@@ -1,0 +1,19 @@
+# Visual Studio Code
+.vscode
+
+# Android Studio, Gradle
+*.iml
+.gradle
+.idea
+.settings
+.project
+.classpath
+.DS_Store
+.externalNativeBuild
+
+# Xcode
+*.pbxuser
+xcuserdata
+xcuserdata/*
+*.xcworkspace/*
+*.xcworkspace

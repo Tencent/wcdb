@@ -1,0 +1,207 @@
+From c6dcab8066d72e9355cfab22ff918be45b0ba8b5 Mon Sep 17 00:00:00 2001
+From: John_He <johnhe928@gmail.com>
+Date: Fri, 7 Oct 2016 02:57:47 +0800
+Subject: [PATCH 2/3] Clean generated asm sources on clean targets.
+
+---
+ crypto/aes/Makefile      | 2 +-
+ crypto/bf/Makefile       | 2 +-
+ crypto/bn/Makefile       | 2 +-
+ crypto/camellia/Makefile | 2 +-
+ crypto/cast/Makefile     | 2 +-
+ crypto/des/Makefile      | 2 +-
+ crypto/ec/Makefile       | 2 +-
+ crypto/md5/Makefile      | 2 +-
+ crypto/modes/Makefile    | 2 +-
+ crypto/rc4/Makefile      | 2 +-
+ crypto/rc5/Makefile      | 2 +-
+ crypto/ripemd/Makefile   | 2 +-
+ crypto/sha/Makefile      | 2 +-
+ crypto/whrlpool/Makefile | 2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/crypto/aes/Makefile b/crypto/aes/Makefile
+index e825c14..7cf2ab2 100644
+--- a/crypto/aes/Makefile
++++ b/crypto/aes/Makefile
+@@ -133,7 +133,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/bf/Makefile b/crypto/bf/Makefile
+index 6dd2015..c2d37b8 100644
+--- a/crypto/bf/Makefile
++++ b/crypto/bf/Makefile
+@@ -83,7 +83,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/bn/Makefile b/crypto/bn/Makefile
+index c4c6409..d9f8341 100644
+--- a/crypto/bn/Makefile
++++ b/crypto/bn/Makefile
+@@ -187,7 +187,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/camellia/Makefile b/crypto/camellia/Makefile
+index ab1225e..04df343 100644
+--- a/crypto/camellia/Makefile
++++ b/crypto/camellia/Makefile
+@@ -86,7 +86,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/cast/Makefile b/crypto/cast/Makefile
+index 4c4b5e9..0d49bf5 100644
+--- a/crypto/cast/Makefile
++++ b/crypto/cast/Makefile
+@@ -80,7 +80,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/des/Makefile b/crypto/des/Makefile
+index 8b5166c..18ff690 100644
+--- a/crypto/des/Makefile
++++ b/crypto/des/Makefile
+@@ -107,7 +107,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj des lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj des lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/ec/Makefile b/crypto/ec/Makefile
+index 6628390..0f6595c 100644
+--- a/crypto/ec/Makefile
++++ b/crypto/ec/Makefile
+@@ -89,7 +89,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o */*.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o */*.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/md5/Makefile b/crypto/md5/Makefile
+index f5240da..6ca208f 100644
+--- a/crypto/md5/Makefile
++++ b/crypto/md5/Makefile
+@@ -90,7 +90,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/modes/Makefile b/crypto/modes/Makefile
+index a7863d9..8e8cf7d 100644
+--- a/crypto/modes/Makefile
++++ b/crypto/modes/Makefile
+@@ -106,7 +106,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o */*.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o */*.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/rc4/Makefile b/crypto/rc4/Makefile
+index 7434ff7..6167b14 100644
+--- a/crypto/rc4/Makefile
++++ b/crypto/rc4/Makefile
+@@ -100,7 +100,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/rc5/Makefile b/crypto/rc5/Makefile
+index 6ca0037..d245c9a 100644
+--- a/crypto/rc5/Makefile
++++ b/crypto/rc5/Makefile
+@@ -80,7 +80,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/ripemd/Makefile b/crypto/ripemd/Makefile
+index 1c3f094..a15893a 100644
+--- a/crypto/ripemd/Makefile
++++ b/crypto/ripemd/Makefile
+@@ -80,7 +80,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/sha/Makefile b/crypto/sha/Makefile
+index de6cdde..dbee8e0 100644
+--- a/crypto/sha/Makefile
++++ b/crypto/sha/Makefile
+@@ -135,7 +135,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+diff --git a/crypto/whrlpool/Makefile b/crypto/whrlpool/Makefile
+index befd6d6..394628b 100644
+--- a/crypto/whrlpool/Makefile
++++ b/crypto/whrlpool/Makefile
+@@ -85,7 +85,7 @@ dclean:
+ 	mv -f Makefile.new $(MAKEFILE)
+ 
+ clean:
+-	rm -f *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
++	rm -f *.S *.s *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+-- 
+2.9.3.windows.3
+

@@ -1,0 +1,28 @@
+From 30e13db032cb9efeaf0c6d71aa48fd12536366c2 Mon Sep 17 00:00:00 2001
+From: johnwhe <johnwhe@tencent.com>
+Date: Sun, 20 Nov 2016 20:17:29 +0800
+Subject: [PATCH 3/3] Fix armv4 clang build.
+
+---
+ crypto/modes/asm/ghash-armv4.pl | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/crypto/modes/asm/ghash-armv4.pl b/crypto/modes/asm/ghash-armv4.pl
+index 8ccc963..21f877a 100644
+--- a/crypto/modes/asm/ghash-armv4.pl
++++ b/crypto/modes/asm/ghash-armv4.pl
+@@ -126,11 +126,6 @@ $code=<<___;
+ .text
+ .code	32
+ 
+-#ifdef __clang__
+-#define ldrplb	ldrbpl
+-#define ldrneb	ldrbne
+-#endif
+-
+ .type	rem_4bit,%object
+ .align	5
+ rem_4bit:
+-- 
+2.9.3.windows.3
+
