@@ -1,0 +1,20 @@
+Language: Cpp
+BasedOnStyle: LLVM
+IndentWidth: 4
+AlignAfterOpenBracket: DontAlign
+AlignEscapedNewlinesLeft: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakTemplateDeclarations: true
+BreakAfterJavaFieldAnnotations: true
+SpaceAfterCStyleCast: true
+TabWidth: 4
+# FixNamespaceComments: true
+
+IncludeCategories: 
+  - Regex:           '^"'   # Project headers
+    Priority:        1
+  - Regex:           '^<'   # System headers
+    Priority:        2
