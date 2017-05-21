@@ -18,7 +18,6 @@ package com.tencent.wcdb.database;
 
 
 import android.annotation.SuppressLint;
-import android.util.LruCache;
 import android.util.Printer;
 
 import com.tencent.wcdb.BuildConfig;
@@ -28,6 +27,7 @@ import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.database.SQLiteDebug.DbStats;
 import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
+import com.tencent.wcdb.support.LruCache;
 import com.tencent.wcdb.support.OperationCanceledException;
 
 import java.lang.ref.WeakReference;

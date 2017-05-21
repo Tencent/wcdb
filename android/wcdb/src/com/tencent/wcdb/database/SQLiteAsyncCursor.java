@@ -21,6 +21,7 @@
 package com.tencent.wcdb.database;
 
 import com.tencent.wcdb.AbstractCursor;
+import com.tencent.wcdb.BuildConfig;
 import com.tencent.wcdb.Cursor;
 import com.tencent.wcdb.CursorIndexOutOfBoundsException;
 import com.tencent.wcdb.StaleDataException;
@@ -158,7 +159,8 @@ public class SQLiteAsyncCursor extends AbstractCursor {
         if (mWindow == null)
             return false;
 
-        assert mCurrentRow == 0;
+        if (BuildConfig.DEBUG && mCurrentRow != 0)
+            throw new AssertionError("mCurrentRow == 0");
 
         if (!isValidPosition(mPos))
             return false;
