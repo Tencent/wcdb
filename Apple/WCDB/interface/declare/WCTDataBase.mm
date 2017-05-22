@@ -42,11 +42,41 @@
 }
 #endif// TARGET_OS_IPHONE
 
-+ (void)SetReport:(WCTReport)report
++ (void)SetGlobalErrorReport:(WCTErrorReport)report
 {
-    WCDB::Error::SetReportMethod([report](const WCDB::Error& error){
-        report([WCTError errorWithWCDBError:error]);
-    });
+    if (report) {
+        WCDB::Error::SetReportMethod([report](const WCDB::Error& error){
+            report([WCTError errorWithWCDBError:error]);
+        });
+    }else {
+        WCDB::Error::SetReportMethod(nullptr);
+    }
+}
+
++ (WCDB::Trace)TraceConvertion:(WCTTrace)trace
+{
+    if (trace) {
+        return [trace](WCDB::Tag tag, const std::map<std::string, unsigned int>& footprint,
+                                               const int64_t& cost) {
+            NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] init];
+            for (const auto& iter : footprint) {
+                [dictionary setObject:@(iter.first.c_str())
+                               forKey:@(iter.second)];
+            }
+            trace(tag, dictionary, cost);
+        };
+    }
+    return nullptr;
+}
+
++ (void)SetGlobalTrace:(WCTTrace)trace
+{
+    WCDB::DataBase::SetGlobalTrace([WCTDataBase TraceConvertion:trace]);
+}
+
+- (void)setTrace:(WCTTrace)trace
+{
+    _database->setTrace([WCTDataBase TraceConvertion:trace]);
 }
 
 @end

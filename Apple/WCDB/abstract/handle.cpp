@@ -27,9 +27,10 @@
 #include <WCDB/macro.hpp>
 #include <WCDB/File.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/statement_transaction.hpp>
 
 namespace WCDB {
-
+    
 static void GlobalLog(void* userInfo, int code, const char* message)
 {
     Error::ReportSQLiteGlobal(code, message, nullptr);
@@ -47,11 +48,15 @@ Handle::Handle(const std::string& p)
 : m_handle(nullptr)
 , m_tag(InvalidTag)
 , path(p)
+, m_trace(nullptr)
+, m_cost(0)
+, m_aggregation(false)
 {
 }
 
 Handle::~Handle()
 {
+    report();
     close();
 }
 
@@ -111,8 +116,65 @@ bool Handle::isTableExists(const std::string& tableName)
     return false;
 }
     
+void Handle::setTrace(const Trace &trace)
+{
+    if (trace) {
+        m_trace = trace;
+        sqlite3_trace_v2(m_handle, SQLITE_TRACE_PROFILE, [](unsigned int, void* M, void* P, void* X)->int {
+            Handle* handle = (Handle*)M;
+            sqlite3_stmt* stmt = (sqlite3_stmt*)P;
+            sqlite3_int64* cost = (sqlite3_int64*)X;
+            const char* sql = sqlite3_sql(stmt);
+            
+            //report last trace
+            if (!handle->shouldAggregation()) {
+                handle->report();
+            }
+            
+            if (!sql) {
+                return SQLITE_OK;
+            }
+            handle->addTrace(sql, *cost);
+            
+            return SQLITE_OK;
+        }, this);
+    }else {
+        sqlite3_trace_v2(m_handle, 0, nullptr, nullptr);
+    }
+}
+    
+bool Handle::shouldAggregation() const
+{
+    return m_aggregation;
+}
+    
+void Handle::addTrace(const std::string& sql, const int64_t& cost)
+{
+    auto iter = m_footprint.find(sql);
+    if (iter==m_footprint.end()) {
+        m_footprint.insert({sql, 1});
+    }else {
+        ++iter->second;
+    }
+    m_cost += cost;
+}
+    
+void Handle::report()
+{
+    if (!m_footprint.empty()) {
+        m_trace(m_tag, m_footprint, m_cost);
+        m_footprint.clear();
+        m_cost = 0;
+    }
+}
+    
 std::shared_ptr<StatementHandle> Handle::prepare(const Statement& statement)
 {
+    if (statement.getStatementType()==Statement::Type::Transaction) {
+        Error::Abort("[prepare] a transaction is not allowed, use [exec] instead",
+                     &m_error);
+        return nullptr;
+    }
     sqlite3_stmt* stmt = nullptr;
     int rc = sqlite3_prepare_v2(m_handle, statement.getDescription().c_str(), -1, &stmt, nullptr);
     if (rc==SQLITE_OK) {
@@ -133,7 +195,26 @@ std::shared_ptr<StatementHandle> Handle::prepare(const Statement& statement)
 bool Handle::exec(const Statement& statement)
 {
     int rc = sqlite3_exec(m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
-    if (rc==SQLITE_OK) {
+    bool result = rc==SQLITE_OK;
+    if (statement.getStatementType()==Statement::Type::Transaction) {
+        const StatementTransaction& transaction = (const StatementTransaction&)statement;
+        switch (transaction.getTransactionType()) {
+            case StatementTransaction::Type::Begin:
+                if (result) {
+                    m_aggregation = true;
+                }
+                break;
+            case StatementTransaction::Type::Commit:
+                if (result) {
+                    m_aggregation = false;
+                }
+                break;
+            case StatementTransaction::Type::Rollback:
+                m_aggregation = false;
+                break;
+        }
+    }
+    if (result) {
         m_error.reset();
         return true;
     }

@@ -24,12 +24,16 @@
 #include <memory>
 #include <string>
 #include <mutex>
+#include <map>
 #include <WCDB/declare.hpp>
 #include <WCDB/error.hpp>
 #include <WCDB/extern_sqlite.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
+
+//{{sql->count}, cost}
+typedef std::function<void(Tag, const std::map<std::string, unsigned int>&, const int64_t&)> Trace;
 
 class Handle
 {
@@ -55,6 +59,9 @@ public:
         Fts3Tokenizer,
     };
     void setConfig(Config config, bool enable);
+    
+    void setTrace(const Trace& trace);
+    static void SetGlobalTrace(const Trace& trace);
 
 //    bool backup(const std::string& backupPath);
 
@@ -65,6 +72,15 @@ protected:
     sqlite3* m_handle;
     Error m_error;
     Tag m_tag;
+    
+    void report();
+    void addTrace(const std::string& sql, const int64_t& cost);
+    bool shouldAggregation() const;
+    
+    Trace m_trace;
+    std::map<std::string, unsigned int> m_footprint;
+    int64_t m_cost;
+    bool m_aggregation;
 };
 
 }//namespace WCDB 

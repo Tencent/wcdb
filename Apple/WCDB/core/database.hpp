@@ -53,10 +53,13 @@ public:
     //config
     static const std::string defaultConfigName;
     static const std::string defaultCipherConfigName;
+    static const std::string defaultTraceConfigName;
     static const Configs defaultConfigs;
     void setConfig(const std::string& name, const Config& config, Configs::Order order);
     void setConfig(const std::string& name, const Config& config);
     void setCipherKey(const void* key, int size);
+    void setTrace(const Trace& trace);
+    static void SetGlobalTrace(const Trace& globalTrace);
 
     //file
     bool moveFiles(const std::string& directory, Error& error);
@@ -92,6 +95,8 @@ protected:
 
     RecyclableHandle flowOut(Error& error);
     static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> s_threadedHandle;
+    
+    static std::shared_ptr<Trace> s_globalTrace;
 };
 
 }//namespace WCDB

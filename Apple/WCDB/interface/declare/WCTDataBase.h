@@ -21,10 +21,16 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTInterface.h>
 
-typedef void (^WCTReport)(WCTError*);
+typedef void (^WCTErrorReport)(WCTError*);
+
+typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString*, NSNumber*>*, NSInteger);
 
 @interface WCTDataBase : WCTInterface
 
-+ (void)SetReport:(WCTReport)report;
++ (void)SetGlobalErrorReport:(WCTErrorReport)report;
+
++ (void)SetGlobalTrace:(WCTTrace)trace;
+
+- (void)setTrace:(WCTTrace)trace;
 
 @end

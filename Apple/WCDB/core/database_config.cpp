@@ -28,15 +28,28 @@ namespace WCDB {
 
 const std::string DataBase::defaultConfigName = "default";
 const std::string DataBase::defaultCipherConfigName = "cipher";
+const std::string DataBase::defaultTraceConfigName = "trace";
+std::shared_ptr<Trace> DataBase::s_globalTrace = nullptr;
 
 const Configs DataBase::defaultConfigs({
+    {
+        DataBase::defaultTraceConfigName,
+        [](std::shared_ptr<Handle>& handle, Error& error)->bool {
+            std::shared_ptr<Trace> trace = s_globalTrace;
+            if (trace) {
+                handle->setTrace(*trace.get());
+            }
+            return true;
+        },
+        0,
+    },
     {
         DataBase::defaultCipherConfigName,
         [](std::shared_ptr<Handle>& handle, Error& error)->bool {
             //place holder
             return true;
         },
-        0,
+        1,
     },
     {
         DataBase::defaultConfigName,
@@ -119,7 +132,7 @@ const Configs DataBase::defaultConfigs({
             error.reset();
             return true;
         },
-        1,
+        2,
     },
 });
 
@@ -143,6 +156,20 @@ void DataBase::setCipherKey(const void* key, int size)
                           error = handle->getError();
                           return result;
                       });
+}
+    
+void DataBase::setTrace(const Trace& trace)
+{
+    m_pool->setConfig(DataBase::defaultTraceConfigName,
+                      [trace](std::shared_ptr<Handle>& handle, Error& error)->bool {
+                          handle->setTrace(trace);
+                          return true;
+                      });
+}
+    
+void DataBase::SetGlobalTrace(const Trace& globalTrace)
+{
+    s_globalTrace.reset(new Trace(globalTrace));
 }
 
 }//namespace WCDB
