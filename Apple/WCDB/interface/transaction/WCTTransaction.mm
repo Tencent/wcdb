@@ -65,6 +65,25 @@
     return result;
 }
 
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
+{
+    return [self runTransaction:inTransaction event:nil];
+}
+
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
+{
+    WCDB::DataBase::TransactionEvent event = nullptr;
+    if (onTransactionStateChanged) {
+        event = [onTransactionStateChanged](WCDB::DataBase::TransactionEventType eventType){
+            onTransactionStateChanged((WCTTransactionEvent)eventType);
+        };
+    }
+    WCDB::Error innerError;
+    return _transaction->runTransaction([inTransaction](WCDB::Error&)->bool {
+        return inTransaction();
+    }, event, innerError);
+}
+
 - (WCTError*)error
 {
     if (_error.isOK()) {

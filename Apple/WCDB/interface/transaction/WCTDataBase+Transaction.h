@@ -1,4 +1,4 @@
-/*
+\/*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
  *
@@ -20,17 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDataBase.h>
-
-@class WCTTransaction;
-
-typedef NS_ENUM(int, WCTTransactionEvent) {
-    WCTTransactionEventBeginFailed = 0,
-    WCTTransactionEventCommitFailed = 1,
-    WCTTransactionEventRollback = 2,
-    WCTTransactionEventRollbackFailed = 3,
-};
-typedef BOOL (^WCTTransactionBlock)();
-typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
+#import <WCDB/WCTTransaction.h>
 
 @interface WCTDataBase(Transaction)
 

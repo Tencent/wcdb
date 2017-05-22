@@ -22,11 +22,23 @@
 #import <WCDB/WCTInterface.h>
 #import <WCDB/WCTDeclare.h>
 
+typedef NS_ENUM(int, WCTTransactionEvent) {
+    WCTTransactionEventBeginFailed = 0,
+    WCTTransactionEventCommitFailed = 1,
+    WCTTransactionEventRollback = 2,
+    WCTTransactionEventRollbackFailed = 3,
+};
+typedef BOOL (^WCTTransactionBlock)();
+typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
+
 @interface WCTTransaction : WCTInterface
 
 - (BOOL)begin;
 - (BOOL)commit;
 - (BOOL)rollback;
+
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged;
 
 - (WCTError*)error;
 
