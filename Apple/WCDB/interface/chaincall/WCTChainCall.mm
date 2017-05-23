@@ -28,31 +28,6 @@
 
 @implementation WCTChainCall
 
-- (void)setStaticticsEnabled:(BOOL)enabled
-{
-    if (!enabled) {
-        _ticker = nullptr;
-    }else if (!_ticker) {
-        _ticker.reset(new WCDB::Ticker);
-    }
-}
-
-- (double)cost
-{
-    if (_ticker) {
-        return _ticker->getElapseTime();
-    }
-    return 0;
-}
-
-- (WCTError*)error
-{
-    if (_error.isOK()) {
-        return nil;
-    }
-    return [WCTError errorWithWCDBError:_error];
-}
-
 - (BOOL)bindProperty:(const WCTProperty&)property ofObject:(WCTObject*)object toStatementHandle:(WCDB::RecyclableStatement&)statementHandle atIndex:(int)index withError:(WCDB::Error&)error
 {
     const std::shared_ptr<WCTColumnBinding>& columnBinding = property.getColumnBinding();

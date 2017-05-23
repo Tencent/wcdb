@@ -20,7 +20,6 @@
 
 #import <WCDB/WCTMaster.h>
 #import <WCDB/WCTSequence.h>
-#import <WCDB/WCTError.h>
 
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTSelect.h>
@@ -56,3 +55,9 @@
 
 #import <WCDB/WCTDataBase+Transaction.h>
 #import <WCDB/WCTTransaction.h>
+
+#import <WCDB/WCTStatictics.h>
+#import <WCDB/WCTDataBase+Statictics.h>
+#import <WCDB/WCTTransaction+Statictics.h>
+#import <WCDB/WCTChainCall+Statictics.h>
+#import <WCDB/WCTError.h>

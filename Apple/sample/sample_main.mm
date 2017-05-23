@@ -39,9 +39,5 @@ int main(int argc, const char * argv[]) {
     sample_table_main(baseDirectory);
     sample_transaction_main(baseDirectory);
     sample_advance_main(baseDirectory);
-    NSDictionary<NSString*, NSNumber*>* sqls;
-    [sqls enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-        <#code#>
-    }]
     return 0;
 }

@@ -82,7 +82,7 @@ typedef NS_ENUM(std::underlying_type<WCDB::Error::Key>::type, WCTErrorKey) {
 /**
  See [WCTErrorKey] in [WCTError.h> also.
 
- @param key 
+ @param key key
  @return Depending on the key and type, [NSString], [NSNumber] and [nil] may be returned.
  */
 - (id)infoForKey:(WCTErrorKey)key;
