@@ -22,6 +22,12 @@
 #import <WCDB/WCTTable.h>
 #import <WCDB/WCTDeclare.h>
 
+/**
+ Thread-safe
+
+ This category contains the combination of common operation on SQL.
+ Although it's all glue code here, it works and it can bring you convenience.
+ */
 @interface WCTTable(Convenient)
 
 #pragma mark - Get Object

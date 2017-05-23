@@ -27,7 +27,6 @@
 #define __WCDB_BINDING(className) _s_##className##_binding
 #define __WCDB_PROPERTIES(className) _s_##className##_properties
 
-//class - implementation
 #define WCDB_IMPLEMENTATION(className) \
 @synthesize lastInsertedRowID; \
 static WCTBinding __WCDB_BINDING(className)(className.class); \

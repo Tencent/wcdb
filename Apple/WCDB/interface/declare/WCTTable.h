@@ -23,6 +23,9 @@
 
 @interface WCTTable : WCTCore
 
+/**
+ The name of the table
+ */
 @property (readonly) NSString* tableName;
 
 @end

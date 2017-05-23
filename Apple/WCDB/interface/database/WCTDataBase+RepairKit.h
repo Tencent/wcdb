@@ -23,6 +23,7 @@
 //#import <wcsrk/wcsrk.h>
 
 @interface WCTDataBase(RepairKit)
+
 //- (NSString*)defaultBackupPath;
 //- (BOOL)backup;
 //- (BOOL)backupToPath:(NSString*)backupPath;

@@ -21,14 +21,57 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTChainCall.h>
 
+/**
+ Not Thread-safe
+ */
 @interface WCTUpdate : WCTChainCall
 
+/**
+ WINQ interface for SQL.
+
+ @param condition condition
+ @return self
+ */
 - (instancetype)where:(const WCTCondition&)condition;
+
+/**
+ WINQ interface for SQL.
+
+ @param orderList order list
+ @return self
+ */
 - (instancetype)orderBy:(const WCTOrderByList&)orderList;
+
+/**
+ WINQ interface for SQL.
+
+ @param limit limit
+ @return self
+ */
 - (instancetype)limit:(const WCTLimit&)limit;
+
+/**
+ WINQ interface for SQL.
+
+ @param offset offset
+ @return self
+ */
 - (instancetype)offset:(const WCTOffset&)offset;
 
+/**
+ Execute the update SQL with objects.
+
+ @param object Template object to be used to update table. 
+ @return YES if no error occurs. See [error] also.
+ */
 - (BOOL)executeWithObject:(WCTObject*)object;
+
+/**
+ Execute the update SQL with objects.
+
+ @param row Template row to be used to update table
+ @return YES if no error occurs. See [error] also.
+ */
 - (BOOL)executeWithRow:(WCTOneRow*)row;
 
 @end
