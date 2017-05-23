@@ -306,13 +306,6 @@
 			remoteGlobalIDString = 239326601E836D7300D677CC;
 			remoteInfo = WCDB;
 		};
-		2474240B1E876BA600946B89 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 247424071E876B4600946B89;
-			remoteInfo = "Xcode Files Templates";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1335,23 +1328,6 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
-/* Begin PBXLegacyTarget section */
-		247424071E876B4600946B89 /* Xcode Files Templates */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION) ";
-			buildConfigurationList = 247424081E876B4600946B89 /* Build configuration list for PBXLegacyTarget "Xcode Files Templates" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = "${PROJECT_DIR}/xcode file template";
-			dependencies = (
-			);
-			name = "Xcode Files Templates";
-			passBuildSettingsInEnvironment = 1;
-			productName = "Xcode Files Templates";
-		};
-/* End PBXLegacyTarget section */
-
 /* Begin PBXNativeTarget section */
 		238A3A7F1EB8B5A700986614 /* Benchmark */ = {
 			isa = PBXNativeTarget;
@@ -1379,11 +1355,11 @@
 				2393265D1E836D7300D677CC /* Frameworks */,
 				2393265E1E836D7300D677CC /* Headers */,
 				2393265F1E836D7300D677CC /* Resources */,
+				2386B3B41ED43B4C000B72F6 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				2474240C1E876BA600946B89 /* PBXTargetDependency */,
 				2393266C1E836EAB00D677CC /* PBXTargetDependency */,
 			);
 			name = WCDB;
@@ -1430,10 +1406,6 @@
 						CreatedOnToolsVersion = 8.3;
 						ProvisioningStyle = Automatic;
 					};
-					247424071E876B4600946B89 = {
-						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 23B5F75E1E1111C100E58396 /* Build configuration list for PBXProject "WCDB" */;
@@ -1459,7 +1431,6 @@
 			projectRoot = "";
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
-				247424071E876B4600946B89 /* Xcode Files Templates */,
 				23D5CCFC1EB8616D00A5B8F9 /* Sample */,
 				238A3A7F1EB8B5A700986614 /* Benchmark */,
 			);
@@ -1499,6 +1470,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2386B3B41ED43B4C000B72F6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ${PROJECT_DIR}/xctemplate\nmake || true";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		238A3A7C1EB8B5A700986614 /* Sources */ = {
@@ -1665,11 +1652,6 @@
 			isa = PBXTargetDependency;
 			target = 239326601E836D7300D677CC /* WCDB */;
 			targetProxy = 23D5CD0B1EB8621500A5B8F9 /* PBXContainerItemProxy */;
-		};
-		2474240C1E876BA600946B89 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 247424071E876B4600946B89 /* Xcode Files Templates */;
-			targetProxy = 2474240B1E876BA600946B89 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1916,33 +1898,6 @@
 			};
 			name = Release;
 		};
-		247424091E876B4600946B89 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		2474240A1E876B4600946B89 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1978,15 +1933,6 @@
 			buildConfigurations = (
 				23D5CD011EB8616D00A5B8F9 /* Debug */,
 				23D5CD021EB8616D00A5B8F9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		247424081E876B4600946B89 /* Build configuration list for PBXLegacyTarget "Xcode Files Templates" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				247424091E876B4600946B89 /* Debug */,
-				2474240A1E876B4600946B89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
