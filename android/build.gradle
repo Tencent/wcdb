@@ -1,42 +1,26 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+// Load local.properties and merge with gradle.properties.
+try {
+    def localProps = new Properties()
+    localProps.load(project.file('local.properties').newDataInputStream())
+    ext.putAll(localProps.entrySet())
+} catch (Exception e) {}
+
 buildscript {
-    // Load local.properties and merge with gradle.properties.
-    Properties localProps = new Properties()
-    try {
-        localProps.load(project.file('local.properties').newDataInputStream())
-        localProps.each { prop ->
-            project.ext.set(prop.key, prop.value)
-        }
-    } catch (Exception e) {
-        println("no local.properties")
-    }
-
-    // Read repositories settings from properties.
-    if (project.hasProperty("ADDITIONAL_REPOSITORIES")) {
-        //println("ADDITIONAL_REPOSITORIES = ${ADDITIONAL_REPOSITORIES}")
-        String repoStr = project.getProperty("ADDITIONAL_REPOSITORIES")
-        String[] repoArr = repoStr.split(";")
-
-        repositories {
-            for (String repo : repoArr) {
-                //println(repo)
-                maven {
-                    url repo
-                }
+    // Read additional repositories from properties.
+    repositories {
+        if (project.hasProperty('ADDITIONAL_REPOSITORIES')) {
+            for (def repo : project.getProperty('ADDITIONAL_REPOSITORIES').split(';')) {
+                repositories.maven.url repo
             }
-            jcenter()
         }
-    } else {
-        //println("no ADDITIONAL_REPOSITORIES")
-        repositories {
-            jcenter()
-        }
+        jcenter()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -44,30 +28,14 @@ buildscript {
 }
 
 allprojects {
-    // Load local.properties and merge with gradle.properties.
-    Properties localProps = new Properties()
-    try {
-        localProps.load(project.file('local.properties').newDataInputStream())
-        project.ext.putAll(localProps.entrySet())
-    } catch (Exception e) {}
-
-    // Read repositories settings from properties.
-    if (project.hasProperty("ADDITIONAL_REPOSITORIES")) {
-        String repoStr = project.getProperty("ADDITIONAL_REPOSITORIES")
-        String[] repoArr = repoStr.split(";")
-
-        repositories {
-            for (String repo : repoArr) {
-                maven {
-                    url repo
-                }
+    // Read additional repositories from properties.
+    repositories {
+        if (project.hasProperty('ADDITIONAL_REPOSITORIES')) {
+            for (def repo : project.getProperty('ADDITIONAL_REPOSITORIES').split(';')) {
+                repositories.maven.url repo
             }
-            jcenter()
         }
-    } else {
-        repositories {
-            jcenter()
-        }
+        jcenter()
     }
 }
 
@@ -75,19 +43,13 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-def getPropertyWithDefault(name, defVal) {
-    return project.hasProperty(name) ? project.getProperty(name) : defVal;
+def propertyWithDefault(name, defVal) {
+    return hasProperty(name) ? getProperty(name) : defVal;
 }
 
 ext {
-    def versionSuffix = getPropertyWithDefault('VERSION_NAME_SUFFIX', '')
+    def versionSuffix = propertyWithDefault('VERSION_NAME_SUFFIX', '')
 
-    GROUP = "com.tencent.wcdb"
     VERSION = project.file('../VERSION').text
     VERSION_NAME = "${VERSION}${versionSuffix}"
-
-    RELEASE_REPOSITORY_URL = getPropertyWithDefault('RELEASE_REPOSITORY_URL', '')
-    SNAPSHOT_REPOSITORY_URL = getPropertyWithDefault('SNAPSHOT_REPOSITORY_URL', '')
-    REPOSITORY_USERNAME = getPropertyWithDefault('REPOSITORY_USERNAME', '')
-    REPOSITORY_PASSWORD = getPropertyWithDefault('REPOSITORY_PASSWORD', '')
 }

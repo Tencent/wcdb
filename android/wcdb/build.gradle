@@ -64,7 +64,9 @@ dependencies {
 }
 
 android.libraryVariants.all { variant ->
-    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+
+    // emit Javadoc generation task
+    def genJavadocTask = task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
         description "Generates Javadoc for $variant.name."
         source = variant.javaCompile.source
         ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
@@ -84,52 +86,19 @@ android.libraryVariants.all { variant ->
             //addStringOption('federationxml Android', rootProject.file('gradle/android-10.xml').path)
         }
     }
-}
 
-task androidJavadocJar(type: Jar) {
-    classifier = 'javadoc'
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-publishing {
-    publications {
-        mmdb(MavenPublication) {
-            groupId = rootProject.GROUP
-            artifactId = 'wcdb-android'
-            version = rootProject.VERSION_NAME
-
-            artifact(androidJavadocJar)
-            artifact(sourcesJar)
-            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
-        }
+    // emit Javadoc bundling task
+    task("bundle${variant.name.capitalize()}Javadoc", type: Jar) {
+        classifier = 'javadoc'
+        from genJavadocTask.destinationDir
+        dependsOn genJavadocTask
     }
 
-    repositories {
-        maven {
-            url = rootProject.VERSION_NAME.endsWith('-SNAPSHOT') ?
-                    rootProject.SNAPSHOT_REPOSITORY_URL :
-                    rootProject.RELEASE_REPOSITORY_URL
-            credentials {
-                username rootProject.REPOSITORY_USERNAME
-                password rootProject.REPOSITORY_PASSWORD
-            }
-        }
+    // emit source bundling task
+    task("bundle${variant.name.capitalize()}Sources", type: Jar) {
+        classifier = 'sources'
+        from variant.javaCompile.source
     }
 }
 
-afterEvaluate {
-    def generateReleaseJavadoc = tasks.findByName('generateReleaseJavadoc')
-    androidJavadocJar.from(generateReleaseJavadoc.destinationDir)
-    androidJavadocJar.dependsOn(generateReleaseJavadoc)
-
-    tasks.withType(PublishToMavenRepository) { task ->
-        task.dependsOn 'build'
-    }
-    tasks.withType(PublishToMavenLocal) { task ->
-        task.dependsOn 'build'
-    }
-}
+apply from: 'bintray.gradle'
