@@ -23,7 +23,31 @@
 #import <WCDB/core.h>
 
 typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
+
+/**
+ Thread-safe
+ */
 @interface WCTDataBase(Core)
+
+/**
+ Set config for this database. All handles will run this config before its next operation.
+ 
+ [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error& error) {
+    return handle->exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
+ } forName:@"demo" withOrder:1];
+
+ @param config config
+ @param name The Identifier for this config
+ @param order The smaller number is called first
+ */
 - (void)setConfig:(WCDB::Config)config forName:(NSString*)name withOrder:(WCDB::Configs::Order)order;
+
+/**
+ This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];
+ 
+ @param config config
+ @param name The Identifier for this config
+ */
 - (void)setConfig:(WCDB::Config)config forName:(NSString*)name;
+
 @end

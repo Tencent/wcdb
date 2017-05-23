@@ -23,8 +23,14 @@
 #import <WCDB/WCTCodingMacro.h>
 #import <WCDB/WCTProperty.h>
 
+/**
+ Builtin ORM for "sqlite_master" table. for further information, see https://www.sqlite.org/faq.html
+ */
 @interface WCTMaster : NSObject<WCTTableCoding>
 
+/**
+ @return @"sqlite_master"
+ */
 + (NSString*)TableName;
 
 @property(retain) NSString* type;

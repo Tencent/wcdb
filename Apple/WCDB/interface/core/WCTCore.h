@@ -21,13 +21,30 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDeclare.h>
 
+/**
+ Thread-safe
+ */
 @interface WCTCore : NSObject
 
-/*
- *  All [WCTCore]s with same path share same tag.
+/**
+ The tag of the database. 
+ You should set it on a [WCTDataBase] and get it from all kind of [WCTCore] object, including [WCTDatatBase], [WCTTable], [WCTransaction], [WCTSelect], [WCTRowSelect], [WCTMultiSelect], [WCTInsert], [WCTDelete], [WCTUpdate] and so on.
+ Note that [WCTCore] objects with same path share this tag, even they are not the same object.
+ 
+ WCTDatabase* database1 = [[WCTDatabase alloc] initWithPath:path];
+ WCTDatabase* database2 = [[WCTDatabase alloc] initWithPath:path];
+ database1.tag = 1;
+ NSLog(@"%d", database2.tag);//print 1
+
+ @return Default to 0
  */
 - (WCTTag)tag;
 
+/**
+ The path of th database
+
+ @return path
+ */
 - (NSString*)path;
 
 @end

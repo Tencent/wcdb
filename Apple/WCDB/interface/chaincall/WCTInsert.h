@@ -22,8 +22,19 @@
 #import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTDeclare.h>
 
+/**
+ Not Thread-safe
+ */
 @interface WCTInsert : WCTChainCall
 
+/**
+ Execute the insert SQL with objects.
+ Note that it will run embedded transaction while objects.count>1 .
+ The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+
+ @param objects Objects to be inserted into WCDB.
+ @return YES if no error occurs. See [error] also.
+ */
 - (BOOL)executeWithObjects:(NSArray<WCTObject*>*)objects;
 
 @end

@@ -27,10 +27,39 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString*, NSNumber*>*, NSInteger)
 
 @interface WCTDataBase : WCTInterface
 
+/**
+ You can register a reporter to monitor all errors.
+
+ @param report report
+ */
 + (void)SetGlobalErrorReport:(WCTErrorReport)report;
 
+/**
+ You can register a tracer to monitor the performance of all SQLs.
+ It returns 
+ 1. The collection of SQLs and the executions count of each SQL.
+ 2. Time consuming in nanoseconds.
+ 3. Tag of database.
+ 
+ [WCTDataBase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+    NSLog(@"Tag: %d", tag);
+    [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
+        NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
+    }];
+    NSLog(@"Total cost %lld nanoseconds", cost);
+ }];
+ 
+ Note that tracer may slow down WCDB.
+
+ @param trace trace
+ */
 + (void)SetGlobalTrace:(WCTTrace)trace;
 
+/**
+ You can register a tracer to monitor the performance of all SQLs in this database. See [SetGlobalTrace:] also.
+
+ @param trace trace
+ */
 - (void)setTrace:(WCTTrace)trace;
 
 @end

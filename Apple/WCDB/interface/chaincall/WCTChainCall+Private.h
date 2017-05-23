@@ -27,4 +27,9 @@
     WCDB::Error _error;
     std::shared_ptr<WCDB::Ticker> _ticker;
 }
+
+- (BOOL)bindProperty:(const WCTProperty&)property ofObject:(WCTObject*)object toStatementHandle:(WCDB::RecyclableStatement&)statementHandle atIndex:(int)index withError:(WCDB::Error&)error;
+
+- (BOOL)bindWithValue:(WCTValue*)value toStatementHandle:(WCDB::RecyclableStatement&)statementHandle atIndex:(int)index withError:(WCDB::Error&)error;
+
 @end

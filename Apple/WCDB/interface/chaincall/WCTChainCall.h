@@ -23,19 +23,33 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/core.h>
 
+/**
+ Not Thread-safe
+ */
 @interface WCTChainCall : WCTCore
 
+/**
+ After enabling, you can call the [cost] interface to get time consuming.
+ Note that you should call it before calling all other interface, otherwise [cost] will return an inaccurate result.
+ See [cost] also.
+
+ @param enabled enabled
+ */
 - (void)setStaticticsEnabled:(BOOL)enabled;
 
+/**
+ The time consuming. You can call it to profile the performance.
+ See [setStaticticsEnabled:] also.
+
+ @return Time in seconds
+ */
 - (double)cost;
 
-/* 
- * More detailed error messages can be obtained from this interface
+/**
+ More detailed error messages.
+
+ @return nil or error.isOK==YES if no error occurs.
  */
 - (WCTError*)error;
-
-- (BOOL)bindProperty:(const WCTProperty&)property ofObject:(WCTObject*)object toStatementHandle:(WCDB::RecyclableStatement&)statementHandle atIndex:(int)index withError:(WCDB::Error&)error;
-
-- (BOOL)bindWithValue:(WCTValue*)value toStatementHandle:(WCDB::RecyclableStatement&)statementHandle atIndex:(int)index withError:(WCDB::Error&)error;
 
 @end

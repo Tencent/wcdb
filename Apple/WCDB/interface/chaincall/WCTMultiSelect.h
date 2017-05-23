@@ -22,9 +22,30 @@
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/WCTDeclare.h>
 
+/**
+ Not Thread-safe
+ */
 @interface WCTMultiSelect : WCTSelectBase
 
+/**
+ Get next selected object. You can do an iteration using it.
+ 
+ WCTMultiObject* multiObject = nil;
+ while ((multiObject = [multiSelect nextMultiObject])) {
+    Class1* object1 = [multiObject objectForKey:Class1.class];
+    Class2* object2 = [multiObject objectForKey:Class2.class];
+    //...
+ }
+
+ @return See the example above
+ */
 - (WCTMultiObject*)nextMultiObject;
+
+/**
+ Get all selected objects. 
+
+ @return Array with all selected objects.
+ */
 - (NSArray<WCTMultiObject*>*)allMultiObjects;
 
 @end
