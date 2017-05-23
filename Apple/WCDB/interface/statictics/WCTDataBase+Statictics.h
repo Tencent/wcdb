@@ -19,8 +19,16 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTInterface.h>
+#import <WCDB/WCTStatictics.h>
+#import <WCDB/WCTDataBase.h>
 
-@interface WCTDataBase : WCTInterface
+@interface WCTDataBase(Statictics)
+
+/**
+ You can register a tracer to monitor the performance of all SQLs in this database. See [SetGlobalTrace:] also.
+ 
+ @param trace trace
+ */
+- (void)setTrace:(WCTTrace)trace;
 
 @end

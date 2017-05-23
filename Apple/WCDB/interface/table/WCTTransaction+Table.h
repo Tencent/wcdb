@@ -36,15 +36,6 @@
 - (BOOL)createTableAndIndexesOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
- Get a wrapper from an existing table.
- 
- @param tableName The name of the table
- @param cls class
- @return [WCTTable] for an existing table.
- */
-- (WCTTable*)getTableOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls;
-
-/**
  Create virtual table from ORM.
  
  @param tableName The name of the virtual table to be created.

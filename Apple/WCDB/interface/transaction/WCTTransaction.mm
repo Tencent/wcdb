@@ -20,7 +20,6 @@
 
 #import <WCDB/WCTTransaction.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTransaction+Private.h>
 
 @implementation WCTTransaction
@@ -82,31 +81,6 @@
     return _transaction->runTransaction([inTransaction](WCDB::Error&)->bool {
         return inTransaction();
     }, event, innerError);
-}
-
-- (WCTError*)error
-{
-    if (_error.isOK()) {
-        return nil;
-    }
-    return [WCTError errorWithWCDBError:_error];
-}
-
-- (void)setStaticticsEnabled:(BOOL)enabled
-{
-    if (!enabled) {
-        _ticker = nullptr;
-    }else if (!_ticker) {
-        _ticker.reset(new WCDB::Ticker);
-    }
-}
-
-- (double)cost
-{
-    if (_ticker) {
-        return _ticker->getElapseTime();
-    }
-    return 0;
 }
 
 @end

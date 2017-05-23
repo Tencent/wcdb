@@ -18,9 +18,35 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTInterface.h>
+#import <WCDB/WCTTransaction+Statictics.h>
+#import <WCDB/WCTTransaction+Private.h>
+#import <WCDB/WCTError+Private.h>
 
-@interface WCTDataBase : WCTInterface
+@implementation WCTTransaction(Statictics)
+
+- (WCTError*)error
+{
+    if (_error.isOK()) {
+        return nil;
+    }
+    return [WCTError errorWithWCDBError:_error];
+}
+
+- (void)setStaticticsEnabled:(BOOL)enabled
+{
+    if (!enabled) {
+        _ticker = nullptr;
+    }else if (!_ticker) {
+        _ticker.reset(new WCDB::Ticker);
+    }
+}
+
+- (double)cost
+{
+    if (_ticker) {
+        return _ticker->getElapseTime();
+    }
+    return 0;
+}
 
 @end

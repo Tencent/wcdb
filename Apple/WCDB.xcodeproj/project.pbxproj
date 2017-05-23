@@ -220,6 +220,17 @@
 		2349F79D1EA0FC750021EFA7 /* WCTResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F7991EA0F9FC0021EFA7 /* WCTResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2358AC501EADE39000F0DA41 /* module_argument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2358AC4E1EADE39000F0DA41 /* module_argument.cpp */; };
 		2358AC511EADE39000F0DA41 /* module_argument.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2358AC4F1EADE39000F0DA41 /* module_argument.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2386B3C01ED442E2000B72F6 /* WCTStatictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3BE1ED442E2000B72F6 /* WCTStatictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2386B3C11ED442E2000B72F6 /* WCTStatictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3BF1ED442E2000B72F6 /* WCTStatictics.mm */; };
+		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
+		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
+		2386B3CA1ED44316000B72F6 /* WCTChainCall+Statictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C81ED44316000B72F6 /* WCTChainCall+Statictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2386B3CB1ED44316000B72F6 /* WCTChainCall+Statictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C91ED44316000B72F6 /* WCTChainCall+Statictics.mm */; };
+		2386B3CE1ED44322000B72F6 /* WCTTransaction+Statictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3CC1ED44322000B72F6 /* WCTTransaction+Statictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2386B3CF1ED44322000B72F6 /* WCTTransaction+Statictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3CD1ED44322000B72F6 /* WCTTransaction+Statictics.mm */; };
+		2386B3D21ED44442000B72F6 /* WCTDataBase+Statictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3D01ED44442000B72F6 /* WCTDataBase+Statictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2386B3D31ED44442000B72F6 /* WCTDataBase+Statictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3D11ED44442000B72F6 /* WCTDataBase+Statictics.mm */; };
 		238A3A511EB8A99400986614 /* WCTSampleTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A501EB8A99400986614 /* WCTSampleTable.mm */; };
 		238A3A541EB8A9A700986614 /* sample_table_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A531EB8A9A700986614 /* sample_table_main.mm */; };
 		238A3A571EB8AC6200986614 /* WCTSampleTransaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A561EB8AC6200986614 /* WCTSampleTransaction.mm */; };
@@ -238,9 +249,6 @@
 		23B31B351EB97B480092EA80 /* WCTTable+DataBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+DataBase.h */; };
 		23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */; };
 		23B4F0561ECD8E0B00D45BB1 /* ticker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */; };
-		23B83BE41EC05B8C00FE03E3 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B83BE21EC05B8C00FE03E3 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23B83BE51EC05B8C00FE03E3 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B83BE31EC05B8C00FE03E3 /* WCTError.mm */; };
-		23B83BEB1EC05C7600FE03E3 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B83BE91EC05C7600FE03E3 /* WCTError+Private.h */; };
 		23D5CD001EB8616D00A5B8F9 /* sample_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D5CCFF1EB8616D00A5B8F9 /* sample_main.mm */; };
 		23D5CD0A1EB8621200A5B8F9 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23D5CD451EB876DB00A5B8F9 /* sample_orm_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D5CD3B1EB876DB00A5B8F9 /* sample_orm_main.mm */; };
@@ -305,13 +313,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 239326601E836D7300D677CC;
 			remoteInfo = WCDB;
-		};
-		2474240B1E876BA600946B89 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 247424071E876B4600946B89;
-			remoteInfo = "Xcode Files Templates";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -553,6 +554,17 @@
 		234B87F41E72505500E4466A /* wcsrk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wcsrk.xcodeproj; path = ../wcsrk/wcsrk.xcodeproj; sourceTree = "<group>"; };
 		2358AC4E1EADE39000F0DA41 /* module_argument.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = module_argument.cpp; sourceTree = "<group>"; };
 		2358AC4F1EADE39000F0DA41 /* module_argument.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = module_argument.hpp; sourceTree = "<group>"; };
+		2386B3BE1ED442E2000B72F6 /* WCTStatictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTStatictics.h; sourceTree = "<group>"; };
+		2386B3BF1ED442E2000B72F6 /* WCTStatictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTStatictics.mm; sourceTree = "<group>"; };
+		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
+		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
+		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
+		2386B3C81ED44316000B72F6 /* WCTChainCall+Statictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTChainCall+Statictics.h"; sourceTree = "<group>"; };
+		2386B3C91ED44316000B72F6 /* WCTChainCall+Statictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTChainCall+Statictics.mm"; sourceTree = "<group>"; };
+		2386B3CC1ED44322000B72F6 /* WCTTransaction+Statictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTransaction+Statictics.h"; sourceTree = "<group>"; };
+		2386B3CD1ED44322000B72F6 /* WCTTransaction+Statictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTransaction+Statictics.mm"; sourceTree = "<group>"; };
+		2386B3D01ED44442000B72F6 /* WCTDataBase+Statictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDataBase+Statictics.h"; sourceTree = "<group>"; };
+		2386B3D11ED44442000B72F6 /* WCTDataBase+Statictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDataBase+Statictics.mm"; sourceTree = "<group>"; };
 		238A3A4F1EB8A99400986614 /* WCTSampleTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleTable.h; sourceTree = "<group>"; };
 		238A3A501EB8A99400986614 /* WCTSampleTable.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSampleTable.mm; sourceTree = "<group>"; };
 		238A3A521EB8A9A700986614 /* sample_table_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sample_table_main.h; sourceTree = "<group>"; };
@@ -583,9 +595,6 @@
 		23B31B331EB97B480092EA80 /* WCTTable+DataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+DataBase.h"; sourceTree = "<group>"; };
 		23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ticker.cpp; sourceTree = "<group>"; };
 		23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ticker.hpp; sourceTree = "<group>"; };
-		23B83BE21EC05B8C00FE03E3 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
-		23B83BE31EC05B8C00FE03E3 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
-		23B83BE91EC05C7600FE03E3 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
 		23D5CCFD1EB8616D00A5B8F9 /* Sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D5CCFF1EB8616D00A5B8F9 /* sample_main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = sample_main.mm; sourceTree = "<group>"; };
 		23D5CD3A1EB876DB00A5B8F9 /* sample_orm_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sample_orm_main.h; sourceTree = "<group>"; };
@@ -768,6 +777,7 @@
 		2349F62A1EA0D6680021EFA7 /* interface */ = {
 			isa = PBXGroup;
 			children = (
+				2386B3BD1ED442D9000B72F6 /* statictics */,
 				2349F62B1EA0D6680021EFA7 /* builtin */,
 				2349F63B1EA0D6680021EFA7 /* chaincall */,
 				2349F6561EA0D6680021EFA7 /* convenient */,
@@ -798,9 +808,6 @@
 				2349F6381EA0D6680021EFA7 /* WCTMaster.mm */,
 				2349F6391EA0D6680021EFA7 /* WCTSequence.h */,
 				2349F63A1EA0D6680021EFA7 /* WCTSequence.mm */,
-				23B83BE21EC05B8C00FE03E3 /* WCTError.h */,
-				23B83BE91EC05C7600FE03E3 /* WCTError+Private.h */,
-				23B83BE31EC05B8C00FE03E3 /* WCTError.mm */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -1033,6 +1040,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2386B3BD1ED442D9000B72F6 /* statictics */ = {
+			isa = PBXGroup;
+			children = (
+				2386B3C21ED442FE000B72F6 /* WCTError.h */,
+				2386B3C31ED442FE000B72F6 /* WCTError.mm */,
+				2386B3C41ED442FE000B72F6 /* WCTError+Private.h */,
+				2386B3BE1ED442E2000B72F6 /* WCTStatictics.h */,
+				2386B3BF1ED442E2000B72F6 /* WCTStatictics.mm */,
+				2386B3C81ED44316000B72F6 /* WCTChainCall+Statictics.h */,
+				2386B3C91ED44316000B72F6 /* WCTChainCall+Statictics.mm */,
+				2386B3CC1ED44322000B72F6 /* WCTTransaction+Statictics.h */,
+				2386B3CD1ED44322000B72F6 /* WCTTransaction+Statictics.mm */,
+				2386B3D01ED44442000B72F6 /* WCTDataBase+Statictics.h */,
+				2386B3D11ED44442000B72F6 /* WCTDataBase+Statictics.mm */,
+			);
+			path = statictics;
+			sourceTree = "<group>";
+		};
 		238A3A4D1EB8A97F00986614 /* table */ = {
 			isa = PBXGroup;
 			children = (
@@ -1218,11 +1243,13 @@
 				2349F7911EA0D7700021EFA7 /* WCTPropertyBase.h in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTConstraintMacro.h in Headers */,
 				2349F6FB1EA0D6680021EFA7 /* core.h in Headers */,
+				2386B3CA1ED44316000B72F6 /* WCTChainCall+Statictics.h in Headers */,
 				2349F6C51EA0D6680021EFA7 /* column_result.hpp in Headers */,
 				2349F7651EA0D6680021EFA7 /* WCTCoding.h in Headers */,
 				2349F6E61EA0D6680021EFA7 /* statement_delete.hpp in Headers */,
 				2349F6CC1EA0D6680021EFA7 /* declare.hpp in Headers */,
 				2349F6E81EA0D6680021EFA7 /* statement_drop_index.hpp in Headers */,
+				2386B3D21ED44442000B72F6 /* WCTDataBase+Statictics.h in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
 				2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */,
 				2349F6E21EA0D6680021EFA7 /* statement_create_table.hpp in Headers */,
@@ -1243,6 +1270,7 @@
 				2349F6DE1EA0D6680021EFA7 /* statement_alter_table.hpp in Headers */,
 				2349F7831EA0D6680021EFA7 /* in_case_lock_guard.hpp in Headers */,
 				242E1E2E1EA37DFD00F77029 /* WCTMultiSelect+Private.h in Headers */,
+				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				2349F6D81EA0D6680021EFA7 /* order_term.hpp in Headers */,
 				2349F6D61EA0D6680021EFA7 /* order.hpp in Headers */,
 				2349F7661EA0D6680021EFA7 /* WCTExpr.h in Headers */,
@@ -1276,7 +1304,7 @@
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2349F6F01EA0D6680021EFA7 /* statement_select.hpp in Headers */,
 				2349F7441EA0D6680021EFA7 /* WCTStatement.h in Headers */,
-				23B83BE41EC05B8C00FE03E3 /* WCTError.h in Headers */,
+				2386B3C01ED442E2000B72F6 /* WCTStatictics.h in Headers */,
 				2349F78C1EA0D6680021EFA7 /* thread_local.hpp in Headers */,
 				2349F7751EA0D6680021EFA7 /* WCTTransaction+Table.h in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDataBase+Table.h in Headers */,
@@ -1310,6 +1338,7 @@
 				2349F6E01EA0D6680021EFA7 /* statement_create_index.hpp in Headers */,
 				2349F76F1EA0D6680021EFA7 /* WCTORM.h in Headers */,
 				2349F7481EA0D6680021EFA7 /* WCTDataBase+File.h in Headers */,
+				2386B3CE1ED44322000B72F6 /* WCTTransaction+Statictics.h in Headers */,
 				2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */,
 				2349F7521EA0D6680021EFA7 /* WCTTable.h in Headers */,
 				2349F7611EA0D6680021EFA7 /* WCTConstraintBinding.h in Headers */,
@@ -1319,6 +1348,7 @@
 				2349F7221EA0D6680021EFA7 /* WCTInsert+Private.h in Headers */,
 				2349F7741EA0D6680021EFA7 /* WCTTable+Private.h in Headers */,
 				23DE0A761EA868C400AA146A /* concurrent_list.hpp in Headers */,
+				2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */,
 				2349F72E1EA0D6680021EFA7 /* WCTSelectBase+Private.h in Headers */,
 				2349F72B1EA0D6680021EFA7 /* WCTSelect+Private.h in Headers */,
 				2349F7431EA0D6680021EFA7 /* WCTStatement+Private.h in Headers */,
@@ -1329,28 +1359,10 @@
 				2349F71C1EA0D6680021EFA7 /* WCTChainCall+Private.h in Headers */,
 				2349F7331EA0D6680021EFA7 /* WCTUpdate+Private.h in Headers */,
 				2358AC511EADE39000F0DA41 /* module_argument.hpp in Headers */,
-				23B83BEB1EC05C7600FE03E3 /* WCTError+Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
-
-/* Begin PBXLegacyTarget section */
-		247424071E876B4600946B89 /* Xcode Files Templates */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION) ";
-			buildConfigurationList = 247424081E876B4600946B89 /* Build configuration list for PBXLegacyTarget "Xcode Files Templates" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = "${PROJECT_DIR}/xcode file template";
-			dependencies = (
-			);
-			name = "Xcode Files Templates";
-			passBuildSettingsInEnvironment = 1;
-			productName = "Xcode Files Templates";
-		};
-/* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
 		238A3A7F1EB8B5A700986614 /* Benchmark */ = {
@@ -1379,11 +1391,11 @@
 				2393265D1E836D7300D677CC /* Frameworks */,
 				2393265E1E836D7300D677CC /* Headers */,
 				2393265F1E836D7300D677CC /* Resources */,
+				2386B3B41ED43B4C000B72F6 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				2474240C1E876BA600946B89 /* PBXTargetDependency */,
 				2393266C1E836EAB00D677CC /* PBXTargetDependency */,
 			);
 			name = WCDB;
@@ -1430,10 +1442,6 @@
 						CreatedOnToolsVersion = 8.3;
 						ProvisioningStyle = Automatic;
 					};
-					247424071E876B4600946B89 = {
-						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 23B5F75E1E1111C100E58396 /* Build configuration list for PBXProject "WCDB" */;
@@ -1459,7 +1467,6 @@
 			projectRoot = "";
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
-				247424071E876B4600946B89 /* Xcode Files Templates */,
 				23D5CCFC1EB8616D00A5B8F9 /* Sample */,
 				238A3A7F1EB8B5A700986614 /* Benchmark */,
 			);
@@ -1499,6 +1506,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2386B3B41ED43B4C000B72F6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ${PROJECT_DIR}/xctemplate\nmake || true";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		238A3A7C1EB8B5A700986614 /* Sources */ = {
@@ -1551,11 +1574,13 @@
 				2349F6E51EA0D6680021EFA7 /* statement_delete.cpp in Sources */,
 				2349F6D11EA0D6680021EFA7 /* handle.cpp in Sources */,
 				2349F6BC1EA0D6680021EFA7 /* clause_join.cpp in Sources */,
+				2386B3D31ED44442000B72F6 /* WCTDataBase+Statictics.mm in Sources */,
 				2349F6C21EA0D6680021EFA7 /* column_index.cpp in Sources */,
 				2349F7131EA0D6680021EFA7 /* NSNumber+WCDB.mm in Sources */,
 				2349F6E31EA0D6680021EFA7 /* statement_create_virtual_table.cpp in Sources */,
 				2349F7781EA0D6680021EFA7 /* WCTDataBase+Transaction.mm in Sources */,
 				2349F6CD1EA0D6680021EFA7 /* describable.cpp in Sources */,
+				2386B3CF1ED44322000B72F6 /* WCTTransaction+Statictics.mm in Sources */,
 				2349F7031EA0D6680021EFA7 /* database_sql.cpp in Sources */,
 				2349F6F91EA0D6680021EFA7 /* config.cpp in Sources */,
 				2349F7471EA0D6680021EFA7 /* WCTDataBase+DataBase.mm in Sources */,
@@ -1563,7 +1588,6 @@
 				2349F7051EA0D6680021EFA7 /* handle_pool.cpp in Sources */,
 				2349F7491EA0D6680021EFA7 /* WCTDataBase+File.mm in Sources */,
 				2349F7281EA0D6680021EFA7 /* WCTMultiSelect.mm in Sources */,
-				23B83BE51EC05B8C00FE03E3 /* WCTError.mm in Sources */,
 				2349F6FE1EA0D6680021EFA7 /* database.cpp in Sources */,
 				2349F7241EA0D6680021EFA7 /* WCTInsert.mm in Sources */,
 				2349F7641EA0D6680021EFA7 /* WCTIndexBInding.mm in Sources */,
@@ -1591,12 +1615,14 @@
 				2349F7091EA0D6680021EFA7 /* statement_recyclable.cpp in Sources */,
 				2349F7101EA0D6680021EFA7 /* NSDictionary+WCDB.mm in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
+				2386B3CB1ED44316000B72F6 /* WCTChainCall+Statictics.mm in Sources */,
 				2349F7761EA0D6680021EFA7 /* WCTTransaction+Table.mm in Sources */,
 				23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */,
 				2349F7821EA0D6680021EFA7 /* in_case_lock_guard.cpp in Sources */,
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
 				2349F77D1EA0D6680021EFA7 /* error.cpp in Sources */,
+				2386B3C11ED442E2000B72F6 /* WCTStatictics.mm in Sources */,
 				2349F6E91EA0D6680021EFA7 /* statement_drop_table.cpp in Sources */,
 				2349F7881EA0D6680021EFA7 /* rwlock.cpp in Sources */,
 				2349F7301EA0D6680021EFA7 /* WCTSelectBase.mm in Sources */,
@@ -1605,6 +1631,7 @@
 				2349F6DF1EA0D6680021EFA7 /* statement_create_index.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,
 				2349F6D51EA0D6680021EFA7 /* order.cpp in Sources */,
+				2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */,
 				2349F78A1EA0D6680021EFA7 /* spin.cpp in Sources */,
 				2349F6CA1EA0D6680021EFA7 /* constraint_table.cpp in Sources */,
 				2349F7261EA0D6680021EFA7 /* WCTInterface+ChainCall.mm in Sources */,
@@ -1665,11 +1692,6 @@
 			isa = PBXTargetDependency;
 			target = 239326601E836D7300D677CC /* WCDB */;
 			targetProxy = 23D5CD0B1EB8621500A5B8F9 /* PBXContainerItemProxy */;
-		};
-		2474240C1E876BA600946B89 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 247424071E876B4600946B89 /* Xcode Files Templates */;
-			targetProxy = 2474240B1E876BA600946B89 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1916,33 +1938,6 @@
 			};
 			name = Release;
 		};
-		247424091E876B4600946B89 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		2474240A1E876B4600946B89 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1978,15 +1973,6 @@
 			buildConfigurations = (
 				23D5CD011EB8616D00A5B8F9 /* Debug */,
 				23D5CD021EB8616D00A5B8F9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		247424081E876B4600946B89 /* Build configuration list for PBXLegacyTarget "Xcode Files Templates" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				247424091E876B4600946B89 /* Debug */,
-				2474240A1E876B4600946B89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
