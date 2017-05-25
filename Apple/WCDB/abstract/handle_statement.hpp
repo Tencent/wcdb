@@ -103,6 +103,7 @@ public:
        
     int getColumnCount();
     const char* getColumnName(int index);
+    const char* getColumnTableName(int index);
 
     long long getLastInsertedRowID();
 

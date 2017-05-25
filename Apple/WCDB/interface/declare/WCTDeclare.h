@@ -102,7 +102,7 @@ typedef NS_ENUM(std::underlying_type<WCDB::ColumnType>::type, WCTColumnType) {
 #pragma mark - StatementHandle
 @class WCTStatement;
 typedef NSObject<WCTTableCoding> WCTObject;
-typedef NSDictionary<Class, WCTObject*> WCTMultiObject;
+typedef NSDictionary<NSString*, WCTObject*> WCTMultiObject;//table name -> object
 typedef NSObject WCTValue;//NSData, NSNumber, NSString, NSNull
 typedef NSArray<WCTValue*> WCTOneRow;
 typedef NSArray<WCTValue*> WCTOneColumn;

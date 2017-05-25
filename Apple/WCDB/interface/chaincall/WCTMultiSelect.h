@@ -32,8 +32,8 @@
  
  WCTMultiObject* multiObject = nil;
  while ((multiObject = [multiSelect nextMultiObject])) {
-    Class1* object1 = [multiObject objectForKey:Class1.class];
-    Class2* object2 = [multiObject objectForKey:Class2.class];
+    Class1* object1 = [multiObject objectForKey:tableName1];
+    Class2* object2 = [multiObject objectForKey:tableName2];
     //...
  }
 

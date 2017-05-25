@@ -128,7 +128,14 @@
 
 - (NSString*)getNameAtIndex:(int)index
 {
-    return [NSString stringWithUTF8String:_statementHandle->getColumnName(index)];
+    const char* columnName = _statementHandle->getColumnName(index);
+    return columnName?@(columnName):nil;
+}
+
+- (NSString*)getTableNameAtIndex:(int)index
+{
+    const char* tableName = _statementHandle->getColumnTableName(index);
+    return tableName?@(tableName):nil;
 }
 
 - (void)finalize

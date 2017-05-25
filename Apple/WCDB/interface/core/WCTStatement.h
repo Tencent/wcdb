@@ -90,6 +90,14 @@
 - (NSString*)getNameAtIndex:(int)index;
 
 /**
+ The wrapper of [sqlite3_column_table_name].
+
+ @param index Begin with 0
+ @return The name of table
+ */
+- (NSString*)getTableNameAtIndex:(int)index;
+
+/**
  The wrapper of [sqlite3_finalize].
  */
 - (void)finalize;

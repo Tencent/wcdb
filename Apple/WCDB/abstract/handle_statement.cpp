@@ -92,6 +92,11 @@ const char* StatementHandle::getColumnName(int index)
 {
     return sqlite3_column_name(m_stmt, index);
 }
+    
+const char* StatementHandle::getColumnTableName(int index)
+{
+    return sqlite3_column_table_name(m_stmt, index);
+}
 
 ColumnType StatementHandle::getType(int index) 
 {

@@ -115,17 +115,28 @@
     NSMutableDictionary* multiObject = [[NSMutableDictionary alloc] init];
     int index = 0;
     for (const WCTResult& result : _resultList) {
-        WCTObject* object = [multiObject objectForKey:result.getBindingClass()];
-        if (!object) {
-            Class cls = result.getBindingClass();
-            object = [[cls alloc] init];
-            [multiObject setObject:object forKey:cls];
+        const char* columnTableName = _statementHandle->getColumnTableName(index);
+        Class cls = result.getBindingClass();
+        if (columnTableName&&cls) {
+            NSString* tableName = @(columnTableName);
+            WCTObject* object = [multiObject objectForKey:tableName];
+            if (!object) {
+                object = [[cls alloc] init];
+                [multiObject setObject:object forKey:tableName];
+            }
+            if (![self extractPropertyToObject:object 
+                                       atIndex:index 
+                             withColumnBinding:result.getColumnBinding()]) {
+                return nil;
+            };
+        }else {
+            if (!columnTableName) {
+                WCDB::Error::Warning("Extracting multi object with an empty table name");
+            }
+            if (!cls) {
+                WCDB::Error::Warning("Extracting multi object with an empty binding cls");
+            }
         }
-        if (![self extractPropertyToObject:object 
-                                   atIndex:index 
-                         withColumnBinding:result.getColumnBinding()]) {
-            return nil;
-        };
         ++index;
     }
     return multiObject;
