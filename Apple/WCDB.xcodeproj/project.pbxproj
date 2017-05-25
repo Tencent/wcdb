@@ -1773,19 +1773,16 @@
 				"ARCHS[sdk=iphoneos*]" = (
 					"$(ARCHS_STANDARD)",
 					arm64,
-					armv7s,
 					armv7,
 				);
 				"ARCHS[sdk=iphonesimulator*]" = (
 					"$(ARCHS_STANDARD)",
 					arm64,
-					armv7s,
 					armv7,
 				);
 				"ARCHS[sdk=macosx*]" = (
 					"$(ARCHS_STANDARD)",
 					x86_64,
-					i386,
 				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1836,7 +1833,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
-				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
+				VALID_ARCHS = "x86_64 arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -1847,19 +1844,16 @@
 				"ARCHS[sdk=iphoneos*]" = (
 					"$(ARCHS_STANDARD)",
 					arm64,
-					armv7s,
 					armv7,
 				);
 				"ARCHS[sdk=iphonesimulator*]" = (
 					"$(ARCHS_STANDARD)",
 					arm64,
 					armv7,
-					armv7s,
 				);
 				"ARCHS[sdk=macosx*]" = (
 					"$(ARCHS_STANDARD)",
 					x86_64,
-					i386,
 				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1906,7 +1900,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
-				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
+				VALID_ARCHS = "x86_64 arm64 armv7";
 			};
 			name = Release;
 		};
