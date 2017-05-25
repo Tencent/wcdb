@@ -26,6 +26,14 @@ import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 
 
+/**
+ * Cursor implementation that acts directly on the underlying SQLite statement
+ * object.
+ *
+ * <p>Differ from the default implementation {@link SQLiteCursor}, which backed
+ * with a linear buffer called CursorWindow, this implementation maps directly
+ * to {@code sqlite3_stmt}, thus cost less memory and CPU time on certain situation.</p>
+ */
 public class SQLiteDirectCursor extends AbstractCursor {
 
     private static final String TAG = "WCDB.SQLiteDirectCursor";
@@ -204,7 +212,14 @@ public class SQLiteDirectCursor extends AbstractCursor {
         }
     }
 
-
+    /**
+     * Static factory object of {@link SQLiteDirectCursor}.
+     *
+     * Pass to {@link SQLiteDatabase#queryWithFactory(SQLiteDatabase.CursorFactory,
+     * boolean, String, String[], String, String[], String, String, String, String)}
+     * or {@link SQLiteDatabase#rawQueryWithFactory(SQLiteDatabase.CursorFactory, String,
+     * String[], String, CancellationSignal)} to get a cursor object of {@link SQLiteDirectCursor} .
+     */
     public static final SQLiteDatabase.CursorFactory FACTORY = new SQLiteDatabase.CursorFactory() {
         @Override
         public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver masterQuery,

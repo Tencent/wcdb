@@ -20,34 +20,61 @@
 
 package com.tencent.wcdb.database;
 
+import com.tencent.wcdb.DatabaseErrorHandler;
+
 /**
  * Describes encryption options for SQLite databases.
+ *
+ * @see SQLiteDatabase#openDatabase(String, byte[], SQLiteCipherSpec, SQLiteDatabase.CursorFactory, int, DatabaseErrorHandler, int)
  */
 public class SQLiteCipherSpec {
 
+    /** 256-bit AES encryption, CBC mode. */
     public static final String CIPHER_AES256CBC = "aes-256-cbc";
-    public static final String CIPHER_XXTEA = "xxtea";
-    public static final String CIPHER_DEVLOCK = "devlock";
 
     /**
-     * Encryption method used, null for default method.
+     * XXTEA encryption, under development.
+     * @hide
+     */
+    public static final String CIPHER_XXTEA = "xxtea";
+
+    /**
+     * Default encryption (AES-256-CBC) with device lock, under development.
+     * @hide
+     */
+    public static final String CIPHER_DEVLOCK = "devlock";
+
+
+    /**
+     * Encryption method used, null for default method, which is 256-bit AES in CBC mode.
      */
     public String cipher;
 
     /**
      * KDF iteration times to generate encryption keys, 0 for default value.
-     * Typical values are 4000 for SQLCipher version 1 and 2, 64000 for
-     * version 3.
+     *
+     * <p>Typical values are 4000 for SQLCipher version 1.x and 2.x, 64000 for
+     * version 3.x. For databases created by WCDB itself, leave it 0.</p>
      */
     public int kdfIteration;
 
     /**
      * Whether HMAC should be used.
+     *
+     * <p>Defaulted to {@code false} for SQLCipher 1.x, and {@code true} otherwise.
+     * Must be set to the same value as when the database is created, or the database
+     * cannot be opened and {@link SQLiteException} is thrown.</p>
      */
     public boolean hmacEnabled = true;
 
     /**
      * Page size to use.
+     *
+     * <p>Page size must be set to the same value as when the database is created, in order to
+     * open existing encrypted database. For databases created by WCDB itself, leave it to
+     * the default is preferred for most applications. If database cannot be opened and
+     * {@link SQLiteException} is thrown, try setting it to 1024 or 4096.
+     * </p>
      */
     public int pageSize = SQLiteGlobal.defaultPageSize;
 
@@ -72,8 +99,9 @@ public class SQLiteCipherSpec {
     /**
      * Set encryption method to be used.
      *
-     * @param c     The method name to be used
-     * @return      This object to allow for chaining of calls to set methods
+     * @param c The method name to be used
+     * @return  This object to allow for chaining of calls to set methods
+     * @see #cipher
      */
     public SQLiteCipherSpec setCipher(String c) {
         cipher = c; return this;
@@ -84,6 +112,7 @@ public class SQLiteCipherSpec {
      *
      * @param iter  New iteration times value
      * @return      This object to allow for chaining of calls to set methods
+     * @see #kdfIteration
      */
     public SQLiteCipherSpec setKDFIteration(int iter) {
         kdfIteration = iter; return this;
@@ -94,6 +123,7 @@ public class SQLiteCipherSpec {
      *
      * @param enabled   Whether to use HMAC
      * @return          This object to allow for chaining of calls to set methods
+     * @see #hmacEnabled
      */
     public SQLiteCipherSpec withHMACEnabled(boolean enabled) {
         hmacEnabled = enabled; return this;
@@ -104,6 +134,7 @@ public class SQLiteCipherSpec {
      *
      * @param size  Page size in byte
      * @return      This object to allow for chaining of calls to set methods
+     * @see #pageSize
      */
     public SQLiteCipherSpec setPageSize(int size) {
         pageSize = size; return this;
@@ -116,6 +147,8 @@ public class SQLiteCipherSpec {
      *
      * @param version   SQLCipher version, should be 1, 2 or 3
      * @return          This object to allow for chaining of calls to set methods
+     * @see #kdfIteration
+     * @see #hmacEnabled
      */
     public SQLiteCipherSpec setSQLCipherVersion(int version) {
         switch (version) {

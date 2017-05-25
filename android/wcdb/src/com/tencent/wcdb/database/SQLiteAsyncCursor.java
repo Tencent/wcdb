@@ -28,6 +28,10 @@ import com.tencent.wcdb.StaleDataException;
 import com.tencent.wcdb.support.CancellationSignal;
 
 
+/**
+ * Cursor that runs query on another thread. Under development.
+ * @hide
+ */
 public class SQLiteAsyncCursor extends AbstractCursor {
 
     private static final String TAG = "WCDB.SQLiteAsyncCursor";

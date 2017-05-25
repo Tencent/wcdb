@@ -25,6 +25,15 @@ import com.tencent.wcdb.Cursor;
 import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 
+
+/**
+ * Query class used by {@link SQLiteDirectCursor}.
+ *
+ * <p>This query implementation holds a database connection on the first time
+ * calling {@link #step(int)}, until being closed or released.</p>
+ *
+ * @hide
+ */
 public class SQLiteDirectQuery extends SQLiteProgram {
 
     private static final String TAG = "WCDB.SQLiteDirectQuery";
