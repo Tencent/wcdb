@@ -19,10 +19,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTransaction.h>
 
-@interface WCTDataBase(Transaction)
+@interface WCTDatabase(Transaction)
 
 /**
  Generation a [WCTTransaction] object to do a transaction.

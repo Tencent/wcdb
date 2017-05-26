@@ -18,27 +18,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+Statictics.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTInterface.h>
 
-@implementation WCTDataBase(Statictics)
-
-- (void)setTrace:(WCTTrace)trace
-{
-    if (trace) {
-        _database->setTrace([trace](WCDB::Tag tag, 
-                                    const std::map<std::string, unsigned int>& footprint,
-                                    const int64_t& cost) {
-            NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] init];
-            for (const auto& iter : footprint) {
-                [dictionary setObject:@(iter.first.c_str())
-                               forKey:@(iter.second)];
-            }
-            trace(tag, dictionary, cost);
-        });
-    }else {
-        _database->setTrace(nullptr);
-    }
-}
+@interface WCTDatabase : WCTInterface
 
 @end

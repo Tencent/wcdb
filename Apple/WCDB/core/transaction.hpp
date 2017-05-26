@@ -54,7 +54,7 @@ protected:
     bool m_isInTransaction;
     std::shared_ptr<std::mutex> m_mutex;
 
-    friend class DataBase;
+    friend class Database;
 };
 
 }//namespace WCDB 

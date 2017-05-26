@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase.h>
-#import <WCDB/WCTDataBase+DataBase.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTDatabase+Database.h>
+#import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #endif// TARGET_OS_IPHONE
 
-@implementation WCTDataBase
+@implementation WCTDatabase
 
 #if TARGET_OS_IPHONE
 + (void)load
@@ -37,7 +37,7 @@
                                                            object:nil 
                                                             queue:nil 
                                                        usingBlock:^(NSNotification * _Nonnull note) {
-                                                           WCDB::DataBase::PurgeFreeHandlesInAllDataBases();
+                                                           WCDB::Database::PurgeFreeHandlesInAllDatabases();
                                                        }];
 }
 #endif// TARGET_OS_IPHONE

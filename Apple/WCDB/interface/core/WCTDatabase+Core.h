@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/core.h>
 
 typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
@@ -27,7 +27,7 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
 /**
  Thread-safe
  */
-@interface WCTDataBase(Core)
+@interface WCTDatabase(Core)
 
 /**
  Set config for this database. All handles will run this config before its next operation.

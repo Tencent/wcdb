@@ -18,20 +18,19 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
-//#import <wcsrk/wcsrk.h>
+#import <WCDB/WCTDatabase+Core.h>
+#import <WCDB/WCTDatabase+Private.h>
 
-@interface WCTDataBase(RepairKit)
+@implementation WCTDatabase(Core)
 
-//- (NSString*)defaultBackupPath;
-//- (BOOL)backup;
-//- (BOOL)backupToPath:(NSString*)backupPath;
-//
-//- (BOOL)removeBackup;
-//- (BOOL)removeBackupAtPath:(NSString*)backupPath;
+- (void)setConfig:(WCDB::Config)invoke forName:(NSString*)name withOrder:(WCDB::Configs::Order)order
+{
+    _database->setConfig(name.UTF8String, invoke, order);
+}
 
-//- (BOOL)repairToPath:(NSString*)newDBPath withBackupPath:(NSString*)backupPath andAssist:(const Assist&)assist;
-//- (BOOL)repairToPath:(NSString*)newDBPath andAssist:(const Assist&)assist;
+- (void)setConfig:(WCDB::Config)invoke forName:(NSString*)name
+{
+    _database->setConfig(name.UTF8String, invoke);
+}
 
 @end

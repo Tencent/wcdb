@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+DataBase.h>
+#import <WCDB/WCTDatabase+Database.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
 
-@implementation WCTDataBase(DataBase)
+@implementation WCTDatabase(Database)
 
 - (instancetype)initWithPath:(NSString*)path
 {
-    std::shared_ptr<WCDB::CoreBase> core(new WCDB::DataBase(path.UTF8String));
+    std::shared_ptr<WCDB::CoreBase> core(new WCDB::Database(path.UTF8String));
     if (self = [super initWithCore:core]) {
-        _database = (WCDB::DataBase*)_core.get();
+        _database = (WCDB::Database*)_core.get();
 #if TARGET_OS_IPHONE
         _database->setConfig("FileProtection", 
                              [path](std::shared_ptr<WCDB::Handle>& handle, WCDB::Error& error)->bool{
@@ -98,9 +98,9 @@
     _database->purgeFreeHandles();
 }
 
-+ (void)PurgeFreeHandlesInAllDataBases
++ (void)PurgeFreeHandlesInAllDatabases
 {
-    WCDB::DataBase::PurgeFreeHandlesInAllDataBases();
+    WCDB::Database::PurgeFreeHandlesInAllDatabases();
 }
 
 - (BOOL)isBlockaded

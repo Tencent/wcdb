@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+Table.h>
-#import <WCDB/WCTTable+DataBase.h>
+#import <WCDB/WCTDatabase+Table.h>
+#import <WCDB/WCTTable+Database.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTInterface+Table.h>
 
-@implementation WCTDataBase(Table)
+@implementation WCTDatabase(Table)
 
 - (BOOL)createTableAndIndexesOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls
 {

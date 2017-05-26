@@ -19,13 +19,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
+#import <WCDB/WCTDatabase.h>
 
 /**
  This category contains file operation interface for database.
  Since database is a binary file, there is a risk of file operations, which may lead to corrupted database or data loss.
  */
-@interface WCTDataBase(File)
+@interface WCTDatabase(File)
 
 /**
  Remove all database-related files.

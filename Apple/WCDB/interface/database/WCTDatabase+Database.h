@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTDeclare.h>
 
 typedef void (^WCTCloseBlock)(void);
@@ -27,7 +27,7 @@ typedef void (^WCTCloseBlock)(void);
 /**
  Thread-safe
  */
-@interface WCTDataBase(DataBase)
+@interface WCTDatabase(Database)
 
 /**
  Init a database from path.
@@ -35,7 +35,7 @@ typedef void (^WCTCloseBlock)(void);
  Note that WCDB will not generate a sqlite handle until the first operation, which is also called as lazy initialization.
 
  @param path Path to your database
- @return WCTDataBase
+ @return WCTDatabase
  */
 - (instancetype)initWithPath:(NSString*)path;
 
@@ -125,6 +125,6 @@ typedef void (^WCTCloseBlock)(void);
  Purge all free handles of all databases. See [purgeFreeHandles] also.
  Note that WCDB will call this interface automatically while it receives memory warning on iOS.
  */
-+ (void)PurgeFreeHandlesInAllDataBases;
++ (void)PurgeFreeHandlesInAllDatabases;
 
 @end

@@ -41,7 +41,7 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString*, NSNumber*>*, NSInteger)
  2. Time consuming in nanoseconds.
  3. Tag of database.
  
- [WCTDataBase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+ [WCTDatabase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
  NSLog(@"Tag: %d", tag);
  [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
  NSLog(@"SQL: %@ Count: %d", sql, count.intValue);

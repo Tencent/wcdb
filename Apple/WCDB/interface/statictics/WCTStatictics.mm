@@ -38,7 +38,7 @@
 + (void)SetGlobalTrace:(WCTTrace)trace
 {
     if (trace) {
-        WCDB::DataBase::SetGlobalTrace([trace](WCDB::Tag tag,
+        WCDB::Database::SetGlobalTrace([trace](WCDB::Tag tag,
                                                const std::map<std::string, unsigned int>& footprint,
                                                const int64_t& cost) {
             NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] init];
@@ -49,7 +49,7 @@
             trace(tag, dictionary, cost);
         });
     }else {
-        WCDB::DataBase::SetGlobalTrace(nullptr);
+        WCDB::Database::SetGlobalTrace(nullptr);
     }
 }
 

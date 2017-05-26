@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-bool DataBase::removeFiles(Error& error)
+bool Database::removeFiles(Error& error)
 {
     if (!isBlockaded()
         ||isOpened()) {
@@ -34,7 +34,7 @@ bool DataBase::removeFiles(Error& error)
     return File::removeFiles(getPaths(), error);
 }
 
-size_t DataBase::getFilesSize(Error& error)
+size_t Database::getFilesSize(Error& error)
 {
     if (!isBlockaded()
         ||isOpened()) {
@@ -43,7 +43,7 @@ size_t DataBase::getFilesSize(Error& error)
     return File::getFilesSize(getPaths(), error);
 }
 
-bool DataBase::moveFiles(const std::string& directory, Error& error)
+bool Database::moveFiles(const std::string& directory, Error& error)
 {
     if (!isBlockaded()
         ||isOpened()) {
@@ -52,7 +52,7 @@ bool DataBase::moveFiles(const std::string& directory, Error& error)
     return File::moveFiles(getPaths(), directory, error);
 }
 
-bool DataBase::moveFilesToDirectoryWithExtraFiles(const std::string& directory, const std::list<std::string>& extraFiles, Error& error)
+bool Database::moveFilesToDirectoryWithExtraFiles(const std::string& directory, const std::list<std::string>& extraFiles, Error& error)
 {
     if (!isBlockaded()
         ||isOpened()) {
@@ -63,7 +63,7 @@ bool DataBase::moveFilesToDirectoryWithExtraFiles(const std::string& directory, 
     return File::moveFiles(paths, directory, error);
 }
 
-const std::array<std::string, 4>& DataBase::subfixs()
+const std::array<std::string, 4>& Database::subfixs()
 {
     static const std::array<std::string, 4> s_subfixs = {
         "",//db file
@@ -75,16 +75,16 @@ const std::array<std::string, 4>& DataBase::subfixs()
     return s_subfixs;
 }
 
-const std::list<std::string> DataBase::getPaths() const
+const std::list<std::string> Database::getPaths() const
 {
     std::list<std::string> paths;
-    for (const auto& subfix : DataBase::subfixs()) {
+    for (const auto& subfix : Database::subfixs()) {
         paths.push_back(Path::addExtention(getPath(), subfix));
     }
     return paths;
 }
 
-//bool DataBase::removeBackup(Error& error)
+//bool Database::removeBackup(Error& error)
 //{
 //    if (!isBlockaded()
 //        ||isOpened()) {
@@ -93,7 +93,7 @@ const std::list<std::string> DataBase::getPaths() const
 //    return File::removeFile(defaultBackupPath(), error);
 //}
 //
-//bool DataBase::removeBackup(const std::string& backupPath, Error& error)
+//bool Database::removeBackup(const std::string& backupPath, Error& error)
 //{
 //    if (!isBlockaded()
 //        ||isOpened()) {

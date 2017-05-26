@@ -24,14 +24,14 @@
 
 namespace WCDB {
 
-//const std::string DataBase::s_defaultBackupSubfix = "-srk";
+//const std::string Database::s_defaultBackupSubfix = "-srk";
 //
-//std::string DataBase::defaultBackupPath() const
+//std::string Database::defaultBackupPath() const
 //{
 //    return Path::addExtention(path, s_defaultBackupSubfix);
 //}
 //
-//bool DataBase::backup(const std::string& backupPath, Error& error)
+//bool Database::backup(const std::string& backupPath, Error& error)
 //{
 //    RecyclableHandle handle = flowOut(error);
 //    bool result = handle->backup(backupPath);
@@ -39,17 +39,17 @@ namespace WCDB {
 //    return result;
 //}
 //
-//bool DataBase::backup(Error& error)
+//bool Database::backup(Error& error)
 //{
 //    return backup(defaultBackupPath(), error);
 //}
 //
-//bool DataBase::repair(const std::string& newDBPath, const Assist& assist, Error& error)
+//bool Database::repair(const std::string& newDBPath, const Assist& assist, Error& error)
 //{
 //    return repair(newDBPath, defaultBackupPath(), assist, error);
 //}
 //
-//bool DataBase::repair(const std::string& newDBPath, const std::string& backupPath, const Assist& assist, Error& error)
+//bool Database::repair(const std::string& newDBPath, const std::string& backupPath, const Assist& assist, Error& error)
 //{
 //    if (!isBlockaded()
 //        ||isOpened()) {

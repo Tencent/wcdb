@@ -31,13 +31,13 @@
 #import <WCDB/WCTTable+ChainCall.h>
 
 #import <WCDB/WCTInterface+Core.h>
-#import <WCDB/WCTDataBase+Core.h>
+#import <WCDB/WCTDatabase+Core.h>
 
-#import <WCDB/WCTDataBase+DataBase.h>
-#import <WCDB/WCTDataBase+File.h>
-#import <WCDB/WCTDataBase+RepairKit.h>
+#import <WCDB/WCTDatabase+Database.h>
+#import <WCDB/WCTDatabase+File.h>
+#import <WCDB/WCTDatabase+RepairKit.h>
 
-#import <WCDB/WCTDataBase.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTable.h>
 #import <WCDB/WCTStatement.h>
 
@@ -50,14 +50,14 @@
 #import <WCDB/WCTInterface+Convenient.h>
 #import <WCDB/WCTTable+Convenient.h>
 
-#import <WCDB/WCTDataBase+Table.h>
+#import <WCDB/WCTDatabase+Table.h>
 #import <WCDB/WCTTransaction+Table.h>
 
-#import <WCDB/WCTDataBase+Transaction.h>
+#import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTTransaction.h>
 
 #import <WCDB/WCTStatictics.h>
-#import <WCDB/WCTDataBase+Statictics.h>
+#import <WCDB/WCTDatabase+Statictics.h>
 #import <WCDB/WCTTransaction+Statictics.h>
 #import <WCDB/WCTChainCall+Statictics.h>
 #import <WCDB/WCTError.h>

@@ -18,19 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+Core.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTDatabase.h>
+#import <WCDB/core.h>
 
-@implementation WCTDataBase(Core)
-
-- (void)setConfig:(WCDB::Config)invoke forName:(NSString*)name withOrder:(WCDB::Configs::Order)order
-{
-    _database->setConfig(name.UTF8String, invoke, order);
+@interface WCTDatabase() {
+@protected
+    WCDB::Database* _database;
 }
-
-- (void)setConfig:(WCDB::Config)invoke forName:(NSString*)name
-{
-    _database->setConfig(name.UTF8String, invoke);
-}
-
 @end

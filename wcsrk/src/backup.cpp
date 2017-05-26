@@ -70,7 +70,7 @@ std::shared_ptr<Backup> Backup::BackupFromHandle(sqlite3* handle)
     return std::shared_ptr<Backup>(new Backup(infos, freePageCount));
 }
 
-std::shared_ptr<Backup> Backup::BackupFromDataBase(const std::string& dbPath)
+std::shared_ptr<Backup> Backup::BackupFromDatabase(const std::string& dbPath)
 {
     sqlite3* handle;
     int rc = sqlite3_open(dbPath.c_str(), &handle);

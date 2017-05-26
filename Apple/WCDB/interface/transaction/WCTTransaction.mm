@@ -27,8 +27,8 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core
 {
     if (self = [super initWithCore:core]) {
-        if (_core->getType()==WCDB::CoreType::DataBase) {
-            _core = ((WCDB::DataBase*)_core.get())->getTransaction(_error);
+        if (_core->getType()==WCDB::CoreType::Database) {
+            _core = ((WCDB::Database*)_core.get())->getTransaction(_error);
         }
         if (_core) {
             _transaction = (WCDB::Transaction*)_core.get();
@@ -78,9 +78,9 @@
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
 {
     @synchronized (self) {
-        WCDB::DataBase::TransactionEvent event = nullptr;
+        WCDB::Database::TransactionEvent event = nullptr;
         if (onTransactionStateChanged) {
-            event = [onTransactionStateChanged](WCDB::DataBase::TransactionEventType eventType){
+            event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType){
                 onTransactionStateChanged((WCTTransactionEvent)eventType);
             };
         }

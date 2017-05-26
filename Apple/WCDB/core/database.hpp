@@ -32,11 +32,11 @@ namespace WCDB {
 
 class Transaction;
 
-class DataBase : public CoreBase
+class Database : public CoreBase
 {    
 public:
-    DataBase() = delete;
-    DataBase(const std::string& path);
+    Database() = delete;
+    Database(const std::string& path);
 
     //basic
     void setTag(Tag tag);
@@ -48,7 +48,7 @@ public:
     bool isBlockaded();
     
     void purgeFreeHandles();
-    static void PurgeFreeHandlesInAllDataBases();
+    static void PurgeFreeHandlesInAllDatabases();
 
     //config
     static const std::string defaultConfigName;

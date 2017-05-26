@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-RecyclableStatement DataBase::prepare(const Statement& statement, Error& error)
+RecyclableStatement Database::prepare(const Statement& statement, Error& error)
 {
     if (statement.getStatementType()==Statement::Type::Transaction) {
         Error::ReportCore(getTag(), 
@@ -38,7 +38,7 @@ RecyclableStatement DataBase::prepare(const Statement& statement, Error& error)
     return CoreBase::prepare(handle, statement, error);
 }
 
-bool DataBase::exec(const Statement& statement, Error& error)
+bool Database::exec(const Statement& statement, Error& error)
 {
     if (statement.getStatementType()==Statement::Type::Transaction) {
         Error::ReportCore(getTag(), 
@@ -53,7 +53,7 @@ bool DataBase::exec(const Statement& statement, Error& error)
     return CoreBase::exec(handle, statement, error);
 }
     
-bool DataBase::isTableExists(const std::string &tableName, Error &error)
+bool Database::isTableExists(const std::string &tableName, Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     return CoreBase::isTableExists(handle, tableName, error);

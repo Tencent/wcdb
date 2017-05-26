@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+File.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <WCDB/WCTDatabase+File.h>
+#import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/utility.hpp>
 #import <WCDB/WCTError+Private.h>
 
-@implementation WCTDataBase(File)
+@implementation WCTDatabase(File)
 
 - (BOOL)removeFilesWithError:(WCTError**)error
 {

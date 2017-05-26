@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class DataBase;
+class Database;
 class Transaction;
 
 typedef int WCTTag;
@@ -36,7 +36,7 @@ typedef int WCTTag;
 enum class CoreType {
     None,
     Transaction,
-    DataBase,
+    Database,
 };
 
 class CoreBase

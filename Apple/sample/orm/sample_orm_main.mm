@@ -36,7 +36,7 @@ void sample_orm_main(NSString* baseDirectory)
         NSString* tableName = classString;
         
         NSString* path = [baseDirectory stringByAppendingPathComponent:filename];
-        WCTDataBase* database = [[WCTDataBase alloc] initWithPath:path];
+        WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
         [database close:^{
             [database removeFilesWithError:nil];
         }];

@@ -28,7 +28,7 @@
 
 /**
  The tag of the database. 
- You should set it on a [WCTDataBase] and get it from all kind of [WCTCore] object, including [WCTDatatBase], [WCTTable], [WCTransaction], [WCTSelect], [WCTRowSelect], [WCTMultiSelect], [WCTInsert], [WCTDelete], [WCTUpdate] and so on.
+ You should set it on a [WCTDatabase] and get it from all kind of [WCTCore] object, including [WCTDatatBase], [WCTTable], [WCTransaction], [WCTSelect], [WCTRowSelect], [WCTMultiSelect], [WCTInsert], [WCTDelete], [WCTUpdate] and so on.
  Note that [WCTCore] objects with same path share this tag, even they are not the same object.
  
  WCTDatabase* database1 = [[WCTDatabase alloc] initWithPath:path];

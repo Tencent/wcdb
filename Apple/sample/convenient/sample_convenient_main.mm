@@ -26,7 +26,7 @@ void sample_convenient_main(NSString* baseDirectory)
     NSString* className = NSStringFromClass(WCTSampleConvenient.class);
     NSString* path = [baseDirectory stringByAppendingPathComponent:className];
     NSString* tableName = className; 
-    WCTDataBase* database = [[WCTDataBase alloc] initWithPath:path];
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
         [database removeFilesWithError:nil];
     }];

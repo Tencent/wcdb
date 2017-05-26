@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+Transaction.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <WCDB/WCTDatabase+Transaction.h>
+#import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTTransaction.h>
 #import <WCDB/WCTCore+Private.h>
 
-@implementation WCTDataBase(Transaction)
+@implementation WCTDatabase(Transaction)
 
 - (WCTTransaction*)getTransaction
 {
@@ -37,9 +37,9 @@
 
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
 {
-    WCDB::DataBase::TransactionEvent event = nullptr;
+    WCDB::Database::TransactionEvent event = nullptr;
     if (onTransactionStateChanged) {
-        event = [onTransactionStateChanged](WCDB::DataBase::TransactionEventType eventType){
+        event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType){
             onTransactionStateChanged((WCTTransactionEvent)eventType);
         };
     }

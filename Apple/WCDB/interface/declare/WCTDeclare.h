@@ -33,7 +33,7 @@
 @class WCTMultiSelect;
 
 #pragma mark - Database
-@class WCTDataBase;
+@class WCTDatabase;
 typedef WCDB::Tag WCTTag;
 
 #pragma mark - Table

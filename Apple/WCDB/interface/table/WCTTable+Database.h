@@ -22,7 +22,7 @@
 #import <WCDB/WCTTable.h>
 #import <WCDB/WCTCore+Private.h>
 
-@interface WCTTable(DataBase)
+@interface WCTTable(Database)
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andTableName:(NSString*)tableName andClass:(Class<WCTTableCoding>)cls;
 

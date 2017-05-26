@@ -26,14 +26,14 @@
 
 namespace WCDB {
 
-const std::string DataBase::defaultConfigName = "default";
-const std::string DataBase::defaultCipherConfigName = "cipher";
-const std::string DataBase::defaultTraceConfigName = "trace";
-std::shared_ptr<Trace> DataBase::s_globalTrace = nullptr;
+const std::string Database::defaultConfigName = "default";
+const std::string Database::defaultCipherConfigName = "cipher";
+const std::string Database::defaultTraceConfigName = "trace";
+std::shared_ptr<Trace> Database::s_globalTrace = nullptr;
 
-const Configs DataBase::defaultConfigs({
+const Configs Database::defaultConfigs({
     {
-        DataBase::defaultTraceConfigName,
+        Database::defaultTraceConfigName,
         [](std::shared_ptr<Handle>& handle, Error& error)->bool {
             std::shared_ptr<Trace> trace = s_globalTrace;
             if (trace) {
@@ -44,7 +44,7 @@ const Configs DataBase::defaultConfigs({
         0,
     },
     {
-        DataBase::defaultCipherConfigName,
+        Database::defaultCipherConfigName,
         [](std::shared_ptr<Handle>& handle, Error& error)->bool {
             //place holder
             return true;
@@ -52,7 +52,7 @@ const Configs DataBase::defaultConfigs({
         1,
     },
     {
-        DataBase::defaultConfigName,
+        Database::defaultConfigName,
         [](std::shared_ptr<Handle>& handle, Error& error)->bool {
                         
             //Locking Mode
@@ -136,21 +136,21 @@ const Configs DataBase::defaultConfigs({
     },
 });
 
-void DataBase::setConfig(const std::string& name, const Config& config, Configs::Order order)
+void Database::setConfig(const std::string& name, const Config& config, Configs::Order order)
 {
     m_pool->setConfig(name, config, order);
 }
 
-void DataBase::setConfig(const std::string& name, const Config& config)
+void Database::setConfig(const std::string& name, const Config& config)
 {
     m_pool->setConfig(name, config);
 }
 
-void DataBase::setCipherKey(const void* key, int size)
+void Database::setCipherKey(const void* key, int size)
 {
     std::shared_ptr<std::vector<unsigned char>> keys(new std::vector<unsigned char>(size));
     memcpy(keys->data(), key, size);
-    m_pool->setConfig(DataBase::defaultCipherConfigName,
+    m_pool->setConfig(Database::defaultCipherConfigName,
                       [keys](std::shared_ptr<Handle>& handle, Error& error)->bool {
                           bool result = handle->setCipherKey(keys->data(), (int)keys->size());
                           error = handle->getError();
@@ -158,16 +158,16 @@ void DataBase::setCipherKey(const void* key, int size)
                       });
 }
     
-void DataBase::setTrace(const Trace& trace)
+void Database::setTrace(const Trace& trace)
 {
-    m_pool->setConfig(DataBase::defaultTraceConfigName,
+    m_pool->setConfig(Database::defaultTraceConfigName,
                       [trace](std::shared_ptr<Handle>& handle, Error& error)->bool {
                           handle->setTrace(trace);
                           return true;
                       });
 }
     
-void DataBase::SetGlobalTrace(const Trace& globalTrace)
+void Database::SetGlobalTrace(const Trace& globalTrace)
 {
     s_globalTrace.reset(new Trace(globalTrace));
 }

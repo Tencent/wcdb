@@ -19,10 +19,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTDeclare.h>
 
-@interface WCTDataBase(Table)
+@interface WCTDatabase(Table)
 
 /**
  Create table and indexes from ORM.

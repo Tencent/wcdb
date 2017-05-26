@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> DataBase::s_threadedHandle([](){
+ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> Database::s_threadedHandle([](){
     return new std::unordered_map<std::string, RecyclableHandle>;
 }, [](std::unordered_map<std::string, RecyclableHandle>* map){
     if (map) {
@@ -32,7 +32,7 @@ ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> DataBase::s_threa
     }
 });
 
-std::shared_ptr<Transaction> DataBase::getTransaction(Error& error)
+std::shared_ptr<Transaction> Database::getTransaction(Error& error)
 {
     RecyclableHandle handle = m_pool->flowOut(error);//get a new handle for transaction
     if (handle!=nullptr) {
@@ -41,7 +41,7 @@ std::shared_ptr<Transaction> DataBase::getTransaction(Error& error)
     return nullptr;
 }
 
-RecyclableHandle DataBase::flowOut(Error& error)
+RecyclableHandle Database::flowOut(Error& error)
 {
     std::unordered_map<std::string, RecyclableHandle>* threadedHandle = s_threadedHandle.get();
     const auto& iter = threadedHandle->find(getPath());
@@ -51,7 +51,7 @@ RecyclableHandle DataBase::flowOut(Error& error)
     return iter->second;
 }
 
-bool DataBase::begin(StatementTransaction::Mode mode, Error& error)
+bool Database::begin(StatementTransaction::Mode mode, Error& error)
 {
     RecyclableHandle handle = flowOut(error);
     if (handle!=nullptr
@@ -62,7 +62,7 @@ bool DataBase::begin(StatementTransaction::Mode mode, Error& error)
     return false;
 }
 
-bool DataBase::commit(Error& error)
+bool Database::commit(Error& error)
 {
     RecyclableHandle handle = flowOut(error);
     if (handle!=nullptr
@@ -73,7 +73,7 @@ bool DataBase::commit(Error& error)
     return false;
 }
 
-bool DataBase::rollback(Error& error)
+bool Database::rollback(Error& error)
 {
     RecyclableHandle handle = flowOut(error);
     bool result = false;
@@ -84,7 +84,7 @@ bool DataBase::rollback(Error& error)
     return result;
 }
 
-bool DataBase::runEmbeddedTransaction(TransactionBlock transaction, Error& error)
+bool Database::runEmbeddedTransaction(TransactionBlock transaction, Error& error)
 {
     std::unordered_map<std::string, RecyclableHandle>* threadedHandle = s_threadedHandle.get();
     if (threadedHandle->find(getPath())!=threadedHandle->end()) {

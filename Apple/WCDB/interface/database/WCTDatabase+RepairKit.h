@@ -19,11 +19,19 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDataBase.h>
-#import <WCDB/core.h>
+#import <WCDB/WCTDatabase.h>
+//#import <wcsrk/wcsrk.h>
 
-@interface WCTDataBase() {
-@protected
-    WCDB::DataBase* _database;
-}
+@interface WCTDatabase(RepairKit)
+
+//- (NSString*)defaultBackupPath;
+//- (BOOL)backup;
+//- (BOOL)backupToPath:(NSString*)backupPath;
+//
+//- (BOOL)removeBackup;
+//- (BOOL)removeBackupAtPath:(NSString*)backupPath;
+
+//- (BOOL)repairToPath:(NSString*)newDBPath withBackupPath:(NSString*)backupPath andAssist:(const Assist&)assist;
+//- (BOOL)repairToPath:(NSString*)newDBPath andAssist:(const Assist&)assist;
+
 @end

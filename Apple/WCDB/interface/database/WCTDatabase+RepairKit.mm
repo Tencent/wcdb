@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDataBase+RepairKit.h>
-#import <WCDB/WCTDataBase+Private.h>
+#import <WCDB/WCTDatabase+RepairKit.h>
+#import <WCDB/WCTDatabase+Private.h>
 
-@implementation WCTDataBase(RepairKit)
+@implementation WCTDatabase(RepairKit)
 
 //- (NSString*)defaultBackupPath
 //{

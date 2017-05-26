@@ -34,7 +34,7 @@ public:
     static const int32_t VERSION;
 
     static std::shared_ptr<Backup> BackupFromHandle(sqlite3* handle);
-    static std::shared_ptr<Backup> BackupFromDataBase(const std::string& dbPath);
+    static std::shared_ptr<Backup> BackupFromDatabase(const std::string& dbPath);
     static std::shared_ptr<Backup> DecodeFromPath(const std::string& backupPath);
     
     std::shared_ptr<unsigned char> encode(size_t& size);

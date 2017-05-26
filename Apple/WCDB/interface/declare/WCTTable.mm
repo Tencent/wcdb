@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTTable.h>
 #import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTTable+DataBase.h>
+#import <WCDB/WCTTable+Database.h>
 
 @implementation WCTTable
 
