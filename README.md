@@ -89,7 +89,7 @@ method.
 ### Build WCDB Android with Prebuilt Dependencies
 
 WCDB itself can be built apart from its dependencies using Gradle or Android Studio. 
-To do so, make sure you have checked out `external` submodule then run:
+To build WCDB Android library, run Gradle on `android` directory:
 
 ```bash
 $ cd android
@@ -109,33 +109,19 @@ Android Studio will do this for you when the project is imported.
 
 ### Build Dependencies from Sources
 
-You can rebuild all dependencies, i.e. OpenSSL and SQLCipher, if you wish. In this case,
-Android NDK *(version r11c or later is recommended)*, a working C compiler on the host 
-system, Perl 5 and a bash environment is needed. 
+WCDB depends on OpenSSL crypto library and SQLCipher. You can rebuild all dependencies
+if you wish. In this case, a working C compiler on the host system, Perl 5, Tcl and a 
+bash environment is needed to be installed on your system.
 
-To build dependencies, set `ANDROID_NDK_ROOT` environment variable to your NDK path, 
-then run `build-depends-android.sh`
+To build dependencies, checkout all submodules, set `ANDROID_NDK_ROOT` environment 
+variable to your NDK path, then run `build-depends-android.sh`:
 
 ```bash
 $ export ANDROID_NDK_ROOT=/path/to/ndk
 $ ./build-depends-android.sh
 ```
 
-Be patient, OpenSSL and SQLCipher static libraries will be built in `external` directory.
-
-## Comparison to SQLCipher Official Android Binding
-
-SQLCipher also provides [its own Android binding][sqlcipher-android]. WCDB works in a similar way, with several improvements:
-
-  * WCDB Android framework is derived from moden Android framework, which provides connection pooling 
-    for concurrent access to database in WAL journal mode. See [Android SDK reference][sdk-ref-sqlitedb].
-  * `arm64-v8a` archtecture is supported. This enables WCDB to work with other native 64-bit libraries.
-  * Sources, including Java and JNI parts, are debuggable using Android Studio 2.2+.
-  * Some additional features is available with extra APIs, such as database corruption recovery
-    (`RepairKit`, `BackupKit`, `RecoverKit`) and alternative Cursor implementations
-    (`SQLiteDirectCursor`, `SQLiteAsyncCursor`).
+This will build OpenSSL crypto library and generate SQLCipher amalgamation sources
+and place them to proper locations suitable for WCDB library building.
 
 [sqlcipher]: https://github.com/sqlcipher/sqlcipher
-[ios-doc]: https://xxxx/yyy
-[sqlcipher-android]: https://github.com/sqlcipher/android-database-sqlcipher
-[sdk-ref-sqlitedb]: https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html
