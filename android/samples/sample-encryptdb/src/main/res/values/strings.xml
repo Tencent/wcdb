@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EncryptedDBSample</string>
+    <string name="action_settings">Settings</string>
+    <string name="init_plain_text_db">Init Plain-text DB</string>
+    <string name="init_encrypted_db">Init Encrypted DB</string>
+    <string name="insert_message">Insert Message</string>
+</resources>

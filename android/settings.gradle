@@ -1,1 +1,2 @@
-include ':wcdb'
+include ':wcdb', ':sample-encryptdb'
+project(':sample-encryptdb').projectDir = new File('samples/sample-encryptdb')
