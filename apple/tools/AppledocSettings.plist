@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>--ignore</key>
+	<array>
+		<string>WCTBaseAccessor.h</string>
+		<string>WCTConstraintBinding.h</string>
+		<string>WCTDeclare.h</string>
+		<string>.cpp</string>
+		<string>.hpp</string>
+		<string>.mm</string>
+	</array>
+	<key>--output</key>
+	<string>./doc</string>
+	<key>--create-docset</key>
+	<false/>
+	<key>--company-id</key>
+	<string>com.Tencent</string>
+	<key>--project-company</key>
+	<string>Tencent</string>
+	<key>--create-html</key>
+	<true/>
+	<key>--project-name</key>
+	<string>WCDB</string>
+</dict>
+</plist>
