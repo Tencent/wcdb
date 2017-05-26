@@ -272,13 +272,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		234B87F91E72505500E4466A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 234B87F41E72505500E4466A /* wcsrk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 234B870B1E724B5D00E4466A;
-			remoteInfo = Test;
-		};
 		238A3A981EB8BF9B00986614 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
@@ -292,13 +285,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 239325C81E836A7700D677CC;
 			remoteInfo = sqlcipher;
-		};
-		239326581E836D4600D677CC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 234B87F41E72505500E4466A /* wcsrk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2393263A1E836C0900D677CC;
-			remoteInfo = "wcsrk framework";
 		};
 		2393266B1E836EAB00D677CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -551,7 +537,6 @@
 		2349F7901EA0D7700021EFA7 /* WCTPropertyBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPropertyBase.mm; sourceTree = "<group>"; };
 		2349F7991EA0F9FC0021EFA7 /* WCTResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTResult.h; sourceTree = "<group>"; };
 		2349F79A1EA0F9FC0021EFA7 /* WCTResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResult.mm; sourceTree = "<group>"; };
-		234B87F41E72505500E4466A /* wcsrk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wcsrk.xcodeproj; path = ../wcsrk/wcsrk.xcodeproj; sourceTree = "<group>"; };
 		2358AC4E1EADE39000F0DA41 /* module_argument.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = module_argument.cpp; sourceTree = "<group>"; };
 		2358AC4F1EADE39000F0DA41 /* module_argument.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = module_argument.hpp; sourceTree = "<group>"; };
 		2386B3BE1ED442E2000B72F6 /* WCTStatictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTStatictics.h; sourceTree = "<group>"; };
@@ -1031,15 +1016,6 @@
 			path = util;
 			sourceTree = "<group>";
 		};
-		234B87F51E72505500E4466A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				234B87FA1E72505500E4466A /* Test */,
-				239326591E836D4600D677CC /* wcsrk.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2386B3BD1ED442D9000B72F6 /* statictics */ = {
 			isa = PBXGroup;
 			children = (
@@ -1101,7 +1077,6 @@
 			children = (
 				231C22BA1EA6191100B55554 /* WCDB-Info.plist */,
 				2349F5D51EA0D6680021EFA7 /* WCDB */,
-				234B87F41E72505500E4466A /* wcsrk.xcodeproj */,
 				23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */,
 				23D5CCFE1EB8616D00A5B8F9 /* Sample */,
 				238A3A811EB8B5A700986614 /* Benchmark */,
@@ -1459,10 +1434,6 @@
 					ProductGroup = 23121C621E700B020012B45E /* Products */;
 					ProjectRef = 23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */;
 				},
-				{
-					ProductGroup = 234B87F51E72505500E4466A /* Products */;
-					ProjectRef = 234B87F41E72505500E4466A /* wcsrk.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1474,25 +1445,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		234B87FA1E72505500E4466A /* Test */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = Test;
-			remoteRef = 234B87F91E72505500E4466A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		239326551E836D4600D677CC /* sqlcipher.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = sqlcipher.framework;
 			remoteRef = 239326541E836D4600D677CC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		239326591E836D4600D677CC /* wcsrk.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = wcsrk.framework;
-			remoteRef = 239326581E836D4600D677CC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1700,13 +1657,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -1715,8 +1669,9 @@
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
@@ -1924,15 +1879,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -1942,9 +1893,9 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
