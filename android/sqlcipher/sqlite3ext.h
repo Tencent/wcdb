@@ -37,12 +37,14 @@ typedef struct sqlite3_api_routines sqlite3_api_routines;
 struct sqlcipher_api_routines {
   int (*register_provider)(sqlcipher_provider *p);
   sqlcipher_provider* (*get_provider)();
-  int (*register_custom_provider)(const char *name, const sqlcipher_provider *p);
-  int (*unregister_custom_provider)(const char *name);
   int (*key)(sqlite3 *db, const void *pKey, int nKey);
   int (*key_v2)(sqlite3 *db, const char *zDb, const void *pKey, int nKey);
   int (*rekey)(sqlite3 *db, const void *pKey, int nKey);
   int (*rekey_v2)(sqlite3 *db, const char *zDb, const void *pKey, int nKey);
+
+  int (*register_custom_provider)(const char *name, const sqlcipher_provider *p);
+  int (*unregister_custom_provider)(const char *name);
+  const sqlcipher_provider* (*get_fallback_provider)();
 };
 #endif
 
@@ -576,6 +578,7 @@ typedef int (*sqlite3_loadext_entry)(
 #define sqlcipher_get_provider         sqlite3_api->sqlcipher->get_provider
 #define sqlcipher_register_custom_provider    sqlite3_api->sqlcipher->register_custom_provider
 #define sqlcipher_unregister_custom_provider  sqlite3_api->sqlcipher->unregister_custom_provider
+#define sqlcipher_get_fallback_provider       sqlite3_api->sqlcipher->get_fallback_provider
 #endif
 
 #endif /* !defined(SQLITE_CORE) && !defined(SQLITE_OMIT_LOAD_EXTENSION) */
