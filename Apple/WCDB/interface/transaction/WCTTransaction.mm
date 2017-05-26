@@ -39,29 +39,35 @@
 
 - (BOOL)begin
 {
-    BOOL result = _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
-    if (result&&_ticker) {
-        _ticker->tick();
+    @synchronized (self) {
+        BOOL result = _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
+        if (result&&_ticker) {
+            _ticker->tick();
+        }
+        return result;
     }
-    return result;
 }
 
 - (BOOL)commit
 {
-    BOOL result = _transaction->commit(_error);
-    if (result&&_ticker) {
-        _ticker->pause();
+    @synchronized (self) {
+        BOOL result = _transaction->commit(_error);
+        if (result&&_ticker) {
+            _ticker->pause();
+        }
+        return result;
     }
-    return result;
 }
 
 - (BOOL)rollback
 {
-    BOOL result = _transaction->rollback(_error);
-    if (_ticker) {
-        _ticker->pause();
+    @synchronized (self) {
+        BOOL result = _transaction->rollback(_error);
+        if (_ticker) {
+            _ticker->pause();
+        }
+        return result;
     }
-    return result;
 }
 
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
@@ -71,16 +77,18 @@
 
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
 {
-    WCDB::DataBase::TransactionEvent event = nullptr;
-    if (onTransactionStateChanged) {
-        event = [onTransactionStateChanged](WCDB::DataBase::TransactionEventType eventType){
-            onTransactionStateChanged((WCTTransactionEvent)eventType);
-        };
+    @synchronized (self) {
+        WCDB::DataBase::TransactionEvent event = nullptr;
+        if (onTransactionStateChanged) {
+            event = [onTransactionStateChanged](WCDB::DataBase::TransactionEventType eventType){
+                onTransactionStateChanged((WCTTransactionEvent)eventType);
+            };
+        }
+        WCDB::Error innerError;
+        return _transaction->runTransaction([inTransaction](WCDB::Error&)->bool {
+            return inTransaction();
+        }, event, innerError);
     }
-    WCDB::Error innerError;
-    return _transaction->runTransaction([inTransaction](WCDB::Error&)->bool {
-        return inTransaction();
-    }, event, innerError);
 }
 
 @end
