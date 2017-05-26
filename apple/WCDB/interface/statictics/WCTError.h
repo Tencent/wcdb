@@ -24,66 +24,88 @@
 
 /**
  It indicates the error type for WCTError
- 
- - WCTErrorTypeSQLite: an error comes from sqlite interface. You can check it at http://www.sqlite.org/rescode.html .
- - WCTErrorTypeSystemCall: system error, which is obtained by [errno].
- - WCTErrorTypeCore: an error comes from core layer of WCDB. For further information, see [Error::CoreCode] in [error.hpp].
- - WCTErrorTypeInterface: an error comes from interface layer of WCDB. For further information, see [Error::InterfaceCode] in [error.hpp].
- - WCTErrorTypeAbort: development error. You should fix it before release.
- - WCTErrorTypeWarning: warning. You'd better fix it,
- - WCTErrorTypeSQLiteGlobal: an error comes from [SQLITE_CONFIG_LOG]. You can check it at http://www.sqlite.org/rescode.html .
  */
-typedef NS_ENUM(std::underlying_type<WCDB::Error::Type>::type, WCTErrorType) {
-    WCTErrorTypeNotSet = (WCTErrorType)WCDB::Error::Type::NotSet,
+typedef NS_ENUM(int, WCTErrorType) {
+    /**
+     * An error comes from sqlite interface. You can check it at http://www.sqlite.org/rescode.html .
+     */
     WCTErrorTypeSQLite = (WCTErrorType)WCDB::Error::Type::SQLite,
+    /**
+     * System error, which is obtained by [errno].
+     */
     WCTErrorTypeSystemCall = (WCTErrorType)WCDB::Error::Type::SystemCall,
+    /**
+     * An error comes from core layer of WCDB. For further information, see [Error::CoreCode] in [error.hpp].
+     */
     WCTErrorTypeCore = (WCTErrorType)WCDB::Error::Type::Core,
+    /**
+     * An error comes from interface layer of WCDB. For further information, see [Error::InterfaceCode] in [error.hpp].
+     */
     WCTErrorTypeInterface = (WCTErrorType)WCDB::Error::Type::Interface,
+    /**
+     * Development error. You should fix it before release.
+     */
     WCTErrorTypeAbort = (WCTErrorType)WCDB::Error::Type::Abort,
+    /**
+     * Warning. You'd better fix it.
+     */
     WCTErrorTypeWarning = (WCTErrorType)WCDB::Error::Type::Warning,
+    /**
+     * An error comes from [SQLITE_CONFIG_LOG]. You can check it at http://www.sqlite.org/rescode.html .
+     */
     WCTErrorTypeSQLiteGlobal = (WCTErrorType)WCDB::Error::Type::SQLiteGlobal,
 };
 
 /**
  More information can be obtained with following keys.
- Note that different types of errors have different keys.
-
- - WCTErrorKeyTag: tag of database.
- - WCTErrorKeyOperation: for further information, see [Error::CoreOperation] in [error.hpp].
- - WCTErrorKeyExtendedCode: extended code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
- - WCTErrorKeyMessage: some text message that helps you debug it.
- - WCTErrorKeySQL: the SQL is being executed when an error occurs.
- - WCTErrorKeyPath: the file path that is being manipulated when an error occurs.
  */
-typedef NS_ENUM(std::underlying_type<WCDB::Error::Key>::type, WCTErrorKey) {
+typedef NS_ENUM(int, WCTErrorKey) {
+    /**
+     * Tag of database
+     */
     WCTErrorKeyTag = (WCTErrorKey)WCDB::Error::Key::Tag,
+    /**
+     * The operation that is being performed when an error occurs. For further information, see [Error::CoreOperation] in [error.hpp].
+     */
     WCTErrorKeyOperation = (WCTErrorKey)WCDB::Error::Key::Operation,
+    /**
+     * Extended code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
+     */
     WCTErrorKeyExtendedCode = (WCTErrorKey)WCDB::Error::Key::ExtendedCode,
+    /**
+     * Text message that helps you debug it.
+     */
     WCTErrorKeyMessage = (WCTErrorKey)WCDB::Error::Key::Message,
+    /**
+     * The SQL is being executed when an error occurs.
+     */
     WCTErrorKeySQL = (WCTErrorKey)WCDB::Error::Key::SQL,
+    /**
+     * The file path that is being manipulated when an error occurs.
+     */
     WCTErrorKeyPath = (WCTErrorKey)WCDB::Error::Key::Path,
 };
 
+/**
+ Detailed error
+ */
 @interface WCTError : NSError
 
 /**
- Convenient interface for checking code==0.
- Note that both error==nil and error.code==0 mean no error.
- 
- @return true for no error 
- */
-- (BOOL)isOK;
-
-/**
- See [WCTErrorType] in [WCTError.h] also.
+ @see WCTErrorType
  */
 @property(nonatomic, readonly) WCTErrorType type;
 
 /**
- See [WCTErrorKey] in [WCTError.h> also.
+ @brief Convenient interface for checking code==0.
+ @return YES for no error 
+ */
+- (BOOL)isOK;
 
+/**
+ @see WCTErrorKey
  @param key key
- @return Depending on the key and type, [NSString], [NSNumber] and [nil] may be returned.
+ @return Depending on the key and type, NSString, NSNumber and [nil] may be returned.
  */
 - (id)infoForKey:(WCTErrorKey)key;
 

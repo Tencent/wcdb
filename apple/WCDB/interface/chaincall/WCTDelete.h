@@ -28,41 +28,36 @@
 @interface WCTDelete : WCTChainCall
 
 /**
- WINQ interface for SQL. 
-
+ @brief WINQ interface for SQL.
  @param expr expr
  @return self
  */
 - (instancetype)where:(const WCTCondition&)expr;
 
 /**
- WINQ interface for SQL.
-
+ @brief WINQ interface for SQL.
  @param orderList order list
  @return self
  */
 - (instancetype)orderBy:(const WCTOrderByList&)orderList;
 
 /**
- WINQ interface for SQL.
-
+ @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
 - (instancetype)limit:(const WCTLimit&)limit;
 
 /**
- WINQ interface for SQL.
-
+ @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
 - (instancetype)offset:(const WCTOffset&)offset;
 
 /**
- Execute the delete SQL.
-
- @return YES if no error occurs. See [error] also.
+ @brief Execute the delete SQL.
+ @return YES if no error occurs.
  */
 - (BOOL)execute;
 

@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-enum class ColumnType{
+enum class ColumnType : int{
     Null,
     Float,
     Integer32,

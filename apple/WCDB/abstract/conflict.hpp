@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-enum class Conflict {
+enum class Conflict : int{
     NotSet,
     Rollback,
     Abort,

@@ -55,7 +55,7 @@ public:
     bool setCipherKey(const void* data, int size);
     long long getLastInsertedRowID();
     
-    enum class Config {
+    enum class Config : int {
         Fts3Tokenizer,
     };
     void setConfig(Config config, bool enable);

@@ -22,19 +22,20 @@
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/core.h>
 
+/**
+ Configuration
+ */
 typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
 
-/**
- Thread-safe
- */
 @interface WCTDatabase(Core)
 
 /**
- Set config for this database. All handles will run this config before its next operation.
+ @brief Set config for this database.  
+ @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.  
  
- [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error& error) {
-    return handle->exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
- } forName:@"demo" withOrder:1];
+     [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error& error) {
+        return handle->exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
+     } forName:@"demo" withOrder:1];
 
  @param config config
  @param name The Identifier for this config
@@ -43,8 +44,8 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
 - (void)setConfig:(WCDB::Config)config forName:(NSString*)name withOrder:(WCDB::Configs::Order)order;
 
 /**
- This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];
- 
+ @brief This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];
+ @see setConfig:forName:withOrder:
  @param config config
  @param name The Identifier for this config
  */

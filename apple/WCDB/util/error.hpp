@@ -34,7 +34,7 @@ const Tag InvalidTag = 0;
 class ErrorValue
 {
 public:
-    enum class Type {
+    enum class Type : int {
         Int,
         String,
     };
@@ -54,7 +54,7 @@ class Error
 {
 public:
     //key
-    enum class Key {
+    enum class Key : int {
         Tag = 1,
         Operation = 2,
         ExtendedCode = 3,
@@ -63,7 +63,7 @@ public:
         Path = 6,
     };
     //type
-    enum class Type {
+    enum class Type : int {
         NotSet = 0,
         SQLite = 1,
         SystemCall = 2,
@@ -74,7 +74,7 @@ public:
         SQLiteGlobal = 7,
     };
     //operation
-    enum class HandleOperation {
+    enum class HandleOperation : int {
         Open = 1,
         Close = 2,
         Prepare = 3,
@@ -84,7 +84,7 @@ public:
         SetCipherKey = 7,
         IsTableExists = 8,
     };
-    enum class InterfaceOperation {
+    enum class InterfaceOperation : int {
         StatementHandle = 1,
         Insert = 2,
         Update = 3,
@@ -92,7 +92,7 @@ public:
         Table = 5,
         ChainCall = 6,
     };
-    enum class CoreOperation {
+    enum class CoreOperation : int {
         Prepare = 1,
         Exec = 2,
         Begin = 3,
@@ -100,7 +100,7 @@ public:
         Rollback = 5,
         GetThreadedHandle = 6,
     };
-    enum class SystemCallOperation {
+    enum class SystemCallOperation : int {
         Lstat = 1,
         Access = 2,
         Remove = 3,
@@ -109,16 +109,16 @@ public:
         Mkdir = 6,
     };
     //code
-    enum class CoreCode {
+    enum class CoreCode : int {
         Misuse = 1,
     };
-    enum class InterfaceCode {
+    enum class InterfaceCode : int {
         ORM = 1,
         Inconsistent = 2,
         NilObject = 3,
         Misuse = 4,
     };
-    enum class GlobalCode {
+    enum class GlobalCode : int {
         Warning = 1,
         Abort = 2,
     };

@@ -22,14 +22,10 @@
 #import <WCDB/WCTInterface.h>
 #import <WCDB/WCTDeclare.h>
 
-/**
- Thread-safe
- */
 @interface WCTInterface(ChainCall)
 
 /**
- Generate a [WCTInsert] to do an insertion.
-
+ @brief Generate a WCTInsert to do an insertion.
  @param cls The class of the object to be inserted.
  @param tableName The name of the table to be used to do an insertion.
  @return WCTInsert
@@ -37,8 +33,7 @@
 - (WCTInsert*)prepareInsertObjectsOfClass:(Class)cls into:(NSString*)tableName;
 
 /**
- Generate a [WCTInsert] to do an insertion or replacement.
-
+ @brief Generate a WCTInsert to do an insertion or replacement.
  @param cls The class of the object to be inserted.
  @param tableName The name of the table to be used to do an insertion.
  @return WCTInsert
@@ -46,8 +41,7 @@
 - (WCTInsert*)prepareInsertOrReplaceObjectsOfClass:(Class)cls into:(NSString*)tableName;
 
 /**
- Generate a [WCTInsert] to do a partial insertion.
-
+ @brief Generate a WCTInsert to do a partial insertion.
  @param propertyList The specific properties to be inserted.
  @param tableName The name of the table to be used to do an insertion.
  @return WCTInsert
@@ -55,8 +49,7 @@
 - (WCTInsert*)prepareInsertObjectsOnProperties:(const WCTPropertyList&)propertyList into:(NSString*)tableName;
 
 /**
- Generate a [WCTInsert] to do a partial insertion or replacement.
-
+ @brief Generate a WCTInsert to do a partial insertion or replacement.
  @param propertyList The specific properties to be inserted.
  @param tableName The name of the table to be used to do an insertion.
  @return WCTInsert
@@ -64,16 +57,14 @@
 - (WCTInsert*)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList&)propertyList into:(NSString*)tableName;
 
 /**
- Generate a [WCTDelete] to do a deletion.
-
+ @brief Generate a WCTDelete to do a deletion.
  @param tableName The name of the table to be used to do a deletion.
  @return WCTDelete
  */
 - (WCTDelete*)prepareDeleteFromTable:(NSString*)tableName;
 
 /**
- Generate a [WCTUpdate] to do an update.
-
+ @brief Generate a WCTUpdate to do an update.
  @param tableName The name of the table to be used to do an update.
  @param propertyList The specific properties to be updated.
  @return WCTUpdate
@@ -81,8 +72,7 @@
 - (WCTUpdate*)prepareUpdateTable:(NSString*)tableName onProperties:(const WCTPropertyList&)propertyList;
 
 /**
- Generate a [WCTSelect] to do an object selection.
-
+ @brief Generate a WCTSelect to do an object selection.
  @param cls The class of the object to be selected.
  @param tableName The name of the table to be used to do a selection.
  @return WCTSelect
@@ -90,8 +80,7 @@
 - (WCTSelect*)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString*)tableName;
 
 /**
- Generate a [WCTSelect] to do an object selection on the specific results.
-
+ @brief Generate a WCTSelect to do an object selection on the specific results.
  @param resultList The column results to be selected.
  @param tableName The name of the table to be used to do a selection.
  @return WCTSelect
@@ -99,8 +88,7 @@
 - (WCTSelect*)prepareSelectObjectsOnResults:(const WCTResultList&)resultList fromTable:(NSString*)tableName;
 
 /**
- Generate a [WCTRowSelect] to do a row selection on the specific results.
-
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
  @param resultList The column results to be selected.
  @param tableName The name of the table to be used to do a selection.
  @return WCTRowSelect
@@ -108,8 +96,7 @@
 - (WCTRowSelect*)prepareSelectRowsOnResults:(const WCTResultList&)resultList fromTable:(NSString*)tableName;
 
 /**
- Generate a [WCTRowSelect] to do a row selection on the specific results.
-
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
  @param resultList The column results to be selected.
  @param tableNames The name of the table to be used to do a selection.
  @return WCTRowSelect
@@ -117,8 +104,7 @@
 - (WCTRowSelect*)prepareSelectRowsOnResults:(const WCTResultList&)resultList fromTables:(NSArray<NSString*>*)tableNames;
 
 /**
- Generate a [WCTMultiSelect] to do a cross table selection on the specific results.
-
+ @brief Generate a WCTMultiSelect to do a cross table selection on the specific results.
  @param resultList The column results to be selected.
  @param tableNames The name of the table to be used to do a selection.
  @return WCTMultiSelect

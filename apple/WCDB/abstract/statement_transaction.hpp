@@ -28,12 +28,12 @@ namespace WCDB {
 class StatementTransaction : public Statement
 {
 public:
-    enum class Mode{
+    enum class Mode : int{
         Defered,
         Immediate,
         Exclusive,
     };
-    enum class Type{
+    enum class Type : int{
         Begin,
         Commit,
         Rollback,

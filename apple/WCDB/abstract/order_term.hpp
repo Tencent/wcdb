@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-enum class OrderTerm {
+enum class OrderTerm : int {
     NotSet,
     ASC,
     DESC,

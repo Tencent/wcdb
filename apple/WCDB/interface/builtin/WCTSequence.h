@@ -24,13 +24,10 @@
 #import <WCDB/WCTProperty.h>
 
 /**
- Builtin ORM for "sqlite_sequence" table. for further information, see https://sqlite.org/autoinc.html .
+ Builtin ORM for "sqlite_sequence" table. For further information, see https://sqlite.org/autoinc.html .
  */
 @interface WCTSequence : NSObject<WCTTableCoding>
 
-/**
- @return @"sqlite_sequence"
- */
 + (NSString*)TableName;
 
 @property(retain) NSString* name;

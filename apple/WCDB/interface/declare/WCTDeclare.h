@@ -64,7 +64,7 @@ typedef std::list<const WCTProperty> WCTPropertyList;
 class WCTResult;
 class WCTResultList;
 typedef WCTExpr WCTCondition;
-typedef NS_ENUM(std::underlying_type<WCDB::OrderTerm>::type, WCTOrderTerm) {
+typedef NS_ENUM(int, WCTOrderTerm) {
     WCTOrderedAscending = (WCTOrderTerm)WCDB::OrderTerm::ASC,
     WCTOrderedDescending = (WCTOrderTerm)WCDB::OrderTerm::DESC,
     WCTOrderedNotSet = (WCTOrderTerm)WCDB::OrderTerm::NotSet,
@@ -82,7 +82,7 @@ typedef WCDB::ColumnDef WCTColumnDef;
 typedef WCDB::ColumnDefList WCTColumnDefList;
 typedef WCDB::TableConstraint WCTTableConstraint;
 typedef WCDB::TableConstraintList WCTTableConstraintList; 
-typedef NS_ENUM(std::underlying_type<WCDB::Conflict>::type, WCTConflict) {
+typedef NS_ENUM(int, WCTConflict) {
     WCTConflictNotSet = (WCTConflict)WCDB::Conflict::NotSet,
     WCTConflictRollback = (WCTConflict)WCDB::Conflict::Rollback,
     WCTConflictAbort = (WCTConflict)WCDB::Conflict::Abort,
@@ -90,7 +90,7 @@ typedef NS_ENUM(std::underlying_type<WCDB::Conflict>::type, WCTConflict) {
     WCTConflictIgnore = (WCTConflict)WCDB::Conflict::Ignore,
     WCTConflictReplace = (WCTConflict)WCDB::Conflict::Replace,
 };
-typedef NS_ENUM(std::underlying_type<WCDB::ColumnType>::type, WCTColumnType) {
+typedef NS_ENUM(int, WCTColumnType) {
     WCTColumnTypeInteger32 = (WCTColumnType)WCDB::ColumnType::Integer32,
     WCTColumnTypeInteger64 = (WCTColumnType)WCDB::ColumnType::Integer64,
     WCTColumnTypeDouble = (WCTColumnType)WCDB::ColumnType::Float,

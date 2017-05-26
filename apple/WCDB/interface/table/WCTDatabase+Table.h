@@ -25,11 +25,10 @@
 @interface WCTDatabase(Table)
 
 /**
- Create table and indexes from ORM.
- Note that it will add newly defined column automatically.
- Note that it will run embedded transaction.
- The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
-
+ @brief Create table and indexes from ORM if not exists.
+        Note that it will add newly defined column automatically.
+        Note that it will run embedded transaction.
+        The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
  @param tableName The name of the table to be created.
  @param cls class
  @return YES only if no error occurs.
@@ -37,27 +36,25 @@
 - (BOOL)createTableAndIndexesOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
- Get a wrapper from an existing table.
-
- @param tableName The name of the table
- @param cls class
- @return [WCTTable] for an existing table.
+ @brief Get a wrapper from an existing table.
+ @param tableName The name of the table.
+ @param cls a class implement WCTTableCoding.
+ @return nil for a non-existent table.
  */
 - (WCTTable*)getTableOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
- Create virtual table from ORM.
-
+ @brief Create virtual table from ORM if not exists.
+ @see http://www.sqlite.org/vtab.html
  @param tableName The name of the virtual table to be created.
  @param moduleName moduleName
- @param cls class
+ @param cls a class implement WCTTableCoding.
  @return YES only if no error occurs.
  */
 - (BOOL)createVirtualTableOfName:(NSString*)tableName usingModule:(NSString*)moduleName withClass:(Class<WCTTableCoding>)cls;
 
 /**
- Create table from user-defined column.
- 
+ @brief Create table from user-defined column if not exists.
  @param tableName The name of the table to be created.
  @param columnDefList The list of column definition.
  @param constraintList The list of constraint.
@@ -66,8 +63,7 @@
 - (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList andConstraintList:(const WCTTableConstraintList&)constraintList;
 
 /**
- This interface is equivalent to [database createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:{}].
- 
+ @brief This interface is equivalent to [database createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:{}].
  @param tableName The name of the table to be created.
  @param columnDefList The list of column definition.
  @return YES only if no error occurs.
@@ -75,24 +71,21 @@
 - (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList;
 
 /**
- Check whether tabel exists
-
+ @brief Check whether tabel exists
  @param tableName The name of the table to be checked.
  @return YES if table exists. NO if table does not exist or an error occurs.
  */
 - (BOOL)isTableExists:(NSString*)tableName;
 
 /**
- Drop table.
-
+ @brief Drop table if exists.
  @param tableName The name of the table to be dropped.
  @return YES only if no error occurs.
  */
 - (BOOL)dropTableOfName:(NSString*)tableName;
 
 /**
- Create table from user-defined index.
-
+ @brief Create table from user-defined index if not exists.
  @param indexName The name of the index to be created.
  @param indexList The list of index definition.
  @param tableName The name of index-associated table.
@@ -101,16 +94,14 @@
 - (BOOL)createIndexOfName:(NSString*)indexName withIndexList:(const WCTIndexList&)indexList forTable:(NSString*)tableName;
 
 /**
- Drop index.
-
+ @brief Drop index if not exists.
  @param indexName The name of the index to be dropped.
  @return YES only if no error occurs.
  */
 - (BOOL)dropIndexOfName:(NSString*)indexName;
 
 /**
- Add column.
-
+ @brief Add column.
  @param columnDef The definition of column to be added.
  @param tableName The name of table to do a column addition.
  @return YES only if no error occurs.

@@ -29,7 +29,7 @@ namespace WCDB {
 class JoinClause : public Describable
 {
 public:
-    enum class Type{
+    enum class Type : int{
         NotSet,
         Left,
         LeftOuter,

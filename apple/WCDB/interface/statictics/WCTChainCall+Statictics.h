@@ -24,25 +24,22 @@
 @interface WCTChainCall(Statictics)
 
 /**
- After enabling, you can call the [cost] interface to get time consuming.
- Note that you should call it before calling all other interface, otherwise [cost] will return an inaccurate result.
- See [cost] also.
- 
+ @brief After enabling, you can call the [cost] interface to get time consuming.
+ @warning You should call it before calling all other interface, otherwise [cost] will return an inaccurate result.
+ @see cost 
  @param enabled enabled
  */
 - (void)setStaticticsEnabled:(BOOL)enabled;
 
 /**
- The time consuming. You can call it to profile the performance.
- See [setStaticticsEnabled:] also.
- 
+ @brief The time consuming. You can call it to profile the performance.
+ @see setStaticticsEnabled:
  @return Time in seconds
  */
 - (double)cost;
 
 /**
- More detailed error messages.
- 
+ @brief More detailed error messages.
  @return nil or error.isOK==YES if no error occurs.
  */
 - (WCTError*)error;

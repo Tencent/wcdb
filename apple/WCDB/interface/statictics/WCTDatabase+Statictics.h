@@ -25,9 +25,9 @@
 @interface WCTDatabase(Statictics)
 
 /**
- You can register a tracer to monitor the performance of all SQLs in this database. See [SetGlobalTrace:] also.
- 
+ @brief You can register a tracer to monitor the performance of all SQLs in this database.
  @param trace trace
+ @see [WCTStatictics SetGlobalTrace:]
  */
 - (void)setTrace:(WCTTrace)trace;
 

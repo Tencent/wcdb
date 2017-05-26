@@ -23,24 +23,22 @@
 #import <WCDB/abstract.h>
 #import <WCDB/WCTDeclare.h>
 
-/**
- Thread-safe
- */
 @interface WCTInterface(Core)
 
 /**
- Exec a specific sql.
- Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer 
-
+ @brief Exec a specific sql.
+        Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer 
+ @param statement WINQ statement
  @return YES if it is successfully executed
  */
 - (BOOL)exec:(const WCDB::Statement&)statement;
 
 /**
- Prepare a specific sql.
- Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer 
-
+ @brief Prepare a specific sql.
+        Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer
+ @param statement WINQ statement
  @return WCTStatement
+ @see WCTStatement
  */
 - (WCTStatement*)prepare:(const WCDB::Statement&)statement;
 

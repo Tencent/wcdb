@@ -33,7 +33,7 @@ class Transaction;
 
 typedef int WCTTag;
 
-enum class CoreType {
+enum class CoreType : int{
     None,
     Transaction,
     Database,

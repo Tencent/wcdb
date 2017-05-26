@@ -21,6 +21,9 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTInterface.h>
 
+/**
+ Thread-safe
+ */
 @interface WCTDatabase : WCTInterface
 
 @end

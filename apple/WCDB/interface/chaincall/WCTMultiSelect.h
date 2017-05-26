@@ -28,22 +28,21 @@
 @interface WCTMultiSelect : WCTSelectBase
 
 /**
- Get next selected object. You can do an iteration using it.
+ @brief Get next selected object. You can do an iteration using it.
  
- WCTMultiObject* multiObject = nil;
- while ((multiObject = [multiSelect nextMultiObject])) {
-    Class1* object1 = [multiObject objectForKey:tableName1];
-    Class2* object2 = [multiObject objectForKey:tableName2];
-    //...
- }
+     WCTMultiObject* multiObject = nil;
+     while ((multiObject = [multiSelect nextMultiObject])) {
+        Class1* object1 = [multiObject objectForKey:tableName1];
+        Class2* object2 = [multiObject objectForKey:tableName2];
+        //...
+     }
 
  @return See the example above
  */
 - (WCTMultiObject*)nextMultiObject;
 
 /**
- Get all selected objects. 
-
+ @brief Get all selected objects. 
  @return Array with all selected objects.
  */
 - (NSArray<WCTMultiObject*>*)allMultiObjects;

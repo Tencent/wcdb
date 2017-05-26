@@ -21,37 +21,51 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDeclare.h>
 
+/**
+ Trigger when errors occurs
+ */
 typedef void (^WCTErrorReport)(WCTError*);
 
+/**
+ Trigger when a transaction or a normal sql ends.
+ */
 typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString*, NSNumber*>*, NSInteger);
 
+/**
+ Statictics
+ */
 @interface WCTStatictics : NSObject
 
 /**
- You can register a reporter to monitor all errors.
+ @brief You can register a reporter to monitor all errors.
+ 
+     [WCTDatabase SetGlobalErrorReport:^(WCTError* error) {
+        NSLog(@"%@", error);
+     }];
  
  @param report report
+ @see WCTErrorReport
  */
 + (void)SetGlobalErrorReport:(WCTErrorReport)report;
 
 /**
- You can register a tracer to monitor the performance of all SQLs.
- It returns 
- 1. The collection of SQLs and the executions count of each SQL.
- 2. Time consuming in nanoseconds.
- 3. Tag of database.
+ @brief You can register a tracer to monitor the performance of all SQLs.
+        It returns 
+        1. The collection of SQLs and the executions count of each SQL.
+        2. Time consuming in nanoseconds.
+        3. Tag of database.
  
- [WCTDatabase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
- NSLog(@"Tag: %d", tag);
- [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
- NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
- }];
- NSLog(@"Total cost %lld nanoseconds", cost);
- }];
+     [WCTDatabase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+         NSLog(@"Tag: %d", tag);
+         [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
+             NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
+         }];
+         NSLog(@"Total cost %lld nanoseconds", cost);
+     }];
  
- Note that tracer may slow down WCDB.
- 
+ @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
+ @see WCTTrace
  */
 + (void)SetGlobalTrace:(WCTTrace)trace;
 

@@ -25,34 +25,33 @@
 @interface WCTDatabase(Transaction)
 
 /**
- Generation a [WCTTransaction] object to do a transaction.
-
- @return [WCTTransaction]
+ @brief Generation a WCTTransaction object to do a transaction.
+ @return WCTTransaction
  */
 - (WCTTransaction*)getTransaction;
 
 /**
- Run a transaction in block.
+ @brief Run a transaction in block.
  
- BOOL commited = [database runTransaction:^BOOL(){
-    BOOL result = [database insertObject:object into:tableName];
-    return result;//return YES to commit transaction and return NO to rollback transaction.
- } event:^(WCTTransactionEvent event) {
-    switch (event) {
-        case WCTTransactionEventBeginFailed:
-            //...
-            break;
-        case WCTTransactionEventCommitFailed:
-            //...
-            break;
-        case WCTTransactionEventRollback:
-            //...
-            break;
-        case WCTTransactionEventRollbackFailed:
-            //...
-            break;
-    };
- }];
+     BOOL commited = [database runTransaction:^BOOL(){
+        BOOL result = [database insertObject:object into:tableName];
+        return result;//return YES to commit transaction and return NO to rollback transaction.
+     } event:^(WCTTransactionEvent event) {
+        switch (event) {
+            case WCTTransactionEventBeginFailed:
+                //...
+                break;
+            case WCTTransactionEventCommitFailed:
+                //...
+                break;
+            case WCTTransactionEventRollback:
+                //...
+                break;
+            case WCTTransactionEventRollbackFailed:
+                //...
+                break;
+        };
+     }];
 
  @param inTransaction Operation inside transaction.
  @param onTransactionStateChanged State changed event.
@@ -61,33 +60,33 @@
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged;
 
 /**
- This interface is equivalent to [database runTransaction:transaction event:nil];
-
+ @brief This interface is equivalent to [database runTransaction:transaction event:nil];
  @param inTransaction Operation inside transaction.
+ @see runTransaction:event:
  @return YES only if transaction is commited.
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 
 /**
- Separate interface of [runTransaction:]
- Note that you should call [beginTransaction], [commitTransaction], [rollbackTrasaction] and all other operations in same thread. To do a cross-thread transaction, see [WCTTransaction].
-
+ @brief Separate interface of runTransaction:
+ @warning You should call beginTransaction , commitTransaction , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @see WCTTransaction
  @return YES only if no error occurs.
  */
 - (BOOL)beginTransaction;
 
 /**
- Separate interface of [runTransaction:]
- Note that you should call [beginTransaction], [commitTransaction], [rollbackTrasaction] and all other operations in same thread. To do a cross-thread transaction, see [WCTTransaction].
-
+ @brief Separate interface of runTransaction:
+ @warning You should call beginTransaction , commitTransaction , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @see WCTTransaction
  @return YES only if no error occurs.
  */
 - (BOOL)commitTransaction;
 
 /**
- Separate interface of [runTransaction:]
- Note that you should call [beginTransaction], [commitTransaction], [rollbackTrasaction] and all other operations in same thread. To do a cross-thread transaction, see [WCTTransaction].
-
+ @brief Separate interface of runTransaction:
+ @warning You should call beginTransaction , commitTransaction , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @see WCTTransaction
  @return YES only if no error occurs.
  */
 - (BOOL)rollbackTransaction;

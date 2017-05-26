@@ -28,7 +28,7 @@ namespace WCDB {
 class Statement : public Describable
 {
 public:
-    enum class Type {
+    enum class Type : int {
         None = 0,
         AlterTable,
         CreateIndex,

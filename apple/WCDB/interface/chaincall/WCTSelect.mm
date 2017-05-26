@@ -66,7 +66,7 @@
                     WCDB::Error::ReportInterface(_core->getTag(),
                                                  _core->getPath(),
                                                  WCDB::Error::InterfaceOperation::Select, 
-                                                 WCDB::Error::InterfaceCode::Inconsistent, "The [WCTSelect] query properties do not belong to the same class. To do a multi-class select, use [WCTMultiSelect] instead.",
+                                                 WCDB::Error::InterfaceCode::Inconsistent, "The WCTSelect query properties do not belong to the same class. To do a multi-class select, use [WCTMultiSelect] instead.",
                                                  &_error);
                     return self;
                 }

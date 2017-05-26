@@ -22,71 +22,96 @@
 #import <WCDB/WCTInterface.h>
 #import <WCDB/WCTDeclare.h>
 
+/**
+ Trigger of error event in runTransaction:
+ */
 typedef NS_ENUM(int, WCTTransactionEvent) {
-    WCTTransactionEventBeginFailed = 0,
-    WCTTransactionEventCommitFailed = 1,
-    WCTTransactionEventRollback = 2,
-    WCTTransactionEventRollbackFailed = 3,
+    /*
+     * transaction failed with begin
+     */
+    WCTTransactionEventBeginFailed,
+    /*
+     * transaction failed with commit
+     */
+    WCTTransactionEventCommitFailed,
+    /*
+     * transaction rollback. It would be triggered when commiting failed or user returns NO to roll back
+     */
+    WCTTransactionEventRollback,
+    /*
+     * transaction failed with rollback
+     */
+    WCTTransactionEventRollbackFailed,
 };
+
+/**
+ Transaction block
+ */
 typedef BOOL (^WCTTransactionBlock)();
+
+/**
+ Transaction event block
+ */
 typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
 
+/**
+ Transaction
+ */
 @interface WCTTransaction : WCTInterface
 
 /**
- Begin this transaction.
-
+ @brief Begin this transaction.
  @return YES only if no error occurs.
  */
 - (BOOL)begin;
 
 /**
- Commit this transaction.
-
+ @brief Commit this transaction.
  @return YES only if no error occurs.
  */
 - (BOOL)commit;
 
 /**
- Rollback this transaction.
-
+ @brief Rollback this transaction.
  @return YES only if no error occurs.
  */
 - (BOOL)rollback;
 
 /**
- Run a transaction in block.
+ @brief Run a transaction in block.
  
- BOOL commited = [database runTransaction:^BOOL(){
- BOOL result = [database insertObject:object into:tableName];
-    return result;//return YES to commit transaction and return NO to rollback transaction.
- } event:^(WCTTransactionEvent event) {
-    switch (event) {
-        case WCTTransactionEventBeginFailed:
-            //...
-            break;
-        case WCTTransactionEventCommitFailed:
-            //...
-            break;
-        case WCTTransactionEventRollback:
-            //...
-            break;
-        case WCTTransactionEventRollbackFailed:
-            //...
-            break;
-    };
- }];
+     BOOL commited = [database runTransaction:^BOOL(){
+     BOOL result = [database insertObject:object into:tableName];
+        return result;//return YES to commit transaction and return NO to rollback transaction.
+     } event:^(WCTTransactionEvent event) {
+        switch (event) {
+            case WCTTransactionEventBeginFailed:
+                //...
+                break;
+            case WCTTransactionEventCommitFailed:
+                //...
+                break;
+            case WCTTransactionEventRollback:
+                //...
+                break;
+            case WCTTransactionEventRollbackFailed:
+                //...
+                break;
+        };
+     }];
 
  @param inTransaction Operation inside transaction.
  @param onTransactionStateChanged State changed event.
  @return YES only if transaction is commited.
+ @see WCTTransactionBlock
+ @see WCTTransactionEventBlock
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged;
 
 /**
- This interface is equivalent to [transaction runTransaction:transaction event:nil];
- 
+ @brief This interface is equivalent to [transaction runTransaction:transaction event:nil];
  @param inTransaction Operation inside transaction.
+ @see runTransaction:event:
  @return YES only if transaction is commited.
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
