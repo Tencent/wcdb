@@ -1,11 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 // Load local.properties and merge with gradle.properties.
-try {
+def propsFile = project.file('local.properties')
+if (propsFile.exists()) {
     def localProps = new Properties()
     localProps.load(project.file('local.properties').newDataInputStream())
-    ext.putAll(localProps.entrySet())
-} catch (Exception e) {}
+    localProps.each { prop ->
+        project.ext.set(prop.key, prop.value)
+    }
+}
 
 buildscript {
     // Read additional repositories from properties.
