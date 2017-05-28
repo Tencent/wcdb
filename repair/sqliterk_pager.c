@@ -145,66 +145,69 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
         goto sqliterkPagerParseHeader_End;
     }
 
+    pager->integrity |= SQLITERK_INTEGRITY_HEADER;
+
     if (pager->codec) {
         rc = sqliterkCryptoDecode(pager->codec, 1, buffer);
         if (rc != SQLITERK_OK) {
-            rc = SQLITERK_DAMAGED;
+            sqliterkOSWarning(SQLITERK_DAMAGED,
+                "Failed to decode page 1, header corrupted.");
             pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
-            goto sqliterkPagerParseHeader_End;
         }
     }
 
-    pager->integrity |= SQLITERK_INTEGRITY_HEADER;
-    if (memcmp(buffer, "SQLite format 3\000", 16) == 0) {
-        //parse pagesize
-        int pagesize;
-        sqliterkParseInt(buffer, 16, 2, &pagesize);
-        if (pager->codec) {
-            if (pagesize != pager->pagesize) {
-                sqliterkOSWarning(SQLITERK_DAMAGED, 
-                    "Invalid page size for encrypted database: %d expected, %d returned.",
-                    pager->pagesize, pagesize);
+    if (pager->integrity & SQLITERK_INTEGRITY_HEADER) {
+        if (memcmp(buffer, "SQLite format 3\000", 16) == 0) {
+            //parse pagesize
+            int pagesize;
+            sqliterkParseInt(buffer, 16, 2, &pagesize);
+            if (pager->codec) {
+                if (pagesize != pager->pagesize) {
+                    sqliterkOSWarning(SQLITERK_DAMAGED,
+                                      "Invalid page size for encrypted database: %d expected, %d returned.",
+                                      pager->pagesize, pagesize);
+                    pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
+                }
+            } else if ( ((pagesize - 1) & pagesize) != 0 || pagesize < 512 ) {
+                sqliterkOSWarning(SQLITERK_DAMAGED,
+                                  "The [page size] field is corrupted. Default page size %d is used",
+                                  SQLITRK_CONFIG_DEFAULT_PAGESIZE);
+                pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
                 pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
+            } else {
+                pager->pagesize = pagesize;
             }
-        } else if ( ((pagesize - 1) & pagesize) != 0 || pagesize < 512 ) {
-            sqliterkOSWarning(SQLITERK_DAMAGED, 
-                "The [page size] field is corrupted. Default page size %d is used", 
-                SQLITRK_CONFIG_DEFAULT_PAGESIZE);
-            pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
-            pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
+
+            // parse free page count
+            sqliterkParseInt(buffer, 36, 4, &pager->freepagecount);
+
+            // parse reserved bytes
+            int reservedBytes;
+            sqliterkParseInt(buffer, 20, 1, &reservedBytes);
+            if (pager->codec) {
+                if (reservedBytes != pager->reservedBytes) {
+                    sqliterkOSWarning(SQLITERK_DAMAGED,
+                                      "Reserved bytes field doesn't match. %d expected, %d returned.",
+                                      pager->reservedBytes, reservedBytes);
+                    pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
+                }
+            } else if (reservedBytes < 0 || reservedBytes > 255) {
+                sqliterkOSWarning(SQLITERK_DAMAGED, "The [reserved bytes] field is corrupted. 0 is used");
+                pager->reservedBytes = 0;
+                pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
+            } else
+                pager->reservedBytes = reservedBytes;
         } else {
-            pager->pagesize = pagesize;
-        }
-
-        // parse free page count
-        sqliterkParseInt(buffer, 36, 4, &pager->freepagecount);
-
-        // parse reserved bytes
-        int reservedBytes;
-        sqliterkParseInt(buffer, 20, 1, &reservedBytes);
-        if (pager->codec) {
-            if (reservedBytes != pager->reservedBytes) {
-                sqliterkOSWarning(SQLITERK_DAMAGED, 
-                    "Reserved bytes field doesn't match. %d expected, %d returned.",
-                    pager->reservedBytes, reservedBytes);
-                pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
+            // Header is corrupted. Defaults the config
+            sqliterkOSWarning(SQLITERK_DAMAGED, "SQLite format magic corrupted.");
+            if (!pager->codec)
+            {
+                pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
+                pager->reservedBytes = 0;
             }
-        } else if (reservedBytes < 0 || reservedBytes > 255) {
-            sqliterkOSWarning(SQLITERK_DAMAGED, "The [reserved bytes] field is corrupted. 0 is used");
-            pager->reservedBytes = 0;
+            pager->freepagecount = 0;
             pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
-        } else
-            pager->reservedBytes = reservedBytes;
-    } else {
-        // Header is corrupted. Defaults the config
-        sqliterkOSWarning(SQLITERK_DAMAGED, "SQLite format magic corrupted.");
-        if (!pager->codec)
-        {
-            pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
-            pager->reservedBytes = 0;
         }
-        pager->freepagecount = 0;
-        pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
     }
 
     // assign page count
