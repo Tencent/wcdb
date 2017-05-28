@@ -204,18 +204,28 @@ namespace wcdb
     static JNICALL jlong nativeLoadMaster(JNIEnv *env, jclass cls, jstring pathStr, jbyteArray keyArr,
         jobjectArray tableArr, jbyteArray outSaltArr)
     {
+        // Path is guaranteed to be non-null by the Java part.
         const char *path = env->GetStringUTFChars(pathStr, NULL);
-        int key_len = env->GetArrayLength(keyArr);
-        jbyte *key = env->GetByteArrayElements(keyArr, NULL);
 
-        int num_tables = env->GetArrayLength(tableArr);
-        const char **tables = (const char **)malloc(sizeof(const char *) * num_tables);
+        int key_len = 0;
+        jbyte *key = NULL;
+        if (keyArr) {
+            key_len = env->GetArrayLength(keyArr);
+            key = env->GetByteArrayElements(keyArr, NULL);
+        }
 
-        for (int i = 0; i < num_tables; i++)
-        {
-            jstring str = (jstring)env->GetObjectArrayElement(tableArr, i);
-            tables[i] = env->GetStringUTFChars(str, NULL);
-            env->DeleteLocalRef(str);
+        int num_tables = 0;
+        const char **tables = NULL;
+        if (tableArr) {
+            num_tables = env->GetArrayLength(tableArr);
+            tables = (const char **) malloc(sizeof(const char *) * num_tables);
+
+            for (int i = 0; i < num_tables; i++)
+            {
+                jstring str = (jstring)env->GetObjectArrayElement(tableArr, i);
+                tables[i] = env->GetStringUTFChars(str, NULL);
+                env->DeleteLocalRef(str);
+            }
         }
 
         unsigned char salt[16];
@@ -230,15 +240,19 @@ namespace wcdb
             env->SetByteArrayRegion(outSaltArr, 0, sizeof(salt), (jbyte *)salt);
         }
 
-        for (int i = 0; i < num_tables; i++)
-        {
-            jstring str = (jstring)env->GetObjectArrayElement(tableArr, i);
-            env->ReleaseStringUTFChars(str, tables[i]);
-            env->DeleteLocalRef(str);
+        if (tableArr) {
+            for (int i = 0; i < num_tables; i++)
+            {
+                jstring str = (jstring)env->GetObjectArrayElement(tableArr, i);
+                env->ReleaseStringUTFChars(str, tables[i]);
+                env->DeleteLocalRef(str);
+            }
+            free(tables);
         }
-        free(tables);
 
-        env->ReleaseByteArrayElements(keyArr, key, 0);
+        if (key)
+            env->ReleaseByteArrayElements(keyArr, key, 0);
+
         env->ReleaseStringUTFChars(pathStr, path);
 
         return (rc == SQLITERK_OK) ? (jlong)(intptr_t)master : 0;
