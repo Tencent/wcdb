@@ -35,13 +35,18 @@ import android.text.TextUtils;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.support.Log;
 
-
+/**
+ * Interface to database recovery dump utility from SQLite command-line tools.
+ *
+ * @deprecated Use {@link RepairKit} for database corruption recovery.
+ */
 public class DBDumpUtil {
 
 	private static final String TAG = "WCDB.DBDumpUtil";
 
-	public static interface ExecuteSqlCallback {
-		public String preExecute(String sql);
+	/** @deprecated Use {@link RepairKit} for database corruption recovery. */
+	public interface ExecuteSqlCallback {
+		String preExecute(String sql);
 	}
 
 	public static boolean doRecoveryDb(SQLiteDatabase db, String crashDbPath, String key,

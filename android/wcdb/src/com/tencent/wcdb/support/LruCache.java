@@ -60,6 +60,8 @@ import java.util.Map;
  * <p>This class appeared in Android 3.1 (Honeycomb MR1); it's available as part
  * of <a href="http://developer.android.com/sdk/compatibility-library.html">Android's
  * Support Package</a> for earlier releases.
+ *
+ * @hide
  */
 public class LruCache<K, V> {
     private final LinkedHashMap<K, V> map;

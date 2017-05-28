@@ -20,7 +20,6 @@
 
 package com.tencent.wcdb.repair;
 
-import com.tencent.wcdb.SQLException;
 import com.tencent.wcdb.database.SQLiteCipherSpec;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
@@ -85,7 +84,7 @@ public class RepairKit {
 
         mNativePtr = nativeInit(path, key, cipherSpec, (master == null) ? null : master.mKDFSalt);
         if (mNativePtr == 0)
-            throw new SQLException("Failed initialize RepairKit.");
+            throw new SQLiteException("Failed initialize RepairKit.");
 
         mIntegrityFlags = nativeIntegrityFlags(mNativePtr);
         mMasterInfo = master;
@@ -169,6 +168,15 @@ public class RepairKit {
         super.finalize();
     }
 
+    /**
+     * Class represent master info backed up from a {@link SQLiteDatabase}, which
+     * can be used in recovery on database file with corrupted header.
+     *
+     * <p>Table filters can be applied while loading from file or creating an
+     * empty {@code MasterInfo}.</p>
+     *
+     * @see RepairKit#RepairKit(String, byte[], SQLiteCipherSpec, MasterInfo)
+     */
     public static class MasterInfo {
         private long mMasterPtr;
         private byte[] mKDFSalt;
@@ -178,6 +186,14 @@ public class RepairKit {
             mKDFSalt = salt;
         }
 
+        /**
+         * Create a {@code MasterInfo} object with no backup information.
+         * The only scenario to call this method is to apply table filters
+         * for recovery.
+         *
+         * @param tables array of table names to include in the filter
+         * @return {@code MasterInfo} object just created
+         */
         public static MasterInfo make(String[] tables) {
             long ptr = RepairKit.nativeMakeMaster(tables);
             if (ptr == 0)
@@ -186,9 +202,21 @@ public class RepairKit {
             return new MasterInfo(ptr, null);
         }
 
+        /**
+         * Load backup information from file and create a {@code MasterInfo}
+         * object. Table filters can be applied while loading.
+         *
+         * @param path      path to the backup file
+         * @param key       passphrase to the encrypted backup file, or null for
+         *                  plain-text backup file
+         * @param tables    array of table names to include in the filter
+         * @return {@code MasterInfo} object just created
+         */
         public static MasterInfo load(String path, byte[] key, String[] tables) {
-            byte[] salt = new byte[16];
+            if (path == null)
+                return make(tables);
 
+            byte[] salt = new byte[16];
             long ptr = RepairKit.nativeLoadMaster(path, key, tables, salt);
             if (ptr == 0)
                 throw new SQLiteException("Cannot create MasterInfo.");
@@ -196,6 +224,25 @@ public class RepairKit {
             return new MasterInfo(ptr, salt);
         }
 
+        /**
+         * Save backup information from an opened {@link SQLiteDatabase} for later
+         * corruption recovery.
+         *
+         * <p><strong>Call this method BEFORE database corruption.</strong> Backup
+         * data will not change unless database schema is modified, by executing,
+         * e.g. {@code CREATE TABLE}, {@code CREATE INDEX} or {@code ALTER TABLE}
+         * statements.</p>
+         *
+         * <p>Best practise would be backing up when database just finished creation
+         * or upgrade, which would be placed in
+         * {@link com.tencent.wcdb.database.SQLiteOpenHelper#onCreate(SQLiteDatabase)}
+         * or {@link com.tencent.wcdb.database.SQLiteOpenHelper#onUpgrade(SQLiteDatabase, int, int)}.</p>
+         *
+         * @param db    database to be backed up
+         * @param path  output path to the backup file
+         * @param key   passphrase to the backup file, or null for no encryption
+         * @return      true if backup is finished successfully
+         */
         public static boolean save(SQLiteDatabase db, String path, byte[] key) {
             long dbPtr = db.acquireNativeConnectionHandle("backupMaster", true, false);
             boolean ret = RepairKit.nativeSaveMaster(dbPtr, path, key);
@@ -203,6 +250,11 @@ public class RepairKit {
             return ret;
         }
 
+        /**
+         * Close corrupted database and release all resources. This should be
+         * called when recovery is finished. No further method calls on this
+         * object after calling.
+         */
         public void release() {
             if (mMasterPtr == 0) return;
 

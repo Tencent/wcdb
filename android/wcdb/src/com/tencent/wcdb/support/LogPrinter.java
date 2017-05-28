@@ -21,6 +21,9 @@ import android.util.Printer;
 /**
  * Implementation of a {@link android.util.Printer} that sends its output
  * to the system log.
+ *
+ * <p>Modified from Android source to print logs to redirection layer
+ * rather than logcat.</p>
  */
 public class LogPrinter implements Printer {
     private final int mPriority;

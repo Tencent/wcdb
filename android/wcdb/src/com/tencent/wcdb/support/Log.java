@@ -28,6 +28,8 @@ package com.tencent.wcdb.support;
  * send log outputs to the preset or user defined logger.</p>
  */
 public class Log {
+	
+	private Log() {}
 
 	/**
 	 * Preset No-op logger which drops all log outputs.
@@ -36,7 +38,7 @@ public class Log {
 	public static final int LOGGER_NONE = 0;
 
 	/**
-	 * Default logger which output logs to Android logcat.
+	 * Default logger which output logs to Android system log (logcat).
 	 * Pass it to {@link #setLogger(int)}.
 	 */
 	public static final int LOGGER_DEFAULT = 1;
