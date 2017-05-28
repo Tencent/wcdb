@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.tencent.wcdb.database.SQLiteDatabase;
+import com.tencent.wcdb.database.SQLiteOpenHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "WCDB.EncryptDBSample";
 
     private SQLiteDatabase mDB;
+    private SQLiteOpenHelper mDBHelper;
     private int mDBVersion;
 
     private ListView mListView;
@@ -59,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
 
         findViewById(R.id.btn_init_plain).setOnClickListener(new View.OnClickListener() {
+            // Init plain-text button pressed.
+            // Create or open database in version 1, then refresh adapter.
+
             @Override
             public void onClick(View v) {
                 new AsyncTask<Void, Void, Cursor>() {
@@ -69,12 +74,15 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     protected Cursor doInBackground(Void... params) {
-                        if (mDB != null && mDB.isOpen()) {
-                            mDB.close();
+                        if (mDBHelper != null && mDB != null && mDB.isOpen()) {
+                            mDBHelper.close();
+                            mDBHelper = null;
                             mDB = null;
                         }
 
-                        mDB = new PlainTextDBHelper(MainActivity.this).getWritableDatabase();
+                        mDBHelper = new PlainTextDBHelper(MainActivity.this);
+                        mDBHelper.setWriteAheadLoggingEnabled(true);
+                        mDB = mDBHelper.getWritableDatabase();
                         mDBVersion = mDB.getVersion();
                         return mDB.rawQuery("SELECT rowid as _id, content, '???' as sender FROM message;",
                                 null);
@@ -89,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_init_encrypted).setOnClickListener(new View.OnClickListener() {
+            // Init encrypted button pressed.
+            // Create or open database in version 2, then refresh adapter.
+            // If plain-text database exists and encrypted one does not, transfer all
+            // data from the plain-text database (which in version 1), then upgrade it
+            // to version 2.
+
+            // See EncryptedDBHelper.java for details about data transfer and schema upgrade.
+
             @Override
             public void onClick(View v) {
                 new AsyncTask<Void, Void, Cursor>() {
@@ -99,13 +115,16 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     protected Cursor doInBackground(Void... params) {
-                        if (mDB != null && mDB.isOpen()) {
-                            mDB.close();
+                        if (mDBHelper != null && mDB != null && mDB.isOpen()) {
+                            mDBHelper.close();
+                            mDBHelper = null;
                             mDB = null;
                         }
 
                         String passphrase = "passphrase";
-                        mDB = new EncryptedDBHelper(MainActivity.this, passphrase).getWritableDatabase();
+                        mDBHelper = new EncryptedDBHelper(MainActivity.this, passphrase);
+                        mDBHelper.setWriteAheadLoggingEnabled(true);
+                        mDB = mDBHelper.getWritableDatabase();
                         mDBVersion = mDB.getVersion();
                         return mDB.rawQuery("SELECT rowid as _id, content, sender FROM message;",
                                 null);
@@ -120,6 +139,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_insert).setOnClickListener(new View.OnClickListener() {
+            // Insert button pressed.
+            // Insert a message to the database.
+
+            // To test data transfer, init plain-text database, insert messages,
+            // then init encrypted database.
+
             final DateFormat DATE_FORMAT = SimpleDateFormat.getDateTimeInstance();
 
             @Override
