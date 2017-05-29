@@ -17,8 +17,8 @@
 #ifndef ANDROID_UNICODE_H
 #define ANDROID_UNICODE_H
 
-#include <sys/types.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +42,10 @@ uint16_t *strncpy16(uint16_t *, const uint16_t *, size_t);
 int strzcmp16(const uint16_t *s1, size_t n1, const uint16_t *s2, size_t n2);
 
 // Version of strzcmp16 for comparing strings in different endianness.
-int strzcmp16_h_n(const uint16_t *s1H, size_t n1, const uint16_t *s2N, size_t n2);
+int strzcmp16_h_n(const uint16_t *s1H,
+                  size_t n1,
+                  const uint16_t *s2N,
+                  size_t n2);
 
 // Standard string functions on char32_t strings.
 size_t strlen32(const uint32_t *);
@@ -89,7 +92,7 @@ ssize_t utf32_to_utf8_length(const uint32_t *src, size_t src_len);
  * "dst" becomes \xE3\x81\x82\xE3\x81\x84
  * (note that "dst" is NOT null-terminated, like strncpy)
  */
-void utf32_to_utf8(const uint32_t* src, size_t src_len, char* dst);
+void utf32_to_utf8(const uint32_t *src, size_t src_len, char *dst);
 
 /**
  * Returns the unicode value at "index".
@@ -98,8 +101,10 @@ void utf32_to_utf8(const uint32_t* src, size_t src_len, char* dst);
  * is unsigned. Then, if "next_index" is not NULL, the next index to be used is
  * stored in "next_index". "next_index" can be NULL.
  */
-int32_t utf32_from_utf8_at(const char *src, size_t src_len, size_t index, size_t *next_index);
-
+int32_t utf32_from_utf8_at(const char *src,
+                           size_t src_len,
+                           size_t index,
+                           size_t *next_index);
 
 /**
  * Returns the UTF-8 length of UTF-16 string "src".
@@ -111,7 +116,7 @@ ssize_t utf16_to_utf8_length(const uint16_t *src, size_t src_len);
  * enough to fit the UTF-16 as measured by utf16_to_utf8_length with an added
  * NULL terminator.
  */
-void utf16_to_utf8(const uint16_t* src, size_t src_len, char* dst);
+void utf16_to_utf8(const uint16_t *src, size_t src_len, char *dst);
 
 /**
  * Returns the length of "src" when "src" is valid UTF-8 string.
@@ -141,26 +146,28 @@ size_t utf8_to_utf32_length(const char *src, size_t src_len);
  * enough to store the entire converted string as measured by
  * utf8_to_utf32_length plus space for a NULL terminator.
  */
-void utf8_to_utf32(const char* src, size_t src_len, uint32_t* dst);
+void utf8_to_utf32(const char *src, size_t src_len, uint32_t *dst);
 
 /**
  * Returns the UTF-16 length of UTF-8 string "src".
  */
-ssize_t utf8_to_utf16_length(const uint8_t* src, size_t srcLen);
+ssize_t utf8_to_utf16_length(const uint8_t *src, size_t srcLen);
 
 /**
  * Convert UTF-8 to UTF-16 including surrogate pairs.
  * Returns a pointer to the end of the string (where a null terminator might go
  * if you wanted to add one).
  */
-uint16_t* utf8_to_utf16_no_null_terminator(const uint8_t* src, size_t srcLen, uint16_t* dst);
+uint16_t *utf8_to_utf16_no_null_terminator(const uint8_t *src,
+                                           size_t srcLen,
+                                           uint16_t *dst);
 
 /**
  * Convert UTF-8 to UTF-16 including surrogate pairs. The destination buffer
  * must be large enough to hold the result as measured by utf8_to_utf16_length
  * plus an added NULL terminator.
  */
-void utf8_to_utf16(const uint8_t* src, size_t srcLen, uint16_t* dst);
+void utf8_to_utf16(const uint8_t *src, size_t srcLen, uint16_t *dst);
 
 #ifdef __cplusplus
 }

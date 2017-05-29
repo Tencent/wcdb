@@ -21,33 +21,33 @@
 #ifndef __WCDB_MODULE_LOADER_H__
 #define __WCDB_MODULE_LOADER_H__
 
-
 typedef struct sqlite3 sqlite3;
 
-typedef enum wcdb_inittag_t
-{
-	WCDB_INITTAG_INVALID = -1,
+typedef enum wcdb_inittag_t {
+    WCDB_INITTAG_INVALID = -1,
 
-	WCDB_INITTAG_JNI_INIT,
-	WCDB_INITTAG_JNI_FINI,
-	WCDB_INITTAG_DBCONN_INIT,
-	
-	WCDB_INITTAG_COUNT
+    WCDB_INITTAG_JNI_INIT,
+    WCDB_INITTAG_JNI_FINI,
+    WCDB_INITTAG_DBCONN_INIT,
+
+    WCDB_INITTAG_COUNT
 } wcdb_inittag_t;
-
 
 // typedef int (*jni_init_func_t)(JavaVM *vm, JNIEnv *env);
 // typedef int (*dbconn_init_func_t)(sqlite3 *db, char **errmsg, const void *);
 
+#define WCDB_INITTAG_DEFINE(name, func, tag)                                   \
+    static void __attribute__((constructor)) __WCDB__##tag##name()             \
+    {                                                                          \
+        register_module_func(#name, (void *) (func), (tag));                   \
+    }
 
-#define WCDB_INITTAG_DEFINE(name, func, tag) \
-	static void __attribute__((constructor)) __WCDB__ ## tag ## name () \
-	{ register_module_func(#name, (void *)(func), (tag)); }
-
-
-#define WCDB_JNI_INIT(name, func)		WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_JNI_INIT)
-#define WCDB_JNI_FINI(name, func)		WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_JNI_FINI)
-#define WCDB_DBCONN_INIT(name, func)	WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_DBCONN_INIT)
+#define WCDB_JNI_INIT(name, func)                                              \
+    WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_JNI_INIT)
+#define WCDB_JNI_FINI(name, func)                                              \
+    WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_JNI_FINI)
+#define WCDB_DBCONN_INIT(name, func)                                           \
+    WCDB_INITTAG_DEFINE(name, func, WCDB_INITTAG_DBCONN_INIT)
 
 #ifdef __cplusplus
 #define WECHAT_EXPORT extern "C"
@@ -55,8 +55,8 @@ typedef enum wcdb_inittag_t
 #define WECHAT_EXPORT
 #endif
 
-WECHAT_EXPORT void register_module_func(const char *name, void *func, unsigned tag);
+WECHAT_EXPORT void
+register_module_func(const char *name, void *func, unsigned tag);
 WECHAT_EXPORT int run_dbconn_initializers(sqlite3 *db, char **errmsg);
-
 
 #endif

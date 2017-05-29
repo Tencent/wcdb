@@ -58,45 +58,55 @@ typedef struct sqliterk_page sqliterk_page;
 typedef struct sqliterk_file sqliterk_file;
 typedef struct sqliterk_cipher_conf sqliterk_cipher_conf;
 struct sqliterk_pager {
-    sqliterk_file* file;
-    sqliterk_status* pagesStatus;
+    sqliterk_file *file;
+    sqliterk_status *pagesStatus;
     int pagesize;
     int freepagecount;
     int reservedBytes;
     int pagecount;
     int usableSize;         // pagesize-reservedBytes
-    unsigned int integrity;	// integrity flags.
+    unsigned int integrity; // integrity flags.
 
-    sqliterk_codec *codec;  // Codec context, implemented in SQLCipher library.
+    sqliterk_codec *codec; // Codec context, implemented in SQLCipher library.
 };
 
-int sqliterkPagerOpen(const char* path, const sqliterk_cipher_conf *cipher, sqliterk_pager** pager);
-int sqliterkPagerClose(sqliterk_pager* pager);
-int sqliterkPagerGetPageCount(sqliterk_pager* pager);
-int sqliterkPagerIsPagenoValid(sqliterk_pager* pager, int pageno);
-int sqliterkPagerGetSize(sqliterk_pager* pager);
-int sqliterkPagerGetUsableSize(sqliterk_pager* pager);
+int sqliterkPagerOpen(const char *path,
+                      const sqliterk_cipher_conf *cipher,
+                      sqliterk_pager **pager);
+int sqliterkPagerClose(sqliterk_pager *pager);
+int sqliterkPagerGetPageCount(sqliterk_pager *pager);
+int sqliterkPagerIsPagenoValid(sqliterk_pager *pager, int pageno);
+int sqliterkPagerGetSize(sqliterk_pager *pager);
+int sqliterkPagerGetUsableSize(sqliterk_pager *pager);
 
-void sqliterkPagerSetStatus(sqliterk_pager* pager, int pageno, sqliterk_status status);
-sqliterk_status sqliterkPagerGetStatus(sqliterk_pager* pager, int pageno);
-int sqliterkPagerGetParsedPageCount(sqliterk_pager* pager);
-int sqliterkPagerGetValidPageCount(sqliterk_pager* pager);
-unsigned int sqliterkPagerGetIntegrity(sqliterk_pager* pager);
+void sqliterkPagerSetStatus(sqliterk_pager *pager,
+                            int pageno,
+                            sqliterk_status status);
+sqliterk_status sqliterkPagerGetStatus(sqliterk_pager *pager, int pageno);
+int sqliterkPagerGetParsedPageCount(sqliterk_pager *pager);
+int sqliterkPagerGetValidPageCount(sqliterk_pager *pager);
+unsigned int sqliterkPagerGetIntegrity(sqliterk_pager *pager);
 
-int sqliterkPageAcquire(sqliterk_pager* pager, int pageno, sqliterk_page** page);
-int sqliterkPageAcquireOverflow(sqliterk_pager* pager, int pageno, sqliterk_page** page);
-int sqliterkPageAcquireType(sqliterk_pager* pager, int pageno, sqliterk_page_type* type);
-int sqliterkPageClearData(sqliterk_page* page);
-int sqliterkPageRelease(sqliterk_page* page);
+int sqliterkPageAcquire(sqliterk_pager *pager,
+                        int pageno,
+                        sqliterk_page **page);
+int sqliterkPageAcquireOverflow(sqliterk_pager *pager,
+                                int pageno,
+                                sqliterk_page **page);
+int sqliterkPageAcquireType(sqliterk_pager *pager,
+                            int pageno,
+                            sqliterk_page_type *type);
+int sqliterkPageClearData(sqliterk_page *page);
+int sqliterkPageRelease(sqliterk_page *page);
 
 int sqliterkPagenoHeaderOffset(int pageno);
-int sqliterkPageHeaderOffset(sqliterk_page* page);
+int sqliterkPageHeaderOffset(sqliterk_page *page);
 
-const unsigned char* sqliterkPageGetData(sqliterk_page* page);
+const unsigned char *sqliterkPageGetData(sqliterk_page *page);
 
-int sqliterkPageGetPageno(sqliterk_page* page);
-sqliterk_page_type sqliterkPageGetType(sqliterk_page* page);
+int sqliterkPageGetPageno(sqliterk_page *page);
+sqliterk_page_type sqliterkPageGetType(sqliterk_page *page);
 
-const char* sqliterkPageGetTypeName(sqliterk_page_type type);
+const char *sqliterkPageGetTypeName(sqliterk_page_type type);
 
 #endif /* sqliterk_pager_h */

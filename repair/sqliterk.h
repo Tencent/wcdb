@@ -25,18 +25,20 @@ typedef struct sqliterk sqliterk;
 typedef struct sqliterk_cipher_conf sqliterk_cipher_conf;
 typedef struct sqliterk_notify sqliterk_notify;
 
-int sqliterkOpen(const char* path, const sqliterk_cipher_conf *cipher, sqliterk** rk);
-int sqliterkParse(sqliterk* rk);
-int sqliterkParsePage(sqliterk* rk, int pageno);
-int sqliterkParseMaster(sqliterk* rk);
-int sqliterkClose(sqliterk* rk);
-int sqliterkSetNotify(sqliterk* rk, sqliterk_notify notify);
-int sqliterkSetUserInfo(sqliterk* rk, void* userInfo);
-void* sqliterkGetUserInfo(sqliterk* rk);
+int sqliterkOpen(const char *path,
+                 const sqliterk_cipher_conf *cipher,
+                 sqliterk **rk);
+int sqliterkParse(sqliterk *rk);
+int sqliterkParsePage(sqliterk *rk, int pageno);
+int sqliterkParseMaster(sqliterk *rk);
+int sqliterkClose(sqliterk *rk);
+int sqliterkSetNotify(sqliterk *rk, sqliterk_notify notify);
+int sqliterkSetUserInfo(sqliterk *rk, void *userInfo);
+void *sqliterkGetUserInfo(sqliterk *rk);
 
-int sqliterkGetParsedPageCount(sqliterk* rk);
-int sqliterkGetValidPageCount(sqliterk* rk);
-int sqliterkGetPageCount(sqliterk* rk);
-unsigned int sqliterkGetIntegrity(sqliterk* rk);
+int sqliterkGetParsedPageCount(sqliterk *rk);
+int sqliterkGetValidPageCount(sqliterk *rk);
+int sqliterkGetPageCount(sqliterk *rk);
+unsigned int sqliterkGetIntegrity(sqliterk *rk);
 
 #endif /* sqliterk_h */

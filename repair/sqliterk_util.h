@@ -23,12 +23,24 @@
 
 #include <stdio.h>
 
-int sqliterkParseInt(const unsigned char* data, int offset, int length, int* value);
-int sqliterkParseInt64(const unsigned char* data, int offset, int length, int64_t* value);
-int sqliterkParseVarint(const unsigned char* data, int offset, int* length, int* value);
-int sqliterkParseVarint64(const unsigned char* data, int offset, int* length, int64_t* value);
-int sqliterkParseNumber(const unsigned char* data, int offset, double* value);
+int sqliterkParseInt(const unsigned char *data,
+                     int offset,
+                     int length,
+                     int *value);
+int sqliterkParseInt64(const unsigned char *data,
+                       int offset,
+                       int length,
+                       int64_t *value);
+int sqliterkParseVarint(const unsigned char *data,
+                        int offset,
+                        int *length,
+                        int *value);
+int sqliterkParseVarint64(const unsigned char *data,
+                          int offset,
+                          int *length,
+                          int64_t *value);
+int sqliterkParseNumber(const unsigned char *data, int offset, double *value);
 int sqliterkGetMaxVarintLength();
-const char* sqliterkGetResultCodeDescription(int result);
+const char *sqliterkGetResultCodeDescription(int result);
 
 #endif /* sqliterk_util_h */

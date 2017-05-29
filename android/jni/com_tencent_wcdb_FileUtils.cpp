@@ -17,48 +17,48 @@
 
 #define LOG_TAG "WCDB.FileUtils"
 
-#include <jni.h>
 #include <errno.h>
-#include <unistd.h>
+#include <jni.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "JNIHelp.h"
 #include "ModuleLoader.h"
 
-
 namespace wcdb {
 
-    jint android_os_FileUtils_setPermissions(JNIEnv* env, jobject clazz,
-        jstring file, jint mode, jint uid, jint gid)
-    {
-        int ret = 0;
-        if (!file) return ENOENT;
+jint android_os_FileUtils_setPermissions(
+    JNIEnv *env, jobject clazz, jstring file, jint mode, jint uid, jint gid)
+{
+    int ret = 0;
+    if (!file)
+        return ENOENT;
 
-        const char *path = env->GetStringUTFChars(file, NULL);
-        if (uid >= 0 || gid >= 0) {
-            int res = chown(path, uid, gid);
-            if (res != 0) {
-                ret = errno;
-                goto end;
-            }
-        }
-
-        if (chmod(path, mode) != 0)
+    const char *path = env->GetStringUTFChars(file, NULL);
+    if (uid >= 0 || gid >= 0) {
+        int res = chown(path, uid, gid);
+        if (res != 0) {
             ret = errno;
-
-    end:
-        env->ReleaseStringUTFChars(file, path);
-        return ret;
+            goto end;
+        }
     }
 
-    static const JNINativeMethod methods[] = {
-        {"setPermissions", "(Ljava/lang/String;III)I", (void*) android_os_FileUtils_setPermissions}
-    };
+    if (chmod(path, mode) != 0)
+        ret = errno;
 
-    static int register_wcdb_FileUtils(JavaVM *vm, JNIEnv* env)
-    {
-        return jniRegisterNativeMethods(env, "com/tencent/wcdb/FileUtils", methods, NELEM(methods));
-    }
-    WCDB_JNI_INIT(FileUtils, register_wcdb_FileUtils)
+end:
+    env->ReleaseStringUTFChars(file, path);
+    return ret;
+}
 
+static const JNINativeMethod methods[] = {
+    {"setPermissions", "(Ljava/lang/String;III)I",
+     (void *) android_os_FileUtils_setPermissions}};
+
+static int register_wcdb_FileUtils(JavaVM *vm, JNIEnv *env)
+{
+    return jniRegisterNativeMethods(env, "com/tencent/wcdb/FileUtils", methods,
+                                    NELEM(methods));
+}
+WCDB_JNI_INIT(FileUtils, register_wcdb_FileUtils)
 }

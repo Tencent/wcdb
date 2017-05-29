@@ -25,8 +25,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <sqlite3.h>
+#include <stdint.h>
 
 #define SQLITE_FCNTL_VFSLOG_STAT 10001
 
@@ -64,7 +64,6 @@ typedef struct VLogStat {
     int64_t lastJournalReadOffset;
     int64_t lastJournalWriteOffset;
 } VLogStat;
-
 
 int vlogGetStats(sqlite3 *db, const char *dbName, VLogStat *stats);
 

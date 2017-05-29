@@ -25,13 +25,13 @@
 
 typedef struct sqliterk_column sqliterk_column;
 
-int sqliterkColumnAlloc(sqliterk_column** column);
-int sqliterkColumnFree(sqliterk_column* column);
+int sqliterkColumnAlloc(sqliterk_column **column);
+int sqliterkColumnFree(sqliterk_column *column);
 
-sqliterk_values* sqliterkColumnGetValues(sqliterk_column* column);
-void sqliterkColumnSetRowId(sqliterk_column* column, int rowid);
-int sqliterkColumnGetRowId(sqliterk_column* column);
-sqliterk_values* sqliterkColumnGetOverflowPages(sqliterk_column* column);
-int sqliterkColumnClear(sqliterk_column* column);
+sqliterk_values *sqliterkColumnGetValues(sqliterk_column *column);
+void sqliterkColumnSetRowId(sqliterk_column *column, int rowid);
+int sqliterkColumnGetRowId(sqliterk_column *column);
+sqliterk_values *sqliterkColumnGetOverflowPages(sqliterk_column *column);
+int sqliterkColumnClear(sqliterk_column *column);
 
 #endif /* sqliterk_column_h */

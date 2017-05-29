@@ -34,7 +34,8 @@ typedef enum {
     sqliterk_btree_type_index = -2,
     sqliterk_btree_type_table = -1,
     sqliterk_btree_type_unknown = 0,
-// About SQLite reserved btree, see [Storage Of The SQL Database Schema] chapter at https://www.sqlite.org/fileformat2.html#Schema
+    // About SQLite reserved btree, see [Storage Of The SQL Database Schema]
+    // chapter at https://www.sqlite.org/fileformat2.html#Schema
     sqliterk_btree_type_system_begin = 1,
     sqliterk_btree_type_sequence = 1,
     sqliterk_btree_type_autoindex = 2,
@@ -43,30 +44,43 @@ typedef enum {
     sqliterk_btree_type_system_end = 5,
 } sqliterk_btree_type;
 
-struct sqliterk_btree_notify{
-    void (*onBeginParseBtree)(sqliterk* rk, sqliterk_btree* btree);
-    void (*onEndParseBtree)(sqliterk* rk, sqliterk_btree* btree, int result);
-    void (*onParseColumn)(sqliterk* rk, sqliterk_btree* btree, sqliterk_page* page, sqliterk_column* column);
+struct sqliterk_btree_notify {
+    void (*onBeginParseBtree)(sqliterk *rk, sqliterk_btree *btree);
+    void (*onEndParseBtree)(sqliterk *rk, sqliterk_btree *btree, int result);
+    void (*onParseColumn)(sqliterk *rk,
+                          sqliterk_btree *btree,
+                          sqliterk_page *page,
+                          sqliterk_column *column);
 
-    // return SQLITE_OK to continue parsing the page. All other return value will skip the parsing phase of this page.
-    int (*onBeginParsePage)(sqliterk* rk, sqliterk_btree* btree, int pageno);
+    // return SQLITE_OK to continue parsing the page. All other return
+    // value will skip the parsing phase of this page.
+    int (*onBeginParsePage)(sqliterk *rk, sqliterk_btree *btree, int pageno);
 
-    void (*onEndParsePage)(sqliterk* rk, sqliterk_btree* btree, int pageno, int result);
+    void (*onEndParsePage)(sqliterk *rk,
+                           sqliterk_btree *btree,
+                           int pageno,
+                           int result);
 };
 
-int sqliterkBtreeOpen(sqliterk* rk, sqliterk_pager* pager, int rootPageno, sqliterk_btree** btree);
-int sqliterkBtreeParse(sqliterk_btree* btree);
-int sqliterkBtreeClose(sqliterk_btree* btree);
+int sqliterkBtreeOpen(sqliterk *rk,
+                      sqliterk_pager *pager,
+                      int rootPageno,
+                      sqliterk_btree **btree);
+int sqliterkBtreeParse(sqliterk_btree *btree);
+int sqliterkBtreeClose(sqliterk_btree *btree);
 
-int sqliterkBtreeSetMeta(sqliterk_btree* btree, const char* name, sqliterk_btree_type type);
-const char* sqliterkBtreeGetName(sqliterk_btree* btree);
-sqliterk_btree_type sqliterkBtreeGetType(sqliterk_btree* btree);
+int sqliterkBtreeSetMeta(sqliterk_btree *btree,
+                         const char *name,
+                         sqliterk_btree_type type);
+const char *sqliterkBtreeGetName(sqliterk_btree *btree);
+sqliterk_btree_type sqliterkBtreeGetType(sqliterk_btree *btree);
 int sqliterkBtreeIsSystemType(sqliterk_btree_type type);
-sqliterk_page* sqliterkBtreeGetRootPage(sqliterk_btree* btree);
+sqliterk_page *sqliterkBtreeGetRootPage(sqliterk_btree *btree);
 
-void sqliterkBtreeSetNotify(sqliterk_btree* btree, sqliterk_btree_notify* notify);
-void sqliterkBtreeSetUserInfo(sqliterk_btree* btree, void* userInfo);
-void* sqliterkBtreeGetUserInfo(sqliterk_btree* btree);
-const char* sqliterkBtreeGetTypeName(sqliterk_btree_type type);
+void sqliterkBtreeSetNotify(sqliterk_btree *btree,
+                            sqliterk_btree_notify *notify);
+void sqliterkBtreeSetUserInfo(sqliterk_btree *btree, void *userInfo);
+void *sqliterkBtreeGetUserInfo(sqliterk_btree *btree);
+const char *sqliterkBtreeGetTypeName(sqliterk_btree_type type);
 
 #endif /* sqliterk_btree_h */

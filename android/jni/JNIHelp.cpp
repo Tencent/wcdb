@@ -19,68 +19,72 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 /**
  * Equivalent to ScopedLocalRef, but for C_JNIEnv instead. (And slightly more powerful.)
  */
-template<typename T>
+template <typename T>
 class scoped_local_ref {
 public:
-    scoped_local_ref(C_JNIEnv* env, T localRef = NULL)
-    : mEnv(env), mLocalRef(localRef)
+    scoped_local_ref(C_JNIEnv *env, T localRef = NULL)
+        : mEnv(env), mLocalRef(localRef)
     {
     }
 
-    ~scoped_local_ref() {
-        reset();
-    }
+    ~scoped_local_ref() { reset(); }
 
-    void reset(T localRef = NULL) {
+    void reset(T localRef = NULL)
+    {
         if (mLocalRef != NULL) {
-            (*mEnv)->DeleteLocalRef(reinterpret_cast<JNIEnv*>(mEnv), mLocalRef);
+            (*mEnv)->DeleteLocalRef(reinterpret_cast<JNIEnv *>(mEnv),
+                                    mLocalRef);
             mLocalRef = localRef;
         }
     }
 
-    T get() const {
-        return mLocalRef;
-    }
+    T get() const { return mLocalRef; }
 
 private:
-    C_JNIEnv* mEnv;
+    C_JNIEnv *mEnv;
     T mLocalRef;
 
     // Disallow copy and assignment.
-    scoped_local_ref(const scoped_local_ref&);
-    void operator=(const scoped_local_ref&);
+    scoped_local_ref(const scoped_local_ref &);
+    void operator=(const scoped_local_ref &);
 };
 
-static jclass findClass(C_JNIEnv* env, const char* className) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+static jclass findClass(C_JNIEnv *env, const char *className)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
     return (*env)->FindClass(e, className);
 }
 
-extern "C" int jniRegisterNativeMethods(C_JNIEnv* env, const char* className,
-    const JNINativeMethod* gMethods, int numMethods)
+extern "C" int jniRegisterNativeMethods(C_JNIEnv *env,
+                                        const char *className,
+                                        const JNINativeMethod *gMethods,
+                                        int numMethods)
 {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
 
     ALOGV("Registering %s natives", className);
 
     scoped_local_ref<jclass> c(env, findClass(env, className));
     if (c.get() == NULL) {
         char msg[256];
-        snprintf(msg, sizeof(msg), "Native registration unable to find class '%s', aborting", className);
+        snprintf(msg, sizeof(msg),
+                 "Native registration unable to find class '%s', aborting",
+                 className);
         e->FatalError(msg);
     }
 
     if ((*env)->RegisterNatives(e, c.get(), gMethods, numMethods) < 0) {
         char msg[256];
-        snprintf(msg, sizeof(msg), "RegisterNatives failed for '%s', aborting", className);
+        snprintf(msg, sizeof(msg), "RegisterNatives failed for '%s', aborting",
+                 className);
         e->FatalError(msg);
     }
 
@@ -92,38 +96,46 @@ extern "C" int jniRegisterNativeMethods(C_JNIEnv* env, const char* className,
  * be populated with the "binary" class name and, if present, the
  * exception message.
  */
-static char* getExceptionSummary0(C_JNIEnv* env, jthrowable exception) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+static char *getExceptionSummary0(C_JNIEnv *env, jthrowable exception)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
 
     /* get the name of the exception's class */
-    scoped_local_ref<jclass> exceptionClass(env, (*env)->GetObjectClass(e, exception)); // can't fail
-    scoped_local_ref<jclass> classClass(env,
-            (*env)->GetObjectClass(e, exceptionClass.get())); // java.lang.Class, can't fail
-    jmethodID classGetNameMethod =
-            (*env)->GetMethodID(e, classClass.get(), "getName", "()Ljava/lang/String;");
-    scoped_local_ref<jstring> classNameStr(env,
-            (jstring) (*env)->CallObjectMethod(e, exceptionClass.get(), classGetNameMethod));
+    scoped_local_ref<jclass> exceptionClass(
+        env, (*env)->GetObjectClass(e, exception)); // can't fail
+    scoped_local_ref<jclass> classClass(
+        env,
+        (*env)->GetObjectClass(
+            e, exceptionClass.get())); // java.lang.Class, can't fail
+    jmethodID classGetNameMethod = (*env)->GetMethodID(
+        e, classClass.get(), "getName", "()Ljava/lang/String;");
+    scoped_local_ref<jstring> classNameStr(
+        env,
+        (jstring)(*env)->CallObjectMethod(e, exceptionClass.get(),
+                                          classGetNameMethod));
     if (classNameStr.get() == NULL) {
         return NULL;
     }
 
     /* get printable string */
-    const char* classNameChars = (*env)->GetStringUTFChars(e, classNameStr.get(), NULL);
+    const char *classNameChars =
+        (*env)->GetStringUTFChars(e, classNameStr.get(), NULL);
     if (classNameChars == NULL) {
         return NULL;
     }
 
     /* if the exception has a detail message, get that */
-    jmethodID getMessage =
-            (*env)->GetMethodID(e, exceptionClass.get(), "getMessage", "()Ljava/lang/String;");
-    scoped_local_ref<jstring> messageStr(env,
-            (jstring) (*env)->CallObjectMethod(e, exception, getMessage));
+    jmethodID getMessage = (*env)->GetMethodID(
+        e, exceptionClass.get(), "getMessage", "()Ljava/lang/String;");
+    scoped_local_ref<jstring> messageStr(
+        env, (jstring)(*env)->CallObjectMethod(e, exception, getMessage));
     if (messageStr.get() == NULL) {
         return strdup(classNameChars);
     }
 
-    char* result = NULL;
-    const char* messageChars = (*env)->GetStringUTFChars(e, messageStr.get(), NULL);
+    char *result = NULL;
+    const char *messageChars =
+        (*env)->GetStringUTFChars(e, messageStr.get(), NULL);
     if (messageChars != NULL) {
         asprintf(&result, "%s: %s", classNameChars, messageChars);
         (*env)->ReleaseStringUTFChars(e, messageStr.get(), messageChars);
@@ -136,9 +148,10 @@ static char* getExceptionSummary0(C_JNIEnv* env, jthrowable exception) {
     return result;
 }
 
-static char* getExceptionSummary(C_JNIEnv* env, jthrowable exception) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
-    char* result = getExceptionSummary0(env, exception);
+static char *getExceptionSummary(C_JNIEnv *env, jthrowable exception)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
+    char *result = getExceptionSummary0(env, exception);
     if (result == NULL) {
         (*env)->ExceptionClear(e);
         result = strdup("<error getting class name>");
@@ -149,74 +162,85 @@ static char* getExceptionSummary(C_JNIEnv* env, jthrowable exception) {
 /*
  * Returns an exception (with stack trace) as a string.
  */
-static char* getStackTrace(C_JNIEnv* env, jthrowable exception) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+static char *getStackTrace(C_JNIEnv *env, jthrowable exception)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
 
-    scoped_local_ref<jclass> stringWriterClass(env, findClass(env, "java/io/StringWriter"));
+    scoped_local_ref<jclass> stringWriterClass(
+        env, findClass(env, "java/io/StringWriter"));
     if (stringWriterClass.get() == NULL) {
         return NULL;
     }
 
-    jmethodID stringWriterCtor = (*env)->GetMethodID(e, stringWriterClass.get(), "<init>", "()V");
-    jmethodID stringWriterToStringMethod =
-            (*env)->GetMethodID(e, stringWriterClass.get(), "toString", "()Ljava/lang/String;");
+    jmethodID stringWriterCtor =
+        (*env)->GetMethodID(e, stringWriterClass.get(), "<init>", "()V");
+    jmethodID stringWriterToStringMethod = (*env)->GetMethodID(
+        e, stringWriterClass.get(), "toString", "()Ljava/lang/String;");
 
-    scoped_local_ref<jclass> printWriterClass(env, findClass(env, "java/io/PrintWriter"));
+    scoped_local_ref<jclass> printWriterClass(
+        env, findClass(env, "java/io/PrintWriter"));
     if (printWriterClass.get() == NULL) {
         return NULL;
     }
 
-    jmethodID printWriterCtor =
-            (*env)->GetMethodID(e, printWriterClass.get(), "<init>", "(Ljava/io/Writer;)V");
+    jmethodID printWriterCtor = (*env)->GetMethodID(
+        e, printWriterClass.get(), "<init>", "(Ljava/io/Writer;)V");
 
-    scoped_local_ref<jobject> stringWriter(env,
-            (*env)->NewObject(e, stringWriterClass.get(), stringWriterCtor));
+    scoped_local_ref<jobject> stringWriter(
+        env, (*env)->NewObject(e, stringWriterClass.get(), stringWriterCtor));
     if (stringWriter.get() == NULL) {
         return NULL;
     }
 
-    jobject printWriter =
-            (*env)->NewObject(e, printWriterClass.get(), printWriterCtor, stringWriter.get());
+    jobject printWriter = (*env)->NewObject(
+        e, printWriterClass.get(), printWriterCtor, stringWriter.get());
     if (printWriter == NULL) {
         return NULL;
     }
 
-    scoped_local_ref<jclass> exceptionClass(env, (*env)->GetObjectClass(e, exception)); // can't fail
-    jmethodID printStackTraceMethod =
-            (*env)->GetMethodID(e, exceptionClass.get(), "printStackTrace", "(Ljava/io/PrintWriter;)V");
+    scoped_local_ref<jclass> exceptionClass(
+        env, (*env)->GetObjectClass(e, exception)); // can't fail
+    jmethodID printStackTraceMethod = (*env)->GetMethodID(
+        e, exceptionClass.get(), "printStackTrace", "(Ljava/io/PrintWriter;)V");
     (*env)->CallVoidMethod(e, exception, printStackTraceMethod, printWriter);
 
     if ((*env)->ExceptionCheck(e)) {
         return NULL;
     }
 
-    scoped_local_ref<jstring> messageStr(env,
-            (jstring) (*env)->CallObjectMethod(e, stringWriter.get(), stringWriterToStringMethod));
+    scoped_local_ref<jstring> messageStr(
+        env,
+        (jstring)(*env)->CallObjectMethod(e, stringWriter.get(),
+                                          stringWriterToStringMethod));
     if (messageStr.get() == NULL) {
         return NULL;
     }
 
-    const char* utfChars = (*env)->GetStringUTFChars(e, messageStr.get(), NULL);
+    const char *utfChars = (*env)->GetStringUTFChars(e, messageStr.get(), NULL);
     if (utfChars == NULL) {
         return NULL;
     }
 
-    char* result = strdup(utfChars);
+    char *result = strdup(utfChars);
     (*env)->ReleaseStringUTFChars(e, messageStr.get(), utfChars);
     return result;
 }
 
-extern "C" int jniThrowException(C_JNIEnv* env, const char* className, const char* msg) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+extern "C" int
+jniThrowException(C_JNIEnv *env, const char *className, const char *msg)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
 
     if ((*env)->ExceptionCheck(e)) {
         /* TODO: consider creating the new exception with this as "cause" */
-        scoped_local_ref<jthrowable> exception(env, (*env)->ExceptionOccurred(e));
+        scoped_local_ref<jthrowable> exception(env,
+                                               (*env)->ExceptionOccurred(e));
         (*env)->ExceptionClear(e);
 
         if (exception.get() != NULL) {
-            char* text = getExceptionSummary(env, exception.get());
-            ALOGW("Discarding pending exception (%s) to throw %s", text, className);
+            char *text = getExceptionSummary(env, exception.get());
+            ALOGW("Discarding pending exception (%s) to throw %s", text,
+                  className);
             free(text);
         }
     }
@@ -237,30 +261,42 @@ extern "C" int jniThrowException(C_JNIEnv* env, const char* className, const cha
     return 0;
 }
 
-int jniThrowExceptionFmt(C_JNIEnv* env, const char* className, const char* fmt, va_list args) {
+int jniThrowExceptionFmt(C_JNIEnv *env,
+                         const char *className,
+                         const char *fmt,
+                         va_list args)
+{
     char msgBuf[512];
     vsnprintf(msgBuf, sizeof(msgBuf), fmt, args);
     return jniThrowException(env, className, msgBuf);
 }
 
-int jniThrowNullPointerException(C_JNIEnv* env, const char* msg) {
+int jniThrowNullPointerException(C_JNIEnv *env, const char *msg)
+{
     return jniThrowException(env, "java/lang/NullPointerException", msg);
 }
 
-int jniThrowRuntimeException(C_JNIEnv* env, const char* msg) {
+int jniThrowRuntimeException(C_JNIEnv *env, const char *msg)
+{
     return jniThrowException(env, "java/lang/RuntimeException", msg);
 }
 
-int jniThrowIOException(C_JNIEnv* env, int errnum) {
+int jniThrowIOException(C_JNIEnv *env, int errnum)
+{
     char buffer[80];
-    const char* message = jniStrError(errnum, buffer, sizeof(buffer));
+    const char *message = jniStrError(errnum, buffer, sizeof(buffer));
     return jniThrowException(env, "java/io/IOException", message);
 }
 
-void jniLogException(C_JNIEnv* env, int priority, const char* tag, jthrowable exception) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+void jniLogException(C_JNIEnv *env,
+                     int priority,
+                     const char *tag,
+                     jthrowable exception)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
 
-    scoped_local_ref<jthrowable> currentException(env, (*env)->ExceptionOccurred(e));
+    scoped_local_ref<jthrowable> currentException(env,
+                                                  (*env)->ExceptionOccurred(e));
     if (exception == NULL) {
         exception = currentException.get();
         if (exception == NULL) {
@@ -272,7 +308,7 @@ void jniLogException(C_JNIEnv* env, int priority, const char* tag, jthrowable ex
         (*env)->ExceptionClear(e);
     }
 
-    char* buffer = getStackTrace(env, exception);
+    char *buffer = getStackTrace(env, exception);
     if (buffer == NULL) {
         (*env)->ExceptionClear(e);
         buffer = getExceptionSummary(env, exception);
@@ -286,7 +322,8 @@ void jniLogException(C_JNIEnv* env, int priority, const char* tag, jthrowable ex
     }
 }
 
-const char* jniStrError(int errnum, char* buf, size_t buflen) {
+const char *jniStrError(int errnum, char *buf, size_t buflen)
+{
     // Note: glibc has a nonstandard strerror_r that returns char* rather than POSIX's int.
     // char *strerror_r(int errnum, char *buf, size_t n);
     int ret = strerror_r(errnum, buf, buflen);
@@ -316,37 +353,41 @@ static struct {
 
 static JavaVM *g_VM = NULL;
 
-extern "C" jint JNIHelp_JNI_OnLoad(JavaVM* vm, void*) {
-    JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+extern "C" jint JNIHelp_JNI_OnLoad(JavaVM *vm, void *)
+{
+    JNIEnv *env;
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) !=
+        JNI_OK) {
         ALOGE("JavaVM::GetEnv() failed");
         abort();
     }
 
-    gFileDescriptorClassInfo.clazz =
-            reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/io/FileDescriptor")));
+    gFileDescriptorClassInfo.clazz = reinterpret_cast<jclass>(
+        env->NewGlobalRef(env->FindClass("java/io/FileDescriptor")));
     if (gFileDescriptorClassInfo.clazz == NULL) {
         abort();
     }
 
     gFileDescriptorClassInfo.ctor =
-            env->GetMethodID(gFileDescriptorClassInfo.clazz, "<init>", "()V");
+        env->GetMethodID(gFileDescriptorClassInfo.clazz, "<init>", "()V");
     if (gFileDescriptorClassInfo.ctor == NULL) {
         abort();
     }
 
     gFileDescriptorClassInfo.descriptor =
-            env->GetFieldID(gFileDescriptorClassInfo.clazz, "descriptor", "I");
+        env->GetFieldID(gFileDescriptorClassInfo.clazz, "descriptor", "I");
     if (gFileDescriptorClassInfo.descriptor == NULL) {
         abort();
     }
 
-    jclass clazz = reinterpret_cast<jclass>(env->FindClass("java/lang/ref/Reference"));
+    jclass clazz =
+        reinterpret_cast<jclass>(env->FindClass("java/lang/ref/Reference"));
     if (clazz == NULL) {
         abort();
     }
 
-    gReferenceClassInfo.get = env->GetMethodID(clazz, "get", "()Ljava/lang/Object;");
+    gReferenceClassInfo.get =
+        env->GetMethodID(clazz, "get", "()Ljava/lang/Object;");
     if (gReferenceClassInfo.get == NULL) {
         abort();
     }
@@ -355,35 +396,43 @@ extern "C" jint JNIHelp_JNI_OnLoad(JavaVM* vm, void*) {
     return JNI_VERSION_1_6;
 }
 
-C_JNIEnv* jniGetEnv_() {
+C_JNIEnv *jniGetEnv_()
+{
     C_JNIEnv *env;
-    
-    if (!g_VM) return NULL;
-    if (g_VM->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK)
+
+    if (!g_VM)
+        return NULL;
+    if (g_VM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK)
         return NULL;
     return env;
 }
 
-jobject jniCreateFileDescriptor(C_JNIEnv* env, int fd) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
-    jobject fileDescriptor = (*env)->NewObject(e,
-            gFileDescriptorClassInfo.clazz, gFileDescriptorClassInfo.ctor);
+jobject jniCreateFileDescriptor(C_JNIEnv *env, int fd)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
+    jobject fileDescriptor = (*env)->NewObject(
+        e, gFileDescriptorClassInfo.clazz, gFileDescriptorClassInfo.ctor);
     jniSetFileDescriptorOfFD(env, fileDescriptor, fd);
     return fileDescriptor;
 }
 
-int jniGetFDFromFileDescriptor(C_JNIEnv* env, jobject fileDescriptor) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
-    return (*env)->GetIntField(e, fileDescriptor, gFileDescriptorClassInfo.descriptor);
+int jniGetFDFromFileDescriptor(C_JNIEnv *env, jobject fileDescriptor)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
+    return (*env)->GetIntField(e, fileDescriptor,
+                               gFileDescriptorClassInfo.descriptor);
 }
 
-void jniSetFileDescriptorOfFD(C_JNIEnv* env, jobject fileDescriptor, int value) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
-    (*env)->SetIntField(e, fileDescriptor, gFileDescriptorClassInfo.descriptor, value);
+void jniSetFileDescriptorOfFD(C_JNIEnv *env, jobject fileDescriptor, int value)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
+    (*env)->SetIntField(e, fileDescriptor, gFileDescriptorClassInfo.descriptor,
+                        value);
 }
 
-jobject jniGetReferent(C_JNIEnv* env, jobject ref) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+jobject jniGetReferent(C_JNIEnv *env, jobject ref)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
     return (*env)->CallObjectMethod(e, ref, gReferenceClassInfo.get);
 }
 
@@ -402,9 +451,10 @@ jobject jniGetReferent(C_JNIEnv* env, jobject ref) {
  *
  * Returns NULL if the array is movable.
  */
-#define kNoCopyMagic 0xd5aab57f     /* also in CheckJni.c */
-extern "C" jbyte* jniGetNonMovableArrayElements(C_JNIEnv* env, jarray arrayObj) {
-    JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+#define kNoCopyMagic 0xd5aab57f /* also in CheckJni.c */
+extern "C" jbyte *jniGetNonMovableArrayElements(C_JNIEnv *env, jarray arrayObj)
+{
+    JNIEnv *e = reinterpret_cast<JNIEnv *>(env);
 
     jbyteArray byteArray = reinterpret_cast<jbyteArray>(arrayObj);
 
@@ -413,12 +463,14 @@ extern "C" jbyte* jniGetNonMovableArrayElements(C_JNIEnv* env, jarray arrayObj) 
      * non-CheckJNI VM will ignore whatever we pass in.
      */
     uint32_t noCopy = kNoCopyMagic;
-    jbyte* result = (*env)->GetByteArrayElements(e, byteArray, reinterpret_cast<jboolean*>(&noCopy));
+    jbyte *result = (*env)->GetByteArrayElements(
+        e, byteArray, reinterpret_cast<jboolean *>(&noCopy));
 
     /*
      * The non-CheckJNI implementation only cares about the array object,
      * so we can replace the element pointer with the magic value.
      */
-    (*env)->ReleaseByteArrayElements(e, byteArray, reinterpret_cast<jbyte*>(kNoCopyMagic), 0);
+    (*env)->ReleaseByteArrayElements(
+        e, byteArray, reinterpret_cast<jbyte *>(kNoCopyMagic), 0);
     return result;
 }

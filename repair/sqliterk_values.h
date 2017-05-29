@@ -28,27 +28,31 @@
 typedef struct sqliterk_values sqliterk_values;
 typedef struct sqliterk_value sqliterk_value;
 
-int sqliterkValuesAlloc(sqliterk_values** values);
-int sqliterkValuesFree(sqliterk_values* values);
-int sqliterkValuesClear(sqliterk_values* values);
+int sqliterkValuesAlloc(sqliterk_values **values);
+int sqliterkValuesFree(sqliterk_values *values);
+int sqliterkValuesClear(sqliterk_values *values);
 
-int sqliterkValuesAddInteger(sqliterk_values* values, int i);
-int sqliterkValuesAddInteger64(sqliterk_values* values, int64_t i);
-int sqliterkValuesAddNumber(sqliterk_values* values, double d);
-int sqliterkValuesAddText(sqliterk_values* values, const char* t);
-int sqliterkValuesAddNoTerminatorText(sqliterk_values* values, const char* t, const int s);
-int sqliterkValuesAddBinary(sqliterk_values* values, const void* b, const int s);
-int sqliterkValuesAddNull(sqliterk_values* values);
+int sqliterkValuesAddInteger(sqliterk_values *values, int i);
+int sqliterkValuesAddInteger64(sqliterk_values *values, int64_t i);
+int sqliterkValuesAddNumber(sqliterk_values *values, double d);
+int sqliterkValuesAddText(sqliterk_values *values, const char *t);
+int sqliterkValuesAddNoTerminatorText(sqliterk_values *values,
+                                      const char *t,
+                                      const int s);
+int sqliterkValuesAddBinary(sqliterk_values *values,
+                            const void *b,
+                            const int s);
+int sqliterkValuesAddNull(sqliterk_values *values);
 
-int sqliterkValuesGetCount(sqliterk_values* values);
-sqliterk_value_type sqliterkValuesGetType(sqliterk_values* values, int index);
-int sqliterkValuesGetInteger(sqliterk_values* values, int index);
-int64_t sqliterkValuesGetInteger64(sqliterk_values* values, int index);
-double sqliterkValuesGetNumber(sqliterk_values* values, int index);
-const char* sqliterkValuesGetText(sqliterk_values* values, int index);
-const void* sqliterkValuesGetBinary(sqliterk_values* values, int index);
-int sqliterkValuesGetBytes(sqliterk_values* values, int index);
+int sqliterkValuesGetCount(sqliterk_values *values);
+sqliterk_value_type sqliterkValuesGetType(sqliterk_values *values, int index);
+int sqliterkValuesGetInteger(sqliterk_values *values, int index);
+int64_t sqliterkValuesGetInteger64(sqliterk_values *values, int index);
+double sqliterkValuesGetNumber(sqliterk_values *values, int index);
+const char *sqliterkValuesGetText(sqliterk_values *values, int index);
+const void *sqliterkValuesGetBinary(sqliterk_values *values, int index);
+int sqliterkValuesGetBytes(sqliterk_values *values, int index);
 
-int sqliterkValueClear(sqliterk_value* value);
+int sqliterkValueClear(sqliterk_value *value);
 
 #endif /* sqliterk_values_h */

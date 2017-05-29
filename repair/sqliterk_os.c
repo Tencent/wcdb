@@ -20,29 +20,30 @@
 
 #include "sqliterk_os.h"
 #include "sqliterk_util.h"
-#include <fcntl.h>
 #include <errno.h>
-#include <unistd.h>
+#include <fcntl.h>
+#include <stdarg.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <stdarg.h>
+#include <unistd.h>
 
 struct sqliterk_file {
-    char* path;
+    char *path;
     int fd;
-    int error;// errno will be set when system error occur
+    int error; // errno will be set when system error occur
 };
 
-int sqliterkOSReadOnlyOpen(const char* path, sqliterk_file** file)
+int sqliterkOSReadOnlyOpen(const char *path, sqliterk_file **file)
 {
-    if (!path||!path[0]||!file) {
+    if (!path || !path[0] || !file) {
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
-    sqliterk_file* theFile = sqliterkOSMalloc(sizeof(sqliterk_file));
+    sqliterk_file *theFile = sqliterkOSMalloc(sizeof(sqliterk_file));
     if (!theFile) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.", sizeof(sqliterk_file));
+        sqliterkOSError(rc, "Not enough memory, required %u bytes.",
+                        sizeof(sqliterk_file));
         goto sqliterkOSReadOnlyOpen_Failed;
     }
 
@@ -55,11 +56,12 @@ int sqliterkOSReadOnlyOpen(const char* path, sqliterk_file** file)
     }
     strncpy(theFile->path, path, len);
 
-    // Open the file in readonly mode, since we do not intend to modify it
+    // Open the file in read-only mode, since we do not intend to modify it
     theFile->fd = open(theFile->path, O_RDONLY);
-    if (theFile->fd<0) {
+    if (theFile->fd < 0) {
         rc = SQLITERK_CANTOPEN;
-        sqliterkOSError(rc, "Cannot open '%s' for reading: %s", theFile->path, strerror(errno));
+        sqliterkOSError(rc, "Cannot open '%s' for reading: %s", theFile->path,
+                        strerror(errno));
         goto sqliterkOSReadOnlyOpen_Failed;
     }
     *file = theFile;
@@ -73,16 +75,16 @@ sqliterkOSReadOnlyOpen_Failed:
     return rc;
 }
 
-int sqliterkOSClose(sqliterk_file* file)
+int sqliterkOSClose(sqliterk_file *file)
 {
     if (!file) {
         return SQLITERK_MISUSE;
     }
     if (file->path) {
-        sqliterkOSFree((char*)file->path);
+        sqliterkOSFree((char *) file->path);
         file->path = NULL;
     }
-    if (file->fd>=0) {
+    if (file->fd >= 0) {
         close(file->fd);
         file->fd = -1;
     }
@@ -91,13 +93,16 @@ int sqliterkOSClose(sqliterk_file* file)
     return SQLITERK_OK;
 }
 
-int sqliterkOSRead(sqliterk_file* file, off_t offset, unsigned char* data, size_t* size)
+int sqliterkOSRead(sqliterk_file *file,
+                   off_t offset,
+                   unsigned char *data,
+                   size_t *size)
 {
-    if (!file||file->fd<0) {
+    if (!file || file->fd < 0) {
         return SQLITERK_MISUSE;
     }
     off_t newOffset = lseek(file->fd, offset, SEEK_SET);
-    if (newOffset==-1) {
+    if (newOffset == -1) {
         file->error = errno;
         return SQLITERK_IOERR;
     }
@@ -106,57 +111,57 @@ int sqliterkOSRead(sqliterk_file* file, off_t offset, unsigned char* data, size_
     ssize_t got = 0;
     do {
         got = read(file->fd, data, left);
-        if (got<0) {
-            if (errno==EINTR) {
+        if (got < 0) {
+            if (errno == EINTR) {
                 got = 1;
                 continue;
             }
             file->error = errno;
             return SQLITERK_IOERR;
-        }else if (got>0) {
+        } else if (got > 0) {
             left -= got;
             cnt += got;
-            data = data+got;
+            data = data + got;
         }
-    } while (got>0&&left>0);
+    } while (got > 0 && left > 0);
     *size = cnt;
-    if (left>0) {
+    if (left > 0) {
         return SQLITERK_SHORT_READ;
     }
     return SQLITERK_OK;
 }
 
-int sqliterkOSFileSize(sqliterk_file* file, int* filesize)
+int sqliterkOSFileSize(sqliterk_file *file, int *filesize)
 {
-    if (!file||file->fd<0) {
+    if (!file || file->fd < 0) {
         return SQLITERK_MISUSE;
     }
     struct stat statbuf;
-    if (fstat(file->fd, &statbuf)!=0) {
+    if (fstat(file->fd, &statbuf) != 0) {
         file->error = errno;
         return SQLITERK_IOERR;
     }
-    *filesize = (int)statbuf.st_size;
+    *filesize = (int) statbuf.st_size;
     return SQLITERK_OK;
 }
 
-const char* sqliterkOSGetFilePath(sqliterk_file* file)
+const char *sqliterkOSGetFilePath(sqliterk_file *file)
 {
     return file->path;
 }
 
-void* sqliterkOSMalloc(size_t size)
+void *sqliterkOSMalloc(size_t size)
 {
     return calloc(size, sizeof(char));
 }
 
-void sqliterkOSFree(void* p)
+void sqliterkOSFree(void *p)
 {
     free(p);
 }
 
-
-static void sqliterkDefaultLog(sqliterk_loglevel level, int result, const char *msg)
+static void
+sqliterkDefaultLog(sqliterk_loglevel level, int result, const char *msg)
 {
     fprintf(stderr, "[%s] %s\n", sqliterkGetResultCodeDescription(result), msg);
 }
@@ -164,7 +169,10 @@ static void sqliterkDefaultLog(sqliterk_loglevel level, int result, const char *
 #define SQLITRK_CONFIG_MAXLOG 4096
 static sqliterk_os s_os = {sqliterkDefaultLog};
 
-int sqliterkOSLog(sqliterk_loglevel loglevel, int result, const char* format, ...)
+int sqliterkOSLog(sqliterk_loglevel loglevel,
+                  int result,
+                  const char *format,
+                  ...)
 {
     char buf[SQLITRK_CONFIG_MAXLOG];
 

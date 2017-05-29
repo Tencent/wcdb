@@ -17,8 +17,8 @@
 #ifndef __WCDB_SQLITE_COMMON_H__
 #define __WCDB_SQLITE_COMMON_H__
 
-#include <jni.h>
 #include "JNIHelp.h"
+#include <jni.h>
 
 #include <sqlite3.h>
 
@@ -29,42 +29,48 @@
 
 namespace wcdb {
 
-#define FIND_CLASS(var, className) \
-        var = env->FindClass(className); \
-        LOG_FATAL_IF(! var, "Unable to find class " className);
+#define FIND_CLASS(var, className)                                             \
+    var = env->FindClass(className);                                           \
+    LOG_FATAL_IF(!var, "Unable to find class " className);
 
-#define GET_STATIC_FIELD_ID(var, clazz, fieldName, fieldDescriptor) \
-        var = env->GetStaticFieldID(clazz, fieldName, fieldDescriptor); \
-        LOG_FATAL_IF(! var, "Unable to find field " fieldName);
+#define GET_STATIC_FIELD_ID(var, clazz, fieldName, fieldDescriptor)            \
+    var = env->GetStaticFieldID(clazz, fieldName, fieldDescriptor);            \
+    LOG_FATAL_IF(!var, "Unable to find field " fieldName);
 
-#define GET_METHOD_ID(var, clazz, methodName, fieldDescriptor) \
-        var = env->GetMethodID(clazz, methodName, fieldDescriptor); \
-        LOG_FATAL_IF(! var, "Unable to find method" methodName);
+#define GET_METHOD_ID(var, clazz, methodName, fieldDescriptor)                 \
+    var = env->GetMethodID(clazz, methodName, fieldDescriptor);                \
+    LOG_FATAL_IF(!var, "Unable to find method" methodName);
 
-#define GET_FIELD_ID(var, clazz, fieldName, fieldDescriptor) \
-        var = env->GetFieldID(clazz, fieldName, fieldDescriptor); \
-        LOG_FATAL_IF(! var, "Unable to find field " fieldName);
+#define GET_FIELD_ID(var, clazz, fieldName, fieldDescriptor)                   \
+    var = env->GetFieldID(clazz, fieldName, fieldDescriptor);                  \
+    LOG_FATAL_IF(!var, "Unable to find field " fieldName);
 
-    /* throw a SQLiteException with a message appropriate for the error in handle */
-    void throw_sqlite3_exception(JNIEnv* env, sqlite3* handle);
+/* throw a SQLiteException with a message appropriate for the error in handle */
+void throw_sqlite3_exception(JNIEnv *env, sqlite3 *handle);
 
-    /* throw a SQLiteException with the given message */
-    void throw_sqlite3_exception(JNIEnv* env, const char* message);
+/* throw a SQLiteException with the given message */
+void throw_sqlite3_exception(JNIEnv *env, const char *message);
 
-    /* throw a SQLiteException with a message appropriate for the error in handle
+/* throw a SQLiteException with a message appropriate for the error in handle
        concatenated with the given message
      */
-    void throw_sqlite3_exception(JNIEnv* env, sqlite3* handle, const char* message);
+void throw_sqlite3_exception(JNIEnv *env, sqlite3 *handle, const char *message);
 
-    /* throw a SQLiteException for a given error code */
-    void throw_sqlite3_exception_errcode(JNIEnv* env, int errcode, const char* message);
+/* throw a SQLiteException for a given error code */
+void throw_sqlite3_exception_errcode(JNIEnv *env,
+                                     int errcode,
+                                     const char *message);
 
-    void throw_sqlite3_exception(JNIEnv* env, int errcode,
-        const char* sqlite3Message, const char* message);
+void throw_sqlite3_exception(JNIEnv *env,
+                             int errcode,
+                             const char *sqlite3Message,
+                             const char *message);
 
-    void throw_sqlite3_exception(JNIEnv* env, int errcode, int sysErrno,
-        const char* sqlite3Message, const char* message);
-
+void throw_sqlite3_exception(JNIEnv *env,
+                             int errcode,
+                             int sysErrno,
+                             const char *sqlite3Message,
+                             const char *message);
 }
 
 #endif // _ANDROID_DATABASE_SQLITE_COMMON_H

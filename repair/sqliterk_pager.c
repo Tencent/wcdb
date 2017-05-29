@@ -19,37 +19,43 @@
  */
 
 #include "sqliterk_pager.h"
-#include "sqliterk_os.h"
-#include "sqliterk_crypto.h"
 #include "SQLiteRepairKit.h"
+#include "sqliterk_crypto.h"
+#include "sqliterk_os.h"
 #include "sqliterk_util.h"
-#include <string.h>
 #include <errno.h>
+#include <string.h>
 
-static int sqliterkPagerParseHeader(sqliterk_pager* pager);
-static int sqliterkPageAcquireOne(sqliterk_pager* pager, int pageno, sqliterk_page** page, sqliterk_page_type type);
+static int sqliterkPagerParseHeader(sqliterk_pager *pager);
+static int sqliterkPageAcquireOne(sqliterk_pager *pager,
+                                  int pageno,
+                                  sqliterk_page **page,
+                                  sqliterk_page_type type);
 
 struct sqliterk_page {
     int pageno;
-    unsigned char* data;//page data
+    unsigned char *data; // page data
     sqliterk_page_type type;
 };
 
-int sqliterkPagerOpen(const char* path, const sqliterk_cipher_conf *cipher, sqliterk_pager** pager)
+int sqliterkPagerOpen(const char *path,
+                      const sqliterk_cipher_conf *cipher,
+                      sqliterk_pager **pager)
 {
     if (!pager) {
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
-    sqliterk_pager* thePager = sqliterkOSMalloc(sizeof(sqliterk_pager));
+    sqliterk_pager *thePager = sqliterkOSMalloc(sizeof(sqliterk_pager));
     if (!thePager) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.", sizeof(sqliterk_pager));
+        sqliterkOSError(rc, "Not enough memory, required %u bytes.",
+                        sizeof(sqliterk_pager));
         goto sqliterkPagerOpen_Failed;
     }
-    
+
     rc = sqliterkOSReadOnlyOpen(path, &thePager->file);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         goto sqliterkPagerOpen_Failed;
     }
 
@@ -60,7 +66,8 @@ int sqliterkPagerOpen(const char* path, const sqliterk_cipher_conf *cipher, sqli
         c.kdf_salt = NULL;
 
         rc = sqliterkCryptoSetCipher(thePager, thePager->file, &c);
-        if (rc != SQLITERK_OK) goto sqliterkPagerOpen_Failed;
+        if (rc != SQLITERK_OK)
+            goto sqliterkPagerOpen_Failed;
 
         // Try parsing header.
         sqliterkPagerParseHeader(thePager);
@@ -70,18 +77,22 @@ int sqliterkPagerOpen(const char* path, const sqliterk_cipher_conf *cipher, sqli
             thePager->integrity |= SQLITERK_INTEGRITY_KDF_SALT;
         } else if (cipher->kdf_salt) {
             // If anything goes wrong, use KDF salt specified in cipher config.
-            sqliterkOSWarning(SQLITERK_DAMAGED,
-                "Header cannot be decoded correctly. Trying to apply recovery data.");
+            sqliterkOSWarning(SQLITERK_DAMAGED, "Header cannot be decoded "
+                                                "correctly. Trying to apply "
+                                                "recovery data.");
             rc = sqliterkCryptoSetCipher(thePager, thePager->file, cipher);
-            if (rc != SQLITERK_OK) goto sqliterkPagerOpen_Failed;
+            if (rc != SQLITERK_OK)
+                goto sqliterkPagerOpen_Failed;
 
             rc = sqliterkPagerParseHeader(thePager);
-            if (rc != SQLITERK_OK) goto sqliterkPagerOpen_Failed;
+            if (rc != SQLITERK_OK)
+                goto sqliterkPagerOpen_Failed;
         }
     } else {
         rc = sqliterkPagerParseHeader(thePager);
-        if (rc != SQLITERK_OK) goto sqliterkPagerOpen_Failed;
-        
+        if (rc != SQLITERK_OK)
+            goto sqliterkPagerOpen_Failed;
+
         // For plain-text databases, just mark KDF salt correct.
         if (thePager->integrity & SQLITERK_INTEGRITY_HEADER)
             thePager->integrity |= SQLITERK_INTEGRITY_KDF_SALT;
@@ -114,7 +125,7 @@ sqliterkPagerOpen_Failed:
 
 // Get the meta from header and set it into pager.
 // For further information, see https://www.sqlite.org/fileformat2.html
-static int sqliterkPagerParseHeader(sqliterk_pager* pager)
+static int sqliterkPagerParseHeader(sqliterk_pager *pager)
 {
     // For encrypted databases, assume default page size, decode the first
     // page, and we have the plain-text header.
@@ -123,11 +134,11 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
-    
+
     size_t size = pager->codec ? pager->pagesize : 100;
 
-    //read data
-    unsigned char* buffer = sqliterkOSMalloc(size);
+    // Read data
+    unsigned char *buffer = sqliterkOSMalloc(size);
     if (!buffer) {
         rc = SQLITERK_NOMEM;
         sqliterkOSError(rc, "Not enough memory, required %u bytes.", size);
@@ -137,10 +148,11 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
     rc = sqliterkOSRead(pager->file, 0, buffer, &size);
     if (rc != SQLITERK_OK) {
         if (rc == SQLITERK_SHORT_READ)
-            sqliterkOSError(rc, "File turncated.");
+            sqliterkOSError(rc, "File truncated.");
         else
-            sqliterkOSError(rc, "Cannot read file '%s': %s", sqliterkOSGetFilePath(pager->file),
-                strerror(errno));
+            sqliterkOSError(rc, "Cannot read file '%s': %s",
+                            sqliterkOSGetFilePath(pager->file),
+                            strerror(errno));
         pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
         goto sqliterkPagerParseHeader_End;
     }
@@ -151,7 +163,7 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
         rc = sqliterkCryptoDecode(pager->codec, 1, buffer);
         if (rc != SQLITERK_OK) {
             sqliterkOSWarning(SQLITERK_DAMAGED,
-                "Failed to decode page 1, header corrupted.");
+                              "Failed to decode page 1, header corrupted.");
             pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
         }
     }
@@ -164,13 +176,15 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
             if (pager->codec) {
                 if (pagesize != pager->pagesize) {
                     sqliterkOSWarning(SQLITERK_DAMAGED,
-                                      "Invalid page size for encrypted database: %d expected, %d returned.",
+                                      "Invalid page size for encrypted "
+                                      "database: %d expected, %d returned.",
                                       pager->pagesize, pagesize);
                     pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
                 }
-            } else if ( ((pagesize - 1) & pagesize) != 0 || pagesize < 512 ) {
-                sqliterkOSWarning(SQLITERK_DAMAGED,
-                                  "The [page size] field is corrupted. Default page size %d is used",
+            } else if (((pagesize - 1) & pagesize) != 0 || pagesize < 512) {
+                sqliterkOSWarning(SQLITERK_DAMAGED, "The [page size] field is "
+                                                    "corrupted. Default page "
+                                                    "size %d is used",
                                   SQLITRK_CONFIG_DEFAULT_PAGESIZE);
                 pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
                 pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
@@ -187,21 +201,24 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
             if (pager->codec) {
                 if (reservedBytes != pager->reservedBytes) {
                     sqliterkOSWarning(SQLITERK_DAMAGED,
-                                      "Reserved bytes field doesn't match. %d expected, %d returned.",
+                                      "Reserved bytes field doesn't match. %d "
+                                      "expected, %d returned.",
                                       pager->reservedBytes, reservedBytes);
                     pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
                 }
             } else if (reservedBytes < 0 || reservedBytes > 255) {
-                sqliterkOSWarning(SQLITERK_DAMAGED, "The [reserved bytes] field is corrupted. 0 is used");
+                sqliterkOSWarning(
+                    SQLITERK_DAMAGED,
+                    "The [reserved bytes] field is corrupted. 0 is used");
                 pager->reservedBytes = 0;
                 pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
             } else
                 pager->reservedBytes = reservedBytes;
         } else {
             // Header is corrupted. Defaults the config
-            sqliterkOSWarning(SQLITERK_DAMAGED, "SQLite format magic corrupted.");
-            if (!pager->codec)
-            {
+            sqliterkOSWarning(SQLITERK_DAMAGED,
+                              "SQLite format magic corrupted.");
+            if (!pager->codec) {
                 pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
                 pager->reservedBytes = 0;
             }
@@ -210,12 +227,12 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
         }
     }
 
-    // assign page count
+    // Assign page count
     int filesize;
     rc = sqliterkOSFileSize(pager->file, &filesize);
     if (rc != SQLITERK_OK) {
         sqliterkOSError(rc, "Failed to get size of file '%s': %s",
-            sqliterkOSGetFilePath(pager->file), strerror(errno));
+                        sqliterkOSGetFilePath(pager->file), strerror(errno));
         goto sqliterkPagerParseHeader_End;
     }
 
@@ -226,14 +243,16 @@ static int sqliterkPagerParseHeader(sqliterk_pager* pager)
         goto sqliterkPagerParseHeader_End;
     }
 
-    // check free page
+    // Check free page
     if (pager->freepagecount < 0 || pager->freepagecount > pager->pagecount) {
-        sqliterkOSWarning(SQLITERK_DAMAGED, "The [free page count] field is corrupted. 0 is used");
+        sqliterkOSWarning(
+            SQLITERK_DAMAGED,
+            "The [free page count] field is corrupted. 0 is used");
         pager->freepagecount = 0;
         pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
     }
 
-    // assign usableSize
+    // Assign usableSize
     pager->usableSize = pager->pagesize - pager->reservedBytes;
 
 sqliterkPagerParseHeader_End:
@@ -243,7 +262,7 @@ sqliterkPagerParseHeader_End:
     return rc;
 }
 
-int sqliterkPagerClose(sqliterk_pager* pager)
+int sqliterkPagerClose(sqliterk_pager *pager)
 {
     if (!pager) {
         return SQLITERK_MISUSE;
@@ -266,7 +285,7 @@ int sqliterkPagerClose(sqliterk_pager* pager)
     return rc;
 }
 
-int sqliterkPagerGetPageCount(sqliterk_pager* pager)
+int sqliterkPagerGetPageCount(sqliterk_pager *pager)
 {
     if (!pager) {
         return 0;
@@ -274,32 +293,34 @@ int sqliterkPagerGetPageCount(sqliterk_pager* pager)
     return pager->pagecount;
 }
 
-int sqliterkPagerIsPagenoValid(sqliterk_pager* pager, int pageno)
+int sqliterkPagerIsPagenoValid(sqliterk_pager *pager, int pageno)
 {
-    if (!pager
-        ||pageno<1
-        ||pageno>pager->pagecount) {
+    if (!pager || pageno < 1 || pageno > pager->pagecount) {
         return SQLITERK_MISUSE;
     }
     return SQLITERK_OK;
 }
 
 // Get the page type from file at page [pageno]
-int sqliterkPageAcquireType(sqliterk_pager* pager, int pageno, sqliterk_page_type* type)
+int sqliterkPageAcquireType(sqliterk_pager *pager,
+                            int pageno,
+                            sqliterk_page_type *type)
 {
     // TODO: for encrypted databases, decode the whole page.
     // Use sqliterkPageAcquire instead.
 
-    if (!pager
-        ||sqliterkPagerIsPagenoValid(pager, pageno)!=SQLITERK_OK
-        ||!type) {
+    if (!pager || sqliterkPagerIsPagenoValid(pager, pageno) != SQLITERK_OK ||
+        !type) {
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
     unsigned char typedata;
     size_t typesize = 1;
-    rc = sqliterkOSRead(pager->file, sqliterkPagenoHeaderOffset(pageno)+(pageno-1)*pager->pagesize, &typedata, &typesize);
-    if (rc!=SQLITERK_OK) {
+    rc = sqliterkOSRead(pager->file,
+                        sqliterkPagenoHeaderOffset(pageno) +
+                            (pageno - 1) * pager->pagesize,
+                        &typedata, &typesize);
+    if (rc != SQLITERK_OK) {
         goto sqliterkPageAcquireType_Failed;
     }
 
@@ -324,25 +345,31 @@ sqliterkPageAcquireType_Failed:
 }
 
 // Get whole page data from file at page [pageno] and setup the [page].
-int sqliterkPageAcquire(sqliterk_pager* pager, int pageno, sqliterk_page** page)
+int sqliterkPageAcquire(sqliterk_pager *pager, int pageno, sqliterk_page **page)
 {
-    return sqliterkPageAcquireOne(pager, pageno, page, sqliterk_page_type_unknown);
+    return sqliterkPageAcquireOne(pager, pageno, page,
+                                  sqliterk_page_type_unknown);
 }
 
-int sqliterkPageAcquireOverflow(sqliterk_pager* pager, int pageno, sqliterk_page** page)
+int sqliterkPageAcquireOverflow(sqliterk_pager *pager,
+                                int pageno,
+                                sqliterk_page **page)
 {
-    return sqliterkPageAcquireOne(pager, pageno, page, sqliterk_page_type_overflow);
+    return sqliterkPageAcquireOne(pager, pageno, page,
+                                  sqliterk_page_type_overflow);
 }
 
-static int sqliterkPageAcquireOne(sqliterk_pager* pager, int pageno, sqliterk_page** page, sqliterk_page_type type)
+static int sqliterkPageAcquireOne(sqliterk_pager *pager,
+                                  int pageno,
+                                  sqliterk_page **page,
+                                  sqliterk_page_type type)
 {
-    if (!pager
-        ||!page
-        ||sqliterkPagerIsPagenoValid(pager, pageno)!=SQLITERK_OK) {
+    if (!pager || !page ||
+        sqliterkPagerIsPagenoValid(pager, pageno) != SQLITERK_OK) {
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
-    sqliterk_page* thePage = sqliterkOSMalloc(sizeof(sqliterk_page));
+    sqliterk_page *thePage = sqliterkOSMalloc(sizeof(sqliterk_page));
     if (!thePage) {
         rc = SQLITERK_NOMEM;
         goto sqliterkPageAcquire_Failed;
@@ -357,20 +384,23 @@ static int sqliterkPageAcquireOne(sqliterk_pager* pager, int pageno, sqliterk_pa
     }
 
     size_t size = pager->pagesize;
-    rc = sqliterkOSRead(pager->file, (pageno-1)*pager->pagesize, thePage->data, &size);
-    if (rc!=SQLITERK_OK) {
+    rc = sqliterkOSRead(pager->file, (pageno - 1) * pager->pagesize,
+                        thePage->data, &size);
+    if (rc != SQLITERK_OK) {
         goto sqliterkPageAcquire_Failed;
     }
 
     // For encrypted databases, decode page.
     if (pager->codec) {
         rc = sqliterkCryptoDecode(pager->codec, pageno, thePage->data);
-        if (rc != SQLITERK_OK) goto sqliterkPageAcquire_Failed;
+        if (rc != SQLITERK_OK)
+            goto sqliterkPageAcquire_Failed;
     }
 
-    //check type
-    if (type==sqliterk_page_type_unknown) {
-        sqliterkParseInt(thePage->data, sqliterkPageHeaderOffset(thePage), 1, &type);
+    // Check type
+    if (type == sqliterk_page_type_unknown) {
+        sqliterkParseInt(thePage->data, sqliterkPageHeaderOffset(thePage), 1,
+                         &type);
         switch (type) {
             case sqliterk_page_type_interior_index:
             case sqliterk_page_type_interior_table:
@@ -382,7 +412,7 @@ static int sqliterkPageAcquireOne(sqliterk_pager* pager, int pageno, sqliterk_pa
                 thePage->type = sqliterk_page_type_unknown;
                 break;
         }
-    }else {
+    } else {
         thePage->type = type;
     }
 
@@ -397,7 +427,7 @@ sqliterkPageAcquire_Failed:
     return rc;
 }
 
-int sqliterkPageRelease(sqliterk_page* page)
+int sqliterkPageRelease(sqliterk_page *page)
 {
     if (!page) {
         return SQLITERK_MISUSE;
@@ -411,7 +441,7 @@ int sqliterkPageRelease(sqliterk_page* page)
 }
 
 // Ahead release the page data to save memory
-int sqliterkPageClearData(sqliterk_page* page)
+int sqliterkPageClearData(sqliterk_page *page)
 {
     if (!page) {
         return SQLITERK_MISUSE;
@@ -423,7 +453,7 @@ int sqliterkPageClearData(sqliterk_page* page)
     return SQLITERK_OK;
 }
 
-const unsigned char* sqliterkPageGetData(sqliterk_page* page)
+const unsigned char *sqliterkPageGetData(sqliterk_page *page)
 {
     if (!page) {
         return NULL;
@@ -431,7 +461,7 @@ const unsigned char* sqliterkPageGetData(sqliterk_page* page)
     return page->data;
 }
 
-int sqliterkPagerGetSize(sqliterk_pager* pager)
+int sqliterkPagerGetSize(sqliterk_pager *pager)
 {
     if (!pager) {
         return 0;
@@ -439,7 +469,7 @@ int sqliterkPagerGetSize(sqliterk_pager* pager)
     return pager->pagesize;
 }
 
-int sqliterkPagerGetUsableSize(sqliterk_pager* pager)
+int sqliterkPagerGetUsableSize(sqliterk_pager *pager)
 {
     if (!pager) {
         return 0;
@@ -447,14 +477,14 @@ int sqliterkPagerGetUsableSize(sqliterk_pager* pager)
     return pager->usableSize;
 }
 
-int sqliterkPageGetPageno(sqliterk_page* page)
+int sqliterkPageGetPageno(sqliterk_page *page)
 {
     if (!page) {
         return 0;
     }
     return page->pageno;
 }
-sqliterk_page_type sqliterkPageGetType(sqliterk_page* page)
+sqliterk_page_type sqliterkPageGetType(sqliterk_page *page)
 {
     if (!page) {
         return sqliterk_page_type_unknown;
@@ -464,13 +494,13 @@ sqliterk_page_type sqliterkPageGetType(sqliterk_page* page)
 
 int sqliterkPagenoHeaderOffset(int pageno)
 {
-    if (pageno==1) {
+    if (pageno == 1) {
         return 100;
     }
     return 0;
 }
 
-int sqliterkPageHeaderOffset(sqliterk_page* page)
+int sqliterkPageHeaderOffset(sqliterk_page *page)
 {
     if (!page) {
         return 0;
@@ -478,9 +508,9 @@ int sqliterkPageHeaderOffset(sqliterk_page* page)
     return sqliterkPagenoHeaderOffset(page->pageno);
 }
 
-const char* sqliterkPageGetTypeName(sqliterk_page_type type)
+const char *sqliterkPageGetTypeName(sqliterk_page_type type)
 {
-    char* name;
+    char *name;
     switch (type) {
         case sqliterk_page_type_interior_index:
             name = "interior-index btree";
@@ -501,53 +531,53 @@ const char* sqliterkPageGetTypeName(sqliterk_page_type type)
     return name;
 }
 
-void sqliterkPagerSetStatus(sqliterk_pager* pager, int pageno, sqliterk_status status)
+void sqliterkPagerSetStatus(sqliterk_pager *pager,
+                            int pageno,
+                            sqliterk_status status)
 {
     if (!pager || !pager->pagesStatus ||
         sqliterkPagerIsPagenoValid(pager, pageno) != SQLITERK_OK) {
         return;
     }
 
-    pager->pagesStatus[pageno-1] = status;
+    pager->pagesStatus[pageno - 1] = status;
     if (status == sqliterk_status_checked)
         pager->integrity |= SQLITERK_INTEGRITY_DATA;
 }
 
-sqliterk_status sqliterkPagerGetStatus(sqliterk_pager* pager, int pageno)
+sqliterk_status sqliterkPagerGetStatus(sqliterk_pager *pager, int pageno)
 {
-    if (!pager
-        ||!pager->pagesStatus
-        ||sqliterkPagerIsPagenoValid(pager, pageno)!=SQLITERK_OK) {
+    if (!pager || !pager->pagesStatus ||
+        sqliterkPagerIsPagenoValid(pager, pageno) != SQLITERK_OK) {
         return sqliterk_status_invalid;
     }
-    return pager->pagesStatus[pageno-1];
+    return pager->pagesStatus[pageno - 1];
 }
 
-int sqliterkPagerGetParsedPageCount(sqliterk_pager* pager)
+int sqliterkPagerGetParsedPageCount(sqliterk_pager *pager)
 {
-    if (!pager
-        ||!pager->pagesStatus) {
+    if (!pager || !pager->pagesStatus) {
         return 0;
     }
 
     int i, count = 0;
     for (i = 0; i < pager->pagecount; i++) {
-        if (pager->pagesStatus[i]==sqliterk_status_checked) {
+        if (pager->pagesStatus[i] == sqliterk_status_checked) {
             count++;
         }
     }
     return count;
 }
 
-int sqliterkPagerGetValidPageCount(sqliterk_pager* pager)
+int sqliterkPagerGetValidPageCount(sqliterk_pager *pager)
 {
     if (!pager) {
         return 0;
     }
-    return pager->pagecount-pager->freepagecount;
+    return pager->pagecount - pager->freepagecount;
 }
 
-unsigned int sqliterkPagerGetIntegrity(sqliterk_pager* pager)
+unsigned int sqliterkPagerGetIntegrity(sqliterk_pager *pager)
 {
     if (!pager) {
         return 0;

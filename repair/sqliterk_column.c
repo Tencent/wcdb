@@ -23,27 +23,27 @@
 
 struct sqliterk_column {
     int rowid;
-    sqliterk_values* values;
-    sqliterk_values* overflowPages;
+    sqliterk_values *values;
+    sqliterk_values *overflowPages;
 };
 
-int sqliterkColumnAlloc(sqliterk_column** column)
+int sqliterkColumnAlloc(sqliterk_column **column)
 {
     if (!column) {
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
-    sqliterk_column* theColumn = sqliterkOSMalloc(sizeof(sqliterk_column));
+    sqliterk_column *theColumn = sqliterkOSMalloc(sizeof(sqliterk_column));
     if (!theColumn) {
         rc = SQLITERK_NOMEM;
         goto sqliterkColumnAlloc_Failed;
     }
     rc = sqliterkValuesAlloc(&theColumn->values);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         goto sqliterkColumnAlloc_Failed;
     }
     rc = sqliterkValuesAlloc(&theColumn->overflowPages);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         goto sqliterkColumnAlloc_Failed;
     }
     *column = theColumn;
@@ -57,7 +57,7 @@ sqliterkColumnAlloc_Failed:
     return rc;
 }
 
-int sqliterkColumnFree(sqliterk_column* column)
+int sqliterkColumnFree(sqliterk_column *column)
 {
     if (!column) {
         return SQLITERK_MISUSE;
@@ -72,7 +72,7 @@ int sqliterkColumnFree(sqliterk_column* column)
     return SQLITERK_OK;
 }
 
-sqliterk_values* sqliterkColumnGetValues(sqliterk_column* column)
+sqliterk_values *sqliterkColumnGetValues(sqliterk_column *column)
 {
     if (!column) {
         return NULL;
@@ -80,14 +80,14 @@ sqliterk_values* sqliterkColumnGetValues(sqliterk_column* column)
     return column->values;
 }
 
-void sqliterkColumnSetRowId(sqliterk_column* column, int rowid)
+void sqliterkColumnSetRowId(sqliterk_column *column, int rowid)
 {
     if (column) {
         column->rowid = rowid;
     }
 }
 
-int sqliterkColumnGetRowId(sqliterk_column* column)
+int sqliterkColumnGetRowId(sqliterk_column *column)
 {
     if (!column) {
         return 0;
@@ -95,7 +95,7 @@ int sqliterkColumnGetRowId(sqliterk_column* column)
     return column->rowid;
 }
 
-sqliterk_values* sqliterkColumnGetOverflowPages(sqliterk_column* column)
+sqliterk_values *sqliterkColumnGetOverflowPages(sqliterk_column *column)
 {
     if (!column) {
         return NULL;
@@ -103,7 +103,7 @@ sqliterk_values* sqliterkColumnGetOverflowPages(sqliterk_column* column)
     return column->overflowPages;
 }
 
-int sqliterkColumnClear(sqliterk_column* column)
+int sqliterkColumnClear(sqliterk_column *column)
 {
     if (!column) {
         return SQLITERK_MISUSE;

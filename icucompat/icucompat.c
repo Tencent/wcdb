@@ -23,34 +23,35 @@
 #define ICUCOMPAT_IMPL
 
 #include "icucompat.h"
-#include <dlfcn.h>
 #include <dirent.h>
+#include <dlfcn.h>
 #include <stdio.h>
 #include <string.h>
-
 
 static void *s_libicuuc_so = NULL;
 static void *s_libicui18n_so = NULL;
 icu_compat_t __g_icucompat_iface__ = {0};
 
-
-static void *load_function(void *lib_handle, const char *func_name, const char *suffix)
+static void *
+load_function(void *lib_handle, const char *func_name, const char *suffix)
 {
     char buf[128];
     size_t len = strlcpy(buf, func_name, sizeof(buf));
     strlcpy(buf + len, suffix, sizeof(buf) - len);
-    
+
     return dlsym(lib_handle, buf);
 }
 
 static void load_functions(const char *suffix)
 {
-#define ICUCOMPAT_UC_FUNC(ret_type, func_name, arg_list) \
-    (__g_icucompat_iface__.func_name ## _) = (ret_type (*) arg_list) \
-        load_function(s_libicuuc_so, #func_name, suffix);
-#define ICUCOMPAT_I18N_FUNC(ret_type, func_name, arg_list) \
-    (__g_icucompat_iface__.func_name ## _) = (ret_type (*) arg_list) \
-        load_function(s_libicui18n_so, #func_name, suffix);
+#define ICUCOMPAT_UC_FUNC(ret_type, func_name, arg_list)                       \
+    (__g_icucompat_iface__.func_name##_) =                                     \
+        (ret_type(*) arg_list) load_function(s_libicuuc_so, #func_name,        \
+                                             suffix);
+#define ICUCOMPAT_I18N_FUNC(ret_type, func_name, arg_list)                     \
+    (__g_icucompat_iface__.func_name##_) =                                     \
+        (ret_type(*) arg_list) load_function(s_libicui18n_so, #func_name,      \
+                                             suffix);
 
 #include "icuprototype.h"
 
@@ -65,21 +66,17 @@ static const char *find_icu_suffix(void *lib_handle, char *buf, size_t buflen)
         return NULL;
 
     struct dirent *dp;
-    while ((dp = readdir(icudir)) != NULL)
-    {
-        if (dp->d_type == DT_REG)
-        {
+    while ((dp = readdir(icudir)) != NULL) {
+        if (dp->d_type == DT_REG) {
             // Find /system/usr/icu/icudt??l.dat
             const char *name = dp->d_name;
-            if (strlen(name) == 12 && !strncmp("icudt", name, 5) && 
-                name[5] >= '0' && name[5] <= '9' && name[6] >= '0' && name[6] <= '9' &&
-                !strncmp("l.dat", &name[7], 6))
-            {
+            if (strlen(name) == 12 && !strncmp("icudt", name, 5) &&
+                name[5] >= '0' && name[5] <= '9' && name[6] >= '0' &&
+                name[6] <= '9' && !strncmp("l.dat", &name[7], 6)) {
                 snprintf(buf, buflen, "_%c%c", name[5], name[6]);
-                
+
                 // Try loading with suffix.
-                if (load_function(lib_handle, "u_getVersion", buf))
-                {
+                if (load_function(lib_handle, "u_getVersion", buf)) {
                     closedir(icudir);
                     return buf;
                 }
@@ -87,17 +84,15 @@ static const char *find_icu_suffix(void *lib_handle, char *buf, size_t buflen)
         }
     }
     closedir(icudir);
-    
+
     // Failed, try plain names without suffix.
-    if (load_function(lib_handle, "u_getVersion", ""))
-    {
+    if (load_function(lib_handle, "u_getVersion", "")) {
         buf[0] = 0;
         return buf;
     }
-    
+
     return NULL;
 }
-
 
 int init_icucompat()
 {
@@ -107,8 +102,9 @@ int init_icucompat()
 
     s_libicuuc_so = dlopen("libicuuc.so", RTLD_LAZY);
     s_libicui18n_so = dlopen("libicui18n.so", RTLD_LAZY);
-    if (!s_libicuuc_so || !s_libicui18n_so) goto bail;
-    
+    if (!s_libicuuc_so || !s_libicui18n_so)
+        goto bail;
+
     if (!find_icu_suffix(s_libicuuc_so, suffix, sizeof(suffix)))
         goto bail;
 
@@ -116,17 +112,21 @@ int init_icucompat()
     return 0;
 
 bail:
-    if (s_libicuuc_so) dlclose(s_libicuuc_so);
-    if (s_libicui18n_so) dlclose(s_libicui18n_so);
+    if (s_libicuuc_so)
+        dlclose(s_libicuuc_so);
+    if (s_libicui18n_so)
+        dlclose(s_libicui18n_so);
     s_libicuuc_so = NULL;
     s_libicui18n_so = NULL;
     return -1;
 }
 
 void destroy_icucompat()
-{   
-    if (s_libicuuc_so) dlclose(s_libicuuc_so);
-    if (s_libicui18n_so) dlclose(s_libicui18n_so);
+{
+    if (s_libicuuc_so)
+        dlclose(s_libicuuc_so);
+    if (s_libicui18n_so)
+        dlclose(s_libicui18n_so);
     s_libicuuc_so = NULL;
     s_libicui18n_so = NULL;
 }

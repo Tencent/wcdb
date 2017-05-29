@@ -20,8 +20,8 @@
 
 #include "sqliterk_crypto.h"
 #include "SQLiteRepairKit.h"
-#include "sqliterk_pager.h"
 #include "sqliterk_os.h"
+#include "sqliterk_pager.h"
 #include <sqlite3.h>
 
 // Declarations by SQLCipher.
@@ -32,21 +32,23 @@
 #define CIPHER_WRITE_CTX 1
 #define CIPHER_READWRITE_CTX 2
 
-/* extensions defined in crypto_impl.c */
+/* Extensions defined in crypto_impl.c */
 typedef struct codec_ctx codec_ctx;
 
-/* activation and initialization */
+/* Activation and initialization */
 void sqlcipher_activate();
 void sqlcipher_deactivate();
-int sqlcipher_codec_ctx_init(codec_ctx **, void *, void *, void *, const void *, int);
+int sqlcipher_codec_ctx_init(
+    codec_ctx **, void *, void *, void *, const void *, int);
 void sqlcipher_codec_ctx_free(codec_ctx **);
 int sqlcipher_codec_key_derive(codec_ctx *);
 int sqlcipher_codec_key_copy(codec_ctx *, int);
 
-/* page cipher implementation */
-int sqlcipher_page_cipher(codec_ctx *, int, int, int, int, unsigned char *, unsigned char *);
+/* Page cipher implementation */
+int sqlcipher_page_cipher(
+    codec_ctx *, int, int, int, int, unsigned char *, unsigned char *);
 
-/* context setters & getters */
+/* Context setters & getters */
 //void sqlcipher_codec_ctx_set_error(codec_ctx *, int);
 
 int sqlcipher_codec_ctx_set_pass(codec_ctx *, const void *, int, int);
@@ -65,15 +67,15 @@ int sqlcipher_get_default_kdf_iter();
 int sqlcipher_codec_ctx_set_kdf_iter(codec_ctx *, int, int);
 int sqlcipher_codec_ctx_get_kdf_iter(codec_ctx *ctx, int);
 
-void* sqlcipher_codec_ctx_get_kdf_salt(codec_ctx *ctx);
+void *sqlcipher_codec_ctx_get_kdf_salt(codec_ctx *ctx);
 
 int sqlcipher_codec_ctx_set_fast_kdf_iter(codec_ctx *, int, int);
 int sqlcipher_codec_ctx_get_fast_kdf_iter(codec_ctx *, int);
 
 int sqlcipher_codec_ctx_set_cipher(codec_ctx *, const char *, int);
-const char* sqlcipher_codec_ctx_get_cipher(codec_ctx *ctx, int for_ctx);
+const char *sqlcipher_codec_ctx_get_cipher(codec_ctx *ctx, int for_ctx);
 
-void* sqlcipher_codec_ctx_get_data(codec_ctx *);
+void *sqlcipher_codec_ctx_get_data(codec_ctx *);
 
 //void sqlcipher_exportFunc(sqlite3_context *, int, sqlite3_value **);
 
@@ -88,9 +90,11 @@ int sqlcipher_codec_ctx_get_use_hmac(codec_ctx *ctx, int for_ctx);
 
 int sqlcipher_codec_ctx_set_flag(codec_ctx *ctx, unsigned int flag);
 int sqlcipher_codec_ctx_unset_flag(codec_ctx *ctx, unsigned int flag);
-int sqlcipher_codec_ctx_get_flag(codec_ctx *ctx, unsigned int flag, int for_ctx);
+int sqlcipher_codec_ctx_get_flag(codec_ctx *ctx,
+                                 unsigned int flag,
+                                 int for_ctx);
 
-const char* sqlcipher_codec_get_cipher_provider(codec_ctx *ctx);
+const char *sqlcipher_codec_get_cipher_provider(codec_ctx *ctx);
 //int sqlcipher_codec_ctx_migrate(codec_ctx *ctx);
 int sqlcipher_codec_add_random(codec_ctx *ctx, const char *data, int random_sz);
 int sqlcipher_cipher_profile(sqlite3 *db, const char *destination);
@@ -99,12 +103,10 @@ int sqlcipher_cipher_profile(sqlite3 *db, const char *destination);
 //static void sqlcipher_codec_get_pass(codec_ctx *ctx, void **zKey, int *nKey);
 //static void sqlcipher_codec_set_store_pass(codec_ctx *ctx, int value);
 int sqlcipher_codec_fips_status(codec_ctx *ctx);
-const char* sqlcipher_codec_get_provider_version(codec_ctx *ctx);
-
+const char *sqlcipher_codec_get_provider_version(codec_ctx *ctx);
 
 // sqlite3_file redirector
-typedef struct
-{
+typedef struct {
     const struct sqlite3_io_methods *pMethods;
     sqliterk_file *fd;
     const unsigned char *kdf_salt;
@@ -113,26 +115,24 @@ typedef struct
 int sqliterkRead(sqlite3_file *fd, void *data, int iAmt, sqlite3_int64 iOfst)
 {
     sqlite3_file_rkredir *rkos = (sqlite3_file_rkredir *) fd;
-    if (rkos->kdf_salt)
-    {
+    if (rkos->kdf_salt) {
         memcpy(data, rkos->kdf_salt, (iAmt > 16) ? 16 : iAmt);
         return SQLITE_OK;
-    }
-    else
-    {
+    } else {
         sqliterk_file *f = rkos->fd;
         size_t size = iAmt;
         return sqliterkOSRead(f, (off_t) iOfst, data, &size);
     }
 }
 
-int sqliterkCryptoSetCipher(sqliterk_pager *pager, sqliterk_file *fd, const sqliterk_cipher_conf *conf)
+int sqliterkCryptoSetCipher(sqliterk_pager *pager,
+                            sqliterk_file *fd,
+                            const sqliterk_cipher_conf *conf)
 {
     codec_ctx *codec = NULL;
     int rc;
 
-    if (conf)
-    {
+    if (conf) {
         // Check arguments.
         if (!conf->key || conf->key_len <= 0)
             return SQLITERK_MISUSE;
@@ -154,35 +154,39 @@ int sqliterkCryptoSetCipher(sqliterk_pager *pager, sqliterk_file *fd, const sqli
         file.kdf_salt = conf->kdf_salt;
 
         // Initialize codec context.
-        rc = sqlcipher_codec_ctx_init(&codec, fake_db, NULL, &file, conf->key, conf->key_len);
-        if (rc != SQLITE_OK) goto bail_sqlite_errstr;
+        rc = sqlcipher_codec_ctx_init(&codec, fake_db, NULL, &file, conf->key,
+                                      conf->key_len);
+        if (rc != SQLITE_OK)
+            goto bail_sqlite_errstr;
 
         // Set cipher.
-        if (conf->cipher_name)
-        {
-            rc = sqlcipher_codec_ctx_set_cipher(codec, conf->cipher_name, CIPHER_READWRITE_CTX);
-            if (rc != SQLITE_OK) goto bail_sqlite_errstr;
+        if (conf->cipher_name) {
+            rc = sqlcipher_codec_ctx_set_cipher(codec, conf->cipher_name,
+                                                CIPHER_READWRITE_CTX);
+            if (rc != SQLITE_OK)
+                goto bail_sqlite_errstr;
         }
 
         // Set page size.
-        if (conf->page_size > 0)
-        {
+        if (conf->page_size > 0) {
             rc = sqlcipher_codec_ctx_set_pagesize(codec, conf->page_size);
-            if (rc != SQLITE_OK) goto bail_sqlite_errstr;
+            if (rc != SQLITE_OK)
+                goto bail_sqlite_errstr;
         }
 
         // Set HMAC usage.
-        if (conf->use_hmac >= 0)
-        {
+        if (conf->use_hmac >= 0) {
             rc = sqlcipher_codec_ctx_set_use_hmac(codec, conf->use_hmac);
-            if (rc != SQLITE_OK) goto bail_sqlite_errstr;
+            if (rc != SQLITE_OK)
+                goto bail_sqlite_errstr;
         }
 
         // Set KDF Iteration.
-        if (conf->kdf_iter > 0)
-        {
-            rc = sqlcipher_codec_ctx_set_kdf_iter(codec, conf->kdf_iter, CIPHER_READWRITE_CTX);
-            if (rc != SQLITE_OK) goto bail;
+        if (conf->kdf_iter > 0) {
+            rc = sqlcipher_codec_ctx_set_kdf_iter(codec, conf->kdf_iter,
+                                                  CIPHER_READWRITE_CTX);
+            if (rc != SQLITE_OK)
+                goto bail;
         }
 
         // Update pager page size.
@@ -193,8 +197,7 @@ int sqliterkCryptoSetCipher(sqliterk_pager *pager, sqliterk_file *fd, const sqli
         pager->reservedBytes = reserve_sz;
     }
 
-    if (pager->codec)
-    {
+    if (pager->codec) {
         sqlcipher_codec_ctx_free(&pager->codec);
         sqlcipher_deactivate();
     }
@@ -203,8 +206,9 @@ int sqliterkCryptoSetCipher(sqliterk_pager *pager, sqliterk_file *fd, const sqli
     return SQLITERK_OK;
 
 bail_sqlite_errstr:
-    sqliterkOSError(SQLITERK_CANTOPEN, "Failed to initialize cipher context: %s",
-        sqlite3_errstr(rc));
+    sqliterkOSError(SQLITERK_CANTOPEN,
+                    "Failed to initialize cipher context: %s",
+                    sqlite3_errstr(rc));
     rc = SQLITERK_CANTOPEN;
 bail:
     if (codec)
@@ -215,7 +219,8 @@ bail:
 
 void sqliterkCryptoFreeCodec(sqliterk_pager *pager)
 {
-    if (!pager->codec) return;
+    if (!pager->codec)
+        return;
     sqlcipher_codec_ctx_free(&pager->codec);
     sqlcipher_deactivate();
 }
@@ -227,25 +232,28 @@ int sqliterkCryptoDecode(sqliterk_codec *codec, int pgno, void *data)
     unsigned char *pdata = (unsigned char *) data;
 
     int page_sz = sqlcipher_codec_ctx_get_pagesize(codec);
-    unsigned char *buffer = (unsigned char *) sqlcipher_codec_ctx_get_data(codec);
+    unsigned char *buffer =
+        (unsigned char *) sqlcipher_codec_ctx_get_data(codec);
 
     rc = sqlcipher_codec_key_derive(codec);
-    if (rc != SQLITE_OK) return rc;
+    if (rc != SQLITE_OK)
+        return rc;
 
     if (pgno == 1) {
-        offset = 16;    // FILE_HEADER_SZ
+        offset = 16; // FILE_HEADER_SZ
         memcpy(buffer, "SQLite format 3", 16);
     }
-    rc = sqlcipher_page_cipher(codec, CIPHER_READ_CTX, pgno, CIPHER_DECRYPT, page_sz - offset,
-            pdata + offset, buffer + offset);
-    if (rc != SQLITE_OK) goto bail;
+    rc = sqlcipher_page_cipher(codec, CIPHER_READ_CTX, pgno, CIPHER_DECRYPT,
+                               page_sz - offset, pdata + offset,
+                               buffer + offset);
+    if (rc != SQLITE_OK)
+        goto bail;
     memcpy(pdata, buffer, page_sz);
 
     return SQLITERK_OK;
 
 bail:
     sqliterkOSError(SQLITERK_DAMAGED, "Failed to decode page %d: %s", pgno,
-        sqlite3_errstr(rc));
+                    sqlite3_errstr(rc));
     return rc;
 }
-

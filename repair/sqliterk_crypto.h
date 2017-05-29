@@ -30,10 +30,11 @@ typedef struct sqliterk_pager sqliterk_pager;
 typedef struct codec_ctx sqliterk_codec;
 typedef struct sqliterk_cipher_conf sqliterk_cipher_conf;
 
-int sqliterkCryptoSetCipher(sqliterk_pager *pager, sqliterk_file *fd, const sqliterk_cipher_conf *conf);
+int sqliterkCryptoSetCipher(sqliterk_pager *pager,
+                            sqliterk_file *fd,
+                            const sqliterk_cipher_conf *conf);
 void sqliterkCryptoFreeCodec(sqliterk_pager *pager);
 int sqliterkCryptoDecode(sqliterk_codec *codec, int pgno, void *data);
-
 
 #ifdef __cplusplus
 }

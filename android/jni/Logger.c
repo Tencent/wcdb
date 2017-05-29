@@ -21,9 +21,7 @@
 #include "Logger.h"
 #include <stdio.h>
 
-
 static wcdb_logfunc_t g_logfunc = __android_log_write;
-
 
 static int dummy_log(int prio, const char *tag, const char *msg)
 {
@@ -37,7 +35,8 @@ wcdb_logfunc_t wcdb_get_log_function()
 
 void wcdb_set_log_function(wcdb_logfunc_t func)
 {
-    if (!func) func = dummy_log;
+    if (!func)
+        func = dummy_log;
     g_logfunc = func;
 }
 

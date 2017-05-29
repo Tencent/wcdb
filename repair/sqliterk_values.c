@@ -19,36 +19,35 @@
  */
 
 #include "sqliterk_values.h"
+#include "SQLiteRepairKit.h"
+#include "sqliterk_os.h"
+#include "sqliterk_util.h"
 #include <stdlib.h>
 #include <string.h>
-#include "sqliterk_util.h"
-#include "sqliterk_os.h"
-#include "SQLiteRepairKit.h"
 
 //declaration
-static int sqliterkValuesAutoGrow(sqliterk_values* values);
+static int sqliterkValuesAutoGrow(sqliterk_values *values);
 
 typedef int64_t sqliterk_integer;
 typedef double sqliterk_number;
 typedef struct sqliterk_text sqliterk_text;
 struct sqliterk_text {
-    char* t;
+    char *t;
     int s;
 };
 typedef struct sqliterk_binary sqliterk_binary;
 struct sqliterk_binary {
-    void* b;
+    void *b;
     int s;
 };
 typedef union sqliterk_any sqliterk_any;
 union sqliterk_any {
-    sqliterk_integer* integer;
-    sqliterk_number* number;
-    sqliterk_text* text;
-    sqliterk_binary* binary;
-    void* memory;
+    sqliterk_integer *integer;
+    sqliterk_number *number;
+    sqliterk_text *text;
+    sqliterk_binary *binary;
+    void *memory;
 };
-
 
 struct sqliterk_value {
     sqliterk_value_type type;
@@ -58,22 +57,22 @@ struct sqliterk_value {
 struct sqliterk_values {
     int count;
     int capacity;
-    sqliterk_value* values;
+    sqliterk_value *values;
 };
 
-int sqliterkValuesAlloc(sqliterk_values** values)
+int sqliterkValuesAlloc(sqliterk_values **values)
 {
     if (!values) {
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
-    sqliterk_values* theValues = sqliterkOSMalloc(sizeof(sqliterk_values));
+    sqliterk_values *theValues = sqliterkOSMalloc(sizeof(sqliterk_values));
     if (!theValues) {
         rc = SQLITERK_NOMEM;
         goto sqliterkValuesAlloc_Failed;
     }
     rc = sqliterkValuesAutoGrow(theValues);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         goto sqliterkValuesAlloc_Failed;
     }
     *values = theValues;
@@ -85,7 +84,7 @@ sqliterkValuesAlloc_Failed:
     return rc;
 }
 
-int sqliterkValuesFree(sqliterk_values* values)
+int sqliterkValuesFree(sqliterk_values *values)
 {
     if (!values) {
         return SQLITERK_MISUSE;
@@ -93,7 +92,7 @@ int sqliterkValuesFree(sqliterk_values* values)
 
     int i;
     for (i = 0; i < values->count; i++) {
-        sqliterk_value* value = &values->values[i];
+        sqliterk_value *value = &values->values[i];
         sqliterkValueClear(value);
     }
     values->count = 0;
@@ -106,7 +105,7 @@ int sqliterkValuesFree(sqliterk_values* values)
     return SQLITERK_OK;
 }
 
-int sqliterkValuesClear(sqliterk_values* values)
+int sqliterkValuesClear(sqliterk_values *values)
 {
     if (!values) {
         return SQLITERK_MISUSE;
@@ -114,32 +113,34 @@ int sqliterkValuesClear(sqliterk_values* values)
 
     int i;
     for (i = 0; i < values->count; i++) {
-        sqliterk_value* value = &values->values[i];
+        sqliterk_value *value = &values->values[i];
         sqliterkValueClear(value);
     }
     values->count = 0;
     return SQLITERK_OK;
 }
 
-static int sqliterkValuesAutoGrow(sqliterk_values* values)
+static int sqliterkValuesAutoGrow(sqliterk_values *values)
 {
     if (!values) {
         return SQLITERK_MISUSE;
     }
-    if (values->count>=values->capacity) {
+    if (values->count >= values->capacity) {
         int oldCapacity = values->capacity;
-        if (oldCapacity<=0) {
+        if (oldCapacity <= 0) {
             //init for 4
             values->capacity = 4;
-        }else {
-            values->capacity = oldCapacity*2;
+        } else {
+            values->capacity = oldCapacity * 2;
         }
-        sqliterk_value* newValues = sqliterkOSMalloc(sizeof(sqliterk_value)*(values->capacity+1));
+        sqliterk_value *newValues =
+            sqliterkOSMalloc(sizeof(sqliterk_value) * (values->capacity + 1));
         if (!newValues) {
             return SQLITERK_NOMEM;
         }
         if (values->values) {
-            memcpy(newValues, values->values, sizeof(sqliterk_value)*oldCapacity);
+            memcpy(newValues, values->values,
+                   sizeof(sqliterk_value) * oldCapacity);
             sqliterkOSFree(values->values);
         }
         values->values = newValues;
@@ -147,7 +148,7 @@ static int sqliterkValuesAutoGrow(sqliterk_values* values)
     return SQLITERK_OK;
 }
 
-int sqliterkValuesGetCount(sqliterk_values* values)
+int sqliterkValuesGetCount(sqliterk_values *values)
 {
     if (!values) {
         return 0;
@@ -155,20 +156,19 @@ int sqliterkValuesGetCount(sqliterk_values* values)
     return values->count;
 }
 
-sqliterk_value_type sqliterkValuesGetType(sqliterk_values* values, int index)
+sqliterk_value_type sqliterkValuesGetType(sqliterk_values *values, int index)
 {
-    if (values&&index<sqliterkValuesGetCount(values)) {
+    if (values && index < sqliterkValuesGetCount(values)) {
         return values->values[index].type;
     }
     return sqliterk_value_type_null;
 }
 
-int64_t sqliterkValuesGetInteger64(sqliterk_values* values, int index)
+int64_t sqliterkValuesGetInteger64(sqliterk_values *values, int index)
 {
-    //TODO
     int64_t out = 0;
-    if (values&&index<sqliterkValuesGetCount(values)) {
-        sqliterk_value* value = &values->values[index];
+    if (values && index < sqliterkValuesGetCount(values)) {
+        sqliterk_value *value = &values->values[index];
         switch (sqliterkValuesGetType(values, index)) {
             case sqliterk_value_type_integer:
                 out = (int64_t)(*value->any.integer);
@@ -186,23 +186,22 @@ int64_t sqliterkValuesGetInteger64(sqliterk_values* values, int index)
     return out;
 }
 
-int sqliterkValuesGetInteger(sqliterk_values* values, int index)
+int sqliterkValuesGetInteger(sqliterk_values *values, int index)
 {
-    return (int)sqliterkValuesGetInteger64(values, index);
+    return (int) sqliterkValuesGetInteger64(values, index);
 }
 
-double sqliterkValuesGetNumber(sqliterk_values* values, int index)
+double sqliterkValuesGetNumber(sqliterk_values *values, int index)
 {
-    //TODO
     double out = 0;
-    if (values&&index<sqliterkValuesGetCount(values)) {
-        sqliterk_value* value = &values->values[index];
+    if (values && index < sqliterkValuesGetCount(values)) {
+        sqliterk_value *value = &values->values[index];
         switch (sqliterkValuesGetType(values, index)) {
             case sqliterk_value_type_integer:
-                out = (double)(*value->any.integer);
+                out = (double) (*value->any.integer);
                 break;
             case sqliterk_value_type_number:
-                out = (double)(*value->any.number);
+                out = (double) (*value->any.number);
                 break;
             case sqliterk_value_type_text:
                 out = atof(value->any.text->t);
@@ -214,12 +213,11 @@ double sqliterkValuesGetNumber(sqliterk_values* values, int index)
     return out;
 }
 
-const char* sqliterkValuesGetText(sqliterk_values* values, int index)
+const char *sqliterkValuesGetText(sqliterk_values *values, int index)
 {
-    //TODO
-    char* out = NULL;
-    if (values&&index<sqliterkValuesGetCount(values)) {
-        sqliterk_value* value = &values->values[index];
+    char *out = NULL;
+    if (values && index < sqliterkValuesGetCount(values)) {
+        sqliterk_value *value = &values->values[index];
         switch (value->type) {
             case sqliterk_value_type_text:
                 out = value->any.text->t;
@@ -231,12 +229,11 @@ const char* sqliterkValuesGetText(sqliterk_values* values, int index)
     return out;
 }
 
-const void* sqliterkValuesGetBinary(sqliterk_values* values, int index)
+const void *sqliterkValuesGetBinary(sqliterk_values *values, int index)
 {
-    //TODO
-    void* out = NULL;
-    if (values&&index<sqliterkValuesGetCount(values)) {
-        sqliterk_value* value = &values->values[index];
+    void *out = NULL;
+    if (values && index < sqliterkValuesGetCount(values)) {
+        sqliterk_value *value = &values->values[index];
         switch (value->type) {
             case sqliterk_value_type_binary:
                 out = value->any.binary->b;
@@ -248,12 +245,11 @@ const void* sqliterkValuesGetBinary(sqliterk_values* values, int index)
     return out;
 }
 
-int sqliterkValuesGetBytes(sqliterk_values* values, int index)
+int sqliterkValuesGetBytes(sqliterk_values *values, int index)
 {
-    //TODO
     int out = 0;
-    if (values&&index<sqliterkValuesGetCount(values)) {
-        sqliterk_value* value = &values->values[index];
+    if (values && index < sqliterkValuesGetCount(values)) {
+        sqliterk_value *value = &values->values[index];
         switch (value->type) {
             case sqliterk_value_type_binary:
                 out = value->any.binary->s;
@@ -268,16 +264,16 @@ int sqliterkValuesGetBytes(sqliterk_values* values, int index)
     return out;
 }
 
-int sqliterkValuesAddInteger64(sqliterk_values* values, int64_t i)
+int sqliterkValuesAddInteger64(sqliterk_values *values, int64_t i)
 {
     if (!values) {
         return SQLITERK_MISUSE;
     }
     int rc = sqliterkValuesAutoGrow(values);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         return rc;
     }
-    sqliterk_value* value = &values->values[values->count];
+    sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_integer;
     value->any.integer = sqliterkOSMalloc(sizeof(sqliterk_integer));
     if (!value->any.integer) {
@@ -293,21 +289,21 @@ sqliterkValuesAddInteger64_Failed:
     return rc;
 }
 
-int sqliterkValuesAddInteger(sqliterk_values* values, int i)
+int sqliterkValuesAddInteger(sqliterk_values *values, int i)
 {
     return sqliterkValuesAddInteger64(values, i);
 }
 
-int sqliterkValuesAddNumber(sqliterk_values* values, double d)
+int sqliterkValuesAddNumber(sqliterk_values *values, double d)
 {
     if (!values) {
         return SQLITERK_MISUSE;
     }
     int rc = sqliterkValuesAutoGrow(values);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         return rc;
     }
-    sqliterk_value* value = &values->values[values->count];
+    sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_number;
     value->any.number = sqliterkOSMalloc(sizeof(sqliterk_number));
     if (!value->any.number) {
@@ -323,21 +319,23 @@ sqliterkValuesAddNumber_Failed:
     return rc;
 }
 
-int sqliterkValuesAddText(sqliterk_values* values, const char* t)
+int sqliterkValuesAddText(sqliterk_values *values, const char *t)
 {
-    return sqliterkValuesAddNoTerminatorText(values, t, (int)strlen(t));
+    return sqliterkValuesAddNoTerminatorText(values, t, (int) strlen(t));
 }
 
-int sqliterkValuesAddNoTerminatorText(sqliterk_values* values, const char* t, const int s)
+int sqliterkValuesAddNoTerminatorText(sqliterk_values *values,
+                                      const char *t,
+                                      const int s)
 {
-    if (!values||!t) {
+    if (!values || !t) {
         return SQLITERK_MISUSE;
     }
     int rc = sqliterkValuesAutoGrow(values);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         return rc;
     }
-    sqliterk_value* value = &values->values[values->count];
+    sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_text;
     value->any.text = sqliterkOSMalloc(sizeof(sqliterk_text));
     if (!value->any.text) {
@@ -345,7 +343,7 @@ int sqliterkValuesAddNoTerminatorText(sqliterk_values* values, const char* t, co
         goto sqliterkValuesAddNoTerminatorText_Failed;
     }
     value->any.text->s = s;
-    value->any.text->t = sqliterkOSMalloc(sizeof(char)*(s+1));
+    value->any.text->t = sqliterkOSMalloc(sizeof(char) * (s + 1));
     if (!value->any.text->t) {
         rc = SQLITERK_NOMEM;
         goto sqliterkValuesAddNoTerminatorText_Failed;
@@ -360,16 +358,16 @@ sqliterkValuesAddNoTerminatorText_Failed:
     return rc;
 }
 
-int sqliterkValuesAddBinary(sqliterk_values* values, const void* b, const int s)
+int sqliterkValuesAddBinary(sqliterk_values *values, const void *b, const int s)
 {
-    if (!values||!b) {
+    if (!values || !b) {
         return SQLITERK_MISUSE;
     }
     int rc = sqliterkValuesAutoGrow(values);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         return rc;
     }
-    sqliterk_value* value = &values->values[values->count];
+    sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_binary;
     value->any.binary = sqliterkOSMalloc(sizeof(sqliterk_binary));
     if (!value->any.binary) {
@@ -377,7 +375,7 @@ int sqliterkValuesAddBinary(sqliterk_values* values, const void* b, const int s)
         goto sqliterkValuesAddBinary_Failed;
     }
     value->any.binary->s = s;
-    value->any.binary->b = sqliterkOSMalloc(sizeof(void*)*s);
+    value->any.binary->b = sqliterkOSMalloc(sizeof(void *) * s);
     if (!value->any.binary->b) {
         return SQLITERK_NOMEM;
     }
@@ -390,23 +388,23 @@ sqliterkValuesAddBinary_Failed:
     return rc;
 }
 
-int sqliterkValuesAddNull(sqliterk_values* values)
+int sqliterkValuesAddNull(sqliterk_values *values)
 {
     if (!values) {
         return SQLITERK_MISUSE;
     }
     int rc = sqliterkValuesAutoGrow(values);
-    if (rc!=SQLITERK_OK) {
+    if (rc != SQLITERK_OK) {
         return rc;
     }
-    sqliterk_value* value = &values->values[values->count];
+    sqliterk_value *value = &values->values[values->count];
     value->type = sqliterk_value_type_null;
     value->any.memory = NULL;
     values->count++;
     return SQLITERK_OK;
 }
 
-int sqliterkValueClear(sqliterk_value* value)
+int sqliterkValueClear(sqliterk_value *value)
 {
     if (!value) {
         return SQLITERK_MISUSE;

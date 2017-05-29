@@ -27,23 +27,21 @@ extern "C" {
 
 /* Disable ICU export renaming. It will be replaced with icucompat macros. */
 #define U_DISABLE_RENAMING 1
-#include <unicode/umachine.h>
-#include <unicode/uversion.h>
-#include <unicode/unorm.h>
 #include <unicode/ubrk.h>
-#include <unicode/ustring.h>
 #include <unicode/ucnv.h>
-#include <unicode/uiter.h>
 #include <unicode/ucol.h>
+#include <unicode/uiter.h>
+#include <unicode/umachine.h>
+#include <unicode/unorm.h>
+#include <unicode/ustring.h>
 #include <unicode/utypes.h>
+#include <unicode/uversion.h>
 
-
-typedef struct icu_compat_t
-{
-#define ICUCOMPAT_UC_FUNC(ret_type, func_name, arg_list) \
-    ret_type (U_EXPORT2 * func_name ## _) arg_list;
-#define ICUCOMPAT_I18N_FUNC(ret_type, func_name, arg_list) \
-    ret_type (U_EXPORT2 * func_name ## _) arg_list;
+typedef struct icu_compat_t {
+#define ICUCOMPAT_UC_FUNC(ret_type, func_name, arg_list)                       \
+    ret_type(U_EXPORT2 *func_name##_) arg_list;
+#define ICUCOMPAT_I18N_FUNC(ret_type, func_name, arg_list)                     \
+    ret_type(U_EXPORT2 *func_name##_) arg_list;
 
 #include "icuprototype.h"
 
@@ -56,7 +54,7 @@ int init_icucompat();
 void destroy_icucompat();
 
 #ifndef ICUCOMPAT_IMPL
-#define ICUCOMPAT_DEFINE_SYMBOL(symbol) (__g_icucompat_iface__.symbol ## _)
+#define ICUCOMPAT_DEFINE_SYMBOL(symbol) (__g_icucompat_iface__.symbol##_)
 #include "icuprototype.h"
 #endif
 
