@@ -34,7 +34,7 @@
                 [dictionary setObject:@(iter.first.c_str())
                                forKey:@(iter.second)];
             }
-            trace(tag, dictionary, cost);
+            trace(tag, dictionary, (NSUInteger)cost);
         });
     }else {
         _database->setTrace(nullptr);

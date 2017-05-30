@@ -23,44 +23,16 @@
 
 @implementation WCTDatabase(RepairKit)
 
-//- (NSString*)defaultBackupPath
-//{
-//    return @(_database->defaultBackupPath().c_str());
-//}
-//
-//- (BOOL)backup
-//{
-//    WCDB::Error wcdbError;
-//    return _database->backup(wcdbError);
-//}
-//
-//- (BOOL)backupToPath:(NSString*)backupPath
-//{
-//    WCDB::Error wcdbError;
-//    return _database->backup(backupPath.UTF8String, wcdbError);
-//}
-//
-//- (BOOL)removeBackup
-//{
-//    WCDB::Error wcdbError;
-//    return _database->removeBackup(wcdbError);
-//}
-//
-//- (BOOL)removeBackupAtPath:(NSString*)backupPath
-//{
-//    WCDB::Error wcdbError;
-//    return _database->removeBackup(backupPath.UTF8String, wcdbError);
-//}
+- (BOOL)backupWithCipher:(NSData*)key
+{
+    WCDB::Error wcdbError;
+    return _database->backup(key.bytes, (unsigned int)key.length, wcdbError);
+}
 
-//- (BOOL)repairToPath:(NSString*)newDBPath withBackupPath:(NSString*)backupPath andAssist:(const Assist&)assist
-//{
-//    WCDB::Error wcdbError;
-//    return _database->repair(newDBPath.UTF8String, backupPath.UTF8String, assist, wcdbError);
-//}
-//
-//- (BOOL)repairToPath:(NSString*)newDBPath andAssist:(const Assist&)assist
-//{
-//    WCDB::Error wcdbError;
-//    return _database->repair(newDBPath.UTF8String, assist, wcdbError);
-//}
+- (BOOL)recoverFromPath:(NSString*)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData*)key
+{
+    WCDB::Error wcdbError;
+    return _database->recoverFromPath(corruptedDBPath.UTF8String, pageSize, key.bytes, (unsigned int)key.length, wcdbError);
+}
+
 @end

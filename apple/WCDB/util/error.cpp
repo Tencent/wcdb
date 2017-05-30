@@ -298,6 +298,20 @@ void Error::ReportSQLiteGlobal(int rc, const char* message, Error* outError)
                   },
                   outError);
 }
+    
+    
+void Error::ReportRepair(const std::string& path, RepairOperation operation, int code, Error* outError)
+{
+    Error::Report(Error::Type::Repair,
+                  code,
+                  {
+                      {
+                          {Error::Key::Path, path},
+                          {Error::Key::Operation, ErrorValue((int)operation)},
+                      }
+                  },
+                  outError);
+}
 
 void Error::Abort(const char* message, Error* outError)
 {

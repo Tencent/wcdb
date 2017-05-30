@@ -23,6 +23,7 @@
 #include "sqliterk_os.h"
 #include "sqliterk_pager.h"
 #include <sqlite3.h>
+#include <string.h>
 
 // Declarations by SQLCipher.
 #define CIPHER_DECRYPT 0

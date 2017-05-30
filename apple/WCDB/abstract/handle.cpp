@@ -21,7 +21,7 @@
 #include <WCDB/handle_statement.hpp>
 #include <WCDB/handle.hpp>
 #include <WCDB/statement.hpp>
-//#include <wcsrk/wcsrk.h>
+#include <WCDB/SQLiteRepairKit.h>
 #include <WCDB/in_case_lock_guard.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <WCDB/macro.hpp>
@@ -30,6 +30,8 @@
 #include <WCDB/statement_transaction.hpp>
 
 namespace WCDB {
+    
+const std::string Handle::backupSuffix("-backup");
     
 static void GlobalLog(void* userInfo, int code, const char* message)
 {
@@ -272,12 +274,72 @@ bool Handle::setCipherKey(const void* data, int size)
     return false;
 #endif //SQLITE_HAS_CODEC
 }
+    
+std::string Handle::getBackupPath() const
+{
+    return path+backupSuffix;
+}
 
-//bool Handle::backup(const std::string& backupPath)
-//{
-//    return wcsrk_backup(m_handle, backupPath.c_str());
-//    return false;
-//}
+bool Handle::backup(const void* key, const unsigned int& length)
+{
+    std::string backupPath = getBackupPath();
+    int rc = sqliterk_save_master(m_handle, backupPath.c_str(), key, length);
+    if (rc==SQLITERK_OK) {
+        m_error.reset();
+        return true;
+    }
+    Error::ReportRepair(path,
+                        Error::RepairOperation::SaveMaster,
+                        rc,
+                        &m_error);
+    return false;
+}
+    
+    
+    
+bool Handle::recoverFromPath(const std::string& corruptedDBPath, const int pageSize, const void* key, const unsigned int& length)
+{
+    std::string backupPath = corruptedDBPath+backupSuffix;
+    sqliterk_master_info* info;
+    unsigned char kdfSalt[16];
+    memset(kdfSalt, 0, 16);
+    int rc = sqliterk_load_master(backupPath.c_str(), key, length, nullptr, 0, &info, kdfSalt);
+    if (rc!=SQLITERK_OK) {
+        Error::ReportRepair(backupPath,
+                            WCDB::Error::RepairOperation::LoadMaster,
+                            rc,
+                            &m_error);
+        return false;
+    }
+    
+    sqliterk_cipher_conf conf;
+    memset(&conf, 0, sizeof(sqliterk_cipher_conf));
+    conf.key = key;
+    conf.key_len = length;
+    conf.page_size =pageSize;
+    conf.kdf_salt = kdfSalt;
+    
+    sqliterk* rk;
+    rc = sqliterk_open(corruptedDBPath.c_str(), &conf, &rk);
+    if (rc!=SQLITERK_OK) {
+        Error::ReportRepair(backupPath,
+                            WCDB::Error::RepairOperation::LoadMaster,
+                            rc,
+                            &m_error);
+        return false;
+    }
+    
+    rc = sqliterk_output(rk, m_handle, info, SQLITERK_OUTPUT_ALL_TABLES);
+    if (rc!=SQLITERK_OK) {
+        Error::ReportRepair(corruptedDBPath,
+                            WCDB::Error::RepairOperation::Repair,
+                            rc,
+                            &m_error);
+        return false;
+    }
+    m_error.reset();
+    return true;
+}
 
 void Handle::setTag(Tag tag)
 {

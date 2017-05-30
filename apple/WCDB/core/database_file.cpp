@@ -24,7 +24,7 @@
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
-
+    
 bool Database::removeFiles(Error& error)
 {
     if (!isBlockaded()
@@ -63,14 +63,14 @@ bool Database::moveFilesToDirectoryWithExtraFiles(const std::string& directory, 
     return File::moveFiles(paths, directory, error);
 }
 
-const std::array<std::string, 4>& Database::subfixs()
+const std::array<std::string, 5>& Database::subfixs()
 {
-    static const std::array<std::string, 4> s_subfixs = {
+    static const std::array<std::string, 5> s_subfixs = {
         "",//db file
         "-wal",
         "-journal",
         "-shm",
-//        s_defaultBackupSubfix,
+        Handle::backupSuffix,
     };
     return s_subfixs;
 }
@@ -83,23 +83,5 @@ const std::list<std::string> Database::getPaths() const
     }
     return paths;
 }
-
-//bool Database::removeBackup(Error& error)
-//{
-//    if (!isBlockaded()
-//        ||isOpened()) {
-//        WCDB::Error::Warning("Removing backup on an opened database may cause unknown results");
-//    }
-//    return File::removeFile(defaultBackupPath(), error);
-//}
-//
-//bool Database::removeBackup(const std::string& backupPath, Error& error)
-//{
-//    if (!isBlockaded()
-//        ||isOpened()) {
-//        WCDB::Error::Warning("Removing backup on an opened database may cause unknown results");
-//    }
-//    return File::removeFile(backupPath, error);
-//}
 
 }//namespace WCDB
