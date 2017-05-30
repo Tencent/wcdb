@@ -72,6 +72,7 @@ public:
         Abort = 5,
         Warning = 6,
         SQLiteGlobal = 7,
+        Repair = 8,
     };
     //operation
     enum class HandleOperation : int {
@@ -107,6 +108,11 @@ public:
         Link = 4,
         Unlink = 5,
         Mkdir = 6,
+    };
+    enum class RepairOperation : int {
+        SaveMaster,
+        LoadMaster,
+        Repair,
     };
     //code
     enum class CoreCode : int {
@@ -153,6 +159,7 @@ public:
     static void ReportInterface(Tag tag, const std::string& path, InterfaceOperation operation, InterfaceCode code, const char* message, Error* outError);
     static void ReportSystemCall(SystemCallOperation operation, const std::string& path, int code, const char* message, Error* outError);
     static void ReportSQLiteGlobal(int rc, const char* message, Error* outError);
+    static void ReportRepair(const std::string& path, RepairOperation operation, int code, Error* outError);
     static void Abort(const char* message, Error* outError = nullptr);
     static void Warning(const char* message, Error* outError = nullptr);
 protected:

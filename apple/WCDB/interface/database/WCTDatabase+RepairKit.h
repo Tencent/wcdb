@@ -20,18 +20,32 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
-//#import <wcsrk/wcsrk.h>
 
 @interface WCTDatabase(RepairKit)
 
-//- (NSString*)defaultBackupPath;
-//- (BOOL)backup;
-//- (BOOL)backupToPath:(NSString*)backupPath;
-//
-//- (BOOL)removeBackup;
-//- (BOOL)removeBackupAtPath:(NSString*)backupPath;
+/**
+ @brief Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.
 
-//- (BOOL)repairToPath:(NSString*)newDBPath withBackupPath:(NSString*)backupPath andAssist:(const Assist&)assist;
-//- (BOOL)repairToPath:(NSString*)newDBPath andAssist:(const Assist&)assist;
+ @param key The cipher key for backup
+ @return YES only if it's successfully backed up
+ */
+- (BOOL)backupWithCipher:(NSData*)key;
+
+/**
+ @brief Recover data from a corruped db. You'd better to recover a closed database. A new repair kit is developing at https://github.com/Tencent/wcdb/tree/new-repair
+ 
+     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+     WCTDatabase* corruped = [[WCTDatabase alloc] initWithPath:corrupedDBPath];
+     [corruped close:^(){
+         BOOL result = [database recoverFromPath:corrupedDBPath withPageSize:4096 withCipher:key];
+         NSLog(@"result %d", result);
+     }];
+
+ @param corruptedDBPath The path to the corrupted database
+ @param pageSize Page size of the corrupted database. It's default to 4096 on iOS. Page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. Also, you can call "PRAGMA page_size" to check the current value while database is not corrupted.
+ @param key The cipher key for backup
+ @return YES only if it's successfully recovered.
+ */
+- (BOOL)recoverFromPath:(NSString*)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData*)key;
 
 @end

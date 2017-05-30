@@ -35,7 +35,7 @@ size_t getFileSize(const std::string& path, Error& error)
     struct stat temp;
     if (lstat(path.c_str(), &temp)==0) {
         error.reset();
-        return temp.st_size;
+        return (size_t)temp.st_size;
     }else if (errno==ENOENT) {
         error.reset();
         return 0;

@@ -63,9 +63,13 @@ public:
     void setTrace(const Trace& trace);
     static void SetGlobalTrace(const Trace& trace);
 
-//    bool backup(const std::string& backupPath);
+    bool backup(const void* key = nullptr, const unsigned int& length = 0);
+    bool recoverFromPath(const std::string& corruptedDBPath, const int pageSize, const void* key, const unsigned int& length);
+    std::string getBackupPath() const;
 
     const Error& getError() const;
+    
+    static const std::string backupSuffix;
 protected:
     Handle(const Handle&) = delete;
     Handle& operator=(const Handle&) = delete;

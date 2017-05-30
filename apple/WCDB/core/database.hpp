@@ -82,16 +82,10 @@ public:
     bool runEmbeddedTransaction(TransactionBlock transaction, Error& error) override;
 
     //Repair Kit
-//    bool backup(Error& error);
-//    bool backup(const std::string& backupPath, Error& error);
-//    bool removeBackup(Error& error);
-//    bool removeBackup(const std::string& backupPath, Error& error);
-//    bool repair(const std::string& newDBPath, const Assist& assist, Error& error);
-//    bool repair(const std::string& newDBPath, const std::string& backupPath, const Assist& assist, Error& error);
-//    std::string defaultBackupPath() const;
+    bool backup(const void* key, const unsigned int &length, Error& error);
+    bool recoverFromPath(const std::string& corruptedDBPath, const int pageSize, const void* key, const unsigned int& length, Error& error);
 protected:
-//    static const std::string s_defaultBackupSubfix;
-    static const std::array<std::string, 4>& subfixs();
+    static const std::array<std::string, 5>& subfixs();
 
     RecyclableHandle flowOut(Error& error);
     static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> s_threadedHandle;

@@ -21,42 +21,30 @@
 #include <WCDB/database.hpp>
 #include <WCDB/path.hpp>
 #include <WCDB/utility.hpp>
+#include <WCDB/SQLiteRepairKit.h>
 
 namespace WCDB {
 
-//const std::string Database::s_defaultBackupSubfix = "-srk";
-//
-//std::string Database::defaultBackupPath() const
-//{
-//    return Path::addExtention(path, s_defaultBackupSubfix);
-//}
-//
-//bool Database::backup(const std::string& backupPath, Error& error)
-//{
-//    RecyclableHandle handle = flowOut(error);
-//    bool result = handle->backup(backupPath);
-//    error = handle->getError();
-//    return result;
-//}
-//
-//bool Database::backup(Error& error)
-//{
-//    return backup(defaultBackupPath(), error);
-//}
-//
-//bool Database::repair(const std::string& newDBPath, const Assist& assist, Error& error)
-//{
-//    return repair(newDBPath, defaultBackupPath(), assist, error);
-//}
-//
-//bool Database::repair(const std::string& newDBPath, const std::string& backupPath, const Assist& assist, Error& error)
-//{
-//    if (!isBlockaded()
-//        ||isOpened()) {
-//        WCDB::Error::Warning("Repair an opened database may cause a corrupted database");
-//    }
-//#warning TODO handle repair error
-//    return wcsrk_repair(path.c_str(), newDBPath.c_str(), backupPath.c_str(), assist);
-//}
+bool Database::backup(const void* key, const unsigned int &length, Error& error)
+{
+    RecyclableHandle handle = flowOut(error);
+    if (!handle) {
+        return false;
+    }
+    bool result = handle->backup(key, length);
+    error = handle->getError();
+    return result;
+}
+    
+bool Database::recoverFromPath(const std::string& corruptedDBPath, const int pageSize, const void* key, const unsigned int& length, Error& error)
+{
+    RecyclableHandle handle = flowOut(error);
+    if (!handle) {
+        return false;
+    }
+    bool result = handle->recoverFromPath(corruptedDBPath, pageSize, key, length);
+    error = handle->getError();
+    return result;
+}
 
 }//namespace WCDB

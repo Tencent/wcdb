@@ -7,6 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		234402FC1EDD718A00808286 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402E91EDD718A00808286 /* SQLiteRepairKit.h */; };
+		234402FD1EDD718A00808286 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402EA1EDD718A00808286 /* sqliterk.c */; };
+		234402FE1EDD718A00808286 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402EB1EDD718A00808286 /* sqliterk.h */; };
+		234402FF1EDD718A00808286 /* sqliterk_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402EC1EDD718A00808286 /* sqliterk_api.c */; };
+		234403001EDD718A00808286 /* sqliterk_btree.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402ED1EDD718A00808286 /* sqliterk_btree.c */; };
+		234403011EDD718A00808286 /* sqliterk_btree.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402EE1EDD718A00808286 /* sqliterk_btree.h */; };
+		234403021EDD718A00808286 /* sqliterk_column.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402EF1EDD718A00808286 /* sqliterk_column.c */; };
+		234403031EDD718A00808286 /* sqliterk_column.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402F01EDD718A00808286 /* sqliterk_column.h */; };
+		234403041EDD718A00808286 /* sqliterk_crypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402F11EDD718A00808286 /* sqliterk_crypto.c */; };
+		234403051EDD718A00808286 /* sqliterk_crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402F21EDD718A00808286 /* sqliterk_crypto.h */; };
+		234403061EDD718A00808286 /* sqliterk_os.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402F31EDD718A00808286 /* sqliterk_os.c */; };
+		234403071EDD718A00808286 /* sqliterk_os.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402F41EDD718A00808286 /* sqliterk_os.h */; };
+		234403081EDD718A00808286 /* sqliterk_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 234402F51EDD718A00808286 /* sqliterk_output.cpp */; };
+		234403091EDD718A00808286 /* sqliterk_pager.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402F61EDD718A00808286 /* sqliterk_pager.c */; };
+		2344030A1EDD718A00808286 /* sqliterk_pager.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402F71EDD718A00808286 /* sqliterk_pager.h */; };
+		2344030B1EDD718A00808286 /* sqliterk_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402F81EDD718A00808286 /* sqliterk_util.c */; };
+		2344030C1EDD718A00808286 /* sqliterk_util.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402F91EDD718A00808286 /* sqliterk_util.h */; };
+		2344030D1EDD718A00808286 /* sqliterk_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402FA1EDD718A00808286 /* sqliterk_values.c */; };
+		2344030E1EDD718A00808286 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402FB1EDD718A00808286 /* sqliterk_values.h */; };
+		234403111EDD71DE00808286 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 234403101EDD71DE00808286 /* libz.tbd */; };
+		234403131EDD71FD00808286 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234403121EDD71FD00808286 /* Security.framework */; };
 		2349F6BB1EA0D6680021EFA7 /* abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F5D71EA0D6680021EFA7 /* abstract.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F6BC1EA0D6680021EFA7 /* clause_join.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F5D81EA0D6680021EFA7 /* clause_join.cpp */; };
 		2349F6BD1EA0D6680021EFA7 /* clause_join.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F5D91EA0D6680021EFA7 /* clause_join.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -326,6 +347,28 @@
 /* Begin PBXFileReference section */
 		23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "sqlcipher-preprocessed.xcodeproj"; path = "../sqlcipher/sqlcipher-preprocessed.xcodeproj"; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* WCDB-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "WCDB-Info.plist"; sourceTree = "<group>"; };
+		234402E91EDD718A00808286 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
+		234402EA1EDD718A00808286 /* sqliterk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk.c; sourceTree = "<group>"; };
+		234402EB1EDD718A00808286 /* sqliterk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk.h; sourceTree = "<group>"; };
+		234402EC1EDD718A00808286 /* sqliterk_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_api.c; sourceTree = "<group>"; };
+		234402ED1EDD718A00808286 /* sqliterk_btree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_btree.c; sourceTree = "<group>"; };
+		234402EE1EDD718A00808286 /* sqliterk_btree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_btree.h; sourceTree = "<group>"; };
+		234402EF1EDD718A00808286 /* sqliterk_column.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_column.c; sourceTree = "<group>"; };
+		234402F01EDD718A00808286 /* sqliterk_column.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_column.h; sourceTree = "<group>"; };
+		234402F11EDD718A00808286 /* sqliterk_crypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_crypto.c; sourceTree = "<group>"; };
+		234402F21EDD718A00808286 /* sqliterk_crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_crypto.h; sourceTree = "<group>"; };
+		234402F31EDD718A00808286 /* sqliterk_os.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_os.c; sourceTree = "<group>"; };
+		234402F41EDD718A00808286 /* sqliterk_os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_os.h; sourceTree = "<group>"; };
+		234402F51EDD718A00808286 /* sqliterk_output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqliterk_output.cpp; sourceTree = "<group>"; };
+		234402F61EDD718A00808286 /* sqliterk_pager.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_pager.c; sourceTree = "<group>"; };
+		234402F71EDD718A00808286 /* sqliterk_pager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_pager.h; sourceTree = "<group>"; };
+		234402F81EDD718A00808286 /* sqliterk_util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_util.c; sourceTree = "<group>"; };
+		234402F91EDD718A00808286 /* sqliterk_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_util.h; sourceTree = "<group>"; };
+		234402FA1EDD718A00808286 /* sqliterk_values.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_values.c; sourceTree = "<group>"; };
+		234402FB1EDD718A00808286 /* sqliterk_values.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_values.h; sourceTree = "<group>"; };
+		234403101EDD71DE00808286 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		234403121EDD71FD00808286 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		234403141EDD726B00808286 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		2349F5D71EA0D6680021EFA7 /* abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstract.h; sourceTree = "<group>"; };
 		2349F5D81EA0D6680021EFA7 /* clause_join.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clause_join.cpp; sourceTree = "<group>"; };
 		2349F5D91EA0D6680021EFA7 /* clause_join.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = clause_join.hpp; sourceTree = "<group>"; };
@@ -626,6 +669,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				234403131EDD71FD00808286 /* Security.framework in Frameworks */,
+				234403111EDD71DE00808286 /* libz.tbd in Frameworks */,
 				2393266D1E836EB000D677CC /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -649,9 +694,37 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		234402E81EDD718A00808286 /* repair */ = {
+			isa = PBXGroup;
+			children = (
+				234402E91EDD718A00808286 /* SQLiteRepairKit.h */,
+				234402EA1EDD718A00808286 /* sqliterk.c */,
+				234402EB1EDD718A00808286 /* sqliterk.h */,
+				234402EC1EDD718A00808286 /* sqliterk_api.c */,
+				234402ED1EDD718A00808286 /* sqliterk_btree.c */,
+				234402EE1EDD718A00808286 /* sqliterk_btree.h */,
+				234402EF1EDD718A00808286 /* sqliterk_column.c */,
+				234402F01EDD718A00808286 /* sqliterk_column.h */,
+				234402F11EDD718A00808286 /* sqliterk_crypto.c */,
+				234402F21EDD718A00808286 /* sqliterk_crypto.h */,
+				234402F31EDD718A00808286 /* sqliterk_os.c */,
+				234402F41EDD718A00808286 /* sqliterk_os.h */,
+				234402F51EDD718A00808286 /* sqliterk_output.cpp */,
+				234402F61EDD718A00808286 /* sqliterk_pager.c */,
+				234402F71EDD718A00808286 /* sqliterk_pager.h */,
+				234402F81EDD718A00808286 /* sqliterk_util.c */,
+				234402F91EDD718A00808286 /* sqliterk_util.h */,
+				234402FA1EDD718A00808286 /* sqliterk_values.c */,
+				234402FB1EDD718A00808286 /* sqliterk_values.h */,
+			);
+			name = repair;
+			path = ../../repair;
+			sourceTree = "<group>";
+		};
 		2349F5D51EA0D6680021EFA7 /* WCDB */ = {
 			isa = PBXGroup;
 			children = (
+				234402E81EDD718A00808286 /* repair */,
 				2349F5D61EA0D6680021EFA7 /* abstract */,
 				2349F6151EA0D6680021EFA7 /* core */,
 				2349F62A1EA0D6680021EFA7 /* interface */,
@@ -1098,6 +1171,9 @@
 		23B5F93E1E111CB100E58396 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				234403141EDD726B00808286 /* libcommonCrypto.tbd */,
+				234403121EDD71FD00808286 /* Security.framework */,
+				234403101EDD71DE00808286 /* libz.tbd */,
 				2392783B1EA5C8CF000DB690 /* libsqlite3.0.tbd */,
 			);
 			name = Frameworks;
@@ -1208,6 +1284,7 @@
 				2349F6FD1EA0D6680021EFA7 /* core_base.hpp in Headers */,
 				2349F70A1EA0D6680021EFA7 /* statement_recyclable.hpp in Headers */,
 				2349F6D41EA0D6680021EFA7 /* handle_statement.hpp in Headers */,
+				2344030A1EDD718A00808286 /* sqliterk_pager.h in Headers */,
 				2349F76A1EA0D6680021EFA7 /* WCTCodingMacro.h in Headers */,
 				2349F7081EA0D6680021EFA7 /* handle_recyclable.hpp in Headers */,
 				2349F7311EA0D6680021EFA7 /* WCTTable+ChainCall.h in Headers */,
@@ -1227,6 +1304,7 @@
 				2386B3D21ED44442000B72F6 /* WCTDatabase+Statictics.h in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
 				2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */,
+				2344030E1EDD718A00808286 /* sqliterk_values.h in Headers */,
 				2349F6E21EA0D6680021EFA7 /* statement_create_table.hpp in Headers */,
 				2349F7461EA0D6680021EFA7 /* WCTDatabase+Database.h in Headers */,
 				2349F6BB1EA0D6680021EFA7 /* abstract.h in Headers */,
@@ -1243,11 +1321,13 @@
 				2349F7811EA0D6680021EFA7 /* file.hpp in Headers */,
 				2349F7631EA0D6680021EFA7 /* WCTIndexBinding.h in Headers */,
 				2349F6DE1EA0D6680021EFA7 /* statement_alter_table.hpp in Headers */,
+				234402FE1EDD718A00808286 /* sqliterk.h in Headers */,
 				2349F7831EA0D6680021EFA7 /* in_case_lock_guard.hpp in Headers */,
 				242E1E2E1EA37DFD00F77029 /* WCTMultiSelect+Private.h in Headers */,
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				2349F6D81EA0D6680021EFA7 /* order_term.hpp in Headers */,
 				2349F6D61EA0D6680021EFA7 /* order.hpp in Headers */,
+				234403051EDD718A00808286 /* sqliterk_crypto.h in Headers */,
 				2349F7661EA0D6680021EFA7 /* WCTExpr.h in Headers */,
 				2349F6C91EA0D6680021EFA7 /* conflict.hpp in Headers */,
 				2349F74D1EA0D6680021EFA7 /* WCTDatabase.h in Headers */,
@@ -1278,6 +1358,7 @@
 				2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2349F6F01EA0D6680021EFA7 /* statement_select.hpp in Headers */,
+				234403071EDD718A00808286 /* sqliterk_os.h in Headers */,
 				2349F7441EA0D6680021EFA7 /* WCTStatement.h in Headers */,
 				2386B3C01ED442E2000B72F6 /* WCTStatictics.h in Headers */,
 				2349F78C1EA0D6680021EFA7 /* thread_local.hpp in Headers */,
@@ -1295,13 +1376,16 @@
 				2349F74B1EA0D6680021EFA7 /* WCTDatabase+RepairKit.h in Headers */,
 				2349F6CE1EA0D6680021EFA7 /* describable.hpp in Headers */,
 				2349F7381EA0D6680021EFA7 /* WCTTable+Convenient.h in Headers */,
+				2344030C1EDD718A00808286 /* sqliterk_util.h in Headers */,
 				2349F76E1EA0D6680021EFA7 /* WCTMacroHelper.h in Headers */,
+				234403031EDD718A00808286 /* sqliterk_column.h in Headers */,
 				2349F7551EA0D6680021EFA7 /* WCTBaseAccessor.h in Headers */,
 				2349F78D1EA0D6680021EFA7 /* utility.hpp in Headers */,
 				2349F7571EA0D6680021EFA7 /* WCTObjCAccessor.h in Headers */,
 				2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */,
 				2349F70C1EA0D6680021EFA7 /* transaction.hpp in Headers */,
 				2349F6E41EA0D6680021EFA7 /* statement_create_virtual_table.hpp in Headers */,
+				234403011EDD718A00808286 /* sqliterk_btree.h in Headers */,
 				242E1E271EA3771400F77029 /* WCTRowSelect+Private.h in Headers */,
 				2349F7891EA0D6680021EFA7 /* rwlock.hpp in Headers */,
 				2349F7561EA0D6680021EFA7 /* WCTCppAccessor.h in Headers */,
@@ -1331,6 +1415,7 @@
 				2349F73A1EA0D6680021EFA7 /* WCTCore+Private.h in Headers */,
 				2349F71F1EA0D6680021EFA7 /* WCTDelete+Private.h in Headers */,
 				2349F7791EA0D6680021EFA7 /* WCTTransaction+Private.h in Headers */,
+				234402FC1EDD718A00808286 /* SQLiteRepairKit.h in Headers */,
 				2349F71C1EA0D6680021EFA7 /* WCTChainCall+Private.h in Headers */,
 				2349F7331EA0D6680021EFA7 /* WCTUpdate+Private.h in Headers */,
 				2358AC511EADE39000F0DA41 /* module_argument.hpp in Headers */,
@@ -1509,10 +1594,12 @@
 				2349F7921EA0D7700021EFA7 /* WCTPropertyBase.mm in Sources */,
 				2349F6F71EA0D6680021EFA7 /* value_pragma.cpp in Sources */,
 				2349F7511EA0D6680021EFA7 /* WCTInterface.mm in Sources */,
+				234403001EDD718A00808286 /* sqliterk_btree.c in Sources */,
 				2349F7851EA0D6680021EFA7 /* path.cpp in Sources */,
 				2349F79C1EA0FC710021EFA7 /* WCTResult.mm in Sources */,
 				23E781951EA4C63F00D74BA8 /* WCTAnyProperty.mm in Sources */,
 				2349F6F31EA0D6680021EFA7 /* statement_update.cpp in Sources */,
+				2344030B1EDD718A00808286 /* sqliterk_util.c in Sources */,
 				2349F6DD1EA0D6680021EFA7 /* statement_alter_table.cpp in Sources */,
 				2349F72A1EA0D6680021EFA7 /* WCTRowSelect.mm in Sources */,
 				2349F6F51EA0D6680021EFA7 /* subquery.cpp in Sources */,
@@ -1546,6 +1633,7 @@
 				2349F7491EA0D6680021EFA7 /* WCTDatabase+File.mm in Sources */,
 				2349F7281EA0D6680021EFA7 /* WCTMultiSelect.mm in Sources */,
 				2349F6FE1EA0D6680021EFA7 /* database.cpp in Sources */,
+				234403081EDD718A00808286 /* sqliterk_output.cpp in Sources */,
 				2349F7241EA0D6680021EFA7 /* WCTInsert.mm in Sources */,
 				2349F7641EA0D6680021EFA7 /* WCTIndexBInding.mm in Sources */,
 				2349F6E11EA0D6680021EFA7 /* statement_create_table.cpp in Sources */,
@@ -1559,6 +1647,7 @@
 				2349F7141EA0D6680021EFA7 /* NSSet+WCDB.mm in Sources */,
 				2349F6C41EA0D6680021EFA7 /* column_result.cpp in Sources */,
 				2358AC501EADE39000F0DA41 /* module_argument.cpp in Sources */,
+				234402FF1EDD718A00808286 /* sqliterk_api.c in Sources */,
 				2349F70E1EA0D6680021EFA7 /* NSData+WCDB.mm in Sources */,
 				2349F7671EA0D6680021EFA7 /* WCTExpr.mm in Sources */,
 				2349F6FC1EA0D6680021EFA7 /* core_base.cpp in Sources */,
@@ -1567,6 +1656,7 @@
 				2349F6DB1EA0D6680021EFA7 /* statement.cpp in Sources */,
 				2349F6F11EA0D6680021EFA7 /* statement_transaction.cpp in Sources */,
 				2349F74E1EA0D6680021EFA7 /* WCTDatabase.mm in Sources */,
+				234403041EDD718A00808286 /* sqliterk_crypto.c in Sources */,
 				2349F75E1EA0D6680021EFA7 /* WCTBinding.mm in Sources */,
 				2349F7371EA0D6680021EFA7 /* WCTInterface+Convenient.mm in Sources */,
 				2349F7091EA0D6680021EFA7 /* statement_recyclable.cpp in Sources */,
@@ -1590,8 +1680,11 @@
 				2349F6D51EA0D6680021EFA7 /* order.cpp in Sources */,
 				2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */,
 				2349F78A1EA0D6680021EFA7 /* spin.cpp in Sources */,
+				234402FD1EDD718A00808286 /* sqliterk.c in Sources */,
 				2349F6CA1EA0D6680021EFA7 /* constraint_table.cpp in Sources */,
+				234403061EDD718A00808286 /* sqliterk_os.c in Sources */,
 				2349F7261EA0D6680021EFA7 /* WCTInterface+ChainCall.mm in Sources */,
+				234403021EDD718A00808286 /* sqliterk_column.c in Sources */,
 				2349F7731EA0D6680021EFA7 /* WCTInterface+Table.mm in Sources */,
 				2349F7451EA0D6680021EFA7 /* WCTStatement.mm in Sources */,
 				2349F6C01EA0D6680021EFA7 /* column_def.cpp in Sources */,
@@ -1599,6 +1692,8 @@
 				2349F7531EA0D6680021EFA7 /* WCTTable.mm in Sources */,
 				2349F74C1EA0D6680021EFA7 /* WCTDatabase+RepairKit.mm in Sources */,
 				2349F7321EA0D6680021EFA7 /* WCTTable+ChainCall.mm in Sources */,
+				234403091EDD718A00808286 /* sqliterk_pager.c in Sources */,
+				2344030D1EDD718A00808286 /* sqliterk_values.c in Sources */,
 				2349F6C81EA0D6680021EFA7 /* conflict.cpp in Sources */,
 				2349F7211EA0D6680021EFA7 /* WCTDelete.mm in Sources */,
 			);
@@ -1689,6 +1784,10 @@
 				INFOPLIST_FILE = "WCDB-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				MACH_O_TYPE = mh_dylib;
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
@@ -1720,6 +1819,10 @@
 				INFOPLIST_FILE = "WCDB-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				MACH_O_TYPE = mh_dylib;
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
@@ -1794,10 +1897,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/src",
-					"$(PROJECT_DIR)/..",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1862,10 +1961,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/src",
-					"$(PROJECT_DIR)/..",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
