@@ -114,7 +114,10 @@ void HandlePool::purgeFreeHandles()
 
 bool HandlePool::isDrained()
 {
-    return m_handles.isEmpty();
+    m_rwlock.lockRead();
+    bool result = m_handles.isEmpty();
+    m_rwlock.unlockRead();
+    return result;
 }
 
 RecyclableHandle HandlePool::flowOut(Error &error)
@@ -179,10 +182,14 @@ std::shared_ptr<HandleWrap> HandlePool::generate(Error &error)
 
 bool HandlePool::fillOne(Error &error)
 {
+    m_rwlock.lockRead();
     std::shared_ptr<HandleWrap> handleWrap = generate(error);
+    bool result = false;
     if (handleWrap) {
+        result = true;
         m_handles.pushBack(handleWrap);
     }
+    m_rwlock.unlockRead();
     return false;
 }
 
