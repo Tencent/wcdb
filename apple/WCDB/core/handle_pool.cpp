@@ -96,8 +96,7 @@ bool HandlePool::isBlockaded() const
 void HandlePool::drain(HandlePool::OnDrained onDrained)
 {
     m_rwlock.lockWrite();
-    while (m_handles.popFront())
-        ;
+    m_handles.clear();
     if (onDrained) {
         onDrained();
     }
@@ -107,8 +106,7 @@ void HandlePool::drain(HandlePool::OnDrained onDrained)
 void HandlePool::purgeFreeHandles()
 {
     m_rwlock.lockRead();
-    while (m_handles.popFront())
-        ;
+    m_handles.clear();
     m_rwlock.unlockRead();
 }
 
