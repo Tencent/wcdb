@@ -28,6 +28,7 @@
 #import <WCDB/WCTSelect+Private.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
+#import <WCDB/handle_statement.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTSelect {

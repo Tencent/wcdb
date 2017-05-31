@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef WINQ_h
+#define WINQ_h
 
 #include <WCDB/describable.hpp>
 
@@ -36,10 +36,6 @@
 #include <WCDB/pragma.hpp>
 #include <WCDB/subquery.hpp>
 
-#include <WCDB/handle_statement.hpp>
-
-#include <WCDB/handle.hpp>
-
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_alter_table.hpp>
 #include <WCDB/statement_create_index.hpp>
@@ -54,4 +50,4 @@
 #include <WCDB/statement_transaction.hpp>
 #include <WCDB/statement_update.hpp>
 
-#endif /* abstract_h */
+#endif /* WINQ_h */

@@ -161,6 +161,9 @@ const char *Error::GetTypeName(Error::Type type)
         case Error::Type::SQLiteGlobal:
             name = "SQLiteGlobal";
             break;
+        case Error::Type::Repair:
+            name = "Repair";
+            break;
         default:
             break;
     }

@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/core_base.hpp>
+#include <WCDB/handle_statement.hpp>
 
 namespace WCDB {
 

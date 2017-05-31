@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTSelectBase.h>
-#import <WCDB/core.h>
+#import <WCDB/statement_recyclable.hpp>
 
 @interface WCTSelectBase () {
 @protected

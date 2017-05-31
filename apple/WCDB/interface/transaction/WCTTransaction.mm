@@ -21,6 +21,8 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTTransaction+Private.h>
 #import <WCDB/WCTTransaction.h>
+#import <WCDB/database.hpp>
+#import <WCDB/transaction.hpp>
 
 @implementation WCTTransaction
 

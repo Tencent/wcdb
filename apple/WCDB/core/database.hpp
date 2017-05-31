@@ -21,8 +21,9 @@
 #ifndef database_hpp
 #define database_hpp
 
-#include <WCDB/abstract.h>
+#include <WCDB/WINQ.h>
 #include <WCDB/core_base.hpp>
+#include <WCDB/handle.hpp>
 #include <WCDB/handle_pool.hpp>
 #include <WCDB/statement_recyclable.hpp>
 #include <WCDB/thread_local.hpp>

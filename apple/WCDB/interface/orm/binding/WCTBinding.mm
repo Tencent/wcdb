@@ -23,6 +23,7 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTIndexBinding.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/error.hpp>
 
 WCTBinding::WCTBinding(Class cls)
     : m_cls(cls)

@@ -24,6 +24,7 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/handle_statement.hpp>
 #import <WCDB/in_case_lock_guard.hpp>
 
 @implementation WCTChainCall

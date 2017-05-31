@@ -24,6 +24,7 @@
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+Private.h>
+#import <WCDB/handle_statement.hpp>
 
 @implementation WCTMultiSelect {
     WCTResultList _resultList;

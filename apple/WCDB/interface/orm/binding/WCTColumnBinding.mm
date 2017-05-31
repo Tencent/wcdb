@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/WCTColumnBinding.h>
+#import <WCDB/error.hpp>
 
 bool WCTColumnBinding::isPrimary() const
 {

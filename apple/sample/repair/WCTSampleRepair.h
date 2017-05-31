@@ -19,12 +19,14 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCore.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCDB.h>
 
-/**
- Not Thread-safe
- */
-@interface WCTChainCall : WCTCore
+@interface WCTSampleRepair : NSObject<WCTTableCoding>
+
+@property int identifier;
+@property(retain) NSString* content;
+
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

@@ -18,13 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef core_h
-#define core_h
+#import "WCTSampleRepair.h"
 
-#include <WCDB/config.hpp>
-#include <WCDB/core_base.hpp>
-#include <WCDB/database.hpp>
-#include <WCDB/statement_recyclable.hpp>
-#include <WCDB/transaction.hpp>
+@implementation WCTSampleRepair
 
-#endif /* core_h */
+WCDB_IMPLEMENTATION(WCTSampleRepair)
+WCDB_SYNTHESIZE(WCTSampleRepair, identifier)
+WCDB_SYNTHESIZE(WCTSampleRepair, content)
+
+@end

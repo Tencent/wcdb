@@ -23,6 +23,7 @@
 #import <WCDB/WCTExpr.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
+#import <WCDB/handle_statement.hpp>
 
 @implementation WCTSelectBase
 

@@ -27,6 +27,7 @@
 #import <WCDB/WCTExpr.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
+#import <WCDB/handle_statement.hpp>
 #import <WCDB/in_case_lock_guard.hpp>
 #import <WCDB/utility.hpp>
 

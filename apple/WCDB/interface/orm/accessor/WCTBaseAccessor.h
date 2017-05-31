@@ -19,7 +19,7 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/abstract.h>
+#import <WCDB/WINQ.h>
 
 typedef NS_ENUM(int, WCTAccessorType) {
     WCTAccessorCpp,

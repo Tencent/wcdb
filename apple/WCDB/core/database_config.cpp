@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/database.hpp>
+#include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/utility.hpp>
 #include <sqlcipher/sqlite3.h>

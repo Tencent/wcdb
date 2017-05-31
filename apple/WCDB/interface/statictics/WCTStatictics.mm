@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTStatictics.h>
-#import <WCDB/core.h>
+#import <WCDB/database.hpp>
 
 @implementation WCTStatictics
 

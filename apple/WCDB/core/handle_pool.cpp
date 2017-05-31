@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/handle.hpp>
 #include <WCDB/handle_pool.hpp>
 #include <WCDB/thread_local.hpp>
 #include <thread>
@@ -118,6 +119,7 @@ bool HandlePool::isDrained()
 
 RecyclableHandle HandlePool::flowOut(Error &error)
 {
+    m_rwlock.lockRead();
     std::shared_ptr<HandleWrap> handleWrap = m_handles.popBack();
     if (handleWrap == nullptr) {
         handleWrap = generate(error);
