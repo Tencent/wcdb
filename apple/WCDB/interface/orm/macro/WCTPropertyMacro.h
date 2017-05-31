@@ -18,26 +18,34 @@
  * limitations under the License.
  */
 
-#define __WCDB_PROPERTY_TYPE(className, propertyName) decltype([[className new] propertyName])
+#define __WCDB_PROPERTY_TYPE(className, propertyName)                          \
+    decltype([[className new] propertyName])
 
-#define __WCDB_PROPERTY_IMP(propertyName) \
-    +(const WCTProperty &) propertyName;
+#define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
-#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                                                                                                                             \
-    +(const WCTProperty &) propertyName                                                                                                                                                                        \
-    {                                                                                                                                                                                                          \
-        WCDB_PROPERTY_HINT(className, propertyName)                                                                                                                                                            \
-        static const WCTProperty s_property(columnName, className.class, __WCDB_BINDING(className).addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>(WCDB_STRINGIFY(propertyName), columnName)); \
-        return s_property;                                                                                                                                                                                     \
-    }                                                                                                                                                                                                          \
-    static const auto UNUSED_UNIQUE_ID = [](WCTPropertyList &propertyList) {                                                                                                                                   \
-        propertyList.push_back(className.propertyName);                                                                                                                                                        \
-        return nullptr;                                                                                                                                                                                        \
+#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
+    +(const WCTProperty &) propertyName                                        \
+    {                                                                          \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        static const WCTProperty s_property(                                   \
+            columnName, className.class,                                       \
+            __WCDB_BINDING(className)                                          \
+                .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
+                    className, propertyName)>(WCDB_STRINGIFY(propertyName),    \
+                                              columnName));                    \
+        return s_property;                                                     \
+    }                                                                          \
+    static const auto UNUSED_UNIQUE_ID = [](WCTPropertyList &propertyList) {   \
+        propertyList.push_back(className.propertyName);                        \
+        return nullptr;                                                        \
     }(__WCDB_PROPERTIES(className));
 
-#define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName, defaultValue)                                            \
-    __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                                                      \
-    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {                                                                  \
-        binding.getColumnBinding(className.propertyName)->makeDefault<__WCDB_PROPERTY_TYPE(className, propertyName)>(defaultValue); \
-        return nullptr;                                                                                                             \
+#define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
+                                      defaultValue)                            \
+    __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        binding.getColumnBinding(className.propertyName)                       \
+            ->makeDefault<__WCDB_PROPERTY_TYPE(className, propertyName)>(      \
+                defaultValue);                                                 \
+        return nullptr;                                                        \
     }(__WCDB_BINDING(className));

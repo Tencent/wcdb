@@ -21,7 +21,7 @@
 #ifndef handle_pool_hpp
 #define handle_pool_hpp
 
-#include <WCDB/abstract.h>
+#include <WCDB/WINQ.h>
 #include <WCDB/concurrent_list.hpp>
 #include <WCDB/config.hpp>
 #include <WCDB/error.hpp>

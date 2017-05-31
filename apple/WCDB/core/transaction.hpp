@@ -21,7 +21,7 @@
 #ifndef transaction_hpp
 #define transaction_hpp
 
-#include <WCDB/abstract.h>
+#include <WCDB/WINQ.h>
 #include <WCDB/core_base.hpp>
 #include <WCDB/error.hpp>
 #include <WCDB/recyclable.hpp>

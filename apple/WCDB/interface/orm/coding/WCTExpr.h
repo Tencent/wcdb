@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTPropertyBase.h>
-#import <WCDB/abstract.h>
+#import <WCDB/WINQ.h>
 
 class WCTExpr : public WCDB::Expr, public WCTPropertyBase {
 public:

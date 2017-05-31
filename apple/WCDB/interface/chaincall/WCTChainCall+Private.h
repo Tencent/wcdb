@@ -19,6 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/ticker.hpp>
 

@@ -50,7 +50,7 @@ typedef void (^WCTCloseBlock)(void);
         Note that WCTCore objects with same path share this tag, even they are not the same object.
  @param tag Default to 0. 
  */
-- (void)setTag:(WCDB::Tag)tag;
+- (void)setTag:(WCTTag)tag;
 
 /**
  @brief Since WCDB is using lazy initialization, [initWithPath:] never return nil even the database can't open. So you can call this to check whether the database can be opened. 

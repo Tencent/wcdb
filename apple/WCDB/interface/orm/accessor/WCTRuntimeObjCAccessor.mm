@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/WCTRuntimeObjCAccessor.h>
+#import <WCDB/error.hpp>
 
 WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::string &propertyName)
     : WCTRuntimeAccessor<id>(instanceClass, propertyName)

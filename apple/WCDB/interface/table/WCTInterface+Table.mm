@@ -22,6 +22,7 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTInterface+Table.h>
 #import <WCDB/WCTORM.h>
+#import <WCDB/handle_statement.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTInterface (Table)

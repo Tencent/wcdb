@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/handle.hpp>
 #include <WCDB/handle_pool.hpp>
 #include <WCDB/thread_local.hpp>
 #include <thread>

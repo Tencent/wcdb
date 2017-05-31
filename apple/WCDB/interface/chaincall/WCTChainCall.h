@@ -21,7 +21,6 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTCore.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/core.h>
 
 /**
  Not Thread-safe

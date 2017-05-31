@@ -21,8 +21,50 @@
 #ifndef WCDB_h
 #define WCDB_h
 
-#import <WCDB/abstract.h>
-#import <WCDB/core.h>
-#import <WCDB/interface.h>
+#import <WCDB/WINQ.h>
+
+#import <WCDB/WCTMaster.h>
+#import <WCDB/WCTSequence.h>
+
+#import <WCDB/WCTDelete.h>
+#import <WCDB/WCTInsert.h>
+#import <WCDB/WCTInterface+ChainCall.h>
+#import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTRowSelect.h>
+#import <WCDB/WCTSelect.h>
+#import <WCDB/WCTTable+ChainCall.h>
+#import <WCDB/WCTUpdate.h>
+
+#import <WCDB/WCTDatabase+Core.h>
+#import <WCDB/WCTInterface+Core.h>
+
+#import <WCDB/WCTDatabase+Database.h>
+#import <WCDB/WCTDatabase+File.h>
+#import <WCDB/WCTDatabase+RepairKit.h>
+
+#import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTStatement.h>
+#import <WCDB/WCTTable.h>
+
+#import <WCDB/WCTAnyProperty.h>
+#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTORM.h>
+#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTResult.h>
+
+#import <WCDB/WCTInterface+Convenient.h>
+#import <WCDB/WCTTable+Convenient.h>
+
+#import <WCDB/WCTDatabase+Table.h>
+#import <WCDB/WCTTransaction+Table.h>
+
+#import <WCDB/WCTDatabase+Transaction.h>
+#import <WCDB/WCTTransaction.h>
+
+#import <WCDB/WCTChainCall+Statictics.h>
+#import <WCDB/WCTDatabase+Statictics.h>
+#import <WCDB/WCTError.h>
+#import <WCDB/WCTStatictics.h>
+#import <WCDB/WCTTransaction+Statictics.h>
 
 #endif /* WCDB_h */

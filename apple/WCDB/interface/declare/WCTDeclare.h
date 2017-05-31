@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/abstract.h>
+#import <WCDB/WINQ.h>
 #import <WCDB/utility.hpp>
 #import <unordered_map>
 
@@ -34,7 +34,7 @@
 
 #pragma mark - Database
 @class WCTDatabase;
-typedef WCDB::Tag WCTTag;
+typedef int WCTTag;
 
 #pragma mark - Table
 @class WCTTable;

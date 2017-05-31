@@ -24,9 +24,9 @@
 #include <WCDB/column_type.hpp>
 #include <WCDB/describable.hpp>
 #include <WCDB/error.hpp>
-#include <WCDB/extern_sqlite.hpp>
 #include <WCDB/handle.hpp>
 #include <mutex>
+#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 

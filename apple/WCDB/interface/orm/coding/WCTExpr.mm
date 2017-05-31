@@ -22,6 +22,7 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+WCTExpr.h>
+#import <WCDB/error.hpp>
 
 WCTExpr::WCTExpr()
     : WCDB::Expr()

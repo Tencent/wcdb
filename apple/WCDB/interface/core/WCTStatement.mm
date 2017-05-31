@@ -22,7 +22,7 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTStatement+Private.h>
 #import <WCDB/WCTStatement.h>
-#import <WCDB/core.h>
+#import <WCDB/handle_statement.hpp>
 
 @implementation WCTStatement
 

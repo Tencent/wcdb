@@ -24,6 +24,7 @@
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
+#import <WCDB/handle_statement.hpp>
 
 @implementation WCTRowSelect
 

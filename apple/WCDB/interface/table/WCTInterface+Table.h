@@ -21,6 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTInterface.h>
+#import <WCDB/error.hpp>
 
 @interface WCTInterface (Table)
 
