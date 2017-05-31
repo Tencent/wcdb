@@ -270,6 +270,8 @@
 		23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+Database.h */; };
 		23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */; };
 		23B4F0561ECD8E0B00D45BB1 /* ticker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */; };
+		23BC46E11EDE6E2E0057E849 /* sample_repair_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BC46DE1EDE6E2E0057E849 /* sample_repair_main.mm */; };
+		23BC46E21EDE6E2E0057E849 /* WCTSampleRepair.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BC46E01EDE6E2E0057E849 /* WCTSampleRepair.mm */; };
 		23D5CD001EB8616D00A5B8F9 /* sample_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D5CCFF1EB8616D00A5B8F9 /* sample_main.mm */; };
 		23D5CD0A1EB8621200A5B8F9 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23D5CD451EB876DB00A5B8F9 /* sample_orm_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D5CD3B1EB876DB00A5B8F9 /* sample_orm_main.mm */; };
@@ -623,6 +625,10 @@
 		23B31B331EB97B480092EA80 /* WCTTable+Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Database.h"; sourceTree = "<group>"; };
 		23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ticker.cpp; sourceTree = "<group>"; };
 		23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ticker.hpp; sourceTree = "<group>"; };
+		23BC46DD1EDE6E2E0057E849 /* sample_repair_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sample_repair_main.h; sourceTree = "<group>"; };
+		23BC46DE1EDE6E2E0057E849 /* sample_repair_main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = sample_repair_main.mm; sourceTree = "<group>"; };
+		23BC46DF1EDE6E2E0057E849 /* WCTSampleRepair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleRepair.h; sourceTree = "<group>"; };
+		23BC46E01EDE6E2E0057E849 /* WCTSampleRepair.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSampleRepair.mm; sourceTree = "<group>"; };
 		23D5CCFD1EB8616D00A5B8F9 /* Sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D5CCFF1EB8616D00A5B8F9 /* sample_main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = sample_main.mm; sourceTree = "<group>"; };
 		23D5CD3A1EB876DB00A5B8F9 /* sample_orm_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sample_orm_main.h; sourceTree = "<group>"; };
@@ -669,9 +675,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2393266D1E836EB000D677CC /* sqlcipher.framework in Frameworks */,
 				234403131EDD71FD00808286 /* Security.framework in Frameworks */,
 				234403111EDD71DE00808286 /* libz.tbd in Frameworks */,
-				2393266D1E836EB000D677CC /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1179,9 +1185,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		23BC46DC1EDE6E2E0057E849 /* repair */ = {
+			isa = PBXGroup;
+			children = (
+				23BC46DD1EDE6E2E0057E849 /* sample_repair_main.h */,
+				23BC46DE1EDE6E2E0057E849 /* sample_repair_main.mm */,
+				23BC46DF1EDE6E2E0057E849 /* WCTSampleRepair.h */,
+				23BC46E01EDE6E2E0057E849 /* WCTSampleRepair.mm */,
+			);
+			name = repair;
+			path = sample/repair;
+			sourceTree = SOURCE_ROOT;
+		};
 		23D5CCFE1EB8616D00A5B8F9 /* Sample */ = {
 			isa = PBXGroup;
 			children = (
+				23BC46DC1EDE6E2E0057E849 /* repair */,
 				238A3A4D1EB8A97F00986614 /* table */,
 				238A3A4E1EB8A97F00986614 /* transaction */,
 				23D5CD351EB876DB00A5B8F9 /* advance */,
@@ -1189,7 +1208,6 @@
 				23D5CD371EB876DB00A5B8F9 /* convenient */,
 				23D5CD381EB876DB00A5B8F9 /* file */,
 				23D5CD391EB876DB00A5B8F9 /* orm */,
-				23D5CD441EB876DB00A5B8F9 /* repair */,
 				23D5CCFF1EB8616D00A5B8F9 /* sample_main.mm */,
 			);
 			path = Sample;
@@ -1264,14 +1282,6 @@
 			);
 			name = orm;
 			path = sample/orm;
-			sourceTree = SOURCE_ROOT;
-		};
-		23D5CD441EB876DB00A5B8F9 /* repair */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = repair;
-			path = sample/repair;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -1704,6 +1714,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D5CD681EB88CF700A5B8F9 /* WCTSampleChainCall.mm in Sources */,
+				23BC46E11EDE6E2E0057E849 /* sample_repair_main.mm in Sources */,
 				23D5CD4C1EB876FD00A5B8F9 /* WCTSampleConvenient.mm in Sources */,
 				238A3A651EB8B31400986614 /* WCTSampleColumnCoding+WCDB.mm in Sources */,
 				23D5CD4F1EB8771000A5B8F9 /* sample_convenient_main.mm in Sources */,
@@ -1724,6 +1735,7 @@
 				238A3A571EB8AC6200986614 /* WCTSampleTransaction.mm in Sources */,
 				238A3A5A1EB8AC6F00986614 /* sample_transaction_main.mm in Sources */,
 				238A3A631EB8B10A00986614 /* WCTSampleAdvanceMulti.mm in Sources */,
+				23BC46E21EDE6E2E0057E849 /* WCTSampleRepair.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
