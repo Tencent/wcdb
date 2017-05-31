@@ -29,21 +29,19 @@
 #include <string.h>
 #include <string>
 #include <vector>
-#if defined(__APPLE__)
-#include <Security/Security.h>
 #include <zlib.h>
+#if defined(__APPLE__)
 #include <CommonCrypto/CommonCrypto.h>
+#include <Security/Security.h>
 #else
 #include <openssl/rc4.h>
 #endif
 
-extern "C"
-{
+extern "C" {
 #include "sqliterk_os.h"
 }
 
-class CipherContext
-{
+class CipherContext {
 public:
     enum Op {
         Encrypt,
@@ -51,53 +49,40 @@ public:
     };
     CipherContext(Op op)
 #if defined(__APPLE__)
-    : m_op(op)
-    , m_key(nullptr)
-    , m_keyLength(0)
-    , m_cryptor(nullptr)
+        : m_op(op), m_key(nullptr), m_keyLength(0), m_cryptor(nullptr)
 #endif
     {
     }
-    
-    void setKey(const void* key, unsigned int keyLength) {
+
+    void setKey(const void *key, unsigned int keyLength)
+    {
 #if defined(__APPLE__)
         m_keyLength = keyLength;
-        m_key = (unsigned char*)realloc(m_key, m_keyLength);
+        m_key = (unsigned char *) realloc(m_key, m_keyLength);
         memcpy(m_key, key, m_keyLength);
 #else
-        RC4_set_key(m_rc4Key, keyLength, key);
+        RC4_set_key(&m_rc4Key, keyLength, (const unsigned char *) key);
 #endif
     }
-    
-    void cipher(unsigned char* data, unsigned int length) {
+
+    void cipher(unsigned char *data, unsigned int length)
+    {
 #if defined(__APPLE__)
         if (!m_cryptor) {
-            CCCryptorCreate(kCCEncrypt,
-                            kCCAlgorithmRC4,
-                            0,
-                            m_key,
-                            m_keyLength,
-                            nullptr,
-                            &m_cryptor);
+            CCCryptorCreate(kCCEncrypt, kCCAlgorithmRC4, 0, m_key, m_keyLength,
+                            nullptr, &m_cryptor);
         }
-        
+
         size_t cryptBytes = 0;
-        CCCryptorUpdate(m_cryptor,
-                        data,
-                        length,
-                        data,
-                        length,
-                        &cryptBytes);
-        CCCryptorFinal(m_cryptor,
-                       data,
-                       length,
-                       &cryptBytes);
+        CCCryptorUpdate(m_cryptor, data, length, data, length, &cryptBytes);
+        CCCryptorFinal(m_cryptor, data, length, &cryptBytes);
 #else
         RC4(&m_rc4Key, length, data, data);
 #endif
     }
-    
-    ~CipherContext(){
+
+    ~CipherContext()
+    {
 #if defined(__APPLE__)
         if (m_cryptor) {
             CCCryptorRelease(m_cryptor);
@@ -107,9 +92,10 @@ public:
         }
 #endif
     }
+
 protected:
 #if defined(__APPLE__)
-    unsigned char* m_key;
+    unsigned char *m_key;
     unsigned int m_keyLength;
     Op m_op;
     CCCryptorRef m_cryptor;
@@ -118,8 +104,7 @@ protected:
 #endif
 };
 
-struct sqliterk_master_entity
-{
+struct sqliterk_master_entity {
     sqliterk_type type;
     std::string sql;
     int root_page;
@@ -209,7 +194,7 @@ static void fini_insert(sqliterk_output_ctx *ctx)
         ctx->stmt = NULL;
     }
 
-    int n = (int)ctx->dflt_values.size();
+    int n = (int) ctx->dflt_values.size();
     for (int i = 0; i < n; i++)
         sqlite3_value_free(ctx->dflt_values[i]);
     ctx->dflt_values.clear();
@@ -545,7 +530,7 @@ int sqliterk_save_master(sqlite3 *db,
     FILE *fp = NULL;
     int rc = SQLITERK_OK;
     sqlite3_stmt *stmt = NULL;
-    z_stream zstrm = { 0 };
+    z_stream zstrm = {0};
     CipherContext cipherContext(CipherContext::Encrypt);
     unsigned char in_buf[512 + 8];
     unsigned char out_buf[2048];
@@ -566,7 +551,7 @@ int sqliterk_save_master(sqlite3 *db,
     // Prepare cipher key.
     if (key && key_len) {
         cipherContext.setKey(key, key_len);
-    }else {
+    } else {
         key = NULL;
     }
 
@@ -639,9 +624,10 @@ int sqliterk_save_master(sqlite3 *db,
             if (key) {
                 cipherContext.cipher(out_buf, have);
             }
-            if (fwrite(out_buf, 1, have, fp) != have)
-            {
-                sqliterkOSError(SQLITERK_IOERR, "Cannot write to backup file: %s", strerror(errno));
+            if (fwrite(out_buf, 1, have, fp) != have) {
+                sqliterkOSError(SQLITERK_IOERR,
+                                "Cannot write to backup file: %s",
+                                strerror(errno));
                 goto bail;
             }
         } while (zstrm.avail_out == 0);
@@ -660,9 +646,10 @@ int sqliterk_save_master(sqlite3 *db,
             if (key) {
                 cipherContext.cipher(out_buf, have);
             }
-            if (fwrite(out_buf, 1, have, fp) != have)
-            {
-                sqliterkOSError(SQLITERK_IOERR, "Cannot write to backup file: %s", strerror(errno));
+            if (fwrite(out_buf, 1, have, fp) != have) {
+                sqliterkOSError(SQLITERK_IOERR,
+                                "Cannot write to backup file: %s",
+                                strerror(errno));
                 goto bail;
             }
         } while (zstrm.avail_out == 0);
@@ -687,9 +674,9 @@ int sqliterk_save_master(sqlite3 *db,
         if (key) {
             cipherContext.cipher(out_buf, have);
         }
-        if (fwrite(out_buf, 1, have, fp) != have)
-        {
-            sqliterkOSError(SQLITERK_IOERR, "Cannot write to backup file: %s", strerror(errno));
+        if (fwrite(out_buf, 1, have, fp) != have) {
+            sqliterkOSError(SQLITERK_IOERR, "Cannot write to backup file: %s",
+                            strerror(errno));
             goto bail;
         }
     } while (zstrm.avail_out == 0);
@@ -738,7 +725,11 @@ bail:
 }
 
 static const size_t IN_BUF_SIZE = 4096;
-static int inflate_read(FILE *fp, z_streamp strm, void *buf, unsigned size, CipherContext *cipherContext)
+static int inflate_read(FILE *fp,
+                        z_streamp strm,
+                        void *buf,
+                        unsigned size,
+                        CipherContext *cipherContext)
 {
     int ret;
     if (size == 0)
@@ -752,11 +743,10 @@ static int inflate_read(FILE *fp, z_streamp strm, void *buf, unsigned size, Ciph
             unsigned char *in_buf = strm->next_in - strm->total_in;
             strm->total_in = 0;
 
-            ret = (int)fread(in_buf, 1, IN_BUF_SIZE, fp);
+            ret = (int) fread(in_buf, 1, IN_BUF_SIZE, fp);
             if (ret == 0 && ferror(fp))
                 return SQLITERK_IOERR;
-            if (ret > 0)
-            {
+            if (ret > 0) {
                 if (cipherContext) {
                     cipherContext->cipher(in_buf, ret);
                 }
@@ -788,7 +778,7 @@ int sqliterk_load_master(const char *path,
                          unsigned char *out_kdf_salt)
 {
     FILE *fp = NULL;
-    z_stream zstrm = { 0 };
+    z_stream zstrm = {0};
     CipherContext cipherContext(CipherContext::Decrypt);
     int rc;
     unsigned char in_buf[IN_BUF_SIZE];
@@ -838,7 +828,7 @@ int sqliterk_load_master(const char *path,
 
     if (key && key_len) {
         cipherContext.setKey(key, key_len);
-    }else {
+    } else {
         key = NULL;
     }
 
@@ -849,15 +839,22 @@ int sqliterk_load_master(const char *path,
     while (entities--) {
         // Read entity header.
         master_file_entity entity;
-        rc = inflate_read(fp, &zstrm, &entity, sizeof(entity), key ? &cipherContext : NULL);
-        if (rc == SQLITERK_IOERR) goto bail_errno;
-        else if (rc == SQLITERK_DAMAGED) goto bail_zlib;
+        rc = inflate_read(fp, &zstrm, &entity, sizeof(entity),
+                          key ? &cipherContext : NULL);
+        if (rc == SQLITERK_IOERR)
+            goto bail_errno;
+        else if (rc == SQLITERK_DAMAGED)
+            goto bail_zlib;
 
         // Read names and SQL.
-        rc = inflate_read(fp, &zstrm, str_buf, entity.name_len + entity.tbl_name_len + entity.sql_len + 3,
-            key ? &cipherContext : NULL);
-        if (rc == SQLITERK_IOERR) goto bail_errno;
-        else if (rc == SQLITERK_DAMAGED) goto bail_zlib;
+        rc = inflate_read(fp, &zstrm, str_buf,
+                          entity.name_len + entity.tbl_name_len +
+                              entity.sql_len + 3,
+                          key ? &cipherContext : NULL);
+        if (rc == SQLITERK_IOERR)
+            goto bail_errno;
+        else if (rc == SQLITERK_DAMAGED)
+            goto bail_zlib;
 
         const char *name = str_buf;
         const char *tbl_name = name + entity.name_len + 1;
