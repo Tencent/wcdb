@@ -28,6 +28,7 @@
 #include <memory>
 #include <mutex>
 #include <sqlcipher/sqlite3.h>
+#include <WCDB/handle_statement.hpp>
 #include <string>
 
 namespace WCDB {
