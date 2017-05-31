@@ -118,6 +118,7 @@ bool HandlePool::isDrained()
 
 RecyclableHandle HandlePool::flowOut(Error &error)
 {
+    m_rwlock.lockRead();
     std::shared_ptr<HandleWrap> handleWrap = m_handles.popBack();
     if (handleWrap == nullptr) {
         handleWrap = generate(error);
