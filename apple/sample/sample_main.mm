@@ -27,6 +27,7 @@
 #import "sample_transaction_main.h"
 #import "sample_advance_main.h"
 #import "sample_repair_main.h"
+#import "sample_core_main.h"
 
 int main(int argc, const char * argv[]) {
 #warning TODO Perfect sample works
@@ -42,5 +43,6 @@ int main(int argc, const char * argv[]) {
     sample_transaction_main(baseDirectory);
     sample_advance_main(baseDirectory);
     sample_repair_main(baseDirectory);
+    sample_core_main(baseDirectory);
     return 0;
 }
