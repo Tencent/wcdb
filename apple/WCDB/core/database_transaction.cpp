@@ -24,7 +24,8 @@
 
 namespace WCDB {
 
-thread_local std::unordered_map<std::string, RecyclableHandle> Database::s_threadedHandle;
+thread_local std::unordered_map<std::string, RecyclableHandle>
+    Database::s_threadedHandle;
 
 std::shared_ptr<Transaction> Database::getTransaction(Error &error)
 {

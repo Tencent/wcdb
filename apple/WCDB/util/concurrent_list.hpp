@@ -97,7 +97,7 @@ public:
         SpinLockGuard<Spin> lockGuard(m_spin);
         return m_list.size();
     }
-    
+
     void clear()
     {
         SpinLockGuard<Spin> lockGuard(m_spin);
