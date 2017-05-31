@@ -23,6 +23,18 @@ package com.tencent.wcdb.database;
 import com.tencent.wcdb.CursorWindowAllocationException;
 
 
+/**
+ * An alternative cursor window implementation which store cursor rows
+ * on different chunks.
+ *
+ * <p>The window size is relatively small on initial and grows when
+ * more rows are filled in. This saves memory on small queries and
+ * prevent row drops on large queries.</p>
+ *
+ * <p>This class is used in {@link SQLiteAsyncCursor} and under development.</p>
+ *
+ * @hide
+ */
 public class ChunkedCursorWindow extends SQLiteClosable {
 
     public static final long CHUNK_NOT_FOUND = 0xFFFFFFFFFFFFFFFFL;

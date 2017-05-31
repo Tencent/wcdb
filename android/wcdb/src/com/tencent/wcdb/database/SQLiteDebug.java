@@ -28,40 +28,10 @@ import android.util.Printer;
  */
 public final class SQLiteDebug {
 	
-	
-	
-	public static final int MAIN_THREAD_SLOW_QUERY_THRESHOLD = 300; // mm main thread query slow threshold ;
-	
-	
-	public static final int CHILD_THREAD_SLOW_QUERY_THRESHOLD = 500; // mm child thread query slow threshold;
-	
-	
-	public static final int MAIN_THREAD_SLOW_UPDATE_THRESHOLD = 500; // mm main thread update slow threshold;
-	
-	
-	public static final int CHILD_THREAD_SLOW_UPDATE_THRESHOLD = 1000; // mm child thread update slow threshold;
-	
-	
-	public static final int MAIN_THREAD_SLOW_TRACSATION_THRESHOLD = 2000;//a SLOW transation run in main Thread
-	
-	
-	public static final int MAIN_THREAD_SLOW_ATTACH_DB_THRESHOLD = 1000;//a SLOW ATTACH db run 
-	
-	public static final int MAIN_THREAD_SLOW_PRAGMA_THRESHOLD = 1000;//a SLOW PRAGMA db run 
-	
-	
-	
     private static native void nativeGetPagerStats(PagerStats stats);
     private static native int nativeGetLastErrorLine();
     private static native void nativeSetIOTraceFlags(int flags);
     private static native void nativeGetIOTraceStats(long connectionPtr, ArrayList<IOTraceStats> statsList);
-
-
-    /**
-     * True to enable database performance testing instrumentation.
-     * @hide
-     */
-    //public static final boolean DEBUG_LOG_SLOW_QUERIES = Build.IS_DEBUGGABLE;
 
     static {
         // Ensure libmmdb.so is loaded.

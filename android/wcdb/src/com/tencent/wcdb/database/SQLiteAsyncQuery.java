@@ -25,6 +25,11 @@ import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 
 
+/**
+ * Query object used by {@link SQLiteAsyncCursor}. Under development.
+ *
+ * @hide
+ */
 public class SQLiteAsyncQuery extends SQLiteProgram {
 
     private static final String TAG = "WCDB.SQLiteAsyncQuery";
