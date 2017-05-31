@@ -28,7 +28,6 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <sqlcipher/sqlite3.h>
 #include <string>
 
 namespace WCDB {
@@ -81,7 +80,7 @@ public:
 protected:
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
-    sqlite3 *m_handle;
+    void *m_handle;
     Error m_error;
     Tag m_tag;
 

@@ -67,34 +67,34 @@ bool Handle::open()
     Error innerError;
     File::createDirectoryWithIntermediateDirectories(Path::getBaseName(path),
                                                      innerError);
-    int rc = sqlite3_open(path.c_str(), &m_handle);
+    int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
     if (rc == SQLITE_OK) {
         m_error.reset();
         return true;
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::Open, rc,
-                        sqlite3_errmsg(m_handle), &m_error);
+                        sqlite3_errmsg((sqlite3 *) m_handle), &m_error);
     return false;
 }
 
 void Handle::close()
 {
-    int rc = sqlite3_close(m_handle);
+    int rc = sqlite3_close((sqlite3 *) m_handle);
     if (rc == SQLITE_OK) {
         m_handle = nullptr;
         m_error.reset();
         return;
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::Close, rc,
-                        sqlite3_extended_errcode(m_handle),
-                        sqlite3_errmsg(m_handle), &m_error);
+                        sqlite3_extended_errcode((sqlite3 *) m_handle),
+                        sqlite3_errmsg((sqlite3 *) m_handle), &m_error);
 }
 
 bool Handle::isTableExists(const std::string &tableName)
 {
-    int rc = sqlite3_table_column_metadata(m_handle, nullptr, tableName.c_str(),
-                                           nullptr, nullptr, nullptr, nullptr,
-                                           nullptr, nullptr);
+    int rc = sqlite3_table_column_metadata((sqlite3 *) m_handle, nullptr,
+                                           tableName.c_str(), nullptr, nullptr,
+                                           nullptr, nullptr, nullptr, nullptr);
     if (rc == SQLITE_OK) {
         m_error.reset();
         return true;
@@ -104,8 +104,8 @@ bool Handle::isTableExists(const std::string &tableName)
         return false;
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::IsTableExists, rc,
-                        sqlite3_extended_errcode(m_handle),
-                        sqlite3_errmsg(m_handle), &m_error);
+                        sqlite3_extended_errcode((sqlite3 *) m_handle),
+                        sqlite3_errmsg((sqlite3 *) m_handle), &m_error);
     return false;
 }
 
@@ -113,7 +113,7 @@ void Handle::setTrace(const Trace &trace)
 {
     if (trace) {
         m_trace = trace;
-        sqlite3_trace_v2(m_handle, SQLITE_TRACE_PROFILE,
+        sqlite3_trace_v2((sqlite3 *) m_handle, SQLITE_TRACE_PROFILE,
                          [](unsigned int, void *M, void *P, void *X) -> int {
                              Handle *handle = (Handle *) M;
                              sqlite3_stmt *stmt = (sqlite3_stmt *) P;
@@ -134,7 +134,7 @@ void Handle::setTrace(const Trace &trace)
                          },
                          this);
     } else {
-        sqlite3_trace_v2(m_handle, 0, nullptr, nullptr);
+        sqlite3_trace_v2((sqlite3 *) m_handle, 0, nullptr, nullptr);
     }
 }
 
@@ -172,24 +172,26 @@ std::shared_ptr<StatementHandle> Handle::prepare(const Statement &statement)
         return nullptr;
     }
     sqlite3_stmt *stmt = nullptr;
-    int rc = sqlite3_prepare_v2(m_handle, statement.getDescription().c_str(),
-                                -1, &stmt, nullptr);
+    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle,
+                                statement.getDescription().c_str(), -1, &stmt,
+                                nullptr);
     if (rc == SQLITE_OK) {
         m_error.reset();
         return std::shared_ptr<StatementHandle>(
             new StatementHandle(stmt, *this));
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::Prepare, rc,
-                        sqlite3_extended_errcode(m_handle),
-                        sqlite3_errmsg(m_handle), statement.getDescription(),
-                        &m_error);
+                        sqlite3_extended_errcode((sqlite3 *) m_handle),
+                        sqlite3_errmsg((sqlite3 *) m_handle),
+                        statement.getDescription(), &m_error);
     return nullptr;
 }
 
 bool Handle::exec(const Statement &statement)
 {
-    int rc = sqlite3_exec(m_handle, statement.getDescription().c_str(), nullptr,
-                          nullptr, nullptr);
+    int rc =
+        sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
+                     nullptr, nullptr, nullptr);
     bool result = rc == SQLITE_OK;
     if (statement.getStatementType() == Statement::Type::Transaction) {
         const StatementTransaction &transaction =
@@ -215,15 +217,15 @@ bool Handle::exec(const Statement &statement)
         return true;
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::Exec, rc,
-                        sqlite3_extended_errcode(m_handle),
-                        sqlite3_errmsg(m_handle), statement.getDescription(),
-                        &m_error);
+                        sqlite3_extended_errcode((sqlite3 *) m_handle),
+                        sqlite3_errmsg((sqlite3 *) m_handle),
+                        statement.getDescription(), &m_error);
     return false;
 }
 
 long long Handle::getLastInsertedRowID()
 {
-    return sqlite3_last_insert_rowid(m_handle);
+    return sqlite3_last_insert_rowid((sqlite3 *) m_handle);
 }
 
 void Handle::setConfig(Handle::Config config, bool enable)
@@ -234,20 +236,20 @@ void Handle::setConfig(Handle::Config config, bool enable)
             dbConfig = SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER;
             break;
     }
-    sqlite3_db_config(m_handle, dbConfig, enable, nullptr);
+    sqlite3_db_config((sqlite3 *) m_handle, dbConfig, enable, nullptr);
 }
 
 bool Handle::setCipherKey(const void *data, int size)
 {
 #ifdef SQLITE_HAS_CODEC
-    int rc = sqlite3_key(m_handle, data, size);
+    int rc = sqlite3_key((sqlite3 *) m_handle, data, size);
     if (rc == SQLITE_OK) {
         m_error.reset();
         return true;
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::SetCipherKey, rc,
-                        sqlite3_extended_errcode(m_handle),
-                        sqlite3_errmsg(m_handle), &m_error);
+                        sqlite3_extended_errcode((sqlite3 *) m_handle),
+                        sqlite3_errmsg((sqlite3 *) m_handle), &m_error);
     return false;
 #else  //SQLITE_HAS_CODEC
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::SetCipherKey,
@@ -266,7 +268,8 @@ std::string Handle::getBackupPath() const
 bool Handle::backup(const void *key, const unsigned int &length)
 {
     std::string backupPath = getBackupPath();
-    int rc = sqliterk_save_master(m_handle, backupPath.c_str(), key, length);
+    int rc = sqliterk_save_master((sqlite3 *) m_handle, backupPath.c_str(), key,
+                                  length);
     if (rc == SQLITERK_OK) {
         m_error.reset();
         return true;
@@ -309,7 +312,8 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
         return false;
     }
 
-    rc = sqliterk_output(rk, m_handle, info, SQLITERK_OUTPUT_ALL_TABLES);
+    rc = sqliterk_output(rk, (sqlite3 *) m_handle, info,
+                         SQLITERK_OUTPUT_ALL_TABLES);
     if (rc != SQLITERK_OK) {
         Error::ReportRepair(corruptedDBPath,
                             WCDB::Error::RepairOperation::Repair, rc, &m_error);
