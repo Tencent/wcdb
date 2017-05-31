@@ -30,6 +30,7 @@
 
 int main(int argc, const char * argv[]) {
 #warning TODO Perfect sample works
+    //Sample code is only used for reading
     NSString* machPath = [NSString stringWithUTF8String:argv[0]];
     NSString* baseDirectory = [[machPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"SampleDB"];
     NSLog(@"Base Directory: %@", baseDirectory);

@@ -18,7 +18,10 @@ void sample_repair_main(NSString* baseDirectory)
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
         [database removeFilesWithError:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:recoverPath error:nil];
+    }];
+    WCTDatabase* recover = [[WCTDatabase alloc] initWithPath:recoverPath];
+    [recover close:^{
+        [recover removeFilesWithError:nil];
     }];
     
     //prepare
@@ -36,7 +39,7 @@ void sample_repair_main(NSString* baseDirectory)
     }
     
     NSString* password = @"sample_password";
-    NSData* cipher = nil;//[password dataUsingEncoding:NSASCIIStringEncoding];
+    NSData* cipher = [password dataUsingEncoding:NSASCIIStringEncoding];
 
     //backup
     {
@@ -48,24 +51,23 @@ void sample_repair_main(NSString* baseDirectory)
     //get page size from origin database.
     //Since page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. You have no need to get the page size like this. Instead, you can hardcode it.
     {
-        WCTStatement* statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
-        [statement step];
-        NSNumber* value = (NSNumber*)[statement getValueAtIndex:0];
-        pageSize = value.intValue;
-        statement = nil;
+        @autoreleasepool {
+            WCTStatement* statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
+            [statement step];
+            NSNumber* value = (NSNumber*)[statement getValueAtIndex:0];
+            pageSize = value.intValue;
+            statement = nil;
+        }
     }
     
-    @autoreleasepool {
-        NSObject* object = [[NSObject alloc] init];
-    }
     //do something
     //corrupt
     {
         [database close:^{
             FILE* file = fopen(path.UTF8String, "rb+");
-            unsigned char* zeroPage = new unsigned char[pageSize];
-            memset(zeroPage, 0, pageSize);
-            fwrite(zeroPage, pageSize, 1, file);
+            unsigned char* zeroPage = new unsigned char[100];
+            memset(zeroPage, 0, 100);
+            fwrite(zeroPage, 100, 1, file);
             fclose(file);
         }];
         
