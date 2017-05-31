@@ -26,7 +26,6 @@
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_pool.hpp>
 #include <WCDB/statement_recyclable.hpp>
-#include <WCDB/thread_local.hpp>
 #include <array>
 
 namespace WCDB {
@@ -102,7 +101,7 @@ protected:
     static const std::array<std::string, 5> &subfixs();
 
     RecyclableHandle flowOut(Error &error);
-    static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
+    static thread_local std::unordered_map<std::string, RecyclableHandle>
         s_threadedHandle;
 
     static std::shared_ptr<Trace> s_globalTrace;

@@ -229,7 +229,6 @@
 		2349F7891EA0D6680021EFA7 /* rwlock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B51EA0D6680021EFA7 /* rwlock.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F78A1EA0D6680021EFA7 /* spin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6B61EA0D6680021EFA7 /* spin.cpp */; };
 		2349F78B1EA0D6680021EFA7 /* spin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B71EA0D6680021EFA7 /* spin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F78C1EA0D6680021EFA7 /* thread_local.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B81EA0D6680021EFA7 /* thread_local.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F78D1EA0D6680021EFA7 /* utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B91EA0D6680021EFA7 /* utility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6BA1EA0D6680021EFA7 /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7911EA0D7700021EFA7 /* WCTPropertyBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F78F1EA0D7700021EFA7 /* WCTPropertyBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -570,7 +569,6 @@
 		2349F6B51EA0D6680021EFA7 /* rwlock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rwlock.hpp; sourceTree = "<group>"; };
 		2349F6B61EA0D6680021EFA7 /* spin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spin.cpp; sourceTree = "<group>"; };
 		2349F6B71EA0D6680021EFA7 /* spin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = spin.hpp; sourceTree = "<group>"; };
-		2349F6B81EA0D6680021EFA7 /* thread_local.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = thread_local.hpp; sourceTree = "<group>"; };
 		2349F6B91EA0D6680021EFA7 /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
 		2349F6BA1EA0D6680021EFA7 /* WCDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
 		2349F78F1EA0D7700021EFA7 /* WCTPropertyBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTPropertyBase.h; sourceTree = "<group>"; };
@@ -1081,7 +1079,6 @@
 				2349F6B51EA0D6680021EFA7 /* rwlock.hpp */,
 				2349F6B61EA0D6680021EFA7 /* spin.cpp */,
 				2349F6B71EA0D6680021EFA7 /* spin.hpp */,
-				2349F6B81EA0D6680021EFA7 /* thread_local.hpp */,
 				2349F6B91EA0D6680021EFA7 /* utility.hpp */,
 				23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */,
 				23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */,
@@ -1375,7 +1372,6 @@
 				234403071EDD718A00808286 /* sqliterk_os.h in Headers */,
 				2349F7441EA0D6680021EFA7 /* WCTStatement.h in Headers */,
 				2386B3C01ED442E2000B72F6 /* WCTStatictics.h in Headers */,
-				2349F78C1EA0D6680021EFA7 /* thread_local.hpp in Headers */,
 				2349F7751EA0D6680021EFA7 /* WCTTransaction+Table.h in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */,
 				2349F72F1EA0D6680021EFA7 /* WCTSelectBase.h in Headers */,
