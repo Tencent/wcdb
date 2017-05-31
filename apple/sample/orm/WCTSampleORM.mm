@@ -24,7 +24,7 @@
 
 WCDB_IMPLEMENTATION(WCTSampleORM)
 WCDB_SYNTHESIZE(WCTSampleORM, identifier)
-WCDB_SYNTHESIZE_COLUMN(WCTSampleORM, desc, "description")//use "description" as column name in Database
+WCDB_SYNTHESIZE_COLUMN(WCTSampleORM, desc, "description") //use "description" as column name in Database
 WCDB_SYNTHESIZE_DEFAULT(WCTSampleORM, value, 1.0f)
 
 WCDB_PRIMARY(WCTSampleORM, identifier)

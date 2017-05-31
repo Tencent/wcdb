@@ -21,10 +21,10 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface WCTSampleORM : NSObject<WCTTableCoding>
+@interface WCTSampleORM : NSObject <WCTTableCoding>
 
 @property int identifier;
-@property(retain) NSString* desc;
+@property(retain) NSString *desc;
 @property float value;
 
 WCDB_PROPERTY(identifier)

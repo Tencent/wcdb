@@ -26,7 +26,7 @@ WCDB_IMPLEMENTATION(WCTSampleORMColumnConstraint)
 WCDB_SYNTHESIZE(WCTSampleORMColumnConstraint, primaryProperty)
 WCDB_SYNTHESIZE(WCTSampleORMColumnConstraint, uniqueProperty)
 WCDB_SYNTHESIZE(WCTSampleORMColumnConstraint, notNullProperty)
-    
+
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(WCTSampleORMColumnConstraint, primaryProperty)
 WCDB_UNIQUE(WCTSampleORMColumnConstraint, uniqueProperty)
 WCDB_NOT_NULL(WCTSampleORMColumnConstraint, notNullProperty)

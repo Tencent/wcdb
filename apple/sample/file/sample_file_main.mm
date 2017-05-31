@@ -21,47 +21,47 @@
 #import "sample_file_main.h"
 #import "WCTSampleFile.h"
 
-void sample_file_main(NSString* baseDirectory)
+void sample_file_main(NSString *baseDirectory)
 {
-    NSString* className = NSStringFromClass(WCTSampleFile.class);
-    NSString* path = [baseDirectory stringByAppendingPathComponent:className];
-    NSString* tableName = className; 
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    NSString *className = NSStringFromClass(WCTSampleFile.class);
+    NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *tableName = className;
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
-        [database removeFilesWithError:nil];
+      [database removeFilesWithError:nil];
     }];
 
     BOOL ret = [database createTableAndIndexesOfName:tableName withClass:WCTSampleFile.class];
     assert(ret);
-       
+
     //Get file size
     {
-        __block WCTError* error = nil;
+        __block WCTError *error = nil;
         __block size_t fileSize;
         [database close:^{
-            fileSize = [database getFilesSizeWithError:&error];
+          fileSize = [database getFilesSizeWithError:&error];
         }];
         //you can call [getFilesSizeWithError:] for an unclosed database, but you will get a warning
-//        fileSize = [database getFilesSizeWithError:&error];
+        //        fileSize = [database getFilesSizeWithError:&error];
         if (error) {
             NSLog(@"Get file size Error %@", error);
         }
     }
-    
+
     //Move files
     {
-        NSString* otherDirectory = baseDirectory;
+        NSString *otherDirectory = baseDirectory;
         [database close:^{
-            WCTError* error = nil;
-            BOOL ret = [database moveFilesToDirectory:otherDirectory withError:&error];
-            if (!ret) {
-                NSLog(@"Move files Error %@", error);
-            }
+          WCTError *error = nil;
+          BOOL ret = [database moveFilesToDirectory:otherDirectory withError:&error];
+          if (!ret) {
+              NSLog(@"Move files Error %@", error);
+          }
         }];
     }
-    
+
     //Get paths
     {
-        NSArray* paths = [database getPaths];
+        NSArray *paths = [database getPaths];
     }
 }

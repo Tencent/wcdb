@@ -21,10 +21,10 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface WCTSampleORMTableConstraint : NSObject<WCTTableCoding>
+@interface WCTSampleORMTableConstraint : NSObject <WCTTableCoding>
 
 @property int primaryKeyPart1;
-@property NSString* primaryKeyPart2;
+@property NSString *primaryKeyPart2;
 
 @property int uniqueKeyPart1;
 @property float uniqueKeyPart2;

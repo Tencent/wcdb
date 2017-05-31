@@ -20,4 +20,4 @@
 
 #import <Foundation/Foundation.h>
 
-void sample_convenient_main(NSString* baseDirectory);
+void sample_convenient_main(NSString *baseDirectory);

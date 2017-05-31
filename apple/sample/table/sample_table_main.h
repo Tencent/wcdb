@@ -20,4 +20,4 @@
 
 #import <Foundation/Foundation.h>
 
-void sample_table_main(NSString* baseDirectory);
+void sample_table_main(NSString *baseDirectory);

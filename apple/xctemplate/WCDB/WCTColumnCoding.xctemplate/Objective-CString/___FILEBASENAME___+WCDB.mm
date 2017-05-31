@@ -9,19 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface ___FILEBASENAMEASIDENTIFIER___(WCDB) <WCTColumnCoding>
+@interface ___FILEBASENAMEASIDENTIFIER___ (WCDB) <WCTColumnCoding>
 @end
 
-@implementation ___FILEBASENAMEASIDENTIFIER___(WCDB)
+@implementation ___FILEBASENAMEASIDENTIFIER___ (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString*)value
++ (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return <#Unarchive ___FILEBASENAMEASIDENTIFIER___ From NSString*#>;
+    return <#Unarchive ___FILEBASENAMEASIDENTIFIER___ From NSString *#>;
 }
 
-- (NSString*)archivedWCTValue
+- (NSString *)archivedWCTValue
 {
-    return <#Archive NSString* To ___FILEBASENAMEASIDENTIFIER___#>;
+    return <#Archive NSString * To ___FILEBASENAMEASIDENTIFIER___ #>;
 }
 
 + (WCTColumnType)columnTypeForWCDB
@@ -30,4 +30,3 @@
 }
 
 @end
-

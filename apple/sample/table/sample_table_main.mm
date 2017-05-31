@@ -21,20 +21,20 @@
 #import "sample_table_main.h"
 #import "WCTSampleTable.h"
 
-void sample_table_main(NSString* baseDirectory)
+void sample_table_main(NSString *baseDirectory)
 {
-    NSString* className = NSStringFromClass(WCTSampleTable.class);
-    NSString* path = [baseDirectory stringByAppendingPathComponent:className];
-    NSString* tableName = className; 
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    NSString *className = NSStringFromClass(WCTSampleTable.class);
+    NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *tableName = className;
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
-        [database removeFilesWithError:nil];
+      [database removeFilesWithError:nil];
     }];
-    
-    //Create table and indexes from WCTTableCoding class 
+
+    //Create table and indexes from WCTTableCoding class
     {
-        BOOL ret = [database createTableAndIndexesOfName:tableName 
-                                               withClass:WCTSampleTable.class];   
+        BOOL ret = [database createTableAndIndexesOfName:tableName
+                                               withClass:WCTSampleTable.class];
     }
     //Drop table
     {
@@ -42,39 +42,38 @@ void sample_table_main(NSString* baseDirectory)
     }
     //Create table from column def
     {
-        BOOL ret = [database createTableOfName:tableName 
+        BOOL ret = [database createTableOfName:tableName
                              withColumnDefList:{
-                                 WCTSampleTable.intValue.def(WCTColumnTypeInteger32),
-                                 WCTSampleTable.stringValue.def(WCTColumnTypeString),
-                             }];
+                                                   WCTSampleTable.intValue.def(WCTColumnTypeInteger32),
+                                                   WCTSampleTable.stringValue.def(WCTColumnTypeString),
+                                               }];
     }
-    
+
     //Create index from column index
-    NSString* indexSubfix = @"_index";
-    NSString* indexName = [tableName stringByAppendingString:indexSubfix];
+    NSString *indexSubfix = @"_index";
+    NSString *indexName = [tableName stringByAppendingString:indexSubfix];
     {
-        BOOL ret = [database createIndexOfName:indexName 
+        BOOL ret = [database createIndexOfName:indexName
                                  withIndexList:{
-                                     WCTSampleTable.stringValue.index(WCTOrderedAscending)
-                                 }
+                                                   WCTSampleTable.stringValue.index(WCTOrderedAscending)}
                                       forTable:tableName];
     }
     //Drop index
     {
         BOOL ret = [database dropIndexOfName:indexName];
     }
-    
+
     //add column
     {
         BOOL ret = [database createTableOfName:[tableName stringByAppendingString:@"2"]
                              withColumnDefList:{
-                                 WCTSampleTable.intValue.def(WCTColumnTypeInteger32),
-                             }];
-        ret = [database addColumn:WCTSampleTable.stringValue.def(WCTColumnTypeString) 
+                                                   WCTSampleTable.intValue.def(WCTColumnTypeInteger32),
+                                               }];
+        ret = [database addColumn:WCTSampleTable.stringValue.def(WCTColumnTypeString)
                          forTable:tableName];
     }
-    
-    WCTTable* table;
+
+    WCTTable *table;
     //get table
     {
         table = [database getTableOfName:tableName
@@ -82,7 +81,7 @@ void sample_table_main(NSString* baseDirectory)
     }
     //Insert/Update/Select/Delete using table
     {
-        WCTSampleTable* object = [[WCTSampleTable alloc] init];
+        WCTSampleTable *object = [[WCTSampleTable alloc] init];
         BOOL ret = [table insertObject:object];
     }
 }

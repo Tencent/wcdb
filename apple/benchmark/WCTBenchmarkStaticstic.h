@@ -26,7 +26,7 @@
 - (void)tick;
 - (void)stop;
 
-- (NSArray<NSNumber*>*)getElapseTimes;
+- (NSArray<NSNumber *> *)getElapseTimes;
 - (void)report;
 
 @end

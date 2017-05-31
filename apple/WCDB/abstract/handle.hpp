@@ -23,12 +23,12 @@
 
 #include <WCDB/declare.hpp>
 #include <WCDB/error.hpp>
+#include <WCDB/handle_statement.hpp>
 #include <WCDB/utility.hpp>
 #include <map>
 #include <memory>
 #include <mutex>
 #include <sqlcipher/sqlite3.h>
-#include <WCDB/handle_statement.hpp>
 #include <string>
 
 namespace WCDB {

@@ -21,22 +21,24 @@
 #import "sample_core_main.h"
 #import <WCDB/WCDB.h>
 
-void sample_core_main(NSString* baseDirectory)
+void sample_core_main(NSString *baseDirectory)
 {
-    NSString* path = [baseDirectory stringByAppendingPathComponent:@"core"];
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    
+    NSString *path = [baseDirectory stringByAppendingPathComponent:@"core"];
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+
     //set config
-    [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error& error) {
-        return handle->exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
-    } forName:@"demo" withOrder:1];
-    
+    [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error &error) {
+      return handle->exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
+    }
+                forName:@"demo"
+              withOrder:1];
+
     //run unwrapped SQL
     [database exec:WCDB::StatementPragma().pragma(WCDB::Pragma::CaseSensitiveLike, true)];
-    
+
     //get value from unwraaped SQL
-    WCTStatement* statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
-    if (statement&&statement.step) {
+    WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
+    if (statement && statement.step) {
         NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
     }
 }

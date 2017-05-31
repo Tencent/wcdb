@@ -19,50 +19,50 @@
  */
 
 #import "benchmark_normal.h"
-#import "WCTBenchmarkStaticstic.h"
 #import "WCTBenchmarkObject.h"
+#import "WCTBenchmarkStaticstic.h"
 
-void benchmark_normal(NSString* baseDirectory)
+void benchmark_normal(NSString *baseDirectory)
 {
-    NSString* className = NSStringFromClass(WCTBenchmarkObject.class);
-    NSString* path = [baseDirectory stringByAppendingPathComponent:className];
-    NSString* tableName = className; 
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    NSString *className = NSStringFromClass(WCTBenchmarkObject.class);
+    NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *tableName = className;
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
-        [database removeFilesWithError:nil];
+      [database removeFilesWithError:nil];
     }];
 
     {
-        BOOL ret = [database createTableAndIndexesOfName:tableName 
+        BOOL ret = [database createTableAndIndexesOfName:tableName
                                                withClass:WCTBenchmarkObject.class];
         assert(ret);
     }
-    
+
     int count = 100000;
     {
-        NSMutableArray* objects = [[NSMutableArray alloc] init];
+        NSMutableArray *objects = [[NSMutableArray alloc] init];
         for (int i = 0; i < count; ++i) {
-            WCTBenchmarkObject* object = [[WCTBenchmarkObject alloc] init];
+            WCTBenchmarkObject *object = [[WCTBenchmarkObject alloc] init];
             object.intValue = i;
             object.stringValue = [NSString stringWithFormat:@"%d", i];
             [objects addObject:object];
         }
-        WCTTable* table = [database getTableOfName:tableName
+        WCTTable *table = [database getTableOfName:tableName
                                          withClass:WCTBenchmarkObject.class];
-        WCTBenchmarkStaticstic* staticstic = [[WCTBenchmarkStaticstic alloc] init];
+        WCTBenchmarkStaticstic *staticstic = [[WCTBenchmarkStaticstic alloc] init];
         [staticstic start];
         BOOL ret = [table insertObjects:objects];
         [staticstic stop];
         assert(ret);
         NSLog(@"Insert %d objects cost %f ms", count, staticstic.getElapseTimes[0].doubleValue);
     }
-    
+
     {
-        WCTTable* table = [database getTableOfName:tableName
+        WCTTable *table = [database getTableOfName:tableName
                                          withClass:WCTBenchmarkObject.class];
-        WCTBenchmarkStaticstic* staticstic = [[WCTBenchmarkStaticstic alloc] init];
+        WCTBenchmarkStaticstic *staticstic = [[WCTBenchmarkStaticstic alloc] init];
         [staticstic start];
-        NSArray* objects = [table getAllObjects];
+        NSArray *objects = [table getAllObjects];
         [staticstic stop];
         NSLog(@"Select %lu objects cost %f ms", objects.count, staticstic.getElapseTimes[0].doubleValue);
     }

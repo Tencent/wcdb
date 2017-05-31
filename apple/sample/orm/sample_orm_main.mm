@@ -21,31 +21,31 @@
 #import "sample_orm_main.h"
 #import "WCTSampleORM.h"
 #import "WCTSampleORMColumnConstraint.h"
-#import "WCTSampleORMTableConstraint.h"
 #import "WCTSampleORMIndex.h"
+#import "WCTSampleORMTableConstraint.h"
 
-void sample_orm_main(NSString* baseDirectory)
+void sample_orm_main(NSString *baseDirectory)
 {
-    NSArray* clses = @[WCTSampleORM.class, 
-                       WCTSampleORMColumnConstraint.class,
-                       WCTSampleORMTableConstraint.class,
-                       WCTSampleORMIndex.class];
+    NSArray *clses = @[ WCTSampleORM.class,
+                        WCTSampleORMColumnConstraint.class,
+                        WCTSampleORMTableConstraint.class,
+                        WCTSampleORMIndex.class ];
     for (Class cls in clses) {
-        NSString* classString = NSStringFromClass(cls);
-        NSString* filename = classString;
-        NSString* tableName = classString;
-        
-        NSString* path = [baseDirectory stringByAppendingPathComponent:filename];
-        WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+        NSString *classString = NSStringFromClass(cls);
+        NSString *filename = classString;
+        NSString *tableName = classString;
+
+        NSString *path = [baseDirectory stringByAppendingPathComponent:filename];
+        WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
         [database close:^{
-            [database removeFilesWithError:nil];
+          [database removeFilesWithError:nil];
         }];
-        
+
         BOOL ret = [database createTableAndIndexesOfName:tableName withClass:cls];
         assert(ret);
-        
-        NSArray* schemas = [database getAllObjectsOnResults:{WCTMaster.name, WCTMaster.sql} fromTable:WCTMaster.TableName];
-        for (WCTMaster* table : schemas) {
+
+        NSArray *schemas = [database getAllObjectsOnResults:{WCTMaster.name, WCTMaster.sql} fromTable:WCTMaster.TableName];
+        for (WCTMaster *table : schemas) {
             NSLog(@"SQL Of %@: %@", table.name, table.sql);
         }
     }

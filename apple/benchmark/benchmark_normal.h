@@ -20,4 +20,4 @@
 
 #import <Foundation/Foundation.h>
 
-void benchmark_normal(NSString* baseDirectory);
+void benchmark_normal(NSString *baseDirectory);

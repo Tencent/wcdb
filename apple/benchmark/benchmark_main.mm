@@ -18,12 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "benchmark_normal.h"
-int main(int argc, const char * argv[]) {
+#import <Foundation/Foundation.h>
+int main(int argc, const char *argv[])
+{
 #warning TODO Perfect benchmark works
-    NSString* machPath = [NSString stringWithUTF8String:argv[0]];
-    NSString* baseDirectory = [[machPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"SampleDB"];
+    NSString *machPath = [NSString stringWithUTF8String:argv[0]];
+    NSString *baseDirectory = [[machPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"SampleDB"];
     NSLog(@"Base Directory: %@", baseDirectory);
     benchmark_normal(baseDirectory);
     return 0;

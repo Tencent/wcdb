@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
+#import "WCTSampleColumnCoding.h"
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
-#import "WCTSampleColumnCoding.h"
 
-@interface WCTSampleAdvance : NSObject<WCTTableCoding>
+@interface WCTSampleAdvance : NSObject <WCTTableCoding>
 
 @property int intValue;
-@property(retain) WCTSampleColumnCoding* columnCoding;
+@property(retain) WCTSampleColumnCoding *columnCoding;
 
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(columnCoding)

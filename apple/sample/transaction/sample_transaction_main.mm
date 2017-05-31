@@ -21,79 +21,80 @@
 #import "sample_transaction_main.h"
 #import "WCTSampleTransaction.h"
 
-void sample_transaction_main(NSString* baseDirectory)
+void sample_transaction_main(NSString *baseDirectory)
 {
-    NSString* className = NSStringFromClass(WCTSampleTransaction.class);
-    NSString* path = [baseDirectory stringByAppendingPathComponent:className];
-    NSString* tableName = className; 
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    NSString *className = NSStringFromClass(WCTSampleTransaction.class);
+    NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *tableName = className;
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
-        [database removeFilesWithError:nil];
+      [database removeFilesWithError:nil];
     }];
-    
+
     //Run auto inner create table/indexes transaction
     {
         //[createTableAndIndexesOfName:withClass:] interface will automatically run an inner transaction if it's not already in a transaction
-        BOOL ret = [database createTableAndIndexesOfName:tableName withClass:WCTSampleTransaction.class];   
+        BOOL ret = [database createTableAndIndexesOfName:tableName withClass:WCTSampleTransaction.class];
     }
-    
+
     //Run blocked transaction
     {
-        BOOL commited = [database runTransaction:^BOOL{
-            WCTSampleTransaction* object = [[WCTSampleTransaction alloc] init];
-            BOOL ret = [database insertObject:object 
-                                         into:tableName];
-            //return YES to do a commit and return NO to do a rollback
-            if (ret) {
-                return YES;
-            }
-            return NO;
-        } event:^(WCTTransactionEvent event) {
-            NSLog(@"Event %d", event);
-        }];
+        BOOL commited = [database runTransaction:^BOOL {
+          WCTSampleTransaction *object = [[WCTSampleTransaction alloc] init];
+          BOOL ret = [database insertObject:object
+                                       into:tableName];
+          //return YES to do a commit and return NO to do a rollback
+          if (ret) {
+              return YES;
+          }
+          return NO;
+        }
+            event:^(WCTTransactionEvent event) {
+              NSLog(@"Event %d", event);
+            }];
     }
-    
+
     //Run threaded transaction
     {
         //[beginTransaction], [commitTransaction], [rollbackTransaction] and all interfaces inside this transaction should run in same thread
         BOOL ret = [database beginTransaction];
-        WCTSampleTransaction* object = [[WCTSampleTransaction alloc] init];
-        ret = [database insertObject:object 
+        WCTSampleTransaction *object = [[WCTSampleTransaction alloc] init];
+        ret = [database insertObject:object
                                 into:tableName];
         if (ret) {
             ret = [database commitTransaction];
-        }else{
+        } else {
             ret = [database rollbackTransaction];
         }
     }
-    
+
     //Transaction using WCTTransaction
     {
         //You can do a transaction in different threads using WCTTransaction.
         //But it's better to run serially, or an inner thread mutex will guarantee this.
-        WCTTransaction* transaction = [database getTransaction];
+        WCTTransaction *transaction = [database getTransaction];
         BOOL ret = [transaction begin];
         dispatch_async(dispatch_queue_create("other thread", DISPATCH_QUEUE_SERIAL), ^{
-            WCTSampleTransaction* object = [[WCTSampleTransaction alloc] init];
-            BOOL ret = [transaction insertObject:object 
-                                 into:tableName];
-            if (ret) {
-                [transaction commit];
-            }else{
-                [transaction rollback];
-            }
-        });        
+          WCTSampleTransaction *object = [[WCTSampleTransaction alloc] init];
+          BOOL ret = [transaction insertObject:object
+                                          into:tableName];
+          if (ret) {
+              [transaction commit];
+          } else {
+              [transaction rollback];
+          }
+        });
     }
-    
+
     //Run auto inner batch insert transaction
     {
         //insertion will automatically run an inner transaction if it's not already in a transaction and objects is more than 1 objects
-        NSMutableArray* objects = [[NSMutableArray alloc] init];
-        WCTSampleTransaction* object1 = [[WCTSampleTransaction alloc] init];
+        NSMutableArray *objects = [[NSMutableArray alloc] init];
+        WCTSampleTransaction *object1 = [[WCTSampleTransaction alloc] init];
         [objects addObject:object1];
-        WCTSampleTransaction* object2 = [[WCTSampleTransaction alloc] init];
+        WCTSampleTransaction *object2 = [[WCTSampleTransaction alloc] init];
         [objects addObject:object2];
-        BOOL ret = [database insertObjects:objects 
+        BOOL ret = [database insertObjects:objects
                                       into:tableName];
     }
 }

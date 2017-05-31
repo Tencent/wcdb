@@ -18,21 +18,21 @@
  * limitations under the License.
  */
 
+#import "WCTSampleColumnCoding.h"
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
-#import "WCTSampleColumnCoding.h"
 
-@interface WCTSampleColumnCoding(WCDB) <WCTColumnCoding>
+@interface WCTSampleColumnCoding (WCDB) <WCTColumnCoding>
 @end
 
-@implementation WCTSampleColumnCoding(WCDB)
+@implementation WCTSampleColumnCoding (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSNumber*)value
++ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
     return [[self alloc] initWithFloat:value.floatValue];
 }
 
-- (NSNumber*)archivedWCTValue
+- (NSNumber *)archivedWCTValue
 {
     return [NSNumber numberWithFloat:self.floatValue];
 }
@@ -43,4 +43,3 @@
 }
 
 @end
-

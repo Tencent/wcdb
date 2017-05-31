@@ -22,41 +22,40 @@
 #import "WCTSampleAdvance.h"
 #import "WCTSampleAdvanceMulti.h"
 
-void sample_advance_main(NSString* baseDirectory)
+void sample_advance_main(NSString *baseDirectory)
 {
-    NSString* className = NSStringFromClass(WCTSampleAdvance.class);
-    NSString* path = [baseDirectory stringByAppendingPathComponent:className];
-    NSString* tableName = className; 
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    NSString *className = NSStringFromClass(WCTSampleAdvance.class);
+    NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *tableName = className;
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
-        [database removeFilesWithError:nil];
+      [database removeFilesWithError:nil];
     }];
 
-    
     //Using [as] to redirect selection
     {
-        WCTSampleAdvance* object = [database getOneObjectOnResults:WCTSampleAdvance.AnyProperty.count().as(WCTSampleAdvance.intValue)
+        WCTSampleAdvance *object = [database getOneObjectOnResults:WCTSampleAdvance.AnyProperty.count().as(WCTSampleAdvance.intValue)
                                                          fromTable:tableName];
         NSLog(@"Count %d", object.intValue);
     }
-    
+
     //Multi select
     {
-        NSString* tableName2 = NSStringFromClass(WCTSampleAdvanceMulti.class);
-        WCTMultiSelect* select = [[database prepareSelectMultiObjectsOnResults:{
-            WCTSampleAdvance.intValue.inTable(tableName),
-            WCTSampleAdvanceMulti.intValue.inTable(tableName2)
-        } fromTables:@[tableName, tableName2]] where:WCTSampleAdvance.intValue==WCTSampleAdvanceMulti.intValue];
-        NSArray<WCTMultiObject*>* multiObjects = select.allMultiObjects;
-        for (WCTMultiObject* multiObjects : multiObjects) {
-            WCTSampleAdvance* object1 = (WCTSampleAdvance*)[multiObjects objectForKey:tableName];
-            WCTSampleAdvanceMulti* object2 = (WCTSampleAdvanceMulti*)[multiObjects objectForKey:tableName2];
+        NSString *tableName2 = NSStringFromClass(WCTSampleAdvanceMulti.class);
+        WCTMultiSelect *select = [[database prepareSelectMultiObjectsOnResults:{
+                                                                                   WCTSampleAdvance.intValue.inTable(tableName),
+                                                                                   WCTSampleAdvanceMulti.intValue.inTable(tableName2)}
+                                                                    fromTables:@[ tableName, tableName2 ]] where:WCTSampleAdvance.intValue == WCTSampleAdvanceMulti.intValue];
+        NSArray<WCTMultiObject *> *multiObjects = select.allMultiObjects;
+        for (WCTMultiObject *multiObjects : multiObjects) {
+            WCTSampleAdvance *object1 = (WCTSampleAdvance *) [multiObjects objectForKey:tableName];
+            WCTSampleAdvanceMulti *object2 = (WCTSampleAdvanceMulti *) [multiObjects objectForKey:tableName2];
         }
     }
-    
+
     //Column coding
     {
-        WCTSampleAdvance* object = [database getOneObjectOfClass:WCTSampleAdvance.class 
+        WCTSampleAdvance *object = [database getOneObjectOfClass:WCTSampleAdvance.class
                                                        fromTable:tableName];
         float value = object.columnCoding.floatValue;
     }

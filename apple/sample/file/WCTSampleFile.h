@@ -21,10 +21,10 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface WCTSampleFile : NSObject<WCTTableCoding>
+@interface WCTSampleFile : NSObject <WCTTableCoding>
 
 @property int intValue;
-    
+
 WCDB_PROPERTY(intValue)
 
 @end

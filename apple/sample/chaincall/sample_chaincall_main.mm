@@ -21,51 +21,51 @@
 #import "sample_chaincall_main.h"
 #import "WCTSampleChainCall.h"
 
-void sample_chaincall_main(NSString* baseDirectory)
+void sample_chaincall_main(NSString *baseDirectory)
 {
-    NSString* className = NSStringFromClass(WCTSampleChainCall.class);
-    NSString* path = [baseDirectory stringByAppendingPathComponent:className];
-    NSString* tableName = className; 
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    NSString *className = NSStringFromClass(WCTSampleChainCall.class);
+    NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *tableName = className;
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
-        [database removeFilesWithError:nil];
+      [database removeFilesWithError:nil];
     }];
     BOOL ret = [database createTableAndIndexesOfName:tableName withClass:WCTSampleChainCall.class];
     assert(ret);
 
     //Insert objects
     {
-        NSMutableArray* objects = [[NSMutableArray alloc] init];
-        WCTSampleChainCall* object1 = [[WCTSampleChainCall alloc] init];
+        NSMutableArray *objects = [[NSMutableArray alloc] init];
+        WCTSampleChainCall *object1 = [[WCTSampleChainCall alloc] init];
         object1.intValue = 1;
         object1.stringValue = @"Insert objects";
         [objects addObject:object1];
-        WCTSampleChainCall* object2 = [[WCTSampleChainCall alloc] init];
+        WCTSampleChainCall *object2 = [[WCTSampleChainCall alloc] init];
         object2.intValue = 2;
         object2.stringValue = @"Insert objects";
         [objects addObject:object2];
-        WCTInsert* insert = [database prepareInsertObjectsOfClass:WCTSampleChainCall.class 
+        WCTInsert *insert = [database prepareInsertObjectsOfClass:WCTSampleChainCall.class
                                                              into:tableName];
         BOOL ret = [insert executeWithObjects:objects];
         if (!ret) {
             NSLog(@"Insert objects Error %@", insert.error);
         }
     }
-    
+
     //Select objects
     {
-        WCTSelect* select = [[[database prepareSelectObjectsOfClass:WCTSampleChainCall.class 
-                                                          fromTable:tableName] where:WCTSampleChainCall.intValue==1] limit:3];
-        NSArray* objects = select.allObjects;
+        WCTSelect *select = [[[database prepareSelectObjectsOfClass:WCTSampleChainCall.class
+                                                          fromTable:tableName] where:WCTSampleChainCall.intValue == 1] limit:3];
+        NSArray *objects = select.allObjects;
         if (!objects) {
             NSLog(@"Select objects Error %@", select.error);
         }
     }
     //Select rows
     {
-        WCTRowSelect* select = [[[database prepareSelectRowsOnResults:WCTSampleChainCall.AllProperties 
-                                                             fromTable:tableName] where:WCTSampleChainCall.intValue==1] limit:3];
-        WCTOneRow* row;
+        WCTRowSelect *select = [[[database prepareSelectRowsOnResults:WCTSampleChainCall.AllProperties
+                                                            fromTable:tableName] where:WCTSampleChainCall.intValue == 1] limit:3];
+        WCTOneRow *row;
         BOOL needBreak = YES;
         while ((row = [select nextRow])) {
             if (needBreak) {
@@ -73,22 +73,22 @@ void sample_chaincall_main(NSString* baseDirectory)
             }
         }
     }
-    
+
     //Update by object
     {
-        WCTUpdate* update = [database prepareUpdateTable:tableName
+        WCTUpdate *update = [database prepareUpdateTable:tableName
                                             onProperties:WCTSampleChainCall.stringValue];
-        WCTSampleChainCall* object = [[WCTSampleChainCall alloc] init];
+        WCTSampleChainCall *object = [[WCTSampleChainCall alloc] init];
         object.stringValue = @"Update by object";
         BOOL ret = [update executeWithObject:object];
         if (!ret) {
             NSLog(@"Update by object Error %@", update.error);
         }
     }
-    
+
     //Delete
     {
-        WCTDelete* deletion = [database prepareDeleteFromTable:tableName];
+        WCTDelete *deletion = [database prepareDeleteFromTable:tableName];
         BOOL ret = [deletion execute];
         if (!ret) {
             NSLog(@"Delete Error %@", deletion.error);

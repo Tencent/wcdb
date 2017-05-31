@@ -18,22 +18,23 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import "sample_orm_main.h"
-#import "sample_convenient_main.h"
+#import "sample_advance_main.h"
 #import "sample_chaincall_main.h"
+#import "sample_convenient_main.h"
+#import "sample_core_main.h"
 #import "sample_file_main.h"
+#import "sample_orm_main.h"
+#import "sample_repair_main.h"
 #import "sample_table_main.h"
 #import "sample_transaction_main.h"
-#import "sample_advance_main.h"
-#import "sample_repair_main.h"
-#import "sample_core_main.h"
+#import <Foundation/Foundation.h>
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char *argv[])
+{
 #warning TODO Perfect sample works
     //Sample code is only used for reading
-    NSString* machPath = [NSString stringWithUTF8String:argv[0]];
-    NSString* baseDirectory = [[machPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"SampleDB"];
+    NSString *machPath = [NSString stringWithUTF8String:argv[0]];
+    NSString *baseDirectory = [[machPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"SampleDB"];
     NSLog(@"Base Directory: %@", baseDirectory);
     sample_orm_main(baseDirectory);
     sample_convenient_main(baseDirectory);

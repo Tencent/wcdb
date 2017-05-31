@@ -8,7 +8,7 @@
 
 #import <WCDB/WCDB.h>
 
-@interface ___FILEBASENAMEASIDENTIFIER___ : NSObject<WCTTableCoding>
+@interface ___FILEBASENAMEASIDENTIFIER___ : NSObject <WCTTableCoding>
 
 /*
 @property(nonatomic, assign) int primary;

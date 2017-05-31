@@ -21,10 +21,10 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface WCTSampleORMIndex : NSObject<WCTTableCoding>
+@interface WCTSampleORMIndex : NSObject <WCTTableCoding>
 
 @property int indexProperty;
-@property(retain) NSString* multiIndexPart1;
+@property(retain) NSString *multiIndexPart1;
 @property float multiIndexPart2;
 
 WCDB_PROPERTY(indexProperty)
