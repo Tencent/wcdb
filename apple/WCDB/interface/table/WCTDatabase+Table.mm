@@ -18,20 +18,20 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+Table.h>
-#import <WCDB/WCTTable+Database.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+Table.h>
 #import <WCDB/WCTInterface+Table.h>
+#import <WCDB/WCTTable+Database.h>
 
-@implementation WCTDatabase(Table)
+@implementation WCTDatabase (Table)
 
-- (BOOL)createTableAndIndexesOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls
+- (BOOL)createTableAndIndexesOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls
 {
     WCDB::Error innerError;
     return [self createTableAndIndexesOfName:tableName withClass:cls andError:innerError];
 }
 
-- (WCTTable*)getTableOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls
+- (WCTTable *)getTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls
 {
     WCDB::Error innerError;
     if (![self isTableExists:tableName withError:innerError]) {
@@ -40,49 +40,49 @@
     return [[WCTTable alloc] initWithCore:_core andTableName:tableName andClass:cls];
 }
 
-- (BOOL)createVirtualTableOfName:(NSString*)tableName usingModule:(NSString*)moduleName withClass:(Class<WCTTableCoding>)cls
+- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class<WCTTableCoding>)cls
 {
     WCDB::Error innerError;
     return [self createVirtualTableOfName:tableName usingModule:moduleName withClass:cls andError:innerError];
 }
 
-- (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList
 {
     WCDB::Error innerError;
     return [self createTableOfName:tableName withColumnDefList:columnDefList andError:innerError];
 }
 
-- (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList andConstraintList:(const WCTTableConstraintList&)constraintList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andConstraintList:(const WCTTableConstraintList &)constraintList
 {
     WCDB::Error innerError;
     return [self createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:constraintList andError:innerError];
 }
 
-- (BOOL)isTableExists:(NSString*)tableName
+- (BOOL)isTableExists:(NSString *)tableName
 {
     WCDB::Error innerError;
     return [self isTableExists:tableName withError:innerError];
 }
 
-- (BOOL)dropTableOfName:(NSString*)tableName
+- (BOOL)dropTableOfName:(NSString *)tableName
 {
     WCDB::Error innerError;
     return [self dropTableOfName:tableName withError:innerError];
 }
 
-- (BOOL)createIndexOfName:(NSString*)indexName withIndexList:(const WCTIndexList&)indexList forTable:(NSString*)tableName
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCTIndexList &)indexList forTable:(NSString *)tableName
 {
     WCDB::Error innerError;
     return [self createIndexOfName:indexName withIndexList:indexList forTable:tableName andError:innerError];
 }
 
-- (BOOL)dropIndexOfName:(NSString*)indexName
+- (BOOL)dropIndexOfName:(NSString *)indexName
 {
     WCDB::Error innerError;
     return [self dropIndexOfName:indexName withError:innerError];
 }
 
-- (BOOL)addColumn:(const WCTColumnDef&)columnDef forTable:(NSString*)tableName
+- (BOOL)addColumn:(const WCTColumnDef &)columnDef forTable:(NSString *)tableName
 {
     WCDB::Error innerError;
     return [self addColumn:columnDef forTable:tableName withError:innerError];

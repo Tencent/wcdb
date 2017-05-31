@@ -20,16 +20,17 @@
 
 #include <WCDB/column.hpp>
 #include <WCDB/expr.hpp>
-#include <WCDB/order.hpp>
 #include <WCDB/handle.hpp>
+#include <WCDB/order.hpp>
 #include <WCDB/statement_update.hpp>
 
 namespace WCDB {
 
-StatementUpdate& StatementUpdate::update(const std::string& table, Conflict conflict)
+StatementUpdate &StatementUpdate::update(const std::string &table,
+                                         Conflict conflict)
 {
     m_description.append("UPDATE ");
-    if (conflict!=Conflict::NotSet) {
+    if (conflict != Conflict::NotSet) {
         m_description.append("OR ");
         m_description.append(ConflictName(conflict));
         m_description.append(" ");
@@ -38,37 +39,37 @@ StatementUpdate& StatementUpdate::update(const std::string& table, Conflict conf
     return *this;
 }
 
-StatementUpdate& StatementUpdate::where(const Expr& where)
+StatementUpdate &StatementUpdate::where(const Expr &where)
 {
     if (!where.isEmpty()) {
-        m_description.append(" WHERE "+where.getDescription());
+        m_description.append(" WHERE " + where.getDescription());
     }
     return *this;
 }
 
-StatementUpdate& StatementUpdate::limit(const Expr& from, const Expr& to)
+StatementUpdate &StatementUpdate::limit(const Expr &from, const Expr &to)
 {
     if (!from.isEmpty()) {
-        m_description.append(" LIMIT "+from.getDescription());
+        m_description.append(" LIMIT " + from.getDescription());
         if (!to.isEmpty()) {
-            m_description.append(","+to.getDescription());
+            m_description.append("," + to.getDescription());
         }
     }
     return *this;
 }
 
-StatementUpdate& StatementUpdate::limit(const Expr& limit)
+StatementUpdate &StatementUpdate::limit(const Expr &limit)
 {
     if (!limit.isEmpty()) {
-        m_description.append(" LIMIT "+limit.getDescription());
+        m_description.append(" LIMIT " + limit.getDescription());
     }
     return *this;
 }
 
-StatementUpdate& StatementUpdate::offset(const Expr& offset)
+StatementUpdate &StatementUpdate::offset(const Expr &offset)
 {
     if (!offset.isEmpty()) {
-        m_description.append(" OFFSET "+offset.getDescription());
+        m_description.append(" OFFSET " + offset.getDescription());
     }
     return *this;
 }
@@ -78,4 +79,4 @@ Statement::Type StatementUpdate::getStatementType() const
     return Statement::Type::Update;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

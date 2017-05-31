@@ -25,8 +25,7 @@
 
 namespace WCDB {
 
-class Pragma : public Describable
-{
+class Pragma : public Describable {
 public:
     static const Pragma ApplicationId;
     static const Pragma AutoVacuum;
@@ -92,12 +91,13 @@ public:
     static const Pragma WalAutocheckpoint;
     static const Pragma WalCheckpoint;
     static const Pragma WritableSchema;
-    
-    const std::string& getName() const;
+
+    const std::string &getName() const;
+
 protected:
-    Pragma(const char* name);
+    Pragma(const char *name);
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* pragma_hpp */

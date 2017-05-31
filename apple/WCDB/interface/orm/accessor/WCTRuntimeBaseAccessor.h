@@ -21,48 +21,49 @@
 #import <Foundation/Foundation.h>
 #import <functional>
 
-class WCTRuntimeBaseAccessor
-{
+class WCTRuntimeBaseAccessor {
 protected:
     using InstanceType = id;
-    static SEL GetGetterSelector(Class cls, const std::string& propertyName);
-    static SEL GetSetterSelector(Class cls, const std::string& propertyName);
+    static SEL GetGetterSelector(Class cls, const std::string &propertyName);
+    static SEL GetSetterSelector(Class cls, const std::string &propertyName);
     static IMP GetClassMethodImplementation(Class cls, SEL selector);
     static IMP GetInstanceMethodImplementation(Class cls, SEL selector);
-    static Class GetPropertyClass(Class cls, const std::string& propertyName);
+    static Class GetPropertyClass(Class cls, const std::string &propertyName);
 };
 
 template <typename PropertyType>
-class WCTRuntimeAccessor : public WCTRuntimeBaseAccessor
-{
+class WCTRuntimeAccessor : public WCTRuntimeBaseAccessor {
 public:
     using Setter = std::function<void(InstanceType, PropertyType)>;
     using Getter = std::function<PropertyType(InstanceType)>;
 
-    WCTRuntimeAccessor(Class cls, const std::string& propertyName)
-    : getProperty(GenerateGetter(cls, propertyName))
-    , setProperty(GenerateSetter(cls, propertyName)){
+    WCTRuntimeAccessor(Class cls, const std::string &propertyName)
+        : getProperty(GenerateGetter(cls, propertyName))
+        , setProperty(GenerateSetter(cls, propertyName))
+    {
     }
 
     const Setter setProperty;
     const Getter getProperty;
+
 protected:
-    Getter GenerateGetter(Class cls, const std::string& propertyName)
+    Getter GenerateGetter(Class cls, const std::string &propertyName)
     {
         SEL selector = GetGetterSelector(cls, propertyName);
         IMP imp = GetInstanceMethodImplementation(cls, selector);
-        return [selector, imp](InstanceType instance)->PropertyType {
-            using IMPGetter = PropertyType(*)(id, SEL);
-            return ((IMPGetter)imp)(instance, selector);
+        return [selector, imp](InstanceType instance) -> PropertyType {
+            using IMPGetter = PropertyType (*)(id, SEL);
+            return ((IMPGetter) imp)(instance, selector);
         };
     }
 
-    Setter GenerateSetter(Class cls, const std::string& propertyName) {
+    Setter GenerateSetter(Class cls, const std::string &propertyName)
+    {
         SEL selector = GetSetterSelector(cls, propertyName);
         IMP imp = GetInstanceMethodImplementation(cls, selector);
         return [selector, imp](InstanceType instance, PropertyType value) {
-            using IMPSetter = void(*)(InstanceType, SEL, PropertyType);
-            return ((IMPSetter)imp)(instance, selector, value);
+            using IMPSetter = void (*)(InstanceType, SEL, PropertyType);
+            return ((IMPSetter) imp)(instance, selector, value);
         };
     }
 };

@@ -18,25 +18,25 @@
  * limitations under the License.
  */
 
-#include <WCDB/column_index.hpp>
 #include <WCDB/column.hpp>
+#include <WCDB/column_index.hpp>
 #include <WCDB/expr.hpp>
 
 namespace WCDB {
 
-ColumnIndex::ColumnIndex(const Column& column, OrderTerm term)
-: Describable(column.getName())
+ColumnIndex::ColumnIndex(const Column &column, OrderTerm term)
+    : Describable(column.getName())
 {
-    if (term!=OrderTerm::NotSet) {
+    if (term != OrderTerm::NotSet) {
         m_description.append(" ");
         m_description.append(OrderTermName(term));
     }
 }
 
-ColumnIndex::ColumnIndex(const Expr& expr, OrderTerm term)
-: Describable(expr.getDescription())
+ColumnIndex::ColumnIndex(const Expr &expr, OrderTerm term)
+    : Describable(expr.getDescription())
 {
-    if (term!=OrderTerm::NotSet) {
+    if (term != OrderTerm::NotSet) {
         m_description.append(" ");
         m_description.append(OrderTermName(term));
     }
@@ -46,5 +46,5 @@ ColumnIndex::operator ColumnIndexList() const
 {
     return {*this};
 }
-    
-}//namespace WCDB
+
+} //namespace WCDB

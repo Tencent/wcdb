@@ -19,61 +19,79 @@
  */
 
 //Column Constraint
-#define __WCDB_PRIMARY_IMP(className, propertyName, order, autoIncrement, onConflict) \
-WCDB_IF(autoIncrement, @synthesize isAutoIncrement;) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getColumnBinding(className.propertyName)->makePrimary(order, autoIncrement, onConflict); \
-    return nullptr;\
-}(__WCDB_BINDING(className));
+#define __WCDB_PRIMARY_IMP(className, propertyName, order, autoIncrement,      \
+                           onConflict)                                         \
+    WCDB_IF(autoIncrement, @synthesize isAutoIncrement;)                       \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding.getColumnBinding(className.propertyName)                       \
+            ->makePrimary(order, autoIncrement, onConflict);                   \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
-#define __WCDB_NOT_NULL_IMP(className, propertyName) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getColumnBinding(className.propertyName)->makeNotNull(); \
-    return nullptr;\
-}(__WCDB_BINDING(className));
+#define __WCDB_NOT_NULL_IMP(className, propertyName)                           \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding.getColumnBinding(className.propertyName)->makeNotNull();       \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
-#define __WCDB_UNIQUE_IMP(className, propertyName) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getColumnBinding(className.propertyName)->makeUnique(); \
-    return nullptr;\
-}(__WCDB_BINDING(className));
+#define __WCDB_UNIQUE_IMP(className, propertyName)                             \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding.getColumnBinding(className.propertyName)->makeUnique();        \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
 //Table Constraint
-#define __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, order) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getOrCreateConstraintBinding<WCTConstraintPrimaryKeyBinding>(constraintName)->addPrimaryKey(className.propertyName.index(order)); \
-    return nullptr; \
-}(__WCDB_BINDING(className));
+#define __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName,      \
+                                 order)                                        \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding                                                                \
+            .getOrCreateConstraintBinding<WCTConstraintPrimaryKeyBinding>(     \
+                constraintName)                                                \
+            ->addPrimaryKey(className.propertyName.index(order));              \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
 #define __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, conflict) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getOrCreateConstraintBinding<WCTConstraintPrimaryKeyBinding>(constraintName)->setConflict(conflict); \
-    return nullptr; \
-}(__WCDB_BINDING(className));
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding                                                                \
+            .getOrCreateConstraintBinding<WCTConstraintPrimaryKeyBinding>(     \
+                constraintName)                                                \
+            ->setConflict(conflict);                                           \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
-#define __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, order) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getOrCreateConstraintBinding<WCTConstraintUniqueBinding>(constraintName)->addUnique(className.propertyName.index(order)); \
-    return nullptr; \
-}(__WCDB_BINDING(className));
+#define __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName,       \
+                                order)                                         \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding                                                                \
+            .getOrCreateConstraintBinding<WCTConstraintUniqueBinding>(         \
+                constraintName)                                                \
+            ->addUnique(className.propertyName.index(order));                  \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
-#define __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, conflict) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getOrCreateConstraintBinding<WCTConstraintUniqueBinding>(constraintName)->setConflict(conflict); \
-    return nullptr; \
-}(__WCDB_BINDING(className));
+#define __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, conflict)  \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding                                                                \
+            .getOrCreateConstraintBinding<WCTConstraintUniqueBinding>(         \
+                constraintName)                                                \
+            ->setConflict(conflict);                                           \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
-#define __WCDB_CHECK_IMP(className, cosntraintName, expr) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding){ \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getOrCreateConstraintBinding<WCTConstraintCheckBinding>(constraintName)->makeCheck(expr); \
-    return nullptr; \
-}(__WCDB_BINDING(className));
-
+#define __WCDB_CHECK_IMP(className, cosntraintName, expr)                      \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding                                                                \
+            .getOrCreateConstraintBinding<WCTConstraintCheckBinding>(          \
+                constraintName)                                                \
+            ->makeCheck(expr);                                                 \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));

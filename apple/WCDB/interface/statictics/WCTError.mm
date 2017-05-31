@@ -22,55 +22,54 @@
 
 @implementation WCTError
 
-+ (instancetype)errorWithWCDBError:(const WCDB::Error&)error
++ (instancetype)errorWithWCDBError:(const WCDB::Error &)error
 {
     return [[WCTError alloc] initWithWCDBError:error];
 }
 
-- (instancetype)initWithWCDBError:(const WCDB::Error&)error
+- (instancetype)initWithWCDBError:(const WCDB::Error &)error
 {
-    NSMutableDictionary* infos = [NSMutableDictionary dictionary];
-    for (const auto& iter : error.getInfos()) {
+    NSMutableDictionary *infos = [NSMutableDictionary dictionary];
+    for (const auto &iter : error.getInfos()) {
         switch (iter.second.getType()) {
             case WCDB::ErrorValue::Type::Int:
-                [infos setObject:@(iter.second.getIntValue()) forKey:@((int)iter.first)];
+                [infos setObject:@(iter.second.getIntValue()) forKey:@((int) iter.first)];
                 break;
             case WCDB::ErrorValue::Type::String: {
-                NSString* value;
-                if (iter.first!=WCDB::Error::Key::Path) {
+                NSString *value;
+                if (iter.first != WCDB::Error::Key::Path) {
                     value = @(iter.second.getStringValue().c_str());
-                }else {
+                } else {
                     value = [@(iter.second.getStringValue().c_str()) stringByAbbreviatingWithTildeInPath];
                 }
-                [infos setObject:value forKey:@((int)iter.first)];
-            }
-                break;
+                [infos setObject:value forKey:@((int) iter.first)];
+            } break;
         }
     }
     if (self = [super initWithDomain:@"WCDB" code:error.getCode() userInfo:infos]) {
-        _type = (WCTErrorType)error.getType();
+        _type = (WCTErrorType) error.getType();
     }
     return self;
 }
 
 - (BOOL)isOK
 {
-    return _type==0;
+    return _type == 0;
 }
 
-- (NSString*)description
+- (NSString *)description
 {
-    NSMutableString* desc = [[NSMutableString alloc] init];
-    [desc appendFormat:@"Code:%ld, ", (long)self.code];
-    [desc appendFormat:@"Type:%s, ", WCDB::Error::GetTypeName((WCDB::Error::Type)_type)];
+    NSMutableString *desc = [[NSMutableString alloc] init];
+    [desc appendFormat:@"Code:%ld, ", (long) self.code];
+    [desc appendFormat:@"Type:%s, ", WCDB::Error::GetTypeName((WCDB::Error::Type) _type)];
     __block BOOL quote = NO;
-    [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSNumber* key, id obj, BOOL * _Nonnull unused) {
-        if (quote) {
-            [desc appendString:@", "];
-        }else {
-            quote = YES;
-        }
-        [desc appendFormat:@"%s:%@", WCDB::Error::GetKeyName((WCDB::Error::Key)key.intValue), obj];
+    [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *_Nonnull unused) {
+      if (quote) {
+          [desc appendString:@", "];
+      } else {
+          quote = YES;
+      }
+      [desc appendFormat:@"%s:%@", WCDB::Error::GetKeyName((WCDB::Error::Key) key.intValue), obj];
     }];
     return desc;
 }

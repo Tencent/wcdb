@@ -22,8 +22,8 @@
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/core.h>
 
-@interface WCTDatabase() {
+@interface WCTDatabase () {
 @protected
-    WCDB::Database* _database;
+    WCDB::Database *_database;
 }
 @end

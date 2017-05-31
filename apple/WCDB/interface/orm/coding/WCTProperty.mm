@@ -18,25 +18,25 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTExpr.h>
+#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 
 WCTProperty::WCTProperty()
-: WCDB::Column("")
-, WCTPropertyBase(nil, nullptr)
+    : WCDB::Column("")
+    , WCTPropertyBase(nil, nullptr)
 {
 }
 
-WCTProperty::WCTProperty(const char* name, Class cls, const std::shared_ptr<WCTColumnBinding>& columnBinding)
-: WCDB::Column(name)
-, WCTPropertyBase(cls, columnBinding)
+WCTProperty::WCTProperty(const char *name, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
+    : WCDB::Column(name)
+    , WCTPropertyBase(cls, columnBinding)
 {
 }
 
-WCTProperty::WCTProperty(const WCDB::Column& column, Class cls, const std::shared_ptr<WCTColumnBinding>& columnBinding)
-: WCDB::Column(column)
-, WCTPropertyBase(cls, columnBinding)
+WCTProperty::WCTProperty(const WCDB::Column &column, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
+    : WCDB::Column(column)
+    , WCTPropertyBase(cls, columnBinding)
 {
 }
 
@@ -50,19 +50,19 @@ WCTProperty::operator WCTPropertyList() const
     return {*this};
 }
 
-WCTProperty WCTProperty::inTable(NSString* table) const
+WCTProperty WCTProperty::inTable(NSString *table) const
 {
     return WCTProperty(WCDB::Column::inTable(table.UTF8String), m_cls, m_columnBinding);
 }
 
 WCTOrderBy WCTProperty::order(WCTOrderTerm term) const
 {
-    return WCTOrderBy(*this, (WCDB::OrderTerm)term);
+    return WCTOrderBy(*this, (WCDB::OrderTerm) term);
 }
 
 WCTIndex WCTProperty::index(WCTOrderTerm term) const
 {
-    return WCDB::ColumnIndex(*this, (WCDB::OrderTerm)term);
+    return WCDB::ColumnIndex(*this, (WCDB::OrderTerm) term);
 }
 
 WCTExpr WCTProperty::avg(bool distinct) const
@@ -80,7 +80,7 @@ WCTExpr WCTProperty::groupConcat(bool distinct) const
     return WCTExpr(*this).groupConcat(distinct);
 }
 
-WCTExpr WCTProperty::groupConcat(NSString* seperator, bool distinct) const
+WCTExpr WCTProperty::groupConcat(NSString *seperator, bool distinct) const
 {
     return WCTExpr(*this).groupConcat(seperator, distinct);
 }
@@ -107,238 +107,238 @@ WCTExpr WCTProperty::total(bool distinct) const
 
 WCTColumnDef WCTProperty::def(WCTColumnType type, bool isPrimary, WCTOrderTerm term, bool autoIncrement) const
 {
-    WCDB::ColumnDef columnDef(*this, (WCDB::ColumnType)type);
+    WCDB::ColumnDef columnDef(*this, (WCDB::ColumnType) type);
     if (isPrimary) {
-        columnDef.makePrimary((WCDB::OrderTerm)term, autoIncrement);
+        columnDef.makePrimary((WCDB::OrderTerm) term, autoIncrement);
     }
     return columnDef;
 }
 
-WCTExpr WCTProperty::operator !() const
+WCTExpr WCTProperty::operator!() const
 {
     return !WCTExpr(*this);
 }
 
-WCTExpr WCTProperty::operator +() const
+WCTExpr WCTProperty::operator+() const
 {
     return +WCTExpr(*this);
 }
 
-WCTExpr WCTProperty::operator -() const
+WCTExpr WCTProperty::operator-() const
 {
     return -WCTExpr(*this);
 }
 
-WCTExpr WCTProperty::operator ||(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator||(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)||operand;
+    return WCTExpr(*this) || operand;
 }
 
-WCTExpr WCTProperty::operator &&(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator&&(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)&&operand;
+    return WCTExpr(*this) && operand;
 }
 
-WCTExpr WCTProperty::operator *(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator*(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)*operand;
+    return WCTExpr(*this) * operand;
 }
 
-WCTExpr WCTProperty::operator /(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator/(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)/operand;
+    return WCTExpr(*this) / operand;
 }
 
-WCTExpr WCTProperty::operator %(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator%(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)%operand;
+    return WCTExpr(*this) % operand;
 }
 
-WCTExpr WCTProperty::operator +(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator+(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)+operand;
+    return WCTExpr(*this) + operand;
 }
 
-WCTExpr WCTProperty::operator -(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator-(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)-operand;
+    return WCTExpr(*this) - operand;
 }
 
-WCTExpr WCTProperty::operator <<(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator<<(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)<<operand;
+    return WCTExpr(*this) << operand;
 }
 
-WCTExpr WCTProperty::operator >>(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator>>(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)>>operand;
+    return WCTExpr(*this) >> operand;
 }
 
-WCTExpr WCTProperty::operator &(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator&(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)&operand;
+    return WCTExpr(*this) & operand;
 }
 
-WCTExpr WCTProperty::operator |(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator|(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)|operand;
+    return WCTExpr(*this) | operand;
 }
 
-WCTExpr WCTProperty::operator <(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator<(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)<operand;
+    return WCTExpr(*this) < operand;
 }
 
-WCTExpr WCTProperty::operator <=(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator<=(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)<=operand;
+    return WCTExpr(*this) <= operand;
 }
 
-WCTExpr WCTProperty::operator >(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator>(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)>operand;
+    return WCTExpr(*this) > operand;
 }
 
-WCTExpr WCTProperty::operator >=(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator>=(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)>=operand;
+    return WCTExpr(*this) >= operand;
 }
 
-WCTExpr WCTProperty::operator ==(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator==(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)==operand;
+    return WCTExpr(*this) == operand;
 }
 
-WCTExpr WCTProperty::operator !=(const WCTExpr& operand) const
+WCTExpr WCTProperty::operator!=(const WCTExpr &operand) const
 {
-    return WCTExpr(*this)!=operand;
+    return WCTExpr(*this) != operand;
 }
 
-WCTExpr WCTProperty::in(const WCTExprList& exprList) const
+WCTExpr WCTProperty::in(const WCTExprList &exprList) const
 {
     return WCTExpr(*this).in(exprList);
 }
 
-WCTExpr WCTProperty::notIn(const WCTExprList& exprList) const
+WCTExpr WCTProperty::notIn(const WCTExprList &exprList) const
 {
     return WCTExpr(*this).notIn(exprList);
 }
 
-WCTExpr WCTProperty::in(const WCDB::StatementSelectList& statementSelectList) const
+WCTExpr WCTProperty::in(const WCDB::StatementSelectList &statementSelectList) const
 {
     return WCTExpr(*this).in(statementSelectList);
 }
 
-WCTExpr WCTProperty::notIn(const WCDB::StatementSelectList& statementSelectList) const
+WCTExpr WCTProperty::notIn(const WCDB::StatementSelectList &statementSelectList) const
 {
     return WCTExpr(*this).notIn(statementSelectList);
 }
 
-WCTExpr WCTProperty::in(NSString* table) const
+WCTExpr WCTProperty::in(NSString *table) const
 {
     return WCTExpr(*this).in(table);
 }
 
-WCTExpr WCTProperty::notIn(NSString* table) const
+WCTExpr WCTProperty::notIn(NSString *table) const
 {
     return WCTExpr(*this).notIn(table);
 }
 
-WCTExpr WCTProperty::in(NSArray<WCTValue*>* valueList) const
+WCTExpr WCTProperty::in(NSArray<WCTValue *> *valueList) const
 {
     return WCTExpr(*this).in(valueList);
 }
-WCTExpr WCTProperty::notIn(NSArray<WCTValue*>* valueList) const
+WCTExpr WCTProperty::notIn(NSArray<WCTValue *> *valueList) const
 {
     return WCTExpr(*this).notIn(valueList);
 }
 
-WCTExpr WCTProperty::between(const WCTExpr& left, const WCTExpr& right) const
+WCTExpr WCTProperty::between(const WCTExpr &left, const WCTExpr &right) const
 {
     return WCTExpr(*this).between(left, right);
 }
 
-WCTExpr WCTProperty::notBetween(const WCTExpr& left, const WCTExpr& right) const
+WCTExpr WCTProperty::notBetween(const WCTExpr &left, const WCTExpr &right) const
 {
     return WCTExpr(*this).notBetween(left, right);
 }
 
-WCTExpr WCTProperty::like(const WCTExpr& operand) const
+WCTExpr WCTProperty::like(const WCTExpr &operand) const
 {
     return WCTExpr(*this).like(operand);
 }
 
-WCTExpr WCTProperty::glob(const WCTExpr& operand) const
+WCTExpr WCTProperty::glob(const WCTExpr &operand) const
 {
     return WCTExpr(*this).glob(operand);
 }
 
-WCTExpr WCTProperty::match(const WCTExpr& operand) const
+WCTExpr WCTProperty::match(const WCTExpr &operand) const
 {
     return WCTExpr(*this).match(operand);
 }
 
-WCTExpr WCTProperty::regexp(const WCTExpr& operand) const
+WCTExpr WCTProperty::regexp(const WCTExpr &operand) const
 {
     return WCTExpr(*this).regexp(operand);
 }
 
-WCTExpr WCTProperty::notLike(const WCTExpr& operand) const
+WCTExpr WCTProperty::notLike(const WCTExpr &operand) const
 {
     return WCTExpr(*this).notLike(operand);
 }
 
-WCTExpr WCTProperty::notGlob(const WCTExpr& operand) const
+WCTExpr WCTProperty::notGlob(const WCTExpr &operand) const
 {
     return WCTExpr(*this).notGlob(operand);
 }
 
-WCTExpr WCTProperty::notMatch(const WCTExpr& operand) const
+WCTExpr WCTProperty::notMatch(const WCTExpr &operand) const
 {
     return WCTExpr(*this).notMatch(operand);
 }
 
-WCTExpr WCTProperty::notRegexp(const WCTExpr& operand) const
+WCTExpr WCTProperty::notRegexp(const WCTExpr &operand) const
 {
     return WCTExpr(*this).notRegexp(operand);
 }
 
-WCTExpr WCTProperty::like(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::like(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).like(operand, escape);
 }
 
-WCTExpr WCTProperty::glob(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::glob(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).glob(operand, escape);
 }
 
-WCTExpr WCTProperty::match(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::match(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).match(operand, escape);
 }
 
-WCTExpr WCTProperty::regexp(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::regexp(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).regexp(operand, escape);
 }
 
-WCTExpr WCTProperty::notLike(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::notLike(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).notLike(operand, escape);
 }
 
-WCTExpr WCTProperty::notGlob(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::notGlob(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).notGlob(operand, escape);
 }
 
-WCTExpr WCTProperty::notMatch(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::notMatch(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).notMatch(operand, escape);
 }
 
-WCTExpr WCTProperty::notRegexp(const WCTExpr& operand, const WCTExpr& escape) const
+WCTExpr WCTProperty::notRegexp(const WCTExpr &operand, const WCTExpr &escape) const
 {
     return WCTExpr(*this).notRegexp(operand, escape);
 }
@@ -353,17 +353,17 @@ WCTExpr WCTProperty::isNotNull() const
     return WCTExpr(*this).isNotNull();
 }
 
-WCTExpr WCTProperty::is(const WCTExpr& operand) const
+WCTExpr WCTProperty::is(const WCTExpr &operand) const
 {
     return WCTExpr(*this).is(operand);
 }
 
-WCTExpr WCTProperty::isNot(const WCTExpr& operand) const
+WCTExpr WCTProperty::isNot(const WCTExpr &operand) const
 {
     return WCTExpr(*this).isNot(operand);
 }
 
-NSString* WCTProperty::getDescription() const
+NSString *WCTProperty::getDescription() const
 {
     return [NSString stringWithUTF8String:WCDB::Column::getDescription().c_str()];
 }

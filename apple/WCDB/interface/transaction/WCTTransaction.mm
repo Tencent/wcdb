@@ -18,20 +18,20 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTransaction.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTTransaction+Private.h>
+#import <WCDB/WCTTransaction.h>
 
 @implementation WCTTransaction
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
 {
     if (self = [super initWithCore:core]) {
-        if (_core->getType()==WCDB::CoreType::Database) {
-            _core = ((WCDB::Database*)_core.get())->getTransaction(_error);
+        if (_core->getType() == WCDB::CoreType::Database) {
+            _core = ((WCDB::Database *) _core.get())->getTransaction(_error);
         }
         if (_core) {
-            _transaction = (WCDB::Transaction*)_core.get();
+            _transaction = (WCDB::Transaction *) _core.get();
         }
     }
     return self;
@@ -39,9 +39,10 @@
 
 - (BOOL)begin
 {
-    @synchronized (self) {
+    @synchronized(self)
+    {
         BOOL result = _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
-        if (result&&_ticker) {
+        if (result && _ticker) {
             _ticker->tick();
         }
         return result;
@@ -50,9 +51,10 @@
 
 - (BOOL)commit
 {
-    @synchronized (self) {
+    @synchronized(self)
+    {
         BOOL result = _transaction->commit(_error);
-        if (result&&_ticker) {
+        if (result && _ticker) {
             _ticker->pause();
         }
         return result;
@@ -61,7 +63,8 @@
 
 - (BOOL)rollback
 {
-    @synchronized (self) {
+    @synchronized(self)
+    {
         BOOL result = _transaction->rollback(_error);
         if (_ticker) {
             _ticker->pause();
@@ -77,17 +80,19 @@
 
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
 {
-    @synchronized (self) {
+    @synchronized(self)
+    {
         WCDB::Database::TransactionEvent event = nullptr;
         if (onTransactionStateChanged) {
-            event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType){
-                onTransactionStateChanged((WCTTransactionEvent)eventType);
+            event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType) {
+                onTransactionStateChanged((WCTTransactionEvent) eventType);
             };
         }
         WCDB::Error innerError;
-        return _transaction->runTransaction([inTransaction](WCDB::Error&)->bool {
+        return _transaction->runTransaction([inTransaction](WCDB::Error &) -> bool {
             return inTransaction();
-        }, event, innerError);
+        },
+                                            event, innerError);
     }
 }
 

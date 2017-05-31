@@ -22,7 +22,8 @@
 
 namespace WCDB {
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::create(const std::string& table, bool ifNotExists)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::create(const std::string &table, bool ifNotExists)
 {
     m_description.append("CREATE VIRTUAL TABLE ");
     if (ifNotExists) {
@@ -32,9 +33,10 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::create(const std::stri
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::usingModule(const std::string &moduleName)
 {
-    m_description.append(" USING "+moduleName);
+    m_description.append(" USING " + moduleName);
     return *this;
 }
 
@@ -42,5 +44,5 @@ Statement::Type StatementCreateVirtualTable::getStatementType() const
 {
     return Statement::Type::CreateVirtualTable;
 }
-    
-}//namespace WCDB 
+
+} //namespace WCDB

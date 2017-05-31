@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-const char* ColumnTypeName(ColumnType type)
+const char *ColumnTypeName(ColumnType type)
 {
     switch (type) {
         case ColumnType::Integer32:
@@ -41,4 +41,4 @@ const char* ColumnTypeName(ColumnType type)
     return ColumnTypeInfo<ColumnType::Null>::name;
 }
 
-}//namespace WCDB
+} //namespace WCDB

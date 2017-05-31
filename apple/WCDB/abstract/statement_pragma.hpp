@@ -25,18 +25,17 @@
 
 namespace WCDB {
 
-class StatementPragma : public Statement
-{
-public:    
-    StatementPragma& pragma(const Pragma& pragma);
-    StatementPragma& pragma(const Pragma& pragma, int value);
-    StatementPragma& pragma(const Pragma& pragma, float value);
-    StatementPragma& pragma(const Pragma& pragma, const char* value);
-    StatementPragma& pragma(const Pragma& pragma, const std::string& value);
-    
+class StatementPragma : public Statement {
+public:
+    StatementPragma &pragma(const Pragma &pragma);
+    StatementPragma &pragma(const Pragma &pragma, int value);
+    StatementPragma &pragma(const Pragma &pragma, float value);
+    StatementPragma &pragma(const Pragma &pragma, const char *value);
+    StatementPragma &pragma(const Pragma &pragma, const std::string &value);
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* statement_pragma_hpp */

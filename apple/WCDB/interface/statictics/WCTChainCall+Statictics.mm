@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Statictics.h>
 #import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTChainCall+Statictics.h>
 #import <WCDB/WCTError+Private.h>
 
-@implementation WCTChainCall(Statictics)
+@implementation WCTChainCall (Statictics)
 
 - (void)setStaticticsEnabled:(BOOL)enabled
 {
     if (!enabled) {
         _ticker = nullptr;
-    }else if (!_ticker) {
+    } else if (!_ticker) {
         _ticker.reset(new WCDB::Ticker);
     }
 }
@@ -41,7 +41,7 @@
     return 0;
 }
 
-- (WCTError*)error
+- (WCTError *)error
 {
     if (_error.isOK()) {
         return nil;

@@ -22,16 +22,16 @@
 #define config_hpp
 
 #include <WCDB/abstract.h>
-#include <functional>
-#include <memory>
-#include <WCDB/rwlock.hpp>
-#include <list>
-#include <WCDB/utility.hpp>
 #include <WCDB/error.hpp>
+#include <WCDB/rwlock.hpp>
+#include <WCDB/utility.hpp>
+#include <functional>
+#include <list>
+#include <memory>
 
 namespace WCDB {
 
-typedef std::function<bool(std::shared_ptr<Handle>&, Error&)> Config;
+typedef std::function<bool(std::shared_ptr<Handle> &, Error &)> Config;
 typedef struct ConfigWrap ConfigWrap;
 
 /*
@@ -60,38 +60,40 @@ typedef struct ConfigWrap ConfigWrap;
  *      c1!=c2
  */
 
-class Configs
-{
+class Configs {
 public:
-    typedef int Order;//Small numbers in front
-    void setConfig(const std::string& name, const Config& config, Configs::Order order);
-    void setConfig(const std::string& name, const Config& config);
+    typedef int Order; //Small numbers in front
+    void setConfig(const std::string &name,
+                   const Config &config,
+                   Configs::Order order);
+    void setConfig(const std::string &name, const Config &config);
 
-    bool invoke(std::shared_ptr<Handle>& handle, Error& error);
+    bool invoke(std::shared_ptr<Handle> &handle, Error &error);
 
-    friend bool operator==(const Configs& left, const Configs& right);
-    friend bool operator!=(const Configs& left, const Configs& right);
+    friend bool operator==(const Configs &left, const Configs &right);
+    friend bool operator!=(const Configs &left, const Configs &right);
 
     Configs();
     Configs(std::initializer_list<const ConfigWrap> configs);
+
 protected:
     typedef std::list<ConfigWrap> ConfigList;
 
-    std::shared_ptr<ConfigList> m_configs;//copy-on-write
+    std::shared_ptr<ConfigList> m_configs; //copy-on-write
 };
 
-struct ConfigWrap
-{
+struct ConfigWrap {
     const std::string name;
     const Config invoke;
     const Configs::Order order;
-    ConfigWrap(const std::string& theName, const Config& theConfig, Configs::Order theOrder)
-    : name(theName)
-    , invoke(theConfig)
-    , order(theOrder){
+    ConfigWrap(const std::string &theName,
+               const Config &theConfig,
+               Configs::Order theOrder)
+        : name(theName), invoke(theConfig), order(theOrder)
+    {
     }
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* config_hpp */

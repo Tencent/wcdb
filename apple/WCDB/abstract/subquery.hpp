@@ -21,23 +21,22 @@
 #ifndef subquery_hpp
 #define subquery_hpp
 
-#include <WCDB/describable.hpp>
 #include <WCDB/declare.hpp>
+#include <WCDB/describable.hpp>
 
 namespace WCDB {
 
-class Subquery : public Describable
-{
+class Subquery : public Describable {
 public:
-    Subquery(const char* table);
-    Subquery(const std::string& table);
-    Subquery(const JoinClause& joinClause);
-    Subquery(const StatementSelect& statementSelect);
-    
-    Subquery& as(const std::string& alias);
+    Subquery(const char *table);
+    Subquery(const std::string &table);
+    Subquery(const JoinClause &joinClause);
+    Subquery(const StatementSelect &statementSelect);
+
+    Subquery &as(const std::string &alias);
     operator SubqueryList() const;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* subquery_hpp */

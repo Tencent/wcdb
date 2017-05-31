@@ -18,75 +18,75 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTInterface+ChainCall.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTUpdate.h>
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTRowSelect.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTInsert+Private.h>
-#import <WCDB/WCTSelect+Private.h>
-#import <WCDB/WCTUpdate+Private.h>
-#import <WCDB/WCTDelete+Private.h>
-#import <WCDB/WCTRowSelect+Private.h>
-#import <WCDB/WCTMultiSelect+Private.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTCoding.h>
+#import <WCDB/WCTDelete+Private.h>
+#import <WCDB/WCTDelete.h>
+#import <WCDB/WCTInsert+Private.h>
+#import <WCDB/WCTInsert.h>
+#import <WCDB/WCTInterface+ChainCall.h>
+#import <WCDB/WCTMultiSelect+Private.h>
+#import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTResult.h>
+#import <WCDB/WCTRowSelect+Private.h>
+#import <WCDB/WCTRowSelect.h>
+#import <WCDB/WCTSelect+Private.h>
+#import <WCDB/WCTSelect.h>
+#import <WCDB/WCTUpdate+Private.h>
+#import <WCDB/WCTUpdate.h>
 
-@implementation WCTInterface(ChainCall)
+@implementation WCTInterface (ChainCall)
 
-- (WCTInsert*)prepareInsertObjectsOfClass:(Class)cls into:(NSString*)tableName
+- (WCTInsert *)prepareInsertObjectsOfClass:(Class)cls into:(NSString *)tableName
 {
     return [[WCTInsert alloc] initWithCore:_core andClass:cls andTableName:tableName andReplaceFlag:NO];
 }
 
-- (WCTInsert*)prepareInsertOrReplaceObjectsOfClass:(Class)cls into:(NSString*)tableName
+- (WCTInsert *)prepareInsertOrReplaceObjectsOfClass:(Class)cls into:(NSString *)tableName
 {
     return [[WCTInsert alloc] initWithCore:_core andClass:cls andTableName:tableName andReplaceFlag:YES];
 }
 
-- (WCTInsert*)prepareInsertObjectsOnProperties:(const WCTPropertyList&)propertyList into:(NSString*)tableName
+- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
 {
     return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:NO];
 }
 
-- (WCTInsert*)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList&)propertyList into:(NSString*)tableName
+- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
 {
     return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:YES];
 }
 
-- (WCTDelete*)prepareDeleteFromTable:(NSString*)tableName
+- (WCTDelete *)prepareDeleteFromTable:(NSString *)tableName
 {
     return [[WCTDelete alloc] initWithCore:_core andTableName:tableName];
 }
 
-- (WCTUpdate*)prepareUpdateTable:(NSString*)tableName onProperties:(const WCTPropertyList&)propertyList
+- (WCTUpdate *)prepareUpdateTable:(NSString *)tableName onProperties:(const WCTPropertyList &)propertyList
 {
     return [[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:tableName];
 }
 
-- (WCTSelect*)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString*)tableName
+- (WCTSelect *)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString *)tableName
 {
     return [[WCTSelect alloc] initWithCore:_core andResults:[cls AllProperties] fromTable:tableName];
 }
 
-- (WCTSelect*)prepareSelectObjectsOnResults:(const WCTResultList&)resultList fromTable:(NSString*)tableName
+- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
 {
     return [[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:tableName];
 }
 
-- (WCTRowSelect*)prepareSelectRowsOnResults:(const WCTResultList&)resultList fromTable:(NSString*)tableName
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
 {
     return [[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:tableName];
 }
 
-- (WCTRowSelect*)prepareSelectRowsOnResults:(const WCTResultList&)resultList fromTables:(NSArray<NSString*>*)tableNames
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
 {
     return [[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTables:tableNames];
 }
 
-- (WCTMultiSelect*)prepareSelectMultiObjectsOnResults:(const WCTResultList&)resultList fromTables:(NSArray<NSString*>*)tableNames
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
 {
     return [[WCTMultiSelect alloc] initWithCore:_core andResults:resultList fromTables:tableNames];
 }

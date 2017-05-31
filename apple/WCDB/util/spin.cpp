@@ -24,7 +24,8 @@ namespace WCDB {
 
 void Spin::lock()
 {
-    while (locked.test_and_set(std::memory_order_acquire));
+    while (locked.test_and_set(std::memory_order_acquire))
+        ;
 }
 
 void Spin::unlock()
@@ -32,4 +33,4 @@ void Spin::unlock()
     locked.clear(std::memory_order_release);
 }
 
-}//namespace WCDB 
+} //namespace WCDB

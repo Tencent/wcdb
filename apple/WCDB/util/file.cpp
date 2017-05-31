@@ -19,150 +19,134 @@
  */
 
 #include <WCDB/file.hpp>
-#include <unistd.h>
-#include <sys/stat.h>
 #include <WCDB/path.hpp>
 #include <WCDB/utility.hpp>
 #include <errno.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace WCDB {
 
 namespace File {
 
 //Basic
-size_t getFileSize(const std::string& path, Error& error)
+size_t getFileSize(const std::string &path, Error &error)
 {
     struct stat temp;
-    if (lstat(path.c_str(), &temp)==0) {
+    if (lstat(path.c_str(), &temp) == 0) {
         error.reset();
-        return (size_t)temp.st_size;
-    }else if (errno==ENOENT) {
+        return (size_t) temp.st_size;
+    } else if (errno == ENOENT) {
         error.reset();
         return 0;
     }
-    Error::ReportSystemCall(WCDB::Error::SystemCallOperation::Lstat,
-                            path,
-                            errno,
-                            strerror(errno),
-                            &error);
+    Error::ReportSystemCall(WCDB::Error::SystemCallOperation::Lstat, path,
+                            errno, strerror(errno), &error);
     return 0;
 }
 
-bool isExists(const std::string& path, Error& error)
+bool isExists(const std::string &path, Error &error)
 {
-    if (access(path.c_str(), F_OK)==0) {
+    if (access(path.c_str(), F_OK) == 0) {
         error.reset();
         return true;
-    }else if (errno==ENOENT) {
+    } else if (errno == ENOENT) {
         error.reset();
         return false;
     }
-    Error::ReportSystemCall(Error::SystemCallOperation::Access,
-                            path,
-                            errno, 
-                            strerror(errno),
-                            &error);
+    Error::ReportSystemCall(Error::SystemCallOperation::Access, path, errno,
+                            strerror(errno), &error);
     return false;
 }
 
-bool createHardLink(const std::string& from, const std::string& to, Error& error)
+bool createHardLink(const std::string &from,
+                    const std::string &to,
+                    Error &error)
 {
-    if (link(from.c_str(), to.c_str())==0) {
+    if (link(from.c_str(), to.c_str()) == 0) {
         error.reset();
         return true;
     }
-    Error::ReportSystemCall(Error::SystemCallOperation::Link,
-                            from,
-                            errno,
-                            strerror(errno),
-                            &error);
+    Error::ReportSystemCall(Error::SystemCallOperation::Link, from, errno,
+                            strerror(errno), &error);
     return false;
 }
 
-bool removeHardLink(const std::string& path, Error& error)
+bool removeHardLink(const std::string &path, Error &error)
 {
-    if (unlink(path.c_str())==0
-        ||errno==ENOENT) {
+    if (unlink(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    Error::ReportSystemCall(Error::SystemCallOperation::Unlink,
-                            path,
-                            errno,
-                            strerror(errno),
-                            &error);
+    Error::ReportSystemCall(Error::SystemCallOperation::Unlink, path, errno,
+                            strerror(errno), &error);
     return false;
 }
 
-bool removeFile(const std::string& path, Error& error)
+bool removeFile(const std::string &path, Error &error)
 {
-    if (remove(path.c_str())==0
-        ||errno==ENOENT) {
+    if (remove(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    Error::ReportSystemCall(Error::SystemCallOperation::Remove, 
-                            path, 
-                            errno, 
-                            strerror(errno),
-                            &error);
+    Error::ReportSystemCall(Error::SystemCallOperation::Remove, path, errno,
+                            strerror(errno), &error);
     return false;
 }
 
-bool createDirectory(const std::string& path, Error& error)
+bool createDirectory(const std::string &path, Error &error)
 {
-    if (mkdir(path.c_str(), 0755)==0) {
+    if (mkdir(path.c_str(), 0755) == 0) {
         return true;
     }
-    Error::ReportSystemCall(WCDB::Error::SystemCallOperation::Mkdir,
-                            path,
-                            errno,
-                            strerror(errno),
-                            &error);
+    Error::ReportSystemCall(WCDB::Error::SystemCallOperation::Mkdir, path,
+                            errno, strerror(errno), &error);
     return false;
 }
 
 //Combination
-size_t getFilesSize(const std::list<std::string>& paths, Error& error)
+size_t getFilesSize(const std::list<std::string> &paths, Error &error)
 {
     size_t size = 0;
-    for (const auto& path : paths) {
+    for (const auto &path : paths) {
         size += File::getFileSize(path, error);
-        if(!error.isOK()) {
+        if (!error.isOK()) {
             return 0;
         }
     }
     return size;
 }
 
-bool moveFiles(const std::list<std::string>& paths, const std::string& directory, Error& error)
+bool moveFiles(const std::list<std::string> &paths,
+               const std::string &directory,
+               Error &error)
 {
     bool result = true;
     std::list<std::string> recovers;
-    for (const auto& path : paths) {
+    for (const auto &path : paths) {
         if (File::isExists(path, error)) {
             const std::string fileName = Path::getFileName(path);
             std::string newPath = Path::addComponent(directory, fileName);
-            if (!File::removeFile(newPath, error)
-                ||!File::createHardLink(path, newPath, error)) {
+            if (!File::removeFile(newPath, error) ||
+                !File::createHardLink(path, newPath, error)) {
                 result = false;
                 break;
             }
             recovers.push_back(newPath);
         }
     }
-    Error innerError;//This error do not need to be passed to the outside
+    Error innerError; //This error do not need to be passed to the outside
     if (result) {
         File::removeFiles(paths, innerError);
-    }else {
-        for (const auto& recover : recovers) {
+    } else {
+        for (const auto &recover : recovers) {
             File::removeHardLink(recover.c_str(), innerError);
         }
     }
     return result;
 }
 
-bool removeFiles(const std::list<std::string>& paths, Error& error)
+bool removeFiles(const std::list<std::string> &paths, Error &error)
 {
-    for (const auto& path : paths) {
+    for (const auto &path : paths) {
         if (!File::removeFile(path, error)) {
             return false;
         }
@@ -170,18 +154,18 @@ bool removeFiles(const std::list<std::string>& paths, Error& error)
     return true;
 }
 
-bool createDirectoryWithIntermediateDirectories(const std::string& path, Error& error)
+bool createDirectoryWithIntermediateDirectories(const std::string &path,
+                                                Error &error)
 {
-    if (!isExists(path, error)
-        &&
-        (!error.isOK()
-         ||!createDirectoryWithIntermediateDirectories(Path::getBaseName(path), error)
-         ||!createDirectory(path, error))) {
+    if (!isExists(path, error) && (!error.isOK() ||
+                                   !createDirectoryWithIntermediateDirectories(
+                                       Path::getBaseName(path), error) ||
+                                   !createDirectory(path, error))) {
         return false;
     }
     return true;
 }
-    
-}//namespace File
 
-}//namespace WCDB
+} //namespace File
+
+} //namespace WCDB

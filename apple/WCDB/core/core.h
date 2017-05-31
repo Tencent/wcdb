@@ -21,10 +21,10 @@
 #ifndef core_h
 #define core_h
 
+#include <WCDB/config.hpp>
+#include <WCDB/core_base.hpp>
 #include <WCDB/database.hpp>
 #include <WCDB/statement_recyclable.hpp>
 #include <WCDB/transaction.hpp>
-#include <WCDB/core_base.hpp>
-#include <WCDB/config.hpp>
 
 #endif /* core_h */

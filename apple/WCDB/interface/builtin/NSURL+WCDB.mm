@@ -23,17 +23,17 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSURL(WCDB) <WCTColumnCoding>
+@interface NSURL (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSURL(WCDB)
+@implementation NSURL (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString*)value
++ (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return value?[NSKeyedUnarchiver unarchiveObjectWithData:self]:nil;
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:self] : nil;
 }
 
-- (NSData*)archivedWCTValue
+- (NSData *)archivedWCTValue
 {
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }

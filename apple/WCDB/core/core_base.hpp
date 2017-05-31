@@ -21,9 +21,9 @@
 #ifndef core_base_hpp
 #define core_base_hpp
 
-#include <WCDB/statement_recyclable.hpp>
-#include <WCDB/handle_pool.hpp>
 #include <WCDB/config.hpp>
+#include <WCDB/handle_pool.hpp>
+#include <WCDB/statement_recyclable.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
@@ -33,28 +33,28 @@ class Transaction;
 
 typedef int WCTTag;
 
-enum class CoreType : int{
+enum class CoreType : int {
     None,
     Transaction,
     Database,
 };
 
-class CoreBase
-{
-public:    
-    const std::string& getPath() const;
+class CoreBase {
+public:
+    const std::string &getPath() const;
 
     CoreType getType() const;
 
     Tag getTag() const;
 
     //Handle Protocol
-    virtual RecyclableStatement prepare(const Statement& statement, Error& error) = 0;
-    virtual bool exec(const Statement& statement, Error& error) = 0;
-    virtual bool isTableExists(const std::string& tableName, Error& error) = 0;
+    virtual RecyclableStatement prepare(const Statement &statement,
+                                        Error &error) = 0;
+    virtual bool exec(const Statement &statement, Error &error) = 0;
+    virtual bool isTableExists(const std::string &tableName, Error &error) = 0;
 
     //Transaction Protocol
-    typedef std::function<bool(Error&)> TransactionBlock;
+    typedef std::function<bool(Error &)> TransactionBlock;
     enum class TransactionEventType {
         BeginFailed = 0,
         CommitFailed = 1,
@@ -62,24 +62,32 @@ public:
         RollbackFailed = 3,
     };
     typedef std::function<void(TransactionEventType)> TransactionEvent;
-    bool runTransaction(TransactionBlock transaction, TransactionEvent event, Error& error);
+    bool runTransaction(TransactionBlock transaction,
+                        TransactionEvent event,
+                        Error &error);
 
-    virtual bool begin(StatementTransaction::Mode mode, Error& error) = 0;
-    virtual bool commit(Error& error) = 0;
-    virtual bool rollback(Error& error) = 0;
-    virtual bool runEmbeddedTransaction(TransactionBlock transaction, Error& error) = 0;
+    virtual bool begin(StatementTransaction::Mode mode, Error &error) = 0;
+    virtual bool commit(Error &error) = 0;
+    virtual bool rollback(Error &error) = 0;
+    virtual bool runEmbeddedTransaction(TransactionBlock transaction,
+                                        Error &error) = 0;
+
 protected:
-    RecyclableStatement prepare(RecyclableHandle& handle, const Statement& statement, Error& error);
-    bool exec(RecyclableHandle& handle, const Statement& statement, Error& error);
-    bool isTableExists(RecyclableHandle& handle, const std::string& tableName, Error& error);
-    
-    CoreBase(const RecyclableHandlePool& pool, CoreType type);
+    RecyclableStatement
+    prepare(RecyclableHandle &handle, const Statement &statement, Error &error);
+    bool
+    exec(RecyclableHandle &handle, const Statement &statement, Error &error);
+    bool isTableExists(RecyclableHandle &handle,
+                       const std::string &tableName,
+                       Error &error);
+
+    CoreBase(const RecyclableHandlePool &pool, CoreType type);
 
     const CoreType m_type;
-    
+
     RecyclableHandlePool m_pool;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* core_base_hpp */

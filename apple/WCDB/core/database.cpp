@@ -19,21 +19,22 @@
  */
 
 #include <WCDB/database.hpp>
-#include <WCDB/path.hpp>
-#include <WCDB/file.hpp>
 #include <WCDB/error.hpp>
+#include <WCDB/file.hpp>
+#include <WCDB/path.hpp>
 
 namespace WCDB {
 
-Database::Database(const std::string& thePath)
-: CoreBase(HandlePool::GetPool(thePath, Database::defaultConfigs), CoreType::Database)
+Database::Database(const std::string &thePath)
+    : CoreBase(HandlePool::GetPool(thePath, Database::defaultConfigs),
+               CoreType::Database)
 {
 }
 
 bool Database::canOpen()
 {
     Error innerError;
-    return !m_pool->isDrained()||m_pool->fillOne(innerError);
+    return !m_pool->isDrained() || m_pool->fillOne(innerError);
 }
 
 void Database::close(std::function<void(void)> onClosed)
@@ -76,4 +77,4 @@ void Database::setTag(Tag tag)
     m_pool->tag = tag;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

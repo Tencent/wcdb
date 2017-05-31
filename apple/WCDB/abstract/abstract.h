@@ -29,12 +29,12 @@
 #include <WCDB/column_index.hpp>
 #include <WCDB/column_result.hpp>
 #include <WCDB/column_type.hpp>
+#include <WCDB/constraint_table.hpp>
 #include <WCDB/expr.hpp>
+#include <WCDB/module_argument.hpp>
 #include <WCDB/order.hpp>
 #include <WCDB/pragma.hpp>
 #include <WCDB/subquery.hpp>
-#include <WCDB/constraint_table.hpp>
-#include <WCDB/module_argument.hpp>
 
 #include <WCDB/handle_statement.hpp>
 
@@ -44,6 +44,7 @@
 #include <WCDB/statement_alter_table.hpp>
 #include <WCDB/statement_create_index.hpp>
 #include <WCDB/statement_create_table.hpp>
+#include <WCDB/statement_create_virtual_table.hpp>
 #include <WCDB/statement_delete.hpp>
 #include <WCDB/statement_drop_index.hpp>
 #include <WCDB/statement_drop_table.hpp>
@@ -52,6 +53,5 @@
 #include <WCDB/statement_select.hpp>
 #include <WCDB/statement_transaction.hpp>
 #include <WCDB/statement_update.hpp>
-#include <WCDB/statement_create_virtual_table.hpp>
 
 #endif /* abstract_h */

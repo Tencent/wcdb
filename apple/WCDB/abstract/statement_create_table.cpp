@@ -19,13 +19,14 @@
  */
 
 #include <WCDB/column_def.hpp>
+#include <WCDB/constraint_table.hpp>
 #include <WCDB/statement_create_table.hpp>
 #include <WCDB/statement_select.hpp>
-#include <WCDB/constraint_table.hpp>
 
 namespace WCDB {
 
-StatementCreateTable& StatementCreateTable::create(const std::string& table, bool ifNotExists)
+StatementCreateTable &StatementCreateTable::create(const std::string &table,
+                                                   bool ifNotExists)
 {
     m_description.append("CREATE TABLE ");
     if (ifNotExists) {
@@ -35,9 +36,10 @@ StatementCreateTable& StatementCreateTable::create(const std::string& table, boo
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::as(const StatementSelect& statementSelect)
+StatementCreateTable &
+StatementCreateTable::as(const StatementSelect &statementSelect)
 {
-    m_description.append(" AS "+statementSelect.getDescription());
+    m_description.append(" AS " + statementSelect.getDescription());
     return *this;
 }
 
@@ -46,4 +48,4 @@ Statement::Type StatementCreateTable::getStatementType() const
     return Statement::Type::CreateTable;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

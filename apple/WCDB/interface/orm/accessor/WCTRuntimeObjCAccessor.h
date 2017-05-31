@@ -23,24 +23,30 @@
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
 
-class WCTRuntimeObjCAccessor : public WCTRuntimeAccessor<id>, public WCTObjCAccessor
-{
+class WCTRuntimeObjCAccessor : public WCTRuntimeAccessor<id>,
+                               public WCTObjCAccessor {
 protected:
     using InstanceType = WCTObjCAccessor::InstanceType;
-    using PropertyType = NSObject*;//NSObject<WCTColumnCoding>*
+    using PropertyType = NSObject *; //NSObject<WCTColumnCoding>*
     using PropertyGetter = WCTRuntimeAccessor<id>::Getter;
     using PropertySetter = WCTRuntimeAccessor<id>::Setter;
     using ValueGetter = WCTObjCAccessor::Getter;
     using ValueSetter = WCTObjCAccessor::Setter;
+
 public:
-    WCTRuntimeObjCAccessor(Class instanceClass, const std::string& propertyName);
+    WCTRuntimeObjCAccessor(Class instanceClass,
+                           const std::string &propertyName);
+
 protected:
-    ValueGetter generateValueGetter(Class instanceClass, const std::string& propertyName);
-    ValueSetter generateValueSetter(Class instanceClass, const std::string& propertyName);
+    ValueGetter generateValueGetter(Class instanceClass,
+                                    const std::string &propertyName);
+    ValueSetter generateValueSetter(Class instanceClass,
+                                    const std::string &propertyName);
 
     virtual WCTColumnType getColumnType() const override;
 
-    WCTColumnType GetColumnType(Class instanceClass, const std::string& propertyName);
+    WCTColumnType GetColumnType(Class instanceClass,
+                                const std::string &propertyName);
 
     const WCTColumnType m_columnType;
 };

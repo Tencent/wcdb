@@ -23,17 +23,17 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSDate(WCDB) <WCTColumnCoding>
+@interface NSDate (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSDate(WCDB)
+@implementation NSDate (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSNumber*)value
++ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return value?[NSDate dateWithTimeIntervalSince1970:value.longLongValue]:nil;
+    return value ? [NSDate dateWithTimeIntervalSince1970:value.longLongValue] : nil;
 }
 
-- (NSNumber*)archivedWCTValue
+- (NSNumber *)archivedWCTValue
 {
     return [NSNumber numberWithLongLong:self.timeIntervalSince1970];
 }

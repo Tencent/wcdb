@@ -22,33 +22,36 @@
 #define transaction_hpp
 
 #include <WCDB/abstract.h>
-#include <WCDB/recyclable.hpp>
-#include <WCDB/statement_recyclable.hpp>
 #include <WCDB/core_base.hpp>
 #include <WCDB/error.hpp>
+#include <WCDB/recyclable.hpp>
+#include <WCDB/statement_recyclable.hpp>
 
 namespace WCDB {
 
 class StatementHandle;
 class Statement;
 
-class Transaction : public CoreBase
-{
+class Transaction : public CoreBase {
 public:
-    RecyclableStatement prepare(const Statement& statement, Error& error) override;
-    bool exec(const Statement& statement, Error& error) override;
-    bool isTableExists(const std::string& tableName, Error& error) override;
+    RecyclableStatement prepare(const Statement &statement,
+                                Error &error) override;
+    bool exec(const Statement &statement, Error &error) override;
+    bool isTableExists(const std::string &tableName, Error &error) override;
 
-    bool begin(StatementTransaction::Mode mode, Error& error) override;
-    bool commit(Error& error) override;
-    bool rollback(Error& error) override;
-    bool runEmbeddedTransaction(TransactionBlock transaction, WCDB::Error& error) override;
+    bool begin(StatementTransaction::Mode mode, Error &error) override;
+    bool commit(Error &error) override;
+    bool rollback(Error &error) override;
+    bool runEmbeddedTransaction(TransactionBlock transaction,
+                                WCDB::Error &error) override;
+
 protected:
     Transaction() = delete;
-    Transaction(const Transaction&) = delete;
-    Transaction& operator = (const Transaction&) = delete;
+    Transaction(const Transaction &) = delete;
+    Transaction &operator=(const Transaction &) = delete;
 
-    Transaction(const RecyclableHandlePool& pool, const RecyclableHandle& handle);
+    Transaction(const RecyclableHandlePool &pool,
+                const RecyclableHandle &handle);
 
     RecyclableHandle m_handle;
     bool m_isInTransaction;
@@ -57,6 +60,6 @@ protected:
     friend class Database;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* transaction_hpp */

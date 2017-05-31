@@ -23,105 +23,136 @@
 
 #include <WCDB/column_type.hpp>
 #include <WCDB/describable.hpp>
-#include <mutex>
+#include <WCDB/error.hpp>
 #include <WCDB/extern_sqlite.hpp>
 #include <WCDB/handle.hpp>
-#include <WCDB/error.hpp>
+#include <mutex>
 
 namespace WCDB {
 
-class StatementHandle
-{
+class StatementHandle {
 public:
     bool step();
 
     bool isOK() const;
-    const Error& getError() const;
-    
+    const Error &getError() const;
+
     //bind, index begin with 1
     void resetBinding();
 
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isInteger32, void>::type bind(typename ColumnTypeInfo<T>::CType value, int index) {
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isInteger32, void>::type
+    bind(typename ColumnTypeInfo<T>::CType value, int index)
+    {
         sqlite3_bind_int(m_stmt, index, value);
     };
-    
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isInteger64, void>::type bind(typename ColumnTypeInfo<T>::CType value, int index) {
+
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isInteger64, void>::type
+    bind(typename ColumnTypeInfo<T>::CType value, int index)
+    {
         sqlite3_bind_int64(m_stmt, index, value);
     };
 
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isFloat, void>::type bind(typename ColumnTypeInfo<T>::CType value, int index) {
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isFloat, void>::type
+    bind(typename ColumnTypeInfo<T>::CType value, int index)
+    {
         sqlite3_bind_double(m_stmt, index, value);
     };
-    
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isText, void>::type bind(typename ColumnTypeInfo<T>::CType value, int index) {
+
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isText, void>::type
+    bind(typename ColumnTypeInfo<T>::CType value, int index)
+    {
         sqlite3_bind_text(m_stmt, index, value, -1, SQLITE_TRANSIENT);
     };
 
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isBLOB, void>::type bind(typename ColumnTypeInfo<T>::CType value, int size, int index) {
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isBLOB, void>::type
+    bind(typename ColumnTypeInfo<T>::CType value, int size, int index)
+    {
         sqlite3_bind_blob(m_stmt, index, value, size, SQLITE_TRANSIENT);
     };
 
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isNull, void>::type bind(int index) {
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isNull, void>::type
+    bind(int index)
+    {
         sqlite3_bind_null(m_stmt, index);
     };
 
-
     //get value, index begin with 0
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isInteger32, typename ColumnTypeInfo<T>::CType>::type getValue(int index) {
-        return (typename ColumnTypeInfo<T>::CType)sqlite3_column_int(m_stmt, index);
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isInteger32,
+                            typename ColumnTypeInfo<T>::CType>::type
+    getValue(int index)
+    {
+        return (typename ColumnTypeInfo<T>::CType) sqlite3_column_int(m_stmt,
+                                                                      index);
     };
-    
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isInteger64, typename ColumnTypeInfo<T>::CType>::type getValue(int index) {
-        return (typename ColumnTypeInfo<T>::CType)sqlite3_column_int64(m_stmt, index);
+
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isInteger64,
+                            typename ColumnTypeInfo<T>::CType>::type
+    getValue(int index)
+    {
+        return (typename ColumnTypeInfo<T>::CType) sqlite3_column_int64(m_stmt,
+                                                                        index);
     };
-    
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isFloat, typename ColumnTypeInfo<T>::CType>::type getValue(int index) {
-        return (typename ColumnTypeInfo<T>::CType)sqlite3_column_double(m_stmt, index);
+
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isFloat,
+                            typename ColumnTypeInfo<T>::CType>::type
+    getValue(int index)
+    {
+        return (typename ColumnTypeInfo<T>::CType) sqlite3_column_double(m_stmt,
+                                                                         index);
     }
-    
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isText, typename ColumnTypeInfo<T>::CType>::type getValue(int index) {
-        return (typename ColumnTypeInfo<T>::CType)sqlite3_column_text(m_stmt, index);
+
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isText,
+                            typename ColumnTypeInfo<T>::CType>::type
+    getValue(int index)
+    {
+        return (typename ColumnTypeInfo<T>::CType) sqlite3_column_text(m_stmt,
+                                                                       index);
     }
-    
-    template<ColumnType T>
-    typename std::enable_if<ColumnTypeInfo<T>::isBLOB, typename ColumnTypeInfo<T>::CType>::type getValue(int index, int& size) {
+
+    template <ColumnType T>
+    typename std::enable_if<ColumnTypeInfo<T>::isBLOB,
+                            typename ColumnTypeInfo<T>::CType>::type
+    getValue(int index, int &size)
+    {
         size = sqlite3_column_bytes(m_stmt, index);
-        return (typename ColumnTypeInfo<T>::CType)sqlite3_column_blob(m_stmt, index);
+        return (typename ColumnTypeInfo<T>::CType) sqlite3_column_blob(m_stmt,
+                                                                       index);
     }
-    
+
     ColumnType getType(int index);
-       
+
     int getColumnCount();
-    const char* getColumnName(int index);
-    const char* getColumnTableName(int index);
+    const char *getColumnName(int index);
+    const char *getColumnTableName(int index);
 
     long long getLastInsertedRowID();
 
     void finalize();
-    
-    ~StatementHandle();
-protected:
-    StatementHandle(sqlite3_stmt* stmt, const Handle& handle);
-    const StatementHandle& operator=(const StatementHandle& other) = delete;
-    StatementHandle(const StatementHandle& other) = delete;
 
-    const Handle& m_handle;
+    ~StatementHandle();
+
+protected:
+    StatementHandle(sqlite3_stmt *stmt, const Handle &handle);
+    const StatementHandle &operator=(const StatementHandle &other) = delete;
+    StatementHandle(const StatementHandle &other) = delete;
+
+    const Handle &m_handle;
     Error m_error;
-    sqlite3_stmt* m_stmt;
-    
+    sqlite3_stmt *m_stmt;
+
     friend class Handle;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* handle_statement_hpp */

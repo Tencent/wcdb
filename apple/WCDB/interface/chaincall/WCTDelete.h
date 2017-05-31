@@ -32,28 +32,28 @@
  @param expr expr
  @return self
  */
-- (instancetype)where:(const WCTCondition&)expr;
+- (instancetype)where:(const WCTCondition &)expr;
 
 /**
  @brief WINQ interface for SQL.
  @param orderList order list
  @return self
  */
-- (instancetype)orderBy:(const WCTOrderByList&)orderList;
+- (instancetype)orderBy:(const WCTOrderByList &)orderList;
 
 /**
  @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
-- (instancetype)limit:(const WCTLimit&)limit;
+- (instancetype)limit:(const WCTLimit &)limit;
 
 /**
  @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
-- (instancetype)offset:(const WCTOffset&)offset;
+- (instancetype)offset:(const WCTOffset &)offset;
 
 /**
  @brief Execute the delete SQL.

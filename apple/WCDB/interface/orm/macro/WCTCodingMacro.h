@@ -18,117 +18,117 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTPropertyMacro.h>
-#import <WCDB/WCTIndexMacro.h>
 #import <WCDB/WCTConstraintMacro.h>
+#import <WCDB/WCTIndexMacro.h>
 #import <WCDB/WCTMacroHelper.h>
+#import <WCDB/WCTPropertyMacro.h>
 #import <WCDB/macro.hpp>
 
 #define __WCDB_BINDING(className) _s_##className##_binding
 #define __WCDB_PROPERTIES(className) _s_##className##_properties
 
-#define WCDB_IMPLEMENTATION(className) \
-@synthesize lastInsertedRowID; \
-static WCTBinding __WCDB_BINDING(className)(className.class); \
-static WCTPropertyList __WCDB_PROPERTIES(className); \
-+ (const WCTBinding*)objectRelationalMappingForWCDB \
-{ \
-    return &__WCDB_BINDING(className); \
-} \
-+ (const WCTPropertyList&)AllProperties \
-{ \
-    return __WCDB_PROPERTIES(className); \
-}\
-+ (const WCTAnyProperty&)AnyProperty \
-{ \
-    static const WCTAnyProperty s_anyProperty(className.class); \
-    return s_anyProperty; \
-}
+#define WCDB_IMPLEMENTATION(className)                              \
+    @synthesize lastInsertedRowID;                                  \
+    static WCTBinding __WCDB_BINDING(className)(className.class);   \
+    static WCTPropertyList __WCDB_PROPERTIES(className);            \
+    +(const WCTBinding *) objectRelationalMappingForWCDB            \
+    {                                                               \
+        return &__WCDB_BINDING(className);                          \
+    }                                                               \
+    +(const WCTPropertyList &) AllProperties                        \
+    {                                                               \
+        return __WCDB_PROPERTIES(className);                        \
+    }                                                               \
+    +(const WCTAnyProperty &) AnyProperty                           \
+    {                                                               \
+        static const WCTAnyProperty s_anyProperty(className.class); \
+        return s_anyProperty;                                       \
+    }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) \
-__WCDB_PROPERTY_IMP(propertyName)
+    __WCDB_PROPERTY_IMP(propertyName)
 
 //Synthesize - implement column
 #define WCDB_SYNTHESIZE(className, propertyName) \
-__WCDB_SYNTHESIZE_IMP(className, propertyName, WCDB_STRINGIFY(propertyName))
+    __WCDB_SYNTHESIZE_IMP(className, propertyName, WCDB_STRINGIFY(propertyName))
 
 #define WCDB_SYNTHESIZE_COLUMN(className, propertyName, columnName) \
-__WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)
+    __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)
 
 #define WCDB_SYNTHESIZE_DEFAULT(className, propertyName, defaultValue) \
-__WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, WCDB_STRINGIFY(propertyName), defaultValue)
+    __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, WCDB_STRINGIFY(propertyName), defaultValue)
 
 #define WCDB_SYNTHESIZE_COLUMN_DEFAULT(className, propertyName, columnName, defaultValue) \
-__WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName, defaultValue)
+    __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName, defaultValue)
 
 //Constraint
 //Column Constraint
 #define WCDB_PRIMARY(className, propertyName) \
-__WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedNotSet, false, WCTConflictNotSet)
+    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedNotSet, false, WCTConflictNotSet)
 
 #define WCDB_PRIMARY_ASC(className, propertyName) \
-__WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedAscending, false, WCTConflictNotSet)
+    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedAscending, false, WCTConflictNotSet)
 
 #define WCDB_PRIMARY_DESC(className, propertyName) \
-__WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedDescending, false, WCTConflictNotSet)
+    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedDescending, false, WCTConflictNotSet)
 
 #define WCDB_PRIMARY_AUTO_INCREMENT(className, propertyName) \
-__WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedNotSet, true, WCTConflictNotSet)
+    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedNotSet, true, WCTConflictNotSet)
 
 #define WCDB_PRIMARY_ASC_AUTO_INCREMENT(className, propertyName) \
-__WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedAscending, true, WCTConflictNotSet)
+    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedAscending, true, WCTConflictNotSet)
 
 #define WCDB_PRIMARY_DESC_AUTO_INCREMENT(className, propertyName) \
-__WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedDescending, true, WCTConflictNotSet)
+    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedDescending, true, WCTConflictNotSet)
 
 #define WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement, onConflict) \
-__WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement, onConflict)
+    __WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement, onConflict)
 
 #define WCDB_NOT_NULL(className, propertyName) \
-__WCDB_NOT_NULL_IMP(className, propertyName)
+    __WCDB_NOT_NULL_IMP(className, propertyName)
 
 #define WCDB_UNIQUE(className, propertyName) \
-__WCDB_UNIQUE_IMP(className, propertyName)
+    __WCDB_UNIQUE_IMP(className, propertyName)
 
 //Table Constraint
 #define WCDB_MULTI_PRIMARY(className, constraintName, propertyName) \
-__WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, WCTOrderedNotSet)
+    __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, WCTOrderedNotSet)
 
 #define WCDB_MULTI_PRIMARY_ASC(className, constraintName, propertyName) \
-__WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, WCTOrderedAscending)
+    __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, WCTOrderedAscending)
 
 #define WCDB_MULTI_PRIMARY_DESC(className, constraintName, propertyName) \
-__WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, WCTOrderedDescending)
+    __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, WCTOrderedDescending)
 
 #define WCDB_MULTI_PRIMARY_CONFLICT(className, constraintName, onConflict) \
-__WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, onConflict)
+    __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, onConflict)
 
 #define WCDB_MULTI_UNIQUE(className, constraintName, propertyName) \
-__WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, WCTOrderedNotSet)
+    __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, WCTOrderedNotSet)
 
 #define WCDB_MULTI_UNIQUE_ASC(className, constraintName, propertyName) \
-__WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, WCTOrderedAscending)
+    __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, WCTOrderedAscending)
 
 #define WCDB_MULTI_UNIQUE_DESC(className, constraintName, propertyName) \
-__WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, WCTOrderedDescending)
+    __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, WCTOrderedDescending)
 
 #define WCDB_MULTI_UNIQUE_CONFLICT(className, constraintName, onConflict) \
-__WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, onConflict)
+    __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, onConflict)
 
 #define WCDB_CHECK(className, constraintName, check) \
-__WCDB_CHECK_IMP(className, constraintName, check)
+    __WCDB_CHECK_IMP(className, constraintName, check)
 
 //Index
 #define WCDB_INDEX(className, indexSubfixName, propertyName) \
-__WCDB_INDEX_IMP(className, indexSubfixName, propertyName, WCTOrderedNotSet)
+    __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, WCTOrderedNotSet)
 
 #define WCDB_INDEX_ASC(className, indexSubfixName, propertyName) \
-__WCDB_INDEX_IMP(className, indexSubfixName, propertyName, WCTOrderedAscending)
+    __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, WCTOrderedAscending)
 
 #define WCDB_INDEX_DESC(className, indexSubfixName, propertyName) \
-__WCDB_INDEX_IMP(className, indexSubfixName, propertyName, WCTOrderedDescending)
+    __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, WCTOrderedDescending)
 
 //Virtual Table Argument
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(className, left, right) \
-__WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)

@@ -25,14 +25,13 @@
 
 namespace WCDB {
 
-namespace Path
-{
-    std::string addExtention(const std::string& base, const std::string& extention);
-    std::string addComponent(const std::string& base, const std::string& component);
-    std::string getFileName(const std::string& base);
-    std::string getBaseName(const std::string& base);
-}//namespace Path
+namespace Path {
+std::string addExtention(const std::string &base, const std::string &extention);
+std::string addComponent(const std::string &base, const std::string &component);
+std::string getFileName(const std::string &base);
+std::string getBaseName(const std::string &base);
+} //namespace Path
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* path_hpp */

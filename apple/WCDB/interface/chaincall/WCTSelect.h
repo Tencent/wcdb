@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTSelectBase.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTSelectBase.h>
 
 /**
  Not Thread-safe
@@ -37,13 +37,13 @@
  
  @return The real type of WCTObject depends on your selection and ORM.
  */
-- (id/* WCTObject* */)nextObject;
+- (id /* WCTObject* */)nextObject;
 
 /**
  @brief Get all selected objects.
  @return The NSArray collection of WCTObject.
          The real type of WCTObject depends on your selection and ORM.
  */
-- (NSArray/* <WCTObject*> */*)allObjects;
+- (NSArray /* <WCTObject*> */ *)allObjects;
 
 @end

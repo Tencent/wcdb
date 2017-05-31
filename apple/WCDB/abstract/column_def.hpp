@@ -23,40 +23,45 @@
 
 #include <WCDB/column.hpp>
 #include <WCDB/column_type.hpp>
+#include <WCDB/declare.hpp>
 #include <WCDB/describable.hpp>
 #include <WCDB/order_term.hpp>
-#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
-class ColumnDef : public Describable
-{
+class ColumnDef : public Describable {
 public:
-    ColumnDef(const Column& column, ColumnType type);
+    ColumnDef(const Column &column, ColumnType type);
 
-    ColumnDef& makePrimary(OrderTerm term = OrderTerm::NotSet, bool autoIncrement = false, Conflict conflict = Conflict::NotSet);
+    ColumnDef &makePrimary(OrderTerm term = OrderTerm::NotSet,
+                           bool autoIncrement = false,
+                           Conflict conflict = Conflict::NotSet);
 
-    ColumnDef& makeDefault(const Expr& expr);
+    ColumnDef &makeDefault(const Expr &expr);
 
     template <typename T>
-    typename std::enable_if<std::is_arithmetic<T>::value, ColumnDef&>::type makeDefault(const T& value) {
-        m_description.append(" DEFAULT "+std::to_string(value));
+    typename std::enable_if<std::is_arithmetic<T>::value, ColumnDef &>::type
+    makeDefault(const T &value)
+    {
+        m_description.append(" DEFAULT " + std::to_string(value));
         return *this;
     }
 
-    ColumnDef& makeDefault(const char* value);
+    ColumnDef &makeDefault(const char *value);
 
-    ColumnDef& makeDefault(const std::string& value);
+    ColumnDef &makeDefault(const std::string &value);
 
-    ColumnDef& makeDefault(const std::nullptr_t value);
+    ColumnDef &makeDefault(const std::nullptr_t value);
 
-    ColumnDef& makeDefault(const typename ColumnTypeInfo<ColumnType::BLOB>::CType& value, int size);
+    ColumnDef &
+    makeDefault(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
+                int size);
 
-    ColumnDef& makeNotNull();
+    ColumnDef &makeNotNull();
 
-    ColumnDef& makeUnique();
+    ColumnDef &makeUnique();
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* column_def_hpp */

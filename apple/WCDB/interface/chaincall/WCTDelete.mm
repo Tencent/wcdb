@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/in_case_lock_guard.hpp>
+#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDelete.h>
 #import <WCDB/WCTExpr.h>
+#import <WCDB/in_case_lock_guard.hpp>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andTableName:(NSString*)tableName
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
         _statement.deleteFrom(tableName.UTF8String);
@@ -36,25 +36,25 @@
     return self;
 }
 
-- (instancetype)where:(const WCTCondition&)expr
+- (instancetype)where:(const WCTCondition &)expr
 {
     _statement.where(expr);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList&)orderList
+- (instancetype)orderBy:(const WCTOrderByList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit&)limit
+- (instancetype)limit:(const WCTLimit &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset&)offset
+- (instancetype)offset:(const WCTOffset &)offset
 {
     _statement.offset(offset);
     return self;

@@ -19,33 +19,36 @@
  */
 
 #include <WCDB/handle_pool.hpp>
-#include <unordered_map>
 #include <WCDB/thread_local.hpp>
 #include <thread>
+#include <unordered_map>
 
 namespace WCDB {
 
-std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>> HandlePool::s_pools;
+std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
+    HandlePool::s_pools;
 std::mutex HandlePool::s_mutex;
-const int HandlePool::s_hardwareConcurrency = std::thread::hardware_concurrency();
+const int HandlePool::s_hardwareConcurrency =
+    std::thread::hardware_concurrency();
 
-RecyclableHandlePool HandlePool::GetPool(const std::string& path, const Configs& defaultConfigs)
+RecyclableHandlePool HandlePool::GetPool(const std::string &path,
+                                         const Configs &defaultConfigs)
 {
     std::shared_ptr<HandlePool> pool = nullptr;
     std::lock_guard<std::mutex> lockGuard(s_mutex);
     auto iter = s_pools.find(path);
-    if (iter==s_pools.end()) {
+    if (iter == s_pools.end()) {
         pool.reset(new HandlePool(path, defaultConfigs));
         s_pools.insert({path, {pool, 1}});
-    }else {
+    } else {
         pool = iter->second.first;
         ++iter->second.second;
     }
     //Can I store iter of unordered_map for later use?
-    return RecyclableHandlePool(pool, [](std::shared_ptr<HandlePool>& pool){
+    return RecyclableHandlePool(pool, [](std::shared_ptr<HandlePool> &pool) {
         std::lock_guard<std::mutex> lockGuard(s_mutex);
-        const auto& iter = s_pools.find(pool->path);
-        if (--iter->second.second==0) {
+        const auto &iter = s_pools.find(pool->path);
+        if (--iter->second.second == 0) {
             s_pools.erase(iter);
         }
     });
@@ -56,21 +59,21 @@ void HandlePool::PurgeFreeHandlesInAllPool()
     std::list<std::shared_ptr<HandlePool>> handlePools;
     {
         std::lock_guard<std::mutex> lockGuard(s_mutex);
-        for (const auto& iter : s_pools) {
+        for (const auto &iter : s_pools) {
             handlePools.push_back(iter.second.first);
-        }   
+        }
     }
-    for (const auto& handlePool : handlePools) {
+    for (const auto &handlePool : handlePools) {
         handlePool->purgeFreeHandles();
     }
 }
 
-HandlePool::HandlePool(const std::string& thePath, const Configs& configs)
-: path(thePath)
-, tag(InvalidTag)
-, m_configs(configs)
-, m_handles(s_hardwareConcurrency)
-, m_aliveHandleCount(0)
+HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
+    : path(thePath)
+    , tag(InvalidTag)
+    , m_configs(configs)
+    , m_handles(s_hardwareConcurrency)
+    , m_aliveHandleCount(0)
 {
 }
 
@@ -92,7 +95,8 @@ bool HandlePool::isBlockaded() const
 void HandlePool::drain(HandlePool::OnDrained onDrained)
 {
     m_rwlock.lockWrite();
-    while (m_handles.popFront());
+    while (m_handles.popFront())
+        ;
     if (onDrained) {
         onDrained();
     }
@@ -102,7 +106,8 @@ void HandlePool::drain(HandlePool::OnDrained onDrained)
 void HandlePool::purgeFreeHandles()
 {
     m_rwlock.lockRead();
-    while (m_handles.popFront());
+    while (m_handles.popFront())
+        ;
     m_rwlock.unlockRead();
 }
 
@@ -111,24 +116,29 @@ bool HandlePool::isDrained()
     return m_handles.isEmpty();
 }
 
-RecyclableHandle HandlePool::flowOut(Error& error)
+RecyclableHandle HandlePool::flowOut(Error &error)
 {
     std::shared_ptr<HandleWrap> handleWrap = m_handles.popBack();
-    if (handleWrap==nullptr) {
+    if (handleWrap == nullptr) {
         handleWrap = generate(error);
         if (handleWrap) {
             ++m_aliveHandleCount;
-            if (m_aliveHandleCount>s_hardwareConcurrency) {
-                WCDB::Error::Warning(("The concurrency of database:"+std::to_string(tag.load())+" exceeds the concurrency of hardware:"+std::to_string(s_hardwareConcurrency)).c_str());
+            if (m_aliveHandleCount > s_hardwareConcurrency) {
+                WCDB::Error::Warning(("The concurrency of database:" +
+                                      std::to_string(tag.load()) +
+                                      " exceeds the concurrency of hardware:" +
+                                      std::to_string(s_hardwareConcurrency))
+                                         .c_str());
             }
         }
     }
     if (handleWrap) {
         handleWrap->handle->setTag(tag.load());
         if (invoke(handleWrap, error)) {
-            return RecyclableHandle(handleWrap, [this](std::shared_ptr<HandleWrap>& handleWrap){
-                flowBack(handleWrap);
-            });
+            return RecyclableHandle(
+                handleWrap, [this](std::shared_ptr<HandleWrap> &handleWrap) {
+                    flowBack(handleWrap);
+                });
         }
     }
 
@@ -137,7 +147,7 @@ RecyclableHandle HandlePool::flowOut(Error& error)
     return RecyclableHandle(nullptr, nullptr);
 }
 
-void HandlePool::flowBack(const std::shared_ptr<HandleWrap>& handleWrap)
+void HandlePool::flowBack(const std::shared_ptr<HandleWrap> &handleWrap)
 {
     if (handleWrap) {
         bool inserted = m_handles.pushBack(handleWrap);
@@ -148,22 +158,24 @@ void HandlePool::flowBack(const std::shared_ptr<HandleWrap>& handleWrap)
     }
 }
 
-std::shared_ptr<HandleWrap> HandlePool::generate(Error& error)
+std::shared_ptr<HandleWrap> HandlePool::generate(Error &error)
 {
     std::shared_ptr<Handle> handle(new Handle(path));
     handle->setTag(tag.load());
-    Configs defaultConfigs = m_configs;//cache config to avoid multi-thread assigning
+    Configs defaultConfigs =
+        m_configs; //cache config to avoid multi-thread assigning
     if (!handle->open()) {
         error = handle->getError();
         return nullptr;
     }
     if (defaultConfigs.invoke(handle, error)) {
-        return std::shared_ptr<HandleWrap>(new HandleWrap(handle, defaultConfigs));
+        return std::shared_ptr<HandleWrap>(
+            new HandleWrap(handle, defaultConfigs));
     }
     return nullptr;
 }
 
-bool HandlePool::fillOne(Error& error)
+bool HandlePool::fillOne(Error &error)
 {
     std::shared_ptr<HandleWrap> handleWrap = generate(error);
     if (handleWrap) {
@@ -172,10 +184,11 @@ bool HandlePool::fillOne(Error& error)
     return false;
 }
 
-bool HandlePool::invoke(std::shared_ptr<HandleWrap>& handleWrap, Error& error)
+bool HandlePool::invoke(std::shared_ptr<HandleWrap> &handleWrap, Error &error)
 {
-    Configs newConfigs = m_configs;//cache config to avoid multi-thread assigning
-    if (newConfigs!=handleWrap->configs) {
+    Configs newConfigs =
+        m_configs; //cache config to avoid multi-thread assigning
+    if (newConfigs != handleWrap->configs) {
         if (!newConfigs.invoke(handleWrap->handle, error)) {
             return false;
         }
@@ -185,7 +198,9 @@ bool HandlePool::invoke(std::shared_ptr<HandleWrap>& handleWrap, Error& error)
     return true;
 }
 
-void HandlePool::setConfig(const std::string &name, const Config &config, Configs::Order order)
+void HandlePool::setConfig(const std::string &name,
+                           const Config &config,
+                           Configs::Order order)
 {
     m_configs.setConfig(name, config, order);
 }
@@ -195,4 +210,4 @@ void HandlePool::setConfig(const std::string &name, const Config &config)
     m_configs.setConfig(name, config);
 }
 
-}//namespace WCDB
+} //namespace WCDB

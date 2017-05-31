@@ -21,21 +21,25 @@
 #ifndef statement_create_virtual_table_hpp
 #define statement_create_virtual_table_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/declare.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementCreateVirtualTable : public Statement
-{
+class StatementCreateVirtualTable : public Statement {
 public:
-    StatementCreateVirtualTable& create(const std::string& table, bool ifNotExists = true);
+    StatementCreateVirtualTable &create(const std::string &table,
+                                        bool ifNotExists = true);
 
-    StatementCreateVirtualTable& usingModule(const std::string& moduleName);
-    
+    StatementCreateVirtualTable &usingModule(const std::string &moduleName);
+
     template <typename T>
-    typename std::enable_if<std::is_base_of<ModuleArgument, T>::value, StatementCreateVirtualTable&>::type usingModule(const std::string& moduleName, const std::list<T>& moduleArgumentList) {
-        m_description.append(" USING "+moduleName);
+    typename std::enable_if<std::is_base_of<ModuleArgument, T>::value,
+                            StatementCreateVirtualTable &>::type
+    usingModule(const std::string &moduleName,
+                const std::list<T> &moduleArgumentList)
+    {
+        m_description.append(" USING " + moduleName);
         if (!moduleArgumentList.empty()) {
             m_description.append("(");
             joinDescribableList(moduleArgumentList);
@@ -46,7 +50,7 @@ public:
 
     virtual Statement::Type getStatementType() const override;
 };
-    
-}//namespace WCDB 
+
+} //namespace WCDB
 
 #endif /* statement_create_virtual_table_hpp */

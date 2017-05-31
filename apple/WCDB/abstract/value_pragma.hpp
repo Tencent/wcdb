@@ -21,24 +21,26 @@
 #ifndef value_pragma_hpp
 #define value_pragma_hpp
 
-#include <WCDB/describable.hpp>
 #include <WCDB/declare.hpp>
+#include <WCDB/describable.hpp>
 
 namespace WCDB {
 
-class PragmaValue : public Describable
-{
+class PragmaValue : public Describable {
 public:
-    PragmaValue(const Pragma& pragma);
-    PragmaValue(const std::string& value);
-    PragmaValue(const char* value);
-    
-    template<typename T>
-    PragmaValue(const T& value, typename std::enable_if<std::is_arithmetic<T>::value>::type* = nullptr)
-    : Describable(std::to_string(value)){
+    PragmaValue(const Pragma &pragma);
+    PragmaValue(const std::string &value);
+    PragmaValue(const char *value);
+
+    template <typename T>
+    PragmaValue(
+        const T &value,
+        typename std::enable_if<std::is_arithmetic<T>::value>::type * = nullptr)
+        : Describable(std::to_string(value))
+    {
     }
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* value_pragma_hpp */

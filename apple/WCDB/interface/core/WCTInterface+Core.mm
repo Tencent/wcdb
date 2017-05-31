@@ -18,19 +18,19 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTInterface+Core.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTInterface+Core.h>
 #import <WCDB/WCTStatement+Private.h>
 
-@implementation WCTInterface(Core)
+@implementation WCTInterface (Core)
 
-- (BOOL)exec:(const WCDB::Statement&)statement
+- (BOOL)exec:(const WCDB::Statement &)statement
 {
     WCDB::Error innerError;
     return _core->exec(statement, innerError);
 }
 
-- (WCTStatement*)prepare:(const WCDB::Statement&)statement
+- (WCTStatement *)prepare:(const WCDB::Statement &)statement
 {
     WCDB::Error error;
     WCDB::RecyclableStatement statementHandle = _core->prepare(statement, error);

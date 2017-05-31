@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTSequence.h>
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTSequence.h>
 
 @implementation WCTSequence
 
@@ -27,12 +27,12 @@ WCDB_IMPLEMENTATION(WCTSequence)
 WCDB_SYNTHESIZE(WCTSequence, name)
 WCDB_SYNTHESIZE(WCTSequence, seq)
 
-+ (NSString*)TableName
++ (NSString *)TableName
 {
     return @"sqlite_sequence";
 }
 
-- (NSString*)description
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"name:%@, seq:%d", self.name, self.seq];
 }

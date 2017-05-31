@@ -22,10 +22,7 @@
 
 namespace WCDB {
 
-RWLock::RWLock()
-: m_reader(0)
-, m_writer(0)
-, m_pending(0)
+RWLock::RWLock() : m_reader(0), m_writer(0), m_pending(0)
 {
 }
 
@@ -36,8 +33,7 @@ RWLock::~RWLock()
 void RWLock::lockRead()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    while (m_writer>0
-           ||m_pending>0) {
+    while (m_writer > 0 || m_pending > 0) {
         m_cond.wait(lock);
     }
     ++m_reader;
@@ -47,7 +43,7 @@ void RWLock::unlockRead()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
     --m_reader;
-    if (m_reader==0) {
+    if (m_reader == 0) {
         m_cond.notify_all();
     }
 }
@@ -55,8 +51,7 @@ void RWLock::unlockRead()
 bool RWLock::tryLockRead()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (m_writer>0
-        ||m_pending>0) {
+    if (m_writer > 0 || m_pending > 0) {
         return false;
     }
     ++m_reader;
@@ -67,8 +62,7 @@ void RWLock::lockWrite()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
     ++m_pending;
-    while (m_writer>0
-           ||m_reader>0) {
+    while (m_writer > 0 || m_reader > 0) {
         m_cond.wait(lock);
     }
     --m_pending;
@@ -85,8 +79,7 @@ void RWLock::unlockWrite()
 bool RWLock::tryLockWrite()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (m_writer>0
-        ||m_reader>0) {
+    if (m_writer > 0 || m_reader > 0) {
         return false;
     }
     m_writer = true;
@@ -96,13 +89,13 @@ bool RWLock::tryLockWrite()
 bool RWLock::isWriting() const
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    return m_writer>0;
+    return m_writer > 0;
 }
 
 bool RWLock::isReading() const
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    return m_reader>0;
+    return m_reader > 0;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

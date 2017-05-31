@@ -22,27 +22,27 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/abstract.h>
 
-class WCTAnyProperty : public WCDB::Column
-{
+class WCTAnyProperty : public WCDB::Column {
 public:
     WCTAnyProperty();
 
     WCTAnyProperty(Class cls);
 
-    WCTAnyProperty inTable(NSString* tableName) const;
+    WCTAnyProperty inTable(NSString *tableName) const;
 
     //function
     WCTExpr avg(bool distinct = false) const;
     WCTExpr count(bool distinct = false) const;
     WCTExpr groupConcat(bool distinct = false) const;
-    WCTExpr groupConcat(NSString* seperator, bool distinct = false) const;
+    WCTExpr groupConcat(NSString *seperator, bool distinct = false) const;
     WCTExpr max(bool distinct = false) const;
     WCTExpr min(bool distinct = false) const;
     WCTExpr sum(bool distinct = false) const;
     WCTExpr total(bool distinct = false) const;
 
     Class getClass() const;
+
 protected:
     Class m_cls;
-    WCTAnyProperty(const Column& column, Class cls);
+    WCTAnyProperty(const Column &column, Class cls);
 };

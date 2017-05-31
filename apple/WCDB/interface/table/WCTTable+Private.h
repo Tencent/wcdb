@@ -19,12 +19,12 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTTable.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTTable.h>
 
-@interface WCTTable()  {
+@interface WCTTable () {
     Class _cls;
-    NSString* _tableName;
+    NSString *_tableName;
 }
 
 @end

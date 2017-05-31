@@ -23,28 +23,24 @@
 
 namespace WCDB {
 
-RecyclableStatement Database::prepare(const Statement& statement, Error& error)
+RecyclableStatement Database::prepare(const Statement &statement, Error &error)
 {
-    if (statement.getStatementType()==Statement::Type::Transaction) {
-        Error::ReportCore(getTag(), 
-                          getPath(),
-                          Error::CoreOperation::Prepare, 
-                          Error::CoreCode::Misuse, 
-                          "Using [getTransaction] method to do a transaction"
-                          , &error);
+    if (statement.getStatementType() == Statement::Type::Transaction) {
+        Error::ReportCore(getTag(), getPath(), Error::CoreOperation::Prepare,
+                          Error::CoreCode::Misuse,
+                          "Using [getTransaction] method to do a transaction",
+                          &error);
         return RecyclableStatement(RecyclableHandle(nullptr, nullptr), nullptr);
     }
     RecyclableHandle handle = flowOut(error);
     return CoreBase::prepare(handle, statement, error);
 }
 
-bool Database::exec(const Statement& statement, Error& error)
+bool Database::exec(const Statement &statement, Error &error)
 {
-    if (statement.getStatementType()==Statement::Type::Transaction) {
-        Error::ReportCore(getTag(), 
-                          getPath(),
-                          Error::CoreOperation::Exec, 
-                          Error::CoreCode::Misuse, 
+    if (statement.getStatementType() == Statement::Type::Transaction) {
+        Error::ReportCore(getTag(), getPath(), Error::CoreOperation::Exec,
+                          Error::CoreCode::Misuse,
                           "Using [getTransaction] method to do a transaction",
                           &error);
         return false;
@@ -52,11 +48,11 @@ bool Database::exec(const Statement& statement, Error& error)
     RecyclableHandle handle = flowOut(error);
     return CoreBase::exec(handle, statement, error);
 }
-    
+
 bool Database::isTableExists(const std::string &tableName, Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     return CoreBase::isTableExists(handle, tableName, error);
 }
 
-}//namespace WCDB
+} //namespace WCDB

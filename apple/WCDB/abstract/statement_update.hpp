@@ -21,49 +21,58 @@
 #ifndef statement_update_hpp
 #define statement_update_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/conflict.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementUpdate : public Statement
-{
+class StatementUpdate : public Statement {
 public:
-    StatementUpdate& update(const std::string& table, Conflict conflict = Conflict::NotSet);
+    StatementUpdate &update(const std::string &table,
+                            Conflict conflict = Conflict::NotSet);
     template <typename T, typename U>
-    typename std::enable_if<std::is_base_of<Column, T>::value&&std::is_base_of<Expr, U>::value, StatementUpdate&>::type set(const std::list<const std::pair<const T, const U>>& valueList) {
+    typename std::enable_if<std::is_base_of<Column, T>::value &&
+                                std::is_base_of<Expr, U>::value,
+                            StatementUpdate &>::type
+    set(const std::list<const std::pair<const T, const U>> &valueList)
+    {
         m_description.append(" SET ");
         bool flag = false;
-        for (const auto& value : valueList) {
+        for (const auto &value : valueList) {
             if (flag) {
                 m_description.append(",");
-            }else {
+            } else {
                 flag = true;
             }
-            m_description.append(value.first.getDescription()+"="+value.second.getDescription());
+            m_description.append(value.first.getDescription() + "=" +
+                                 value.second.getDescription());
         }
         return *this;
     }
-    
-    StatementUpdate& where(const Expr& where);
+
+    StatementUpdate &where(const Expr &where);
     //StatementUpdateLimited
     template <typename T>
-    typename std::enable_if<std::is_base_of<Order, T>::value, StatementUpdate&>::type orderBy(const std::list<const T>& orderList) {
+    typename std::enable_if<std::is_base_of<Order, T>::value,
+                            StatementUpdate &>::type
+    orderBy(const std::list<const T> &orderList)
+    {
         if (!orderList.empty()) {
             m_description.append(" ORDER BY ");
             joinDescribableList(orderList);
         }
         return *this;
     }
-    StatementUpdate& limit(const Expr& from, const Expr& to);
-    StatementUpdate& limit(const Expr& limit);
-    StatementUpdate& offset(const Expr& offset);
-    
+    StatementUpdate &limit(const Expr &from, const Expr &to);
+    StatementUpdate &limit(const Expr &limit);
+    StatementUpdate &offset(const Expr &offset);
+
     virtual Statement::Type getStatementType() const override;
+
 protected:
     bool m_set;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* statement_update_hpp */

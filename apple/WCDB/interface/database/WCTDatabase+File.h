@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
 
-@interface WCTDatabase(File)
+@interface WCTDatabase (File)
 
 /**
  @brief Remove all database-related files.
@@ -29,7 +29,7 @@
  @param error error
  @return YES if all files are removed.
  */
-- (BOOL)removeFilesWithError:(WCTError**)error;
+- (BOOL)removeFilesWithError:(WCTError **)error;
 
 /**
  @brief Move all database-related files and some extra files to directory safely.
@@ -40,7 +40,7 @@
  @param error error
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(NSString*)directory withExtraFiles:(NSArray<NSString*>*)extraFiles andError:(WCTError**)error;
+- (BOOL)moveFilesToDirectory:(NSString *)directory withExtraFiles:(NSArray<NSString *> *)extraFiles andError:(WCTError **)error;
 
 /**
  @brief This interface is equivalent to [database moveFilesToDirectory:directory withExtraFiles:nil andError:error].
@@ -48,13 +48,13 @@
  @param error error
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(NSString*)directory withError:(WCTError**)error;
+- (BOOL)moveFilesToDirectory:(NSString *)directory withError:(WCTError **)error;
 
 /**
  @brief Paths to all database-related files.
  @return paths
  */
-- (NSArray<NSString*>*)getPaths;
+- (NSArray<NSString *> *)getPaths;
 
 /**
  @brief Get the space used by the database files.
@@ -62,6 +62,6 @@
  @param error error
  @return The sum of files size in bytes.
  */
-- (NSUInteger)getFilesSizeWithError:(WCTError**)error;
+- (NSUInteger)getFilesSizeWithError:(WCTError **)error;
 
 @end

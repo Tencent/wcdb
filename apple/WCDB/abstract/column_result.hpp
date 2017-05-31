@@ -21,22 +21,22 @@
 #ifndef column_result_hpp
 #define column_result_hpp
 
-#include <WCDB/describable.hpp>
 #include <WCDB/declare.hpp>
+#include <WCDB/describable.hpp>
 
 namespace WCDB {
 
-class ColumnResult : public Describable
-{
+class ColumnResult : public Describable {
 public:
-    ColumnResult(const Expr& expr);
-    ColumnResult& as(const std::string& name);
+    ColumnResult(const Expr &expr);
+    ColumnResult &as(const std::string &name);
     static ColumnResult Any();
-    static ColumnResult Any(const std::string& tableName);
+    static ColumnResult Any(const std::string &tableName);
+
 protected:
     ColumnResult();
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* column_result_hpp */

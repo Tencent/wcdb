@@ -23,14 +23,14 @@
 
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTIndexBinding.h>
 #import <WCDB/WCTConstraintBinding.h>
+#import <WCDB/WCTIndexBinding.h>
 
 #import <WCDB/WCTCoding.h>
-#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTExpr.h>
+#import <WCDB/WCTProperty.h>
 
 #import <WCDB/WCTCodingMacro.h>
-#import <WCDB/WCTPropertyMacro.h>
 #import <WCDB/WCTIndexMacro.h>
 #import <WCDB/WCTMacroHelper.h>
+#import <WCDB/WCTPropertyMacro.h>

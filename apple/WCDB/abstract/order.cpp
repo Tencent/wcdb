@@ -23,10 +23,10 @@
 
 namespace WCDB {
 
-Order::Order(const Expr& expr, OrderTerm term)
-: Describable(expr.getDescription())
+Order::Order(const Expr &expr, OrderTerm term)
+    : Describable(expr.getDescription())
 {
-    if (term!=OrderTerm::NotSet) {
+    if (term != OrderTerm::NotSet) {
         m_description.append(" ");
         m_description.append(OrderTermName(term));
     }
@@ -37,4 +37,4 @@ Order::operator OrderList() const
     return {*this};
 }
 
-}//namespace WCDB
+} //namespace WCDB

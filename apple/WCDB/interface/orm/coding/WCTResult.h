@@ -18,36 +18,35 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTPropertyBase.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTPropertyBase.h>
 
-class WCTResult : public WCDB::ColumnResult, public WCTPropertyBase
-{
+class WCTResult : public WCDB::ColumnResult, public WCTPropertyBase {
 public:
-    WCTResult(const WCTExpr& expr);
-    WCTResult(const WCTProperty& property);
-    WCTResult& as(const WCTProperty& property);
+    WCTResult(const WCTExpr &expr);
+    WCTResult(const WCTProperty &property);
+    WCTResult &as(const WCTProperty &property);
 
     WCTResultList distinct() const;
 
     operator WCTResultList() const;
-    
-    NSString* getDescription() const;
+
+    NSString *getDescription() const;
 };
 
-class WCTResultList : public std::list<const WCTResult>
-{
+class WCTResultList : public std::list<const WCTResult> {
 public:
     WCTResultList();
-    WCTResultList(const WCTProperty& property);
-    WCTResultList(const WCTExpr& expr);
-    WCTResultList(const WCTPropertyList& propertyList);
-    WCTResultList(const WCTExprList& exprList);
+    WCTResultList(const WCTProperty &property);
+    WCTResultList(const WCTExpr &expr);
+    WCTResultList(const WCTPropertyList &propertyList);
+    WCTResultList(const WCTExprList &exprList);
     WCTResultList(std::initializer_list<const WCTResult> il);
 
-    WCTResultList& distinct();
+    WCTResultList &distinct();
 
     bool isDistinct() const;
+
 protected:
     bool m_distinct;
 };

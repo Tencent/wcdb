@@ -18,34 +18,34 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTUpdate.h>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTCoding.h>
-#import <WCDB/utility.hpp>
-#import <WCDB/in_case_lock_guard.hpp>
-#import <WCDB/WCTExpr.h>
 #import <WCDB/WCTBinding.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTUpdate.h>
+#import <WCDB/in_case_lock_guard.hpp>
+#import <WCDB/utility.hpp>
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
     WCTPropertyList _propertyList;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andProperties:(const WCTPropertyList&)propertyList andTableName:(NSString*)tableName
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
         _statement.update(tableName.UTF8String);
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         WCDB::UpdateValueList updateValueList;
-        for (const WCTProperty& property : propertyList) {
-            const std::shared_ptr<WCTColumnBinding>& columnBinding = property.getColumnBinding();
+        for (const WCTProperty &property : propertyList) {
+            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (columnBinding) {
                 updateValueList.push_back({property, WCTExpr::BindParameter});
-            }else {
+            } else {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),
                                              WCDB::Error::InterfaceOperation::Update,
@@ -59,31 +59,31 @@
     return self;
 }
 
-- (instancetype)where:(const WCTCondition&)condition
+- (instancetype)where:(const WCTCondition &)condition
 {
     _statement.where(condition);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList&)orderList
+- (instancetype)orderBy:(const WCTOrderByList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit&)limit
+- (instancetype)limit:(const WCTLimit &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset&)offset
+- (instancetype)offset:(const WCTOffset &)offset
 {
     _statement.offset(offset);
     return self;
 }
 
-- (BOOL)executeWithObject:(WCTObject*)object
+- (BOOL)executeWithObject:(WCTObject *)object
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
@@ -108,18 +108,18 @@
         return NO;
     }
     int index = 1;
-    for (const WCTProperty& property : _propertyList) {
+    for (const WCTProperty &property : _propertyList) {
         if (![self bindProperty:property
-                       ofObject:object
-              toStatementHandle:statementHandle
-                        atIndex:index
-                      withError:_error]) {
+                         ofObject:object
+                toStatementHandle:statementHandle
+                          atIndex:index
+                        withError:_error]) {
             return NO;
         }
         ++index;
     }
     statementHandle->step();
-    _error = statementHandle->getError(); 
+    _error = statementHandle->getError();
     return _error.isOK();
 }
 
@@ -129,7 +129,7 @@
     if (!_error.isOK()) {
         return NO;
     }
-    if (row.count==0) {
+    if (row.count == 0) {
         WCDB::Error::Warning("Updating with a empty row");
         return YES;
     }
@@ -139,17 +139,17 @@
         return NO;
     }
     int index = 1;
-    for (WCTValue* value in row) {
-        if (![self bindWithValue:value 
-               toStatementHandle:statementHandle 
-                         atIndex:index 
-                       withError:_error]) {
+    for (WCTValue *value in row) {
+        if (![self bindWithValue:value
+                toStatementHandle:statementHandle
+                          atIndex:index
+                        withError:_error]) {
             return NO;
         }
         ++index;
     }
     statementHandle->step();
-    _error = statementHandle->getError(); 
+    _error = statementHandle->getError();
     return _error.isOK();
 }
 

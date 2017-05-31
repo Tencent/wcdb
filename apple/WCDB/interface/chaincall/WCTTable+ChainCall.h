@@ -19,27 +19,27 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTTable.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTTable.h>
 
 /**
  Thread-safe
  */
-@interface WCTTable(ChainCall)
+@interface WCTTable (ChainCall)
 
 /**
  Generate a WCTInsert to do an insertion on this table.
 
  @return WCTInsert
  */
-- (WCTInsert*)prepareInsertObjects;
+- (WCTInsert *)prepareInsertObjects;
 
 /**
  Generate a WCTInsert to do an insertion or replacement on this table.
 
  @return WCTInsert
  */
-- (WCTInsert*)prepareInsertOrReplaceObjects;
+- (WCTInsert *)prepareInsertOrReplaceObjects;
 
 /**
  Generate a WCTInsert to do a partial insertion on this table.
@@ -47,7 +47,7 @@
  @param propertyList The specific properties to be inserted.
  @return WCTInsert
  */
-- (WCTInsert*)prepareInsertObjectsOnProperties:(const WCTPropertyList&)propertyList;
+- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList;
 
 /**
  Generate a WCTInsert to do a partial insertion or replacement on this table.
@@ -55,14 +55,14 @@
  @param propertyList The specific properties to be inserted.
  @return WCTInsert
  */
-- (WCTInsert*)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList&)propertyList;
+- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)propertyList;
 
 /**
  Generate a WCTDelete to do a deletion.
 
  @return WCTDelete
  */
-- (WCTDelete*)prepareDelete;
+- (WCTDelete *)prepareDelete;
 
 /**
  Generate a WCTUpdate to do an update.
@@ -70,14 +70,14 @@
  @param propertyList The specific properties to be updated.
  @return WCTUpdate
  */
-- (WCTUpdate*)prepareUpdateOnProperties:(const WCTPropertyList&)propertyList;
+- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)propertyList;
 
 /**
  Generate a WCTSelect to do an object selection.
 
  @return WCTSelect
  */
-- (WCTSelect*)prepareSelectObjects;
+- (WCTSelect *)prepareSelectObjects;
 
 /**
  Generate a WCTSelect to do an object selection on the specific results.
@@ -85,7 +85,7 @@
  @param resultList The column results to be selected.
  @return WCTSelect
  */
-- (WCTSelect*)prepareSelectObjectsOnResults:(const WCTResultList&)resultList;
+- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList;
 
 /**
  Generate a WCTRowSelect to do a row selection on the specific results.
@@ -93,6 +93,6 @@
  @param resultList The column results to be selected.
  @return WCTRowSelect
  */
-- (WCTRowSelect*)prepareSelectRowsOnResults:(const WCTResultList&)resultList;
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList;
 
 @end

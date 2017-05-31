@@ -18,23 +18,24 @@
  * limitations under the License.
  */
 
-#import <WCDB/abstract.h>
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTExpr.h>
+#import <WCDB/abstract.h>
 
-class WCTIndexBinding
-{
+class WCTIndexBinding {
 public:
-    WCTIndexBinding(const std::string& indexNameSubfix);
+    WCTIndexBinding(const std::string &indexNameSubfix);
     const std::string indexNameSubfix;
 
-    void addIndex(const WCTIndex& index);
-    void setCondition(const WCTCondition& condition);
+    void addIndex(const WCTIndex &index);
+    void setCondition(const WCTCondition &condition);
 
-    const WCTIndexList& getIndexes() const;
-    const WCTCondition& getCondition() const;
+    const WCTIndexList &getIndexes() const;
+    const WCTCondition &getCondition() const;
 
-    WCDB::StatementCreateIndex generateCreateIndexStatement(const std::string& tableName) const;
+    WCDB::StatementCreateIndex
+    generateCreateIndexStatement(const std::string &tableName) const;
+
 protected:
     WCTIndexList m_indexes;
     WCTCondition m_condition;

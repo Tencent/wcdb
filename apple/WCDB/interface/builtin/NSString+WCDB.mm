@@ -23,17 +23,17 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSString(WCDB) <WCTColumnCoding>
+@interface NSString (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSString(WCDB)
+@implementation NSString (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString*)value
++ (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
     return value;
 }
 
-- (NSString*)archivedWCTValue
+- (NSString *)archivedWCTValue
 {
     return self;
 }
@@ -45,17 +45,17 @@
 
 @end
 
-@interface NSMutableString(WCDB) <WCTColumnCoding>
+@interface NSMutableString (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSMutableString(WCDB)
+@implementation NSMutableString (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString*)value
++ (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return value?[NSMutableString stringWithString:value]:nil;
+    return value ? [NSMutableString stringWithString:value] : nil;
 }
 
-- (NSString*)archivedWCTValue
+- (NSString *)archivedWCTValue
 {
     return [NSString stringWithString:self];
 }

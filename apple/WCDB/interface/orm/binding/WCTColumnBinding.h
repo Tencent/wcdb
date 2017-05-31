@@ -18,33 +18,42 @@
  * limitations under the License.
  */
 
-#import <WCDB/abstract.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTRuntimeObjCAccessor.h>
 #import <WCDB/WCTRuntimeCppAccessor.h>
+#import <WCDB/WCTRuntimeObjCAccessor.h>
+#import <WCDB/abstract.h>
 
-class WCTColumnBinding
-{
+class WCTColumnBinding {
 public:
     template <typename T>
-    WCTColumnBinding(Class cls, const std::string& pn, const std::string& cn, T* = nullptr, typename std::enable_if<ColumnIsCppType<T>::value>::type* = nullptr)
-    : columnName(cn)
-    , accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
-    , m_columnDef(cn, (WCDB::ColumnType)accessor->getColumnType())
-    , m_isAutoIncrement(false)
-    , m_isPrimary(false)
-    , m_defaultValue(nil)
+    WCTColumnBinding(
+        Class cls,
+        const std::string &pn,
+        const std::string &cn,
+        T * = nullptr,
+        typename std::enable_if<ColumnIsCppType<T>::value>::type * = nullptr)
+        : columnName(cn)
+        , accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
+        , m_columnDef(cn, (WCDB::ColumnType) accessor->getColumnType())
+        , m_isAutoIncrement(false)
+        , m_isPrimary(false)
+        , m_defaultValue(nil)
     {
     }
 
     template <typename T>
-    WCTColumnBinding(Class cls, const std::string& pn, const std::string& cn, T* = nullptr,  typename std::enable_if<ColumnIsObjCType<T>::value>::type* = nullptr)
-    : columnName(cn)
-    , accessor(new WCTRuntimeObjCAccessor(cls, pn))
-    , m_columnDef(cn, (WCDB::ColumnType)accessor->getColumnType())
-    , m_isAutoIncrement(false)
-    , m_isPrimary(false)
-    , m_defaultValue(nil)
+    WCTColumnBinding(
+        Class cls,
+        const std::string &pn,
+        const std::string &cn,
+        T * = nullptr,
+        typename std::enable_if<ColumnIsObjCType<T>::value>::type * = nullptr)
+        : columnName(cn)
+        , accessor(new WCTRuntimeObjCAccessor(cls, pn))
+        , m_columnDef(cn, (WCDB::ColumnType) accessor->getColumnType())
+        , m_isAutoIncrement(false)
+        , m_isPrimary(false)
+        , m_defaultValue(nil)
     {
     }
 
@@ -54,7 +63,8 @@ public:
     bool isAutoIncrement() const;
     const WCTColumnDef getColumnDef() const;
 
-    void makePrimary(WCTOrderTerm order, bool isAutoIncrement, WCTConflict conflict);
+    void
+    makePrimary(WCTOrderTerm order, bool isAutoIncrement, WCTConflict conflict);
 
     void makeNotNull();
 
@@ -62,19 +72,22 @@ public:
 
     template <typename T>
     typename std::enable_if<ColumnIsObjCType<T>::value, void>::type
-    makeDefault(WCTValue* defaultValue) {
+    makeDefault(WCTValue *defaultValue)
+    {
         makeDefaultObjC(defaultValue);
     }
 
     template <typename T>
     typename std::enable_if<ColumnIsCppType<T>::value, void>::type
-    makeDefault(const typename WCDB::ColumnInfo<T>::CType& defaultValue) {
+    makeDefault(const typename WCDB::ColumnInfo<T>::CType &defaultValue)
+    {
         m_columnDef.makeDefault(defaultValue);
     }
+
 protected:
-    void makeDefaultObjC(WCTValue* defaultValue);
+    void makeDefaultObjC(WCTValue *defaultValue);
     bool m_isPrimary;
     bool m_isAutoIncrement;
-    WCTValue* m_defaultValue;
+    WCTValue *m_defaultValue;
     WCTColumnDef m_columnDef;
 };

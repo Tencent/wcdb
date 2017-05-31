@@ -19,11 +19,11 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDelete.h>
 #import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTDelete.h>
 
-@interface WCTDelete(Private)
+@interface WCTDelete (Private)
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andTableName:(NSString*)tableName;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName;
 
 @end

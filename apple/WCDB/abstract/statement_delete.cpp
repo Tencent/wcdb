@@ -24,43 +24,43 @@
 
 namespace WCDB {
 
-StatementDelete& StatementDelete::deleteFrom(const std::string& table)
+StatementDelete &StatementDelete::deleteFrom(const std::string &table)
 {
-    m_description.append("DELETE FROM "+table);
+    m_description.append("DELETE FROM " + table);
     return *this;
 }
 
-StatementDelete& StatementDelete::where(const Expr& where)
+StatementDelete &StatementDelete::where(const Expr &where)
 {
     if (!where.isEmpty()) {
-        m_description.append(" WHERE "+where.getDescription());
+        m_description.append(" WHERE " + where.getDescription());
     }
     return *this;
 }
 
-StatementDelete& StatementDelete::limit(const Expr& from, const Expr& to)
+StatementDelete &StatementDelete::limit(const Expr &from, const Expr &to)
 {
     if (!from.isEmpty()) {
-        m_description.append(" LIMIT "+from.getDescription());
+        m_description.append(" LIMIT " + from.getDescription());
         if (!to.isEmpty()) {
-            m_description.append(","+to.getDescription());
+            m_description.append("," + to.getDescription());
         }
     }
     return *this;
 }
 
-StatementDelete& StatementDelete::limit(const Expr& limit)
+StatementDelete &StatementDelete::limit(const Expr &limit)
 {
     if (!limit.isEmpty()) {
-        m_description.append(" LIMIT "+limit.getDescription());
+        m_description.append(" LIMIT " + limit.getDescription());
     }
     return *this;
 }
 
-StatementDelete& StatementDelete::offset(const Expr& offset)
+StatementDelete &StatementDelete::offset(const Expr &offset)
 {
     if (!offset.isEmpty()) {
-        m_description.append(" OFFSET "+offset.getDescription());
+        m_description.append(" OFFSET " + offset.getDescription());
     }
     return *this;
 }
@@ -70,4 +70,4 @@ Statement::Type StatementDelete::getStatementType() const
     return Statement::Type::Delete;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

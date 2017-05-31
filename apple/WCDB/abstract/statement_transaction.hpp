@@ -25,31 +25,32 @@
 
 namespace WCDB {
 
-class StatementTransaction : public Statement
-{
+class StatementTransaction : public Statement {
 public:
-    enum class Mode : int{
+    enum class Mode : int {
         Defered,
         Immediate,
         Exclusive,
     };
-    enum class Type : int{
+    enum class Type : int {
         Begin,
         Commit,
         Rollback,
     };
-    
-    StatementTransaction& begin(StatementTransaction::Mode mode = StatementTransaction::Mode::Immediate);
-    StatementTransaction& commit();
-    StatementTransaction& rollback(); 
-    
-    const StatementTransaction::Type& getTransactionType() const;
-    
+
+    StatementTransaction &begin(StatementTransaction::Mode mode =
+                                    StatementTransaction::Mode::Immediate);
+    StatementTransaction &commit();
+    StatementTransaction &rollback();
+
+    const StatementTransaction::Type &getTransactionType() const;
+
     virtual Statement::Type getStatementType() const override;
+
 protected:
     StatementTransaction::Type m_type;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_transaction_hpp */

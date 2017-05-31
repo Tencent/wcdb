@@ -19,13 +19,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTInsert.h>
 #import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTInsert.h>
 
-@interface WCTInsert(Private)
+@interface WCTInsert (Private)
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andClass:(Class)cls andTableName:(NSString*)tableName andReplaceFlag:(BOOL)replace;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andClass:(Class)cls andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace;
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andProperties:(const WCTPropertyList&)propertyList andTableName:(NSString*)tableName andReplaceFlag:(BOOL)replace;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace;
 
 @end

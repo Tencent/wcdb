@@ -18,21 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+RepairKit.h>
 #import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+RepairKit.h>
 
-@implementation WCTDatabase(RepairKit)
+@implementation WCTDatabase (RepairKit)
 
-- (BOOL)backupWithCipher:(NSData*)key
+- (BOOL)backupWithCipher:(NSData *)key
 {
     WCDB::Error wcdbError;
-    return _database->backup(key.bytes, (unsigned int)key.length, wcdbError);
+    return _database->backup(key.bytes, (unsigned int) key.length, wcdbError);
 }
 
-- (BOOL)recoverFromPath:(NSString*)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData*)key
+- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData *)key
 {
     WCDB::Error wcdbError;
-    return _database->recoverFromPath(corruptedDBPath.UTF8String, pageSize, key.bytes, (unsigned int)key.length, wcdbError);
+    return _database->recoverFromPath(corruptedDBPath.UTF8String, pageSize, key.bytes, (unsigned int) key.length, wcdbError);
 }
 
 @end

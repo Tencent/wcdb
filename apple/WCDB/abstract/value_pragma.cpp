@@ -18,24 +18,22 @@
  * limitations under the License.
  */
 
-#include <WCDB/value_pragma.hpp>
 #include <WCDB/pragma.hpp>
+#include <WCDB/value_pragma.hpp>
 
 namespace WCDB {
 
-PragmaValue::PragmaValue(const Pragma& pragma)
-: Describable(pragma.getDescription())
+PragmaValue::PragmaValue(const Pragma &pragma)
+    : Describable(pragma.getDescription())
 {
 }
 
-PragmaValue::PragmaValue(const std::string& value)
-: Describable(value)
+PragmaValue::PragmaValue(const std::string &value) : Describable(value)
 {
 }
 
-PragmaValue::PragmaValue(const char* value)
-: Describable(value)
+PragmaValue::PragmaValue(const char *value) : Describable(value)
 {
 }
 
-}//namespace WCDB 
+} //namespace WCDB

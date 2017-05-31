@@ -19,8 +19,8 @@
  */
 
 #include <WCDB/database.hpp>
-#include <WCDB/utility.hpp>
 #include <WCDB/macro.hpp>
+#include <WCDB/utility.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <vector>
 
@@ -34,7 +34,7 @@ std::shared_ptr<Trace> Database::s_globalTrace = nullptr;
 const Configs Database::defaultConfigs({
     {
         Database::defaultTraceConfigName,
-        [](std::shared_ptr<Handle>& handle, Error& error)->bool {
+        [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
             std::shared_ptr<Trace> trace = s_globalTrace;
             if (trace) {
                 handle->setTrace(*trace.get());
@@ -45,7 +45,7 @@ const Configs Database::defaultConfigs({
     },
     {
         Database::defaultCipherConfigName,
-        [](std::shared_ptr<Handle>& handle, Error& error)->bool {
+        [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
             //place holder
             return true;
         },
@@ -53,15 +53,18 @@ const Configs Database::defaultConfigs({
     },
     {
         Database::defaultConfigName,
-        [](std::shared_ptr<Handle>& handle, Error& error)->bool {
-                        
+        [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+
             //Locking Mode
             {
-                static const StatementPragma s_getLockingMode = StatementPragma().pragma(Pragma::LockingMode);
-                static const StatementPragma s_setLockingModeNormal = StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
+                static const StatementPragma s_getLockingMode =
+                    StatementPragma().pragma(Pragma::LockingMode);
+                static const StatementPragma s_setLockingModeNormal =
+                    StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
 
                 //Get Locking Mode
-                std::shared_ptr<StatementHandle> statementHandle = handle->prepare(s_getLockingMode);
+                std::shared_ptr<StatementHandle> statementHandle =
+                    handle->prepare(s_getLockingMode);
                 if (!statementHandle) {
                     error = handle->getError();
                     return false;
@@ -71,24 +74,28 @@ const Configs Database::defaultConfigs({
                     error = statementHandle->getError();
                     return false;
                 }
-                std::string lockingMode = statementHandle->getValue<WCDB::ColumnType::Text>(0);
+                std::string lockingMode =
+                    statementHandle->getValue<WCDB::ColumnType::Text>(0);
                 statementHandle->finalize();
-                
+
                 //Set Locking Mode
-                if (strcasecmp(lockingMode.c_str(), "NORMAL")!=0
-                    &&!handle->exec(s_setLockingModeNormal)) {
+                if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
+                    !handle->exec(s_setLockingModeNormal)) {
                     error = handle->getError();
                     return false;
                 }
             }
-            
+
             //Journal Mode
             {
-                static const StatementPragma s_getJournalMode = StatementPragma().pragma(Pragma::JournalMode);
-                static const StatementPragma s_setJournalModeWAL = StatementPragma().pragma(Pragma::JournalMode, "WAL");
+                static const StatementPragma s_getJournalMode =
+                    StatementPragma().pragma(Pragma::JournalMode);
+                static const StatementPragma s_setJournalModeWAL =
+                    StatementPragma().pragma(Pragma::JournalMode, "WAL");
 
                 //Get Journal Mode
-                std::shared_ptr<StatementHandle> statementHandle = handle->prepare(s_getJournalMode);
+                std::shared_ptr<StatementHandle> statementHandle =
+                    handle->prepare(s_getJournalMode);
                 if (!statementHandle) {
                     error = handle->getError();
                     return false;
@@ -98,12 +105,13 @@ const Configs Database::defaultConfigs({
                     error = statementHandle->getError();
                     return false;
                 }
-                std::string journalMode = statementHandle->getValue<WCDB::ColumnType::Text>(0);
+                std::string journalMode =
+                    statementHandle->getValue<WCDB::ColumnType::Text>(0);
                 statementHandle->finalize();
-                
+
                 //Set Journal Mode
-                if (strcasecmp(journalMode.c_str(), "WAL")!=0
-                    &&!handle->exec(s_setJournalModeWAL)) {
+                if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
+                    !handle->exec(s_setJournalModeWAL)) {
                     error = handle->getError();
                     return false;
                 }
@@ -111,24 +119,26 @@ const Configs Database::defaultConfigs({
 
             //Synchronous
             {
-                static const StatementPragma s_setSynchronousFull = StatementPragma().pragma(Pragma::Synchronous, "FULL");
+                static const StatementPragma s_setSynchronousFull =
+                    StatementPragma().pragma(Pragma::Synchronous, "FULL");
 
                 if (!handle->exec(s_setSynchronousFull)) {
                     error = handle->getError();
                     return false;
                 }
             }
-            
+
             //Fullfsync
             {
-                static const StatementPragma s_setFullFsync = StatementPragma().pragma(Pragma::Fullfsync, "ON");
-                
+                static const StatementPragma s_setFullFsync =
+                    StatementPragma().pragma(Pragma::Fullfsync, "ON");
+
                 if (!handle->exec(s_setFullFsync)) {
                     error = handle->getError();
                     return false;
                 }
             }
-            
+
             error.reset();
             return true;
         },
@@ -136,40 +146,46 @@ const Configs Database::defaultConfigs({
     },
 });
 
-void Database::setConfig(const std::string& name, const Config& config, Configs::Order order)
+void Database::setConfig(const std::string &name,
+                         const Config &config,
+                         Configs::Order order)
 {
     m_pool->setConfig(name, config, order);
 }
 
-void Database::setConfig(const std::string& name, const Config& config)
+void Database::setConfig(const std::string &name, const Config &config)
 {
     m_pool->setConfig(name, config);
 }
 
-void Database::setCipherKey(const void* key, int size)
+void Database::setCipherKey(const void *key, int size)
 {
-    std::shared_ptr<std::vector<unsigned char>> keys(new std::vector<unsigned char>(size));
+    std::shared_ptr<std::vector<unsigned char>> keys(
+        new std::vector<unsigned char>(size));
     memcpy(keys->data(), key, size);
-    m_pool->setConfig(Database::defaultCipherConfigName,
-                      [keys](std::shared_ptr<Handle>& handle, Error& error)->bool {
-                          bool result = handle->setCipherKey(keys->data(), (int)keys->size());
-                          error = handle->getError();
-                          return result;
-                      });
+    m_pool->setConfig(
+        Database::defaultCipherConfigName,
+        [keys](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+            bool result =
+                handle->setCipherKey(keys->data(), (int) keys->size());
+            error = handle->getError();
+            return result;
+        });
 }
-    
-void Database::setTrace(const Trace& trace)
+
+void Database::setTrace(const Trace &trace)
 {
-    m_pool->setConfig(Database::defaultTraceConfigName,
-                      [trace](std::shared_ptr<Handle>& handle, Error& error)->bool {
-                          handle->setTrace(trace);
-                          return true;
-                      });
+    m_pool->setConfig(
+        Database::defaultTraceConfigName,
+        [trace](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+            handle->setTrace(trace);
+            return true;
+        });
 }
-    
-void Database::SetGlobalTrace(const Trace& globalTrace)
+
+void Database::SetGlobalTrace(const Trace &globalTrace)
 {
     s_globalTrace.reset(new Trace(globalTrace));
 }
 
-}//namespace WCDB
+} //namespace WCDB

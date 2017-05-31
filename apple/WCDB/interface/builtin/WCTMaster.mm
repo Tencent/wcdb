@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTMaster.h>
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTMaster.h>
 
 @implementation WCTMaster
 
@@ -30,12 +30,12 @@ WCDB_SYNTHESIZE_COLUMN(WCTMaster, tableName, "tbl_name")
 WCDB_SYNTHESIZE(WCTMaster, rootpage)
 WCDB_SYNTHESIZE(WCTMaster, sql)
 
-+ (NSString*)TableName
++ (NSString *)TableName
 {
     return @"sqlite_master";
 }
 
-- (NSString*)description
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"type:%@, name:%@, tbl_name:%@, rootpage:%d, sql:%@", self.type, self.name, self.tableName, self.rootpage, self.sql];
 }

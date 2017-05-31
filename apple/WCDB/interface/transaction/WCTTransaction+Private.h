@@ -23,9 +23,9 @@
 #import <WCDB/core.h>
 #import <WCDB/ticker.hpp>
 
-@interface WCTTransaction() {
+@interface WCTTransaction () {
     WCDB::Error _error;
-    WCDB::Transaction* _transaction;
+    WCDB::Transaction *_transaction;
     std::shared_ptr<WCDB::Ticker> _ticker;
 }
 

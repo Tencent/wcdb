@@ -20,19 +20,19 @@
 
 #include <WCDB/WCTConstraintBinding.h>
 
-WCTConstraintBindingBase::WCTConstraintBindingBase(const std::string& n, WCTConstraintBindingType t)
-: name(n)
-, type(t)
+WCTConstraintBindingBase::WCTConstraintBindingBase(const std::string &n, WCTConstraintBindingType t)
+    : name(n)
+    , type(t)
 {
 }
 
-WCTConstraintPrimaryKeyBinding::WCTConstraintPrimaryKeyBinding(const std::string& name)
-: WCTConstraintBindingBase(name, WCTConstraintPrimaryKeyBinding::type)
-, m_conflict(WCTConflictNotSet)
+WCTConstraintPrimaryKeyBinding::WCTConstraintPrimaryKeyBinding(const std::string &name)
+    : WCTConstraintBindingBase(name, WCTConstraintPrimaryKeyBinding::type)
+    , m_conflict(WCTConflictNotSet)
 {
 }
 
-void WCTConstraintPrimaryKeyBinding::addPrimaryKey(const WCTIndex& index)
+void WCTConstraintPrimaryKeyBinding::addPrimaryKey(const WCTIndex &index)
 {
     m_primaryKeyList.push_back(index);
 }
@@ -44,16 +44,16 @@ void WCTConstraintPrimaryKeyBinding::setConflict(WCTConflict conflict)
 
 WCDB::TableConstraint WCTConstraintPrimaryKeyBinding::generateConstraint() const
 {
-    return WCDB::TableConstraint(name).makePrimary(m_primaryKeyList).onConflict((WCDB::Conflict)m_conflict);
+    return WCDB::TableConstraint(name).makePrimary(m_primaryKeyList).onConflict((WCDB::Conflict) m_conflict);
 }
 
-WCTConstraintUniqueBinding::WCTConstraintUniqueBinding(const std::string& name)
-: WCTConstraintBindingBase(name, WCTConstraintUniqueBinding::type)
-, m_conflict(WCTConflictNotSet)
+WCTConstraintUniqueBinding::WCTConstraintUniqueBinding(const std::string &name)
+    : WCTConstraintBindingBase(name, WCTConstraintUniqueBinding::type)
+    , m_conflict(WCTConflictNotSet)
 {
 }
 
-void WCTConstraintUniqueBinding::addUnique(const WCTIndex& index)
+void WCTConstraintUniqueBinding::addUnique(const WCTIndex &index)
 {
     m_uniqueList.push_back(index);
 }
@@ -65,15 +65,15 @@ void WCTConstraintUniqueBinding::setConflict(WCTConflict conflict)
 
 WCDB::TableConstraint WCTConstraintUniqueBinding::generateConstraint() const
 {
-    return WCDB::TableConstraint(name).makeUnique(m_uniqueList).onConflict((WCDB::Conflict)m_conflict);
+    return WCDB::TableConstraint(name).makeUnique(m_uniqueList).onConflict((WCDB::Conflict) m_conflict);
 }
 
-WCTConstraintCheckBinding::WCTConstraintCheckBinding(const std::string& name)
-: WCTConstraintBindingBase(name, WCTConstraintCheckBinding::type)
+WCTConstraintCheckBinding::WCTConstraintCheckBinding(const std::string &name)
+    : WCTConstraintBindingBase(name, WCTConstraintCheckBinding::type)
 {
 }
 
-void WCTConstraintCheckBinding::makeCheck(const WCTExpr& expr)
+void WCTConstraintCheckBinding::makeCheck(const WCTExpr &expr)
 {
     m_check = expr;
 }

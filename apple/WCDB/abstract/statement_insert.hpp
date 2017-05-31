@@ -21,24 +21,29 @@
 #ifndef statement_insert_hpp
 #define statement_insert_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/conflict.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementInsert : public Statement
-{
+class StatementInsert : public Statement {
 public:
-    StatementInsert& insert(const std::string& table, Conflict conflict = Conflict::NotSet);
-    
+    StatementInsert &insert(const std::string &table,
+                            Conflict conflict = Conflict::NotSet);
+
     template <typename T>
-    typename std::enable_if<std::is_base_of<Column, T>::value, StatementInsert&>::type insert(const std::string& table, const std::list<const T>& columnList, Conflict conflict = Conflict::Replace) {
+    typename std::enable_if<std::is_base_of<Column, T>::value,
+                            StatementInsert &>::type
+    insert(const std::string &table,
+           const std::list<const T> &columnList,
+           Conflict conflict = Conflict::Replace)
+    {
         m_description.append("INSERT");
-        if (conflict!=Conflict::NotSet) {
+        if (conflict != Conflict::NotSet) {
             m_description.append(" OR ");
             m_description.append(ConflictName(conflict));
         }
-        m_description.append(" INTO "+table);
+        m_description.append(" INTO " + table);
         if (!columnList.empty()) {
             m_description.append("(");
             joinDescribableList(columnList);
@@ -46,9 +51,12 @@ public:
         }
         return *this;
     }
-    
+
     template <typename T>
-    typename std::enable_if<std::is_base_of<Expr, T>::value, StatementInsert&>::type values(const std::list<const T>& exprList) {
+    typename std::enable_if<std::is_base_of<Expr, T>::value,
+                            StatementInsert &>::type
+    values(const std::list<const T> &exprList)
+    {
         if (!exprList.empty()) {
             m_description.append(" VALUES(");
             joinDescribableList(exprList);
@@ -56,10 +64,10 @@ public:
         }
         return *this;
     }
-    
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_insert_hpp */

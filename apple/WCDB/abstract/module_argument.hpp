@@ -25,15 +25,14 @@
 #include <WCDB/describable.hpp>
 
 namespace WCDB {
-    
-class ModuleArgument : public Describable
-{
+
+class ModuleArgument : public Describable {
 public:
-    ModuleArgument(const TableConstraint& tableConstraint);
-    ModuleArgument(const ColumnDef& columnDef);
-    ModuleArgument(const std::string& left, const std::string& right);
+    ModuleArgument(const TableConstraint &tableConstraint);
+    ModuleArgument(const ColumnDef &columnDef);
+    ModuleArgument(const std::string &left, const std::string &right);
 };
 
-}//namespace WCDB
-    
+} //namespace WCDB
+
 #endif /* module_argument_hpp */

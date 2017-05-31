@@ -18,21 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTSelectBase+Private.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTMultiSelect+Private.h>
+#import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTResult.h>
+#import <WCDB/WCTSelectBase+Private.h>
 
 @implementation WCTMultiSelect {
     WCTResultList _resultList;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andResults:(const WCTResultList&)resultList fromTables:(NSArray<NSString*>*)tableNames
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
 {
     if (self = [super initWithCore:core]) {
-        if (resultList.size()==0) {
+        if (resultList.size() == 0) {
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
@@ -42,8 +42,8 @@
             return self;
         }
         _resultList.insert(_resultList.begin(), resultList.begin(), resultList.end());
-        for (const WCTResult& result : _resultList) {
-            Class cls = result.getBindingClass(); 
+        for (const WCTResult &result : _resultList) {
+            Class cls = result.getBindingClass();
             if (!cls) {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),
@@ -72,9 +72,9 @@
                 return self;
             }
         }
-        
+
         WCDB::SubqueryList subqueryList;
-        for (NSString* tableName in tableNames) {
+        for (NSString *tableName in tableNames) {
             subqueryList.push_back(tableName.UTF8String);
         }
         _statement.select(_resultList, _resultList.isDistinct()).from(subqueryList);
@@ -82,7 +82,7 @@
     return self;
 }
 
-- (WCTMultiObject*)nextMultiObject
+- (WCTMultiObject *)nextMultiObject
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (![self lazyPrepare]) {
@@ -91,45 +91,44 @@
     return [self _nextMultiObject];
 }
 
-- (NSArray<WCTMultiObject*>*)allMultiObjects
+- (NSArray<WCTMultiObject *> *)allMultiObjects
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (![self lazyPrepare]) {
         return nil;
     }
-    NSMutableArray* allMultiObjects = [[NSMutableArray alloc] init];
-    WCTMultiObject* multiObject = nil;
+    NSMutableArray *allMultiObjects = [[NSMutableArray alloc] init];
+    WCTMultiObject *multiObject = nil;
     while ((multiObject = [self _nextMultiObject])) {
         [allMultiObjects addObject:multiObject];
     }
-    return _error.isOK()?allMultiObjects:nil;
+    return _error.isOK() ? allMultiObjects : nil;
 }
 
-- (WCTMultiObject*)_nextMultiObject
+- (WCTMultiObject *)_nextMultiObject
 {
-    if (!_statementHandle->step()
-        ||!_error.isOK()) {
+    if (!_statementHandle->step() || !_error.isOK()) {
         _statementHandle->finalize();
         return nil;
     }
-    NSMutableDictionary* multiObject = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *multiObject = [[NSMutableDictionary alloc] init];
     int index = 0;
-    for (const WCTResult& result : _resultList) {
-        const char* columnTableName = _statementHandle->getColumnTableName(index);
+    for (const WCTResult &result : _resultList) {
+        const char *columnTableName = _statementHandle->getColumnTableName(index);
         Class cls = result.getBindingClass();
-        if (columnTableName&&cls) {
-            NSString* tableName = @(columnTableName);
-            WCTObject* object = [multiObject objectForKey:tableName];
+        if (columnTableName && cls) {
+            NSString *tableName = @(columnTableName);
+            WCTObject *object = [multiObject objectForKey:tableName];
             if (!object) {
                 object = [[cls alloc] init];
                 [multiObject setObject:object forKey:tableName];
             }
-            if (![self extractPropertyToObject:object 
-                                       atIndex:index 
+            if (![self extractPropertyToObject:object
+                                       atIndex:index
                              withColumnBinding:result.getColumnBinding()]) {
                 return nil;
             };
-        }else {
+        } else {
             if (!columnTableName) {
                 WCDB::Error::Warning("Extracting multi object with an empty table name");
             }
@@ -140,7 +139,6 @@
         ++index;
     }
     return multiObject;
-    
 }
 
 @end

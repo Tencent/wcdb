@@ -19,11 +19,11 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTInterface.h>
 #import <WCDB/abstract.h>
-#import <WCDB/WCTDeclare.h>
 
-@interface WCTInterface(Core)
+@interface WCTInterface (Core)
 
 /**
  @brief Exec a specific sql.
@@ -31,7 +31,7 @@
  @param statement WINQ statement
  @return YES if it is successfully executed
  */
-- (BOOL)exec:(const WCDB::Statement&)statement;
+- (BOOL)exec:(const WCDB::Statement &)statement;
 
 /**
  @brief Prepare a specific sql.
@@ -40,6 +40,6 @@
  @return WCTStatement
  @see WCTStatement
  */
-- (WCTStatement*)prepare:(const WCDB::Statement&)statement;
+- (WCTStatement *)prepare:(const WCDB::Statement &)statement;
 
 @end

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTStatictics.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTStatictics.h>
 #import <WCDB/core.h>
 
 @implementation WCTStatictics
@@ -27,10 +27,10 @@
 + (void)SetGlobalErrorReport:(WCTErrorReport)report
 {
     if (report) {
-        WCDB::Error::SetReportMethod([report](const WCDB::Error& error){
+        WCDB::Error::SetReportMethod([report](const WCDB::Error &error) {
             report([WCTError errorWithWCDBError:error]);
         });
-    }else {
+    } else {
         WCDB::Error::SetReportMethod(nullptr);
     }
 }
@@ -39,16 +39,16 @@
 {
     if (trace) {
         WCDB::Database::SetGlobalTrace([trace](WCDB::Tag tag,
-                                               const std::map<std::string, unsigned int>& footprint,
-                                               const int64_t& cost) {
-            NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] init];
-            for (const auto& iter : footprint) {
+                                               const std::map<std::string, unsigned int> &footprint,
+                                               const int64_t &cost) {
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            for (const auto &iter : footprint) {
                 [dictionary setObject:@(iter.first.c_str())
                                forKey:@(iter.second)];
             }
-            trace(tag, dictionary, (NSUInteger)cost);
+            trace(tag, dictionary, (NSUInteger) cost);
         });
-    }else {
+    } else {
         WCDB::Database::SetGlobalTrace(nullptr);
     }
 }

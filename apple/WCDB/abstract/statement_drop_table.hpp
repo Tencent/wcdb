@@ -25,14 +25,13 @@
 
 namespace WCDB {
 
-class StatementDropTable : public Statement
-{
+class StatementDropTable : public Statement {
 public:
-    StatementDropTable& drop(const std::string& table, bool ifExists = true);
-    
+    StatementDropTable &drop(const std::string &table, bool ifExists = true);
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* statement_drop_table_hpp */

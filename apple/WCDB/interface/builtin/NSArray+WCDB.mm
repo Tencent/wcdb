@@ -23,17 +23,17 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSArray(WCDB) <WCTColumnCoding>
+@interface NSArray (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSArray(WCDB)
+@implementation NSArray (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSData*)value
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value?[NSKeyedUnarchiver unarchiveObjectWithData:value]:nil;
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
-- (NSData*)archivedWCTValue
+- (NSData *)archivedWCTValue
 {
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
@@ -44,18 +44,18 @@
 }
 
 @end
- 
-@interface NSMutableArray(WCDB) <WCTColumnCoding>
+
+@interface NSMutableArray (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSMutableArray(WCDB)
+@implementation NSMutableArray (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSData*)value
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value?[NSKeyedUnarchiver unarchiveObjectWithData:value]:nil;
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
-- (NSData*)archivedWCTValue
+- (NSData *)archivedWCTValue
 {
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }

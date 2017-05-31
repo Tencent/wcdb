@@ -20,18 +20,20 @@
 
 #include <WCDB/clause_join.hpp>
 #include <WCDB/column.hpp>
+#include <WCDB/declare.hpp>
 #include <WCDB/expr.hpp>
 #include <WCDB/subquery.hpp>
-#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
-JoinClause& JoinClause::join(const Subquery& subquery, JoinClause::Type type, bool isNatural)
+JoinClause &JoinClause::join(const Subquery &subquery,
+                             JoinClause::Type type,
+                             bool isNatural)
 {
     if (isNatural) {
         m_description.append(" NATURAL");
     }
-    if (type!=JoinClause::Type::NotSet) {
+    if (type != JoinClause::Type::NotSet) {
         switch (type) {
             case JoinClause::Type::Left:
                 m_description.append(" LEFT");
@@ -49,14 +51,14 @@ JoinClause& JoinClause::join(const Subquery& subquery, JoinClause::Type type, bo
                 break;
         }
     }
-    m_description.append(" JOIN "+subquery.getDescription());
+    m_description.append(" JOIN " + subquery.getDescription());
     return *this;
 }
 
-JoinClause& JoinClause::on(const Expr& expr)
+JoinClause &JoinClause::on(const Expr &expr)
 {
-    m_description.append(" ON "+expr.getDescription());
+    m_description.append(" ON " + expr.getDescription());
     return *this;
 }
 
-};// namespace WCDB
+}; // namespace WCDB

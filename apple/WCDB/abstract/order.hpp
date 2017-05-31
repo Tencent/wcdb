@@ -21,20 +21,19 @@
 #ifndef order_hpp
 #define order_hpp
 
+#include <WCDB/declare.hpp>
 #include <WCDB/describable.hpp>
 #include <WCDB/order_term.hpp>
-#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
-class Order : public Describable
-{
+class Order : public Describable {
 public:
-    Order(const Expr& expr, OrderTerm term = OrderTerm::NotSet);
+    Order(const Expr &expr, OrderTerm term = OrderTerm::NotSet);
 
     operator OrderList() const;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* order_hpp */

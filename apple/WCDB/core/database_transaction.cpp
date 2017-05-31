@@ -19,78 +19,83 @@
  */
 
 #include <WCDB/database.hpp>
-#include <WCDB/transaction.hpp>
 #include <WCDB/error.hpp>
+#include <WCDB/transaction.hpp>
 
 namespace WCDB {
 
-ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> Database::s_threadedHandle([](){
-    return new std::unordered_map<std::string, RecyclableHandle>;
-}, [](std::unordered_map<std::string, RecyclableHandle>* map){
-    if (map) {
-        delete map;
-    }
-});
+ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
+    Database::s_threadedHandle(
+        []() { return new std::unordered_map<std::string, RecyclableHandle>; },
+        [](std::unordered_map<std::string, RecyclableHandle> *map) {
+            if (map) {
+                delete map;
+            }
+        });
 
-std::shared_ptr<Transaction> Database::getTransaction(Error& error)
+std::shared_ptr<Transaction> Database::getTransaction(Error &error)
 {
-    RecyclableHandle handle = m_pool->flowOut(error);//get a new handle for transaction
-    if (handle!=nullptr) {
+    RecyclableHandle handle =
+        m_pool->flowOut(error); //get a new handle for transaction
+    if (handle != nullptr) {
         return std::shared_ptr<Transaction>(new Transaction(m_pool, handle));
     }
     return nullptr;
 }
 
-RecyclableHandle Database::flowOut(Error& error)
+RecyclableHandle Database::flowOut(Error &error)
 {
-    std::unordered_map<std::string, RecyclableHandle>* threadedHandle = s_threadedHandle.get();
-    const auto& iter = threadedHandle->find(getPath());
-    if (iter==threadedHandle->end()) {
+    std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
+        s_threadedHandle.get();
+    const auto &iter = threadedHandle->find(getPath());
+    if (iter == threadedHandle->end()) {
         return m_pool->flowOut(error);
     }
     return iter->second;
 }
 
-bool Database::begin(StatementTransaction::Mode mode, Error& error)
+bool Database::begin(StatementTransaction::Mode mode, Error &error)
 {
     RecyclableHandle handle = flowOut(error);
-    if (handle!=nullptr
-        &&CoreBase::exec(handle, StatementTransaction().begin(mode), error)) {
+    if (handle != nullptr &&
+        CoreBase::exec(handle, StatementTransaction().begin(mode), error)) {
         s_threadedHandle.get()->insert({getPath(), handle});
         return true;
     }
     return false;
 }
 
-bool Database::commit(Error& error)
+bool Database::commit(Error &error)
 {
     RecyclableHandle handle = flowOut(error);
-    if (handle!=nullptr
-        &&CoreBase::exec(handle, StatementTransaction().commit(), error)) {
+    if (handle != nullptr &&
+        CoreBase::exec(handle, StatementTransaction().commit(), error)) {
         s_threadedHandle.get()->erase(getPath());
         return true;
     }
     return false;
 }
 
-bool Database::rollback(Error& error)
+bool Database::rollback(Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     bool result = false;
-    if (handle!=nullptr) {
+    if (handle != nullptr) {
         result = CoreBase::exec(handle, StatementTransaction().commit(), error);
         s_threadedHandle.get()->erase(getPath());
     }
     return result;
 }
 
-bool Database::runEmbeddedTransaction(TransactionBlock transaction, Error& error)
+bool Database::runEmbeddedTransaction(TransactionBlock transaction,
+                                      Error &error)
 {
-    std::unordered_map<std::string, RecyclableHandle>* threadedHandle = s_threadedHandle.get();
-    if (threadedHandle->find(getPath())!=threadedHandle->end()) {
+    std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
+        s_threadedHandle.get();
+    if (threadedHandle->find(getPath()) != threadedHandle->end()) {
         return transaction(error);
     }
     return runTransaction(transaction, nullptr, error);
 }
 
-}//namespace WCDB
+} //namespace WCDB

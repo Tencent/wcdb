@@ -22,11 +22,11 @@
 #import <WCDB/WCTCore.h>
 #import <WCDB/core.h>
 
-@interface WCTCore() {
+@interface WCTCore () {
 @protected
     std::shared_ptr<WCDB::CoreBase> _core;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core;
 
 @end

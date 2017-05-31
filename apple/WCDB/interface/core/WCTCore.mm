@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCore.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTCore.h>
 
 @implementation WCTCore
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
 {
     if (self = [self init]) {
         _core = core;
@@ -36,7 +36,7 @@
     return _core->getTag();
 }
 
-- (NSString*)path
+- (NSString *)path
 {
     return @(_core->getPath().c_str());
 }

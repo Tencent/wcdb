@@ -22,9 +22,9 @@
 #define database_hpp
 
 #include <WCDB/abstract.h>
+#include <WCDB/core_base.hpp>
 #include <WCDB/handle_pool.hpp>
 #include <WCDB/statement_recyclable.hpp>
-#include <WCDB/core_base.hpp>
 #include <WCDB/thread_local.hpp>
 #include <array>
 
@@ -32,11 +32,10 @@ namespace WCDB {
 
 class Transaction;
 
-class Database : public CoreBase
-{    
+class Database : public CoreBase {
 public:
     Database() = delete;
-    Database(const std::string& path);
+    Database(const std::string &path);
 
     //basic
     void setTag(Tag tag);
@@ -46,7 +45,7 @@ public:
     void close(std::function<void(void)> onClosed);
     void unblockade();
     bool isBlockaded();
-    
+
     void purgeFreeHandles();
     static void PurgeFreeHandlesInAllDatabases();
 
@@ -55,44 +54,57 @@ public:
     static const std::string defaultCipherConfigName;
     static const std::string defaultTraceConfigName;
     static const Configs defaultConfigs;
-    void setConfig(const std::string& name, const Config& config, Configs::Order order);
-    void setConfig(const std::string& name, const Config& config);
-    void setCipherKey(const void* key, int size);
-    void setTrace(const Trace& trace);
-    static void SetGlobalTrace(const Trace& globalTrace);
+    void setConfig(const std::string &name,
+                   const Config &config,
+                   Configs::Order order);
+    void setConfig(const std::string &name, const Config &config);
+    void setCipherKey(const void *key, int size);
+    void setTrace(const Trace &trace);
+    static void SetGlobalTrace(const Trace &globalTrace);
 
     //file
-    bool moveFiles(const std::string& directory, Error& error);
-    bool moveFilesToDirectoryWithExtraFiles(const std::string& directory, const std::list<std::string>& extraFiles, Error& error);
-    bool removeFiles(Error& error);
-    size_t getFilesSize(Error& error);
+    bool moveFiles(const std::string &directory, Error &error);
+    bool
+    moveFilesToDirectoryWithExtraFiles(const std::string &directory,
+                                       const std::list<std::string> &extraFiles,
+                                       Error &error);
+    bool removeFiles(Error &error);
+    size_t getFilesSize(Error &error);
     const std::list<std::string> getPaths() const;
 
     //sql
-    RecyclableStatement prepare(const Statement& statement, Error& error) override;
-    bool exec(const Statement& statement, Error& error) override;
-    bool isTableExists(const std::string& tableName, Error& error) override;
+    RecyclableStatement prepare(const Statement &statement,
+                                Error &error) override;
+    bool exec(const Statement &statement, Error &error) override;
+    bool isTableExists(const std::string &tableName, Error &error) override;
 
     //transaction
-    std::shared_ptr<Transaction> getTransaction(Error& error);
+    std::shared_ptr<Transaction> getTransaction(Error &error);
 
-    bool begin(StatementTransaction::Mode mode, Error& error) override;
-    bool commit(Error& error) override;
-    bool rollback(Error& error) override;
-    bool runEmbeddedTransaction(TransactionBlock transaction, Error& error) override;
+    bool begin(StatementTransaction::Mode mode, Error &error) override;
+    bool commit(Error &error) override;
+    bool rollback(Error &error) override;
+    bool runEmbeddedTransaction(TransactionBlock transaction,
+                                Error &error) override;
 
     //Repair Kit
-    bool backup(const void* key, const unsigned int &length, Error& error);
-    bool recoverFromPath(const std::string& corruptedDBPath, const int pageSize, const void* key, const unsigned int& length, Error& error);
-protected:
-    static const std::array<std::string, 5>& subfixs();
+    bool backup(const void *key, const unsigned int &length, Error &error);
+    bool recoverFromPath(const std::string &corruptedDBPath,
+                         const int pageSize,
+                         const void *key,
+                         const unsigned int &length,
+                         Error &error);
 
-    RecyclableHandle flowOut(Error& error);
-    static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>> s_threadedHandle;
-    
+protected:
+    static const std::array<std::string, 5> &subfixs();
+
+    RecyclableHandle flowOut(Error &error);
+    static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
+        s_threadedHandle;
+
     static std::shared_ptr<Trace> s_globalTrace;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* database_hpp */

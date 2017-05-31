@@ -24,7 +24,9 @@
 
 namespace WCDB {
 
-StatementCreateIndex& StatementCreateIndex::create(const std::string& index, bool unique, bool ifNotExists)
+StatementCreateIndex &StatementCreateIndex::create(const std::string &index,
+                                                   bool unique,
+                                                   bool ifNotExists)
 {
     m_description.append("CREATE ");
     if (unique) {
@@ -37,10 +39,10 @@ StatementCreateIndex& StatementCreateIndex::create(const std::string& index, boo
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::where(const Expr& expr)
+StatementCreateIndex &StatementCreateIndex::where(const Expr &expr)
 {
     if (!expr.isEmpty()) {
-        m_description.append(" WHERE "+expr.getDescription());
+        m_description.append(" WHERE " + expr.getDescription());
     }
     return *this;
 }
@@ -50,4 +52,4 @@ Statement::Type StatementCreateIndex::getStatementType() const
     return Statement::Type::CreateIndex;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

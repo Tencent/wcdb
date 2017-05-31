@@ -25,8 +25,7 @@
 
 namespace WCDB {
 
-class Statement : public Describable
-{
+class Statement : public Describable {
 public:
     enum class Type : int {
         None = 0,
@@ -45,9 +44,9 @@ public:
     };
     Statement();
     virtual ~Statement();
-    virtual Statement::Type getStatementType() const = 0; 
+    virtual Statement::Type getStatementType() const = 0;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_hpp */

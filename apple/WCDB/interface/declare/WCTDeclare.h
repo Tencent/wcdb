@@ -44,14 +44,19 @@ class WCTBinding;
 
 class WCTColumnBinding;
 typedef std::list<std::shared_ptr<WCTColumnBinding>> WCTColumnBindingList;
-typedef std::unordered_map<std::string, std::shared_ptr<WCTColumnBinding>> WCTColumnBindingMap;
+typedef std::unordered_map<std::string, std::shared_ptr<WCTColumnBinding>>
+    WCTColumnBindingMap;
 
 class WCTIndexBinding;
-typedef std::unordered_map<std::string, std::shared_ptr<WCTIndexBinding>> WCTIndexBindingMap;
+typedef std::unordered_map<std::string, std::shared_ptr<WCTIndexBinding>>
+    WCTIndexBindingMap;
 
 class WCTConstraintBindingBase;
-typedef std::list<std::shared_ptr<WCTConstraintBindingBase>> WCTConstraintBindingList;
-typedef std::unordered_map<std::string, std::shared_ptr<WCTConstraintBindingBase>> WCTConstraintBindingMap;
+typedef std::list<std::shared_ptr<WCTConstraintBindingBase>>
+    WCTConstraintBindingList;
+typedef std::unordered_map<std::string,
+                           std::shared_ptr<WCTConstraintBindingBase>>
+    WCTConstraintBindingMap;
 
 #pragma mark - ORM - Coding
 @protocol WCTTableCoding;
@@ -65,9 +70,9 @@ class WCTResult;
 class WCTResultList;
 typedef WCTExpr WCTCondition;
 typedef NS_ENUM(int, WCTOrderTerm) {
-    WCTOrderedAscending = (WCTOrderTerm)WCDB::OrderTerm::ASC,
-    WCTOrderedDescending = (WCTOrderTerm)WCDB::OrderTerm::DESC,
-    WCTOrderedNotSet = (WCTOrderTerm)WCDB::OrderTerm::NotSet,
+    WCTOrderedAscending = (WCTOrderTerm) WCDB::OrderTerm::ASC,
+    WCTOrderedDescending = (WCTOrderTerm) WCDB::OrderTerm::DESC,
+    WCTOrderedNotSet = (WCTOrderTerm) WCDB::OrderTerm::NotSet,
 };
 typedef WCDB::Order WCTOrderBy;
 typedef WCDB::OrderList WCTOrderByList;
@@ -81,31 +86,32 @@ typedef WCDB::ColumnIndexList WCTIndexList;
 typedef WCDB::ColumnDef WCTColumnDef;
 typedef WCDB::ColumnDefList WCTColumnDefList;
 typedef WCDB::TableConstraint WCTTableConstraint;
-typedef WCDB::TableConstraintList WCTTableConstraintList; 
+typedef WCDB::TableConstraintList WCTTableConstraintList;
 typedef NS_ENUM(int, WCTConflict) {
-    WCTConflictNotSet = (WCTConflict)WCDB::Conflict::NotSet,
-    WCTConflictRollback = (WCTConflict)WCDB::Conflict::Rollback,
-    WCTConflictAbort = (WCTConflict)WCDB::Conflict::Abort,
-    WCTConflictFail = (WCTConflict)WCDB::Conflict::Fail,
-    WCTConflictIgnore = (WCTConflict)WCDB::Conflict::Ignore,
-    WCTConflictReplace = (WCTConflict)WCDB::Conflict::Replace,
+    WCTConflictNotSet = (WCTConflict) WCDB::Conflict::NotSet,
+    WCTConflictRollback = (WCTConflict) WCDB::Conflict::Rollback,
+    WCTConflictAbort = (WCTConflict) WCDB::Conflict::Abort,
+    WCTConflictFail = (WCTConflict) WCDB::Conflict::Fail,
+    WCTConflictIgnore = (WCTConflict) WCDB::Conflict::Ignore,
+    WCTConflictReplace = (WCTConflict) WCDB::Conflict::Replace,
 };
 typedef NS_ENUM(int, WCTColumnType) {
-    WCTColumnTypeInteger32 = (WCTColumnType)WCDB::ColumnType::Integer32,
-    WCTColumnTypeInteger64 = (WCTColumnType)WCDB::ColumnType::Integer64,
-    WCTColumnTypeDouble = (WCTColumnType)WCDB::ColumnType::Float,
-    WCTColumnTypeString = (WCTColumnType)WCDB::ColumnType::Text,
-    WCTColumnTypeBinary = (WCTColumnType)WCDB::ColumnType::BLOB,
-    WCTColumnTypeNil = (WCTColumnType)WCDB::ColumnType::Null,
+    WCTColumnTypeInteger32 = (WCTColumnType) WCDB::ColumnType::Integer32,
+    WCTColumnTypeInteger64 = (WCTColumnType) WCDB::ColumnType::Integer64,
+    WCTColumnTypeDouble = (WCTColumnType) WCDB::ColumnType::Float,
+    WCTColumnTypeString = (WCTColumnType) WCDB::ColumnType::Text,
+    WCTColumnTypeBinary = (WCTColumnType) WCDB::ColumnType::BLOB,
+    WCTColumnTypeNil = (WCTColumnType) WCDB::ColumnType::Null,
 };
 
 #pragma mark - StatementHandle
 @class WCTStatement;
 typedef NSObject<WCTTableCoding> WCTObject;
-typedef NSDictionary<NSString*, WCTObject*> WCTMultiObject;//table name -> object
-typedef NSObject WCTValue;//NSData, NSNumber, NSString, NSNull
-typedef NSArray<WCTValue*> WCTOneRow;
-typedef NSArray<WCTValue*> WCTOneColumn;
-typedef NSArray<NSArray<WCTValue*>*> WCTColumnsXRows;
+typedef NSDictionary<NSString *, WCTObject *>
+    WCTMultiObject;        //table name -> object
+typedef NSObject WCTValue; //NSData, NSNumber, NSString, NSNull
+typedef NSArray<WCTValue *> WCTOneRow;
+typedef NSArray<WCTValue *> WCTOneColumn;
+typedef NSArray<NSArray<WCTValue *> *> WCTColumnsXRows;
 
 @class WCTError;

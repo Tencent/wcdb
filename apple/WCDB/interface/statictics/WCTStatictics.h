@@ -24,12 +24,12 @@
 /**
  Trigger when errors occurs
  */
-typedef void (^WCTErrorReport)(WCTError*);
+typedef void (^WCTErrorReport)(WCTError *);
 
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString*, NSNumber*>*, NSInteger);
+typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
 
 /**
  Statictics

@@ -19,67 +19,67 @@
  */
 
 #include <WCDB/clause_join.hpp>
+#include <WCDB/column.hpp>
 #include <WCDB/column_result.hpp>
 #include <WCDB/expr.hpp>
-#include <WCDB/order.hpp>
 #include <WCDB/handle.hpp>
+#include <WCDB/order.hpp>
 #include <WCDB/statement_select.hpp>
 #include <WCDB/subquery.hpp>
-#include <WCDB/column.hpp>
 
 namespace WCDB {
 
-StatementSelect& StatementSelect::from(const JoinClause& joinClause)
+StatementSelect &StatementSelect::from(const JoinClause &joinClause)
 {
-    m_description.append(" FROM "+joinClause.getDescription());
-    return *this;
-}
-    
-StatementSelect& StatementSelect::from(const std::string& tableName)
-{
-    m_description.append(" FROM "+tableName);
+    m_description.append(" FROM " + joinClause.getDescription());
     return *this;
 }
 
-StatementSelect& StatementSelect::where(const Expr& where)
+StatementSelect &StatementSelect::from(const std::string &tableName)
+{
+    m_description.append(" FROM " + tableName);
+    return *this;
+}
+
+StatementSelect &StatementSelect::where(const Expr &where)
 {
     if (!where.isEmpty()) {
-        m_description.append(" WHERE "+where.getDescription());
+        m_description.append(" WHERE " + where.getDescription());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::limit(const Expr& from, const Expr& to)
+StatementSelect &StatementSelect::limit(const Expr &from, const Expr &to)
 {
     if (!from.isEmpty()) {
-        m_description.append(" LIMIT "+from.getDescription());
+        m_description.append(" LIMIT " + from.getDescription());
         if (!to.isEmpty()) {
-            m_description.append(","+to.getDescription());
+            m_description.append("," + to.getDescription());
         }
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::limit(const Expr& limit)
+StatementSelect &StatementSelect::limit(const Expr &limit)
 {
     if (!limit.isEmpty()) {
-        m_description.append(" LIMIT "+limit.getDescription());
+        m_description.append(" LIMIT " + limit.getDescription());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::offset(const Expr& offset)
+StatementSelect &StatementSelect::offset(const Expr &offset)
 {
     if (!offset.isEmpty()) {
-        m_description.append(" OFFSET "+offset.getDescription());
+        m_description.append(" OFFSET " + offset.getDescription());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::having(const Expr& having)
+StatementSelect &StatementSelect::having(const Expr &having)
 {
     if (!having.isEmpty()) {
-        m_description.append(" HAVING "+having.getDescription());
+        m_description.append(" HAVING " + having.getDescription());
     }
     return *this;
 }
@@ -89,4 +89,4 @@ Statement::Type StatementSelect::getStatementType() const
     return Statement::Type::Select;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

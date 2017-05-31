@@ -35,20 +35,19 @@
 namespace WCDB {
 
 template <typename T>
-class ThreadLocal
-{
+class ThreadLocal {
 public:
-    typedef std::function<T*(void)> Constructor;
-    typedef std::function<void(T*)> Destructor;
-    ThreadLocal(const Constructor& constructor, Destructor destructor)
-    : construct(constructor)
+    typedef std::function<T *(void)> Constructor;
+    typedef std::function<void(T *)> Destructor;
+    ThreadLocal(const Constructor &constructor, Destructor destructor)
+        : construct(constructor)
     {
-        pthread_key_create(&m_key, destructor.template target<void(void*)>());
+        pthread_key_create(&m_key, destructor.template target<void(void *)>());
     }
 
-    T* get()
+    T *get()
     {
-        T* value = (T*)pthread_getspecific(m_key);
+        T *value = (T *) pthread_getspecific(m_key);
         if (value) {
             return value;
         }
@@ -57,15 +56,13 @@ public:
         return value;
     }
 
-    ~ThreadLocal()
-    {
-        pthread_key_delete(m_key);
-    }
+    ~ThreadLocal() { pthread_key_delete(m_key); }
+
 protected:
     const Constructor construct;
     pthread_key_t m_key;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* thread_local_hpp */

@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-enum class Conflict : int{
+enum class Conflict : int {
     NotSet,
     Rollback,
     Abort,
@@ -32,8 +32,8 @@ enum class Conflict : int{
     Replace,
 };
 
-const char* ConflictName(Conflict conflict);
+const char *ConflictName(Conflict conflict);
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* conflict_hpp */

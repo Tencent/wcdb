@@ -18,31 +18,37 @@
  * limitations under the License.
  */
 
-#import <WCDB/abstract.h>
 #import <WCDB/WCTBaseAccessor.h>
+#import <WCDB/abstract.h>
 
 template <typename T, typename Enable = void>
-struct ColumnIsCppType : public std::false_type {};
+struct ColumnIsCppType : public std::false_type {
+};
 template <typename T>
-struct ColumnIsCppType<T, typename std::enable_if<WCDB::ColumnInfo<T>::type!=WCDB::ColumnType::Null>::type> : public std::true_type {};
+struct ColumnIsCppType<T,
+                       typename std::enable_if<WCDB::ColumnInfo<T>::type !=
+                                               WCDB::ColumnType::Null>::type>
+    : public std::true_type {
+};
 
 template <WCTColumnType t>
-class WCTCppAccessor : public WCTBaseAccessor
-{
+class WCTCppAccessor : public WCTBaseAccessor {
 public:
-    using CType = typename WCDB::ColumnTypeInfo<(WCDB::ColumnType)t>::CType;
+    using CType = typename WCDB::ColumnTypeInfo<(WCDB::ColumnType) t>::CType;
     using Setter = std::function<void(InstanceType, CType)>;
     using Getter = std::function<CType(InstanceType)>;
 
     WCTCppAccessor(Getter getter, Setter setter)
-    : getValue(getter)
-    , setValue(setter){
+        : getValue(getter), setValue(setter)
+    {
     }
 
-    virtual WCTColumnType getColumnType() const override {
-        return (WCTColumnType)t;
+    virtual WCTColumnType getColumnType() const override
+    {
+        return (WCTColumnType) t;
     };
-    virtual WCTAccessorType getAccessorType() const override {
+    virtual WCTAccessorType getAccessorType() const override
+    {
         return WCTAccessorCpp;
     }
 
@@ -51,23 +57,26 @@ public:
 };
 
 template <>
-class WCTCppAccessor<WCTColumnTypeBinary> : public WCTBaseAccessor
-{
+class WCTCppAccessor<WCTColumnTypeBinary> : public WCTBaseAccessor {
 public:
-    using SizeType = typename WCDB::ColumnTypeInfo<(WCDB::ColumnType)WCTColumnTypeBinary>::SizeType;
-    using CType = typename WCDB::ColumnTypeInfo<(WCDB::ColumnType)WCTColumnTypeBinary>::CType;
+    using SizeType = typename WCDB::ColumnTypeInfo<(
+        WCDB::ColumnType) WCTColumnTypeBinary>::SizeType;
+    using CType = typename WCDB::ColumnTypeInfo<(
+        WCDB::ColumnType) WCTColumnTypeBinary>::CType;
     using Setter = std::function<void(InstanceType, CType, SizeType)>;
-    using Getter = std::function<CType(InstanceType, SizeType&)>;
+    using Getter = std::function<CType(InstanceType, SizeType &)>;
 
     WCTCppAccessor(Getter getter, Setter setter)
-    : getValue(getter)
-    , setValue(setter){
+        : getValue(getter), setValue(setter)
+    {
     }
 
-    virtual WCTColumnType getColumnType() const override {
+    virtual WCTColumnType getColumnType() const override
+    {
         return WCTColumnTypeBinary;
     };
-    virtual WCTAccessorType getAccessorType() const override {
+    virtual WCTAccessorType getAccessorType() const override
+    {
         return WCTAccessorCpp;
     }
 

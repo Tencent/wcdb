@@ -22,7 +22,8 @@
 
 namespace WCDB {
 
-StatementTransaction& StatementTransaction::begin(StatementTransaction::Mode mode)
+StatementTransaction &
+StatementTransaction::begin(StatementTransaction::Mode mode)
 {
     m_type = StatementTransaction::Type::Begin;
     m_description.append("BEGIN");
@@ -34,18 +35,18 @@ StatementTransaction& StatementTransaction::begin(StatementTransaction::Mode mod
             m_description.append(" EXCLUSIVE");
         default:
             break;
-    }    
+    }
     return *this;
 }
 
-StatementTransaction& StatementTransaction::commit()
+StatementTransaction &StatementTransaction::commit()
 {
     m_type = StatementTransaction::Type::Commit;
     m_description.append("COMMIT");
     return *this;
 }
 
-StatementTransaction& StatementTransaction::rollback()
+StatementTransaction &StatementTransaction::rollback()
 {
     m_type = StatementTransaction::Type::Rollback;
     m_description.append("ROLLBACK");
@@ -57,9 +58,10 @@ Statement::Type StatementTransaction::getStatementType() const
     return Statement::Type::Transaction;
 }
 
-const StatementTransaction::Type& StatementTransaction::getTransactionType() const
+const StatementTransaction::Type &
+StatementTransaction::getTransactionType() const
 {
     return m_type;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

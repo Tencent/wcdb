@@ -18,32 +18,31 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+Database.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+Database.h>
 #import <WCDB/WCTDatabase+Private.h>
 
-@implementation WCTDatabase(Database)
+@implementation WCTDatabase (Database)
 
-- (instancetype)initWithPath:(NSString*)path
+- (instancetype)initWithPath:(NSString *)path
 {
     std::shared_ptr<WCDB::CoreBase> core(new WCDB::Database(path.UTF8String));
     if (self = [super initWithCore:core]) {
-        _database = (WCDB::Database*)_core.get();
+        _database = (WCDB::Database *) _core.get();
 #if TARGET_OS_IPHONE
-        _database->setConfig("FileProtection", 
-                             [path](std::shared_ptr<WCDB::Handle>& handle, WCDB::Error& error)->bool{
-                                 NSString* shm = [path stringByAppendingString:@"-shm"];
-                                 NSFileManager* fm = [NSFileManager defaultManager];
+        _database->setConfig("FileProtection",
+                             [path](std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) -> bool {
+                                 NSString *shm = [path stringByAppendingString:@"-shm"];
+                                 NSFileManager *fm = [NSFileManager defaultManager];
                                  if ([fm fileExistsAtPath:shm]) {
-                                     NSDictionary* attributes = [fm attributesOfItemAtPath:shm error:nil];
-                                     NSString* fileProtection = [attributes objectForKey:NSFileProtectionKey];
-                                     if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]
-                                         ||[fileProtection isEqualToString:NSFileProtectionNone]) {
+                                     NSDictionary *attributes = [fm attributesOfItemAtPath:shm error:nil];
+                                     NSString *fileProtection = [attributes objectForKey:NSFileProtectionKey];
+                                     if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
                                          return true;
                                      }
-                                     NSMutableDictionary* newAttributes = [[NSMutableDictionary alloc] initWithDictionary:attributes];
+                                     NSMutableDictionary *newAttributes = [[NSMutableDictionary alloc] initWithDictionary:attributes];
                                      [newAttributes setObject:NSFileProtectionCompleteUntilFirstUserAuthentication forKey:NSFileProtectionKey];
-                                     [fm setAttributes:newAttributes ofItemAtPath:path error:nil];    
+                                     [fm setAttributes:newAttributes ofItemAtPath:path error:nil];
                                  }
                                  return true;
                              });
@@ -52,9 +51,9 @@
     return self;
 }
 
-- (void)setCipherKey:(NSData*)data
+- (void)setCipherKey:(NSData *)data
 {
-    _database->setCipherKey(data.bytes, (int)data.length);
+    _database->setCipherKey(data.bytes, (int) data.length);
 }
 
 - (BOOL)canOpen
@@ -86,7 +85,7 @@
 {
     std::function<void(void)> callback = nullptr;
     if (onClosed) {
-        callback = [onClosed](){
+        callback = [onClosed]() {
             onClosed();
         };
     }

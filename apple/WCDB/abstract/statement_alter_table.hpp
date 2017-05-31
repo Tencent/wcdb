@@ -25,16 +25,15 @@
 
 namespace WCDB {
 
-class StatementAlterTable : public Statement
-{
+class StatementAlterTable : public Statement {
 public:
-    StatementAlterTable& alter(const std::string& table);
-    StatementAlterTable& rename(const std::string& newTable);
-    StatementAlterTable& addColumn(const ColumnDef& columnDef);
-    
+    StatementAlterTable &alter(const std::string &table);
+    StatementAlterTable &rename(const std::string &newTable);
+    StatementAlterTable &addColumn(const ColumnDef &columnDef);
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_alter_table_hpp */

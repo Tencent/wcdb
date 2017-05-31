@@ -20,59 +20,59 @@
 
 #import <WCDB/WCTDatabase+File.h>
 #import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/utility.hpp>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/utility.hpp>
 
-@implementation WCTDatabase(File)
+@implementation WCTDatabase (File)
 
-- (BOOL)removeFilesWithError:(WCTError**)error
+- (BOOL)removeFilesWithError:(WCTError **)error
 {
     WCDB::Error unixError;
     bool result = _database->removeFiles(unixError);
-    if (!result&&error) {
+    if (!result && error) {
         *error = [WCTError errorWithWCDBError:unixError];
     }
     return result;
 }
 
-- (BOOL)moveFilesToDirectory:(NSString*)directory withExtraFiles:(NSArray<NSString*>*)extraFiles andError:(WCTError**)error
+- (BOOL)moveFilesToDirectory:(NSString *)directory withExtraFiles:(NSArray<NSString *> *)extraFiles andError:(WCTError **)error
 {
     WCDB::Error unixError;
     std::list<std::string> files;
-    for (NSString* extraFile in extraFiles) {
+    for (NSString *extraFile in extraFiles) {
         files.push_back(extraFile.UTF8String);
     }
     bool result = _database->moveFilesToDirectoryWithExtraFiles(directory.UTF8String, files, unixError);
-    if (!result&&error) {
+    if (!result && error) {
         *error = [WCTError errorWithWCDBError:unixError];
     }
     return result;
 }
 
-- (BOOL)moveFilesToDirectory:(NSString*)directory withError:(WCTError**)error
+- (BOOL)moveFilesToDirectory:(NSString *)directory withError:(WCTError **)error
 {
     WCDB::Error unixError;
     bool result = _database->moveFiles(directory.UTF8String, unixError);
-    if (!result&&error) {
+    if (!result && error) {
         *error = [WCTError errorWithWCDBError:unixError];
     }
     return result;
 }
 
-- (NSArray<NSString*>*)getPaths
+- (NSArray<NSString *> *)getPaths
 {
-    NSMutableArray* paths = [NSMutableArray array];
-    for (const auto& path : _database->getPaths()) {
+    NSMutableArray *paths = [NSMutableArray array];
+    for (const auto &path : _database->getPaths()) {
         [paths addObject:@(path.c_str())];
     }
     return paths;
 }
 
-- (NSUInteger)getFilesSizeWithError:(WCTError**)error
+- (NSUInteger)getFilesSizeWithError:(WCTError **)error
 {
     WCDB::Error unixError;
     size_t size = _database->getFilesSize(unixError);
-    if (!unixError.isOK()&&error) {
+    if (!unixError.isOK() && error) {
         *error = [WCTError errorWithWCDBError:unixError];
     }
     return size;

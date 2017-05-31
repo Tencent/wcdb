@@ -18,57 +18,57 @@
  * limitations under the License.
  */
 
-#include <WCDB/transaction.hpp>
 #include <WCDB/in_case_lock_guard.hpp>
+#include <WCDB/transaction.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
 
-Transaction::Transaction(const RecyclableHandlePool& pool, const RecyclableHandle& handle)
-: CoreBase(pool, CoreType::Transaction)
-, m_handle(handle)
-, m_mutex(new std::mutex)
-, m_isInTransaction(false)
+Transaction::Transaction(const RecyclableHandlePool &pool,
+                         const RecyclableHandle &handle)
+    : CoreBase(pool, CoreType::Transaction)
+    , m_handle(handle)
+    , m_mutex(new std::mutex)
+    , m_isInTransaction(false)
 {
 }
 
-RecyclableStatement Transaction::prepare(const Statement& statement, Error& error)
+RecyclableStatement Transaction::prepare(const Statement &statement,
+                                         Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
-    if (statement.getStatementType()==Statement::Type::Transaction) {
-        Error::ReportCore(getTag(), 
-                          getPath(),
-                          Error::CoreOperation::Prepare, 
-                          Error::CoreCode::Misuse, 
-                          "Using [begin], [commit], [rollback] method to do a transaction",
-                          &error);
+    if (statement.getStatementType() == Statement::Type::Transaction) {
+        Error::ReportCore(
+            getTag(), getPath(), Error::CoreOperation::Prepare,
+            Error::CoreCode::Misuse,
+            "Using [begin], [commit], [rollback] method to do a transaction",
+            &error);
         return RecyclableStatement(m_handle, nullptr);
     }
     return CoreBase::prepare(m_handle, statement, error);
 }
 
-bool Transaction::exec(const Statement& statement, Error& error)
+bool Transaction::exec(const Statement &statement, Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
-    if (statement.getStatementType()==Statement::Type::Transaction) {
-        Error::ReportCore(getTag(),
-                          getPath(),
-                          Error::CoreOperation::Exec, 
-                          Error::CoreCode::Misuse, 
-                          "Using [begin], [commit], [rollback] method to do a transaction",
-                          &error);
+    if (statement.getStatementType() == Statement::Type::Transaction) {
+        Error::ReportCore(
+            getTag(), getPath(), Error::CoreOperation::Exec,
+            Error::CoreCode::Misuse,
+            "Using [begin], [commit], [rollback] method to do a transaction",
+            &error);
         return false;
     }
     return CoreBase::exec(m_handle, statement, error);
 }
-    
-bool Transaction::isTableExists(const std::string& tableName, Error& error)
+
+bool Transaction::isTableExists(const std::string &tableName, Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
     return CoreBase::isTableExists(m_handle, tableName, error);
 }
 
-bool Transaction::begin(StatementTransaction::Mode mode, Error& error)
+bool Transaction::begin(StatementTransaction::Mode mode, Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
     if (CoreBase::exec(m_handle, StatementTransaction().begin(mode), error)) {
@@ -78,25 +78,28 @@ bool Transaction::begin(StatementTransaction::Mode mode, Error& error)
     return false;
 }
 
-bool Transaction::commit(Error& error)
+bool Transaction::commit(Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
-    bool result = CoreBase::exec(m_handle, StatementTransaction().commit(), error);
+    bool result =
+        CoreBase::exec(m_handle, StatementTransaction().commit(), error);
     if (result) {
         m_isInTransaction = false;
     }
     return result;
 }
 
-bool Transaction::rollback(Error& error)
+bool Transaction::rollback(Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
-    bool result = CoreBase::exec(m_handle, StatementTransaction().rollback(), error);
+    bool result =
+        CoreBase::exec(m_handle, StatementTransaction().rollback(), error);
     m_isInTransaction = false;
     return result;
 }
 
-bool Transaction::runEmbeddedTransaction(TransactionBlock transaction, WCDB::Error& error)
+bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
+                                         WCDB::Error &error)
 {
     InCaseLockGuard lockGuard(m_mutex);
     if (m_isInTransaction) {
@@ -105,4 +108,4 @@ bool Transaction::runEmbeddedTransaction(TransactionBlock transaction, WCDB::Err
     return runTransaction(transaction, nullptr, error);
 }
 
-}//namespace WCDB 
+} //namespace WCDB

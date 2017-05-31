@@ -21,49 +21,51 @@
 #ifndef concurrent_list_hpp
 #define concurrent_list_hpp
 
-#include <list>
 #include <WCDB/spin.hpp>
+#include <list>
 
 namespace WCDB {
 
 template <typename T>
-class ConcurrentList
-{
+class ConcurrentList {
 public:
     using ElementType = std::shared_ptr<T>;
-    ConcurrentList(size_t capacityCap)
-    : m_capacityCap(capacityCap){
-    }
-    
-    void setCapacityCap(const size_t& capacityCap) {
+    ConcurrentList(size_t capacityCap) : m_capacityCap(capacityCap) {}
+
+    void setCapacityCap(const size_t &capacityCap)
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
         m_capacityCap = capacityCap;
     }
-    
-    size_t getCapacityCap() const {
+
+    size_t getCapacityCap() const
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
         return m_capacityCap;
     }
-    
-    bool pushBack(const ElementType& value) {
+
+    bool pushBack(const ElementType &value)
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
-        if (m_list.size()<m_capacityCap) {
+        if (m_list.size() < m_capacityCap) {
             m_list.push_back(value);
             return true;
         }
         return false;
     }
-    
-    bool pushFront(const ElementType& value) {
+
+    bool pushFront(const ElementType &value)
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
-        if (m_list.size()<m_capacityCap) {
+        if (m_list.size() < m_capacityCap) {
             m_list.push_front(value);
             return true;
         }
         return false;
     }
-    
-    ElementType popBack() {
+
+    ElementType popBack()
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
         if (m_list.empty()) {
             return nullptr;
@@ -72,8 +74,9 @@ public:
         m_list.pop_back();
         return value;
     }
-    
-    ElementType popFront() {
+
+    ElementType popFront()
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
         if (m_list.empty()) {
             return nullptr;
@@ -82,22 +85,25 @@ public:
         m_list.pop_front();
         return value;
     }
-    
-    bool isEmpty() const {
+
+    bool isEmpty() const
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
         return m_list.empty();
     }
-    
-    size_t size() const {
+
+    size_t size() const
+    {
         SpinLockGuard<Spin> lockGuard(m_spin);
         return m_list.size();
     }
+
 protected:
     std::list<ElementType> m_list;
     size_t m_capacityCap;
     mutable Spin m_spin;
 };
-    
-}//namespace WCDB 
+
+} //namespace WCDB
 
 #endif /* concurrent_list_hpp */

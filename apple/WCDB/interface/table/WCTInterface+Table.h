@@ -19,27 +19,27 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTInterface.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTInterface.h>
 
-@interface WCTInterface(Table)
+@interface WCTInterface (Table)
 
-- (BOOL)createTableAndIndexesOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls andError:(WCDB::Error&)error;
+- (BOOL)createTableAndIndexesOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls andError:(WCDB::Error &)error;
 
-- (BOOL)createVirtualTableOfName:(NSString*)tableName usingModule:(NSString*)moduleName withClass:(Class)cls andError:(WCDB::Error&)error;
+- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class)cls andError:(WCDB::Error &)error;
 
-- (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList andError:(WCDB::Error&)error;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andError:(WCDB::Error &)error;
 
-- (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList andConstraintList:(const WCTTableConstraintList&)constraintList andError:(WCDB::Error&)error;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andConstraintList:(const WCTTableConstraintList &)constraintList andError:(WCDB::Error &)error;
 
-- (BOOL)addColumn:(const WCTColumnDef&)columnDef forTable:(NSString*)tableName withError:(WCDB::Error&)error;
+- (BOOL)addColumn:(const WCTColumnDef &)columnDef forTable:(NSString *)tableName withError:(WCDB::Error &)error;
 
-- (BOOL)dropTableOfName:(NSString*)tableName withError:(WCDB::Error&)error;
+- (BOOL)dropTableOfName:(NSString *)tableName withError:(WCDB::Error &)error;
 
-- (BOOL)isTableExists:(NSString*)tableName withError:(WCDB::Error&)error;
+- (BOOL)isTableExists:(NSString *)tableName withError:(WCDB::Error &)error;
 
-- (BOOL)createIndexOfName:(NSString*)indexName withIndexList:(const WCTIndexList&)indexList forTable:(NSString*)tableName andError:(WCDB::Error&)error;
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCTIndexList &)indexList forTable:(NSString *)tableName andError:(WCDB::Error &)error;
 
-- (BOOL)dropIndexOfName:(NSString*)indexName withError:(WCDB::Error&)error;
+- (BOOL)dropIndexOfName:(NSString *)indexName withError:(WCDB::Error &)error;
 
 @end

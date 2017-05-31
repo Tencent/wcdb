@@ -22,25 +22,24 @@
 #import <WCDB/WCTExpr.h>
 
 WCTAnyProperty::WCTAnyProperty()
-: WCDB::Column(WCDB::Column::Any)
-, m_cls(nil)
+    : WCDB::Column(WCDB::Column::Any)
+    , m_cls(nil)
 {
 }
 
 WCTAnyProperty::WCTAnyProperty(Class cls)
-: WCDB::Column(WCDB::Column::Any)
-, m_cls(cls)
+    : WCDB::Column(WCDB::Column::Any)
+    , m_cls(cls)
 {
 }
 
-WCTAnyProperty::WCTAnyProperty(const Column& column, Class cls)
-: WCDB::Column(column)
-, m_cls(cls)
+WCTAnyProperty::WCTAnyProperty(const Column &column, Class cls)
+    : WCDB::Column(column)
+    , m_cls(cls)
 {
-
 }
 
-WCTAnyProperty WCTAnyProperty::inTable(NSString* tableName) const
+WCTAnyProperty WCTAnyProperty::inTable(NSString *tableName) const
 {
     return WCTAnyProperty(WCDB::Column::inTable(tableName.UTF8String), m_cls);
 }
@@ -60,7 +59,7 @@ WCTExpr WCTAnyProperty::groupConcat(bool distinct) const
     return WCTExpr(WCDB::Expr(*this)).groupConcat(distinct);
 }
 
-WCTExpr WCTAnyProperty::groupConcat(NSString* seperator, bool distinct) const
+WCTExpr WCTAnyProperty::groupConcat(NSString *seperator, bool distinct) const
 {
     return WCTExpr(WCDB::Expr(*this)).groupConcat(seperator, distinct);
 }

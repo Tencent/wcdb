@@ -18,15 +18,16 @@
  * limitations under the License.
  */
 
-#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding) { \
-    WCDB_PROPERTY_HINT(className, propertyName) \
-    binding.getOrCreateIndexBinding(indexSubfixName)->addIndex(className.propertyName.index(order));\
-    return nullptr; \
-}(__WCDB_BINDING(className));
+#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order)      \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
+        binding.getOrCreateIndexBinding(indexSubfixName)                       \
+            ->addIndex(className.propertyName.index(order));                   \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));
 
-#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right) \
-static const auto UNUSED_UNIQUE_ID = [](WCTBinding& binding) { \
-    binding.addVirtualTableArgument(left, right);\
-    return nullptr; \
-}(__WCDB_BINDING(className));
+#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        binding.addVirtualTableArgument(left, right);                          \
+        return nullptr;                                                        \
+    }(__WCDB_BINDING(className));

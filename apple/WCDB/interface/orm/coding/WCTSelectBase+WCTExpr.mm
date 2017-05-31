@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTSelectBase+WCTExpr.h>
 #import <WCDB/WCTSelectBase+Private.h>
+#import <WCDB/WCTSelectBase+WCTExpr.h>
 
-@implementation WCTSelectBase(WCTExpr)
+@implementation WCTSelectBase (WCTExpr)
 
-- (const WCDB::StatementSelect&)statement
+- (const WCDB::StatementSelect &)statement
 {
     return _statement;
 }

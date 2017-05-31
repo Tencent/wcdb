@@ -22,27 +22,30 @@
 #define statement_recyclable_hpp
 
 #include <WCDB/abstract.h>
-#include <WCDB/recyclable.hpp>
 #include <WCDB/handle_pool.hpp>
+#include <WCDB/recyclable.hpp>
 
 namespace WCDB {
 
-class RecyclableStatement
-{
+class RecyclableStatement {
 public:
-    RecyclableStatement(const RecyclableHandle& handle, const std::shared_ptr<StatementHandle>& statementHandle);
-    constexpr StatementHandle* operator -> () const {
+    RecyclableStatement(
+        const RecyclableHandle &handle,
+        const std::shared_ptr<StatementHandle> &statementHandle);
+    constexpr StatementHandle *operator->() const
+    {
         return m_statementHandle.get();
     }
     RecyclableStatement();
     operator bool() const;
-    bool operator !=(std::nullptr_t) const;
-    bool operator ==(std::nullptr_t) const;
+    bool operator!=(std::nullptr_t) const;
+    bool operator==(std::nullptr_t) const;
+
 protected:
     RecyclableHandle m_handle;
     std::shared_ptr<StatementHandle> m_statementHandle;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_recyclable_hpp */

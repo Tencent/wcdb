@@ -23,17 +23,17 @@
 
 @protocol WCTTableCoding
 @required
-+ (const WCTBinding*)objectRelationalMappingForWCDB;
-+ (const WCTPropertyList&)AllProperties;
-+ (const WCTAnyProperty&)AnyProperty;
-@property (nonatomic, assign) long long lastInsertedRowID;
++ (const WCTBinding *)objectRelationalMappingForWCDB;
++ (const WCTPropertyList &)AllProperties;
++ (const WCTAnyProperty &)AnyProperty;
+@property(nonatomic, assign) long long lastInsertedRowID;
 @optional
-@property (nonatomic, assign) BOOL isAutoIncrement;
+@property(nonatomic, assign) BOOL isAutoIncrement;
 @end
 
 @protocol WCTColumnCoding
 @required
-+ (instancetype)unarchiveWithWCTValue:(WCTValue*)value;//value could be nil
-- (id/* WCTValue* */)archivedWCTValue;//value could be nil
++ (instancetype)unarchiveWithWCTValue:(WCTValue *)value; //value could be nil
+- (id /* WCTValue* */)archivedWCTValue;                  //value could be nil
 + (WCTColumnType)columnTypeForWCDB;
 @end

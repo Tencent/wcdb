@@ -21,13 +21,13 @@
 #ifndef column_type_hpp
 #define column_type_hpp
 
-#include <type_traits>
 #include <cstdint>
 #include <string>
+#include <type_traits>
 
 namespace WCDB {
 
-enum class ColumnType : int{
+enum class ColumnType : int {
     Null,
     Float,
     Integer32,
@@ -37,34 +37,62 @@ enum class ColumnType : int{
 };
 
 template <typename T, typename Enable = void>
-struct ColumnIsFloatType : public std::false_type {};
+struct ColumnIsFloatType : public std::false_type {
+};
 template <typename T>
-struct ColumnIsFloatType<T, typename std::enable_if<std::is_floating_point<T>::value>::type> : public std::true_type {};
+struct ColumnIsFloatType<
+    T,
+    typename std::enable_if<std::is_floating_point<T>::value>::type>
+    : public std::true_type {
+};
 
 template <typename T, typename Enable = void>
-struct ColumnIsInteger32Type : public std::false_type {};
+struct ColumnIsInteger32Type : public std::false_type {
+};
 template <typename T>
-struct ColumnIsInteger32Type<T, typename std::enable_if<(std::is_integral<T>::value||std::is_enum<T>::value)&&(sizeof(T)<=4)>::type> : public std::true_type {};
+struct ColumnIsInteger32Type<
+    T,
+    typename std::enable_if<(std::is_integral<T>::value ||
+                             std::is_enum<T>::value) &&
+                            (sizeof(T) <= 4)>::type> : public std::true_type {
+};
 
 template <typename T, typename Enable = void>
-struct ColumnIsInteger64Type : public std::false_type {};
+struct ColumnIsInteger64Type : public std::false_type {
+};
 template <typename T>
-struct ColumnIsInteger64Type<T, typename std::enable_if<(std::is_integral<T>::value||std::is_enum<T>::value)&&(sizeof(T)>4)>::type> : public std::true_type {};
+struct ColumnIsInteger64Type<
+    T,
+    typename std::enable_if<(std::is_integral<T>::value ||
+                             std::is_enum<T>::value) &&
+                            (sizeof(T) > 4)>::type> : public std::true_type {
+};
 
 template <typename T, typename Enable = void>
-struct ColumnIsTextType : public std::false_type {};
+struct ColumnIsTextType : public std::false_type {
+};
 template <typename T>
-struct ColumnIsTextType<T, typename std::enable_if<std::is_same<std::string, T>::value||std::is_same<const char*, T>::value>::type> : public std::true_type {};
+struct ColumnIsTextType<
+    T,
+    typename std::enable_if<std::is_same<std::string, T>::value ||
+                            std::is_same<const char *, T>::value>::type>
+    : public std::true_type {
+};
 
 template <typename T, typename Enable = void>
-struct ColumnIsBLOBType : public std::false_type {};
+struct ColumnIsBLOBType : public std::false_type {
+};
 template <typename T>
-struct ColumnIsBLOBType<T, typename std::enable_if<std::is_same<void*, T>::value||std::is_same<const void*, T>::value>::type> : public std::true_type {};
+struct ColumnIsBLOBType<
+    T,
+    typename std::enable_if<std::is_same<void *, T>::value ||
+                            std::is_same<const void *, T>::value>::type>
+    : public std::true_type {
+};
 
 //Null
 template <ColumnType T = ColumnType::Null>
-struct ColumnTypeInfo 
-{
+struct ColumnTypeInfo {
     static constexpr const bool isNull = true;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger32 = false;
@@ -74,14 +102,14 @@ struct ColumnTypeInfo
     static constexpr const bool isBaseType = false;
     using CType = void;
     static constexpr const ColumnType type = ColumnType::Null;
-    static constexpr const char* name = "";
+    static constexpr const char *name = "";
 };
 template <typename T, typename Enable = void>
-struct ColumnInfo : public ColumnTypeInfo<ColumnType::Null> {};
+struct ColumnInfo : public ColumnTypeInfo<ColumnType::Null> {
+};
 //Float
 template <>
-struct ColumnTypeInfo<ColumnType::Float>
-{
+struct ColumnTypeInfo<ColumnType::Float> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = true;
     static constexpr const bool isInteger32 = false;
@@ -91,14 +119,15 @@ struct ColumnTypeInfo<ColumnType::Float>
     static constexpr const bool isBaseType = true;
     using CType = double;
     static constexpr const ColumnType type = ColumnType::Float;
-    static constexpr const char* name = "REAL";
+    static constexpr const char *name = "REAL";
 };
 template <typename T>
-struct ColumnInfo<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> : public ColumnTypeInfo<ColumnType::Float> {};
+struct ColumnInfo<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::Float> {
+};
 //Integer32
 template <>
-struct ColumnTypeInfo<ColumnType::Integer32>
-{
+struct ColumnTypeInfo<ColumnType::Integer32> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger32 = true;
@@ -108,14 +137,17 @@ struct ColumnTypeInfo<ColumnType::Integer32>
     static constexpr const bool isBaseType = true;
     using CType = int32_t;
     static constexpr const ColumnType type = ColumnType::Integer32;
-    static constexpr const char* name = "INTEGER";
+    static constexpr const char *name = "INTEGER";
 };
 template <typename T>
-struct ColumnInfo<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> : public ColumnTypeInfo<ColumnType::Integer32> {};
+struct ColumnInfo<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::Integer32> {
+};
 //Integer64
 template <>
-struct ColumnTypeInfo<ColumnType::Integer64>
-{
+struct ColumnTypeInfo<ColumnType::Integer64> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger32 = false;
@@ -125,14 +157,17 @@ struct ColumnTypeInfo<ColumnType::Integer64>
     static constexpr const bool isBaseType = true;
     using CType = int64_t;
     static constexpr const ColumnType type = ColumnType::Integer64;
-    static constexpr const char* name = "INTEGER";
+    static constexpr const char *name = "INTEGER";
 };
 template <typename T>
-struct ColumnInfo<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> : public ColumnTypeInfo<ColumnType::Integer64> {};
+struct ColumnInfo<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::Integer64> {
+};
 //Text
 template <>
-struct ColumnTypeInfo<ColumnType::Text>
-{
+struct ColumnTypeInfo<ColumnType::Text> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger32 = false;
@@ -140,16 +175,17 @@ struct ColumnTypeInfo<ColumnType::Text>
     static constexpr const bool isText = true;
     static constexpr const bool isBLOB = false;
     static constexpr const bool isBaseType = true;
-    using CType = const char*;
+    using CType = const char *;
     static constexpr const ColumnType type = ColumnType::Text;
-    static constexpr const char* name = "TEXT";
+    static constexpr const char *name = "TEXT";
 };
 template <typename T>
-struct ColumnInfo<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public ColumnTypeInfo<ColumnType::Text> {};
+struct ColumnInfo<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::Text> {
+};
 //BLOB
 template <>
-struct ColumnTypeInfo<ColumnType::BLOB>
-{
+struct ColumnTypeInfo<ColumnType::BLOB> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
     static constexpr const bool isInteger32 = false;
@@ -157,16 +193,18 @@ struct ColumnTypeInfo<ColumnType::BLOB>
     static constexpr const bool isText = false;
     static constexpr const bool isBLOB = true;
     static constexpr const bool isBaseType = false;
-    using CType = const void*;
+    using CType = const void *;
     using SizeType = int;
     static constexpr const ColumnType type = ColumnType::BLOB;
-    static constexpr const char* name = "BLOB";
+    static constexpr const char *name = "BLOB";
 };
 template <typename T>
-struct ColumnInfo<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type> : public ColumnTypeInfo<ColumnType::BLOB> {};
+struct ColumnInfo<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::BLOB> {
+};
 
-const char* ColumnTypeName(ColumnType type);
+const char *ColumnTypeName(ColumnType type);
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* column_type_hpp */

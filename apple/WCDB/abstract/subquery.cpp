@@ -24,29 +24,27 @@
 
 namespace WCDB {
 
-Subquery::Subquery(const char* table)
-: Describable(table)
+Subquery::Subquery(const char *table) : Describable(table)
 {
 }
 
-Subquery::Subquery(const std::string& table)
-: Describable(table)
+Subquery::Subquery(const std::string &table) : Describable(table)
 {
 }
 
-Subquery::Subquery(const JoinClause& joinClause)
-: Describable("("+joinClause.getDescription()+")")
+Subquery::Subquery(const JoinClause &joinClause)
+    : Describable("(" + joinClause.getDescription() + ")")
 {
 }
 
-Subquery::Subquery(const StatementSelect& statementSelect)
-: Describable("("+statementSelect.getDescription()+")")
+Subquery::Subquery(const StatementSelect &statementSelect)
+    : Describable("(" + statementSelect.getDescription() + ")")
 {
 }
 
-Subquery& Subquery::as(const std::string& alias)
+Subquery &Subquery::as(const std::string &alias)
 {
-    m_description.append(" AS "+alias);
+    m_description.append(" AS " + alias);
     return *this;
 }
 
@@ -54,5 +52,5 @@ Subquery::operator SubqueryList() const
 {
     return {*this};
 }
-    
-}//namespace WCDB 
+
+} //namespace WCDB

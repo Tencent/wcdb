@@ -34,6 +34,6 @@
  @param objects Objects to be inserted into WCDB.
  @return YES if no error occurs.
  */
-- (BOOL)executeWithObjects:(NSArray<WCTObject*>*)objects;
+- (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects;
 
 @end

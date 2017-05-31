@@ -23,21 +23,21 @@
 
 namespace WCDB {
 
-StatementAlterTable& StatementAlterTable::alter(const std::string& table)
+StatementAlterTable &StatementAlterTable::alter(const std::string &table)
 {
-    m_description.append("ALTER TABLE "+table);
+    m_description.append("ALTER TABLE " + table);
     return *this;
 }
 
-StatementAlterTable& StatementAlterTable::rename(const std::string& newTable)
+StatementAlterTable &StatementAlterTable::rename(const std::string &newTable)
 {
-    m_description.append(" RENAME TO "+newTable);
+    m_description.append(" RENAME TO " + newTable);
     return *this;
 }
 
-StatementAlterTable& StatementAlterTable::addColumn(const ColumnDef& columnDef)
-{    
-    m_description.append(" ADD COLUMN "+columnDef.getDescription());
+StatementAlterTable &StatementAlterTable::addColumn(const ColumnDef &columnDef)
+{
+    m_description.append(" ADD COLUMN " + columnDef.getDescription());
     return *this;
 }
 
@@ -46,4 +46,4 @@ Statement::Type StatementAlterTable::getStatementType() const
     return Statement::Type::AlterTable;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

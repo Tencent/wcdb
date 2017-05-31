@@ -18,17 +18,18 @@
  * limitations under the License.
  */
 
+#include <WCDB/error.hpp>
 #include <WCDB/in_case_lock_guard.hpp>
 #include <WCDB/utility.hpp>
-#include <WCDB/error.hpp>
 
 namespace WCDB {
 
-InCaseLockGuard::InCaseLockGuard(std::shared_ptr<std::mutex>& mutex)
-: m_mutex(mutex)
+InCaseLockGuard::InCaseLockGuard(std::shared_ptr<std::mutex> &mutex)
+    : m_mutex(mutex)
 {
     if (!m_mutex->try_lock()) {
-        WCDB::Error::Abort("This context can not be accessed by multiple threads at the same time");
+        WCDB::Error::Abort("This context can not be accessed by multiple "
+                           "threads at the same time");
         m_mutex->lock();
     }
 }
@@ -40,4 +41,4 @@ InCaseLockGuard::~InCaseLockGuard()
     }
 }
 
-}//namespace WCDB
+} //namespace WCDB

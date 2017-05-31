@@ -22,7 +22,8 @@
 
 namespace WCDB {
 
-StatementDropTable& StatementDropTable::drop(const std::string& table, bool ifExists)
+StatementDropTable &StatementDropTable::drop(const std::string &table,
+                                             bool ifExists)
 {
     m_description.append("DROP TABLE ");
     if (ifExists) {
@@ -37,4 +38,4 @@ Statement::Type StatementDropTable::getStatementType() const
     return Statement::Type::DropTable;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

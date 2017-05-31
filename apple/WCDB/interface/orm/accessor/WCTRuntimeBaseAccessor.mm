@@ -22,24 +22,24 @@
 #import <objc/runtime.h>
 #import <string>
 
-SEL WCTRuntimeBaseAccessor::GetGetterSelector(Class cls, const std::string& propertyName)
+SEL WCTRuntimeBaseAccessor::GetGetterSelector(Class cls, const std::string &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
-    const char* getter = property_copyAttributeValue(objcProperty, "G");
+    const char *getter = property_copyAttributeValue(objcProperty, "G");
     if (!getter) {
         getter = propertyName.c_str();
     }
     return sel_registerName(getter);
 }
 
-SEL WCTRuntimeBaseAccessor::GetSetterSelector(Class cls, const std::string& propertyName)
+SEL WCTRuntimeBaseAccessor::GetSetterSelector(Class cls, const std::string &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
-    const char* setter = property_copyAttributeValue(objcProperty, "S");
+    const char *setter = property_copyAttributeValue(objcProperty, "S");
     if (setter) {
         return sel_registerName(setter);
     }
-    std::string defaultSetter = "set"+propertyName+":";
+    std::string defaultSetter = "set" + propertyName + ":";
     defaultSetter[3] = std::toupper(propertyName[0]);
     return sel_registerName(defaultSetter.c_str());
 }
@@ -54,13 +54,12 @@ IMP WCTRuntimeBaseAccessor::GetInstanceMethodImplementation(Class cls, SEL selec
     return [cls instanceMethodForSelector:selector];
 }
 
-Class WCTRuntimeBaseAccessor::GetPropertyClass(Class cls, const std::string& propertyName)
+Class WCTRuntimeBaseAccessor::GetPropertyClass(Class cls, const std::string &propertyName)
 {
     objc_property_t property = class_getProperty(cls, propertyName.c_str());
     NSString *attributes = [[NSString alloc] initWithUTF8String:property_getAttributes(property)];
     NSArray *splitAttributes = [attributes componentsSeparatedByString:@","];
-    if (splitAttributes.count > 0)
-    {
+    if (splitAttributes.count > 0) {
         NSString *encodeType = splitAttributes[0];
         NSArray *splitEncodeTypes = [encodeType componentsSeparatedByString:@"\""];
         NSString *className = splitEncodeTypes[1];

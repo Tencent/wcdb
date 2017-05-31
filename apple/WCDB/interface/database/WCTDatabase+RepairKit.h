@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
 
-@interface WCTDatabase(RepairKit)
+@interface WCTDatabase (RepairKit)
 
 /**
  @brief Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.
@@ -29,7 +29,7 @@
  @param key The cipher key for backup
  @return YES only if it's successfully backed up
  */
-- (BOOL)backupWithCipher:(NSData*)key;
+- (BOOL)backupWithCipher:(NSData *)key;
 
 /**
  @brief Recover data from a corruped db. You'd better to recover a closed database. A new repair kit is developing at https://github.com/Tencent/wcdb/tree/new-repair
@@ -46,6 +46,6 @@
  @param key The cipher key for backup
  @return YES only if it's successfully recovered.
  */
-- (BOOL)recoverFromPath:(NSString*)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData*)key;
+- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData *)key;
 
 @end

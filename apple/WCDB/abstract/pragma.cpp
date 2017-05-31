@@ -87,14 +87,13 @@ const Pragma Pragma::WalAutocheckpoint("wal_autocheckpoint");
 const Pragma Pragma::WalCheckpoint("wal_checkpoint");
 const Pragma Pragma::WritableSchema("writable_schema");
 
-Pragma::Pragma(const char* name)
-: Describable(name)
+Pragma::Pragma(const char *name) : Describable(name)
 {
 }
 
-const std::string& Pragma::getName() const 
+const std::string &Pragma::getName() const
 {
     return m_description;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

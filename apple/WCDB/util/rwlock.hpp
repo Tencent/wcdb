@@ -21,28 +21,28 @@
 #ifndef rwlock_hpp
 #define rwlock_hpp
 
-#include <mutex>
 #include <condition_variable>
+#include <mutex>
 
 //std::shared_lock is supported from C++14
 
 namespace WCDB {
 
-class RWLock
-{
+class RWLock {
 public:
     RWLock();
     ~RWLock();
     void lockRead();
     void unlockRead();
     bool tryLockRead();
-    
+
     void lockWrite();
     void unlockWrite();
     bool tryLockWrite();
-    
+
     bool isWriting() const;
     bool isReading() const;
+
 protected:
     mutable std::recursive_mutex m_mutex;
     std::condition_variable_any m_cond;
@@ -51,6 +51,6 @@ protected:
     int m_pending;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* rwlock_hpp */

@@ -18,21 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/utility.hpp>
-#import <WCDB/in_case_lock_guard.hpp>
+#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTInsert.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/in_case_lock_guard.hpp>
+#import <WCDB/utility.hpp>
 
 @implementation WCTInsert {
     WCTPropertyList _propertyList;
     WCDB::StatementInsert _statement;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andClass:(Class)cls andTableName:(NSString*)tableName andReplaceFlag:(BOOL)replace
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andClass:(Class)cls andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
 {
     if (self = [super initWithCore:core]) {
         if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
@@ -44,21 +44,21 @@
                                          &_error);
             return self;
         }
-        const WCTPropertyList& propertyList = [cls AllProperties];
+        const WCTPropertyList &propertyList = [cls AllProperties];
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
-        .insert(tableName.UTF8String,
-                _propertyList,
-                replace?WCDB::Conflict::Replace:WCDB::Conflict::NotSet)
-        .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
+                         .insert(tableName.UTF8String,
+                                 _propertyList,
+                                 replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
+                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
     }
     return self;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andProperties:(const WCTPropertyList&)propertyList andTableName:(NSString*)tableName andReplaceFlag:(BOOL)replace
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
 {
     if (self = [super initWithCore:core]) {
-        if (propertyList.size()==0) {
+        if (propertyList.size() == 0) {
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Insert,
@@ -69,28 +69,28 @@
         }
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
-        .insert(tableName.UTF8String,
-                _propertyList,
-                replace?WCDB::Conflict::Replace:WCDB::Conflict::NotSet)
-        .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
+                         .insert(tableName.UTF8String,
+                                 _propertyList,
+                                 replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
+                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
     }
     return self;
 }
 
-- (BOOL)doInsertObjects:(NSArray<WCTObject*>*)objects withError:(WCDB::Error&)error
+- (BOOL)doInsertObjects:(NSArray<WCTObject *> *)objects withError:(WCDB::Error &)error
 {
     WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, error);
     if (!statementHandle) {
         return NO;
     }
-    for (WCTObject* object in objects) {
+    for (WCTObject *object in objects) {
         int index = 1;
-        for (const WCTProperty& property : _propertyList) {
+        for (const WCTProperty &property : _propertyList) {
             if (![self bindProperty:property
-                           ofObject:object
-                  toStatementHandle:statementHandle
-                            atIndex:index
-                          withError:error]) {
+                             ofObject:object
+                    toStatementHandle:statementHandle
+                              atIndex:index
+                            withError:error]) {
                 return NO;
             }
             ++index;
@@ -110,22 +110,23 @@
     return error.isOK();
 }
 
-- (BOOL)executeWithObjects:(NSArray<WCTObject*>*)objects
+- (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }
-    if (objects.count==0) {
+    if (objects.count == 0) {
         WCDB::Error::Warning("Inserting with empty object");
         return YES;
     }
-    if (objects.count==1) {
+    if (objects.count == 1) {
         return [self doInsertObjects:objects withError:_error];
     }
-    return _core->runEmbeddedTransaction([self, objects](WCDB::Error& error)->bool {
+    return _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) -> bool {
         return [self doInsertObjects:objects withError:error];
-    }, _error);
+    },
+                                         _error);
 }
 
 @end

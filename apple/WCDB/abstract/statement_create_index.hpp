@@ -25,23 +25,27 @@
 
 namespace WCDB {
 
-class StatementCreateIndex : public Statement
-{
+class StatementCreateIndex : public Statement {
 public:
-    StatementCreateIndex& create(const std::string& index, bool unique = false, bool ifNotExists = true);
-    
+    StatementCreateIndex &create(const std::string &index,
+                                 bool unique = false,
+                                 bool ifNotExists = true);
+
     template <typename T>
-    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value, StatementCreateIndex&>::type on(const std::string& table, const std::list<const T>& indexList) {
-        m_description.append(" ON "+table+"(");
+    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
+                            StatementCreateIndex &>::type
+    on(const std::string &table, const std::list<const T> &indexList)
+    {
+        m_description.append(" ON " + table + "(");
         joinDescribableList(indexList);
         m_description.append(")");
         return *this;
     }
-    StatementCreateIndex& where(const Expr& expr) ;
-    
+    StatementCreateIndex &where(const Expr &expr);
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_create_index_hpp */

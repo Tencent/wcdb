@@ -18,23 +18,23 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTExpr.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTResult.h>
 
-WCTResult::WCTResult(const WCTExpr& expr)
-: WCDB::ColumnResult(expr)
-, WCTPropertyBase(expr)
+WCTResult::WCTResult(const WCTExpr &expr)
+    : WCDB::ColumnResult(expr)
+    , WCTPropertyBase(expr)
 {
 }
 
-WCTResult::WCTResult(const WCTProperty& property)
-: WCDB::ColumnResult(property)
-, WCTPropertyBase(property)
+WCTResult::WCTResult(const WCTProperty &property)
+    : WCDB::ColumnResult(property)
+    , WCTPropertyBase(property)
 {
 }
 
-NSString* WCTResult::getDescription() const
+NSString *WCTResult::getDescription() const
 {
     return [NSString stringWithUTF8String:WCDB::ColumnResult::getDescription().c_str()];
 }
@@ -44,7 +44,7 @@ WCTResult::operator WCTResultList() const
     return {*this};
 }
 
-WCTResult& WCTResult::as(const WCTProperty& property)
+WCTResult &WCTResult::as(const WCTProperty &property)
 {
     WCDB::ColumnResult::as(property.getName());
     setBinding(property);
@@ -57,42 +57,42 @@ WCTResultList WCTResult::distinct() const
 }
 
 WCTResultList::WCTResultList()
-: std::list<const WCTResult>()
-, m_distinct(false)
+    : std::list<const WCTResult>()
+    , m_distinct(false)
 {
 }
 
-WCTResultList::WCTResultList(const WCTPropertyList& propertyList)
-: std::list<const WCTResult>(propertyList.begin(), propertyList.end())
-, m_distinct(false)
+WCTResultList::WCTResultList(const WCTPropertyList &propertyList)
+    : std::list<const WCTResult>(propertyList.begin(), propertyList.end())
+    , m_distinct(false)
 {
 }
 
-WCTResultList::WCTResultList(const WCTExprList& exprList)
-: std::list<const WCTResult>(exprList.begin(), exprList.end())
-, m_distinct(false)
+WCTResultList::WCTResultList(const WCTExprList &exprList)
+    : std::list<const WCTResult>(exprList.begin(), exprList.end())
+    , m_distinct(false)
 {
 }
 
 WCTResultList::WCTResultList(std::initializer_list<const WCTResult> il)
-: std::list<const WCTResult>(il)
-, m_distinct(false)
+    : std::list<const WCTResult>(il)
+    , m_distinct(false)
 {
 }
 
-WCTResultList::WCTResultList(const WCTProperty& property)
-: std::list<const WCTResult>({property})
-, m_distinct(false)
+WCTResultList::WCTResultList(const WCTProperty &property)
+    : std::list<const WCTResult>({property})
+    , m_distinct(false)
 {
 }
 
-WCTResultList::WCTResultList(const WCTExpr& expr)
-: std::list<const WCTResult>({expr})
-, m_distinct(false)
+WCTResultList::WCTResultList(const WCTExpr &expr)
+    : std::list<const WCTResult>({expr})
+    , m_distinct(false)
 {
 }
 
-WCTResultList& WCTResultList::distinct()
+WCTResultList &WCTResultList::distinct()
 {
     m_distinct = true;
     return *this;

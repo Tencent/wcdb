@@ -18,40 +18,39 @@
  * limitations under the License.
  */
 
-#include <WCDB/constraint_table.hpp>
 #include <WCDB/column_index.hpp>
+#include <WCDB/constraint_table.hpp>
 #include <WCDB/expr.hpp>
 
 namespace WCDB {
 
-TableConstraint::TableConstraint()
-: Describable("")
+TableConstraint::TableConstraint() : Describable("")
 {
 }
 
-TableConstraint::TableConstraint(const char* name)
-: Describable(std::string("CONSTRAINT ")+name)
+TableConstraint::TableConstraint(const char *name)
+    : Describable(std::string("CONSTRAINT ") + name)
 {
 }
 
-TableConstraint::TableConstraint(const std::string& name)
-: Describable("CONSTRAINT "+name)
+TableConstraint::TableConstraint(const std::string &name)
+    : Describable("CONSTRAINT " + name)
 {
 }
 
-TableConstraint& TableConstraint::onConflict(Conflict conflict)
+TableConstraint &TableConstraint::onConflict(Conflict conflict)
 {
-    if (conflict!=WCDB::Conflict::NotSet) {
+    if (conflict != WCDB::Conflict::NotSet) {
         m_description.append(" ON CONFLICT ");
         m_description.append(ConflictName(conflict));
     }
     return *this;
 }
 
-TableConstraint& TableConstraint::makeCheck(const Expr& expr)
+TableConstraint &TableConstraint::makeCheck(const Expr &expr)
 {
-    m_description.append(" CHECK ("+expr.getDescription()+")");
+    m_description.append(" CHECK (" + expr.getDescription() + ")");
     return *this;
 }
-    
-}//namespace WCDB
+
+} //namespace WCDB

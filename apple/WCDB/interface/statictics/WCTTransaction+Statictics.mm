@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTransaction+Statictics.h>
-#import <WCDB/WCTTransaction+Private.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTTransaction+Private.h>
+#import <WCDB/WCTTransaction+Statictics.h>
 
-@implementation WCTTransaction(Statictics)
+@implementation WCTTransaction (Statictics)
 
-- (WCTError*)error
+- (WCTError *)error
 {
     if (_error.isOK()) {
         return nil;
@@ -36,7 +36,7 @@
 {
     if (!enabled) {
         _ticker = nullptr;
-    }else if (!_ticker) {
+    } else if (!_ticker) {
         _ticker.reset(new WCDB::Ticker);
     }
 }

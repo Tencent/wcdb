@@ -18,24 +18,24 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTRowSelect.h>
-#import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTResult.h>
+#import <WCDB/WCTRowSelect+Private.h>
+#import <WCDB/WCTRowSelect.h>
+#import <WCDB/WCTSelectBase+Private.h>
 
 @implementation WCTRowSelect
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andResults:(const WCTResultList&)resultList fromTable:(NSString*)tableName
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
 {
-    return [self initWithCore:core andResults:resultList fromTables:@[tableName]];
+    return [self initWithCore:core andResults:resultList fromTables:@[ tableName ]];
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andResults:(const WCTResultList&)resultList fromTables:(NSArray<NSString*>*)tableNames
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
 {
     if (self = [super initWithCore:core]) {
-        if (resultList.size()==0) {
+        if (resultList.size() == 0) {
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
@@ -45,7 +45,7 @@
             return self;
         }
         WCDB::SubqueryList subqueryList;
-        for (NSString* tableName in tableNames) {
+        for (NSString *tableName in tableNames) {
             subqueryList.push_back(tableName.UTF8String);
         }
         _statement.select(resultList, resultList.isDistinct()).from(subqueryList);
@@ -53,21 +53,21 @@
     return self;
 }
 
-- (WCTColumnsXRows*)allRows
+- (WCTColumnsXRows *)allRows
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (![self lazyPrepare]) {
         return nil;
     }
-    NSMutableArray* allRows = [NSMutableArray array];
-    WCTOneRow* nextRow = nil;
+    NSMutableArray *allRows = [NSMutableArray array];
+    WCTOneRow *nextRow = nil;
     while ((nextRow = [self _nextRow])) {
         [allRows addObject:nextRow];
     }
-    return _error.isOK()?allRows:nil;
+    return _error.isOK() ? allRows : nil;
 }
 
-- (WCTOneRow*)nextRow
+- (WCTOneRow *)nextRow
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (![self lazyPrepare]) {
@@ -76,16 +76,15 @@
     return [self _nextRow];
 }
 
-- (WCTOneRow*)_nextRow
+- (WCTOneRow *)_nextRow
 {
-    if (!_statementHandle->step()
-        ||!_error.isOK()) {
+    if (!_statementHandle->step() || !_error.isOK()) {
         _statementHandle->finalize();
         return nil;
     }
-    NSMutableArray* row = [NSMutableArray array];
-    for (int i = 0 ; i < _statementHandle->getColumnCount(); ++i) {
-        WCTValue* value = [self extractValueAtIndex:i];
+    NSMutableArray *row = [NSMutableArray array];
+    for (int i = 0; i < _statementHandle->getColumnCount(); ++i) {
+        WCTValue *value = [self extractValueAtIndex:i];
         if (!value) {
             if (!_error.isOK()) {
                 return nil;
@@ -94,24 +93,24 @@
         }
         [row addObject:value];
     }
-    return _error.isOK()?row:nil;
+    return _error.isOK() ? row : nil;
 }
 
-- (WCTOneColumn*)allValues
+- (WCTOneColumn *)allValues
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (![self lazyPrepare]) {
         return nil;
     }
-    NSMutableArray* allValues = [NSMutableArray array];
-    WCTValue* nextValue = nil;
+    NSMutableArray *allValues = [NSMutableArray array];
+    WCTValue *nextValue = nil;
     while ((nextValue = [self _nextValue])) {
         [allValues addObject:nextValue];
     }
-    return _error.isOK()?allValues:nil;
+    return _error.isOK() ? allValues : nil;
 }
 
-- (WCTValue*)nextValue
+- (WCTValue *)nextValue
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
     if (![self lazyPrepare]) {
@@ -120,10 +119,9 @@
     return [self _nextValue];
 }
 
-- (WCTValue*)_nextValue
+- (WCTValue *)_nextValue
 {
-    if (!_statementHandle->step()
-        ||!_error.isOK()) {
+    if (!_statementHandle->step() || !_error.isOK()) {
         _statementHandle->finalize();
         return nil;
     }

@@ -22,7 +22,7 @@
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/core.h>
 
-@interface WCTSelectBase() {
+@interface WCTSelectBase () {
 @protected
     BOOL _prepared;
     WCDB::RecyclableStatement _statementHandle;
@@ -30,9 +30,9 @@
 }
 
 - (BOOL)lazyPrepare;
-- (BOOL)extractPropertyToObject:(WCTObject*)object
-                        atIndex:(int)index 
-              withColumnBinding:(const std::shared_ptr<WCTColumnBinding>&)columnBinding;
-- (id /* WCTValue* */ )extractValueAtIndex:(int)i;
+- (BOOL)extractPropertyToObject:(WCTObject *)object
+                        atIndex:(int)index
+              withColumnBinding:(const std::shared_ptr<WCTColumnBinding> &)columnBinding;
+- (id /* WCTValue* */)extractValueAtIndex:(int)i;
 
 @end

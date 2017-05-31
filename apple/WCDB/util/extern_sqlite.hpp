@@ -26,9 +26,9 @@ extern "C" {
 typedef struct sqlite3_stmt sqlite3_stmt;
 typedef struct sqlite3 sqlite3;
 
-typedef void (*sqlite3_destructor_type)(void*);
+typedef void (*sqlite3_destructor_type)(void *);
 #ifndef SQLITE_TRANSIENT
-#define SQLITE_TRANSIENT   ((sqlite3_destructor_type)-1)
+#define SQLITE_TRANSIENT ((sqlite3_destructor_type) -1)
 #endif
 
 #ifdef SQLITE_INT64_TYPE
@@ -43,21 +43,22 @@ typedef unsigned long long int sqlite_uint64;
 #endif
 typedef sqlite_int64 sqlite3_int64;
 
-extern int sqlite3_bind_blob(sqlite3_stmt*, int, const void*, int n, void(*)(void*));
-extern int sqlite3_bind_double(sqlite3_stmt*, int, double);
-extern int sqlite3_bind_int(sqlite3_stmt*, int, int);
-extern int sqlite3_bind_int64(sqlite3_stmt*, int, sqlite3_int64);
-extern int sqlite3_bind_null(sqlite3_stmt*, int);
-extern int sqlite3_bind_text(sqlite3_stmt*,int,const char*,int,void(*)(void*));
+extern int
+sqlite3_bind_blob(sqlite3_stmt *, int, const void *, int n, void (*)(void *));
+extern int sqlite3_bind_double(sqlite3_stmt *, int, double);
+extern int sqlite3_bind_int(sqlite3_stmt *, int, int);
+extern int sqlite3_bind_int64(sqlite3_stmt *, int, sqlite3_int64);
+extern int sqlite3_bind_null(sqlite3_stmt *, int);
+extern int
+sqlite3_bind_text(sqlite3_stmt *, int, const char *, int, void (*)(void *));
 
-extern const void *sqlite3_column_blob(sqlite3_stmt*, int iCol);
-extern int sqlite3_column_bytes(sqlite3_stmt*, int iCol);
-extern double sqlite3_column_double(sqlite3_stmt*, int iCol);
-extern int sqlite3_column_int(sqlite3_stmt*, int iCol);
-extern sqlite3_int64 sqlite3_column_int64(sqlite3_stmt*, int iCol);
-extern const unsigned char *sqlite3_column_text(sqlite3_stmt*, int iCol);
-extern int sqlite3_column_type(sqlite3_stmt*, int iCol);
-
+extern const void *sqlite3_column_blob(sqlite3_stmt *, int iCol);
+extern int sqlite3_column_bytes(sqlite3_stmt *, int iCol);
+extern double sqlite3_column_double(sqlite3_stmt *, int iCol);
+extern int sqlite3_column_int(sqlite3_stmt *, int iCol);
+extern sqlite3_int64 sqlite3_column_int64(sqlite3_stmt *, int iCol);
+extern const unsigned char *sqlite3_column_text(sqlite3_stmt *, int iCol);
+extern int sqlite3_column_type(sqlite3_stmt *, int iCol);
 };
 
 #endif /* extern_sqlite_hpp */

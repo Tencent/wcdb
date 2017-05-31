@@ -22,31 +22,32 @@
 
 namespace WCDB {
 
-HandleWrap::HandleWrap(const std::shared_ptr<Handle>& theSqlBase, const Configs& theConfigs)
-: handle(theSqlBase)
-, configs(theConfigs)
+HandleWrap::HandleWrap(const std::shared_ptr<Handle> &theSqlBase,
+                       const Configs &theConfigs)
+    : handle(theSqlBase), configs(theConfigs)
 {
 }
 
-RecyclableHandle::RecyclableHandle(const std::shared_ptr<HandleWrap>& value, const Recyclable<std::shared_ptr<HandleWrap>>::OnRecycled& onRecycled)
-: m_value(value)
-, m_recyclable(value, onRecycled)
+RecyclableHandle::RecyclableHandle(
+    const std::shared_ptr<HandleWrap> &value,
+    const Recyclable<std::shared_ptr<HandleWrap>>::OnRecycled &onRecycled)
+    : m_value(value), m_recyclable(value, onRecycled)
 {
 }
 
 RecyclableHandle::operator bool() const
 {
-    return m_value!=nullptr;
+    return m_value != nullptr;
 }
 
 bool RecyclableHandle::operator!=(std::nullptr_t) const
 {
-    return m_value!=nullptr;
+    return m_value != nullptr;
 }
 
 bool RecyclableHandle::operator==(std::nullptr_t) const
 {
-    return m_value==nullptr;
+    return m_value == nullptr;
 }
 
-}//namespace WCDB
+} //namespace WCDB

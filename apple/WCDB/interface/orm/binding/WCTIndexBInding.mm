@@ -20,34 +20,34 @@
 
 #import <WCDB/WCTIndexBinding.h>
 
-WCTIndexBinding::WCTIndexBinding(const std::string& ins)
-: indexNameSubfix(ins)
+WCTIndexBinding::WCTIndexBinding(const std::string &ins)
+    : indexNameSubfix(ins)
 {
 }
 
-void WCTIndexBinding::addIndex(const WCTIndex& index)
+void WCTIndexBinding::addIndex(const WCTIndex &index)
 {
     m_indexes.push_back(index);
 }
 
-void WCTIndexBinding::setCondition(const WCTCondition& condition)
+void WCTIndexBinding::setCondition(const WCTCondition &condition)
 {
     m_condition = condition;
 }
 
-const WCTIndexList& WCTIndexBinding::getIndexes() const
+const WCTIndexList &WCTIndexBinding::getIndexes() const
 {
     return m_indexes;
 }
 
-const WCTCondition& WCTIndexBinding::getCondition() const
+const WCTCondition &WCTIndexBinding::getCondition() const
 {
     return m_condition;
 }
 
-WCDB::StatementCreateIndex WCTIndexBinding::generateCreateIndexStatement(const std::string& tableName) const
+WCDB::StatementCreateIndex WCTIndexBinding::generateCreateIndexStatement(const std::string &tableName) const
 {
-    std::string indexName = tableName+indexNameSubfix;
+    std::string indexName = tableName + indexNameSubfix;
     WCDB::StatementCreateIndex statementCreateIndex = WCDB::StatementCreateIndex().create(indexName).on(tableName, m_indexes);
     if (!m_condition.isEmpty()) {
         statementCreateIndex.where(m_condition);

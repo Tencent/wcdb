@@ -22,31 +22,31 @@
 
 namespace WCDB {
 
-RecyclableStatement::RecyclableStatement(const RecyclableHandle& handle, const std::shared_ptr<StatementHandle>& statementHandle)
-: m_handle(handle)
-, m_statementHandle(statementHandle)
+RecyclableStatement::RecyclableStatement(
+    const RecyclableHandle &handle,
+    const std::shared_ptr<StatementHandle> &statementHandle)
+    : m_handle(handle), m_statementHandle(statementHandle)
 {
 }
 
 RecyclableStatement::RecyclableStatement()
-: m_statementHandle(nullptr)
-, m_handle({nullptr, nullptr})
+    : m_statementHandle(nullptr), m_handle({nullptr, nullptr})
 {
 }
 
 RecyclableStatement::operator bool() const
 {
-    return m_statementHandle!=nullptr;
+    return m_statementHandle != nullptr;
 }
 
-bool RecyclableStatement::operator !=(std::nullptr_t) const
+bool RecyclableStatement::operator!=(std::nullptr_t) const
 {
-    return m_statementHandle!=nullptr;
+    return m_statementHandle != nullptr;
 }
 
-bool RecyclableStatement::operator ==(std::nullptr_t) const
+bool RecyclableStatement::operator==(std::nullptr_t) const
 {
-    return m_statementHandle==nullptr;
+    return m_statementHandle == nullptr;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

@@ -22,13 +22,13 @@
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTTransaction.h>
 
-@interface WCTDatabase(Transaction)
+@interface WCTDatabase (Transaction)
 
 /**
  @brief Generation a WCTTransaction object to do a transaction.
  @return WCTTransaction
  */
-- (WCTTransaction*)getTransaction;
+- (WCTTransaction *)getTransaction;
 
 /**
  @brief Run a transaction in block.

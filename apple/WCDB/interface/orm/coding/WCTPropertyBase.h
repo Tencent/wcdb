@@ -20,15 +20,16 @@
 
 #import <WCDB/WCTColumnBinding.h>
 
-class WCTPropertyBase
-{
+class WCTPropertyBase {
 public:
-    WCTPropertyBase(Class cls, const std::shared_ptr<WCTColumnBinding>& columnBinding);
-    
-    const std::shared_ptr<WCTColumnBinding>& getColumnBinding() const;
+    WCTPropertyBase(Class cls,
+                    const std::shared_ptr<WCTColumnBinding> &columnBinding);
+
+    const std::shared_ptr<WCTColumnBinding> &getColumnBinding() const;
     const Class getBindingClass() const;
+
 protected:
-    void setBinding(const WCTPropertyBase& other);
+    void setBinding(const WCTPropertyBase &other);
     Class m_cls;
     std::shared_ptr<WCTColumnBinding> m_columnBinding;
 };

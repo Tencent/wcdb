@@ -19,10 +19,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTStatictics.h>
 #import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTStatictics.h>
 
-@interface WCTDatabase(Statictics)
+@interface WCTDatabase (Statictics)
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs in this database.

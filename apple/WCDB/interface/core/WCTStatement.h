@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTCore.h>
+#import <WCDB/WCTDeclare.h>
 
 /**
  Not Thread-safe
@@ -33,7 +33,7 @@
  @brief More detailed error messages.
  @return nil or error.isOK==YES if no error occurs.
  */
-- (WCTError*)getError;
+- (WCTError *)getError;
 
 /**
  @brief The wrapper of sqlite3_bind_*.
@@ -41,14 +41,14 @@
  @param index Begin with 1.
  @return NO only if you pass a incorrect type of value.
  */
-- (BOOL)bindValue:(WCTValue*)value toIndex:(int)index;
+- (BOOL)bindValue:(WCTValue *)value toIndex:(int)index;
 
 /**
  @brief The wrapper of sqlite3_column_*.
  @param index Begin with 0.
  @return The real type of WCTValue depends on the value in database.
  */
-- (WCTValue*)getValueAtIndex:(int)index;
+- (WCTValue *)getValueAtIndex:(int)index;
 
 /**
  @brief The wrapper of sqlite3_step.
@@ -80,14 +80,14 @@
  @param index Begin with 0.
  @return The description of column result.
  */
-- (NSString*)getNameAtIndex:(int)index;
+- (NSString *)getNameAtIndex:(int)index;
 
 /**
  @brief The wrapper of sqlite3_column_table_name.
  @param index Begin with 0
  @return The name of table
  */
-- (NSString*)getTableNameAtIndex:(int)index;
+- (NSString *)getTableNameAtIndex:(int)index;
 
 /**
  @brief The wrapper of [sqlite3_finalize].

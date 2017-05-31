@@ -19,11 +19,11 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTSelect.h>
 #import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTSelect.h>
 
-@interface WCTSelect()
+@interface WCTSelect ()
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andResults:(const WCTResultList&)resultList fromTable:(NSString*)tableName;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName;
 
 @end

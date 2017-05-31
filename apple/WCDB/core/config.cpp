@@ -22,30 +22,31 @@
 
 namespace WCDB {
 
-Configs::Configs()
-: m_configs(new ConfigList)
+Configs::Configs() : m_configs(new ConfigList)
 {
 }
 
 Configs::Configs(std::initializer_list<const ConfigWrap> configs)
-: m_configs(new ConfigList)
+    : m_configs(new ConfigList)
 {
-    for (const auto& config : configs) {
+    for (const auto &config : configs) {
         m_configs->push_back(config);
     }
 }
 
-void Configs::setConfig(const std::string& name, const Config& config, Configs::Order order)
+void Configs::setConfig(const std::string &name,
+                        const Config &config,
+                        Configs::Order order)
 {
-    if (config!=nullptr) {
+    if (config != nullptr) {
         std::shared_ptr<ConfigList> configs = m_configs;
         std::shared_ptr<ConfigList> newConfigs(new ConfigList);
         bool inserted = false;
-        for (const auto& wrap : *configs.get()) {
-            if (!inserted&&order<wrap.order) {
+        for (const auto &wrap : *configs.get()) {
+            if (!inserted && order < wrap.order) {
                 newConfigs->push_back({name, config, order});
                 inserted = true;
-            }else if (name!=wrap.name) {
+            } else if (name != wrap.name) {
                 newConfigs->push_back(wrap);
             }
         }
@@ -56,16 +57,16 @@ void Configs::setConfig(const std::string& name, const Config& config, Configs::
     }
 }
 
-void Configs::setConfig(const std::string& name, const Config& config)
+void Configs::setConfig(const std::string &name, const Config &config)
 {
-    if (config!=nullptr) {
+    if (config != nullptr) {
         std::shared_ptr<ConfigList> configs = m_configs;
         std::shared_ptr<ConfigList> newConfigs(new ConfigList);
         bool inserted = false;
-        for (const auto& wrap : *configs.get()) {
-            if (name!=wrap.name) {
+        for (const auto &wrap : *configs.get()) {
+            if (name != wrap.name) {
                 newConfigs->push_back(wrap);
-            }else {
+            } else {
                 newConfigs->push_back({name, config, wrap.order});
                 inserted = true;
             }
@@ -77,10 +78,10 @@ void Configs::setConfig(const std::string& name, const Config& config)
     }
 }
 
-bool Configs::invoke(std::shared_ptr<Handle>& handle, Error& error)
+bool Configs::invoke(std::shared_ptr<Handle> &handle, Error &error)
 {
     std::shared_ptr<ConfigList> configs = m_configs;
-    for (const auto& config : *configs.get()) {
+    for (const auto &config : *configs.get()) {
         if (!config.invoke(handle, error)) {
             return false;
         }
@@ -88,14 +89,14 @@ bool Configs::invoke(std::shared_ptr<Handle>& handle, Error& error)
     return true;
 }
 
-bool operator==(const Configs& left, const Configs& right)
+bool operator==(const Configs &left, const Configs &right)
 {
-    return left.m_configs==right.m_configs;
+    return left.m_configs == right.m_configs;
 }
 
-bool operator!=(const Configs& left, const Configs& right)
+bool operator!=(const Configs &left, const Configs &right)
 {
-    return left.m_configs!=right.m_configs;
+    return left.m_configs != right.m_configs;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

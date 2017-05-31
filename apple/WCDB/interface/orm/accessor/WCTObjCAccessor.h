@@ -18,33 +18,37 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTBaseAccessor.h>
-#import <type_traits>
-#import <functional>
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTBaseAccessor.h>
+#import <functional>
+#import <type_traits>
 
 template <typename T, typename Enable = void>
-struct ColumnIsObjCType : public std::false_type {};
+struct ColumnIsObjCType : public std::false_type {
+};
 template <typename T>
-struct ColumnIsObjCType<T, typename std::enable_if<std::is_convertible<T, id>::value>::type> : public std::true_type {};
+struct ColumnIsObjCType<
+    T,
+    typename std::enable_if<std::is_convertible<T, id>::value>::type>
+    : public std::true_type {
+};
 
-class WCTObjCAccessor : public WCTBaseAccessor
-{
+class WCTObjCAccessor : public WCTBaseAccessor {
 public:
-    using OCType = id;//NSData*, NSString*, NSNumber*
+    using OCType = id; //NSData*, NSString*, NSNumber*
     using Setter = std::function<void(InstanceType, OCType)>;
     using Getter = std::function<OCType(InstanceType)>;
 
     WCTObjCAccessor(Getter getter, Setter setter)
-    : getObject(getter)
-    , setObject(setter){
+        : getObject(getter), setObject(setter)
+    {
     }
 
-    virtual WCTAccessorType getAccessorType() const override {
+    virtual WCTAccessorType getAccessorType() const override
+    {
         return WCTAccessorObjC;
     }
 
     const Setter setObject;
     const Getter getObject;
 };
-

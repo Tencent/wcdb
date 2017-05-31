@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTable+Private.h>
 #import <WCDB/WCTTable+Database.h>
+#import <WCDB/WCTTable+Private.h>
+#import <WCDB/WCTTable.h>
 
 @implementation WCTTable
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andTableName:(NSString*)tableName andClass:(Class<WCTTableCoding>)cls
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName andClass:(Class<WCTTableCoding>)cls
 {
     if (self = [super initWithCore:core]) {
         _tableName = tableName;
@@ -33,7 +33,7 @@
     return self;
 }
 
-- (NSString*)tableName
+- (NSString *)tableName
 {
     return _tableName;
 }

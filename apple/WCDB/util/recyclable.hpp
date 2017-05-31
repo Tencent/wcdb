@@ -26,27 +26,29 @@
 namespace WCDB {
 
 template <typename T>
-class Recyclable
-{
+class Recyclable {
 public:
-    typedef std::function<void(T&)> OnRecycled;
+    typedef std::function<void(T &)> OnRecycled;
     static const Recyclable inValid;
-    
-    Recyclable(const T& value, const Recyclable::OnRecycled& onRecycled)
-    : m_value(value)
-    , m_onRecycled(onRecycled)
-    , m_reference(new std::atomic<int>(0)){
+
+    Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
+        : m_value(value)
+        , m_onRecycled(onRecycled)
+        , m_reference(new std::atomic<int>(0))
+    {
         retain();
     }
-    
-    Recyclable(const Recyclable& other) 
-    : m_value(other.m_value)
-    , m_onRecycled(other.m_onRecycled)
-    , m_reference(other.m_reference) {
+
+    Recyclable(const Recyclable &other)
+        : m_value(other.m_value)
+        , m_onRecycled(other.m_onRecycled)
+        , m_reference(other.m_reference)
+    {
         retain();
     }
-    
-    Recyclable& operator = (const Recyclable& other) {
+
+    Recyclable &operator=(const Recyclable &other)
+    {
         other.retain();
         release();
         m_value = other.m_value;
@@ -55,31 +57,34 @@ public:
         return *this;
     }
 
-    ~Recyclable() {
-        release();
-    }
-    
-    constexpr T operator -> () const {
-        return m_value;
+    ~Recyclable() { release(); }
+
+    constexpr T operator->() const { return m_value; }
+
+    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
+                            bool>::type
+    operator!=(std::nullptr_t) const
+    {
+        return m_value != nullptr;
     }
 
-    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value, bool>::type operator!=(std::nullptr_t) const {
-        return m_value!=nullptr;
+    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
+                            bool>::type
+    operator==(std::nullptr_t) const
+    {
+        return m_value == nullptr;
     }
 
-    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value, bool>::type operator==(std::nullptr_t) const {
-        return m_value==nullptr;
-    }
 protected:
-    Recyclable()//invalid
-    : m_reference(new std::atomic<int>(0)) {
+    Recyclable() //invalid
+        : m_reference(new std::atomic<int>(0))
+    {
     }
-    
-    void retain() const {
-        ++(*m_reference);
-    }
-    void release() {
-        if (--(*m_reference)==0) {
+
+    void retain() const { ++(*m_reference); }
+    void release()
+    {
+        if (--(*m_reference) == 0) {
             delete m_reference;
             m_reference = nullptr;
             if (m_onRecycled) {
@@ -88,12 +93,12 @@ protected:
             }
         }
     }
-    
+
     T m_value;
-    mutable std::atomic<int>* m_reference;
+    mutable std::atomic<int> *m_reference;
     Recyclable::OnRecycled m_onRecycled;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* recyclable_hpp */

@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-const char* ConflictName(Conflict conflict)
+const char *ConflictName(Conflict conflict)
 {
     switch (conflict) {
         case Conflict::Rollback:
@@ -41,4 +41,4 @@ const char* ConflictName(Conflict conflict)
     return "";
 }
 
-}//namespace WCDB
+} //namespace WCDB

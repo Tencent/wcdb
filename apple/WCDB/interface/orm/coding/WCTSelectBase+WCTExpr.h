@@ -21,8 +21,8 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTSelectBase.h>
 
-@interface WCTSelectBase(WCTExpr)
+@interface WCTSelectBase (WCTExpr)
 
-- (const WCDB::StatementSelect&)statement;
+- (const WCDB::StatementSelect &)statement;
 
 @end

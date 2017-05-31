@@ -23,33 +23,37 @@
 
 namespace WCDB {
 
-StatementPragma& StatementPragma::pragma(const Pragma& pragma)
+StatementPragma &StatementPragma::pragma(const Pragma &pragma)
 {
-    m_description.append("PRAGMA "+pragma.getDescription());
-    return *this;
-} 
-
-StatementPragma& StatementPragma::pragma(const Pragma& pragma, int value)
-{
-    m_description.append("PRAGMA "+pragma.getDescription()+"="+std::to_string(value));
+    m_description.append("PRAGMA " + pragma.getDescription());
     return *this;
 }
 
-StatementPragma& StatementPragma::pragma(const Pragma& pragma, float value)
+StatementPragma &StatementPragma::pragma(const Pragma &pragma, int value)
 {
-    m_description.append("PRAGMA "+pragma.getDescription()+"="+std::to_string(value));
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
+                         std::to_string(value));
     return *this;
 }
 
-StatementPragma& StatementPragma::pragma(const Pragma& pragma, const char* value)
+StatementPragma &StatementPragma::pragma(const Pragma &pragma, float value)
 {
-    m_description.append("PRAGMA "+pragma.getDescription()+"="+value);
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
+                         std::to_string(value));
     return *this;
 }
 
-StatementPragma& StatementPragma::pragma(const Pragma& pragma, const std::string& value)
+StatementPragma &StatementPragma::pragma(const Pragma &pragma,
+                                         const char *value)
 {
-    m_description.append("PRAGMA "+pragma.getDescription()+"="+value);
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" + value);
+    return *this;
+}
+
+StatementPragma &StatementPragma::pragma(const Pragma &pragma,
+                                         const std::string &value)
+{
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" + value);
     return *this;
 }
 
@@ -58,4 +62,4 @@ Statement::Type StatementPragma::getStatementType() const
     return Statement::Type::Pragma;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

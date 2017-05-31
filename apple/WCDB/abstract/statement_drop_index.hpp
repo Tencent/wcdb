@@ -25,14 +25,13 @@
 
 namespace WCDB {
 
-class StatementDropIndex : public Statement
-{
+class StatementDropIndex : public Statement {
 public:
-    StatementDropIndex drop(const std::string& index, bool ifExists = true);
-    
+    StatementDropIndex drop(const std::string &index, bool ifExists = true);
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_drop_index_hpp */

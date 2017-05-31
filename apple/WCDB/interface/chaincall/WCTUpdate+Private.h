@@ -19,11 +19,11 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTUpdate.h>
 #import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTUpdate.h>
 
-@interface WCTUpdate(Private)
+@interface WCTUpdate (Private)
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andProperties:(const WCTPropertyList&)propertyList andTableName:(NSString*)tableName;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName;
 
 @end

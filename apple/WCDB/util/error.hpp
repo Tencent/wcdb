@@ -21,37 +21,36 @@
 #ifndef error_hpp
 #define error_hpp
 
-#include <string>
-#include <map>
 #include <WCDB/utility.hpp>
 #include <climits>
+#include <map>
+#include <string>
 
 namespace WCDB {
 
 typedef int Tag;
 const Tag InvalidTag = 0;
 
-class ErrorValue
-{
+class ErrorValue {
 public:
     enum class Type : int {
         Int,
         String,
     };
     ErrorValue(int value);
-    ErrorValue(const std::string& value);
+    ErrorValue(const std::string &value);
 
     int getIntValue() const;
     std::string getStringValue() const;
     ErrorValue::Type getType() const;
+
 protected:
     ErrorValue::Type m_type;
     int m_intValue;
     std::string m_stringValue;
 };
-    
-class Error
-{
+
+class Error {
 public:
     //key
     enum class Key : int {
@@ -130,38 +129,78 @@ public:
     };
 
     typedef std::map<Key, ErrorValue> Infos;
-    typedef std::function<void(const Error&)> ReportMethod;
+    typedef std::function<void(const Error &)> ReportMethod;
 
     Error();
-    Error(Error::Type type, int code, const Error::Infos& infos);
-    
+    Error(Error::Type type, int code, const Error::Infos &infos);
+
     Error::Type getType() const;
     int getCode() const;
-    const Error::Infos& getInfos() const;
-    bool isOK() const;//getCode()==0
+    const Error::Infos &getInfos() const;
+    bool isOK() const; //getCode()==0
     void reset();
     std::string description() const;
-    
-    void report() const;
-    
-    static const char* GetKeyName(Key key);
-    static const char* GetTypeName(Type type);
 
-    static void SetReportMethod(const ReportMethod& reportMethod);
-    
-    static void Report(Error::Type type, int code, const std::map<Key, ErrorValue>& infos, Error* outError);
-    
+    void report() const;
+
+    static const char *GetKeyName(Key key);
+    static const char *GetTypeName(Type type);
+
+    static void SetReportMethod(const ReportMethod &reportMethod);
+
+    static void Report(Error::Type type,
+                       int code,
+                       const std::map<Key, ErrorValue> &infos,
+                       Error *outError);
+
     //Convenience
-    static void ReportSQLite(Tag tag, const std::string& path, HandleOperation operation, int code, const char* message, Error* outError);
-    static void ReportSQLite(Tag tag, const std::string& path, HandleOperation operation, int code, int extendedError, const char* message, Error* outError);
-    static void ReportSQLite(Tag tag, const std::string& path, HandleOperation operation, int code, int extendedError, const char* message, const std::string& sql, Error* outError);
-    static void ReportCore(Tag tag, const std::string& path, CoreOperation operation, CoreCode code, const char* message, Error* outError);
-    static void ReportInterface(Tag tag, const std::string& path, InterfaceOperation operation, InterfaceCode code, const char* message, Error* outError);
-    static void ReportSystemCall(SystemCallOperation operation, const std::string& path, int code, const char* message, Error* outError);
-    static void ReportSQLiteGlobal(int rc, const char* message, Error* outError);
-    static void ReportRepair(const std::string& path, RepairOperation operation, int code, Error* outError);
-    static void Abort(const char* message, Error* outError = nullptr);
-    static void Warning(const char* message, Error* outError = nullptr);
+    static void ReportSQLite(Tag tag,
+                             const std::string &path,
+                             HandleOperation operation,
+                             int code,
+                             const char *message,
+                             Error *outError);
+    static void ReportSQLite(Tag tag,
+                             const std::string &path,
+                             HandleOperation operation,
+                             int code,
+                             int extendedError,
+                             const char *message,
+                             Error *outError);
+    static void ReportSQLite(Tag tag,
+                             const std::string &path,
+                             HandleOperation operation,
+                             int code,
+                             int extendedError,
+                             const char *message,
+                             const std::string &sql,
+                             Error *outError);
+    static void ReportCore(Tag tag,
+                           const std::string &path,
+                           CoreOperation operation,
+                           CoreCode code,
+                           const char *message,
+                           Error *outError);
+    static void ReportInterface(Tag tag,
+                                const std::string &path,
+                                InterfaceOperation operation,
+                                InterfaceCode code,
+                                const char *message,
+                                Error *outError);
+    static void ReportSystemCall(SystemCallOperation operation,
+                                 const std::string &path,
+                                 int code,
+                                 const char *message,
+                                 Error *outError);
+    static void
+    ReportSQLiteGlobal(int rc, const char *message, Error *outError);
+    static void ReportRepair(const std::string &path,
+                             RepairOperation operation,
+                             int code,
+                             Error *outError);
+    static void Abort(const char *message, Error *outError = nullptr);
+    static void Warning(const char *message, Error *outError = nullptr);
+
 protected:
     int m_code;
     Error::Type m_type;
@@ -170,6 +209,6 @@ protected:
     static std::shared_ptr<Error::ReportMethod> s_reportMethod;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* error_hpp */

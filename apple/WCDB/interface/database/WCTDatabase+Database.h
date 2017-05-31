@@ -27,7 +27,7 @@
  */
 typedef void (^WCTCloseBlock)(void);
 
-@interface WCTDatabase(Database)
+@interface WCTDatabase (Database)
 
 /**
  @brief Init a database from path.
@@ -36,14 +36,14 @@ typedef void (^WCTCloseBlock)(void);
  @param path Path to your database
  @return WCTDatabase
  */
-- (instancetype)initWithPath:(NSString*)path;
+- (instancetype)initWithPath:(NSString *)path;
 
 /**
  @brief Set cipher key for a database. 
         For an encrypted database, you must call it before all other operation.
  @param data Cipher key.
  */
-- (void)setCipherKey:(NSData*)data;
+- (void)setCipherKey:(NSData *)data;
 
 /**
  @brief Set the tag of the database. 

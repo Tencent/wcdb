@@ -18,18 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/abstract.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/abstract.h>
 
 typedef NS_ENUM(int, WCTAccessorType) {
     WCTAccessorCpp,
     WCTAccessorObjC,
 };
 
-class WCTBaseAccessor
-{
+class WCTBaseAccessor {
 public:
-    using InstanceType = id;//NSObject<WCTTableCoding>*
+    using InstanceType = id; //NSObject<WCTTableCoding>*
     virtual WCTColumnType getColumnType() const = 0;
     virtual WCTAccessorType getAccessorType() const = 0;
 };

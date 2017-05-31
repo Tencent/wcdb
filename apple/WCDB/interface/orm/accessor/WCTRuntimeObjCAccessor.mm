@@ -20,50 +20,51 @@
 
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
-WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::string& propertyName)
-: WCTRuntimeAccessor<id>(instanceClass, propertyName)
-, WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
-, m_columnType(GetColumnType(instanceClass, propertyName)) {
+WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::string &propertyName)
+    : WCTRuntimeAccessor<id>(instanceClass, propertyName)
+    , WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
+    , m_columnType(GetColumnType(instanceClass, propertyName))
+{
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
         WCDB::Error::Abort([NSString stringWithFormat:@"Class %@ should conforms to protocol WCTColumnCoding", NSStringFromClass(propertyClass)].UTF8String);
     }
 }
 
-WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const std::string& propertyName)
+WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const std::string &propertyName)
 {
     static const SEL ArchiveSelector = NSSelectorFromString(@"archivedWCTValue");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     IMP implementation = GetInstanceMethodImplementation(propertyClass, ArchiveSelector);
-    return [this, propertyClass, implementation](InstanceType instance)->OCType {
-        using Archiver = OCType(*)(InstanceType, SEL);
+    return [this, propertyClass, implementation](InstanceType instance) -> OCType {
+        using Archiver = OCType (*)(InstanceType, SEL);
         PropertyType property = getProperty(instance);
-        OCType value = property?((Archiver)implementation)(property, ArchiveSelector):nil;
+        OCType value = property ? ((Archiver) implementation)(property, ArchiveSelector) : nil;
         return value;
     };
 }
 
-WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class instanceClass, const std::string& propertyName)
+WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class instanceClass, const std::string &propertyName)
 {
     static const SEL UnarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     IMP implementation = GetClassMethodImplementation(propertyClass, UnarchiveSelector);
     return [this, propertyClass, implementation](id instance, OCType value) {
-        using Unarchiver = PropertyType(*)(Class, SEL, OCType);
+        using Unarchiver = PropertyType (*)(Class, SEL, OCType);
         if (instance) {
-            PropertyType property = ((Unarchiver)implementation)(propertyClass, UnarchiveSelector, value);
+            PropertyType property = ((Unarchiver) implementation)(propertyClass, UnarchiveSelector, value);
             setProperty(instance, property);
         }
     };
 }
 
-WCTColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string& propertyName)
+WCTColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string &propertyName)
 {
     static const SEL ColumnTypeSelector = NSSelectorFromString(@"columnTypeForWCDB");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     IMP implementation = GetClassMethodImplementation(propertyClass, ColumnTypeSelector);
-    using GetColumnTyper = WCTColumnType(*)(Class, SEL);
-    return ((GetColumnTyper)implementation)(propertyClass, ColumnTypeSelector);
+    using GetColumnTyper = WCTColumnType (*)(Class, SEL);
+    return ((GetColumnTyper) implementation)(propertyClass, ColumnTypeSelector);
 }
 
 WCTColumnType WCTRuntimeObjCAccessor::getColumnType() const

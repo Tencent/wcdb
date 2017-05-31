@@ -24,20 +24,19 @@
 
 namespace WCDB {
 
-Ticker::Ticker()
-: m_base(0)
+Ticker::Ticker() : m_base(0)
 {
 }
-    
+
 void Ticker::tick()
 {
     uint64_t now = mach_absolute_time();
-    if (m_base!=0) {
-        m_elapses.push_back(now-m_base);
+    if (m_base != 0) {
+        m_elapses.push_back(now - m_base);
     }
     m_base = now;
 }
-    
+
 void Ticker::pause()
 {
     tick();
@@ -47,16 +46,16 @@ void Ticker::pause()
 std::vector<double> Ticker::getElapseTimes() const
 {
     std::vector<double> result;
-    for (const auto& elapse : m_elapses) {
+    for (const auto &elapse : m_elapses) {
         result.push_back(secondsFromElapse(elapse));
     }
     return result;
 }
-    
+
 double Ticker::getElapseTime() const
 {
     double result = 0;
-    for (const auto& elapse : m_elapses) {
+    for (const auto &elapse : m_elapses) {
         result += secondsFromElapse(elapse);
     }
     return result;
@@ -66,31 +65,29 @@ std::string Ticker::log() const
 {
     std::string result;
     int i = 0;
-    for (const auto& cost : getElapseTimes()) {
-        result.append(std::to_string(i)+": "+std::to_string(cost)+"\n");
+    for (const auto &cost : getElapseTimes()) {
+        result.append(std::to_string(i) + ": " + std::to_string(cost) + "\n");
         ++i;
     }
     return result;
 }
 
-inline double Ticker::secondsFromElapse(const uint64_t& elapse)
+inline double Ticker::secondsFromElapse(const uint64_t &elapse)
 {
     static double s_numer = 0;
     static double s_denom = 0;
     static std::once_flag s_once;
-    std::call_once(s_once, [](){
+    std::call_once(s_once, []() {
         mach_timebase_info_data_t info;
         mach_timebase_info(&info);
         s_numer = info.numer;
         s_denom = info.denom;
     });
-    
-    return (double)elapse*s_numer/s_denom/1000/1000/1000;
+
+    return (double) elapse * s_numer / s_denom / 1000 / 1000 / 1000;
 }
 
-    
-ScopedTicker::ScopedTicker(std::shared_ptr<Ticker>& ticker)
-: m_ticker(ticker)
+ScopedTicker::ScopedTicker(std::shared_ptr<Ticker> &ticker) : m_ticker(ticker)
 {
     if (m_ticker) {
         m_ticker->tick();
@@ -103,5 +100,5 @@ ScopedTicker::~ScopedTicker()
         m_ticker->pause();
     }
 }
-    
-}//namespace WCDB 
+
+} //namespace WCDB

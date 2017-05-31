@@ -21,39 +21,39 @@
 #ifndef ticker_hpp
 #define ticker_hpp
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace WCDB {
 
-class Ticker
-{
+class Ticker {
 public:
     Ticker();
     void tick();
     void pause();
-    
+
     //in seconds
     std::vector<double> getElapseTimes() const;
     double getElapseTime() const;
-    
+
     std::string log() const;
+
 protected:
-    static double secondsFromElapse(const uint64_t& elapse);
-    
+    static double secondsFromElapse(const uint64_t &elapse);
+
     uint64_t m_base;
     std::vector<uint64_t> m_elapses;
 };
-    
-class ScopedTicker
-{
+
+class ScopedTicker {
 public:
-    ScopedTicker(std::shared_ptr<Ticker>& ticker);
+    ScopedTicker(std::shared_ptr<Ticker> &ticker);
     ~ScopedTicker();
+
 protected:
-    std::shared_ptr<Ticker>& m_ticker;
+    std::shared_ptr<Ticker> &m_ticker;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* ticker_hpp */

@@ -25,27 +25,29 @@
 
 namespace WCDB {
 
-class StatementDelete : public Statement
-{
+class StatementDelete : public Statement {
 public:
-    StatementDelete& deleteFrom(const std::string& table);
-    StatementDelete& where(const Expr& where);
+    StatementDelete &deleteFrom(const std::string &table);
+    StatementDelete &where(const Expr &where);
     //StatementDeleteLimited
     template <typename T>
-    typename std::enable_if<std::is_base_of<Order, T>::value, StatementDelete&>::type orderBy(const std::list<const T>& orderList) {
+    typename std::enable_if<std::is_base_of<Order, T>::value,
+                            StatementDelete &>::type
+    orderBy(const std::list<const T> &orderList)
+    {
         if (!orderList.empty()) {
             m_description.append(" ORDER BY ");
             joinDescribableList(orderList);
         }
         return *this;
     }
-    StatementDelete& limit(const Expr& from, const Expr& to);
-    StatementDelete& limit(const Expr& expr);
-    StatementDelete& offset(const Expr& expr);
-    
+    StatementDelete &limit(const Expr &from, const Expr &to);
+    StatementDelete &limit(const Expr &expr);
+    StatementDelete &offset(const Expr &expr);
+
     virtual Statement::Type getStatementType() const override;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* statement_delete_hpp */

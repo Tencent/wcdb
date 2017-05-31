@@ -18,28 +18,28 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTDatabase+Database.h>
 #import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
-#endif// TARGET_OS_IPHONE
+#endif // TARGET_OS_IPHONE
 
 @implementation WCTDatabase
 
 #if TARGET_OS_IPHONE
 + (void)load
 {
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     //keep it the entire life cycle
-    static id s_observer __attribute__((unused)) = [notificationCenter addObserverForName:UIApplicationDidReceiveMemoryWarningNotification 
-                                                           object:nil 
-                                                            queue:nil 
-                                                       usingBlock:^(NSNotification * _Nonnull note) {
-                                                           WCDB::Database::PurgeFreeHandlesInAllDatabases();
-                                                       }];
+    static id s_observer __attribute__((unused)) = [notificationCenter addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
+                                                                                   object:nil
+                                                                                    queue:nil
+                                                                               usingBlock:^(NSNotification *_Nonnull note) {
+                                                                                 WCDB::Database::PurgeFreeHandlesInAllDatabases();
+                                                                               }];
 }
-#endif// TARGET_OS_IPHONE
+#endif // TARGET_OS_IPHONE
 
 @end

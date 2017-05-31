@@ -26,15 +26,15 @@
 /**
  Builtin ORM for "sqlite_master" table. For further information, see https://www.sqlite.org/faq.html
  */
-@interface WCTMaster : NSObject<WCTTableCoding>
+@interface WCTMaster : NSObject <WCTTableCoding>
 
-+ (NSString*)TableName;
++ (NSString *)TableName;
 
-@property(retain) NSString* type;
-@property(retain) NSString* name;
-@property(retain) NSString* tableName;
+@property(retain) NSString *type;
+@property(retain) NSString *name;
+@property(retain) NSString *tableName;
 @property(assign) int rootpage;
-@property(retain) NSString* sql;
+@property(retain) NSString *sql;
 
 WCDB_PROPERTY(type)
 WCDB_PROPERTY(name)

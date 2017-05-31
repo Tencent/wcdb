@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-const char* OrderTermName(OrderTerm term)
+const char *OrderTermName(OrderTerm term)
 {
     switch (term) {
         case OrderTerm::ASC:
@@ -35,4 +35,4 @@ const char* OrderTermName(OrderTerm term)
     return "";
 }
 
-}//namespace WCDB 
+} //namespace WCDB

@@ -21,11 +21,11 @@
 #ifndef declare_hpp
 #define declare_hpp
 
-#include <list>
-#include <functional>
+#include <WCDB/conflict.hpp>
 #include <atomic>
 #include <cassert>
-#include <WCDB/conflict.hpp>
+#include <functional>
+#include <list>
 #include <string>
 #include <utility>
 

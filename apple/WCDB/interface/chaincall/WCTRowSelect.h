@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTSelectBase.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTSelectBase.h>
 
 /**
  Not Thread-safe
@@ -46,7 +46,7 @@
          The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.
  */
-- (WCTOneRow*)nextRow;
+- (WCTOneRow *)nextRow;
 
 /**
  @brief Get all selected row.
@@ -64,7 +64,7 @@
          The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.         
  */
-- (WCTColumnsXRows*)allRows;
+- (WCTColumnsXRows *)allRows;
 
 /**
  @brief Get next selected value. You can do an iteration using it.
@@ -85,7 +85,7 @@
  @return The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.
  */
-- (WCTValue*)nextValue;
+- (WCTValue *)nextValue;
 
 /**
  @brief Get all selected values.
@@ -106,6 +106,6 @@
          The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.         
  */
-- (WCTOneColumn*)allValues;
+- (WCTOneColumn *)allValues;
 
 @end

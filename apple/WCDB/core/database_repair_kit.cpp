@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
+#include <WCDB/SQLiteRepairKit.h>
 #include <WCDB/database.hpp>
 #include <WCDB/path.hpp>
 #include <WCDB/utility.hpp>
-#include <WCDB/SQLiteRepairKit.h>
 
 namespace WCDB {
 
-bool Database::backup(const void* key, const unsigned int &length, Error& error)
+bool Database::backup(const void *key, const unsigned int &length, Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     if (!handle) {
@@ -35,16 +35,21 @@ bool Database::backup(const void* key, const unsigned int &length, Error& error)
     error = handle->getError();
     return result;
 }
-    
-bool Database::recoverFromPath(const std::string& corruptedDBPath, const int pageSize, const void* key, const unsigned int& length, Error& error)
+
+bool Database::recoverFromPath(const std::string &corruptedDBPath,
+                               const int pageSize,
+                               const void *key,
+                               const unsigned int &length,
+                               Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     if (!handle) {
         return false;
     }
-    bool result = handle->recoverFromPath(corruptedDBPath, pageSize, key, length);
+    bool result =
+        handle->recoverFromPath(corruptedDBPath, pageSize, key, length);
     error = handle->getError();
     return result;
 }
 
-}//namespace WCDB
+} //namespace WCDB

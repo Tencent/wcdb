@@ -25,14 +25,15 @@
 
 namespace WCDB {
 
-StatementInsert& StatementInsert::insert(const std::string& table, Conflict conflict)
+StatementInsert &StatementInsert::insert(const std::string &table,
+                                         Conflict conflict)
 {
     m_description.append("INSERT");
-    if (conflict!=Conflict::NotSet) {
+    if (conflict != Conflict::NotSet) {
         m_description.append(" OR ");
         m_description.append(ConflictName(conflict));
     }
-    m_description.append(" INTO "+table);
+    m_description.append(" INTO " + table);
     return *this;
 }
 
@@ -41,4 +42,4 @@ Statement::Type StatementInsert::getStatementType() const
     return Statement::Type::Insert;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

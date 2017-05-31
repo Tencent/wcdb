@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTSelectBase.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTSelectBase.h>
 
 /**
  Not Thread-safe
@@ -39,12 +39,12 @@
 
  @return See the example above
  */
-- (WCTMultiObject*)nextMultiObject;
+- (WCTMultiObject *)nextMultiObject;
 
 /**
  @brief Get all selected objects. 
  @return Array with all selected objects.
  */
-- (NSArray<WCTMultiObject*>*)allMultiObjects;
+- (NSArray<WCTMultiObject *> *)allMultiObjects;
 
 @end

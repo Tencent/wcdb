@@ -25,9 +25,9 @@
 /**
  Configuration
  */
-typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
+typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
 
-@interface WCTDatabase(Core)
+@interface WCTDatabase (Core)
 
 /**
  @brief Set config for this database.  
@@ -41,7 +41,7 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
  @param name The Identifier for this config
  @param order The smaller number is called first
  */
-- (void)setConfig:(WCDB::Config)config forName:(NSString*)name withOrder:(WCDB::Configs::Order)order;
+- (void)setConfig:(WCDB::Config)config forName:(NSString *)name withOrder:(WCDB::Configs::Order)order;
 
 /**
  @brief This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];
@@ -49,6 +49,6 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error&);
  @param config config
  @param name The Identifier for this config
  */
-- (void)setConfig:(WCDB::Config)config forName:(NSString*)name;
+- (void)setConfig:(WCDB::Config)config forName:(NSString *)name;
 
 @end

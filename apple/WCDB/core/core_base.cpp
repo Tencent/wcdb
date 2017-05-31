@@ -22,14 +22,12 @@
 
 namespace WCDB {
 
-CoreBase::CoreBase(const RecyclableHandlePool& pool, CoreType type)
-: m_pool(pool)
-, m_type(type)
+CoreBase::CoreBase(const RecyclableHandlePool &pool, CoreType type)
+    : m_pool(pool), m_type(type)
 {
 }
-    
-    
-const std::string& CoreBase::getPath() const
+
+const std::string &CoreBase::getPath() const
 {
     return m_pool->path;
 }
@@ -39,7 +37,9 @@ CoreType CoreBase::getType() const
     return m_type;
 }
 
-RecyclableStatement CoreBase::prepare(RecyclableHandle& handle, const Statement& statement, Error& error)
+RecyclableStatement CoreBase::prepare(RecyclableHandle &handle,
+                                      const Statement &statement,
+                                      Error &error)
 {
     std::shared_ptr<StatementHandle> statementHandle = nullptr;
     if (handle) {
@@ -49,7 +49,9 @@ RecyclableStatement CoreBase::prepare(RecyclableHandle& handle, const Statement&
     return RecyclableStatement(handle, statementHandle);
 }
 
-bool CoreBase::exec(RecyclableHandle& handle, const Statement& statement, Error& error)
+bool CoreBase::exec(RecyclableHandle &handle,
+                    const Statement &statement,
+                    Error &error)
 {
     bool result = false;
     if (handle) {
@@ -58,8 +60,10 @@ bool CoreBase::exec(RecyclableHandle& handle, const Statement& statement, Error&
     }
     return result;
 }
-    
-bool CoreBase::isTableExists(RecyclableHandle& handle, const std::string& tableName, Error& error)
+
+bool CoreBase::isTableExists(RecyclableHandle &handle,
+                             const std::string &tableName,
+                             Error &error)
 {
     bool result = false;
     if (handle) {
@@ -69,22 +73,28 @@ bool CoreBase::isTableExists(RecyclableHandle& handle, const std::string& tableN
     return result;
 }
 
-bool CoreBase::runTransaction(TransactionBlock transaction, TransactionEvent event, Error& error)
+bool CoreBase::runTransaction(TransactionBlock transaction,
+                              TransactionEvent event,
+                              Error &error)
 {
-#define TRANSATION_EVENT(eventType) if (event) {event(eventType);}
+#define TRANSATION_EVENT(eventType)                                            \
+    if (event) {                                                               \
+        event(eventType);                                                      \
+    }
     if (!begin(StatementTransaction::Mode::Immediate, error)) {
         TRANSATION_EVENT(TransactionEventType::BeginFailed);
         return false;
     }
     if (transaction(error)) {
-        error.reset();//User discards error
+        error.reset(); //User discards error
         if (commit(error)) {
             return true;
         }
         TRANSATION_EVENT(TransactionEventType::CommitFailed);
     }
     TRANSATION_EVENT(TransactionEventType::Rollback);
-    Error rollBackError;//Rollback errors do not need to be passed to the outside
+    Error
+        rollBackError; //Rollback errors do not need to be passed to the outside
     if (!rollback(rollBackError)) {
         TRANSATION_EVENT(TransactionEventType::RollbackFailed);
     }
@@ -96,4 +106,4 @@ int CoreBase::getTag() const
     return m_pool->tag.load();
 }
 
-}//namespace WCDB 
+} //namespace WCDB

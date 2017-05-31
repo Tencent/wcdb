@@ -23,17 +23,17 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSNumber(WCDB) <WCTColumnCoding>
+@interface NSNumber (WCDB) <WCTColumnCoding>
 @end
 
-@implementation NSNumber(WCDB)
+@implementation NSNumber (WCDB)
 
-+ (instancetype)unarchiveWithWCTValue:(NSNumber*)value
++ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
     return value;
 }
 
-- (NSNumber*)archivedWCTValue
+- (NSNumber *)archivedWCTValue
 {
     return self;
 }

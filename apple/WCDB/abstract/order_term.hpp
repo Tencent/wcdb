@@ -29,8 +29,8 @@ enum class OrderTerm : int {
     DESC,
 };
 
-const char* OrderTermName(OrderTerm term);
+const char *OrderTermName(OrderTerm term);
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* order_term_hpp */

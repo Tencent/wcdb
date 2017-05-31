@@ -21,15 +21,14 @@
 #ifndef clause_join_hpp
 #define clause_join_hpp
 
-#include <WCDB/describable.hpp>
 #include <WCDB/declare.hpp>
+#include <WCDB/describable.hpp>
 
 namespace WCDB {
 
-class JoinClause : public Describable
-{
+class JoinClause : public Describable {
 public:
-    enum class Type : int{
+    enum class Type : int {
         NotSet,
         Left,
         LeftOuter,
@@ -37,17 +36,22 @@ public:
         Cross,
     };
 
-    JoinClause& join(const Subquery& subquery, JoinClause::Type type = JoinClause::Type::NotSet, bool isNatural = false);
-    JoinClause& on(const Expr& expr);
+    JoinClause &join(const Subquery &subquery,
+                     JoinClause::Type type = JoinClause::Type::NotSet,
+                     bool isNatural = false);
+    JoinClause &on(const Expr &expr);
 
     template <typename T>
-    typename std::enable_if<std::is_base_of<Column, T>::value, JoinClause&>::type usingColumns(const std::list<const T>& columnList) {
+    typename std::enable_if<std::is_base_of<Column, T>::value,
+                            JoinClause &>::type
+    usingColumns(const std::list<const T> &columnList)
+    {
         m_description.append(" USING ");
         joinDescribableList(columnList);
         return *this;
     }
 };
 
-};//name space WCTDB
+}; // namespace WCDB
 
 #endif /* clause_join_hpp */

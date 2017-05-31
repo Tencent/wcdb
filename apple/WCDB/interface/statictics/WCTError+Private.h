@@ -22,10 +22,10 @@
 #import <WCDB/WCTError.h>
 #import <WCDB/error.hpp>
 
-@interface WCTError()
+@interface WCTError ()
 
-+ (instancetype)errorWithWCDBError:(const WCDB::Error&)error;
++ (instancetype)errorWithWCDBError:(const WCDB::Error &)error;
 
-- (instancetype)initWithWCDBError:(const WCDB::Error&)error;
+- (instancetype)initWithWCDBError:(const WCDB::Error &)error;
 
 @end

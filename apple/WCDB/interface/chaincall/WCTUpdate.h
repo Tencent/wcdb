@@ -31,41 +31,41 @@
  @param condition condition
  @return self
  */
-- (instancetype)where:(const WCTCondition&)condition;
+- (instancetype)where:(const WCTCondition &)condition;
 
 /**
  @brief WINQ interface for SQL.
  @param orderList order list
  @return self
  */
-- (instancetype)orderBy:(const WCTOrderByList&)orderList;
+- (instancetype)orderBy:(const WCTOrderByList &)orderList;
 
 /**
  @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
-- (instancetype)limit:(const WCTLimit&)limit;
+- (instancetype)limit:(const WCTLimit &)limit;
 
 /**
  @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
-- (instancetype)offset:(const WCTOffset&)offset;
+- (instancetype)offset:(const WCTOffset &)offset;
 
 /**
  @brief Execute the update SQL with objects.
  @param object Template object to be used to update table. 
  @return YES if no error occurs. See [error] also.
  */
-- (BOOL)executeWithObject:(WCTObject*)object;
+- (BOOL)executeWithObject:(WCTObject *)object;
 
 /**
  @brief Execute the update SQL with objects.
  @param row Template row to be used to update table
  @return YES if no error occurs. See [error] also.
  */
-- (BOOL)executeWithRow:(WCTOneRow*)row;
+- (BOOL)executeWithRow:(WCTOneRow *)row;
 
 @end

@@ -21,14 +21,14 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTTransaction.h>
 
-@interface WCTTransaction(Statictics)
+@interface WCTTransaction (Statictics)
 
 /**
  More detailed error messages.
  
  @return nil or error.isOK==YES if no error occurs.
  */
-- (WCTError*)error;
+- (WCTError *)error;
 
 /**
  After enabling, you can call the [cost] interface to get time consuming.

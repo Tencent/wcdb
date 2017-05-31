@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <type_traits>
 #import <WCDB/error.hpp>
+#import <type_traits>
 
 /**
  It indicates the error type for WCTError
@@ -29,31 +29,31 @@ typedef NS_ENUM(int, WCTErrorType) {
     /**
      * An error comes from sqlite interface. You can check it at http://www.sqlite.org/rescode.html .
      */
-    WCTErrorTypeSQLite = (WCTErrorType)WCDB::Error::Type::SQLite,
+    WCTErrorTypeSQLite = (WCTErrorType) WCDB::Error::Type::SQLite,
     /**
      * System error, which is obtained by [errno].
      */
-    WCTErrorTypeSystemCall = (WCTErrorType)WCDB::Error::Type::SystemCall,
+    WCTErrorTypeSystemCall = (WCTErrorType) WCDB::Error::Type::SystemCall,
     /**
      * An error comes from core layer of WCDB. For further information, see [Error::CoreCode] in [error.hpp].
      */
-    WCTErrorTypeCore = (WCTErrorType)WCDB::Error::Type::Core,
+    WCTErrorTypeCore = (WCTErrorType) WCDB::Error::Type::Core,
     /**
      * An error comes from interface layer of WCDB. For further information, see [Error::InterfaceCode] in [error.hpp].
      */
-    WCTErrorTypeInterface = (WCTErrorType)WCDB::Error::Type::Interface,
+    WCTErrorTypeInterface = (WCTErrorType) WCDB::Error::Type::Interface,
     /**
      * Development error. You should fix it before release.
      */
-    WCTErrorTypeAbort = (WCTErrorType)WCDB::Error::Type::Abort,
+    WCTErrorTypeAbort = (WCTErrorType) WCDB::Error::Type::Abort,
     /**
      * Warning. You'd better fix it.
      */
-    WCTErrorTypeWarning = (WCTErrorType)WCDB::Error::Type::Warning,
+    WCTErrorTypeWarning = (WCTErrorType) WCDB::Error::Type::Warning,
     /**
      * An error comes from [SQLITE_CONFIG_LOG]. You can check it at http://www.sqlite.org/rescode.html .
      */
-    WCTErrorTypeSQLiteGlobal = (WCTErrorType)WCDB::Error::Type::SQLiteGlobal,
+    WCTErrorTypeSQLiteGlobal = (WCTErrorType) WCDB::Error::Type::SQLiteGlobal,
 };
 
 /**
@@ -63,27 +63,27 @@ typedef NS_ENUM(int, WCTErrorKey) {
     /**
      * Tag of database
      */
-    WCTErrorKeyTag = (WCTErrorKey)WCDB::Error::Key::Tag,
+    WCTErrorKeyTag = (WCTErrorKey) WCDB::Error::Key::Tag,
     /**
      * The operation that is being performed when an error occurs. For further information, see [Error::CoreOperation] in [error.hpp].
      */
-    WCTErrorKeyOperation = (WCTErrorKey)WCDB::Error::Key::Operation,
+    WCTErrorKeyOperation = (WCTErrorKey) WCDB::Error::Key::Operation,
     /**
      * Extended code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
      */
-    WCTErrorKeyExtendedCode = (WCTErrorKey)WCDB::Error::Key::ExtendedCode,
+    WCTErrorKeyExtendedCode = (WCTErrorKey) WCDB::Error::Key::ExtendedCode,
     /**
      * Text message that helps you debug it.
      */
-    WCTErrorKeyMessage = (WCTErrorKey)WCDB::Error::Key::Message,
+    WCTErrorKeyMessage = (WCTErrorKey) WCDB::Error::Key::Message,
     /**
      * The SQL is being executed when an error occurs.
      */
-    WCTErrorKeySQL = (WCTErrorKey)WCDB::Error::Key::SQL,
+    WCTErrorKeySQL = (WCTErrorKey) WCDB::Error::Key::SQL,
     /**
      * The file path that is being manipulated when an error occurs.
      */
-    WCTErrorKeyPath = (WCTErrorKey)WCDB::Error::Key::Path,
+    WCTErrorKeyPath = (WCTErrorKey) WCDB::Error::Key::Path,
 };
 
 /**

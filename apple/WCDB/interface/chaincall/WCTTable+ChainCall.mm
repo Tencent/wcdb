@@ -18,66 +18,66 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable+ChainCall.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTRowSelect.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTUpdate.h>
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTInsert+Private.h>
-#import <WCDB/WCTSelect+Private.h>
-#import <WCDB/WCTUpdate+Private.h>
-#import <WCDB/WCTDelete+Private.h>
-#import <WCDB/WCTRowSelect+Private.h>
+#import <WCDB/WCTInsert.h>
 #import <WCDB/WCTMultiSelect+Private.h>
-#import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTResult.h>
+#import <WCDB/WCTRowSelect+Private.h>
+#import <WCDB/WCTRowSelect.h>
+#import <WCDB/WCTSelect+Private.h>
+#import <WCDB/WCTSelect.h>
+#import <WCDB/WCTTable+ChainCall.h>
+#import <WCDB/WCTTable+Private.h>
+#import <WCDB/WCTUpdate+Private.h>
+#import <WCDB/WCTUpdate.h>
 
-@implementation WCTTable(ChainCall)
+@implementation WCTTable (ChainCall)
 
-- (WCTInsert*)prepareInsertObjects
+- (WCTInsert *)prepareInsertObjects
 {
     return [[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:NO];
 }
 
-- (WCTInsert*)prepareInsertOrReplaceObjects
+- (WCTInsert *)prepareInsertOrReplaceObjects
 {
     return [[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:YES];
 }
 
-- (WCTInsert*)prepareInsertObjectsOnProperties:(const WCTPropertyList&)propertyList
+- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList
 {
     return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO];
 }
 
-- (WCTInsert*)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList&)propertyList
+- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)propertyList
 {
     return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:YES];
 }
 
-- (WCTDelete*)prepareDelete
+- (WCTDelete *)prepareDelete
 {
     return [[WCTDelete alloc] initWithCore:_core andTableName:_tableName];
 }
 
-- (WCTUpdate*)prepareUpdateOnProperties:(const WCTPropertyList&)propertyList
+- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)propertyList
 {
     return [[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName];
 }
 
-- (WCTSelect*)prepareSelectObjects
+- (WCTSelect *)prepareSelectObjects
 {
     return [[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName];
 }
 
-- (WCTSelect*)prepareSelectObjectsOnResults:(const WCTResultList&)resultList
+- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList
 {
     return [[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName];
 }
 
-- (WCTRowSelect*)prepareSelectRowsOnResults:(const WCTResultList&)resultList
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList
 {
     return [[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName];
 }

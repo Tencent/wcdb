@@ -45,6 +45,6 @@
 
  @return path
  */
-- (NSString*)path;
+- (NSString *)path;
 
 @end

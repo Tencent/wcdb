@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTStatement.h>
-#import <WCDB/core.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTStatement+Private.h>
+#import <WCDB/WCTStatement.h>
+#import <WCDB/core.h>
 
-@implementation WCTStatement 
+@implementation WCTStatement
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andStatementHandle:(WCDB::RecyclableStatement&)statementHandle andError:(const WCDB::Error &)error
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle andError:(const WCDB::Error &)error
 {
     if (self = [super initWithCore:core]) {
         _statementHandle = statementHandle;
@@ -34,37 +34,37 @@
     return self;
 }
 
-- (WCTError*)getError
+- (WCTError *)getError
 {
-    const WCDB::Error& error = _statementHandle->getError();
+    const WCDB::Error &error = _statementHandle->getError();
     if (error.isOK()) {
         return nil;
     }
     return [WCTError errorWithWCDBError:error];
 }
 
-- (BOOL)bindValue:(WCTValue*)value toIndex:(int)index
+- (BOOL)bindValue:(WCTValue *)value toIndex:(int)index
 {
     if ([value isKindOfClass:NSData.class]) {
-        NSData* data = (NSData*)value;
-        _statementHandle->bind<(WCDB::ColumnType)WCTColumnTypeBinary>(data.bytes, (int)data.length, index);
-    }else if ([value isKindOfClass:NSString.class]) {
-        NSString* string = (NSString*)value;
-        _statementHandle->bind<(WCDB::ColumnType)WCTColumnTypeString>(string.UTF8String, index);
-    }else if ([value isKindOfClass:NSNumber.class]) {
-        NSNumber* number = (NSNumber*)value;
-        if (CFNumberIsFloatType((CFNumberRef)number)) {
-            _statementHandle->bind<(WCDB::ColumnType)WCTColumnTypeDouble>(number.doubleValue, index);
-        }else {
-            if (CFNumberGetByteSize((CFNumberRef)number)<=4) {
-                _statementHandle->bind<(WCDB::ColumnType)WCTColumnTypeInteger32>(number.intValue, index);
-            }else {
-                _statementHandle->bind<(WCDB::ColumnType)WCTColumnTypeInteger64>(number.longLongValue, index);
+        NSData *data = (NSData *) value;
+        _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
+    } else if ([value isKindOfClass:NSString.class]) {
+        NSString *string = (NSString *) value;
+        _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(string.UTF8String, index);
+    } else if ([value isKindOfClass:NSNumber.class]) {
+        NSNumber *number = (NSNumber *) value;
+        if (CFNumberIsFloatType((CFNumberRef) number)) {
+            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
+        } else {
+            if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+                _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+            } else {
+                _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
             }
         }
-    }else if ([value isKindOfClass:NSNull.class]||value==nil) {
-        _statementHandle->bind<(WCDB::ColumnType)WCTColumnTypeNil>(index);
-    }else {
+    } else if ([value isKindOfClass:NSNull.class] || value == nil) {
+        _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+    } else {
         WCDB::Error::Abort(([NSString stringWithFormat:@"Binding statement with unknown type %@", NSStringFromClass(value.class)].UTF8String));
         return NO;
     }
@@ -72,34 +72,31 @@
 }
 
 //get value, index begin with 0
-- (WCTValue*)getValueAtIndex:(int)index
+- (WCTValue *)getValueAtIndex:(int)index
 {
-    WCTValue* value = nil;
-    switch ((WCTColumnType)_statementHandle->getType(index)) {
+    WCTValue *value = nil;
+    switch ((WCTColumnType) _statementHandle->getType(index)) {
         case WCTColumnTypeInteger32:
-            value = [NSNumber numberWithInt:_statementHandle->getValue<(WCDB::ColumnType)WCTColumnTypeInteger32>(index)];
+            value = [NSNumber numberWithInt:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger32>(index)];
             break;
         case WCTColumnTypeInteger64:
-            value = [NSNumber numberWithLongLong:_statementHandle->getValue<(WCDB::ColumnType)WCTColumnTypeInteger64>(index)];
+            value = [NSNumber numberWithLongLong:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger64>(index)];
             break;
         case WCTColumnTypeDouble:
-            value = [NSNumber numberWithDouble:_statementHandle->getValue<(WCDB::ColumnType)WCTColumnTypeDouble>(index)];
+            value = [NSNumber numberWithDouble:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeDouble>(index)];
             break;
         case WCTColumnTypeString: {
-            const char* string = _statementHandle->getValue<(WCDB::ColumnType)WCTColumnTypeString>(index);
-            value = string?[NSString stringWithUTF8String:string]:nil;
-        }
-            break;
+            const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(index);
+            value = string ? [NSString stringWithUTF8String:string] : nil;
+        } break;
         case WCTColumnTypeBinary: {
             int size = 0;
-            const void* data = _statementHandle->getValue<(WCDB::ColumnType)WCTColumnTypeBinary>(index, size);
-            value = data?[NSData dataWithBytes:data length:size]:nil;
-        }
-            break;
+            const void *data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index, size);
+            value = data ? [NSData dataWithBytes:data length:size] : nil;
+        } break;
         case WCTColumnTypeNil: {
             value = nil;
-        }
-            break;
+        } break;
         default:
             break;
     }
@@ -118,7 +115,7 @@
 
 - (WCTColumnType)getTypeAtIndex:(int)index
 {
-    return (WCTColumnType)_statementHandle->getType(index);
+    return (WCTColumnType) _statementHandle->getType(index);
 }
 
 - (int)getCount
@@ -126,16 +123,16 @@
     return _statementHandle->getColumnCount();
 }
 
-- (NSString*)getNameAtIndex:(int)index
+- (NSString *)getNameAtIndex:(int)index
 {
-    const char* columnName = _statementHandle->getColumnName(index);
-    return columnName?@(columnName):nil;
+    const char *columnName = _statementHandle->getColumnName(index);
+    return columnName ? @(columnName) : nil;
 }
 
-- (NSString*)getTableNameAtIndex:(int)index
+- (NSString *)getTableNameAtIndex:(int)index
 {
-    const char* tableName = _statementHandle->getColumnTableName(index);
-    return tableName?@(tableName):nil;
+    const char *tableName = _statementHandle->getColumnTableName(index);
+    return tableName ? @(tableName) : nil;
 }
 
 - (void)finalize

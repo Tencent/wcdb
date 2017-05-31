@@ -21,14 +21,14 @@
 #import <WCDB/WCTDatabase+Core.h>
 #import <WCDB/WCTDatabase+Private.h>
 
-@implementation WCTDatabase(Core)
+@implementation WCTDatabase (Core)
 
-- (void)setConfig:(WCDB::Config)invoke forName:(NSString*)name withOrder:(WCDB::Configs::Order)order
+- (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name withOrder:(WCDB::Configs::Order)order
 {
     _database->setConfig(name.UTF8String, invoke, order);
 }
 
-- (void)setConfig:(WCDB::Config)invoke forName:(NSString*)name
+- (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name
 {
     _database->setConfig(name.UTF8String, invoke);
 }

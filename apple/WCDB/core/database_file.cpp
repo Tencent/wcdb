@@ -24,53 +24,53 @@
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
-    
-bool Database::removeFiles(Error& error)
+
+bool Database::removeFiles(Error &error)
 {
-    if (!isBlockaded()
-        ||isOpened()) {
-        WCDB::Error::Warning("Removing files on an opened database may cause unknown results");
+    if (!isBlockaded() || isOpened()) {
+        WCDB::Error::Warning(
+            "Removing files on an opened database may cause unknown results");
     }
     return File::removeFiles(getPaths(), error);
 }
 
-size_t Database::getFilesSize(Error& error)
+size_t Database::getFilesSize(Error &error)
 {
-    if (!isBlockaded()
-        ||isOpened()) {
-        WCDB::Error::Warning("Getting files size on an opened database may get incorrect results");
+    if (!isBlockaded() || isOpened()) {
+        WCDB::Error::Warning("Getting files size on an opened database may get "
+                             "incorrect results");
     }
     return File::getFilesSize(getPaths(), error);
 }
 
-bool Database::moveFiles(const std::string& directory, Error& error)
+bool Database::moveFiles(const std::string &directory, Error &error)
 {
-    if (!isBlockaded()
-        ||isOpened()) {
-        WCDB::Error::Warning("Moving files on an opened database may cause a corrupted database");
+    if (!isBlockaded() || isOpened()) {
+        WCDB::Error::Warning("Moving files on an opened database may cause a "
+                             "corrupted database");
     }
     return File::moveFiles(getPaths(), directory, error);
 }
 
-bool Database::moveFilesToDirectoryWithExtraFiles(const std::string& directory, const std::list<std::string>& extraFiles, Error& error)
+bool Database::moveFilesToDirectoryWithExtraFiles(
+    const std::string &directory,
+    const std::list<std::string> &extraFiles,
+    Error &error)
 {
-    if (!isBlockaded()
-        ||isOpened()) {
-        WCDB::Error::Warning("Moving files on an opened database may cause a corrupted database");
+    if (!isBlockaded() || isOpened()) {
+        WCDB::Error::Warning("Moving files on an opened database may cause a "
+                             "corrupted database");
     }
     std::list<std::string> paths = getPaths();
     paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
     return File::moveFiles(paths, directory, error);
 }
 
-const std::array<std::string, 5>& Database::subfixs()
+const std::array<std::string, 5> &Database::subfixs()
 {
     static const std::array<std::string, 5> s_subfixs = {
-        "",//db file
-        "-wal",
-        "-journal",
-        "-shm",
-        Handle::backupSuffix,
+        "", //db file
+        "-wal", "-journal", "-shm", Handle::backupSuffix,
     };
     return s_subfixs;
 }
@@ -78,10 +78,10 @@ const std::array<std::string, 5>& Database::subfixs()
 const std::list<std::string> Database::getPaths() const
 {
     std::list<std::string> paths;
-    for (const auto& subfix : Database::subfixs()) {
+    for (const auto &subfix : Database::subfixs()) {
         paths.push_back(Path::addExtention(getPath(), subfix));
     }
     return paths;
 }
 
-}//namespace WCDB
+} //namespace WCDB

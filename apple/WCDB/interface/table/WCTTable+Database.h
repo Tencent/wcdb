@@ -19,11 +19,11 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTTable.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTTable.h>
 
-@interface WCTTable(Database)
+@interface WCTTable (Database)
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase>&)core andTableName:(NSString*)tableName andClass:(Class<WCTTableCoding>)cls;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName andClass:(Class<WCTTableCoding>)cls;
 
 @end

@@ -18,34 +18,34 @@
  * limitations under the License.
  */
 
-#define WCDB_BOOL_1		1
-#define WCDB_BOOL_0		0
-#define WCDB_BOOL_true	1
-#define WCDB_BOOL_false	0
-#define WCDB_BOOL_TRUE	1
-#define WCDB_BOOL_FALSE	0
-#define WCDB_BOOL_YES	1
-#define WCDB_BOOL_NO	0
-#define WCDB_BOOL___objc_yes	1
-#define WCDB_BOOL___objc_no		0
+#define WCDB_BOOL_1 1
+#define WCDB_BOOL_0 0
+#define WCDB_BOOL_true 1
+#define WCDB_BOOL_false 0
+#define WCDB_BOOL_TRUE 1
+#define WCDB_BOOL_FALSE 0
+#define WCDB_BOOL_YES 1
+#define WCDB_BOOL_NO 0
+#define WCDB_BOOL___objc_yes 1
+#define WCDB_BOOL___objc_no 0
 #define WCDB_BOOL(var) _WCDB_BOOL(var)
-#define _WCDB_BOOL(var) WCDB_BOOL_ ## var
+#define _WCDB_BOOL(var) WCDB_BOOL_##var
 
 #define WCDB_IF_ELSE_0(t, f) f
 #define WCDB_IF_ELSE_1(t, f) t
-#define __WCDB_IF_ELSE(bit, t, f) WCDB_IF_ELSE_ ## bit(t, f)
+#define __WCDB_IF_ELSE(bit, t, f) WCDB_IF_ELSE_##bit(t, f)
 #define _WCDB_IF_ELSE(bit, t, f) __WCDB_IF_ELSE(bit, t, f)
 #define WCDB_IF_ELSE(cond, t, f) _WCDB_IF_ELSE(WCDB_BOOL(cond), t, f)
 
 #define WCDB_IF_0(t)
 #define WCDB_IF_1(t) t
-#define __WCDB_IF(bit, t) WCDB_IF_ ## bit(t)
+#define __WCDB_IF(bit, t) WCDB_IF_##bit(t)
 #define _WCDB_IF(bit, t) __WCDB_IF(bit, t)
 #define WCDB_IF(cond, t) _WCDB_IF(WCDB_BOOL(cond), t)
 
 #define WCDB_IF_NOT_0(f) f
 #define WCDB_IF_NOT_1(f)
-#define __WCDB_IF_NOT(bit, f) WCDB_IF_NOT_ ## bit(f)
+#define __WCDB_IF_NOT(bit, f) WCDB_IF_NOT_##bit(f)
 #define _WCDB_IF_NOT(bit, f) __WCDB_IF_NOT(bit, f)
 #define WCDB_IF_NOT(cond, f) _WCDB_IF_NOT(WCDB_BOOL(cond), f)
 
@@ -53,7 +53,9 @@
 #define WCDB_STRINGIFY(str) _WCDB_STRINGIFY(str)
 
 #ifdef DEBUG
-#define WCDB_PROPERTY_HINT(className, propertyName) static const auto UNUSED_UNIQUE_ID __attribute__((unused)) = sizeof([[className new] propertyName]);
+#define WCDB_PROPERTY_HINT(className, propertyName)                            \
+    static const auto UNUSED_UNIQUE_ID __attribute__((unused)) =               \
+        sizeof([[className new] propertyName]);
 #else
 #define WCDB_PROPERTY_HINT(className, propertyName)
 #endif

@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-Statement::Statement()
-: Describable("")
+Statement::Statement() : Describable("")
 {
 }
 
@@ -32,4 +31,4 @@ Statement::~Statement()
 {
 }
 
-}//namespace WCDB 
+} //namespace WCDB

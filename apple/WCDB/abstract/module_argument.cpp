@@ -18,25 +18,26 @@
  * limitations under the License.
  */
 
-#include <WCDB/module_argument.hpp>
 #include <WCDB/column_def.hpp>
 #include <WCDB/constraint_table.hpp>
+#include <WCDB/module_argument.hpp>
 
 namespace WCDB {
 
-ModuleArgument::ModuleArgument(const TableConstraint& tableConstraint)
-: Describable(tableConstraint.getDescription())
-{
-}
-    
-ModuleArgument::ModuleArgument(const ColumnDef& columnDef)
-: Describable(columnDef.getDescription())
+ModuleArgument::ModuleArgument(const TableConstraint &tableConstraint)
+    : Describable(tableConstraint.getDescription())
 {
 }
 
-ModuleArgument::ModuleArgument(const std::string& left, const std::string& right)
-: Describable(left+"="+right)
+ModuleArgument::ModuleArgument(const ColumnDef &columnDef)
+    : Describable(columnDef.getDescription())
 {
 }
 
-}//namespace WCDB
+ModuleArgument::ModuleArgument(const std::string &left,
+                               const std::string &right)
+    : Describable(left + "=" + right)
+{
+}
+
+} //namespace WCDB

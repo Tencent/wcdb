@@ -26,10 +26,11 @@
 namespace WCDB {
 
 template <typename T>
-std::string GetListDescription(const std::list<T>& t) {
+std::string GetListDescription(const std::list<T> &t)
+{
     return Describable::GetListDescription(t);
 }
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* utility_hpp */

@@ -22,7 +22,8 @@
 
 namespace WCDB {
 
-StatementDropIndex StatementDropIndex::drop(const std::string& index, bool ifExists)
+StatementDropIndex StatementDropIndex::drop(const std::string &index,
+                                            bool ifExists)
 {
     m_description.append("DROP INDEX ");
     if (ifExists) {
@@ -37,4 +38,4 @@ Statement::Type StatementDropIndex::getStatementType() const
     return Statement::Type::DropIndex;
 }
 
-}//namespace WCDB 
+} //namespace WCDB

@@ -26,15 +26,15 @@
 
 namespace WCDB {
 
-class InCaseLockGuard
-{
+class InCaseLockGuard {
 public:
-    InCaseLockGuard(std::shared_ptr<std::mutex>& mutex);
+    InCaseLockGuard(std::shared_ptr<std::mutex> &mutex);
     ~InCaseLockGuard();
+
 protected:
     std::shared_ptr<std::mutex> m_mutex;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* in_case_lock_guard_hpp */

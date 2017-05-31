@@ -21,55 +21,61 @@
 #ifndef describable_hpp
 #define describable_hpp
 
+#include <list>
 #include <string>
 #include <type_traits>
-#include <list>
 
 namespace WCDB {
 
-class Describable
-{
+class Describable {
 public:
     template <typename T>
-    static std::string GetListDescription(const std::list<const T>& t) {
+    static std::string GetListDescription(const std::list<const T> &t)
+    {
         std::string s;
         GetDescription(t, s);
         return s;
     }
 
-    const std::string& getDescription() const;
+    const std::string &getDescription() const;
 
-    template<typename T>
-    void joinDescribableList(const std::list<const T>& list) {
+    template <typename T>
+    void joinDescribableList(const std::list<const T> &list)
+    {
         GetDescription<T>(list, m_description);
     }
 
-    explicit operator const std::string&() const;
+    explicit operator const std::string &() const;
 
     bool isEmpty() const;
+
 protected:
-    template<typename T>
-    static void GetDescription(const std::list<const T>& list, std::string& output) {
+    template <typename T>
+    static void GetDescription(const std::list<const T> &list,
+                               std::string &output)
+    {
         bool flag = false;
-        for (const auto& t : list) {
+        for (const auto &t : list) {
             if (flag) {
                 output.append(",");
-            }else {
+            } else {
                 flag = true;
             }
             output.append(std::string(t));
         }
     }
-    
-    
-    static std::string stringByReplacingOccurrencesOfString(const std::string& origin, const std::string& target, const std::string& replacement);
-    
-    Describable(const std::string& description);
-    Describable(const char* description);
-        
+
+    static std::string
+    stringByReplacingOccurrencesOfString(const std::string &origin,
+                                         const std::string &target,
+                                         const std::string &replacement);
+
+    Describable(const std::string &description);
+    Describable(const char *description);
+
     std::string m_description;
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* describable_hpp */

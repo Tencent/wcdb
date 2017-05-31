@@ -22,7 +22,7 @@
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTDeclare.h>
 
-@interface WCTDatabase(Table)
+@interface WCTDatabase (Table)
 
 /**
  @brief Create table and indexes from ORM if not exists.
@@ -33,7 +33,7 @@
  @param cls class
  @return YES only if no error occurs.
  */
-- (BOOL)createTableAndIndexesOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls;
+- (BOOL)createTableAndIndexesOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Get a wrapper from an existing table.
@@ -41,7 +41,7 @@
  @param cls a class implement WCTTableCoding.
  @return nil for a non-existent table.
  */
-- (WCTTable*)getTableOfName:(NSString*)tableName withClass:(Class<WCTTableCoding>)cls;
+- (WCTTable *)getTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Create virtual table from ORM if not exists.
@@ -51,7 +51,7 @@
  @param cls a class implement WCTTableCoding.
  @return YES only if no error occurs.
  */
-- (BOOL)createVirtualTableOfName:(NSString*)tableName usingModule:(NSString*)moduleName withClass:(Class<WCTTableCoding>)cls;
+- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Create table from user-defined column if not exists.
@@ -60,7 +60,7 @@
  @param constraintList The list of constraint.
  @return YES only if no error occurs.
  */
-- (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList andConstraintList:(const WCTTableConstraintList&)constraintList;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andConstraintList:(const WCTTableConstraintList &)constraintList;
 
 /**
  @brief This interface is equivalent to [database createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:{}].
@@ -68,21 +68,21 @@
  @param columnDefList The list of column definition.
  @return YES only if no error occurs.
  */
-- (BOOL)createTableOfName:(NSString*)tableName withColumnDefList:(const WCTColumnDefList&)columnDefList;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList;
 
 /**
  @brief Check whether tabel exists
  @param tableName The name of the table to be checked.
  @return YES if table exists. NO if table does not exist or an error occurs.
  */
-- (BOOL)isTableExists:(NSString*)tableName;
+- (BOOL)isTableExists:(NSString *)tableName;
 
 /**
  @brief Drop table if exists.
  @param tableName The name of the table to be dropped.
  @return YES only if no error occurs.
  */
-- (BOOL)dropTableOfName:(NSString*)tableName;
+- (BOOL)dropTableOfName:(NSString *)tableName;
 
 /**
  @brief Create table from user-defined index if not exists.
@@ -91,14 +91,14 @@
  @param tableName The name of index-associated table.
  @return YES only if no error occurs.
  */
-- (BOOL)createIndexOfName:(NSString*)indexName withIndexList:(const WCTIndexList&)indexList forTable:(NSString*)tableName;
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCTIndexList &)indexList forTable:(NSString *)tableName;
 
 /**
  @brief Drop index if not exists.
  @param indexName The name of the index to be dropped.
  @return YES only if no error occurs.
  */
-- (BOOL)dropIndexOfName:(NSString*)indexName;
+- (BOOL)dropIndexOfName:(NSString *)indexName;
 
 /**
  @brief Add column.
@@ -106,6 +106,6 @@
  @param tableName The name of table to do a column addition.
  @return YES only if no error occurs.
  */
-- (BOOL)addColumn:(const WCTColumnDef&)columnDef forTable:(NSString*)tableName;
+- (BOOL)addColumn:(const WCTColumnDef &)columnDef forTable:(NSString *)tableName;
 
 @end

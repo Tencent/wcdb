@@ -21,21 +21,20 @@
 #ifndef column_index_hpp
 #define column_index_hpp
 
+#include <WCDB/declare.hpp>
 #include <WCDB/describable.hpp>
 #include <WCDB/order_term.hpp>
-#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
-class ColumnIndex : public Describable
-{
+class ColumnIndex : public Describable {
 public:
-    ColumnIndex(const Column& column, OrderTerm term = OrderTerm::NotSet);
-    ColumnIndex(const Expr& expr, OrderTerm term = OrderTerm::NotSet);
-    
+    ColumnIndex(const Column &column, OrderTerm term = OrderTerm::NotSet);
+    ColumnIndex(const Expr &expr, OrderTerm term = OrderTerm::NotSet);
+
     operator ColumnIndexList() const;
 };
 
-}//namespace WCDB 
+} //namespace WCDB
 
 #endif /* column_index_hpp */

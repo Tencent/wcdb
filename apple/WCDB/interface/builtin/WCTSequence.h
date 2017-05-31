@@ -26,11 +26,11 @@
 /**
  Builtin ORM for "sqlite_sequence" table. For further information, see https://sqlite.org/autoinc.html .
  */
-@interface WCTSequence : NSObject<WCTTableCoding>
+@interface WCTSequence : NSObject <WCTTableCoding>
 
-+ (NSString*)TableName;
++ (NSString *)TableName;
 
-@property(retain) NSString* name;
+@property(retain) NSString *name;
 @property(assign) int seq;
 
 WCDB_PROPERTY(name)

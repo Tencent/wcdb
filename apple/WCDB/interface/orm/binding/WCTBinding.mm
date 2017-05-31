@@ -19,33 +19,33 @@
  */
 
 #import <WCDB/WCTBinding.h>
+#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTIndexBinding.h>
-#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTProperty.h>
 
 WCTBinding::WCTBinding(Class cls)
-: m_cls(cls)
-, m_indexBindingMap(nullptr)
-, m_constraintBindingMap(nullptr)
-, m_constraintBindingList(nullptr)
-, m_virtualTableArgumentList(nullptr)
+    : m_cls(cls)
+    , m_indexBindingMap(nullptr)
+    , m_constraintBindingMap(nullptr)
+    , m_constraintBindingList(nullptr)
+    , m_virtualTableArgumentList(nullptr)
 {
     if (![m_cls conformsToProtocol:@protocol(WCTTableCoding)]) {
         WCDB::Error::Abort([NSString stringWithFormat:@"Class [%@] should conform to WCTTableCoding protocol", NSStringFromClass(m_cls)].UTF8String);
     }
 }
 
-void WCTBinding::_addColumnBinding(const std::string& columnName, const std::shared_ptr<WCTColumnBinding>& columnBinding)
+void WCTBinding::_addColumnBinding(const std::string &columnName, const std::shared_ptr<WCTColumnBinding> &columnBinding)
 {
     m_columnBindingList.push_back(columnBinding);
     m_columnBindingMap.insert({columnName, columnBinding});
 }
 
-std::shared_ptr<WCTColumnBinding> WCTBinding::getColumnBinding(const WCTProperty& property) const
+std::shared_ptr<WCTColumnBinding> WCTBinding::getColumnBinding(const WCTProperty &property) const
 {
     auto iter = m_columnBindingMap.find(property.getName());
-    return iter!=m_columnBindingMap.end()?iter->second:nullptr;
+    return iter != m_columnBindingMap.end() ? iter->second : nullptr;
 }
 
 void WCTBinding::lazyInitIndexBinding()
@@ -55,11 +55,11 @@ void WCTBinding::lazyInitIndexBinding()
     }
 }
 
-std::shared_ptr<WCTIndexBinding> WCTBinding::getOrCreateIndexBinding(const std::string& indexSubfixName)
+std::shared_ptr<WCTIndexBinding> WCTBinding::getOrCreateIndexBinding(const std::string &indexSubfixName)
 {
     lazyInitIndexBinding();
     auto iter = m_indexBindingMap->find(indexSubfixName);
-    if (iter==m_indexBindingMap->end()) {
+    if (iter == m_indexBindingMap->end()) {
         std::shared_ptr<WCTIndexBinding> indexBinding(new WCTIndexBinding(indexSubfixName));
         m_indexBindingMap->insert({indexSubfixName, indexBinding});
         return indexBinding;
@@ -71,8 +71,8 @@ const std::shared_ptr<WCTIndexBindingMap> WCTBinding::getIndexBindingMap() const
 {
     return m_indexBindingMap;
 }
-                         
-const WCTColumnBindingList& WCTBinding::getColumnBindingList() const
+
+const WCTColumnBindingList &WCTBinding::getColumnBindingList() const
 {
     return m_columnBindingList;
 }
@@ -87,15 +87,15 @@ void WCTBinding::lazyInitConstraintBinding()
     }
 }
 
-WCTConstraintBindingBase* WCTBinding::getConstraint(const std::string& constraintName, WCTConstraintBindingType type)
+WCTConstraintBindingBase *WCTBinding::getConstraint(const std::string &constraintName, WCTConstraintBindingType type)
 {
     if (!m_constraintBindingMap) {
         return nullptr;
     }
     auto iter = m_constraintBindingMap->find(constraintName);
-    if (iter!=m_constraintBindingMap->end()) {
-        WCTConstraintBindingBase* constraintBinding = iter->second.get();
-        if (constraintBinding->type==type) {
+    if (iter != m_constraintBindingMap->end()) {
+        WCTConstraintBindingBase *constraintBinding = iter->second.get();
+        if (constraintBinding->type == type) {
             return constraintBinding;
         }
         WCDB::Error::Abort(([NSString stringWithFormat:@"There are already other constraints with different types of the same name %s", constraintName.c_str()].UTF8String));
@@ -103,7 +103,7 @@ WCTConstraintBindingBase* WCTBinding::getConstraint(const std::string& constrain
     return nullptr;
 }
 
-void WCTBinding::addConstraintBinding(const std::string& constraintName, const std::shared_ptr<WCTConstraintBindingBase>& constraintBinding)
+void WCTBinding::addConstraintBinding(const std::string &constraintName, const std::shared_ptr<WCTConstraintBindingBase> &constraintBinding)
 {
     lazyInitConstraintBinding();
     m_constraintBindingMap->insert({constraintName, constraintBinding});
@@ -122,42 +122,42 @@ void WCTBinding::lazyInitVirtualTableArgumentList()
     }
 }
 
-void WCTBinding::addVirtualTableArgument(const std::string& left, const std::string& right)
+void WCTBinding::addVirtualTableArgument(const std::string &left, const std::string &right)
 {
     lazyInitVirtualTableArgumentList();
     m_virtualTableArgumentList->push_back({left, right});
 }
 
-WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::string& tableName)  const
+WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::string &tableName) const
 {
     WCDB::ColumnDefList columnDefList;
-    for (const auto& columnBinding : m_columnBindingList) {
+    for (const auto &columnBinding : m_columnBindingList) {
         if (columnBinding) {
             columnDefList.push_back(columnBinding->getColumnDef());
         }
     }
     WCDB::TableConstraintList constraintList;
     if (m_constraintBindingList) {
-        for (const auto& constraintBinding : *m_constraintBindingList.get()) {
+        for (const auto &constraintBinding : *m_constraintBindingList.get()) {
             constraintList.push_back(constraintBinding->generateConstraint());
         }
     }
     return WCDB::StatementCreateTable().create(tableName, columnDefList, constraintList);
 }
 
-WCDB::StatementCreateVirtualTable WCTBinding::generateVirtualCreateTableStatement(const std::string& tableName, const std::string& moduleName) const
+WCDB::StatementCreateVirtualTable WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName, const std::string &moduleName) const
 {
     WCDB::ModuleArgumentList moduleArgumentList;
-    for (const auto& columnBinding : m_columnBindingList) {
+    for (const auto &columnBinding : m_columnBindingList) {
         moduleArgumentList.push_back(columnBinding->getColumnDef());
     }
     if (m_constraintBindingList) {
-        for (const auto& constraintBinding : *m_constraintBindingList.get()) {
+        for (const auto &constraintBinding : *m_constraintBindingList.get()) {
             moduleArgumentList.push_back(constraintBinding->generateConstraint());
         }
     }
     if (m_virtualTableArgumentList) {
-        for (const auto& moduleArgument : *m_virtualTableArgumentList.get()) {
+        for (const auto &moduleArgument : *m_virtualTableArgumentList.get()) {
             moduleArgumentList.push_back(WCDB::ModuleArgument(moduleArgument.first, moduleArgument.second));
         }
     }

@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+Transaction.h>
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTTransaction.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Transaction.h>
+#import <WCDB/WCTTransaction.h>
 
-@implementation WCTDatabase(Transaction)
+@implementation WCTDatabase (Transaction)
 
-- (WCTTransaction*)getTransaction
+- (WCTTransaction *)getTransaction
 {
     return [[WCTTransaction alloc] initWithCore:_core];
 }
@@ -39,14 +39,15 @@
 {
     WCDB::Database::TransactionEvent event = nullptr;
     if (onTransactionStateChanged) {
-        event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType){
-            onTransactionStateChanged((WCTTransactionEvent)eventType);
+        event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType) {
+            onTransactionStateChanged((WCTTransactionEvent) eventType);
         };
     }
     WCDB::Error innerError;
-    return _database->runTransaction([inTransaction](WCDB::Error&)->bool {
+    return _database->runTransaction([inTransaction](WCDB::Error &) -> bool {
         return inTransaction();
-    }, event, innerError);
+    },
+                                     event, innerError);
 }
 
 - (BOOL)beginTransaction

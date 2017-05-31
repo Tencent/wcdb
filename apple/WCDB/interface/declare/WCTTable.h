@@ -26,6 +26,6 @@
 /**
  The name of the table
  */
-@property (readonly) NSString* tableName;
+@property(readonly) NSString *tableName;
 
 @end

@@ -26,15 +26,17 @@
 
 namespace WCDB {
 
-class TableConstraint : public Describable
-{
+class TableConstraint : public Describable {
 public:
     TableConstraint();
-    TableConstraint(const char* name);
-    TableConstraint(const std::string& name);
+    TableConstraint(const char *name);
+    TableConstraint(const std::string &name);
 
     template <typename T>
-    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value, TableConstraint&>::type makePrimary(const std::list<const T>& columnIndexList) {
+    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
+                            TableConstraint &>::type
+    makePrimary(const std::list<const T> &columnIndexList)
+    {
         m_description.append(" PRIMARY KEY(");
         joinDescribableList(columnIndexList);
         m_description.append(")");
@@ -42,18 +44,21 @@ public:
     }
 
     template <typename T>
-    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value, TableConstraint&>::type makeUnique(const std::list<const T>& columnIndexList) {
+    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
+                            TableConstraint &>::type
+    makeUnique(const std::list<const T> &columnIndexList)
+    {
         m_description.append(" UNIQUE (");
         joinDescribableList(columnIndexList);
         m_description.append(")");
         return *this;
     }
 
-    TableConstraint& onConflict(Conflict conflict);
+    TableConstraint &onConflict(Conflict conflict);
 
-    TableConstraint& makeCheck(const Expr& expr);
+    TableConstraint &makeCheck(const Expr &expr);
 };
 
-}//namespace WCDB
+} //namespace WCDB
 
 #endif /* constraint_table_hpp */

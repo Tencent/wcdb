@@ -32,7 +32,7 @@
  @param condition condition
  @return self
  */
-- (instancetype)where:(const WCTCondition&)condition;
+- (instancetype)where:(const WCTCondition &)condition;
 
 /**
  WINQ interface for SQL.
@@ -40,7 +40,7 @@
  @param orderList order list
  @return self
  */
-- (instancetype)orderBy:(const WCTOrderByList&)orderList;
+- (instancetype)orderBy:(const WCTOrderByList &)orderList;
 
 /**
  WINQ interface for SQL.
@@ -48,7 +48,7 @@
  @param limit limit
  @return self
  */
-- (instancetype)limit:(const WCTLimit&)limit;
+- (instancetype)limit:(const WCTLimit &)limit;
 
 /**
  WINQ interface for SQL.
@@ -56,7 +56,7 @@
  @param offset offset
  @return self
  */
-- (instancetype)offset:(const WCTOffset&)offset;
+- (instancetype)offset:(const WCTOffset &)offset;
 
 /**
  WINQ interface for SQL.
@@ -64,7 +64,7 @@
  @param groupByList group by list
  @return self
  */
-- (instancetype)groupBy:(const WCTGroupByList&)groupByList;
+- (instancetype)groupBy:(const WCTGroupByList &)groupByList;
 
 /**
  WINQ interface for SQL.
@@ -72,6 +72,6 @@
  @param having having
  @return self
  */
-- (instancetype)having:(const WCTHaving&)having;
+- (instancetype)having:(const WCTHaving &)having;
 
 @end

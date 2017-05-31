@@ -23,15 +23,19 @@
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 
 template <typename PropertyType, typename Enable = void>
-class WCTRuntimeCppAccessor {};
+class WCTRuntimeCppAccessor {
+};
 
 template <typename PropertyType>
-class WCTRuntimeCppAccessor<PropertyType, typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
-: public WCTRuntimeAccessor<PropertyType>
-, public WCTCppAccessor<(WCTColumnType)WCDB::ColumnInfo<PropertyType>::type>
-{
+class WCTRuntimeCppAccessor<
+    PropertyType,
+    typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
+    : public WCTRuntimeAccessor<PropertyType>,
+      public WCTCppAccessor<(
+          WCTColumnType) WCDB::ColumnInfo<PropertyType>::type> {
 protected:
-    using CppAccessor = WCTCppAccessor<(WCTColumnType)WCDB::ColumnInfo<PropertyType>::type>;
+    using CppAccessor =
+        WCTCppAccessor<(WCTColumnType) WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
     using CType = typename CppAccessor::CType;
@@ -39,23 +43,25 @@ protected:
     using PropertySetter = typename RuntimeAccessor::Setter;
     using ValueGetter = typename CppAccessor::Getter;
     using ValueSetter = typename CppAccessor::Setter;
+
 public:
-    WCTRuntimeCppAccessor(Class cls, const std::string& propertyName)
-    : RuntimeAccessor(cls, propertyName)
-    , CppAccessor(generateValueGetter(), generateValueSetter()){
+    WCTRuntimeCppAccessor(Class cls, const std::string &propertyName)
+        : RuntimeAccessor(cls, propertyName)
+        , CppAccessor(generateValueGetter(), generateValueSetter())
+    {
     }
+
 protected:
-    CType convertPropertyTypeToCType(const PropertyType& property) {
+    CType convertPropertyTypeToCType(const PropertyType &property)
+    {
         return property;
     }
 
-    PropertyType convertCTypeToPropertyType(CType value) {
-        return value;
-    }
+    PropertyType convertCTypeToPropertyType(CType value) { return value; }
 
     ValueGetter generateValueGetter()
     {
-        return [this](InstanceType instance)->CType {
+        return [this](InstanceType instance) -> CType {
             return convertPropertyTypeToCType(this->getProperty(instance));
         };
     }
@@ -69,10 +75,11 @@ protected:
 };
 
 template <typename PropertyType>
-class WCTRuntimeCppAccessor<PropertyType, typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBLOB>::type>
-: public WCTRuntimeAccessor<PropertyType>
-, public WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>
-{
+class WCTRuntimeCppAccessor<
+    PropertyType,
+    typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBLOB>::type>
+    : public WCTRuntimeAccessor<PropertyType>,
+      public WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type> {
 public:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
@@ -84,18 +91,19 @@ public:
     using ValueGetter = typename CppAccessor::Getter;
     using ValueSetter = typename CppAccessor::Setter;
 
-    WCTRuntimeCppAccessor(Class cls, const std::string& propertyName)
-    : RuntimeAccessor(cls, propertyName)
-    , CppAccessor(generateValueGetter(), generateValueSetter()){
+    WCTRuntimeCppAccessor(Class cls, const std::string &propertyName)
+        : RuntimeAccessor(cls, propertyName)
+        , CppAccessor(generateValueGetter(), generateValueSetter())
+    {
     }
 
-// no default implementation for BLOB
-//    CType convertPropertyTypeToCType(const PropertyType& property, SizeType& size);
-//    PropertyType convertCTypeToPropertyType(CType value, SizeType size);
+    // no default implementation for BLOB
+    //    CType convertPropertyTypeToCType(const PropertyType& property, SizeType& size);
+    //    PropertyType convertCTypeToPropertyType(CType value, SizeType size);
 
     ValueGetter generateValueGetter()
     {
-        return [this](InstanceType instance, SizeType& size)->CType {
+        return [this](InstanceType instance, SizeType &size) -> CType {
             return convertPropertyTypeToCType(getProperty(instance), size);
         };
     }
@@ -107,4 +115,3 @@ public:
         };
     }
 };
-
