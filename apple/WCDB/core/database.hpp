@@ -92,8 +92,10 @@ public:
     bool backup(const void *key, const unsigned int &length, Error &error);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          const int pageSize,
-                         const void *key,
-                         const unsigned int &length,
+                         const void *backupKey,
+                         const unsigned int &backupKeyLength,
+                         const void *databaseKey,
+                         const unsigned int &databaseKeyLength,
                          Error &error);
 
 protected:

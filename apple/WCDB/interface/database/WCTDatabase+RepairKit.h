@@ -37,15 +37,16 @@
      WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
      WCTDatabase* corruped = [[WCTDatabase alloc] initWithPath:corrupedDBPath];
      [corruped close:^(){
-         BOOL result = [database recoverFromPath:corrupedDBPath withPageSize:4096 withCipher:key];
+         BOOL result = [database recoverFromPath:corrupedDBPath withPageSize:4096 backupCipher:backupCipher databaseCipher:databaseCipher];
          NSLog(@"result %d", result);
      }];
 
  @param corruptedDBPath The path to the corrupted database
  @param pageSize Page size of the corrupted database. It's default to 4096 on iOS. Page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. Also, you can call "PRAGMA page_size" to check the current value while database is not corrupted.
- @param key The cipher key for backup
+ @param backupCipher The cipher key for backup
+ @param databaseCipher The cipher key for corrupeted database
  @return YES only if it's successfully recovered.
  */
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize withCipher:(NSData *)key;
+- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize backupCipher:(NSData *)backupCipher databaseCipher:(NSData *)databaseCipher;
 
 @end

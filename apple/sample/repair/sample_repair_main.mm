@@ -80,7 +80,7 @@ void sample_repair_main(NSString* baseDirectory)
         //dispatch_async(DISPATCH_QUEUE_PRIORITY_BACKGROUND, ^{
         WCTDatabase* recover = [[WCTDatabase alloc] initWithPath:recoverPath];
         [database close:^{
-            [recover recoverFromPath:path withPageSize:pageSize withCipher:cipher];
+            [recover recoverFromPath:path withPageSize:pageSize backupCipher:cipher databaseCipher:nil];
         }];
         NSLog(@"The count of objects repaired: %lu", [recover getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }

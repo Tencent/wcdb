@@ -34,9 +34,9 @@ typedef struct sqliterk_column sqliterk_column;
 typedef struct sqliterk_notify sqliterk_notify;
 struct sqliterk_notify {
     void (*onBeginParseTable)(sqliterk *rk, sqliterk_table *table);
-    // Only a column that make sense will trigger this callback, 
+    // Only a column that make sense will trigger this callback,
     // which is the column in a non-system table or the "sqlite_master"
-    // return SQLITERK_OK to tell sqliterk that you already know that 
+    // return SQLITERK_OK to tell sqliterk that you already know that
     // meaning of this column
     int (*onParseColumn)(sqliterk *rk,
                          sqliterk_table *table,
@@ -93,7 +93,7 @@ int sqliterk_load_master(const char *path,
 void sqliterk_free_master(sqliterk_master_info *master);
 
 // A database may have many kind of tables or indexes, such as a customized
-// index or a system-level table and so on. But you should be only concern 
+// index or a system-level table and so on. But you should be only concern
 // about the listed types below.
 // Since the system-level tables or indexes is generated. And you do know
 // the index of a certain table (you make this table).
@@ -167,7 +167,7 @@ int sqliterk_register(sqliterk_os os);
 const char *sqliterk_description(int result);
 
 #ifndef SQLITRK_CONFIG_DEFAULT_PAGESIZE
-#define SQLITRK_CONFIG_DEFAULT_PAGESIZE 1024
+#define SQLITRK_CONFIG_DEFAULT_PAGESIZE 4096
 #endif
 
 #ifdef __cplusplus

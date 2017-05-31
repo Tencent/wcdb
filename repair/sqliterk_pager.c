@@ -26,7 +26,7 @@
 #include <errno.h>
 #include <string.h>
 
-static int sqliterkPagerParseHeader(sqliterk_pager *pager);
+static int sqliterkPagerParseHeader(sqliterk_pager *pager, int forcePageSize);
 static int sqliterkPageAcquireOne(sqliterk_pager *pager,
                                   int pageno,
                                   sqliterk_page **page,
@@ -42,6 +42,15 @@ int sqliterkPagerOpen(const char *path,
                       const sqliterk_cipher_conf *cipher,
                       sqliterk_pager **pager)
 {
+    // Workaround page size cannot be specified for plain-text
+    // databases. For that case, pass non-null cipher_conf with
+    // null key and non-zero page size.
+    int forcePageSize = 0;
+    if (cipher && !cipher->key) {
+        forcePageSize = cipher->page_size;
+        cipher = NULL;
+    }
+
     if (!pager) {
         return SQLITERK_MISUSE;
     }
@@ -70,7 +79,7 @@ int sqliterkPagerOpen(const char *path,
             goto sqliterkPagerOpen_Failed;
 
         // Try parsing header.
-        sqliterkPagerParseHeader(thePager);
+        sqliterkPagerParseHeader(thePager, 0);
 
         if (thePager->integrity & SQLITERK_INTEGRITY_HEADER) {
             // If header is parsed successfully, original KDF salt is also correct.
@@ -84,12 +93,12 @@ int sqliterkPagerOpen(const char *path,
             if (rc != SQLITERK_OK)
                 goto sqliterkPagerOpen_Failed;
 
-            rc = sqliterkPagerParseHeader(thePager);
+            rc = sqliterkPagerParseHeader(thePager, 0);
             if (rc != SQLITERK_OK)
                 goto sqliterkPagerOpen_Failed;
         }
     } else {
-        rc = sqliterkPagerParseHeader(thePager);
+        rc = sqliterkPagerParseHeader(thePager, forcePageSize);
         if (rc != SQLITERK_OK)
             goto sqliterkPagerOpen_Failed;
 
@@ -125,7 +134,7 @@ sqliterkPagerOpen_Failed:
 
 // Get the meta from header and set it into pager.
 // For further information, see https://www.sqlite.org/fileformat2.html
-static int sqliterkPagerParseHeader(sqliterk_pager *pager)
+static int sqliterkPagerParseHeader(sqliterk_pager *pager, int forcePageSize)
 {
     // For encrypted databases, assume default page size, decode the first
     // page, and we have the plain-text header.
@@ -134,6 +143,11 @@ static int sqliterkPagerParseHeader(sqliterk_pager *pager)
         return SQLITERK_MISUSE;
     }
     int rc = SQLITERK_OK;
+
+    // Overwrite pager page size if forcePageSize is specified.
+    if (forcePageSize) {
+        pager->pagesize = forcePageSize;
+    }
 
     size_t size = pager->codec ? pager->pagesize : 100;
 
@@ -173,22 +187,27 @@ static int sqliterkPagerParseHeader(sqliterk_pager *pager)
             //parse pagesize
             int pagesize;
             sqliterkParseInt(buffer, 16, 2, &pagesize);
-            if (pager->codec) {
+            if (pager->codec || forcePageSize) {
+                // Page size is predefined, check whether it matches the header.
                 if (pagesize != pager->pagesize) {
-                    sqliterkOSWarning(SQLITERK_DAMAGED,
-                                      "Invalid page size for encrypted "
-                                      "database: %d expected, %d returned.",
-                                      pager->pagesize, pagesize);
+                    sqliterkOSWarning(
+                        SQLITERK_DAMAGED,
+                        "Invalid page size: %d expected, %d returned.",
+                        pager->pagesize, pagesize);
                     pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
                 }
             } else if (((pagesize - 1) & pagesize) != 0 || pagesize < 512) {
-                sqliterkOSWarning(SQLITERK_DAMAGED, "The [page size] field is "
-                                                    "corrupted. Default page "
-                                                    "size %d is used",
+                // Page size is not predefined and value in the header is invalid,
+                // use the default page size.
+                sqliterkOSWarning(SQLITERK_DAMAGED,
+                                  "Page size field is corrupted. Default page "
+                                  "size %d is used",
                                   SQLITRK_CONFIG_DEFAULT_PAGESIZE);
                 pager->pagesize = SQLITRK_CONFIG_DEFAULT_PAGESIZE;
                 pager->integrity &= ~SQLITERK_INTEGRITY_HEADER;
             } else {
+                // Page size is not predefined and value in the header is valid,
+                // use the value in header.
                 pager->pagesize = pagesize;
             }
 

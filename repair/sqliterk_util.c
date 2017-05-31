@@ -63,17 +63,21 @@ int sqliterkParseInt64(const unsigned char *data,
             out = (((int8_t) p[0]) * 65536) | (p[1] << 8) | p[2];
             break;
         case 4:
-            out = (((int8_t) p[0]) * 16777216) | (p[1] << 16) | (p[2] << 8) | p[3];
+            out = (((int8_t) p[0]) * 16777216) | (p[1] << 16) | (p[2] << 8) |
+                  p[3];
             break;
         case 6:
             out = (((int8_t) p[0]) * 256) | p[1];
             out *= ((int64_t) 1) << 32;
-            out += (((uint32_t) p[2]) << 24) | (p[3] << 16) | (p[4] << 8) | p[5];
+            out +=
+                (((uint32_t) p[2]) << 24) | (p[3] << 16) | (p[4] << 8) | p[5];
             break;
         case 8:
-            out = (((int8_t) p[0]) * 16777216) | (p[1] << 16) | (p[2] << 8) | p[3];
+            out = (((int8_t) p[0]) * 16777216) | (p[1] << 16) | (p[2] << 8) |
+                  p[3];
             out *= ((int64_t) 1) << 32;
-            out += (((uint32_t) p[4]) << 24) | (p[5] << 16) | (p[6] << 8) | p[7];
+            out +=
+                (((uint32_t) p[4]) << 24) | (p[5] << 16) | (p[6] << 8) | p[7];
             break;
         default:
             return SQLITERK_MISUSE;
@@ -83,7 +87,7 @@ int sqliterkParseInt64(const unsigned char *data,
     return SQLITERK_OK;
 }
 
-// Varint is a kind of huffman encoding value. For further informantion, 
+// Varint is a kind of huffman encoding value. For further informantion,
 // see https://www.sqlite.org/fileformat2.html#varint
 int sqliterkParseVarint(const unsigned char *data,
                         int offset,
@@ -141,8 +145,8 @@ int sqliterkParseNumber(const unsigned char *data, int offset, double *value)
     const unsigned char *begin = data + offset;
     int i;
     for (i = 0; i < 8; i++) {
-        // All float values in SQLite is big-endian with 8 lengths. 
-        // For further informantion, see [Record Format] chapter at 
+        // All float values in SQLite is big-endian with 8 lengths.
+        // For further informantion, see [Record Format] chapter at
         // https://www.sqlite.org/fileformat2.html
         out[i] = begin[8 - 1 - i];
     }

@@ -247,8 +247,9 @@ static void sqliterkNotify_onParseColumn(sqliterk *rk,
             if (rc != SQLITERK_OK) {
                 sqliterk_page *rootpage = sqliterkBtreeGetRootPage(subbtree);
                 sqliterkOSError(
-                    rc, "sqliterkNotify_onParseColumn: failed to parse known "
-                        "table with root page no. %d, name %s, type %s",
+                    rc,
+                    "sqliterkNotify_onParseColumn: failed to parse known "
+                    "table with root page no. %d, name %s, type %s",
                     sqliterkPageGetPageno(rootpage),
                     sqliterkBtreeGetName(subbtree),
                     sqliterkBtreeGetTypeName(sqliterkBtreeGetType(subbtree)));

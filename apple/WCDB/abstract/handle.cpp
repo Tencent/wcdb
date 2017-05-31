@@ -277,15 +277,17 @@ bool Handle::backup(const void *key, const unsigned int &length)
 
 bool Handle::recoverFromPath(const std::string &corruptedDBPath,
                              const int pageSize,
-                             const void *key,
-                             const unsigned int &length)
+                             const void *backupKey,
+                             const unsigned int &backupKeyLength,
+                             const void *databaseKey,
+                             const unsigned int &databaseKeyLength)
 {
     std::string backupPath = corruptedDBPath + backupSuffix;
     sqliterk_master_info *info;
     unsigned char kdfSalt[16];
     memset(kdfSalt, 0, 16);
-    int rc = sqliterk_load_master(backupPath.c_str(), key, length, nullptr, 0,
-                                  &info, kdfSalt);
+    int rc = sqliterk_load_master(backupPath.c_str(), backupKey,
+                                  backupKeyLength, nullptr, 0, &info, kdfSalt);
     if (rc != SQLITERK_OK) {
         Error::ReportRepair(
             backupPath, WCDB::Error::RepairOperation::LoadMaster, rc, &m_error);
@@ -294,8 +296,8 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
 
     sqliterk_cipher_conf conf;
     memset(&conf, 0, sizeof(sqliterk_cipher_conf));
-    conf.key = key;
-    conf.key_len = length;
+    conf.key = databaseKey;
+    conf.key_len = databaseKeyLength;
     conf.page_size = pageSize;
     conf.kdf_salt = kdfSalt;
 

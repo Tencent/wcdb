@@ -137,8 +137,8 @@ int sqliterkBtreeParse(sqliterk_btree *btree)
     return rc;
 }
 
-// If the page is an interior-btree, no matter is an interior-table btree 
-// or an interior-index btree, this function will recursively parse the page 
+// If the page is an interior-btree, no matter is an interior-table btree
+// or an interior-index btree, this function will recursively parse the page
 // until it find the leaf page or any error occur.
 // A leaf-index btree will only be found but not parse, since its data make
 // no sense.
@@ -179,7 +179,7 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
 
     //sqliterkOSDebug(SQLITERK_OK, "Page %d is %s", pageno, sqliterkPageGetTypeName(type));
 
-    // Parse cell pointer array. For further information, see [cell pointer] 
+    // Parse cell pointer array. For further information, see [cell pointer]
     // at https://www.sqlite.org/fileformat2.html#btree
     const unsigned char *pagedata = sqliterkPageGetData(page);
     int offsetCellPointerArray =
@@ -187,9 +187,8 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
     int cellsCount;
     sqliterkParseInt(pagedata, 3 + sqliterkPageHeaderOffset(page), 2,
                      &cellsCount);
-    if (cellsCount <= 0 ||
-        cellsCount * 2 + offsetCellPointerArray >
-            sqliterkPagerGetSize(btree->pager)) {
+    if (cellsCount <= 0 || cellsCount * 2 + offsetCellPointerArray >
+                               sqliterkPagerGetSize(btree->pager)) {
         rc = SQLITERK_DAMAGED;
         goto sqliterkBtreeParsePage_End;
     }
@@ -268,7 +267,7 @@ sqliterkBtreeParsePage_End:
     return rc;
 }
 
-// Parse the payload data. see [B-tree Cell Format] 
+// Parse the payload data. see [B-tree Cell Format]
 // at https://www.sqlite.org/fileformat2.html#btree
 static int sqliterkBtreeParseCell(sqliterk_btree *btree,
                                   sqliterk_page *page,
@@ -352,9 +351,9 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
         // Since it is a leaf-table page, the max local should be equal to max leaf
         int maxPageLocal = btree->maxLeaf;
         int minPageLocal = btree->minLocal;
-        int surplus = minPageLocal +
-                      (payloadSize - minPageLocal) %
-                          (sqliterkPagerGetUsableSize(btree->pager) - 4);
+        int surplus =
+            minPageLocal + (payloadSize - minPageLocal) %
+                               (sqliterkPagerGetUsableSize(btree->pager) - 4);
         if (surplus <= maxPageLocal) {
             local = surplus;
         } else {
@@ -642,7 +641,7 @@ const char *sqliterkBtreeGetTypeName(sqliterk_btree_type type)
     return name;
 }
 
-// See [Serial Type Codes Of The Record Format] 
+// See [Serial Type Codes Of The Record Format]
 // at https://www.sqlite.org/fileformat2.html
 static int sqliterkBtreeGetLengthForSerialType(int serialType)
 {

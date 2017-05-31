@@ -67,8 +67,10 @@ public:
     bool backup(const void *key = nullptr, const unsigned int &length = 0);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          const int pageSize,
-                         const void *key,
-                         const unsigned int &length);
+                         const void *backupKey,
+                         const unsigned int &backupKeyLength,
+                         const void *databaseKey,
+                         const unsigned int &databaseKeyLength);
     std::string getBackupPath() const;
 
     const Error &getError() const;
