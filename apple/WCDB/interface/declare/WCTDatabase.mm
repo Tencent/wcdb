@@ -32,13 +32,18 @@
 + (void)load
 {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    static dispatch_queue_t s_queue = dispatch_queue_create("WCDB-PurgeFreeHandle", DISPATCH_QUEUE_SERIAL);
     //keep it the entire life cycle
-    static id s_observer __attribute__((unused)) = [notificationCenter addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
-                                                                                   object:nil
-                                                                                    queue:nil
-                                                                               usingBlock:^(NSNotification *_Nonnull note) {
-                                                                                 WCDB::Database::PurgeFreeHandlesInAllDatabases();
-                                                                               }];
+    static id s_observer __attribute__((unused)) =
+        [notificationCenter addObserverForName:
+                                UIApplicationDidReceiveMemoryWarningNotification
+                                        object:nil
+                                         queue:nil
+                                    usingBlock:^(NSNotification *_Nonnull note) {
+                                      dispatch_async(s_queue, ^{
+                                        WCDB::Database::PurgeFreeHandlesInAllDatabases();
+                                      });
+                                    }];
 }
 #endif // TARGET_OS_IPHONE
 
