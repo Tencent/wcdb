@@ -23,7 +23,8 @@
 #import <WCDB/WCTInterface.h>
 
 /**
- WCTInterface(Convenient) category contains the combination of common operation on SQL. Although it's all glue code here, it works and it can bring you convenience. It's fairly straightforward so that no comment here.
+ WCTInterface(Convenient) category contains the combination of common operations on SQL.
+ Although it's all glue code here, it works and it can bring you convenience. It's fairly straightforward so that no comment here.
  */
 @interface WCTInterface (Convenient)
 
