@@ -68,11 +68,14 @@ typedef void (^WCTCloseBlock)(void);
  @brief close the database.
         Since Multi-threaded operation is supported in WCDB, other operations in different thread can open the closed database. So this method can make sure database is closed in the "onClosed" block. All other operations will be blocked until this method returns.
         A close operation consists of 4 steps:
-            1. [blockade], which blocks all other operations.
-            2. [close], which closes all sqlite handles.
-            3. [onClosed], which trigger the callback.
-            4. [unblokade], which unblocks all other opreations.
-        You can simply call [close:] to do all steps above or call these separately.
+            1. blockade, which blocks all other operations.
+            2. close, which closes all sqlite handles.
+            3. onClosed, which trigger the callback.
+            4. unblokade, which unblocks all other opreations.
+        You can simply call close: to do all steps above or call these separately.
+        Note that sometimes you might find that close: blocks the thread and never return. The reasons can be:
+            1. You keep some WCDB objects, including WCTInsert, WCTDelete, WCTUpdate, WCTSelect, WCTRowSelect, WCTMultiSelect, WCTStatement, WCTTransaction. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
+            2. Further more, those WCDB objects may be kept by NSAutoReleasePool, which is done by ARC automatically. So you should make sure that all WCDB objects in NSAutoReleasePool is drained. Since close: would wait until all operations done, the best practice is to call close: in sub-thread and display a loading animation in main thread.
  
      //close directly
      [database close:^(){
