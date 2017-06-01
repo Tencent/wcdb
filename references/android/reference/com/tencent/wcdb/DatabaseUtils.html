@@ -1,0 +1,4154 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Javadoc API documentation for WCDB for Android." />
+
+<link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
+<title>
+
+  DatabaseUtils - WCDB for Android
+
+
+| WCDB for Android
+
+</title>
+<link href="../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
+<script src="../../../../assets/search_autocomplete.js" type="text/javascript"></script>
+<script src="../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
+<script src="../../../../assets/doclava-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../assets/prettify.js" type="text/javascript"></script>
+<script type="text/javascript">
+  setToRoot("../../../", "../../../../assets/");
+</script>
+<script src="../../../../assets/doclava-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../assets/navtree_data.js" type="text/javascript"></script>
+<script src="../../../../assets/customizations.js" type="text/javascript"></script>
+<noscript>
+  <style type="text/css">
+    html,body{overflow:auto;}
+    #body-content{position:relative; top:0;}
+    #doc-content{overflow:visible;border-left:3px solid #666;}
+    #side-nav{padding:0;}
+    #side-nav .toggle-list ul {display:block;}
+    #resize-packages-nav{border-bottom:3px solid #666;}
+  </style>
+</noscript>
+</head>
+
+<body class="">
+
+<div id="header">
+    <div id="headerLeft">
+    
+      <span id="masthead-title">WCDB for Android</span>
+    
+    </div>
+    <div id="headerRight">
+      
+  <div id="search" >
+      <div id="searchForm">
+          <form accept-charset="utf-8" class="gsc-search-box" 
+                onsubmit="return submit_search()">
+            <table class="gsc-search-box" cellpadding="0" cellspacing="0"><tbody>
+                <tr>
+                  <td class="gsc-input">
+                    <input id="search_autocomplete" class="gsc-input" type="text" size="33" autocomplete="off"
+                      title="search developer docs" name="q"
+                      value="search developer docs"
+                      onFocus="search_focus_changed(this, true)"
+                      onBlur="search_focus_changed(this, false)"
+                      onkeydown="return search_changed(event, true, '../../../')"
+                      onkeyup="return search_changed(event, false, '../../../')" />
+                  <div id="search_filtered_div" class="no-display">
+                      <table id="search_filtered" cellspacing=0>
+                      </table>
+                  </div>
+                  </td>
+                  <td class="gsc-search-button">
+                    <input type="submit" value="Search" title="search" id="search-button" class="gsc-search-button" />
+                  </td>
+                  <td class="gsc-clear-button">
+                    <div title="clear results" class="gsc-clear-button">&nbsp;</div>
+                  </td>
+                </tr></tbody>
+              </table>
+          </form>
+      </div><!-- searchForm -->
+  </div><!-- search -->
+      
+    </div>
+</div><!-- header -->
+
+
+  <div class="g-section g-tpl-240" id="body-content">
+    <div class="g-unit g-first side-nav-resizable" id="side-nav">
+      <div id="swapper">
+        <div id="nav-panels">
+          <div id="resize-packages-nav">
+            <div id="packages-nav">
+              <div id="index-links">
+                <a href="../../../packages.html"  >Package Index</a> | 
+                <a href="../../../classes.html" >Class Index</a>
+              </div>
+              <ul>
+                
+    <li class="selected api apilevel-">
+  <a href="../../../com/tencent/wcdb/package-summary.html">com.tencent.wcdb</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/tencent/wcdb/database/package-summary.html">com.tencent.wcdb.database</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/tencent/wcdb/repair/package-summary.html">com.tencent.wcdb.repair</a></li>
+    <li class="api apilevel-">
+  <a href="../../../com/tencent/wcdb/support/package-summary.html">com.tencent.wcdb.support</a></li>
+              </ul><br/>
+            </div> <!-- end packages -->
+          </div> <!-- end resize-packages -->
+          <div id="classes-nav">
+            <ul>
+              
+    <li><h2>Interfaces</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CrossProcessCursor.html">CrossProcessCursor</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/DatabaseErrorHandler.html">DatabaseErrorHandler</a></li>
+      </ul>
+    </li>
+              
+    <li><h2>Classes</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/AbstractCursor.html">AbstractCursor</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/AbstractWindowedCursor.html">AbstractWindowedCursor</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/BuildConfig.html">BuildConfig</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CrossProcessCursorWrapper.html">CrossProcessCursorWrapper</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CursorJoiner.html">CursorJoiner</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CursorWindow.html">CursorWindow</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CursorWrapper.html">CursorWrapper</a></li>
+          <li class="selected api apilevel-"><a href="../../../com/tencent/wcdb/DatabaseUtils.html">DatabaseUtils</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/DatabaseUtils.InsertHelper.html">DatabaseUtils.InsertHelper</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/DefaultDatabaseErrorHandler.html">DefaultDatabaseErrorHandler</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/MatrixCursor.html">MatrixCursor</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/MatrixCursor.RowBuilder.html">MatrixCursor.RowBuilder</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/MergeCursor.html">MergeCursor</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/Observable.html">Observable</a>&lt;T&gt;</li>
+      </ul>
+    </li>
+              
+              
+    <li><h2>Enums</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CursorJoiner.Result.html">CursorJoiner.Result</a></li>
+      </ul>
+    </li>
+              
+    <li><h2>Exceptions</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/CursorIndexOutOfBoundsException.html">CursorIndexOutOfBoundsException</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/SQLException.html">SQLException</a></li>
+          <li class="api apilevel-"><a href="../../../com/tencent/wcdb/StaleDataException.html">StaleDataException</a></li>
+      </ul>
+    </li>
+              
+            </ul><br/>
+          </div><!-- end classes -->
+        </div><!-- end nav-panels -->
+        <div id="nav-tree" style="display:none">
+          <div id="index-links">
+            <a href="../../../packages.html"  >Package Index</a> | 
+            <a href="../../../classes.html" >Class Index</a>
+          </div>
+        </div><!-- end nav-tree -->
+      </div><!-- end swapper -->
+    </div> <!-- end side-nav -->
+    <script>
+      if (!isMobile) {
+        $("<a href='#' id='nav-swap' onclick='swapNav();return false;' style='font-size:10px;line-height:9px;margin-left:1em;text-decoration:none;'><span id='tree-link'>Use Tree Navigation</span><span id='panel-link' style='display:none'>Use Panel Navigation</span></a>").appendTo("#side-nav");
+        chooseDefaultNav();
+        if ($("#nav-tree").is(':visible')) {
+          init_default_navtree("../../../");
+        } else {
+          addLoadEvent(function() {
+            scrollIntoView("packages-nav");
+            scrollIntoView("classes-nav");
+          });
+        }
+        $("#swapper").css({borderBottom:"2px solid #aaa"});
+      } else {
+        swapNav(); // tree view should be used on mobile
+      }
+    </script>
+
+
+
+<div class="g-unit" id="doc-content">
+
+<div id="api-info-block">
+
+
+
+  
+   
+  
+  
+  
+  
+
+
+<div class="sum-details-links">
+
+
+Summary:
+
+  <a href="#nestedclasses">Nested Classes</a>
+  
+
+
+
+
+
+  &#124; <a href="#constants">Constants</a>
+  
+
+
+
+
+
+  &#124; <a href="#pubctors">Ctors</a>
+  
+
+
+
+  &#124; <a href="#pubmethods">Methods</a>
+  
+
+
+
+  &#124; <a href="#inhmethods">Inherited Methods</a>
+
+&#124; <a href="#" onclick="return toggleAllClassInherited()" id="toggleAllClassInherited">[Expand All]</a>
+
+</div><!-- end sum-details-links -->
+<div class="api-level">
+  
+
+
+  
+  
+
+</div>
+</div><!-- end api-info-block -->
+
+
+<!-- ======== START OF CLASS DATA ======== -->
+
+<div id="jd-header">
+    public
+     
+     
+    
+    class
+<h1>DatabaseUtils</h1>
+
+
+
+  
+    extends Object<br/>
+  
+  
+  
+
+  
+  
+  
+
+
+</div><!-- end header -->
+
+<div id="naMessage"></div>
+
+<div id="jd-content" class="api apilevel-">
+<table class="jd-inheritance-table">
+
+
+    <tr>
+         	
+        <td colspan="2" class="jd-inheritance-class-cell">java.lang.Object</td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+         	
+        <td colspan="1" class="jd-inheritance-class-cell">com.tencent.wcdb.DatabaseUtils</td>
+    </tr>
+    
+
+</table>
+
+
+
+
+
+
+
+<div class="jd-descr">
+
+
+<h2>Class Overview</h2>
+<p>Static utility methods for dealing with databases and <code><a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a></code>s.
+</p>
+
+
+
+
+
+</div><!-- jd-descr -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="jd-descr">
+
+
+<h2>Summary</h2>
+
+
+
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<table id="nestedclasses" class="jd-sumtable"><tr><th colspan="12">Nested Classes</th></tr>
+
+
+  
+    <tr class="alt-color api apilevel-" >
+      <td class="jd-typecol">
+        
+         
+         
+        
+        class</td>
+      <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.InsertHelper.html">DatabaseUtils.InsertHelper</a></td>
+      <td class="jd-descrcol" width="100%">
+      <em>
+  This class is deprecated.
+      Use <code><a href="../../../com/tencent/wcdb/database/SQLiteStatement.html">SQLiteStatement</a></code> instead.
+</em>&nbsp;</td>
+    </tr>
+    
+    
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<table id="constants" class="jd-sumtable"><tr><th colspan="12">Constants</th></tr>
+
+
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_ABORT">STATEMENT_ABORT</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_ATTACH">STATEMENT_ATTACH</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_BEGIN">STATEMENT_BEGIN</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_COMMIT">STATEMENT_COMMIT</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_DDL">STATEMENT_DDL</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_OTHER">STATEMENT_OTHER</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_PRAGMA">STATEMENT_PRAGMA</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_SELECT">STATEMENT_SELECT</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_UNPREPARED">STATEMENT_UNPREPARED</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_UPDATE">STATEMENT_UPDATE</a></td>
+        <td class="jd-descrcol" width="100%">One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>.</td>
+    </tr>
+    
+    
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<table id="pubctors" class="jd-sumtable"><tr><th colspan="12">Public Constructors</th></tr>
+
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#DatabaseUtils()">DatabaseUtils</a></span>()
+        
+  </td></tr>
+
+
+
+</table>
+
+
+
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="pubmethods" class="jd-sumtable"><tr><th colspan="12">Public Methods</th></tr>
+
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#appendEscapedSQLString(java.lang.StringBuilder, java.lang.String)">appendEscapedSQLString</a></span>(StringBuilder sb, String sqlString)
+        
+        <div class="jd-descrdiv">Appends an SQL string to the given StringBuilder, including the opening
+ and closing single quotes.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String[]
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#appendSelectionArgs(java.lang.String[], java.lang.String[])">appendSelectionArgs</a></span>(String[] originalValues, String[] newValues)
+        
+        <div class="jd-descrdiv">Appends one set of selection args to another.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#appendValueToSql(java.lang.StringBuilder, java.lang.Object)">appendValueToSql</a></span>(StringBuilder sql, Object value)
+        
+        <div class="jd-descrdiv">Appends an Object to an SQL string with the proper escaping, etc.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#bindObjectToProgram(com.tencent.wcdb.database.SQLiteProgram, int, java.lang.Object)">bindObjectToProgram</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteProgram.html">SQLiteProgram</a> prog, int index, Object value)
+        
+        <div class="jd-descrdiv">Binds the given Object to the given SQLiteProgram using the proper
+ typing.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#concatenateWhere(java.lang.String, java.lang.String)">concatenateWhere</a></span>(String a, String b)
+        
+        <div class="jd-descrdiv">Concatenates two SQL WHERE clauses, handling empty or null values.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#createDbFromSqlStatements(android.content.Context, java.lang.String, byte[], com.tencent.wcdb.database.SQLiteCipherSpec, int, java.lang.String)">createDbFromSqlStatements</a></span>(Context context, String dbName, byte[] password, <a href="../../../com/tencent/wcdb/database/SQLiteCipherSpec.html">SQLiteCipherSpec</a> cipher, int dbVersion, String sqlStatements)
+        
+        <div class="jd-descrdiv">Creates a db and populates it with the sql statements in sqlStatements.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#createDbFromSqlStatements(android.content.Context, java.lang.String, int, java.lang.String)">createDbFromSqlStatements</a></span>(Context context, String dbName, int dbVersion, String sqlStatements)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorDoubleToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)">cursorDoubleToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)
+        
+        <div class="jd-descrdiv">Reads a Double out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorDoubleToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)">cursorDoubleToContentValuesIfPresent</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)
+        
+        <div class="jd-descrdiv">Reads a Double out of a column in a Cursor and writes it to a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorDoubleToCursorValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)">cursorDoubleToCursorValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)
+        
+        <div class="jd-descrdiv">Reads a Double out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorFloatToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)">cursorFloatToContentValuesIfPresent</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)
+        
+        <div class="jd-descrdiv">Reads a Float out of a column in a Cursor and writes it to a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorIntToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)">cursorIntToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)
+        
+        <div class="jd-descrdiv">Reads an Integer out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorIntToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)">cursorIntToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)
+        
+        <div class="jd-descrdiv">Reads a Integer out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorIntToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)">cursorIntToContentValuesIfPresent</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)
+        
+        <div class="jd-descrdiv">Reads a Integer out of a column in a Cursor and writes it to a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorLongToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)">cursorLongToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)
+        
+        <div class="jd-descrdiv">Reads a Long out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorLongToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)">cursorLongToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)
+        
+        <div class="jd-descrdiv">Reads a Long out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorLongToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)">cursorLongToContentValuesIfPresent</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)
+        
+        <div class="jd-descrdiv">Reads a Long out of a column in a Cursor and writes it to a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorRowToContentValues(com.tencent.wcdb.Cursor, android.content.ContentValues)">cursorRowToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values)
+        
+        <div class="jd-descrdiv">Read the entire contents of a cursor row and store them in a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorShortToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)">cursorShortToContentValuesIfPresent</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)
+        
+        <div class="jd-descrdiv">Reads a Short out of a column in a Cursor and writes it to a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorStringToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)">cursorStringToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)
+        
+        <div class="jd-descrdiv">Reads a String out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorStringToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)">cursorStringToContentValues</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)
+        
+        <div class="jd-descrdiv">Reads a String out of a field in a Cursor and writes it to a Map.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorStringToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)">cursorStringToContentValuesIfPresent</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)
+        
+        <div class="jd-descrdiv">Reads a String out of a column in a Cursor and writes it to a ContentValues.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#cursorStringToInsertHelper(com.tencent.wcdb.Cursor, java.lang.String, com.tencent.wcdb.DatabaseUtils.InsertHelper, int)">cursorStringToInsertHelper</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, <a href="../../../com/tencent/wcdb/DatabaseUtils.InsertHelper.html">DatabaseUtils.InsertHelper</a> inserter, int index)
+        
+        <div class="jd-descrdiv">Reads a String out of a field in a Cursor and writes it to an InsertHelper.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCurrentRow(com.tencent.wcdb.Cursor, java.lang.StringBuilder)">dumpCurrentRow</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, StringBuilder sb)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor's current row to a StringBuilder.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCurrentRow(com.tencent.wcdb.Cursor, java.io.PrintStream)">dumpCurrentRow</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, PrintStream stream)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor's current row to a PrintSteam.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCurrentRow(com.tencent.wcdb.Cursor)">dumpCurrentRow</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor's current row to System.out.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCurrentRowToString(com.tencent.wcdb.Cursor)">dumpCurrentRowToString</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)
+        
+        <div class="jd-descrdiv">Dump the contents of a Cursor's current row to a String.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCursor(com.tencent.wcdb.Cursor, java.io.PrintStream)">dumpCursor</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, PrintStream stream)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor to a PrintSteam.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCursor(com.tencent.wcdb.Cursor)">dumpCursor</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor to System.out.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCursor(com.tencent.wcdb.Cursor, java.lang.StringBuilder)">dumpCursor</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, StringBuilder sb)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor to a StringBuilder.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#dumpCursorToString(com.tencent.wcdb.Cursor)">dumpCursorToString</a></span>(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)
+        
+        <div class="jd-descrdiv">Prints the contents of a Cursor to a String.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getCollationKey(java.lang.String)">getCollationKey</a></span>(String name)
+        
+        <div class="jd-descrdiv">return the collation key</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getHexCollationKey(java.lang.String)">getHexCollationKey</a></span>(String name)
+        
+        <div class="jd-descrdiv">return the collation key in hex format</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            int
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType</a></span>(String sql)
+        
+        <div class="jd-descrdiv">Returns one of the following which represent the type of the given SQL statement.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            long
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#longForQuery(com.tencent.wcdb.database.SQLiteStatement, java.lang.String[])">longForQuery</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteStatement.html">SQLiteStatement</a> prog, String[] selectionArgs)
+        
+        <div class="jd-descrdiv">Utility method to run the pre-compiled query and return the value in the
+ first column of the first row.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            long
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#longForQuery(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String[])">longForQuery</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String query, String[] selectionArgs)
+        
+        <div class="jd-descrdiv">Utility method to run the query on the db and return the value in the
+ first column of the first row.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            long
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#queryNumEntries(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String)">queryNumEntries</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String table)
+        
+        <div class="jd-descrdiv">Query the table for the number of rows in the table.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            long
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#queryNumEntries(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String)">queryNumEntries</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String table, String selection)
+        
+        <div class="jd-descrdiv">Query the table for the number of rows in the table.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            long
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#queryNumEntries(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String, java.lang.String[])">queryNumEntries</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String table, String selection, String[] selectionArgs)
+        
+        <div class="jd-descrdiv">Query the table for the number of rows in the table.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#readExceptionFromParcel(android.os.Parcel)">readExceptionFromParcel</a></span>(Parcel reply)
+        
+        <div class="jd-descrdiv">Special function for reading an exception result from the header of
+ a parcel, to be used after receiving the result of a transaction.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#readExceptionWithFileNotFoundExceptionFromParcel(android.os.Parcel)">readExceptionWithFileNotFoundExceptionFromParcel</a></span>(Parcel reply)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#readExceptionWithOperationApplicationExceptionFromParcel(android.os.Parcel)">readExceptionWithOperationApplicationExceptionFromParcel</a></span>(Parcel reply)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#sqlEscapeString(java.lang.String)">sqlEscapeString</a></span>(String value)
+        
+        <div class="jd-descrdiv">SQL-escape a string.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#stringForQuery(com.tencent.wcdb.database.SQLiteStatement, java.lang.String[])">stringForQuery</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteStatement.html">SQLiteStatement</a> prog, String[] selectionArgs)
+        
+        <div class="jd-descrdiv">Utility method to run the pre-compiled query and return the value in the
+ first column of the first row.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            static
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#stringForQuery(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String[])">stringForQuery</a></span>(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String query, String[] selectionArgs)
+        
+        <div class="jd-descrdiv">Utility method to run the query on the db and return the value in the
+ first column of the first row.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            static
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../com/tencent/wcdb/DatabaseUtils.html#writeExceptionToParcel(android.os.Parcel, java.lang.Exception)">writeExceptionToParcel</a></span>(Parcel reply, Exception e)
+        
+        <div class="jd-descrdiv">Special function for writing an exception result at the header of
+ a parcel, to be used when returning an exception from a transaction.</div>
+  
+  </td></tr>
+
+
+
+</table>
+
+
+
+
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="inhmethods" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Object" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.Object-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  java.lang.Object
+
+<div id="inherited-methods-java.lang.Object">
+  <div id="inherited-methods-java.lang.Object-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.Object-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            boolean
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">equals</span>(Object arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            
+            
+            Class&lt;?&gt;
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">getClass</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            int
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">hashCode</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notify</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">notifyAll</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">toString</span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0, int arg1)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>(long arg0)
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            final
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad">wait</span>()
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+</table>
+
+
+</div><!-- jd-descr (summary) -->
+
+<!-- Details -->
+
+
+
+
+
+
+
+
+<!-- XML Attributes -->
+
+
+<!-- Enum Values -->
+
+
+<!-- Constants -->
+
+
+<!-- ========= ENUM CONSTANTS DETAIL ======== -->
+<h2>Constants</h2>
+
+
+
+
+<a id="STATEMENT_ABORT"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_ABORT
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                6
+                (0x00000006)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_ATTACH"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_ATTACH
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                3
+                (0x00000003)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_BEGIN"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_BEGIN
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                4
+                (0x00000004)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_COMMIT"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_COMMIT
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                5
+                (0x00000005)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_DDL"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_DDL
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                8
+                (0x00000008)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_OTHER"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_OTHER
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                99
+                (0x00000063)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_PRAGMA"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_PRAGMA
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                7
+                (0x00000007)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_SELECT"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_SELECT
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                1
+                (0x00000001)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_UNPREPARED"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_UNPREPARED
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                9
+                (0x00000009)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<a id="STATEMENT_UPDATE"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        STATEMENT_UPDATE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>One of the values returned by <code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#getSqlStatementType(java.lang.String)">getSqlStatementType(String)</a></code>. </p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                2
+                (0x00000002)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+
+<!-- Fields -->
+
+
+<!-- Public ctors -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<h2>Public Constructors</h2>
+
+
+
+<a id="DatabaseUtils()"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">DatabaseUtils</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<!-- Protected ctors -->
+
+
+
+<!-- ========= METHOD DETAIL ======== -->
+<!-- Public methdos -->
+
+<h2>Public Methods</h2>
+
+
+
+<a id="appendEscapedSQLString(java.lang.StringBuilder, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">appendEscapedSQLString</span>
+      <span class="normal">(StringBuilder sb, String sqlString)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Appends an SQL string to the given StringBuilder, including the opening
+ and closing single quotes. Any single quotes internal to sqlString will
+ be escaped.
+ <p/>
+ This method is deprecated because we want to encourage everyone
+ to use the "?" binding form.  However, when implementing a
+ ContentProvider, one may want to add WHERE clauses that were
+ not provided by the caller.  Since "?" is a positional form,
+ using it in this case could break the caller because the
+ indexes would be shifted to accomodate the ContentProvider's
+ internal bindings.  In that case, it may be necessary to
+ construct a WHERE clause manually.  This method is useful for
+ those cases.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>sb</th>
+          <td>the StringBuilder that the SQL string will be appended to</td>
+        </tr>
+        <tr>
+          <th>sqlString</th>
+          <td>the raw string to be appended, which may contain single
+                  quotes
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="appendSelectionArgs(java.lang.String[], java.lang.String[])"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String[]
+      </span>
+      <span class="sympad">appendSelectionArgs</span>
+      <span class="normal">(String[] originalValues, String[] newValues)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Appends one set of selection args to another. This is useful when adding a selection
+ argument to a user provided set.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="appendValueToSql(java.lang.StringBuilder, java.lang.Object)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+         
+         
+        void
+      </span>
+      <span class="sympad">appendValueToSql</span>
+      <span class="normal">(StringBuilder sql, Object value)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Appends an Object to an SQL string with the proper escaping, etc.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="bindObjectToProgram(com.tencent.wcdb.database.SQLiteProgram, int, java.lang.Object)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">bindObjectToProgram</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteProgram.html">SQLiteProgram</a> prog, int index, Object value)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Binds the given Object to the given SQLiteProgram using the proper
+ typing. For example, bind numbers as longs/doubles, and everything else
+ as a string by call toString() on it.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>prog</th>
+          <td>the program to bind the object to</td>
+        </tr>
+        <tr>
+          <th>index</th>
+          <td>the 1-based index to bind at</td>
+        </tr>
+        <tr>
+          <th>value</th>
+          <td>the value to bind
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="concatenateWhere(java.lang.String, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">concatenateWhere</span>
+      <span class="normal">(String a, String b)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Concatenates two SQL WHERE clauses, handling empty or null values.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="createDbFromSqlStatements(android.content.Context, java.lang.String, byte[], com.tencent.wcdb.database.SQLiteCipherSpec, int, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">createDbFromSqlStatements</span>
+      <span class="normal">(Context context, String dbName, byte[] password, <a href="../../../com/tencent/wcdb/database/SQLiteCipherSpec.html">SQLiteCipherSpec</a> cipher, int dbVersion, String sqlStatements)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Creates a db and populates it with the sql statements in sqlStatements.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>context</th>
+          <td>the context to use to create the db</td>
+        </tr>
+        <tr>
+          <th>dbName</th>
+          <td>the name of the db to create</td>
+        </tr>
+        <tr>
+          <th>dbVersion</th>
+          <td>the version to set on the db</td>
+        </tr>
+        <tr>
+          <th>sqlStatements</th>
+          <td>the statements to use to populate the db. This should be a single string
+                      of the form returned by sqlite3's <tt>.dump</tt> command (statements separated by
+                      semicolons)
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="createDbFromSqlStatements(android.content.Context, java.lang.String, int, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">createDbFromSqlStatements</span>
+      <span class="normal">(Context context, String dbName, int dbVersion, String sqlStatements)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<a id="cursorDoubleToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorDoubleToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Double out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The REAL field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into</td>
+        </tr>
+        <tr>
+          <th>key</th>
+          <td>The key to store the value with in the map
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorDoubleToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorDoubleToContentValuesIfPresent</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Double out of a column in a Cursor and writes it to a ContentValues.
+ Adds nothing to the ContentValues if the column isn't present or if its value is null.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+        <tr>
+          <th>column</th>
+          <td>The column to read</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorDoubleToCursorValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorDoubleToCursorValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Double out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The REAL field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorFloatToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorFloatToContentValuesIfPresent</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Float out of a column in a Cursor and writes it to a ContentValues.
+ Adds nothing to the ContentValues if the column isn't present or if its value is null.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+        <tr>
+          <th>column</th>
+          <td>The column to read</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorIntToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorIntToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads an Integer out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The INTEGER field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into, with the field as the key
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorIntToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorIntToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Integer out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The INTEGER field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into, with the field as the key</td>
+        </tr>
+        <tr>
+          <th>key</th>
+          <td>The key to store the value with in the map
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorIntToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorIntToContentValuesIfPresent</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Integer out of a column in a Cursor and writes it to a ContentValues.
+ Adds nothing to the ContentValues if the column isn't present or if its value is null.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+        <tr>
+          <th>column</th>
+          <td>The column to read</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorLongToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorLongToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Long out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The INTEGER field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into, with the field as the key
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorLongToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorLongToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Long out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The INTEGER field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into</td>
+        </tr>
+        <tr>
+          <th>key</th>
+          <td>The key to store the value with in the map
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorLongToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorLongToContentValuesIfPresent</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Long out of a column in a Cursor and writes it to a ContentValues.
+ Adds nothing to the ContentValues if the column isn't present or if its value is null.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+        <tr>
+          <th>column</th>
+          <td>The column to read</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorRowToContentValues(com.tencent.wcdb.Cursor, android.content.ContentValues)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorRowToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Read the entire contents of a cursor row and store them in a ContentValues.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to read from.</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>the ContentValues to put the row into.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorShortToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorShortToContentValuesIfPresent</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a Short out of a column in a Cursor and writes it to a ContentValues.
+ Adds nothing to the ContentValues if the column isn't present or if its value is null.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+        <tr>
+          <th>column</th>
+          <td>The column to read</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorStringToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorStringToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values, String key)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a String out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The TEXT field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into, with the field as the key</td>
+        </tr>
+        <tr>
+          <th>key</th>
+          <td>The key to store the value with in the map
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorStringToContentValues(com.tencent.wcdb.Cursor, java.lang.String, android.content.ContentValues)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorStringToContentValues</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, ContentValues values)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a String out of a field in a Cursor and writes it to a Map.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The TEXT field to read</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into, with the field as the key
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorStringToContentValuesIfPresent(com.tencent.wcdb.Cursor, android.content.ContentValues, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorStringToContentValuesIfPresent</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, ContentValues values, String column)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a String out of a column in a Cursor and writes it to a ContentValues.
+ Adds nothing to the ContentValues if the column isn't present or if its value is null.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>values</th>
+          <td>The ContentValues to put the value into
+</td>
+        </tr>
+        <tr>
+          <th>column</th>
+          <td>The column to read</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="cursorStringToInsertHelper(com.tencent.wcdb.Cursor, java.lang.String, com.tencent.wcdb.DatabaseUtils.InsertHelper, int)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">cursorStringToInsertHelper</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, String field, <a href="../../../com/tencent/wcdb/DatabaseUtils.InsertHelper.html">DatabaseUtils.InsertHelper</a> inserter, int index)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Reads a String out of a field in a Cursor and writes it to an InsertHelper.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>The cursor to read from</td>
+        </tr>
+        <tr>
+          <th>field</th>
+          <td>The TEXT field to read</td>
+        </tr>
+        <tr>
+          <th>inserter</th>
+          <td>The InsertHelper to bind into</td>
+        </tr>
+        <tr>
+          <th>index</th>
+          <td>the index of the bind entry in the InsertHelper
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCurrentRow(com.tencent.wcdb.Cursor, java.lang.StringBuilder)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">dumpCurrentRow</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, StringBuilder sb)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor's current row to a StringBuilder.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print</td>
+        </tr>
+        <tr>
+          <th>sb</th>
+          <td>the StringBuilder to print to
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCurrentRow(com.tencent.wcdb.Cursor, java.io.PrintStream)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">dumpCurrentRow</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, PrintStream stream)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor's current row to a PrintSteam.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print</td>
+        </tr>
+        <tr>
+          <th>stream</th>
+          <td>the stream to print to
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCurrentRow(com.tencent.wcdb.Cursor)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">dumpCurrentRow</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor's current row to System.out.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print from
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCurrentRowToString(com.tencent.wcdb.Cursor)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">dumpCurrentRowToString</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Dump the contents of a Cursor's current row to a String.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>a String that contains the dumped cursor row
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCursor(com.tencent.wcdb.Cursor, java.io.PrintStream)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">dumpCursor</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, PrintStream stream)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor to a PrintSteam. The position is restored
+ after printing.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print</td>
+        </tr>
+        <tr>
+          <th>stream</th>
+          <td>the stream to print to
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCursor(com.tencent.wcdb.Cursor)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">dumpCursor</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor to System.out. The position is restored
+ after printing.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCursor(com.tencent.wcdb.Cursor, java.lang.StringBuilder)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">dumpCursor</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor, StringBuilder sb)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor to a StringBuilder. The position
+ is restored after printing.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print</td>
+        </tr>
+        <tr>
+          <th>sb</th>
+          <td>the StringBuilder to print to
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="dumpCursorToString(com.tencent.wcdb.Cursor)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">dumpCursorToString</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/Cursor.html">Cursor</a> cursor)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Prints the contents of a Cursor to a String. The position is restored
+ after printing.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to print</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>a String that contains the dumped cursor
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="getCollationKey(java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">getCollationKey</span>
+      <span class="normal">(String name)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>return the collation key</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the collation key
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="getHexCollationKey(java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">getHexCollationKey</span>
+      <span class="normal">(String name)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>return the collation key in hex format</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the collation key in hex format
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="getSqlStatementType(java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        int
+      </span>
+      <span class="sympad">getSqlStatementType</span>
+      <span class="normal">(String sql)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Returns one of the following which represent the type of the given SQL statement.
+ <ol>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_SELECT">STATEMENT_SELECT</a></code></li>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_UPDATE">STATEMENT_UPDATE</a></code></li>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_ATTACH">STATEMENT_ATTACH</a></code></li>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_BEGIN">STATEMENT_BEGIN</a></code></li>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_COMMIT">STATEMENT_COMMIT</a></code></li>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_ABORT">STATEMENT_ABORT</a></code></li>
+ <li><code><a href="../../../com/tencent/wcdb/DatabaseUtils.html#STATEMENT_OTHER">STATEMENT_OTHER</a></code></li>
+ </ol></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>sql</th>
+          <td>the SQL statement whose type is returned by this method</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>one of the values listed above
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="longForQuery(com.tencent.wcdb.database.SQLiteStatement, java.lang.String[])"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        long
+      </span>
+      <span class="sympad">longForQuery</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteStatement.html">SQLiteStatement</a> prog, String[] selectionArgs)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Utility method to run the pre-compiled query and return the value in the
+ first column of the first row.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="longForQuery(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String[])"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        long
+      </span>
+      <span class="sympad">longForQuery</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String query, String[] selectionArgs)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Utility method to run the query on the db and return the value in the
+ first column of the first row.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="queryNumEntries(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        long
+      </span>
+      <span class="sympad">queryNumEntries</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String table)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Query the table for the number of rows in the table.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>db</th>
+          <td>the database the table is in</td>
+        </tr>
+        <tr>
+          <th>table</th>
+          <td>the name of the table to query</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the number of rows in the table
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="queryNumEntries(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        long
+      </span>
+      <span class="sympad">queryNumEntries</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String table, String selection)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Query the table for the number of rows in the table.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>db</th>
+          <td>the database the table is in</td>
+        </tr>
+        <tr>
+          <th>table</th>
+          <td>the name of the table to query</td>
+        </tr>
+        <tr>
+          <th>selection</th>
+          <td>A filter declaring which rows to return,
+                  formatted as an SQL WHERE clause (excluding the WHERE itself).
+                  Passing null will count all rows for the given table</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the number of rows in the table filtered by the selection
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="queryNumEntries(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String, java.lang.String[])"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        long
+      </span>
+      <span class="sympad">queryNumEntries</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String table, String selection, String[] selectionArgs)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Query the table for the number of rows in the table.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>db</th>
+          <td>the database the table is in</td>
+        </tr>
+        <tr>
+          <th>table</th>
+          <td>the name of the table to query</td>
+        </tr>
+        <tr>
+          <th>selection</th>
+          <td>A filter declaring which rows to return,
+                      formatted as an SQL WHERE clause (excluding the WHERE itself).
+                      Passing null will count all rows for the given table</td>
+        </tr>
+        <tr>
+          <th>selectionArgs</th>
+          <td>You may include ?s in selection,
+                      which will be replaced by the values from selectionArgs,
+                      in order that they appear in the selection.
+                      The values will be bound as Strings.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the number of rows in the table filtered by the selection
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="readExceptionFromParcel(android.os.Parcel)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+         
+         
+        void
+      </span>
+      <span class="sympad">readExceptionFromParcel</span>
+      <span class="normal">(Parcel reply)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Special function for reading an exception result from the header of
+ a parcel, to be used after receiving the result of a transaction.  This
+ will throw the exception for you if it had been written to the Parcel,
+ otherwise return and let you read the normal result data from the Parcel.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>reply</th>
+          <td>Parcel to read from</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li><code><a href="../../../null#writeNoException()">writeNoException()</a></code></li><li><code><a href="../../../null#readException()">readException()</a></code></li>
+      </ul>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="readExceptionWithFileNotFoundExceptionFromParcel(android.os.Parcel)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">readExceptionWithFileNotFoundExceptionFromParcel</span>
+      <span class="normal">(Parcel reply)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>FileNotFoundException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="readExceptionWithOperationApplicationExceptionFromParcel(android.os.Parcel)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">readExceptionWithOperationApplicationExceptionFromParcel</span>
+      <span class="normal">(Parcel reply)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>OperationApplicationException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<a id="sqlEscapeString(java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">sqlEscapeString</span>
+      <span class="normal">(String value)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>SQL-escape a string.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="stringForQuery(com.tencent.wcdb.database.SQLiteStatement, java.lang.String[])"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">stringForQuery</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteStatement.html">SQLiteStatement</a> prog, String[] selectionArgs)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Utility method to run the pre-compiled query and return the value in the
+ first column of the first row.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="stringForQuery(com.tencent.wcdb.database.SQLiteDatabase, java.lang.String, java.lang.String[])"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">stringForQuery</span>
+      <span class="normal">(<a href="../../../com/tencent/wcdb/database/SQLiteDatabase.html">SQLiteDatabase</a> db, String query, String[] selectionArgs)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Utility method to run the query on the db and return the value in the
+ first column of the first row.
+</p></div>
+
+    </div>
+</div>
+
+
+<a id="writeExceptionToParcel(android.os.Parcel, java.lang.Exception)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+         
+         
+        void
+      </span>
+      <span class="sympad">writeExceptionToParcel</span>
+      <span class="normal">(Parcel reply, Exception e)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Special function for writing an exception result at the header of
+ a parcel, to be used when returning an exception from a transaction.
+ exception will be re-thrown by the function in another process</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>reply</th>
+          <td>Parcel to write to</td>
+        </tr>
+        <tr>
+          <th>e</th>
+          <td>The Exception to be written.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li><code><a href="../../../null#writeNoException()">writeNoException()</a></code></li><li><code><a href="../../../null#writeException(java.lang.Exception)">writeException(Exception)</a></code></li>
+      </ul>
+  </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- ========= METHOD DETAIL ======== -->
+
+
+
+<!-- ========= END OF CLASS DATA ========= -->
+<a id="navbar_top"></a>
+
+<div id="footer">
+Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
+</div> <!-- end footer -->
+
+</div> <!-- jd-content -->
+
+</div><!-- end doc-content -->
+
+</div> <!-- end body-content --> 
+
+<script type="text/javascript">
+init(); /* initialize doclava-developer-docs.js */
+</script>
+
+</body>
+</html>
