@@ -40,7 +40,7 @@ Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and st
 
 ## Tutorials
 
-You can find tutorials at TODO.
+You can find tutorials at https://github.com/Tencent/wcdb/wiki/iOS_tutorial .
 
 ## Documentations
 
@@ -51,11 +51,11 @@ You can find tutorials at TODO.
 
 ## Features
 
-  * Database encryption via [SQLCipher][sqlcipher].
-  * Concurrent access via connection pooling from modern Android framework.
-  * Repair toolkit for database corruption recovery.
-  * Database backup and recovery utility optimized for small backup size.
-  * Log redirection and various tracing facilities.
+* Database encryption via [SQLCipher][sqlcipher].
+* Concurrent access via connection pooling from modern Android framework.
+* Repair toolkit for database corruption recovery.
+* Database backup and recovery utility optimized for small backup size.
+* Log redirection and various tracing facilities.
 
 ## Getting Started
 
