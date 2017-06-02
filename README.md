@@ -23,12 +23,12 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
 
 ### Installation
 
-* Via Carthage: 
+* **Via Carthage:** 
   1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage);
   2. Add `github "Tencent/WCDB"` to your Cartfile.
   3. Drag `WCDB.framework` from the appropriate platform directory in `Carthage/Build/` to the "Linked Binary and Libraries" section of your Xcode project’s "Build Phases" settings.
   4. iOS: On your application targets' "Build Phases" settings tab, click the "+" icon and choose "New Run Script Phase". Create a Run Script with  `carthage copy-frameworks` and add the paths to the frameworks under "Input Files": `$(SRCROOT)/Carthage/Build/iOS/Realm.framework`.
-* Via source code: 
+* **Via source code**: 
   1. Getting source code
      * If cloning from git, recursive flag is required: `git clone https://github.com/Tencent/wcdb.git --recursive` .
      * If already cloned from git, submodules are required: `git submodule update --init --recursive`.
@@ -36,7 +36,11 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
   3. Add `WCDB.framework` to the "Target Dependencies" section and "Linked Binary and Libraries" of your Xcode project's "Build Phases" settings.
   4. Add `WCDB.framework` to the "Enbedded Binaries" section of your Xcode project's "General" settings.
 
-Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and Start your WCDB journal.
+Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and start your WCDB journey.
+
+### Tutorial
+
+You can find tutorial at TODO.
 
 ### Documentation
 
