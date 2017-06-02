@@ -987,7 +987,7 @@
     if (objects) {
         return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:YES] executeWithObjects:objects];
     }
-    return nil;
+    return NO;
 }
 
 - (BOOL)insertObject:(WCTObject *)object onProperties:(const WCTPropertyList &)propertyList
