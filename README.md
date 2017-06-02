@@ -1,8 +1,8 @@
 # WCDB
 
-(中文版本请参看[这里](https://github.com/Tencent/wcdb/wiki)
+(中文版本请参看[这里](https://github.com/Tencent/wcdb/wiki))
 
-WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework. This repository holds the source code for the iOS, macOS and Android.
+WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework, which is based on [sqlcipher][sqlcipher]. This repository holds the source code for the iOS, macOS and Android.
 
 # WCDB for iOS/macOS
 
@@ -11,6 +11,7 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
 * **WINQ**(WCDB language integrated query): WINQ is a native data querying capabilities which leads developers freed from the glue code for SQL string concatenation.
 * **ORM**(Object Relational Mapping): WCDB supports a flexible, easy-to-use ORM for creating table, index and constraint and doing a CRUD through ObjC objects.
 * **Multi-threaded concurrent**: WCDB supports concurrency for read/read and read/write, while write/write will execute serially.
+* **Encryption**: WCDB supports encrption based on [sqlcipher][sqlcipher].
 * **Corruption recovery**: WCDB provides a built-in repair kit for database corruption.
 * **Anti-injection**: WCDB provides a built-in protection for SQL injection.
 * ...
