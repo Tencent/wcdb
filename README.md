@@ -1,5 +1,7 @@
 # WCDB
 
+(中文版本请参看[这里](https://github.com/Tencent/wcdb/wiki)
+
 WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework. This repository holds the source code for the iOS, macOS and Android.
 
 # WCDB for iOS/macOS
