@@ -1,16 +1,47 @@
-# Introduce
+# WCDB
 
-WCDB is a multi-platform database framework based on [SQLCipher][sqlcipher], 
-with features such as corruption recovery and concurrent access via connection pooling.
+WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework. This repository holds the source code for the iOS, macOS and Android.
 
-# WCDB for iOS
+# WCDB for iOS/macOS
 
-WCDB provide a flexible ORM (Object Relational Mapping) interface on iOS platform. 
-See documentation for details.
+## Features
+
+* **WINQ**(WCDB language integrated query): WINQ is a native data querying capabilities which leads developers freed from the glue code for SQL string concatenation.
+* **ORM**(Object Relational Mapping): WCDB supports a flexible, easy-to-use ORM for creating table, index and constraint and doing a CRUD through ObjC objects.
+* **Multi-threaded concurrent**: WCDB supports concurrency for read/read and read/write, while write/write will execute serially.
+* **Corruption recovery**: WCDB provides a built-in repair kit for database corruption.
+* **Anti-injection**: WCDB provides a built-in protection for SQL injection.
+* ...
 
 ## Getting Started
 
-// TODO
+### Prerequisites
+
+* Apps using WCDB can target: iOS 8 or later, macOS 10.10 or later.
+* Xcode 8.0 or later required.
+* Objective-C++ required.
+
+### Installation
+
+* Via Carthage: 
+  1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage);
+  2. Add `github "Tencent/WCDB"` to your Cartfile.
+  3. Drag `WCDB.framework` from the appropriate platform directory in `Carthage/Build/` to the "Linked Binary and Libraries" section of your Xcode project’s "Build Phases" settings.
+  4. iOS: On your application targets' "Build Phases" settings tab, click the "+" icon and choose "New Run Script Phase". Create a Run Script with  `carthage copy-frameworks` and add the paths to the frameworks under "Input Files": `$(SRCROOT)/Carthage/Build/iOS/Realm.framework`.
+* Via source code: 
+  1. Getting source code
+     * If cloning from git, recursive flag is required: `git clone https://github.com/Tencent/wcdb.git --recursive` .
+     * If already cloned from git, submodules are required: `git submodule update --init --recursive`.
+  2. Drag `WCDB.xcodeproj` into your project.
+  3. Add `WCDB.framework` to the "Target Dependencies" section and "Linked Binary and Libraries" of your Xcode project's "Build Phases" settings.
+  4. Add `WCDB.framework` to the "Enbedded Binaries" section of your Xcode project's "General" settings.
+
+Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and Start your WCDB journal.
+
+### Documentation
+
+* The documentation can be found at https://github.com/Tencent/wcdb/wiki .
+* The API reference can be found at https://tencent.github.io/wcdb/references/ios/index.html .
 
 # WCDB for Android
 
@@ -22,10 +53,11 @@ To include WCDB to your project, choose either way: import prebuilt AAR package,
 
 ### Import Prebuilt AAR Package
 
-  1. **Download AAR package from release page.**
-  2. **Import the AAR as new module.** In Android Studio, select `File -> New -> New Module...` menu and choose `"Import JAR/AAR Package"`.
-  3. **Add a dependency on the new module.** This can be done using `File -> Project Structure...` in Android Studio,
-  or by adding following code to application's `build.gradle`:
+  1. **Download AAR package from release page.**
+
+  2. **Import the AAR as new module.** In Android Studio, select `File -> New -> New Module...` menu and choose `"Import JAR/AAR Package"`.
+
+  3. **Add a dependency on the new module.** This can be done using `File -> Project Structure...` in Android Studio, or by adding following code to application's `build.gradle`:
 
 ```groovy
 dependencies {
