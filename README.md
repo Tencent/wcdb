@@ -40,7 +40,7 @@ Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and st
 
 ## Tutorials
 
-You can find tutorials at https://github.com/Tencent/wcdb/wiki/iOS_tutorial .
+Tutorials can be found [here][iOS-tutorial].
 
 ## Documentations
 
@@ -173,3 +173,5 @@ and place them to proper locations suitable for WCDB library building.
 [wcdb-docs-ios]: https://tencent.github.io/wcdb/references/ios/index.html
 [wcdb-docs-android]: https://tencent.github.io/wcdb/references/android/index.html
 [sqlcipher]: https://github.com/sqlcipher/sqlcipher
+[iOS-tutorial]: https://github.com/Tencent/wcdb/wiki/iOS+macOS%e4%bd%bf%e7%94%a8%e6%95%99%e7%a8%8b
+
