@@ -118,8 +118,8 @@
         return NO;
     }
     if (objects.count == 0) {
-        WCDB::Error::Warning("Inserting with empty object");
-        return YES;
+        WCDB::Error::Warning("Inserting with an empty/nil object");
+        return NO;
     }
     if (objects.count == 1) {
         return [self doInsertObjects:objects withError:_error];

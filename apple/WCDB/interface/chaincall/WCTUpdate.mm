@@ -92,7 +92,7 @@
     }
     if (!object) {
         WCDB::Error::Warning("Updating with a nil object");
-        return YES;
+        return NO;
     }
     Class cls = object.class;
     if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
@@ -131,8 +131,8 @@
         return NO;
     }
     if (row.count == 0) {
-        WCDB::Error::Warning("Updating with a empty row");
-        return YES;
+        WCDB::Error::Warning("Updating with an empty/nil row");
+        return NO;
     }
 
     WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);

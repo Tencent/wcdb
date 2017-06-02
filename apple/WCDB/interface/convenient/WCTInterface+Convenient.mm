@@ -969,45 +969,69 @@
 - (BOOL)insertObject:(WCTObject *)object
                 into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:object.class andTableName:tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:object.class andTableName:tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects
                  into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:objects.firstObject.class andTableName:tableName andReplaceFlag:NO] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:objects.firstObject.class andTableName:tableName andReplaceFlag:NO] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObject:(WCTObject *)object
                          into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:object.class andTableName:tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:object.class andTableName:tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
                           into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:objects.firstObject.class andTableName:tableName andReplaceFlag:YES] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:objects.firstObject.class andTableName:tableName andReplaceFlag:YES] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 - (BOOL)insertObject:(WCTObject *)object onProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:NO] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:NO] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObject:(WCTObject *)object onProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:YES] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:YES] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 #pragma mark - Update Properties With Object

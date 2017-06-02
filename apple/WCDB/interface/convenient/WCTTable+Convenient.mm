@@ -960,42 +960,66 @@
 #pragma mark - Insert
 - (BOOL)insertObject:(WCTObject *)object
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObject:(WCTObject *)object
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
 {
-    return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:YES] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andClass:_cls andTableName:_tableName andReplaceFlag:YES] executeWithObjects:objects];
+    }
+    return nil;
 }
 
 - (BOOL)insertObject:(WCTObject *)object onProperties:(const WCTPropertyList &)propertyList
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObject:(WCTObject *)object onProperties:(const WCTPropertyList &)propertyList
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    if (object) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+    }
+    return NO;
 }
 
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList
 {
-    return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+    if (objects) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+    }
+    return NO;
 }
 
 #pragma mark - Update Properties With Object
