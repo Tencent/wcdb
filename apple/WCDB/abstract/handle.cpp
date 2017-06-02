@@ -35,7 +35,7 @@ const std::string Handle::backupSuffix("-backup");
 
 static void GlobalLog(void *userInfo, int code, const char *message)
 {
-    Error::ReportSQLiteGlobal(code, message, nullptr);
+    Error::ReportSQLiteGlobal(code, message?message:"", nullptr);
 }
 
 const auto UNUSED_UNIQUE_ID = []() {
