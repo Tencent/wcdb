@@ -37,6 +37,8 @@ typedef std::function<void(
     Tag, const std::map<std::string, unsigned int> &, const int64_t &)>
     Trace;
 
+typedef std::function<void(Handle *, int, void *)> CommitedHook;
+
 class Handle {
 public:
     Handle(const std::string &path);
@@ -75,6 +77,8 @@ public:
 
     const Error &getError() const;
 
+    void registerCommitedHook(const CommitedHook &onCommited, void *info);
+
     static const std::string backupSuffix;
 
 protected:
@@ -87,6 +91,13 @@ protected:
     void report();
     void addTrace(const std::string &sql, const int64_t &cost);
     bool shouldAggregation() const;
+
+    typedef struct {
+        CommitedHook onCommited;
+        void *info;
+        Handle *handle;
+    } CommitedHookInfo;
+    CommitedHookInfo m_commitedHookInfo;
 
     Trace m_trace;
     std::map<std::string, unsigned int> m_footprint;

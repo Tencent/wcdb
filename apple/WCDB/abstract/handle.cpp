@@ -35,7 +35,7 @@ const std::string Handle::backupSuffix("-backup");
 
 static void GlobalLog(void *userInfo, int code, const char *message)
 {
-    Error::ReportSQLiteGlobal(code, message?message:"", nullptr);
+    Error::ReportSQLiteGlobal(code, message ? message : "", nullptr);
 }
 
 const auto UNUSED_UNIQUE_ID = []() {
@@ -258,6 +258,26 @@ bool Handle::setCipherKey(const void *data, int size)
                         &m_error);
     return false;
 #endif //SQLITE_HAS_CODEC
+}
+
+void Handle::registerCommitedHook(const CommitedHook &onCommited, void *info)
+{
+    m_commitedHookInfo.onCommited = onCommited;
+    m_commitedHookInfo.info = info;
+    m_commitedHookInfo.handle = this;
+    if (m_commitedHookInfo.onCommited) {
+        sqlite3_wal_hook(
+            (sqlite3 *) m_handle,
+            [](void *p, sqlite3 *, const char *, int pages) -> int {
+                CommitedHookInfo *commitedHookInfo = (CommitedHookInfo *) p;
+                commitedHookInfo->onCommited(commitedHookInfo->handle, pages,
+                                             commitedHookInfo->info);
+                return SQLITE_OK;
+            },
+            &m_commitedHookInfo);
+    } else {
+        sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
+    }
 }
 
 std::string Handle::getBackupPath() const

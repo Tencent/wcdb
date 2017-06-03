@@ -54,6 +54,7 @@ public:
     static const std::string defaultConfigName;
     static const std::string defaultCipherConfigName;
     static const std::string defaultTraceConfigName;
+    static const std::string defaultCheckpointConfigName;
     static const Configs defaultConfigs;
     void setConfig(const std::string &name,
                    const Config &config,

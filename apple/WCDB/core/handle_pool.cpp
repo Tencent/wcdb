@@ -111,7 +111,7 @@ void HandlePool::purgeFreeHandles()
 
 bool HandlePool::isDrained()
 {
-    return m_aliveHandleCount==0;
+    return m_aliveHandleCount == 0;
 }
 
 RecyclableHandle HandlePool::flowOut(Error &error)

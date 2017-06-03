@@ -22,7 +22,9 @@
 #include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/utility.hpp>
+#include <queue>
 #include <sqlcipher/sqlite3.h>
+#include <thread>
 #include <vector>
 
 namespace WCDB {
@@ -30,122 +32,196 @@ namespace WCDB {
 const std::string Database::defaultConfigName = "default";
 const std::string Database::defaultCipherConfigName = "cipher";
 const std::string Database::defaultTraceConfigName = "trace";
+const std::string Database::defaultCheckpointConfigName = "checkpoint";
 std::shared_ptr<Trace> Database::s_globalTrace = nullptr;
 
-const Configs Database::defaultConfigs({
-    {
-        Database::defaultTraceConfigName,
-        [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-            std::shared_ptr<Trace> trace = s_globalTrace;
-            if (trace) {
-                handle->setTrace(*trace.get());
-            }
-            return true;
-        },
-        0,
-    },
-    {
-        Database::defaultCipherConfigName,
-        [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-            //place holder
-            return true;
-        },
-        1,
-    },
-    {
-        Database::defaultConfigName,
-        [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+const Configs Database::defaultConfigs(
+    {{
+         Database::defaultTraceConfigName,
+         [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+             std::shared_ptr<Trace> trace = s_globalTrace;
+             if (trace) {
+                 handle->setTrace(*trace.get());
+             }
+             return true;
+         },
+         0,
+     },
+     {
+         Database::defaultCipherConfigName,
+         [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+             //place holder
+             return true;
+         },
+         1,
+     },
+     {
+         Database::defaultConfigName,
+         [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
 
-            //Locking Mode
-            {
-                static const StatementPragma s_getLockingMode =
-                    StatementPragma().pragma(Pragma::LockingMode);
-                static const StatementPragma s_setLockingModeNormal =
-                    StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
+             //Locking Mode
+             {
+                 static const StatementPragma s_getLockingMode =
+                     StatementPragma().pragma(Pragma::LockingMode);
+                 static const StatementPragma s_setLockingModeNormal =
+                     StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
 
-                //Get Locking Mode
-                std::shared_ptr<StatementHandle> statementHandle =
-                    handle->prepare(s_getLockingMode);
-                if (!statementHandle) {
-                    error = handle->getError();
-                    return false;
-                }
-                statementHandle->step();
-                if (!statementHandle->isOK()) {
-                    error = statementHandle->getError();
-                    return false;
-                }
-                std::string lockingMode =
-                    statementHandle->getValue<WCDB::ColumnType::Text>(0);
-                statementHandle->finalize();
+                 //Get Locking Mode
+                 std::shared_ptr<StatementHandle> statementHandle =
+                     handle->prepare(s_getLockingMode);
+                 if (!statementHandle) {
+                     error = handle->getError();
+                     return false;
+                 }
+                 statementHandle->step();
+                 if (!statementHandle->isOK()) {
+                     error = statementHandle->getError();
+                     return false;
+                 }
+                 std::string lockingMode =
+                     statementHandle->getValue<WCDB::ColumnType::Text>(0);
+                 statementHandle->finalize();
 
-                //Set Locking Mode
-                if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
-                    !handle->exec(s_setLockingModeNormal)) {
-                    error = handle->getError();
-                    return false;
-                }
-            }
+                 //Set Locking Mode
+                 if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
+                     !handle->exec(s_setLockingModeNormal)) {
+                     error = handle->getError();
+                     return false;
+                 }
+             }
 
-            //Journal Mode
-            {
-                static const StatementPragma s_getJournalMode =
-                    StatementPragma().pragma(Pragma::JournalMode);
-                static const StatementPragma s_setJournalModeWAL =
-                    StatementPragma().pragma(Pragma::JournalMode, "WAL");
+             //Journal Mode
+             {
+                 static const StatementPragma s_getJournalMode =
+                     StatementPragma().pragma(Pragma::JournalMode);
+                 static const StatementPragma s_setJournalModeWAL =
+                     StatementPragma().pragma(Pragma::JournalMode, "WAL");
 
-                //Get Journal Mode
-                std::shared_ptr<StatementHandle> statementHandle =
-                    handle->prepare(s_getJournalMode);
-                if (!statementHandle) {
-                    error = handle->getError();
-                    return false;
-                }
-                statementHandle->step();
-                if (!statementHandle->isOK()) {
-                    error = statementHandle->getError();
-                    return false;
-                }
-                std::string journalMode =
-                    statementHandle->getValue<WCDB::ColumnType::Text>(0);
-                statementHandle->finalize();
+                 //Get Journal Mode
+                 std::shared_ptr<StatementHandle> statementHandle =
+                     handle->prepare(s_getJournalMode);
+                 if (!statementHandle) {
+                     error = handle->getError();
+                     return false;
+                 }
+                 statementHandle->step();
+                 if (!statementHandle->isOK()) {
+                     error = statementHandle->getError();
+                     return false;
+                 }
+                 std::string journalMode =
+                     statementHandle->getValue<WCDB::ColumnType::Text>(0);
+                 statementHandle->finalize();
 
-                //Set Journal Mode
-                if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
-                    !handle->exec(s_setJournalModeWAL)) {
-                    error = handle->getError();
-                    return false;
-                }
-            }
+                 //Set Journal Mode
+                 if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
+                     !handle->exec(s_setJournalModeWAL)) {
+                     error = handle->getError();
+                     return false;
+                 }
+             }
 
-            //Synchronous
-            {
-                static const StatementPragma s_setSynchronousFull =
-                    StatementPragma().pragma(Pragma::Synchronous, "FULL");
+             //Synchronous
+             {
+                 static const StatementPragma s_setSynchronousFull =
+                     StatementPragma().pragma(Pragma::Synchronous, "FULL");
 
-                if (!handle->exec(s_setSynchronousFull)) {
-                    error = handle->getError();
-                    return false;
-                }
-            }
+                 if (!handle->exec(s_setSynchronousFull)) {
+                     error = handle->getError();
+                     return false;
+                 }
+             }
 
-            //Fullfsync
-            {
-                static const StatementPragma s_setFullFsync =
-                    StatementPragma().pragma(Pragma::Fullfsync, "ON");
+             //Fullfsync
+             {
+                 static const StatementPragma s_setFullFsync =
+                     StatementPragma().pragma(Pragma::Fullfsync, "ON");
 
-                if (!handle->exec(s_setFullFsync)) {
-                    error = handle->getError();
-                    return false;
-                }
-            }
+                 if (!handle->exec(s_setFullFsync)) {
+                     error = handle->getError();
+                     return false;
+                 }
+             }
 
-            error.reset();
-            return true;
-        },
-        2,
-    },
-});
+             error.reset();
+             return true;
+         },
+         2,
+     },
+     {
+         Database::defaultCheckpointConfigName,
+         [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+
+             static std::unordered_map<std::string, int> s_checkpointStep;
+             static std::mutex s_checkpointStepMutex;
+             s_checkpointStepMutex.lock();
+             auto iter = s_checkpointStep.find(handle->path);
+             if (iter == s_checkpointStep.end()) {
+                 iter = s_checkpointStep.insert({handle->path, 1000}).first;
+             }
+             int *checkpointStepPointer = &iter->second;
+             s_checkpointStepMutex.unlock();
+
+             handle->registerCommitedHook(
+                 [](Handle *handle, int pages, void *p) {
+                     //Since sqlite can't write concurrently, checkpointStepPointer does not need a mutex.
+                     int *checkpointStepPointer = (int *) p;
+                     if (*checkpointStepPointer != 0) {
+                         if (pages > *checkpointStepPointer) {
+                             *checkpointStepPointer = 0;
+                             if (pthread_main_np() != 0) {
+                                 //dispatch checkpoint op to sub-thread
+                                 static std::queue<std::string> s_toCheckpoint;
+                                 static std::condition_variable s_cond;
+                                 static std::mutex s_mutex;
+                                 static std::thread s_checkpointThread([]() {
+                                     pthread_setname_np(
+                                         ("WCDB-" +
+                                          Database::defaultCheckpointConfigName)
+                                             .c_str());
+                                     while (true) {
+                                         std::string path;
+                                         {
+                                             std::unique_lock<std::mutex>
+                                                 lockGuard(s_mutex);
+                                             if (s_toCheckpoint.empty()) {
+                                                 s_cond.wait(lockGuard);
+                                                 continue;
+                                             }
+                                             path = s_toCheckpoint.front();
+                                             s_toCheckpoint.pop();
+                                         }
+                                         Database database(path);
+                                         WCDB::Error innerError;
+                                         database.exec(
+                                             StatementPragma().pragma(
+                                                 Pragma::WalCheckpoint),
+                                             innerError);
+                                     }
+                                 });
+                                 static std::once_flag s_flag;
+                                 std::call_once(s_flag, []() {
+                                     s_checkpointThread.detach();
+                                 });
+
+                                 std::unique_lock<std::mutex> lockGuard(
+                                     s_mutex);
+                                 s_toCheckpoint.push(handle->path);
+                                 s_cond.notify_one();
+                             } else {
+                                 handle->exec(StatementPragma().pragma(
+                                     Pragma::WalCheckpoint));
+                             }
+                         }
+                     } else {
+                         *checkpointStepPointer = pages + 1000;
+                     }
+                 },
+                 checkpointStepPointer);
+             return true;
+         },
+         3,
+     }});
 
 void Database::setConfig(const std::string &name,
                          const Config &config,
