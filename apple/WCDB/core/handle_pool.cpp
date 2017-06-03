@@ -111,10 +111,7 @@ void HandlePool::purgeFreeHandles()
 
 bool HandlePool::isDrained()
 {
-    m_rwlock.lockRead();
-    bool result = m_handles.isEmpty();
-    m_rwlock.unlockRead();
-    return result;
+    return m_aliveHandleCount==0;
 }
 
 RecyclableHandle HandlePool::flowOut(Error &error)
