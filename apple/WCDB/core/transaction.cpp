@@ -108,4 +108,12 @@ bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
     return runTransaction(transaction, nullptr, error);
 }
 
+Transaction::~Transaction()
+{
+    if (m_isInTransaction) {
+        Error innerError;
+        rollback(innerError);
+    }
+}
+    
 } //namespace WCDB

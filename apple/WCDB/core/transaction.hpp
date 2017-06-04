@@ -34,6 +34,8 @@ class Statement;
 
 class Transaction : public CoreBase {
 public:
+    ~Transaction();
+    
     RecyclableStatement prepare(const Statement &statement,
                                 Error &error) override;
     bool exec(const Statement &statement, Error &error) override;
