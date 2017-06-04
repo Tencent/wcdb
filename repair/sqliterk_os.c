@@ -131,7 +131,7 @@ int sqliterkOSRead(sqliterk_file *file,
     return SQLITERK_OK;
 }
 
-int sqliterkOSFileSize(sqliterk_file *file, int *filesize)
+int sqliterkOSFileSize(sqliterk_file *file, size_t *filesize)
 {
     if (!file || file->fd < 0) {
         return SQLITERK_MISUSE;
@@ -141,7 +141,7 @@ int sqliterkOSFileSize(sqliterk_file *file, int *filesize)
         file->error = errno;
         return SQLITERK_IOERR;
     }
-    *filesize = (int) statbuf.st_size;
+    *filesize = (size_t) statbuf.st_size;
     return SQLITERK_OK;
 }
 

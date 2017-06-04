@@ -55,7 +55,7 @@ int sqliterkOSRead(sqliterk_file *file,
                    off_t offset,
                    unsigned char *data,
                    size_t *size);
-int sqliterkOSFileSize(sqliterk_file *file, int *filesize);
+int sqliterkOSFileSize(sqliterk_file *file, size_t *filesize);
 const char *sqliterkOSGetFilePath(sqliterk_file *file);
 
 #endif /* sqliterk_os_h */

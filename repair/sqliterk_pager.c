@@ -247,7 +247,7 @@ static int sqliterkPagerParseHeader(sqliterk_pager *pager, int forcePageSize)
     }
 
     // Assign page count
-    int filesize;
+    size_t filesize;
     rc = sqliterkOSFileSize(pager->file, &filesize);
     if (rc != SQLITERK_OK) {
         sqliterkOSError(rc, "Failed to get size of file '%s': %s",
@@ -255,7 +255,8 @@ static int sqliterkPagerParseHeader(sqliterk_pager *pager, int forcePageSize)
         goto sqliterkPagerParseHeader_End;
     }
 
-    pager->pagecount = (filesize + pager->pagesize - 1) / pager->pagesize;
+    pager->pagecount =
+        (int) ((filesize + pager->pagesize - 1) / pager->pagesize);
     if (pager->pagecount < 1) {
         rc = SQLITERK_DAMAGED;
         sqliterkOSError(rc, "File truncated.");
