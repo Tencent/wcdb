@@ -40,10 +40,11 @@ void sample_core_main(NSString *baseDirectory)
     //run unwrapped SQL
     [database exec:WCDB::StatementPragma().pragma(WCDB::Pragma::CaseSensitiveLike, true)];
 
-    //get value from unwraaped SQL
+    //get value from unwrapped SQL
     WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
     if (statement && statement.step) {
         NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
     }
+
     NSLog(@"Sample-core End");
 }

@@ -34,6 +34,12 @@ void sample_advance_main(NSString *baseDirectory)
       [database removeFilesWithError:nil];
     }];
 
+    //cipher
+    {
+        NSData *key = [@"password" dataUsingEncoding:NSASCIIStringEncoding];
+        [database setCipherKey:key];
+    }
+
     {
         [database createTableAndIndexesOfName:tableName
                                     withClass:WCTSampleAdvance.class];
@@ -75,5 +81,6 @@ void sample_advance_main(NSString *baseDirectory)
                                                        fromTable:tableName];
         float value = object.columnCoding.floatValue;
     }
+
     NSLog(@"Sample-advance End");
 }
