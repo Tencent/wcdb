@@ -38,6 +38,7 @@ public:
         String,
     };
     ErrorValue(int value);
+    ErrorValue(const char *value);
     ErrorValue(const std::string &value);
 
     int getIntValue() const;

@@ -29,6 +29,13 @@ ErrorValue::ErrorValue(int value)
 {
 }
 
+ErrorValue::ErrorValue(const char *value)
+    : m_type(ErrorValue::Type::String)
+    , m_intValue(0)
+    , m_stringValue(value ? value : "")
+{
+}
+
 ErrorValue::ErrorValue(const std::string &value)
     : m_type(ErrorValue::Type::String), m_intValue(0), m_stringValue(value)
 {
@@ -328,10 +335,10 @@ void Error::ReportRepair(const std::string &path,
                          Error *outError)
 {
     Error::Report(Error::Type::Repair, code,
-                  {{
+                  {
                       {Error::Key::Path, path},
                       {Error::Key::Operation, ErrorValue((int) operation)},
-                  }},
+                  },
                   outError);
 }
 
