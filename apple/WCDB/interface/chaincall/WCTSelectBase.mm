@@ -221,4 +221,9 @@
     return result;
 }
 
+- (void)finalize
+{
+    _statementHandle = nullptr;
+}
+
 @end

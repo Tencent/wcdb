@@ -109,7 +109,7 @@
 - (WCTMultiObject *)_nextMultiObject
 {
     if (!_statementHandle->step() || !_error.isOK()) {
-        _statementHandle->finalize();
+        [self finalize];
         return nil;
     }
     NSMutableDictionary *multiObject = [[NSMutableDictionary alloc] init];

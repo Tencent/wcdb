@@ -123,7 +123,7 @@
 - (id /* WCTObject */)_nextObject
 {
     if (!_statementHandle->step() || !_error.isOK()) {
-        _statementHandle->finalize();
+        [self finalize];
         return nil;
     }
     WCTObject *object = [[_cls alloc] init];

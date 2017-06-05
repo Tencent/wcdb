@@ -76,7 +76,7 @@ ColumnDef &ColumnDef::makeDefault(const std::string &value)
     return *this;
 }
 
-ColumnDef &ColumnDef::makeDefault(const std::nullptr_t value)
+ColumnDef &ColumnDef::makeDefault(const std::nullptr_t &value)
 {
     m_description.append(" DEFAULT NULL");
     return *this;

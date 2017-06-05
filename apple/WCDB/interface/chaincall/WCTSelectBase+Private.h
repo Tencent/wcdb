@@ -34,5 +34,6 @@
                         atIndex:(int)index
               withColumnBinding:(const std::shared_ptr<WCTColumnBinding> &)columnBinding;
 - (id /* WCTValue* */)extractValueAtIndex:(int)i;
+- (void)finalize;
 
 @end

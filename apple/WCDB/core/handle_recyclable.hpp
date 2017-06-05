@@ -45,8 +45,10 @@ public:
         const Recyclable<std::shared_ptr<HandleWrap>>::OnRecycled &onRecycled);
     constexpr Handle *operator->() const { return m_value->operator->(); }
     operator bool() const;
-    bool operator!=(std::nullptr_t) const;
-    bool operator==(std::nullptr_t) const;
+    bool operator!=(const std::nullptr_t &) const;
+    bool operator==(const std::nullptr_t &) const;
+
+    RecyclableHandle &operator=(const std::nullptr_t &);
 
 protected:
     std::shared_ptr<HandleWrap> m_value;

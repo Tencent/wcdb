@@ -39,14 +39,21 @@ RecyclableStatement::operator bool() const
     return m_statementHandle != nullptr;
 }
 
-bool RecyclableStatement::operator!=(std::nullptr_t) const
+bool RecyclableStatement::operator!=(const std::nullptr_t &) const
 {
     return m_statementHandle != nullptr;
 }
 
-bool RecyclableStatement::operator==(std::nullptr_t) const
+bool RecyclableStatement::operator==(const std::nullptr_t &) const
 {
     return m_statementHandle == nullptr;
+}
+
+RecyclableStatement &RecyclableStatement::operator=(const std::nullptr_t &)
+{
+    m_handle = nullptr;
+    m_statementHandle = nullptr;
+    return *this;
 }
 
 } //namespace WCDB

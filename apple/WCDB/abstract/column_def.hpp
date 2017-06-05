@@ -51,7 +51,7 @@ public:
 
     ColumnDef &makeDefault(const std::string &value);
 
-    ColumnDef &makeDefault(const std::nullptr_t value);
+    ColumnDef &makeDefault(const std::nullptr_t &value);
 
     ColumnDef &
     makeDefault(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,

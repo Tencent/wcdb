@@ -115,5 +115,5 @@ Transaction::~Transaction()
         rollback(innerError);
     }
 }
-    
+
 } //namespace WCDB

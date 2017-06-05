@@ -57,20 +57,31 @@ public:
         return *this;
     }
 
+    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
+                            Recyclable &>::type
+    operator=(const std::nullptr_t &)
+    {
+        release();
+        m_value = nullptr;
+        m_reference = nullptr;
+        m_onRecycled = nullptr;
+        return *this;
+    }
+
     ~Recyclable() { release(); }
 
     constexpr T operator->() const { return m_value; }
 
     typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
                             bool>::type
-    operator!=(std::nullptr_t) const
+    operator!=(const std::nullptr_t &) const
     {
         return m_value != nullptr;
     }
 
     typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
                             bool>::type
-    operator==(std::nullptr_t) const
+    operator==(const std::nullptr_t &) const
     {
         return m_value == nullptr;
     }

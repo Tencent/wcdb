@@ -34,7 +34,7 @@ Expr::Expr(const std::string &value) : Describable(literalValue(value))
 {
 }
 
-Expr::Expr(std::nullptr_t value) : Describable(literalValue(value))
+Expr::Expr(const std::nullptr_t &value) : Describable(literalValue(value))
 {
 }
 
@@ -539,7 +539,7 @@ std::string Expr::literalValue(const std::string &value)
     return "'" + stringByReplacingOccurrencesOfString(value, "'", "''") + "'";
 }
 
-std::string Expr::literalValue(const std::nullptr_t value)
+std::string Expr::literalValue(const std::nullptr_t &value)
 {
     return "NULL";
 }

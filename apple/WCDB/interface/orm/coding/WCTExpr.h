@@ -43,7 +43,7 @@ public:
 
     WCTExpr(const char *value);
 
-    WCTExpr(std::nullptr_t);
+    WCTExpr(const std::nullptr_t &);
 
     WCTExpr(const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::CType
                 &value,

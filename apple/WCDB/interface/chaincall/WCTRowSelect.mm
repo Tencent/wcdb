@@ -80,7 +80,7 @@
 - (WCTOneRow *)_nextRow
 {
     if (!_statementHandle->step() || !_error.isOK()) {
-        _statementHandle->finalize();
+        [self finalize];
         return nil;
     }
     NSMutableArray *row = [NSMutableArray array];
@@ -123,7 +123,7 @@
 - (WCTValue *)_nextValue
 {
     if (!_statementHandle->step() || !_error.isOK()) {
-        _statementHandle->finalize();
+        [self finalize];
         return nil;
     }
     return [self extractValueAtIndex:0];

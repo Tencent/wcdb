@@ -48,7 +48,7 @@ WCTExpr::WCTExpr(const char *value)
 {
 }
 
-WCTExpr::WCTExpr(std::nullptr_t value)
+WCTExpr::WCTExpr(const std::nullptr_t &value)
     : WCDB::Expr(value)
     , WCTPropertyBase(nil, nullptr)
 {

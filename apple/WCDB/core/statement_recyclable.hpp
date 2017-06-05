@@ -38,8 +38,9 @@ public:
     }
     RecyclableStatement();
     operator bool() const;
-    bool operator!=(std::nullptr_t) const;
-    bool operator==(std::nullptr_t) const;
+    bool operator!=(const std::nullptr_t &) const;
+    bool operator==(const std::nullptr_t &) const;
+    RecyclableStatement &operator=(const std::nullptr_t &);
 
 protected:
     RecyclableHandle m_handle;

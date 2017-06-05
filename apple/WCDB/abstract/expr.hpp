@@ -46,7 +46,7 @@ public:
 
     Expr(const std::string &value);
 
-    Expr(std::nullptr_t value);
+    Expr(const std::nullptr_t &value);
 
     Expr(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
          int size);
@@ -196,7 +196,7 @@ protected:
     }
     std::string literalValue(const char *value);
     std::string literalValue(const std::string &value);
-    std::string literalValue(const std::nullptr_t value);
+    std::string literalValue(const std::nullptr_t &value);
     std::string
     literalValue(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
                  int size);
