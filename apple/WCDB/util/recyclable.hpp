@@ -92,15 +92,22 @@ protected:
     {
     }
 
-    void retain() const { ++(*m_reference); }
+    void retain() const
+    {
+        if (m_reference) {
+            ++(*m_reference);
+        }
+    }
     void release()
     {
-        if (--(*m_reference) == 0) {
-            delete m_reference;
-            m_reference = nullptr;
-            if (m_onRecycled) {
-                m_onRecycled(m_value);
-                m_onRecycled = nullptr;
+        if (m_reference) {
+            if (--(*m_reference) == 0) {
+                delete m_reference;
+                m_reference = nullptr;
+                if (m_onRecycled) {
+                    m_onRecycled(m_value);
+                    m_onRecycled = nullptr;
+                }
             }
         }
     }
