@@ -26,6 +26,7 @@
 
 void sample_orm_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-ORM Begin");
     NSArray *clses = @[ WCTSampleORM.class,
                         WCTSampleORMColumnConstraint.class,
                         WCTSampleORMTableConstraint.class,
@@ -49,4 +50,5 @@ void sample_orm_main(NSString *baseDirectory)
             NSLog(@"SQL Of %@: %@", table.name, table.sql);
         }
     }
+    NSLog(@"Sample-ORM End");
 }

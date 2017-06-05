@@ -23,6 +23,7 @@
 
 void sample_convenient_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-convenient Begin");
     NSString *className = NSStringFromClass(WCTSampleConvenient.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *tableName = className;
@@ -183,4 +184,5 @@ void sample_convenient_main(NSString *baseDirectory)
         BOOL ret = [database deleteObjectsFromTable:tableName
                                               where:WCTSampleConvenient.intValue == 1];
     }
+    NSLog(@"Sample-convenient End");
 }

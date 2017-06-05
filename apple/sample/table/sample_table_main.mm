@@ -23,6 +23,7 @@
 
 void sample_table_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-table Begin");
     NSString *className = NSStringFromClass(WCTSampleTable.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *tableName = className;
@@ -63,18 +64,19 @@ void sample_table_main(NSString *baseDirectory)
         BOOL ret = [database dropIndexOfName:indexName];
     }
 
-    //add column
+    //Add column
     {
-        BOOL ret = [database createTableOfName:[tableName stringByAppendingString:@"2"]
+        NSString *tableName2 = [tableName stringByAppendingString:@"2"];
+        BOOL ret = [database createTableOfName:tableName2
                              withColumnDefList:{
                                                    WCTSampleTable.intValue.def(WCTColumnTypeInteger32),
                                                }];
         ret = [database addColumn:WCTSampleTable.stringValue.def(WCTColumnTypeString)
-                         forTable:tableName];
+                         forTable:tableName2];
     }
 
     WCTTable *table;
-    //get table
+    //Get table
     {
         table = [database getTableOfName:tableName
                                withClass:WCTSampleTable.class];
@@ -84,4 +86,5 @@ void sample_table_main(NSString *baseDirectory)
         WCTSampleTable *object = [[WCTSampleTable alloc] init];
         BOOL ret = [table insertObject:object];
     }
+    NSLog(@"Sample-table End");
 }

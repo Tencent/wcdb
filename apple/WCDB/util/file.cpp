@@ -67,7 +67,7 @@ bool createHardLink(const std::string &from,
         error.reset();
         return true;
     }
-    Error::ReportSystemCall(Error::SystemCallOperation::Link, from, errno,
+    Error::ReportSystemCall(Error::SystemCallOperation::Link, to, errno,
                             strerror(errno), &error);
     return false;
 }
@@ -120,6 +120,10 @@ bool moveFiles(const std::list<std::string> &paths,
                Error &error)
 {
     bool result = true;
+    createDirectoryWithIntermediateDirectories(directory, error);
+    if (!error.isOK()) {
+        return false;
+    }
     std::list<std::string> recovers;
     for (const auto &path : paths) {
         if (File::isExists(path, error)) {

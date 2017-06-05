@@ -23,8 +23,10 @@
 
 void sample_file_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-file Begin");
     NSString *className = NSStringFromClass(WCTSampleFile.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
+    NSString *otherDirectory = [baseDirectory stringByAppendingPathComponent:@"moved"];
     NSString *tableName = className;
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
@@ -39,10 +41,9 @@ void sample_file_main(NSString *baseDirectory)
         __block WCTError *error = nil;
         __block size_t fileSize;
         [database close:^{
+          //you can call [getFilesSizeWithError:] for an unclosed database, but you will an inaccurate result and a warning
           fileSize = [database getFilesSizeWithError:&error];
         }];
-        //you can call [getFilesSizeWithError:] for an unclosed database, but you will get a warning
-        //        fileSize = [database getFilesSizeWithError:&error];
         if (error) {
             NSLog(@"Get file size Error %@", error);
         }
@@ -50,7 +51,6 @@ void sample_file_main(NSString *baseDirectory)
 
     //Move files
     {
-        NSString *otherDirectory = baseDirectory;
         [database close:^{
           WCTError *error = nil;
           BOOL ret = [database moveFilesToDirectory:otherDirectory withError:&error];
@@ -64,4 +64,5 @@ void sample_file_main(NSString *baseDirectory)
     {
         NSArray *paths = [database getPaths];
     }
+    NSLog(@"Sample-file End");
 }

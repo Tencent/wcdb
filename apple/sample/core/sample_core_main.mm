@@ -23,8 +23,12 @@
 
 void sample_core_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-core Begin");
     NSString *path = [baseDirectory stringByAppendingPathComponent:@"core"];
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+    [database close:^{
+      [database removeFilesWithError:nil];
+    }];
 
     //set config
     [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error &error) {
@@ -41,4 +45,5 @@ void sample_core_main(NSString *baseDirectory)
     if (statement && statement.step) {
         NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
     }
+    NSLog(@"Sample-core End");
 }

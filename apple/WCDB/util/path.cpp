@@ -61,7 +61,7 @@ std::string getFileName(const std::string &base)
             }
         }
     }
-    return length == 0 && size > 0 ? std::string(cstr, begin, length) : "/";
+    return length != 0 && size > 0 ? std::string(cstr, begin, length) : "/";
 }
 
 std::string getBaseName(const std::string &base)

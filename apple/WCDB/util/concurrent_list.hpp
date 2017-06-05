@@ -98,10 +98,12 @@ public:
         return m_list.size();
     }
 
-    void clear()
+    size_t clear()
     {
         SpinLockGuard<Spin> lockGuard(m_spin);
-        return m_list.clear();
+        size_t size = m_list.size();
+        m_list.clear();
+        return size;
     }
 
 protected:

@@ -95,7 +95,8 @@ bool HandlePool::isBlockaded() const
 void HandlePool::drain(HandlePool::OnDrained onDrained)
 {
     m_rwlock.lockWrite();
-    m_handles.clear();
+    int size = (int) m_handles.clear();
+    m_aliveHandleCount -= size;
     if (onDrained) {
         onDrained();
     }
@@ -105,7 +106,8 @@ void HandlePool::drain(HandlePool::OnDrained onDrained)
 void HandlePool::purgeFreeHandles()
 {
     m_rwlock.lockRead();
-    m_handles.clear();
+    int size = (int) m_handles.clear();
+    m_aliveHandleCount -= size;
     m_rwlock.unlockRead();
 }
 
@@ -181,7 +183,10 @@ bool HandlePool::fillOne(Error &error)
     bool result = false;
     if (handleWrap) {
         result = true;
-        m_handles.pushBack(handleWrap);
+        bool inserted = m_handles.pushBack(handleWrap);
+        if (inserted) {
+            ++m_aliveHandleCount;
+        }
     }
     m_rwlock.unlockRead();
     return false;

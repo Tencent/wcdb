@@ -29,7 +29,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return [[self alloc] initWithFloat:value.floatValue];
+    return value ? [[self alloc] initWithFloatValue:value.floatValue] : nil;
 }
 
 - (NSNumber *)archivedWCTValue

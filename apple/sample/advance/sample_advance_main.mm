@@ -24,13 +24,30 @@
 
 void sample_advance_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-advance Begin");
     NSString *className = NSStringFromClass(WCTSampleAdvance.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *tableName = className;
+    NSString *tableName2 = NSStringFromClass(WCTSampleAdvanceMulti.class);
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     [database close:^{
       [database removeFilesWithError:nil];
     }];
+
+    {
+        [database createTableAndIndexesOfName:tableName
+                                    withClass:WCTSampleAdvance.class];
+        WCTSampleAdvance *advance = [[WCTSampleAdvance alloc] init];
+        advance.intValue = 1;
+        [database insertObject:advance
+                          into:tableName];
+        [database createTableAndIndexesOfName:tableName2
+                                    withClass:WCTSampleAdvanceMulti.class];
+        WCTSampleAdvanceMulti *advanceMulti = [[WCTSampleAdvanceMulti alloc] init];
+        advanceMulti.intValue = 1;
+        [database insertObject:advanceMulti
+                          into:tableName2];
+    }
 
     //Using [as] to redirect selection
     {
@@ -41,11 +58,10 @@ void sample_advance_main(NSString *baseDirectory)
 
     //Multi select
     {
-        NSString *tableName2 = NSStringFromClass(WCTSampleAdvanceMulti.class);
         WCTMultiSelect *select = [[database prepareSelectMultiObjectsOnResults:{
                                                                                    WCTSampleAdvance.intValue.inTable(tableName),
                                                                                    WCTSampleAdvanceMulti.intValue.inTable(tableName2)}
-                                                                    fromTables:@[ tableName, tableName2 ]] where:WCTSampleAdvance.intValue == WCTSampleAdvanceMulti.intValue];
+                                                                    fromTables:@[ tableName, tableName2 ]] where:WCTSampleAdvance.intValue.inTable(tableName) == WCTSampleAdvanceMulti.intValue.inTable(tableName2)];
         NSArray<WCTMultiObject *> *multiObjects = select.allMultiObjects;
         for (WCTMultiObject *multiObjects : multiObjects) {
             WCTSampleAdvance *object1 = (WCTSampleAdvance *) [multiObjects objectForKey:tableName];
@@ -59,4 +75,5 @@ void sample_advance_main(NSString *baseDirectory)
                                                        fromTable:tableName];
         float value = object.columnCoding.floatValue;
     }
+    NSLog(@"Sample-advance End");
 }

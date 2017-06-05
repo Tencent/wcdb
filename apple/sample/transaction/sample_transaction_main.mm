@@ -23,6 +23,7 @@
 
 void sample_transaction_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-transaction Begin");
     NSString *className = NSStringFromClass(WCTSampleTransaction.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *tableName = className;
@@ -97,4 +98,5 @@ void sample_transaction_main(NSString *baseDirectory)
         BOOL ret = [database insertObjects:objects
                                       into:tableName];
     }
+    NSLog(@"Sample-transaction End");
 }

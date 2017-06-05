@@ -23,6 +23,7 @@
 
 void sample_repair_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-repair Begin");
     NSString *className = NSStringFromClass(WCTSampleRepair.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *recoverPath = [path stringByAppendingString:@"_recover"];
@@ -96,4 +97,5 @@ void sample_repair_main(NSString *baseDirectory)
         }];
         NSLog(@"The count of objects repaired: %lu", [recover getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
+    NSLog(@"Sample-repair End");
 }

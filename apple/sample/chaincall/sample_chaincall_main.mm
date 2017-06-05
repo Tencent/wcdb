@@ -23,6 +23,7 @@
 
 void sample_chaincall_main(NSString *baseDirectory)
 {
+    NSLog(@"Sample-chaincall Begin");
     NSString *className = NSStringFromClass(WCTSampleChainCall.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *tableName = className;
@@ -94,4 +95,5 @@ void sample_chaincall_main(NSString *baseDirectory)
             NSLog(@"Delete Error %@", deletion.error);
         }
     }
+    NSLog(@"Sample-chaincall End");
 }
