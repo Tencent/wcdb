@@ -19,14 +19,17 @@ package com.tencent.wcdb.database;
 /**
  * This error can occur if the application creates a SQLiteStatement object and allows multiple
  * threads in the application use it at the same time.
- * Sqlite returns this error if bind and execute methods on this object occur at the same time
- * from multiple threads, like so:
- *     thread # 1: in execute() method of the SQLiteStatement object
- *     while thread # 2: is in bind..() on the same object.
+ * <p>
+ * SQLite returns this error if bind and execute methods on this object occur at the same time
+ * from multiple threads, like so:<br>
+ *     thread # 1: in {@code execute()} method of the {@link SQLiteStatement} object<br>
+ *     while thread # 2: is in bind..() on the same object.<br>
  *</p>
- * FIX this by NEVER sharing the same SQLiteStatement object between threads.
+ * <p>
+ * FIX this by NEVER sharing the same {@link SQLiteStatement} object between threads.
  * Create a local instance of the SQLiteStatement whenever it is needed, use it and close it ASAP.
  * NEVER make it globally available.
+ * </p>
  */
 @SuppressWarnings("serial")
 public class SQLiteMisuseException extends SQLiteException {

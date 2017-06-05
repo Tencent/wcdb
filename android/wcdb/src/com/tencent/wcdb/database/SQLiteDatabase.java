@@ -2373,7 +2373,20 @@ public final class SQLiteDatabase extends SQLiteClosable {
         return true;
     }
 
-
+    /**
+     * Acquire database connection from connection pool and return its native handle
+     * (a.k.a {@code sqlite3 *}).
+     *
+     * <p>The caller must release the returned handle when finished with it by calling
+     * {@link #releaseNativeConnection(long, Exception)} <strong>within the same thread</strong>.
+     * Failed to release the returned handle will cause connection leakage and probably
+     * ANR.</p>
+     *
+     * @param operation     string describing usage of the connection, for logging
+     * @param readOnly      whether operations on returned connection is read-only
+     * @param interactive   whether operations on returned connection is for interactive
+     * @return {@code sqlite3 *} handle casted to {@code long}
+     */
     public long acquireNativeConnectionHandle(String operation, boolean readOnly, boolean interactive) {
         if (operation == null)
             operation = "unnamedNative";
@@ -2387,6 +2400,13 @@ public final class SQLiteDatabase extends SQLiteClosable {
                 .getNativeHandle(operation);
     }
 
+    /**
+     * Release connection returned by {@link #acquireNativeConnectionHandle(String, boolean, boolean)}.
+     *
+     * @param nativePtr {@code sqlite3 *} handle to release
+     * @param ex        exception occurred during operations on the native handle,
+     *                  or null for successful operations
+     */
     public void releaseNativeConnection(long nativePtr, Exception ex) {
         getThreadSession().releaseConnectionForNativeHandle(ex);
     }
@@ -2428,101 +2448,5 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public interface CustomFunction {
         public void callback(String[] args);
-    }
-
-    public static boolean copyTables(SQLiteDatabase OrgDb, SQLiteDatabase CipDb) {
-        boolean status = false;
-
-        HashSet<String> sysTables = new HashSet<String>();
-        //sysTables.add("android_metadata");
-        sysTables.add("sqlite_sequence");
-
-        StringBuilder sql = new StringBuilder("select DISTINCT  tbl_name from sqlite_master");
-        Cursor cursorTableName = OrgDb.rawQuery(sql.toString(), null);
-        if (cursorTableName != null) {
-            int tblCount = cursorTableName.getCount();
-            while (cursorTableName.moveToNext()) {
-                tblCount--;
-                String tableName = cursorTableName.getString(0);
-
-                sql.setLength(0);
-                sql.append("select sql from sqlite_master where tbl_name = '").append(tableName).append("'");
-                android.database.Cursor cursorTableDesc = OrgDb.rawQuery(sql.toString(), null);
-                if (cursorTableDesc != null) {
-                    if (cursorTableDesc.moveToNext()) {
-                        if (sysTables.contains(tableName)) {
-                            cursorTableDesc.close();
-                            continue;
-                        }
-                        CipDb.execSQL(cursorTableDesc.getString(0));
-
-                        Cursor cursorTableText = OrgDb.rawQuery("select * from " + tableName, null);
-                        if (cursorTableText != null && cursorTableText.getCount() > 0) {
-                            sql.setLength(0);
-                            sql.append("insert into ").append(tableName).append("(");
-                            if (cursorTableText.getColumnCount() > 0) {
-                                StringBuilder value = new StringBuilder(" values(");
-                                for (String columnName : cursorTableText.getColumnNames()) {
-                                    sql.append(columnName).append(",");
-                                    value.append("?,");
-                                }
-                                value.deleteCharAt(value.length() - 1);
-                                sql.deleteCharAt(sql.length() - 1);
-                                sql.append(")").append(value).append(")");
-                            }
-
-                            SQLiteStatement stat = CipDb.compileStatement(sql.toString());
-                            CipDb.beginTransaction();
-
-                            int columnCount = cursorTableText.getColumnCount();
-                            int[] columnTypes = new int[columnCount];
-                            cursorTableText.moveToFirst();
-                            for (int i = 0; i < columnCount; i++)
-                                columnTypes[i] = cursorTableText.getType(i);
-                            do {
-                                for (int i = 0; i < columnCount; i++) {
-                                    switch (columnTypes[i]) {
-                                        case Cursor.FIELD_TYPE_STRING: {
-                                            String s = cursorTableText.getString(i);
-                                            if (s != null) stat.bindString(i + 1, s);
-                                            else stat.bindNull(i + 1);
-                                            break;
-                                        }
-                                        case Cursor.FIELD_TYPE_INTEGER: {
-                                            stat.bindLong(i + 1, cursorTableText.getLong(i));
-                                            break;
-                                        }
-                                        case Cursor.FIELD_TYPE_BLOB: {
-                                            byte[] b = cursorTableText.getBlob(i);
-                                            if (b != null) stat.bindBlob(i + 1, b);
-                                            else stat.bindNull(i + 1);
-                                            break;
-                                        }
-                                        case Cursor.FIELD_TYPE_FLOAT: {
-                                            stat.bindDouble(i + 1, cursorTableText.getDouble(i));
-                                            break;
-                                        }
-                                        case Cursor.FIELD_TYPE_NULL: {
-                                            stat.bindNull(i + 1);
-                                            break;
-                                        }
-                                        default: {
-                                        }
-                                    }
-                                }
-                                stat.executeInsert();
-                            } while (cursorTableText.moveToNext());
-                            CipDb.setTransactionSuccessful();
-                            CipDb.endTransaction();
-                            cursorTableText.close();
-                        }
-                    }
-                    cursorTableDesc.close();
-                }
-            }
-            cursorTableName.close();
-            if (tblCount == 0) status = true;
-        }
-        return status;
     }
 }

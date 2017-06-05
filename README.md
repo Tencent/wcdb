@@ -128,7 +128,8 @@ method.
 ### Build WCDB Android with Prebuilt Dependencies
 
 WCDB itself can be built apart from its dependencies using Gradle or Android Studio. 
-To build WCDB Android library, run Gradle on `android` directory:
+To build WCDB Android library, import Gradle project or run Gradle wrapper on 
+`android` directory:
 
 ```bash
 $ cd android
@@ -144,7 +145,9 @@ sdk.dir=path/to/sdk
 ndk.dir=path/to/ndk
 ```
 
-Android Studio will do this for you when the project is imported.
+Android Studio will do this for you when the project is imported. If you have 
+*"Failed to notify project evaluation listener"* error, double check your `ndk.dir`
+property.
 
 ### Build Dependencies from Sources
 

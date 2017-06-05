@@ -46,7 +46,16 @@ public class SQLiteDirectCursor extends AbstractCursor {
     private int mCount;
     private boolean mCountFinished;
 
-
+    /**
+     * Execute a query and provide access to its result set through a Cursor
+     * interface. For a query such as: {@code SELECT name, birth, phone FROM
+     * myTable WHERE ... LIMIT 1,20 ORDER BY...} the column names (name, birth,
+     * phone) would be in the projection argument and everything from
+     * {@code FROM} onward would be in the params argument.
+     *
+     * @param editTable the name of the table used for this query
+     * @param query the {@link SQLiteDirectQuery} object associated with this cursor object.
+     */
     public SQLiteDirectCursor(SQLiteCursorDriver driver, String editTable, SQLiteDirectQuery query) {
         if (query == null) {
             throw new IllegalArgumentException("query object cannot be null");
