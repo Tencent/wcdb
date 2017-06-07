@@ -60,7 +60,7 @@ android {
     }
 
     defaultPublishConfig 'release'
-    publishNonDefault true
+    //publishNonDefault true
 }
 
 dependencies {
