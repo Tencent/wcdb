@@ -34,8 +34,8 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
 * **Via source code**: 
   1. Getting source code from git repository. If cloning from git, submodules are required: `git submodule update --init --recursive`.
   2. Drag `WCDB.xcodeproj` in `wcdb/apple/` into your project;
-  3. Add `WCDB.framework` to the `Target Dependencies` section and `Linked Binary and Libraries` of your Xcode project's `Build Phases` settings;
-  4. Add `WCDB.framework` to the `Enbedded Binaries` section of your Xcode project's `General` settings;
+  3. Add `WCDB.framework` to the `Target Dependencies` section and `Linked Binary and Libraries` of your Xcode project's `Build Phases" settings;
+  4. Add `WCDB.framework` to the "Enbedded Binaries" section of your Xcode project's "General" settings;
 
 Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and start your WCDB journey.
 
@@ -129,8 +129,7 @@ method.
 ### Build WCDB Android with Prebuilt Dependencies
 
 WCDB itself can be built apart from its dependencies using Gradle or Android Studio. 
-To build WCDB Android library, import Gradle project or run Gradle wrapper on 
-`android` directory:
+To build WCDB Android library, run Gradle on `android` directory:
 
 ```bash
 $ cd android
@@ -146,9 +145,7 @@ sdk.dir=path/to/sdk
 ndk.dir=path/to/ndk
 ```
 
-Android Studio will do this for you when the project is imported. If you have 
-*"Failed to notify project evaluation listener"* error, double check your `ndk.dir`
-property.
+Android Studio will do this for you when the project is imported.
 
 ### Build Dependencies from Sources
 
