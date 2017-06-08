@@ -44,8 +44,8 @@ public:
     bool isReading() const;
 
 protected:
-    mutable std::recursive_mutex m_mutex;
-    std::condition_variable_any m_cond;
+    mutable std::mutex m_mutex;
+    std::condition_variable m_cond;
     int m_reader;
     int m_writer;
     int m_pending;

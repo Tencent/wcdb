@@ -32,12 +32,6 @@ public:
     using ElementType = std::shared_ptr<T>;
     ConcurrentList(size_t capacityCap) : m_capacityCap(capacityCap) {}
 
-    void setCapacityCap(const size_t &capacityCap)
-    {
-        SpinLockGuard<Spin> lockGuard(m_spin);
-        m_capacityCap = capacityCap;
-    }
-
     size_t getCapacityCap() const
     {
         SpinLockGuard<Spin> lockGuard(m_spin);
