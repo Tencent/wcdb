@@ -27,6 +27,15 @@
 @interface WCTSelectBase : WCTChainCall
 
 /**
+ WINQ interface for virtual SQL to do a subquery.
+
+ @param resultList The column results to be selected
+ @param tableName The name of the table to be used to do a selection
+ @return self
+ */
+- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTable:(NSString *)tableName;
+
+/**
  WINQ interface for SQL.
 
  @param condition condition

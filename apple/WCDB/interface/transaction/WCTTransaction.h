@@ -80,8 +80,8 @@ typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
 /**
  @brief Run a transaction in block.
  
-     BOOL commited = [database runTransaction:^BOOL(){
-     BOOL result = [database insertObject:object into:tableName];
+     BOOL commited = [transaction runTransaction:^BOOL(){
+     BOOL result = [transaction insertObject:object into:tableName];
         return result;//return YES to commit transaction and return NO to rollback transaction.
      } event:^(WCTTransactionEvent event) {
         switch (event) {
