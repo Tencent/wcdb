@@ -41,7 +41,7 @@ Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and st
 
 Note that
 
-* Since WCDB is an Objective-C++ framework, for those files included in WCDB, you should rename its extension .m to .mm
+* Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension .m to .mm
 * Abot Cocoapods - WCDB links SQLCipher with each source files separately, but not a large sqlite.c file. It will be. This will be easier to debug, but the cocoapods configuration will be more complex. We will finish it as soon as possible.
 
 ## Tutorials
