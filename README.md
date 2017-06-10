@@ -39,6 +39,11 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
 
 Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and start your WCDB journey.
 
+Note that
+
+* Since WCDB is an Objective-C++ framework, for those files included WCDB, you should rename its subfix .m to .mm
+* Abot Cocoapods - WCDB links SQLCipher with each souce files separately, but not a large sqlite.c file. It will be. This will be easier to debug, but the cocoapods configuration will be more complex. We will finish it as soon as possible.
+
 ## Tutorials
 
 Tutorials can be found [here][iOS-tutorial].
