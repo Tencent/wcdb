@@ -2,14 +2,14 @@
 
 **中文版本请参看[这里][wcdb-wiki]**
 
-WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework used in WeChat application. It's currently available on iOS, macOS and Android.
+WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework used in the WeChat application. It's currently available on iOS, macOS and Android.
 
 # WCDB for iOS/macOS
 
 ## Features
 
-* **WINQ**(WCDB language integrated query): WINQ is a native data querying capabilities which frees developers from writing glue codes to concatenate SQL query strings.
-* **ORM**(Object Relational Mapping): WCDB provides a flexible, easy-to-use ORM for creating tables, indices and constraints, as well as CRUD through ObjC objects.
+* **WINQ** (WCDB language integrated query): WINQ is a native data querying capability which frees developers from writing glue code to concatenate SQL query strings.
+* **ORM** (Object Relational Mapping): WCDB provides a flexible, easy-to-use ORM for creating tables, indices and constraints, as well as CRUD through ObjC objects.
 * **Multi-threaded concurrency**: WCDB supports concurrent read-read and read-write access via connection pooling.
 * **Encryption Support**: WCDB supports database encryption via [SQLCipher][sqlcipher].
 * **Corruption recovery**: WCDB provides a built-in repair kit for database corruption recovery.
@@ -41,8 +41,8 @@ Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and st
 
 Note that
 
-* Since WCDB is an Objective-C++ framework, for those files included WCDB, you should rename its subfix .m to .mm
-* Abot Cocoapods - WCDB links SQLCipher with each souce files separately, but not a large sqlite.c file. It will be. This will be easier to debug, but the cocoapods configuration will be more complex. We will finish it as soon as possible.
+* Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension .m to .mm
+* Abot Cocoapods - WCDB links SQLCipher with each source files separately, but not a large sqlite.c file. It will be. This will be easier to debug, but the cocoapods configuration will be more complex. We will finish it as soon as possible.
 
 ## Tutorials
 
