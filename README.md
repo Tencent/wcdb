@@ -30,7 +30,7 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
   2. Add `github "Tencent/WCDB"` to your Cartfile;
   3. Run `carthage update`.
   4. Drag `WCDB.framework` from the appropriate platform directory in `Carthage/Build/` to the `Linked Binary and Libraries` section of your Xcode project’s `Build Phases` settings;
-  5. On your application targets' `Build Phases` settings tab, click the "+" icon and choose `New Run Script Phase`. Create a Run Script with  `carthage copy-frameworks` and add the paths to the frameworks under "Input Files": `$(SRCROOT)/Carthage/Build/iOS/WCDB.framework`;
+  5. On your application targets' `Build Phases` settings tab, click the "+" icon and choose `New Run Script Phase`. Create a Run Script with  `carthage copy-frameworks` and add the paths to the frameworks under "Input Files": `$(SRCROOT)/Carthage/Build/iOS/WCDB.framework` or `$(SRCROOT)/Carthage/Build/Mac/WCDB.framework`;
 * **Via source code**: 
   1. Getting source code from git repository. If cloning from git, submodules are required: `git submodule update --init --recursive`.
   2. Drag `WCDB.xcodeproj` in `wcdb/apple/` into your project;
