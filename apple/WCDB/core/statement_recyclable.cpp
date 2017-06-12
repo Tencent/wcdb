@@ -51,8 +51,8 @@ bool RecyclableStatement::operator==(const std::nullptr_t &) const
 
 RecyclableStatement &RecyclableStatement::operator=(const std::nullptr_t &)
 {
-    m_handle = nullptr;
     m_statementHandle = nullptr;
+    m_handle = nullptr;
     return *this;
 }
 
