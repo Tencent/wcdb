@@ -21,11 +21,29 @@
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTExpr.h>
+#import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/handle_statement.hpp>
 
 @implementation WCTSelectBase
+
+- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTable:(NSString *)tableName
+{
+    if (self = [super init]) {
+        if (resultList.size() == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Select,
+                                         WCDB::Error::InterfaceCode::NilObject,
+                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableName].UTF8String,
+                                         &_error);
+            return self;
+        }
+        _statement.select(resultList, resultList.isDistinct()).from(tableName.UTF8String);
+    }
+    return self;
+}
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
 {
