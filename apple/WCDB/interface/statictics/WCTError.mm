@@ -36,10 +36,15 @@
                 [infos setObject:@(iter.second.getIntValue()) forKey:@((int) iter.first)];
                 break;
             case WCDB::ErrorValue::Type::String: {
-                NSString *value;
-                if (iter.first != WCDB::Error::Key::Path) {
-                    value = @(iter.second.getStringValue().c_str());
-                } else {
+                const std::string stringValue = iter.second.getStringValue();
+                NSString *value = @(stringValue.c_str());
+                if (!value) {
+                    value = [[NSString alloc] initWithCString:stringValue.c_str() encoding:NSASCIIStringEncoding];
+                }
+                if (!value) {
+                    value = @"";
+                }
+                if (iter.first == WCDB::Error::Key::Path) {
                     value = [@(iter.second.getStringValue().c_str()) stringByAbbreviatingWithTildeInPath];
                 }
                 [infos setObject:value forKey:@((int) iter.first)];
