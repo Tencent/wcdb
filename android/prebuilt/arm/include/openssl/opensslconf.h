@@ -44,9 +44,6 @@ extern "C" {
 #ifndef OPENSSL_NO_GOST
 # define OPENSSL_NO_GOST
 #endif
-#ifndef OPENSSL_NO_HEARTBEATS
-# define OPENSSL_NO_HEARTBEATS
-#endif
 #ifndef OPENSSL_NO_JPAKE
 # define OPENSSL_NO_JPAKE
 #endif
@@ -89,9 +86,6 @@ extern "C" {
 #ifndef OPENSSL_NO_SOCK
 # define OPENSSL_NO_SOCK
 #endif
-#ifndef OPENSSL_NO_SRP
-# define OPENSSL_NO_SRP
-#endif
 #ifndef OPENSSL_NO_SSL_TRACE
 # define OPENSSL_NO_SSL_TRACE
 #endif
@@ -106,9 +100,6 @@ extern "C" {
 #endif
 #ifndef OPENSSL_NO_TLS1
 # define OPENSSL_NO_TLS1
-#endif
-#ifndef OPENSSL_NO_TLSEXT
-# define OPENSSL_NO_TLSEXT
 #endif
 #ifndef OPENSSL_NO_UNIT_TEST
 # define OPENSSL_NO_UNIT_TEST
@@ -170,9 +161,6 @@ extern "C" {
 # if defined(OPENSSL_NO_GOST) && !defined(NO_GOST)
 #  define NO_GOST
 # endif
-# if defined(OPENSSL_NO_HEARTBEATS) && !defined(NO_HEARTBEATS)
-#  define NO_HEARTBEATS
-# endif
 # if defined(OPENSSL_NO_JPAKE) && !defined(NO_JPAKE)
 #  define NO_JPAKE
 # endif
@@ -215,9 +203,6 @@ extern "C" {
 # if defined(OPENSSL_NO_SOCK) && !defined(NO_SOCK)
 #  define NO_SOCK
 # endif
-# if defined(OPENSSL_NO_SRP) && !defined(NO_SRP)
-#  define NO_SRP
-# endif
 # if defined(OPENSSL_NO_SSL_TRACE) && !defined(NO_SSL_TRACE)
 #  define NO_SSL_TRACE
 # endif
@@ -232,9 +217,6 @@ extern "C" {
 # endif
 # if defined(OPENSSL_NO_TLS1) && !defined(NO_TLS1)
 #  define NO_TLS1
-# endif
-# if defined(OPENSSL_NO_TLSEXT) && !defined(NO_TLSEXT)
-#  define NO_TLSEXT
 # endif
 # if defined(OPENSSL_NO_UNIT_TEST) && !defined(NO_UNIT_TEST)
 #  define NO_UNIT_TEST
@@ -253,8 +235,8 @@ extern "C" {
 
 #if !(defined(VMS) || defined(__VMS)) /* VMS uses logical names instead */
 #if defined(HEADER_CRYPTLIB_H) && !defined(OPENSSLDIR)
-#define ENGINESDIR "/home/johnh/Projects/mmdb/external/android-arm/lib/engines"
-#define OPENSSLDIR "/home/johnh/Projects/mmdb/external/android-arm"
+#define ENGINESDIR "/c/projects/wcdb/android/prebuilt/arm/lib/engines"
+#define OPENSSLDIR "/c/projects/wcdb/android/prebuilt/arm"
 #endif
 #endif
 
