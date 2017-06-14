@@ -39,7 +39,7 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteg
 /**
  @brief You can register a reporter to monitor all errors.
  
-     [WCTDatabase SetGlobalErrorReport:^(WCTError* error) {
+     [WCTStatictics SetGlobalErrorReport:^(WCTError* error) {
         NSLog(@"%@", error);
      }];
  
@@ -55,13 +55,13 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteg
         2. Time consuming in nanoseconds.
         3. Tag of database.
  
-     [WCTDatabase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
-         NSLog(@"Tag: %d", tag);
-         [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
-             NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
-         }];
-         NSLog(@"Total cost %lld nanoseconds", cost);
-     }];
+    [WCTStatictics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+        NSLog(@"Tag: %d", tag);
+        [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
+            NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
+        }];
+        NSLog(@"Total cost %ld nanoseconds", (long)cost);
+    }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
