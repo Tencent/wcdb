@@ -43,8 +43,8 @@
                                                const int64_t &cost) {
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             for (const auto &iter : footprint) {
-                [dictionary setObject:@(iter.first.c_str())
-                               forKey:@(iter.second)];
+                [dictionary setObject:@(iter.second)
+                               forKey:@(iter.first.c_str())];
             }
             trace(tag, dictionary, (NSUInteger) cost);
         });
