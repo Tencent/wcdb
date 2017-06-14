@@ -263,6 +263,8 @@
 		238A3A971EB8BAD500986614 /* WCTBenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A961EB8BAD500986614 /* WCTBenchmarkObject.mm */; };
 		238A3A9A1EB8BF9F00986614 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2393266D1E836EB000D677CC /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326551E836D4600D677CC /* sqlcipher.framework */; };
+		23943AE61EF1205000AF7FCA /* WCTSampleStatictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23943AE51EF1205000AF7FCA /* WCTSampleStatictics.mm */; };
+		23943AE91EF1205C00AF7FCA /* sample_statictics_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23943AE81EF1205C00AF7FCA /* sample_statictics_main.mm */; };
 		23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+Database.h */; };
 		23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */; };
 		23B4F0561ECD8E0B00D45BB1 /* ticker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */; };
@@ -616,6 +618,10 @@
 		238A3A961EB8BAD500986614 /* WCTBenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBenchmarkObject.mm; sourceTree = "<group>"; };
 		2392783B1EA5C8CF000DB690 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		23943AE41EF1205000AF7FCA /* WCTSampleStatictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleStatictics.h; sourceTree = "<group>"; };
+		23943AE51EF1205000AF7FCA /* WCTSampleStatictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSampleStatictics.mm; sourceTree = "<group>"; };
+		23943AE71EF1205C00AF7FCA /* sample_statictics_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sample_statictics_main.h; sourceTree = "<group>"; };
+		23943AE81EF1205C00AF7FCA /* sample_statictics_main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = sample_statictics_main.mm; sourceTree = "<group>"; };
 		23B31B331EB97B480092EA80 /* WCTTable+Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Database.h"; sourceTree = "<group>"; };
 		23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ticker.cpp; sourceTree = "<group>"; };
 		23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ticker.hpp; sourceTree = "<group>"; };
@@ -1145,6 +1151,18 @@
 			path = Benchmark;
 			sourceTree = "<group>";
 		};
+		23943AE21EF1204400AF7FCA /* statictics */ = {
+			isa = PBXGroup;
+			children = (
+				23943AE41EF1205000AF7FCA /* WCTSampleStatictics.h */,
+				23943AE51EF1205000AF7FCA /* WCTSampleStatictics.mm */,
+				23943AE71EF1205C00AF7FCA /* sample_statictics_main.h */,
+				23943AE81EF1205C00AF7FCA /* sample_statictics_main.mm */,
+			);
+			name = statictics;
+			path = sample/statictics;
+			sourceTree = SOURCE_ROOT;
+		};
 		23B5F75A1E1111C100E58396 = {
 			isa = PBXGroup;
 			children = (
@@ -1204,6 +1222,7 @@
 		23D5CCFE1EB8616D00A5B8F9 /* Sample */ = {
 			isa = PBXGroup;
 			children = (
+				23943AE21EF1204400AF7FCA /* statictics */,
 				23BC476C1EDEAFA90057E849 /* core */,
 				23BC46DC1EDE6E2E0057E849 /* repair */,
 				238A3A4D1EB8A97F00986614 /* table */,
@@ -1729,6 +1748,7 @@
 				23BC47701EDEAFB50057E849 /* sample_core_main.mm in Sources */,
 				238A3A541EB8A9A700986614 /* sample_table_main.mm in Sources */,
 				23D5CD461EB876DB00A5B8F9 /* WCTSampleORM.mm in Sources */,
+				23943AE91EF1205C00AF7FCA /* sample_statictics_main.mm in Sources */,
 				23D5CD6B1EB88D0200A5B8F9 /* sample_chaincall_main.mm in Sources */,
 				23D5CD6E1EB8905A00A5B8F9 /* sample_file_main.mm in Sources */,
 				23D5CD711EB8909000A5B8F9 /* WCTSampleFile.mm in Sources */,
@@ -1737,6 +1757,7 @@
 				238A3A681EB8B32300986614 /* WCTSampleColumnCoding.mm in Sources */,
 				238A3A571EB8AC6200986614 /* WCTSampleTransaction.mm in Sources */,
 				238A3A5A1EB8AC6F00986614 /* sample_transaction_main.mm in Sources */,
+				23943AE61EF1205000AF7FCA /* WCTSampleStatictics.mm in Sources */,
 				238A3A631EB8B10A00986614 /* WCTSampleAdvanceMulti.mm in Sources */,
 				23BC46E21EDE6E2E0057E849 /* WCTSampleRepair.mm in Sources */,
 			);
