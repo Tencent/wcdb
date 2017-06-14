@@ -28,7 +28,7 @@
 
 @implementation WCTSelectBase
 
-- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTable:(NSString *)tableName
+- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
 {
     if (self = [super init]) {
         if (resultList.size() == 0) {
@@ -36,11 +36,15 @@
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
                                          WCDB::Error::InterfaceCode::NilObject,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableName].UTF8String,
+                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableNames].UTF8String,
                                          &_error);
             return self;
         }
-        _statement.select(resultList, resultList.isDistinct()).from(tableName.UTF8String);
+        WCDB::SubqueryList subqueryList;
+        for (NSString *tableName in tableNames) {
+            subqueryList.push_back(tableName.UTF8String);
+        }
+        _statement.select(resultList, resultList.isDistinct()).from(subqueryList);
     }
     return self;
 }

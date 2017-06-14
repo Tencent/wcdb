@@ -33,7 +33,7 @@
  @param tableName The name of the table to be used to do a selection
  @return self
  */
-- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTable:(NSString *)tableName;
+- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames;
 
 /**
  WINQ interface for SQL.
