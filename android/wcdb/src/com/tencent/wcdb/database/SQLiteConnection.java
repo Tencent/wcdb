@@ -18,6 +18,7 @@ package com.tencent.wcdb.database;
 
 
 import android.annotation.SuppressLint;
+import android.os.Process;
 import android.util.Printer;
 
 import com.tencent.wcdb.BuildConfig;
@@ -109,6 +110,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private long mConnectionPtr;
 
     private boolean mOnlyAllowReadOnlyOperations;
+    private int mLastAcquireTid;
+    private StackTraceElement[] mLastAcquireStackTrace;
 
     // The number of times attachCancellationSignal has been called.
     // Because SQLite statement execution can be reentrant, we keep track of how many
@@ -515,6 +518,18 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     // Returns true if the prepared statement cache contains the specified SQL.
     boolean isPreparedStatementInCache(String sql) {
         return mPreparedStatementCache.get(sql) != null;
+    }
+
+    // Called by SQLiteConnectionPool only.
+    // Records stack trace of the current (calling) thread.
+    void recordAcquireStackTrace(boolean acquire) {
+        if (acquire) {
+            mLastAcquireTid = Process.myTid();
+            mLastAcquireStackTrace = Thread.currentThread().getStackTrace();
+        } else {
+            mLastAcquireTid = 0;
+            mLastAcquireStackTrace = null;
+        }
     }
 
 
@@ -1125,6 +1140,16 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
         printer.println("  isPrimaryConnection: " + mIsPrimaryConnection);
         printer.println("  onlyAllowReadOnlyOperations: " + mOnlyAllowReadOnlyOperations);
+
+        if (mLastAcquireTid != 0) {
+            printer.println("  lastAcquireTid: " + mLastAcquireTid);
+        }
+        if (mLastAcquireStackTrace != null && mLastAcquireStackTrace.length > 0) {
+            printer.println("  lastAcquireStackTrace:");
+            for (StackTraceElement e : mLastAcquireStackTrace) {
+                printer.println("    at " + e.toString());
+            }
+        }
 
         mRecentOperations.dump(printer, verbose);
 
