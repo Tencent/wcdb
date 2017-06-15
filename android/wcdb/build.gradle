@@ -26,8 +26,10 @@ android {
                     hasBuildInfo = arguments.add('WX_BUILD_TIME=\'' + rootProject.WX_BUILD_TIME + '\'')
                 if (rootProject.hasProperty("WX_BUILD_JOB"))
                     hasBuildInfo = arguments.add('WX_BUILD_JOB=\'' + rootProject.WX_BUILD_JOB + '\'')
-                if (hasBuildInfo)
+                if (hasBuildInfo) {
+                    arguments.add('WX_BUILD_VERSION=\'' + rootProject.VERSION_NAME + '\'')
                     arguments.add('WITH_BUILD_INFO=1')
+                }
             }
         }
     }
@@ -89,6 +91,8 @@ android.libraryVariants.all { variant ->
             //addStringOption('federate Android', 'http://d.android.com/reference')
             //addStringOption('federationxml Android', rootProject.file('gradle/android-10.xml').path)
         }
+
+        dependsOn "generate${variant.name.capitalize()}Sources"
     }
 
     // emit Javadoc bundling task
@@ -102,7 +106,20 @@ android.libraryVariants.all { variant ->
     task("bundle${variant.name.capitalize()}Sources", type: Jar) {
         classifier = 'sources'
         from variant.javaCompile.source
+        dependsOn "generate${variant.name.capitalize()}Sources"
+    }
+
+    task("bundle${variant.name.capitalize()}NativeSymbols", type: Jar) {
+        def nativeBuildTask = project.tasks.findByName("externalNativeBuild${variant.name.capitalize()}")
+
+        classifier = 'symbols'
+        from nativeBuildTask.getObjFolder()
+        include '**/*.so'
+        dependsOn nativeBuildTask
     }
 }
 
 apply from: 'bintray.gradle'
+
+if (file('local.gradle').isFile())
+    apply from: 'local.gradle'
