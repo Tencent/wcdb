@@ -30,7 +30,7 @@
  WINQ interface for virtual SQL to do a subquery.
 
  @param resultList The column results to be selected
- @param tableName The name of the table to be used to do a selection
+ @param tableNames The names of the table to be used to do a selection
  @return self
  */
 - (instancetype)initWithResultList:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames;
