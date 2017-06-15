@@ -47,7 +47,7 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
   3. Add `WCDB.framework` to the `Target Dependencies` section and `Linked Binary and Libraries` of your Xcode project's `Build Phases" settings;
   4. Add `WCDB.framework` to the "Enbedded Binaries" section of your Xcode project's "General" settings;
   5. Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and start your WCDB journey.
-  6. **Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.
+  6. **Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.**
 
 ## Tutorials
 
