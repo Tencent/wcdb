@@ -33,6 +33,7 @@ void sample_statictics_main(NSString *baseDirectory)
     }];
 
     //trace
+    //You should register trace before all db operation.
     [WCTStatictics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString *, NSNumber *> *sqls, NSInteger cost) {
       NSLog(@"Tag: %d", tag);
       [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {

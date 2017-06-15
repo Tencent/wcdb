@@ -64,7 +64,6 @@ public:
     void setConfig(Config config, bool enable);
 
     void setTrace(const Trace &trace);
-    static void SetGlobalTrace(const Trace &trace);
 
     bool backup(const void *key = nullptr, const unsigned int &length = 0);
     bool recoverFromPath(const std::string &corruptedDBPath,
