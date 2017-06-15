@@ -33,10 +33,6 @@
 
 - (WCTTable *)getTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls
 {
-    WCDB::Error innerError;
-    if (![self isTableExists:tableName withError:innerError]) {
-        return nil;
-    }
     return [[WCTTable alloc] initWithCore:_core andTableName:tableName andClass:cls];
 }
 
