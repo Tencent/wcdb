@@ -2260,7 +2260,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
-    private void dump(Printer printer, boolean verbose) {
+    public void dump(Printer printer, boolean verbose) {
         synchronized (mLock) {
             if (mConnectionPoolLocked != null) {
                 mConnectionPoolLocked.dump(printer, verbose);
