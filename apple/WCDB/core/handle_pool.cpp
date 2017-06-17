@@ -189,7 +189,7 @@ bool HandlePool::fillOne(Error &error)
         }
     }
     m_rwlock.unlockRead();
-    return false;
+    return result;
 }
 
 bool HandlePool::invoke(std::shared_ptr<HandleWrap> &handleWrap, Error &error)
