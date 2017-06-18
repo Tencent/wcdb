@@ -67,7 +67,7 @@ public class EncryptedDBHelper extends SQLiteOpenHelper {
             db.endTransaction();
 
             // Attach old database to the newly created, encrypted database.
-            String sql = String.format("ATTACH DATABASE %s AS old;",
+            String sql = String.format("ATTACH DATABASE %s AS old KEY '';",
                     DatabaseUtils.sqlEscapeString(oldDbFile.getPath()));
             db.execSQL(sql);
 
