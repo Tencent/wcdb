@@ -21,6 +21,10 @@
 #ifndef WCDB_h
 #define WCDB_h
 
+#ifndef __cplusplus
+#error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension .m to .mm.
+#endif
+
 #import <WCDB/WINQ.h>
 
 #import <WCDB/WCTMaster.h>
