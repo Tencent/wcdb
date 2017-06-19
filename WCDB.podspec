@@ -1,6 +1,6 @@
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
-  wcdb.version      = "1.0.0"
+  wcdb.version      = "1.0.1"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by Wechat."
   wcdb.description  = <<-DESC
                       WCDB is an efficient, complete, easy-to-use mobile database framework used in the WeChat application.
@@ -9,8 +9,8 @@ Pod::Spec.new do |wcdb|
   wcdb.homepage     = "https://github.com/Tencent/wcdb"
   wcdb.license      = { :type => "BSD", :file => "LICENSE.txt"}
   wcdb.author             = { "sanhuazhang" => "sanhuazhang@tencent.com" }
-  wcdb.ios.deployment_target = "8.0"
-  wcdb.osx.deployment_target = "10.10"
+  wcdb.ios.deployment_target = "7.0"
+  wcdb.osx.deployment_target = "10.9"
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}", :submodules => true }
