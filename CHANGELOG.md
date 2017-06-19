@@ -2,9 +2,15 @@
 
 #### iOS
 
+* Add `cocoapods` support.
+* Add iOS 7 and macOS 10.9 support. Apps using WCDB can target to iOS 7 now.
+* Fix an issue that `[WCTDatabase canOpen]` never return YES.
+* Fix an issue that the global tracer return some odd values.
+* Add `@autoreleasepool` in `runTransaction` to avoid OOM.
+
 #### Android
 
-  * Add `x86_64` ABI support.
+* Add `x86_64` ABI support.
   * Publish debug version of AAR and native symbols. To reference debug version of WCDB library, modify your `build.gradle`
 
 ```gradle
@@ -14,7 +20,7 @@ dependencies {
 }
 ```
 
-  * Various bug fixes.
+* Various bug fixes.
 
 ## v1.0.0
 
