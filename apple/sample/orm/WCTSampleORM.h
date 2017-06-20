@@ -26,9 +26,11 @@
 @property int identifier;
 @property(retain) NSString *desc;
 @property float value;
+@property(retain) NSString *timestamp;
 
 WCDB_PROPERTY(identifier)
 WCDB_PROPERTY(desc)
 WCDB_PROPERTY(value)
+WCDB_PROPERTY(timestamp)
 
 @end

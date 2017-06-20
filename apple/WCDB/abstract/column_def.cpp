@@ -96,6 +96,23 @@ ColumnDef &ColumnDef::makeDefault(const Expr &expr)
     return *this;
 }
 
+ColumnDef &ColumnDef::makeDefault(DefaultType defaultType)
+{
+    m_description.append(" DEFAULT ");
+    switch (defaultType) {
+        case DefaultType::CurrentDate:
+            m_description.append("CURRENT_DATE");
+            break;
+        case DefaultType::CurrentTime:
+            m_description.append("CURRENT_TIME");
+            break;
+        case DefaultType::CurrentTimestamp:
+            m_description.append("CURRENT_TIMESTAMP");
+            break;
+    }
+    return *this;
+}
+
 ColumnDef &ColumnDef::makeNotNull()
 {
     m_description.append(" NOT NULL");
