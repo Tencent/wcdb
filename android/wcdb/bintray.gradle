@@ -85,6 +85,10 @@ afterEvaluate {
         artifact(bundleRelease)
         artifact(bundleReleaseJavadoc)
         artifact(bundleReleaseSources)
+        artifact(bundleReleaseNativeSymbols)
+
+        artifact(bundleDebug)
+        artifact(bundleDebugNativeSymbols)
     }
 
     tasks.withType(PublishToMavenRepository) { task ->

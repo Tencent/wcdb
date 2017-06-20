@@ -22,7 +22,7 @@ SQLCIPHER_CONFIG="--disable-shared --enable-static \
   --enable-tempstore=always --enable-threadsafe=multi --disable-tcl"
 
 USE_CLANG=0
-BUILD_ARCHS="arm,arm64,x86"
+BUILD_ARCHS="arm,arm64,x86,x86_64"
 BUILD_API=12
 BUILD_PIE=1
 BUILD_CRYPTO=1
@@ -181,6 +181,14 @@ for android_arch in $BUILD_ARCHS; do
       android_cflags="-O2 -fPIC"
       openssl_conf="linux-elf"
       ;;
+    x86_64)
+      android_eabi=x86_64
+      gcc_prefix=x86_64-linux-android
+      clang-target=x86_64-none-linux-android
+      android_api=21
+      android_cflags="-O2 -fPIC"
+      openssl_conf="linux-x86_64"
+      ;;
     *)
       echo "Unsupported architecture: $android_arch"
       exit 1
@@ -234,7 +242,6 @@ for android_arch in $BUILD_ARCHS; do
     LDFLAGS="-L$android_prefix/lib $SQLCIPHER_LDFLAGS $android_pie" \
     ./configure --host="$gcc_prefix" --prefix="$android_prefix" $SQLCIPHER_CONFIG || exit 1
     make all install || exit 1
-    cp sqlite3.c "$android_prefix/sqlite3.c"
     make distclean || exit 1
     cd ..
   fi

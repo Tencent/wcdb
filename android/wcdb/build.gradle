@@ -14,7 +14,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
+                abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 arguments '-j2'
 
                 def hasBuildInfo = false;
@@ -26,8 +26,10 @@ android {
                     hasBuildInfo = arguments.add('WX_BUILD_TIME=\'' + rootProject.WX_BUILD_TIME + '\'')
                 if (rootProject.hasProperty("WX_BUILD_JOB"))
                     hasBuildInfo = arguments.add('WX_BUILD_JOB=\'' + rootProject.WX_BUILD_JOB + '\'')
-                if (hasBuildInfo)
+                if (hasBuildInfo) {
+                    arguments.add('WX_BUILD_VERSION=\'' + rootProject.VERSION_NAME + '\'')
                     arguments.add('WITH_BUILD_INFO=1')
+                }
             }
         }
     }
@@ -60,7 +62,11 @@ android {
     }
 
     defaultPublishConfig 'release'
-    //publishNonDefault true
+    publishNonDefault true
+
+    lintOptions {
+        disable 'OldTargetApi', 'GradleDependency'
+    }
 }
 
 dependencies {
@@ -69,9 +75,12 @@ dependencies {
 
 android.libraryVariants.all { variant ->
 
+    def varName = variant.name
+    def cvarName = varName.capitalize()
+
     // emit Javadoc generation task
-    def genJavadocTask = task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-        description "Generates Javadoc for $variant.name."
+    def genJavadocTask = task("generate${cvarName}Javadoc", type: Javadoc) {
+        description "Generates Javadoc for ${varName}."
         source = variant.javaCompile.source
         ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
         classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
@@ -89,20 +98,44 @@ android.libraryVariants.all { variant ->
             //addStringOption('federate Android', 'http://d.android.com/reference')
             //addStringOption('federationxml Android', rootProject.file('gradle/android-10.xml').path)
         }
+
+        dependsOn "generate${cvarName}Sources"
     }
 
     // emit Javadoc bundling task
-    task("bundle${variant.name.capitalize()}Javadoc", type: Jar) {
+    task("bundle${cvarName}Javadoc", type: Jar) {
         classifier = 'javadoc'
         from genJavadocTask.destinationDir
         dependsOn genJavadocTask
     }
 
     // emit source bundling task
-    task("bundle${variant.name.capitalize()}Sources", type: Jar) {
+    task("bundle${cvarName}Sources", type: Jar) {
         classifier = 'sources'
         from variant.javaCompile.source
+        dependsOn "generate${cvarName}Sources"
+    }
+
+    // emit native symbols bundling task
+    def bundleSymTask = task("bundle${cvarName}NativeSymbols", type: Zip) {
+        def nativeBuildTask = project.tasks.findByName("externalNativeBuild${cvarName}")
+
+        from nativeBuildTask.getObjFolder()
+        include '**/*.so'
+        dependsOn nativeBuildTask
+    }
+
+    def bundleTask = project.tasks.findByName("bundle${cvarName}")
+    if (varName != 'release') {
+        bundleTask.classifier = varName
+        bundleSymTask.classifier = "${varName}Symbols"
+    } else {
+        bundleTask.classifier = ''
+        bundleSymTask.classifier = 'symbols'
     }
 }
 
 apply from: 'bintray.gradle'
+
+if (file('local.gradle').isFile())
+    apply from: 'local.gradle'

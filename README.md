@@ -75,6 +75,7 @@ Tutorials can be found [here][iOS-tutorial].
 * Repair toolkit for database corruption recovery.
 * Database backup and recovery utility optimized for small backup size.
 * Log redirection and various tracing facilities.
+* API 12 (Android 3.1) and above are supported.
 
 ## Getting Started
 

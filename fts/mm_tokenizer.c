@@ -22,12 +22,13 @@
 #include "mm_fts.h"
 #include <icucompat.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unicode/ubrk.h>
 #include <unicode/unorm.h>
 #include <unicode/utf16.h>
 #include <unicode/utf8.h>
-//#include <android/log.h>
+
 
 #ifdef _WIN32
 #include <malloc.h>
@@ -158,8 +159,6 @@ static int output_token(mm_cursor_t *cur,
     *piEndOffset = cur->in_offset[end];
     *piPosition = cur->token_count++;
 
-    //__android_log_print(ANDROID_LOG_VERBOSE, "TOKENIZER", "> %s, %d, %d, %d, %d",
-    //		*ppToken, *pnBytes, *piStartOffset, *piEndOffset, *piPosition);
     return SQLITE_OK;
 }
 

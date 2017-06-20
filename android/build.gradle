@@ -15,7 +15,9 @@ buildscript {
     repositories {
         if (project.hasProperty('ADDITIONAL_REPOSITORIES')) {
             for (def repo : project.getProperty('ADDITIONAL_REPOSITORIES').split(';')) {
-                repositories.maven.url repo
+                maven {
+                    url repo
+                }
             }
         }
         jcenter()
@@ -35,7 +37,9 @@ allprojects {
     repositories {
         if (project.hasProperty('ADDITIONAL_REPOSITORIES')) {
             for (def repo : project.getProperty('ADDITIONAL_REPOSITORIES').split(';')) {
-                repositories.maven.url repo
+                maven {
+                    url repo
+                }
             }
         }
         jcenter()

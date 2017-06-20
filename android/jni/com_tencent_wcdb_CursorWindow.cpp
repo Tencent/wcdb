@@ -469,7 +469,7 @@ static jboolean nativePutLong(JNIEnv *env,
         return false;
     }
 
-    LOG_WINDOW("%d,%d is INTEGER 0x%016llx", row, column, value);
+    LOG_WINDOW("%d,%d is INTEGER 0x%016" PRIx64, row, column, (uint64_t) value);
     return true;
 }
 
