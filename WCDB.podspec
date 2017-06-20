@@ -1,5 +1,5 @@
 # pod spec lint --verbose --skip-import-validation
-# pod trunk push WCDB.podspec 
+# pod trunk push WCDB.podspec --verbose --skip-import-validation
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
   wcdb.version      = "1.0.1"
@@ -9,7 +9,7 @@ Pod::Spec.new do |wcdb|
                       It can be a replacement for Core Data, SQLite & FMDB.
                       DESC
   wcdb.homepage     = "https://github.com/Tencent/wcdb"
-  wcdb.license      = { :type => "BSD", :file => "LICENSE.txt"}
+  wcdb.license      = { :type => "BSD", :file => "LICENSE"}
   wcdb.author             = { "sanhuazhang" => "sanhuazhang@tencent.com" }
   wcdb.ios.deployment_target = "7.0"
   wcdb.osx.deployment_target = "10.9"
