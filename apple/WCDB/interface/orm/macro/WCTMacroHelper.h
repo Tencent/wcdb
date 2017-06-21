@@ -51,11 +51,3 @@
 
 #define _WCDB_STRINGIFY(str) #str
 #define WCDB_STRINGIFY(str) _WCDB_STRINGIFY(str)
-
-#ifdef DEBUG
-#define WCDB_PROPERTY_HINT(className, propertyName)                            \
-    static const auto UNUSED_UNIQUE_ID __attribute__((unused)) =               \
-        sizeof([[className new] propertyName]);
-#else
-#define WCDB_PROPERTY_HINT(className, propertyName)
-#endif
