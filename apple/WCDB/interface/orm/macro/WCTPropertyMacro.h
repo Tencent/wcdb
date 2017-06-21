@@ -19,14 +19,13 @@
  */
 
 #define __WCDB_PROPERTY_TYPE(className, propertyName)                          \
-    decltype([[className new] propertyName])
+    decltype([className new].propertyName)
 
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
 #define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
-        WCDB_PROPERTY_HINT(className, propertyName)                            \
         static const WCTProperty s_property(                                   \
             columnName, className.class,                                       \
             __WCDB_BINDING(className)                                          \
