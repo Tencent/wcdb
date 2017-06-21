@@ -17,25 +17,11 @@
 package com.tencent.wcdb.database;
 
 import android.content.ContentValues;
+import android.os.Build;
 import android.os.Looper;
 import android.text.TextUtils;
-
-import com.tencent.wcdb.support.Log;
-
 import android.util.Pair;
 import android.util.Printer;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 import com.tencent.wcdb.Cursor;
 import com.tencent.wcdb.DatabaseErrorHandler;
@@ -44,7 +30,19 @@ import com.tencent.wcdb.DefaultDatabaseErrorHandler;
 import com.tencent.wcdb.SQLException;
 import com.tencent.wcdb.database.SQLiteDebug.DbStats;
 import com.tencent.wcdb.support.CancellationSignal;
+import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.OperationCanceledException;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * Exposes methods to manage a SQLite database.
@@ -1609,17 +1607,18 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
     @SuppressWarnings("unchecked")
     private Set<String> keySet(ContentValues cv) {
-        HashMap<String, Object> mValues = null;
-        try {
-            Class<?> cls = Class.forName("android.content.ContentValues");
-            Field fd = cls.getDeclaredField("mValues");
-            fd.setAccessible(true);
-            mValues = (HashMap<String, Object>) fd.get(cv);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (Build.VERSION.SDK_INT < 11) {
+            try {
+                Class<?> cls = Class.forName("android.content.ContentValues");
+                Field fd = cls.getDeclaredField("mValues");
+                fd.setAccessible(true);
+                return ((HashMap<String, Object>) fd.get(cv)).keySet();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return cv.keySet();
         }
-        return mValues.keySet();
     }
 
     /**
