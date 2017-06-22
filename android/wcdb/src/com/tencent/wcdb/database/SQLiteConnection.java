@@ -190,7 +190,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
         if (operation != null && mNativeOperation == null) {
             mNativeOperation = mRecentOperations.beginOperation(operation, null, null);
-            mNativeOperation.bindStamentType(DatabaseUtils.STATEMENT_OTHER);
+            mNativeOperation.mType = DatabaseUtils.STATEMENT_OTHER;
         }
 
         mNativeHandleCount++;
@@ -582,7 +582,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         final int cookie = operation.mCookie;
         try {
             final PreparedStatement statement = acquirePreparedStatement(sql);
-            operation.bindStamentType(statement.mType);
+            operation.mType = statement.mType;
             try {
                 if (outStatementInfo != null) {
                     outStatementInfo.numParameters = statement.mNumParameters;
@@ -635,7 +635,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         final int cookie = operation.mCookie;
         try {
             final PreparedStatement statement = acquirePreparedStatement(sql);
-            operation.bindStamentType(statement.mType);
+            operation.mType = statement.mType;
             try {
                 throwIfStatementForbidden(statement);
                 bindArguments(statement, bindArgs);
@@ -685,7 +685,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         final int cookie = operation.mCookie;
         try {
             final PreparedStatement statement = acquirePreparedStatement(sql);
-            operation.bindStamentType(statement.mType);
+            operation.mType = statement.mType;
             try {
                 throwIfStatementForbidden(statement);
                 bindArguments(statement, bindArgs);
@@ -734,7 +734,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         final int cookie = operation.mCookie;
         try {
             final PreparedStatement statement = acquirePreparedStatement(sql);
-            operation.bindStamentType(statement.mType);
+            operation.mType = statement.mType;
             try {
                 throwIfStatementForbidden(statement);
                 bindArguments(statement, bindArgs);
@@ -785,7 +785,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         final int cookie = operation.mCookie;
         try {
             final PreparedStatement statement = acquirePreparedStatement(sql);
-            operation.bindStamentType(statement.mType);
+            operation.mType = statement.mType;
             try {
                 throwIfStatementForbidden(statement);
                 bindArguments(statement, bindArgs);
@@ -838,7 +838,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         final int cookie = operation.mCookie;
         try {
             final PreparedStatement statement = acquirePreparedStatement(sql);
-            operation.bindStamentType(statement.mType);
+            operation.mType = statement.mType;
             try {
                 throwIfStatementForbidden(statement);
                 bindArguments(statement, bindArgs);
@@ -886,7 +886,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             final int cookie = operation.mCookie;
             try {
                 final PreparedStatement statement = acquirePreparedStatement(sql);
-                operation.bindStamentType(statement.mType);
+                operation.mType = statement.mType;
                 try {
                     throwIfStatementForbidden(statement);
                     bindArguments(statement, bindArgs);
@@ -1378,7 +1378,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             if (connection == null) return;
 
             mOperation = connection.mRecentOperations.beginOperation(kind, mSql, bindArgs);
-            mOperation.bindStamentType(mType);
+            mOperation.mType = mType;
         }
 
         public void failOperation(Exception ex) {
@@ -1499,27 +1499,53 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
 
         public void endOperation(int cookie) {
+            final Operation operation;
+            final String sql;
+            final int type;
+            final long elapsedTimeMillis;
+
             synchronized (mOperations) {
-                if (endOperationDeferLogLocked(cookie)) {
-                    logOperationLocked(cookie, null);
+                operation = getOperationLocked(cookie);
+                sql = operation.mSql;
+                type = operation.mType;
+                elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
+
+                if (endOperationDeferLogLocked(operation)) {
+                    logOperationLocked(operation, null);
                 }
             }
+
+            mPool.traceExecute(sql, type, elapsedTimeMillis);
         }
 
         public boolean endOperationDeferLog(int cookie) {
+            final Operation operation;
+            final String sql;
+            final int type;
+            final long elapsedTimeMillis;
+            final boolean result;
+
             synchronized (mOperations) {
-                return endOperationDeferLogLocked(cookie);
+                operation = getOperationLocked(cookie);
+                sql = operation.mSql;
+                type = operation.mType;
+                elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
+
+                result = endOperationDeferLogLocked(operation);
             }
+
+            mPool.traceExecute(sql, type, elapsedTimeMillis);
+            return result;
         }
 
         public void logOperation(int cookie, String detail) {
             synchronized (mOperations) {
-                logOperationLocked(cookie, detail);
+                final Operation operation = getOperationLocked(cookie);
+                logOperationLocked(operation, detail);
             }
         }
 
-        private boolean endOperationDeferLogLocked(int cookie) {
-            final Operation operation = getOperationLocked(cookie);
+        private boolean endOperationDeferLogLocked(final Operation operation) {
             if (operation != null) {
                 operation.mEndTime = System.currentTimeMillis();
                 operation.mFinished = true;
@@ -1528,15 +1554,13 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 }
 
                 long elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
-                mPool.traceExecute(operation.mSql, operation.type, elapsedTimeMillis);
                 return SQLiteDebug.shouldLogSlowQuery(elapsedTimeMillis);
             }
             return false;
         }
 
 
-        private void logOperationLocked(int cookie, String detail) {
-            final Operation operation = getOperationLocked(cookie);
+        private void logOperationLocked(final Operation operation, String detail) {
             StringBuilder msg = new StringBuilder();
             operation.describe(msg, false);
             if (detail != null) {
@@ -1611,7 +1635,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         public boolean mFinished;
         public Exception mException;
         public int mCookie;
-        public int type;
+        public int mType;
 
         public void describe(StringBuilder msg, boolean verbose) {
             msg.append(mKind);
@@ -1649,11 +1673,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 msg.append(", exception=\"").append(mException.getMessage()).append("\"");
             }
         }
-
-        public void bindStamentType(int type) {
-            this.type = type;
-        }
-
 
         private String getStatus() {
             if (!mFinished) {
