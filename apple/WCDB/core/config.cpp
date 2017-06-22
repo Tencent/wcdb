@@ -38,51 +38,47 @@ void Configs::setConfig(const std::string &name,
                         const Config &config,
                         Configs::Order order)
 {
-    if (config != nullptr) {
-        std::shared_ptr<ConfigList> configs = m_configs;
-        std::shared_ptr<ConfigList> newConfigs(new ConfigList);
-        bool inserted = false;
-        for (const auto &wrap : *configs.get()) {
-            if (!inserted && order < wrap.order) {
-                newConfigs->push_back({name, config, order});
-                inserted = true;
-            } else if (name != wrap.name) {
-                newConfigs->push_back(wrap);
-            }
-        }
-        if (!inserted) {
+    std::shared_ptr<ConfigList> configs = m_configs;
+    std::shared_ptr<ConfigList> newConfigs(new ConfigList);
+    bool inserted = false;
+    for (const auto &wrap : *configs.get()) {
+        if (!inserted && order < wrap.order) {
             newConfigs->push_back({name, config, order});
+            inserted = true;
+        } else if (name != wrap.name) {
+            newConfigs->push_back(wrap);
         }
-        m_configs = newConfigs;
     }
+    if (!inserted) {
+        newConfigs->push_back({name, config, order});
+    }
+    m_configs = newConfigs;
 }
 
 void Configs::setConfig(const std::string &name, const Config &config)
 {
-    if (config != nullptr) {
-        std::shared_ptr<ConfigList> configs = m_configs;
-        std::shared_ptr<ConfigList> newConfigs(new ConfigList);
-        bool inserted = false;
-        for (const auto &wrap : *configs.get()) {
-            if (name != wrap.name) {
-                newConfigs->push_back(wrap);
-            } else {
-                newConfigs->push_back({name, config, wrap.order});
-                inserted = true;
-            }
+    std::shared_ptr<ConfigList> configs = m_configs;
+    std::shared_ptr<ConfigList> newConfigs(new ConfigList);
+    bool inserted = false;
+    for (const auto &wrap : *configs.get()) {
+        if (name != wrap.name) {
+            newConfigs->push_back(wrap);
+        } else {
+            newConfigs->push_back({name, config, wrap.order});
+            inserted = true;
         }
-        if (!inserted) {
-            newConfigs->push_back({name, config, INT_MAX});
-        }
-        m_configs = newConfigs;
     }
+    if (!inserted) {
+        newConfigs->push_back({name, config, INT_MAX});
+    }
+    m_configs = newConfigs;
 }
 
 bool Configs::invoke(std::shared_ptr<Handle> &handle, Error &error)
 {
     std::shared_ptr<ConfigList> configs = m_configs;
     for (const auto &config : *configs.get()) {
-        if (!config.invoke(handle, error)) {
+        if (config.invoke && !config.invoke(handle, error)) {
             return false;
         }
     }
