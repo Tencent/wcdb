@@ -31,6 +31,18 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
 @interface WCTDatabase (Core)
 
 /**
+ @brief Default config name. 
+        The default config for WCDB is :
+        1. PRAGMA locking_mode=NORMAL
+        2. PRAGMA journal_mode=WAL
+        3. PRAGMA synchronous=FULL
+        4. PRAGMA fullfsync=ON
+        Setting config for this name will overwrite the default config.
+ @return default config name
+ */
++ (NSString *)DefaultConfigName;
+
+/**
  @brief Set config for this database.  
  @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.  
  

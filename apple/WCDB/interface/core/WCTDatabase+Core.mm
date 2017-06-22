@@ -23,6 +23,11 @@
 
 @implementation WCTDatabase (Core)
 
++ (NSString *)DefaultConfigName
+{
+    return @(WCDB::Database::defaultConfigName.c_str());
+}
+
 - (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name withOrder:(WCDB::Configs::Order)order
 {
     _database->setConfig(name.UTF8String, invoke, order);
