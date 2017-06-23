@@ -257,11 +257,6 @@
 		238A3A631EB8B10A00986614 /* WCTSampleAdvanceMulti.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A621EB8B10A00986614 /* WCTSampleAdvanceMulti.mm */; };
 		238A3A651EB8B31400986614 /* WCTSampleColumnCoding+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A641EB8B31400986614 /* WCTSampleColumnCoding+WCDB.mm */; };
 		238A3A681EB8B32300986614 /* WCTSampleColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A671EB8B32300986614 /* WCTSampleColumnCoding.mm */; };
-		238A3A831EB8B5A700986614 /* benchmark_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A821EB8B5A700986614 /* benchmark_main.mm */; };
-		238A3A8B1EB8B63300986614 /* WCTBenchmarkStaticstic.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A8A1EB8B63300986614 /* WCTBenchmarkStaticstic.mm */; };
-		238A3A8E1EB8B63F00986614 /* benchmark_normal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A8D1EB8B63F00986614 /* benchmark_normal.mm */; };
-		238A3A971EB8BAD500986614 /* WCTBenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A3A961EB8BAD500986614 /* WCTBenchmarkObject.mm */; };
-		238A3A9A1EB8BF9F00986614 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2393266D1E836EB000D677CC /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326551E836D4600D677CC /* sqlcipher.framework */; };
 		23943AE61EF1205000AF7FCA /* WCTSampleStatictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23943AE51EF1205000AF7FCA /* WCTSampleStatictics.mm */; };
 		23943AE91EF1205C00AF7FCA /* sample_statictics_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23943AE81EF1205C00AF7FCA /* sample_statictics_main.mm */; };
@@ -548,13 +543,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		238A3A981EB8BF9B00986614 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
 		239326541E836D4600D677CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */;
@@ -586,15 +574,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		238A3A7E1EB8B5A700986614 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 		23D5CCFB1EB8616D00A5B8F9 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -868,14 +847,6 @@
 		238A3A641EB8B31400986614 /* WCTSampleColumnCoding+WCDB.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTSampleColumnCoding+WCDB.mm"; sourceTree = "<group>"; };
 		238A3A661EB8B32300986614 /* WCTSampleColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleColumnCoding.h; sourceTree = "<group>"; };
 		238A3A671EB8B32300986614 /* WCTSampleColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSampleColumnCoding.mm; sourceTree = "<group>"; };
-		238A3A801EB8B5A700986614 /* Benchmark */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Benchmark; sourceTree = BUILT_PRODUCTS_DIR; };
-		238A3A821EB8B5A700986614 /* benchmark_main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = benchmark_main.mm; sourceTree = "<group>"; };
-		238A3A891EB8B63300986614 /* WCTBenchmarkStaticstic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTBenchmarkStaticstic.h; sourceTree = "<group>"; };
-		238A3A8A1EB8B63300986614 /* WCTBenchmarkStaticstic.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBenchmarkStaticstic.mm; sourceTree = "<group>"; };
-		238A3A8C1EB8B63F00986614 /* benchmark_normal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = benchmark_normal.h; sourceTree = "<group>"; };
-		238A3A8D1EB8B63F00986614 /* benchmark_normal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = benchmark_normal.mm; sourceTree = "<group>"; };
-		238A3A951EB8BAD500986614 /* WCTBenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTBenchmarkObject.h; sourceTree = "<group>"; };
-		238A3A961EB8BAD500986614 /* WCTBenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBenchmarkObject.mm; sourceTree = "<group>"; };
 		2392783B1EA5C8CF000DB690 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23943AE41EF1205000AF7FCA /* WCTSampleStatictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleStatictics.h; sourceTree = "<group>"; };
@@ -928,14 +899,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		238A3A7D1EB8B5A700986614 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				238A3A9A1EB8BF9F00986614 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2393265D1E836D7300D677CC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1409,20 +1372,6 @@
 			path = sample/transaction;
 			sourceTree = SOURCE_ROOT;
 		};
-		238A3A811EB8B5A700986614 /* Benchmark */ = {
-			isa = PBXGroup;
-			children = (
-				238A3A821EB8B5A700986614 /* benchmark_main.mm */,
-				238A3A891EB8B63300986614 /* WCTBenchmarkStaticstic.h */,
-				238A3A8A1EB8B63300986614 /* WCTBenchmarkStaticstic.mm */,
-				238A3A8C1EB8B63F00986614 /* benchmark_normal.h */,
-				238A3A8D1EB8B63F00986614 /* benchmark_normal.mm */,
-				238A3A951EB8BAD500986614 /* WCTBenchmarkObject.h */,
-				238A3A961EB8BAD500986614 /* WCTBenchmarkObject.mm */,
-			);
-			path = Benchmark;
-			sourceTree = "<group>";
-		};
 		23943AE21EF1204400AF7FCA /* statictics */ = {
 			isa = PBXGroup;
 			children = (
@@ -1442,7 +1391,6 @@
 				2349F5D51EA0D6680021EFA7 /* WCDB */,
 				23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */,
 				23D5CCFE1EB8616D00A5B8F9 /* Sample */,
-				238A3A811EB8B5A700986614 /* Benchmark */,
 				23B5F93E1E111CB100E58396 /* Frameworks */,
 				23B5F7641E1111C100E58396 /* Products */,
 			);
@@ -1453,7 +1401,6 @@
 			children = (
 				239326611E836D7300D677CC /* WCDB.framework */,
 				23D5CCFD1EB8616D00A5B8F9 /* Sample */,
-				238A3A801EB8B5A700986614 /* Benchmark */,
 				23DE41B01EF7707900227551 /* WCDB.framework */,
 			);
 			name = Products;
@@ -1872,24 +1819,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		238A3A7F1EB8B5A700986614 /* Benchmark */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 238A3A881EB8B5A700986614 /* Build configuration list for PBXNativeTarget "Benchmark" */;
-			buildPhases = (
-				238A3A7C1EB8B5A700986614 /* Sources */,
-				238A3A7D1EB8B5A700986614 /* Frameworks */,
-				238A3A7E1EB8B5A700986614 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				238A3A991EB8BF9B00986614 /* PBXTargetDependency */,
-			);
-			name = Benchmark;
-			productName = Benchmark;
-			productReference = 238A3A801EB8B5A700986614 /* Benchmark */;
-			productType = "com.apple.product-type.tool";
-		};
 		239326601E836D7300D677CC /* WCDB */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 239326661E836D7300D677CC /* Build configuration list for PBXNativeTarget "WCDB" */;
@@ -1957,10 +1886,6 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = sanhuazhang;
 				TargetAttributes = {
-					238A3A7F1EB8B5A700986614 = {
-						CreatedOnToolsVersion = 8.3;
-						ProvisioningStyle = Automatic;
-					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
 						ProvisioningStyle = Automatic;
@@ -1995,7 +1920,6 @@
 				239326601E836D7300D677CC /* WCDB */,
 				23DE40A81EF7707900227551 /* WCDB iOS Static */,
 				23D5CCFC1EB8616D00A5B8F9 /* Sample */,
-				238A3A7F1EB8B5A700986614 /* Benchmark */,
 			);
 		};
 /* End PBXProject section */
@@ -2057,17 +1981,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		238A3A7C1EB8B5A700986614 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				238A3A8E1EB8B63F00986614 /* benchmark_normal.mm in Sources */,
-				238A3A831EB8B5A700986614 /* benchmark_main.mm in Sources */,
-				238A3A8B1EB8B63300986614 /* WCTBenchmarkStaticstic.mm in Sources */,
-				238A3A971EB8BAD500986614 /* WCTBenchmarkObject.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2393265C1E836D7300D677CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2348,11 +2261,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		238A3A991EB8BF9B00986614 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 239326601E836D7300D677CC /* WCDB */;
-			targetProxy = 238A3A981EB8BF9B00986614 /* PBXContainerItemProxy */;
-		};
 		2393266C1E836EAB00D677CC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "sqlcipher framework";
@@ -2371,26 +2279,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		238A3A841EB8B5A700986614 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = macosx;
-				VALID_ARCHS = x86_64;
-			};
-			name = Debug;
-		};
-		238A3A851EB8B5A700986614 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = macosx;
-				VALID_ARCHS = x86_64;
-			};
-			name = Release;
-		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2674,15 +2562,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		238A3A881EB8B5A700986614 /* Build configuration list for PBXNativeTarget "Benchmark" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				238A3A841EB8B5A700986614 /* Debug */,
-				238A3A851EB8B5A700986614 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		239326661E836D7300D677CC /* Build configuration list for PBXNativeTarget "WCDB" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
