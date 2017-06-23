@@ -52,4 +52,11 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  */
 - (void)setConfig:(WCDB::Config)config forName:(NSString *)name;
 
+/**
+ @brief Set sync for this database.
+        Sync can improve the stability of the database, reduce database damage, but there will be performance degradation.
+ @param sync enable or disable sync
+ */
+- (void)setSyncEnabled:(BOOL)sync;
+
 @end

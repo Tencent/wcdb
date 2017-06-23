@@ -33,6 +33,7 @@ const std::string Database::defaultConfigName = "default";
 const std::string Database::defaultCipherConfigName = "cipher";
 const std::string Database::defaultTraceConfigName = "trace";
 const std::string Database::defaultCheckpointConfigName = "checkpoint";
+const std::string Database::defaultSyncName = "sync";
 std::shared_ptr<Trace> Database::s_globalTrace = nullptr;
 
 const Configs Database::defaultConfigs({
@@ -121,32 +122,15 @@ const Configs Database::defaultConfigs({
                 }
             }
 
-            //Synchronous
-            {
-                static const StatementPragma s_setSynchronousFull =
-                    StatementPragma().pragma(Pragma::Synchronous, "FULL");
-
-                if (!handle->exec(s_setSynchronousFull)) {
-                    error = handle->getError();
-                    return false;
-                }
-            }
-
-            //Fullfsync
-            {
-                static const StatementPragma s_setFullFsync =
-                    StatementPragma().pragma(Pragma::Fullfsync, "ON");
-
-                if (!handle->exec(s_setFullFsync)) {
-                    error = handle->getError();
-                    return false;
-                }
-            }
-
             error.reset();
             return true;
         },
         2,
+    },
+    {
+        Database::defaultSyncName,
+        nullptr, //placeholder
+        3,
     },
     /*
      {
@@ -221,7 +205,7 @@ const Configs Database::defaultConfigs({
                  checkpointStepPointer);
              return true;
          },
-         3,
+         4,
      }
 */
 });
@@ -261,6 +245,54 @@ void Database::setTrace(const Trace &trace)
             handle->setTrace(trace);
             return true;
         });
+}
+
+void Database::setSyncEnabled(bool sync)
+{
+    if (sync) {
+        m_pool->setConfig(
+            Database::defaultSyncName,
+            [](std::shared_ptr<Handle> &handle,
+               Error &error) -> bool { //Synchronous
+                {
+                    static const StatementPragma s_setSynchronousFull =
+                        StatementPragma().pragma(Pragma::Synchronous, "FULL");
+
+                    if (!handle->exec(s_setSynchronousFull)) {
+                        error = handle->getError();
+                        return false;
+                    }
+                }
+
+                //Checkpoint Fullfsync
+                {
+                    static const StatementPragma s_setCheckpointFullfsync =
+                        StatementPragma().pragma(Pragma::CheckpointFullfsync,
+                                                 true);
+
+                    if (!handle->exec(s_setCheckpointFullfsync)) {
+                        error = handle->getError();
+                        return false;
+                    }
+                }
+
+                //Fullfsync
+                {
+                    static const StatementPragma s_setFullFsync =
+                        StatementPragma().pragma(Pragma::Fullfsync, true);
+
+                    if (!handle->exec(s_setFullFsync)) {
+                        error = handle->getError();
+                        return false;
+                    }
+                }
+
+                error.reset();
+                return true;
+            });
+    } else {
+        m_pool->setConfig(Database::defaultSyncName, nullptr);
+    }
 }
 
 void Database::SetGlobalTrace(const Trace &globalTrace)

@@ -33,4 +33,9 @@
     _database->setConfig(name.UTF8String, invoke);
 }
 
+- (void)setSyncEnabled:(BOOL)sync
+{
+    _database->setSyncEnabled(sync);
+}
+
 @end
