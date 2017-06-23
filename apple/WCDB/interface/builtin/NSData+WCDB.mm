@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTCompatible.h>
 
 @interface NSData (WCDB) <WCTColumnCoding>
 @end
@@ -30,12 +31,24 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    NSData *result = nil;
+    if (value) {
+        //Compatible for old builtin column coding before v1.0.1
+        if (![WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled) {
+            result = value;
+        } else {
+            result = [NSKeyedUnarchiver unarchiveObjectWithData:value];
+            if (!result) {
+                result = value;
+            }
+        }
+    }
+    return result;
 }
 
 - (NSData *)archivedWCTValue
 {
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
+    return self;
 }
 
 + (WCTColumnType)columnTypeForWCDB
@@ -52,12 +65,24 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    NSData *result = nil;
+    if (value) {
+        //Compatible for old builtin column coding before v1.0.1
+        if (![WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled) {
+            result = value;
+        } else {
+            result = [NSKeyedUnarchiver unarchiveObjectWithData:value];
+            if (!result) {
+                result = value;
+            }
+        }
+    }
+    return result ? [NSMutableData dataWithData:result] : nil;
 }
 
 - (NSData *)archivedWCTValue
 {
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
+    return self;
 }
 
 + (WCTColumnType)columnTypeForWCDB
