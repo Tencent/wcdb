@@ -50,7 +50,7 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     static const SEL UnarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     IMP implementation = GetClassMethodImplementation(propertyClass, UnarchiveSelector);
-    return [this, propertyClass, implementation](id instance, OCType value) {
+    return [this, propertyClass, implementation](InstanceType instance, OCType value) {
         using Unarchiver = PropertyType (*)(Class, SEL, OCType);
         if (instance) {
             PropertyType property = ((Unarchiver) implementation)(propertyClass, UnarchiveSelector, value);
