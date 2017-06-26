@@ -41,10 +41,6 @@
                                      &error);
         return NO;
     }
-    if (columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
-        statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
-        return YES;
-    }
     const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding->accessor;
     switch (accessor->getAccessorType()) {
         case WCTAccessorCpp: {

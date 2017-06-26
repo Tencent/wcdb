@@ -28,7 +28,6 @@
 #define __WCDB_PROPERTIES(className) _s_##className##_properties
 
 #define WCDB_IMPLEMENTATION(className)                                         \
-    @synthesize lastInsertedRowID;                                             \
     static WCTBinding __WCDB_BINDING(className)(className.class);              \
     static WCTPropertyList __WCDB_PROPERTIES(className);                       \
     +(const WCTBinding *) objectRelationalMappingForWCDB                       \

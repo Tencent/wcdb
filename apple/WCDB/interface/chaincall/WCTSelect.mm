@@ -100,43 +100,47 @@
 - (NSArray /* <WCTObject*> */ *)allObjects
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if (![self lazyPrepare]) {
-        return nil;
+    if ([self lazyPrepare]) {
+        NSMutableArray *objects = [[NSMutableArray alloc] init];
+        WCTObject *object = nil;
+        int index = 0;
+        while ([self next]) {
+            object = [[_cls alloc] init];
+            index = 0;
+            for (const WCTResult &result : _resultList) {
+                if ([self extractPropertyToObject:object
+                                           atIndex:index
+                                withColumnBinding:result.getColumnBinding()]) {
+                    ++index;
+                }else {
+                    return nil;
+                }
+            }
+            [objects addObject:object];
+        }
+        return _error.isOK() ? objects : nil;
     }
-    NSMutableArray *objects = [[NSMutableArray alloc] init];
-    WCTObject *object = nil;
-    while ((object = [self _nextObject])) {
-        [objects addObject:object];
-    }
-    return _error.isOK() ? objects : nil;
+    return nil;
 }
 
 - (id /* WCTObject* */)nextObject
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if (![self lazyPrepare]) {
-        return nil;
-    }
-    return [self _nextObject];
-}
-
-- (id /* WCTObject */)_nextObject
-{
-    if (!_statementHandle->step() || !_error.isOK()) {
-        [self finalize];
-        return nil;
-    }
-    WCTObject *object = [[_cls alloc] init];
-    int index = 0;
-    for (const WCTResult &result : _resultList) {
-        if (![self extractPropertyToObject:object
-                                   atIndex:index
-                         withColumnBinding:result.getColumnBinding()]) {
-            return nil;
+    if ([self lazyPrepare] && [self next]) {
+        WCTObject *object = [[_cls alloc] init];
+        int index = 0;
+        for (const WCTResult &result : _resultList) {
+            if ([self extractPropertyToObject:object
+                                       atIndex:index
+                            withColumnBinding:result.getColumnBinding()]) {
+                ++index;
+            }else {
+                return nil;
+            }
         }
-        ++index;
+        return object;
     }
-    return object;
+    return nil;
 }
 
 @end

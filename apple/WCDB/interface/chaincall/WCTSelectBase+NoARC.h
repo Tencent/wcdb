@@ -19,19 +19,16 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTSelectBase+NoARC.h>
 #import <WCDB/WCTSelectBase.h>
-#import <WCDB/statement_recyclable.hpp>
 
-@interface WCTSelectBase () {
-@protected
-    BOOL _prepared;
-    WCDB::RecyclableStatement _statementHandle;
-    WCDB::StatementSelect _statement;
-}
+@interface WCTSelectBase (NoARC)
 
-- (BOOL)lazyPrepare;
-- (BOOL)next;
-- (void)finalize;
+- (BOOL)extractPropertyToObject:(WCTObject *)object
+                        atIndex:(int)index
+              withColumnBinding:(const std::shared_ptr<WCTColumnBinding> &)columnBinding;
+
+- (BOOL)extractValueToRow:(NSMutableArray * /*WCTOneRow*/)row;
+
+- (WCTValue *)extractValue;
 
 @end

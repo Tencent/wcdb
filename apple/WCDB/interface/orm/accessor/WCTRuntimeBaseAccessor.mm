@@ -57,7 +57,7 @@ IMP WCTRuntimeBaseAccessor::GetInstanceMethodImplementation(Class cls, SEL selec
 Class WCTRuntimeBaseAccessor::GetPropertyClass(Class cls, const std::string &propertyName)
 {
     objc_property_t property = class_getProperty(cls, propertyName.c_str());
-    NSString *attributes = [[NSString alloc] initWithUTF8String:property_getAttributes(property)];
+    NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];
     NSArray *splitAttributes = [attributes componentsSeparatedByString:@","];
     if (splitAttributes.count > 0) {
         NSString *encodeType = splitAttributes[0];

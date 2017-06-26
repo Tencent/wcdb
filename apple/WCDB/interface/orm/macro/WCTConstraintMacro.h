@@ -22,6 +22,7 @@
 #define __WCDB_PRIMARY_IMP(className, propertyName, order, autoIncrement,      \
                            onConflict)                                         \
     WCDB_IF(autoIncrement, @synthesize isAutoIncrement;)                       \
+    WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)                     \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
         binding.getColumnBinding(className.propertyName)                       \
             ->makePrimary(order, autoIncrement, onConflict);                   \
