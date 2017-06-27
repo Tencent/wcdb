@@ -237,6 +237,7 @@
 		2349F79D1EA0FC750021EFA7 /* WCTResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F7991EA0F9FC0021EFA7 /* WCTResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2358AC501EADE39000F0DA41 /* module_argument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2358AC4E1EADE39000F0DA41 /* module_argument.cpp */; };
 		2358AC511EADE39000F0DA41 /* module_argument.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2358AC4F1EADE39000F0DA41 /* module_argument.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		237D3C321F0205D1000563BC /* WCTCompatible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A37BE01EFCF1AC00703D84 /* WCTCompatible.mm */; };
 		2386B3C01ED442E2000B72F6 /* WCTStatictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3BE1ED442E2000B72F6 /* WCTStatictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C11ED442E2000B72F6 /* WCTStatictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3BF1ED442E2000B72F6 /* WCTStatictics.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2216,6 +2217,7 @@
 				23DE40D81EF7707900227551 /* database_sql.cpp in Sources */,
 				23DE40D91EF7707900227551 /* config.cpp in Sources */,
 				23DE40DA1EF7707900227551 /* WCTDatabase+Database.mm in Sources */,
+				237D3C321F0205D1000563BC /* WCTCompatible.mm in Sources */,
 				23DE40DB1EF7707900227551 /* WCTChainCall.mm in Sources */,
 				23DE40DC1EF7707900227551 /* handle_pool.cpp in Sources */,
 				23DE40DD1EF7707900227551 /* WCTDatabase+File.mm in Sources */,
