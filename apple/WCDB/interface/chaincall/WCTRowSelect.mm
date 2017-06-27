@@ -64,7 +64,7 @@
             row = [NSMutableArray array];
             if ([self extractValueToRow:row]) {
                 [allRows addObject:row];
-            }else {
+            } else {
                 return nil;
             }
         }

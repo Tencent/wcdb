@@ -109,10 +109,10 @@
             index = 0;
             for (const WCTResult &result : _resultList) {
                 if ([self extractPropertyToObject:object
-                                           atIndex:index
+                                          atIndex:index
                                 withColumnBinding:result.getColumnBinding()]) {
                     ++index;
-                }else {
+                } else {
                     return nil;
                 }
             }
@@ -131,10 +131,10 @@
         int index = 0;
         for (const WCTResult &result : _resultList) {
             if ([self extractPropertyToObject:object
-                                       atIndex:index
+                                      atIndex:index
                             withColumnBinding:result.getColumnBinding()]) {
                 ++index;
-            }else {
+            } else {
                 return nil;
             }
         }
