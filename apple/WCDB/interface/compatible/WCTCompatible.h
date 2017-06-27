@@ -28,6 +28,6 @@
  @brief For WCDB version>1.0.1, the builtin WCDB column coding for NSData/NSMutableData is stored in database directly, instead of NSCoding.
         Enable it if the existing NSData is stored before WCDB 1.0.1.
  */
-@property(getter=isBuiltinNSDataColumnCodingCompatibleEnabled) BOOL builtinNSDataColumnCodingCompatibleEnabled;
+@property(nonatomic, assign, getter=isBuiltinNSDataColumnCodingCompatibleEnabled) BOOL builtinNSDataColumnCodingCompatibleEnabled;
 
 @end

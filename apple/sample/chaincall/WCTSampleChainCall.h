@@ -23,8 +23,8 @@
 
 @interface WCTSampleChainCall : NSObject <WCTTableCoding>
 
-@property int intValue;
-@property(retain) NSString *stringValue;
+@property(nonatomic, assign) int intValue;
+@property(nonatomic, retain) NSString *stringValue;
 
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(stringValue)

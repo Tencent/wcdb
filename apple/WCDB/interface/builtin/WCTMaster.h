@@ -30,11 +30,11 @@
 
 + (NSString *)TableName;
 
-@property(retain) NSString *type;
-@property(retain) NSString *name;
-@property(retain) NSString *tableName;
-@property(assign) int rootpage;
-@property(retain) NSString *sql;
+@property(nonatomic, retain) NSString *type;
+@property(nonatomic, retain) NSString *name;
+@property(nonatomic, retain) NSString *tableName;
+@property(nonatomic, assign) int rootpage;
+@property(nonatomic, retain) NSString *sql;
 
 WCDB_PROPERTY(type)
 WCDB_PROPERTY(name)

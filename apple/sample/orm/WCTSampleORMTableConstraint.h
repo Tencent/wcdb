@@ -23,11 +23,11 @@
 
 @interface WCTSampleORMTableConstraint : NSObject <WCTTableCoding>
 
-@property int primaryKeyPart1;
-@property NSString *primaryKeyPart2;
+@property(nonatomic, assign) int primaryKeyPart1;
+@property(nonatomic, retain) NSString *primaryKeyPart2;
 
-@property int uniqueKeyPart1;
-@property float uniqueKeyPart2;
+@property(nonatomic, assign) int uniqueKeyPart1;
+@property(nonatomic) float uniqueKeyPart2;
 
 WCDB_PROPERTY(primaryKeyPart1)
 WCDB_PROPERTY(primaryKeyPart2)

@@ -23,8 +23,8 @@
 
 @interface WCTSampleTable : NSObject <WCTTableCoding>
 
-@property int intValue;
-@property NSString *stringValue;
+@property(nonatomic, assign) int intValue;
+@property(nonatomic, retain) NSString *stringValue;
 
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(stringValue)

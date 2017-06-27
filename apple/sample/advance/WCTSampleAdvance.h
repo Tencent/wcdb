@@ -24,8 +24,8 @@
 
 @interface WCTSampleAdvance : NSObject <WCTTableCoding>
 
-@property int intValue;
-@property(retain) WCTSampleColumnCoding *columnCoding;
+@property(nonatomic, assign) int intValue;
+@property(nonatomic, retain) WCTSampleColumnCoding *columnCoding;
 
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(columnCoding)

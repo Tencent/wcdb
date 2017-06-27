@@ -23,7 +23,7 @@
 
 @interface WCTSampleFile : NSObject <WCTTableCoding>
 
-@property int intValue;
+@property(nonatomic, assign) int intValue;
 
 WCDB_PROPERTY(intValue)
 

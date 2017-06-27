@@ -34,7 +34,8 @@
     NSData *result = nil;
     if (value) {
         //Compatible for old builtin column coding before v1.0.1
-        if (![WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled) {
+        static BOOL s_compatible = [WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled;
+        if (!s_compatible) {
             result = value;
         } else {
             result = [NSKeyedUnarchiver unarchiveObjectWithData:value];
@@ -68,7 +69,8 @@
     NSData *result = nil;
     if (value) {
         //Compatible for old builtin column coding before v1.0.1
-        if (![WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled) {
+        static BOOL s_compatible = [WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled;
+        if (!s_compatible) {
             result = value;
         } else {
             result = [NSKeyedUnarchiver unarchiveObjectWithData:value];

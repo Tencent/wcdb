@@ -23,7 +23,7 @@
 
 @interface WCTSampleColumnCoding : NSObject
 
-@property float floatValue;
+@property(nonatomic, assign) float floatValue;
 
 - (instancetype)initWithFloatValue:(float)floatValue;
 

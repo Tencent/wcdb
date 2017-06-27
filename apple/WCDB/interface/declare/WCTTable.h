@@ -26,11 +26,11 @@
 /**
  The name of the table.
  */
-@property(readonly) NSString *tableName;
+@property(nonatomic, readonly) NSString *tableName;
 
 /**
  The class binding to this table.
  */
-@property(readonly) Class cls;
+@property(nonatomic, readonly) Class cls;
 
 @end
