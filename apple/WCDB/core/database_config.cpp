@@ -230,8 +230,41 @@ void Database::setCipherKey(const void *key, int size)
     m_pool->setConfig(
         Database::defaultCipherConfigName,
         [keys](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+            
             bool result =
                 handle->setCipherKey(keys->data(), (int) keys->size());
+            
+            //Page Size
+            {
+                static const StatementPragma s_getCipherPageSize =
+                StatementPragma().pragma(Pragma::CipherPageSize);
+                static const StatementPragma s_setCipherPageSize =
+                StatementPragma().pragma(Pragma::CipherPageSize, 4096);
+                
+                //Get Page Size
+                std::shared_ptr<StatementHandle> statementHandle =
+                handle->prepare(s_getCipherPageSize);
+                if (!statementHandle) {
+                    error = handle->getError();
+                    return false;
+                }
+                statementHandle->step();
+                if (!statementHandle->isOK()) {
+                    error = statementHandle->getError();
+                    return false;
+                }
+                int cipherPageSize =
+                statementHandle->getValue<WCDB::ColumnType::Integer32>(0);
+                statementHandle->finalize();
+                
+                //Set Page Size
+                if (cipherPageSize!=4096 &&
+                    !handle->exec(s_setCipherPageSize)) {
+                    error = handle->getError();
+                    return false;
+                }
+            }
+            
             error = handle->getError();
             return result;
         });

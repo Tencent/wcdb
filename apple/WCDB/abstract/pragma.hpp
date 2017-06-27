@@ -36,6 +36,18 @@ public:
     static const Pragma CaseSensitiveLike;
     static const Pragma CellSizeCheck;
     static const Pragma CheckpointFullfsync;
+    static const Pragma Cipher;
+    static const Pragma CipherAddRandom;
+    static const Pragma CipherDefaultKdfIter;
+    static const Pragma CipherDefaultPageSize;
+    static const Pragma CipherPageSize;
+    static const Pragma CipherDefaultUseHmac;
+    static const Pragma CipherMigrate;
+    static const Pragma CipherProfile;
+    static const Pragma CipherProvider;
+    static const Pragma CipherProviderVersion;
+    static const Pragma CipherUseHmac;
+    static const Pragma CipherVersion;
     static const Pragma CollationList;
     static const Pragma CompileOptions;
     static const Pragma CountChanges;
@@ -60,6 +72,8 @@ public:
     static const Pragma IntegrityCheck;
     static const Pragma JournalMode;
     static const Pragma JournalSizeLimit;
+    static const Pragma Key;
+    static const Pragma KdfIter;
     static const Pragma LegacyFileFormat;
     static const Pragma LockingMode;
     static const Pragma MaxPageCount;
@@ -71,6 +85,7 @@ public:
     static const Pragma QuickCheck;
     static const Pragma ReadUncommitted;
     static const Pragma RecursiveTriggers;
+    static const Pragma Rekey;
     static const Pragma ReverseUnorderedSelects;
     static const Pragma SchemaVersion;
     static const Pragma SecureDelete;
