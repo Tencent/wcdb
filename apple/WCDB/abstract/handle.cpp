@@ -42,7 +42,7 @@ const auto UNUSED_UNIQUE_ID = []() {
     sqlite3_config(SQLITE_CONFIG_LOG, GlobalLog, nullptr);
     sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
     sqlite3_config(SQLITE_CONFIG_MEMSTATUS, false);
-    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, 0x7fff0000, 0x7fff0000);
+    //    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, 0x7fff0000, 0x7fff0000);
     return nullptr;
 }();
 
