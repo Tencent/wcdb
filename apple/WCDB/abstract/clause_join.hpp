@@ -35,7 +35,7 @@ public:
         Inner,
         Cross,
     };
-
+    JoinClause():Describable(""){}
     JoinClause &join(const Subquery &subquery,
                      JoinClause::Type type = JoinClause::Type::NotSet,
                      bool isNatural = false);
