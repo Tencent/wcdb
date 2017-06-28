@@ -91,6 +91,17 @@ const Configs Database::defaultConfigs({
                 }
             }
 
+            //Synchronous
+            {
+                static const StatementPragma s_setSynchronousFull =
+                    StatementPragma().pragma(Pragma::Synchronous, "NORMAL");
+
+                if (!handle->exec(s_setSynchronousFull)) {
+                    error = handle->getError();
+                    return false;
+                }
+            }
+
             //Journal Mode
             {
                 static const StatementPragma s_getJournalMode =
@@ -230,20 +241,20 @@ void Database::setCipherKey(const void *key, int size)
     m_pool->setConfig(
         Database::defaultCipherConfigName,
         [keys](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-            
+
             bool result =
                 handle->setCipherKey(keys->data(), (int) keys->size());
-            
+
             //Page Size
             {
                 static const StatementPragma s_getCipherPageSize =
-                StatementPragma().pragma(Pragma::CipherPageSize);
+                    StatementPragma().pragma(Pragma::CipherPageSize);
                 static const StatementPragma s_setCipherPageSize =
-                StatementPragma().pragma(Pragma::CipherPageSize, 4096);
-                
+                    StatementPragma().pragma(Pragma::CipherPageSize, 4096);
+
                 //Get Page Size
                 std::shared_ptr<StatementHandle> statementHandle =
-                handle->prepare(s_getCipherPageSize);
+                    handle->prepare(s_getCipherPageSize);
                 if (!statementHandle) {
                     error = handle->getError();
                     return false;
@@ -254,17 +265,17 @@ void Database::setCipherKey(const void *key, int size)
                     return false;
                 }
                 int cipherPageSize =
-                statementHandle->getValue<WCDB::ColumnType::Integer32>(0);
+                    statementHandle->getValue<WCDB::ColumnType::Integer32>(0);
                 statementHandle->finalize();
-                
+
                 //Set Page Size
-                if (cipherPageSize!=4096 &&
+                if (cipherPageSize != 4096 &&
                     !handle->exec(s_setCipherPageSize)) {
                     error = handle->getError();
                     return false;
                 }
             }
-            
+
             error = handle->getError();
             return result;
         });
@@ -285,8 +296,9 @@ void Database::setSyncEnabled(bool sync)
     if (sync) {
         m_pool->setConfig(
             Database::defaultSyncName,
-            [](std::shared_ptr<Handle> &handle,
-               Error &error) -> bool { //Synchronous
+            [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+
+                //Synchronous
                 {
                     static const StatementPragma s_setSynchronousFull =
                         StatementPragma().pragma(Pragma::Synchronous, "FULL");

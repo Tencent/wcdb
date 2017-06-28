@@ -42,7 +42,7 @@ const Pragma Pragma::CipherProvider("cipher_provider");
 const Pragma Pragma::CipherProviderVersion("cipher_provider_version");
 const Pragma Pragma::CipherUseHmac("cipher_use_hmac");
 const Pragma Pragma::CipherVersion("cipher_version");
-const Pragma Pragma::CipherPageSize("cipher_page_size");    
+const Pragma Pragma::CipherPageSize("cipher_page_size");
 const Pragma Pragma::CollationList("collation_list");
 const Pragma Pragma::CompileOptions("compile_options");
 const Pragma Pragma::CountChanges("count_changes");
