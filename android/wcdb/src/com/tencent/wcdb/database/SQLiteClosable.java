@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * This class implements a primitive reference counting scheme for database objects.
  */
 public abstract class SQLiteClosable implements Closeable {
-    private AtomicInteger mReferenceCount = new AtomicInteger(1);
+    private int mReferenceCount = 1;
 
     /**
      * Called when the last reference to the object was released by
@@ -51,9 +51,12 @@ public abstract class SQLiteClosable implements Closeable {
      * been released.
      */
     public void acquireReference() {
-        if (mReferenceCount.getAndIncrement() <= 0) {
-            throw new IllegalStateException(
-                    "attempt to re-open an already-closed object: " + this);
+        synchronized (this) {
+            if (mReferenceCount <= 0) {
+                throw new IllegalStateException(
+                        "attempt to re-open an already-closed object: " + this);
+            }
+            mReferenceCount++;
         }
     }
 
@@ -64,7 +67,11 @@ public abstract class SQLiteClosable implements Closeable {
      * @see #onAllReferencesReleased()
      */
     public void releaseReference() {
-        if (mReferenceCount.decrementAndGet() == 0) {
+        boolean refCountIsZero;
+        synchronized (this) {
+            refCountIsZero = --mReferenceCount == 0;
+        }
+        if (refCountIsZero) {
             onAllReferencesReleased();
         }
     }
@@ -78,8 +85,12 @@ public abstract class SQLiteClosable implements Closeable {
      */
     @Deprecated
     public void releaseReferenceFromContainer() {
-        if (mReferenceCount.decrementAndGet() == 0) {
-            onAllReferencesReleasedFromContainer();
+        boolean refCountIsZero;
+        synchronized (this) {
+            refCountIsZero = --mReferenceCount == 0;
+        }
+        if (refCountIsZero) {
+            onAllReferencesReleased();
         }
     }
 
