@@ -1381,7 +1381,21 @@ public class DatabaseUtils {
         createDbFromSqlStatements(context, dbName, null, null, dbVersion, sqlStatements);
     }
 
-    private static final Locale ROOT = new Locale("", "", "");
+    private static int extractSqlCode(String sql) {
+        // sql must have length >= 3
+
+        int result = 0;
+        for (int i = 0; i < 3; i++) {
+            int c = sql.charAt(i);
+            if (c >= 'a' && c <= 'z')
+                c = c - 'a' + 'A';
+            else if (c >= 0x80)
+                return 0;
+
+            result |= ((c & 0x7F) << i * 8);
+        }
+        return result;
+    }
 
     /**
      * Returns one of the following which represent the type of the given SQL statement.
@@ -1404,33 +1418,36 @@ public class DatabaseUtils {
             return STATEMENT_OTHER;
         }
 
-        String prefixSql = sql.substring(0, 3).toUpperCase(ROOT);
-        if (prefixSql.equals("SEL")) {
-            return STATEMENT_SELECT;
-        } else if (prefixSql.equals("INS") ||
-                prefixSql.equals("UPD") ||
-                prefixSql.equals("REP") ||
-                prefixSql.equals("DEL")) {
-            return STATEMENT_UPDATE;
-        } else if (prefixSql.equals("ATT")) {
-            return STATEMENT_ATTACH;
-        } else if (prefixSql.equals("COM")) {
-            return STATEMENT_COMMIT;
-        } else if (prefixSql.equals("END")) {
-            return STATEMENT_COMMIT;
-        } else if (prefixSql.equals("ROL")) {
-            return STATEMENT_ABORT;
-        } else if (prefixSql.equals("BEG")) {
-            return STATEMENT_BEGIN;
-        } else if (prefixSql.equals("PRA")) {
-            return STATEMENT_PRAGMA;
-        } else if (prefixSql.equals("CRE") || prefixSql.equals("DRO") ||
-                prefixSql.equals("ALT")) {
-            return STATEMENT_DDL;
-        } else if (prefixSql.equals("ANA") || prefixSql.equals("DET")) {
-            return STATEMENT_UNPREPARED;
+        int sqlCode = extractSqlCode(sql);
+        switch (sqlCode) {
+            case 0x4C4553:  // SEL
+                return STATEMENT_SELECT;
+            case 0x534E49:  // INS
+            case 0x445055:  // UPD
+            case 0x504552:  // REP
+            case 0x4C4544:  // DEL
+                return STATEMENT_UPDATE;
+            case 0x545441:  // ATT
+                return STATEMENT_ATTACH;
+            case 0x4D4F43:  // COM
+            case 0x444E45:  // END
+                return STATEMENT_COMMIT;
+            case 0x4C4F52:  // ROL
+                return STATEMENT_ABORT;
+            case 0x474542:  // BEG
+                return STATEMENT_BEGIN;
+            case 0x415250:  // PRA
+                return STATEMENT_PRAGMA;
+            case 0x455243:  // CRE
+            case 0x4F5244:  // DRO
+            case 0x544C41:  // ALT
+                return STATEMENT_DDL;
+            case 0x414E41:  // ANA
+            case 0x544544:  // DET
+                return STATEMENT_UNPREPARED;
+            default:
+                return STATEMENT_OTHER;
         }
-        return STATEMENT_OTHER;
     }
 
     /**
