@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		231039161F03E13600BC3FCC /* timed_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231039141F03E13600BC3FCC /* timed_queue.cpp */; };
+		231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231039151F03E13600BC3FCC /* timed_queue.hpp */; };
 		234402FC1EDD718A00808286 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402E91EDD718A00808286 /* SQLiteRepairKit.h */; };
 		234402FD1EDD718A00808286 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402EA1EDD718A00808286 /* sqliterk.c */; };
 		234402FE1EDD718A00808286 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402EB1EDD718A00808286 /* sqliterk.h */; };
@@ -594,6 +596,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		231039141F03E13600BC3FCC /* timed_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timed_queue.cpp; sourceTree = "<group>"; };
+		231039151F03E13600BC3FCC /* timed_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timed_queue.hpp; sourceTree = "<group>"; };
 		23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "sqlcipher-preprocessed.xcodeproj"; path = "../sqlcipher/sqlcipher-preprocessed.xcodeproj"; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* WCDB-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "WCDB-Info.plist"; sourceTree = "<group>"; };
 		234402E91EDD718A00808286 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
@@ -1341,6 +1345,8 @@
 				23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */,
 				23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */,
 				23C623801EE12D22009D55D3 /* thread_local.hpp */,
+				231039141F03E13600BC3FCC /* timed_queue.cpp */,
+				231039151F03E13600BC3FCC /* timed_queue.hpp */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -1631,6 +1637,7 @@
 				2349F6DC1EA0D6680021EFA7 /* statement.hpp in Headers */,
 				2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */,
 				2349F7181EA0D6680021EFA7 /* WCTMaster.h in Headers */,
+				231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */,
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
 				2349F7061EA0D6680021EFA7 /* handle_pool.hpp in Headers */,
 				2349F6EE1EA0D6680021EFA7 /* statement_pragma.hpp in Headers */,
@@ -2023,6 +2030,7 @@
 				2349F6EB1EA0D6680021EFA7 /* statement_insert.cpp in Sources */,
 				2349F6ED1EA0D6680021EFA7 /* statement_pragma.cpp in Sources */,
 				2349F6D71EA0D6680021EFA7 /* order_term.cpp in Sources */,
+				231039161F03E13600BC3FCC /* timed_queue.cpp in Sources */,
 				2349F7921EA0D7700021EFA7 /* WCTPropertyBase.mm in Sources */,
 				2349F6F71EA0D6680021EFA7 /* value_pragma.cpp in Sources */,
 				2349F7511EA0D6680021EFA7 /* WCTInterface.mm in Sources */,
