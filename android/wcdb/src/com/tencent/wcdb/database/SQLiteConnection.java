@@ -110,8 +110,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private long mConnectionPtr;
 
     private boolean mOnlyAllowReadOnlyOperations;
-    private int mLastAcquireTid;
-    private StackTraceElement[] mLastAcquireStackTrace;
 
     // The number of times attachCancellationSignal has been called.
     // Because SQLite statement execution can be reentrant, we keep track of how many
@@ -519,19 +517,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     boolean isPreparedStatementInCache(String sql) {
         return mPreparedStatementCache.get(sql) != null;
     }
-
-    // Called by SQLiteConnectionPool only.
-    // Records stack trace of the current (calling) thread.
-    void recordAcquireStackTrace(boolean acquire) {
-        if (acquire) {
-            mLastAcquireTid = Process.myTid();
-            mLastAcquireStackTrace = Thread.currentThread().getStackTrace();
-        } else {
-            mLastAcquireTid = 0;
-            mLastAcquireStackTrace = null;
-        }
-    }
-
 
     /**
      * Gets the unique id of this connection.
@@ -1141,16 +1126,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         printer.println("  isPrimaryConnection: " + mIsPrimaryConnection);
         printer.println("  onlyAllowReadOnlyOperations: " + mOnlyAllowReadOnlyOperations);
 
-        if (mLastAcquireTid != 0) {
-            printer.println("  lastAcquireTid: " + mLastAcquireTid);
-        }
-        if (mLastAcquireStackTrace != null && mLastAcquireStackTrace.length > 0) {
-            printer.println("  lastAcquireStackTrace:");
-            for (StackTraceElement e : mLastAcquireStackTrace) {
-                printer.println("    at " + e.toString());
-            }
-        }
-
         mRecentOperations.dump(printer, verbose);
 
         if (verbose) {
@@ -1483,6 +1458,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                     }
                 }
                 operation.mCookie = newOperationCookieLocked(index);
+                operation.mTid = android.os.Process.myTid();
                 mIndex = index;
                 return operation;
             }
@@ -1636,6 +1612,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         public Exception mException;
         public int mCookie;
         public int mType;
+        public int mTid;
 
         public void describe(StringBuilder msg, boolean verbose) {
             msg.append(mKind);
@@ -1648,6 +1625,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             msg.append(" - ").append(getStatus());
             if (mSql != null) {
                 msg.append(", sql=\"").append(trimSqlForDisplay(mSql)).append("\"");
+            }
+            if (mTid > 0) {
+                msg.append(", tid=").append(mTid);
             }
             if (verbose && mBindArgs != null && mBindArgs.size() != 0) {
                 msg.append(", bindArgs=[");

@@ -385,7 +385,6 @@ public final class SQLiteConnectionPool implements Closeable {
                         + "because the specified connection was not acquired "
                         + "from this pool or has already been released.");
             }
-            connection.recordAcquireStackTrace(false);
 
             if (!mIsOpen) {
                 closeConnectionAndLogExceptionsLocked(connection);
@@ -939,7 +938,6 @@ public final class SQLiteConnectionPool implements Closeable {
         try {
             final boolean readOnly = (connectionFlags & CONNECTION_FLAG_READ_ONLY) != 0;
             connection.setOnlyAllowReadOnlyOperations(readOnly);
-            connection.recordAcquireStackTrace(true);
 
             mAcquiredConnections.put(connection, AcquiredConnectionStatus.NORMAL);
         } catch (RuntimeException ex) {
