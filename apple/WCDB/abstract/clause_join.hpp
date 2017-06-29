@@ -35,7 +35,8 @@ public:
         Inner,
         Cross,
     };
-
+    JoinClause():Describable(""){}
+    JoinClause(const std::string &tabelName):Describable(tabelName){}
     JoinClause &join(const Subquery &subquery,
                      JoinClause::Type type = JoinClause::Type::NotSet,
                      bool isNatural = false);
