@@ -31,6 +31,7 @@
 @implementation WCTInsert {
     WCTPropertyList _propertyList;
     WCDB::StatementInsert _statement;
+    BOOL _replace;
 }
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andClass:(Class)cls andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
@@ -45,12 +46,13 @@
                                          &_error);
             return self;
         }
+        _replace = replace;
         const WCTPropertyList &propertyList = [cls AllProperties];
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
                          .insert(tableName.UTF8String,
                                  _propertyList,
-                                 replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
+                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
                          .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
     }
     return self;
@@ -68,11 +70,12 @@
                                          &_error);
             return self;
         }
+        _replace = replace;
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
                          .insert(tableName.UTF8String,
                                  _propertyList,
-                                 replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
+                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
                          .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
     }
     return self;
@@ -91,7 +94,7 @@
         isAutoIncrement = NO;
         for (const WCTProperty &property : _propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-            if (columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
+            if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
                 statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
                 isAutoIncrement = YES;
                 continue;
