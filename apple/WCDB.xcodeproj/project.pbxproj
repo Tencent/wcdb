@@ -514,7 +514,7 @@
 		23DE418C1EF7707900227551 /* WCTCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67C1EA0D6680021EFA7 /* WCTCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE418D1EF7707900227551 /* recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B31EA0D6680021EFA7 /* recyclable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE418E1EF7707900227551 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6171EA0D6680021EFA7 /* config.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23DE418F1EF7707900227551 /* WCTSelectBase+WCTExpr.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F0CF5D1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23DE418F1EF7707900227551 /* WCTSelectBase+WCTExpr.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F0CF5D1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h */; };
 		23DE41901EF7707900227551 /* WCTPropertyMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6941EA0D6680021EFA7 /* WCTPropertyMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE41911EF7707900227551 /* column_type.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F5E31EA0D6680021EFA7 /* column_type.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE41921EF7707900227551 /* statement_create_index.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F5FC1EA0D6680021EFA7 /* statement_create_index.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -545,7 +545,7 @@
 		23DE41DD1EF7750D00227551 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23DE41DC1EF7750D00227551 /* UIKit.framework */; };
 		23E781951EA4C63F00D74BA8 /* WCTAnyProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E781911EA4C63400D74BA8 /* WCTAnyProperty.mm */; };
 		23E781961EA4C65100D74BA8 /* WCTAnyProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E781901EA4C63400D74BA8 /* WCTAnyProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F0CF5F1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F0CF5D1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F0CF5F1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F0CF5D1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h */; };
 		23F0CF601ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F0CF5E1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.mm */; };
 		23FD443B1F064525000A2CAC /* statement_attach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23FD44391F064525000A2CAC /* statement_attach.cpp */; };
 		23FD443C1F064525000A2CAC /* statement_attach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23FD44391F064525000A2CAC /* statement_attach.cpp */; };
