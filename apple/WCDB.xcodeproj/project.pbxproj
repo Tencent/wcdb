@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		231039161F03E13600BC3FCC /* timed_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231039141F03E13600BC3FCC /* timed_queue.cpp */; };
 		231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231039151F03E13600BC3FCC /* timed_queue.hpp */; };
 		234402FC1EDD718A00808286 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402E91EDD718A00808286 /* SQLiteRepairKit.h */; };
 		234402FD1EDD718A00808286 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 234402EA1EDD718A00808286 /* sqliterk.c */; };
@@ -556,6 +555,7 @@
 		23FD44431F064794000A2CAC /* statement_detach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23FD44401F064794000A2CAC /* statement_detach.cpp */; };
 		23FD44441F064794000A2CAC /* statement_detach.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23FD44411F064794000A2CAC /* statement_detach.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23FD44451F064794000A2CAC /* statement_detach.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23FD44411F064794000A2CAC /* statement_detach.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23FD44751F06534D000A2CAC /* timed_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231039151F03E13600BC3FCC /* timed_queue.hpp */; };
 		242E1E271EA3771400F77029 /* WCTRowSelect+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 242E1E221EA376FB00F77029 /* WCTRowSelect+Private.h */; };
 		242E1E2E1EA37DFD00F77029 /* WCTMultiSelect+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 242E1E2B1EA37DDF00F77029 /* WCTMultiSelect+Private.h */; };
 /* End PBXBuildFile section */
@@ -604,7 +604,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		231039141F03E13600BC3FCC /* timed_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timed_queue.cpp; sourceTree = "<group>"; };
 		231039151F03E13600BC3FCC /* timed_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timed_queue.hpp; sourceTree = "<group>"; };
 		23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "sqlcipher-preprocessed.xcodeproj"; path = "../sqlcipher/sqlcipher-preprocessed.xcodeproj"; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* WCDB-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "WCDB-Info.plist"; sourceTree = "<group>"; };
@@ -1361,7 +1360,6 @@
 				23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */,
 				23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */,
 				23C623801EE12D22009D55D3 /* thread_local.hpp */,
-				231039141F03E13600BC3FCC /* timed_queue.cpp */,
 				231039151F03E13600BC3FCC /* timed_queue.hpp */,
 			);
 			path = util;
@@ -1765,6 +1763,7 @@
 				23DE41451EF7707900227551 /* WCTInterface.h in Headers */,
 				23DE41461EF7707900227551 /* database.hpp in Headers */,
 				23DE41471EF7707900227551 /* WCTTable+Database.h in Headers */,
+				23FD44751F06534D000A2CAC /* timed_queue.hpp in Headers */,
 				23DE41481EF7707900227551 /* file.hpp in Headers */,
 				23DE41491EF7707900227551 /* WCTIndexBinding.h in Headers */,
 				23DE414A1EF7707900227551 /* statement_alter_table.hpp in Headers */,
@@ -2050,7 +2049,6 @@
 				2349F6EB1EA0D6680021EFA7 /* statement_insert.cpp in Sources */,
 				2349F6ED1EA0D6680021EFA7 /* statement_pragma.cpp in Sources */,
 				2349F6D71EA0D6680021EFA7 /* order_term.cpp in Sources */,
-				231039161F03E13600BC3FCC /* timed_queue.cpp in Sources */,
 				2349F7921EA0D7700021EFA7 /* WCTPropertyBase.mm in Sources */,
 				2349F6F71EA0D6680021EFA7 /* value_pragma.cpp in Sources */,
 				2349F7511EA0D6680021EFA7 /* WCTInterface.mm in Sources */,
