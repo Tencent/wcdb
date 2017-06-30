@@ -97,14 +97,14 @@
             if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
                 statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
                 isAutoIncrement = YES;
-                continue;
-            }
-            if (![self bindProperty:property
-                             ofObject:object
-                    toStatementHandle:statementHandle
-                              atIndex:index
-                            withError:error]) {
-                return NO;
+            } else {
+                if (![self bindProperty:property
+                                 ofObject:object
+                        toStatementHandle:statementHandle
+                                  atIndex:index
+                                withError:error]) {
+                    return NO;
+                }
             }
             ++index;
         }
