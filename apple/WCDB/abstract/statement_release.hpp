@@ -18,21 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef statement_attach_hpp
-#define statement_attach_hpp
+#ifndef statement_release_hpp
+#define statement_release_hpp
 
 #include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementAttach : public Statement {
+class StatementRelease : public Statement {
 public:
-    StatementAttach &attach(const Expr &expr);
-    StatementAttach &attach(const Expr &expr, const std::string &database);
-
-    StatementAttach &as(const std::string &schema);
+    StatementRelease &release(const std::string &savepointName);
 };
 
 } //namespace WCDB
 
-#endif /* statement_attach_hpp */
+#endif /* statement_release_hpp */

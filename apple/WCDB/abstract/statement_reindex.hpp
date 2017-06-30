@@ -18,21 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef statement_attach_hpp
-#define statement_attach_hpp
+#ifndef statement_reindex_hpp
+#define statement_reindex_hpp
 
 #include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementAttach : public Statement {
+class StatementReindex : public Statement {
 public:
-    StatementAttach &attach(const Expr &expr);
-    StatementAttach &attach(const Expr &expr, const std::string &database);
-
-    StatementAttach &as(const std::string &schema);
+    StatementReindex &reindex(const std::string &name);
 };
 
 } //namespace WCDB
 
-#endif /* statement_attach_hpp */
+#endif /* statement_reindex_hpp */

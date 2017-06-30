@@ -21,12 +21,11 @@
 #ifndef statement_detach_hpp
 #define statement_detach_hpp
 
-#include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementDetach : public Describable {
+class StatementDetach : public Statement {
 public:
     StatementDetach &detach(const std::string &schema);
     StatementDetach &detach(const std::string &schema,

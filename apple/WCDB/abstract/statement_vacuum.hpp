@@ -18,21 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef statement_attach_hpp
-#define statement_attach_hpp
+#ifndef statement_vacuum_hpp
+#define statement_vacuum_hpp
 
 #include <WCDB/statement.hpp>
 
 namespace WCDB {
 
-class StatementAttach : public Statement {
+class StatementVacuum : public Statement {
 public:
-    StatementAttach &attach(const Expr &expr);
-    StatementAttach &attach(const Expr &expr, const std::string &database);
-
-    StatementAttach &as(const std::string &schema);
+    StatementVacuum &vacuum(const std::string &schemaName = "");
 };
 
 } //namespace WCDB
 
-#endif /* statement_attach_hpp */
+#endif /* statement_vacuum_hpp */

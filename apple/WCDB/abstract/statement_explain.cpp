@@ -18,21 +18,20 @@
  * limitations under the License.
  */
 
-#ifndef statement_attach_hpp
-#define statement_attach_hpp
-
-#include <WCDB/statement.hpp>
+#include <WCDB/statement_explain.hpp>
 
 namespace WCDB {
 
-class StatementAttach : public Statement {
-public:
-    StatementAttach &attach(const Expr &expr);
-    StatementAttach &attach(const Expr &expr, const std::string &database);
+StatementExplain &StatementExplain::explain(const Statement &statement)
+{
+    m_description.append("EXPLAIN " + statement.getDescription());
+    return *this;
+}
 
-    StatementAttach &as(const std::string &schema);
-};
+StatementExplain &StatementExplain::explainQueryPlan(const Statement &statement)
+{
+    m_description.append("EXPLAIN QUERY PLAN" + statement.getDescription());
+    return *this;
+}
 
 } //namespace WCDB
-
-#endif /* statement_attach_hpp */
