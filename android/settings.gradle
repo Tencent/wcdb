@@ -1,3 +1,4 @@
-include ':wcdb', ':sample-encryptdb', ':sample-repairdb'
+include ':wcdb', ':sample-encryptdb', ':sample-repairdb', ':benchmark'
 project(':sample-encryptdb').projectDir = new File('samples/sample-encryptdb')
 project(':sample-repairdb').projectDir = new File('samples/sample-repairdb')
+project(':benchmark').projectDir = new File('samples/benchmark')
