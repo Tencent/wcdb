@@ -38,6 +38,7 @@
 
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_alter_table.hpp>
+#include <WCDB/statement_attach.hpp>
 #include <WCDB/statement_create_index.hpp>
 #include <WCDB/statement_create_table.hpp>
 #include <WCDB/statement_create_virtual_table.hpp>
