@@ -63,28 +63,23 @@
                     return NO;
                 }
             }
-            //Check whether the column names are consistent
-            const WCTColumnBindingList &columnBindingList = binding->getColumnBindingList();
-
-            auto columnNameIter = columnNameList.begin();
-            auto columnBindingIter = columnBindingList.begin();
-            while (columnBindingIter != columnBindingList.end()) {
-                if (columnNameIter != columnNameList.end()) {
-                    if (columnBindingIter->get()->columnName == *columnNameIter) {
-                        ++columnBindingIter;
-                    } else {
-                        WCDB::Error::Warning([NSString stringWithFormat:@"Skip column named [%s] for table [%s]", columnNameIter->c_str(), tableName.UTF8String].UTF8String);
-                    }
-                    ++columnNameIter;
+            //Check whether the column names exists
+            WCTColumnBindingMap columnBindingMap = binding->getColumnBindingMap();
+            for (const std::string &columnName : columnNameList) {
+                auto iter = columnBindingMap.find(columnName);
+                if (iter == columnBindingMap.end()) {
+                    WCDB::Error::Warning([NSString stringWithFormat:@"Skip column named [%s] for table [%s]", columnName.c_str(), tableName.UTF8String].UTF8String);
                 } else {
-                    //Add new column
-                    if (!_core->exec(WCDB::StatementAlterTable()
-                                         .alter(tableName.UTF8String)
-                                         .addColumn(columnBindingIter->get()->getColumnDef()),
-                                     error)) {
-                        return NO;
-                    }
-                    ++columnBindingIter;
+                    columnBindingMap.erase(iter);
+                }
+            }
+            //Add new column
+            for (const auto &iter : columnBindingMap) {
+                if (!_core->exec(WCDB::StatementAlterTable()
+                                     .alter(tableName.UTF8String)
+                                     .addColumn(iter.second->getColumnDef()),
+                                 error)) {
+                    return NO;
                 }
             }
         } else {
