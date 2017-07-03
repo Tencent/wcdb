@@ -103,7 +103,7 @@
 
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];
     [formater setLocale:[NSLocale currentLocale]];
-    [formater setDateFormat:@"yyyy-MM-dd_HH:mm:ss"];
+    [formater setDateFormat:@"yyyy_MM_dd_HH_mm_ss"];
     NSString *now = [formater stringFromDate:[NSDate date]];
     NSString *filename = [NSString stringWithFormat:@"%@_%@_%@.plist", record.database, record.type, now];
 
