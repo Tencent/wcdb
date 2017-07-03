@@ -543,305 +543,304 @@
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList;
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object;
+- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withObject:(WCTObject *)object;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
 
 #pragma mark - Update Property With Object
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object;
+- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+                     withObject:(WCTObject *)object;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
 
-#pragma mark - Update Properties With StatementHandle
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row;
-;
+#pragma mark - Update Properties With Row
+- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+                          withRow:(WCTOneRow *)row;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
 
 #pragma mark - Update Property With Value
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value;
+- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+                      withValue:(WCTValue *)value;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
 
 #pragma mark - Delete
 - (BOOL)deleteAllObjects;

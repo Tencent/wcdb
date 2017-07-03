@@ -1023,481 +1023,481 @@
 }
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
+- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withObject:(WCTObject *)object
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         limit:(const WCTLimit &)limit
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                        offset:(const WCTOffset &)offset
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] limit:limit] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] limit:limit] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-              withObject:(WCTObject *)object
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] offset:offset] executeWithObject:object];
 }
 
 #pragma mark - Update Property With Object
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
+- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+                     withObject:(WCTObject *)object
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       limit:(const WCTLimit &)limit
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                      offset:(const WCTOffset &)offset
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] limit:limit] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] limit:limit] offset:offset] executeWithObject:object];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-            withObject:(WCTObject *)object
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] offset:offset] executeWithObject:object];
 }
 
-#pragma mark - Update Properties With StatementHandle
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
+#pragma mark - Update Properties With Row
+- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+                          withRow:(WCTOneRow *)row
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         limit:(const WCTLimit &)limit
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] limit:limit] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                        offset:(const WCTOffset &)offset
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] offset:offset] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] limit:limit] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] offset:offset] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] limit:limit] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] offset:offset] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] limit:limit] offset:offset] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] offset:offset] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] orderBy:orderList] limit:limit] offset:offset] executeWithRow:row];
 }
 
-- (BOOL)updateProperties:(const WCTPropertyList &)propertyList
-                 withRow:(WCTOneRow *)row
-                   where:(const WCTCondition &)condition
-                 orderBy:(const WCTOrderByList &)orderList
-                   limit:(const WCTLimit &)limit
-                  offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                       orderBy:(const WCTOrderByList &)orderList
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
 {
     return [[[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] offset:offset] executeWithRow:row];
 }
 
-#pragma mark - Update Properties With StatementHandle
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
+#pragma mark - Update Properties With Value
+- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+                      withValue:(WCTValue *)value
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       limit:(const WCTLimit &)limit
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] limit:limit] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                      offset:(const WCTOffset &)offset
 {
     return [[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] offset:offset] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] limit:limit] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] offset:offset] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] limit:limit] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] offset:offset] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] limit:limit] offset:offset] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] offset:offset] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] orderBy:orderList] limit:limit] offset:offset] executeWithRow:@[ value ]];
 }
 
-- (BOOL)updateProperty:(const WCTProperty &)property
-             withValue:(WCTValue *)value
-                 where:(const WCTCondition &)condition
-               orderBy:(const WCTOrderByList &)orderList
-                 limit:(const WCTLimit &)limit
-                offset:(const WCTOffset &)offset
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                     orderBy:(const WCTOrderByList &)orderList
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
 {
     return [[[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] limit:limit] offset:offset] executeWithRow:@[ value ]];
 }
