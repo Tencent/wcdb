@@ -23,9 +23,9 @@
 
 @interface WCTSampleORMColumnConstraint : NSObject <WCTTableCoding>
 
-@property int primaryProperty;
-@property NSString *uniqueProperty;
-@property NSData *notNullProperty;
+@property(nonatomic, assign) int primaryProperty;
+@property(nonatomic, retain) NSString *uniqueProperty;
+@property(nonatomic, retain) NSData *notNullProperty;
 
 WCDB_PROPERTY(primaryProperty)
 WCDB_PROPERTY(uniqueProperty)

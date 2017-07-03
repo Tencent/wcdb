@@ -79,7 +79,8 @@ bool Database::rollback(Error &error)
     RecyclableHandle handle = flowOut(error);
     bool result = false;
     if (handle != nullptr) {
-        result = CoreBase::exec(handle, StatementTransaction().rollback(), error);
+        result =
+            CoreBase::exec(handle, StatementTransaction().rollback(), error);
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->erase(getPath());

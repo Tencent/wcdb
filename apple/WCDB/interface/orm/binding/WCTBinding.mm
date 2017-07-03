@@ -78,6 +78,11 @@ const WCTColumnBindingList &WCTBinding::getColumnBindingList() const
     return m_columnBindingList;
 }
 
+const WCTColumnBindingMap &WCTBinding::getColumnBindingMap() const
+{
+    return m_columnBindingMap;
+}
+
 void WCTBinding::lazyInitConstraintBinding()
 {
     if (!m_constraintBindingList) {

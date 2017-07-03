@@ -23,8 +23,8 @@
 
 @interface WCTSampleRepair : NSObject <WCTTableCoding>
 
-@property int identifier;
-@property(retain) NSString *content;
+@property(nonatomic, assign) int identifier;
+@property(nonatomic, retain) NSString *content;
 
 WCDB_PROPERTY(identifier)
 WCDB_PROPERTY(content)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Device Info</key>
+	<dict>
+		<key>CPU Frequency</key>
+		<string>3.50 GHz</string>
+		<key>Is In Debug Mode</key>
+		<false/>
+		<key>Model</key>
+		<string>iMac14,2</string>
+		<key>Number of Cores</key>
+		<integer>8</integer>
+		<key>OS Version</key>
+		<string>10.12.5</string>
+		<key>Physical Memory</key>
+		<string>16384 MB</string>
+	</dict>
+	<key>Record</key>
+	<dict>
+		<key>Database</key>
+		<string>FMDB</string>
+		<key>Elapsed Time</key>
+		<string>1.02 seconds</string>
+		<key>Op Count</key>
+		<integer>2000000</integer>
+		<key>Rate</key>
+		<string>1967450.30 ops per second</string>
+		<key>Type</key>
+		<string>Baseline_Read</string>
+	</dict>
+</dict>
+</plist>

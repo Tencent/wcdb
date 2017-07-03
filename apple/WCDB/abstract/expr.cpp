@@ -531,7 +531,7 @@ Expr Expr::total(bool distinct) const
 
 std::string Expr::literalValue(const char *value)
 {
-    return literalValue(std::string(value));
+    return literalValue(value ? std::string(value) : "");
 }
 
 std::string Expr::literalValue(const std::string &value)

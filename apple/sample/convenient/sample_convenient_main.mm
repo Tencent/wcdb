@@ -91,25 +91,25 @@ void sample_convenient_main(NSString *baseDirectory)
     {
         WCTSampleConvenient *object = [[WCTSampleConvenient alloc] init];
         object.stringValue = @"Update by object";
-        [database updateTable:tableName
-                 onProperties:WCTSampleConvenient.stringValue
-                   withObject:object];
+        [database updateAllRowsInTable:tableName
+                          onProperties:WCTSampleConvenient.stringValue
+                            withObject:object];
     }
     //Update by value
     {
         NSArray *row = [NSArray arrayWithObject:@"Update by value"];
-        [database updateTable:tableName
-                 onProperties:WCTSampleConvenient.stringValue
-                      withRow:row];
+        [database updateAllRowsInTable:tableName
+                          onProperties:WCTSampleConvenient.stringValue
+                               withRow:row];
     }
     //Update with condition/order/offset/limit
     {
         WCTSampleConvenient *object = [[WCTSampleConvenient alloc] init];
         object.stringValue = @"Update with condition/order/offset/limit";
-        [database updateTable:tableName
-                 onProperties:WCTSampleConvenient.stringValue
-                   withObject:object
-                        where:WCTSampleConvenient.intValue > 0];
+        [database updateRowsInTable:tableName
+                       onProperties:WCTSampleConvenient.stringValue
+                         withObject:object
+                              where:WCTSampleConvenient.intValue > 0];
     }
 
     //Select One Object

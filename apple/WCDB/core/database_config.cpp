@@ -21,6 +21,7 @@
 #include <WCDB/database.hpp>
 #include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>
+#include <WCDB/timed_queue.hpp>
 #include <WCDB/utility.hpp>
 #include <queue>
 #include <sqlcipher/sqlite3.h>
@@ -33,7 +34,36 @@ const std::string Database::defaultConfigName = "default";
 const std::string Database::defaultCipherConfigName = "cipher";
 const std::string Database::defaultTraceConfigName = "trace";
 const std::string Database::defaultCheckpointConfigName = "checkpoint";
+const std::string Database::defaultSyncName = "sync";
 std::shared_ptr<Trace> Database::s_globalTrace = nullptr;
+
+static const Config s_checkpointConfig = [](std::shared_ptr<Handle> &handle,
+                                            Error &error) -> bool {
+    handle->registerCommitedHook(
+        [](Handle *handle, int pages, void *) {
+            static TimedQueue<std::string> s_timedQueue(2);
+            if (pages > 1000) {
+                s_timedQueue.reQueue(handle->path);
+            }
+            static std::thread s_checkpointThread([]() {
+                pthread_setname_np(
+                    ("WCDB-" + Database::defaultCheckpointConfigName).c_str());
+                while (true) {
+                    s_timedQueue.waitUntilExpired([](const std::string &path) {
+                        Database database(path);
+                        WCDB::Error innerError;
+                        database.exec(
+                            StatementPragma().pragma(Pragma::WalCheckpoint),
+                            innerError);
+                    });
+                }
+            });
+            static std::once_flag s_flag;
+            std::call_once(s_flag, []() { s_checkpointThread.detach(); });
+        },
+        nullptr);
+    return true;
+};
 
 const Configs Database::defaultConfigs(
     {{
@@ -90,6 +120,17 @@ const Configs Database::defaultConfigs(
                  }
              }
 
+             //Synchronous
+             {
+                 static const StatementPragma s_setSynchronousFull =
+                     StatementPragma().pragma(Pragma::Synchronous, "NORMAL");
+
+                 if (!handle->exec(s_setSynchronousFull)) {
+                     error = handle->getError();
+                     return false;
+                 }
+             }
+
              //Journal Mode
              {
                  static const StatementPragma s_getJournalMode =
@@ -121,106 +162,20 @@ const Configs Database::defaultConfigs(
                  }
              }
 
-             //Synchronous
-             {
-                 static const StatementPragma s_setSynchronousFull =
-                     StatementPragma().pragma(Pragma::Synchronous, "FULL");
-
-                 if (!handle->exec(s_setSynchronousFull)) {
-                     error = handle->getError();
-                     return false;
-                 }
-             }
-
-             //Fullfsync
-             {
-                 static const StatementPragma s_setFullFsync =
-                     StatementPragma().pragma(Pragma::Fullfsync, "ON");
-
-                 if (!handle->exec(s_setFullFsync)) {
-                     error = handle->getError();
-                     return false;
-                 }
-             }
-
              error.reset();
              return true;
          },
          2,
      },
      {
-         Database::defaultCheckpointConfigName,
-         [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-
-             static std::unordered_map<std::string, int> s_checkpointStep;
-             static std::mutex s_checkpointStepMutex;
-             s_checkpointStepMutex.lock();
-             auto iter = s_checkpointStep.find(handle->path);
-             if (iter == s_checkpointStep.end()) {
-                 iter = s_checkpointStep.insert({handle->path, 1000}).first;
-             }
-             int *checkpointStepPointer = &iter->second;
-             s_checkpointStepMutex.unlock();
-
-             handle->registerCommitedHook(
-                 [](Handle *handle, int pages, void *p) {
-                     //Since sqlite can't write concurrently, checkpointStepPointer does not need a mutex.
-                     int *checkpointStepPointer = (int *) p;
-                     if (*checkpointStepPointer != 0) {
-                         if (pages > *checkpointStepPointer) {
-                             *checkpointStepPointer = 0;
-                             if (pthread_main_np() != 0) {
-                                 //dispatch checkpoint op to sub-thread
-                                 static std::queue<std::string> s_toCheckpoint;
-                                 static std::condition_variable s_cond;
-                                 static std::mutex s_mutex;
-                                 static std::thread s_checkpointThread([]() {
-                                     pthread_setname_np(
-                                         ("WCDB-" +
-                                          Database::defaultCheckpointConfigName)
-                                             .c_str());
-                                     while (true) {
-                                         std::string path;
-                                         {
-                                             std::unique_lock<std::mutex>
-                                                 lockGuard(s_mutex);
-                                             if (s_toCheckpoint.empty()) {
-                                                 s_cond.wait(lockGuard);
-                                                 continue;
-                                             }
-                                             path = s_toCheckpoint.front();
-                                             s_toCheckpoint.pop();
-                                         }
-                                         Database database(path);
-                                         WCDB::Error innerError;
-                                         database.exec(
-                                             StatementPragma().pragma(
-                                                 Pragma::WalCheckpoint),
-                                             innerError);
-                                     }
-                                 });
-                                 static std::once_flag s_flag;
-                                 std::call_once(s_flag, []() {
-                                     s_checkpointThread.detach();
-                                 });
-
-                                 std::unique_lock<std::mutex> lockGuard(
-                                     s_mutex);
-                                 s_toCheckpoint.push(handle->path);
-                                 s_cond.notify_one();
-                             } else {
-                                 handle->exec(StatementPragma().pragma(
-                                     Pragma::WalCheckpoint));
-                             }
-                         }
-                     } else {
-                         *checkpointStepPointer = pages + 1000;
-                     }
-                 },
-                 checkpointStepPointer);
-             return true;
-         },
+         Database::defaultSyncName,
+         nullptr, //placeholder
          3,
+     },
+     {
+         Database::defaultCheckpointConfigName,
+         s_checkpointConfig, //checkpoint opti
+         4,
      }});
 
 void Database::setConfig(const std::string &name,
@@ -243,8 +198,41 @@ void Database::setCipherKey(const void *key, int size)
     m_pool->setConfig(
         Database::defaultCipherConfigName,
         [keys](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+
             bool result =
                 handle->setCipherKey(keys->data(), (int) keys->size());
+
+            //Page Size
+            {
+                static const StatementPragma s_getCipherPageSize =
+                    StatementPragma().pragma(Pragma::CipherPageSize);
+                static const StatementPragma s_setCipherPageSize =
+                    StatementPragma().pragma(Pragma::CipherPageSize, 4096);
+
+                //Get Page Size
+                std::shared_ptr<StatementHandle> statementHandle =
+                    handle->prepare(s_getCipherPageSize);
+                if (!statementHandle) {
+                    error = handle->getError();
+                    return false;
+                }
+                statementHandle->step();
+                if (!statementHandle->isOK()) {
+                    error = statementHandle->getError();
+                    return false;
+                }
+                int cipherPageSize =
+                    statementHandle->getValue<WCDB::ColumnType::Integer32>(0);
+                statementHandle->finalize();
+
+                //Set Page Size
+                if (cipherPageSize != 4096 &&
+                    !handle->exec(s_setCipherPageSize)) {
+                    error = handle->getError();
+                    return false;
+                }
+            }
+
             error = handle->getError();
             return result;
         });
@@ -258,6 +246,59 @@ void Database::setTrace(const Trace &trace)
             handle->setTrace(trace);
             return true;
         });
+}
+
+void Database::setSyncEnabled(bool sync)
+{
+    if (sync) {
+        m_pool->setConfig(
+            Database::defaultSyncName,
+            [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+
+                //Synchronous
+                {
+                    static const StatementPragma s_setSynchronousFull =
+                        StatementPragma().pragma(Pragma::Synchronous, "FULL");
+
+                    if (!handle->exec(s_setSynchronousFull)) {
+                        error = handle->getError();
+                        return false;
+                    }
+                }
+
+                //Checkpoint Fullfsync
+                {
+                    static const StatementPragma s_setCheckpointFullfsync =
+                        StatementPragma().pragma(Pragma::CheckpointFullfsync,
+                                                 true);
+
+                    if (!handle->exec(s_setCheckpointFullfsync)) {
+                        error = handle->getError();
+                        return false;
+                    }
+                }
+
+                //Fullfsync
+                {
+                    static const StatementPragma s_setFullFsync =
+                        StatementPragma().pragma(Pragma::Fullfsync, true);
+
+                    if (!handle->exec(s_setFullFsync)) {
+                        error = handle->getError();
+                        return false;
+                    }
+                }
+
+                error.reset();
+                return true;
+            });
+        //disable checkpoint opti for sync
+        m_pool->setConfig(Database::defaultCheckpointConfigName, nullptr);
+    } else {
+        m_pool->setConfig(Database::defaultSyncName, nullptr);
+        m_pool->setConfig(Database::defaultCheckpointConfigName,
+                          s_checkpointConfig);
+    }
 }
 
 void Database::SetGlobalTrace(const Trace &globalTrace)

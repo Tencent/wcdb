@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Device Info</key>
+	<dict>
+		<key>CPU Frequency</key>
+		<string>0.00 GHz</string>
+		<key>Is In Debug Mode</key>
+		<false/>
+		<key>Model</key>
+		<string>N71AP</string>
+		<key>Number of Cores</key>
+		<integer>2</integer>
+		<key>OS Version</key>
+		<string>10.3.2</string>
+		<key>Physical Memory</key>
+		<string>2005 MB</string>
+	</dict>
+	<key>Record</key>
+	<dict>
+		<key>Database</key>
+		<string>WCDB</string>
+		<key>Elapsed Time</key>
+		<string>0.66 seconds</string>
+		<key>Op Count</key>
+		<integer>300000</integer>
+		<key>Rate</key>
+		<string>457199.33 ops per second</string>
+		<key>Type</key>
+		<string>Baseline_Batch_Write</string>
+	</dict>
+</dict>
+</plist>

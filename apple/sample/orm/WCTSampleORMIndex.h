@@ -23,9 +23,9 @@
 
 @interface WCTSampleORMIndex : NSObject <WCTTableCoding>
 
-@property int indexProperty;
-@property(retain) NSString *multiIndexPart1;
-@property float multiIndexPart2;
+@property(nonatomic, assign) int indexProperty;
+@property(nonatomic, retain) NSString *multiIndexPart1;
+@property(nonatomic, assign) float multiIndexPart2;
 
 WCDB_PROPERTY(indexProperty)
 WCDB_PROPERTY(multiIndexPart1)
