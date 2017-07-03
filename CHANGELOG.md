@@ -1,3 +1,32 @@
+## v1.0.2
+
+#### iOS
+
+- Performance optimization and add Benchmark for performance test, which shows that WCDB take a better performance than FMDB.
+  **Batch Write Performance Test**.
+
+  ![](https://raw.githubusercontent.com/wiki/Tencent/wcdb/assets/benchmark/baseline_batch_write.png)
+  For more benchmark data, please refer to [our benchmark][Benchmark-iOS].
+
+- Change builtin NSData/NSMutableData column coding from NSCoding to raw data. 
+  For those old data before v1.0.2, you can call `[WCTCompatible sharedCompatible].builtinNSDataColumnCodingCompatibleEnabled = YES` to make it compatible.
+
+- Rename `updateTable:...` to `updateRowsInTable:...`  to make the interface more clear. For compatible, you can just do a batch string replacement.
+
+- Add `attach`, `detach`, `vacuum`, `savepoint`, `rollback`, `release`, `reindex`, `explain` statement for WINQ.
+
+- Remove auto increment for `insertOrReplace`.
+
+- Add pragma `cipher`, `cipher_add_random`, `cipher_default_kdf_iter` and so on for WINQ.
+
+- Fix an spelling issue: `statictics` to `statistics`. For compatible, you can just do a batch string replacement.
+
+- Fix some issue that it's not critical.
+
+#### Android
+
+* TODO
+
 ## v1.0.1
 
 #### iOS
