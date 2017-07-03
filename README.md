@@ -8,12 +8,31 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
 
 ## Features
 
-* **WINQ** (WCDB language integrated query): WINQ is a native data querying capability which frees developers from writing glue code to concatenate SQL query strings.
-* **ORM** (Object Relational Mapping): WCDB provides a flexible, easy-to-use ORM for creating tables, indices and constraints, as well as CRUD through ObjC objects.
-* **Multi-threaded concurrency**: WCDB supports concurrent read-read and read-write access via connection pooling.
-* **Encryption Support**: WCDB supports database encryption via [SQLCipher][sqlcipher].
-* **Corruption recovery**: WCDB provides a built-in repair kit for database corruption recovery.
-* **Anti-injection**: WCDB provides a built-in protection from SQL injection.
+* **Easy-to-use**. Through WCDB, you can get objects from database in one line code. 
+
+  * **WINQ** (WCDB language integrated query): WINQ is a native data querying capability which frees developers from writing glue code to concatenate SQL query strings.
+
+  * **ORM** (Object Relational Mapping): WCDB provides a flexible, easy-to-use ORM for creating tables, indices and constraints, as well as CRUD through ObjC objects.
+
+    ```objective-c
+    [database getObjectsOfClass:WCTSampleConvenient.class
+                      fromTable:tableName
+                          where:WCTSampleConvenient.intValue>=10
+                          limit:20];
+    ```
+
+* **Efficient**. Through the framework layer and sqlcipher source optimization, WCDB have more efficient performance.
+
+  * **Multi-threaded concurrency**: WCDB supports concurrent read-read and read-write access via connection pooling.
+  * **Batch Write Performance Test**.
+    ![](https://raw.githubusercontent.com/wiki/Tencent/wcdb/assets/benchmark/baseline_batch_write.png)
+    For more benchmark data, please refer to [our benchmark][Benchmark-iOS].
+
+* **Complete**.
+
+  * **Encryption Support**: WCDB supports database encryption via [SQLCipher][sqlcipher].
+  * **Corruption recovery**: WCDB provides a built-in repair kit for database corruption recovery.
+  * **Anti-injection**: WCDB provides a built-in protection from SQL injection.
 
 ## Getting Started
 
@@ -66,6 +85,7 @@ Tutorials can be found [here][iOS-tutorial].
 
 * Documentations can be found on [our Wiki][wcdb-wiki].
 * API references for iOS/macOS can be found [here][wcdb-docs-ios].
+* Performence data can be found on [our benchmark][Benchmark-iOS].
 
 # WCDB for Android
 
@@ -195,4 +215,5 @@ and place them to proper locations suitable for WCDB library building.
 [wcdb-docs-android]: https://tencent.github.io/wcdb/references/android/index.html
 [sqlcipher]: https://github.com/sqlcipher/sqlcipher
 [iOS-tutorial]: https://github.com/Tencent/wcdb/wiki/iOS-macOS-Tutorial
+[Benchmark-iOS]: https://github.com/Tencent/wcdb/wiki/WCDB-iOS-benchmark
 
