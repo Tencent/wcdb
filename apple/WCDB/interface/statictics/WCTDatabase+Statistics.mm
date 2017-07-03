@@ -18,35 +18,27 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTChainCall+Statictics.h>
-#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Statistics.h>
 
-@implementation WCTChainCall (Statictics)
+@implementation WCTDatabase (Statistics)
 
-- (void)setStaticticsEnabled:(BOOL)enabled
+- (void)setTrace:(WCTTrace)trace
 {
-    if (!enabled) {
-        _ticker = nullptr;
-    } else if (!_ticker) {
-        _ticker.reset(new WCDB::Ticker);
+    if (trace) {
+        _database->setTrace([trace](WCDB::Tag tag,
+                                    const std::map<std::string, unsigned int> &footprint,
+                                    const int64_t &cost) {
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            for (const auto &iter : footprint) {
+                [dictionary setObject:@(iter.second)
+                               forKey:@(iter.first.c_str())];
+            }
+            trace(tag, dictionary, (NSUInteger) cost);
+        });
+    } else {
+        _database->setTrace(nullptr);
     }
-}
-
-- (double)cost
-{
-    if (_ticker) {
-        return _ticker->getElapseTime();
-    }
-    return 0;
-}
-
-- (WCTError *)error
-{
-    if (_error.isOK()) {
-        return nil;
-    }
-    return [WCTError errorWithWCDBError:_error];
 }
 
 @end

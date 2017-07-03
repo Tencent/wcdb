@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTTransaction.h>
 
-@interface WCTTransaction (Statictics)
+@interface WCTTransaction (Statistics)
 
 /**
  More detailed error messages.
@@ -37,11 +37,11 @@
  
  @param enabled enabled
  */
-- (void)setStaticticsEnabled:(BOOL)enabled;
+- (void)setStatisticsEnabled:(BOOL)enabled;
 
 /**
  The time consuming. You can call it to profile the performance.
- See [setStaticticsEnabled:] also.
+ See [setStatisticsEnabled:] also.
  
  @return Time in seconds
  */

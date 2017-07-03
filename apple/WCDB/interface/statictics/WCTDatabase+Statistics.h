@@ -18,13 +18,17 @@
  * limitations under the License.
  */
 
-#import "WCTSampleStatictics.h"
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTStatistics.h>
 
-@implementation WCTSampleStatictics
+@interface WCTDatabase (Statistics)
 
-WCDB_IMPLEMENTATION(WCTSampleStatictics)
-WCDB_SYNTHESIZE(WCTSampleStatictics, intValue)
-
-WCDB_UNIQUE(WCTSampleStatictics, intValue)
+/**
+ @brief You can register a tracer to monitor the performance of all SQLs in this database. The database tracer will recover the global tracer for specifiy database.
+ @param trace trace
+ @see [WCTStatistics SetGlobalTrace:]
+ */
+- (void)setTrace:(WCTTrace)trace;
 
 @end

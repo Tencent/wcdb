@@ -19,29 +19,5 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTChainCall.h>
 
-@interface WCTChainCall (Statictics)
-
-/**
- @brief After enabling, you can call the [cost] interface to get time consuming.
- @warning You should call it before calling all other interface, otherwise [cost] will return an inaccurate result.
- @see cost 
- @param enabled enabled
- */
-- (void)setStaticticsEnabled:(BOOL)enabled;
-
-/**
- @brief The time consuming. You can call it to profile the performance.
- @see setStaticticsEnabled:
- @return Time in seconds
- */
-- (double)cost;
-
-/**
- @brief More detailed error messages.
- @return nil or error.isOK==YES if no error occurs.
- */
-- (WCTError *)error;
-
-@end
+void sample_statistics_main(NSString *baseDirectory);

@@ -18,6 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WCTSampleStatistics.h"
 
-void sample_statictics_main(NSString *baseDirectory);
+@implementation WCTSampleStatistics
+
+WCDB_IMPLEMENTATION(WCTSampleStatistics)
+WCDB_SYNTHESIZE(WCTSampleStatistics, intValue)
+
+WCDB_UNIQUE(WCTSampleStatistics, intValue)
+
+@end

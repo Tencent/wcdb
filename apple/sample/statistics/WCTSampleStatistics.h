@@ -19,16 +19,11 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTStatictics.h>
+#import <WCDB/WCDB.h>
 
-@interface WCTDatabase (Statictics)
+@interface WCTSampleStatistics : NSObject <WCTTableCoding>
 
-/**
- @brief You can register a tracer to monitor the performance of all SQLs in this database. The database tracer will recover the global tracer for specifiy database.
- @param trace trace
- @see [WCTStatictics SetGlobalTrace:]
- */
-- (void)setTrace:(WCTTrace)trace;
+@property(nonatomic, assign) int intValue;
+WCDB_PROPERTY(intValue)
 
 @end

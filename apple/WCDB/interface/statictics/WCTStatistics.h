@@ -32,14 +32,14 @@ typedef void (^WCTErrorReport)(WCTError *);
 typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
 
 /**
- Statictics
+ Statistics
  */
-@interface WCTStatictics : NSObject
+@interface WCTStatistics : NSObject
 
 /**
  @brief You can register a reporter to monitor all errors.
  
-     [WCTStatictics SetGlobalErrorReport:^(WCTError* error) {
+     [WCTStatistics SetGlobalErrorReport:^(WCTError* error) {
         NSLog(@"%@", error);
      }];
  
@@ -58,7 +58,7 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteg
         1. You should register trace before all db operation. 
         2. Global tracer will be recovered by db tracer.
  
-    [WCTStatictics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+    [WCTStatistics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
         NSLog(@"Tag: %d", tag);
         [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
             NSLog(@"SQL: %@ Count: %d", sql, count.intValue);

@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import "sample_statictics_main.h"
-#import "WCTSampleStatictics.h"
+#import "sample_statistics_main.h"
+#import "WCTSampleStatistics.h"
 
-void sample_statictics_main(NSString *baseDirectory)
+void sample_statistics_main(NSString *baseDirectory)
 {
-    NSLog(@"Sample-statictics Begin");
-    NSString *className = NSStringFromClass(WCTSampleStatictics.class);
+    NSLog(@"Sample-statistics Begin");
+    NSString *className = NSStringFromClass(WCTSampleStatistics.class);
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *tableName = className;
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
@@ -34,7 +34,7 @@ void sample_statictics_main(NSString *baseDirectory)
 
     //trace
     //You should register trace before all db operation.
-    [WCTStatictics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString *, NSNumber *> *sqls, NSInteger cost) {
+    [WCTStatistics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString *, NSNumber *> *sqls, NSInteger cost) {
       NSLog(@"Tag: %d", tag);
       [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
         NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
@@ -43,15 +43,15 @@ void sample_statictics_main(NSString *baseDirectory)
     }];
 
     //error
-    [WCTStatictics SetGlobalErrorReport:^(WCTError *error) {
+    [WCTStatistics SetGlobalErrorReport:^(WCTError *error) {
       NSLog(@"[Error] %@", error);
     }];
 
-    [database createTableAndIndexesOfName:tableName withClass:WCTSampleStatictics.class];
+    [database createTableAndIndexesOfName:tableName withClass:WCTSampleStatistics.class];
 
     //trace for insertion
     {
-        WCTSampleStatictics *object = [[WCTSampleStatictics alloc] init];
+        WCTSampleStatistics *object = [[WCTSampleStatistics alloc] init];
         object.intValue = 100;
         [database insertObject:object into:tableName];
     }
@@ -60,13 +60,13 @@ void sample_statictics_main(NSString *baseDirectory)
     {
         NSMutableArray *objects = [[NSMutableArray alloc] init];
         for (int i = 0; i < 10; ++i) {
-            WCTSampleStatictics *object = [[WCTSampleStatictics alloc] init];
+            WCTSampleStatistics *object = [[WCTSampleStatistics alloc] init];
             object.intValue = i;
         }
         [database runTransaction:^BOOL {
-          NSArray *results = [database getAllObjectsOfClass:WCTSampleStatictics.class
+          NSArray *results = [database getAllObjectsOfClass:WCTSampleStatistics.class
                                                   fromTable:tableName];
-          for (WCTSampleStatictics *object in results) {
+          for (WCTSampleStatistics *object in results) {
               object.intValue = -object.intValue;
           }
           [database insertObjects:results into:tableName];
@@ -76,12 +76,12 @@ void sample_statictics_main(NSString *baseDirectory)
 
     //error
     {
-        WCTSampleStatictics *object = [[WCTSampleStatictics alloc] init];
+        WCTSampleStatistics *object = [[WCTSampleStatistics alloc] init];
         object.intValue = 100;
         [database insertObject:object into:tableName];
     }
 
     //unregister
-    [WCTStatictics SetGlobalTrace:nil];
-    [WCTStatictics SetGlobalErrorReport:nil];
+    [WCTStatistics SetGlobalTrace:nil];
+    [WCTStatistics SetGlobalErrorReport:nil];
 }

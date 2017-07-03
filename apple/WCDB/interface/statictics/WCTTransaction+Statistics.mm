@@ -20,9 +20,9 @@
 
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTransaction+Private.h>
-#import <WCDB/WCTTransaction+Statictics.h>
+#import <WCDB/WCTTransaction+Statistics.h>
 
-@implementation WCTTransaction (Statictics)
+@implementation WCTTransaction (Statistics)
 
 - (WCTError *)error
 {
@@ -32,7 +32,7 @@
     return [WCTError errorWithWCDBError:_error];
 }
 
-- (void)setStaticticsEnabled:(BOOL)enabled
+- (void)setStatisticsEnabled:(BOOL)enabled
 {
     if (!enabled) {
         _ticker = nullptr;
