@@ -105,27 +105,24 @@
         return NO;
     }
 
-    return _core->runEmbeddedTransaction([self, object](WCDB::Error &error) -> bool {
-        WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
-        if (!statementHandle) {
+    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
+    if (!statementHandle) {
+        return NO;
+    }
+    int index = 1;
+    for (const WCTProperty &property : _propertyList) {
+        if (![self bindProperty:property
+                         ofObject:object
+                toStatementHandle:statementHandle
+                          atIndex:index
+                        withError:_error]) {
             return NO;
         }
-        int index = 1;
-        for (const WCTProperty &property : _propertyList) {
-            if (![self bindProperty:property
-                             ofObject:object
-                    toStatementHandle:statementHandle
-                              atIndex:index
-                            withError:_error]) {
-                return NO;
-            }
-            ++index;
-        }
-        statementHandle->step();
-        _error = statementHandle->getError();
-        return _error.isOK();
-    },
-                                         _error);
+        ++index;
+    }
+    statementHandle->step();
+    _error = statementHandle->getError();
+    return _error.isOK();
 }
 
 - (BOOL)executeWithRow:(WCTOneRow *)row
@@ -139,26 +136,23 @@
         return NO;
     }
 
-    return _core->runEmbeddedTransaction([self, row](WCDB::Error &error) -> bool {
-        WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
-        if (!statementHandle) {
+    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
+    if (!statementHandle) {
+        return NO;
+    }
+    int index = 1;
+    for (WCTValue *value in row) {
+        if (![self bindWithValue:value
+                toStatementHandle:statementHandle
+                          atIndex:index
+                        withError:_error]) {
             return NO;
         }
-        int index = 1;
-        for (WCTValue *value in row) {
-            if (![self bindWithValue:value
-                    toStatementHandle:statementHandle
-                              atIndex:index
-                            withError:_error]) {
-                return NO;
-            }
-            ++index;
-        }
-        statementHandle->step();
-        _error = statementHandle->getError();
-        return _error.isOK();
-    },
-                                         _error);
+        ++index;
+    }
+    statementHandle->step();
+    _error = statementHandle->getError();
+    return _error.isOK();
 }
 
 @end
