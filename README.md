@@ -109,8 +109,8 @@ app module:
 
 ```gradle
 dependencies {
-    compile 'com.tencent.wcdb:wcdb-android:1.0.0'
-    // Replace "1.0.0" to any available version.
+    compile 'com.tencent.wcdb:wcdb-android:1.0.2'
+    // Replace "1.0.2" to any available version.
 }
 ```
 
