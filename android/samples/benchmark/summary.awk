@@ -15,6 +15,9 @@ $2 == "End" {
 }
 
 {
+    if (substr($2, 1, 1) == ">")
+        next
+
     item = $2
     value = $3
     
