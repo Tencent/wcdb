@@ -88,15 +88,13 @@
         return NO;
     }
     int index;
-    BOOL isAutoIncrement;
+    BOOL fillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
     for (WCTObject *object in objects) {
         index = 1;
-        isAutoIncrement = NO;
         for (const WCTProperty &property : _propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
                 statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
-                isAutoIncrement = YES;
             } else {
                 if (![self bindProperty:property
                                  ofObject:object
@@ -113,7 +111,7 @@
             error = statementHandle->getError();
             return NO;
         }
-        if (isAutoIncrement) {
+        if (fillLastInsertedRowID) {
             object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
         }
         statementHandle->resetBinding();
