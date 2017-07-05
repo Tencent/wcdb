@@ -22,6 +22,12 @@
 #import <objc/runtime.h>
 #import <string>
 
+#ifndef WCDB_COCOAPODS
+#if __has_feature(objc_arc)
+#error This file cannot be compiled with ARC. Either turn off ARC for the project or use -fno-objc-arc flag
+#endif
+#endif
+
 SEL WCTRuntimeBaseAccessor::GetGetterSelector(Class cls, const std::string &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());

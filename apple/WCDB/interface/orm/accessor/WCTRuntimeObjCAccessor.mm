@@ -21,6 +21,12 @@
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 #import <WCDB/error.hpp>
 
+#ifndef WCDB_COCOAPODS
+#if __has_feature(objc_arc)
+#error This file cannot be compiled with ARC. Either turn off ARC for the project or use -fno-objc-arc flag
+#endif
+#endif
+
 WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::string &propertyName)
     : WCTRuntimeAccessor<id>(instanceClass, propertyName)
     , WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
