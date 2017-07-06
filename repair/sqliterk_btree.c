@@ -300,8 +300,8 @@ static int sqliterkBtreeParseCell(sqliterk_btree *btree,
         offset += payloadSizeLength;
 
         int rowidLength;
-        int rowid;
-        rc = sqliterkParseVarint(pagedata, offset, &rowidLength, &rowid);
+        int64_t rowid;
+        rc = sqliterkParseVarint64(pagedata, offset, &rowidLength, &rowid);
         if (rc != SQLITERK_OK) {
             goto sqliterkBtreeParsePayload_End;
         }

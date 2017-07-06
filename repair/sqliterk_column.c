@@ -22,7 +22,7 @@
 #include "sqliterk_os.h"
 
 struct sqliterk_column {
-    int rowid;
+    int64_t rowid;
     sqliterk_values *values;
     sqliterk_values *overflowPages;
 };
@@ -80,14 +80,14 @@ sqliterk_values *sqliterkColumnGetValues(sqliterk_column *column)
     return column->values;
 }
 
-void sqliterkColumnSetRowId(sqliterk_column *column, int rowid)
+void sqliterkColumnSetRowId(sqliterk_column *column, int64_t rowid)
 {
     if (column) {
         column->rowid = rowid;
     }
 }
 
-int sqliterkColumnGetRowId(sqliterk_column *column)
+int64_t sqliterkColumnGetRowId(sqliterk_column *column)
 {
     if (!column) {
         return 0;
