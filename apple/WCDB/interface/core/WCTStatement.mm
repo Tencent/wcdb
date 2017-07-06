@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTStatement+Private.h>
 #import <WCDB/WCTStatement.h>
+#import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
 
 @implementation WCTStatement
@@ -45,30 +47,41 @@
 
 - (BOOL)bindValue:(WCTValue *)value toIndex:(int)index
 {
-    if ([value isKindOfClass:NSData.class]) {
-        NSData *data = (NSData *) value;
-        _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
-    } else if ([value isKindOfClass:NSString.class]) {
-        NSString *string = (NSString *) value;
-        _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(string.UTF8String, index);
-    } else if ([value isKindOfClass:NSNumber.class]) {
-        NSNumber *number = (NSNumber *) value;
-        if (CFNumberIsFloatType((CFNumberRef) number)) {
-            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
-        } else {
-            if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
-            } else {
-                _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
-            }
-        }
-    } else if ([value isKindOfClass:NSNull.class] || value == nil) {
-        _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
-    } else {
-        WCDB::Error::Abort(([NSString stringWithFormat:@"Binding statement with unknown type %@", NSStringFromClass(value.class)].UTF8String));
-        return NO;
+    WCTValueType valueType = [value valueType];
+    if (valueType == WCTValueTypeColumnCoding) {
+        value = [(id<WCTColumnCoding>) value archivedWCTValue];
+        valueType = [value valueType];
     }
-    return YES;
+    BOOL result = YES;
+    switch (valueType) {
+        case WCTValueTypeString:
+            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(((NSString *) value).UTF8String, index);
+            break;
+        case WCTValueTypeNumber: {
+            NSNumber *number = (NSNumber *) value;
+            if (CFNumberIsFloatType((CFNumberRef) number)) {
+                _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
+            } else {
+                if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+                    _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+                } else {
+                    _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
+                }
+            }
+        } break;
+        case WCTValueTypeData: {
+            NSData *data = (NSData *) value;
+            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
+        } break;
+        case WCTValueTypeNil:
+            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+            break;
+        default:
+            WCDB::Error::Abort(([NSString stringWithFormat:@"Binding statement with unknown type %@", NSStringFromClass(value.class)].UTF8String));
+            result = NO;
+            break;
+    }
+    return result;
 }
 
 //get value, index begin with 0

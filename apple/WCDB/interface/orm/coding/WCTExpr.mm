@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTExpr.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+WCTExpr.h>
+#import <WCDB/WCTValue.h>
 #import <WCDB/error.hpp>
 
 WCTExpr::WCTExpr()
@@ -64,28 +66,7 @@ WCTExpr::WCTExpr(WCTValue *value)
     : WCDB::Expr()
     , WCTPropertyBase(nil, nullptr)
 {
-    if ([value isKindOfClass:NSString.class]) {
-        NSString *string = (NSString *) value;
-        m_description = literalValue(string.UTF8String);
-    } else if ([value isKindOfClass:NSData.class]) {
-        NSData *data = (NSData *) value;
-        m_description = literalValue(data.bytes, (int) data.length);
-    } else if ([value isKindOfClass:NSNumber.class]) {
-        NSNumber *number = (NSNumber *) value;
-        if (CFNumberIsFloatType((CFNumberRef) number)) {
-            m_description = literalValue(number.doubleValue);
-        } else {
-            if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                m_description = literalValue(number.intValue);
-            } else {
-                m_description = literalValue(number.longLongValue);
-            }
-        }
-    } else if (value == nil || [value isKindOfClass:NSNull.class]) {
-        m_description = literalValue(nullptr);
-    } else {
-        WCDB::Error::Abort(([NSString stringWithFormat:@"Converting an unknown class [%@]", NSStringFromClass(value.class)].UTF8String));
-    }
+    m_description = literalValue(value);
 }
 
 WCTExpr::WCTExpr(const WCDB::Expr &expr, const WCTPropertyBase &propertyBase)
@@ -393,4 +374,42 @@ NSString *WCTExpr::getDescription() const
 WCTExpr WCTExpr::Function(NSString *function, const WCTExprList &exprList) const
 {
     return WCTExpr(Expr::Function(function.UTF8String, exprList));
+}
+
+std::string WCTExpr::literalValue(WCTValue *value)
+{
+    WCTValueType valueType = [value valueType];
+    if (valueType == WCTValueTypeColumnCoding) {
+        value = [(id<WCTColumnCoding>) value archivedWCTValue];
+        valueType = [value valueType];
+    }
+    switch (valueType) {
+        case WCTValueTypeString: {
+            NSString *string = (NSString *) value;
+            return WCDB::Expr::literalValue(string.UTF8String);
+        } break;
+        case WCTValueTypeNumber: {
+            NSNumber *number = (NSNumber *) value;
+            if (CFNumberIsFloatType((CFNumberRef) number)) {
+                return WCDB::Expr::literalValue(number.doubleValue);
+            } else {
+                if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+                    return WCDB::Expr::literalValue(number.intValue);
+                } else {
+                    return WCDB::Expr::literalValue(number.longLongValue);
+                }
+            }
+        } break;
+        case WCTValueTypeData: {
+            NSData *data = (NSData *) value;
+            return WCDB::Expr::literalValue(data.bytes, (int) data.length);
+        } break;
+        case WCTValueTypeNil: {
+            return WCDB::Expr::literalValue(nullptr);
+        } break;
+        default:
+            WCDB::Error::Abort(([NSString stringWithFormat:@"Converting an unknown class [%@]", NSStringFromClass(value.class)].UTF8String));
+            break;
+    }
+    return "";
 }

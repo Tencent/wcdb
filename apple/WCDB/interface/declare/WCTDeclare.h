@@ -118,6 +118,14 @@ typedef NSObject<WCTTableCoding> WCTObject;
 typedef NSDictionary<NSString *, WCTObject *>
     WCTMultiObject;        //table name -> object
 typedef NSObject WCTValue; //NSData, NSNumber, NSString, NSNull
+typedef NS_ENUM(int, WCTValueType) {
+    WCTValueTypeUnknown = -1,
+    WCTValueTypeNil = 0, //NSNull or nil.
+    WCTValueTypeString,  //NSString
+    WCTValueTypeNumber,  //NSNumber
+    WCTValueTypeData,    //NSData
+    WCTValueTypeColumnCoding, //id<WCTColumnCoding>, only for passing WCTValue to WCDB
+};
 typedef NSArray<WCTValue *> WCTOneRow;
 typedef NSArray<WCTValue *> WCTOneColumn;
 typedef NSArray<NSArray<WCTValue *> *> WCTColumnsXRows;

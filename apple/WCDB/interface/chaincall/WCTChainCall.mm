@@ -24,6 +24,7 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
 #import <WCDB/in_case_lock_guard.hpp>
 
@@ -137,39 +138,45 @@
 
 - (BOOL)bindWithValue:(WCTValue *)value toStatementHandle:(WCDB::RecyclableStatement &)statementHandle atIndex:(int)index withError:(WCDB::Error &)error
 {
-    if ([value isKindOfClass:NSNumber.class]) {
-        NSNumber *number = (NSNumber *) value;
-        if (CFNumberIsFloatType((CFNumberRef) number)) {
-            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
-        } else {
-            if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+    WCTValueType valueType = [value valueType];
+    if (valueType == WCTValueTypeColumnCoding) {
+        value = [(id<WCTColumnCoding>) value archivedWCTValue];
+        valueType = [value valueType];
+    }
+    BOOL result = YES;
+    switch (valueType) {
+        case WCTValueTypeString:
+            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(((NSString *) value).UTF8String, index);
+            break;
+        case WCTValueTypeNumber: {
+            NSNumber *number = (NSNumber *) value;
+            if (CFNumberIsFloatType((CFNumberRef) number)) {
+                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
             } else {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
+                if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+                } else {
+                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
+                }
             }
-        }
-        return YES;
+        } break;
+        case WCTValueTypeData: {
+            NSData *data = (NSData *) value;
+            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
+        } break;
+        case WCTValueTypeNil:
+            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+            break;
+        default:
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::ChainCall,
+                                         WCDB::Error::InterfaceCode::ORM,
+                                         [NSString stringWithFormat:@"Binding with unknown type %@", value.class].UTF8String,
+                                         &error);
+            result = NO;
+            break;
     }
-    if ([value isKindOfClass:NSString.class]) {
-        NSString *string = (NSString *) value;
-        statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(string.UTF8String, index);
-        return YES;
-    }
-    if ([value isKindOfClass:NSData.class]) {
-        NSData *data = (NSData *) value;
-        statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
-        return YES;
-    }
-    if ([value isKindOfClass:NSNull.class] || value == nil) {
-        statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
-        return YES;
-    }
-    WCDB::Error::ReportInterface(_core->getTag(),
-                                 _core->getPath(),
-                                 WCDB::Error::InterfaceOperation::ChainCall,
-                                 WCDB::Error::InterfaceCode::ORM,
-                                 [NSString stringWithFormat:@"Binding with unknown type %@", value.class].UTF8String,
-                                 &error);
-    return NO;
+    return result;
 }
 @end

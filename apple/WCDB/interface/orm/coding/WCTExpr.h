@@ -131,4 +131,5 @@ public:
 
 protected:
     Class m_cls;
+    std::string literalValue(WCTValue *value);
 };
