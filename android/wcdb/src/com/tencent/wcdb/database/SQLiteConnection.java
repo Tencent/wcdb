@@ -1475,42 +1475,46 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
 
         public void endOperation(int cookie) {
-            final Operation operation;
             final String sql;
+            final String kind;
             final int type;
             final long elapsedTimeMillis;
 
             synchronized (mOperations) {
-                operation = getOperationLocked(cookie);
-                sql = operation.mSql;
-                type = operation.mType;
-                elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
-
+                Operation operation = getOperationLocked(cookie);
                 if (endOperationDeferLogLocked(operation)) {
                     logOperationLocked(operation, null);
                 }
+
+                sql = operation.mSql;
+                kind = operation.mKind;
+                type = operation.mType;
+                elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
             }
 
-            mPool.traceExecute(sql, type, elapsedTimeMillis);
+            if (!"prepare".equals(kind))
+                mPool.traceExecute(sql, type, elapsedTimeMillis);
         }
 
         public boolean endOperationDeferLog(int cookie) {
-            final Operation operation;
             final String sql;
+            final String kind;
             final int type;
             final long elapsedTimeMillis;
             final boolean result;
 
             synchronized (mOperations) {
-                operation = getOperationLocked(cookie);
+                Operation operation = getOperationLocked(cookie);
+                result = endOperationDeferLogLocked(operation);
+
                 sql = operation.mSql;
+                kind = operation.mKind;
                 type = operation.mType;
                 elapsedTimeMillis = operation.mEndTime - operation.mStartTime;
-
-                result = endOperationDeferLogLocked(operation);
             }
 
-            mPool.traceExecute(sql, type, elapsedTimeMillis);
+            if (!"prepare".equals(kind))
+                mPool.traceExecute(sql, type, elapsedTimeMillis);
             return result;
         }
 
