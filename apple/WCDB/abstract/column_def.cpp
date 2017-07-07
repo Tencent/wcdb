@@ -125,4 +125,10 @@ ColumnDef &ColumnDef::makeUnique()
     return *this;
 }
 
+ColumnDef &ColumnDef::makeForeignKey(const ForeignKey &foreignKey)
+{
+    m_description.append(" " + foreignKey.getDescription());
+    return *this;
+}
+
 } //namespace WCDB
