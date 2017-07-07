@@ -25,6 +25,7 @@
 #include <WCDB/column_type.hpp>
 #include <WCDB/declare.hpp>
 #include <WCDB/describable.hpp>
+#include <WCDB/foreign_key.hpp>
 #include <WCDB/order_term.hpp>
 
 namespace WCDB {
@@ -68,6 +69,8 @@ public:
     ColumnDef &makeNotNull();
 
     ColumnDef &makeUnique();
+
+    ColumnDef &makeForeignKey(const ForeignKey &foreignKey);
 };
 
 } //namespace WCDB
