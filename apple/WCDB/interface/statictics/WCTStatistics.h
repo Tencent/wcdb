@@ -82,6 +82,11 @@ typedef void (^WCTSQLTrace)(NSString *);
  @brief You can register a tracer to monitor the execution of all SQLs.
         It returns a prepared or executed SQL.
         Note that you should register trace before all db operation. 
+ 
+    [WCTStatistics SetGlobalSQLTrace:^(NSString* sql) {
+        NSLog(@"SQL: %@", sql);
+    }];
+ 
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @see WCTSQLTrace
  @param trace trace
