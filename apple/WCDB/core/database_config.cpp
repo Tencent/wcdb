@@ -35,7 +35,8 @@ const std::string Database::defaultCipherConfigName = "cipher";
 const std::string Database::defaultTraceConfigName = "trace";
 const std::string Database::defaultCheckpointConfigName = "checkpoint";
 const std::string Database::defaultSyncName = "sync";
-std::shared_ptr<Trace> Database::s_globalTrace = nullptr;
+std::shared_ptr<PerformanceTrace> Database::s_globalPerformanceTrace = nullptr;
+std::shared_ptr<SQLTrace> Database::s_globalSQLTrace = nullptr;
 
 static const Config s_checkpointConfig = [](std::shared_ptr<Handle> &handle,
                                             Error &error) -> bool {
@@ -69,9 +70,18 @@ const Configs Database::defaultConfigs(
     {{
          Database::defaultTraceConfigName,
          [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-             std::shared_ptr<Trace> trace = s_globalTrace;
-             if (trace) {
-                 handle->setTrace(*trace.get());
+             {
+                 std::shared_ptr<PerformanceTrace> trace =
+                     s_globalPerformanceTrace;
+                 if (trace) {
+                     handle->setPerformanceTrace(*trace.get());
+                 }
+             }
+             {
+                 std::shared_ptr<SQLTrace> trace = s_globalSQLTrace;
+                 if (trace) {
+                     handle->setSQLTrace(*trace.get());
+                 }
              }
              return true;
          },
@@ -238,12 +248,12 @@ void Database::setCipherKey(const void *key, int size)
         });
 }
 
-void Database::setTrace(const Trace &trace)
+void Database::setPerformanceTrace(const PerformanceTrace &trace)
 {
     m_pool->setConfig(
         Database::defaultTraceConfigName,
         [trace](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-            handle->setTrace(trace);
+            handle->setPerformanceTrace(trace);
             return true;
         });
 }
@@ -301,9 +311,14 @@ void Database::setSyncEnabled(bool sync)
     }
 }
 
-void Database::SetGlobalTrace(const Trace &globalTrace)
+void Database::SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace)
 {
-    s_globalTrace.reset(new Trace(globalTrace));
+    s_globalPerformanceTrace.reset(new PerformanceTrace(globalTrace));
+}
+
+void Database::SetGlobalSQLTrace(const SQLTrace &globalTrace)
+{
+    s_globalSQLTrace.reset(new SQLTrace(globalTrace));
 }
 
 } //namespace WCDB

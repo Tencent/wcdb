@@ -35,12 +35,12 @@
     }
 }
 
-+ (void)SetGlobalTrace:(WCTTrace)trace
++ (void)SetGlobalPerformanceTrace:(WCTPerformanceTrace)trace
 {
     if (trace) {
-        WCDB::Database::SetGlobalTrace([trace](WCDB::Tag tag,
-                                               const std::map<std::string, unsigned int> &footprint,
-                                               const int64_t &cost) {
+        WCDB::Database::SetGlobalPerformanceTrace([trace](WCDB::Tag tag,
+                                                          const std::map<const std::string, unsigned int> &footprint,
+                                                          const int64_t &cost) {
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             for (const auto &iter : footprint) {
                 [dictionary setObject:@(iter.second)
@@ -49,7 +49,18 @@
             trace(tag, dictionary, (NSUInteger) cost);
         });
     } else {
-        WCDB::Database::SetGlobalTrace(nullptr);
+        WCDB::Database::SetGlobalPerformanceTrace(nullptr);
+    }
+}
+
++ (void)SetGlobalSQLTrace:(WCTSQLTrace)trace
+{
+    if (trace) {
+        WCDB::Database::SetGlobalSQLTrace([trace](const std::string &sql) {
+            trace(@(sql.c_str()));
+        });
+    } else {
+        WCDB::Database::SetGlobalSQLTrace(nullptr);
     }
 }
 

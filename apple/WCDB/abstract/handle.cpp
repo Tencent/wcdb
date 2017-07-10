@@ -50,7 +50,8 @@ Handle::Handle(const std::string &p)
     : m_handle(nullptr)
     , m_tag(InvalidTag)
     , path(p)
-    , m_trace(nullptr)
+    , m_performanceTrace(nullptr)
+    , m_sqlTrace(nullptr)
     , m_cost(0)
     , m_aggregation(false)
 {
@@ -58,7 +59,7 @@ Handle::Handle(const std::string &p)
 
 Handle::~Handle()
 {
-    report();
+    reportPerformance();
     close();
 }
 
@@ -109,41 +110,71 @@ bool Handle::isTableExists(const std::string &tableName)
     return false;
 }
 
-void Handle::setTrace(const Trace &trace)
+void Handle::setupTrace()
 {
-    if (trace) {
-        m_trace = trace;
-        sqlite3_trace_v2((sqlite3 *) m_handle, SQLITE_TRACE_PROFILE,
-                         [](unsigned int, void *M, void *P, void *X) -> int {
-                             Handle *handle = (Handle *) M;
-                             sqlite3_stmt *stmt = (sqlite3_stmt *) P;
-                             sqlite3_int64 *cost = (sqlite3_int64 *) X;
-                             const char *sql = sqlite3_sql(stmt);
+    unsigned flag = 0;
+    if (m_sqlTrace) {
+        flag |= SQLITE_TRACE_STMT;
+    }
+    if (m_performanceTrace) {
+        flag |= SQLITE_TRACE_PROFILE;
+    }
+    if (flag > 0) {
+        sqlite3_trace_v2(
+            (sqlite3 *) m_handle, flag,
+            [](unsigned int flag, void *M, void *P, void *X) -> int {
+                Handle *handle = (Handle *) M;
+                sqlite3_stmt *stmt = (sqlite3_stmt *) P;
+                switch (flag) {
+                    case SQLITE_TRACE_STMT: {
+                        const char *sql = sqlite3_sql(stmt);
+                        if (sql) {
+                            handle->reportSQL(sql);
+                        }
+                    } break;
+                    case SQLITE_TRACE_PROFILE: {
+                        sqlite3_int64 *cost = (sqlite3_int64 *) X;
+                        const char *sql = sqlite3_sql(stmt);
 
-                             //report last trace
-                             if (!handle->shouldAggregation()) {
-                                 handle->report();
-                             }
+                        //report last trace
+                        if (!handle->shouldPerformanceAggregation()) {
+                            handle->reportPerformance();
+                        }
 
-                             if (!sql) {
-                                 return SQLITE_OK;
-                             }
-                             handle->addTrace(sql, *cost);
+                        if (sql) {
+                            handle->addPerformanceTrace(sql, *cost);
+                        }
+                    } break;
+                    default:
+                        break;
+                }
 
-                             return SQLITE_OK;
-                         },
-                         this);
+                return SQLITE_OK;
+            },
+            this);
     } else {
         sqlite3_trace_v2((sqlite3 *) m_handle, 0, nullptr, nullptr);
     }
 }
 
-bool Handle::shouldAggregation() const
+void Handle::setSQLTrace(const SQLTrace &trace)
+{
+    m_sqlTrace = trace;
+    setupTrace();
+}
+
+void Handle::setPerformanceTrace(const PerformanceTrace &trace)
+{
+    m_performanceTrace = trace;
+    setupTrace();
+}
+
+bool Handle::shouldPerformanceAggregation() const
 {
     return m_aggregation;
 }
 
-void Handle::addTrace(const std::string &sql, const int64_t &cost)
+void Handle::addPerformanceTrace(const std::string &sql, const int64_t &cost)
 {
     auto iter = m_footprint.find(sql);
     if (iter == m_footprint.end()) {
@@ -154,12 +185,19 @@ void Handle::addTrace(const std::string &sql, const int64_t &cost)
     m_cost += cost;
 }
 
-void Handle::report()
+void Handle::reportPerformance()
 {
     if (!m_footprint.empty()) {
-        m_trace(m_tag, m_footprint, m_cost);
+        m_performanceTrace(m_tag, m_footprint, m_cost);
         m_footprint.clear();
         m_cost = 0;
+    }
+}
+
+void Handle::reportSQL(const std::string &sql)
+{
+    if (m_sqlTrace) {
+        m_sqlTrace(sql);
     }
 }
 

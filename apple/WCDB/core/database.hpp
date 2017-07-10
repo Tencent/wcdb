@@ -63,8 +63,9 @@ public:
     void setConfig(const std::string &name, const Config &config);
     void setCipherKey(const void *key, int size);
     void setSyncEnabled(bool sync);
-    void setTrace(const Trace &trace);
-    static void SetGlobalTrace(const Trace &globalTrace);
+    void setPerformanceTrace(const PerformanceTrace &trace);
+    static void SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace);
+    static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
 
     //file
     bool moveFiles(const std::string &directory, Error &error);
@@ -108,7 +109,8 @@ protected:
     static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
         s_threadedHandle;
 
-    static std::shared_ptr<Trace> s_globalTrace;
+    static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
+    static std::shared_ptr<SQLTrace> s_globalSQLTrace;
 };
 
 } //namespace WCDB

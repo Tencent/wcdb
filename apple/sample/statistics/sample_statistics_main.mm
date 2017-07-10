@@ -34,12 +34,17 @@ void sample_statistics_main(NSString *baseDirectory)
 
     //trace
     //You should register trace before all db operation.
-    [WCTStatistics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString *, NSNumber *> *sqls, NSInteger cost) {
+    [WCTStatistics SetGlobalPerformanceTrace:^(WCTTag tag, NSDictionary<NSString *, NSNumber *> *sqls, NSInteger cost) {
       NSLog(@"Tag: %d", tag);
       [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
         NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
       }];
       NSLog(@"Total cost %ld nanoseconds", (long) cost);
+    }];
+
+    //SQL
+    [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+      NSLog(@"SQL: %@", sql);
     }];
 
     //error
@@ -82,6 +87,7 @@ void sample_statistics_main(NSString *baseDirectory)
     }
 
     //unregister
-    [WCTStatistics SetGlobalTrace:nil];
+    [WCTStatistics SetGlobalPerformanceTrace:nil];
     [WCTStatistics SetGlobalErrorReport:nil];
+    [WCTStatistics SetGlobalSQLTrace:nil];
 }
