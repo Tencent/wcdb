@@ -67,10 +67,9 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
      - `cd wcdb`
      - `git submodule update --init sqlcipher ` 
   2. Drag `WCDB.xcodeproj` in `wcdb/apple/` into your project;
-  3. Add `WCDB.framework` to the `Target Dependencies` section and `Linked Binary and Libraries` of your Xcode project's `Build Phases` settings;
-  4. Add `WCDB.framework` to the "Enbedded Binaries" section of your Xcode project's `General settings`;
-  5. Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and start your WCDB journey.
-  6. **Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.**
+  3. Add `WCDB.framework` to the `Enbedded Binaries` section of your Xcode project's `General settings`; **Note that there are two frameworks here and the dynamic one should be chosen. You can check it at `Build Phases`->`Target Dependencies`. The right one is `WCDB` while `WCDB iOS Static is used for static lib.**
+  4. Add `#import <WCDB/WCDB.h>` at the top of your Objective-C++ source files and start your WCDB journey.
+  5. **Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.**
 * **Via Static Framework:**
   1. Getting source code from git repository and update the submodule of sqlcipher.
      - `git clone https://github.com/Tencent/wcdb.git`
