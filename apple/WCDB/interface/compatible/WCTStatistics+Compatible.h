@@ -32,6 +32,6 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteg
  @see [WCTStatistics SetGlobalPerformanceTrace:]
  @param trace trace
  */
-+ (void)SetGlobalTrace:(WCTTrace)trace;
++ (void)SetGlobalTrace:(WCTTrace)trace DEPRECATED_MSG_ATTRIBUTE("Use -SetGlobalPerformanceTrace: instead");
 
 @end
