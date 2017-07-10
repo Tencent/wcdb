@@ -23,12 +23,12 @@
 
 @implementation WCTDatabase (Statistics)
 
-- (void)setTrace:(WCTTrace)trace
+- (void)setPerformanceTrace:(WCTPerformanceTrace)trace
 {
     if (trace) {
-        _database->setTrace([trace](WCDB::Tag tag,
-                                    const std::map<std::string, unsigned int> &footprint,
-                                    const int64_t &cost) {
+        _database->setPerformanceTrace([trace](WCDB::Tag tag,
+                                               const std::map<const std::string, unsigned int> &footprint,
+                                               const int64_t &cost) {
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             for (const auto &iter : footprint) {
                 [dictionary setObject:@(iter.second)
@@ -37,7 +37,7 @@
             trace(tag, dictionary, (NSUInteger) cost);
         });
     } else {
-        _database->setTrace(nullptr);
+        _database->setPerformanceTrace(nullptr);
     }
 }
 

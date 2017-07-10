@@ -34,8 +34,10 @@ namespace WCDB {
 
 //{{sql->count}, cost}
 typedef std::function<void(
-    Tag, const std::map<std::string, unsigned int> &, const int64_t &)>
-    Trace;
+    Tag, const std::map<const std::string, unsigned int> &, const int64_t &)>
+    PerformanceTrace;
+
+typedef std::function<void(const std::string &)> SQLTrace;
 
 typedef std::function<void(Handle *, int, void *)> CommitedHook;
 
@@ -63,7 +65,8 @@ public:
     };
     void setConfig(Config config, bool enable);
 
-    void setTrace(const Trace &trace);
+    void setPerformanceTrace(const PerformanceTrace &trace);
+    void setSQLTrace(const SQLTrace &trace);
 
     bool backup(const void *key = nullptr, const unsigned int &length = 0);
     bool recoverFromPath(const std::string &corruptedDBPath,
@@ -87,9 +90,10 @@ protected:
     Error m_error;
     Tag m_tag;
 
-    void report();
-    void addTrace(const std::string &sql, const int64_t &cost);
-    bool shouldAggregation() const;
+    void reportPerformance();
+    void addPerformanceTrace(const std::string &sql, const int64_t &cost);
+    bool shouldPerformanceAggregation() const;
+    void reportSQL(const std::string &sql);
 
     typedef struct {
         CommitedHook onCommited;
@@ -98,8 +102,10 @@ protected:
     } CommitedHookInfo;
     CommitedHookInfo m_commitedHookInfo;
 
-    Trace m_trace;
-    std::map<std::string, unsigned int> m_footprint;
+    void setupTrace();
+    PerformanceTrace m_performanceTrace;
+    SQLTrace m_sqlTrace;
+    std::map<const std::string, unsigned int> m_footprint;
     int64_t m_cost;
     bool m_aggregation;
 };
