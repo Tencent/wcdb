@@ -40,7 +40,7 @@ public class CursorWindow extends SQLiteClosable implements Parcelable {
     /** The cursor window size. resource xml file specifies the value in kB.
      * convert it to bytes here by multiplying with 1024.
      */
-    private static final int sCursorWindowSize;
+    private static int sCursorWindowSize;
     static {
 	    // com.android.internal.R.integer.config_cursorWindowSize
 	    int id = Resources.getSystem().getIdentifier("config_cursorWindowSize", "integer", "android");
@@ -49,6 +49,20 @@ public class CursorWindow extends SQLiteClosable implements Parcelable {
         } else {
             sCursorWindowSize = 2048 * 1024;
         }
+    }
+
+    /**
+     * Optionally set size for newly created {@code CursorWindow}s and return the old size.
+     *
+     * @param newSize new size to be set, or 0 if keep it unchanged
+     * @return the old size
+     */
+    public static int windowSize(int newSize) {
+        int oldSize = sCursorWindowSize;
+        if (newSize > 0) {
+            sCursorWindowSize = newSize;
+        }
+        return oldSize;
     }
 
     /**
