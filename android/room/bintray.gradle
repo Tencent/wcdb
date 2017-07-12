@@ -6,7 +6,7 @@ def propertyWithDefault(name, defVal) {
 }
 
 bintray {
-    publications = ['wcdbLibrary']
+    publications = ['wcdbRoomLibrary']
 
     user = propertyWithDefault('BINTRAY_USER', '')
     key = propertyWithDefault('BINTRAY_APIKEY', '')
@@ -50,7 +50,7 @@ def pomConfig = {
 
 publishing {
     publications {
-        wcdbLibrary(MavenPublication) {
+        wcdbRoomLibrary(MavenPublication) {
             groupId 'com.tencent.wcdb'
             artifactId 'wcdb-room'
             version rootProject.VERSION_NAME
@@ -81,8 +81,8 @@ publishing {
 }
 
 afterEvaluate {
-    publishing.publications.wcdbLibrary {
-        artifact(bundleRelease)
+    publishing.publications.wcdbRoomLibrary {
+        artifact(source: bundleRelease, classifier: null)
         artifact(bundleReleaseJavadoc)
         artifact(bundleReleaseSources)
 

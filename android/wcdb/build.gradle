@@ -120,6 +120,7 @@ android.libraryVariants.all { variant ->
     task("bundle${cvarName}NativeSymbols", type: Zip) {
         def nativeBuildTask = project.tasks.findByName("externalNativeBuild${cvarName}")
 
+        classifier = (varName == 'release') ? 'symbols' : "${varName}Symbols"
         from nativeBuildTask.getObjFolder()
         include '**/*.so'
         dependsOn nativeBuildTask

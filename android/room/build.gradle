@@ -19,12 +19,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    defaultPublishConfig 'release'
+    publishNonDefault true
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     debugCompile project(path: ':wcdb', configuration: 'debug')
-    releaseCompile project(':wcdb')
+    releaseCompile project(path: ':wcdb', configuration: 'release')
 
     compile 'android.arch.persistence.room:runtime:1.0.0-alpha4'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha4'
@@ -72,13 +75,6 @@ android.libraryVariants.all { variant ->
         classifier = 'sources'
         from variant.javaCompile.source
         dependsOn "generate${cvarName}Sources"
-    }
-
-    def bundleTask = project.tasks.findByName("bundle${cvarName}")
-    if (varName != 'release') {
-        bundleTask.classifier = varName
-    } else {
-        bundleTask.classifier = ''
     }
 }
 
