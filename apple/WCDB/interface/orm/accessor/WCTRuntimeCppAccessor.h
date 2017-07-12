@@ -54,10 +54,13 @@ public:
 protected:
     CType convertPropertyTypeToCType(const PropertyType &property)
     {
-        return property;
+        return (CType) property;
     }
 
-    PropertyType convertCTypeToPropertyType(CType value) { return value; }
+    PropertyType convertCTypeToPropertyType(CType value)
+    {
+        return (PropertyType) value;
+    }
 
     ValueGetter generateValueGetter()
     {

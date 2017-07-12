@@ -21,16 +21,23 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
+typedef NS_ENUM(NSUInteger, WCTSampleORMType) {
+    WCTSampleORMType1,
+    WCTSampleORMType2,
+};
+
 @interface WCTSampleORM : NSObject <WCTTableCoding>
 
 @property(nonatomic, assign) int identifier;
 @property(nonatomic, retain) NSString *desc;
 @property(nonatomic, assign) float value;
 @property(nonatomic, retain) NSString *timestamp;
+@property(nonatomic, assign) WCTSampleORMType type;
 
 WCDB_PROPERTY(identifier)
 WCDB_PROPERTY(desc)
 WCDB_PROPERTY(value)
 WCDB_PROPERTY(timestamp)
+WCDB_PROPERTY(type)
 
 @end
