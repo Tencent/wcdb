@@ -1,0 +1,88 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    debugCompile project(path: ':wcdb', configuration: 'debug')
+    releaseCompile project(':wcdb')
+
+    compile 'android.arch.persistence.room:runtime:1.0.0-alpha4'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha4'
+}
+
+
+android.libraryVariants.all { variant ->
+
+    def varName = variant.name
+    def cvarName = varName.capitalize()
+
+    // emit Javadoc generation task
+    def genJavadocTask = task("generate${cvarName}Javadoc", type: Javadoc) {
+        description "Generates Javadoc for ${varName}."
+        source = variant.javaCompile.source
+        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+
+        title = null
+
+        options {
+            memberLevel = JavadocMemberLevel.PUBLIC
+
+            doclet = 'com.google.doclava.Doclava'
+            docletpath = [rootProject.file('gradle/doclava-1.0.6.jar')]
+
+            addStringOption('title', 'WCDB for Android')
+            addStringOption('hdf project.name', 'WCDB for Android')
+            //addStringOption('federate Android', 'http://d.android.com/reference')
+            //addStringOption('federationxml Android', rootProject.file('gradle/android-10.xml').path)
+        }
+
+        dependsOn "generate${cvarName}Sources"
+    }
+
+    // emit Javadoc bundling task
+    task("bundle${cvarName}Javadoc", type: Jar) {
+        classifier = 'javadoc'
+        from genJavadocTask.destinationDir
+        dependsOn genJavadocTask
+    }
+
+    // emit source bundling task
+    task("bundle${cvarName}Sources", type: Jar) {
+        classifier = 'sources'
+        from variant.javaCompile.source
+        dependsOn "generate${cvarName}Sources"
+    }
+
+    def bundleTask = project.tasks.findByName("bundle${cvarName}")
+    if (varName != 'release') {
+        bundleTask.classifier = varName
+    } else {
+        bundleTask.classifier = ''
+    }
+}
+
+apply from: 'bintray.gradle'
+
+if (file('local.gradle').isFile())
+    apply from: 'local.gradle'
