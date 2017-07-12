@@ -43,14 +43,14 @@ public final class SQLiteDirectCursorDriver implements SQLiteCursorDriver {
         mCancellationSignal = cancellationSignal;
     }
 
-    public Cursor query(CursorFactory factory, String[] selectionArgs) {
+    public Cursor query(CursorFactory factory, Object[] bindArgs) {
         if (factory == null)
             factory = DEFAULT_FACTORY;
 
         SQLiteProgram query = null;
         final Cursor cursor;
         try {
-            query = factory.newQuery(mDatabase, mSql, selectionArgs, mCancellationSignal);
+            query = factory.newQuery(mDatabase, mSql, bindArgs, mCancellationSignal);
             cursor = factory.newCursor(mDatabase, this, mEditTable, query);
         } catch (RuntimeException ex) {
             if (query != null)

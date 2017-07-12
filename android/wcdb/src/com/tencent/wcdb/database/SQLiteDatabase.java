@@ -17,6 +17,7 @@
 package com.tencent.wcdb.database;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteTransactionListener;
 import android.os.Build;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -1218,8 +1219,10 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      * @see Cursor
      */
-    public Cursor query(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
-        return queryWithFactory(null, distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit, null);
+    public Cursor query(boolean distinct, String table, String[] columns, String selection,
+            Object[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
+        return queryWithFactory(null, distinct, table, columns, selection, selectionArgs,
+                groupBy, having, orderBy, limit, null);
     }
 
     /**
@@ -1257,7 +1260,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @see Cursor
      */
     public Cursor query(boolean distinct, String table, String[] columns,
-            String selection, String[] selectionArgs, String groupBy,
+            String selection, Object[] selectionArgs, String groupBy,
             String having, String orderBy, String limit, CancellationSignal cancellationSignal) {
         return queryWithFactory(null, distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit, cancellationSignal);
     }
@@ -1296,7 +1299,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns,
-            String selection, String[] selectionArgs, String groupBy,
+            String selection, Object[] selectionArgs, String groupBy,
             String having, String orderBy, String limit) {
         return queryWithFactory(cursorFactory, distinct, table, columns, selection,
                 selectionArgs, groupBy, having, orderBy, limit, null);
@@ -1339,7 +1342,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns,
-            String selection, String[] selectionArgs, String groupBy,
+            String selection, Object[] selectionArgs, String groupBy,
             String having, String orderBy, String limit, CancellationSignal cancellationSignal) {
         acquireReference();
         try {
@@ -1382,7 +1385,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @see Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
-            String[] selectionArgs, String groupBy, String having,
+            Object[] selectionArgs, String groupBy, String having,
             String orderBy) {
 
         return query(false, table, columns, selection, selectionArgs, groupBy,
@@ -1421,7 +1424,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @see Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
-            String[] selectionArgs, String groupBy, String having,
+            Object[] selectionArgs, String groupBy, String having,
             String orderBy, String limit) {
 
         return query(false, table, columns, selection, selectionArgs, groupBy,
@@ -1438,7 +1441,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @return A {@link Cursor} object, which is positioned before the first entry. Note that
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
-    public Cursor rawQuery(String sql, String[] selectionArgs) {
+    public Cursor rawQuery(String sql, Object[] selectionArgs) {
         return rawQueryWithFactory(null, sql, selectionArgs, null, null);
     }
 
@@ -1455,7 +1458,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @return A {@link Cursor} object, which is positioned before the first entry. Note that
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
-    public Cursor rawQuery(String sql, String[] selectionArgs,
+    public Cursor rawQuery(String sql, Object[] selectionArgs,
             CancellationSignal cancellationSignal) {
         return rawQueryWithFactory(null, sql, selectionArgs, null, cancellationSignal);
     }
@@ -1473,7 +1476,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
-            CursorFactory cursorFactory, String sql, String[] selectionArgs,
+            CursorFactory cursorFactory, String sql, Object[] selectionArgs,
             String editTable) {
         return rawQueryWithFactory(cursorFactory, sql, selectionArgs, editTable, null);
     }
@@ -1494,7 +1497,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
-            CursorFactory cursorFactory, String sql, String[] selectionArgs,
+            CursorFactory cursorFactory, String sql, Object[] selectionArgs,
             String editTable, CancellationSignal cancellationSignal) {
         acquireReference();
         try {
