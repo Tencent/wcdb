@@ -28,6 +28,7 @@ public:
     const std::string indexNameSubfix;
 
     void addIndex(const WCTIndex &index);
+    void setUnique(bool unique);
     void setCondition(const WCTCondition &condition);
 
     const WCTIndexList &getIndexes() const;
@@ -39,4 +40,5 @@ public:
 protected:
     WCTIndexList m_indexes;
     WCTCondition m_condition;
+    bool m_unique;
 };

@@ -18,10 +18,13 @@
  * limitations under the License.
  */
 
-#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order)      \
+#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order,      \
+                         unique)                                               \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
         binding.getOrCreateIndexBinding(indexSubfixName)                       \
             ->addIndex(className.propertyName.index(order));                   \
+        WCDB_IF(unique, binding.getOrCreateIndexBinding(indexSubfixName)       \
+                            ->setUnique(true);)                                \
         return nullptr;                                                        \
     }(__WCDB_BINDING(className));
 
