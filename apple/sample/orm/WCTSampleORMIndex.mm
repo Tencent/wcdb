@@ -24,11 +24,14 @@
 
 WCDB_IMPLEMENTATION(WCTSampleORMIndex)
 WCDB_SYNTHESIZE(WCTSampleORMIndex, indexProperty)
+WCDB_SYNTHESIZE(WCTSampleORMIndex, uniqueIndexProperty)
 WCDB_SYNTHESIZE(WCTSampleORMIndex, multiIndexPart1)
 WCDB_SYNTHESIZE(WCTSampleORMIndex, multiIndexPart2)
 
 //Index Name = Table Name + Index Subfix Name
 WCDB_INDEX(WCTSampleORMIndex, "_indexSubfix", indexProperty)
+
+WCDB_UNIQUE_INDEX(WCTSampleORMIndex, "_uniqueIndexSubfix", uniqueIndexProperty)
 
 //Use the same index subfix name to combine multiple properties into a multi indexes constraint
 WCDB_INDEX(WCTSampleORMIndex, "_multiIndexSubfix", multiIndexPart1)
