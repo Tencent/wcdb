@@ -29,6 +29,8 @@ class StatementExplain : public Statement {
 public:
     StatementExplain &explain(const Statement &statement);
     StatementExplain &explainQueryPlan(const Statement &statement);
+
+    virtual Statement::Type getStatementType() const override;
 };
 
 } //namespace WCDB

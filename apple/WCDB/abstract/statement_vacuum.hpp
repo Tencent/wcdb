@@ -28,6 +28,8 @@ namespace WCDB {
 class StatementVacuum : public Statement {
 public:
     StatementVacuum &vacuum(const std::string &schemaName = "");
+
+    virtual Statement::Type getStatementType() const override;
 };
 
 } //namespace WCDB

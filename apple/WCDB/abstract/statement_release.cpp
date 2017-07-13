@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementRelease::getStatementType() const
+{
+    return Statement::Type::Release;
+}
+
 StatementRelease &StatementRelease::release(const std::string &savepointName)
 {
     m_description.append("RELEASE " + savepointName);

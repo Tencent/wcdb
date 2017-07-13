@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementExplain::getStatementType() const
+{
+    return Statement::Type::Explain;
+}
+
 StatementExplain &StatementExplain::explain(const Statement &statement)
 {
     m_description.append("EXPLAIN " + statement.getDescription());

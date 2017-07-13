@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementReindex::getStatementType() const
+{
+    return Statement::Type::Reindex;
+}
+
 StatementReindex &StatementReindex::reindex(const std::string &name)
 {
     m_description.append("REINDEX " + name);

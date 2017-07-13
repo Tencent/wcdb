@@ -31,6 +31,8 @@ public:
     StatementAttach &attach(const Expr &expr, const std::string &database);
 
     StatementAttach &as(const std::string &schema);
+
+    virtual Statement::Type getStatementType() const override;
 };
 
 } //namespace WCDB

@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementRollback::getStatementType() const
+{
+    return Statement::Type::Rollback;
+}
+
 StatementRollback &StatementRollback::rollback(const std::string &savepointName)
 {
     m_description.append("ROLLBACK TO " + savepointName);

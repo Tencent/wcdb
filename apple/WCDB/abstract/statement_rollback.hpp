@@ -28,6 +28,8 @@ namespace WCDB {
 class StatementRollback : public Statement {
 public:
     StatementRollback &rollback(const std::string &savepointName = "");
+
+    virtual Statement::Type getStatementType() const override;
 };
 
 } //namespace WCDB

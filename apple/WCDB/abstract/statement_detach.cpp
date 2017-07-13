@@ -23,6 +23,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementDetach::getStatementType() const
+{
+    return Statement::Type::Detach;
+}
+
 StatementDetach &StatementDetach::detach(const std::string &schema)
 {
     m_description.append("DETACH " + schema);
