@@ -41,9 +41,37 @@ void sample_core_main(NSString *baseDirectory)
     [database exec:WCDB::StatementPragma().pragma(WCDB::Pragma::CaseSensitiveLike, true)];
 
     //get value from unwrapped SQL
-    WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
-    if (statement && statement.step) {
-        NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
+    {
+        WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
+        if (statement && [statement step]) {
+            NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
+        }
+    }
+
+    //complex statement 1
+    //SAVEPOINT mySavepoint
+    [database exec:WCDB::StatementSavepoint().savepoint("mySavepoint")];
+    //...
+    //RELEASE SAVEPOINT mySavepoint
+    [database exec:WCDB::StatementRelease().release("mySavepoint")];
+
+    //complex statement 2
+    //EXPLAIN CREATE TABLE message(localID INTEGER PRIMARY KEY ASC, content TEXT);
+    {
+        NSLog(@"Explain:");
+        WCDB::ColumnDef localIDColumnDef(WCDB::Column("localID"), WCDB::ColumnType::Integer32);
+        localIDColumnDef.makePrimary(WCDB::OrderTerm::ASC);
+        WCDB::ColumnDef contentColumnDef(WCDB::Column("content"), WCDB::ColumnType::Text);
+        WCDB::ColumnDefList columnDefList = {localIDColumnDef, contentColumnDef};
+        WCDB::StatementCreateTable statementCreate = WCDB::StatementCreateTable().create("message", columnDefList);
+        WCTStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];
+        if (statementExplain && [statementExplain step]) {
+            for (int i = 0; i < [statementExplain getCount]; ++i) {
+                NSString *columnName = [statementExplain getNameAtIndex:i];
+                WCTValue *value = [statementExplain getValueAtIndex:i];
+                NSLog(@"%@:%@", columnName, value);
+            }
+        }
     }
 
     NSLog(@"Sample-core End");

@@ -41,6 +41,14 @@ public:
         Transaction,
         Update,
         CreateVirtualTable,
+        Attach,
+        Detach,
+        Explain,
+        Savepoint,
+        Release,
+        Rollback,
+        Vacuum,
+        Reindex,
     };
     Statement();
     virtual ~Statement();

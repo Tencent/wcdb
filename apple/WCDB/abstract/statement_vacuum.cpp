@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementVacuum::getStatementType() const
+{
+    return Statement::Type::Vacuum;
+}
+
 StatementVacuum &StatementVacuum::vacuum(const std::string &schemaName)
 {
     m_description.append("VACUUM " + schemaName);

@@ -28,6 +28,8 @@ namespace WCDB {
 class StatementRelease : public Statement {
 public:
     StatementRelease &release(const std::string &savepointName);
+
+    virtual Statement::Type getStatementType() const override;
 };
 
 } //namespace WCDB

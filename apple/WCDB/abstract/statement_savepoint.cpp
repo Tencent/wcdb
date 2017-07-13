@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementSavepoint::getStatementType() const
+{
+    return Statement::Type::Savepoint;
+}
+
 StatementSavepoint &
 StatementSavepoint::savepoint(const std::string &savepointName)
 {

@@ -23,6 +23,11 @@
 
 namespace WCDB {
 
+Statement::Type StatementAttach::getStatementType() const
+{
+    return Statement::Type::Attach;
+}
+
 StatementAttach &StatementAttach::attach(const Expr &expr)
 {
     m_description.append("ATTACH " + expr.getDescription());

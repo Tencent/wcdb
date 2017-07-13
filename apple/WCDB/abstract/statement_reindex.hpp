@@ -28,6 +28,8 @@ namespace WCDB {
 class StatementReindex : public Statement {
 public:
     StatementReindex &reindex(const std::string &name);
+
+    virtual Statement::Type getStatementType() const override;
 };
 
 } //namespace WCDB
