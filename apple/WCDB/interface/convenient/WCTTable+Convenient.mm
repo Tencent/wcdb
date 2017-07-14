@@ -41,179 +41,92 @@
 #pragma mark - Get Object
 - (id /* WCTObject* */)getOneObject
 {
-    return [[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] nextObject];
+    return [[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
 {
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] nextObject];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
 {
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectLimit:(const WCTLimit &)limit
-{
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] limit:limit] nextObject];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOffset:(const WCTOffset &)offset
 {
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] offset:offset] nextObject];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                  orderBy:(const WCDB::OrderList &)order
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] orderBy:order] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                   limit:(const WCTLimit &)limit
-{
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] limit:limit] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] limit:1] orderBy:order] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                   offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
-                                     limit:(const WCTLimit &)limit
-{
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] limit:limit] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
                                     offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOffset:(const WCTOffset &)offset
-                                    limit:(const WCTLimit &)limit
-{
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] offset:offset] limit:limit] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                 orderBy:(const WCDB::OrderList &)order
-                                   limit:(const WCTLimit &)limit
-{
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] orderBy:order] limit:limit] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                  orderBy:(const WCDB::OrderList &)order
                                   offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] orderBy:order] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                   limit:(const WCTLimit &)limit
-                                  offset:(const WCTOffset &)offset
-{
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] limit:limit] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
-                                     limit:(const WCTLimit &)limit
-                                    offset:(const WCTOffset &)offset
-{
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] limit:limit] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                 orderBy:(const WCDB::OrderList &)order
-                                   limit:(const WCTLimit &)limit
-                                  offset:(const WCTOffset &)offset
-{
-    return [[[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] orderBy:order] limit:limit] offset:offset] nextObject];
+    return [[[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] orderBy:order] limit:1] offset:offset] nextObject];
 }
 
 #pragma mark - Get Part Of Object
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
 {
-    return [[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] nextObject];
+    return [[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                        where:(const WCTCondition &)condition
 {
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] nextObject];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                      orderBy:(const WCDB::OrderList &)order
 {
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:order] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       limit:(const WCTLimit &)limit
-{
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] limit:limit] nextObject];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:order] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                       offset:(const WCTOffset &)offset
 {
-    return [[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] offset:offset] nextObject];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                        where:(const WCTCondition &)condition
                                      orderBy:(const WCDB::OrderList &)order
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:order] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                       limit:(const WCTLimit &)limit
-{
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] limit:limit] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:order] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                        where:(const WCTCondition &)condition
                                       offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit
-{
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:order] limit:limit] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                      orderBy:(const WCDB::OrderList &)order
                                       offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:order] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                      offset:(const WCTOffset &)offset
-                                       limit:(const WCTLimit &)limit
-{
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] offset:offset] limit:limit] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit
-{
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:order] limit:limit] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:order] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
@@ -221,32 +134,7 @@
                                      orderBy:(const WCDB::OrderList &)order
                                       offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:order] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                       limit:(const WCTLimit &)limit
-                                      offset:(const WCTOffset &)offset
-{
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] limit:limit] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit
-                                      offset:(const WCTOffset &)offset
-{
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:order] limit:limit] offset:offset] nextObject];
-}
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit
-                                      offset:(const WCTOffset &)offset
-{
-    return [[[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:order] limit:limit] offset:offset] nextObject];
+    return [[[[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:order] limit:1] offset:offset] nextObject];
 }
 
 #pragma mark - Get One Row
@@ -270,7 +158,7 @@
 - (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
                            offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] offset:offset] limit:1] nextRow];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] limit:1] offset:offset] nextRow];
 }
 
 - (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
@@ -284,14 +172,14 @@
                             where:(const WCTCondition &)condition
                            offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] offset:offset] limit:1] nextRow];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] limit:1] offset:offset] nextRow];
 }
 
 - (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
                           orderBy:(const WCTOrderByList &)orderList
                            offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:orderList] offset:offset] limit:1] nextRow];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] orderBy:orderList] limit:1] offset:offset] nextRow];
 }
 
 - (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
@@ -299,7 +187,7 @@
                           orderBy:(const WCTOrderByList &)orderList
                            offset:(const WCTOffset &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:orderList] offset:offset] limit:1] nextRow];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:orderList] limit:1] offset:offset] nextRow];
 }
 
 #pragma mark - Get One Column
@@ -321,15 +209,15 @@
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                offset:(const WCTOffset &)offset
-{
-    return [[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] offset:offset] allValues];
-}
-
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  limit:(const WCTLimit &)limit
 {
     return [[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] limit:limit] allValues];
+}
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                                offset:(const WCTOffset &)offset
+{
+    return [[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -341,23 +229,16 @@
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  where:(const WCTCondition &)condition
-                                offset:(const WCTOffset &)offset
-{
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] offset:offset] allValues];
-}
-
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
                                  limit:(const WCTLimit &)limit
 {
     return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                               orderBy:(const WCTOrderByList &)orderList
+                                 where:(const WCTCondition &)condition
                                 offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] orderBy:orderList] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -368,10 +249,25 @@
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                               orderBy:(const WCTOrderByList &)orderList
                                 offset:(const WCTOffset &)offset
+{
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] orderBy:orderList] offset:offset] allValues];
+}
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset
+{
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] limit:limit] offset:offset] allValues];
+}
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                                 where:(const WCTCondition &)condition
+                               orderBy:(const WCTOrderByList &)orderList
                                  limit:(const WCTLimit &)limit
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] offset:offset] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] orderBy:orderList] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -384,27 +280,27 @@
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList
                                  limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] orderBy:orderList] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset
                                  limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] orderBy:orderList] offset:offset] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  where:(const WCTCondition &)condition
                                orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset
                                  limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] orderBy:orderList] offset:offset] limit:limit] allValues];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 #pragma mark - Get One Distinct Column
@@ -429,17 +325,17 @@
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                        offset:(const WCTOffset &)offset
-{
-    WCTResultList resultList = {result};
-    return [[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] offset:offset] allValues];
-}
-
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          limit:(const WCTLimit &)limit
 {
     WCTResultList resultList = {result};
     return [[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] limit:limit] allValues];
+}
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                        offset:(const WCTOffset &)offset
+{
+    WCTResultList resultList = {result};
+    return [[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -452,14 +348,6 @@
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          where:(const WCTCondition &)condition
-                                        offset:(const WCTOffset &)offset
-{
-    WCTResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] offset:offset] allValues];
-}
-
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
                                          limit:(const WCTLimit &)limit
 {
     WCTResultList resultList = {result};
@@ -467,11 +355,11 @@
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                       orderBy:(const WCTOrderByList &)orderList
+                                         where:(const WCTCondition &)condition
                                         offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] orderBy:orderList] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -483,11 +371,28 @@
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                       orderBy:(const WCTOrderByList &)orderList
                                         offset:(const WCTOffset &)offset
+{
+    WCTResultList resultList = {result};
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] orderBy:orderList] offset:offset] allValues];
+}
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset
+{
+    WCTResultList resultList = {result};
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] limit:limit] offset:offset] allValues];
+}
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                         where:(const WCTCondition &)condition
+                                       orderBy:(const WCTOrderByList &)orderList
                                          limit:(const WCTLimit &)limit
 {
     WCTResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] offset:offset] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] orderBy:orderList] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -501,30 +406,30 @@
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList
                                          limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] orderBy:orderList] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                        orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset
                                          limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] orderBy:orderList] offset:offset] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          where:(const WCTCondition &)condition
                                        orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset
                                          limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] orderBy:orderList] offset:offset] limit:limit] allValues];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 #pragma mark - Get One Value
@@ -548,7 +453,7 @@
 - (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
                                    offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] offset:offset] limit:1] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
@@ -562,14 +467,14 @@
                                     where:(const WCTCondition &)condition
                                    offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] offset:offset] limit:1] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
                                   orderBy:(const WCTOrderByList &)orderList
                                    offset:(const WCTOffset &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] orderBy:orderList] offset:offset] limit:1] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
@@ -577,7 +482,7 @@
                                   orderBy:(const WCTOrderByList &)orderList
                                    offset:(const WCTOffset &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] orderBy:orderList] offset:offset] limit:1] nextValue];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:{result} fromTable:_tableName] where:condition] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 #pragma mark - Get One Distinct Value
@@ -605,7 +510,7 @@
                                            offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] offset:offset] limit:1] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
@@ -621,7 +526,7 @@
                                            offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] offset:offset] limit:1] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
@@ -629,7 +534,7 @@
                                            offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] orderBy:orderList] offset:offset] limit:1] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
@@ -638,7 +543,7 @@
                                            offset:(const WCTOffset &)offset
 {
     WCTResultList resultList = {result};
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] orderBy:orderList] offset:offset] limit:1] nextValue];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList.distinct() fromTable:_tableName] where:condition] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 #pragma mark - Get Objects
@@ -697,10 +602,10 @@
     return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] orderBy:order] offset:offset] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOffset:(const WCTOffset &)offset
-                                           limit:(const WCTLimit &)limit
+- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCTOffset &)offset
+                                         offset:(const WCTLimit &)limit
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] offset:offset] limit:limit] allObjects];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] limit:limit] offset:offset] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
@@ -805,10 +710,10 @@
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                             offset:(const WCTOffset &)offset
                                               limit:(const WCTLimit &)limit
+                                             offset:(const WCTOffset &)offset
 {
-    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] offset:offset] limit:limit] allObjects];
+    return [[[[[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] limit:limit] offset:offset] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
@@ -938,6 +843,14 @@
                                offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] orderBy:orderList] offset:offset] allRows];
+}
+
+- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
+                                where:(const WCTCondition &)condition
+                                limit:(const WCTLimit &)limit
+                               offset:(const WCTOffset &)offset
+{
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName] where:condition] limit:limit] offset:offset] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
@@ -1125,6 +1038,15 @@
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
+{
+    return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] limit:limit] offset:offset] executeWithObject:object];
+}
+
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
                        orderBy:(const WCTOrderByList &)orderList
                          limit:(const WCTLimit &)limit
                         offset:(const WCTOffset &)offset
@@ -1241,6 +1163,15 @@
                       offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] orderBy:orderList] offset:offset] executeWithObject:object];
+}
+
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
+{
+    return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] limit:limit] offset:offset] executeWithObject:object];
 }
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
@@ -1365,6 +1296,15 @@
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset
+{
+    return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] where:condition] limit:limit] offset:offset] executeWithRow:row];
+}
+
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
                        orderBy:(const WCTOrderByList &)orderList
                          limit:(const WCTLimit &)limit
                         offset:(const WCTOffset &)offset
@@ -1485,6 +1425,15 @@
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset
+{
+    return [[[[[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] where:condition] limit:limit] offset:offset] executeWithRow:@[ value ]];
+}
+
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
                      orderBy:(const WCTOrderByList &)orderList
                        limit:(const WCTLimit &)limit
                       offset:(const WCTOffset &)offset
@@ -1576,6 +1525,13 @@
                     offset:(const WCTOffset &)offset
 {
     return [[[[[[WCTDelete alloc] initWithCore:_core andTableName:_tableName] where:condition] orderBy:orderList] offset:offset] execute];
+}
+
+- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
+                     limit:(const WCTLimit &)limit
+                    offset:(const WCTOffset &)offset
+{
+    return [[[[[[WCTDelete alloc] initWithCore:_core andTableName:_tableName] where:condition] limit:limit] offset:offset] execute];
 }
 
 - (BOOL)deleteObjectsOrderBy:(const WCTOrderByList &)orderList

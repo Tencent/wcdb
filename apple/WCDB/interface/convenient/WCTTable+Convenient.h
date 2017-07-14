@@ -35,47 +35,19 @@
 
 - (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order;
 
-- (id /* WCTObject* */)getOneObjectLimit:(const WCTLimit &)limit;
-
 - (id /* WCTObject* */)getOneObjectOffset:(const WCTOffset &)offset;
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                  orderBy:(const WCDB::OrderList &)order;
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                   limit:(const WCTLimit &)limit;
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                   offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
-                                     limit:(const WCTLimit &)limit;
 
 - (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
                                     offset:(const WCTOffset &)offset;
 
-- (id /* WCTObject* */)getOneObjectOffset:(const WCTOffset &)offset
-                                    limit:(const WCTLimit &)limit;
-
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                  orderBy:(const WCDB::OrderList &)order
-                                   limit:(const WCTLimit &)limit;
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                 orderBy:(const WCDB::OrderList &)order
-                                  offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                   limit:(const WCTLimit &)limit
-                                  offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
-                                     limit:(const WCTLimit &)limit
-                                    offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                 orderBy:(const WCDB::OrderList &)order
-                                   limit:(const WCTLimit &)limit
                                   offset:(const WCTOffset &)offset;
 
 #pragma mark - Get Part Of Object
@@ -88,9 +60,6 @@
                                      orderBy:(const WCDB::OrderList &)order;
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       limit:(const WCTLimit &)limit;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                       offset:(const WCTOffset &)offset;
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
@@ -99,48 +68,15 @@
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                        where:(const WCTCondition &)condition
-                                       limit:(const WCTLimit &)limit;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
                                       offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit;
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                      orderBy:(const WCDB::OrderList &)order
                                       offset:(const WCTOffset &)offset;
 
 - (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                      offset:(const WCTOffset &)offset
-                                       limit:(const WCTLimit &)limit;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
                                        where:(const WCTCondition &)condition
                                      orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                     orderBy:(const WCDB::OrderList &)order
-                                      offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                       limit:(const WCTLimit &)limit
-                                      offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit
-                                      offset:(const WCTOffset &)offset;
-
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                     orderBy:(const WCDB::OrderList &)order
-                                       limit:(const WCTLimit &)limit
                                       offset:(const WCTOffset &)offset;
 
 #pragma mark - Get One Row
@@ -182,10 +118,10 @@
                                orderBy:(const WCTOrderByList &)orderList;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                offset:(const WCTOffset &)offset;
+                                 limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 limit:(const WCTLimit &)limit;
+                                offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  where:(const WCTCondition &)condition
@@ -193,14 +129,10 @@
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  where:(const WCTCondition &)condition
-                                offset:(const WCTOffset &)offset;
-
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
                                  limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                               orderBy:(const WCTOrderByList &)orderList
+                                 where:(const WCTCondition &)condition
                                 offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -208,12 +140,11 @@
                                  limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                offset:(const WCTOffset &)offset
-                                 limit:(const WCTLimit &)limit;
+                               orderBy:(const WCTOrderByList &)orderList
+                                offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList
+                                 limit:(const WCTLimit &)limit
                                 offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -222,15 +153,25 @@
                                  limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                                 where:(const WCTCondition &)condition
                                orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset
-                                 limit:(const WCTLimit &)limit;
+                                offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                                 where:(const WCTCondition &)condition
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                               orderBy:(const WCTOrderByList &)orderList
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                                  where:(const WCTCondition &)condition
                                orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset
-                                 limit:(const WCTLimit &)limit;
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset;
 
 #pragma mark - Get One Distinct Column
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result;
@@ -242,10 +183,10 @@
                                        orderBy:(const WCTOrderByList &)orderList;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                        offset:(const WCTOffset &)offset;
+                                         limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         limit:(const WCTLimit &)limit;
+                                        offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          where:(const WCTCondition &)condition
@@ -253,14 +194,10 @@
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          where:(const WCTCondition &)condition
-                                        offset:(const WCTOffset &)offset;
-
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
                                          limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                       orderBy:(const WCTOrderByList &)orderList
+                                         where:(const WCTCondition &)condition
                                         offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -268,12 +205,11 @@
                                          limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                        offset:(const WCTOffset &)offset
-                                         limit:(const WCTLimit &)limit;
+                                       orderBy:(const WCTOrderByList &)orderList
+                                        offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList
+                                         limit:(const WCTLimit &)limit
                                         offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -282,15 +218,25 @@
                                          limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                         where:(const WCTCondition &)condition
                                        orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset
-                                         limit:(const WCTLimit &)limit;
+                                        offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                         where:(const WCTCondition &)condition
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                       orderBy:(const WCTOrderByList &)orderList
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                          where:(const WCTCondition &)condition
                                        orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset
-                                         limit:(const WCTLimit &)limit;
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset;
 
 #pragma mark - Get One Value
 - (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result;
@@ -376,8 +322,8 @@
 - (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)order
                                            offset:(const WCTOffset &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOffset:(const WCTOffset &)offset
-                                           limit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCTLimit &)limit
+                                         offset:(const WCTOffset &)offset;
 
 - (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
                                         orderBy:(const WCDB::OrderList &)order
@@ -436,8 +382,8 @@
                                              offset:(const WCTOffset &)offset;
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                             offset:(const WCTOffset &)offset
-                                              limit:(const WCTLimit &)limit;
+                                              limit:(const WCTLimit &)limit
+                                             offset:(const WCTOffset &)offset;
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
                                               where:(const WCTCondition &)condition
@@ -512,6 +458,11 @@
 - (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
                                 where:(const WCTCondition &)condition
                               orderBy:(const WCTOrderByList &)orderList
+                               offset:(const WCTOffset &)offset;
+
+- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
+                                where:(const WCTCondition &)condition
+                                limit:(const WCTLimit &)limit
                                offset:(const WCTOffset &)offset;
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
@@ -606,6 +557,12 @@
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                    withObject:(WCTObject *)object
                        orderBy:(const WCTOrderByList &)orderList
                          limit:(const WCTLimit &)limit
                         offset:(const WCTOffset &)offset;
@@ -677,6 +634,12 @@
                   withObject:(WCTObject *)object
                        where:(const WCTCondition &)condition
                      orderBy:(const WCTOrderByList &)orderList
+                      offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit
                       offset:(const WCTOffset &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
@@ -756,6 +719,12 @@
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
+                        offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
+                       withRow:(WCTOneRow *)row
                        orderBy:(const WCTOrderByList &)orderList
                          limit:(const WCTLimit &)limit
                         offset:(const WCTOffset &)offset;
@@ -831,6 +800,12 @@
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
+                       where:(const WCTCondition &)condition
+                       limit:(const WCTLimit &)limit
+                      offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value
                      orderBy:(const WCTOrderByList &)orderList
                        limit:(const WCTLimit &)limit
                       offset:(const WCTOffset &)offset;
@@ -877,6 +852,10 @@
 
 - (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
                    orderBy:(const WCTOrderByList &)orderList
+                    offset:(const WCTOffset &)offset;
+
+- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
+                     limit:(const WCTLimit &)limit
                     offset:(const WCTOffset &)offset;
 
 - (BOOL)deleteObjectsOrderBy:(const WCTOrderByList &)orderList
