@@ -51,9 +51,14 @@
     return self;
 }
 
-- (void)setCipherKey:(NSData *)data
+- (void)setCipherKey:(NSData *)cipherKey
 {
-    _database->setCipherKey(data.bytes, (int) data.length);
+    _database->setCipher(cipherKey.bytes, (int) cipherKey.length);
+}
+
+- (void)setCipherKey:(NSData *)cipherKey andCipherPageSize:(int)cipherPageSize
+{
+    _database->setCipher(cipherKey.bytes, (int) cipherKey.length, cipherPageSize);
 }
 
 - (BOOL)canOpen

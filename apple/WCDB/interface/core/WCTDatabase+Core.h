@@ -43,6 +43,39 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
 + (NSString *)DefaultConfigName;
 
 /**
+ @brief Default cipher config name
+        The default cipher config for WCDB is :
+        1. PRAGMA key=yourCipherKey
+        2. PRAGMA cipher_page_size=yourCipherPageSize. Default to 4096
+ @return default cipher config name
+ */
++ (NSString *)DefaultCipherConfigName;
+
+/**
+ @brief Default trace config name 
+        The config for performance and sql tracing.
+ @return default trace config name
+ */
++ (NSString *)DefaultTraceConfigName;
+
+/**
+ @brief Default checkpoint config name
+        The config for subthread checkpoint optimization
+ @return default checkpoint config name
+ */
++ (NSString *)DefaultCheckpointConfigName;
+
+/**
+ @brief Default sync config name
+        The default sync config for WCDB is :
+        1. PRAGMA synchronous=FULL
+        2. PRAGMA checkpoint_fullfsync=1
+        3. PRAGMA fullfsync=1
+ @return default sync config name
+ */
++ (NSString *)DefaultSyncConfigName;
+
+/**
  @brief Set config for this database.  
  @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.  
  

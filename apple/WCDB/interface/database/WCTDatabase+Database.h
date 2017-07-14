@@ -39,11 +39,19 @@ typedef void (^WCTCloseBlock)(void);
 - (instancetype)initWithPath:(NSString *)path;
 
 /**
- @brief Set cipher key for a database. 
-        For an encrypted database, you must call it before all other operation.
- @param data Cipher key.
+ @brief This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];
+ @param cipherKey Cipher key.
  */
-- (void)setCipherKey:(NSData *)data;
+- (void)setCipherKey:(NSData *)cipherKey;
+
+/**
+ @brief Set cipher key for a database. 
+ For an encrypted database, you must call it before all other operation.
+ The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. So for an existing database created by other database framework, you should set it to 1024. Otherwise, you'd better to use cipher page size with 4096 or simply call setCipherKey: interface to get better performance.
+ @param cipherKey Cipher key.
+ @param cipherPageSize Cipher Page Size
+ */
+- (void)setCipherKey:(NSData *)cipherKey andCipherPageSize:(int)cipherPageSize;
 
 /**
  @brief Set the tag of the database. 
