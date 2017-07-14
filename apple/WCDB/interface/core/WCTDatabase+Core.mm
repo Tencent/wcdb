@@ -28,6 +28,26 @@
     return @(WCDB::Database::defaultConfigName.c_str());
 }
 
++ (NSString *)DefaultCipherConfigName
+{
+    return @(WCDB::Database::defaultCipherConfigName.c_str());
+}
+
++ (NSString *)DefaultTraceConfigName
+{
+    return @(WCDB::Database::defaultTraceConfigName.c_str());
+}
+
++ (NSString *)DefaultCheckpointConfigName
+{
+    return @(WCDB::Database::defaultCheckpointConfigName.c_str());
+}
+
++ (NSString *)DefaultSyncConfigName
+{
+    return @(WCDB::Database::defaultSyncConfigName.c_str());
+}
+
 - (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name withOrder:(WCDB::Configs::Order)order
 {
     _database->setConfig(name.UTF8String, invoke, order);
