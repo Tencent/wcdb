@@ -29,7 +29,7 @@
         static const WCTProperty s_property(                                   \
             columnName, className.class,                                       \
             __WCDB_BINDING(className)                                          \
-                .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
+                ->addColumnBinding<__WCDB_PROPERTY_TYPE(                       \
                     className, propertyName)>(WCDB_STRINGIFY(propertyName),    \
                                               columnName));                    \
         return s_property;                                                     \
@@ -42,8 +42,8 @@
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
                                       defaultValue)                            \
     __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
-    static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
-        binding.getColumnBinding(className.propertyName)                       \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
+        binding->getColumnBinding(className.propertyName)                      \
             ->makeDefault<__WCDB_PROPERTY_TYPE(className, propertyName)>(      \
                 defaultValue);                                                 \
         return nullptr;                                                        \
