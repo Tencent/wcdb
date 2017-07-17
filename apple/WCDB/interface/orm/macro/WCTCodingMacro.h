@@ -28,14 +28,15 @@
 #define __WCDB_PROPERTIES(className) _s_##className##_properties
 
 #define WCDB_IMPLEMENTATION(className)                                         \
-    static WCTBinding __WCDB_BINDING(className)(className.class);              \
+    static WCTBinding *__WCDB_BINDING(className)(                              \
+        new WCTBinding(className.class));                                      \
     static WCTPropertyList __WCDB_PROPERTIES(className);                       \
     +(const WCTBinding *) objectRelationalMappingForWCDB                       \
     {                                                                          \
         if (self.class != className.class) {                                   \
             WCDB::Error::Abort("Inheritance is not supported for ORM");        \
         }                                                                      \
-        return &__WCDB_BINDING(className);                                     \
+        return __WCDB_BINDING(className);                                      \
     }                                                                          \
     +(const WCTPropertyList &) AllProperties                                   \
     {                                                                          \
