@@ -93,7 +93,6 @@
         NSString *tableName = nil;
         WCTObject *object = nil;
         for (const WCTResult &result : _resultList) {
-            index = 0;
             const char *columnTableName = _statementHandle->getColumnTableName(index);
             cls = result.getBindingClass();
             if (columnTableName && cls) {
