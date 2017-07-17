@@ -33,7 +33,11 @@
 
 - (WCTTable *)getTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls
 {
-    return [[WCTTable alloc] initWithCore:_core andTableName:tableName andClass:cls];
+    WCDB::Error innerError;
+    if ([self isTableExists:tableName withError:innerError]) {
+        return [[WCTTable alloc] initWithCore:_core andTableName:tableName andClass:cls];
+    }
+    return nil;
 }
 
 - (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class<WCTTableCoding>)cls

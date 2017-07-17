@@ -39,7 +39,7 @@
  @brief Get a wrapper from an existing table.
  @param tableName The name of the table.
  @param cls a class implement WCTTableCoding.
- @return WCTTable
+ @return WCTTable nil for a non-existent table.
  */
 - (WCTTable *)getTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
 
