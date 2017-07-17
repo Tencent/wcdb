@@ -69,6 +69,9 @@ WCTColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const s
 {
     static const SEL ColumnTypeSelector = NSSelectorFromString(@"columnTypeForWCDB");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
+    if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
+        WCDB::Error::Abort([NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()].UTF8String);
+    }
     IMP implementation = GetClassMethodImplementation(propertyClass, ColumnTypeSelector);
     using GetColumnTyper = WCTColumnType (*)(Class, SEL);
     return ((GetColumnTyper) implementation)(propertyClass, ColumnTypeSelector);
