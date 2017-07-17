@@ -24,7 +24,7 @@
 
 #ifndef WCDB_COCOAPODS
 #if __has_feature(objc_arc)
-#error This file cannot be compiled with ARC. Either turn off ARC for the project or use -fno-objc-arc flag
+#error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif
 #endif
 
