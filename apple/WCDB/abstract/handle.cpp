@@ -361,6 +361,7 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
     conf.key_len = databaseKeyLength;
     conf.page_size = pageSize;
     conf.kdf_salt = kdfSalt;
+    conf.use_hmac = true;
 
     sqliterk *rk;
     rc = sqliterk_open(corruptedDBPath.c_str(), &conf, &rk);

@@ -28,13 +28,13 @@ void sample_repair_main(NSString *baseDirectory)
     NSString *path = [baseDirectory stringByAppendingPathComponent:className];
     NSString *recoverPath = [path stringByAppendingString:@"_recover"];
     NSString *tableName = className;
+    NSData *databaseCipher = [@"databaseCipher" dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *backupCipher = [@"backupCipher" dataUsingEncoding:NSASCIIStringEncoding];
+
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+    [database setCipherKey:databaseCipher];
     [database close:^{
       [database removeFilesWithError:nil];
-    }];
-    WCTDatabase *recover = [[WCTDatabase alloc] initWithPath:recoverPath];
-    [recover close:^{
-      [recover removeFilesWithError:nil];
     }];
 
     //prepare
@@ -51,12 +51,12 @@ void sample_repair_main(NSString *baseDirectory)
         NSLog(@"The count of objects before: %lu", [database getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
 
-    NSString *password = @"sample_password";
-    NSData *cipher = [password dataUsingEncoding:NSASCIIStringEncoding];
-
     //backup
     {
-        BOOL ret = [database backupWithCipher:cipher];
+        BOOL ret = [database backupWithCipher:backupCipher];
+        if (!ret) {
+            abort();
+        }
     }
 
     //get page size
@@ -92,8 +92,11 @@ void sample_repair_main(NSString *baseDirectory)
         //Since recovering is a long time operation, you'd better call it in sub-thread.
         //dispatch_async(DISPATCH_QUEUE_PRIORITY_BACKGROUND, ^{
         WCTDatabase *recover = [[WCTDatabase alloc] initWithPath:recoverPath];
+        [recover close:^{
+          [recover removeFilesWithError:nil];
+        }];
         [database close:^{
-          [recover recoverFromPath:path withPageSize:pageSize backupCipher:cipher databaseCipher:nil];
+          [recover recoverFromPath:path withPageSize:pageSize backupCipher:backupCipher databaseCipher:databaseCipher];
         }];
         NSLog(@"The count of objects repaired: %lu", [recover getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
