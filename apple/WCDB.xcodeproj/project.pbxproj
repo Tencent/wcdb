@@ -564,6 +564,7 @@
 		23E732671F209FFF00AA1614 /* WCTSequence+WCTTableCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E732641F209FFF00AA1614 /* WCTSequence+WCTTableCoding.mm */; };
 		23E732681F209FFF00AA1614 /* WCTSequence+WCTTableCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E732641F209FFF00AA1614 /* WCTSequence+WCTTableCoding.mm */; };
 		23E7326B1F20A16600AA1614 /* WCTSampleAdvance+WCTTableCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E7326A1F20A16600AA1614 /* WCTSampleAdvance+WCTTableCoding.mm */; };
+		23E732741F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E732731F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.m */; };
 		23E781951EA4C63F00D74BA8 /* WCTAnyProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E781911EA4C63400D74BA8 /* WCTAnyProperty.mm */; };
 		23E781961EA4C65100D74BA8 /* WCTAnyProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E781901EA4C63400D74BA8 /* WCTAnyProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F0CF5F1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F0CF5D1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h */; };
@@ -970,6 +971,8 @@
 		23E732641F209FFF00AA1614 /* WCTSequence+WCTTableCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTSequence+WCTTableCoding.mm"; sourceTree = "<group>"; };
 		23E732691F20A16600AA1614 /* WCTSampleAdvance+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSampleAdvance+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23E7326A1F20A16600AA1614 /* WCTSampleAdvance+WCTTableCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTSampleAdvance+WCTTableCoding.mm"; sourceTree = "<group>"; };
+		23E732721F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleNoObjectiveCpp.h; sourceTree = "<group>"; };
+		23E732731F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTSampleNoObjectiveCpp.m; sourceTree = "<group>"; };
 		23E781901EA4C63400D74BA8 /* WCTAnyProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTAnyProperty.h; sourceTree = "<group>"; };
 		23E781911EA4C63400D74BA8 /* WCTAnyProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTAnyProperty.mm; sourceTree = "<group>"; };
 		23F0CF5D1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSelectBase+WCTExpr.h"; sourceTree = "<group>"; };
@@ -1596,6 +1599,8 @@
 		23D5CD351EB876DB00A5B8F9 /* advance */ = {
 			isa = PBXGroup;
 			children = (
+				23E732721F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.h */,
+				23E732731F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.m */,
 				238A3A5B1EB8B08D00986614 /* WCTSampleAdvance.h */,
 				238A3A5C1EB8B08D00986614 /* WCTSampleAdvance.m */,
 				23E732691F20A16600AA1614 /* WCTSampleAdvance+WCTTableCoding.h */,
@@ -2294,6 +2299,7 @@
 				23D5CD681EB88CF700A5B8F9 /* WCTSampleChainCall.mm in Sources */,
 				23BC46E11EDE6E2E0057E849 /* sample_repair_main.mm in Sources */,
 				23D5CD4C1EB876FD00A5B8F9 /* WCTSampleConvenient.mm in Sources */,
+				23E732741F20B01B00AA1614 /* WCTSampleNoObjectiveCpp.m in Sources */,
 				23D5CD4F1EB8771000A5B8F9 /* sample_convenient_main.mm in Sources */,
 				23D5CD001EB8616D00A5B8F9 /* sample_main.mm in Sources */,
 				23D5CD471EB876DB00A5B8F9 /* WCTSampleORMColumnConstraint.mm in Sources */,
