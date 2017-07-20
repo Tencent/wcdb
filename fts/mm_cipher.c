@@ -223,6 +223,10 @@ int sqlite3_register_mm_cipher(sqlite3 *db, const unsigned char *key)
     int sqlite_err;
     mm_cipher_context_t *ctx;
 
+    // XXX: if we failed to load ICU functions, just skip initializing.
+    if (!ucnv_openCCSID)
+        return SQLITE_OK;
+
     ctx = sqlite3_malloc(sizeof(mm_cipher_context_t));
     if (!ctx)
         return SQLITE_NOMEM;
