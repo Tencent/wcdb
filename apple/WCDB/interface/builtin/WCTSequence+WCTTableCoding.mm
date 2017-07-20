@@ -19,25 +19,12 @@
  */
 
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTMaster.h>
+#import <WCDB/WCTSequence+WCTTableCoding.h>
 
-@implementation WCTMaster
+@implementation WCTSequence (WCTTableCoding)
 
-WCDB_IMPLEMENTATION(WCTMaster)
-WCDB_SYNTHESIZE(WCTMaster, type)
-WCDB_SYNTHESIZE(WCTMaster, name)
-WCDB_SYNTHESIZE_COLUMN(WCTMaster, tableName, "tbl_name")
-WCDB_SYNTHESIZE(WCTMaster, rootpage)
-WCDB_SYNTHESIZE(WCTMaster, sql)
-
-+ (NSString *)TableName
-{
-    return @"sqlite_master";
-}
-
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"type:%@, name:%@, tbl_name:%@, rootpage:%d, sql:%@", self.type, self.name, self.tableName, self.rootpage, self.sql];
-}
+WCDB_IMPLEMENTATION(WCTSequence)
+WCDB_SYNTHESIZE(WCTSequence, name)
+WCDB_SYNTHESIZE(WCTSequence, seq)
 
 @end

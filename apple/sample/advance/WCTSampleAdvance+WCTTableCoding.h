@@ -18,23 +18,12 @@
  * limitations under the License.
  */
 
+#import "WCTSampleAdvance.h"
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTSequence.h>
 
-@implementation WCTSequence
+@interface WCTSampleAdvance (WCTTableCoding) <WCTTableCoding>
 
-WCDB_IMPLEMENTATION(WCTSequence)
-WCDB_SYNTHESIZE(WCTSequence, name)
-WCDB_SYNTHESIZE(WCTSequence, seq)
-
-+ (NSString *)TableName
-{
-    return @"sqlite_sequence";
-}
-
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"name:%@, seq:%d", self.name, self.seq];
-}
+WCDB_PROPERTY(intValue)
+WCDB_PROPERTY(columnCoding)
 
 @end

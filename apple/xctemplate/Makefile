@@ -14,4 +14,8 @@ $(SRC): $(ORIGIN)
 	rm -fR $(SRC)
 	mkdir -p ~/Library/Developer/Xcode/Templates/File\ Templates
 	cp -R $(ORIGIN) $(FILE_TEMPLATES)
+force:
+	rm -fR $(SRC)
+	mkdir -p ~/Library/Developer/Xcode/Templates/File\ Templates
+	cp -R $(ORIGIN) $(FILE_TEMPLATES)
 clean:

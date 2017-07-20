@@ -19,21 +19,12 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCoding.h>
-#import <WCDB/WCTCodingMacro.h>
-#import <WCDB/WCTProperty.h>
 
-/**
- Builtin ORM for "sqlite_sequence" table. For further information, see https://sqlite.org/autoinc.html .
- */
-@interface WCTSequence : NSObject <WCTTableCoding>
+@interface WCTSequence : NSObject
 
 + (NSString *)TableName;
 
 @property(nonatomic, retain) NSString *name;
 @property(nonatomic, assign) int seq;
-
-WCDB_PROPERTY(name)
-WCDB_PROPERTY(seq)
 
 @end

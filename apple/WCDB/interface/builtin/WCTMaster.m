@@ -18,12 +18,18 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <WCDB/WCTMaster.h>
 
-@interface WCTSampleColumnCoding : NSObject
+@implementation WCTMaster
 
-@property(nonatomic, assign) float floatValue;
++ (NSString *)TableName
+{
+    return @"sqlite_master";
+}
 
-- (instancetype)initWithFloatValue:(float)floatValue;
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"type:%@, name:%@, tbl_name:%@, rootpage:%d, sql:%@", self.type, self.name, self.tableName, self.rootpage, self.sql];
+}
 
 @end

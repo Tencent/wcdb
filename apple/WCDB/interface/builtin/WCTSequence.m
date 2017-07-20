@@ -18,31 +18,18 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#import <WCDB/WCTSequence.h>
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+@implementation WCTSequence
 
-@interface NSNumber (WCDB) <WCTColumnCoding>
-@end
-
-@implementation NSNumber (WCDB)
-
-+ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
++ (NSString *)TableName
 {
-    return value;
+    return @"sqlite_sequence";
 }
 
-- (NSNumber *)archivedWCTValue
+- (NSString *)description
 {
-    return self;
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeDouble;
+    return [NSString stringWithFormat:@"name:%@, seq:%d", self.name, self.seq];
 }
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

@@ -24,10 +24,10 @@
 #import <WCDB/WCDB.h>
 #import <WCDB/WCTCompatible.h>
 
-@interface NSData (WCDB) <WCTColumnCoding>
+@interface NSData (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSData (WCDB)
+@implementation NSData (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
@@ -59,10 +59,10 @@
 
 @end
 
-@interface NSMutableData (WCDB) <WCTColumnCoding>
+@interface NSMutableData (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSMutableData (WCDB)
+@implementation NSMutableData (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {

@@ -18,12 +18,16 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <WCDB/WCDB.h>
+#import <WCDB/WCTMaster+WCTTableCoding.h>
 
-@interface WCTSampleColumnCoding : NSObject
+@implementation WCTMaster (WCTTableCoding)
 
-@property(nonatomic, assign) float floatValue;
-
-- (instancetype)initWithFloatValue:(float)floatValue;
+WCDB_IMPLEMENTATION(WCTMaster)
+WCDB_SYNTHESIZE(WCTMaster, type)
+WCDB_SYNTHESIZE(WCTMaster, name)
+WCDB_SYNTHESIZE_COLUMN(WCTMaster, tableName, "tbl_name")
+WCDB_SYNTHESIZE(WCTMaster, rootpage)
+WCDB_SYNTHESIZE(WCTMaster, sql)
 
 @end

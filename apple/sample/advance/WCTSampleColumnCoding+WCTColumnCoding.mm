@@ -18,53 +18,28 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
-
+#import "WCTSampleColumnCoding.h"
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSSet (WCDB) <WCTColumnCoding>
+@interface WCTSampleColumnCoding (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSSet (WCDB)
+@implementation WCTSampleColumnCoding (WCTColumnCoding)
 
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
++ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    return value ? [[self alloc] initWithFloatValue:value.floatValue] : nil;
 }
 
-- (NSData *)archivedWCTValue
+- (NSNumber *)archivedWCTValue
 {
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
+    return [NSNumber numberWithFloat:self.floatValue];
 }
 
 + (WCTColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeBinary;
+    return WCTColumnTypeDouble;
 }
 
 @end
-
-@interface NSMutableSet (WCDB) <WCTColumnCoding>
-@end
-
-@implementation NSMutableSet (WCDB)
-
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
-}
-
-@end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING
