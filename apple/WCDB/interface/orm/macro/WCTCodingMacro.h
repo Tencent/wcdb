@@ -89,10 +89,6 @@
     __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedAscending, true,     \
                        WCTConflictNotSet)
 
-#define WCDB_PRIMARY_DESC_AUTO_INCREMENT(className, propertyName)              \
-    __WCDB_PRIMARY_IMP(className, propertyName, WCTOrderedDescending, true,    \
-                       WCTConflictNotSet)
-
 #define WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement,      \
                          onConflict)                                           \
     __WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement,        \
