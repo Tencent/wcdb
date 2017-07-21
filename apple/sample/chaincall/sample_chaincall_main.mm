@@ -55,8 +55,8 @@ void sample_chaincall_main(NSString *baseDirectory)
 
     //Select objects
     {
-        WCTSelect *select = [[[database prepareSelectObjectsOfClass:WCTSampleChainCall.class
-                                                          fromTable:tableName] where:WCTSampleChainCall.intValue == 1] limit:3];
+        WCTSelect *select = [[[[database prepareSelectObjectsOnResults:WCTSampleChainCall.intValue.max()
+                                                             fromTable:tableName] where:WCTSampleChainCall.intValue == 1] groupBy:{WCTSampleChainCall.intValue}] limit:3];
         NSArray *objects = select.allObjects;
         if (!objects) {
             NSLog(@"Select objects Error %@", select.error);
