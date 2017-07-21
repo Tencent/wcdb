@@ -33,20 +33,6 @@
 			<key>NotPersisted</key>
 			<true/>
 		</dict>
-		<dict>
-			<key>Identifier</key>
-			<string>ObjCpp</string>
-			<key>Name</key>
-			<string>Also create Objective-C++ source file</string>
-			<key>Description</key>
-			<string>Whether to create a Objective-C++ source file with the same name</string>
-			<key>Type</key>
-			<string>checkbox</string>
-			<key>Default</key>
-			<string>false</string>
-			<key>NotPersisted</key>
-			<true/>
-		</dict>
 	</array>
 </dict>
 </plist>
