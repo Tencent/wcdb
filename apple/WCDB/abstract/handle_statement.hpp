@@ -132,6 +132,8 @@ public:
 
     void finalize();
 
+    int getChanges();
+
     ~StatementHandle();
 
 protected:

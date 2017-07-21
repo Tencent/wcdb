@@ -59,6 +59,7 @@
         if (result && _ticker) {
             _ticker->pause();
         }
+        _changes = _transaction->getChanges();
         return result;
     }
 }
@@ -91,13 +92,20 @@
             };
         }
         WCDB::Error innerError;
-        return _transaction->runTransaction([inTransaction](WCDB::Error &) -> bool {
+        BOOL result = _transaction->runTransaction([inTransaction](WCDB::Error &) -> bool {
             @autoreleasepool {
                 return inTransaction();
             }
         },
-                                            event, innerError);
+                                                   event, innerError);
+        _changes = _transaction->getChanges();
+        return result;
     }
+}
+
+- (int)changes
+{
+    return _changes;
 }
 
 @end

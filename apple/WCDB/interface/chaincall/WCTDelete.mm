@@ -22,10 +22,12 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTExpr.h>
+#import <WCDB/handle_statement.hpp>
 #import <WCDB/in_case_lock_guard.hpp>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
+    int _changes;
 }
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName
@@ -63,7 +65,22 @@
 - (BOOL)execute
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    return _core->exec(_statement, _error);
+    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
+    if (!statementHandle) {
+        return NO;
+    }
+    statementHandle->step();
+    if (!statementHandle->isOK()) {
+        _error = statementHandle->getError();
+        return NO;
+    }
+    _changes = statementHandle->getChanges();
+    return YES;
+}
+
+- (int)changes
+{
+    return _changes;
 }
 
 @end

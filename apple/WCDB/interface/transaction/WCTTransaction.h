@@ -116,4 +116,10 @@ typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 
+/**
+ @brief It should be called after executing successfully
+ @return the number of changes in the most recent call
+ */
+- (int)changes;
+
 @end

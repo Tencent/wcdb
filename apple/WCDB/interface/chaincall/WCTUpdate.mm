@@ -34,6 +34,7 @@
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
     WCTPropertyList _propertyList;
+    int _changes;
 }
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName
@@ -122,6 +123,7 @@
     }
     statementHandle->step();
     _error = statementHandle->getError();
+    _changes = statementHandle->getChanges();
     return _error.isOK();
 }
 
@@ -152,7 +154,13 @@
     }
     statementHandle->step();
     _error = statementHandle->getError();
+    _changes = statementHandle->getChanges();
     return _error.isOK();
+}
+
+- (int)changes
+{
+    return _changes;
 }
 
 @end
