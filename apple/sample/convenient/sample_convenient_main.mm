@@ -165,14 +165,14 @@ void sample_convenient_main(NSString *baseDirectory)
                                                       }
                                             fromTable:tableName];
     }
-    //Select distinct result
-    {
-        NSArray *objects = [database getAllObjectsOnResults:WCTSampleConvenient.stringValue.distinct()
-                                                  fromTable:tableName];
-    }
     //Select distinct aggregation
     {
-        NSNumber *distinctCount = [database getOneDistinctValueOnResult:WCTSampleConvenient.AnyProperty.count() fromTable:tableName];
+        NSArray *objects = [database getAllObjectsOnResults:WCTSampleConvenient.stringValue.count(true)
+                                                  fromTable:tableName];
+    }
+    //Select distinct result
+    {
+        NSNumber *distinctCount = [database getOneDistinctValueOnResult:WCTSampleConvenient.intValue fromTable:tableName];
     }
 
     //Delete
