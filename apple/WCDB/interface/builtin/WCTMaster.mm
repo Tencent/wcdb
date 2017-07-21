@@ -18,8 +18,27 @@
  * limitations under the License.
  */
 
-#import "WCTSampleAdvance.h"
+#import <WCDB/WCDB.h>
+#import <WCDB/WCTMaster+WCTTableCoding.h>
+#import <WCDB/WCTMaster.h>
 
-@implementation WCTSampleAdvance
+@implementation WCTMaster
+
+WCDB_IMPLEMENTATION(WCTMaster)
+WCDB_SYNTHESIZE(WCTMaster, type)
+WCDB_SYNTHESIZE(WCTMaster, name)
+WCDB_SYNTHESIZE_COLUMN(WCTMaster, tableName, "tbl_name")
+WCDB_SYNTHESIZE(WCTMaster, rootpage)
+WCDB_SYNTHESIZE(WCTMaster, sql)
+
++ (NSString *)TableName
+{
+    return @"sqlite_master";
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"type:%@, name:%@, tbl_name:%@, rootpage:%d, sql:%@", self.type, self.name, self.tableName, self.rootpage, self.sql];
+}
 
 @end

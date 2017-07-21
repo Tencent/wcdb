@@ -18,9 +18,15 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCDB.h>
+#import <WCDB/WCTSequence+WCTTableCoding.h>
 #import <WCDB/WCTSequence.h>
 
 @implementation WCTSequence
+
+WCDB_IMPLEMENTATION(WCTSequence)
+WCDB_SYNTHESIZE(WCTSequence, name)
+WCDB_SYNTHESIZE(WCTSequence, seq)
 
 + (NSString *)TableName
 {

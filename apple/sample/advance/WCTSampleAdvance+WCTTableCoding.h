@@ -21,7 +21,7 @@
 #import "WCTSampleAdvance.h"
 #import <WCDB/WCDB.h>
 
-@interface WCTSampleAdvance (WCTTableCoding) <WCTTableCoding>
+@interface WCTSampleAdvance () <WCTTableCoding>
 
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(columnCoding)

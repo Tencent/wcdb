@@ -18,13 +18,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
-#import <WCDB/WCTSequence+WCTTableCoding.h>
+#import "WCTSampleAdvance.h"
+#import "WCTSampleAdvance+WCTTableCoding.h"
 
-@implementation WCTSequence (WCTTableCoding)
+@implementation WCTSampleAdvance
 
-WCDB_IMPLEMENTATION(WCTSequence)
-WCDB_SYNTHESIZE(WCTSequence, name)
-WCDB_SYNTHESIZE(WCTSequence, seq)
+WCDB_IMPLEMENTATION(WCTSampleAdvance)
+WCDB_SYNTHESIZE(WCTSampleAdvance, intValue)
+WCDB_SYNTHESIZE(WCTSampleAdvance, columnCoding)
+
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(WCTSampleAdvance, intValue)
 
 @end
