@@ -183,6 +183,11 @@ WCTExpr WCTExpr::operator!=(const WCTExpr &operand) const
     return WCTExpr(Expr::operator!=(operand), *this);
 }
 
+WCTExpr WCTExpr::concat(const WCTExpr &operand) const
+{
+    return WCTExpr(Expr::concat(operand));
+}
+
 WCTExpr WCTExpr::in(const WCTExprList &exprList) const
 {
     return WCTExpr(Expr::in(exprList), *this);

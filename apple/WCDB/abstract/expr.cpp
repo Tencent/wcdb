@@ -214,6 +214,14 @@ Expr Expr::operator!=(const Expr &operand) const
     return expr;
 }
 
+Expr Expr::concat(const Expr &operand) const
+{
+    Expr expr;
+    expr.m_description.append("(" + m_description + "||" +
+                              operand.m_description + ")");
+    return expr;
+}
+
 Expr Expr::like(const Expr &operand) const
 {
     Expr expr;
