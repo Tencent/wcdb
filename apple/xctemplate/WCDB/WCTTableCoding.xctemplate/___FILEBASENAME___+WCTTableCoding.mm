@@ -17,8 +17,8 @@ WCDB_SYNTHESIZE_DEFAULT(___FILEBASENAMEASIDENTIFIER___, <#property3 #>, <#defaul
 WCDB_SYNTHESIZE_COLUMN_DEFAULT(___FILEBASENAMEASIDENTIFIER___, <#property4 #>, "<#column_name_in_database#>", <#default_value #>)
 WCDB_SYNTHESIZE(___FILEBASENAMEASIDENTIFIER___, <#... #>)
 
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(___FILEBASENAMEASIDENTIFIER___, <#primary_property #>)
+WCDB_PRIMARY_AUTO_INCREMENT(___FILEBASENAMEASIDENTIFIER___, <#primary_property #>)
 
-WCDB_INDEX_DESC(TestTemplate, "<#index_subfix_name#>", <#index_property #>)
+WCDB_INDEX(___FILEBASENAMEASIDENTIFIER___, "<#index_subfix_name#>", <#index_property #>)
 
 @end
