@@ -33,5 +33,5 @@ dependencies {
 
     debugCompile project(path: ':room', configuration: 'debug')
     releaseCompile project(path: ':room', configuration: 'release')
-    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha4'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha5'
 }

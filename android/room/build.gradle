@@ -29,8 +29,8 @@ dependencies {
     debugCompile project(path: ':wcdb', configuration: 'debug')
     releaseCompile project(path: ':wcdb', configuration: 'release')
 
-    compile 'android.arch.persistence.room:runtime:1.0.0-alpha4'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha4'
+    compile 'android.arch.persistence.room:runtime:1.0.0-alpha5'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha5'
 }
 
 
