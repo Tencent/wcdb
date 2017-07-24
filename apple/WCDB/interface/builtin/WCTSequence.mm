@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTSequence+WCTTableCoding.h>
 #import <WCDB/WCTSequence.h>
 
 @implementation WCTSequence

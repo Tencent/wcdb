@@ -1,17 +1,18 @@
 #!/usr/make
 
-SRC = ~/Library/Developer/Xcode/Templates/File\ Templates/WCDB
+DESTINATION = ~/Library/Developer/Xcode/Templates/File\ Templates/WCDB
 TEMPLATES = ~/Library/Developer/Xcode/Templates
 FILE_TEMPLATES = ~/Library/Developer/Xcode/Templates/File\ Templates
-ORIGIN = ./WCDB
+SOURCE = ./WCDB/* ./WCDB/**/* ./WCDB/**/**/*
+SOURCE_DIR = ./WCDB
 
-all: $(SRC)
-$(SRC): $(ORIGIN)
+all: $(DESTINATION)
+$(DESTINATION): $(SOURCE)
 	if [ -f $(TEMPLATES) ] ; \
 	then \
 		rm $(TEMPLATES); \
 	fi;
-	rm -fR $(SRC)
-	mkdir -p ~/Library/Developer/Xcode/Templates/File\ Templates
-	cp -R $(ORIGIN) $(FILE_TEMPLATES)
+	rm -fR $(DESTINATION)
+	mkdir -p $(FILE_TEMPLATES)
+	cp -R $(SOURCE_DIR) $(FILE_TEMPLATES)
 clean:

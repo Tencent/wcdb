@@ -77,6 +77,8 @@ public:
     Expr operator==(const Expr &operand) const;
     Expr operator!=(const Expr &operand) const;
 
+    Expr concat(const Expr &operand) const;
+
     template <typename T>
     typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
     in(const std::list<const T> &exprList) const

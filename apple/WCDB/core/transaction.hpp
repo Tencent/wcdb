@@ -47,6 +47,8 @@ public:
     bool runEmbeddedTransaction(TransactionBlock transaction,
                                 WCDB::Error &error) override;
 
+    int getChanges();
+
 protected:
     Transaction() = delete;
     Transaction(const Transaction &) = delete;

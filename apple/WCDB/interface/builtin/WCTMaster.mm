@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTMaster+WCTTableCoding.h>
 #import <WCDB/WCTMaster.h>
 
 @implementation WCTMaster

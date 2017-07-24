@@ -19,14 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCoding.h>
-#import <WCDB/WCTCodingMacro.h>
-#import <WCDB/WCTProperty.h>
 
-/**
- Builtin ORM for "sqlite_master" table. For further information, see https://www.sqlite.org/faq.html
- */
-@interface WCTMaster : NSObject <WCTTableCoding>
+@interface WCTMaster : NSObject
 
 + (NSString *)TableName;
 
@@ -35,11 +29,5 @@
 @property(nonatomic, retain) NSString *tableName;
 @property(nonatomic, assign) int rootpage;
 @property(nonatomic, retain) NSString *sql;
-
-WCDB_PROPERTY(type)
-WCDB_PROPERTY(name)
-WCDB_PROPERTY(tableName)
-WCDB_PROPERTY(rootpage)
-WCDB_PROPERTY(sql)
 
 @end

@@ -27,6 +27,7 @@
     WCDB::Error _error;
     WCDB::Transaction *_transaction;
     std::shared_ptr<WCDB::Ticker> _ticker;
+    int _changes;
 }
 
 @end

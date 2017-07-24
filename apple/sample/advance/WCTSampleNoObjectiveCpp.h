@@ -18,12 +18,10 @@
  * limitations under the License.
  */
 
+#import "WCTSampleAdvance.h"
 #import <Foundation/Foundation.h>
 
-@interface WCTSampleColumnCoding : NSObject
-
-@property(nonatomic, assign) float floatValue;
-
-- (instancetype)initWithFloatValue:(float)floatValue;
-
+//Since WCTSampleAdvance use category to implement ORM, you have no need to change this file's extension from .m to .mm
+@interface WCTSampleNoObjectiveCpp : NSObject
+@property(nonatomic, retain) WCTSampleAdvance *nocpp;
 @end

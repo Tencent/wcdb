@@ -6,13 +6,14 @@
 //___COPYRIGHT___
 //
 
+#import "___FILEBASENAMEASIDENTIFIER___.h"
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface ___FILEBASENAMEASIDENTIFIER___ (WCDB) <WCTColumnCoding>
+@interface ___FILEBASENAMEASIDENTIFIER___ (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation ___FILEBASENAMEASIDENTIFIER___ (WCDB)
+@implementation ___FILEBASENAMEASIDENTIFIER___ (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {

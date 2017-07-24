@@ -23,46 +23,24 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSDictionary (WCDB) <WCTColumnCoding>
+@interface NSDate (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSDictionary (WCDB)
+@implementation NSDate (WCTColumnCoding)
 
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
++ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    return value ? [NSDate dateWithTimeIntervalSince1970:value.longLongValue] : nil;
 }
 
-- (NSData *)archivedWCTValue
+- (NSNumber *)archivedWCTValue
 {
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
+    return [NSNumber numberWithLongLong:self.timeIntervalSince1970];
 }
 
 + (WCTColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeBinary;
-}
-
-@end
-
-@interface NSMutableDictionary (WCDB) <WCTColumnCoding>
-@end
-
-@implementation NSMutableDictionary (WCDB)
-
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
+    return WCTColumnTypeInteger64;
 }
 
 @end

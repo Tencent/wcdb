@@ -105,6 +105,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     // The recent operations log.
     private final OperationLog mRecentOperations = new OperationLog();
+    private Thread mAcquiredThread;
+    private int mAcquiredTid;
 
     // The native SQLiteConnection pointer.  (FOR INTERNAL USE ONLY)
     private long mConnectionPtr;
@@ -510,6 +512,13 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     // Preparing statements that might write is ok, just don't execute them.
     void setOnlyAllowReadOnlyOperations(boolean readOnly) {
         mOnlyAllowReadOnlyOperations = readOnly;
+    }
+
+    // Called by SQLiteSession only.
+    // Mark acquisition state for debug purpose.
+    void setAcquisitionState(Thread thread, int tid) {
+        mAcquiredThread = thread;
+        mAcquiredTid = tid;
     }
 
     // Called by SQLiteConnectionPool only.
@@ -1125,6 +1134,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
         printer.println("  isPrimaryConnection: " + mIsPrimaryConnection);
         printer.println("  onlyAllowReadOnlyOperations: " + mOnlyAllowReadOnlyOperations);
+        if (mAcquiredThread != null) {
+            printer.println("  acquiredThread: " + mAcquiredThread + " (tid: " + mAcquiredTid + ")");
+        }
 
         mRecentOperations.dump(printer, verbose);
 
@@ -1458,7 +1470,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                     }
                 }
                 operation.mCookie = newOperationCookieLocked(index);
-                operation.mTid = android.os.Process.myTid();
+                operation.mTid = mAcquiredTid;
                 mIndex = index;
                 return operation;
             }

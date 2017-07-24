@@ -397,4 +397,9 @@ const Error &Handle::getError() const
     return m_error;
 }
 
+int Handle::getChanges()
+{
+    return sqlite3_changes((sqlite3 *) m_handle);
+}
+
 } //namespace WCDB

@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <strings.h>
 #include <vector>
 #include <zlib.h>
 #if defined(__APPLE__)
@@ -127,6 +128,7 @@ struct sqliterk_output_ctx {
     sqlite3_stmt *stmt;
     int real_columns;
     std::vector<sqlite3_value *> dflt_values;
+    int ipk_column;
 
     sqliterk_master_map tables;
     sqliterk_master_map::const_iterator table_cursor;
@@ -199,6 +201,7 @@ static void fini_insert(sqliterk_output_ctx *ctx)
         sqlite3_value_free(ctx->dflt_values[i]);
     ctx->dflt_values.clear();
     ctx->real_columns = 0;
+    ctx->ipk_column = 0;
 }
 
 static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
@@ -225,11 +228,25 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     sql += table;
     sql += " VALUES(";
     ctx->real_columns = 0;
+    int ipk_column = 0;
     while (sqlite3_step(table_info_stmt) == SQLITE_ROW) {
         ctx->real_columns++;
 
         sqlite3_value *value = sqlite3_column_value(table_info_stmt, 4);
         ctx->dflt_values.push_back(sqlite3_value_dup(value));
+
+        // determine INTEGER PRIMARY KEY
+        if (ipk_column >= 0) {
+            int pk_idx = sqlite3_column_int(table_info_stmt, 5);
+            if (pk_idx == 1) {
+                const char *column_type =
+                    (const char *) sqlite3_column_text(table_info_stmt, 2);
+                if (strcasecmp(column_type, "INTEGER") == 0)
+                    ipk_column = ctx->real_columns;
+            } else if (pk_idx != 0) {
+                ipk_column = -1;
+            }
+        }
 
         sql += "?,";
     }
@@ -254,6 +271,7 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
         return -1;
     }
     ctx->stmt = stmt;
+    ctx->ipk_column = (ipk_column > 0) ? ipk_column : 0;
 
     return ctx->real_columns;
 }
@@ -309,7 +327,12 @@ static int table_onParseColumn(sqliterk *rk,
                                    sqliterk_column_integer64(column, i));
                 break;
             case sqliterk_value_type_null:
-                sqlite3_bind_null(stmt, i + 1);
+                // If it's INTEGER PRIMARY KEY column, bind rowid instead.
+                if (ctx->ipk_column == i + 1)
+                    sqlite3_bind_int64(stmt, i + 1,
+                                       sqliterk_column_rowid(column));
+                else
+                    sqlite3_bind_null(stmt, i + 1);
                 break;
             case sqliterk_value_type_number:
                 sqlite3_bind_double(stmt, i + 1,
@@ -365,6 +388,7 @@ int sqliterk_output(sqliterk *rk,
     ctx.flags = flags;
     ctx.success_count = 0;
     ctx.fail_count = 0;
+    ctx.ipk_column = 0;
 
     if (!master)
         ctx.flags |= SQLITERK_OUTPUT_ALL_TABLES;
@@ -465,7 +489,7 @@ int sqliterk_output(sqliterk *rk,
     if (ctx.success_count == 0) {
         rc = SQLITERK_DAMAGED;
         if (ctx.tables.empty())
-            sqliterkOSError(rc, "No vaild sqlite_master info available, "
+            sqliterkOSError(rc, "No valid sqlite_master info available, "
                                 "sqlite_master is corrupted.");
         else
             sqliterkOSError(rc,
@@ -817,7 +841,7 @@ int sqliterk_load_master(const char *path,
         goto bail_errno;
     if (memcmp(header.magic, SQLITERK_SM_MAGIC, sizeof(header.magic)) != 0 ||
         header.version != SQLITERK_SM_VERSION) {
-        sqliterkOSError(SQLITERK_DAMAGED, "Invaild format: %s", path);
+        sqliterkOSError(SQLITERK_DAMAGED, "Invalid format: %s", path);
         goto bail;
     }
 

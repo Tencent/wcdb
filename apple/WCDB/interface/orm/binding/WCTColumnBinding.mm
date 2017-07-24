@@ -18,7 +18,9 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
+#import <WCDB/WCTValue.h>
 #import <WCDB/error.hpp>
 
 bool WCTColumnBinding::isPrimary() const
@@ -55,25 +57,36 @@ void WCTColumnBinding::makeUnique()
 
 void WCTColumnBinding::makeDefaultObjC(WCTValue *defaultValue)
 {
-    if ([defaultValue isKindOfClass:NSNumber.class]) {
-        NSNumber *number = (NSNumber *) defaultValue;
-        if (CFNumberIsFloatType((CFNumberRef) number)) {
-            m_columnDef.makeDefault(number.doubleValue);
-        } else {
-            if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                m_columnDef.makeDefault(number.intValue);
+    WCTValueType valueType = [defaultValue valueType];
+    if (valueType == WCTValueTypeColumnCoding) {
+        defaultValue = [(id<WCTColumnCoding>) defaultValue archivedWCTValue];
+        valueType = [defaultValue valueType];
+    }
+    switch (valueType) {
+        case WCTValueTypeString:
+            m_columnDef.makeDefault(((NSString *) defaultValue).UTF8String);
+            break;
+        case WCTValueTypeNumber: {
+            NSNumber *number = (NSNumber *) defaultValue;
+            if (CFNumberIsFloatType((CFNumberRef) number)) {
+                m_columnDef.makeDefault(number.doubleValue);
             } else {
-                m_columnDef.makeDefault(number.longLongValue);
+                if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+                    m_columnDef.makeDefault(number.intValue);
+                } else {
+                    m_columnDef.makeDefault(number.longLongValue);
+                }
             }
-        }
-    } else if ([defaultValue isKindOfClass:NSString.class]) {
-        m_columnDef.makeDefault(((NSString *) defaultValue).UTF8String);
-    } else if ([defaultValue isKindOfClass:NSData.class]) {
-        NSData *data = (NSData *) defaultValue;
-        m_columnDef.makeDefault(data.bytes, (int) data.length);
-    } else if (defaultValue == nil || [defaultValue isKindOfClass:NSNull.class]) {
-        m_columnDef.makeDefault(nullptr);
-    } else {
-        WCDB::Error::Abort([NSString stringWithFormat:@"Setting default value for %s with unknown column type %d", columnName.c_str(), (int) accessor->getColumnType()].UTF8String);
+        } break;
+        case WCTValueTypeData: {
+            NSData *data = (NSData *) defaultValue;
+            m_columnDef.makeDefault(data.bytes, (int) data.length);
+        } break;
+        case WCTValueTypeNil:
+            m_columnDef.makeDefault(nullptr);
+            break;
+        default:
+            WCDB::Error::Abort([NSString stringWithFormat:@"Setting default value for %s with unknown column type %d", columnName.c_str(), (int) accessor->getColumnType()].UTF8String);
+            break;
     }
 }

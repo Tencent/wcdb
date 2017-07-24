@@ -18,12 +18,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WCTSampleNoObjectiveCpp.h"
 
-@interface WCTSampleColumnCoding : NSObject
-
-@property(nonatomic, assign) float floatValue;
-
-- (instancetype)initWithFloatValue:(float)floatValue;
+@implementation WCTSampleNoObjectiveCpp
 
 @end

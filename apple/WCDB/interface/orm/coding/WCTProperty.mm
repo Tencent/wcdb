@@ -214,6 +214,11 @@ WCTExpr WCTProperty::operator!=(const WCTExpr &operand) const
     return WCTExpr(*this) != operand;
 }
 
+WCTExpr WCTProperty::concat(const WCTExpr &operand) const
+{
+    return WCTExpr(*this).concat(operand);
+}
+
 WCTExpr WCTProperty::in(const WCTExprList &exprList) const
 {
     return WCTExpr(*this).in(exprList);

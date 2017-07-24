@@ -68,4 +68,10 @@
  */
 - (BOOL)executeWithRow:(WCTOneRow *)row;
 
+/**
+ @brief It should be called after executing successfully
+ @return the number of changes in the most recent call
+ */
+- (int)changes;
+
 @end

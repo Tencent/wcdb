@@ -23,46 +23,46 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSString (WCDB) <WCTColumnCoding>
+@interface NSDictionary (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSString (WCDB)
+@implementation NSDictionary (WCTColumnCoding)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString *)value
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value;
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
-- (NSString *)archivedWCTValue
+- (NSData *)archivedWCTValue
 {
-    return self;
+    return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
 + (WCTColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeString;
+    return WCTColumnTypeBinary;
 }
 
 @end
 
-@interface NSMutableString (WCDB) <WCTColumnCoding>
+@interface NSMutableDictionary (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSMutableString (WCDB)
+@implementation NSMutableDictionary (WCTColumnCoding)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString *)value
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value ? [NSMutableString stringWithString:value] : nil;
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
-- (NSString *)archivedWCTValue
+- (NSData *)archivedWCTValue
 {
-    return [NSString stringWithString:self];
+    return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
 + (WCTColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeString;
+    return WCTColumnTypeBinary;
 }
 
 @end

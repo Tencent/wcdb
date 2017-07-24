@@ -18,12 +18,26 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTValue.h>
 
-@interface WCTSampleColumnCoding : NSObject
+@implementation NSObject (WCTValue)
 
-@property(nonatomic, assign) float floatValue;
-
-- (instancetype)initWithFloatValue:(float)floatValue;
+- (WCTValueType)valueType
+{
+    if ([self isKindOfClass:NSString.class]) {
+        return WCTValueTypeString;
+    } else if ([self isKindOfClass:NSData.class]) {
+        return WCTValueTypeData;
+    } else if ([self isKindOfClass:NSNumber.class]) {
+        return WCTValueTypeNumber;
+    } else if ([self isKindOfClass:NSNull.class]) {
+        return WCTValueTypeNil;
+    } else if ([self conformsToProtocol:@protocol(WCTColumnCoding)]) {
+        return WCTValueTypeColumnCoding;
+    } else {
+        return WCTValueTypeUnknown;
+    }
+}
 
 @end

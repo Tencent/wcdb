@@ -68,6 +68,12 @@ const Error &StatementHandle::getError() const
     return m_error;
 }
 
+int StatementHandle::getChanges()
+{
+    sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
+    return sqlite3_changes((sqlite3 *) handle);
+}
+
 StatementHandle::~StatementHandle()
 {
     finalize();

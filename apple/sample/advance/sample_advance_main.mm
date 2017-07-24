@@ -19,6 +19,7 @@
  */
 
 #import "sample_advance_main.h"
+#import "WCTSampleAdvance+WCTTableCoding.h"
 #import "WCTSampleAdvance.h"
 #import "WCTSampleAdvanceMulti.h"
 

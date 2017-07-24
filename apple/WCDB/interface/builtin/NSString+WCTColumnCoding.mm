@@ -23,24 +23,46 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSURL (WCDB) <WCTColumnCoding>
+@interface NSString (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSURL (WCDB)
+@implementation NSString (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:self] : nil;
+    return value;
 }
 
-- (NSData *)archivedWCTValue
+- (NSString *)archivedWCTValue
 {
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
+    return self;
 }
 
 + (WCTColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeBinary;
+    return WCTColumnTypeString;
+}
+
+@end
+
+@interface NSMutableString (WCTColumnCoding) <WCTColumnCoding>
+@end
+
+@implementation NSMutableString (WCTColumnCoding)
+
++ (instancetype)unarchiveWithWCTValue:(NSString *)value
+{
+    return value ? [NSMutableString stringWithString:value] : nil;
+}
+
+- (NSString *)archivedWCTValue
+{
+    return [NSString stringWithString:self];
+}
+
++ (WCTColumnType)columnTypeForWCDB
+{
+    return WCTColumnTypeString;
 }
 
 @end

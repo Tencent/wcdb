@@ -18,31 +18,20 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTCodingMacro.h>
+#import <WCDB/WCTMaster.h>
+#import <WCDB/WCTProperty.h>
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+/**
+ Builtin ORM for "sqlite_master" table. For further information, see https://www.sqlite.org/faq.html
+ */
+@interface WCTMaster (WCTTableCoding) <WCTTableCoding>
 
-@interface NSNumber (WCDB) <WCTColumnCoding>
-@end
-
-@implementation NSNumber (WCDB)
-
-+ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
-{
-    return value;
-}
-
-- (NSNumber *)archivedWCTValue
-{
-    return self;
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeDouble;
-}
+WCDB_PROPERTY(type)
+WCDB_PROPERTY(name)
+WCDB_PROPERTY(tableName)
+WCDB_PROPERTY(rootpage)
+WCDB_PROPERTY(sql)
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

@@ -114,7 +114,7 @@ int sqliterk_column_bytes(sqliterk_column *column, int index)
     return sqliterkValuesGetBytes(sqliterkColumnGetValues(column), index);
 }
 
-int sqliterk_column_rowid(sqliterk_column *column)
+int64_t sqliterk_column_rowid(sqliterk_column *column)
 {
     return sqliterkColumnGetRowId(column);
 }

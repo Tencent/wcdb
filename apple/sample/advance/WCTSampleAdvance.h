@@ -20,14 +20,10 @@
 
 #import "WCTSampleColumnCoding.h"
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
-@interface WCTSampleAdvance : NSObject <WCTTableCoding>
+@interface WCTSampleAdvance : NSObject
 
 @property(nonatomic, assign) int intValue;
 @property(nonatomic, retain) WCTSampleColumnCoding *columnCoding;
-
-WCDB_PROPERTY(intValue)
-WCDB_PROPERTY(columnCoding)
 
 @end

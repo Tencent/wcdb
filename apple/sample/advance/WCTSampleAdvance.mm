@@ -19,11 +19,14 @@
  */
 
 #import "WCTSampleAdvance.h"
+#import "WCTSampleAdvance+WCTTableCoding.h"
 
 @implementation WCTSampleAdvance
 
 WCDB_IMPLEMENTATION(WCTSampleAdvance)
 WCDB_SYNTHESIZE(WCTSampleAdvance, intValue)
 WCDB_SYNTHESIZE(WCTSampleAdvance, columnCoding)
+
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(WCTSampleAdvance, intValue)
 
 @end

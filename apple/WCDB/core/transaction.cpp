@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/handle.hpp>
 #include <WCDB/in_case_lock_guard.hpp>
 #include <WCDB/transaction.hpp>
 #include <WCDB/utility.hpp>
@@ -106,6 +107,12 @@ bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
         return transaction(error);
     }
     return runTransaction(transaction, nullptr, error);
+}
+
+int Transaction::getChanges()
+{
+    InCaseLockGuard lockGuard(m_mutex);
+    return m_handle->getChanges();
 }
 
 Transaction::~Transaction()

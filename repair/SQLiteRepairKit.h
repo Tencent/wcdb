@@ -131,7 +131,7 @@ double sqliterk_column_number(sqliterk_column *column, int index);
 const char *sqliterk_column_text(sqliterk_column *column, int index);
 const void *sqliterk_column_binary(sqliterk_column *column, int index);
 int sqliterk_column_bytes(sqliterk_column *column, int index);
-int sqliterk_column_rowid(sqliterk_column *column);
+int64_t sqliterk_column_rowid(sqliterk_column *column);
 
 #define SQLITERK_INTEGRITY_HEADER 0x0001
 #define SQLITERK_INTEGRITY_DATA 0x0002

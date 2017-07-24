@@ -24,6 +24,7 @@
 #import <WCDB/WCTIndexBinding.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/error.hpp>
+#import <objc/runtime.h>
 
 WCTBinding::WCTBinding(Class cls)
     : m_cls(cls)
@@ -33,7 +34,7 @@ WCTBinding::WCTBinding(Class cls)
     , m_virtualTableArgumentList(nullptr)
 {
     if (![m_cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        WCDB::Error::Abort([NSString stringWithFormat:@"Class [%@] should conform to WCTTableCoding protocol", NSStringFromClass(m_cls)].UTF8String);
+        class_addProtocol(m_cls, @protocol(WCTTableCoding));
     }
 }
 

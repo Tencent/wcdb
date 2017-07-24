@@ -84,6 +84,8 @@ public:
     WCTExpr operator==(const WCTExpr &operand) const;
     WCTExpr operator!=(const WCTExpr &operand) const;
 
+    WCTExpr concat(const WCTExpr &operand) const;
+
     WCTExpr in(const WCTExprList &exprList) const;
     WCTExpr notIn(const WCTExprList &exprList) const;
     WCTExpr in(const WCDB::StatementSelectList &statementSelectList) const;

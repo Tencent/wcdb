@@ -83,6 +83,8 @@ public:
 
     static const std::string backupSuffix;
 
+    int getChanges();
+
 protected:
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;

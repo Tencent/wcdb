@@ -80,6 +80,8 @@ public:
     WCTExpr operator==(const WCTExpr &operand) const;
     WCTExpr operator!=(const WCTExpr &operand) const;
 
+    WCTExpr concat(const WCTExpr &operand) const;
+
     WCTExpr in(const WCTExprList &exprList) const;
     WCTExpr notIn(const WCTExprList &exprList) const;
     WCTExpr in(NSArray<WCTValue *> *valueList) const;
@@ -131,4 +133,5 @@ public:
 
 protected:
     Class m_cls;
+    std::string literalValue(WCTValue *value);
 };

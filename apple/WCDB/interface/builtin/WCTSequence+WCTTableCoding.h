@@ -18,12 +18,17 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTCodingMacro.h>
+#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTSequence.h>
 
-@interface WCTSampleColumnCoding : NSObject
+/**
+ Builtin ORM for "sqlite_sequence" table. For further information, see https://sqlite.org/autoinc.html .
+ */
+@interface WCTSequence (WCTTableCoding) <WCTTableCoding>
 
-@property(nonatomic, assign) float floatValue;
-
-- (instancetype)initWithFloatValue:(float)floatValue;
+WCDB_PROPERTY(name)
+WCDB_PROPERTY(seq)
 
 @end

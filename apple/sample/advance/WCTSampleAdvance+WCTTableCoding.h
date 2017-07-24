@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WCTSampleAdvance.h"
+#import <WCDB/WCDB.h>
 
-@interface WCTSampleColumnCoding : NSObject
+@interface WCTSampleAdvance () <WCTTableCoding>
 
-@property(nonatomic, assign) float floatValue;
-
-- (instancetype)initWithFloatValue:(float)floatValue;
+WCDB_PROPERTY(intValue)
+WCDB_PROPERTY(columnCoding)
 
 @end

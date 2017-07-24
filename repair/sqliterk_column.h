@@ -29,8 +29,8 @@ int sqliterkColumnAlloc(sqliterk_column **column);
 int sqliterkColumnFree(sqliterk_column *column);
 
 sqliterk_values *sqliterkColumnGetValues(sqliterk_column *column);
-void sqliterkColumnSetRowId(sqliterk_column *column, int rowid);
-int sqliterkColumnGetRowId(sqliterk_column *column);
+void sqliterkColumnSetRowId(sqliterk_column *column, int64_t rowid);
+int64_t sqliterkColumnGetRowId(sqliterk_column *column);
 sqliterk_values *sqliterkColumnGetOverflowPages(sqliterk_column *column);
 int sqliterkColumnClear(sqliterk_column *column);
 

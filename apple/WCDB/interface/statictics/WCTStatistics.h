@@ -60,7 +60,7 @@ typedef void (^WCTSQLTrace)(NSString *);
         2. Time consuming in nanoseconds.
         3. Tag of database.
         Note that:
-        1. You should register trace before all db operation. 
+        1. You should register trace before all db operations. 
         2. Global tracer will be recovered by db tracer.
  
     [WCTStatistics SetGlobalPerformanceTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
@@ -81,7 +81,14 @@ typedef void (^WCTSQLTrace)(NSString *);
 /**
  @brief You can register a tracer to monitor the execution of all SQLs.
         It returns a prepared or executed SQL.
+        Note that you should register trace before all db operations. 
+ 
+    [WCTStatistics SetGlobalSQLTrace:^(NSString* sql) {
+        NSLog(@"SQL: %@", sql);
+    }];
+ 
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+ @see WCTSQLTrace
  @param trace trace
  */
 + (void)SetGlobalSQLTrace:(WCTSQLTrace)trace;
