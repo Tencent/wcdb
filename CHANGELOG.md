@@ -1,34 +1,38 @@
 ## v1.0.3
 
+#### Repair Kit
+
+* Fix INTEGER PRIMARY KEY columns not properly recovered.
+
 #### iOS
 
-- Add `WCTColumnCoding` support for all `WCTValue`. Developers can use `id<WCTColumnCoding>` objects for WINQ and all interfaces.
+* Add `WCTColumnCoding` support for all `WCTValue`. Developers can use `id<WCTColumnCoding>` objects for WINQ and all interfaces.
+```objc
+//WINQ
+NSDate *now = [NSDate date];
+[database getObjectsOfClass:Message.class fromTable:tableName where:Message.modifedTime==now];
 
-  ```objective-c
-  //WINQ
-  NSDate *now = [NSDate date];
-  [database getObjectsOfClass:Message.class fromTable:tableName where:Message.modifedTime==now];
-
-  //Interfaces
-  [database updateAllRowsInTable:tableName 
-  					onProperty:Message.modifiedTime 
-  					 withValue:[NSDate date]];
-  ```
-
-- Add monitor for all executed SQL. Developers can use it to make sure the correction of their WINQ.
-
-  ```objective-c
-  //SQL Execution Monitor
-  [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-  	NSLog(@"SQL: %@", sql);
-  }];
-  ```
-
-- Update `WCTTableCoding` xcode file template for the best practice of isolating the ObjC++ code. See Wiki page for details.
-
-- Some minor bug fixes.
+//Interfaces
+[database updateAllRowsInTable:tableName 
+          onProperty:Message.modifiedTime 
+            withValue:[NSDate date]];
+```
+* Add monitor for all executed SQL to check WINQ correctness.
+```objc
+//SQL Execution Monitor
+[WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+  NSLog(@"SQL: %@", sql);
+}];
+```
+* Update `WCTTableCoding` XCode file template for the best practice of isolating Objective C++ codes. See Wiki page for details.
+* Some minor bug fixes.
 
 #### Android
+
+* Add `CursorWindow.windowSize(int)` static method to set or get default size for cursor windows.
+* `SQLiteDatabase.dump()` reports IDs for all threads that hold database connections, to aid dead-lock debugging.
+* Fix crashing on devices fail to load ICU library.
+* Fix `SQLiteTrace.onSQLExecuted(...)` reports negative execution time.
 
 ## v1.0.2
 
