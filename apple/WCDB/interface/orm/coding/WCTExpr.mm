@@ -371,6 +371,36 @@ WCTExpr WCTExpr::total(bool distinct) const
     return WCTExpr(Expr::total(distinct), *this);
 }
 
+WCTExpr WCTExpr::abs(bool distinct) const
+{
+    return WCTExpr(Expr::abs(distinct), *this);
+}
+
+WCTExpr WCTExpr::hex(bool distinct) const
+{
+    return WCTExpr(Expr::hex(distinct), *this);
+}
+
+WCTExpr WCTExpr::length(bool distinct) const
+{
+    return WCTExpr(Expr::length(distinct), *this);
+}
+
+WCTExpr WCTExpr::lower(bool distinct) const
+{
+    return WCTExpr(Expr::lower(distinct), *this);
+}
+
+WCTExpr WCTExpr::upper(bool distinct) const
+{
+    return WCTExpr(Expr::upper(distinct), *this);
+}
+
+WCTExpr WCTExpr::round(bool distinct) const
+{
+    return WCTExpr(Expr::round(distinct), *this);
+}
+
 NSString *WCTExpr::getDescription() const
 {
     return [NSString stringWithUTF8String:WCDB::Expr::getDescription().c_str()];

@@ -105,6 +105,36 @@ WCTExpr WCTProperty::total(bool distinct) const
     return WCTExpr(*this).total(distinct);
 }
 
+WCTExpr WCTProperty::abs(bool distinct) const
+{
+    return WCTExpr(*this).abs(distinct);
+}
+
+WCTExpr WCTProperty::hex(bool distinct) const
+{
+    return WCTExpr(*this).hex(distinct);
+}
+
+WCTExpr WCTProperty::length(bool distinct) const
+{
+    return WCTExpr(*this).length(distinct);
+}
+
+WCTExpr WCTProperty::lower(bool distinct) const
+{
+    return WCTExpr(*this).lower(distinct);
+}
+
+WCTExpr WCTProperty::upper(bool distinct) const
+{
+    return WCTExpr(*this).upper(distinct);
+}
+
+WCTExpr WCTProperty::round(bool distinct) const
+{
+    return WCTExpr(*this).round(distinct);
+}
+
 WCTColumnDef WCTProperty::def(WCTColumnType type, bool isPrimary, WCTOrderTerm term, bool autoIncrement) const
 {
     WCDB::ColumnDef columnDef(*this, (WCDB::ColumnType) type);

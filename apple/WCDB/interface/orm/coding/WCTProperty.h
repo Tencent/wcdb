@@ -43,7 +43,7 @@ public:
     //index
     WCTIndex index(WCTOrderTerm term = WCTOrderedNotSet) const;
 
-    //function
+    //aggregate functions
     WCTExpr avg(bool distinct = false) const;
     WCTExpr count(bool distinct = false) const;
     WCTExpr groupConcat(bool distinct = false) const;
@@ -52,6 +52,14 @@ public:
     WCTExpr min(bool distinct = false) const;
     WCTExpr sum(bool distinct = false) const;
     WCTExpr total(bool distinct = false) const;
+
+    //core functions
+    WCTExpr abs(bool distinct = false) const;
+    WCTExpr hex(bool distinct = false) const;
+    WCTExpr length(bool distinct = false) const;
+    WCTExpr lower(bool distinct = false) const;
+    WCTExpr upper(bool distinct = false) const;
+    WCTExpr round(bool distinct = false) const;
 
     //def
     WCTColumnDef def(WCTColumnType type,

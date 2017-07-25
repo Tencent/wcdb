@@ -167,7 +167,7 @@ public:
         return expr;
     }
 
-    //function
+    //aggregate functions
     Expr avg(bool distinct = false) const;
     Expr count(bool distinct = false) const;
     Expr groupConcat(bool distinct = false) const;
@@ -176,6 +176,15 @@ public:
     Expr min(bool distinct = false) const;
     Expr sum(bool distinct = false) const;
     Expr total(bool distinct = false) const;
+
+    //core functions
+    Expr abs(bool distinct = false) const;
+    Expr hex(bool distinct = false) const;
+    Expr length(bool distinct = false) const;
+    Expr lower(bool distinct = false) const;
+    Expr upper(bool distinct = false) const;
+    Expr round(bool distinct = false) const;
+
     template <typename T>
     static typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
     Function(const std::string &function, const std::list<const T> &exprList)
@@ -188,6 +197,8 @@ public:
     }
 
 protected:
+    Expr function(const std::string &funtionName, bool distinct) const;
+
     template <typename T>
     std::string literalValue(
         const T &value,
