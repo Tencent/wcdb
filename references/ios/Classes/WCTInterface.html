@@ -134,6 +134,141 @@ Although it&rsquo;s all glue code here, it works and it can bring you convenienc
 						<a title="Tasks" name="tasks"></a>
 						
 
+						<a title="Core Methods" name="task_Core Methods"></a>
+						<h2 class="task-title">Core Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/exec:" title="exec:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/exec:">&ndash;&nbsp;exec:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Exec a specific sql.
+        Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)exec:(const WCDB : : Statement &amp;)<em>statement</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>statement</code></th>
+						<td><p>WINQ statement</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES if it is successfully executed</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepare:" title="prepare:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepare:">&ndash;&nbsp;prepare:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Prepare a specific sql.
+        Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTStatement *)prepare:(const WCDB : : Statement &amp;)<em>statement</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>statement</code></th>
+						<td><p>WINQ statement</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTStatement.html">WCTStatement</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="../Classes/WCTStatement.html">WCTStatement</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
 						<a title="ChainCall Methods" name="task_ChainCall Methods"></a>
 						<h2 class="task-title">ChainCall Methods</h2>
 
@@ -829,141 +964,6 @@ Although it&rsquo;s all glue code here, it works and it can bring you convenienc
 </div>
 						</div>
 						
-
-						<a title="Core Methods" name="task_Core Methods"></a>
-						<h2 class="task-title">Core Methods</h2>
-
-						<div class="task-list">
-							<div class="section-method">
-	<a name="//api/name/exec:" title="exec:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/exec:">&ndash;&nbsp;exec:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Exec a specific sql.
-        Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)exec:(const WCDB : : Statement &amp;)<em>statement</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>statement</code></th>
-						<td><p>WINQ statement</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES if it is successfully executed</p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/prepare:" title="prepare:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/prepare:">&ndash;&nbsp;prepare:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Prepare a specific sql.
-        Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (WCTStatement *)prepare:(const WCDB : : Statement &amp;)<em>statement</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>statement</code></th>
-						<td><p>WINQ statement</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p><a href="../Classes/WCTStatement.html">WCTStatement</a></p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="../Classes/WCTStatement.html">WCTStatement</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div>
-						</div>
-						
 					</div>
 					
 					
@@ -976,7 +976,7 @@ Although it&rsquo;s all glue code here, it works and it can bring you convenienc
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-06-02</p>
+						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-07-25</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>

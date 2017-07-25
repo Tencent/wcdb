@@ -64,6 +64,8 @@
 		
 		<option value="//api/name/begin">- begin</option>
 		
+		<option value="//api/name/changes">- changes</option>
+		
 		<option value="//api/name/commit">- commit</option>
 		
 		<option value="//api/name/cost">- cost</option>
@@ -92,7 +94,7 @@
 		
 		<option value="//api/name/runTransaction:event:">- runTransaction:event:</option>
 		
-		<option value="//api/name/setStaticticsEnabled:">- setStaticticsEnabled:</option>
+		<option value="//api/name/setStatisticsEnabled:">- setStatisticsEnabled:</option>
 		
 	</optgroup>
 	
@@ -295,8 +297,8 @@
 			<div class="method-subsection brief-description">
 				<p>Run a transaction in block.</p>
 
-<pre><code> BOOL commited = [database runTransaction:^BOOL(){
- BOOL result = [database insertObject:object into:tableName];
+<pre><code> BOOL commited = [transaction runTransaction:^BOOL(){
+ BOOL result = [transaction insertObject:object into:tableName];
     return result;//return YES to commit transaction and return NO to rollback transaction.
  } event:^(WCTTransactionEvent event) {
     switch (event) {
@@ -428,6 +430,52 @@
 					
 				</ul>
 			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTTransaction.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/changes" title="changes"></a>
+	<h3 class="method-title"><code><a href="#//api/name/changes">&ndash;&nbsp;changes</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>It should be called after executing successfully</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (int)changes</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>the number of changes in the most recent call</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
 			
 
 			
@@ -1069,8 +1117,8 @@ The embedded transaction means that it will run a transaction if it&rsquo;s not 
 						</div>
 						
 
-						<a title="Statictics Methods" name="task_Statictics Methods"></a>
-						<h2 class="task-title">Statictics Methods</h2>
+						<a title="Statistics Methods" name="task_Statistics Methods"></a>
+						<h2 class="task-title">Statistics Methods</h2>
 
 						<div class="task-list">
 							<div class="section-method">
@@ -1118,15 +1166,15 @@ The embedded transaction means that it will run a transaction if it&rsquo;s not 
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTTransaction+Statictics.h</code></p>
+				<p><code class="declared-in-ref">WCTTransaction+Statistics.h</code></p>
 			</div>
 			
 			
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/setStaticticsEnabled:" title="setStaticticsEnabled:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/setStaticticsEnabled:">&ndash;&nbsp;setStaticticsEnabled:</a></code>
+	<a name="//api/name/setStatisticsEnabled:" title="setStatisticsEnabled:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setStatisticsEnabled:">&ndash;&nbsp;setStatisticsEnabled:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -1143,7 +1191,7 @@ See [cost] also.</p>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setStaticticsEnabled:(BOOL)<em>enabled</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)setStatisticsEnabled:(BOOL)<em>enabled</em></code></div>
 
 		    
 			
@@ -1180,7 +1228,7 @@ See [cost] also.</p>
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTTransaction+Statictics.h</code></p>
+				<p><code class="declared-in-ref">WCTTransaction+Statistics.h</code></p>
 			</div>
 			
 			
@@ -1199,7 +1247,7 @@ See [cost] also.</p>
 			
 			<div class="method-subsection brief-description">
 				<p>The time consuming. You can call it to profile the performance.
-See [setStaticticsEnabled:] also.</p>
+See [setStatisticsEnabled:] also.</p>
 			</div>
 			
 		    
@@ -1222,7 +1270,7 @@ See [setStaticticsEnabled:] also.</p>
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
 				<p>The time consuming. You can call it to profile the performance.
-See [setStaticticsEnabled:] also.</p>
+See [setStatisticsEnabled:] also.</p>
 			</div>
 			
 
@@ -1233,7 +1281,7 @@ See [setStaticticsEnabled:] also.</p>
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTTransaction+Statictics.h</code></p>
+				<p><code class="declared-in-ref">WCTTransaction+Statistics.h</code></p>
 			</div>
 			
 			
@@ -1254,7 +1302,7 @@ See [setStaticticsEnabled:] also.</p>
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-06-02</p>
+						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-07-25</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>WCTTrace Block Reference</title>
+	<title>WCTSQLTrace Block Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
@@ -59,16 +59,13 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title">WCTTrace Block Reference</h1>
+					<h1 class="title">WCTSQLTrace Block Reference</h1>
 
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
 	<th>Declared in</th>
-	<td>WCTStatistics+Compatible.h</td>
-</tr><tr>
-	<th>References</th>
-	<td><a href="Blocks/WCTPerformanceTrace.html">WCTPerformanceTrace</a></td>
+	<td>WCTStatistics.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -82,39 +79,35 @@
           
           <a title="Block Definition" name="instance_methods"></a>
           <h4 class="method-subtitle parameter-title">Block Definition</h4>
-          <h3 class="subsubtitle method-title">WCTTrace</h3>
+          <h3 class="subsubtitle method-title">WCTSQLTrace</h3>
 
 
 <div class="method-subsection brief-description">
-  <p><a href="../Blocks/WCTPerformanceTrace.html">WCTPerformanceTrace</a></p>
+  <p>Trigger when a SQL is executed.</p>
 </div>
 
 
 
-<code>typedef void (^WCTTrace) (WCTTag , NSDictionary <, NSString *, NSNumber *>, * , NSInteger )</code>
+<code>typedef void (^WCTSQLTrace) (NSString *)</code>
   
   
   
-  
-  
-  
-  
-  
-  
-  <div class="method-subsection see-also-section">
-  <h4 class="method-subtitle">See Also</h4>
-  <ul>
-  
-  <li><code><p><a href="../Blocks/WCTPerformanceTrace.html">WCTPerformanceTrace</a></p></code></li>
-  
-  </ul>
+  <div class="method-subsection discussion-section">
+  <h4 class="method-subtitle">Discussion</h4>
+  <p>Trigger when a SQL is executed.</p>
   </div>
+  
+  
+  
+  
+  
+  
   
   
   
   <div class="method-subsection declared-in-section">
   <h4 class="method-subtitle">Declared In</h4>
-  <code class="declared-in-ref">WCTStatistics+Compatible.h</code><br />
+  <code class="declared-in-ref">WCTStatistics.h</code><br />
   </div>
   
   

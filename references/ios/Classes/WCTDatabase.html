@@ -58,6 +58,16 @@
 	
 	<optgroup label="Class Methods">
 		
+		<option value="//api/name/DefaultCheckpointConfigName">+ DefaultCheckpointConfigName</option>
+		
+		<option value="//api/name/DefaultCipherConfigName">+ DefaultCipherConfigName</option>
+		
+		<option value="//api/name/DefaultConfigName">+ DefaultConfigName</option>
+		
+		<option value="//api/name/DefaultSyncConfigName">+ DefaultSyncConfigName</option>
+		
+		<option value="//api/name/DefaultTraceConfigName">+ DefaultTraceConfigName</option>
+		
 		<option value="//api/name/PurgeFreeHandlesInAllDatabases">+ PurgeFreeHandlesInAllDatabases</option>
 		
 	</optgroup>
@@ -130,13 +140,17 @@
 		
 		<option value="//api/name/setCipherKey:">- setCipherKey:</option>
 		
+		<option value="//api/name/setCipherKey:andCipherPageSize:">- setCipherKey:andCipherPageSize:</option>
+		
 		<option value="//api/name/setConfig:forName:">- setConfig:forName:</option>
 		
 		<option value="//api/name/setConfig:forName:withOrder:">- setConfig:forName:withOrder:</option>
 		
-		<option value="//api/name/setTag:">- setTag:</option>
+		<option value="//api/name/setPerformanceTrace:">- setPerformanceTrace:</option>
 		
-		<option value="//api/name/setTrace:">- setTrace:</option>
+		<option value="//api/name/setSyncEnabled:">- setSyncEnabled:</option>
+		
+		<option value="//api/name/setTag:">- setTag:</option>
 		
 		<option value="//api/name/unblockade">- unblockade</option>
 		
@@ -185,13 +199,13 @@
 						<a title="Tasks" name="tasks"></a>
 						
 
-						<a title="RepairKit Methods" name="task_RepairKit Methods"></a>
-						<h2 class="task-title">RepairKit Methods</h2>
+						<a title="Transaction Methods" name="task_Transaction Methods"></a>
+						<h2 class="task-title">Transaction Methods</h2>
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/backupWithCipher:" title="backupWithCipher:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/backupWithCipher:">&ndash;&nbsp;backupWithCipher:</a></code>
+	<a name="//api/name/getTransaction" title="getTransaction"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getTransaction">&ndash;&nbsp;getTransaction</a></code>
 </h3>
 
 	<div class="method-info">
@@ -201,32 +215,20 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.</p>
+				<p>Generation a <a href="../Classes/WCTTransaction.html">WCTTransaction</a> object to do a transaction.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (BOOL)backupWithCipher:(NSData *)<em>key</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (WCTTransaction *)getTransaction</code></div>
 
 		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>key</code></th>
-						<td><p>The cipher key for backup</p></td>
-					</tr>
-				
-				</table>
-			</div>
 			
 
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if it&rsquo;s successfully backed up</p>
+				<p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p>
 			</div>
 			
 
@@ -241,15 +243,15 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+RepairKit.h</code></p>
+				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
 			</div>
 			
 			
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/recoverFromPath:withPageSize:backupCipher:databaseCipher:" title="recoverFromPath:withPageSize:backupCipher:databaseCipher:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/recoverFromPath:withPageSize:backupCipher:databaseCipher:">&ndash;&nbsp;recoverFromPath:withPageSize:backupCipher:databaseCipher:</a></code>
+	<a name="//api/name/runTransaction:event:" title="runTransaction:event:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/runTransaction:event:">&ndash;&nbsp;runTransaction:event:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -259,20 +261,29 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Recover data from a corruped db. You&rsquo;d better to recover a closed database. A new repair kit is developing at <a href="https://github.com/Tencent/wcdb/tree/new-repair">https://github.com/Tencent/wcdb/tree/new-repair</a></p>
+				<p>Run a transaction in block.</p>
 
-<pre><code> WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
- WCTDatabase* corruped = [[WCTDatabase alloc] initWithPath:corrupedDBPath];
- [corruped close:^(){
-     BOOL result = [database recoverFromPath:corrupedDBPath withPageSize:4096 backupCipher:backupCipher databaseCipher:databaseCipher];
-     NSLog(@"result %d", result);
+<pre><code> BOOL commited = [database runTransaction:^BOOL(){
+    BOOL result = [database insertObject:object into:tableName];
+    return result;//return YES to commit transaction and return NO to rollback transaction.
+ } event:^(WCTTransactionEvent event) {
+    switch (event) {
+        case WCTTransactionEventBeginFailed:
+            break;
+        case WCTTransactionEventCommitFailed:
+            break;
+        case WCTTransactionEventRollback:
+            break;
+        case WCTTransactionEventRollbackFailed:
+            break;
+    };
  }];
 </code></pre>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (BOOL)recoverFromPath:(NSString *)<em>corruptedDBPath</em> withPageSize:(const int)<em>pageSize</em> backupCipher:(NSData *)<em>backupCipher</em> databaseCipher:(NSData *)<em>databaseCipher</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (BOOL)runTransaction:(WCTTransactionBlock)<em>inTransaction</em> event:(WCTTransactionEventBlock)<em>onTransactionStateChanged</em></code></div>
 
 		    
 			
@@ -281,23 +292,13 @@
 				<table class="argument-def parameter-def">
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>corruptedDBPath</code></th>
-						<td><p>The path to the corrupted database</p></td>
+						<th scope="row" class="argument-name"><code>inTransaction</code></th>
+						<td><p>Operation inside transaction.</p></td>
 					</tr>
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>pageSize</code></th>
-						<td><p>Page size of the corrupted database. It&rsquo;s default to 4096 on iOS. Page size never change unless you can call &ldquo;PRAGMA page_size=NewPageSize&rdquo; to set it. Also, you can call &ldquo;PRAGMA page_size&rdquo; to check the current value while database is not corrupted.</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>backupCipher</code></th>
-						<td><p>The cipher key for backup</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>databaseCipher</code></th>
-						<td><p>The cipher key for corrupeted database</p></td>
+						<th scope="row" class="argument-name"><code>onTransactionStateChanged</code></th>
+						<td><p>State changed event.</p></td>
 					</tr>
 				
 				</table>
@@ -307,7 +308,7 @@
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if it&rsquo;s successfully recovered.</p>
+				<p>YES only if transaction is commited.</p>
 			</div>
 			
 
@@ -322,23 +323,15 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+RepairKit.h</code></p>
+				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
 			</div>
 			
 			
 		</div>
 	</div>
-</div>
-						</div>
-						
-
-						<a title="Core Methods" name="task_Core Methods"></a>
-						<h2 class="task-title">Core Methods</h2>
-
-						<div class="task-list">
-							<div class="section-method">
-	<a name="//api/name/setConfig:forName:withOrder:" title="setConfig:forName:withOrder:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/setConfig:forName:withOrder:">&ndash;&nbsp;setConfig:forName:withOrder:</a></code>
+</div><div class="section-method">
+	<a name="//api/name/runTransaction:" title="runTransaction:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/runTransaction:">&ndash;&nbsp;runTransaction:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -348,12 +341,12 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Set config for this database.</p>
+				<p>This interface is equivalent to [database runTransaction:transaction event:nil];</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setConfig:(WCDB : : Config)<em>config</em> forName:(NSString *)<em>name</em> withOrder:(WCDB : : Configs : : Order)<em>order</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (BOOL)runTransaction:(WCTTransactionBlock)<em>inTransaction</em></code></div>
 
 		    
 			
@@ -362,24 +355,74 @@
 				<table class="argument-def parameter-def">
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>config</code></th>
-						<td><p>config</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>name</code></th>
-						<td><p>The Identifier for this config</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>order</code></th>
-						<td><p>The smaller number is called first</p></td>
+						<th scope="row" class="argument-name"><code>inTransaction</code></th>
+						<td><p>Operation inside transaction.</p></td>
 					</tr>
 				
 				</table>
 			</div>
 			
 
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES only if transaction is commited.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/runTransaction:event:">- runTransaction:event:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/beginTransaction" title="beginTransaction"></a>
+	<h3 class="method-title"><code><a href="#//api/name/beginTransaction">&ndash;&nbsp;beginTransaction</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Separate interface of <a href="#//api/name/runTransaction:">runTransaction:</a></p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)beginTransaction</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES only if no error occurs.</p>
+			</div>
 			
 
 			
@@ -387,71 +430,8 @@
 			
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
-				<div class="warning"><p><strong>Warning:</strong> Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.</p>
-
-<pre><code> [database setConfig:^BOOL(std::shared_ptr&lt;WCDB::Handle&gt; handle, WCDB::Error&amp; error) {
-    return handle-&gt;exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
- } forName:@"demo" withOrder:1];
-</code></pre></div>
+				<div class="warning"><p><strong>Warning:</strong> You should call beginTransaction , <a href="#//api/name/commitTransaction">commitTransaction</a> , <a href="#//api/name/rollbackTransaction">rollbackTransaction</a> and all other operations in same thread. To do a cross-thread transaction, use <a href="../Classes/WCTTransaction.html">WCTTransaction</a>.</p></div>
 			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/setConfig:forName:" title="setConfig:forName:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/setConfig:forName:">&ndash;&nbsp;setConfig:forName:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)setConfig:(WCDB : : Config)<em>config</em> forName:(NSString *)<em>name</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>config</code></th>
-						<td><p>config</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>name</code></th>
-						<td><p>The Identifier for this config</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
 			
 
 			
@@ -461,7 +441,7 @@
 				<h4 class="method-subtitle">See Also</h4>
 				<ul>
 					
-					<li><code><p><a href="#//api/name/setConfig:forName:withOrder:">- setConfig:forName:withOrder:</a></p></code></li>
+					<li><code><p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p></code></li>
 					
 				</ul>
 			</div>
@@ -470,83 +450,15 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div>
-						</div>
-						
-
-						<a title="Database Methods" name="task_Database Methods"></a>
-						<h2 class="task-title">Database Methods</h2>
-
-						<div class="task-list">
-							<div class="section-method">
-	<a name="//api/name/initWithPath:" title="initWithPath:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/initWithPath:">&ndash;&nbsp;initWithPath:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Init a database from path.
-        Note that all database objects with same path share the same core. So you can create multiple database objects. WCDB will manage them automatically.
-        Note that WCDB will not generate a sqlite handle until the first operation, which is also called as lazy initialization.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (instancetype)initWithPath:(NSString *)<em>path</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>path</code></th>
-						<td><p>Path to your database</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>WCTDatabase</p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
 			</div>
 			
 			
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/setCipherKey:" title="setCipherKey:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/setCipherKey:">&ndash;&nbsp;setCipherKey:</a></code>
+	<a name="//api/name/commitTransaction" title="commitTransaction"></a>
+	<h3 class="method-title"><code><a href="#//api/name/commitTransaction">&ndash;&nbsp;commitTransaction</a></code>
 </h3>
 
 	<div class="method-info">
@@ -556,120 +468,12 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Set cipher key for a database.
-        For an encrypted database, you must call it before all other operation.</p>
+				<p>Separate interface of <a href="#//api/name/runTransaction:">runTransaction:</a></p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setCipherKey:(NSData *)<em>data</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>data</code></th>
-						<td><p>Cipher key.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/setTag:" title="setTag:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/setTag:">&ndash;&nbsp;setTag:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Set the tag of the database.
-        Note that <a href="../Classes/WCTCore.html">WCTCore</a> objects with same path share this tag, even they are not the same object.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)setTag:(WCTTag)<em>tag</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>tag</code></th>
-						<td><p>Default to 0.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/canOpen" title="canOpen"></a>
-	<h3 class="method-title"><code><a href="#//api/name/canOpen">&ndash;&nbsp;canOpen</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Since WCDB is using lazy initialization, [initWithPath:] never return nil even the database can&rsquo;t open. So you can call this to check whether the database can be opened.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)canOpen</code></div>
+			<div class="method-subsection method-declaration"><code>- (BOOL)commitTransaction</code></div>
 
 		    
 			
@@ -677,30 +481,44 @@
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>NO if an error occurs during sqlite handle initialization.</p>
+				<p>YES only if no error occurs.</p>
 			</div>
 			
 
 			
 
 			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="warning"><p><strong>Warning:</strong> You should call <a href="#//api/name/beginTransaction">beginTransaction</a> , commitTransaction , <a href="#//api/name/rollbackTransaction">rollbackTransaction</a> and all other operations in same thread. To do a cross-thread transaction, use <a href="../Classes/WCTTransaction.html">WCTTransaction</a>.</p></div>
+			</div>
+			
 
 			
 
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p></code></li>
+					
+				</ul>
+			</div>
 			
 
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
 			</div>
 			
 			
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/isOpened" title="isOpened"></a>
-	<h3 class="method-title"><code><a href="#//api/name/isOpened">&ndash;&nbsp;isOpened</a></code>
+	<a name="//api/name/rollbackTransaction" title="rollbackTransaction"></a>
+	<h3 class="method-title"><code><a href="#//api/name/rollbackTransaction">&ndash;&nbsp;rollbackTransaction</a></code>
 </h3>
 
 	<div class="method-info">
@@ -710,12 +528,12 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Check database is already opened.</p>
+				<p>Separate interface of <a href="#//api/name/runTransaction:">runTransaction:</a></p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (BOOL)isOpened</code></div>
+			<div class="method-subsection method-declaration"><code>- (BOOL)rollbackTransaction</code></div>
 
 		    
 			
@@ -723,127 +541,17 @@
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>isOpened</p>
+				<p>YES only if no error occurs.</p>
 			</div>
 			
 
 			
 
 			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="warning"><p><strong>Warning:</strong> You should call <a href="#//api/name/beginTransaction">beginTransaction</a> , <a href="#//api/name/commitTransaction">commitTransaction</a> , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use <a href="../Classes/WCTTransaction.html">WCTTransaction</a>.</p></div>
 			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/close:" title="close:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/close:">&ndash;&nbsp;close:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p><a href="#//api/name/close">close</a> the database.
-        Since Multi-threaded operation is supported in WCDB, other operations in different thread can open the closed database. So this method can make sure database is closed in the &ldquo;onClosed&rdquo; block. All other operations will be blocked until this method returns.
-        A close operation consists of 4 steps:
-            1. blockade, which blocks all other operations.
-            2. close, which closes all sqlite handles.
-            3. onClosed, which trigger the callback.
-            4. unblokade, which unblocks all other opreations.
-        You can simply call close: to do all steps above or call these separately.
-        Note that sometimes you might find that close: blocks the thread and never return. The reasons can be:
-            1. You keep some WCDB objects, including WCTInsert, WCTDelete, WCTUpdate, WCTSelect, WCTRowSelect, WCTMultiSelect, WCTStatement, WCTTransaction. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
-            2. Further more, those WCDB objects may be kept by NSAutoReleasePool, which is done by ARC automatically. So you should make sure that all WCDB objects in NSAutoReleasePool is drained. Since close: would wait until all operations done, the best practice is to call close: in sub-thread and display a loading animation in main thread.</p>
-
-<pre><code> //close directly
- [database close:^(){
-    //do something on this closed database
- }];
- //close separately
- [database blockade];
- [database close];
- //do something on this closed database
- [database unblockade];
-</code></pre>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)close:(WCTCloseBlock)<em>onClosed</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>onClosed</code></th>
-						<td><p>Trigger on database closed.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/close" title="close"></a>
-	<h3 class="method-title"><code><a href="#//api/name/close">&ndash;&nbsp;close</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>This interface is equivalent to [database close:nil].</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)close</code></div>
-
-		    
-			
-
-			
-
-			
-
 			
 
 			
@@ -853,7 +561,7 @@
 				<h4 class="method-subtitle">See Also</h4>
 				<ul>
 					
-					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
+					<li><code><p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p></code></li>
 					
 				</ul>
 			</div>
@@ -862,257 +570,7 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/blockade" title="blockade"></a>
-	<h3 class="method-title"><code><a href="#//api/name/blockade">&ndash;&nbsp;blockade</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Blockade the database.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)blockade</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/unblockade" title="unblockade"></a>
-	<h3 class="method-title"><code><a href="#//api/name/unblockade">&ndash;&nbsp;unblockade</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Un<a href="#//api/name/blockade">blockade</a> the database.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)unblockade</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/isBlockaded" title="isBlockaded"></a>
-	<h3 class="method-title"><code><a href="#//api/name/isBlockaded">&ndash;&nbsp;isBlockaded</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Check whether database is blockaded.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)isBlockaded</code></div>
-
-		    
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>isBlockaded</p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/purgeFreeHandles" title="purgeFreeHandles"></a>
-	<h3 class="method-title"><code><a href="#//api/name/purgeFreeHandles">&ndash;&nbsp;purgeFreeHandles</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Purge all free handles of this database.
-        WCDB will cache and reuse some sqlite handles to improve performance.
-        The max count of free sqlite handles is same as the number of concurrent threads supported by the hardware implementation.
-        You can call it to save some memory.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)purgeFreeHandles</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/PurgeFreeHandlesInAllDatabases" title="PurgeFreeHandlesInAllDatabases"></a>
-	<h3 class="method-title"><code><a href="#//api/name/PurgeFreeHandlesInAllDatabases">+&nbsp;PurgeFreeHandlesInAllDatabases</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Purge all free handles of all databases.
-        Note that WCDB will call this interface automatically while it receives memory warning on iOS.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>+ (void)PurgeFreeHandlesInAllDatabases</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="#//api/name/purgeFreeHandles">- purgeFreeHandles</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
 			</div>
 			
 			
@@ -1156,7 +614,7 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>tableName</code></th>
-						<td><p>The name of the table to be created.</p></td>
+						<td><p>This would be the name of the table and the prefix of the index names.</p></td>
 					</tr>
 				
 					<tr>
@@ -1234,7 +692,7 @@
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>nil for a non-existent table.</p>
+				<p><a href="../Classes/WCTTable.html">WCTTable</a> nil for a non-existent table.</p>
 			</div>
 			
 
@@ -1772,387 +1230,6 @@
 						</div>
 						
 
-						<a title="Transaction Methods" name="task_Transaction Methods"></a>
-						<h2 class="task-title">Transaction Methods</h2>
-
-						<div class="task-list">
-							<div class="section-method">
-	<a name="//api/name/getTransaction" title="getTransaction"></a>
-	<h3 class="method-title"><code><a href="#//api/name/getTransaction">&ndash;&nbsp;getTransaction</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Generation a <a href="../Classes/WCTTransaction.html">WCTTransaction</a> object to do a transaction.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (WCTTransaction *)getTransaction</code></div>
-
-		    
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/runTransaction:event:" title="runTransaction:event:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/runTransaction:event:">&ndash;&nbsp;runTransaction:event:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Run a transaction in block.</p>
-
-<pre><code> BOOL commited = [database runTransaction:^BOOL(){
-    BOOL result = [database insertObject:object into:tableName];
-    return result;//return YES to commit transaction and return NO to rollback transaction.
- } event:^(WCTTransactionEvent event) {
-    switch (event) {
-        case WCTTransactionEventBeginFailed:
-            break;
-        case WCTTransactionEventCommitFailed:
-            break;
-        case WCTTransactionEventRollback:
-            break;
-        case WCTTransactionEventRollbackFailed:
-            break;
-    };
- }];
-</code></pre>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)runTransaction:(WCTTransactionBlock)<em>inTransaction</em> event:(WCTTransactionEventBlock)<em>onTransactionStateChanged</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>inTransaction</code></th>
-						<td><p>Operation inside transaction.</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>onTransactionStateChanged</code></th>
-						<td><p>State changed event.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if transaction is commited.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/runTransaction:" title="runTransaction:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/runTransaction:">&ndash;&nbsp;runTransaction:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>This interface is equivalent to [database runTransaction:transaction event:nil];</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)runTransaction:(WCTTransactionBlock)<em>inTransaction</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>inTransaction</code></th>
-						<td><p>Operation inside transaction.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if transaction is commited.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="#//api/name/runTransaction:event:">- runTransaction:event:</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/beginTransaction" title="beginTransaction"></a>
-	<h3 class="method-title"><code><a href="#//api/name/beginTransaction">&ndash;&nbsp;beginTransaction</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Separate interface of <a href="#//api/name/runTransaction:">runTransaction:</a></p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)beginTransaction</code></div>
-
-		    
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if no error occurs.</p>
-			</div>
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<div class="warning"><p><strong>Warning:</strong> You should call beginTransaction , <a href="#//api/name/commitTransaction">commitTransaction</a> , <a href="#//api/name/rollbackTransaction">rollbackTransaction</a> and all other operations in same thread. To do a cross-thread transaction, use <a href="../Classes/WCTTransaction.html">WCTTransaction</a>.</p></div>
-			</div>
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/commitTransaction" title="commitTransaction"></a>
-	<h3 class="method-title"><code><a href="#//api/name/commitTransaction">&ndash;&nbsp;commitTransaction</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Separate interface of <a href="#//api/name/runTransaction:">runTransaction:</a></p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)commitTransaction</code></div>
-
-		    
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if no error occurs.</p>
-			</div>
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<div class="warning"><p><strong>Warning:</strong> You should call <a href="#//api/name/beginTransaction">beginTransaction</a> , commitTransaction , <a href="#//api/name/rollbackTransaction">rollbackTransaction</a> and all other operations in same thread. To do a cross-thread transaction, use <a href="../Classes/WCTTransaction.html">WCTTransaction</a>.</p></div>
-			</div>
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/rollbackTransaction" title="rollbackTransaction"></a>
-	<h3 class="method-title"><code><a href="#//api/name/rollbackTransaction">&ndash;&nbsp;rollbackTransaction</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Separate interface of <a href="#//api/name/runTransaction:">runTransaction:</a></p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)rollbackTransaction</code></div>
-
-		    
-			
-
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES only if no error occurs.</p>
-			</div>
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<div class="warning"><p><strong>Warning:</strong> You should call <a href="#//api/name/beginTransaction">beginTransaction</a> , <a href="#//api/name/commitTransaction">commitTransaction</a> , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use <a href="../Classes/WCTTransaction.html">WCTTransaction</a>.</p></div>
-			</div>
-			
-
-			
-
-			
-			<div class="method-subsection see-also-section">
-				<h4 class="method-subtitle">See Also</h4>
-				<ul>
-					
-					<li><code><p><a href="../Classes/WCTTransaction.html">WCTTransaction</a></p></code></li>
-					
-				</ul>
-			</div>
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Transaction.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div>
-						</div>
-						
-
 						<a title="File Methods" name="task_File Methods"></a>
 						<h2 class="task-title">File Methods</h2>
 
@@ -2470,13 +1547,13 @@
 						</div>
 						
 
-						<a title="Statictics Methods" name="task_Statictics Methods"></a>
-						<h2 class="task-title">Statictics Methods</h2>
+						<a title="Core Methods" name="task_Core Methods"></a>
+						<h2 class="task-title">Core Methods</h2>
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/setTrace:" title="setTrace:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/setTrace:">&ndash;&nbsp;setTrace:</a></code>
+	<a name="//api/name/DefaultConfigName" title="DefaultConfigName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/DefaultConfigName">+&nbsp;DefaultConfigName</a></code>
 </h3>
 
 	<div class="method-info">
@@ -2486,12 +1563,459 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>You can register a tracer to monitor the performance of all SQLs in this database.</p>
+				<p>Default config name.
+        The default config for WCDB is :
+        1. PRAGMA locking_mode=NORMAL
+        2. PRAGMA journal_mode=WAL
+        3. PRAGMA synchronous=FULL
+        4. PRAGMA fullfsync=ON
+        Setting config for this name will overwrite the default config.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)setTrace:(WCTTrace)<em>trace</em></code></div>
+			<div class="method-subsection method-declaration"><code>+ (NSString *)DefaultConfigName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>default config name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/DefaultCipherConfigName" title="DefaultCipherConfigName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/DefaultCipherConfigName">+&nbsp;DefaultCipherConfigName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Default cipher config name
+        The default cipher config for WCDB is :
+        1. PRAGMA key=yourCipherKey
+        2. PRAGMA cipher_page_size=yourCipherPageSize. Default to 4096</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)DefaultCipherConfigName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>default cipher config name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/DefaultTraceConfigName" title="DefaultTraceConfigName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/DefaultTraceConfigName">+&nbsp;DefaultTraceConfigName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Default trace config name
+        The config for performance and sql tracing.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)DefaultTraceConfigName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>default trace config name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/DefaultCheckpointConfigName" title="DefaultCheckpointConfigName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/DefaultCheckpointConfigName">+&nbsp;DefaultCheckpointConfigName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Default checkpoint config name
+        The config for subthread checkpoint optimization</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)DefaultCheckpointConfigName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>default checkpoint config name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/DefaultSyncConfigName" title="DefaultSyncConfigName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/DefaultSyncConfigName">+&nbsp;DefaultSyncConfigName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Default sync config name
+        The default sync config for WCDB is :
+        1. PRAGMA synchronous=FULL
+        2. PRAGMA checkpoint_fullfsync=1
+        3. PRAGMA fullfsync=1</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)DefaultSyncConfigName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>default sync config name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setConfig:forName:withOrder:" title="setConfig:forName:withOrder:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setConfig:forName:withOrder:">&ndash;&nbsp;setConfig:forName:withOrder:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set config for this database.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setConfig:(WCDB : : Config)<em>config</em> forName:(NSString *)<em>name</em> withOrder:(WCDB : : Configs : : Order)<em>order</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>config</code></th>
+						<td><p>config</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The Identifier for this config</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>order</code></th>
+						<td><p>The smaller number is called first</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="warning"><p><strong>Warning:</strong> Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.</p>
+
+<pre><code> [database setConfig:^BOOL(std::shared_ptr&lt;WCDB::Handle&gt; handle, WCDB::Error&amp; error) {
+    return handle-&gt;exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
+ } forName:@"demo" withOrder:1];
+</code></pre></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setConfig:forName:" title="setConfig:forName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setConfig:forName:">&ndash;&nbsp;setConfig:forName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setConfig:(WCDB : : Config)<em>config</em> forName:(NSString *)<em>name</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>config</code></th>
+						<td><p>config</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The Identifier for this config</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/setConfig:forName:withOrder:">- setConfig:forName:withOrder:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSyncEnabled:" title="setSyncEnabled:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSyncEnabled:">&ndash;&nbsp;setSyncEnabled:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set sync for this database.
+        Sync can improve the stability of the database, reduce database damage, but there will be performance degradation.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setSyncEnabled:(BOOL)<em>sync</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sync</code></th>
+						<td><p>enable or disable sync</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Statistics Methods" name="task_Statistics Methods"></a>
+						<h2 class="task-title">Statistics Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/setPerformanceTrace:" title="setPerformanceTrace:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setPerformanceTrace:">&ndash;&nbsp;setPerformanceTrace:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>You can register a tracer to monitor the performance of all SQLs in this database. The database tracer will recover the global tracer for specifiy database.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setPerformanceTrace:(WCTPerformanceTrace)<em>trace</em></code></div>
 
 		    
 			
@@ -2521,7 +2045,7 @@
 				<h4 class="method-subtitle">See Also</h4>
 				<ul>
 					
-					<li><code><p><a href="../Classes/WCTStatictics.html#//api/name/SetGlobalTrace:">[WCTStatictics SetGlobalTrace:]</a></p></code></li>
+					<li><code><p><a href="../Classes/WCTStatistics.html#//api/name/SetGlobalPerformanceTrace:">[WCTStatistics SetGlobalPerformanceTrace:]</a></p></code></li>
 					
 				</ul>
 			</div>
@@ -2530,7 +2054,857 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTDatabase+Statictics.h</code></p>
+				<p><code class="declared-in-ref">WCTDatabase+Statistics.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="RepairKit Methods" name="task_RepairKit Methods"></a>
+						<h2 class="task-title">RepairKit Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/backupWithCipher:" title="backupWithCipher:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/backupWithCipher:">&ndash;&nbsp;backupWithCipher:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)backupWithCipher:(NSData *)<em>key</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>key</code></th>
+						<td><p>The cipher key for backup</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES only if it&rsquo;s successfully backed up</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+RepairKit.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/recoverFromPath:withPageSize:backupCipher:databaseCipher:" title="recoverFromPath:withPageSize:backupCipher:databaseCipher:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/recoverFromPath:withPageSize:backupCipher:databaseCipher:">&ndash;&nbsp;recoverFromPath:withPageSize:backupCipher:databaseCipher:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Recover data from a corruped db. You&rsquo;d better to recover a closed database. A new repair kit is developing at <a href="https://github.com/Tencent/wcdb/tree/new-repair">https://github.com/Tencent/wcdb/tree/new-repair</a></p>
+
+<pre><code> WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+ WCTDatabase* corruped = [[WCTDatabase alloc] initWithPath:corrupedDBPath];
+ [corruped close:^(){
+     BOOL result = [database recoverFromPath:corrupedDBPath withPageSize:4096 backupCipher:backupCipher databaseCipher:databaseCipher];
+     NSLog(@"result %d", result);
+ }];
+</code></pre>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)recoverFromPath:(NSString *)<em>corruptedDBPath</em> withPageSize:(const int)<em>pageSize</em> backupCipher:(NSData *)<em>backupCipher</em> databaseCipher:(NSData *)<em>databaseCipher</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>corruptedDBPath</code></th>
+						<td><p>The path to the corrupted database</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>pageSize</code></th>
+						<td><p>Page size of the corrupted database. It&rsquo;s default to 4096 on iOS. Page size never change unless you can call &ldquo;PRAGMA page_size=NewPageSize&rdquo; to set it. Also, you can call &ldquo;PRAGMA page_size&rdquo; to check the current value while database is not corrupted.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>backupCipher</code></th>
+						<td><p>The cipher key for backup</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>databaseCipher</code></th>
+						<td><p>The cipher key for corrupeted database</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES only if it&rsquo;s successfully recovered.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+RepairKit.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Database Methods" name="task_Database Methods"></a>
+						<h2 class="task-title">Database Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithPath:" title="initWithPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithPath:">&ndash;&nbsp;initWithPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Init a database from path.
+        Note that all database objects with same path share the same core. So you can create multiple database objects. WCDB will manage them automatically.
+        Note that WCDB will not generate a sqlite handle until the first operation, which is also called as lazy initialization.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithPath:(NSString *)<em>path</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>path</code></th>
+						<td><p>Path to your database</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>WCTDatabase</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setCipherKey:" title="setCipherKey:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setCipherKey:">&ndash;&nbsp;setCipherKey:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setCipherKey:(NSData *)<em>cipherKey</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cipherKey</code></th>
+						<td><p>Cipher key.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setCipherKey:andCipherPageSize:" title="setCipherKey:andCipherPageSize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setCipherKey:andCipherPageSize:">&ndash;&nbsp;setCipherKey:andCipherPageSize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set cipher key for a database.
+For an encrypted database, you must call it before all other operation.
+The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. So for an existing database created by other database framework, you should set it to 1024. Otherwise, you&rsquo;d better to use cipher page size with 4096 or simply call <a href="#//api/name/setCipherKey:">setCipherKey:</a> interface to get better performance.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setCipherKey:(NSData *)<em>cipherKey</em> andCipherPageSize:(int)<em>cipherPageSize</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cipherKey</code></th>
+						<td><p>Cipher key.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cipherPageSize</code></th>
+						<td><p>Cipher Page Size</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setTag:" title="setTag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setTag:">&ndash;&nbsp;setTag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the tag of the database.
+        Note that <a href="../Classes/WCTCore.html">WCTCore</a> objects with same path share this tag, even they are not the same object.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setTag:(WCTTag)<em>tag</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tag</code></th>
+						<td><p>Default to 0.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/canOpen" title="canOpen"></a>
+	<h3 class="method-title"><code><a href="#//api/name/canOpen">&ndash;&nbsp;canOpen</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Since WCDB is using lazy initialization, [initWithPath:] never return nil even the database can&rsquo;t open. So you can call this to check whether the database can be opened.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)canOpen</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>NO if an error occurs during sqlite handle initialization.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isOpened" title="isOpened"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isOpened">&ndash;&nbsp;isOpened</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Check database is already opened.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)isOpened</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>isOpened</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/close:" title="close:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/close:">&ndash;&nbsp;close:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p><a href="#//api/name/close">close</a> the database.
+        Since Multi-threaded operation is supported in WCDB, other operations in different thread can open the closed database. So this method can make sure database is closed in the &ldquo;onClosed&rdquo; block. All other operations will be blocked until this method returns.
+        A close operation consists of 4 steps:
+            1. blockade, which blocks all other operations.
+            2. close, which waits until all sqlite handles return and closes them.
+            3. onClosed, which trigger the callback.
+            4. unblokade, which unblocks all other opreations.
+        You can simply call close: to do all steps above or call these separately.
+        Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice. The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
+            1. You should not keep WCDB objects, including WCTInsert, WCTDelete, WCTUpdate, WCTSelect, WCTRowSelect, WCTMultiSelect, WCTStatement, WCTTransaction. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
+            2. WCDB objects may not be out of its' scope.
+            3. Further more, those WCDB objects may be kept by NSAutoReleasePool, which is done by ARC automatically. So you should make sure that all WCDB objects in NSAutoReleasePool is drained.
+            The best practice is to call close: in sub-thread and display a loading animation in main thread.</p>
+
+<pre><code> //close directly
+ [database close:^(){
+    //do something on this closed database
+ }];
+ //close separately
+ [database blockade];
+ [database close];
+ //do something on this closed database
+ [database unblockade];
+</code></pre>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)close:(WCTCloseBlock)<em>onClosed</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>onClosed</code></th>
+						<td><p>Trigger on database closed.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/close" title="close"></a>
+	<h3 class="method-title"><code><a href="#//api/name/close">&ndash;&nbsp;close</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This interface is equivalent to [database close:nil].</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)close</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/blockade" title="blockade"></a>
+	<h3 class="method-title"><code><a href="#//api/name/blockade">&ndash;&nbsp;blockade</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Blockade the database.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)blockade</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/unblockade" title="unblockade"></a>
+	<h3 class="method-title"><code><a href="#//api/name/unblockade">&ndash;&nbsp;unblockade</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Un<a href="#//api/name/blockade">blockade</a> the database.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)unblockade</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isBlockaded" title="isBlockaded"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isBlockaded">&ndash;&nbsp;isBlockaded</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Check whether database is blockaded.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)isBlockaded</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>isBlockaded</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/close:">- close:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/purgeFreeHandles" title="purgeFreeHandles"></a>
+	<h3 class="method-title"><code><a href="#//api/name/purgeFreeHandles">&ndash;&nbsp;purgeFreeHandles</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Purge all free handles of this database.
+        WCDB will cache and reuse some sqlite handles to improve performance.
+        The max count of free sqlite handles is same as the number of concurrent threads supported by the hardware implementation.
+        You can call it to save some memory.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)purgeFreeHandles</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/PurgeFreeHandlesInAllDatabases" title="PurgeFreeHandlesInAllDatabases"></a>
+	<h3 class="method-title"><code><a href="#//api/name/PurgeFreeHandlesInAllDatabases">+&nbsp;PurgeFreeHandlesInAllDatabases</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Purge all free handles of all databases.
+        Note that WCDB will call this interface automatically while it receives memory warning on iOS.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)PurgeFreeHandlesInAllDatabases</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/purgeFreeHandles">- purgeFreeHandles</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTDatabase+Database.h</code></p>
 			</div>
 			
 			
@@ -2551,7 +2925,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-06-02</p>
+						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-07-25</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>

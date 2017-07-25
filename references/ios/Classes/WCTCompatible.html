@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>WCTInsert Class Reference</title>
+	<title>WCTCompatible Class Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
@@ -43,8 +43,6 @@
 							<select id="jump-to">
 	<option value="top">Jump To&#133;</option>
 	
-	<option value="overview">Overview</option>
-	
 
 	
 	
@@ -54,15 +52,15 @@
 
 	
 	
-
-	
-
-	
-	<optgroup label="Instance Methods">
+	<optgroup label="Properties">
 		
-		<option value="//api/name/executeWithObjects:">- executeWithObjects:</option>
+		<option value="//api/name/builtinNSDataColumnCodingCompatibleEnabled">builtinNSDataColumnCodingCompatibleEnabled</option>
 		
 	</optgroup>
+	
+
+	
+
 	
 	
 </select>
@@ -77,29 +75,21 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title">WCTInsert Class Reference</h1>
+					<h1 class="title">WCTCompatible Class Reference</h1>
 
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
 	<th>Inherits from</th>
-	<td><a href="../Classes/WCTChainCall.html">WCTChainCall</a> : <a href="../Classes/WCTCore.html">WCTCore</a> : NSObject</td>
+	<td>NSObject</td>
 </tr><tr>
 	<th>Declared in</th>
-	<td>WCTInsert.h</td>
+	<td>WCTCompatible.h</td>
 </tr>
 						</tbody></table></div>
 					
 
                     
-					
-					<div class="section section-overview">
-						<a title="Overview" name="overview"></a>
-						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Not Thread-safe</p>
-					</div>
-					
-					
 
 					
 					
@@ -112,8 +102,8 @@
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/executeWithObjects:" title="executeWithObjects:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/executeWithObjects:">&ndash;&nbsp;executeWithObjects:</a></code>
+	<a name="//api/name/builtinNSDataColumnCodingCompatibleEnabled" title="builtinNSDataColumnCodingCompatibleEnabled"></a>
+	<h3 class="method-title"><code><a href="#//api/name/builtinNSDataColumnCodingCompatibleEnabled">&nbsp;&nbsp;builtinNSDataColumnCodingCompatibleEnabled</a></code>
 </h3>
 
 	<div class="method-info">
@@ -123,35 +113,17 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Execute the insert SQL with objects.
-        Note that it will run embedded transaction while objects.count>1 .
-        The embedded transaction means that it will run a transaction if it&rsquo;s not in other transaction, otherwise it will be executed within the existing transaction.</p>
+				<p>For WCDB version>1.0.1, the builtin WCDB column coding for NSData/NSMutableData is stored in database directly, instead of NSCoding.
+        Enable it if the existing NSData is stored before WCDB 1.0.1.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (BOOL)executeWithObjects:(NSArray&lt;WCTObject*&gt; *)<em>objects</em></code></div>
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, assign, getter=isBuiltinNSDataColumnCodingCompatibleEnabled) BOOL builtinNSDataColumnCodingCompatibleEnabled</code></div>
 
 		    
 			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>objects</code></th>
-						<td><p>Objects to be inserted into WCDB.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
 
-			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES if no error occurs.</p>
-			</div>
 			
 
 			
@@ -165,7 +137,7 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">WCTInsert.h</code></p>
+				<p><code class="declared-in-ref">WCTCompatible.h</code></p>
 			</div>
 			
 			
