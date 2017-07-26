@@ -315,7 +315,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private void setCipherSpec() {
         if (mCipher != null) {
             if (mCipher.cipher != null)
-                execute("PRAGMA cipher=" + mCipher.cipher, null, null);
+                execute("PRAGMA cipher=" + DatabaseUtils.sqlEscapeString(mCipher.cipher),
+                        null, null);
 
             if (mCipher.kdfIteration != 0)
                 execute("PRAGMA kdf_iter=" + mCipher.kdfIteration, null, null);
