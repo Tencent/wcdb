@@ -2390,13 +2390,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
         if (operation == null)
             operation = "unnamedNative";
 
-        int connectionFlags;
-        if (readOnly) connectionFlags = SQLiteConnectionPool.CONNECTION_FLAG_READ_ONLY;
-        else connectionFlags = SQLiteConnectionPool.CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY;
-        if (interactive) connectionFlags |= SQLiteConnectionPool.CONNECTION_FLAG_INTERACTIVE;
+        int connectionFlags = readOnly ? SQLiteConnectionPool.CONNECTION_FLAG_READ_ONLY :
+                SQLiteConnectionPool.CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY;
+        if (interactive)
+            connectionFlags |= SQLiteConnectionPool.CONNECTION_FLAG_INTERACTIVE;
 
-        return getThreadSession().acquireConnectionForNativeHandle(connectionFlags)
+        long handle = getThreadSession().acquireConnectionForNativeHandle(connectionFlags)
                 .getNativeHandle(operation);
+        if (handle == 0)
+            throw new IllegalStateException("SQLiteConnection native handle not initialized.");
+        return handle;
     }
 
     /**

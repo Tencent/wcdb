@@ -180,8 +180,8 @@ public final class SQLiteDebug {
         long ptr = connection.getNativeHandle(null);
         if (ptr != 0) {
             nativeGetIOTraceStats(ptr, stats);
+            connection.endNativeHandle(null);
         }
-        connection.endNativeHandle(null);
 
         sLastIOTraceStats = stats;
     }

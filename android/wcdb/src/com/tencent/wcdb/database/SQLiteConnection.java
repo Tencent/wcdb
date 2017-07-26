@@ -186,7 +186,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     /*package*/ long getNativeHandle(String operation) {
         if (mConnectionPtr == 0)
-            throw new IllegalStateException("SQLiteConnection native handle not initialized.");
+            return 0;
 
         if (operation != null && mNativeOperation == null) {
             mNativeOperation = mRecentOperations.beginOperation(operation, null, null);
