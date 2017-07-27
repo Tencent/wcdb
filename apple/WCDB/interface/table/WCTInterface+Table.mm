@@ -39,11 +39,9 @@
         return NO;
     }
     return _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) -> bool {
+        WCDB::Error innerError;
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
-        bool isTableExists = _core->isTableExists(tableName.UTF8String, error);
-        if (!error.isOK()) {
-            return NO;
-        }
+        bool isTableExists = _core->isTableExists(tableName.UTF8String, innerError);
         if (isTableExists) {
             //Get all column names
             std::list<std::string> columnNameList;
@@ -90,9 +88,7 @@
         const std::shared_ptr<WCTIndexBindingMap> &indexBindingMap = binding->getIndexBindingMap();
         if (indexBindingMap) {
             for (const auto &indexBinding : *indexBindingMap.get()) {
-                if (!_core->exec(indexBinding.second->generateCreateIndexStatement(tableName.UTF8String), error)) {
-                    return NO;
-                }
+                _core->exec(indexBinding.second->generateCreateIndexStatement(tableName.UTF8String), innerError);
             }
         }
         return YES;
