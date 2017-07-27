@@ -26,12 +26,12 @@
 
 /**
  @brief Create table and indexes from ORM if not exists.
-        Note that it will add newly defined column automatically.
+        Note that it will add newly defined columns automatically.
         Note that it will run embedded transaction.
         The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
  @param tableName This would be the name of the table and the prefix of the index names.
  @param cls class
- @return YES only if no error occurs.
+ @return YES while creating table or adding newly defined columns succeeds. It will not fail if error occurs during creating indexes.  
  */
 - (BOOL)createTableAndIndexesOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
 
