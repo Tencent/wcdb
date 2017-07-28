@@ -66,7 +66,7 @@
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Insert,
                                          WCDB::Error::InterfaceCode::NilObject,
-                                         [NSString stringWithFormat:@"Inserting %@ with empty property", tableName].UTF8String,
+                                         [NSString stringWithFormat:@"Inserting nothing into %@", tableName].UTF8String,
                                          &_error);
             return self;
         }

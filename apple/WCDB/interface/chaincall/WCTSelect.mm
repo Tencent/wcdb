@@ -44,7 +44,7 @@
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
                                          WCDB::Error::InterfaceCode::NilObject,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableName].UTF8String,
+                                         [NSString stringWithFormat:@"Selecting nothing from %@", tableName].UTF8String,
                                          &_error);
             return self;
         }
