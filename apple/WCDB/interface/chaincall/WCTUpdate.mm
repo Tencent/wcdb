@@ -40,6 +40,15 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
+        if (propertyList.size() == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Update,
+                                         WCDB::Error::InterfaceCode::NilObject,
+                                         [NSString stringWithFormat:@"Updating %@ with empty property", tableName].UTF8String,
+                                         &_error);
+            return self;
+        }
         _statement.update(tableName.UTF8String);
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         WCDB::UpdateValueList updateValueList;
