@@ -22,6 +22,7 @@
 #define utility_hpp
 
 #include <WCDB/describable.hpp>
+#include <string.h>
 
 namespace WCDB {
 
@@ -30,6 +31,13 @@ std::string GetListDescription(const std::list<T> &t)
 {
     return Describable::GetListDescription(t);
 }
+
+struct CaseInsensiveComparetor {
+    bool operator()(const std::string &lhs, const std::string &rhs) const
+    {
+        return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
+    }
+};
 
 } //namespace WCDB
 
