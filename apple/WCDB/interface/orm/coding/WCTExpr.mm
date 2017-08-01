@@ -406,7 +406,7 @@ NSString *WCTExpr::getDescription() const
     return [NSString stringWithUTF8String:WCDB::Expr::getDescription().c_str()];
 }
 
-WCTExpr WCTExpr::Function(NSString *function, const WCTExprList &exprList) const
+WCTExpr WCTExpr::Function(NSString *function, const WCTExprList &exprList)
 {
     return WCTExpr(Expr::Function(function.UTF8String, exprList));
 }

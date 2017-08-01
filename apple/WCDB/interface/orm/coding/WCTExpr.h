@@ -134,7 +134,18 @@ public:
     WCTExpr upper(bool distinct = false) const;
     WCTExpr round(bool distinct = false) const;
 
-    WCTExpr Function(NSString *function, const WCTExprList &exprList) const;
+    /**
+     @brief Call other function
+     
+         //substr(columnName, 1, 2)
+         WCTExprList exprList = {columnName, 1, 2};
+         WCTExpr substrExpr = WCTExpr::Function(@"substr", exprList);
+     
+     @param function function name
+     @param exprList param list
+     @return WCTExpr
+     */
+    static WCTExpr Function(NSString *function, const WCTExprList &exprList);
 
     WCTExpr(const WCDB::Expr &expr);
     WCTExpr(const WCDB::Expr &expr, const WCTPropertyBase &propertyBase);
