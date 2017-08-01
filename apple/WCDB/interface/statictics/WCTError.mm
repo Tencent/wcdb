@@ -60,7 +60,7 @@
 
 - (BOOL)isOK
 {
-    return _type == 0;
+    return self.code == 0;
 }
 
 - (NSString *)description
