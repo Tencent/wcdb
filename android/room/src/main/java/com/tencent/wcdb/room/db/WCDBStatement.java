@@ -89,4 +89,9 @@ class WCDBStatement implements SupportSQLiteStatement {
     public String simpleQueryForString() {
         return mDelegate.simpleQueryForString();
     }
+
+    @Override
+    public void close() throws Exception {
+        mDelegate.close();
+    }
 }
