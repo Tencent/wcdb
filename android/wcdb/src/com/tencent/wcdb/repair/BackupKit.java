@@ -121,7 +121,7 @@ public class BackupKit {
 			throws SQLiteException {
 		mDB = db;
 		mLastError = null;
-		mTableDesc = Arrays.copyOf(tableDesc, tableDesc.length);
+		mTableDesc = (tableDesc != null) ? Arrays.copyOf(tableDesc, tableDesc.length) : null;
 		if (outPath == null)
 			throw new IllegalArgumentException();
 		mNativePtr = nativeInit(outPath, key, flags);
