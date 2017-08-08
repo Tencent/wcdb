@@ -101,6 +101,7 @@ public:
         Commit = 4,
         Rollback = 5,
         GetThreadedHandle = 6,
+        FlowOut = 7,
     };
     enum class SystemCallOperation : int {
         Lstat = 1,
@@ -118,6 +119,7 @@ public:
     //code
     enum class CoreCode : int {
         Misuse = 1,
+        Exceed = 2,
     };
     enum class InterfaceCode : int {
         ORM = 1,

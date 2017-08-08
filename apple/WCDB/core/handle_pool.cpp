@@ -30,6 +30,7 @@ std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
 std::mutex HandlePool::s_mutex;
 const int HandlePool::s_hardwareConcurrency =
     std::thread::hardware_concurrency();
+const int HandlePool::s_maxConcurrency = 64;
 
 RecyclableHandlePool HandlePool::GetPool(const std::string &path,
                                          const Configs &defaultConfigs)
@@ -121,16 +122,26 @@ RecyclableHandle HandlePool::flowOut(Error &error)
     m_rwlock.lockRead();
     std::shared_ptr<HandleWrap> handleWrap = m_handles.popBack();
     if (handleWrap == nullptr) {
-        handleWrap = generate(error);
-        if (handleWrap) {
-            ++m_aliveHandleCount;
-            if (m_aliveHandleCount > s_hardwareConcurrency) {
-                WCDB::Error::Warning(("The concurrency of database:" +
-                                      std::to_string(tag.load()) +
-                                      " exceeds the concurrency of hardware:" +
-                                      std::to_string(s_hardwareConcurrency))
-                                         .c_str());
+        if (m_aliveHandleCount < s_maxConcurrency) {
+            handleWrap = generate(error);
+            if (handleWrap) {
+                ++m_aliveHandleCount;
+                if (m_aliveHandleCount > s_hardwareConcurrency) {
+                    WCDB::Error::Warning(
+                        ("The concurrency of database:" +
+                         std::to_string(tag.load()) + " with " +
+                         std::to_string(m_aliveHandleCount) +
+                         " exceeds the concurrency of hardware:" +
+                         std::to_string(s_hardwareConcurrency))
+                            .c_str());
+                }
             }
+        } else {
+            Error::ReportCore(
+                tag.load(), path, Error::CoreOperation::FlowOut,
+                Error::CoreCode::Exceed,
+                "The concurrency of database exceeds the max concurrency",
+                &error);
         }
     }
     if (handleWrap) {
