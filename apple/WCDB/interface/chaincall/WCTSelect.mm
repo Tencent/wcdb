@@ -43,8 +43,17 @@
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::NilObject,
+                                         WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Selecting nothing from %@", tableName].UTF8String,
+                                         &_error);
+            return self;
+        }
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Select,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Nil table name".UTF8String,
                                          &_error);
             return self;
         }

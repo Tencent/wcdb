@@ -46,6 +46,15 @@
                                          &_error);
             return self;
         }
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Insert,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Nil table name".UTF8String,
+                                         &_error);
+            return self;
+        }
         _replace = replace;
         const WCTPropertyList &propertyList = [cls AllProperties];
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
@@ -65,8 +74,17 @@
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::NilObject,
+                                         WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Inserting nothing into %@", tableName].UTF8String,
+                                         &_error);
+            return self;
+        }
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Insert,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         [NSString stringWithFormat:@"Table name should be large than 0"].UTF8String,
                                          &_error);
             return self;
         }

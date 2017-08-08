@@ -33,6 +33,15 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Delete,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Nil table name".UTF8String,
+                                         &_error);
+            return self;
+        }
         _statement.deleteFrom(tableName.UTF8String);
     }
     return self;

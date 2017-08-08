@@ -42,6 +42,15 @@
                                          &_error);
             return self;
         }
+        if (tableNames.count == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Select,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Empty table".UTF8String,
+                                         &_error);
+            return self;
+        }
         _resultList.insert(_resultList.begin(), resultList.begin(), resultList.end());
         for (const WCTResult &result : _resultList) {
             Class cls = result.getBindingClass();
