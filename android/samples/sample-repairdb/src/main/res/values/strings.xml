@@ -3,4 +3,5 @@
     <string name="init_db">Init</string>
     <string name="corrupt_db">Corrupt!</string>
     <string name="repair_db">Repair</string>
+    <string name="cancel">Cancel</string>
 </resources>
