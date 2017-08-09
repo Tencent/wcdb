@@ -42,7 +42,7 @@ int sqliterkOSReadOnlyOpen(const char *path, sqliterk_file **file)
     sqliterk_file *theFile = sqliterkOSMalloc(sizeof(sqliterk_file));
     if (!theFile) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.",
+        sqliterkOSError(rc, "Not enough memory, required %zu bytes.",
                         sizeof(sqliterk_file));
         goto sqliterkOSReadOnlyOpen_Failed;
     }
@@ -51,7 +51,7 @@ int sqliterkOSReadOnlyOpen(const char *path, sqliterk_file **file)
     theFile->path = sqliterkOSMalloc(len);
     if (!theFile->path) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.", len);
+        sqliterkOSError(rc, "Not enough memory, required %zu bytes.", len);
         goto sqliterkOSReadOnlyOpen_Failed;
     }
     strncpy(theFile->path, path, len);
@@ -166,7 +166,7 @@ sqliterkDefaultLog(sqliterk_loglevel level, int result, const char *msg)
     fprintf(stderr, "[%s] %s\n", sqliterkGetResultCodeDescription(result), msg);
 }
 
-#define SQLITRK_CONFIG_MAXLOG 4096
+#define SQLITERK_CONFIG_MAXLOG 4096
 static sqliterk_os s_os = {sqliterkDefaultLog};
 
 int sqliterkOSLog(sqliterk_loglevel loglevel,
@@ -174,7 +174,7 @@ int sqliterkOSLog(sqliterk_loglevel loglevel,
                   const char *format,
                   ...)
 {
-    char buf[SQLITRK_CONFIG_MAXLOG];
+    char buf[SQLITERK_CONFIG_MAXLOG];
 
     va_list ap;
     va_start(ap, format);

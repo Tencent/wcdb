@@ -41,7 +41,7 @@ static void sqliterkNotify_onBeginParseBtree(sqliterk *rk,
                                              sqliterk_btree *btree);
 static void
 sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result);
-static void sqliterkNotify_onParseColumn(sqliterk *rk,
+static int sqliterkNotify_onParseColumn(sqliterk *rk,
                                          sqliterk_btree *btree,
                                          sqliterk_page *page,
                                          sqliterk_column *column);
@@ -65,7 +65,7 @@ int sqliterkOpen(const char *path,
     sqliterk *therk = sqliterkOSMalloc(sizeof(sqliterk));
     if (!therk) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required: %u bytes",
+        sqliterkOSError(rc, "Not enough memory, required: %zu bytes",
                         sizeof(sqliterk));
         goto sqliterkOpen_Failed;
     }
@@ -194,19 +194,22 @@ sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result)
     }
 }
 
-static void sqliterkNotify_onParseColumn(sqliterk *rk,
+static int sqliterkNotify_onParseColumn(sqliterk *rk,
                                          sqliterk_btree *btree,
                                          sqliterk_page *page,
                                          sqliterk_column *column)
 {
     if (!rk) {
-        return;
+        return SQLITERK_MISUSE;
     }
+
+    int result;
     if (rk->notify.onParseColumn) {
-        int result =
-            rk->notify.onParseColumn(rk, (sqliterk_table *) btree, column);
-        int pageno = sqliterkPageGetPageno(page);
-        if (result != SQLITERK_OK) {
+        result = rk->notify.onParseColumn(rk, (sqliterk_table *) btree, column);
+        if (result == SQLITERK_CANCELLED) {
+            return result;
+        } else if (result != SQLITERK_OK) {
+            int pageno = sqliterkPageGetPageno(page);
             sqliterkPagerSetStatus(rk->pager, pageno,
                                    sqliterk_status_discarded);
             sqliterk_values *overflowPages =
@@ -219,7 +222,10 @@ static void sqliterkNotify_onParseColumn(sqliterk *rk,
                     sqliterk_status_discarded);
             }
         }
+    } else {
+        result = SQLITERK_OK;
     }
+
     if (sqliterkBtreeGetType(btree) == sqliterk_btree_type_master &&
         rk->recursive) {
         // Recursively decode the page since the mapping of [table]->[rootPageno] is known
@@ -259,6 +265,8 @@ static void sqliterkNotify_onParseColumn(sqliterk *rk,
             }
         }
     }
+    
+    return result;
 }
 
 static int
@@ -286,6 +294,9 @@ static void sqliterkNotify_onEndParsePage(sqliterk *rk,
             break;
         case SQLITERK_DAMAGED:
             sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_damaged);
+            break;
+        case SQLITERK_CANCELLED:
+            sqliterkOSDebug(SQLITERK_CANCELLED, "Cancelled parsing page %d.", pageno);
             break;
         default:
             sqliterkOSWarning(SQLITERK_MISUSE,

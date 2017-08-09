@@ -58,7 +58,7 @@ int sqliterkPagerOpen(const char *path,
     sqliterk_pager *thePager = sqliterkOSMalloc(sizeof(sqliterk_pager));
     if (!thePager) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.",
+        sqliterkOSError(rc, "Not enough memory, required %zu bytes.",
                         sizeof(sqliterk_pager));
         goto sqliterkPagerOpen_Failed;
     }
@@ -116,7 +116,7 @@ int sqliterkPagerOpen(const char *path,
     thePager->pagesStatus = sqliterkOSMalloc(len);
     if (!thePager->pagesStatus) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.", len);
+        sqliterkOSError(rc, "Not enough memory, required %zu bytes.", len);
         goto sqliterkPagerOpen_Failed;
     }
 
@@ -155,7 +155,7 @@ static int sqliterkPagerParseHeader(sqliterk_pager *pager, int forcePageSize)
     unsigned char *buffer = sqliterkOSMalloc(size);
     if (!buffer) {
         rc = SQLITERK_NOMEM;
-        sqliterkOSError(rc, "Not enough memory, required %u bytes.", size);
+        sqliterkOSError(rc, "Not enough memory, required %zu bytes.", size);
         goto sqliterkPagerParseHeader_End;
     }
 

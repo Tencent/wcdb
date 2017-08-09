@@ -76,6 +76,7 @@ int sqliterk_output(sqliterk *rk,
                     sqlite3 *db,
                     sqliterk_master_info *master,
                     unsigned int flags);
+void sqliterk_cancel(sqliterk *rk);
 int sqliterk_make_master(const char **tables,
                          int num_tables,
                          sqliterk_master_info **out_master);
@@ -164,6 +165,7 @@ int sqliterk_register(sqliterk_os os);
 #define SQLITERK_SHORT_READ 5
 #define SQLITERK_DAMAGED 6
 #define SQLITERK_DISCARD 7
+#define SQLITERK_CANCELLED 8
 const char *sqliterk_description(int result);
 
 #ifndef SQLITRK_CONFIG_DEFAULT_PAGESIZE
