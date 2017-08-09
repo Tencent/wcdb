@@ -140,7 +140,7 @@ static JNICALL void nativeFini(JNIEnv *env, jclass cls, jlong rkPtr)
     sqliterk_close(rk);
 }
 
-static JNICALL jboolean nativeOutput(JNIEnv *env,
+static JNICALL jint nativeOutput(JNIEnv *env,
                                      jclass cls,
                                      jlong rkPtr,
                                      jlong dbPtr,
@@ -153,7 +153,15 @@ static JNICALL jboolean nativeOutput(JNIEnv *env,
         (sqliterk_master_info *) (intptr_t) masterPtr;
 
     int rc = sqliterk_output(rk, db, master, flags);
-    return (rc == SQLITERK_OK) ? JNI_TRUE : JNI_FALSE;
+    if (rc == SQLITERK_OK) return 0;
+    if (rc == SQLITERK_CANCELLED) return 1;
+    return -1;
+}
+
+static JNICALL void nativeCancel(JNIEnv *env, jclass cls, jlong rkPtr)
+{
+    sqliterk *rk = (sqliterk *) (intptr_t) rkPtr;
+    sqliterk_cancel(rk);
 }
 
 static JNICALL jint nativeIntegrityFlags(JNIEnv *env, jclass cls, jlong rkPtr)
@@ -289,7 +297,8 @@ static const JNINativeMethod sMethods[] = {
      "(Ljava/lang/String;[BLcom/tencent/wcdb/database/SQLiteCipherSpec;[B)J",
      (void *) nativeInit},
     {"nativeFini", "(J)V", (void *) nativeFini},
-    {"nativeOutput", "(JJJI)Z", (void *) nativeOutput},
+    {"nativeOutput", "(JJJI)I", (void *) nativeOutput},
+    {"nativeCancel", "(J)V", (void *) nativeCancel},
     {"nativeIntegrityFlags", "(J)I", (void *) nativeIntegrityFlags},
     {"nativeLastError", "()Ljava/lang/String;", (void *) nativeLastError},
     {"nativeMakeMaster", "([Ljava/lang/String;)J", (void *) nativeMakeMaster},

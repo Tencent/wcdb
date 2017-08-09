@@ -32,6 +32,21 @@ import com.tencent.wcdb.database.SQLiteException;
 public class RepairKit {
 
     /**
+     * Result code that indicates successful operation.
+     */
+    public static final int RESULT_OK = 0;
+
+    /**
+     * Result code that indicates operation has been cancelled.
+     */
+    public static final int RESULT_CANCELED = 1;
+
+    /**
+     * Result code that indicates operation failure.
+     */
+    public static final int RESULT_FAILED = -1;
+
+    /**
      * Flag indicates no {@code CREATE TABLE} or {@code CREATE INDEX} statement
      * should be executed on the destination database.
      */
@@ -51,6 +66,7 @@ public class RepairKit {
     private long mNativePtr;
     private int mIntegrityFlags;
     private MasterInfo mMasterInfo;
+    private volatile boolean mCancelled;
 
 
     /**
@@ -114,20 +130,31 @@ public class RepairKit {
      *
      * @param db    destination database to be written
      * @param flags flags affects repair behavior
-     * @return      {@code true} if at least one row is successfully repaired
+     * @return      result code which is {@link #RESULT_OK}, {@link #RESULT_CANCELED}
+     *              or {@link #RESULT_FAILED}.
      */
-    public boolean output(SQLiteDatabase db, int flags) {
+    public int output(SQLiteDatabase db, int flags) {
         if (mNativePtr == 0)
             throw new IllegalArgumentException();
+
+        if (mCancelled)
+            return RESULT_CANCELED;
 
         long masterPtr = (mMasterInfo == null) ? 0 : mMasterInfo.mMasterPtr;
 
         long dbPtr = db.acquireNativeConnectionHandle("repair", false, false);
-        boolean ret = nativeOutput(mNativePtr, dbPtr, masterPtr, flags);
+        int ret = nativeOutput(mNativePtr, dbPtr, masterPtr, flags);
         db.releaseNativeConnection(dbPtr, null);
 
         mIntegrityFlags = nativeIntegrityFlags(mNativePtr);
         return ret;
+    }
+
+    public void cancel() {
+        if (mNativePtr == 0)
+            throw new IllegalArgumentException();
+        mCancelled = true;
+        nativeCancel(mNativePtr);
     }
 
     /**
@@ -271,7 +298,8 @@ public class RepairKit {
 
     private static native long nativeInit(String path, byte[] key, SQLiteCipherSpec cipherSpec, byte[] salt);
     private static native void nativeFini(long rkPtr);
-    private static native boolean nativeOutput(long rkPtr, long dbPtr, long masterPtr, int flags);
+    private static native int nativeOutput(long rkPtr, long dbPtr, long masterPtr, int flags);
+    private static native void nativeCancel(long rkPtr);
     private static native int nativeIntegrityFlags(long rkPtr);
     private static native String nativeLastError();
     private static native long nativeMakeMaster(String[] tables);

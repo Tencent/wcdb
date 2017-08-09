@@ -23,7 +23,7 @@
 #include "ModuleLoader.h"
 #include "fts/mm_fts.h"
 
-// Forward declearation from vfslog.c
+// Forward declaration from vfslog.c
 extern "C" int sqlite3_register_vfslog(const char *);
 extern volatile uint32_t vlogDefaultLogFlags;
 
