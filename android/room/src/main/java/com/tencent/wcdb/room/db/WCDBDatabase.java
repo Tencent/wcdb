@@ -40,8 +40,10 @@ import java.util.Locale;
 
 /**
  * Delegates all calls to an implementation of {@link SQLiteDatabase}.
+ *
+ * @hide
  */
-class WCDBDatabase implements SupportSQLiteDatabase {
+public class WCDBDatabase implements SupportSQLiteDatabase {
     private static final String[] CONFLICT_VALUES = new String[]
             {"", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE "};
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
@@ -55,6 +57,15 @@ class WCDBDatabase implements SupportSQLiteDatabase {
      */
     public WCDBDatabase(SQLiteDatabase delegate) {
         mDelegate = delegate;
+    }
+
+    /**
+     * Retrieve the wrapped {@link SQLiteDatabase} object.
+     *
+     * @return the real, wrapped database object
+     */
+    public final SQLiteDatabase getInnerDatabase() {
+        return mDelegate;
     }
 
     @Override
