@@ -23,7 +23,6 @@
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTExpr.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/in_case_lock_guard.hpp>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;

@@ -105,7 +105,10 @@
 
 - (int)changes
 {
-    return _changes;
+    @synchronized(self)
+    {
+        return _changes;
+    }
 }
 
 @end

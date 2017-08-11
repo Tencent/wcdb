@@ -23,7 +23,6 @@
 #include <WCDB/SQLiteRepairKit.h>
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_statement.hpp>
-#include <WCDB/in_case_lock_guard.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_transaction.hpp>

@@ -26,7 +26,6 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/in_case_lock_guard.hpp>
 
 @implementation WCTChainCall
 

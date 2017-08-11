@@ -220,8 +220,6 @@
 		2349F77E1EA0D6680021EFA7 /* error.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6AA1EA0D6680021EFA7 /* error.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7801EA0D6680021EFA7 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6AC1EA0D6680021EFA7 /* file.cpp */; };
 		2349F7811EA0D6680021EFA7 /* file.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6AD1EA0D6680021EFA7 /* file.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F7821EA0D6680021EFA7 /* in_case_lock_guard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6AE1EA0D6680021EFA7 /* in_case_lock_guard.cpp */; };
-		2349F7831EA0D6680021EFA7 /* in_case_lock_guard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6AF1EA0D6680021EFA7 /* in_case_lock_guard.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7841EA0D6680021EFA7 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B01EA0D6680021EFA7 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7851EA0D6680021EFA7 /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6B11EA0D6680021EFA7 /* path.cpp */; };
 		2349F7861EA0D6680021EFA7 /* path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6B21EA0D6680021EFA7 /* path.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -386,7 +384,6 @@
 		23DE40FD1EF7707900227551 /* WCTChainCall+Statistics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C91ED44316000B72F6 /* WCTChainCall+Statistics.mm */; };
 		23DE40FE1EF7707900227551 /* WCTTransaction+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6A01EA0D6680021EFA7 /* WCTTransaction+Table.mm */; };
 		23DE40FF1EF7707900227551 /* ticker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */; };
-		23DE41001EF7707900227551 /* in_case_lock_guard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6AE1EA0D6680021EFA7 /* in_case_lock_guard.cpp */; };
 		23DE41011EF7707900227551 /* WCTSequence.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F63A1EA0D6680021EFA7 /* WCTSequence.mm */; };
 		23DE41021EF7707900227551 /* WCTUpdate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6551EA0D6680021EFA7 /* WCTUpdate.mm */; };
 		23DE41031EF7707900227551 /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6A91EA0D6680021EFA7 /* error.cpp */; };
@@ -459,7 +456,6 @@
 		23DE41491EF7707900227551 /* WCTIndexBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F68A1EA0D6680021EFA7 /* WCTIndexBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE414A1EF7707900227551 /* statement_alter_table.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F5FA1EA0D6680021EFA7 /* statement_alter_table.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE414B1EF7707900227551 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402EB1EDD718A00808286 /* sqliterk.h */; };
-		23DE414C1EF7707900227551 /* in_case_lock_guard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6AF1EA0D6680021EFA7 /* in_case_lock_guard.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DE414D1EF7707900227551 /* WCTMultiSelect+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 242E1E2B1EA37DDF00F77029 /* WCTMultiSelect+Private.h */; };
 		23DE414E1EF7707900227551 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
 		23DE414F1EF7707900227551 /* order_term.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F5F41EA0D6680021EFA7 /* order_term.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -861,8 +857,6 @@
 		2349F6AA1EA0D6680021EFA7 /* error.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = error.hpp; sourceTree = "<group>"; };
 		2349F6AC1EA0D6680021EFA7 /* file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = file.cpp; sourceTree = "<group>"; };
 		2349F6AD1EA0D6680021EFA7 /* file.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = file.hpp; sourceTree = "<group>"; };
-		2349F6AE1EA0D6680021EFA7 /* in_case_lock_guard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = in_case_lock_guard.cpp; sourceTree = "<group>"; };
-		2349F6AF1EA0D6680021EFA7 /* in_case_lock_guard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = in_case_lock_guard.hpp; sourceTree = "<group>"; };
 		2349F6B01EA0D6680021EFA7 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = macro.hpp; sourceTree = "<group>"; };
 		2349F6B11EA0D6680021EFA7 /* path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = path.cpp; sourceTree = "<group>"; };
 		2349F6B21EA0D6680021EFA7 /* path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = path.hpp; sourceTree = "<group>"; };
@@ -1428,8 +1422,6 @@
 				2349F6AA1EA0D6680021EFA7 /* error.hpp */,
 				2349F6AC1EA0D6680021EFA7 /* file.cpp */,
 				2349F6AD1EA0D6680021EFA7 /* file.hpp */,
-				2349F6AE1EA0D6680021EFA7 /* in_case_lock_guard.cpp */,
-				2349F6AF1EA0D6680021EFA7 /* in_case_lock_guard.hpp */,
 				2349F6B01EA0D6680021EFA7 /* macro.hpp */,
 				2349F6B11EA0D6680021EFA7 /* path.cpp */,
 				2349F6B21EA0D6680021EFA7 /* path.hpp */,
@@ -1711,7 +1703,6 @@
 				2349F7631EA0D6680021EFA7 /* WCTIndexBinding.h in Headers */,
 				2349F6DE1EA0D6680021EFA7 /* statement_alter_table.hpp in Headers */,
 				234402FE1EDD718A00808286 /* sqliterk.h in Headers */,
-				2349F7831EA0D6680021EFA7 /* in_case_lock_guard.hpp in Headers */,
 				242E1E2E1EA37DFD00F77029 /* WCTMultiSelect+Private.h in Headers */,
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				23FD44B01F067CD5000A2CAC /* statement_rollback.hpp in Headers */,
@@ -1870,7 +1861,6 @@
 				23DE41491EF7707900227551 /* WCTIndexBinding.h in Headers */,
 				23DE414A1EF7707900227551 /* statement_alter_table.hpp in Headers */,
 				23DE414B1EF7707900227551 /* sqliterk.h in Headers */,
-				23DE414C1EF7707900227551 /* in_case_lock_guard.hpp in Headers */,
 				23DE414D1EF7707900227551 /* WCTMultiSelect+Private.h in Headers */,
 				23FD44B11F067CD5000A2CAC /* statement_rollback.hpp in Headers */,
 				23FD449F1F067B28000A2CAC /* statement_reindex.hpp in Headers */,
@@ -2242,7 +2232,6 @@
 				2386B3CB1ED44316000B72F6 /* WCTChainCall+Statistics.mm in Sources */,
 				2349F7761EA0D6680021EFA7 /* WCTTransaction+Table.mm in Sources */,
 				23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */,
-				2349F7821EA0D6680021EFA7 /* in_case_lock_guard.cpp in Sources */,
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
 				23FD44A21F067BD6000A2CAC /* statement_savepoint.cpp in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
@@ -2411,7 +2400,6 @@
 				23DE40FD1EF7707900227551 /* WCTChainCall+Statistics.mm in Sources */,
 				23DE40FE1EF7707900227551 /* WCTTransaction+Table.mm in Sources */,
 				23DE40FF1EF7707900227551 /* ticker.cpp in Sources */,
-				23DE41001EF7707900227551 /* in_case_lock_guard.cpp in Sources */,
 				23DE41011EF7707900227551 /* WCTSequence.mm in Sources */,
 				23FD44A31F067BD6000A2CAC /* statement_savepoint.cpp in Sources */,
 				23DE41021EF7707900227551 /* WCTUpdate.mm in Sources */,
