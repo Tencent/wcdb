@@ -22,6 +22,7 @@ package com.tencent.wcdb.repair;
 
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
+import com.tencent.wcdb.support.CancellationSignal;
 
 import java.util.Arrays;
 
@@ -29,7 +30,7 @@ import java.util.Arrays;
 /**
  * Data backup toolkit based on table traversal.
  */
-public class BackupKit {
+public class BackupKit implements CancellationSignal.OnCancelListener {
 
 	/*package*/ static final String TAG = "WCDB.DBBackup";
 
@@ -154,6 +155,17 @@ public class BackupKit {
 		return result;
 	}
 
+	public int run(CancellationSignal cancellationSignal) {
+		if (cancellationSignal.isCanceled())
+			return RESULT_CANCELED;
+
+		cancellationSignal.setOnCancelListener(this);
+		int result = run();
+		cancellationSignal.setOnCancelListener(null);
+
+		return result;
+	}
+
 	/**
 	 * Retrieve total count of statements had been output during the last time {@link #run()}
 	 * was called.
@@ -171,7 +183,8 @@ public class BackupKit {
 	 * Calling this method causes {@link #run()} to interrupt as quickly as possible and
 	 * return {@link #RESULT_CANCELED}</p>
 	 */
-	public void cancel() {
+	@Override
+	public void onCancel() {
 		if (mNativePtr != 0)
 			nativeCancel(mNativePtr);
 	}

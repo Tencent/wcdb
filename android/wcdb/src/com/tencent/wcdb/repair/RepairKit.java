@@ -23,13 +23,14 @@ package com.tencent.wcdb.repair;
 import com.tencent.wcdb.database.SQLiteCipherSpec;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
+import com.tencent.wcdb.support.CancellationSignal;
 
 
 /**
  * Database repair toolkit to parse a corrupted database file and
  * write its content to another (newly created) database.
  */
-public class RepairKit {
+public class RepairKit implements CancellationSignal.OnCancelListener {
 
     /**
      * Result code that indicates successful operation.
@@ -66,7 +67,6 @@ public class RepairKit {
     private long mNativePtr;
     private int mIntegrityFlags;
     private MasterInfo mMasterInfo;
-    private volatile boolean mCancelled;
 
 
     /**
@@ -137,9 +137,6 @@ public class RepairKit {
         if (mNativePtr == 0)
             throw new IllegalArgumentException();
 
-        if (mCancelled)
-            return RESULT_CANCELED;
-
         long masterPtr = (mMasterInfo == null) ? 0 : mMasterInfo.mMasterPtr;
 
         long dbPtr = db.acquireNativeConnectionHandle("repair", false, false);
@@ -150,10 +147,21 @@ public class RepairKit {
         return ret;
     }
 
-    public void cancel() {
+    public int output(SQLiteDatabase db, int flags, CancellationSignal cancellationSignal) {
+        if (cancellationSignal.isCanceled())
+            return RESULT_CANCELED;
+
+        cancellationSignal.setOnCancelListener(this);
+        int result = output(db, flags);
+        cancellationSignal.setOnCancelListener(null);
+
+        return result;
+    }
+
+    @Override
+    public void onCancel() {
         if (mNativePtr == 0)
-            throw new IllegalArgumentException();
-        mCancelled = true;
+            return;
         nativeCancel(mNativePtr);
     }
 

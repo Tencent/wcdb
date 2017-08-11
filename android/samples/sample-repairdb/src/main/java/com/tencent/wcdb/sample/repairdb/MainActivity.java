@@ -22,11 +22,12 @@ package com.tencent.wcdb.sample.repairdb;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
 import com.tencent.wcdb.database.SQLiteOpenHelper;
 import com.tencent.wcdb.repair.RepairKit;
-import com.tencent.wcdb.sample.repairdb.R;
+import com.tencent.wcdb.support.CancellationSignal;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,9 +43,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView mListView;
     private SimpleCursorAdapter mAdapter;
     private RepairKit mRepair;
+    private CancellationSignal mCancellationSignal;
+    private Button mCancelButton;
 
 
     @Override
@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mCancelButton = (Button) findViewById(R.id.btn_repair_cancel);
         findViewById(R.id.btn_repair_db).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -210,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected void onPreExecute() {
                         mAdapter.changeCursor(null);
+                        mCancellationSignal = new CancellationSignal();
+                        mCancelButton.setEnabled(true);
                     }
 
                     @Override
@@ -281,17 +284,19 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Repair failed: "
                                     + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+
+                        mCancelButton.setEnabled(false);
+                        mCancellationSignal = null;
                     }
                 }.execute();
             }
         });
 
-        findViewById(R.id.btn_repair_cancel).setOnClickListener(new View.OnClickListener() {
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mRepair != null) {
-                    Log.i(TAG, "Cancel");
-                    mRepair.cancel();
+                if (mCancellationSignal != null) {
+                    mCancellationSignal.cancel();
                 }
             }
         });
