@@ -251,6 +251,14 @@ public class MainActivity extends AppCompatActivity {
                             SQLiteDatabase newDb = SQLiteDatabase.openOrCreateDatabase(newDbFile,
                                     DBHelper.PASSPHRASE, DBHelper.CIPHER_SPEC, null,
                                     DBHelper.ERROR_HANDLER);
+                            mRepair.setCallback(new RepairKit.Callback() {
+                                @Override
+                                public int onProgress(String table, int root, Cursor cursor) {
+                                    Log.d(TAG, String.format("table: %s, root: %d, count: %d",
+                                            table, root, cursor.getColumnCount()));
+                                    return RepairKit.RESULT_OK;
+                                }
+                            });
                             int result = mRepair.output(newDb, 0);
                             if (result != RepairKit.RESULT_OK && result != RepairKit.RESULT_CANCELED) {
                                 throw new SQLiteException("Repair returns failure.");
