@@ -166,6 +166,7 @@
                 }
                 ++index;
             }
+            [allMultiObjects addObject:multiObject];
         }
         return _error.isOK() ? allMultiObjects : nil;
     }
