@@ -24,11 +24,15 @@
 #include <jni.h>
 #include <repair/SQLiteRepairKit.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static int g_error_result = 0;
 static char g_error_msg[2048] = {0};
 
 namespace wcdb {
+
+static jmethodID sMID_onProgress = NULL;
+
 static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
 {
     sqliterk_cipher_conf *result = NULL;
@@ -140,8 +144,35 @@ static JNICALL void nativeFini(JNIEnv *env, jclass cls, jlong rkPtr)
     sqliterk_close(rk);
 }
 
+struct callback_data {
+    JNIEnv *env;
+    jobject obj;
+};
+
+static int output_callback(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column)
+{
+    callback_data *d = (callback_data *) user;
+    const char *table_name = sqliterk_table_name(table);
+    int root = sqliterk_table_root(table);
+
+    jstring table_name_str = d->env->NewStringUTF(table_name);
+    jint result = d->env->CallIntMethod(d->obj, sMID_onProgress, table_name_str,
+        root, (jlong) (intptr_t) column);
+    d->env->DeleteLocalRef(table_name_str);
+
+    switch (result) {
+        case 0: // RESULT_OK
+            return SQLITERK_OK;
+        case 1: // RESULT_CANCELLED
+            return SQLITERK_CANCELLED;
+        case 2: // RESULT_IGNORE
+            return SQLITERK_IGNORE;
+    }
+    return SQLITERK_MISUSE;
+}
+
 static JNICALL jint nativeOutput(JNIEnv *env,
-                                     jclass cls,
+                                     jobject obj,
                                      jlong rkPtr,
                                      jlong dbPtr,
                                      jlong masterPtr,
@@ -152,7 +183,10 @@ static JNICALL jint nativeOutput(JNIEnv *env,
     sqliterk_master_info *master =
         (sqliterk_master_info *) (intptr_t) masterPtr;
 
-    int rc = sqliterk_output(rk, db, master, flags);
+    callback_data data;
+    data.env = env;
+    data.obj = obj;
+    int rc = sqliterk_output_cb(rk, db, master, flags, output_callback, &data);
     if (rc == SQLITERK_OK) return 0;
     if (rc == SQLITERK_CANCELLED) return 1;
     return -1;
@@ -292,7 +326,50 @@ static JNICALL void nativeFreeMaster(JNIEnv *env, jclass cls, jlong masterPtr)
     sqliterk_free_master(master);
 }
 
-static const JNINativeMethod sMethods[] = {
+static JNICALL jint cursorNativeGetColumnCount(JNIEnv *env, jclass, jlong ptr)
+{
+    sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
+    return sqliterk_column_count(column);
+}
+
+static JNICALL jint cursorNativeGetType(JNIEnv *env, jclass, jlong ptr, jint idx)
+{
+    sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
+    return sqliterk_column_type(column, idx);
+}
+
+static JNICALL jlong cursorNativeGetLong(JNIEnv *env, jclass, jlong ptr, jint idx)
+{
+    sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
+    return sqliterk_column_integer64(column, idx);
+}
+
+static JNICALL double cursorNativeGetDouble(JNIEnv *env, jclass, jlong ptr, jint idx)
+{
+    sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
+    return sqliterk_column_number(column, idx);
+}
+
+static JNICALL jstring cursorNativeGetString(JNIEnv *env, jclass, jlong ptr, jint idx)
+{
+    sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
+
+    // TODO: handle UTF-8 => UTF-16 convertion
+    const char *result = sqliterk_column_text(column, idx);
+    return env->NewStringUTF(result);
+}
+
+static JNICALL jbyteArray cursorNativeGetBlob(JNIEnv *env, jclass, jlong ptr, jint idx)
+{
+    sqliterk_column *column = (sqliterk_column *) (intptr_t) ptr;
+    const void *arr = sqliterk_column_binary(column, idx);
+    int size = sqliterk_column_bytes(column, idx);
+    jbyteArray result = env->NewByteArray(size);
+    env->SetByteArrayRegion(result, 0, size, (const jbyte *) arr);
+    return result;
+}
+
+static const JNINativeMethod sRepairMethods[] = {
     {"nativeInit",
      "(Ljava/lang/String;[BLcom/tencent/wcdb/database/SQLiteCipherSpec;[B)J",
      (void *) nativeInit},
@@ -306,6 +383,15 @@ static const JNINativeMethod sMethods[] = {
     {"nativeLoadMaster", "(Ljava/lang/String;[B[Ljava/lang/String;[B)J",
      (void *) nativeLoadMaster},
     {"nativeFreeMaster", "(J)V", (void *) nativeFreeMaster},
+};
+
+static const JNINativeMethod sCursorMethods[] = {
+    {"nativeGetColumnCount", "(J)I", (void *) cursorNativeGetColumnCount},
+    {"nativeGetType", "(JI)I", (void *) cursorNativeGetType},
+    {"nativeGetLong", "(JI)J", (void *) cursorNativeGetLong},
+    {"nativeGetDouble", "(JI)D", (void *) cursorNativeGetDouble},
+    {"nativeGetString", "(JI)Ljava/lang/String;", (void *) cursorNativeGetString},
+    {"nativeGetBlob", "(JI)[B", (void *) cursorNativeGetBlob},
 };
 
 static void xlog(sqliterk_loglevel level, int result, const char *msg)
@@ -337,11 +423,35 @@ static void xlog(sqliterk_loglevel level, int result, const char *msg)
 
 static int register_wcdb_repair(JavaVM *vm, JNIEnv *env)
 {
+    char msg[256];
     sqliterk_os os = {xlog};
     sqliterk_register(os);
 
-    jniRegisterNativeMethods(env, "com/tencent/wcdb/repair/RepairKit", sMethods,
-                             NELEM(sMethods));
+    jclass cls = env->FindClass("com/tencent/wcdb/repair/RepairKit");
+    if (!cls) {
+        snprintf(msg, sizeof(msg),
+                 "Unable to find class '%s', aborting",
+                 "com/tencent/wcdb/repair/RepairKit");
+        env->FatalError(msg);
+    }
+    
+    sMID_onProgress = env->GetMethodID(cls, "onProgress", "(Ljava/lang/String;IJ)I");
+    if (!sMID_onProgress) {
+        snprintf(msg, sizeof(msg),
+                 "Unable to find method '%s' with signature '%s', aborting",
+                 "onProgress", "(Ljava/lang/String;IJ)I");
+        env->FatalError(msg);
+    }
+
+    if (env->RegisterNatives(cls, sRepairMethods, NELEM(sRepairMethods)) < 0) {
+        snprintf(msg, sizeof(msg), "RegisterNatives failed for '%s', aborting",
+                 "com/tencent/wcdb/repair/RepairKit");
+        env->FatalError(msg);
+    }
+    env->DeleteLocalRef(cls);
+
+    jniRegisterNativeMethods(env, "com/tencent/wcdb/repair/RepairKit$RepairCursor", 
+                             sCursorMethods, NELEM(sCursorMethods));
 
     return 0;
 }

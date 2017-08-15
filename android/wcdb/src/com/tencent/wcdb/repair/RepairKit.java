@@ -20,6 +20,9 @@
 
 package com.tencent.wcdb.repair;
 
+import android.database.Cursor;
+
+import com.tencent.wcdb.AbstractCursor;
 import com.tencent.wcdb.database.SQLiteCipherSpec;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
@@ -47,6 +50,8 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
      */
     public static final int RESULT_FAILED = -1;
 
+    public static final int RESULT_IGNORE = 2;
+
     /**
      * Flag indicates no {@code CREATE TABLE} or {@code CREATE INDEX} statement
      * should be executed on the destination database.
@@ -67,6 +72,8 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
     private long mNativePtr;
     private int mIntegrityFlags;
     private MasterInfo mMasterInfo;
+    private Callback mCallback;
+    private RepairCursor mCurrentCursor;
 
 
     /**
@@ -106,6 +113,14 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         mMasterInfo = master;
     }
 
+    public Callback getCallback() {
+        return mCallback;
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
+    }
+
     /**
      * Close corrupted database and release all resources. Do not call any methods
      * after this method is called.
@@ -142,6 +157,7 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         long dbPtr = db.acquireNativeConnectionHandle("repair", false, false);
         int ret = nativeOutput(mNativePtr, dbPtr, masterPtr, flags);
         db.releaseNativeConnection(dbPtr, null);
+        mCurrentCursor = null;
 
         mIntegrityFlags = nativeIntegrityFlags(mNativePtr);
         return ret;
@@ -163,6 +179,19 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         if (mNativePtr == 0)
             return;
         nativeCancel(mNativePtr);
+    }
+
+    @SuppressWarnings("unused")
+    private int onProgress(String table, int root, long cursorPtr) {
+        if (mCallback == null)
+            return RESULT_OK;
+
+        if (mCurrentCursor == null) {
+            mCurrentCursor = new RepairCursor();
+        }
+
+        mCurrentCursor.mPtr = cursorPtr;
+        return mCallback.onProgress(table, root, mCurrentCursor);
     }
 
     /**
@@ -304,14 +333,91 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         }
     }
 
-    private static native long nativeInit(String path, byte[] key, SQLiteCipherSpec cipherSpec, byte[] salt);
+    public interface Callback {
+        int onProgress(String table, int root, Cursor cursor);
+    }
+
+    private static class RepairCursor extends AbstractCursor {
+
+        @Override
+        public int getCount() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String[] getColumnNames() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return nativeGetColumnCount(mPtr);
+        }
+
+        @Override
+        public int getType(int column) {
+            return nativeGetType(mPtr, column);
+        }
+
+        @Override
+        public String getString(int column) {
+            return nativeGetString(mPtr, column);
+        }
+
+        @Override
+        public short getShort(int column) {
+            return (short) getLong(column);
+        }
+
+        @Override
+        public int getInt(int column) {
+            return (int) getLong(column);
+        }
+
+        @Override
+        public long getLong(int column) {
+            return nativeGetLong(mPtr, column);
+        }
+
+        @Override
+        public float getFloat(int column) {
+            return (float) getDouble(column);
+        }
+
+        @Override
+        public double getDouble(int column) {
+            return nativeGetDouble(mPtr, column);
+        }
+
+        @Override
+        public byte[] getBlob(int column) {
+            return nativeGetBlob(mPtr, column);
+        }
+
+        @Override
+        public boolean isNull(int column) {
+            return getType(column) == FIELD_TYPE_NULL;
+        }
+
+        long mPtr;
+        private static native int nativeGetColumnCount(long ptr);
+        private static native int nativeGetType(long ptr, int column);
+        private static native long nativeGetLong(long ptr, int column);
+        private static native double nativeGetDouble(long ptr, int column);
+        private static native String nativeGetString(long ptr, int column);
+        private static native byte[] nativeGetBlob(long ptr, int column);
+    }
+
+    private static native long nativeInit(String path, byte[] key, SQLiteCipherSpec cipherSpec,
+                                          byte[] salt);
     private static native void nativeFini(long rkPtr);
-    private static native int nativeOutput(long rkPtr, long dbPtr, long masterPtr, int flags);
+    private native int nativeOutput(long rkPtr, long dbPtr, long masterPtr, int flags);
     private static native void nativeCancel(long rkPtr);
     private static native int nativeIntegrityFlags(long rkPtr);
     private static native String nativeLastError();
     private static native long nativeMakeMaster(String[] tables);
     private static native boolean nativeSaveMaster(long dbPtr, String path, byte[] key);
-    private static native long nativeLoadMaster(String path, byte[] key, String[] tables, byte[] outSalt);
+    private static native long nativeLoadMaster(String path, byte[] key, String[] tables,
+                                                byte[] outSalt);
     private static native void nativeFreeMaster(long masterPtr);
 }

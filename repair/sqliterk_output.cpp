@@ -137,6 +137,9 @@ struct sqliterk_output_ctx {
     unsigned int success_count;
     unsigned int fail_count;
     volatile unsigned cancelled;
+
+    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column);
+    void *user;
 };
 
 static void dummy_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
@@ -290,9 +293,18 @@ static int table_onParseColumn(sqliterk *rk,
     if (ctx->cancelled)
         return SQLITERK_CANCELLED;
 
+    int rc;
+    if (ctx->callback) {
+        rc = ctx->callback(ctx->user, rk, table, column);
+        if (rc != SQLITERK_OK) {
+            if (rc == SQLITERK_IGNORE)
+                rc = SQLITERK_OK;
+            return rc;
+        }
+    }
+
     int columns = sqliterk_column_count(column);
     sqlite3_stmt *stmt = ctx->stmt;
-    int rc;
 
     if (!stmt) {
         // Invalid table_cursor means failed statement compilation.
@@ -386,6 +398,16 @@ int sqliterk_output(sqliterk *rk,
                     sqliterk_master_info *master_,
                     unsigned int flags)
 {
+    return sqliterk_output_cb(rk, db, master_, flags, NULL, NULL);
+}
+
+int sqliterk_output_cb(sqliterk *rk,
+                    sqlite3 *db,
+                    sqliterk_master_info *master_,
+                    unsigned int flags,
+                    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
+                    void *user)
+{
     if (!rk || !db)
         return SQLITERK_MISUSE;
 
@@ -397,6 +419,8 @@ int sqliterk_output(sqliterk *rk,
     ctx.success_count = 0;
     ctx.fail_count = 0;
     ctx.ipk_column = 0;
+    ctx.callback = callback;
+    ctx.user = user;
     ctx.cancelled = 0;
 
     if (!master)
