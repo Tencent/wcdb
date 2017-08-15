@@ -147,6 +147,8 @@ static JNICALL void nativeFini(JNIEnv *env, jclass cls, jlong rkPtr)
 struct callback_data {
     JNIEnv *env;
     jobject obj;
+    jstring last_table;
+    int last_root;
 };
 
 static int output_callback(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column)
@@ -155,10 +157,16 @@ static int output_callback(void *user, sqliterk *rk, sqliterk_table *table, sqli
     const char *table_name = sqliterk_table_name(table);
     int root = sqliterk_table_root(table);
 
-    jstring table_name_str = d->env->NewStringUTF(table_name);
-    jint result = d->env->CallIntMethod(d->obj, sMID_onProgress, table_name_str,
+    if (d->last_root != root) {
+        if (d->last_table)
+            d->env->DeleteLocalRef(d->last_table);
+        
+        d->last_table = d->env->NewStringUTF(table_name);
+        d->last_root = root;
+    }
+
+    jint result = d->env->CallIntMethod(d->obj, sMID_onProgress, d->last_table,
         root, (jlong) (intptr_t) column);
-    d->env->DeleteLocalRef(table_name_str);
 
     switch (result) {
         case 0: // RESULT_OK
@@ -186,6 +194,9 @@ static JNICALL jint nativeOutput(JNIEnv *env,
     callback_data data;
     data.env = env;
     data.obj = obj;
+    data.last_table = NULL;
+    data.last_root = 0;
+    
     int rc = sqliterk_output_cb(rk, db, master, flags, output_callback, &data);
     if (rc == SQLITERK_OK) return 0;
     if (rc == SQLITERK_CANCELLED) return 1;
