@@ -40,6 +40,7 @@
 
 extern "C" {
 #include "sqliterk_os.h"
+#include "sqliterk_btree.h"
 }
 
 class CipherContext {
@@ -142,11 +143,7 @@ struct sqliterk_output_ctx {
     void *user;
 };
 
-static void dummy_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
-{
-}
-
-static void dummy_onEndParseTable(sqliterk *rk, sqliterk_table *table)
+static void dummyParseTableCallback(sqliterk *rk, sqliterk_table *table)
 {
 }
 
@@ -281,6 +278,16 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     ctx->ipk_column = (ipk_column > 0) ? ipk_column : 0;
 
     return ctx->real_columns;
+}
+
+static void table_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
+{
+    sqliterk_output_ctx *ctx =
+        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+
+    sqliterkBtreeSetMeta((sqliterk_btree *) table,
+                         ctx->table_cursor->first.c_str(),
+                         sqliterk_btree_type_table);
 }
 
 static int table_onParseColumn(sqliterk *rk,
@@ -430,8 +437,8 @@ int sqliterk_output_cb(sqliterk *rk,
 
     sqliterk_set_user_info(rk, &ctx);
     sqliterk_notify notify;
-    notify.onBeginParseTable = dummy_onBeginParseTable;
-    notify.onEndParseTable = dummy_onEndParseTable;
+    notify.onBeginParseTable = dummyParseTableCallback;
+    notify.onEndParseTable = dummyParseTableCallback;
     notify.onParseColumn = master_onParseColumn;
     sqliterk_register_notify(rk, notify);
     sqliterk_set_recursive(rk, 0);
@@ -452,6 +459,7 @@ int sqliterk_output_cb(sqliterk *rk,
                        ctx.tables.size());
 
     // Parse all tables.
+    notify.onBeginParseTable = table_onBeginParseTable;
     notify.onParseColumn = table_onParseColumn;
     sqliterk_register_notify(rk, notify);
 
