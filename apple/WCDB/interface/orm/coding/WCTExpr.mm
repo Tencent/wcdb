@@ -448,3 +448,8 @@ std::string WCTExpr::literalValue(WCTValue *value)
     }
     return "";
 }
+
+WCTExpr WCTExpr::Case(const WCTExpr &case_, const std::list<std::pair<WCTExpr, WCTExpr>> &when, const std::list<WCTExpr> &else_)
+{
+    return WCTExpr(Expr::Case(case_, when, else_));
+}

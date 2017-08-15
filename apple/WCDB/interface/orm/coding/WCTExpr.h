@@ -147,6 +147,10 @@ public:
      */
     static WCTExpr Function(NSString *function, const WCTExprList &exprList);
 
+    static WCTExpr Case(const WCTExpr &case_,
+                        const std::list<std::pair<WCTExpr, WCTExpr>> &when,
+                        const std::list<WCTExpr> &else_);
+
     WCTExpr(const WCDB::Expr &expr);
     WCTExpr(const WCDB::Expr &expr, const WCTPropertyBase &propertyBase);
 

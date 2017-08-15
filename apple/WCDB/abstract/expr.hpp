@@ -196,6 +196,30 @@ public:
         return expr;
     }
 
+    template <typename T>
+    static typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
+    Case(const Expr &case_,
+         const std::list<std::pair<T, T>> &when,
+         const std::list<T> &else_)
+    {
+        Expr expr;
+        expr.m_description.append("CASE " + case_.m_description + " ");
+        for (const auto &p : when) {
+            expr.m_description.append("WHEN ");
+            expr.m_description.append(p.first.m_description);
+            expr.m_description.append("THEN ");
+            expr.m_description.append(p.second.m_description);
+            expr.m_description.append(" ");
+        }
+        for (const auto &e : else_) {
+            expr.m_description.append("ELSE ");
+            expr.m_description.append(e.m_description);
+            expr.m_description.append(" ");
+        }
+        expr.m_description.append("END");
+        return expr;
+    }
+
 protected:
     Expr function(const std::string &funtionName, bool distinct) const;
 
