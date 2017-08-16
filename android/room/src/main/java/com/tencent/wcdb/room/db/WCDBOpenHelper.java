@@ -101,6 +101,7 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
                 SQLiteCipherSpec cipher, SQLiteDatabase.CursorFactory factory,
                 int version, DatabaseErrorHandler errorHandler) {
             super(context, name, passphrase, cipher, factory, version, errorHandler);
+            setForcedSingleConnection(true);
         }
 
         SupportSQLiteDatabase getWritableSupportDatabase() {
