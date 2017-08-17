@@ -19,6 +19,10 @@
  */
 
 #import "sample_core_main.h"
+#import "WCTSampleCore+WCTTableCoding.h"
+#import "WCTSampleCore.h"
+#import "WCTSampleCoreExt+WCTTableCoding.h"
+#import "WCTSampleCoreExt.h"
 #import <WCDB/WCDB.h>
 
 void sample_core_main(NSString *baseDirectory)
@@ -59,11 +63,18 @@ void sample_core_main(NSString *baseDirectory)
     //EXPLAIN CREATE TABLE message(localID INTEGER PRIMARY KEY ASC, content TEXT);
     {
         NSLog(@"Explain:");
-        WCDB::ColumnDef localIDColumnDef(WCDB::Column("localID"), WCDB::ColumnType::Integer32);
-        localIDColumnDef.makePrimary(WCDB::OrderTerm::ASC);
-        WCDB::ColumnDef contentColumnDef(WCDB::Column("content"), WCDB::ColumnType::Text);
+        //Column def for localID
+        WCDB::ColumnDef localIDColumnDef = WCDB::ColumnDef(WCTSampleCore.localID, WCDB::ColumnType::Integer32).makePrimary(WCDB::OrderTerm::ASC);
+
+        //Column def for content
+        WCDB::ColumnDef contentColumnDef(WCTSampleCore.content, WCDB::ColumnType::Text);
+
+        //Combine them into column def list
         WCDB::ColumnDefList columnDefList = {localIDColumnDef, contentColumnDef};
+
+        //Combine table name and column def list into create table statement
         WCDB::StatementCreateTable statementCreate = WCDB::StatementCreateTable().create("message", columnDefList);
+
         WCTStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];
         if (statementExplain && [statementExplain step]) {
             for (int i = 0; i < [statementExplain getCount]; ++i) {
@@ -71,6 +82,36 @@ void sample_core_main(NSString *baseDirectory)
                 WCTValue *value = [statementExplain getValueAtIndex:i];
                 NSLog(@"%@:%@", columnName, value);
             }
+        }
+    }
+
+    //complex statement 3
+    //SELECT message.content, message_ext.createTime FROM message LEFT OUTER JOIN message_ext ON message.localID=message_ext.localID
+    {
+        //Column result list
+        WCTResultList resultList = { WCTSampleCore.content.inTable(@"message"),
+                                     WCTSampleCoreExt.createTime.inTable(@"message_ext") };
+
+        //Join clause
+        WCDB::JoinClause joinClause = WCDB::JoinClause("message").join("message_ext", WCDB::JoinClause::Type::LeftOuter).on(WCTSampleCore.localID.inTable(@"message") == WCTSampleCoreExt.localID.inTable(@"message_ext"));
+
+        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause);
+        WCTError *error;
+        WCTStatement *statement = [database prepare:statementSelect withError:&error];
+        if (statement) {
+            while ([statement step]) {
+                for (int i = 0; i < [statement getCount]; ++i) {
+                    NSString *columnName = [statement getNameAtIndex:i];
+                    WCTValue *value = [statement getValueAtIndex:i];
+                    NSLog(@"%@:%@", columnName, value);
+                }
+            }
+            error = [statement getError];
+            if (error) {
+                NSLog(@"Error %@", error);
+            }
+        } else {
+            NSLog(@"Error %@", error);
         }
     }
 
