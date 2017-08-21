@@ -56,7 +56,6 @@ public:
     bool open();
     void close();
 
-    bool isTableExists(const std::string &tableName);
     bool setCipherKey(const void *data, int size);
     long long getLastInsertedRowID();
 

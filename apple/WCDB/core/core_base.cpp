@@ -68,8 +68,20 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
 {
     bool result = false;
     if (handle) {
-        result = handle->isTableExists(tableName);
-        error = handle->getError();
+        static const ColumnResultList resultList = {ColumnResult(Expr(1))};
+        StatementSelect select =
+            StatementSelect().select(resultList).from(tableName);
+        std::shared_ptr<StatementHandle> statementHandle =
+            handle->prepare(select);
+        if (statementHandle) {
+            statementHandle->step();
+            result = statementHandle->isOK();
+            if (!result) {
+                error = statementHandle->getError();
+            }
+        } else {
+            error = handle->getError();
+        }
     }
     return result;
 }
