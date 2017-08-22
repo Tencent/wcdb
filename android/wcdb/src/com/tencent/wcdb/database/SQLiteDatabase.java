@@ -1809,7 +1809,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql) throws SQLException {
-        executeSql(sql, null);
+        executeSql(sql, null, null);
     }
 
     /**
@@ -1856,13 +1856,15 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql, Object[] bindArgs) throws SQLException {
-        if (bindArgs == null) {
-            throw new IllegalArgumentException("Empty bindArgs");
-        }
-        executeSql(sql, bindArgs);
+        executeSql(sql, bindArgs, null);
     }
 
-    private int executeSql(String sql, Object[] bindArgs) throws SQLException {
+    public void execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
+        executeSql(sql, bindArgs, cancellationSignal);
+    }
+
+    private int executeSql(String sql, Object[] bindArgs, CancellationSignal cancellationSignal)
+            throws SQLException {
         acquireReference();
         try {
             if (DatabaseUtils.getSqlStatementType(sql) == DatabaseUtils.STATEMENT_ATTACH) {
@@ -1880,7 +1882,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
             SQLiteStatement statement = new SQLiteStatement(this, sql, bindArgs);
             try {
-                return statement.executeUpdateDelete();
+                return statement.executeUpdateDelete(cancellationSignal);
             } finally {
                 statement.close();
             }
