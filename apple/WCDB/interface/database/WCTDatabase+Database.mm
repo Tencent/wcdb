@@ -26,6 +26,7 @@
 
 - (instancetype)initWithPath:(NSString *)path
 {
+    path = [path stringByStandardizingPath];
     std::shared_ptr<WCDB::CoreBase> core(new WCDB::Database(path.UTF8String));
     if (self = [super initWithCore:core]) {
         _database = (WCDB::Database *) _core.get();
