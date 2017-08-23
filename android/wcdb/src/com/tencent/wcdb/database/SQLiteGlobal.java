@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 public final class SQLiteGlobal {
     private static final String TAG = "WCDB.SQLiteGlobal";
     private static native int nativeReleaseMemory();
+    /*package*/ static native void nativeTestJNIRegistration();
 
     /** Default page size to use when creating a database. */
     public static final int defaultPageSize;
