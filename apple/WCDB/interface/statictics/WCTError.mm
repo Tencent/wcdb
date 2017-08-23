@@ -52,8 +52,13 @@
             } break;
         }
     }
-    if (self = [super initWithDomain:@"WCDB" code:error.getCode() userInfo:infos]) {
-        _type = (WCTErrorType) error.getType();
+    return [self initWithType:(WCTErrorType) error.getType() code:error.getCode() userInfo:infos];
+}
+
+- (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo
+{
+    if ([self initWithDomain:@"WCDB" code:code userInfo:userInfo]) {
+        _type = type;
     }
     return self;
 }
