@@ -18,15 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTStatement.h>
-#import <WCDB/core_base.hpp>
+#import "WCTSampleCore.h"
+#import "WCTSampleCore+WCTTableCoding.h"
 
-@interface WCTStatement () {
-    WCDB::RecyclableStatement _statementHandle;
-}
+@implementation WCTSampleCore
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle;
+WCDB_IMPLEMENTATION(WCTSampleCore)
+WCDB_SYNTHESIZE(WCTSampleCore, localID)
+WCDB_SYNTHESIZE(WCTSampleCore, content)
 
 @end

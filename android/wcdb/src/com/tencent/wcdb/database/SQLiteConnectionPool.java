@@ -362,7 +362,21 @@ public final class SQLiteConnectionPool implements Closeable {
      */
     public SQLiteConnection acquireConnection(String sql, int connectionFlags,
             CancellationSignal cancellationSignal) {
-        return waitForConnection(sql, connectionFlags, cancellationSignal);
+        long startTime = SystemClock.uptimeMillis();
+
+        SQLiteConnection connection = waitForConnection(sql, connectionFlags, cancellationSignal);
+
+        if (mTraceCallback != null) {
+            long waitTime = SystemClock.uptimeMillis() - startTime;
+            SQLiteDatabase db = mDB.get();
+            if (db != null) {
+                final boolean isPrimary =
+                        (connectionFlags & CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY) != 0;
+                mTraceCallback.onConnectionObtained(db, sql, waitTime, isPrimary);
+            }
+        }
+
+        return connection;
     }
 
     /**

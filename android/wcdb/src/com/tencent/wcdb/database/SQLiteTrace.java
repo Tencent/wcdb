@@ -34,9 +34,19 @@ public interface SQLiteTrace {
      * @param db    database on which the statement was executed
      * @param sql   statement executed
      * @param type  type of the statement. See {@link com.tencent.wcdb.DatabaseUtils#getSqlStatementType}
-     * @param time  time spent on execution, in milliseconds.
+     * @param time  time spent on execution, in milliseconds
      */
     void onSQLExecuted(SQLiteDatabase db, String sql, int type, long time);
+
+    /**
+     * Called when database connection is successfully obtained by a thread.
+     *
+     * @param db        database on which the connection was obtained
+     * @param sql       statement about to be executed
+     * @param waitTime  time spent on waiting for available connection, in milliseconds
+     * @param isPrimary whether the primary connection (write connection) is obtained
+     */
+    void onConnectionObtained(SQLiteDatabase db, String sql, long waitTime, boolean isPrimary);
 
     /**
      * Called when connection pool is blocked by other statement execution

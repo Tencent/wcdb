@@ -92,6 +92,15 @@ typedef NS_ENUM(int, WCTErrorKey) {
 @interface WCTError : NSError
 
 /**
+ @brief init
+ @param type type
+ @param code code
+ @param userInfo WCTErrorKey->Value
+ @return self
+ */
+- (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo;
+
+/**
  @see WCTErrorType
  */
 @property(nonatomic, readonly) WCTErrorType type;

@@ -23,7 +23,6 @@
 #include <WCDB/SQLiteRepairKit.h>
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_statement.hpp>
-#include <WCDB/in_case_lock_guard.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_transaction.hpp>
@@ -89,25 +88,6 @@ void Handle::close()
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::Close, rc,
                         sqlite3_extended_errcode((sqlite3 *) m_handle),
                         sqlite3_errmsg((sqlite3 *) m_handle), &m_error);
-}
-
-bool Handle::isTableExists(const std::string &tableName)
-{
-    int rc = sqlite3_table_column_metadata((sqlite3 *) m_handle, nullptr,
-                                           tableName.c_str(), nullptr, nullptr,
-                                           nullptr, nullptr, nullptr, nullptr);
-    if (rc == SQLITE_OK) {
-        m_error.reset();
-        return true;
-    }
-    if (rc == SQLITE_ERROR) {
-        m_error.reset();
-        return false;
-    }
-    Error::ReportSQLite(m_tag, path, Error::HandleOperation::IsTableExists, rc,
-                        sqlite3_extended_errcode((sqlite3 *) m_handle),
-                        sqlite3_errmsg((sqlite3 *) m_handle), &m_error);
-    return false;
 }
 
 void Handle::setupTrace()

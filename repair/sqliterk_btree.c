@@ -150,10 +150,10 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
         return SQLITERK_MISUSE;
     }
 
-    int rc = SQLITERK_OK;
+    int rc;
 
     if (btree->notify.onBeginParsePage) {
-        int rc = btree->notify.onBeginParsePage(btree->rk, btree, pageno);
+        rc = btree->notify.onBeginParsePage(btree->rk, btree, pageno);
         if (rc != SQLITERK_OK) {
             return rc;
         }
@@ -230,7 +230,8 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
             sqliterkPageClearData(page);
             // Recursively decode the page
             for (i = 0; i < pagenosCount; i++) {
-                sqliterkBtreeParsePage(btree, pagenos[i]);
+                if (sqliterkBtreeParsePage(btree, pagenos[i]) == SQLITERK_CANCELLED)
+                    break;
             }
             sqliterkOSFree(pagenos);
             break;
@@ -261,8 +262,8 @@ sqliterkBtreeParsePage_End:
     if (page) {
         sqliterkPageRelease(page);
     }
-    if (rc != SQLITERK_OK) {
-        sqliterkOSDebug(rc, "Failed to parse page %d.", pageno, rc);
+    if (rc != SQLITERK_OK && rc != SQLITERK_CANCELLED) {
+        sqliterkOSDebug(rc, "Failed to parse page %d.", pageno);
     }
     return rc;
 }
@@ -318,7 +319,7 @@ sqliterkBtreeParsePayload_End:
     if (column) {
         sqliterkColumnFree(column);
     }
-    if (rc != SQLITERK_OK) {
+    if (rc != SQLITERK_OK && rc != SQLITERK_CANCELLED) {
         sqliterkOSDebug(rc, "Failed to parse payload.");
     }
     return rc;
@@ -474,7 +475,7 @@ static int sqliterkBtreeParsePayload(sqliterk_btree *btree,
 
 sqliterkBtreeParseColumn_End:
     if (rc == SQLITERK_OK && btree->notify.onParseColumn) {
-        btree->notify.onParseColumn(btree->rk, btree, page, column);
+        rc = btree->notify.onParseColumn(btree->rk, btree, page, column);
     }
     if (payloadData) {
         sqliterkOSFree(payloadData);

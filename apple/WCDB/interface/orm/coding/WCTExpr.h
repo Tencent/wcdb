@@ -116,6 +116,7 @@ public:
     WCTExpr is(const WCTExpr &operand) const;
     WCTExpr isNot(const WCTExpr &operand) const;
 
+    //aggregate functions
     WCTExpr avg(bool distinct = false) const;
     WCTExpr count(bool distinct = false) const;
     WCTExpr groupConcat(bool distinct = false) const;
@@ -124,7 +125,31 @@ public:
     WCTExpr min(bool distinct = false) const;
     WCTExpr sum(bool distinct = false) const;
     WCTExpr total(bool distinct = false) const;
-    WCTExpr Function(NSString *function, const WCTExprList &exprList) const;
+
+    //core functions
+    WCTExpr abs(bool distinct = false) const;
+    WCTExpr hex(bool distinct = false) const;
+    WCTExpr length(bool distinct = false) const;
+    WCTExpr lower(bool distinct = false) const;
+    WCTExpr upper(bool distinct = false) const;
+    WCTExpr round(bool distinct = false) const;
+
+    /**
+     @brief Call other function
+     
+         //substr(columnName, 1, 2)
+         WCTExprList exprList = {columnName, 1, 2};
+         WCTExpr substrExpr = WCTExpr::Function(@"substr", exprList);
+     
+     @param function function name
+     @param exprList param list
+     @return WCTExpr
+     */
+    static WCTExpr Function(NSString *function, const WCTExprList &exprList);
+
+    static WCTExpr Case(const WCTExpr &case_,
+                        const std::list<std::pair<WCTExpr, WCTExpr>> &when,
+                        const std::list<WCTExpr> &else_);
 
     WCTExpr(const WCDB::Expr &expr);
     WCTExpr(const WCDB::Expr &expr, const WCTPropertyBase &propertyBase);

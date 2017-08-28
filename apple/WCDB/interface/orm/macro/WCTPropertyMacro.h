@@ -29,7 +29,7 @@
         static const WCTProperty s_property(                                   \
             columnName, className.class,                                       \
             __WCDB_BINDING(className)                                          \
-                ->addColumnBinding<__WCDB_PROPERTY_TYPE(                       \
+                .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
                     className, propertyName)>(WCDB_STRINGIFY(propertyName),    \
                                               columnName));                    \
         return s_property;                                                     \
@@ -47,4 +47,4 @@
             ->makeDefault<__WCDB_PROPERTY_TYPE(className, propertyName)>(      \
                 defaultValue);                                                 \
         return nullptr;                                                        \
-    }(__WCDB_BINDING(className));
+    }(&__WCDB_BINDING(className));

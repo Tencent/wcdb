@@ -45,6 +45,15 @@
                                          &_error);
             return self;
         }
+        if (tableNames.count == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Select,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Empty table".UTF8String,
+                                         &_error);
+            return self;
+        }
         WCDB::SubqueryList subqueryList;
         for (NSString *tableName in tableNames) {
             subqueryList.push_back(tableName.UTF8String);

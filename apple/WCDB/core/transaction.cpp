@@ -19,7 +19,6 @@
  */
 
 #include <WCDB/handle.hpp>
-#include <WCDB/in_case_lock_guard.hpp>
 #include <WCDB/transaction.hpp>
 #include <WCDB/utility.hpp>
 
@@ -37,7 +36,7 @@ Transaction::Transaction(const RecyclableHandlePool &pool,
 RecyclableStatement Transaction::prepare(const Statement &statement,
                                          Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     if (statement.getStatementType() == Statement::Type::Transaction) {
         Error::ReportCore(
             getTag(), getPath(), Error::CoreOperation::Prepare,
@@ -51,7 +50,7 @@ RecyclableStatement Transaction::prepare(const Statement &statement,
 
 bool Transaction::exec(const Statement &statement, Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     if (statement.getStatementType() == Statement::Type::Transaction) {
         Error::ReportCore(
             getTag(), getPath(), Error::CoreOperation::Exec,
@@ -65,13 +64,13 @@ bool Transaction::exec(const Statement &statement, Error &error)
 
 bool Transaction::isTableExists(const std::string &tableName, Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     return CoreBase::isTableExists(m_handle, tableName, error);
 }
 
 bool Transaction::begin(StatementTransaction::Mode mode, Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     if (CoreBase::exec(m_handle, StatementTransaction().begin(mode), error)) {
         m_isInTransaction = true;
         return true;
@@ -81,7 +80,7 @@ bool Transaction::begin(StatementTransaction::Mode mode, Error &error)
 
 bool Transaction::commit(Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     bool result =
         CoreBase::exec(m_handle, StatementTransaction().commit(), error);
     if (result) {
@@ -92,7 +91,7 @@ bool Transaction::commit(Error &error)
 
 bool Transaction::rollback(Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     bool result =
         CoreBase::exec(m_handle, StatementTransaction().rollback(), error);
     m_isInTransaction = false;
@@ -102,7 +101,7 @@ bool Transaction::rollback(Error &error)
 bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
                                          WCDB::Error &error)
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     if (m_isInTransaction) {
         return transaction(error);
     }
@@ -111,7 +110,7 @@ bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
 
 int Transaction::getChanges()
 {
-    InCaseLockGuard lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(*m_mutex.get());
     return m_handle->getChanges();
 }
 

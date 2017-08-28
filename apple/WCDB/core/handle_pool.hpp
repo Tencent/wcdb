@@ -86,6 +86,7 @@ protected:
     ConcurrentList<HandleWrap> m_handles;
     std::atomic<int> m_aliveHandleCount;
     static const int s_hardwareConcurrency;
+    static const int s_maxConcurrency;
 };
 
 } //namespace WCDB

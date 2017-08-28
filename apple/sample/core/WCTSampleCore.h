@@ -19,14 +19,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTStatement.h>
-#import <WCDB/core_base.hpp>
 
-@interface WCTStatement () {
-    WCDB::RecyclableStatement _statementHandle;
-}
+@interface WCTSampleCore : NSObject
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle;
+@property(nonatomic, assign) int localID;
+@property(nonatomic, retain) NSString *content;
 
 @end

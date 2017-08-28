@@ -25,7 +25,6 @@
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/in_case_lock_guard.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTInsert {
@@ -43,6 +42,15 @@
                                          WCDB::Error::InterfaceOperation::Insert,
                                          WCDB::Error::InterfaceCode::ORM,
                                          [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
+                                         &_error);
+            return self;
+        }
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Insert,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Nil table name".UTF8String,
                                          &_error);
             return self;
         }
@@ -65,8 +73,17 @@
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::NilObject,
+                                         WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Inserting nothing into %@", tableName].UTF8String,
+                                         &_error);
+            return self;
+        }
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Insert,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         [NSString stringWithFormat:@"Table name should be large than 0"].UTF8String,
                                          &_error);
             return self;
         }

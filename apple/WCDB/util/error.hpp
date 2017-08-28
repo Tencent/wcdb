@@ -92,6 +92,7 @@ public:
         Select = 4,
         Table = 5,
         ChainCall = 6,
+        Delete = 7,
     };
     enum class CoreOperation : int {
         Prepare = 1,
@@ -100,6 +101,7 @@ public:
         Commit = 4,
         Rollback = 5,
         GetThreadedHandle = 6,
+        FlowOut = 7,
     };
     enum class SystemCallOperation : int {
         Lstat = 1,
@@ -117,11 +119,12 @@ public:
     //code
     enum class CoreCode : int {
         Misuse = 1,
+        Exceed = 2,
     };
     enum class InterfaceCode : int {
         ORM = 1,
         Inconsistent = 2,
-        NilObject = 3,
+        //        NilObject = 3,
         Misuse = 4,
     };
     enum class GlobalCode : int {

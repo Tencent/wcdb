@@ -19,7 +19,6 @@
  */
 
 #include <WCDB/handle_statement.hpp>
-#include <WCDB/in_case_lock_guard.hpp>
 #include <sqlcipher/sqlite3.h>
 
 namespace WCDB {

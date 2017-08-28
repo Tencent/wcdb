@@ -18,27 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/error.hpp>
-#include <WCDB/in_case_lock_guard.hpp>
-#include <WCDB/utility.hpp>
+#import <Foundation/Foundation.h>
 
-namespace WCDB {
+@interface WCTSampleCoreExt : NSObject
 
-InCaseLockGuard::InCaseLockGuard(std::shared_ptr<std::mutex> &mutex)
-    : m_mutex(mutex)
-{
-    if (!m_mutex->try_lock()) {
-        WCDB::Error::Abort("This context can not be accessed by multiple "
-                           "threads at the same time");
-        m_mutex->lock();
-    }
-}
+@property(nonatomic, assign) int localID;
+@property(nonatomic, retain) NSDate *createTime;
 
-InCaseLockGuard::~InCaseLockGuard()
-{
-    if (m_mutex) {
-        m_mutex->unlock();
-    }
-}
-
-} //namespace WCDB
+@end

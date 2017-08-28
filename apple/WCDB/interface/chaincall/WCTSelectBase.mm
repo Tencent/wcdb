@@ -35,8 +35,17 @@
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::NilObject,
+                                         WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableNames].UTF8String,
+                                         &_error);
+            return self;
+        }
+        if (tableNames.count == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Select,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Empty table".UTF8String,
                                          &_error);
             return self;
         }

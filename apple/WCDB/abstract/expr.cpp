@@ -443,38 +443,17 @@ Expr Expr::notIn(const std::string &table) const
 
 Expr Expr::avg(bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("AVG(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return function("AVG", distinct);
 }
 
 Expr Expr::count(bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("COUNT(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return function("COUNT", distinct);
 }
 
 Expr Expr::groupConcat(bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("GROUP_CONCAT(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return function("GROUP_CONCAT", distinct);
 }
 
 Expr Expr::groupConcat(const std::string &seperator, bool distinct) const
@@ -491,44 +470,58 @@ Expr Expr::groupConcat(const std::string &seperator, bool distinct) const
 
 Expr Expr::max(bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("MAX(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return function("MAX", distinct);
 }
 
 Expr Expr::min(bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("MIN(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return function("MIN", distinct);
 }
 
 Expr Expr::sum(bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("SUM(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return function("SUM", distinct);
 }
 
 Expr Expr::total(bool distinct) const
 {
+    return function("TOTAL", distinct);
+}
+
+Expr Expr::abs(bool distinct) const
+{
+    return function("ABS", distinct);
+}
+
+Expr Expr::hex(bool distinct) const
+{
+    return function("HEX", distinct);
+}
+
+Expr Expr::length(bool distinct) const
+{
+    return function("LENGTH", distinct);
+}
+
+Expr Expr::lower(bool distinct) const
+{
+    return function("LOWER", distinct);
+}
+
+Expr Expr::upper(bool distinct) const
+{
+    return function("UPPER", distinct);
+}
+
+Expr Expr::round(bool distinct) const
+{
+    return function("ROUND", distinct);
+}
+
+Expr Expr::function(const std::string &funtionName, bool distinct) const
+{
     Expr expr;
-    expr.m_description.append("TOTAL(");
+    expr.m_description.append(funtionName + "(");
     if (distinct) {
         expr.m_description.append("DISTINCT ");
     }

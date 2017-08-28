@@ -76,6 +76,13 @@ int sqliterk_output(sqliterk *rk,
                     sqlite3 *db,
                     sqliterk_master_info *master,
                     unsigned int flags);
+int sqliterk_output_cb(sqliterk *rk,
+                       sqlite3 *db,
+                       sqliterk_master_info *master,
+                       unsigned int flags,
+                       int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
+                       void *user);
+void sqliterk_cancel(sqliterk *rk);
 int sqliterk_make_master(const char **tables,
                          int num_tables,
                          sqliterk_master_info **out_master);
@@ -164,6 +171,8 @@ int sqliterk_register(sqliterk_os os);
 #define SQLITERK_SHORT_READ 5
 #define SQLITERK_DAMAGED 6
 #define SQLITERK_DISCARD 7
+#define SQLITERK_CANCELLED 8
+#define SQLITERK_IGNORE 100
 const char *sqliterk_description(int result);
 
 #ifndef SQLITRK_CONFIG_DEFAULT_PAGESIZE

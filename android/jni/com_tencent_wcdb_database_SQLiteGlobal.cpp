@@ -23,7 +23,7 @@
 #include "ModuleLoader.h"
 #include "fts/mm_fts.h"
 
-// Forward declearation from vfslog.c
+// Forward declaration from vfslog.c
 extern "C" int sqlite3_register_vfslog(const char *);
 extern volatile uint32_t vlogDefaultLogFlags;
 
@@ -105,9 +105,15 @@ static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
     return sqlite3_release_memory(SOFT_HEAP_LIMIT);
 }
 
+static void nativeTestJNIRegistration(JNIEnv *env, jclass clazz)
+{
+    // do nothing
+}
+
 static JNINativeMethod sMethods[] = {
     /* name, signature, funcPtr */
     {"nativeReleaseMemory", "()I", (void *) nativeReleaseMemory},
+    {"nativeTestJNIRegistration", "()V", (void *) nativeTestJNIRegistration},
 };
 
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)

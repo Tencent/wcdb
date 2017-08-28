@@ -28,7 +28,6 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/in_case_lock_guard.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTUpdate {
@@ -44,8 +43,17 @@
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Update,
-                                         WCDB::Error::InterfaceCode::NilObject,
+                                         WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Updating %@ with empty property", tableName].UTF8String,
+                                         &_error);
+            return self;
+        }
+        if (tableName.length == 0) {
+            WCDB::Error::ReportInterface(_core->getTag(),
+                                         _core->getPath(),
+                                         WCDB::Error::InterfaceOperation::Update,
+                                         WCDB::Error::InterfaceCode::Misuse,
+                                         @"Nil table name".UTF8String,
                                          &_error);
             return self;
         }

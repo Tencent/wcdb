@@ -40,6 +40,7 @@
 
 extern "C" {
 #include "sqliterk_os.h"
+#include "sqliterk_btree.h"
 }
 
 class CipherContext {
@@ -136,13 +137,13 @@ struct sqliterk_output_ctx {
 
     unsigned int success_count;
     unsigned int fail_count;
+    volatile unsigned cancelled;
+
+    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column);
+    void *user;
 };
 
-static void dummy_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
-{
-}
-
-static void dummy_onEndParseTable(sqliterk *rk, sqliterk_table *table)
+static void dummyParseTableCallback(sqliterk *rk, sqliterk_table *table)
 {
 }
 
@@ -152,6 +153,9 @@ static int master_onParseColumn(sqliterk *rk,
 {
     sqliterk_output_ctx *ctx =
         (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+
+    if (ctx->cancelled)
+        return SQLITERK_CANCELLED;
 
     // For master table, check whether we should ignore, or create table
     // and prepare for insertion.
@@ -276,15 +280,38 @@ static int init_insert(sqliterk_output_ctx *ctx, const std::string &table)
     return ctx->real_columns;
 }
 
+static void table_onBeginParseTable(sqliterk *rk, sqliterk_table *table)
+{
+    sqliterk_output_ctx *ctx =
+        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+
+    sqliterkBtreeSetMeta((sqliterk_btree *) table,
+                         ctx->table_cursor->first.c_str(),
+                         sqliterk_btree_type_table);
+}
+
 static int table_onParseColumn(sqliterk *rk,
                                sqliterk_table *table,
                                sqliterk_column *column)
 {
     sqliterk_output_ctx *ctx =
         (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+
+    if (ctx->cancelled)
+        return SQLITERK_CANCELLED;
+
+    int rc;
+    if (ctx->callback) {
+        rc = ctx->callback(ctx->user, rk, table, column);
+        if (rc != SQLITERK_OK) {
+            if (rc == SQLITERK_IGNORE)
+                rc = SQLITERK_OK;
+            return rc;
+        }
+    }
+
     int columns = sqliterk_column_count(column);
     sqlite3_stmt *stmt = ctx->stmt;
-    int rc;
 
     if (!stmt) {
         // Invalid table_cursor means failed statement compilation.
@@ -378,6 +405,16 @@ int sqliterk_output(sqliterk *rk,
                     sqliterk_master_info *master_,
                     unsigned int flags)
 {
+    return sqliterk_output_cb(rk, db, master_, flags, NULL, NULL);
+}
+
+int sqliterk_output_cb(sqliterk *rk,
+                    sqlite3 *db,
+                    sqliterk_master_info *master_,
+                    unsigned int flags,
+                    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
+                    void *user)
+{
     if (!rk || !db)
         return SQLITERK_MISUSE;
 
@@ -389,6 +426,9 @@ int sqliterk_output(sqliterk *rk,
     ctx.success_count = 0;
     ctx.fail_count = 0;
     ctx.ipk_column = 0;
+    ctx.callback = callback;
+    ctx.user = user;
+    ctx.cancelled = 0;
 
     if (!master)
         ctx.flags |= SQLITERK_OUTPUT_ALL_TABLES;
@@ -397,8 +437,8 @@ int sqliterk_output(sqliterk *rk,
 
     sqliterk_set_user_info(rk, &ctx);
     sqliterk_notify notify;
-    notify.onBeginParseTable = dummy_onBeginParseTable;
-    notify.onEndParseTable = dummy_onEndParseTable;
+    notify.onBeginParseTable = dummyParseTableCallback;
+    notify.onEndParseTable = dummyParseTableCallback;
     notify.onParseColumn = master_onParseColumn;
     sqliterk_register_notify(rk, notify);
     sqliterk_set_recursive(rk, 0);
@@ -410,18 +450,23 @@ int sqliterk_output(sqliterk *rk,
     // Parse sqlite_master for table info.
     sqliterkOSDebug(SQLITERK_OK, "Begin parsing sqlite_master...");
     int rc = sqliterk_parse_page(rk, 1);
-    if (rc != SQLITERK_OK)
+    if (rc == SQLITERK_CANCELLED) {
+        goto cancelled;
+    } else if (rc != SQLITERK_OK)
         sqliterkOSWarning(rc, "Failed to parse sqlite_master.");
     else
-        sqliterkOSInfo(rc, "Parsed sqlite_master. [table/index: %u]",
+        sqliterkOSInfo(rc, "Parsed sqlite_master. [table/index: %zu]",
                        ctx.tables.size());
 
     // Parse all tables.
+    notify.onBeginParseTable = table_onBeginParseTable;
     notify.onParseColumn = table_onParseColumn;
     sqliterk_register_notify(rk, notify);
 
-    sqliterk_master_map::iterator it;
-    for (it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+    for (sqliterk_master_map::iterator it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+        if (ctx.cancelled)
+            goto cancelled;
+
         if (it->second.type != sqliterk_type_table)
             continue;
 
@@ -446,28 +491,36 @@ int sqliterk_output(sqliterk *rk,
             sqliterkOSInfo(SQLITERK_OK, "[%s] -> pgno: %d", name, root_page);
             ctx.table_cursor = it;
             rc = sqliterk_parse_page(rk, root_page);
-            if (rc != SQLITERK_OK)
-                sqliterkOSWarning(rc,
-                                  "Failed to parse B-tree with root page %d.",
-                                  it->second.root_page);
             if (ctx.stmt) {
+                const char *sql = (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
+
                 // Commit transaction and free statement.
                 char *errmsg;
-                rc = sqlite3_exec(ctx.db, "COMMIT;", NULL, NULL, &errmsg);
+                int rc2 = sqlite3_exec(ctx.db, sql, NULL, NULL, &errmsg);
                 if (errmsg) {
-                    sqliterkOSWarning(rc, "Failed to commit transaction: %s",
+                    sqliterkOSWarning(rc2, "Failed to commit transaction: %s",
                                       errmsg);
                     sqlite3_free(errmsg);
                 }
 
                 fini_insert(&ctx);
             }
+            if (rc == SQLITERK_CANCELLED) {
+                goto cancelled;
+            } else if (rc != SQLITERK_OK) {
+                sqliterkOSWarning(rc,
+                                  "Failed to parse B-tree with root page %d.",
+                                  it->second.root_page);
+            }
         }
     }
 
     // Iterate through indices, create them if necessary.
     if (!(ctx.flags & SQLITERK_OUTPUT_NO_CREATE_TABLES)) {
-        for (it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+        for (sqliterk_master_map::iterator it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+            if (ctx.cancelled)
+                goto cancelled;
+
             if (it->second.type != sqliterk_type_index)
                 continue;
 
@@ -485,21 +538,34 @@ int sqliterk_output(sqliterk *rk,
     }
 
     // Return OK only if we had successfully output at least one row.
-    rc = SQLITERK_OK;
     if (ctx.success_count == 0) {
-        rc = SQLITERK_DAMAGED;
         if (ctx.tables.empty())
-            sqliterkOSError(rc, "No valid sqlite_master info available, "
+            sqliterkOSError(SQLITERK_DAMAGED, "No valid sqlite_master info available, "
                                 "sqlite_master is corrupted.");
         else
-            sqliterkOSError(rc,
+            sqliterkOSError(SQLITERK_DAMAGED,
                             "No rows can be successfully output. [failed: %u]",
                             ctx.fail_count);
-    } else
-        sqliterkOSInfo(rc,
-                       "Recovery output finished. [succeeded: %u, failed: %u]",
-                       ctx.success_count, ctx.fail_count);
-    return rc;
+        return SQLITERK_DAMAGED;
+    } else {
+        sqliterkOSInfo(SQLITERK_OK, "Recovery output finished. [succeeded: %u, failed: %u]", 
+            ctx.success_count, ctx.fail_count);
+        return SQLITERK_OK;
+    }
+
+cancelled:
+    sqliterkOSInfo(SQLITERK_CANCELLED, "Recovery cancelled. [succeeded: %u, failed: %u]",
+        ctx.success_count, ctx.fail_count);
+    return SQLITERK_CANCELLED;
+}
+
+void sqliterk_cancel(sqliterk *rk)
+{
+    sqliterk_output_ctx *ctx =
+        (sqliterk_output_ctx *) sqliterk_get_user_info(rk);
+    if (ctx) {
+        ctx->cancelled = 1;
+    }
 }
 
 int sqliterk_make_master(const char **tables,
@@ -913,7 +979,7 @@ int sqliterk_load_master(const char *path,
     if (out_kdf_salt)
         memcpy(out_kdf_salt, header.kdf_salt, sizeof(header.kdf_salt));
     *out_master = static_cast<sqliterk_master_info *>(master);
-    sqliterkOSInfo(SQLITERK_OK, "Loaded master info with %u valid entries.",
+    sqliterkOSInfo(SQLITERK_OK, "Loaded master info with %zu valid entries.",
                    master->size());
     return SQLITERK_OK;
 

@@ -26,10 +26,10 @@
         WCDB_IF(unique, binding->getOrCreateIndexBinding(indexSubfixName)      \
                             ->setUnique(true);)                                \
         return nullptr;                                                        \
-    }(__WCDB_BINDING(className));
+    }(&__WCDB_BINDING(className));
 
 #define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
         binding->addVirtualTableArgument(left, right);                         \
         return nullptr;                                                        \
-    }(__WCDB_BINDING(className));
+    }(&__WCDB_BINDING(className));

@@ -69,7 +69,14 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private static final String TAG = "WCDB.SQLiteDatabase";
 
     static {
-        System.loadLibrary("wcdb");
+        // To be compatible to frameworks which handle native library loading themselves,
+        // we do a simple test for whether native methods have been registered already.
+        try {
+            SQLiteGlobal.nativeTestJNIRegistration();
+        } catch (UnsatisfiedLinkError e) {
+            // If we reached here, native methods are not registered.
+            System.loadLibrary("wcdb");
+        }
     }
     // Dummy static method to trigger class initialization.
     // See [JLS 12.4.1](http://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4.1)
@@ -1809,7 +1816,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql) throws SQLException {
-        executeSql(sql, null);
+        executeSql(sql, null, null);
     }
 
     /**
@@ -1856,13 +1863,15 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql, Object[] bindArgs) throws SQLException {
-        if (bindArgs == null) {
-            throw new IllegalArgumentException("Empty bindArgs");
-        }
-        executeSql(sql, bindArgs);
+        executeSql(sql, bindArgs, null);
     }
 
-    private int executeSql(String sql, Object[] bindArgs) throws SQLException {
+    public void execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
+        executeSql(sql, bindArgs, cancellationSignal);
+    }
+
+    private int executeSql(String sql, Object[] bindArgs, CancellationSignal cancellationSignal)
+            throws SQLException {
         acquireReference();
         try {
             if (DatabaseUtils.getSqlStatementType(sql) == DatabaseUtils.STATEMENT_ATTACH) {
@@ -1880,7 +1889,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
             SQLiteStatement statement = new SQLiteStatement(this, sql, bindArgs);
             try {
-                return statement.executeUpdateDelete();
+                return statement.executeUpdateDelete(cancellationSignal);
             } finally {
                 statement.close();
             }
@@ -2390,13 +2399,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
         if (operation == null)
             operation = "unnamedNative";
 
-        int connectionFlags;
-        if (readOnly) connectionFlags = SQLiteConnectionPool.CONNECTION_FLAG_READ_ONLY;
-        else connectionFlags = SQLiteConnectionPool.CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY;
-        if (interactive) connectionFlags |= SQLiteConnectionPool.CONNECTION_FLAG_INTERACTIVE;
+        int connectionFlags = readOnly ? SQLiteConnectionPool.CONNECTION_FLAG_READ_ONLY :
+                SQLiteConnectionPool.CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY;
+        if (interactive)
+            connectionFlags |= SQLiteConnectionPool.CONNECTION_FLAG_INTERACTIVE;
 
-        return getThreadSession().acquireConnectionForNativeHandle(connectionFlags)
+        long handle = getThreadSession().acquireConnectionForNativeHandle(connectionFlags)
                 .getNativeHandle(operation);
+        if (handle == 0)
+            throw new IllegalStateException("SQLiteConnection native handle not initialized.");
+        return handle;
     }
 
     /**

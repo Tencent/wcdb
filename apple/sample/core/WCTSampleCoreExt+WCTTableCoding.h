@@ -18,23 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef in_case_lock_guard_hpp
-#define in_case_lock_guard_hpp
+#import "WCTSampleCoreExt.h"
+#import <WCDB/WCDB.h>
 
-#include <memory>
-#include <mutex>
+@interface WCTSampleCoreExt (WCTTableCoding) <WCTTableCoding>
 
-namespace WCDB {
+WCDB_PROPERTY(localID)
+WCDB_PROPERTY(createTime)
 
-class InCaseLockGuard {
-public:
-    InCaseLockGuard(std::shared_ptr<std::mutex> &mutex);
-    ~InCaseLockGuard();
-
-protected:
-    std::shared_ptr<std::mutex> m_mutex;
-};
-
-} //namespace WCDB
-
-#endif /* in_case_lock_guard_hpp */
+@end

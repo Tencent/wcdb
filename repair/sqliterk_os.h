@@ -37,7 +37,11 @@ void sqliterkOSFree(void *p);
 int sqliterkOSLog(sqliterk_loglevel loglevel,
                   int result,
                   const char *format,
-                  ...);
+                  ...)
+#ifdef __GNUC__
+__attribute__ ((format(printf, 3, 4)))
+#endif
+;
 int sqliterkOSRegister(sqliterk_os os);
 
 #define sqliterkOSDebug(result, ...)                                           \

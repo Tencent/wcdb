@@ -45,26 +45,4 @@
 
 @end
 
-@interface NSMutableDictionary (WCTColumnCoding) <WCTColumnCoding>
-@end
-
-@implementation NSMutableDictionary (WCTColumnCoding)
-
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
-}
-
-@end
-
 #endif //WCDB_BUILTIN_COLUMN_CODING

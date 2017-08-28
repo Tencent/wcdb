@@ -22,10 +22,12 @@ package com.tencent.wcdb.sample.repairdb;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +35,7 @@ import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
 import com.tencent.wcdb.database.SQLiteOpenHelper;
 import com.tencent.wcdb.repair.RepairKit;
-import com.tencent.wcdb.sample.repairdb.R;
+import com.tencent.wcdb.support.CancellationSignal;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,9 +43,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
     private SimpleCursorAdapter mAdapter;
+    private RepairKit mRepair;
+    private CancellationSignal mCancellationSignal;
+    private Button mCancelButton;
 
 
     @Override
@@ -200,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mCancelButton = (Button) findViewById(R.id.btn_repair_cancel);
         findViewById(R.id.btn_repair_db).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -208,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected void onPreExecute() {
                         mAdapter.changeCursor(null);
+                        mCancellationSignal = new CancellationSignal();
+                        mCancelButton.setEnabled(true);
                     }
 
                     @Override
@@ -231,9 +236,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
-                        RepairKit repair = null;
+                        mRepair = null;
                         try {
-                            repair = new RepairKit(
+                            mRepair = new RepairKit(
                                     dbFile.getPath(),       // corrupted database file
                                     DBHelper.PASSPHRASE,    // passphrase to the database
                                     DBHelper.CIPHER_SPEC,   // cipher spec to the database
@@ -246,23 +251,33 @@ public class MainActivity extends AppCompatActivity {
                             SQLiteDatabase newDb = SQLiteDatabase.openOrCreateDatabase(newDbFile,
                                     DBHelper.PASSPHRASE, DBHelper.CIPHER_SPEC, null,
                                     DBHelper.ERROR_HANDLER);
-                            boolean result = repair.output(newDb, 0);
-                            if (!result) {
-                                throw new SQLiteException("Repair returns false on output.");
+                            mRepair.setCallback(new RepairKit.Callback() {
+                                @Override
+                                public int onProgress(String table, int root, Cursor cursor) {
+                                    Log.d(TAG, String.format("table: %s, root: %d, count: %d",
+                                            table, root, cursor.getColumnCount()));
+                                    return RepairKit.RESULT_OK;
+                                }
+                            });
+                            int result = mRepair.output(newDb, 0);
+                            if (result != RepairKit.RESULT_OK && result != RepairKit.RESULT_CANCELED) {
+                                throw new SQLiteException("Repair returns failure.");
                             }
 
                             newDb.setVersion(DBHelper.DATABASE_VERSION);
                             newDb.close();
-                            repair.release();
-                            repair = null;
+                            mRepair.release();
+                            mRepair = null;
 
                             if (!dbFile.delete() || !newDbFile.renameTo(dbFile))
                                 throw new SQLiteException("Cannot rename database.");
                         } catch (SQLiteException e) {
                             return e;
                         } finally {
-                            if (repair != null)
-                                repair.release();
+                            if (mRepair != null) {
+                                mRepair.release();
+                                mRepair = null;
+                            }
                         }
 
                         return null;
@@ -277,8 +292,20 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Repair failed: "
                                     + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+
+                        mCancelButton.setEnabled(false);
+                        mCancellationSignal = null;
                     }
                 }.execute();
+            }
+        });
+
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCancellationSignal != null) {
+                    mCancellationSignal.cancel();
+                }
             }
         });
     }

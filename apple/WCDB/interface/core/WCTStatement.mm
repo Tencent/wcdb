@@ -28,7 +28,7 @@
 
 @implementation WCTStatement
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle andError:(const WCDB::Error &)error
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle
 {
     if (self = [super initWithCore:core]) {
         _statementHandle = statementHandle;

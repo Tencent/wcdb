@@ -22,12 +22,13 @@ package com.tencent.wcdb.repair;
 
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteException;
+import com.tencent.wcdb.support.CancellationSignal;
 
 
 /**
  * Data recovery toolkit that recover data backed up by {@link BackupKit}.
  */
-public class RecoverKit {
+public class RecoverKit implements CancellationSignal.OnCancelListener {
 
 	/*package*/ static final String TAG = "WCDB.DBBackup";
 
@@ -99,6 +100,17 @@ public class RecoverKit {
 		return result;
 	}
 
+	public int run(boolean fatal, CancellationSignal cancellationSignal) {
+		if (cancellationSignal.isCanceled())
+			return RESULT_CANCELED;
+
+		cancellationSignal.setOnCancelListener(this);
+		int result = run(fatal);
+		cancellationSignal.setOnCancelListener(null);
+
+		return result;
+	}
+
 	/**
 	 * Retrieve total count of successful statements had been run during the last time
 	 * {@link #run(boolean)} was called.
@@ -126,7 +138,8 @@ public class RecoverKit {
 	 * Calling this method causes {@link #run(boolean)} to interrupt as quickly as possible and
 	 * return {@link #RESULT_CANCELED}</p>
 	 */
-	public void cancel() {
+	@Override
+	public void onCancel() {
 		if (mNativePtr != 0)
 			nativeCancel(mNativePtr);
 	}

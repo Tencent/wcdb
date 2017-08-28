@@ -186,7 +186,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     /*package*/ long getNativeHandle(String operation) {
         if (mConnectionPtr == 0)
-            throw new IllegalStateException("SQLiteConnection native handle not initialized.");
+            return 0;
 
         if (operation != null && mNativeOperation == null) {
             mNativeOperation = mRecentOperations.beginOperation(operation, null, null);
@@ -315,7 +315,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private void setCipherSpec() {
         if (mCipher != null) {
             if (mCipher.cipher != null)
-                execute("PRAGMA cipher=" + mCipher.cipher, null, null);
+                execute("PRAGMA cipher=" + DatabaseUtils.sqlEscapeString(mCipher.cipher),
+                        null, null);
 
             if (mCipher.kdfIteration != 0)
                 execute("PRAGMA kdf_iter=" + mCipher.kdfIteration, null, null);

@@ -47,7 +47,7 @@ typedef enum {
 struct sqliterk_btree_notify {
     void (*onBeginParseBtree)(sqliterk *rk, sqliterk_btree *btree);
     void (*onEndParseBtree)(sqliterk *rk, sqliterk_btree *btree, int result);
-    void (*onParseColumn)(sqliterk *rk,
+    int (*onParseColumn)(sqliterk *rk,
                           sqliterk_btree *btree,
                           sqliterk_page *page,
                           sqliterk_column *column);

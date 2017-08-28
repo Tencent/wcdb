@@ -88,12 +88,12 @@
                 break;
             case WCTColumnTypeString: {
                 const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(i);
-                value = string ? [NSString stringWithUTF8String:string] : nil;
+                value = string ? [NSString stringWithUTF8String:string] : [NSNull null];
             } break;
             case WCTColumnTypeBinary: {
                 int size = 0;
                 const void *data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(i, size);
-                value = data ? [NSData dataWithBytes:data length:size] : nil;
+                value = data ? [NSData dataWithBytes:data length:size] : [NSNull null];
             } break;
             case WCTColumnTypeNil: {
                 value = [NSNull null];
