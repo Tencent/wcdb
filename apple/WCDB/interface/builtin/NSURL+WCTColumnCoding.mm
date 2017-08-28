@@ -28,9 +28,9 @@
 
 @implementation NSURL (WCTColumnCoding)
 
-+ (instancetype)unarchiveWithWCTValue:(NSString *)value
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:self] : nil;
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue
