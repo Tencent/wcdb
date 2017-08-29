@@ -24,7 +24,6 @@
 #include <WCDB/timed_queue.hpp>
 #include <WCDB/utility.hpp>
 #include <queue>
-#include <sqlcipher/sqlite3.h>
 #include <thread>
 #include <vector>
 

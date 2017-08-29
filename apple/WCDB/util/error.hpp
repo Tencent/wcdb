@@ -23,6 +23,7 @@
 
 #include <WCDB/utility.hpp>
 #include <climits>
+#include <functional>
 #include <map>
 #include <string>
 
