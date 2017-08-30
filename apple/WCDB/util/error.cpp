@@ -64,6 +64,8 @@ ErrorValue::Type ErrorValue::getType() const
 
 std::shared_ptr<Error::ReportMethod> Error::s_reportMethod;
 
+ThreadLocal<bool> Error::s_slient(false);
+
 Error::Error() : m_type(Error::Type::NotSet), m_code(0)
 {
 }
@@ -102,17 +104,35 @@ void Error::reset()
 
 void Error::report() const
 {
-    if (!s_reportMethod) {
-        s_reportMethod.reset((new Error::ReportMethod([](const Error &error) {
-            printf("[WCDB]%s\n", error.description().c_str());
+    if (!*s_slient.get()) {
+        if (!s_reportMethod) {
+            s_reportMethod.reset(
+                (new Error::ReportMethod([](const Error &error) {
+                    switch (error.getType()) {
+                        case Error::Type::SQLiteGlobal:
 #if DEBUG
-            if (error.getType() == Error::Type::Abort) {
-                abort();
-            }
+                            printf("[WCDB][DEBUG]%s\n",
+                                   error.description().c_str());
 #endif
-        })));
+                            break;
+                        case Error::Type::Warning:
+                            printf("[WCDB][WARNING]%s\n",
+                                   error.description().c_str());
+                            break;
+                        default:
+                            printf("[WCDB][ERROR]%s\n",
+                                   error.description().c_str());
+#if DEBUG
+                            if (error.getType() == Error::Type::Abort) {
+                                abort();
+                            }
+#endif
+                            break;
+                    }
+                })));
+        }
+        (*s_reportMethod)(*this);
     }
-    (*s_reportMethod)(*this);
 }
 
 const char *Error::GetKeyName(Error::Key key)
@@ -358,6 +378,11 @@ void Error::Warning(const char *message, Error *outError)
                       {Error::Key::Message, ErrorValue(message)},
                   },
                   outError);
+}
+
+void Error::setThreadedSlient(bool slient)
+{
+    *s_slient.get() = slient;
 }
 
 } //namespace WCDB

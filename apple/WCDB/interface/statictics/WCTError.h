@@ -23,7 +23,7 @@
 #import <type_traits>
 
 /**
- It indicates the error type for WCTError
+ It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.
  */
 typedef NS_ENUM(int, WCTErrorType) {
     /**
