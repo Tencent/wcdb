@@ -77,8 +77,8 @@ void sample_core_main(NSString *baseDirectory)
 
         WCTStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];
         if (statementExplain && [statementExplain step]) {
-            for (int i = 0; i < [statementExplain getCount]; ++i) {
-                NSString *columnName = [statementExplain getNameAtIndex:i];
+            for (int i = 0; i < [statementExplain getColumnCount]; ++i) {
+                NSString *columnName = [statementExplain getColumnNameAtIndex:i];
                 WCTValue *value = [statementExplain getValueAtIndex:i];
                 NSLog(@"%@:%@", columnName, value);
             }
@@ -100,8 +100,8 @@ void sample_core_main(NSString *baseDirectory)
         WCTStatement *statement = [database prepare:statementSelect withError:&error];
         if (statement) {
             while ([statement step]) {
-                for (int i = 0; i < [statement getCount]; ++i) {
-                    NSString *columnName = [statement getNameAtIndex:i];
+                for (int i = 0; i < [statement getColumnCount]; ++i) {
+                    NSString *columnName = [statement getColumnNameAtIndex:i];
                     WCTValue *value = [statement getValueAtIndex:i];
                     NSLog(@"%@:%@", columnName, value);
                 }

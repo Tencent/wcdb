@@ -44,11 +44,26 @@
 - (BOOL)bindValue:(WCTValue *)value toIndex:(int)index;
 
 /**
+ @brief The wrapper of sqlite3_bind_*.
+ @param value The WCTValue can be NSString, NSNumber, NSData, NSNull and nil.
+ @param columnName columnName.
+ @return NO only if you pass a incorrect type of value.
+ */
+- (BOOL)bindValue:(WCTValue *)value byColumnName:(NSString *)columnName;
+
+/**
  @brief The wrapper of sqlite3_column_*.
  @param index Begin with 0.
  @return The real type of WCTValue depends on the value in database.
  */
 - (WCTValue *)getValueAtIndex:(int)index;
+
+/**
+ @brief The wrapper of sqlite3_column_*.
+ @param columnName columnName.
+ @return The real type of WCTValue depends on the value in database.
+ */
+- (WCTValue *)getValueByColumnName:(NSString *)columnName;
 
 /**
  @brief The wrapper of sqlite3_step.
@@ -70,17 +85,45 @@
 - (WCTColumnType)getTypeAtIndex:(int)index;
 
 /**
+ @brief The wrapper of sqlite3_column_type.
+ @param columnName columnName.
+ @return Column type.
+ */
+- (WCTColumnType)getTypeByColumnName:(NSString *)columnName;
+
+/**
  @brief The wrapper of sqlite3_column_count.
  @return Count of column result.
  */
-- (int)getCount;
+- (int)getCount DEPRECATED_MSG_ATTRIBUTE("-getCount is deprecated since v1.0.4. Use -getColumnCount instead");
+;
+
+/**
+ @brief The wrapper of sqlite3_column_count.
+ @return Count of column result.
+ */
+- (int)getColumnCount;
 
 /**
  @brief The wrapper of sqlite3_column_name.
  @param index Begin with 0.
  @return The description of column result.
  */
-- (NSString *)getNameAtIndex:(int)index;
+- (NSString *)getColumnNameAtIndex:(int)index;
+
+/**
+ @brief Get index by column name.
+ @param columnName columnName.
+ @return The index of given column name. INT_MAX will be returned if no such column name.
+ */
+- (int)getIndexByColumnName:(NSString *)columnName;
+
+/**
+ @brief The wrapper of sqlite3_column_name. Use -getColumNameAtIndex: instead.
+ @param index Begin with 0.
+ @return The description of column result.
+ */
+- (NSString *)getNameAtIndex:(int)index DEPRECATED_MSG_ATTRIBUTE("-getNameAtIndex: is deprecated since v1.0.4. Use -getColumNameAtIndex: instead");
 
 /**
  @brief The wrapper of sqlite3_column_table_name.

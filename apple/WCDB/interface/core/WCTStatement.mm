@@ -84,7 +84,15 @@
     return result;
 }
 
-//get value, index begin with 0
+- (BOOL)bindValue:(WCTValue *)value byColumnName:(NSString *)columnName
+{
+    int index = [self getIndexByColumnName:columnName];
+    if (index != INT_MAX) {
+        return [self bindValue:value toIndex:index];
+    }
+    return NO;
+}
+
 - (WCTValue *)getValueAtIndex:(int)index
 {
     WCTValue *value = nil;
@@ -116,6 +124,27 @@
     return value;
 }
 
+- (WCTValue *)getValueByColumnName:(NSString *)columnName
+{
+    int index = [self getIndexByColumnName:columnName];
+    if (index != INT_MAX) {
+        return [self getValueAtIndex:index];
+    }
+    return nil;
+}
+
+- (int)getIndexByColumnName:(NSString *)columnName
+{
+    const char *rightColumnName = columnName.UTF8String;
+    for (int i = 0; i < _statementHandle->getColumnCount(); ++i) {
+        const char *leftColumnName = _statementHandle->getColumnName(i);
+        if (leftColumnName && strcmp(leftColumnName, rightColumnName) == 0) {
+            return i;
+        }
+    }
+    return INT_MAX;
+}
+
 - (void)resetBinding
 {
     _statementHandle->resetBinding();
@@ -131,15 +160,34 @@
     return (WCTColumnType) _statementHandle->getType(index);
 }
 
+- (WCTColumnType)getTypeByColumnName:(NSString *)columnName
+{
+    int index = [self getIndexByColumnName:columnName];
+    if (index != INT_MAX) {
+        return [self getTypeAtIndex:index];
+    }
+    return WCTColumnTypeNil;
+}
+
 - (int)getCount
+{
+    return [self getColumnCount];
+}
+
+- (int)getColumnCount
 {
     return _statementHandle->getColumnCount();
 }
 
-- (NSString *)getNameAtIndex:(int)index
+- (NSString *)getColumnNameAtIndex:(int)index
 {
     const char *columnName = _statementHandle->getColumnName(index);
     return columnName ? @(columnName) : nil;
+}
+
+- (NSString *)getNameAtIndex:(int)index
+{
+    return [self getNameAtIndex:index];
 }
 
 - (NSString *)getTableNameAtIndex:(int)index
