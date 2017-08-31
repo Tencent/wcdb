@@ -135,11 +135,13 @@
 
 - (int)getIndexByColumnName:(NSString *)columnName
 {
-    const char *rightColumnName = columnName.UTF8String;
-    for (int i = 0; i < _statementHandle->getColumnCount(); ++i) {
-        const char *leftColumnName = _statementHandle->getColumnName(i);
-        if (leftColumnName && strcmp(leftColumnName, rightColumnName) == 0) {
-            return i;
+    if (columnName) {
+        const char *rightColumnName = columnName.UTF8String;
+        for (int i = 0; i < _statementHandle->getColumnCount(); ++i) {
+            const char *leftColumnName = _statementHandle->getColumnName(i);
+            if (leftColumnName && strcmp(leftColumnName, rightColumnName) == 0) {
+                return i;
+            }
         }
     }
     return INT_MAX;
