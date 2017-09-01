@@ -328,11 +328,11 @@ public final class SQLiteConnectionPool implements Closeable {
 
                 mAvailablePrimaryConnection = newPrimaryConnection;
                 mConfiguration.updateParametersFrom(configuration);
-                setMaxConnectionPoolSizeLocked(1);
+                setMaxConnectionPoolSizeLocked(0);
             } else {
                 // Reconfigure the database connections in place.
                 mConfiguration.updateParametersFrom(configuration);
-                setMaxConnectionPoolSizeLocked(1);
+                setMaxConnectionPoolSizeLocked(0);
 
                 closeExcessConnectionsAndLogExceptionsLocked();
                 reconfigureAllConnectionsLocked();
