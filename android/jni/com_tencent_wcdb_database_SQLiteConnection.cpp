@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include "CursorWindow.h"
 #include "Errors.h"
@@ -28,7 +29,6 @@
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include "SQLiteCommon.h"
-#include "SQLiteConnection.h"
 //#include <sqlite3_android.h>
 
 // Set to 1 to use UTF16 storage for localized indexes.
@@ -51,6 +51,8 @@ namespace wcdb {
 //static const int BUSY_TIMEOUT_MS = 2500;
 static const int BUSY_TIMEOUT_MS = 10 * 1000;
 
+static JavaVM *gVM;
+
 static struct {
     jfieldID name;
     jfieldID numArgs;
@@ -61,11 +63,72 @@ static struct {
     jclass clazz;
 } gStringClassInfo;
 
+static struct {
+    jmethodID notifyCheckpoint;
+} gSQLiteConnectionClassInfo;
+
+struct SQLiteConnection {
+    // Open flags.
+    // Must be kept in sync with the constants defined in SQLiteDatabase.java.
+    enum {
+        OPEN_READWRITE = 0x00000000,
+        OPEN_READONLY = 0x00000001,
+        OPEN_READ_MASK = 0x00000001,
+        NO_LOCALIZED_COLLATORS = 0x00000010,
+        CREATE_IF_NECESSARY = 0x10000000,
+    };
+
+    jobject const dbObj;
+    sqlite3 *const db;
+    const int openFlags;
+
+    volatile bool canceled;
+
+    SQLiteConnection(jobject dbObj, sqlite3 *db,
+                     int openFlags)
+        : dbObj(dbObj)
+        , db(db)
+        , openFlags(openFlags)
+        , canceled(false)
+    {
+    }
+};
+
 // Called after each SQLite VM instruction when cancelation is enabled.
 static int sqliteProgressHandlerCallback(void *data)
 {
     SQLiteConnection *connection = static_cast<SQLiteConnection *>(data);
     return connection->canceled;
+}
+
+// Called after commiting transactions in WAL mode.
+static int sqliteWalHookCallback(void *data, sqlite3 *db, const char *dbName, int pages)
+{
+    SQLiteConnection *connection = static_cast<SQLiteConnection *>(data);
+
+    JNIEnv *env = NULL;
+    bool attached = false;
+    jint ret = gVM->GetEnv((void **) &env, JNI_VERSION_1_6);
+    if (ret == JNI_EDETACHED) {
+        jint ret = gVM->AttachCurrentThread(&env, NULL);
+        assert(ret == JNI_OK);
+        (void) ret;
+        attached = true;
+    }
+
+    jstring dbNameStr = env->NewStringUTF(dbName);
+    env->CallVoidMethod(connection->dbObj, gSQLiteConnectionClassInfo.notifyCheckpoint,
+                        dbNameStr, (jint) pages);
+    bool exceptionOccurred = env->ExceptionCheck();
+    if (exceptionOccurred) {
+        jniLogException(env, ANDROID_LOG_ERROR, LOG_TAG);
+    }
+    env->DeleteLocalRef(dbNameStr);
+
+    if (attached) {
+        gVM->DetachCurrentThread();
+    }
+    return exceptionOccurred ? SQLITE_ERROR : SQLITE_OK;
 }
 
 static void
@@ -99,10 +162,9 @@ nativeSetKey(JNIEnv *env, jclass clazz, jlong connectionPtr, jbyteArray keyArr)
 }
 
 static jlong nativeOpen(JNIEnv *env,
-                        jclass clazz,
+                        jobject obj,
                         jstring pathStr,
                         jint openFlags,
-                        jstring labelStr,
                         jstring vfsNameStr)
 {
     int sqliteFlags;
@@ -115,13 +177,8 @@ static jlong nativeOpen(JNIEnv *env,
     }
 
     const char *pathChars = env->GetStringUTFChars(pathStr, NULL);
-    //    registerLoggingFunc(pathChars);
     std::string path(pathChars);
     env->ReleaseStringUTFChars(pathStr, pathChars);
-
-    const char *labelChars = env->GetStringUTFChars(labelStr, NULL);
-    std::string label(labelChars);
-    env->ReleaseStringUTFChars(labelStr, labelChars);
 
     const char *vfsNameChars = NULL;
     if (vfsNameStr)
@@ -129,6 +186,7 @@ static jlong nativeOpen(JNIEnv *env,
 
     sqlite3 *db;
     int err = sqlite3_open_v2(path.c_str(), &db, sqliteFlags, vfsNameChars);
+
     if (vfsNameStr)
         env->ReleaseStringUTFChars(vfsNameStr, vfsNameChars);
 
@@ -174,9 +232,9 @@ static jlong nativeOpen(JNIEnv *env,
 
     // Create wrapper object.
     SQLiteConnection *connection =
-        new SQLiteConnection(db, openFlags, path, label);
+        new SQLiteConnection(env->NewGlobalRef(obj), db, openFlags);
 
-    LOGI(LOG_TAG, "Opened connection %p with label '%s'", db, label.c_str());
+    LOGI(LOG_TAG, "Opened connection %p with label '%s'", db, path.c_str());
     return (jlong)(intptr_t) connection;
 }
 
@@ -193,6 +251,8 @@ static void nativeClose(JNIEnv *env, jclass clazz, jlong connectionPtr)
                                     "Failed to close database.");
             return;
         }
+
+        env->DeleteGlobalRef(connection->dbObj);
         delete connection;
     }
 }
@@ -529,7 +589,6 @@ static int executeNonQuery(JNIEnv *env,
                            SQLiteConnection *connection,
                            sqlite3_stmt *statement)
 {
-    //reset_pagecount(connection);
     int err = sqlite3_step(statement);
     if (err == SQLITE_ROW) {
         throw_sqlite3_exception(env, "Queries can be performed using "
@@ -847,48 +906,6 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
     return result;
 }
 
-static int
-explain_callback(void *ud, int num_column, char **values, char **names)
-{
-    std::string *out = reinterpret_cast<std::string *>(ud);
-    for (int i = 0; i < num_column; i++) {
-        out->push_back(' ');
-        out->append(values[i]);
-    }
-    out->push_back('\n');
-
-    return 0;
-}
-
-static jstring nativeExplainQueryPlan(JNIEnv *env,
-                                      jclass clazz,
-                                      jlong connectionPtr,
-                                      jstring sql)
-{
-    SQLiteConnection *connection =
-        (SQLiteConnection *) (intptr_t) connectionPtr;
-    std::string explain_sql("EXPLAIN QUERY PLAN ");
-
-    const char *orig_sql = env->GetStringUTFChars(sql, NULL);
-    explain_sql.append(orig_sql);
-
-    std::string out;
-    char *errmsg;
-    sqlite3_exec(connection->db, explain_sql.c_str(), explain_callback, &out,
-                 &errmsg);
-    if (errmsg) {
-        LOGE(LOG_TAG, "Failed to explain query plan for SQL '%s': %s", orig_sql,
-             errmsg);
-        sqlite3_free(errmsg);
-        env->ReleaseStringUTFChars(sql, orig_sql);
-        return NULL;
-    }
-    env->ReleaseStringUTFChars(sql, orig_sql);
-
-    jstring result = env->NewStringUTF(out.c_str());
-    return result;
-}
-
 static jlong
 nativeGetDbLookaside(JNIEnv *env, jobject clazz, jlong connectionPtr)
 {
@@ -926,6 +943,14 @@ static void nativeResetCancel(JNIEnv *env,
     }
 }
 
+static void nativeSetWalHook(JNIEnv *env, jobject clazz, jlong connectionPtr)
+{
+    SQLiteConnection *connection =
+        (SQLiteConnection *) (intptr_t) connectionPtr;
+
+    sqlite3_wal_hook(connection->db, sqliteWalHookCallback, connection);
+}
+
 static jlong
 nativeGetSQLiteHandle(JNIEnv *env, jobject clazz, jlong connectionPtr)
 {
@@ -935,7 +960,7 @@ nativeGetSQLiteHandle(JNIEnv *env, jobject clazz, jlong connectionPtr)
 }
 
 static JNINativeMethod sMethods[] = {
-    {"nativeOpen", "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)J",
+    {"nativeOpen", "(Ljava/lang/String;ILjava/lang/String;)J",
      (void *) nativeOpen},
     {"nativeClose", "(J)V", (void *) nativeClose},
     {"nativeSetKey", "(J[B)V", (void *) nativeSetKey},
@@ -968,16 +993,17 @@ static JNINativeMethod sMethods[] = {
      (void *) nativeExecuteForLastInsertedRowId},
     {"nativeExecuteForCursorWindow", "(JJJIIZ)J",
      (void *) nativeExecuteForCursorWindow},
-    {"nativeExplainQueryPlan", "(JLjava/lang/String;)Ljava/lang/String;",
-     (void *) nativeExplainQueryPlan},
     {"nativeGetDbLookaside", "(J)I", (void *) nativeGetDbLookaside},
     {"nativeCancel", "(J)V", (void *) nativeCancel},
     {"nativeResetCancel", "(JZ)V", (void *) nativeResetCancel},
+    {"nativeSetWalHook", "(J)V", (void *) nativeSetWalHook},
     {"nativeGetSQLiteHandle", "(J)J", (void *) nativeGetSQLiteHandle},
 };
 
 static int register_wcdb_SQLiteConnection(JavaVM *vm, JNIEnv *env)
 {
+    gVM = vm;
+
     jclass clazz;
     FIND_CLASS(clazz, "com/tencent/wcdb/database/SQLiteCustomFunction");
 
@@ -992,10 +1018,19 @@ static int register_wcdb_SQLiteConnection(JavaVM *vm, JNIEnv *env)
     gStringClassInfo.clazz = jclass(env->NewGlobalRef(clazz));
     env->DeleteLocalRef(clazz);
 
-    int result = jniRegisterNativeMethods(
-        env, "com/tencent/wcdb/database/SQLiteConnection", sMethods,
-        NELEM(sMethods));
-    return result;
+    FIND_CLASS(clazz, "com/tencent/wcdb/database/SQLiteConnection");
+    GET_METHOD_ID(gSQLiteConnectionClassInfo.notifyCheckpoint, clazz,
+                  "notifyCheckpoint", "(Ljava/lang/String;I)V");
+
+    if (env->RegisterNatives(clazz, sMethods, NELEM(sMethods)) < 0) {
+        char msg[256];
+        snprintf(msg, sizeof(msg), "RegisterNatives failed for '%s', aborting",
+                 "com/tencent/wcdb/database/SQLiteConnection");
+        env->FatalError(msg);
+    }
+    env->DeleteLocalRef(clazz);
+
+    return 0;
 }
 WCDB_JNI_INIT(SQLiteConnection, register_wcdb_SQLiteConnection)
 

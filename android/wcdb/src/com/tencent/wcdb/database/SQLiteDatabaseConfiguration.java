@@ -80,6 +80,13 @@ public final class SQLiteDatabaseConfiguration {
     public boolean foreignKeyConstraintsEnabled;
 
     /**
+     * True if custom WAL hook, including async-checkpoint, is enabled.
+     *
+     * Default is false.
+     */
+    public boolean customWALHookEnabled;
+
+    /**
      * Name of VFS used to open connections, or null to use default VFS.
      *
      * Default is null.
@@ -148,6 +155,7 @@ public final class SQLiteDatabaseConfiguration {
         maxSqlCacheSize = other.maxSqlCacheSize;
         locale = other.locale;
         foreignKeyConstraintsEnabled = other.foreignKeyConstraintsEnabled;
+        customWALHookEnabled = other.customWALHookEnabled;
         vfsName = other.vfsName;
         customFunctions.clear();
         customFunctions.addAll(other.customFunctions);

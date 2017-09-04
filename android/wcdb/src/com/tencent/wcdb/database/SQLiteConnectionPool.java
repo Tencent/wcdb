@@ -79,6 +79,10 @@ public final class SQLiteConnectionPool implements Closeable {
     // Keep reference to SQLiteDatabase which owns this connection pool.
     private final WeakReference<SQLiteDatabase> mDB;
     private volatile SQLiteTrace mTraceCallback;
+    private volatile SQLiteCheckpointListener mCheckpointListener;
+
+    private byte[] mPassword;
+    private SQLiteCipherSpec mCipher;
 
     private final Object mLock = new Object();
     private final AtomicBoolean mConnectionLeaked = new AtomicBoolean();
@@ -162,9 +166,6 @@ public final class SQLiteConnectionPool implements Closeable {
             super.finalize();
         }
     }
-
-    private byte[] mPassword;
-    private SQLiteCipherSpec mCipher;
 
     /**
      * Opens a connection pool for the specified database.
@@ -1052,10 +1053,28 @@ public final class SQLiteConnectionPool implements Closeable {
 
     /*package*/ void traceExecute(String sql, int type, long time) {
         SQLiteDatabase db = mDB.get();
-        if (mTraceCallback == null || db == null)
-            return;
+        SQLiteTrace trace = mTraceCallback;
 
-        mTraceCallback.onSQLExecuted(db, sql, type, time);
+        if (trace == null || db == null)
+            return;
+        trace.onSQLExecuted(db, sql, type, time);
+    }
+
+    /*package*/ SQLiteCheckpointListener getCheckpointListener() {
+        return mCheckpointListener;
+    }
+
+    /*package*/ void setCheckpointListener(SQLiteCheckpointListener listener) {
+        mCheckpointListener = listener;
+    }
+
+    /*package*/ void notifyCheckpoint(String dbName, int pages) {
+        SQLiteDatabase db = mDB.get();
+        SQLiteCheckpointListener walHook = mCheckpointListener;
+
+        if (walHook == null || db == null)
+            return;
+        walHook.onWALCommit(db, dbName, pages);
     }
 
     /**

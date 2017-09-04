@@ -2064,6 +2064,26 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    public void setCheckpointCallback(SQLiteCheckpointListener callback) {
+        boolean customWALHookEnabled = (callback != null);
+
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+
+            if (mConfigurationLocked.customWALHookEnabled != customWALHookEnabled) {
+                mConfigurationLocked.customWALHookEnabled = customWALHookEnabled;
+                try {
+                    mConnectionPoolLocked.reconfigure(mConfigurationLocked);
+                } catch (RuntimeException ex) {
+                    mConfigurationLocked.customWALHookEnabled = !customWALHookEnabled;
+                    throw ex;
+                }
+            }
+
+            mConnectionPoolLocked.setCheckpointListener(callback);
+        }
+    }
+
     /**
      * This method enables parallel execution of queries from multiple threads on the
      * same database.  It does this by opening multiple connections to the database

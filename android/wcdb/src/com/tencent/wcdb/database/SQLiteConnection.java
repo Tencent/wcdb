@@ -18,7 +18,6 @@ package com.tencent.wcdb.database;
 
 
 import android.annotation.SuppressLint;
-import android.os.Process;
 import android.util.Printer;
 
 import com.tencent.wcdb.BuildConfig;
@@ -119,8 +118,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     // we can ensure that we detach the signal at the right time.
     private int mCancellationSignalAttachCount;
 
-    private static native long nativeOpen(String path, int openFlags, String label,
-            String vfsName);
+    private native long nativeOpen(String path, int openFlags, String vfsName);
     private static native void nativeClose(long connectionPtr);
     private static native void nativeRegisterCustomFunction(long connectionPtr,
             SQLiteCustomFunction function);
@@ -151,11 +149,11 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private static native long nativeExecuteForLastInsertedRowId(long connectionPtr, long statementPtr);
     private static native long nativeExecuteForCursorWindow(long connectionPtr, long statementPtr,
             long windowPtr, int startPos, int requiredPos, boolean countAllRows);
-    private static native String nativeExplainQueryPlan(long connectionPtr, String sql);
     private static native int nativeGetDbLookaside(long connectionPtr);
     private static native void nativeCancel(long connectionPtr);
     private static native void nativeResetCancel(long connectionPtr, boolean cancelable);
     private static native void nativeSetKey(long connectionPtr, byte[] password);
+    private static native void nativeSetWalHook(long connectionPtr);
     private static native long nativeGetSQLiteHandle(long connectionPtr);
 
     // Password for encrypted database.
@@ -247,7 +245,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     private void open() {
         mConnectionPtr = nativeOpen(mConfiguration.path, mConfiguration.openFlags,
-                mConfiguration.label, mConfiguration.vfsName);
+                mConfiguration.vfsName);
         if (mPassword != null && mPassword.length == 0)
             mPassword = null;
 
@@ -266,7 +264,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         setForeignKeyModeFromConfiguration();
         setWalModeFromConfiguration();
         setJournalSizeLimit();
-        setAutoCheckpointInterval();
+        setCheckpointStrategy();
         setLocaleFromConfiguration();
 
         // Register custom functions.
@@ -325,12 +323,21 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
     }
 
-    private void setAutoCheckpointInterval() {
+    @SuppressWarnings("unused")
+    private void notifyCheckpoint(String dbName, int pages) {
+        mPool.notifyCheckpoint(dbName, pages);
+    }
+
+    private void setCheckpointStrategy() {
         if (!mConfiguration.isInMemoryDb() && !mIsReadOnlyConnection) {
-            final long newValue = SQLiteGlobal.walAutoCheckpoint;
-            long value = executeForLong("PRAGMA wal_autocheckpoint", null, null);
-            if (value != newValue) {
-                executeForLong("PRAGMA wal_autocheckpoint=" + newValue, null, null);
+            if (mConfiguration.customWALHookEnabled) {
+                nativeSetWalHook(mConnectionPtr);
+            } else {
+                final long newValue = SQLiteGlobal.walAutoCheckpoint;
+                long value = executeForLong("PRAGMA wal_autocheckpoint", null, null);
+                if (value != newValue) {
+                    executeForLong("PRAGMA wal_autocheckpoint=" + newValue, null, null);
+                }
             }
         }
     }
@@ -485,6 +492,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         boolean walModeChanged = ((configuration.openFlags ^ mConfiguration.openFlags)
                 & SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING) != 0;
         boolean localeChanged = !configuration.locale.equals(mConfiguration.locale);
+        boolean checkpointStrategyChanged = configuration.customWALHookEnabled
+                != mConfiguration.customWALHookEnabled;
 
         // Update configuration parameters.
         mConfiguration.updateParametersFrom(configuration);
@@ -500,6 +509,11 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         // Update WAL.
         if (walModeChanged) {
             setWalModeFromConfiguration();
+        }
+
+        // Update checkpoint strategy. This must be done after setting WAL mode.
+        if (checkpointStrategyChanged) {
+            setCheckpointStrategy();
         }
 
         // Update locale.
@@ -924,12 +938,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             window.releaseReference();
         }
     }
-
-
-    public String explainQueryPlan(String sql) {
-        return nativeExplainQueryPlan(mConnectionPtr, sql);
-    }
-
 
     /*package*/ PreparedStatement acquirePreparedStatement(String sql) {
         PreparedStatement statement = mPreparedStatementCache.get(sql);
