@@ -36,7 +36,12 @@ namespace WCDB {
 template <typename T>
 class ThreadLocal {
 public:
-    ThreadLocal()
+    ThreadLocal() : m_defaultValue(nullptr)
+    {
+        pthread_key_create(&m_key, [](void *value) { delete (T *) value; });
+    }
+
+    ThreadLocal(const T &defaultValue) : m_defaultValue(new T(defaultValue))
     {
         pthread_key_create(&m_key, [](void *value) { delete (T *) value; });
     }
@@ -48,14 +53,25 @@ public:
             return value;
         }
         value = new T;
+        if (m_defaultValue) {
+            *value = *m_defaultValue;
+        }
         pthread_setspecific(m_key, value);
         return value;
     }
 
-    ~ThreadLocal() { pthread_key_delete(m_key); }
+    ~ThreadLocal()
+    {
+        if (m_defaultValue) {
+            delete m_defaultValue;
+            m_defaultValue = nullptr;
+        }
+        pthread_key_delete(m_key);
+    }
 
 protected:
     pthread_key_t m_key;
+    T *m_defaultValue;
 };
 
 } //namespace WCDB
