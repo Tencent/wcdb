@@ -182,7 +182,12 @@ void sample_convenient_main(NSString *baseDirectory)
     //Delete with condition/order/offset/limit
     {
         BOOL ret = [database deleteObjectsFromTable:tableName
-                                              where:WCTSampleConvenient.intValue == 1];
+                                              where:WCTSampleConvenient.intValue.in({1, 2, 3})];
+    }
+    //Delete with condition/order/offset/limit
+    {
+        BOOL ret = [database deleteObjectsFromTable:tableName
+                                              where:WCTSampleConvenient.intValue.in(@[ @(1), @(2), @(3) ])];
     }
     NSLog(@"Sample-convenient End");
 }
