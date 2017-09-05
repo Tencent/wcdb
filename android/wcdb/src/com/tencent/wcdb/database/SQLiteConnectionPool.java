@@ -20,7 +20,13 @@ import android.os.SystemClock;
 import android.util.Printer;
 
 import com.tencent.wcdb.BuildConfig;
+import com.tencent.wcdb.DatabaseUtils;
+import com.tencent.wcdb.database.SQLiteDebug.DbStats;
+import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
+import com.tencent.wcdb.support.OperationCanceledException;
+import com.tencent.wcdb.support.PrefixPrinter;
+
 import java.io.Closeable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,10 +34,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
-import com.tencent.wcdb.database.SQLiteDebug.DbStats;
-import com.tencent.wcdb.support.CancellationSignal;
-import com.tencent.wcdb.support.OperationCanceledException;
-import com.tencent.wcdb.support.PrefixPrinter;
 
 /**
  * Maintains a pool of active SQLite database connections.
@@ -309,7 +311,7 @@ public final class SQLiteConnectionPool implements Closeable {
             }
 
             if (mConfiguration.openFlags != configuration.openFlags ||
-                    !mConfiguration.vfsName.equals(configuration.vfsName)) {
+                    !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName)) {
                 // If we are changing open flags and WAL mode at the same time, then
                 // we have no choice but to close the primary connection beforehand
                 // because there can only be one connection open when we change WAL mode.
