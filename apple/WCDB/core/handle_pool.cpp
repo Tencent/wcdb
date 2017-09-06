@@ -55,6 +55,25 @@ RecyclableHandlePool HandlePool::GetPool(const std::string &path,
     });
 }
 
+RecyclableHandlePool HandlePool::GetPool(Tag tag)
+{
+    std::lock_guard<std::mutex> lockGuard(s_mutex);
+    for (auto iter : s_pools) {
+        if (iter.second.first->tag == tag) {
+            ++iter.second.second;
+            return RecyclableHandlePool(
+                iter.second.first, [](std::shared_ptr<HandlePool> &pool) {
+                    std::lock_guard<std::mutex> lockGuard(s_mutex);
+                    const auto &iter = s_pools.find(pool->path);
+                    if (--iter->second.second == 0) {
+                        s_pools.erase(iter);
+                    }
+                });
+        }
+    }
+    return RecyclableHandlePool(nullptr, nullptr);
+}
+
 void HandlePool::PurgeFreeHandlesInAllPool()
 {
     std::list<std::shared_ptr<HandlePool>> handlePools;

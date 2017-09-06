@@ -52,6 +52,18 @@
     return self;
 }
 
+- (instancetype)initWithExistingTag:(WCTTag)tag
+{
+    std::shared_ptr<WCDB::CoreBase> core(new WCDB::Database(tag));
+    if (core->getType() != WCDB::CoreType::None) {
+        if (self = [super initWithCore:core]) {
+            _database = (WCDB::Database *) _core.get();
+        }
+        return self;
+    }
+    return nil;
+}
+
 - (void)setCipherKey:(NSData *)cipherKey
 {
     _database->setCipher(cipherKey.bytes, (int) cipherKey.length);

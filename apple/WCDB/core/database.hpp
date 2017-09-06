@@ -37,6 +37,7 @@ class Database : public CoreBase {
 public:
     Database() = delete;
     Database(const std::string &path);
+    Database(Tag tag);
 
     //basic
     void setTag(Tag tag);
