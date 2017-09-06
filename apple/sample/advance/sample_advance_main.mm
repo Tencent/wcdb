@@ -76,6 +76,19 @@ void sample_advance_main(NSString *baseDirectory)
         }
     }
 
+    //Multi select
+    {
+        WCTMultiSelect *select = [[database prepareSelectMultiObjectsOnResults:{
+                                                                                   WCTSampleAdvance.AllProperties.inTable(tableName),
+                                                                                   WCTSampleAdvanceMulti.AllProperties.inTable(tableName2)}
+                                                                    fromTables:@[ tableName, tableName2 ]] where:WCTSampleAdvance.intValue.inTable(tableName) == WCTSampleAdvanceMulti.intValue.inTable(tableName2)];
+        NSArray<WCTMultiObject *> *multiObjects = select.allMultiObjects;
+        for (WCTMultiObject *multiObjects : multiObjects) {
+            WCTSampleAdvance *object1 = (WCTSampleAdvance *) [multiObjects objectForKey:tableName];
+            WCTSampleAdvanceMulti *object2 = (WCTSampleAdvanceMulti *) [multiObjects objectForKey:tableName2];
+        }
+    }
+
     //Column coding
     {
         WCTSampleAdvance *object = [database getOneObjectOfClass:WCTSampleAdvance.class

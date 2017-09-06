@@ -37,11 +37,29 @@ public:
 class WCTResultList : public std::list<const WCTResult> {
 public:
     WCTResultList();
-    WCTResultList(const WCTProperty &property);
-    WCTResultList(const WCTExpr &expr);
+
+    template <typename T>
+    WCTResultList(
+        const T &value,
+        typename std::enable_if<std::is_convertible<T, WCTResult>::value>::type
+            * = nullptr)
+        : std::list<const WCTResult>(WCTResult(value)), m_distinct(false)
+    {
+    }
+
+    template <typename T>
+    WCTResultList(
+        std::initializer_list<const T> il,
+        typename std::enable_if<std::is_convertible<T, WCTResult>::value>::type
+            * = nullptr)
+        : std::list<const WCTResult>(il.begin(), il.end()), m_distinct(false)
+    {
+    }
+
     WCTResultList(const WCTPropertyList &propertyList);
     WCTResultList(const WCTExprList &exprList);
-    WCTResultList(std::initializer_list<const WCTResult> il);
+
+    WCTResultList(std::initializer_list<const WCTPropertyList> il);
 
     WCTResultList &distinct();
 
