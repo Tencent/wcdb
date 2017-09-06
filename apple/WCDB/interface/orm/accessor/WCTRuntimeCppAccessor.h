@@ -64,15 +64,15 @@ protected:
 
     ValueGetter generateValueGetter()
     {
-        return [this](InstanceType instance) -> CType {
-            return convertPropertyTypeToCType(this->getProperty(instance));
+        return ^(InstanceType instance) {
+          return convertPropertyTypeToCType(this->getProperty(instance));
         };
     }
 
     ValueSetter generateValueSetter()
     {
-        return [this](InstanceType instance, CType value) {
-            this->setProperty(instance, convertCTypeToPropertyType(value));
+        return ^(InstanceType instance, CType value) {
+          this->setProperty(instance, convertCTypeToPropertyType(value));
         };
     }
 };
@@ -106,15 +106,15 @@ public:
 
     ValueGetter generateValueGetter()
     {
-        return [this](InstanceType instance, SizeType &size) -> CType {
-            return convertPropertyTypeToCType(getProperty(instance), size);
+        return ^(InstanceType instance, SizeType &size) {
+          return convertPropertyTypeToCType(getProperty(instance), size);
         };
     }
 
     ValueSetter generateValueSetter()
     {
-        return [this](InstanceType instance, CType value, SizeType size) {
-            setProperty(instance, convertCTypeToPropertyType(value, size));
+        return ^(InstanceType instance, CType value, SizeType size) {
+          setProperty(instance, convertCTypeToPropertyType(value, size));
         };
     }
 };

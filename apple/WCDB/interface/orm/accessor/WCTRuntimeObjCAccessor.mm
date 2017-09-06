@@ -43,12 +43,13 @@ WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(
     static const SEL ArchiveSelector = NSSelectorFromString(@"archivedWCTValue");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     IMP implementation = GetInstanceMethodImplementation(propertyClass, ArchiveSelector);
-    return [this, propertyClass, implementation](InstanceType instance) -> OCType {
-        using Archiver = OCType (*)(InstanceType, SEL);
-        PropertyType property = getProperty(instance);
-        OCType value = property ? ((Archiver) implementation)(property, ArchiveSelector) : nil;
-        return value;
+    auto block = ^(InstanceType instance) {
+      using Archiver = OCType (*)(InstanceType, SEL);
+      PropertyType property = getProperty(instance);
+      OCType value = property ? ((Archiver) implementation)(property, ArchiveSelector) : nil;
+      return value;
     };
+    return [block copy];
 }
 
 WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class instanceClass, const std::string &propertyName)
@@ -56,13 +57,14 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     static const SEL UnarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     IMP implementation = GetClassMethodImplementation(propertyClass, UnarchiveSelector);
-    return [this, propertyClass, implementation](InstanceType instance, OCType value) {
-        using Unarchiver = PropertyType (*)(Class, SEL, OCType);
-        if (instance) {
-            PropertyType property = ((Unarchiver) implementation)(propertyClass, UnarchiveSelector, value);
-            setProperty(instance, property);
-        }
+    auto block = ^(InstanceType instance, OCType value) {
+      using Unarchiver = PropertyType (*)(Class, SEL, OCType);
+      if (instance) {
+          PropertyType property = ((Unarchiver) implementation)(propertyClass, UnarchiveSelector, value);
+          setProperty(instance, property);
+      }
     };
+    return [block copy];
 }
 
 WCTColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string &propertyName)

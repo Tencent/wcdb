@@ -34,6 +34,6 @@
 @protocol WCTColumnCoding
 @required
 + (instancetype)unarchiveWithWCTValue:(WCTValue *)value; //value could be nil
-- (id /* WCTValue* */)archivedWCTValue;                  //value could be nil
+- (id /* WCTValue* */)archivedWCTValue; //value could be nil
 + (WCTColumnType)columnTypeForWCDB;
 @end
