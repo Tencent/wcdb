@@ -24,7 +24,7 @@
 namespace WCDB {
 
 CoreBase::CoreBase(const RecyclableHandlePool &pool, CoreType type)
-    : m_pool(pool), m_type(type)
+    : m_pool(pool), m_type(pool != nullptr ? type : CoreType::None)
 {
 }
 

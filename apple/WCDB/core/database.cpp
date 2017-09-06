@@ -31,6 +31,11 @@ Database::Database(const std::string &thePath)
 {
 }
 
+Database::Database(Tag tag)
+    : CoreBase(HandlePool::GetPool(tag), CoreType::Database)
+{
+}
+
 bool Database::canOpen()
 {
     Error innerError;
