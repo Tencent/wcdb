@@ -49,7 +49,7 @@ public:
                 &value,
             int size);
 
-    WCTResult as(const WCTProperty &column);
+    WCTResult as(const WCTProperty &property);
 
     WCTResultList distinct() const;
 
