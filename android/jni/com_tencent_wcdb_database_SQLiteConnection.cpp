@@ -122,6 +122,7 @@ static int sqliteWalHookCallback(void *data, sqlite3 *db, const char *dbName, in
     bool exceptionOccurred = env->ExceptionCheck();
     if (exceptionOccurred) {
         jniLogException(env, ANDROID_LOG_ERROR, LOG_TAG);
+        env->ExceptionClear();
     }
     env->DeleteLocalRef(dbNameStr);
 
