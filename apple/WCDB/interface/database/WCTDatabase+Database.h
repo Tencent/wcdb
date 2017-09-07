@@ -42,7 +42,7 @@ typedef void (^WCTCloseBlock)(void);
  @brief Init a database from existing tag.
         Note that all database objects with same path share the same core. So you can create multiple database objects. WCDB will manage them automatically.
         Note that WCDB will not generate a sqlite handle until the first operation, which is also called as lazy initialization.
- @param tag a tag already exists
+ @param tag a tag already exists. Note that 0 is not a valid tag.
  @return nil if the tag do not exists
  */
 - (instancetype)initWithExistingTag:(WCTTag)tag;
