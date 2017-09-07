@@ -23,18 +23,23 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface NSSet (WCTColumnCoding) <WCTColumnCoding>
+@interface NSObject (WCTColumnCoding) <WCTColumnCoding>
 @end
 
-@implementation NSSet (WCTColumnCoding)
+@implementation NSObject (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    NSObject *object = nil;
+    if (value.length > 0) {
+        object = [NSKeyedUnarchiver unarchiveObjectWithData:value];
+    }
+    return object;
 }
 
 - (NSData *)archivedWCTValue
 {
+    //Class should conform to either [WCTColumnCoding] or [NSCoding] protocol or it may crash here.
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
