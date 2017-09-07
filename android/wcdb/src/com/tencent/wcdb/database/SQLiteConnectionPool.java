@@ -1067,7 +1067,15 @@ public final class SQLiteConnectionPool implements Closeable {
     }
 
     /*package*/ void setCheckpointListener(SQLiteCheckpointListener listener) {
+        SQLiteDatabase db = mDB.get();
+
+        if (mCheckpointListener != null)
+            mCheckpointListener.onDetach(db);
+
         mCheckpointListener = listener;
+
+        if (mCheckpointListener != null)
+            mCheckpointListener.onAttach(db);
     }
 
     /*package*/ void notifyCheckpoint(String dbName, int pages) {

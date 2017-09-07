@@ -21,5 +21,7 @@
 package com.tencent.wcdb.database;
 
 public interface SQLiteCheckpointListener {
+    void onAttach(SQLiteDatabase db);
     void onWALCommit(SQLiteDatabase db, String dbName, int pages);
+    void onDetach(SQLiteDatabase db);
 }

@@ -2084,6 +2084,12 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    public void setAsyncCheckpointEnabled(boolean enabled) {
+        SQLiteCheckpointListener callback = enabled ?
+                new SQLiteAsyncCheckpointer(null) : null;
+        setCheckpointCallback(callback);
+    }
+
     /**
      * This method enables parallel execution of queries from multiple threads on the
      * same database.  It does this by opening multiple connections to the database
