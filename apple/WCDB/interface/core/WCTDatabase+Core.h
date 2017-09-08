@@ -34,8 +34,8 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  @brief Default config name. 
         The default config for WCDB is :
         1. PRAGMA locking_mode=NORMAL
-        2. PRAGMA journal_mode=WAL
-        3. PRAGMA synchronous=FULL
+        2. PRAGMA synchronous=NORMAL
+        3. PRAGMA journal_mode=WAL
         4. PRAGMA fullfsync=ON
         Setting config for this name will overwrite the default config.
  @return default config name
@@ -52,9 +52,10 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
 + (NSString *)DefaultCipherConfigName;
 
 /**
- @brief Default trace config name 
+ @brief Default trace config name. It's off by default. Call [WCTStatistics SetGlobalPerformanceTrace:] to open it.
         The config for performance and sql tracing.
  @return default trace config name
+ @see [WCTStatistics SetGlobalPerformanceTrace:]
  */
 + (NSString *)DefaultTraceConfigName;
 
@@ -66,14 +67,13 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
 + (NSString *)DefaultCheckpointConfigName;
 
 /**
- @brief Default sync config name
-        The default sync config for WCDB is :
+ @brief Default synchronous config name. It's off by default. Call [WCTDatabase setSynchronousFull:] to open it.
+        The default synchronous config for WCDB is :
         1. PRAGMA synchronous=FULL
-        2. PRAGMA checkpoint_fullfsync=1
-        3. PRAGMA fullfsync=1
- @return default sync config name
+ @return default synchronous config name
+ @see [WCTDatabase setSynchronousFull:]
  */
-+ (NSString *)DefaultSyncConfigName;
++ (NSString *)DefaultSynchronousConfigName;
 
 /**
  @brief Set config for this database.  
@@ -98,10 +98,10 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
 - (void)setConfig:(WCDB::Config)config forName:(NSString *)name;
 
 /**
- @brief Set sync for this database.
-        Sync can improve the stability of the database, reduce database damage, but there will be performance degradation.
- @param sync enable or disable sync
+ @brief Set Synchronous for this database. It will disable checkpoint opti to avoid performance degradation.
+        Synchronous can improve the stability of the database and reduce database damage, but there will be performance degradation.
+ @param full enable or disable full synchronous
  */
-- (void)setSyncEnabled:(BOOL)sync;
+- (void)setSynchronousFull:(BOOL)full;
 
 @end

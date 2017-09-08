@@ -85,6 +85,17 @@ bool Configs::invoke(std::shared_ptr<Handle> &handle, Error &error)
     return true;
 }
 
+Config Configs::getConfigByName(const std::string &name) const
+{
+    std::shared_ptr<ConfigList> configs = m_configs;
+    for (const auto &config : *configs.get()) {
+        if (config.name == name) {
+            return config.invoke;
+        }
+    }
+    return nullptr;
+}
+
 bool operator==(const Configs &left, const Configs &right)
 {
     return left.m_configs == right.m_configs;

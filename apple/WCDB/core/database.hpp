@@ -56,7 +56,7 @@ public:
     static const std::string defaultCipherConfigName;
     static const std::string defaultTraceConfigName;
     static const std::string defaultCheckpointConfigName;
-    static const std::string defaultSyncConfigName;
+    static const std::string defaultSynchronousConfigName;
     static const Configs defaultConfigs;
     void setConfig(const std::string &name,
                    const Config &config,
@@ -64,7 +64,7 @@ public:
     void setConfig(const std::string &name, const Config &config);
     void setCipher(const void *key, int keySize);
     void setCipher(const void *key, int keySize, int pageSize);
-    void setSyncEnabled(bool sync);
+    void setSynchronousFull(bool full);
     void setPerformanceTrace(const PerformanceTrace &trace);
     static void SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace);
     static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
