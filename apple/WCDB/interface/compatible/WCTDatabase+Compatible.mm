@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#ifndef WCDB_OMIT_DEPRECATED
+
 #import <WCDB/WCTDatabase+Compatible.h>
 #import <WCDB/WCTDatabase+Core.h>
 
@@ -34,3 +36,5 @@
 }
 
 @end
+
+#endif //WCDB_OMIT_DEPRECATED

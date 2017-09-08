@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#ifndef WCDB_OMIT_DEPRECATED
+
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
 
@@ -28,3 +30,5 @@
 - (void)setSyncEnabled:(BOOL)sync DEPRECATED_MSG_ATTRIBUTE("-setSyncEnabled: is deprecated since v1.0.4. Use -setSynchronousFull: instead");
 
 @end
+
+#endif //WCDB_OMIT_DEPRECATED

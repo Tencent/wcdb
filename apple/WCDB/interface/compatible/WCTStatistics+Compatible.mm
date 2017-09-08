@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#ifndef WCDB_OMIT_DEPRECATED
+
 #import <WCDB/WCTStatistics+Compatible.h>
 
 @implementation WCTStatistics (Compatible)
@@ -28,3 +30,5 @@
 }
 
 @end
+
+#endif //WCDB_OMIT_DEPRECATED
