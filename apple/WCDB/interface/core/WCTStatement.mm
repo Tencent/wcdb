@@ -171,11 +171,6 @@
     return WCTColumnTypeNil;
 }
 
-- (int)getCount
-{
-    return [self getColumnCount];
-}
-
 - (int)getColumnCount
 {
     return _statementHandle->getColumnCount();
@@ -185,11 +180,6 @@
 {
     const char *columnName = _statementHandle->getColumnName(index);
     return columnName ? @(columnName) : nil;
-}
-
-- (NSString *)getNameAtIndex:(int)index
-{
-    return [self getNameAtIndex:index];
 }
 
 - (NSString *)getTableNameAtIndex:(int)index

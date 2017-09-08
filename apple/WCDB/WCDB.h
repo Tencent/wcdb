@@ -75,6 +75,7 @@
 
 #import <WCDB/WCTCompatible.h>
 #import <WCDB/WCTDatabase+Compatible.h>
+#import <WCDB/WCTStatement+Compatible.h>
 #import <WCDB/WCTStatistics+Compatible.h>
 
 #endif /* WCDB_h */

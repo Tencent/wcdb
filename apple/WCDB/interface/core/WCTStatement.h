@@ -95,13 +95,6 @@
  @brief The wrapper of sqlite3_column_count.
  @return Count of column result.
  */
-- (int)getCount DEPRECATED_MSG_ATTRIBUTE("-getCount is deprecated since v1.0.4. Use -getColumnCount instead");
-;
-
-/**
- @brief The wrapper of sqlite3_column_count.
- @return Count of column result.
- */
 - (int)getColumnCount;
 
 /**
@@ -117,13 +110,6 @@
  @return The index of given column name. INT_MAX will be returned if no such column name.
  */
 - (int)getIndexByColumnName:(NSString *)columnName;
-
-/**
- @brief The wrapper of sqlite3_column_name. Use -getColumNameAtIndex: instead.
- @param index Begin with 0.
- @return The description of column result.
- */
-- (NSString *)getNameAtIndex:(int)index DEPRECATED_MSG_ATTRIBUTE("-getNameAtIndex: is deprecated since v1.0.4. Use -getColumNameAtIndex: instead");
 
 /**
  @brief The wrapper of sqlite3_column_table_name.
