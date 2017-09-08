@@ -74,6 +74,7 @@
 #import <WCDB/WCTTransaction+Statistics.h>
 
 #import <WCDB/WCTCompatible.h>
+#import <WCDB/WCTStatement+Compatible.h>
 #import <WCDB/WCTStatistics+Compatible.h>
 
 #endif /* WCDB_h */
