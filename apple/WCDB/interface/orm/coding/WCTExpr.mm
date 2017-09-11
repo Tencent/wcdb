@@ -114,6 +114,11 @@ WCTExpr WCTExpr::operator-() const
     return WCTExpr(Expr::operator-(), *this);
 }
 
+WCTExpr WCTExpr::operator~() const
+{
+    return WCTExpr(Expr::operator~(), *this);
+}
+
 WCTExpr WCTExpr::operator||(const WCTExpr &operand) const
 {
     return WCTExpr(Expr::operator||(operand), *this);

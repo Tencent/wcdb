@@ -154,6 +154,11 @@ WCTExpr WCTProperty::operator-() const
     return -WCTExpr(*this);
 }
 
+WCTExpr WCTProperty::operator~() const
+{
+    return ~WCTExpr(*this);
+}
+
 WCTExpr WCTProperty::operator||(const WCTExpr &operand) const
 {
     return WCTExpr(*this) || operand;

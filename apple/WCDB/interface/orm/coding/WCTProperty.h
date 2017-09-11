@@ -70,6 +70,7 @@ public:
     WCTExpr operator!() const;
     WCTExpr operator+() const;
     WCTExpr operator-() const;
+    WCTExpr operator~() const;
 
     //binary
     WCTExpr operator||(const WCTExpr &operand) const; //or, not concat
