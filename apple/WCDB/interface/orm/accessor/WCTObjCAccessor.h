@@ -36,8 +36,8 @@ struct ColumnIsObjCType<
 class WCTObjCAccessor : public WCTBaseAccessor {
 public:
     using OCType = id; //NSData*, NSString*, NSNumber*
-    using Setter = std::function<void(InstanceType, OCType)>;
-    using Getter = std::function<OCType(InstanceType)>;
+    using Setter = void (^)(InstanceType, OCType);
+    using Getter = OCType (^)(InstanceType);
 
     WCTObjCAccessor(Getter getter, Setter setter)
         : getObject(getter), setObject(setter)
