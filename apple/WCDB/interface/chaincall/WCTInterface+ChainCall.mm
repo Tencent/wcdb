@@ -21,11 +21,13 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
+#import <WCDB/WCTExpr.h>
 #import <WCDB/WCTInsert+Private.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTInterface+ChainCall.h>
 #import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>

@@ -39,11 +39,6 @@ NSString *WCTResult::getDescription() const
     return [NSString stringWithUTF8String:WCDB::ColumnResult::getDescription().c_str()];
 }
 
-WCTResult::operator WCTResultList() const
-{
-    return {*this};
-}
-
 WCTResult &WCTResult::as(const WCTProperty &property)
 {
     WCDB::ColumnResult::as(property.getName());
@@ -70,6 +65,18 @@ WCTResultList::WCTResultList(const WCTPropertyList &propertyList)
 
 WCTResultList::WCTResultList(const WCTExprList &exprList)
     : std::list<const WCTResult>(exprList.begin(), exprList.end())
+    , m_distinct(false)
+{
+}
+
+WCTResultList::WCTResultList(std::initializer_list<const WCTExpr> il)
+    : std::list<const WCTResult>(il.begin(), il.end())
+    , m_distinct(false)
+{
+}
+
+WCTResultList::WCTResultList(std::initializer_list<const WCTProperty> il)
+    : std::list<const WCTResult>(il.begin(), il.end())
     , m_distinct(false)
 {
 }
