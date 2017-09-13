@@ -27,7 +27,7 @@ namespace WCDB {
 
 class StatementSelect : public Statement {
 public:
-    template <typename T>
+    template <typename T = ColumnResult>
     typename std::enable_if<std::is_base_of<ColumnResult, T>::value,
                             StatementSelect &>::type
     select(const std::list<const T> &columnResultList, bool distinct = false)
@@ -85,6 +85,8 @@ public:
     StatementSelect &having(const Expr &having);
 
     virtual Statement::Type getStatementType() const override;
+
+    static StatementSelect Fts3Tokenizer;
 };
 
 } //namespace WCDB

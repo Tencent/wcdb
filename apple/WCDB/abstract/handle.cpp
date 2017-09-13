@@ -246,17 +246,6 @@ long long Handle::getLastInsertedRowID()
     return sqlite3_last_insert_rowid((sqlite3 *) m_handle);
 }
 
-void Handle::setConfig(Handle::Config config, bool enable)
-{
-    int dbConfig;
-    switch (config) {
-        case Config::Fts3Tokenizer:
-            dbConfig = SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER;
-            break;
-    }
-    sqlite3_db_config((sqlite3 *) m_handle, dbConfig, enable, nullptr);
-}
-
 bool Handle::setCipherKey(const void *data, int size)
 {
 #ifdef SQLITE_HAS_CODEC

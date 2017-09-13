@@ -459,91 +459,73 @@ Expr Expr::notIn(const std::string &table) const
 
 Expr Expr::avg(bool distinct) const
 {
-    return function("AVG", distinct);
+    return Expr::Function("AVG", {*this}, distinct);
 }
 
 Expr Expr::count(bool distinct) const
 {
-    return function("COUNT", distinct);
+    return Expr::Function("COUNT", {*this}, distinct);
 }
 
 Expr Expr::groupConcat(bool distinct) const
 {
-    return function("GROUP_CONCAT", distinct);
+    return Expr::Function("GROUP_CONCAT", {*this}, distinct);
 }
 
 Expr Expr::groupConcat(const std::string &seperator, bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("GROUP_CONCAT(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description + "," + seperator);
-    expr.m_description.append(")");
-    return expr;
+    return Expr::Function("GROUP_CONCAT", ExprList({*this, seperator}),
+                          distinct);
 }
 
 Expr Expr::max(bool distinct) const
 {
-    return function("MAX", distinct);
+    return Expr::Function("MAX", {*this}, distinct);
 }
 
 Expr Expr::min(bool distinct) const
 {
-    return function("MIN", distinct);
+    return Expr::Function("MIN", {*this}, distinct);
 }
 
 Expr Expr::sum(bool distinct) const
 {
-    return function("SUM", distinct);
+    return Expr::Function("SUM", {*this}, distinct);
 }
 
 Expr Expr::total(bool distinct) const
 {
-    return function("TOTAL", distinct);
+    return Expr::Function("TOTAL", {*this}, distinct);
 }
 
 Expr Expr::abs(bool distinct) const
 {
-    return function("ABS", distinct);
+    return Expr::Function("ABS", {*this}, distinct);
 }
 
 Expr Expr::hex(bool distinct) const
 {
-    return function("HEX", distinct);
+    return Expr::Function("HEX", {*this}, distinct);
 }
 
 Expr Expr::length(bool distinct) const
 {
-    return function("LENGTH", distinct);
+    return Expr::Function("LENGTH", {*this}, distinct);
 }
 
 Expr Expr::lower(bool distinct) const
 {
-    return function("LOWER", distinct);
+    return Expr::Function("LOWER", {*this}, distinct);
 }
 
 Expr Expr::upper(bool distinct) const
 {
-    return function("UPPER", distinct);
+    return Expr::Function("UPPER", {*this}, distinct);
 }
 
 Expr Expr::round(bool distinct) const
 {
-    return function("ROUND", distinct);
-}
-
-Expr Expr::function(const std::string &funtionName, bool distinct) const
-{
-    Expr expr;
-    expr.m_description.append(funtionName + "(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return Expr::Function("ROUND", {*this}, distinct);
 }
 
 std::string Expr::literalValue(const char *value)
@@ -565,6 +547,21 @@ std::string Expr::literalValue(
     const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size)
 {
     return "'" + std::string((const char *) value, size) + "'";
+}
+
+Expr Expr::matchinfo()
+{
+    return Expr::Function("MATCHINFO", {*this});
+}
+
+Expr Expr::offsets()
+{
+    return Expr::Function("OFFSETS", {*this});
+}
+
+Expr Expr::snippet()
+{
+    return Expr::Function("SNIPPET", {*this});
 }
 
 } //namespace WCDB

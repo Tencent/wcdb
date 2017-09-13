@@ -187,12 +187,17 @@ public:
     Expr upper(bool distinct = false) const;
     Expr round(bool distinct = false) const;
 
-    template <typename T>
+    template <typename T = Expr>
     static typename std::enable_if<std::is_base_of<Expr, T>::value, Expr>::type
-    Function(const std::string &function, const std::list<const T> &exprList)
+    Function(const std::string &function,
+             const std::list<const T> &exprList,
+             bool distinct = false)
     {
         Expr expr;
         expr.m_description.append(function + "(");
+        if (distinct) {
+            expr.m_description.append("DISTINCT ");
+        }
         expr.joinDescribableList(exprList);
         expr.m_description.append(")");
         return expr;
@@ -222,9 +227,12 @@ public:
         return expr;
     }
 
-protected:
-    Expr function(const std::string &funtionName, bool distinct) const;
+    //FTS3
+    Expr matchinfo();
+    Expr offsets();
+    Expr snippet();
 
+protected:
     template <typename T>
     std::string literalValue(
         const T &value,
