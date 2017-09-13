@@ -2086,7 +2086,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
     public void setAsyncCheckpointEnabled(boolean enabled) {
         SQLiteCheckpointListener callback = enabled ?
-                new SQLiteAsyncCheckpointer(null) : null;
+                new SQLiteAsyncCheckpointer() : null;
         setCheckpointCallback(callback);
     }
 

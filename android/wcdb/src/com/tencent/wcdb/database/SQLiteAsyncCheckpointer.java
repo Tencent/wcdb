@@ -28,8 +28,6 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Pair;
 
-import com.tencent.wcdb.DatabaseUtils;
-
 import java.util.HashSet;
 
 
@@ -38,11 +36,23 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
     private Looper mLooper;
     private Handler mHandler;
     private boolean mUseDefaultLooper;
+    private int mThreshold;
     private final HashSet<Pair<SQLiteDatabase, String>> mPendingCheckpoints;
 
+    private static final int DEFAULT_THRESHOLD = 250;
+
+
+    public SQLiteAsyncCheckpointer() {
+        this(null, DEFAULT_THRESHOLD);
+    }
 
     public SQLiteAsyncCheckpointer(Looper looper) {
+        this(looper, DEFAULT_THRESHOLD);
+    }
+
+    public SQLiteAsyncCheckpointer(Looper looper, int threshold) {
         mLooper = looper;
+        mThreshold = threshold;
         mPendingCheckpoints = new HashSet<>();
     }
 
@@ -59,8 +69,7 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
     @Override
     public void onWALCommit(SQLiteDatabase db, String dbName, int pages) {
 
-        // TODO: customizable threshold
-        if (pages < 250)
+        if (pages < mThreshold)
             return;
 
         Pair<SQLiteDatabase, String> p = new Pair<>(db, dbName);
