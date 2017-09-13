@@ -2,7 +2,7 @@
 # pod trunk push WCDB.podspec --verbose --skip-import-validation
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
-  wcdb.version      = "1.0.3"
+  wcdb.version      = "1.0.4"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by Wechat."
   wcdb.description  = <<-DESC
                       WCDB is an efficient, complete, easy-to-use mobile database framework used in the WeChat application.
