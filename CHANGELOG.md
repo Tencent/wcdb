@@ -1,3 +1,23 @@
+## v1.0.4
+
+### iOS
+
+* Builtin `WCTColumnCoding` supports all `id<NSCoding>` objects now.
+
+* Compatible with iOS 11.
+
+* `Fullfsync` is used by default for data integrity.
+
+* Add `-initWithExistingTag:` for `WCTDatabase` to get existing database without path.
+
+  ```objective-c
+  WCTDatabase* database = [WCTDatabase [alloc] initWithPath:path];
+  database.tag = 123;
+  WCTDatabase* withoutPath = [[WCTDatabase alloc] initWithExistingTag:123];
+  ```
+
+* Some minor bug fixes, performance improvement and code refactor.
+
 ## v1.0.3
 
 #### Repair Kit
