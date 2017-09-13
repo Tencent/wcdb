@@ -20,7 +20,13 @@ import android.os.SystemClock;
 import android.util.Printer;
 
 import com.tencent.wcdb.BuildConfig;
+import com.tencent.wcdb.DatabaseUtils;
+import com.tencent.wcdb.database.SQLiteDebug.DbStats;
+import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
+import com.tencent.wcdb.support.OperationCanceledException;
+import com.tencent.wcdb.support.PrefixPrinter;
+
 import java.io.Closeable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,10 +34,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
-import com.tencent.wcdb.database.SQLiteDebug.DbStats;
-import com.tencent.wcdb.support.CancellationSignal;
-import com.tencent.wcdb.support.OperationCanceledException;
-import com.tencent.wcdb.support.PrefixPrinter;
 
 /**
  * Maintains a pool of active SQLite database connections.
@@ -79,6 +81,10 @@ public final class SQLiteConnectionPool implements Closeable {
     // Keep reference to SQLiteDatabase which owns this connection pool.
     private final WeakReference<SQLiteDatabase> mDB;
     private volatile SQLiteTrace mTraceCallback;
+    private volatile SQLiteCheckpointListener mCheckpointListener;
+
+    private byte[] mPassword;
+    private SQLiteCipherSpec mCipher;
 
     private final Object mLock = new Object();
     private final AtomicBoolean mConnectionLeaked = new AtomicBoolean();
@@ -162,9 +168,6 @@ public final class SQLiteConnectionPool implements Closeable {
             super.finalize();
         }
     }
-
-    private byte[] mPassword;
-    private SQLiteCipherSpec mCipher;
 
     /**
      * Opens a connection pool for the specified database.
@@ -308,7 +311,7 @@ public final class SQLiteConnectionPool implements Closeable {
             }
 
             if (mConfiguration.openFlags != configuration.openFlags ||
-                    !mConfiguration.vfsName.equals(configuration.vfsName)) {
+                    !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName)) {
                 // If we are changing open flags and WAL mode at the same time, then
                 // we have no choice but to close the primary connection beforehand
                 // because there can only be one connection open when we change WAL mode.
@@ -328,11 +331,11 @@ public final class SQLiteConnectionPool implements Closeable {
 
                 mAvailablePrimaryConnection = newPrimaryConnection;
                 mConfiguration.updateParametersFrom(configuration);
-                setMaxConnectionPoolSizeLocked(1);
+                setMaxConnectionPoolSizeLocked(0);
             } else {
                 // Reconfigure the database connections in place.
                 mConfiguration.updateParametersFrom(configuration);
-                setMaxConnectionPoolSizeLocked(1);
+                setMaxConnectionPoolSizeLocked(0);
 
                 closeExcessConnectionsAndLogExceptionsLocked();
                 reconfigureAllConnectionsLocked();
@@ -1052,10 +1055,36 @@ public final class SQLiteConnectionPool implements Closeable {
 
     /*package*/ void traceExecute(String sql, int type, long time) {
         SQLiteDatabase db = mDB.get();
-        if (mTraceCallback == null || db == null)
-            return;
+        SQLiteTrace trace = mTraceCallback;
 
-        mTraceCallback.onSQLExecuted(db, sql, type, time);
+        if (trace == null || db == null)
+            return;
+        trace.onSQLExecuted(db, sql, type, time);
+    }
+
+    /*package*/ SQLiteCheckpointListener getCheckpointListener() {
+        return mCheckpointListener;
+    }
+
+    /*package*/ void setCheckpointListener(SQLiteCheckpointListener listener) {
+        SQLiteDatabase db = mDB.get();
+
+        if (mCheckpointListener != null)
+            mCheckpointListener.onDetach(db);
+
+        mCheckpointListener = listener;
+
+        if (mCheckpointListener != null)
+            mCheckpointListener.onAttach(db);
+    }
+
+    /*package*/ void notifyCheckpoint(String dbName, int pages) {
+        SQLiteDatabase db = mDB.get();
+        SQLiteCheckpointListener walHook = mCheckpointListener;
+
+        if (walHook == null || db == null)
+            return;
+        walHook.onWALCommit(db, dbName, pages);
     }
 
     /**

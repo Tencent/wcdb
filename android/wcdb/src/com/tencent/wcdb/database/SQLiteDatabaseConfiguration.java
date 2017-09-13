@@ -35,10 +35,6 @@ import java.util.regex.Pattern;
  * @hide
  */
 public final class SQLiteDatabaseConfiguration {
-    // The pattern we use to strip email addresses from database paths
-    // when constructing a label to use in log messages.
-    private static final Pattern EMAIL_IN_DB_PATTERN =
-            Pattern.compile("[\\w\\.\\-]+@[\\w\\.\\-]+");
 
     /**
      * Special path used by in-memory databases.
@@ -84,6 +80,13 @@ public final class SQLiteDatabaseConfiguration {
     public boolean foreignKeyConstraintsEnabled;
 
     /**
+     * True if custom WAL hook, including async-checkpoint, is enabled.
+     *
+     * Default is false.
+     */
+    public boolean customWALHookEnabled;
+
+    /**
      * Name of VFS used to open connections, or null to use default VFS.
      *
      * Default is null.
@@ -109,7 +112,7 @@ public final class SQLiteDatabaseConfiguration {
         }
 
         this.path = path;
-        label = stripPathForLogs(path);
+        label = path;
         this.openFlags = openFlags;
 
         // Set default values for optional parameters.
@@ -152,6 +155,7 @@ public final class SQLiteDatabaseConfiguration {
         maxSqlCacheSize = other.maxSqlCacheSize;
         locale = other.locale;
         foreignKeyConstraintsEnabled = other.foreignKeyConstraintsEnabled;
+        customWALHookEnabled = other.customWALHookEnabled;
         vfsName = other.vfsName;
         customFunctions.clear();
         customFunctions.addAll(other.customFunctions);
@@ -163,12 +167,5 @@ public final class SQLiteDatabaseConfiguration {
      */
     public boolean isInMemoryDb() {
         return path.equalsIgnoreCase(MEMORY_DB_PATH);
-    }
-
-    private static String stripPathForLogs(String path) {
-        if (path.indexOf('@') == -1) {
-            return path;
-        }
-        return EMAIL_IN_DB_PATTERN.matcher(path).replaceAll("XX@YY");
     }
 }

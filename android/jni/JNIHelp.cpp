@@ -314,7 +314,7 @@ void jniLogException(C_JNIEnv *env,
         buffer = getExceptionSummary(env, exception);
     }
 
-    __android_log_write(priority, tag, buffer);
+    wcdb_log_write(priority, tag, buffer);
     free(buffer);
 
     if (currentException.get() != NULL) {

@@ -57,6 +57,7 @@ public:
     Expr operator!() const;
     Expr operator+() const;
     Expr operator-() const;
+    Expr operator~() const;
 
     //binary
     Expr operator||(const Expr &operand) const; //or, not concat

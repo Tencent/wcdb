@@ -76,6 +76,8 @@ public:
     Configs();
     Configs(std::initializer_list<const ConfigWrap> configs);
 
+    Config getConfigByName(const std::string &name) const;
+
 protected:
     typedef std::list<ConfigWrap> ConfigList;
 

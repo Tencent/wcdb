@@ -21,20 +21,13 @@
 #ifndef WCDB_OMIT_DEPRECATED
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTStatistics.h>
+#import <WCDB/WCTDatabase.h>
 
-/**
- @see WCTPerformanceTrace
- */
-typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
+@interface WCTDatabase (Compatible)
 
-@interface WCTStatistics (Compatible)
++ (NSString *)DefaultSyncConfigName DEPRECATED_MSG_ATTRIBUTE("-DefaultSyncConfigName: is deprecated since v1.0.4. Use +DefaultSynchronousConfigName: instead");
 
-/**
- @see [WCTStatistics SetGlobalPerformanceTrace:]
- @param trace trace
- */
-+ (void)SetGlobalTrace:(WCTTrace)trace DEPRECATED_MSG_ATTRIBUTE("-SetGlobalTrace: is deprecated since v1.0.3. Use -SetGlobalPerformanceTrace: instead");
+- (void)setSyncEnabled:(BOOL)sync DEPRECATED_MSG_ATTRIBUTE("-setSyncEnabled: is deprecated since v1.0.4. Use -setSynchronousFull: instead");
 
 @end
 

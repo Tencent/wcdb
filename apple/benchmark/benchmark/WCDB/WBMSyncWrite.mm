@@ -33,7 +33,7 @@
 - (void)prepare
 {
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:_path];
-    [_database setSyncEnabled:YES];
+    [_database setSynchronousFull:YES];
     {
         BOOL result = [database createTableAndIndexesOfName:_tableName withClass:WBMObject.class];
         if (!result) {
@@ -46,7 +46,7 @@
 - (void)preBenchmark
 {
     _database = [[WCTDatabase alloc] initWithPath:_path];
-    [_database setSyncEnabled:YES];
+    [_database setSynchronousFull:YES];
     if (![_database canOpen]) {
         abort();
     }

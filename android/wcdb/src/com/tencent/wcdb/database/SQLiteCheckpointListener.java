@@ -18,24 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef WCDB_OMIT_DEPRECATED
+package com.tencent.wcdb.database;
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTStatistics.h>
-
-/**
- @see WCTPerformanceTrace
- */
-typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
-
-@interface WCTStatistics (Compatible)
-
-/**
- @see [WCTStatistics SetGlobalPerformanceTrace:]
- @param trace trace
- */
-+ (void)SetGlobalTrace:(WCTTrace)trace DEPRECATED_MSG_ATTRIBUTE("-SetGlobalTrace: is deprecated since v1.0.3. Use -SetGlobalPerformanceTrace: instead");
-
-@end
-
-#endif //WCDB_OMIT_DEPRECATED
+public interface SQLiteCheckpointListener {
+    void onAttach(SQLiteDatabase db);
+    void onWALCommit(SQLiteDatabase db, String dbName, int pages);
+    void onDetach(SQLiteDatabase db);
+}

@@ -21,7 +21,6 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
-#include "SQLiteConnection.h"
 #include <backup/mm_backup.h>
 #include <jni.h>
 #include <stdlib.h>

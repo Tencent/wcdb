@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#ifndef WCDB_OMIT_DEPRECATED
+
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTStatement.h>
 
@@ -37,3 +39,5 @@
 - (NSString *)getNameAtIndex:(int)index DEPRECATED_MSG_ATTRIBUTE("-getNameAtIndex: is deprecated since v1.0.4. Use -getColumNameAtIndex: instead");
 
 @end
+
+#endif //WCDB_OMIT_DEPRECATED

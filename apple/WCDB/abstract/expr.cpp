@@ -78,6 +78,13 @@ Expr Expr::operator-() const
     return expr;
 }
 
+Expr Expr::operator~() const
+{
+    Expr expr;
+    expr.m_description.append("~(" + m_description + ")");
+    return expr;
+}
+
 Expr Expr::operator||(const Expr &operand) const
 {
     Expr expr;

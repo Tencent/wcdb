@@ -56,6 +56,7 @@ static int jniCallbackLogger(int priority, const char *tag, const char *msg)
     jstring msgStr = env->NewStringUTF(msg);
     env->CallVoidMethod(g_callbackObj, g_callbackPrintLnMethod, priority,
                         tagStr, msgStr);
+    env->ExceptionClear();
     env->DeleteLocalRef(tagStr);
     env->DeleteLocalRef(msgStr);
 

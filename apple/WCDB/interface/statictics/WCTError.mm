@@ -57,7 +57,7 @@
 
 - (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo
 {
-    if ([self initWithDomain:@"WCDB" code:code userInfo:userInfo]) {
+    if (self = [super initWithDomain:@"WCDB" code:code userInfo:userInfo]) {
         _type = type;
     }
     return self;
