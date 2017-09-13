@@ -29,31 +29,19 @@ StatementPragma &StatementPragma::pragma(const Pragma &pragma)
     return *this;
 }
 
-StatementPragma &StatementPragma::pragma(const Pragma &pragma, int value)
-{
-    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
-                         std::to_string(value));
-    return *this;
-}
-
-StatementPragma &StatementPragma::pragma(const Pragma &pragma, float value)
-{
-    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
-                         std::to_string(value));
-    return *this;
-}
-
 StatementPragma &StatementPragma::pragma(const Pragma &pragma,
                                          const char *value)
 {
-    m_description.append("PRAGMA " + pragma.getDescription() + "=" + value);
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
+                         LiteralValue(value).getDescription());
     return *this;
 }
 
 StatementPragma &StatementPragma::pragma(const Pragma &pragma,
                                          const std::string &value)
 {
-    m_description.append("PRAGMA " + pragma.getDescription() + "=" + value);
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
+                         LiteralValue(value).getDescription());
     return *this;
 }
 

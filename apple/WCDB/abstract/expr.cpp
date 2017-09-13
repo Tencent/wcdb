@@ -26,21 +26,25 @@ namespace WCDB {
 
 const Expr Expr::BindParameter = Expr(Column("?"));
 
-Expr::Expr(const char *value) : Describable(literalValue(value))
+Expr::Expr(const LiteralValue &value) : Describable(value)
 {
 }
 
-Expr::Expr(const std::string &value) : Describable(literalValue(value))
+Expr::Expr(const char *value) : Describable(LiteralValue(value))
 {
 }
 
-Expr::Expr(const std::nullptr_t &value) : Describable(literalValue(value))
+Expr::Expr(const std::string &value) : Describable(LiteralValue(value))
+{
+}
+
+Expr::Expr(const std::nullptr_t &value) : Describable(LiteralValue(value))
 {
 }
 
 Expr::Expr(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
            int size)
-    : WCDB::Describable(literalValue(value, size))
+    : WCDB::Describable(LiteralValue(value, size))
 {
 }
 
@@ -526,27 +530,6 @@ Expr Expr::upper(bool distinct) const
 Expr Expr::round(bool distinct) const
 {
     return Expr::Function("ROUND", {*this}, distinct);
-}
-
-std::string Expr::literalValue(const char *value)
-{
-    return literalValue(value ? std::string(value) : "");
-}
-
-std::string Expr::literalValue(const std::string &value)
-{
-    return "'" + stringByReplacingOccurrencesOfString(value, "'", "''") + "'";
-}
-
-std::string Expr::literalValue(const std::nullptr_t &value)
-{
-    return "NULL";
-}
-
-std::string Expr::literalValue(
-    const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size)
-{
-    return "'" + std::string((const char *) value, size) + "'";
 }
 
 Expr Expr::matchinfo()

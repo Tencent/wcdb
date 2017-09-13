@@ -33,7 +33,7 @@ public:
 
     StatementCreateVirtualTable &usingModule(const std::string &moduleName);
 
-    template <typename T>
+    template <typename T = ModuleArgument>
     typename std::enable_if<std::is_base_of<ModuleArgument, T>::value,
                             StatementCreateVirtualTable &>::type
     usingModule(const std::string &moduleName,

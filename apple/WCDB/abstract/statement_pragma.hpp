@@ -21,6 +21,7 @@
 #ifndef statement_pragma_hpp
 #define statement_pragma_hpp
 
+#include <WCDB/literal_value.hpp>
 #include <WCDB/statement.hpp>
 
 namespace WCDB {
@@ -28,8 +29,19 @@ namespace WCDB {
 class StatementPragma : public Statement {
 public:
     StatementPragma &pragma(const Pragma &pragma);
-    StatementPragma &pragma(const Pragma &pragma, int value);
-    StatementPragma &pragma(const Pragma &pragma, float value);
+
+    template <typename T>
+    StatementPragma &
+    pragma(const Pragma &pragma,
+           const T &value,
+           typename std::enable_if<std::is_arithmetic<T>::value ||
+                                   std::is_enum<T>::value>::type * = nullptr)
+    {
+        m_description.append("PRAGMA " + pragma.getDescription() + "=" +
+                             LiteralValue(value).getDescription());
+        return *this;
+    }
+
     StatementPragma &pragma(const Pragma &pragma, const char *value);
     StatementPragma &pragma(const Pragma &pragma, const std::string &value);
 

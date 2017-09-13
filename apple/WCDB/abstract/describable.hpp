@@ -65,11 +65,6 @@ protected:
         }
     }
 
-    static std::string
-    stringByReplacingOccurrencesOfString(const std::string &origin,
-                                         const std::string &target,
-                                         const std::string &replacement);
-
     Describable(const std::string &description);
     Describable(const char *description);
 

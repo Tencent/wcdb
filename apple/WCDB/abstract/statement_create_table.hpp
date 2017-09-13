@@ -33,7 +33,7 @@ public:
                                  bool ifNotExists = true);
     StatementCreateTable &as(const StatementSelect &statementSelect);
 
-    template <typename T>
+    template <typename T = ColumnDef>
     typename std::enable_if<std::is_base_of<ColumnDef, T>::value,
                             StatementCreateTable &>::type
     create(const std::string &table,

@@ -38,7 +38,7 @@ class WCTResultList : public std::list<const WCTResult> {
 public:
     WCTResultList();
 
-    template <typename T>
+    template <typename T = WCTResult>
     WCTResultList(
         const T &value,
         typename std::enable_if<

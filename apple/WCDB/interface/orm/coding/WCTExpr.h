@@ -158,7 +158,7 @@ public:
 
 protected:
     Class m_cls;
-    std::string literalValue(WCTValue *value);
+    WCDB::LiteralValue literalValue(WCTValue *value);
 };
 
 class WCTExprList : public std::list<const WCTExpr> {

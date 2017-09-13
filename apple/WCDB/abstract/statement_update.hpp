@@ -52,7 +52,7 @@ public:
 
     StatementUpdate &where(const Expr &where);
     //StatementUpdateLimited
-    template <typename T>
+    template <typename T = Order>
     typename std::enable_if<std::is_base_of<Order, T>::value,
                             StatementUpdate &>::type
     orderBy(const std::list<const T> &orderList)

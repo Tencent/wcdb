@@ -32,7 +32,7 @@ public:
     TableConstraint(const char *name);
     TableConstraint(const std::string &name);
 
-    template <typename T>
+    template <typename T = ColumnIndex>
     typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
                             TableConstraint &>::type
     makePrimary(const std::list<const T> &columnIndexList)
@@ -43,7 +43,7 @@ public:
         return *this;
     }
 
-    template <typename T>
+    template <typename T = ColumnIndex>
     typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
                             TableConstraint &>::type
     makeUnique(const std::list<const T> &columnIndexList)

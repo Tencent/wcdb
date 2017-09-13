@@ -63,10 +63,9 @@ WCTExpr::WCTExpr(const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::CT
 }
 
 WCTExpr::WCTExpr(WCTValue *value)
-    : WCDB::Expr()
+    : WCDB::Expr(literalValue(value))
     , WCTPropertyBase(nil, nullptr)
 {
-    m_description = literalValue(value);
 }
 
 WCTExpr::WCTExpr(const WCDB::Expr &expr, const WCTPropertyBase &propertyBase)
@@ -416,7 +415,7 @@ WCTExpr WCTExpr::Function(NSString *function, const WCTExprList &exprList)
     return WCTExpr(Expr::Function(function.UTF8String, exprList));
 }
 
-std::string WCTExpr::literalValue(WCTValue *value)
+WCDB::LiteralValue WCTExpr::literalValue(WCTValue *value)
 {
     WCTValueType valueType = [value valueType];
     if (valueType == WCTValueTypeColumnCoding) {
@@ -426,26 +425,26 @@ std::string WCTExpr::literalValue(WCTValue *value)
     switch (valueType) {
         case WCTValueTypeString: {
             NSString *string = (NSString *) value;
-            return WCDB::Expr::literalValue(string.UTF8String);
+            return WCDB::LiteralValue(string.UTF8String);
         } break;
         case WCTValueTypeNumber: {
             NSNumber *number = (NSNumber *) value;
             if (CFNumberIsFloatType((CFNumberRef) number)) {
-                return WCDB::Expr::literalValue(number.doubleValue);
+                return WCDB::LiteralValue(number.doubleValue);
             } else {
                 if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                    return WCDB::Expr::literalValue(number.intValue);
+                    return WCDB::LiteralValue(number.intValue);
                 } else {
-                    return WCDB::Expr::literalValue(number.longLongValue);
+                    return WCDB::LiteralValue(number.longLongValue);
                 }
             }
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            return WCDB::Expr::literalValue(data.bytes, (int) data.length);
+            return WCDB::LiteralValue(data.bytes, (int) data.length);
         } break;
         case WCTValueTypeNil: {
-            return WCDB::Expr::literalValue(nullptr);
+            return WCDB::LiteralValue(nullptr);
         } break;
         default:
             WCDB::Error::Abort(([NSString stringWithFormat:@"Converting an unknown class [%@]", NSStringFromClass(value.class)].UTF8String));
