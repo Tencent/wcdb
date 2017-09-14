@@ -1,22 +1,59 @@
 ## v1.0.4
 
-### iOS
+#### Repair Kit
+
+* Add `sqliterk_cancel` function to cancel ongoing output operations.
+* Add corresponding Java interface to cancel operations on Android.
+
+#### iOS
 
 * Builtin `WCTColumnCoding` supports all `id<NSCoding>` objects now.
-
 * Compatible with iOS 11.
-
 * `Fullfsync` is used by default for data integrity.
-
 * Add `-initWithExistingTag:` for `WCTDatabase` to get existing database without path.
 
-  ```objective-c
-  WCTDatabase* database = [WCTDatabase [alloc] initWithPath:path];
-  database.tag = 123;
-  WCTDatabase* withoutPath = [[WCTDatabase alloc] initWithExistingTag:123];
-  ```
+```objc
+WCTDatabase* database = [WCTDatabase [alloc] initWithPath:path];
+database.tag = 123;
+WCTDatabase* withoutPath = [[WCTDatabase alloc] initWithExistingTag:123];
+```
 
 * Some minor bug fixes, performance improvement and code refactor.
+
+#### Android
+
+* Add asynchronous checkpointing support and custom checkpointing callback. This can
+improve performance in WAL mode.
+
+```java
+SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabaseInWalMode(...);
+
+// Use asynchronous checkpointing.
+db.setAsyncCheckpointEnabled(true);
+
+// OR use custom checkpointer.
+SQLiteCheckpointListener callback = new SQLiteCheckpointListener() {
+    //...
+};
+db.setCheckpointCallback(callback);
+```
+
+* Add `SQLiteTrace.onConnectionObtained(...)` interface to trace concurrency performance.
+* Add cancelable version of `SQLiteDatabase.execSQL()`. See `CancellationSignal` for details.
+
+```java
+CancellationSignal signal = new CancellationSignal();
+db.execSQL(longRunningSQL, args, signal);
+
+// on another thread
+signal.cancel();
+```
+
+* Enable `SQLITE_ENABLE_FTS3_PARENTHESIS` compilation option on SQLCipher, which enables `AND`, `OR` operators in FTS3/4.
+* Use `CancellationSignal` for canceling `BackupKit`, `RecoverKit` and `RepairKit` operations. See repair sample for details.
+* Add callback interface for `RepairKit` to show progress to the users. See `RepairKit.Callback` and `RepairKit.setCallback()`.
+* Do not load `libwcdb.so` if it's already loaded on the first use. This makes WCDB compatible to Tinker framework.
+* Various bug fixes.
 
 ## v1.0.3
 
