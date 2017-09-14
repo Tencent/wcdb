@@ -30,11 +30,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    NSObject *object = nil;
-    if (value.length > 0) {
-        object = [NSKeyedUnarchiver unarchiveObjectWithData:value];
-    }
-    return object;
+    return value.length > 0 ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue

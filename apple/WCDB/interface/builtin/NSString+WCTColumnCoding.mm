@@ -30,12 +30,12 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return value;
+    return value.length > 0 ? [NSString stringWithString:value] : nil;
 }
 
 - (NSString *)archivedWCTValue
 {
-    return self;
+    return [NSString stringWithString:self];
 }
 
 + (WCTColumnType)columnTypeForWCDB
@@ -52,7 +52,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return value ? [NSMutableString stringWithString:value] : nil;
+    return value.length > 0 ? [NSMutableString stringWithString:value] : nil;
 }
 
 - (NSString *)archivedWCTValue
