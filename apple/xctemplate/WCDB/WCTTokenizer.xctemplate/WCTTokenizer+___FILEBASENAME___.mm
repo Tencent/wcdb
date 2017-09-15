@@ -86,6 +86,10 @@ int Module<___FILEBASENAMEASIDENTIFIER___Module::Name>::CursorStep(void *info,
                                                                    int *piEndOffset,
                                                                    int *piPosition)
 {
+    if (!info) {
+        return SQLITE_ERROR;
+    }
+
     ___FILEBASENAMEASIDENTIFIER___CursorInfo *cursorInfo = (___FILEBASENAMEASIDENTIFIER___CursorInfo *) info;
 
     if (<#Is It Done Yet ?#>) {
