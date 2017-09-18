@@ -14,6 +14,10 @@
 		232146F81F6AAC9400BF7AF2 /* fts_modules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		232146F91F6AACA700BF7AF2 /* fts_modules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */; };
 		232146FA1F6AACAB00BF7AF2 /* fts_module.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F11F6AAC9000BF7AF2 /* fts_module.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		232741511F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
+		232741531F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
 		233071301F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
 		234402FC1EDD718A00808286 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 234402E91EDD718A00808286 /* SQLiteRepairKit.h */; };
@@ -662,6 +666,8 @@
 		232146F11F6AAC9000BF7AF2 /* fts_module.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fts_module.hpp; sourceTree = "<group>"; };
 		232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fts_modules.cpp; sourceTree = "<group>"; };
 		232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fts_modules.hpp; sourceTree = "<group>"; };
+		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
+		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		234402E91EDD718A00808286 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
 		234402EA1EDD718A00808286 /* sqliterk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk.c; sourceTree = "<group>"; };
@@ -1062,6 +1068,8 @@
 			children = (
 				23B860E91F6B865000FB8D96 /* WCTTokenizer+Apple.h */,
 				23B860EA1F6B865000FB8D96 /* WCTTokenizer+Apple.mm */,
+				2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */,
+				2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -1851,6 +1859,7 @@
 				242E1E271EA3771400F77029 /* WCTRowSelect+Private.h in Headers */,
 				2349F7891EA0D6680021EFA7 /* rwlock.hpp in Headers */,
 				2349F7561EA0D6680021EFA7 /* WCTCppAccessor.h in Headers */,
+				232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */,
 				2349F7871EA0D6680021EFA7 /* recyclable.hpp in Headers */,
 				2349F6FA1EA0D6680021EFA7 /* config.hpp in Headers */,
 				23F0CF5F1ECAEDEE00DCCAD5 /* WCTSelectBase+WCTExpr.h in Headers */,
@@ -2013,6 +2022,7 @@
 				23DE418B1EF7707900227551 /* rwlock.hpp in Headers */,
 				23DE418C1EF7707900227551 /* WCTCppAccessor.h in Headers */,
 				23DE418D1EF7707900227551 /* recyclable.hpp in Headers */,
+				232741511F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */,
 				23DE418E1EF7707900227551 /* config.hpp in Headers */,
 				23DE418F1EF7707900227551 /* WCTSelectBase+WCTExpr.h in Headers */,
 				23DE41901EF7707900227551 /* WCTPropertyMacro.h in Headers */,
@@ -2289,6 +2299,7 @@
 				2358AC501EADE39000F0DA41 /* module_argument.cpp in Sources */,
 				23FD44961F06796D000A2CAC /* statement_explain.cpp in Sources */,
 				23FD443B1F064525000A2CAC /* statement_attach.cpp in Sources */,
+				232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */,
 				23A37BE21EFCF1AC00703D84 /* WCTCompatible.mm in Sources */,
 				232146F61F6AAC9000BF7AF2 /* fts_modules.cpp in Sources */,
 				234402FF1EDD718A00808286 /* sqliterk_api.c in Sources */,
@@ -2462,6 +2473,7 @@
 				23DE40EC1EF7707900227551 /* column_result.cpp in Sources */,
 				23FD44971F06796D000A2CAC /* statement_explain.cpp in Sources */,
 				23DE40ED1EF7707900227551 /* module_argument.cpp in Sources */,
+				232741531F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */,
 				23DE40EE1EF7707900227551 /* sqliterk_api.c in Sources */,
 				23DE40EF1EF7707900227551 /* NSData+WCTColumnCoding.mm in Sources */,
 				23FD449D1F067B28000A2CAC /* statement_reindex.cpp in Sources */,

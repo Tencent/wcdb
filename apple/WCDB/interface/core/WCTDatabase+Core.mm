@@ -68,18 +68,4 @@
     _database->setSynchronousFull(full);
 }
 
-- (void)setTokenizer:(NSString *)tokenizeName
-{
-    _database->setTokenize(tokenizeName.UTF8String);
-}
-
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames
-{
-    std::list<std::string> theTokenizeNames;
-    for (NSString *tokenizeName in tokenizeNames) {
-        theTokenizeNames.push_back(tokenizeName.UTF8String);
-    }
-    _database->setTokenizes(theTokenizeNames);
-}
-
 @end

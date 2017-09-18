@@ -75,6 +75,10 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  */
 + (NSString *)DefaultSynchronousConfigName;
 
+/**
+ @brief Default tokenize config name
+ @return default tokenize config name
+ */
 + (NSString *)DefaultTokenizeConfigName;
 
 /**
@@ -105,9 +109,5 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  @param full enable or disable full synchronous
  */
 - (void)setSynchronousFull:(BOOL)full;
-
-- (void)setTokenizer:(NSString *)tokenizeName;
-
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames;
 
 @end
