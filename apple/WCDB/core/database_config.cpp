@@ -27,7 +27,6 @@
 #include <queue>
 #include <thread>
 #include <vector>
-#include <WCDB/fts_modules.hpp>
 
 namespace WCDB {
 
