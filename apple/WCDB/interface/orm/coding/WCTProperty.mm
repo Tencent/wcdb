@@ -22,8 +22,18 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 
-WCTProperty::WCTProperty()
-    : WCDB::Column("")
+WCTPropertyNamed WCTProperty::PropertyNamed = ^(NSString *propertyName) {
+  return WCTProperty(propertyName);
+};
+
+WCTProperty::WCTProperty(const char *name)
+    : WCDB::Column(name)
+    , WCTPropertyBase(nil, nullptr)
+{
+}
+
+WCTProperty::WCTProperty(NSString *name)
+    : WCDB::Column(name ? name.UTF8String : "")
     , WCTPropertyBase(nil, nullptr)
 {
 }

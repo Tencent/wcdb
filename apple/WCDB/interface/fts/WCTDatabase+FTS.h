@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 
-@interface WCTDatabase(FTS)
+@interface WCTDatabase (FTS)
 
 /**
  @brief Setup tokenizer with name for current database

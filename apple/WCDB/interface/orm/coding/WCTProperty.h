@@ -22,9 +22,12 @@
 #import <WCDB/WCTPropertyBase.h>
 #import <WCDB/abstract.h>
 
+typedef WCTProperty (^WCTPropertyNamed)(NSString *);
+
 class WCTProperty : public WCDB::Column, public WCTPropertyBase {
 public:
-    WCTProperty();
+    WCTProperty(const char *name = "");
+    WCTProperty(NSString *name = @"");
     WCTProperty(const char *name,
                 Class cls,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
@@ -129,6 +132,8 @@ public:
     WCTExpr isNot(const WCTExpr &operand) const;
 
     NSString *getDescription() const;
+
+    static WCTPropertyNamed PropertyNamed;
 
 protected:
     WCTProperty(const WCDB::Column &column,

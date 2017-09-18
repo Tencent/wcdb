@@ -21,7 +21,7 @@
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
 
-@implementation WCTDatabase(FTS)
+@implementation WCTDatabase (FTS)
 
 - (void)setTokenizer:(NSString *)tokenizeName
 {

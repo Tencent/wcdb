@@ -20,12 +20,14 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTProperty.h>
 
 @protocol WCTTableCoding
 @required
 + (const WCTBinding *)objectRelationalMappingForWCDB;
 + (const WCTPropertyList &)AllProperties;
 + (const WCTAnyProperty &)AnyProperty;
++ (WCTPropertyNamed)PropertyNamed; //className.PropertyNamed(propertyName)
 @optional
 @property(nonatomic, assign) long long lastInsertedRowID;
 @property(nonatomic, assign) BOOL isAutoIncrement;
