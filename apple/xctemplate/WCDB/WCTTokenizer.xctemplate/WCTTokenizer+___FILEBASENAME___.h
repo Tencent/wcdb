@@ -9,4 +9,4 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTMacroHelper.h>
 
-WCDB_EXTERN NSString *const WCTTokenizerNameApple;
+WCDB_EXTERN NSString *const WCTTokenizerName___FILEBASENAMEASIDENTIFIER___;

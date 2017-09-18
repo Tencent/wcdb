@@ -37,6 +37,12 @@ const std::nullptr_t ___FILEBASENAMEASIDENTIFIER___Module::s_register = []() {
 //};
 //
 //template <>
+//bool Module<___FILEBASENAMEASIDENTIFIER___Module::Name>::ShouldCreateTokenizerInfo()
+//{
+//    return true;
+//}
+//
+//template <>
 //void *Module<___FILEBASENAMEASIDENTIFIER___Module::Name>::CreateTokenizerInfo(int argc, const char *const *argv)
 //{
 //    ___FILEBASENAMEASIDENTIFIER___TokenizerInfo *tokenizerInfo = (___FILEBASENAMEASIDENTIFIER___TokenizerInfo *) sqlite3_malloc(sizeof(___FILEBASENAMEASIDENTIFIER___TokenizerInfo));
