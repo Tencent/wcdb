@@ -7,7 +7,16 @@
 //
 
 #import "WCTSampleFTSOrigin.h"
+#import "WCTSampleFTSOrigin+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleFTSOrigin
+
+WCDB_IMPLEMENTATION(WCTSampleFTSOrigin)
+WCDB_SYNTHESIZE(WCTSampleFTSOrigin, localID)
+WCDB_SYNTHESIZE(WCTSampleFTSOrigin, name)
+WCDB_SYNTHESIZE(WCTSampleFTSOrigin, content)
+
+WCDB_PRIMARY_AUTO_INCREMENT(WCTSampleFTSOrigin, localID)
 
 @end

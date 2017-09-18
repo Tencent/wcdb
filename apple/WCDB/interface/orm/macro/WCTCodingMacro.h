@@ -161,3 +161,6 @@
 //Virtual Table Argument
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(className, left, right)                    \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)
+
+#define WCDB_VIRTUAL_TABLE_TOKENIZE(className, tokenizeName)                   \
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", tokenizeName)

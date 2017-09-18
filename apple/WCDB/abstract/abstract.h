@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef WINQ_h
-#define WINQ_h
+#ifndef abstract_h
+#define abstract_h
 
 #include <WCDB/describable.hpp>
 
@@ -59,4 +59,4 @@
 #include <WCDB/statement_update.hpp>
 #include <WCDB/statement_vacuum.hpp>
 
-#endif /* WINQ_h */
+#endif /* abstract_h */

@@ -71,8 +71,10 @@ public:
 
     const std::shared_ptr<std::list<std::pair<std::string, std::string>>>
     getVirtualTableArgumentList() const;
+
     void addVirtualTableArgument(const std::string &left,
                                  const std::string &right);
+    void addVirtualTableArgument(const std::string &left, NSString *right);
 
     WCDB::StatementCreateTable
     generateCreateTableStatement(const std::string &tableName) const;

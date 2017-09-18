@@ -21,7 +21,7 @@
 #ifndef database_hpp
 #define database_hpp
 
-#include <WCDB/WINQ.h>
+#include <WCDB/abstract.h>
 #include <WCDB/core_base.hpp>
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_pool.hpp>
@@ -57,6 +57,7 @@ public:
     static const std::string defaultTraceConfigName;
     static const std::string defaultCheckpointConfigName;
     static const std::string defaultSynchronousConfigName;
+    static const std::string defaultTokenizeConfigName;
     static const Configs defaultConfigs;
     void setConfig(const std::string &name,
                    const Config &config,
@@ -65,6 +66,8 @@ public:
     void setCipher(const void *key, int keySize);
     void setCipher(const void *key, int keySize, int pageSize);
     void setSynchronousFull(bool full);
+    void setTokenizes(const std::list<std::string> &tokenizeNames);
+    void setTokenize(const std::string &tokenizeName);
     void setPerformanceTrace(const PerformanceTrace &trace);
     static void SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace);
     static void SetGlobalSQLTrace(const SQLTrace &globalTrace);

@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTPropertyBase.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 
 class WCTProperty : public WCDB::Column, public WCTPropertyBase {
 public:

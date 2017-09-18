@@ -18,35 +18,31 @@
  * limitations under the License.
  */
 
-#ifndef statement_recyclable_hpp
-#define statement_recyclable_hpp
+#ifndef fts_modules_hpp
+#define fts_modules_hpp
 
-#include <WCDB/abstract.h>
-#include <WCDB/handle_pool.hpp>
-#include <WCDB/recyclable.hpp>
+#include <string>
+#include <unordered_map>
 
 namespace WCDB {
 
-class RecyclableStatement {
+namespace FTS {
+
+class Modules {
 public:
-    RecyclableStatement(
-        const RecyclableHandle &handle,
-        const std::shared_ptr<StatementHandle> &statementHandle);
-    constexpr StatementHandle *operator->() const
-    {
-        return m_statementHandle.get();
-    }
-    RecyclableStatement();
-    operator bool() const;
-    bool operator!=(const std::nullptr_t &) const;
-    bool operator==(const std::nullptr_t &) const;
-    RecyclableStatement &operator=(const std::nullptr_t &);
+    static Modules *SharedModules();
+
+    void addModule(const std::string &name,
+                   const std::shared_ptr<void> &module);
+    const void *getAddress(const std::string &name);
 
 protected:
-    RecyclableHandle m_handle;
-    std::shared_ptr<StatementHandle> m_statementHandle;
+    std::unordered_map<std::string, std::shared_ptr<void>>
+        m_modules; //TODO thread safe
 };
+
+} //namespace FTS
 
 } //namespace WCDB
 
-#endif /* statement_recyclable_hpp */
+#endif /* fts_modules_hpp */

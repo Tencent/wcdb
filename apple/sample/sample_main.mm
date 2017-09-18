@@ -23,6 +23,7 @@
 #import "sample_convenient_main.h"
 #import "sample_core_main.h"
 #import "sample_file_main.h"
+#import "sample_fts_main.h"
 #import "sample_orm_main.h"
 #import "sample_repair_main.h"
 #import "sample_statistics_main.h"
@@ -46,5 +47,6 @@ int main(int argc, const char *argv[])
     sample_repair_main(baseDirectory);
     sample_core_main(baseDirectory);
     sample_statistics_main(baseDirectory);
+    sample_fts_main(baseDirectory);
     return 0;
 }

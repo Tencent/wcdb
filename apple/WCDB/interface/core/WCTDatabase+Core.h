@@ -75,6 +75,8 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  */
 + (NSString *)DefaultSynchronousConfigName;
 
++ (NSString *)DefaultTokenizeConfigName;
+
 /**
  @brief Set config for this database.  
  @warning Since WCDB is a multi-handle database, an executing handle will not apply this config immediately. Instead, all handles will run this config before its next operation.  
@@ -103,5 +105,9 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  @param full enable or disable full synchronous
  */
 - (void)setSynchronousFull:(BOOL)full;
+
+- (void)setTokenizer:(NSString *)tokenizeName;
+
+- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames;
 
 @end

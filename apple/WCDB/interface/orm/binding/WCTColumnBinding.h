@@ -21,7 +21,7 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTRuntimeCppAccessor.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 
 class WCTColumnBinding {
 public:

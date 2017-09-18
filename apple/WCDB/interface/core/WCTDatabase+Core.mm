@@ -48,6 +48,11 @@
     return @(WCDB::Database::defaultSynchronousConfigName.c_str());
 }
 
++ (NSString *)DefaultTokenizeConfigName
+{
+    return @(WCDB::Database::defaultTokenizeConfigName.c_str());
+}
+
 - (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name withOrder:(WCDB::Configs::Order)order
 {
     _database->setConfig(name.UTF8String, invoke, order);
@@ -61,6 +66,20 @@
 - (void)setSynchronousFull:(BOOL)full
 {
     _database->setSynchronousFull(full);
+}
+
+- (void)setTokenizer:(NSString *)tokenizeName
+{
+    _database->setTokenize(tokenizeName.UTF8String);
+}
+
+- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames
+{
+    std::list<std::string> theTokenizeNames;
+    for (NSString *tokenizeName in tokenizeNames) {
+        theTokenizeNames.push_back(tokenizeName.UTF8String);
+    }
+    _database->setTokenizes(theTokenizeNames);
 }
 
 @end

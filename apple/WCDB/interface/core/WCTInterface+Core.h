@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTInterface.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 
 @interface WCTInterface (Core)
 

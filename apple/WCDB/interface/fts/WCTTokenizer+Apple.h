@@ -18,27 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpr.h>
-#import <WCDB/abstract.h>
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTMacroHelper.h>
 
-class WCTIndexBinding {
-public:
-    WCTIndexBinding(const std::string &indexNameSubfix);
-    const std::string indexNameSubfix;
-
-    void addIndex(const WCTIndex &index);
-    void setUnique(bool unique);
-    void setCondition(const WCTCondition &condition);
-
-    const WCTIndexList &getIndexes() const;
-    const WCTCondition &getCondition() const;
-
-    WCDB::StatementCreateIndex
-    generateCreateIndexStatement(const std::string &tableName) const;
-
-protected:
-    WCTIndexList m_indexes;
-    WCTCondition m_condition;
-    bool m_unique;
-};
+WCDB_EXTERN NSString *const WCTTokenizerNameApple;

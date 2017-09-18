@@ -135,6 +135,12 @@ void WCTBinding::addVirtualTableArgument(const std::string &left, const std::str
     m_virtualTableArgumentList->push_back({left, right});
 }
 
+void WCTBinding::addVirtualTableArgument(const std::string &left, NSString *right)
+{
+    lazyInitVirtualTableArgumentList();
+    m_virtualTableArgumentList->push_back({left, right.UTF8String});
+}
+
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::string &tableName) const
 {
     WCDB::ColumnDefList columnDefList;
