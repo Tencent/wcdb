@@ -82,6 +82,7 @@
 #import <WCDB/WCTDatabase+Compatible.h>
 #import <WCDB/WCTStatement+Compatible.h>
 #import <WCDB/WCTStatistics+Compatible.h>
+#import <WCDB/WCTTransaction+Compatible.h>
 
 #endif //WCDB_OMIT_DEPRECATED
 

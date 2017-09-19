@@ -47,11 +47,10 @@
  @brief Create virtual table from ORM if not exists.
  @see http://www.sqlite.org/vtab.html
  @param tableName The name of the virtual table to be created.
- @param moduleName moduleName
  @param cls a class implement WCTTableCoding.
  @return YES only if no error occurs.
  */
-- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class<WCTTableCoding>)cls;
+- (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Create table from user-defined column if not exists.

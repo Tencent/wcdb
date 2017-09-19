@@ -29,6 +29,8 @@
 
 - (void)setSyncEnabled:(BOOL)sync DEPRECATED_MSG_ATTRIBUTE("-setSyncEnabled: is deprecated since v1.0.4. Use -setSynchronousFull: instead");
 
+- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class)cls DEPRECATED_MSG_ATTRIBUTE("-createVirtualTableOfName:usingModule:withClass: is deprecated since v1.0.4. Use -createVirtualTableOfName:withClass: instead");
+
 @end
 
 #endif //WCDB_OMIT_DEPRECATED

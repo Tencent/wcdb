@@ -20,6 +20,9 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTMacroHelper.h>
+
+WCDB_EXTERN NSString *const WCTModuleNameFTS3;
 
 @interface WCTDatabase (FTS)
 

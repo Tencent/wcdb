@@ -158,7 +158,7 @@ WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::s
     return WCDB::StatementCreateTable().create(tableName, columnDefList, constraintList);
 }
 
-WCDB::StatementCreateVirtualTable WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName, const std::string &moduleName) const
+WCDB::StatementCreateVirtualTable WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName) const
 {
     WCDB::ModuleArgumentList moduleArgumentList;
     for (const auto &columnBinding : m_columnBindingList) {
@@ -174,5 +174,15 @@ WCDB::StatementCreateVirtualTable WCTBinding::generateVirtualCreateTableStatemen
             moduleArgumentList.push_back(WCDB::ModuleArgument(moduleArgument.first, moduleArgument.second));
         }
     }
-    return WCDB::StatementCreateVirtualTable().create(tableName).usingModule(moduleName, moduleArgumentList);
+    return WCDB::StatementCreateVirtualTable().create(tableName).usingModule(m_virtualTableModuleName, moduleArgumentList);
+}
+
+void WCTBinding::setVirtualTableModule(const std::string &moduleName)
+{
+    m_virtualTableModuleName = moduleName;
+}
+
+void WCTBinding::setVirtualTableModule(NSString *moduleName)
+{
+    m_virtualTableModuleName = moduleName.UTF8String;
 }

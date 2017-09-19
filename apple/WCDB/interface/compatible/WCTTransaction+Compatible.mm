@@ -18,25 +18,18 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+FTS.h>
-#import <WCDB/WCTDatabase+Private.h>
+#ifndef WCDB_OMIT_DEPRECATED
 
-NSString *const WCTModuleNameFTS3 = @"fts3";
+#import <WCDB/WCTTransaction+Compatible.h>
+#import <WCDB/WCTTransaction+Table.h>
 
-@implementation WCTDatabase (FTS)
+@implementation WCTTransaction (Compatible)
 
-- (void)setTokenizer:(NSString *)tokenizeName
+- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class)cls
 {
-    _database->setTokenize(tokenizeName.UTF8String);
-}
-
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames
-{
-    std::list<std::string> theTokenizeNames;
-    for (NSString *tokenizeName in tokenizeNames) {
-        theTokenizeNames.push_back(tokenizeName.UTF8String);
-    }
-    _database->setTokenizes(theTokenizeNames);
+    return [self createVirtualTableOfName:tableName withClass:cls];
 }
 
 @end
+
+#endif //WCDB_OMIT_DEPRECATED

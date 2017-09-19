@@ -70,9 +70,10 @@ void sample_fts_main(NSString *baseDirectory)
     [databaseFTS close:^{
       [databaseFTS removeFilesWithError:nil];
     }];
-
+    
     [databaseFTS setTokenizer:WCTTokenizerNameApple];
-    [databaseFTS createVirtualTableOfName:tableNameFTS usingModule:@"fts3" withClass:WCTSampleFTSData.class];
+
+    [databaseFTS createVirtualTableOfName:tableNameFTS withClass:WCTSampleFTSData.class];
 
     //Build Full-Text-Search Index
     {
