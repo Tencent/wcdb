@@ -69,7 +69,7 @@ const std::nullptr_t ___FILEBASENAMEASIDENTIFIER___Module::s_register = []() {
 #pragma mark - Cursor
 class ___FILEBASENAMEASIDENTIFIER___CursorInfo {
 public:
-    <#Your Cursor Info#>
+    /* <#Your Cursor Info#> */
 };
 
 template <>
@@ -77,9 +77,7 @@ void *Module<___FILEBASENAMEASIDENTIFIER___Module::Name>::CreateCursorInfo(const
 {
     ___FILEBASENAMEASIDENTIFIER___CursorInfo *cursorInfo = (___FILEBASENAMEASIDENTIFIER___CursorInfo *) sqlite3_malloc(sizeof(___FILEBASENAMEASIDENTIFIER___CursorInfo));
     if (cursorInfo) {
-
-        <#Init Your Cursor Info#>
-        
+        /* <#Init Your Cursor Info#> */
     }
     return cursorInfo;
 }
@@ -98,9 +96,9 @@ int Module<___FILEBASENAMEASIDENTIFIER___Module::Name>::CursorStep(void *info,
 
     ___FILEBASENAMEASIDENTIFIER___CursorInfo *cursorInfo = (___FILEBASENAMEASIDENTIFIER___CursorInfo *) info;
 
-    if (<#Is It Done Yet ?#>) {
+    if (/* <#Is It Done Yet ?#> */) {
 
-        <#Your Cursor Step #>
+        /* <#Your Cursor Step #> */
 
         return SQLITE_OK;
     }
@@ -113,7 +111,7 @@ void Module<___FILEBASENAMEASIDENTIFIER___Module::Name>::DestroyCursorInfo(void 
     if (info) {
         ___FILEBASENAMEASIDENTIFIER___CursorInfo *cursorInfo = (___FILEBASENAMEASIDENTIFIER___CursorInfo *) info;
 
-        <#Deinit Your Cursor Info #>
+        /* <#Deinit Your Cursor Info #> */
 
         sqlite3_free(cursorInfo);
     }
