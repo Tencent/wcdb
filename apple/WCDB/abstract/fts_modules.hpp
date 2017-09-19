@@ -21,6 +21,7 @@
 #ifndef fts_modules_hpp
 #define fts_modules_hpp
 
+#include <WCDB/spin.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -34,11 +35,11 @@ public:
 
     void addModule(const std::string &name,
                    const std::shared_ptr<void> &module);
-    const void *getAddress(const std::string &name);
+    const void *getAddress(const std::string &name) const;
 
 protected:
-    std::unordered_map<std::string, std::shared_ptr<void>>
-        m_modules; //TODO thread safe
+    std::unordered_map<std::string, std::shared_ptr<void>> m_modules;
+    mutable Spin m_spin;
 };
 
 } //namespace FTS

@@ -34,11 +34,13 @@ Modules *Modules::SharedModules()
 void Modules::addModule(const std::string &name,
                         const std::shared_ptr<void> &module)
 {
+    SpinLockGuard<Spin> lockGuard(m_spin);
     m_modules.insert({name, module});
 }
 
-const void *Modules::getAddress(const std::string &name)
+const void *Modules::getAddress(const std::string &name) const
 {
+    SpinLockGuard<Spin> lockGuard(m_spin);
     auto iter = m_modules.find(name);
     if (iter != m_modules.end()) {
         return iter->second.get();
