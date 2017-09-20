@@ -15,7 +15,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License.
+ * limitations under the Licesunse.
  */
 
 #include <WCDB/column.hpp>
@@ -226,6 +226,15 @@ Expr Expr::concat(const Expr &operand) const
     Expr expr;
     expr.m_description.append("(" + m_description + "||" +
                               operand.m_description + ")");
+    return expr;
+}
+    
+Expr Expr::substr(const Expr &start, const Expr &length) const
+{
+    Expr expr;
+    expr.m_description.append("SUBSTR(" + m_description + "," +
+                              start.m_description + "," +
+                              length.m_description + ")");
     return expr;
 }
 

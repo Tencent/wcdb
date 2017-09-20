@@ -188,6 +188,11 @@ WCTExpr WCTExpr::concat(const WCTExpr &operand) const
     return WCTExpr(Expr::concat(operand));
 }
 
+WCTExpr WCTExpr::substr(const WCTExpr &start, const WCTExpr &length) const
+{
+    return WCTExpr(Expr::substr(start,length), *this);
+}
+
 WCTExpr WCTExpr::in(const WCTExprList &exprList) const
 {
     return WCTExpr(Expr::in(exprList), *this);

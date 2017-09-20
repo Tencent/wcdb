@@ -92,6 +92,7 @@ public:
     WCTExpr operator!=(const WCTExpr &operand) const;
 
     WCTExpr concat(const WCTExpr &operand) const;
+    WCTExpr substr(const WCTExpr &start, const WCTExpr &length) const;
 
     WCTExpr in(const WCTExprList &exprList) const;
     WCTExpr notIn(const WCTExprList &exprList) const;
