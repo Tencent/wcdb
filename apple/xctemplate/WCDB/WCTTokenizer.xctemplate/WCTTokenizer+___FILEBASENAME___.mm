@@ -57,7 +57,7 @@ public:
     }
 
 protected:
-    <#/* Your Cursor Info */#>
+    /* <#Your Cursor Info#> */
 };
 
 #pragma mark - Module
