@@ -4,7 +4,7 @@
 [![WeChat Approved iOS](https://img.shields.io/badge/Wechat_Approved_iOS-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki#wcdb-for-iosmacos)
 [![WeChat Approved Android](https://img.shields.io/badge/Wechat_Approved_Android-1.0.3-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki#wcdb-for-android)
 
-中文版本请参看[这里][wcdb-wiki]**
+中文版本请参看[这里][wcdb-wiki]
 
 WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework used in the WeChat application. It's currently available on iOS, macOS and Android.
 
