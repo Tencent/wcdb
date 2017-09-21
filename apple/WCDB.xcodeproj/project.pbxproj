@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231039151F03E13600BC3FCC /* timed_queue.hpp */; };
+		231316261F7396F50087288A /* fts_module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231316251F7396F50087288A /* fts_module.cpp */; };
+		231316271F7396F50087288A /* fts_module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231316251F7396F50087288A /* fts_module.cpp */; };
+		231316571F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */ = {isa = PBXBuildFile; fileRef = 231316551F73A0A80087288A /* WCTTokenizer+Apple.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		231316581F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */ = {isa = PBXBuildFile; fileRef = 231316551F73A0A80087288A /* WCTTokenizer+Apple.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		231316591F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */; };
+		2313165A1F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */; };
 		232146F51F6AAC9000BF7AF2 /* fts_module.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F11F6AAC9000BF7AF2 /* fts_module.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		232146F61F6AAC9000BF7AF2 /* fts_modules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */; };
 		232146F71F6AAC9000BF7AF2 /* fts_modules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -300,10 +306,6 @@
 		23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+Database.h */; };
 		23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */; };
 		23B4F0561ECD8E0B00D45BB1 /* ticker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */; };
-		23B860EB1F6B865000FB8D96 /* WCTTokenizer+Apple.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B860E91F6B865000FB8D96 /* WCTTokenizer+Apple.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23B860EC1F6B865000FB8D96 /* WCTTokenizer+Apple.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B860E91F6B865000FB8D96 /* WCTTokenizer+Apple.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23B860ED1F6B865000FB8D96 /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B860EA1F6B865000FB8D96 /* WCTTokenizer+Apple.mm */; };
-		23B860EE1F6B865000FB8D96 /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B860EA1F6B865000FB8D96 /* WCTTokenizer+Apple.mm */; };
 		23B861321F6BBB9900FB8D96 /* WCTSampleFTSOrigin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B861311F6BBB9900FB8D96 /* WCTSampleFTSOrigin.mm */; };
 		23B861361F6BBD2800FB8D96 /* WCTSampleFTSData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B861351F6BBD2800FB8D96 /* WCTSampleFTSData.mm */; };
 		23B861391F6BBD4700FB8D96 /* sample_fts_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B861381F6BBD4700FB8D96 /* sample_fts_main.mm */; };
@@ -666,6 +668,9 @@
 /* Begin PBXFileReference section */
 		231039151F03E13600BC3FCC /* timed_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timed_queue.hpp; sourceTree = "<group>"; };
 		23121C611E700B020012B45E /* sqlcipher-preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "sqlcipher-preprocessed.xcodeproj"; path = "../sqlcipher/sqlcipher-preprocessed.xcodeproj"; sourceTree = "<group>"; };
+		231316251F7396F50087288A /* fts_module.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fts_module.cpp; sourceTree = "<group>"; };
+		231316551F73A0A80087288A /* WCTTokenizer+Apple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTokenizer+Apple.h"; sourceTree = "<group>"; };
+		231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTokenizer+Apple.mm"; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* WCDB-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "WCDB-Info.plist"; sourceTree = "<group>"; };
 		232146F11F6AAC9000BF7AF2 /* fts_module.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fts_module.hpp; sourceTree = "<group>"; };
 		232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fts_modules.cpp; sourceTree = "<group>"; };
@@ -954,8 +959,6 @@
 		23B31B331EB97B480092EA80 /* WCTTable+Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Database.h"; sourceTree = "<group>"; };
 		23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ticker.cpp; sourceTree = "<group>"; };
 		23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ticker.hpp; sourceTree = "<group>"; };
-		23B860E91F6B865000FB8D96 /* WCTTokenizer+Apple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTokenizer+Apple.h"; sourceTree = "<group>"; };
-		23B860EA1F6B865000FB8D96 /* WCTTokenizer+Apple.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTokenizer+Apple.mm"; sourceTree = "<group>"; };
 		23B861301F6BBB9900FB8D96 /* WCTSampleFTSOrigin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSampleFTSOrigin.h; sourceTree = "<group>"; };
 		23B861311F6BBB9900FB8D96 /* WCTSampleFTSOrigin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSampleFTSOrigin.mm; sourceTree = "<group>"; };
 		23B861331F6BBBAB00FB8D96 /* WCTSampleFTSOrigin+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSampleFTSOrigin+WCTTableCoding.h"; sourceTree = "<group>"; };
@@ -1072,10 +1075,10 @@
 		232147001F6AAE6500BF7AF2 /* fts */ = {
 			isa = PBXGroup;
 			children = (
-				23B860E91F6B865000FB8D96 /* WCTTokenizer+Apple.h */,
-				23B860EA1F6B865000FB8D96 /* WCTTokenizer+Apple.mm */,
 				2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */,
 				2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */,
+				231316551F73A0A80087288A /* WCTTokenizer+Apple.h */,
+				231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -1124,6 +1127,7 @@
 			isa = PBXGroup;
 			children = (
 				232146F11F6AAC9000BF7AF2 /* fts_module.hpp */,
+				231316251F7396F50087288A /* fts_module.cpp */,
 				232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */,
 				232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */,
 				2349F5D71EA0D6680021EFA7 /* abstract.h */,
@@ -1824,11 +1828,11 @@
 				2349F75D1EA0D6680021EFA7 /* WCTBinding.h in Headers */,
 				2349F6D01EA0D6680021EFA7 /* expr.hpp in Headers */,
 				2349F7361EA0D6680021EFA7 /* WCTInterface+Convenient.h in Headers */,
-				23B860EB1F6B865000FB8D96 /* WCTTokenizer+Apple.h in Headers */,
 				2349F6DC1EA0D6680021EFA7 /* statement.hpp in Headers */,
 				2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */,
 				2349F7181EA0D6680021EFA7 /* WCTMaster.h in Headers */,
 				231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */,
+				231316571F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */,
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
 				2349F7061EA0D6680021EFA7 /* handle_pool.hpp in Headers */,
 				2349F6EE1EA0D6680021EFA7 /* statement_pragma.hpp in Headers */,
@@ -1988,11 +1992,11 @@
 				23DE41651EF7707900227551 /* WCTBinding.h in Headers */,
 				23DE41661EF7707900227551 /* expr.hpp in Headers */,
 				23DE41671EF7707900227551 /* WCTInterface+Convenient.h in Headers */,
-				23B860EC1F6B865000FB8D96 /* WCTTokenizer+Apple.h in Headers */,
 				23DE41681EF7707900227551 /* statement.hpp in Headers */,
 				23DE41691EF7707900227551 /* WCTSelect.h in Headers */,
 				23DE416A1EF7707900227551 /* WCTMaster.h in Headers */,
 				23DE416B1EF7707900227551 /* WCTUpdate.h in Headers */,
+				231316581F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */,
 				23DE416C1EF7707900227551 /* handle_pool.hpp in Headers */,
 				23DE416D1EF7707900227551 /* statement_pragma.hpp in Headers */,
 				23DE416E1EF7707900227551 /* WCDB.h in Headers */,
@@ -2283,6 +2287,7 @@
 				2349F6E31EA0D6680021EFA7 /* statement_create_virtual_table.cpp in Sources */,
 				2349F7781EA0D6680021EFA7 /* WCTDatabase+Transaction.mm in Sources */,
 				2349F6CD1EA0D6680021EFA7 /* describable.cpp in Sources */,
+				231316261F7396F50087288A /* fts_module.cpp in Sources */,
 				2386B3CF1ED44322000B72F6 /* WCTTransaction+Statistics.mm in Sources */,
 				239E50761F00AF0000E3A01D /* WCTSelectBase+NoARC.mm in Sources */,
 				2349F7031EA0D6680021EFA7 /* database_sql.cpp in Sources */,
@@ -2328,6 +2333,7 @@
 				2349F7091EA0D6680021EFA7 /* statement_recyclable.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
 				2386B3CB1ED44316000B72F6 /* WCTChainCall+Statistics.mm in Sources */,
+				231316591F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */,
 				2349F7761EA0D6680021EFA7 /* WCTTransaction+Table.mm in Sources */,
 				23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */,
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
@@ -2337,7 +2343,6 @@
 				2386B3C11ED442E2000B72F6 /* WCTStatistics.mm in Sources */,
 				2349F6E91EA0D6680021EFA7 /* statement_drop_table.cpp in Sources */,
 				2349F7881EA0D6680021EFA7 /* rwlock.cpp in Sources */,
-				23B860ED1F6B865000FB8D96 /* WCTTokenizer+Apple.mm in Sources */,
 				2349F7301EA0D6680021EFA7 /* WCTSelectBase.mm in Sources */,
 				2349F7041EA0D6680021EFA7 /* database_transaction.cpp in Sources */,
 				2349F6D31EA0D6680021EFA7 /* handle_statement.cpp in Sources */,
@@ -2493,6 +2498,7 @@
 				23DE40F21EF7707900227551 /* statement_select.cpp in Sources */,
 				23DE40F31EF7707900227551 /* database_file.cpp in Sources */,
 				23DE40F41EF7707900227551 /* statement.cpp in Sources */,
+				2313165A1F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */,
 				23DE40F51EF7707900227551 /* statement_transaction.cpp in Sources */,
 				23DE40F61EF7707900227551 /* WCTDatabase.mm in Sources */,
 				23DE40F71EF7707900227551 /* sqliterk_crypto.c in Sources */,
@@ -2512,7 +2518,6 @@
 				23FD44431F064794000A2CAC /* statement_detach.cpp in Sources */,
 				23DE41041EF7707900227551 /* WCTStatistics.mm in Sources */,
 				23DE41051EF7707900227551 /* statement_drop_table.cpp in Sources */,
-				23B860EE1F6B865000FB8D96 /* WCTTokenizer+Apple.mm in Sources */,
 				23DE41061EF7707900227551 /* rwlock.cpp in Sources */,
 				23DE41071EF7707900227551 /* WCTSelectBase.mm in Sources */,
 				23DE41081EF7707900227551 /* database_transaction.cpp in Sources */,
@@ -2529,6 +2534,7 @@
 				23FD44A91F067BDE000A2CAC /* statement_release.cpp in Sources */,
 				23DE41121EF7707900227551 /* WCTInterface+ChainCall.mm in Sources */,
 				23DE41131EF7707900227551 /* sqliterk_column.c in Sources */,
+				231316271F7396F50087288A /* fts_module.cpp in Sources */,
 				23DE41141EF7707900227551 /* WCTInterface+Table.mm in Sources */,
 				234FC0171F62A07A00BFB47E /* WCTStatement+Compatible.mm in Sources */,
 				23DE41151EF7707900227551 /* WCTStatement.mm in Sources */,

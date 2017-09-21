@@ -30,18 +30,41 @@ namespace WCDB {
 
 namespace FTS {
 
-template <const char name[] = nullptr>
+class TokenizerInfoBase {
+public:
+    TokenizerInfoBase(int argc, const char *const *argv);
+};
+
+class CursorInfoBase {
+public:
+    CursorInfoBase(const char *input,
+                   int bytes,
+                   TokenizerInfoBase *tokenizerInfo);
+
+    virtual int step(const char **ppToken,
+                     int *pnBytes,
+                     int *piStartOffset,
+                     int *piEndOffset,
+                     int *piPosition) = 0;
+
+protected:
+    TokenizerInfoBase *m_tokenizerInfo;
+};
+
+template <const char name[] = nullptr,
+          typename TokenizerInfo = TokenizerInfoBase,
+          typename CursorInfo = CursorInfoBase>
 class Module {
 public:
     struct Tokenizer {
         sqlite3_tokenizer base;
-        void *info;
+        TokenizerInfo *info;
     };
     typedef struct Tokenizer Tokenizer;
 
     struct Cursor {
         sqlite3_tokenizer_cursor base;
-        void *info;
+        CursorInfo *info;
     };
     typedef struct Cursor Cursor;
 
@@ -53,11 +76,9 @@ public:
             return SQLITE_NOMEM;
         }
         memset(tokenizer, 0, sizeof(Tokenizer));
-        if (ShouldCreateTokenizerInfo()) {
-            tokenizer->info = CreateTokenizerInfo(argc, argv);
-            if (!tokenizer->info) {
-                return SQLITE_NOMEM;
-            }
+        tokenizer->info = new TokenizerInfo(argc, argv);
+        if (!tokenizer->info) {
+            return SQLITE_NOMEM;
         }
         *ppTokenizer = &tokenizer->base;
         return SQLITE_OK;
@@ -67,7 +88,10 @@ public:
     {
         if (pTokenizer) {
             Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
-            DestroyTokenizerInfo(tokenizer->info);
+            if (tokenizer->info) {
+                delete tokenizer->info;
+                tokenizer->info = nullptr;
+            }
             sqlite3_free(pTokenizer);
         }
         return SQLITE_OK;
@@ -89,11 +113,10 @@ public:
             return SQLITE_NOMEM;
         }
         memset(cursor, 0, sizeof(Cursor));
-        if (Module<nullptr>::CreateCursorInfo != CreateCursorInfo) {
-            cursor->info = CreateCursorInfo(pInput, nBytes);
-            if (!cursor->info) {
-                return SQLITE_NOMEM;
-            }
+        Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
+        cursor->info = new CursorInfo(pInput, nBytes, tokenizer->info);
+        if (!cursor->info) {
+            return SQLITE_NOMEM;
         }
         *ppCursor = &cursor->base;
         return SQLITE_OK;
@@ -103,7 +126,10 @@ public:
     {
         if (pCursor) {
             Cursor *cursor = (Cursor *) pCursor;
-            DestroyCursorInfo(cursor->info);
+            if (cursor->info) {
+                delete cursor->info;
+                cursor->info = nullptr;
+            }
             sqlite3_free(pCursor);
         }
         return SQLITE_OK;
@@ -116,39 +142,15 @@ public:
                     int *piEndOffset,
                     int *piPosition)
     {
-        void *info = nullptr;
         if (pCursor) {
-            info = ((Cursor *) pCursor)->info;
+            CursorInfo *info = ((Cursor *) pCursor)->info;
+            if (info) {
+                return info->step(ppToken, pnBytes, piStartOffset, piEndOffset,
+                                  piPosition);
+            }
         }
-        return CursorStep(info, ppToken, pnBytes, piStartOffset, piEndOffset,
-                          piPosition);
+        return SQLITE_NOMEM;
     }
-
-    static bool ShouldCreateTokenizerInfo() { return false; }
-
-    static void *CreateTokenizerInfo(int argc, const char *const *argv)
-    {
-        return nullptr;
-    }
-
-    static void DestroyTokenizerInfo(void *tokenizerInfo) {}
-
-    static void *CreateCursorInfo(const char *pInput, int nBytes)
-    {
-        return nullptr;
-    }
-
-    static int CursorStep(void *cursorInfo,
-                          const char **ppToken,
-                          int *pnBytes,
-                          int *piStartOffset,
-                          int *piEndOffset,
-                          int *piPosition)
-    {
-        return SQLITE_ERROR;
-    }
-
-    static void DestroyCursorInfo(void *cursorInfo) {}
 
     static void Register()
     {
