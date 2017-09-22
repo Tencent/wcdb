@@ -120,11 +120,16 @@ public:
                 default:
                     break;
             }
+            setBuffer(m_input + *piStartOffset, *pnBytes);
+            if (type == TokenType::BasicMultilingualPlaneLetter) {
+                for (int i = 0; i < *pnBytes; ++i) {
+                    m_buffer[i] = tolower(m_buffer[i]);
+                }
+            }
         } else {
             subTokensStep(pnBytes, piStartOffset);
+            setBuffer(m_input + *piStartOffset, *pnBytes);
         }
-
-        setBuffer(m_input + *piStartOffset, *pnBytes);
 
         *ppToken = m_buffer;
         *piEndOffset = *piStartOffset + *pnBytes;
