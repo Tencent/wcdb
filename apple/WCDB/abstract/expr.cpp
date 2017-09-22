@@ -532,17 +532,17 @@ Expr Expr::round(bool distinct) const
     return Expr::Function("ROUND", {*this}, distinct);
 }
 
-Expr Expr::matchinfo()
+Expr Expr::matchinfo() const
 {
     return Expr::Function("MATCHINFO", {*this});
 }
 
-Expr Expr::offsets()
+Expr Expr::offsets() const
 {
     return Expr::Function("OFFSETS", {*this});
 }
 
-Expr Expr::snippet()
+Expr Expr::snippet() const
 {
     return Expr::Function("SNIPPET", {*this});
 }

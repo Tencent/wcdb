@@ -405,6 +405,21 @@ WCTExpr WCTExpr::round(bool distinct) const
     return WCTExpr(Expr::round(distinct), *this);
 }
 
+WCTExpr WCTExpr::matchinfo() const
+{
+    return WCTExpr(Expr::matchinfo(), *this);
+}
+
+WCTExpr WCTExpr::offsets() const
+{
+    return WCTExpr(Expr::offsets(), *this);
+}
+
+WCTExpr WCTExpr::snippet() const
+{
+    return WCTExpr(Expr::snippet(), *this);
+}
+
 NSString *WCTExpr::getDescription() const
 {
     return [NSString stringWithUTF8String:WCDB::Expr::getDescription().c_str()];

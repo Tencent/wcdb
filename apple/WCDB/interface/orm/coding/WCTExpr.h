@@ -134,6 +134,11 @@ public:
     WCTExpr upper(bool distinct = false) const;
     WCTExpr round(bool distinct = false) const;
 
+    //FTS3
+    WCTExpr matchinfo() const;
+    WCTExpr offsets() const;
+    WCTExpr snippet() const;
+
     /**
      @brief Call other function
      

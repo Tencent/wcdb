@@ -229,9 +229,9 @@ public:
     }
 
     //FTS3
-    Expr matchinfo();
-    Expr offsets();
-    Expr snippet();
+    Expr matchinfo() const;
+    Expr offsets() const;
+    Expr snippet() const;
 
 protected:
     Expr(const LiteralValue &value);

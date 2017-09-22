@@ -140,6 +140,21 @@ WCTExpr WCTProperty::round(bool distinct) const
     return WCTExpr(*this).round(distinct);
 }
 
+WCTExpr WCTProperty::matchinfo() const
+{
+    return WCTExpr(*this).matchinfo();
+}
+
+WCTExpr WCTProperty::offsets() const
+{
+    return WCTExpr(*this).offsets();
+}
+
+WCTExpr WCTProperty::snippet() const
+{
+    return WCTExpr(*this).snippet();
+}
+
 WCTColumnDef WCTProperty::def(WCTColumnType type, bool isPrimary, WCTOrderTerm term, bool autoIncrement) const
 {
     WCDB::ColumnDef columnDef(*this, (WCDB::ColumnType) type);

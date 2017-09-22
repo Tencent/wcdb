@@ -62,6 +62,12 @@ public:
     WCTExpr upper(bool distinct = false) const;
     WCTExpr round(bool distinct = false) const;
 
+    //FTS3
+    //See http://www.sqlite.org/fts3.html#snippet for further information
+    WCTExpr matchinfo() const;
+    WCTExpr offsets() const;
+    WCTExpr snippet() const;
+
     //def
     WCTColumnDef def(WCTColumnType type,
                      bool isPrimary = false,
