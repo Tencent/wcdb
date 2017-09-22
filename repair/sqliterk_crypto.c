@@ -37,8 +37,8 @@
 typedef struct codec_ctx codec_ctx;
 
 /* Activation and initialization */
-void sqlcipher_activate();
-void sqlcipher_deactivate();
+void sqlcipher_activate(void);
+void sqlcipher_deactivate(void);
 int sqlcipher_codec_ctx_init(
     codec_ctx **, void *, void *, void *, const void *, int);
 void sqlcipher_codec_ctx_free(codec_ctx **);
@@ -60,10 +60,10 @@ int sqlcipher_codec_ctx_get_pagesize(codec_ctx *);
 int sqlcipher_codec_ctx_get_reservesize(codec_ctx *);
 
 void sqlcipher_set_default_pagesize(int page_size);
-int sqlcipher_get_default_pagesize();
+int sqlcipher_get_default_pagesize(void);
 
 void sqlcipher_set_default_kdf_iter(int iter);
-int sqlcipher_get_default_kdf_iter();
+int sqlcipher_get_default_kdf_iter(void);
 
 int sqlcipher_codec_ctx_set_kdf_iter(codec_ctx *, int, int);
 int sqlcipher_codec_ctx_get_kdf_iter(codec_ctx *ctx, int);
@@ -81,10 +81,10 @@ void *sqlcipher_codec_ctx_get_data(codec_ctx *);
 //void sqlcipher_exportFunc(sqlite3_context *, int, sqlite3_value **);
 
 void sqlcipher_set_default_use_hmac(int use);
-int sqlcipher_get_default_use_hmac();
+int sqlcipher_get_default_use_hmac(void);
 
 void sqlcipher_set_hmac_salt_mask(unsigned char mask);
-unsigned char sqlcipher_get_hmac_salt_mask();
+unsigned char sqlcipher_get_hmac_salt_mask(void);
 
 int sqlcipher_codec_ctx_set_use_hmac(codec_ctx *ctx, int use);
 int sqlcipher_codec_ctx_get_use_hmac(codec_ctx *ctx, int for_ctx);
