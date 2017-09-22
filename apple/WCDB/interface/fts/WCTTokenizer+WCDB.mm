@@ -18,15 +18,8 @@
  * limitations under the License.
  */
 
-#import "WCTSampleFTSData.h"
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTTokenizer+WCDB.h>
+#import <WCDB/tokenizer.hpp>
 
-@implementation WCTSampleFTSData
-WCDB_IMPLEMENTATION(WCTSampleFTSData)
-WCDB_SYNTHESIZE(WCTSampleFTSData, name)
-WCDB_SYNTHESIZE(WCTSampleFTSData, content)
-
-WCDB_VIRTUAL_TABLE_MODULE(WCTSampleFTSData, WCTModuleNameFTS3)
-WCDB_VIRTUAL_TABLE_TOKENIZE(WCTSampleFTSData, WCTTokenizerNameWCDB)
-
-@end
+NSString *const WCTTokenizerNameWCDB = @(WCDB::FTS::WCDBModule::Name);

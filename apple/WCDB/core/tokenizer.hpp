@@ -18,15 +18,25 @@
  * limitations under the License.
  */
 
-#import "WCTSampleFTSData.h"
-#import <WCDB/WCDB.h>
+#ifndef tokenizer_hpp
+#define tokenizer_hpp
 
-@implementation WCTSampleFTSData
-WCDB_IMPLEMENTATION(WCTSampleFTSData)
-WCDB_SYNTHESIZE(WCTSampleFTSData, name)
-WCDB_SYNTHESIZE(WCTSampleFTSData, content)
+#include <cstddef>
 
-WCDB_VIRTUAL_TABLE_MODULE(WCTSampleFTSData, WCTModuleNameFTS3)
-WCDB_VIRTUAL_TABLE_TOKENIZE(WCTSampleFTSData, WCTTokenizerNameWCDB)
+namespace WCDB {
 
-@end
+namespace FTS {
+
+class WCDBModule {
+public:
+    constexpr static const char Name[] = "WCDB";
+
+private:
+    static const std::nullptr_t s_register;
+};
+
+} //namespace FTS
+
+} //namespace WCDB
+
+#endif /* tokenizer_hpp */

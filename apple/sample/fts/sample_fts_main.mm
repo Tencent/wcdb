@@ -71,7 +71,7 @@ void sample_fts_main(NSString *baseDirectory)
       [databaseFTS removeFilesWithError:nil];
     }];
 
-    [databaseFTS setTokenizer:WCTTokenizerNameApple];
+    [databaseFTS setTokenizer:WCTTokenizerNameWCDB];
 
     [databaseFTS createVirtualTableOfName:tableNameFTS withClass:WCTSampleFTSData.class];
 

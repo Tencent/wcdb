@@ -75,6 +75,7 @@
 #import <WCDB/WCTTransaction+Statistics.h>
 
 #import <WCDB/WCTTokenizer+Apple.h>
+#import <WCDB/WCTTokenizer+WCDB.h>
 
 #ifndef WCDB_OMIT_DEPRECATED
 
