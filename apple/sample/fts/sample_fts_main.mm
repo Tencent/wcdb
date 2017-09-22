@@ -89,10 +89,15 @@ void sample_fts_main(NSString *baseDirectory)
     }
 
     //Full-Text-Search by `match`
-    NSArray<WCTSampleFTSData *> *ftsDatas = [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("123")];
+    NSArray<WCTSampleFTSData *> *ftsDatas = [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
     for (WCTSampleFTSData *ftsData in ftsDatas) {
         NSLog(@"Match name:%@ content:%@", ftsData.name, ftsData.content);
     }
+
+    //Full-Text-Search info by `match`
+    //See http://www.sqlite.org/fts3.html#snippet for further information
+    WCTOneRow *row = [databaseFTS getOneRowOnResults:{WCTSampleFTSData.PropertyNamed(tableNameFTS).snippet(), WCTSampleFTSData.PropertyNamed(tableNameFTS).offsets()} fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("12*")];
+    NSLog(@"Snippet: %@ Offsets: %@", row[0], row[1]);
 
     NSLog(@"Sample-fts End");
 }
