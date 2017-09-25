@@ -21,7 +21,7 @@
 #ifndef tokenizer_hpp
 #define tokenizer_hpp
 
-#include <WCDB/fts_module.hpp>
+#include <WCDB/fts_modules.hpp>
 #include <cstddef>
 #include <vector>
 #ifdef __APPLE__
