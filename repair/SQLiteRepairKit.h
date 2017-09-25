@@ -42,6 +42,7 @@ struct sqliterk_notify {
                          sqliterk_table *table,
                          sqliterk_column *column);
     void (*onEndParseTable)(sqliterk *rk, sqliterk_table *table);
+    void (*didParsePage)(sqliterk* rk, int pageno);
 };
 int sqliterk_register_notify(sqliterk *rk, sqliterk_notify notify);
 

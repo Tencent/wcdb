@@ -305,6 +305,9 @@ static void sqliterkNotify_onEndParsePage(sqliterk *rk,
             break;
     }
     //sqliterkOSDebug(result, "sqliterkNotify_onEndParsePage: %d", pageno);
+    if (rk->notify.didParsePage) {
+        rk->notify.didParsePage(rk, pageno);
+    }
 }
 
 int sqliterkSetNotify(sqliterk *rk, sqliterk_notify notify)
