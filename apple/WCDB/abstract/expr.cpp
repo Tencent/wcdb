@@ -232,13 +232,13 @@ Expr Expr::concat(const Expr &operand) const
                               operand.m_description + ")");
     return expr;
 }
-    
+
 Expr Expr::substr(const Expr &start, const Expr &length) const
 {
     Expr expr;
     expr.m_description.append("SUBSTR(" + m_description + "," +
-                              start.m_description + "," +
-                              length.m_description + ")");
+                              start.m_description + "," + length.m_description +
+                              ")");
     return expr;
 }
 
