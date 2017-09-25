@@ -1,8 +1,10 @@
 # WCDB
 
-[![Release Version](https://img.shields.io/badge/release-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)
-[![WeChat Approved iOS](https://img.shields.io/badge/Wechat_Approved_iOS-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki#wcdb-for-iosmacos)
-[![WeChat Approved Android](https://img.shields.io/badge/Wechat_Approved_Android-1.0.3-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki#wcdb-for-android)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/wcdb/pulls)
+[![Release Version](https://img.shields.io/badge/release-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
+[![WeChat Approved iOS](https://img.shields.io/badge/Wechat_Approved_iOS-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/blob/master/README.md#wcdb-for-iosmacos)
+[![WeChat Approved Android](https://img.shields.io/badge/Wechat_Approved_Android-1.0.3-brightgreen.svg)](https://github.com/Tencent/wcdb/blob/master/README.md#wcdb-for-android)
+[![Platform](https://img.shields.io/badge/Platform-%20iOS%20%7C%20macOS%20%7C%20Android-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)
 
 中文版本请参看[这里][wcdb-wiki]
 
