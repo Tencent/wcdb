@@ -25,6 +25,17 @@ namespace WCDB {
 
 namespace FTS {
 
+TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
+{
+}
+
+CursorInfoBase::CursorInfoBase(const char *input,
+                               int bytes,
+                               TokenizerInfoBase *tokenizerInfo)
+    : m_tokenizerInfo(tokenizerInfo)
+{
+}
+
 Modules *Modules::SharedModules()
 {
     static Modules s_modules;

@@ -30,27 +30,6 @@ namespace WCDB {
 
 namespace FTS {
 
-class TokenizerInfoBase {
-public:
-    TokenizerInfoBase(int argc, const char *const *argv);
-};
-
-class CursorInfoBase {
-public:
-    CursorInfoBase(const char *input,
-                   int bytes,
-                   TokenizerInfoBase *tokenizerInfo);
-
-    virtual int step(const char **ppToken,
-                     int *pnBytes,
-                     int *piStartOffset,
-                     int *piEndOffset,
-                     int *piPosition) = 0;
-
-protected:
-    TokenizerInfoBase *m_tokenizerInfo;
-};
-
 template <const char name[] = nullptr,
           typename TokenizerInfo = TokenizerInfoBase,
           typename CursorInfo = CursorInfoBase>
