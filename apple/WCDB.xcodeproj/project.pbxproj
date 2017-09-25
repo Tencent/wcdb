@@ -257,9 +257,9 @@
 		23577F6C1F74F4BA00D31C05 /* WCTTransaction+Compatible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F6A1F74F4BA00D31C05 /* WCTTransaction+Compatible.mm */; };
 		23577F6D1F74F4BC00D31C05 /* WCTTransaction+Compatible.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F681F74F4BA00D31C05 /* WCTTransaction+Compatible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F6E1F74F4C100D31C05 /* WCTTransaction+Compatible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F6A1F74F4BA00D31C05 /* WCTTransaction+Compatible.mm */; };
-		23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; };
+		23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F741F74F4D000D31C05 /* tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* tokenizer.cpp */; };
-		23577F751F74F4D200D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; };
+		23577F751F74F4D200D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F761F74F4E100D31C05 /* tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer+WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer+WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTTokenizer+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTTokenizer+WCDB.mm */; };
