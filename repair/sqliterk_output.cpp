@@ -39,8 +39,8 @@
 #endif
 
 extern "C" {
-#include "sqliterk_os.h"
 #include "sqliterk_btree.h"
+#include "sqliterk_os.h"
 }
 
 class CipherContext {
@@ -139,7 +139,10 @@ struct sqliterk_output_ctx {
     unsigned int fail_count;
     volatile unsigned cancelled;
 
-    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column);
+    int (*callback)(void *user,
+                    sqliterk *rk,
+                    sqliterk_table *table,
+                    sqliterk_column *column);
     void *user;
 };
 
@@ -409,11 +412,14 @@ int sqliterk_output(sqliterk *rk,
 }
 
 int sqliterk_output_cb(sqliterk *rk,
-                    sqlite3 *db,
-                    sqliterk_master_info *master_,
-                    unsigned int flags,
-                    int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
-                    void *user)
+                       sqlite3 *db,
+                       sqliterk_master_info *master_,
+                       unsigned int flags,
+                       int (*callback)(void *user,
+                                       sqliterk *rk,
+                                       sqliterk_table *table,
+                                       sqliterk_column *column),
+                       void *user)
 {
     if (!rk || !db)
         return SQLITERK_MISUSE;
@@ -464,7 +470,8 @@ int sqliterk_output_cb(sqliterk *rk,
     notify.onParseColumn = table_onParseColumn;
     sqliterk_register_notify(rk, notify);
 
-    for (sqliterk_master_map::iterator it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+    for (sqliterk_master_map::iterator it = ctx.tables.begin();
+         it != ctx.tables.end(); ++it) {
         if (ctx.cancelled)
             goto cancelled;
 
@@ -493,7 +500,8 @@ int sqliterk_output_cb(sqliterk *rk,
             ctx.table_cursor = it;
             rc = sqliterk_parse_page(rk, root_page);
             if (ctx.stmt) {
-                const char *sql = (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
+                const char *sql =
+                    (rc == SQLITERK_CANCELLED) ? "ROLLBACK;" : "COMMIT;";
 
                 // Commit transaction and free statement.
                 char *errmsg;
@@ -518,7 +526,8 @@ int sqliterk_output_cb(sqliterk *rk,
 
     // Iterate through indices, create them if necessary.
     if (!(ctx.flags & SQLITERK_OUTPUT_NO_CREATE_TABLES)) {
-        for (sqliterk_master_map::iterator it = ctx.tables.begin(); it != ctx.tables.end(); ++it) {
+        for (sqliterk_master_map::iterator it = ctx.tables.begin();
+             it != ctx.tables.end(); ++it) {
             if (ctx.cancelled)
                 goto cancelled;
 
@@ -541,22 +550,25 @@ int sqliterk_output_cb(sqliterk *rk,
     // Return OK only if we had successfully output at least one row.
     if (ctx.success_count == 0) {
         if (ctx.tables.empty())
-            sqliterkOSError(SQLITERK_DAMAGED, "No valid sqlite_master info available, "
-                                "sqlite_master is corrupted.");
+            sqliterkOSError(SQLITERK_DAMAGED,
+                            "No valid sqlite_master info available, "
+                            "sqlite_master is corrupted.");
         else
             sqliterkOSError(SQLITERK_DAMAGED,
                             "No rows can be successfully output. [failed: %u]",
                             ctx.fail_count);
         return SQLITERK_DAMAGED;
     } else {
-        sqliterkOSInfo(SQLITERK_OK, "Recovery output finished. [succeeded: %u, failed: %u]", 
-            ctx.success_count, ctx.fail_count);
+        sqliterkOSInfo(SQLITERK_OK,
+                       "Recovery output finished. [succeeded: %u, failed: %u]",
+                       ctx.success_count, ctx.fail_count);
         return SQLITERK_OK;
     }
 
 cancelled:
-    sqliterkOSInfo(SQLITERK_CANCELLED, "Recovery cancelled. [succeeded: %u, failed: %u]",
-        ctx.success_count, ctx.fail_count);
+    sqliterkOSInfo(SQLITERK_CANCELLED,
+                   "Recovery cancelled. [succeeded: %u, failed: %u]",
+                   ctx.success_count, ctx.fail_count);
     return SQLITERK_CANCELLED;
 }
 

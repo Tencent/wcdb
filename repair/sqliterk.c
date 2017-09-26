@@ -42,9 +42,9 @@ static void sqliterkNotify_onBeginParseBtree(sqliterk *rk,
 static void
 sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result);
 static int sqliterkNotify_onParseColumn(sqliterk *rk,
-                                         sqliterk_btree *btree,
-                                         sqliterk_page *page,
-                                         sqliterk_column *column);
+                                        sqliterk_btree *btree,
+                                        sqliterk_page *page,
+                                        sqliterk_column *column);
 static int sqliterkNotify_onBeginParsePage(sqliterk *rk,
                                            sqliterk_btree *btree,
                                            int pageno);
@@ -195,9 +195,9 @@ sqliterkNotify_onEndParseBtree(sqliterk *rk, sqliterk_btree *btree, int result)
 }
 
 static int sqliterkNotify_onParseColumn(sqliterk *rk,
-                                         sqliterk_btree *btree,
-                                         sqliterk_page *page,
-                                         sqliterk_column *column)
+                                        sqliterk_btree *btree,
+                                        sqliterk_page *page,
+                                        sqliterk_column *column)
 {
     if (!rk) {
         return SQLITERK_MISUSE;
@@ -265,7 +265,7 @@ static int sqliterkNotify_onParseColumn(sqliterk *rk,
             }
         }
     }
-    
+
     return result;
 }
 
@@ -296,7 +296,8 @@ static void sqliterkNotify_onEndParsePage(sqliterk *rk,
             sqliterkPagerSetStatus(rk->pager, pageno, sqliterk_status_damaged);
             break;
         case SQLITERK_CANCELLED:
-            sqliterkOSDebug(SQLITERK_CANCELLED, "Cancelled parsing page %d.", pageno);
+            sqliterkOSDebug(SQLITERK_CANCELLED, "Cancelled parsing page %d.",
+                            pageno);
             break;
         default:
             sqliterkOSWarning(SQLITERK_MISUSE,
