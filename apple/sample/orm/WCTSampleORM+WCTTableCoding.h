@@ -18,12 +18,15 @@
  * limitations under the License.
  */
 
-#import "WCTSampleAdvance.h"
-#import <Foundation/Foundation.h>
+#import "WCTSampleORM.h"
+#import <WCDB/WCDB.h>
 
-//Since WCTSampleAdvance use category to implement ORM, you have no need to change this file's extension from .m to .mm
-@interface WCTSampleNoObjectiveCpp : NSObject
+@interface WCTSampleORM (WCTTableCoding) <WCTTableCoding>
 
-@property(nonatomic, retain) WCTSampleAdvance *nocpp;
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(desc)
+WCDB_PROPERTY(value)
+WCDB_PROPERTY(timestamp)
+WCDB_PROPERTY(type)
 
 @end

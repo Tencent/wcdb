@@ -20,6 +20,7 @@
 
 #import "sample_table_main.h"
 #import "WCTSampleTable.h"
+#import "WCTSampleTable+WCTTableCoding.h"
 
 void sample_table_main(NSString *baseDirectory)
 {

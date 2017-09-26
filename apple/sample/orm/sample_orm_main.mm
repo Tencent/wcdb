@@ -19,9 +19,13 @@
  */
 
 #import "sample_orm_main.h"
+#import "WCTSampleORM+WCTTableCoding.h"
 #import "WCTSampleORM.h"
+#import "WCTSampleORMColumnConstraint+WCTTableCoding.h"
 #import "WCTSampleORMColumnConstraint.h"
+#import "WCTSampleORMIndex+WCTTableCoding.h"
 #import "WCTSampleORMIndex.h"
+#import "WCTSampleORMTableConstraint+WCTTableCoding.h"
 #import "WCTSampleORMTableConstraint.h"
 
 void sample_orm_main(NSString *baseDirectory)

@@ -20,6 +20,7 @@
 
 #import "sample_convenient_main.h"
 #import "WCTSampleConvenient.h"
+#import "WCTSampleConvenient+WCTTableCoding.h"
 
 void sample_convenient_main(NSString *baseDirectory)
 {

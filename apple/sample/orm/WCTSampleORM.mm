@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleORM.h"
+#import "WCTSampleORM+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleORM
 
