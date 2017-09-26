@@ -59,6 +59,7 @@ WCTCursorInfo::~WCTCursorInfo()
 
 CFCharacterSetRef WCTCursorInfo::GenerateSymbolCharacterSet()
 {
+    //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
     CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
     CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
     CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
