@@ -58,7 +58,7 @@ const Configs Database::defaultConfigs(
              }
              return true;
          },
-         (ConfigOrder) Database::ConfigOrder::Trace,
+         (Configs::Order) Database::ConfigOrder::Trace,
      },
      {
          Database::defaultCipherConfigName,
@@ -66,7 +66,7 @@ const Configs Database::defaultConfigs(
              //place holder
              return true;
          },
-         (ConfigOrder) Database::ConfigOrder::Cipher,
+         (Configs::Order) Database::ConfigOrder::Cipher,
      },
      {
          Database::defaultBasicConfigName,
@@ -159,12 +159,12 @@ const Configs Database::defaultConfigs(
              error.reset();
              return true;
          },
-         (ConfigOrder) Database::ConfigOrder::Basic,
+         (Configs::Order) Database::ConfigOrder::Basic,
      },
      {
          Database::defaultSynchronousConfigName,
          nullptr, //placeholder
-         (ConfigOrder) Database::ConfigOrder::Synchronous,
+         (Configs::Order) Database::ConfigOrder::Synchronous,
      },
      {
          Database::defaultCheckpointConfigName,
@@ -197,12 +197,12 @@ const Configs Database::defaultConfigs(
                  nullptr);
              return true;
          },
-         (ConfigOrder) Database::ConfigOrder::Checkpoint,
+         (Configs::Order) Database::ConfigOrder::Checkpoint,
      },
      {
          Database::defaultTokenizeConfigName,
          nullptr, //placeholder
-         (ConfigOrder) Database::ConfigOrder::Tokenize,
+         (Configs::Order) Database::ConfigOrder::Tokenize,
      }});
 
 void Database::setConfig(const std::string &name,
