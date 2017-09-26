@@ -19,8 +19,8 @@
  */
 
 #import "sample_table_main.h"
-#import "WCTSampleTable.h"
 #import "WCTSampleTable+WCTTableCoding.h"
+#import "WCTSampleTable.h"
 
 void sample_table_main(NSString *baseDirectory)
 {
