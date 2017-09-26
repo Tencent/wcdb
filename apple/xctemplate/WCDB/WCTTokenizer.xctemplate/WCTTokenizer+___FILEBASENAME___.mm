@@ -49,7 +49,7 @@ public:
 
         if (/* <#Is It Done Yet ?#> */) {
 
-            /* <#Your Cursor Step #> */
+            /* <#Your Cursor Step#> */
 
             return SQLITE_OK;
         }

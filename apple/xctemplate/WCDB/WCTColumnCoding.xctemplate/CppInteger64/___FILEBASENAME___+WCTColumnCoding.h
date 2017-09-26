@@ -1,25 +1,19 @@
-//
-//  ___FILENAME___
-//  ___PROJECTNAME___
-//
-//  Created by ___FULLUSERNAME___ on ___DATE___.
-//___COPYRIGHT___
-//
+//___FILEHEADER___
 
 #import <WCDB/WCDB.h>
 
 template <>
-struct ColumnIsInteger64Type<___FILEBASENAMEASIDENTIFIER___>
+struct ColumnIsInteger64Type<___VARIABLE_productName___>
     : public std::true_type {
 };
 
 template <>
-WCTColumnRuntimeCppAccessor<___FILEBASENAMEASIDENTIFIER___>::CType
-    WCTColumnRuntimeCppAccessor<___FILEBASENAMEASIDENTIFIER___>::
-        convertPropertyTypeToCType(___FILEBASENAMEASIDENTIFIER___);
+WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::CType
+    WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::
+        convertPropertyTypeToCType(___VARIABLE_productName___);
 
 template <>
-___FILEBASENAMEASIDENTIFIER___
-    WCTColumnRuntimeCppAccessor<___FILEBASENAMEASIDENTIFIER___>::
+___VARIABLE_productName___
+    WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::
         convertCTypeToPropertyType(
-            WCTColumnRuntimeCppAccessor<___FILEBASENAMEASIDENTIFIER___>::CType);
+            WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::CType);
