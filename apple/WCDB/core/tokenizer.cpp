@@ -25,16 +25,7 @@ namespace WCDB {
 
 namespace FTS {
 
-#pragma mark - Tokenizer
-WCDBTokenizerInfo::WCDBTokenizerInfo(int argc, const char *const *argv)
-    : TokenizerInfoBase(argc, argv)
-{
-}
-
-WCDBTokenizerInfo::~WCDBTokenizerInfo()
-{
-}
-
+#pragma mark - Cursor
 WCDBCursorInfo::WCDBCursorInfo(const char *input,
                                int bytes,
                                TokenizerInfoBase *tokenizerInfo)
@@ -44,16 +35,22 @@ WCDBCursorInfo::WCDBCursorInfo(const char *input,
     , m_position(0)
     , m_cursor(0)
     , m_buffer(nullptr)
-    , m_bufferLength(0)
+    , m_bufferCapacity(0)
+    , m_nonLemmaLength(0)
+    , m_nonLemmaStartOffset(0)
+    , m_lemmaBuffer(nullptr)
+    , m_lemmaBufferCapacity(0)
+    , m_lemmaLength(0)
 {
-    setupToken();
-    m_subTokensLengthArray.clear();
 }
 
 WCDBCursorInfo::~WCDBCursorInfo()
 {
     if (m_buffer) {
         sqlite3_free(m_buffer);
+    }
+    if (m_lemmaBuffer) {
+        sqlite3_free(m_lemmaBuffer);
     }
 }
 
@@ -64,73 +61,111 @@ int WCDBCursorInfo::step(const char **ppToken,
                          int *piEndOffset,
                          int *piPosition)
 {
-    if (m_subTokensLengthArray.empty()) {
-        if (m_currentTokenType == TokenType::None) {
-            return SQLITE_DONE;
+    int rc = SQLITE_OK;
+    if (m_position == 0) {
+        rc = setupToken();
+        if (rc != SQLITE_OK) {
+            return rc;
         }
-
-        //Skip symbol
-        while (m_currentTokenType == TokenType::BasicMultilingualPlaneSymbol) {
-            if (!cursorStep()) {
-                return SQLITE_DONE;
-            }
-        }
-
-        TokenType type = m_currentTokenType;
-        switch (type) {
-            case TokenType::BasicMultilingualPlaneLetter:
-            case TokenType::BasicMultilingualPlaneDigit:
-                *piStartOffset = m_cursor;
-                while (cursorStep() && m_currentTokenType == type)
-                    ;
-                *pnBytes = m_cursor - *piStartOffset;
-                break;
-            case TokenType::BasicMultilingualPlaneOther:
-            case TokenType::AuxiliaryPlaneOther:
-                m_subTokensLengthArray.push_back(m_currentTokenLength);
-                m_subTokensCursor = m_cursor;
-                m_subTokensDoubleChar = true;
-                while (cursorStep() && m_currentTokenType == type) {
-                    m_subTokensLengthArray.push_back(m_currentTokenLength);
-                }
-                subTokensStep(pnBytes, piStartOffset);
-                break;
-            default:
-                break;
-        }
-        setBuffer(m_input + *piStartOffset, *pnBytes);
-        if (type == TokenType::BasicMultilingualPlaneLetter) {
-            for (int i = 0; i < *pnBytes; ++i) {
-                m_buffer[i] = tolower(m_buffer[i]);
-            }
-        }
-    } else {
-        subTokensStep(pnBytes, piStartOffset);
-        setBuffer(m_input + *piStartOffset, *pnBytes);
     }
 
-    *ppToken = m_buffer;
-    *piEndOffset = *piStartOffset + *pnBytes;
-    *piPosition = m_position++;
+    if (m_lemmaLength == 0) {
+        if (m_subTokensLengthArray.empty()) {
+            if (m_currentTokenType == TokenType::None) {
+                return SQLITE_DONE;
+            }
+
+            //Skip symbol
+            while (m_currentTokenType ==
+                   TokenType::BasicMultilingualPlaneSymbol) {
+                rc = cursorStep();
+                if (rc != SQLITE_OK) {
+                    return rc;
+                }
+            }
+
+            TokenType type = m_currentTokenType;
+            switch (type) {
+                case TokenType::BasicMultilingualPlaneLetter:
+                case TokenType::BasicMultilingualPlaneDigit:
+                    *piStartOffset = m_cursor;
+                    while (((rc = cursorStep()) == SQLITE_OK) &&
+                           m_currentTokenType == type)
+                        ;
+                    if (rc != SQLITE_OK) {
+                        return rc;
+                    }
+                    *pnBytes = m_cursor - *piStartOffset;
+                    break;
+                case TokenType::BasicMultilingualPlaneOther:
+                case TokenType::AuxiliaryPlaneOther:
+                    m_subTokensLengthArray.push_back(m_currentTokenLength);
+                    m_subTokensCursor = m_cursor;
+                    m_subTokensDoubleChar = true;
+                    while (((rc = cursorStep()) == SQLITE_OK) &&
+                           m_currentTokenType == type) {
+                        m_subTokensLengthArray.push_back(m_currentTokenLength);
+                    }
+                    if (rc != SQLITE_OK) {
+                        return rc;
+                    }
+                    subTokensStep(pnBytes, piStartOffset);
+                    break;
+                default:
+                    break;
+            }
+            if (type == TokenType::BasicMultilingualPlaneLetter) {
+                rc = lemmatization(m_input + *piStartOffset, *pnBytes);
+                if (rc != SQLITE_OK) {
+                    return rc;
+                }
+                if (m_lemmaLength > 0) {
+                    m_nonLemmaStartOffset = *piStartOffset;
+                    m_nonLemmaLength = *pnBytes;
+                }
+            } else {
+                rc = setBuffer(m_input + *piStartOffset, *pnBytes);
+                if (rc != SQLITE_OK) {
+                    return rc;
+                }
+            }
+        } else {
+            subTokensStep(pnBytes, piStartOffset);
+            rc = setBuffer(m_input + *piStartOffset, *pnBytes);
+            if (rc != SQLITE_OK) {
+                return rc;
+            }
+        }
+
+        *ppToken = m_buffer;
+        *piEndOffset = *piStartOffset + *pnBytes;
+        *piPosition = m_position++;
+    } else {
+        *ppToken = m_lemmaBuffer;
+        *piStartOffset = m_nonLemmaStartOffset;
+        *pnBytes = m_lemmaLength;
+        *piEndOffset = *piStartOffset + m_nonLemmaLength;
+        m_lemmaLength = 0;
+    }
 
     return SQLITE_OK;
 }
 
-bool WCDBCursorInfo::cursorStep()
+int WCDBCursorInfo::cursorStep()
 {
     if (m_cursor + m_currentTokenLength < m_length) {
         m_cursor += m_currentTokenLength;
-        setupToken();
-        return 1;
+        return setupToken();
     }
     m_cursor = m_length;
     m_currentTokenType = TokenType::None;
     m_currentTokenLength = 0;
-    return 0;
+    return SQLITE_OK;
 }
 
-void WCDBCursorInfo::setupToken()
+int WCDBCursorInfo::setupToken()
 {
+    int rc;
     const unsigned char &first = m_input[m_cursor];
     if (first < 0xC0) {
         m_currentTokenLength = 1;
@@ -140,14 +175,21 @@ void WCDBCursorInfo::setupToken()
                    (first >= 0x61 && first <= 0x7a)) {
             m_currentTokenType = TokenType::BasicMultilingualPlaneLetter;
         } else {
-            if (isSymbol(first)) {
-                m_currentTokenType = TokenType::BasicMultilingualPlaneSymbol;
+            bool result = false;
+            rc = isSymbol(first, &result);
+            if (rc == SQLITE_OK) {
+                if (result) {
+                    m_currentTokenType =
+                        TokenType::BasicMultilingualPlaneSymbol;
+                } else {
+                    m_currentTokenType = TokenType::BasicMultilingualPlaneOther;
+                }
             } else {
-                m_currentTokenType = TokenType::BasicMultilingualPlaneOther;
+                return rc;
             }
         }
     } else if (first < 0xF0) {
-        UniChar unicode = 0;
+        UnicodeChar unicode = 0;
         if (first < 0xE0) {
             m_currentTokenLength = 2;
             unicode = first & 0x1F;
@@ -161,13 +203,19 @@ void WCDBCursorInfo::setupToken()
             } else {
                 m_currentTokenType = TokenType::None;
                 m_currentTokenLength = m_length - i;
-                return;
+                return SQLITE_OK;
             }
         }
-        if (isSymbol(unicode)) {
-            m_currentTokenType = TokenType::BasicMultilingualPlaneSymbol;
+        bool result = false;
+        rc = isSymbol(unicode, &result);
+        if (rc == SQLITE_OK) {
+            if (result) {
+                m_currentTokenType = TokenType::BasicMultilingualPlaneSymbol;
+            } else {
+                m_currentTokenType = TokenType::BasicMultilingualPlaneOther;
+            }
         } else {
-            m_currentTokenType = TokenType::BasicMultilingualPlaneOther;
+            return rc;
         }
     } else {
         m_currentTokenType = TokenType::AuxiliaryPlaneOther;
@@ -179,35 +227,41 @@ void WCDBCursorInfo::setupToken()
             m_currentTokenLength = 6;
         }
     }
+    return SQLITE_OK;
 }
 
-bool WCDBCursorInfo::isSymbol(UniChar theChar)
+int WCDBCursorInfo::lemmatization(const char *input, int bytes)
 {
-#ifdef __APPLE__
-    //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
-    static CFCharacterSetRef s_symbolCharacterSet = []() {
-        CFMutableCharacterSetRef symbolCharacterSet =
-            CFCharacterSetCreateMutable(CFAllocatorGetDefault());
-        CFCharacterSetUnion(symbolCharacterSet, CFCharacterSetGetPredefined(
-                                                    kCFCharacterSetControl));
-        CFCharacterSetUnion(
-            symbolCharacterSet,
-            CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
-        CFCharacterSetUnion(symbolCharacterSet, CFCharacterSetGetPredefined(
-                                                    kCFCharacterSetNonBase));
-        CFCharacterSetUnion(
-            symbolCharacterSet,
-            CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
-        CFCharacterSetUnion(symbolCharacterSet,
-                            CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
-        CFCharacterSetUnion(symbolCharacterSet, CFCharacterSetGetPredefined(
-                                                    kCFCharacterSetIllegal));
-        return symbolCharacterSet;
-    }();
-    return CFCharacterSetIsCharacterMember(s_symbolCharacterSet, theChar);
-#else //
-#error You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
-#endif
+    //Tolower only. You can implement your own lemmatization here.
+    int rc = setBufferCapacity(bytes);
+    if (rc != SQLITE_OK) {
+        return rc;
+    }
+    for (int i = 0; i < bytes; ++i) {
+        m_buffer[i] = tolower(input[i]);
+    }
+    return SQLITE_OK;
+}
+
+int WCDBCursorInfo::setLemmaBuffer(const char *src, int length)
+{
+    if (length > m_lemmaBufferCapacity) {
+        if (m_lemmaBuffer) {
+            sqlite3_free(m_lemmaBuffer);
+        }
+        m_lemmaBufferCapacity *= 2;
+        if (m_lemmaBufferCapacity < length) {
+            m_lemmaBufferCapacity = length;
+        }
+        m_lemmaBuffer = (char *) sqlite3_malloc(m_lemmaBufferCapacity);
+        if (!m_lemmaBuffer) {
+            m_lemmaBufferCapacity = 0;
+            return SQLITE_NOMEM;
+        }
+    }
+    memcpy(m_lemmaBuffer, src, length);
+    m_lemmaLength = length;
+    return SQLITE_OK;
 }
 
 void WCDBCursorInfo::subTokensStep(int *pnBytes, int *piStartOffset)
@@ -228,37 +282,33 @@ void WCDBCursorInfo::subTokensStep(int *pnBytes, int *piStartOffset)
     }
 }
 
-void WCDBCursorInfo::cutBufferLength(int newLength)
+int WCDBCursorInfo::setBufferCapacity(int newCapacity)
 {
-    if (newLength < m_bufferLength) {
-        m_bufferLength = newLength;
-    }
-}
-bool WCDBCursorInfo::setBuffer(const char *src, int length)
-{
-    if (length > m_bufferLength) {
+    if (newCapacity > m_bufferCapacity) {
         if (m_buffer) {
             sqlite3_free(m_buffer);
         }
-        m_bufferLength = m_bufferLength ? m_bufferLength * 2 : length;
-        m_buffer = (char *) sqlite3_malloc(m_bufferLength);
+        m_bufferCapacity *= 2;
+        if (m_bufferCapacity < newCapacity) {
+            m_bufferCapacity = newCapacity;
+        }
+        m_buffer = (char *) sqlite3_malloc(m_bufferCapacity);
         if (!m_buffer) {
-            m_bufferLength = 0;
-            return false;
+            m_bufferCapacity = 0;
+            return SQLITE_NOMEM;
         }
     }
-    memcpy(m_buffer, src, length);
-    return true;
+    return SQLITE_OK;
 }
 
-#pragma mark - Module
-constexpr const char WCDBModule::Name[];
-
-const std::nullptr_t WCDBModule::s_register = []() {
-    FTS::Module<WCDBModule::Name, WCDBTokenizerInfo,
-                WCDBCursorInfo>::Register();
-    return nullptr;
-}();
+int WCDBCursorInfo::setBuffer(const char *src, int length)
+{
+    int rc = setBufferCapacity(length);
+    if (rc == SQLITE_OK) {
+        memcpy(m_buffer, src, length);
+    }
+    return rc;
+}
 
 } //namespace FTS
 

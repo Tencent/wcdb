@@ -19,35 +19,22 @@
  */
 
 #include <WCDB/fts_module.hpp>
-#include <WCDB/fts_modules.hpp>
 
 namespace WCDB {
 
 namespace FTS {
 
-Modules *Modules::SharedModules()
+TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
 {
-    static Modules s_modules;
-    return &s_modules;
 }
 
-void Modules::addModule(const std::string &name,
-                        const std::shared_ptr<void> &module)
+CursorInfoBase::CursorInfoBase(const char *input,
+                               int bytes,
+                               TokenizerInfoBase *tokenizerInfo)
+    : m_tokenizerInfo(tokenizerInfo)
 {
-    SpinLockGuard<Spin> lockGuard(m_spin);
-    m_modules.insert({name, module});
 }
 
-const void *Modules::getAddress(const std::string &name) const
-{
-    SpinLockGuard<Spin> lockGuard(m_spin);
-    auto iter = m_modules.find(name);
-    if (iter != m_modules.end()) {
-        return iter->second.get();
-    }
-    return nullptr;
-}
-
-} //namespace FTS
+} // namespace FTS
 
 } //namespace WCDB

@@ -12,12 +12,12 @@
 		231316581F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */ = {isa = PBXBuildFile; fileRef = 231316551F73A0A80087288A /* WCTTokenizer+Apple.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		231316591F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */; };
 		2313165A1F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */; };
-		232146F51F6AAC9000BF7AF2 /* fts_module.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F11F6AAC9000BF7AF2 /* fts_module.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		232146F51F6AAC9000BF7AF2 /* fts_module.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F11F6AAC9000BF7AF2 /* fts_module.hpp */; };
 		232146F61F6AAC9000BF7AF2 /* fts_modules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */; };
 		232146F71F6AAC9000BF7AF2 /* fts_modules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		232146F81F6AAC9400BF7AF2 /* fts_modules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		232146F91F6AACA700BF7AF2 /* fts_modules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */; };
-		232146FA1F6AACAB00BF7AF2 /* fts_module.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F11F6AAC9000BF7AF2 /* fts_module.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		232146FA1F6AACAB00BF7AF2 /* fts_module.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232146F11F6AAC9000BF7AF2 /* fts_module.hpp */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741511F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
@@ -255,9 +255,9 @@
 		23577F6C1F74F4BA00D31C05 /* WCTTransaction+Compatible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F6A1F74F4BA00D31C05 /* WCTTransaction+Compatible.mm */; };
 		23577F6D1F74F4BC00D31C05 /* WCTTransaction+Compatible.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F681F74F4BA00D31C05 /* WCTTransaction+Compatible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F6E1F74F4C100D31C05 /* WCTTransaction+Compatible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F6A1F74F4BA00D31C05 /* WCTTransaction+Compatible.mm */; };
-		23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; };
 		23577F741F74F4D000D31C05 /* tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* tokenizer.cpp */; };
-		23577F751F74F4D200D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23577F751F74F4D200D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; };
 		23577F761F74F4E100D31C05 /* tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer+WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer+WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTTokenizer+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTTokenizer+WCDB.mm */; };
@@ -586,6 +586,8 @@
 		23E63DFF1F79FB1800001A68 /* WCTSampleCoreExt.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E63DFA1F79FB1700001A68 /* WCTSampleCoreExt.mm */; };
 		23E63E001F79FB1800001A68 /* WCTSampleCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E63DFD1F79FB1800001A68 /* WCTSampleCore.mm */; };
 		23E63E041F79FB3100001A68 /* WCTSampleStatistics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E63E031F79FB3100001A68 /* WCTSampleStatistics.mm */; };
+		23E63E071F7A392B00001A68 /* fts_module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E63E061F7A392B00001A68 /* fts_module.cpp */; };
+		23E63E081F7A392B00001A68 /* fts_module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E63E061F7A392B00001A68 /* fts_module.cpp */; };
 		23E732601F209E6800AA1614 /* WCTMaster+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 236DB4B61F209D100091FC79 /* WCTMaster+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E732651F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E732661F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1031,6 +1033,7 @@
 		23E63E011F79FB3100001A68 /* WCTSampleStatistics+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTSampleStatistics+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23E63E021F79FB3100001A68 /* WCTSampleStatistics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTSampleStatistics.h; sourceTree = "<group>"; };
 		23E63E031F79FB3100001A68 /* WCTSampleStatistics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSampleStatistics.mm; sourceTree = "<group>"; };
+		23E63E061F7A392B00001A68 /* fts_module.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fts_module.cpp; sourceTree = "<group>"; };
 		23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23E781901EA4C63400D74BA8 /* WCTAnyProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTAnyProperty.h; sourceTree = "<group>"; };
 		23E781911EA4C63400D74BA8 /* WCTAnyProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTAnyProperty.mm; sourceTree = "<group>"; };
@@ -1154,6 +1157,7 @@
 		2349F5D61EA0D6680021EFA7 /* abstract */ = {
 			isa = PBXGroup;
 			children = (
+				23E63E061F7A392B00001A68 /* fts_module.cpp */,
 				232146F11F6AAC9000BF7AF2 /* fts_module.hpp */,
 				232146F21F6AAC9000BF7AF2 /* fts_modules.cpp */,
 				232146F31F6AAC9000BF7AF2 /* fts_modules.hpp */,
@@ -2317,6 +2321,7 @@
 				23577F741F74F4D000D31C05 /* tokenizer.cpp in Sources */,
 				2349F7421EA0D6680021EFA7 /* WCTInterface+Core.mm in Sources */,
 				2349F6D91EA0D6680021EFA7 /* pragma.cpp in Sources */,
+				23E63E071F7A392B00001A68 /* fts_module.cpp in Sources */,
 				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm in Sources */,
 				2349F7801EA0D6680021EFA7 /* file.cpp in Sources */,
 				2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm in Sources */,
@@ -2494,6 +2499,7 @@
 				23577F761F74F4E100D31C05 /* tokenizer.cpp in Sources */,
 				23DE40C41EF7707900227551 /* WCTInterface+Core.mm in Sources */,
 				23DE40C51EF7707900227551 /* pragma.cpp in Sources */,
+				23E63E081F7A392B00001A68 /* fts_module.cpp in Sources */,
 				23DE40C71EF7707900227551 /* WCTRuntimeObjCAccessor.mm in Sources */,
 				23DE40C81EF7707900227551 /* file.cpp in Sources */,
 				23DE40C91EF7707900227551 /* WCTRuntimeBaseAccessor.mm in Sources */,

@@ -30,9 +30,30 @@ namespace WCDB {
 
 namespace FTS {
 
-template <const char name[] = nullptr,
-          typename TokenizerInfo = TokenizerInfoBase,
-          typename CursorInfo = CursorInfoBase>
+class TokenizerInfoBase {
+public:
+    TokenizerInfoBase(int argc, const char *const *argv);
+};
+
+class CursorInfoBase {
+public:
+    CursorInfoBase(const char *input,
+                   int bytes,
+                   TokenizerInfoBase *tokenizerInfo);
+
+    virtual int step(const char **ppToken,
+                     int *pnBytes,
+                     int *piStartOffset,
+                     int *piEndOffset,
+                     int *piPosition) = 0;
+
+protected:
+    TokenizerInfoBase *m_tokenizerInfo;
+};
+
+template <const char name[],
+          typename TokenizerInfo /* = TokenizerInfoBase */,
+          typename CursorInfo /* = CursorInfoBase */>
 class Module {
 public:
     struct Tokenizer {
@@ -55,9 +76,9 @@ public:
             return SQLITE_NOMEM;
         }
         memset(tokenizer, 0, sizeof(Tokenizer));
-        tokenizer->info = new TokenizerInfo(argc, argv);
-        if (!tokenizer->info) {
-            return SQLITE_NOMEM;
+        int rc = CreateTokenizerInfo<TokenizerInfo>(tokenizer, argc, argv);
+        if (rc != SQLITE_OK) {
+            return rc;
         }
         *ppTokenizer = &tokenizer->base;
         return SQLITE_OK;
@@ -67,13 +88,44 @@ public:
     {
         if (pTokenizer) {
             Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
-            if (tokenizer->info) {
-                delete tokenizer->info;
-                tokenizer->info = nullptr;
-            }
+            DestroyTokenizerInfo<TokenizerInfo>(tokenizer);
             sqlite3_free(pTokenizer);
         }
         return SQLITE_OK;
+    }
+
+    template <typename T /* = TokenizerInfo */>
+    static typename std::enable_if<!std::is_same<T, void>::value, int>::type
+    CreateTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
+    {
+        tokenizer->info = new TokenizerInfo(argc, argv);
+        if (!tokenizer->info) {
+            return SQLITE_NOMEM;
+        }
+        return SQLITE_OK;
+    }
+
+    template <typename T /* = void */>
+    static typename std::enable_if<std::is_same<T, void>::value, int>::type
+    CreateTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
+    {
+        return SQLITE_OK;
+    }
+
+    template <typename T /* = TokenizerInfo */>
+    static typename std::enable_if<!std::is_same<T, void>::value, void>::type
+    DestroyTokenizerInfo(Tokenizer *tokenizer)
+    {
+        if (tokenizer->info) {
+            delete tokenizer->info;
+            tokenizer->info = nullptr;
+        }
+    }
+
+    template <typename T /* = void */>
+    static typename std::enable_if<std::is_same<T, void>::value, void>::type
+    DestroyTokenizerInfo(Tokenizer *tokenizer)
+    {
     }
 
     static int Open(sqlite3_tokenizer *pTokenizer,
@@ -93,7 +145,8 @@ public:
         }
         memset(cursor, 0, sizeof(Cursor));
         Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
-        cursor->info = new CursorInfo(pInput, nBytes, tokenizer->info);
+        cursor->info = new CursorInfo(pInput, nBytes,
+                                      (TokenizerInfoBase *) tokenizer->info);
         if (!cursor->info) {
             return SQLITE_NOMEM;
         }

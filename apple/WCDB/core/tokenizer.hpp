@@ -21,25 +21,16 @@
 #ifndef tokenizer_hpp
 #define tokenizer_hpp
 
-#include <WCDB/fts_modules.hpp>
+#include <WCDB/fts_module.hpp>
 #include <cstddef>
 #include <vector>
-#ifdef __APPLE__
-#include <CoreFoundation/CoreFoundation.h>
-#else
-typedef UInt16 UniChar;
-#endif //__APPLE__
 
 namespace WCDB {
 
 namespace FTS {
 
-#pragma mark - Tokenizer
-class WCDBTokenizerInfo : public TokenizerInfoBase {
-public:
-    WCDBTokenizerInfo(int argc, const char *const *argv);
-    ~WCDBTokenizerInfo();
-};
+typedef unsigned short UnicodeChar;
+static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length");
 
 #pragma mark - Cursor
 class WCDBCursorInfo : public CursorInfoBase {
@@ -72,9 +63,18 @@ protected:
     int m_cursor;
     TokenType m_currentTokenType;
     int m_currentTokenLength;
-    bool cursorStep();
-    void setupToken();
-    bool isSymbol(UniChar theChar);
+    int cursorStep();
+    int setupToken();
+
+    //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
+    virtual int isSymbol(UnicodeChar theChar, bool *result) = 0;
+    virtual int lemmatization(const char *input, int bytes);
+    int m_nonLemmaStartOffset;
+    int m_nonLemmaLength;
+    char *m_lemmaBuffer;
+    int m_lemmaBufferCapacity;
+    int m_lemmaLength; //>0 lemma is not empty
+    int setLemmaBuffer(const char *src, int length);
 
     std::vector<int> m_subTokensLengthArray;
     int m_subTokensCursor;
@@ -82,18 +82,9 @@ protected:
     void subTokensStep(int *pnBytes, int *piStartOffset);
 
     char *m_buffer;
-    int m_bufferLength;
-    void cutBufferLength(int newLength);
-    bool setBuffer(const char *src, int length);
-};
-
-#pragma mark - Module
-class WCDBModule {
-public:
-    constexpr static const char Name[] = "WCDB";
-
-private:
-    static const std::nullptr_t s_register;
+    int m_bufferCapacity;
+    int setBufferCapacity(int newCapacity);
+    int setBuffer(const char *src, int length);
 };
 
 } //namespace FTS
