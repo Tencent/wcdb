@@ -41,6 +41,11 @@
     return [self createVirtualTableOfName:tableName withClass:cls];
 }
 
++ (NSString *)DefaultConfigName
+{
+    return [self DefaultBasicConfigName];
+}
+
 @end
 
 #endif //WCDB_OMIT_DEPRECATED

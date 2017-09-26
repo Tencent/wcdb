@@ -23,9 +23,9 @@
 
 @implementation WCTDatabase (Core)
 
-+ (NSString *)DefaultConfigName
++ (NSString *)DefaultBasicConfigName
 {
-    return @(WCDB::Database::defaultConfigName.c_str());
+    return @(WCDB::Database::defaultBasicConfigName.c_str());
 }
 
 + (NSString *)DefaultCipherConfigName

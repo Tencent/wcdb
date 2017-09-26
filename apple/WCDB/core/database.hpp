@@ -52,7 +52,15 @@ public:
     static void PurgeFreeHandlesInAllDatabases();
 
     //config
-    static const std::string defaultConfigName;
+    enum class ConfigOrder : Configs::Order {
+        Trace = 0,
+        Cipher = 1,
+        Basic = 2,
+        Synchronous = 3,
+        Checkpoint = 4,
+        Tokenize = 5,
+    };
+    static const std::string defaultBasicConfigName;
     static const std::string defaultCipherConfigName;
     static const std::string defaultTraceConfigName;
     static const std::string defaultCheckpointConfigName;

@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-const std::string Database::defaultConfigName = "default";
+const std::string Database::defaultBasicConfigName = "basic";
 const std::string Database::defaultCipherConfigName = "cipher";
 const std::string Database::defaultTraceConfigName = "trace";
 const std::string Database::defaultCheckpointConfigName = "checkpoint";
@@ -58,7 +58,7 @@ const Configs Database::defaultConfigs(
              }
              return true;
          },
-         0,
+         (ConfigOrder) Database::ConfigOrder::Trace,
      },
      {
          Database::defaultCipherConfigName,
@@ -66,10 +66,10 @@ const Configs Database::defaultConfigs(
              //place holder
              return true;
          },
-         1,
+         (ConfigOrder) Database::ConfigOrder::Cipher,
      },
      {
-         Database::defaultConfigName,
+         Database::defaultBasicConfigName,
          [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
 
              //Locking Mode
@@ -159,12 +159,12 @@ const Configs Database::defaultConfigs(
              error.reset();
              return true;
          },
-         2,
+         (ConfigOrder) Database::ConfigOrder::Basic,
      },
      {
          Database::defaultSynchronousConfigName,
          nullptr, //placeholder
-         3,
+         (ConfigOrder) Database::ConfigOrder::Synchronous,
      },
      {
          Database::defaultCheckpointConfigName,
@@ -197,12 +197,12 @@ const Configs Database::defaultConfigs(
                  nullptr);
              return true;
          },
-         4,
+         (ConfigOrder) Database::ConfigOrder::Checkpoint,
      },
      {
          Database::defaultTokenizeConfigName,
          nullptr, //placeholder
-         5,
+         (ConfigOrder) Database::ConfigOrder::Tokenize,
      }});
 
 void Database::setConfig(const std::string &name,
