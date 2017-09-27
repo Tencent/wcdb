@@ -33,7 +33,7 @@ public:
     AppleCursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
         : CursorInfoBase(input, inputLength, tokenizerInfo)
         , m_input(input ? [[NSString alloc] initWithBytes:input length:inputLength encoding:NSUTF8StringEncoding] : @"")
-        , m_tokenizer(CFStringTokenizerCreate(kCFAllocatorDefault, (__bridge CFStringRef) m_input, CFRangeMake(0, m_input.length), kCFStringTokenizerUnitWord, CFLocaleCopyCurrent()))
+        , m_tokenizer(m_input ? CFStringTokenizerCreate(kCFAllocatorDefault, (__bridge CFStringRef) m_input, CFRangeMake(0, m_input.length), kCFStringTokenizerUnitWord, CFLocaleCopyCurrent()) : NULL)
         , m_offset(0)
         , m_position(0)
     {
