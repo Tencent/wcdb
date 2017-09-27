@@ -1645,14 +1645,14 @@
 		23B8612F1F6BBB4A00FB8D96 /* fts */ = {
 			isa = PBXGroup;
 			children = (
+				23B8613A1F6BBE8D00FB8D96 /* sample_fts_main.h */,
+				23B861381F6BBD4700FB8D96 /* sample_fts_main.mm */,
 				23B861301F6BBB9900FB8D96 /* WCTSampleFTSOrigin.h */,
 				23B861311F6BBB9900FB8D96 /* WCTSampleFTSOrigin.mm */,
 				23B861331F6BBBAB00FB8D96 /* WCTSampleFTSOrigin+WCTTableCoding.h */,
 				23B861341F6BBD2800FB8D96 /* WCTSampleFTSData.h */,
 				23B861351F6BBD2800FB8D96 /* WCTSampleFTSData.mm */,
 				23B861371F6BBD3400FB8D96 /* WCTSampleFTSData+WCTTableCoding.h */,
-				23B861381F6BBD4700FB8D96 /* sample_fts_main.mm */,
-				23B8613A1F6BBE8D00FB8D96 /* sample_fts_main.h */,
 			);
 			name = fts;
 			path = sample/fts;

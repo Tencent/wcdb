@@ -29,7 +29,7 @@ TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
 }
 
 CursorInfoBase::CursorInfoBase(const char *input,
-                               int bytes,
+                               int inputLength,
                                TokenizerInfoBase *tokenizerInfo)
     : m_tokenizerInfo(tokenizerInfo)
 {

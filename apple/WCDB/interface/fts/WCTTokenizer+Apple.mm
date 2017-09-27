@@ -21,36 +21,21 @@
 #import <WCDB/WCDB.h>
 #import <WCDB/WCTTokenizer+Apple.h>
 #import <WCDB/fts_module.hpp>
+#import <vector>
 
 namespace WCDB {
 
 namespace FTS {
 
-#pragma mark - Tokenizer
-class AppleTokenizerInfo : public TokenizerInfoBase {
-public:
-    AppleTokenizerInfo(int argc, const char *const *argv)
-        : TokenizerInfoBase(argc, argv)
-    {
-    }
-    ~AppleTokenizerInfo()
-    {
-    }
-
-protected:
-};
-
 #pragma mark - Cursor
 class AppleCursorInfo : public CursorInfoBase {
 public:
-    AppleCursorInfo(const char *input, int bytes, TokenizerInfoBase *tokenizerInfo)
-        : CursorInfoBase(input, bytes, tokenizerInfo)
-        , m_input(input ? [NSString stringWithUTF8String:input] : @"")
+    AppleCursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
+        : CursorInfoBase(input, inputLength, tokenizerInfo)
+        , m_input(input ? [[NSString alloc] initWithBytes:input length:inputLength encoding:NSUTF8StringEncoding] : @"")
         , m_tokenizer(CFStringTokenizerCreate(kCFAllocatorDefault, (__bridge CFStringRef) m_input, CFRangeMake(0, m_input.length), kCFStringTokenizerUnitWord, CFLocaleCopyCurrent()))
         , m_offset(0)
         , m_position(0)
-        , m_buffer(0)
-        , m_bufferSize(0)
     {
     }
 
@@ -58,9 +43,6 @@ public:
     {
         if (m_tokenizer) {
             CFRelease(m_tokenizer);
-        }
-        if (m_buffer) {
-            sqlite3_free(m_buffer);
         }
     }
 
@@ -75,30 +57,24 @@ public:
             CFRange range = CFStringTokenizerGetCurrentTokenRange(m_tokenizer);
 
             CFIndex maxBufferSize = CFStringGetMaximumSizeForEncoding(range.length, kCFStringEncodingUTF8);
-            if (maxBufferSize > m_bufferSize) {
-                if (m_buffer) {
-                    sqlite3_free(m_buffer);
-                }
-                m_bufferSize = (int) maxBufferSize;
-                m_buffer = (char *) sqlite3_malloc(m_bufferSize);
-                if (!m_buffer) {
-                    return SQLITE_NOMEM;
-                }
+            if (maxBufferSize > m_buffer.capacity()) {
+                m_buffer.resize(maxBufferSize);
             }
             NSUInteger used;
-            BOOL result = [m_input getBytes:m_buffer maxLength:m_bufferSize usedLength:&used encoding:NSUTF8StringEncoding options:NSStringEncodingConversionAllowLossy range:NSMakeRange(range.location, range.length) remainingRange:NULL];
+            BOOL result = [m_input getBytes:m_buffer.data() maxLength:m_buffer.capacity() usedLength:&used encoding:NSUTF8StringEncoding options:NSStringEncodingConversionAllowLossy range:NSMakeRange(range.location, range.length) remainingRange:NULL];
             if (!result) {
                 return SQLITE_ERROR;
             }
 
-            *ppToken = m_buffer;
+            *ppToken = m_buffer.data();
             *piStartOffset = (int) m_offset;
             *pnBytes = (int) used;
             *piEndOffset = (int) (m_offset + used);
-            *piPosition = m_position;
+            *piPosition = m_position++;
 
             m_offset += used;
-            ++m_position;
+
+            printf("t %s\n", std::string(*ppToken, *pnBytes).c_str());
 
             return SQLITE_OK;
         }
@@ -110,8 +86,7 @@ protected:
     CFStringTokenizerRef m_tokenizer;
     NSUInteger m_offset;
     int m_position;
-    char *m_buffer;
-    int m_bufferSize;
+    std::vector<char> m_buffer;
 };
 
 #pragma mark - Module
@@ -126,7 +101,7 @@ private:
 constexpr const char AppleModule::Name[];
 
 const std::nullptr_t AppleModule::s_register = []() {
-    FTS::Module<AppleModule::Name, AppleTokenizerInfo, AppleCursorInfo>::Register();
+    FTS::Module<AppleModule::Name, void, AppleCursorInfo>::Register();
     return nullptr;
 }();
 

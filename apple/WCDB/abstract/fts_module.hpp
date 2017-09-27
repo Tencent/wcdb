@@ -38,7 +38,7 @@ public:
 class CursorInfoBase {
 public:
     CursorInfoBase(const char *input,
-                   int bytes,
+                   int inputLength,
                    TokenizerInfoBase *tokenizerInfo);
 
     virtual int step(const char **ppToken,

@@ -27,31 +27,22 @@ namespace FTS {
 
 #pragma mark - Cursor
 WCDBCursorInfo::WCDBCursorInfo(const char *input,
-                               int bytes,
+                               int inputLength,
                                TokenizerInfoBase *tokenizerInfo)
-    : CursorInfoBase(input, bytes, tokenizerInfo)
+    : CursorInfoBase(input, inputLength, tokenizerInfo)
     , m_input(input)
-    , m_length(bytes)
+    , m_inputLength(inputLength)
     , m_position(0)
+    , m_startOffset(0)
+    , m_endOffset(0)
     , m_cursor(0)
-    , m_buffer(nullptr)
-    , m_bufferCapacity(0)
-    , m_nonLemmaLength(0)
-    , m_nonLemmaStartOffset(0)
-    , m_lemmaBuffer(nullptr)
-    , m_lemmaBufferCapacity(0)
-    , m_lemmaLength(0)
+    , m_cursorTokenType(TokenType::None)
+    , m_cursorTokenLength(0)
+    , m_lemmaBufferLength(0)
+    , m_subTokensCursor(0)
+    , m_subTokensDoubleChar(true)
+    , m_bufferLength(0)
 {
-}
-
-WCDBCursorInfo::~WCDBCursorInfo()
-{
-    if (m_buffer) {
-        sqlite3_free(m_buffer);
-    }
-    if (m_lemmaBuffer) {
-        sqlite3_free(m_lemmaBuffer);
-    }
 }
 
 //Inspired by zorrozhang
@@ -63,20 +54,20 @@ int WCDBCursorInfo::step(const char **ppToken,
 {
     int rc = SQLITE_OK;
     if (m_position == 0) {
-        rc = setupToken();
+        rc = cursorSetup();
         if (rc != SQLITE_OK) {
             return rc;
         }
     }
 
-    if (m_lemmaLength == 0) {
+    if (m_lemmaBufferLength == 0) {
         if (m_subTokensLengthArray.empty()) {
-            if (m_currentTokenType == TokenType::None) {
+            if (m_cursorTokenType == TokenType::None) {
                 return SQLITE_DONE;
             }
 
             //Skip symbol
-            while (m_currentTokenType ==
+            while (m_cursorTokenType ==
                    TokenType::BasicMultilingualPlaneSymbol) {
                 rc = cursorStep();
                 if (rc != SQLITE_OK) {
@@ -84,105 +75,103 @@ int WCDBCursorInfo::step(const char **ppToken,
                 }
             }
 
-            TokenType type = m_currentTokenType;
+            TokenType type = m_cursorTokenType;
             switch (type) {
                 case TokenType::BasicMultilingualPlaneLetter:
                 case TokenType::BasicMultilingualPlaneDigit:
-                    *piStartOffset = m_cursor;
+                    m_startOffset = m_cursor;
                     while (((rc = cursorStep()) == SQLITE_OK) &&
-                           m_currentTokenType == type)
+                           m_cursorTokenType == type)
                         ;
                     if (rc != SQLITE_OK) {
                         return rc;
                     }
-                    *pnBytes = m_cursor - *piStartOffset;
+                    m_endOffset = m_cursor;
+                    m_bufferLength = m_endOffset - m_startOffset;
                     break;
                 case TokenType::BasicMultilingualPlaneOther:
                 case TokenType::AuxiliaryPlaneOther:
-                    m_subTokensLengthArray.push_back(m_currentTokenLength);
+                    m_subTokensLengthArray.push_back(m_cursorTokenLength);
                     m_subTokensCursor = m_cursor;
                     m_subTokensDoubleChar = true;
                     while (((rc = cursorStep()) == SQLITE_OK) &&
-                           m_currentTokenType == type) {
-                        m_subTokensLengthArray.push_back(m_currentTokenLength);
+                           m_cursorTokenType == type) {
+                        m_subTokensLengthArray.push_back(m_cursorTokenLength);
                     }
                     if (rc != SQLITE_OK) {
                         return rc;
                     }
-                    subTokensStep(pnBytes, piStartOffset);
+                    subTokensStep();
                     break;
                 default:
                     break;
             }
             if (type == TokenType::BasicMultilingualPlaneLetter) {
-                rc = lemmatization(m_input + *piStartOffset, *pnBytes);
+                rc = lemmatization(m_input + m_startOffset, m_bufferLength);
                 if (rc != SQLITE_OK) {
                     return rc;
-                }
-                if (m_lemmaLength > 0) {
-                    m_nonLemmaStartOffset = *piStartOffset;
-                    m_nonLemmaLength = *pnBytes;
                 }
             } else {
-                rc = setBuffer(m_input + *piStartOffset, *pnBytes);
-                if (rc != SQLITE_OK) {
-                    return rc;
+                if (m_bufferLength > m_buffer.capacity()) {
+                    m_buffer.resize(m_bufferLength);
                 }
+                memcpy(m_buffer.data(), m_input + m_startOffset,
+                       m_bufferLength);
             }
         } else {
-            subTokensStep(pnBytes, piStartOffset);
-            rc = setBuffer(m_input + *piStartOffset, *pnBytes);
-            if (rc != SQLITE_OK) {
-                return rc;
+            subTokensStep();
+            if (m_bufferLength > m_buffer.capacity()) {
+                m_buffer.resize(m_bufferLength);
             }
+            memcpy(m_buffer.data(), m_input + m_startOffset, m_bufferLength);
         }
 
-        *ppToken = m_buffer;
-        *piEndOffset = *piStartOffset + *pnBytes;
-        *piPosition = m_position++;
+        *ppToken = m_buffer.data();
+        *pnBytes = m_bufferLength;
     } else {
-        *ppToken = m_lemmaBuffer;
-        *piStartOffset = m_nonLemmaStartOffset;
-        *pnBytes = m_lemmaLength;
-        *piEndOffset = *piStartOffset + m_nonLemmaLength;
-        m_lemmaLength = 0;
+        *ppToken = m_lemmaBuffer.data();
+        *pnBytes = m_lemmaBufferLength;
+        m_lemmaBufferLength = 0;
     }
+
+    *piStartOffset = m_startOffset;
+    *piEndOffset = m_endOffset;
+    *piPosition = m_position++;
 
     return SQLITE_OK;
 }
 
 int WCDBCursorInfo::cursorStep()
 {
-    if (m_cursor + m_currentTokenLength < m_length) {
-        m_cursor += m_currentTokenLength;
-        return setupToken();
+    if (m_cursor + m_cursorTokenLength < m_inputLength) {
+        m_cursor += m_cursorTokenLength;
+        return cursorSetup();
     }
-    m_cursor = m_length;
-    m_currentTokenType = TokenType::None;
-    m_currentTokenLength = 0;
+    m_cursor = m_inputLength;
+    m_cursorTokenType = TokenType::None;
+    m_cursorTokenLength = 0;
     return SQLITE_OK;
 }
 
-int WCDBCursorInfo::setupToken()
+int WCDBCursorInfo::cursorSetup()
 {
     int rc;
     const unsigned char &first = m_input[m_cursor];
     if (first < 0xC0) {
-        m_currentTokenLength = 1;
+        m_cursorTokenLength = 1;
         if (first >= 0x30 && first <= 0x39) {
-            m_currentTokenType = TokenType::BasicMultilingualPlaneDigit;
+            m_cursorTokenType = TokenType::BasicMultilingualPlaneDigit;
         } else if ((first >= 0x41 && first <= 0x5a) ||
                    (first >= 0x61 && first <= 0x7a)) {
-            m_currentTokenType = TokenType::BasicMultilingualPlaneLetter;
+            m_cursorTokenType = TokenType::BasicMultilingualPlaneLetter;
         } else {
             bool result = false;
             rc = isSymbol(first, &result);
             if (rc == SQLITE_OK) {
                 if (result) {
-                    m_currentTokenType =
-                        TokenType::BasicMultilingualPlaneSymbol;
+                    m_cursorTokenType = TokenType::BasicMultilingualPlaneSymbol;
                 } else {
-                    m_currentTokenType = TokenType::BasicMultilingualPlaneOther;
+                    m_cursorTokenType = TokenType::BasicMultilingualPlaneOther;
                 }
             } else {
                 return rc;
@@ -191,18 +180,18 @@ int WCDBCursorInfo::setupToken()
     } else if (first < 0xF0) {
         UnicodeChar unicode = 0;
         if (first < 0xE0) {
-            m_currentTokenLength = 2;
+            m_cursorTokenLength = 2;
             unicode = first & 0x1F;
         } else {
-            m_currentTokenLength = 3;
+            m_cursorTokenLength = 3;
             unicode = first & 0x0F;
         }
-        for (int i = m_cursor + 1; i < m_cursor + m_currentTokenLength; ++i) {
-            if (i < m_length) {
+        for (int i = m_cursor + 1; i < m_cursor + m_cursorTokenLength; ++i) {
+            if (i < m_inputLength) {
                 unicode = (unicode << 6) | (m_input[i] & 0x3F);
             } else {
-                m_currentTokenType = TokenType::None;
-                m_currentTokenLength = m_length - i;
+                m_cursorTokenType = TokenType::None;
+                m_cursorTokenLength = m_inputLength - i;
                 return SQLITE_OK;
             }
         }
@@ -210,67 +199,45 @@ int WCDBCursorInfo::setupToken()
         rc = isSymbol(unicode, &result);
         if (rc == SQLITE_OK) {
             if (result) {
-                m_currentTokenType = TokenType::BasicMultilingualPlaneSymbol;
+                m_cursorTokenType = TokenType::BasicMultilingualPlaneSymbol;
             } else {
-                m_currentTokenType = TokenType::BasicMultilingualPlaneOther;
+                m_cursorTokenType = TokenType::BasicMultilingualPlaneOther;
             }
         } else {
             return rc;
         }
     } else {
-        m_currentTokenType = TokenType::AuxiliaryPlaneOther;
+        m_cursorTokenType = TokenType::AuxiliaryPlaneOther;
         if (first < 0xF8) {
-            m_currentTokenLength = 4;
+            m_cursorTokenLength = 4;
         } else if (first < 0xFC) {
-            m_currentTokenLength = 5;
+            m_cursorTokenLength = 5;
         } else {
-            m_currentTokenLength = 6;
+            m_cursorTokenLength = 6;
         }
     }
     return SQLITE_OK;
 }
 
-int WCDBCursorInfo::lemmatization(const char *input, int bytes)
+int WCDBCursorInfo::lemmatization(const char *input, int inputLength)
 {
-    //Tolower only. You can implement your own lemmatization here.
-    int rc = setBufferCapacity(bytes);
-    if (rc != SQLITE_OK) {
-        return rc;
+    //tolower only. You can implement your own lemmatization.
+    if (inputLength > m_buffer.capacity()) {
+        m_buffer.resize(inputLength);
     }
-    for (int i = 0; i < bytes; ++i) {
-        m_buffer[i] = tolower(input[i]);
+    for (int i = 0; i < inputLength; ++i) {
+        m_buffer.data()[i] = tolower(input[i]);
     }
     return SQLITE_OK;
 }
 
-int WCDBCursorInfo::setLemmaBuffer(const char *src, int length)
+void WCDBCursorInfo::subTokensStep()
 {
-    if (length > m_lemmaBufferCapacity) {
-        if (m_lemmaBuffer) {
-            sqlite3_free(m_lemmaBuffer);
-        }
-        m_lemmaBufferCapacity *= 2;
-        if (m_lemmaBufferCapacity < length) {
-            m_lemmaBufferCapacity = length;
-        }
-        m_lemmaBuffer = (char *) sqlite3_malloc(m_lemmaBufferCapacity);
-        if (!m_lemmaBuffer) {
-            m_lemmaBufferCapacity = 0;
-            return SQLITE_NOMEM;
-        }
-    }
-    memcpy(m_lemmaBuffer, src, length);
-    m_lemmaLength = length;
-    return SQLITE_OK;
-}
-
-void WCDBCursorInfo::subTokensStep(int *pnBytes, int *piStartOffset)
-{
-    *piStartOffset = m_subTokensCursor;
-    *pnBytes = m_subTokensLengthArray[0];
+    m_startOffset = m_subTokensCursor;
+    m_bufferLength = m_subTokensLengthArray[0];
     if (m_subTokensDoubleChar) {
         if (m_subTokensLengthArray.size() > 1) {
-            *pnBytes += m_subTokensLengthArray[1];
+            m_bufferLength += m_subTokensLengthArray[1];
             m_subTokensDoubleChar = false;
         } else {
             m_subTokensLengthArray.clear();
@@ -280,34 +247,7 @@ void WCDBCursorInfo::subTokensStep(int *pnBytes, int *piStartOffset)
         m_subTokensLengthArray.erase(m_subTokensLengthArray.begin());
         m_subTokensDoubleChar = true;
     }
-}
-
-int WCDBCursorInfo::setBufferCapacity(int newCapacity)
-{
-    if (newCapacity > m_bufferCapacity) {
-        if (m_buffer) {
-            sqlite3_free(m_buffer);
-        }
-        m_bufferCapacity *= 2;
-        if (m_bufferCapacity < newCapacity) {
-            m_bufferCapacity = newCapacity;
-        }
-        m_buffer = (char *) sqlite3_malloc(m_bufferCapacity);
-        if (!m_buffer) {
-            m_bufferCapacity = 0;
-            return SQLITE_NOMEM;
-        }
-    }
-    return SQLITE_OK;
-}
-
-int WCDBCursorInfo::setBuffer(const char *src, int length)
-{
-    int rc = setBufferCapacity(length);
-    if (rc == SQLITE_OK) {
-        memcpy(m_buffer, src, length);
-    }
-    return rc;
+    m_endOffset = m_startOffset + m_bufferLength;
 }
 
 } //namespace FTS

@@ -45,9 +45,8 @@ public:
     };
 
     WCDBCursorInfo(const char *input,
-                   int bytes,
+                   int inputLength,
                    TokenizerInfoBase *tokenizerInfo);
-    ~WCDBCursorInfo();
 
     virtual int step(const char **ppToken,
                      int *pnBytes,
@@ -57,34 +56,32 @@ public:
 
 protected:
     const char *m_input;
-    int m_length;
+    int m_inputLength;
 
     int m_position;
+    int m_startOffset;
+    int m_endOffset;
+
     int m_cursor;
-    TokenType m_currentTokenType;
-    int m_currentTokenLength;
+    TokenType m_cursorTokenType;
+    int m_cursorTokenLength;
     int cursorStep();
-    int setupToken();
+    int cursorSetup();
 
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
     virtual int isSymbol(UnicodeChar theChar, bool *result) = 0;
-    virtual int lemmatization(const char *input, int bytes);
-    int m_nonLemmaStartOffset;
-    int m_nonLemmaLength;
-    char *m_lemmaBuffer;
-    int m_lemmaBufferCapacity;
-    int m_lemmaLength; //>0 lemma is not empty
-    int setLemmaBuffer(const char *src, int length);
+
+    virtual int lemmatization(const char *input, int inputLength);
+    std::vector<char> m_lemmaBuffer;
+    int m_lemmaBufferLength; //>0 lemma is not empty
 
     std::vector<int> m_subTokensLengthArray;
     int m_subTokensCursor;
     bool m_subTokensDoubleChar;
-    void subTokensStep(int *pnBytes, int *piStartOffset);
+    void subTokensStep();
 
-    char *m_buffer;
-    int m_bufferCapacity;
-    int setBufferCapacity(int newCapacity);
-    int setBuffer(const char *src, int length);
+    std::vector<char> m_buffer;
+    int m_bufferLength;
 };
 
 } //namespace FTS

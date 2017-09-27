@@ -31,76 +31,69 @@ namespace FTS {
 class WCTCursorInfo : public WCDBCursorInfo {
 public:
     WCTCursorInfo(const char *input,
-                  int bytes,
-                  TokenizerInfoBase *tokenizerInfo);
-    ~WCTCursorInfo();
+                  int inputLength,
+                  TokenizerInfoBase *tokenizerInfo)
+        : WCDBCursorInfo(input, inputLength, tokenizerInfo)
+        , m_symbolCharacterSet(GenerateSymbolCharacterSet())
+    {
+    }
+
+    ~WCTCursorInfo()
+    {
+        if (m_symbolCharacterSet) {
+            CFRelease(m_symbolCharacterSet);
+        }
+    }
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;
-    static CFCharacterSetRef GenerateSymbolCharacterSet();
-    virtual int isSymbol(UnicodeChar theChar, bool *result) override;
-    virtual int lemmatization(const char *input, int bytes) override;
-};
-
-WCTCursorInfo::WCTCursorInfo(const char *input,
-                             int bytes,
-                             TokenizerInfoBase *tokenizerInfo)
-    : WCDBCursorInfo(input, bytes, tokenizerInfo)
-    , m_symbolCharacterSet(GenerateSymbolCharacterSet())
-{
-}
-
-WCTCursorInfo::~WCTCursorInfo()
-{
-    if (m_symbolCharacterSet) {
-        CFRelease(m_symbolCharacterSet);
+    static CFCharacterSetRef GenerateSymbolCharacterSet()
+    {
+        //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
+        CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetNonBase));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
+        CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
+        return characterSetRef;
     }
-}
-
-CFCharacterSetRef WCTCursorInfo::GenerateSymbolCharacterSet()
-{
-    //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
-    CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetControl));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetNonBase));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetPunctuation));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetSymbol));
-    CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
-    return characterSetRef;
-}
-
-int WCTCursorInfo::isSymbol(UnicodeChar theChar, bool *result)
-{
-    if (m_symbolCharacterSet) {
-        *result = CFCharacterSetIsCharacterMember(m_symbolCharacterSet, theChar);
-        return SQLITE_OK;
+    virtual int isSymbol(UnicodeChar theChar, bool *result) override
+    {
+        if (m_symbolCharacterSet) {
+            *result = CFCharacterSetIsCharacterMember(m_symbolCharacterSet, theChar);
+            return SQLITE_OK;
+        }
+        return SQLITE_NOMEM;
     }
-    return SQLITE_NOMEM;
-}
-
-int WCTCursorInfo::lemmatization(const char *input, int bytes)
-{
-    int rc = WCDBCursorInfo::lemmatization(input, bytes);
-    if (rc != SQLITE_OK) {
+    virtual int lemmatization(const char *input, int inputLength) override
+    {
+        int rc = WCDBCursorInfo::lemmatization(input, inputLength);
+        if (rc != SQLITE_OK) {
+            return rc;
+        }
+        __block NSString *lemma = nil;
+        NSString *string = [[NSString alloc] initWithBytes:input length:inputLength encoding:NSASCIIStringEncoding];
+        NSDictionary *languageMap = @{ @"Latn" : @[ @"en" ] };
+        [string enumerateLinguisticTagsInRange:NSMakeRange(0, string.length)
+                                        scheme:NSLinguisticTagSchemeLemma
+                                       options:NSLinguisticTaggerOmitWhitespace
+                                   orthography:[NSOrthography orthographyWithDominantScript:@"Latn" languageMap:languageMap]
+                                    usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+                                      lemma = tag.lowercaseString;
+                                      *stop = YES;
+                                    }];
+        if (lemma.length > 0 && [lemma caseInsensitiveCompare:string] != NSOrderedSame) {
+            m_lemmaBufferLength = (int) lemma.length;
+            if (m_lemmaBufferLength > m_lemmaBuffer.capacity()) {
+                m_lemmaBuffer.resize(lemma.length);
+            }
+            memcpy(m_lemmaBuffer.data(), lemma.UTF8String, m_lemmaBufferLength);
+        }
         return rc;
     }
-    __block NSString *lemma = nil;
-    NSString *string = [[NSString alloc] initWithBytes:input length:bytes encoding:NSASCIIStringEncoding];
-    NSDictionary *languageMap = @{ @"Latn" : @[ @"en" ] };
-    [string enumerateLinguisticTagsInRange:NSMakeRange(0, string.length)
-                                    scheme:NSLinguisticTagSchemeLemma
-                                   options:NSLinguisticTaggerOmitWhitespace
-                               orthography:[NSOrthography orthographyWithDominantScript:@"Latn" languageMap:languageMap]
-                                usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-                                  lemma = tag.lowercaseString;
-                                  *stop = YES;
-                                }];
-    if (lemma.length > 0 && [lemma caseInsensitiveCompare:string] != NSOrderedSame) {
-        rc = setLemmaBuffer(lemma.UTF8String, (int) lemma.length);
-    }
-    return rc;
-}
+};
 
 #pragma mark - Module
 class WCTModule {
