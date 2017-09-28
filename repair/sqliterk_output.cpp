@@ -446,7 +446,7 @@ int sqliterk_output_cb(sqliterk *rk,
     notify.onBeginParseTable = dummyParseTableCallback;
     notify.onEndParseTable = dummyParseTableCallback;
     notify.onParseColumn = master_onParseColumn;
-    notify.didParsePage = nullptr;
+    notify.didParsePage = NULL;
     sqliterk_register_notify(rk, notify);
     sqliterk_set_recursive(rk, 0);
 
