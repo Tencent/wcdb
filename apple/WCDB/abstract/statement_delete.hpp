@@ -30,7 +30,7 @@ public:
     StatementDelete &deleteFrom(const std::string &table);
     StatementDelete &where(const Expr &where);
     //StatementDeleteLimited
-    template <typename T>
+    template <typename T = Order>
     typename std::enable_if<std::is_base_of<Order, T>::value,
                             StatementDelete &>::type
     orderBy(const std::list<const T> &orderList)

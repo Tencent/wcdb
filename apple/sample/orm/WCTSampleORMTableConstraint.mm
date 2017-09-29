@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleORMTableConstraint.h"
+#import "WCTSampleORMTableConstraint+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleORMTableConstraint
 

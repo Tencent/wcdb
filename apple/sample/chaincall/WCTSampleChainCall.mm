@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleChainCall.h"
+#import "WCTSampleChainCall+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleChainCall
 

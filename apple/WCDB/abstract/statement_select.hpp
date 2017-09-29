@@ -27,7 +27,7 @@ namespace WCDB {
 
 class StatementSelect : public Statement {
 public:
-    template <typename T>
+    template <typename T = ColumnResult>
     typename std::enable_if<std::is_base_of<ColumnResult, T>::value,
                             StatementSelect &>::type
     select(const std::list<const T> &columnResultList, bool distinct = false)
@@ -40,7 +40,7 @@ public:
         return *this;
     }
 
-    template <typename T>
+    template <typename T = Subquery>
     typename std::enable_if<std::is_base_of<Subquery, T>::value,
                             StatementSelect &>::type
     from(const std::list<const T> &subqueryList)
@@ -54,7 +54,7 @@ public:
     StatementSelect &from(const std::string &tableName);
     StatementSelect &where(const Expr &where);
 
-    template <typename T>
+    template <typename T = Order>
     typename std::enable_if<std::is_base_of<Order, T>::value,
                             StatementSelect &>::type
     orderBy(const std::list<const T> &orderList)
@@ -68,9 +68,11 @@ public:
 
     StatementSelect &limit(const Expr &from, const Expr &to);
     StatementSelect &limit(const Expr &limit);
-    StatementSelect &offset(
-        const Expr &offset); //limit [from, to] -> limit [to-from, offset [from]
-    template <typename T>
+    StatementSelect &
+    offset(const Expr &
+               offset); //limit(from, to) is same as limit(to-from).offset(from)
+
+    template <typename T = Expr>
     typename std::enable_if<std::is_base_of<Expr, T>::value,
                             StatementSelect &>::type
     groupBy(const std::list<const T> &groupList)
@@ -85,6 +87,8 @@ public:
     StatementSelect &having(const Expr &having);
 
     virtual Statement::Type getStatementType() const override;
+
+    static StatementSelect Fts3Tokenizer;
 };
 
 } //namespace WCDB

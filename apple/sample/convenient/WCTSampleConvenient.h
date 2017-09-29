@@ -19,14 +19,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
-@interface WCTSampleConvenient : NSObject <WCTTableCoding>
+@interface WCTSampleConvenient : NSObject
 
 @property(nonatomic, assign) int intValue;
 @property(nonatomic, retain) NSString *stringValue;
-
-WCDB_PROPERTY(intValue)
-WCDB_PROPERTY(stringValue)
 
 @end

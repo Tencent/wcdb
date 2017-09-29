@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleTable.h"
+#import "WCTSampleTable+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleTable
 

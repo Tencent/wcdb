@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleTransaction.h"
+#import "WCTSampleTransaction+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleTransaction
 

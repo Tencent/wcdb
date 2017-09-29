@@ -19,12 +19,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
-@interface WCTSampleTransaction : NSObject <WCTTableCoding>
+@interface WCTSampleTransaction : NSObject
 
 @property(nonatomic, assign) int intValue;
-
-WCDB_PROPERTY(intValue)
 
 @end

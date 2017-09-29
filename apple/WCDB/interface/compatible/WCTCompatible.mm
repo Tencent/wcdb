@@ -32,12 +32,4 @@
     return s_compatible;
 }
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _builtinNSDataColumnCodingCompatibleEnabled = NO;
-    }
-    return self;
-}
-
 @end

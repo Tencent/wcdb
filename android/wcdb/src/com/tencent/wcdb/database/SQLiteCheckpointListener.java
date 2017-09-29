@@ -20,8 +20,38 @@
 
 package com.tencent.wcdb.database;
 
+/**
+ * A listener for WAL checkpointing.
+ */
 public interface SQLiteCheckpointListener {
+
+    /**
+     * Called immediately when this listener is set to the database. Initialization codes
+     * can be placed here, if any.
+     *
+     * @param db database object to be attached
+     */
     void onAttach(SQLiteDatabase db);
+
+    /**
+     * Called immediately when a WAL transaction has been committed.
+     *
+     * <p>The implementation should checkpoint the database according to its strategy by executing
+     * SQL {@code PRAGMA wal_checkpoint;} or something alike. Failing to do this will result in
+     * unlimited growing WAL file and may degrade performance.</p>
+     *
+     * @param db     database object whose transaction is committed
+     * @param dbName attached database name of the committed transaction, or "main" for the
+     *               main database
+     * @param pages  number of frames in the WAL file after commit
+     */
     void onWALCommit(SQLiteDatabase db, String dbName, int pages);
+
+    /**
+     * Called immediately when this listener is detached from the database. Cleanup codes
+     * can be placed here, if any.
+     *
+     * @param db database object to be detached from
+     */
     void onDetach(SQLiteDatabase db);
 }

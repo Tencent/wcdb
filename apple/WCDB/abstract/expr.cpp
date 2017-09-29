@@ -26,21 +26,25 @@ namespace WCDB {
 
 const Expr Expr::BindParameter = Expr(Column("?"));
 
-Expr::Expr(const char *value) : Describable(literalValue(value))
+Expr::Expr(const LiteralValue &value) : Describable(value)
 {
 }
 
-Expr::Expr(const std::string &value) : Describable(literalValue(value))
+Expr::Expr(const char *value) : Describable(LiteralValue(value))
 {
 }
 
-Expr::Expr(const std::nullptr_t &value) : Describable(literalValue(value))
+Expr::Expr(const std::string &value) : Describable(LiteralValue(value))
+{
+}
+
+Expr::Expr(const std::nullptr_t &value) : Describable(LiteralValue(value))
 {
 }
 
 Expr::Expr(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
            int size)
-    : WCDB::Describable(literalValue(value, size))
+    : WCDB::Describable(LiteralValue(value, size))
 {
 }
 
@@ -226,6 +230,15 @@ Expr Expr::concat(const Expr &operand) const
     Expr expr;
     expr.m_description.append("(" + m_description + "||" +
                               operand.m_description + ")");
+    return expr;
+}
+
+Expr Expr::substr(const Expr &start, const Expr &length) const
+{
+    Expr expr;
+    expr.m_description.append("SUBSTR(" + m_description + "," +
+                              start.m_description + "," + length.m_description +
+                              ")");
     return expr;
 }
 
@@ -450,112 +463,88 @@ Expr Expr::notIn(const std::string &table) const
 
 Expr Expr::avg(bool distinct) const
 {
-    return function("AVG", distinct);
+    return Expr::Function("AVG", {*this}, distinct);
 }
 
 Expr Expr::count(bool distinct) const
 {
-    return function("COUNT", distinct);
+    return Expr::Function("COUNT", {*this}, distinct);
 }
 
 Expr Expr::groupConcat(bool distinct) const
 {
-    return function("GROUP_CONCAT", distinct);
+    return Expr::Function("GROUP_CONCAT", {*this}, distinct);
 }
 
 Expr Expr::groupConcat(const std::string &seperator, bool distinct) const
 {
-    Expr expr;
-    expr.m_description.append("GROUP_CONCAT(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description + "," + seperator);
-    expr.m_description.append(")");
-    return expr;
+    return Expr::Function("GROUP_CONCAT", ExprList({*this, seperator}),
+                          distinct);
 }
 
 Expr Expr::max(bool distinct) const
 {
-    return function("MAX", distinct);
+    return Expr::Function("MAX", {*this}, distinct);
 }
 
 Expr Expr::min(bool distinct) const
 {
-    return function("MIN", distinct);
+    return Expr::Function("MIN", {*this}, distinct);
 }
 
 Expr Expr::sum(bool distinct) const
 {
-    return function("SUM", distinct);
+    return Expr::Function("SUM", {*this}, distinct);
 }
 
 Expr Expr::total(bool distinct) const
 {
-    return function("TOTAL", distinct);
+    return Expr::Function("TOTAL", {*this}, distinct);
 }
 
 Expr Expr::abs(bool distinct) const
 {
-    return function("ABS", distinct);
+    return Expr::Function("ABS", {*this}, distinct);
 }
 
 Expr Expr::hex(bool distinct) const
 {
-    return function("HEX", distinct);
+    return Expr::Function("HEX", {*this}, distinct);
 }
 
 Expr Expr::length(bool distinct) const
 {
-    return function("LENGTH", distinct);
+    return Expr::Function("LENGTH", {*this}, distinct);
 }
 
 Expr Expr::lower(bool distinct) const
 {
-    return function("LOWER", distinct);
+    return Expr::Function("LOWER", {*this}, distinct);
 }
 
 Expr Expr::upper(bool distinct) const
 {
-    return function("UPPER", distinct);
+    return Expr::Function("UPPER", {*this}, distinct);
 }
 
 Expr Expr::round(bool distinct) const
 {
-    return function("ROUND", distinct);
+    return Expr::Function("ROUND", {*this}, distinct);
 }
 
-Expr Expr::function(const std::string &funtionName, bool distinct) const
+Expr Expr::matchinfo() const
 {
-    Expr expr;
-    expr.m_description.append(funtionName + "(");
-    if (distinct) {
-        expr.m_description.append("DISTINCT ");
-    }
-    expr.m_description.append(m_description);
-    expr.m_description.append(")");
-    return expr;
+    return Expr::Function("MATCHINFO", {*this});
 }
 
-std::string Expr::literalValue(const char *value)
+Expr Expr::offsets() const
 {
-    return literalValue(value ? std::string(value) : "");
+    return Expr::Function("OFFSETS", {*this});
 }
 
-std::string Expr::literalValue(const std::string &value)
+Expr Expr::snippet() const
 {
-    return "'" + stringByReplacingOccurrencesOfString(value, "'", "''") + "'";
-}
-
-std::string Expr::literalValue(const std::nullptr_t &value)
-{
-    return "NULL";
-}
-
-std::string Expr::literalValue(
-    const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size)
-{
-    return "'" + std::string((const char *) value, size) + "'";
+    return Expr::Function("SNIPPET", {*this});
 }
 
 } //namespace WCDB

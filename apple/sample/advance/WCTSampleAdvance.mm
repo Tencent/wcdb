@@ -20,6 +20,7 @@
 
 #import "WCTSampleAdvance.h"
 #import "WCTSampleAdvance+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleAdvance
 

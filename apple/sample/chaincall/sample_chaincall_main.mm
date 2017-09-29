@@ -19,6 +19,7 @@
  */
 
 #import "sample_chaincall_main.h"
+#import "WCTSampleChainCall+WCTTableCoding.h"
 #import "WCTSampleChainCall.h"
 
 void sample_chaincall_main(NSString *baseDirectory)

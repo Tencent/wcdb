@@ -19,6 +19,7 @@
  */
 
 #import "sample_convenient_main.h"
+#import "WCTSampleConvenient+WCTTableCoding.h"
 #import "WCTSampleConvenient.h"
 
 void sample_convenient_main(NSString *baseDirectory)

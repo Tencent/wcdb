@@ -230,7 +230,8 @@ static int sqliterkBtreeParsePage(sqliterk_btree *btree, int pageno)
             sqliterkPageClearData(page);
             // Recursively decode the page
             for (i = 0; i < pagenosCount; i++) {
-                if (sqliterkBtreeParsePage(btree, pagenos[i]) == SQLITERK_CANCELLED)
+                if (sqliterkBtreeParsePage(btree, pagenos[i]) ==
+                    SQLITERK_CANCELLED)
                     break;
             }
             sqliterkOSFree(pagenos);

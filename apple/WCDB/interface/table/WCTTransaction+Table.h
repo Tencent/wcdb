@@ -39,11 +39,10 @@
  Create virtual table from ORM.
  
  @param tableName The name of the virtual table to be created.
- @param moduleName moduleName
  @param cls class
  @return YES only if no error occurs.
  */
-- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class<WCTTableCoding>)cls;
+- (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
 
 /**
  Create table from user-defined column.

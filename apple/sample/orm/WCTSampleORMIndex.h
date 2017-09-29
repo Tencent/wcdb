@@ -19,18 +19,12 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
-@interface WCTSampleORMIndex : NSObject <WCTTableCoding>
+@interface WCTSampleORMIndex : NSObject
 
 @property(nonatomic, assign) int indexProperty;
 @property(nonatomic, assign) int uniqueIndexProperty;
 @property(nonatomic, retain) NSString *multiIndexPart1;
 @property(nonatomic, assign) float multiIndexPart2;
-
-WCDB_PROPERTY(indexProperty)
-WCDB_PROPERTY(uniqueIndexProperty)
-WCDB_PROPERTY(multiIndexPart1)
-WCDB_PROPERTY(multiIndexPart2)
 
 @end

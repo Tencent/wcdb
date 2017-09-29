@@ -31,7 +31,7 @@ public:
     StatementInsert &insert(const std::string &table,
                             Conflict conflict = Conflict::NotSet);
 
-    template <typename T>
+    template <typename T = Column>
     typename std::enable_if<std::is_base_of<Column, T>::value,
                             StatementInsert &>::type
     insert(const std::string &table,
@@ -52,7 +52,7 @@ public:
         return *this;
     }
 
-    template <typename T>
+    template <typename T = Expr>
     typename std::enable_if<std::is_base_of<Expr, T>::value,
                             StatementInsert &>::type
     values(const std::list<const T> &exprList)

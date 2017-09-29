@@ -113,10 +113,20 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         mMasterInfo = master;
     }
 
+    /**
+     * Returns the progress callback set previously.
+     *
+     * @return the progress callback object
+     */
     public Callback getCallback() {
         return mCallback;
     }
 
+    /**
+     * Set the progress callback to be called during {@link #output(SQLiteDatabase, int)}.
+     *
+     * @param callback the callback object to be set
+     */
     public void setCallback(Callback callback) {
         mCallback = callback;
     }
@@ -163,6 +173,18 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         return ret;
     }
 
+    /**
+     * Parse corrupted database and output its content to {@code db}.
+     *
+     * <p>This method does not return until repairing is finished. Don't
+     * call it in the main thread or it will cause ANR.</p>
+     *
+     * @param db    destination database to be written
+     * @param flags flags affects repair behavior
+     * @param cancellationSignal A signal to cancel the operation in progress, or null if none
+     * @return      result code which is {@link #RESULT_OK}, {@link #RESULT_CANCELED}
+     *              or {@link #RESULT_FAILED}.
+     */
     public int output(SQLiteDatabase db, int flags, CancellationSignal cancellationSignal) {
         if (cancellationSignal.isCanceled())
             return RESULT_CANCELED;
@@ -333,7 +355,32 @@ public class RepairKit implements CancellationSignal.OnCancelListener {
         }
     }
 
+    /**
+     * Listener for repairing progress report.
+     */
     public interface Callback {
+
+        /**
+         * Called whenever a row of data is read from the corrupted database file.
+         *
+         * <p>The implementation can use the {@link Cursor} object from the argument to access
+         * the row data. Note that <b>no movement of the cursor is allowed</b>. The access is limited
+         * to the current row when callback method is called.</p>
+         *
+         * <p>The implementation tells the library how to deal with the current row by returning
+         * different values.
+         * <ul>
+         * <li>{@link #RESULT_OK} means output the row to the new database;</li>
+         * <li>{@link #RESULT_CANCELED} means the repairing method should return immediately with
+         * further iteration;</li>
+         * <li>{@link #RESULT_IGNORE} means ignore the current row and proceed to the next.</li>
+         * </ul></p>
+         *
+         * @param table  which table the row of data belong to
+         * @param root   root page of the table
+         * @param cursor cursor object to access the row data
+         * @return result code to tell the further operations
+         */
         int onProgress(String table, int root, Cursor cursor);
     }
 

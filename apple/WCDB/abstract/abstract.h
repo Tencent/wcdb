@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef WINQ_h
-#define WINQ_h
+#ifndef abstract_h
+#define abstract_h
 
 #include <WCDB/describable.hpp>
 
@@ -31,6 +31,7 @@
 #include <WCDB/column_type.hpp>
 #include <WCDB/constraint_table.hpp>
 #include <WCDB/expr.hpp>
+#include <WCDB/literal_value.hpp>
 #include <WCDB/module_argument.hpp>
 #include <WCDB/order.hpp>
 #include <WCDB/pragma.hpp>
@@ -58,4 +59,4 @@
 #include <WCDB/statement_update.hpp>
 #include <WCDB/statement_vacuum.hpp>
 
-#endif /* WINQ_h */
+#endif /* abstract_h */

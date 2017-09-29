@@ -29,6 +29,9 @@
 
 namespace WCDB {
 
+StatementSelect StatementSelect::Fts3Tokenizer = StatementSelect().select(
+    {Expr::Function("fts3_tokenizer", ExprList(2, WCDB::Expr::BindParameter))});
+
 StatementSelect &StatementSelect::from(const JoinClause &joinClause)
 {
     m_description.append(" FROM " + joinClause.getDescription());

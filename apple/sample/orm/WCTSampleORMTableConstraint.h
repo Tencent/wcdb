@@ -19,19 +19,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
-@interface WCTSampleORMTableConstraint : NSObject <WCTTableCoding>
+@interface WCTSampleORMTableConstraint : NSObject
 
 @property(nonatomic, assign) int primaryKeyPart1;
 @property(nonatomic, retain) NSString *primaryKeyPart2;
 
 @property(nonatomic, assign) int uniqueKeyPart1;
 @property(nonatomic) float uniqueKeyPart2;
-
-WCDB_PROPERTY(primaryKeyPart1)
-WCDB_PROPERTY(primaryKeyPart2)
-WCDB_PROPERTY(uniqueKeyPart1)
-WCDB_PROPERTY(uniqueKeyPart2)
 
 @end

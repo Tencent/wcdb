@@ -40,10 +40,10 @@
     return nil;
 }
 
-- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class<WCTTableCoding>)cls
+- (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls
 {
     WCDB::Error innerError;
-    return [self createVirtualTableOfName:tableName usingModule:moduleName withClass:cls andError:innerError];
+    return [self createVirtualTableOfName:tableName withClass:cls andError:innerError];
 }
 
 - (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList

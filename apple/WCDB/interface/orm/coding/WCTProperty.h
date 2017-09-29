@@ -20,11 +20,14 @@
 
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTPropertyBase.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
+
+typedef WCTProperty (^WCTPropertyNamed)(NSString *);
 
 class WCTProperty : public WCDB::Column, public WCTPropertyBase {
 public:
-    WCTProperty();
+    WCTProperty(const char *name = "");
+    WCTProperty(NSString *name = @"");
     WCTProperty(const char *name,
                 Class cls,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
@@ -59,6 +62,12 @@ public:
     WCTExpr upper(bool distinct = false) const;
     WCTExpr round(bool distinct = false) const;
 
+    //FTS3
+    //See http://www.sqlite.org/fts3.html#snippet for further information
+    WCTExpr matchinfo() const;
+    WCTExpr offsets() const;
+    WCTExpr snippet() const;
+
     //def
     WCTColumnDef def(WCTColumnType type,
                      bool isPrimary = false,
@@ -92,6 +101,7 @@ public:
     WCTExpr operator!=(const WCTExpr &operand) const;
 
     WCTExpr concat(const WCTExpr &operand) const;
+    WCTExpr substr(const WCTExpr &start, const WCTExpr &length) const;
 
     WCTExpr in(const WCTExprList &exprList) const;
     WCTExpr notIn(const WCTExprList &exprList) const;
@@ -128,6 +138,8 @@ public:
     WCTExpr isNot(const WCTExpr &operand) const;
 
     NSString *getDescription() const;
+
+    static WCTPropertyNamed PropertyNamed;
 
 protected:
     WCTProperty(const WCDB::Column &column,

@@ -22,6 +22,7 @@
 
 #import <WCDB/WCTDatabase+Compatible.h>
 #import <WCDB/WCTDatabase+Core.h>
+#import <WCDB/WCTDatabase+Table.h>
 
 @implementation WCTDatabase (Compatible)
 
@@ -33,6 +34,16 @@
 + (NSString *)DefaultSyncConfigName
 {
     return [self DefaultSynchronousConfigName];
+}
+
+- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class)cls
+{
+    return [self createVirtualTableOfName:tableName withClass:cls];
+}
+
++ (NSString *)DefaultConfigName
+{
+    return [self DefaultBasicConfigName];
 }
 
 @end

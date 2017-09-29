@@ -19,6 +19,7 @@
  */
 
 #import "sample_transaction_main.h"
+#import "WCTSampleTransaction+WCTTableCoding.h"
 #import "WCTSampleTransaction.h"
 
 void sample_transaction_main(NSString *baseDirectory)

@@ -72,7 +72,7 @@ ColumnDef &ColumnDef::makeDefault(const char *value)
 
 ColumnDef &ColumnDef::makeDefault(const std::string &value)
 {
-    m_description.append(" DEFAULT '" + std::string(value) + "'");
+    m_description.append(" DEFAULT '" + value + "'");
     return *this;
 }
 

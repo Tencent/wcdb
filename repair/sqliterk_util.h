@@ -40,7 +40,7 @@ int sqliterkParseVarint64(const unsigned char *data,
                           int *length,
                           int64_t *value);
 int sqliterkParseNumber(const unsigned char *data, int offset, double *value);
-int sqliterkGetMaxVarintLength();
+int sqliterkGetMaxVarintLength(void);
 const char *sqliterkGetResultCodeDescription(int result);
 
 #endif /* sqliterk_util_h */

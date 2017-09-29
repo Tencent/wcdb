@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTPropertyBase.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 
 class WCTExpr : public WCDB::Expr, public WCTPropertyBase {
 public:
@@ -80,6 +80,7 @@ public:
     WCTExpr operator!=(const WCTExpr &operand) const;
 
     WCTExpr concat(const WCTExpr &operand) const;
+    WCTExpr substr(const WCTExpr &start, const WCTExpr &length) const;
 
     WCTExpr in(const WCTExprList &exprList) const;
     WCTExpr notIn(const WCTExprList &exprList) const;
@@ -133,6 +134,11 @@ public:
     WCTExpr upper(bool distinct = false) const;
     WCTExpr round(bool distinct = false) const;
 
+    //FTS3
+    WCTExpr matchinfo() const;
+    WCTExpr offsets() const;
+    WCTExpr snippet() const;
+
     /**
      @brief Call other function
      
@@ -157,7 +163,7 @@ public:
 
 protected:
     Class m_cls;
-    std::string literalValue(WCTValue *value);
+    WCDB::LiteralValue literalValue(WCTValue *value);
 };
 
 class WCTExprList : public std::list<const WCTExpr> {

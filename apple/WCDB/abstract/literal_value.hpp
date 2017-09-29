@@ -18,29 +18,42 @@
  * limitations under the License.
  */
 
-#ifndef value_pragma_hpp
-#define value_pragma_hpp
+#ifndef literal_value_hpp
+#define literal_value_hpp
 
-#include <WCDB/declare.hpp>
+#include <WCDB/column_type.hpp>
 #include <WCDB/describable.hpp>
 
 namespace WCDB {
 
-class PragmaValue : public Describable {
+class LiteralValue : public Describable {
 public:
-    PragmaValue(const Pragma &pragma);
-    PragmaValue(const std::string &value);
-    PragmaValue(const char *value);
-
     template <typename T>
-    PragmaValue(
+    LiteralValue(
         const T &value,
-        typename std::enable_if<std::is_arithmetic<T>::value>::type * = nullptr)
+        typename std::enable_if<std::is_arithmetic<T>::value ||
+                                std::is_enum<T>::value>::type * = nullptr)
         : Describable(std::to_string(value))
     {
     }
+
+    LiteralValue(const char *value);
+    LiteralValue(const std::string &value);
+
+    LiteralValue(const std::nullptr_t &value);
+
+    LiteralValue(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
+                 int size);
+
+protected:
+    static std::string
+    stringByReplacingOccurrencesOfString(const std::string &origin,
+                                         const std::string &target,
+                                         const std::string &replacement);
+
+    static std::string LiteralString(const std::string &value);
 };
 
-} //namespace WCDB
+} // namespace WCDB
 
-#endif /* value_pragma_hpp */
+#endif /* literal_value_hpp */

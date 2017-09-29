@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleAdvanceMulti.h"
+#import "WCTSampleAdvanceMulti+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleAdvanceMulti
 

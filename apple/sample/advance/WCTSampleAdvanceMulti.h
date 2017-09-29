@@ -19,12 +19,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
-@interface WCTSampleAdvanceMulti : NSObject <WCTTableCoding>
+@interface WCTSampleAdvanceMulti : NSObject
 
 @property(nonatomic, assign) int intValue;
-
-WCDB_PROPERTY(intValue)
 
 @end

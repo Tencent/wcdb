@@ -48,9 +48,9 @@ struct sqliterk_btree_notify {
     void (*onBeginParseBtree)(sqliterk *rk, sqliterk_btree *btree);
     void (*onEndParseBtree)(sqliterk *rk, sqliterk_btree *btree, int result);
     int (*onParseColumn)(sqliterk *rk,
-                          sqliterk_btree *btree,
-                          sqliterk_page *page,
-                          sqliterk_column *column);
+                         sqliterk_btree *btree,
+                         sqliterk_page *page,
+                         sqliterk_column *column);
 
     // return SQLITE_OK to continue parsing the page. All other return
     // value will skip the parsing phase of this page.

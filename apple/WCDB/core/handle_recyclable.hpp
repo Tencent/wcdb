@@ -21,7 +21,7 @@
 #ifndef handle_recyclable_hpp
 #define handle_recyclable_hpp
 
-#include <WCDB/WINQ.h>
+#include <WCDB/abstract.h>
 #include <WCDB/config.hpp>
 #include <WCDB/recyclable.hpp>
 #include <memory>

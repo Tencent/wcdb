@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleORMColumnConstraint.h"
+#import "WCTSampleORMColumnConstraint+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleORMColumnConstraint
 

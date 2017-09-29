@@ -40,7 +40,7 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
         Setting config for this name will overwrite the default config.
  @return default config name
  */
-+ (NSString *)DefaultConfigName;
++ (NSString *)DefaultBasicConfigName;
 
 /**
  @brief Default cipher config name
@@ -74,6 +74,12 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  @see [WCTDatabase setSynchronousFull:]
  */
 + (NSString *)DefaultSynchronousConfigName;
+
+/**
+ @brief Default tokenize config name
+ @return default tokenize config name
+ */
++ (NSString *)DefaultTokenizeConfigName;
 
 /**
  @brief Set config for this database.  

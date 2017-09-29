@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleORMIndex.h"
+#import "WCTSampleORMIndex+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleORMIndex
 

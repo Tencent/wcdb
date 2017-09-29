@@ -42,6 +42,7 @@ struct sqliterk_notify {
                          sqliterk_table *table,
                          sqliterk_column *column);
     void (*onEndParseTable)(sqliterk *rk, sqliterk_table *table);
+    void (*didParsePage)(sqliterk *rk, int pageno);
 };
 int sqliterk_register_notify(sqliterk *rk, sqliterk_notify notify);
 
@@ -80,7 +81,10 @@ int sqliterk_output_cb(sqliterk *rk,
                        sqlite3 *db,
                        sqliterk_master_info *master,
                        unsigned int flags,
-                       int (*callback)(void *user, sqliterk *rk, sqliterk_table *table, sqliterk_column *column),
+                       int (*callback)(void *user,
+                                       sqliterk *rk,
+                                       sqliterk_table *table,
+                                       sqliterk_column *column),
                        void *user);
 void sqliterk_cancel(sqliterk *rk);
 int sqliterk_make_master(const char **tables,

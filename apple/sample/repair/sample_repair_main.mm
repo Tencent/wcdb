@@ -19,6 +19,7 @@
  */
 
 #import "sample_repair_main.h"
+#import "WCTSampleRepair+WCTTableCoding.h"
 #import "WCTSampleRepair.h"
 
 void sample_repair_main(NSString *baseDirectory)

@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 #import <WCDB/utility.hpp>
 #import <map>
 #import <unordered_map>

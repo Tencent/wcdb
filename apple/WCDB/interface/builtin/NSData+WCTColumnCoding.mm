@@ -31,25 +31,12 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    NSData *result = nil;
-    if (value) {
-        //Compatible for old builtin column coding before v1.0.1
-        static BOOL s_compatible = [WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled;
-        if (!s_compatible) {
-            result = value;
-        } else {
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:value];
-            if (!result) {
-                result = value;
-            }
-        }
-    }
-    return result;
+    return value.length > 0 ? [NSData dataWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue
 {
-    return self;
+    return [NSData dataWithData:self];
 }
 
 + (WCTColumnType)columnTypeForWCDB
@@ -66,25 +53,12 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    NSData *result = nil;
-    if (value) {
-        //Compatible for old builtin column coding before v1.0.1
-        static BOOL s_compatible = [WCTCompatible sharedCompatible].isBuiltinNSDataColumnCodingCompatibleEnabled;
-        if (!s_compatible) {
-            result = value;
-        } else {
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:value];
-            if (!result) {
-                result = value;
-            }
-        }
-    }
-    return result ? [NSMutableData dataWithData:result] : nil;
+    return value.length > 0 ? [NSMutableData dataWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue
 {
-    return self;
+    return [NSData dataWithData:self];
 }
 
 + (WCTColumnType)columnTypeForWCDB

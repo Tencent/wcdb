@@ -71,14 +71,17 @@ public:
 
     const std::shared_ptr<std::list<std::pair<std::string, std::string>>>
     getVirtualTableArgumentList() const;
+
     void addVirtualTableArgument(const std::string &left,
                                  const std::string &right);
+    void addVirtualTableArgument(const std::string &left, NSString *right);
+    void setVirtualTableModule(const std::string &moduleName);
+    void setVirtualTableModule(NSString *moduleName);
 
     WCDB::StatementCreateTable
     generateCreateTableStatement(const std::string &tableName) const;
     WCDB::StatementCreateVirtualTable
-    generateVirtualCreateTableStatement(const std::string &tableName,
-                                        const std::string &moduleName) const;
+    generateVirtualCreateTableStatement(const std::string &tableName) const;
 
 protected:
     void
@@ -108,6 +111,7 @@ protected:
     void lazyInitVirtualTableArgumentList();
     std::shared_ptr<std::list<std::pair<std::string, std::string>>>
         m_virtualTableArgumentList; //for Virtual Table
+    std::string m_virtualTableModuleName;
 };
 
 #endif /* WCTBinding_hpp */

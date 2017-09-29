@@ -33,3 +33,9 @@
         binding->addVirtualTableArgument(left, right);                         \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
+
+#define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
+    static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
+        binding->setVirtualTableModule(moduleName);                            \
+        return nullptr;                                                        \
+    }(&__WCDB_BINDING(className));

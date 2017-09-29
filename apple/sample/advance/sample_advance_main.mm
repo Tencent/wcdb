@@ -21,6 +21,7 @@
 #import "sample_advance_main.h"
 #import "WCTSampleAdvance+WCTTableCoding.h"
 #import "WCTSampleAdvance.h"
+#import "WCTSampleAdvanceMulti+WCTTableCoding.h"
 #import "WCTSampleAdvanceMulti.h"
 
 void sample_advance_main(NSString *baseDirectory)

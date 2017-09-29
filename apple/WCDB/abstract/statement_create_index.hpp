@@ -31,7 +31,7 @@ public:
                                  bool unique = false,
                                  bool ifNotExists = true);
 
-    template <typename T>
+    template <typename T = ColumnIndex>
     typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
                             StatementCreateIndex &>::type
     on(const std::string &table, const std::list<const T> &indexList)

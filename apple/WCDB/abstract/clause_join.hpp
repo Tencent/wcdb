@@ -42,7 +42,7 @@ public:
                      bool isNatural = false);
     JoinClause &on(const Expr &expr);
 
-    template <typename T>
+    template <typename T = Column>
     typename std::enable_if<std::is_base_of<Column, T>::value,
                             JoinClause &>::type
     usingColumns(const std::list<const T> &columnList)

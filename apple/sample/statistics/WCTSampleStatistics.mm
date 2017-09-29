@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleStatistics.h"
+#import "WCTSampleStatistics+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleStatistics
 

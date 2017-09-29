@@ -23,9 +23,9 @@
 
 @implementation WCTDatabase (Core)
 
-+ (NSString *)DefaultConfigName
++ (NSString *)DefaultBasicConfigName
 {
-    return @(WCDB::Database::defaultConfigName.c_str());
+    return @(WCDB::Database::defaultBasicConfigName.c_str());
 }
 
 + (NSString *)DefaultCipherConfigName
@@ -46,6 +46,11 @@
 + (NSString *)DefaultSynchronousConfigName
 {
     return @(WCDB::Database::defaultSynchronousConfigName.c_str());
+}
+
++ (NSString *)DefaultTokenizeConfigName
+{
+    return @(WCDB::Database::defaultTokenizeConfigName.c_str());
 }
 
 - (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name withOrder:(WCDB::Configs::Order)order

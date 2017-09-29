@@ -19,6 +19,8 @@
  */
 
 #import "WCTSampleRepair.h"
+#import "WCTSampleRepair+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
 @implementation WCTSampleRepair
 

@@ -19,6 +19,7 @@
  */
 
 #import "sample_statistics_main.h"
+#import "WCTSampleStatistics+WCTTableCoding.h"
 #import "WCTSampleStatistics.h"
 
 void sample_statistics_main(NSString *baseDirectory)

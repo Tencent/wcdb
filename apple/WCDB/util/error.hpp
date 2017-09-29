@@ -104,6 +104,7 @@ public:
         Rollback = 5,
         GetThreadedHandle = 6,
         FlowOut = 7,
+        Tokenize = 8,
     };
     enum class SystemCallOperation : int {
         Lstat = 1,

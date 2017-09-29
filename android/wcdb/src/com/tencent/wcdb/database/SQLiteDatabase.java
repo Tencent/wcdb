@@ -1866,6 +1866,29 @@ public final class SQLiteDatabase extends SQLiteClosable {
         executeSql(sql, bindArgs, null);
     }
 
+    /**
+     * Execute a single SQL statement that is NOT a SELECT
+     * or any other SQL statement that returns data.
+     * <p>
+     * It has no means to return any data (such as the number of affected rows).
+     * Instead, you're encouraged to use {@link #insert(String, String, ContentValues)},
+     * {@link #update(String, ContentValues, String, String[])}, et al, when possible.
+     * </p>
+     * <p>
+     * When using {@link #enableWriteAheadLogging()}, journal_mode is
+     * automatically managed by this class. So, do not set journal_mode
+     * using "PRAGMA journal_mode'<value>" statement if your app is using
+     * {@link #enableWriteAheadLogging()}
+     * </p>
+     *
+     * @param sql      the SQL statement to be executed. Multiple statements separated by semicolons are
+     *                 not supported.
+     * @param bindArgs arguments to bind. Only byte[], String, Long and Double are supported.
+     * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
+     *                           If the operation is canceled, then {@link OperationCanceledException} will be thrown
+     *                           when the query is executed.
+     * @throws SQLException if the SQL string is invalid
+     */
     public void execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
         executeSql(sql, bindArgs, cancellationSignal);
     }
@@ -1917,7 +1940,6 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * Returns true if the database is in-memory db.
      *
      * @return True if the database is in-memory.
-     * @hide
      */
     public boolean isInMemoryDatabase() {
         synchronized (mLock) {
@@ -2064,6 +2086,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    /**
+     * Set callback object to be called on each commit in WAL mode.
+     *
+     * <p>Use this callback for customized WAL checkpoint operations for different situations an
+     * applications. For general applications, you probably want {@link #setAsyncCheckpointEnabled(boolean)}
+     * for asynchronous checkpointing on a separate thread.</p>
+     *
+     * <p>Callback object won't be called in journal modes other than WAL.</p>
+     *
+     * @param callback callback object to be set, or null to disable customized checkpointing
+     */
     public void setCheckpointCallback(SQLiteCheckpointListener callback) {
         boolean customWALHookEnabled = (callback != null);
 
@@ -2084,6 +2117,15 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    /**
+     * Set whether to use asynchronous checkpointing strategy in WAL mode. Asynchronous checkpointing
+     * runs checkpoint operations on a separate thread, which may improve performance in WAL mode.
+     *
+     * <p>This method calls {@link #setCheckpointCallback(SQLiteCheckpointListener)}, thus will overwrite
+     * previous callbacks set by that method.</p>
+     *
+     * @param enabled true if asynchronous checkpointing is to be enabled
+     */
     public void setAsyncCheckpointEnabled(boolean enabled) {
         SQLiteCheckpointListener callback = enabled ?
                 new SQLiteAsyncCheckpointer() : null;
@@ -2243,12 +2285,27 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    /**
+     * Returns the {@link SQLiteTrace} object bound to this database.
+     *
+     * @return {@link SQLiteTrace} object bound to this database
+     * @see SQLiteTrace
+     * @see #setTraceCallback(SQLiteTrace)
+     */
     public SQLiteTrace getTraceCallback() {
         synchronized (mLock) {
             throwIfNotOpenLocked();
             return mConnectionPoolLocked.getTraceCallback();
         }
     }
+
+    /**
+     * Bind a {@link SQLiteTrace} callback object for tracing database performance.
+     * When a callback object was bound, its methods will be called on various event, such as
+     * a SQL statement was executed or a database connection was granted to a thread.
+     *
+     * @param callback callback object to be set, or null to disable tracing.
+     */
     public void setTraceCallback(SQLiteTrace callback) {
         synchronized (mLock) {
             throwIfNotOpenLocked();
@@ -2287,6 +2344,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
     /**
      * Dump detailed information about all open databases in the current process.
      * Used by bug report.
+     *
+     * @param printer printer used to receive or output log messages
+     * @param verbose true if verbose messages is requested
      */
     public static void dumpAll(Printer printer, boolean verbose) {
         for (SQLiteDatabase db : getActiveDatabases()) {
@@ -2294,6 +2354,12 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    /**
+     * Dump detailed information about this database.
+     *
+     * @param printer printer used to receive or output log messages
+     * @param verbose true if verbose messages is requested
+     */
     public void dump(Printer printer, boolean verbose) {
         synchronized (mLock) {
             if (mConnectionPoolLocked != null) {
@@ -2303,7 +2369,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
-     * Returns list of full pathnames of all attached databases including the main database
+     * Returns list of full path-names of all attached databases including the main database
      * by executing 'pragma database_list' on the database.
      *
      * @return ArrayList of pairs of (database name, database file path) or null if the database

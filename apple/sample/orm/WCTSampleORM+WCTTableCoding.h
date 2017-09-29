@@ -18,22 +18,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/pragma.hpp>
-#include <WCDB/value_pragma.hpp>
+#import "WCTSampleORM.h"
+#import <WCDB/WCDB.h>
 
-namespace WCDB {
+@interface WCTSampleORM (WCTTableCoding) <WCTTableCoding>
 
-PragmaValue::PragmaValue(const Pragma &pragma)
-    : Describable(pragma.getDescription())
-{
-}
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(desc)
+WCDB_PROPERTY(value)
+WCDB_PROPERTY(timestamp)
+WCDB_PROPERTY(type)
 
-PragmaValue::PragmaValue(const std::string &value) : Describable(value)
-{
-}
-
-PragmaValue::PragmaValue(const char *value) : Describable(value)
-{
-}
-
-} //namespace WCDB
+@end

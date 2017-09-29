@@ -96,7 +96,7 @@
                                          error);
 }
 
-- (BOOL)createVirtualTableOfName:(NSString *)tableName usingModule:(NSString *)moduleName withClass:(Class)cls andError:(WCDB::Error &)error
+- (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class)cls andError:(WCDB::Error &)error
 {
     if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
         WCDB::Error::ReportInterface(_core->getTag(),
@@ -107,9 +107,9 @@
                                      &error);
         return NO;
     }
-    return _core->runEmbeddedTransaction([self, cls, tableName, moduleName](WCDB::Error &error) -> bool {
+    return _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) -> bool {
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
-        return _core->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String, moduleName.UTF8String), error);
+        return _core->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String), error);
     },
                                          error);
 }

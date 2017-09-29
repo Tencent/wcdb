@@ -23,5 +23,7 @@
 
 //Since WCTSampleAdvance use category to implement ORM, you have no need to change this file's extension from .m to .mm
 @interface WCTSampleNoObjectiveCpp : NSObject
+
 @property(nonatomic, retain) WCTSampleAdvance *nocpp;
+
 @end

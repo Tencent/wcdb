@@ -22,8 +22,18 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 
-WCTProperty::WCTProperty()
-    : WCDB::Column("")
+WCTPropertyNamed WCTProperty::PropertyNamed = ^(NSString *propertyName) {
+  return WCTProperty(propertyName);
+};
+
+WCTProperty::WCTProperty(const char *name)
+    : WCDB::Column(name)
+    , WCTPropertyBase(nil, nullptr)
+{
+}
+
+WCTProperty::WCTProperty(NSString *name)
+    : WCDB::Column(name ? name.UTF8String : "")
     , WCTPropertyBase(nil, nullptr)
 {
 }
@@ -128,6 +138,21 @@ WCTExpr WCTProperty::upper(bool distinct) const
 WCTExpr WCTProperty::round(bool distinct) const
 {
     return WCTExpr(*this).round(distinct);
+}
+
+WCTExpr WCTProperty::matchinfo() const
+{
+    return WCTExpr(*this).matchinfo();
+}
+
+WCTExpr WCTProperty::offsets() const
+{
+    return WCTExpr(*this).offsets();
+}
+
+WCTExpr WCTProperty::snippet() const
+{
+    return WCTExpr(*this).snippet();
 }
 
 WCTColumnDef WCTProperty::def(WCTColumnType type, bool isPrimary, WCTOrderTerm term, bool autoIncrement) const
@@ -247,6 +272,11 @@ WCTExpr WCTProperty::operator!=(const WCTExpr &operand) const
 WCTExpr WCTProperty::concat(const WCTExpr &operand) const
 {
     return WCTExpr(*this).concat(operand);
+}
+
+WCTExpr WCTProperty::substr(const WCTExpr &start, const WCTExpr &length) const
+{
+    return WCTExpr(*this).substr(start, length);
 }
 
 WCTExpr WCTProperty::in(const WCTExprList &exprList) const

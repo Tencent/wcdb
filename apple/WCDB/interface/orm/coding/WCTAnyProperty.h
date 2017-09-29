@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 
 class WCTAnyProperty : public WCDB::Column {
 public:

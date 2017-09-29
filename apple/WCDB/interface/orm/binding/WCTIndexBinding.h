@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTExpr.h>
-#import <WCDB/WINQ.h>
+#import <WCDB/abstract.h>
 
 class WCTIndexBinding {
 public:
