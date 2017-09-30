@@ -30,7 +30,7 @@ dependencies {
 
     debugCompile project(path: ':wcdb', configuration: 'debug')
     releaseCompile project(path: ':wcdb', configuration: 'release')
-    //compile 'com.tencent.wcdb:wcdb-android:1.0.2'
+    //compile 'com.tencent.wcdb:wcdb-android:1.0.4'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'

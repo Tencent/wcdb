@@ -29,10 +29,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //debugCompile project(path: ':wcdb', configuration: 'debug')
-    //releaseCompile project(path: ':wcdb', configuration: 'release')
-    //compile project(path: ':wcdb')
-    compile 'com.tencent.wcdb:wcdb-android:1.0.2'
+    debugCompile project(path: ':wcdb', configuration: 'debug')
+    releaseCompile project(path: ':wcdb', configuration: 'release')
+    //compile 'com.tencent.wcdb:wcdb-android:1.0.4'
     compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
