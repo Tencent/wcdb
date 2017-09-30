@@ -18,6 +18,7 @@ package com.tencent.wcdb.database;
 
 
 import android.annotation.SuppressLint;
+import android.util.Pair;
 import android.util.Printer;
 
 import com.tencent.wcdb.BuildConfig;
@@ -154,6 +155,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private static native void nativeResetCancel(long connectionPtr, boolean cancelable);
     private static native void nativeSetKey(long connectionPtr, byte[] password);
     private static native void nativeSetWalHook(long connectionPtr);
+    private static native long nativeWalCheckpoint(long connectionPtr, String dbName);
     private static native long nativeGetSQLiteHandle(long connectionPtr);
 
     // Password for encrypted database.
@@ -937,6 +939,16 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         } finally {
             window.releaseReference();
         }
+    }
+
+    public Pair<Integer, Integer> walCheckpoint(String dbName) {
+        if (dbName == null || dbName.isEmpty())
+            dbName = "main";
+
+        long result = nativeWalCheckpoint(mConnectionPtr, dbName);
+        int walPages = (int) (result >> 32);
+        int checkpointedPages = (int) (result & 0xFFFFFFFFL);
+        return new Pair<>(walPages, checkpointedPages);
     }
 
     /*package*/ PreparedStatement acquirePreparedStatement(String sql) {

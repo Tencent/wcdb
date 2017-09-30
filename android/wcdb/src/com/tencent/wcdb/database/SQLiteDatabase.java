@@ -1921,6 +1921,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    public Pair<Integer, Integer> walCheckpoint(String dbName, boolean blockWriting) {
+        acquireReference();
+        try {
+            int connectionFlag = blockWriting ?
+                    SQLiteConnectionPool.CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY : 0;
+            return getThreadSession().walCheckpoint(dbName, connectionFlag);
+        } finally {
+            releaseReference();
+        }
+    }
+
     /**
      * Returns true if the database is opened as read only.
      *
