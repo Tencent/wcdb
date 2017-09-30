@@ -20,7 +20,6 @@
 
 package com.tencent.wcdb.database;
 
-import android.database.Cursor;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -37,22 +36,25 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
     private Handler mHandler;
     private boolean mUseDefaultLooper;
     private int mThreshold;
+    private int mBlockingThreshold = DEFAULT_BLOCKING_THRESHOLD;
     private final HashSet<Pair<SQLiteDatabase, String>> mPendingCheckpoints;
 
-    private static final int DEFAULT_THRESHOLD = 250;
+    private static final int DEFAULT_THRESHOLD = 20;
+    private static final int DEFAULT_BLOCKING_THRESHOLD = 100;
 
 
     public SQLiteAsyncCheckpointer() {
-        this(null, DEFAULT_THRESHOLD);
+        this(null, DEFAULT_THRESHOLD, DEFAULT_BLOCKING_THRESHOLD);
     }
 
     public SQLiteAsyncCheckpointer(Looper looper) {
-        this(looper, DEFAULT_THRESHOLD);
+        this(looper, DEFAULT_THRESHOLD, DEFAULT_BLOCKING_THRESHOLD);
     }
 
-    public SQLiteAsyncCheckpointer(Looper looper, int threshold) {
+    public SQLiteAsyncCheckpointer(Looper looper, int threshold, int blockingThreshold) {
         mLooper = looper;
         mThreshold = threshold;
+        mBlockingThreshold = blockingThreshold;
         mPendingCheckpoints = new HashSet<>();
     }
 
@@ -71,6 +73,7 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
 
         if (pages < mThreshold)
             return;
+        boolean blockWriting = pages >= mBlockingThreshold;
 
         Pair<SQLiteDatabase, String> p = new Pair<>(db, dbName);
 
@@ -82,7 +85,7 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
             return;
 
         db.acquireReference();
-        Message msg = mHandler.obtainMessage(0, p);
+        Message msg = mHandler.obtainMessage(0, blockWriting ? 1 : 0, 0, p);
         mHandler.sendMessage(msg);
     }
 
@@ -103,20 +106,13 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
         Pair<SQLiteDatabase, String> p = (Pair<SQLiteDatabase, String>) msg.obj;
         SQLiteDatabase db = p.first;
         String dbName = p.second;
+        boolean blockWriting = msg.arg1 != 0;
 
         long time = SystemClock.uptimeMillis();
-        Cursor cursor = db.rawQueryWithFactory(SQLiteDirectCursor.FACTORY,
-                "PRAGMA " + dbName + ".wal_checkpoint;", null, null);
-        int walPages;
-        int checkpointedPages;
-        if (cursor.moveToFirst()) {
-            walPages = cursor.getInt(1);
-            checkpointedPages = cursor.getInt(2);
-        } else {
-            walPages = -1;
-            checkpointedPages = -1;
-        }
-        cursor.close();
+        Pair<Integer, Integer> result = db.walCheckpoint(dbName, blockWriting);
+        int walPages = result.first;
+        int checkpointedPages = result.second;
+
         time = SystemClock.uptimeMillis() - time;
         onCheckpointResult(db, walPages, checkpointedPages, time);
         db.releaseReference();
