@@ -27,7 +27,9 @@ NSString *const WCTModuleNameFTS3 = @"fts3";
 
 - (void)setTokenizer:(NSString *)tokenizeName
 {
-    _database->setTokenize(tokenizeName.UTF8String);
+    if (tokenizeName) {
+        _database->setTokenizes({tokenizeName.UTF8String});
+    }
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames

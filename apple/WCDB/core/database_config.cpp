@@ -217,11 +217,6 @@ void Database::setConfig(const std::string &name, const Config &config)
     m_pool->setConfig(name, config);
 }
 
-void Database::setCipher(const void *key, int keySize)
-{
-    setCipher(key, keySize, 4096);
-}
-
 void Database::setCipher(const void *key, int keySize, int pageSize)
 {
     std::shared_ptr<std::vector<unsigned char>> keys(
@@ -290,11 +285,6 @@ void Database::setSynchronousFull(bool full)
                           Database::defaultConfigs.getConfigByName(
                               Database::defaultCheckpointConfigName));
     }
-}
-
-void Database::setTokenize(const std::string &tokenizeName)
-{
-    setTokenizes({tokenizeName});
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
