@@ -78,19 +78,19 @@ void sample_fts_main(NSString *baseDirectory)
     //Build Full-Text-Search Index
     {
         NSArray<WCTSampleFTSOrigin *> *objects = [databaseOrigin getAllObjectsOfClass:WCTSampleFTSOrigin.class fromTable:tableNameOrigin];
-        NSMutableArray *ftsDatas = [[NSMutableArray alloc] init];
+        NSMutableArray *ftsDataArray = [[NSMutableArray alloc] init];
         for (WCTSampleFTSOrigin *object in objects) {
             WCTSampleFTSData *ftsData = [[WCTSampleFTSData alloc] init];
             ftsData.name = object.name;
             ftsData.content = object.content;
-            [ftsDatas addObject:ftsData];
+            [ftsDataArray addObject:ftsData];
         }
-        [databaseFTS insertObjects:ftsDatas into:tableNameFTS];
+        [databaseFTS insertObjects:ftsDataArray into:tableNameFTS];
     }
 
     //Full-Text-Search by `match`
-    NSArray<WCTSampleFTSData *> *ftsDatas = [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
-    for (WCTSampleFTSData *ftsData in ftsDatas) {
+    NSArray<WCTSampleFTSData *> *ftsDataArray = [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
+    for (WCTSampleFTSData *ftsData in ftsDataArray) {
         NSLog(@"Match name:%@ content:%@", ftsData.name, ftsData.content);
     }
 
