@@ -18,7 +18,11 @@
  * limitations under the License.
  */
 
+#ifndef WCDB_OMIT_TOKENIZE_APPLE
+
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTMacroHelper.h>
 
 WCDB_EXTERN NSString *const WCTTokenizerNameApple;
+
+#endif //WCDB_OMIT_TOKENIZE_APPLE

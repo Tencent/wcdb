@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#ifndef WCDB_OMIT_TOKENIZE_APPLE
+
 #import <WCDB/WCDB.h>
 #import <WCDB/WCTTokenizer+Apple.h>
 #import <WCDB/fts_module.hpp>
@@ -110,3 +112,5 @@ const std::nullptr_t AppleModule::s_register = []() {
 } //namespace WCDB
 
 NSString *const WCTTokenizerNameApple = @(WCDB::FTS::AppleModule::Name);
+
+#endif //WCDB_OMIT_TOKENIZE_APPLE
