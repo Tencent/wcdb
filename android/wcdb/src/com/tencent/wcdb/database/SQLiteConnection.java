@@ -265,6 +265,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         // 4. Other initialization steps from original SQLiteConnection.
         setForeignKeyModeFromConfiguration();
         setWalModeFromConfiguration();
+        setSyncModeFromConfiguration();
         setJournalSizeLimit();
         setCheckpointStrategy();
         setLocaleFromConfiguration();
@@ -366,33 +367,19 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     private void setWalModeFromConfiguration() {
         if (!mConfiguration.isInMemoryDb() && !mIsReadOnlyConnection) {
+            String journalMode;
             if ((mConfiguration.openFlags & SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING) != 0) {
-                setJournalMode("WAL");
-                setSyncMode(SQLiteGlobal.walSyncMode);
+                journalMode = "WAL";
             } else {
-                setJournalMode(SQLiteGlobal.defaultJournalMode);
-                setSyncMode(SQLiteGlobal.defaultSyncMode);
+                journalMode = SQLiteGlobal.defaultJournalMode;
             }
+            setJournalMode(journalMode);
         }
     }
 
-    private void setSyncMode(String newValue) {
-        String value = executeForString("PRAGMA synchronous", null, null);
-        if (!canonicalizeSyncMode(value).equalsIgnoreCase(
-                canonicalizeSyncMode(newValue))) {
-            execute("PRAGMA synchronous=" + newValue, null, null);
-        }
-    }
-
-    private static String canonicalizeSyncMode(String value) {
-        if (value.equals("0")) {
-            return "OFF";
-        } else if (value.equals("1")) {
-            return "NORMAL";
-        } else if (value.equals("2")) {
-            return "FULL";
-        }
-        return value;
+    private void setSyncModeFromConfiguration() {
+        int syncMode = mConfiguration.synchronousMode;
+        execute("PRAGMA synchronous=" + syncMode, null, null);
     }
 
     private void setJournalMode(String newValue) {
@@ -496,6 +483,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         boolean localeChanged = !configuration.locale.equals(mConfiguration.locale);
         boolean checkpointStrategyChanged = configuration.customWALHookEnabled
                 != mConfiguration.customWALHookEnabled;
+        boolean synchronousChanged = configuration.synchronousMode
+                != mConfiguration.synchronousMode;
 
         // Update configuration parameters.
         mConfiguration.updateParametersFrom(configuration);
@@ -511,6 +500,11 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         // Update WAL.
         if (walModeChanged) {
             setWalModeFromConfiguration();
+        }
+
+        // Update synchronous mode.
+        if (synchronousChanged) {
+            setSyncModeFromConfiguration();
         }
 
         // Update checkpoint strategy. This must be done after setting WAL mode.

@@ -192,6 +192,11 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private static final String[] CONFLICT_VALUES = new String[]
             {"", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE "};
 
+    public static final int SYNCHRONOUS_OFF = 0;
+    public static final int SYNCHRONOUS_NORMAL = 1;
+    public static final int SYNCHRONOUS_FULL = 2;
+    public static final int SYNCHRONOUS_EXTRA = 3;
+
     /**
      * Maximum Length Of A LIKE Or GLOB Pattern
      * The pattern matching algorithm used in the default LIKE and GLOB implementation
@@ -2293,6 +2298,31 @@ public final class SQLiteDatabase extends SQLiteClosable {
             throwIfNotOpenLocked();
 
             return (mConfigurationLocked.openFlags & ENABLE_WRITE_AHEAD_LOGGING) != 0;
+        }
+    }
+
+    public int getSynchronousMode() {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+
+            return mConfigurationLocked.synchronousMode;
+        }
+    }
+
+    public void setSynchronousMode(int mode) {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+
+            final int oldMode = mConfigurationLocked.synchronousMode;
+            if (oldMode != mode) {
+                mConfigurationLocked.synchronousMode = mode;
+                try {
+                    mConnectionPoolLocked.reconfigure(mConfigurationLocked);
+                } catch (RuntimeException ex) {
+                    mConfigurationLocked.synchronousMode = oldMode;
+                    throw ex;
+                }
+            }
         }
     }
 
