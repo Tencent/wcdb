@@ -36,10 +36,11 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
     private Handler mHandler;
     private boolean mUseDefaultLooper;
     private int mThreshold;
-    private int mBlockingThreshold = DEFAULT_BLOCKING_THRESHOLD;
+    private int mBlockingThreshold;
+    private int mLastSyncMode;
     private final HashSet<Pair<SQLiteDatabase, String>> mPendingCheckpoints;
 
-    private static final int DEFAULT_THRESHOLD = 20;
+    private static final int DEFAULT_THRESHOLD = 0;
     private static final int DEFAULT_BLOCKING_THRESHOLD = 100;
 
 
@@ -66,6 +67,9 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
         }
 
         mHandler = new Handler(mLooper, this);
+
+        mLastSyncMode = db.getSynchronousMode();
+        db.setSynchronousMode(SQLiteDatabase.SYNCHRONOUS_NORMAL);
     }
 
     @Override
@@ -91,6 +95,7 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
 
     @Override
     public void onDetach(SQLiteDatabase db) {
+        db.setSynchronousMode(mLastSyncMode);
         mHandler = null;
 
         if (mUseDefaultLooper) {
@@ -108,14 +113,17 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
         String dbName = p.second;
         boolean blockWriting = msg.arg1 != 0;
 
-        long time = SystemClock.uptimeMillis();
-        Pair<Integer, Integer> result = db.walCheckpoint(dbName, blockWriting);
-        int walPages = result.first;
-        int checkpointedPages = result.second;
+        try {
+            long time = SystemClock.uptimeMillis();
+            Pair<Integer, Integer> result = db.walCheckpoint(dbName, blockWriting);
+            int walPages = result.first;
+            int checkpointedPages = result.second;
 
-        time = SystemClock.uptimeMillis() - time;
-        onCheckpointResult(db, walPages, checkpointedPages, time);
-        db.releaseReference();
+            time = SystemClock.uptimeMillis() - time;
+            onCheckpointResult(db, walPages, checkpointedPages, time);
+        } finally {
+            db.releaseReference();
+        }
 
         synchronized (mPendingCheckpoints) {
             if (!mPendingCheckpoints.remove(p))
