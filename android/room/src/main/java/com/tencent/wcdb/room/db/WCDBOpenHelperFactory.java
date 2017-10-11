@@ -29,7 +29,6 @@ public class WCDBOpenHelperFactory implements SupportSQLiteOpenHelper.Factory {
 
     private byte[] mPassphrase;
     private SQLiteCipherSpec mCipherSpec;
-    private DatabaseErrorHandler mErrorHandler;
     private boolean mWALMode;
 
     public WCDBOpenHelperFactory passphrase(byte[] value) {
@@ -42,11 +41,6 @@ public class WCDBOpenHelperFactory implements SupportSQLiteOpenHelper.Factory {
         return this;
     }
 
-    public WCDBOpenHelperFactory errorHandler(DatabaseErrorHandler handler) {
-        mErrorHandler = handler;
-        return this;
-    }
-
     public WCDBOpenHelperFactory writeAheadLoggingEnabled(boolean wal) {
         mWALMode = wal;
         return this;
@@ -55,8 +49,7 @@ public class WCDBOpenHelperFactory implements SupportSQLiteOpenHelper.Factory {
     @Override
     public SupportSQLiteOpenHelper create(SupportSQLiteOpenHelper.Configuration configuration) {
         WCDBOpenHelper result =  new WCDBOpenHelper(configuration.context, configuration.name,
-                mPassphrase, mCipherSpec, configuration.version, mErrorHandler,
-                configuration.callback);
+                mPassphrase, mCipherSpec, configuration.callback);
         result.setWriteAheadLoggingEnabled(mWALMode);
         return result;
     }

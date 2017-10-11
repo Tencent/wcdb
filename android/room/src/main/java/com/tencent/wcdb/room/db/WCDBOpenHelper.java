@@ -28,44 +28,15 @@ import com.tencent.wcdb.database.SQLiteOpenHelper;
 class WCDBOpenHelper implements SupportSQLiteOpenHelper {
     private final OpenHelper mDelegate;
 
-    WCDBOpenHelper(Context context, String name, byte[] passphrase,
-            SQLiteCipherSpec cipher, int version, DatabaseErrorHandler errorHandler,
-            SupportSQLiteOpenHelper.Callback callback) {
-        mDelegate = createDelegate(context, name, passphrase, cipher,
-                version, errorHandler, callback);
+    WCDBOpenHelper(Context context, String name, byte[] passphrase, SQLiteCipherSpec cipherSpec,
+                   Callback callback) {
+        mDelegate = createDelegate(context, name, passphrase, cipherSpec, callback);
     }
 
-    private OpenHelper createDelegate(Context context, String name,
-            byte[] passphrase, SQLiteCipherSpec cipher,
-            int version, DatabaseErrorHandler errorHandler,
-            final Callback callback) {
-        return new OpenHelper(context, name, passphrase, cipher, null, version, errorHandler) {
-            @Override
-            public void onCreate(SQLiteDatabase sqLiteDatabase) {
-                mWrappedDb = new WCDBDatabase(sqLiteDatabase);
-                callback.onCreate(mWrappedDb);
-            }
-
-            @Override
-            public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-                callback.onUpgrade(getWrappedDb(sqLiteDatabase), oldVersion, newVersion);
-            }
-
-            @Override
-            public void onConfigure(SQLiteDatabase db) {
-                callback.onConfigure(getWrappedDb(db));
-            }
-
-            @Override
-            public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-                callback.onDowngrade(getWrappedDb(db), oldVersion, newVersion);
-            }
-
-            @Override
-            public void onOpen(SQLiteDatabase db) {
-                callback.onOpen(getWrappedDb(db));
-            }
-        };
+    private OpenHelper createDelegate(Context context, String name, byte[] passphrase,
+                                      SQLiteCipherSpec cipherSpec, Callback callback) {
+        final WCDBDatabase[] dbRef = new WCDBDatabase[1];
+        return new OpenHelper(context, name, dbRef, passphrase, cipherSpec, callback);
     }
 
     @Override
@@ -93,15 +64,30 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
         mDelegate.close();
     }
 
-    abstract static class OpenHelper extends SQLiteOpenHelper {
+    static class OpenHelper extends SQLiteOpenHelper {
+        /**
+         * This is used as an Object reference so that we can access the wrapped database inside
+         * the constructor. SQLiteOpenHelper requires the error handler to be passed in the
+         * constructor.
+         */
+        final WCDBDatabase[] mDbRef;
+        final Callback mCallback;
 
-        WCDBDatabase mWrappedDb;
-
-        OpenHelper(Context context, String name, byte[] passphrase,
-                SQLiteCipherSpec cipher, SQLiteDatabase.CursorFactory factory,
-                int version, DatabaseErrorHandler errorHandler) {
-            super(context, name, passphrase, cipher, factory, version, errorHandler);
-            setForcedSingleConnection(true);
+        OpenHelper(Context context, String name, final WCDBDatabase[] dbRef,
+                   byte[] passphrase, SQLiteCipherSpec cipherSpec,
+                   final Callback callback) {
+            super(context, name, passphrase, cipherSpec, null, callback.version,
+                    new DatabaseErrorHandler() {
+                        @Override
+                        public void onCorruption(SQLiteDatabase dbObj) {
+                            WCDBDatabase db = dbRef[0];
+                            if (db != null) {
+                                callback.onCorruption(db);
+                            }
+                        }
+                    });
+            mCallback = callback;
+            mDbRef = dbRef;
         }
 
         SupportSQLiteDatabase getWritableSupportDatabase() {
@@ -115,16 +101,44 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
         }
 
         WCDBDatabase getWrappedDb(SQLiteDatabase sqLiteDatabase) {
-            if (mWrappedDb == null) {
-                mWrappedDb = new WCDBDatabase(sqLiteDatabase);
+            WCDBDatabase dbRef = mDbRef[0];
+            if (dbRef == null) {
+                dbRef = new WCDBDatabase(sqLiteDatabase);
+                mDbRef[0] = dbRef;
             }
-            return mWrappedDb;
+            return mDbRef[0];
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            mCallback.onCreate(getWrappedDb(sqLiteDatabase));
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+            mCallback.onUpgrade(getWrappedDb(sqLiteDatabase), oldVersion, newVersion);
+        }
+
+        @Override
+        public void onConfigure(SQLiteDatabase db) {
+            mCallback.onConfigure(getWrappedDb(db));
+        }
+
+        @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            mCallback.onDowngrade(getWrappedDb(db), oldVersion, newVersion);
+        }
+
+        @Override
+        public void onOpen(SQLiteDatabase db) {
+            mCallback.onOpen(getWrappedDb(db));
         }
 
         @Override
         public synchronized void close() {
             super.close();
-            mWrappedDb = null;
+            mDbRef[0] = null;
         }
     }
+
 }
