@@ -28,7 +28,7 @@ StatementHandle::StatementHandle(void *stmt, const Handle &handle)
 {
 }
 
-void StatementHandle::resetBinding()
+void StatementHandle::reset()
 {
     int rc = sqlite3_reset((sqlite3_stmt *) m_stmt);
     if (rc == SQLITE_OK) {

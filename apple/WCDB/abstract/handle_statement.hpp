@@ -37,7 +37,7 @@ public:
     const Error &getError() const;
 
     //bind, index begin with 1
-    void resetBinding();
+    void reset();
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isInteger32, void>::type

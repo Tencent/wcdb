@@ -131,7 +131,7 @@
         if (fillLastInsertedRowID) {
             object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
         }
-        statementHandle->resetBinding();
+        statementHandle->reset();
         if (!statementHandle->isOK()) {
             error = statementHandle->getError();
             return NO;
