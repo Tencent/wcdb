@@ -2103,6 +2103,21 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
+     * Returns {@link SQLiteCheckpointListener} object previously set.
+     *
+     * @return callback object set to the database
+     */
+    public SQLiteCheckpointListener getCheckpointCallback() {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            if (!mConfigurationLocked.customWALHookEnabled)
+                return null;
+
+            return mConnectionPoolLocked.getCheckpointListener();
+        }
+    }
+
+    /**
      * Set callback object to be called on each commit in WAL mode.
      *
      * <p>Use this callback for customized WAL checkpoint operations for different situations an
@@ -2131,6 +2146,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
             mConnectionPoolLocked.setCheckpointListener(callback);
         }
+    }
+
+    /**
+     * Returns whether asynchronous checkpointing is enabled.
+     *
+     * @return true if asynchronous checkpointing is enabled
+     */
+    public boolean getAsyncCheckpointEnabled() {
+        SQLiteCheckpointListener listener = getCheckpointCallback();
+        return (listener != null) && (listener instanceof SQLiteAsyncCheckpointer);
     }
 
     /**
