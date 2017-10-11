@@ -34,6 +34,11 @@
     return [self getColumnNameAtIndex:index];
 }
 
+- (void)resetBinding
+{
+    return [self reset];
+}
+
 @end
 
 #endif //WCDB_OMIT_DEPRECATED

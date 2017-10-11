@@ -38,6 +38,11 @@
  */
 - (NSString *)getNameAtIndex:(int)index DEPRECATED_MSG_ATTRIBUTE("-getNameAtIndex: is deprecated since v1.0.4. Use -getColumNameAtIndex: instead");
 
+/**
+ @brief The wrapper of sqlite3_reset.
+ */
+- (void)resetBinding DEPRECATED_MSG_ATTRIBUTE("-resetBinding is deprecated since v1.0.4. Use -reset instead");
+
 @end
 
 #endif //WCDB_OMIT_DEPRECATED

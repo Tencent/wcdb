@@ -75,7 +75,7 @@
 /**
  @brief The wrapper of sqlite3_reset.
  */
-- (void)resetBinding;
+- (void)reset;
 
 /**
  @brief The wrapper of sqlite3_column_type.

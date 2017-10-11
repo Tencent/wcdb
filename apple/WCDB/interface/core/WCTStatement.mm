@@ -147,9 +147,9 @@
     return INT_MAX;
 }
 
-- (void)resetBinding
+- (void)reset
 {
-    _statementHandle->resetBinding();
+    _statementHandle->reset();
 }
 
 - (BOOL)step
