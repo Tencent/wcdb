@@ -86,6 +86,7 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
                             }
                         }
                     });
+            setForcedSingleConnection(true);
             mCallback = callback;
             mDbRef = dbRef;
         }
