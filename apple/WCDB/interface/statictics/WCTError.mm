@@ -45,9 +45,6 @@
                 if (!value) {
                     value = @"";
                 }
-                if (iter.first == WCDB::Error::Key::Path) {
-                    value = [value stringByAbbreviatingWithTildeInPath];
-                }
                 [infos setObject:value forKey:key];
             } break;
         }
