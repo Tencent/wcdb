@@ -74,6 +74,10 @@ int WCDBCursorInfo::step(const char **ppToken,
                     return rc;
                 }
             }
+            
+            if (m_cursorTokenType == TokenType::None) {
+                return SQLITE_DONE;
+            }
 
             TokenType type = m_cursorTokenType;
             switch (type) {
