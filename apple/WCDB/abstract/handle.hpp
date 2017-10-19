@@ -79,6 +79,8 @@ public:
 
     int getChanges();
 
+    bool isReadonly();
+
 protected:
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;

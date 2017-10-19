@@ -371,4 +371,9 @@ int Handle::getChanges()
     return sqlite3_changes((sqlite3 *) m_handle);
 }
 
+bool Handle::isReadonly()
+{
+    return sqlite3_db_readonly((sqlite3 *) m_handle, NULL) == 1;
+}
+
 } //namespace WCDB

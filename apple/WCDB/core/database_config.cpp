@@ -72,6 +72,10 @@ const Configs Database::defaultConfigs(
          Database::defaultBasicConfigName,
          [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
 
+             if (handle->isReadonly()) {
+                 return true;
+             }
+
              //Locking Mode
              {
                  static const StatementPragma s_getLockingMode =
