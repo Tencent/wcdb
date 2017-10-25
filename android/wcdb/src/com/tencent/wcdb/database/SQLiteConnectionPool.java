@@ -563,7 +563,7 @@ public final class SQLiteConnectionPool implements Closeable {
             connection.close(); // might throw
         } catch (RuntimeException ex) {
             Log.e(TAG, "Failed to close connection, its fate is now in the hands "
-                    + "of the merciful GC: " + connection, ex);
+                    + "of the merciful GC: " + connection + ex.getMessage());
         }
     }
 
