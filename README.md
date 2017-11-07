@@ -1,8 +1,8 @@
 # WCDB
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/wcdb/pulls)
-[![Release Version](https://img.shields.io/badge/release-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
-[![WeChat Approved iOS](https://img.shields.io/badge/Wechat_Approved_iOS-1.0.4-brightgreen.svg)](https://github.com/Tencent/wcdb/blob/master/README.md#wcdb-for-iosmacos)
+[![Release Version](https://img.shields.io/badge/release-1.0.5-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
+[![WeChat Approved iOS](https://img.shields.io/badge/Wechat_Approved_iOS-1.0.5-brightgreen.svg)](https://github.com/Tencent/wcdb/blob/master/README.md#wcdb-for-iosmacos)
 [![WeChat Approved Android](https://img.shields.io/badge/Wechat_Approved_Android-1.0.3-brightgreen.svg)](https://github.com/Tencent/wcdb/blob/master/README.md#wcdb-for-android)
 [![Platform](https://img.shields.io/badge/Platform-%20iOS%20%7C%20macOS%20%7C%20Android-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)
 
@@ -129,11 +129,11 @@ This will cause Gradle to download AAR package from jcenter while building your 
 
 ### Import Prebuilt AAR Package
 
-  1. **Download AAR package from release page.**
+    1. **Download AAR package from release page.**
 
-  2. **Import the AAR as new module.** In Android Studio, select `File -> New -> New Module...` menu and choose `"Import JAR/AAR Package"`.
+    2. **Import the AAR as new module.** In Android Studio, select `File -> New -> New Module...` menu and choose `"Import JAR/AAR Package"`.
 
-  3. **Add a dependency on the new module.** This can be done using `File -> Project Structure...` in Android Studio, or by adding following code to application's `build.gradle`:
+    3. **Add a dependency on the new module.** This can be done using `File -> Project Structure...` in Android Studio, or by adding following code to application's `build.gradle`:
 
 ```gradle
 dependencies {

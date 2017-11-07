@@ -1,3 +1,21 @@
+##v1.0.5
+
+### iOS
+
+* Builtin Full-text search support for ORM.
+
+  ```objective-c
+  WCTProperty *tableProperty = WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
+
+  [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:tableProperty.match("Eng*")];
+  ```
+
+* Support readonly database.
+
+* Some minor bug fixes and code refactor.
+
+###Android
+
 ## v1.0.4
 
 #### Repair Kit
@@ -23,7 +41,7 @@ WCTDatabase* withoutPath = [[WCTDatabase alloc] initWithExistingTag:123];
 #### Android
 
 * Add asynchronous checkpointing support and custom checkpointing callback. This can
-improve performance in WAL mode.
+  improve performance in WAL mode.
 
 ```java
 SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabaseInWalMode(...);
