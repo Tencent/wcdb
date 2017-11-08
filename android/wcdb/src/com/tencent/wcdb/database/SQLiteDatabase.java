@@ -192,6 +192,11 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private static final String[] CONFLICT_VALUES = new String[]
             {"", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE "};
 
+    public static final int SYNCHRONOUS_OFF = 0;
+    public static final int SYNCHRONOUS_NORMAL = 1;
+    public static final int SYNCHRONOUS_FULL = 2;
+    public static final int SYNCHRONOUS_EXTRA = 3;
+
     /**
      * Maximum Length Of A LIKE Or GLOB Pattern
      * The pattern matching algorithm used in the default LIKE and GLOB implementation
@@ -1921,6 +1926,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    public Pair<Integer, Integer> walCheckpoint(String dbName, boolean blockWriting) {
+        acquireReference();
+        try {
+            int connectionFlag = blockWriting ?
+                    SQLiteConnectionPool.CONNECTION_FLAG_PRIMARY_CONNECTION_AFFINITY : 0;
+            return getThreadSession().walCheckpoint(dbName, connectionFlag);
+        } finally {
+            releaseReference();
+        }
+    }
+
     /**
      * Returns true if the database is opened as read only.
      *
@@ -2087,6 +2103,21 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     /**
+     * Returns {@link SQLiteCheckpointListener} object previously set.
+     *
+     * @return callback object set to the database
+     */
+    public SQLiteCheckpointListener getCheckpointCallback() {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            if (!mConfigurationLocked.customWALHookEnabled)
+                return null;
+
+            return mConnectionPoolLocked.getCheckpointListener();
+        }
+    }
+
+    /**
      * Set callback object to be called on each commit in WAL mode.
      *
      * <p>Use this callback for customized WAL checkpoint operations for different situations an
@@ -2115,6 +2146,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
 
             mConnectionPoolLocked.setCheckpointListener(callback);
         }
+    }
+
+    /**
+     * Returns whether asynchronous checkpointing is enabled.
+     *
+     * @return true if asynchronous checkpointing is enabled
+     */
+    public boolean getAsyncCheckpointEnabled() {
+        SQLiteCheckpointListener listener = getCheckpointCallback();
+        return (listener != null) && (listener instanceof SQLiteAsyncCheckpointer);
     }
 
     /**
@@ -2282,6 +2323,31 @@ public final class SQLiteDatabase extends SQLiteClosable {
             throwIfNotOpenLocked();
 
             return (mConfigurationLocked.openFlags & ENABLE_WRITE_AHEAD_LOGGING) != 0;
+        }
+    }
+
+    public int getSynchronousMode() {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+
+            return mConfigurationLocked.synchronousMode;
+        }
+    }
+
+    public void setSynchronousMode(int mode) {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+
+            final int oldMode = mConfigurationLocked.synchronousMode;
+            if (oldMode != mode) {
+                mConfigurationLocked.synchronousMode = mode;
+                try {
+                    mConnectionPoolLocked.reconfigure(mConfigurationLocked);
+                } catch (RuntimeException ex) {
+                    mConfigurationLocked.synchronousMode = oldMode;
+                    throw ex;
+                }
+            }
         }
     }
 

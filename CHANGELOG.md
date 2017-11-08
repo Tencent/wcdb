@@ -1,3 +1,27 @@
+## v1.0.5
+
+#### iOS
+
+* Builtin full-text search support for ORM.
+  ```objc
+  WCTProperty *tableProperty = WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
+
+  [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:tableProperty.match("Eng*")];
+  ```
+* Support read-only databases.
+* Some minor bug fixes and code refactor.
+
+#### Android
+
+* Optimize asynchronous checkpointer, greatly improve write performance with WAL and asynchronous checkpointing.
+```java
+SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabaseInWalMode(...);
+db.setAsyncCheckpointEnabled(true);
+```
+* Add benchmark for asynchronous checkpointer.
+* Add connection pooling friendly interface `SQLiteDatabase.setSynchronousMode()` to set database synchronization mode.
+* Enable `dbstat` virtual table while compiling.
+
 ## v1.0.4
 
 #### Repair Kit
@@ -23,7 +47,7 @@ WCTDatabase* withoutPath = [[WCTDatabase alloc] initWithExistingTag:123];
 #### Android
 
 * Add asynchronous checkpointing support and custom checkpointing callback. This can
-improve performance in WAL mode.
+  improve performance in WAL mode.
 
 ```java
 SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabaseInWalMode(...);

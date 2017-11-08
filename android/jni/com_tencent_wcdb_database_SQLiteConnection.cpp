@@ -16,12 +16,12 @@
 
 #define LOG_TAG "WCDB.SQLiteConnection"
 
+#include <assert.h>
 #include <jni.h>
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <assert.h>
 
 #include "CursorWindow.h"
 #include "Errors.h"
@@ -37,17 +37,17 @@
 namespace wcdb {
 
 /* Busy timeout in milliseconds.
-     * If another connection (possibly in another process) has the database locked for
-     * longer than this amount of time then SQLite will generate a SQLITE_BUSY error.
-     * The SQLITE_BUSY error is then raised as a SQLiteDatabaseLockedException.
-     *
-     * In ordinary usage, busy timeouts are quite rare.  Most databases only ever
-     * have a single open connection at a time unless they are using WAL.  When using
-     * WAL, a timeout could occur if one connection is busy performing an auto-checkpoint
-     * operation.  The busy timeout needs to be long enough to tolerate slow I/O write
-     * operations but not so long as to cause the application to hang indefinitely if
-     * there is a problem acquiring a database lock.
-     */
+ * If another connection (possibly in another process) has the database locked for
+ * longer than this amount of time then SQLite will generate a SQLITE_BUSY error.
+ * The SQLITE_BUSY error is then raised as a SQLiteDatabaseLockedException.
+ *
+ * In ordinary usage, busy timeouts are quite rare.  Most databases only ever
+ * have a single open connection at a time unless they are using WAL.  When using
+ * WAL, a timeout could occur if one connection is busy performing an auto-checkpoint
+ * operation.  The busy timeout needs to be long enough to tolerate slow I/O write
+ * operations but not so long as to cause the application to hang indefinitely if
+ * there is a problem acquiring a database lock.
+ */
 //static const int BUSY_TIMEOUT_MS = 2500;
 static const int BUSY_TIMEOUT_MS = 10 * 1000;
 
@@ -84,12 +84,8 @@ struct SQLiteConnection {
 
     volatile bool canceled;
 
-    SQLiteConnection(jobject dbObj, sqlite3 *db,
-                     int openFlags)
-        : dbObj(dbObj)
-        , db(db)
-        , openFlags(openFlags)
-        , canceled(false)
+    SQLiteConnection(jobject dbObj, sqlite3 *db, int openFlags)
+        : dbObj(dbObj), db(db), openFlags(openFlags), canceled(false)
     {
     }
 };
@@ -102,7 +98,8 @@ static int sqliteProgressHandlerCallback(void *data)
 }
 
 // Called after commiting transactions in WAL mode.
-static int sqliteWalHookCallback(void *data, sqlite3 *db, const char *dbName, int pages)
+static int
+sqliteWalHookCallback(void *data, sqlite3 *db, const char *dbName, int pages)
 {
     SQLiteConnection *connection = static_cast<SQLiteConnection *>(data);
 
@@ -117,8 +114,9 @@ static int sqliteWalHookCallback(void *data, sqlite3 *db, const char *dbName, in
     }
 
     jstring dbNameStr = env->NewStringUTF(dbName);
-    env->CallVoidMethod(connection->dbObj, gSQLiteConnectionClassInfo.notifyCheckpoint,
-                        dbNameStr, (jint) pages);
+    env->CallVoidMethod(connection->dbObj,
+                        gSQLiteConnectionClassInfo.notifyCheckpoint, dbNameStr,
+                        (jint) pages);
     bool exceptionOccurred = env->ExceptionCheck();
     if (exceptionOccurred) {
         jniLogException(env, ANDROID_LOG_ERROR, LOG_TAG);
@@ -952,6 +950,31 @@ static void nativeSetWalHook(JNIEnv *env, jobject clazz, jlong connectionPtr)
     sqlite3_wal_hook(connection->db, sqliteWalHookCallback, connection);
 }
 
+static jlong nativeWalCheckpoint(JNIEnv *env,
+                                 jobject clazz,
+                                 jlong connectionPtr,
+                                 jstring dbNameStr)
+{
+    SQLiteConnection *connection =
+        (SQLiteConnection *) (intptr_t) connectionPtr;
+
+    int nLog = 0, nCkpt = 0;
+    const char *dbName = env->GetStringUTFChars(dbNameStr, NULL);
+    int ret = sqlite3_wal_checkpoint_v2(
+        connection->db, dbName, SQLITE_CHECKPOINT_PASSIVE, &nLog, &nCkpt);
+    env->ReleaseStringUTFChars(dbNameStr, dbName);
+    if (ret != SQLITE_OK) {
+        // sqlite3_wal_checkpoint_v2 returns SQLITE_BUSY if any other process is running
+        // a checkpoint operation at the same time. This is generally not an error.
+        if (ret != SQLITE_BUSY)
+            throw_sqlite3_exception(env, connection->db,
+                                    "Cannot checkpoint the WAL database");
+        return -1;
+    }
+
+    return jlong(nLog) << 32 | jlong(nCkpt);
+}
+
 static jlong
 nativeGetSQLiteHandle(JNIEnv *env, jobject clazz, jlong connectionPtr)
 {
@@ -998,6 +1021,8 @@ static JNINativeMethod sMethods[] = {
     {"nativeCancel", "(J)V", (void *) nativeCancel},
     {"nativeResetCancel", "(JZ)V", (void *) nativeResetCancel},
     {"nativeSetWalHook", "(J)V", (void *) nativeSetWalHook},
+    {"nativeWalCheckpoint", "(JLjava/lang/String;)J",
+     (void *) nativeWalCheckpoint},
     {"nativeGetSQLiteHandle", "(J)J", (void *) nativeGetSQLiteHandle},
 };
 

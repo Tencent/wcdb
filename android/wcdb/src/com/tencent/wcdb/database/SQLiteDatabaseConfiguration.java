@@ -53,6 +53,13 @@ public final class SQLiteDatabaseConfiguration {
     public final String label;
 
     /**
+     * Name of VFS used to open connections, or null to use default VFS.
+     *
+     * Default is null.
+     */
+    public String vfsName;
+
+    /**
      * The flags used to open the database.
      */
     public int openFlags;
@@ -86,12 +93,7 @@ public final class SQLiteDatabaseConfiguration {
      */
     public boolean customWALHookEnabled;
 
-    /**
-     * Name of VFS used to open connections, or null to use default VFS.
-     *
-     * Default is null.
-     */
-    public String vfsName;
+    public int synchronousMode;
 
     /**
      * The custom functions to register.
@@ -116,6 +118,7 @@ public final class SQLiteDatabaseConfiguration {
         this.openFlags = openFlags;
 
         // Set default values for optional parameters.
+        synchronousMode = SQLiteDatabase.SYNCHRONOUS_FULL;
         maxSqlCacheSize = 25;
         locale = Locale.getDefault();
         vfsName = (openFlags & SQLiteDatabase.ENABLE_IO_TRACE) != 0 ? "vfslog" : null;
@@ -156,6 +159,7 @@ public final class SQLiteDatabaseConfiguration {
         locale = other.locale;
         foreignKeyConstraintsEnabled = other.foreignKeyConstraintsEnabled;
         customWALHookEnabled = other.customWALHookEnabled;
+        synchronousMode = other.synchronousMode;
         vfsName = other.vfsName;
         customFunctions.clear();
         customFunctions.addAll(other.customFunctions);
