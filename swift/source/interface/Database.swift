@@ -64,7 +64,6 @@ public class Database {
     }
     
     public func blockade() {
-        print("handle pool")
         handlePool.blockade()
     }
     
