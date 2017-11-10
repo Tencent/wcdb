@@ -98,9 +98,7 @@ extension Database {
         Configs.Config(named: DefaultConfigOrder.trace.description, with: { (handle: Handle) throws in
             //TODO:
         }, orderBy: DefaultConfigOrder.trace.rawValue),
-        Configs.Config(named: DefaultConfigOrder.cipher.description, with: { (handle: Handle) throws in
-            //TODO:
-        }, orderBy: DefaultConfigOrder.cipher.rawValue),
+        Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
             guard !handle.isReadonly else {
                 return
@@ -132,15 +130,11 @@ extension Database {
                 }
             }
         }, orderBy: DefaultConfigOrder.basic.rawValue),
-        Configs.Config(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
-            //TODO:
-        }, orderBy: DefaultConfigOrder.synchronous.rawValue),
+        Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description, orderBy: DefaultConfigOrder.synchronous.rawValue),
         Configs.Config(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
             //TODO:
         }, orderBy: DefaultConfigOrder.checkpoint.rawValue),
-        Configs.Config(named: DefaultConfigOrder.tokenize.description, with: { (handle: Handle) throws in
-            //TODO:
-        }, orderBy: DefaultConfigOrder.tokenize.rawValue)
+        Configs.Config(emptyConfigNamed: DefaultConfigOrder.tokenize.description, orderBy: DefaultConfigOrder.tokenize.rawValue)
     )
     
     public enum DefaultConfigOrder: Int, CustomStringConvertible {
@@ -205,6 +199,7 @@ extension Database: Core {
     public var path: String {
         return handlePool.path
     }
+    
     public var tag: Tag? {
         get {
             return handlePool.tag

@@ -30,12 +30,18 @@ public struct Configs {
         public typealias Order = Int
 
         let name: String
-        let callback: TaggedCallback
+        let callback: TaggedCallback?
         let order: Order
         
         init(named name: String, with callback: @escaping Callback, orderBy order: Order) {
             self.name = name
             self.callback = Tagged(callback)
+            self.order = order
+        }
+        
+        init(emptyConfigNamed name: String, orderBy order: Order) {
+            self.name = name
+            self.callback = nil
             self.order = order
         }
         
@@ -95,7 +101,10 @@ public struct Configs {
         let configs = self.configs
         do {
             for config in configs {
-                try config.callback.value(handle)
+                guard config.callback != nil else {
+                    continue
+                } 
+                try config.callback!.value(handle)
             }
         }catch let error {
             throw error
@@ -106,7 +115,10 @@ public struct Configs {
         let configs = self.configs
         for config in configs {
             if config.name == name {
-                return config.callback.value
+                guard config.callback != nil else {
+                    return nil
+                } 
+                return config.callback!.value
             }
         }
         return nil
