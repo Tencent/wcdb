@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Kind</key>
+	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
+	<key>Description</key>
+	<string>A WCTColumnCoding class.</string>
+	<key>Summary</key>
+	<string>A WCTColumnCoding class</string>
+	<key>SortOrder</key>
+	<string>1</string>
+	<key>DefaultCompletionName</key>
+	<string>MyClass</string>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.macosx</string>
+		<string>com.apple.platform.iphoneos</string>
+	</array>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Class</string>
+			<key>Description</key>
+			<string>Class</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>languageChoice</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Language:</string>
+			<key>Description</key>
+			<string>The implementation language</string>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Default</key>
+			<string>Objective-C</string>
+			<key>Values</key>
+			<array>
+				<string>Cpp</string>
+				<string>Objective-C</string>
+				<string>Swift</string>
+			</array>
+			<key>AllowedTypes</key>
+			<dict>
+				<key>Cpp</key>
+				<array>
+					<string>public.objective-c-plus-plus-source</string>
+				</array>
+				<key>Objective-C</key>
+				<array>
+					<string>public.objective-c-plus-plus-source</string>
+				</array>
+				<key>Swift</key>
+				<array>
+					<string>public.swift-source</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>DataType</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Type In DataBase</string>
+			<key>Description</key>
+			<string>Type In DataBase</string>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Default</key>
+			<string>Integer32</string>
+			<key>Values</key>
+			<array>
+				<string>Integer32</string>
+				<string>Integer64</string>
+				<string>Double</string>
+				<string>String</string>
+				<string>Binary</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
