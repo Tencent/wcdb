@@ -7,7 +7,7 @@
 > Please **remove all grey hint text before submitting**.
 >
 
-##对应的 WCDB 语言 ( The language of WCDB )
+## 对应的 WCDB 语言 ( The language of WCDB )
 
 > 如：Objective、Swift 或 Java
 >
