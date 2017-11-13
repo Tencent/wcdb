@@ -158,13 +158,10 @@ public class Error: Swift.Error, CustomStringConvertible {
         }
         
         public enum SystemCallOperation: Int {
-            case Lstat = 1
-            case Access = 2
-            case Remove = 3
-            case Link = 4
-            case Unlink = 5
-            case Mkdir = 6
-            case CreateDirectory = 7
+            case Remove = 257 // 1 + 1<<8 Swift not supported
+            case Link = 258
+            case CreateDirectory = 259
+            case GetFileSize = 260
         }
         
         public enum RepairOperation: Int {

@@ -27,3 +27,14 @@ extension String: TableOrSubqueryConvertible{
         return Subquery(withTable: self)
     }
 }
+
+//Path
+extension String {
+    var lastPathComponent: String {
+        return URL(fileURLWithPath: self).lastPathComponent
+    }
+
+    func stringByAppending(pathComponent: String) -> String {
+        return URL(fileURLWithPath: self).appendingPathComponent(pathComponent).path
+    }
+}

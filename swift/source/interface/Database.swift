@@ -294,18 +294,50 @@ extension Database: Core {
 
 extension Database {
     public static let subfixs: [String] = ["", "-wal", "-journal", "-shm"]
+    
     public var paths: [String] {
         return Database.subfixs.map({ (path) -> String in
             return self.path+path
         })
     }
+    
     public func removeFiles() throws {
         if !isBlockaded || isOpened {
             Error.warning("Removing files on an opened database may cause unknown results")
         }
         try File.remove(files: paths)
     }
-    //TODO: other file interface
+    
+    public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: [String]? = nil) throws {
+        try File.createDirectoryWithIntermediateDirectories(atPath: directory)
+        var recovers: [String] = []
+        let paths = self.paths + (extraFiles ?? [])
+        do {
+            for path in paths {
+                guard File.isExists(atPath: path) else {
+                    continue
+                }
+                let file = path.lastPathComponent
+                let newFile = directory.stringByAppending(pathComponent: file)
+                if File.isExists(atPath: newFile) {
+                    try File.remove(files: newFile)
+                }
+                try File.hardlink(atPath: file, toPath: newFile)
+                recovers.append(newFile)
+            }
+        }catch let error {
+            try? File.remove(files: recovers)
+            throw error
+        }
+        try? File.remove(files: paths)
+    }
+    
+    public func getFilesSize() throws -> UInt64 {
+        if !isBlockaded || isOpened {
+            Error.warning("Getting files size on an opened database may get incorrect results")
+        }
+        return try File.getSize(ofFiles: paths)
+    }
 }
 
 extension Database: InsertChainCallInterface {}
