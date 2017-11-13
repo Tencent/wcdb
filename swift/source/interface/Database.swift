@@ -97,9 +97,8 @@ extension Database {
     public typealias PerformanceTrace = Handle.PerformanceTrace
     public typealias SQLTrace = Handle.SQLTrace
 
-    //FIXME: nullable closure
-    static private var performanceTrace: Atomic<PerformanceTrace> = Atomic({ (_,_,_) in })
-    static private var sqlTrace: Atomic<SQLTrace> = Atomic({ (_) in })
+    static private var performanceTrace: Atomic<PerformanceTrace?> = Atomic(nil)
+    static private var sqlTrace: Atomic<SQLTrace?> = Atomic(nil)
     
     static func setGlobal(ofPerformanceTrace trace: @escaping PerformanceTrace) {
         performanceTrace.assign(trace)
@@ -115,8 +114,12 @@ extension Database {
     
     private static let defaultConfigs: Configs = Configs(
         Configs.Config(named: DefaultConfigOrder.trace.description, with: { (handle: Handle) throws in
-            handle.setTrace(forSQL: sqlTrace.raw)
-            handle.setTrace(forPerformance: performanceTrace.raw)
+            if sqlTrace.raw != nil {
+                handle.setTrace(forSQL: sqlTrace.raw!)
+            }
+            if performanceTrace.raw != nil {
+                handle.setTrace(forPerformance: performanceTrace.raw!)
+            }
         }, orderBy: DefaultConfigOrder.trace.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
