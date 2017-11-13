@@ -12,5 +12,5 @@ all:
 	fi;
 	rm -fR $(DESTINATION)
 	mkdir -p $(FILE_TEMPLATES)
-	ln -s $(SOURCE_DIR) $(DESTINATION)
+	cp -R $(SOURCE_DIR) $(DESTINATION)
 clean:
