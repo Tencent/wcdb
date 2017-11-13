@@ -45,7 +45,7 @@ extension AnyKeyPath: ColumnBindingRepresentable {
 //FIXME: refactor
 extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: ColumnCoding {
     public var name: String {
-        var propertyName: String? = nil
+        var propertyName: String! = nil
         
         var root = Root()
         var property = Value.WrappedType()
@@ -78,13 +78,13 @@ extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, V
             propertyName = child.label
         }
         assert(propertyName != nil)
-        return propertyName!
+        return propertyName
     }
 }
 
 extension WritableKeyPath where Root: TableCoding, Value: ColumnCoding {
     public var name: String {
-        var propertyName: String? = nil
+        var propertyName: String! = nil 
         
         var root = Root()
         root[keyPath: self] = Value()
@@ -114,6 +114,6 @@ extension WritableKeyPath where Root: TableCoding, Value: ColumnCoding {
             propertyName = child.label
         }
         assert(propertyName != nil)
-        return propertyName!
+        return propertyName
     }
 }
