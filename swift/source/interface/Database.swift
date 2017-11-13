@@ -94,9 +94,29 @@ extension Database {
         })
     }
 
+    public typealias PerformanceTrace = Handle.PerformanceTrace
+    public typealias SQLTrace = Handle.SQLTrace
+
+    //FIXME: nullable closure
+    static private var performanceTrace: Atomic<PerformanceTrace> = Atomic({ (_,_,_) in })
+    static private var sqlTrace: Atomic<SQLTrace> = Atomic({ (_) in })
+    
+    static func setGlobal(ofPerformanceTrace trace: @escaping PerformanceTrace) {
+        performanceTrace.assign(trace)
+    }
+    
+    static func setGlobal(ofSQLTrace trace: @escaping SQLTrace) {
+        sqlTrace.assign(trace)
+    }
+    
+    static func setGlobal(ofErrorReport errorReporter: @escaping Error.Reporter) {
+        Error.setReporter(errorReporter)
+    }
+    
     private static let defaultConfigs: Configs = Configs(
         Configs.Config(named: DefaultConfigOrder.trace.description, with: { (handle: Handle) throws in
-            //TODO:
+            handle.setTrace(forSQL: sqlTrace.raw)
+            handle.setTrace(forPerformance: performanceTrace.raw)
         }, orderBy: DefaultConfigOrder.trace.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
@@ -162,14 +182,18 @@ extension Database {
             }
         }
     }
+    
     public typealias Config = HandlePool.Config
     public typealias ConfigOrder = HandlePool.ConfigOrder
+    
     public func setConfig(named name: String, with callback: @escaping Config, orderBy order: ConfigOrder) {
         handlePool.setConfig(named: name, with: callback, orderBy: order)
     }
+    
     public func setConfig(named name: String, with callback: @escaping Config) {
         handlePool.setConfig(named: name, with: callback)
     }
+    
     public func setSynchronous(isFull: Bool) {
         if isFull {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
@@ -182,6 +206,12 @@ extension Database {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
             })
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: Database.defaultConfigs.config(by: DefaultConfigOrder.checkpoint.description)!)
+        }
+    }
+    
+    public func setPerformanceTrace(_ performanceTrace: @escaping PerformanceTrace) {
+        handlePool.setConfig(named: DefaultConfigOrder.trace.description) { (handle) in
+            handle.setTrace(forPerformance: performanceTrace)
         }
     }
 }
