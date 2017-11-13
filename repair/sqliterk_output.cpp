@@ -22,7 +22,11 @@
 #include <assert.h>
 #include <errno.h>
 #include <map>
+#ifdef WCDB_BUILTIN_SQLCIPHER
+#include <sqlcipher/sqlite3.h>
+#else //WCDB_BUILTIN_SQLCIPHER
 #include <sqlite3.h>
+#endif //WCDB_BUILTIN_SQLCIPHER
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

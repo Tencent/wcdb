@@ -35,7 +35,7 @@ public class Handle {
     }
     
     deinit {
-        try! close()
+        try? close()
     }
     
     private static var once: Void = {
@@ -93,12 +93,14 @@ public class Handle {
     public var isReadonly: Bool {
         return sqlite3_db_readonly(handle, nil)==1
     }
-    
+}
+
+//Cipher
+extension Handle {
     public func setCipher(key: Data) throws {
         #if WCDB_HAS_CODEC
-            var rc = SQLITE_OK
-            key.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Void in
-                rc = sqlite3_key(handle, bytes, Int32(key.count))
+            let rc = key.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Int32 in
+                return sqlite3_key(handle, bytes, Int32(key.count))
             })
             guard rc == SQLITE_OK else {
                 throw Error.reportSQLite(tag: tag, path: path, operation: .SetCipherKey, extendedError: sqlite3_extended_errcode(handle), rc: rc, message: String(cString: sqlite3_errmsg(handle)))
@@ -107,4 +109,76 @@ public class Handle {
             fatalError("[sqlite3_key] is not supported for current config")
         #endif
     }
+}
+
+//Repair
+extension Handle {
+    static let backupSubfix = "-backup"
+    
+    var backupPath: String {
+        return path+Handle.backupSubfix
+    }
+    
+    public func backup(withKey optionalKey: Data? = nil) throws {
+        var rc = SQLITE_OK
+        if let key = optionalKey {
+            key.withUnsafeBytes { (bytes: UnsafePointer<Int8>) -> Void in
+                rc = sqliterk_save_master(handle, path, bytes, Int32(key.count))
+            }            
+        }else {
+            rc = sqliterk_save_master(handle, path, nil, 0)
+        }
+        guard rc == SQLITERK_OK else {
+            throw Error.reportRepair(path: path, operation: .SaveMaster, code: Int(rc))
+        }
+    }
+    
+    public func recover(fromPath source: String, withPageSize pageSize: Int32, databaseKey optionalDatabaseKey: Data? = nil, backupKey optionalBackupKey: Data? = nil) throws {
+        var rc = SQLITERK_OK
+        
+        let backupPath = source+Handle.backupSubfix
+        
+        let kdfSalt = UnsafeMutablePointer<UInt8>.allocate(capacity: 16)
+        memset(kdfSalt, 0, 16)
+        
+        let backupBytes: UnsafeRawPointer? = optionalBackupKey?.withUnsafeBytes({ (bytes: UnsafePointer<UInt8>) -> UnsafeRawPointer in
+            return UnsafeRawPointer(bytes)
+        })
+        let backupSize: Int32 = Int32(optionalBackupKey?.count ?? 0)
+        
+        var info: OpaquePointer? = nil
+        
+        rc = sqliterk_load_master(backupPath, backupBytes, backupSize, nil, 0, &info, kdfSalt) 
+        guard rc == SQLITERK_OK else {
+            throw Error.reportRepair(path: backupPath, operation: .Repair, code: Int(rc))
+        }
+        
+        let databaseBytes: UnsafeRawPointer? = optionalDatabaseKey?.withUnsafeBytes({ (bytes: UnsafePointer<UInt8>) -> UnsafeRawPointer in
+            return UnsafeRawPointer(bytes)
+        })
+        let databaseSize: Int32 = Int32(optionalDatabaseKey?.count ?? 0)
+
+        var conf = sqliterk_cipher_conf()
+        conf.key = databaseBytes
+        conf.key_len = databaseSize
+        conf.page_size = pageSize
+        conf.kdf_salt = UnsafePointer(kdfSalt) 
+        conf.use_hmac = 1
+        
+        typealias sqliterk = OpaquePointer
+        var rk: sqliterk? = nil
+        rc = sqliterk_open(source, &conf, &rk)
+        guard rc == SQLITERK_OK else {
+            throw Error.reportRepair(path: source, operation: .Repair, code: Int(rc))
+        }
+        
+        rc = sqliterk_output(rk, handle, info, UInt32(SQLITERK_OUTPUT_ALL_TABLES))
+        guard rc == SQLITERK_OK else {
+            throw Error.reportRepair(path: source, operation: .Repair, code: Int(rc))
+        }
+    }
+}
+
+extension Handle {
+    static let subfixs: [String] = ["", "-wal", "-journal", "-shm", Handle.backupSubfix]
 }

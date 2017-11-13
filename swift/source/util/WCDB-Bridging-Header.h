@@ -18,5 +18,10 @@
  * limitations under the License.
  */
 
+#ifdef WCDB_BUILTIN_SQLCIPHER
+#define SQLITE_HAS_CODEC
+#endif //WCDB_BUILTIN_SQLCIPHER
+
 #import <sqlcipher/sqlite3.h>
-#import "SQLite-Bridging.h"
+#import <WCDB/SQLite-Bridging-Header.h>
+#import <WCDB/SQLiteRepairKit.h>

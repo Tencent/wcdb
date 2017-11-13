@@ -292,12 +292,15 @@ extension Database: Core {
     }
 }
 
+//File
 extension Database {
-    public static let subfixs: [String] = ["", "-wal", "-journal", "-shm"]
+    public static var subfixs: [String] {
+        return Handle.subfixs
+    }
     
     public var paths: [String] {
-        return Database.subfixs.map({ (path) -> String in
-            return self.path+path
+        return Database.subfixs.map({ (subfix) -> String in
+            return path+subfix
         })
     }
     
@@ -337,6 +340,19 @@ extension Database {
             Error.warning("Getting files size on an opened database may get incorrect results")
         }
         return try File.getSize(ofFiles: paths)
+    }
+}
+
+//Repair
+extension Database {
+    public func backup(withKey key: Data? = nil) throws {
+        let handle = try flowOut() 
+        try handle.raw.handle.backup(withKey: key)        
+    }
+    
+    public func recover(fromPath source: String, withPageSize pageSize: Int32, databaseKey: Data? = nil, backupKey: Data? = nil) throws {
+        let handle = try flowOut()
+        try handle.raw.handle.recover(fromPath: source, withPageSize: pageSize, databaseKey: databaseKey, backupKey: backupKey)
     }
 }
 

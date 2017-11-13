@@ -336,7 +336,7 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
     rc = sqliterk_open(corruptedDBPath.c_str(), &conf, &rk);
     if (rc != SQLITERK_OK) {
         Error::ReportRepair(
-            backupPath, WCDB::Error::RepairOperation::LoadMaster, rc, &m_error);
+            corruptedDBPath, WCDB::Error::RepairOperation::Repair, rc, &m_error);
         return false;
     }
 

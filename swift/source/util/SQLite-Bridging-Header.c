@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "SQLite-Bridging.h"
+#include <SQLite-Bridging-Header.h>
 #include <sqlcipher/sqlite3.h>
 
 int sqlite3_bind_text_transient(sqlite3_stmt* a, int b, const char* c, int d)
