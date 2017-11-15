@@ -75,9 +75,6 @@ public:
             *piPosition = m_position++;
 
             m_offset += used;
-
-            printf("t %s\n", std::string(*ppToken, *pnBytes).c_str());
-
             return SQLITE_OK;
         }
         return SQLITE_DONE;
