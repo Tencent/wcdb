@@ -20,11 +20,11 @@
 
 import Foundation
 
-public class WCDBTokenizerInfo: FTSTokenizerInfo {
+public class WCDBTokenizerInfo: TokenizerInfoBase {
     public required init(withArgc argc: Int32, andArgv argv: UnsafePointer<UnsafePointer<Int8>?>?) {}
 }
 
-public class WCDBCursorInfo: FTSCursorInfo {
+public class WCDBCursorInfo: CursorInfoBase {
     enum TokenType: UInt {
         case basicMultilingualPlaneLetter = 0x00000001
         case basicMultilingualPlaneDigit = 0x00000002
@@ -64,7 +64,7 @@ public class WCDBCursorInfo: FTSCursorInfo {
     var buffer: [UInt8] = []
     var bufferLength: Int32 = 0
     
-    public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: FTSTokenizerInfo) {
+    public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: TokenizerInfoBase) {
         input = pInput
         inputLength = count
     }
@@ -294,7 +294,7 @@ public class WCDBCursorInfo: FTSCursorInfo {
     }
 }
 
-public class WCDBModule: FTSModule {
+public class WCDBModule: Module {
     public typealias TokenizerInfo = WCDBTokenizerInfo
     public typealias CursorInfo = WCDBCursorInfo
     
@@ -321,6 +321,6 @@ public class WCDBModule: FTSModule {
     public static let address = Data(bytes: &module, count: MemoryLayout<UnsafePointer<sqlite3_tokenizer_module>>.size)
 }
 
-extension FTSDefinedModule {
-    public static let WCDB = FTSDefinedModule(module: WCDBModule.self)
+extension Tokenize {
+    public static let WCDB = Tokenize(module: WCDBModule.self)
 }

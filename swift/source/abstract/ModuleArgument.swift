@@ -19,6 +19,11 @@
  */
 
 import Foundation
+
+public enum FTSModule: String {
+    case fts3 = "fts3"
+}
+
 public class ModuleArgument: Describable {
     public init(with tableConstraint: TableConstraint) {
         super.init(tableConstraint.description)
@@ -32,7 +37,7 @@ public class ModuleArgument: Describable {
         super.init("\(left)=\(right)")
     }
     
-    public convenience init(withTokenize tokenize: String) {
-        self.init(left: "tokenize", right: tokenize)
+    public convenience init(withTokenize tokenize: Tokenize) {
+        self.init(left: "tokenize", right: tokenize.module.name)
     }
 }

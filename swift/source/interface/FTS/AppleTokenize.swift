@@ -20,18 +20,18 @@
 
 import Foundation
 
-public class AppleTokenizerInfo: FTSTokenizerInfo {
+public class AppleTokenizerInfo: TokenizerInfoBase {
     public required init(withArgc argc: Int32, andArgv argv: UnsafePointer<UnsafePointer<Int8>?>?) {}
 }
 
-public class AppleCursorInfo: FTSCursorInfo {
+public class AppleCursorInfo: CursorInfoBase {
     let input: String
     let tokenizer: CFStringTokenizer
     var offset: Int32 = 0
     var position: Int32 = 0
     var buffer: [UInt8] = [] 
     
-    public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: FTSTokenizerInfo) { 
+    public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: TokenizerInfoBase) { 
         input = pInput != nil ? (String(bytes: pInput!, count: Int(count), encoding: String.Encoding.utf8) ?? "") : ""
         tokenizer = CFStringTokenizerCreate(kCFAllocatorDefault, input as CFString, CFRangeMake(0, input.count), kCFStringTokenizerUnitWord, CFLocaleCopyCurrent())
     }
@@ -76,7 +76,7 @@ public class AppleCursorInfo: FTSCursorInfo {
     }
 }
 
-public class AppleModule: FTSModule {   
+public class AppleModule: Module {   
     public typealias TokenizerInfo = AppleTokenizerInfo
     public typealias CursorInfo = AppleCursorInfo
     public static let name = "Apple"
@@ -102,6 +102,6 @@ public class AppleModule: FTSModule {
     public static let address = Data(bytes: &module, count: MemoryLayout<UnsafePointer<sqlite3_tokenizer_module>>.size)
 }
 
-extension FTSDefinedModule {
-    public static let Apple = FTSDefinedModule(module: AppleModule.self)
+extension Tokenize {
+    public static let Apple = Tokenize(module: AppleModule.self)
 }

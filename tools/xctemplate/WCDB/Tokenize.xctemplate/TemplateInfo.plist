@@ -5,13 +5,13 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A WCTTokenizer class.</string>
+	<string>A Tokenize class.</string>
 	<key>Summary</key>
-	<string>A WCTTokenizer class</string>
+	<string>A Tokenize class</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>DefaultCompletionName</key>
-	<string>MyTokenizer</string>
+	<string>MyTokenize</string>
 	<key>Platforms</key>
 	<array>
 		<string>com.apple.platform.macosx</string>
@@ -25,9 +25,9 @@
 			<key>Required</key>
 			<true/>
 			<key>Name</key>
-			<string>Tokenizer Name</string>
+			<string>Tokenize Name</string>
 			<key>Description</key>
-			<string>Tokenizer Name</string>
+			<string>Tokenize Name</string>
 			<key>Type</key>
 			<string>text</string>
 			<key>NotPersisted</key>

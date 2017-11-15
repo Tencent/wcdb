@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		230AE40D1FB53F5900ABB2C9 /* SampleConvenient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230AE40C1FB53F5900ABB2C9 /* SampleConvenient.swift */; };
 		230AE4101FB53F6400ABB2C9 /* sample_convenient_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230AE40F1FB53F6400ABB2C9 /* sample_convenient_main.swift */; };
+		230DD60C1FBC602700795D22 /* SampleFTSOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD60B1FBC602700795D22 /* SampleFTSOrigin.swift */; };
+		230DD60E1FBC602F00795D22 /* SampleFTSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD60D1FBC602F00795D22 /* SampleFTSData.swift */; };
+		230DD6101FBC603600795D22 /* sample_fts_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD60F1FBC603600795D22 /* sample_fts_main.swift */; };
 		232D622E1FB4738E00BD479B /* SampleORMColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232D622D1FB4738E00BD479B /* SampleORMColumnConstraint.swift */; };
 		232D62301FB474BC00BD479B /* SampleORMTableConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232D622F1FB474BC00BD479B /* SampleORMTableConstraint.swift */; };
 		232D62331FB476B000BD479B /* sample_chaincall_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232D62321FB476B000BD479B /* sample_chaincall_main.swift */; };
@@ -62,6 +65,9 @@
 /* Begin PBXFileReference section */
 		230AE40C1FB53F5900ABB2C9 /* SampleConvenient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleConvenient.swift; sourceTree = "<group>"; };
 		230AE40F1FB53F6400ABB2C9 /* sample_convenient_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_convenient_main.swift; sourceTree = "<group>"; };
+		230DD60B1FBC602700795D22 /* SampleFTSOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleFTSOrigin.swift; sourceTree = "<group>"; };
+		230DD60D1FBC602F00795D22 /* SampleFTSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleFTSData.swift; sourceTree = "<group>"; };
+		230DD60F1FBC603600795D22 /* sample_fts_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_fts_main.swift; sourceTree = "<group>"; };
 		232D622D1FB4738E00BD479B /* SampleORMColumnConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleORMColumnConstraint.swift; sourceTree = "<group>"; };
 		232D622F1FB474BC00BD479B /* SampleORMTableConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleORMTableConstraint.swift; sourceTree = "<group>"; };
 		232D62321FB476B000BD479B /* sample_chaincall_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_chaincall_main.swift; sourceTree = "<group>"; };
@@ -96,6 +102,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		230DD6071FBC5FF900795D22 /* fts */ = {
+			isa = PBXGroup;
+			children = (
+				230DD60F1FBC603600795D22 /* sample_fts_main.swift */,
+				230DD60B1FBC602700795D22 /* SampleFTSOrigin.swift */,
+				230DD60D1FBC602F00795D22 /* SampleFTSData.swift */,
+			);
+			path = fts;
+			sourceTree = "<group>";
+		};
 		232D62311FB476A400BD479B /* chaincall */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +133,7 @@
 		232F7AD51FB193100093372C = {
 			isa = PBXGroup;
 			children = (
+				230DD6071FBC5FF900795D22 /* fts */,
 				237BC5871FB54A57006ECEBB /* advance */,
 				237BC5881FB54A57006ECEBB /* core */,
 				237BC5861FB54A57006ECEBB /* transaction */,
@@ -273,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				232D622E1FB4738E00BD479B /* SampleORMColumnConstraint.swift in Sources */,
+				230DD60E1FBC602F00795D22 /* SampleFTSData.swift in Sources */,
 				235CAEF01FB5580D003039F0 /* SampleColumnCoding+ColumnCoding.swift in Sources */,
 				230AE40D1FB53F5900ABB2C9 /* SampleConvenient.swift in Sources */,
 				235CAEFB1FB584FC003039F0 /* sample_core_main.swift in Sources */,
@@ -282,9 +300,11 @@
 				232F7AED1FB1936E0093372C /* SampleORM.swift in Sources */,
 				232F7AEC1FB1936E0093372C /* main.swift in Sources */,
 				232F7AEE1FB1936E0093372C /* sample_orm_main.swift in Sources */,
+				230DD6101FBC603600795D22 /* sample_fts_main.swift in Sources */,
 				232D62331FB476B000BD479B /* sample_chaincall_main.swift in Sources */,
 				232D62301FB474BC00BD479B /* SampleORMTableConstraint.swift in Sources */,
 				235CAEE61FB55679003039F0 /* SampleAdvance.swift in Sources */,
+				230DD60C1FBC602700795D22 /* SampleFTSOrigin.swift in Sources */,
 				235CAEEC1FB55693003039F0 /* sample_advance_main.swift in Sources */,
 				232F7AFC1FB193BD0093372C /* SampleORMIndex.swift in Sources */,
 				230AE4101FB53F6400ABB2C9 /* sample_convenient_main.swift in Sources */,

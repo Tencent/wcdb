@@ -19,15 +19,29 @@
  */
 
 import Foundation
+import WCDB
 
-public class VirtualTableBinding : AnyBinding {
-    let arguments: [ModuleArgument]
-    let module: String
+class SampleFTSData: WCDB.TableCoding {
+    var name: String? = nil
+    var content: String? = nil
     
-    public init(withModule module: String, and arguments: [ModuleArgument]) {
-        self.module = module
-        self.arguments = arguments
-        super.init(with: .VirtualTable)
-    }
+    required init() {}
+
+    //WCDB
+    static var objectRelationalMapping: TableBinding = TableBinding(SampleFTSData.self)
 }
 
+//WCDB
+extension SampleFTSData {
+    static func columnBindings() -> [AnyColumnBinding] {
+        return [
+            ColumnBinding(\SampleFTSData.name),
+            ColumnBinding(\SampleFTSData.content)]
+    }
+    
+    static func virtualTableBinding() -> VirtualTableBinding? {
+        return VirtualTableBinding(withModule: FTSModule.fts3.rawValue, and: [
+            ModuleArgument(withTokenize: .WCDB)
+            ])
+    }
+}

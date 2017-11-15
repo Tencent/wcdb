@@ -35,7 +35,7 @@ public protocol TableCoding {
     static var allProperties: [Property] {get}
     static var anyProperty: Property {get}
     static var magicNumber: Int32 {get}
-    static func column(named name: String) -> Column
+    static func property(named name: String) -> Property
     static func property(fromAccessor accessor: AnyKeyPath) -> Property
 }
 
@@ -52,8 +52,8 @@ extension TableCoding {
         return 0x539D7C2
     }
     
-    public static func column(named name: String) -> Column {
-        return Column(named: name)
+    public static func property(named name: String) -> Property {
+        return Property(named: name)
     }
     
     public static func indexBindings() -> [IndexBinding]? {

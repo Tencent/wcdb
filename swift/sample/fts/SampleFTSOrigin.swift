@@ -19,15 +19,28 @@
  */
 
 import Foundation
+import WCDB
 
-public class VirtualTableBinding : AnyBinding {
-    let arguments: [ModuleArgument]
-    let module: String
+class SampleFTSOrigin: WCDB.TableCoding {
+    var localID: Int? = nil
+    var name: String? = nil
+    var content: String? = nil
     
-    public init(withModule module: String, and arguments: [ModuleArgument]) {
-        self.module = module
-        self.arguments = arguments
-        super.init(with: .VirtualTable)
-    }
+    required init() {}
+
+    //WCDB
+    static var objectRelationalMapping: TableBinding = TableBinding(SampleFTSOrigin.self)
+
+    var isAutoIncrement: Bool = false
+    var lastInsertedRowID: Int64 = 0
 }
 
+//WCDB
+extension SampleFTSOrigin {
+    static func columnBindings() -> [AnyColumnBinding] {
+        return [
+            ColumnBinding(\SampleFTSOrigin.localID, isPrimary: true, isAutoIncrement: true),
+            ColumnBinding(\SampleFTSOrigin.name),
+            ColumnBinding(\SampleFTSOrigin.content)]
+    }
+}

@@ -248,14 +248,14 @@ extension Database {
         }
     }
     
-    public func setTokenizes(_ definedModules: FTSDefinedModule...) {
-        setTokenizes(definedModules)
+    public func setTokenizes(_ tokenizes: Tokenize...) {
+        setTokenizes(tokenizes)
     }
     
-    public func setTokenizes(_ definedModules: [FTSDefinedModule]) {
+    public func setTokenizes(_ tokenizes: [Tokenize]) {
         handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
-            for definedModule in definedModules {
-                let module = definedModule.module
+            for tokenize in tokenizes {
+                let module = tokenize.module
                 let handleStatement = try handle.prepare(StatementSelect.fts3Tokenizer)
                 handleStatement.bind(module.name, toIndex: 1)
                 handleStatement.bind(module.address, toIndex: 2)

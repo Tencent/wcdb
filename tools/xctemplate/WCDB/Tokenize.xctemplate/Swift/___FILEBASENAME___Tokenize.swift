@@ -3,7 +3,7 @@
 import Foundation
 import WCDB
 
-public class ___VARIABLE_productName___TokenizerInfo: FTSTokenizerInfo {
+public class ___VARIABLE_productName___TokenizerInfo: TokenizerInfoBase {
     /* <#Your Tokenizer Info#> */
 
     public required init(withArgc argc: Int32, andArgv argv: UnsafePointer<UnsafePointer<Int8>?>?) {
@@ -11,10 +11,10 @@ public class ___VARIABLE_productName___TokenizerInfo: FTSTokenizerInfo {
     }
 }
 
-public class ___VARIABLE_productName___CursorInfo: FTSCursorInfo {
+public class ___VARIABLE_productName___CursorInfo: CursorInfoBase {
     /* <#Your Cursor Info#> */
 
-    public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: FTSTokenizerInfo) {
+    public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: TokenizerInfoBase) {
         /* <#Init Your Cursor Info#> */
     }
     
@@ -30,7 +30,7 @@ public class ___VARIABLE_productName___CursorInfo: FTSCursorInfo {
     }
 }
 
-public class ___VARIABLE_productName___Module: FTSModule {
+public class ___VARIABLE_productName___Module: Module {
     public typealias TokenizerInfo = ___VARIABLE_productName___TokenizerInfo
     public typealias CursorInfo = ___VARIABLE_productName___CursorInfo
     
@@ -57,7 +57,7 @@ public class ___VARIABLE_productName___Module: FTSModule {
     public static let address = Data(bytes: &module, count: MemoryLayout<UnsafePointer<sqlite3_tokenizer_module>>.size)
 }
 
-extension FTSDefinedModule {
-    public static let ___VARIABLE_productName___ = FTSDefinedModule(module: ___VARIABLE_productName___Module.self)
+extension Tokenize {
+    public static let ___VARIABLE_productName___ = Tokenize(module: ___VARIABLE_productName___Module.self)
 }
 

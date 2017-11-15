@@ -22,7 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230686DB1FAC0E5B0005EE8B /* Convertible.swift */; };
-		230DD5E51FBC29B400795D22 /* WCDBTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD5E41FBC29B400795D22 /* WCDBTokenizer.swift */; };
+		230DD5E51FBC29B400795D22 /* WCDBTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD5E41FBC29B400795D22 /* WCDBTokenize.swift */; };
 		2330329F1FB9479400101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330328C1FB9479400101373 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233032A01FB9479400101373 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 2330328D1FB9479400101373 /* sqliterk.c */; };
 		233032A11FB9479400101373 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330328E1FB9479400101373 /* sqliterk.h */; };
@@ -104,8 +104,8 @@
 		238D0BCD1FAB1F7E00BC2659 /* SQLite-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 238D0B701FAB1F7E00BC2659 /* SQLite-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B711FAB1F7E00BC2659 /* Tagged.swift */; };
 		238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */; };
-		23A00CD91FBAF82B000180A8 /* FTSTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* FTSTokenizer.swift */; };
-		23A00CE21FBB133B000180A8 /* AppleTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CE11FBB133B000180A8 /* AppleTokenizer.swift */; };
+		23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* Tokenize.swift */; };
+		23A00CE21FBB133B000180A8 /* AppleTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CE11FBB133B000180A8 /* AppleTokenize.swift */; };
 		23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A1FF6E1FB084570023527D /* sqlcipher.framework */; };
 		23B816481FB2BC0A00B046E9 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B816471FB2BC0A00B046E9 /* Optional.swift */; };
 		23E737C41FB1601C00EEBC3D /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C31FB1601C00EEBC3D /* Master.swift */; };
@@ -167,7 +167,7 @@
 
 /* Begin PBXFileReference section */
 		230686DB1FAC0E5B0005EE8B /* Convertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convertible.swift; sourceTree = "<group>"; };
-		230DD5E41FBC29B400795D22 /* WCDBTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCDBTokenizer.swift; sourceTree = "<group>"; };
+		230DD5E41FBC29B400795D22 /* WCDBTokenize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCDBTokenize.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2330328C1FB9479400101373 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
 		2330328D1FB9479400101373 /* sqliterk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk.c; sourceTree = "<group>"; };
@@ -251,8 +251,8 @@
 		238D0B701FAB1F7E00BC2659 /* SQLite-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLite-Bridging-Header.h"; sourceTree = "<group>"; };
 		238D0B711FAB1F7E00BC2659 /* Tagged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tagged.swift; sourceTree = "<group>"; };
 		238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
-		23A00CD81FBAF82B000180A8 /* FTSTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FTSTokenizer.swift; sourceTree = "<group>"; };
-		23A00CE11FBB133B000180A8 /* AppleTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleTokenizer.swift; sourceTree = "<group>"; };
+		23A00CD81FBAF82B000180A8 /* Tokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenize.swift; sourceTree = "<group>"; };
+		23A00CE11FBB133B000180A8 /* AppleTokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleTokenize.swift; sourceTree = "<group>"; };
 		23A1FF691FB084570023527D /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		23B816471FB2BC0A00B046E9 /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
@@ -371,7 +371,7 @@
 		238D0B121FAB1F7E00BC2659 /* abstract */ = {
 			isa = PBXGroup;
 			children = (
-				23A00CD81FBAF82B000180A8 /* FTSTokenizer.swift */,
+				23A00CD81FBAF82B000180A8 /* Tokenize.swift */,
 				230686DB1FAC0E5B0005EE8B /* Convertible.swift */,
 				238D0B131FAB1F7E00BC2659 /* Column.swift */,
 				238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */,
@@ -458,8 +458,8 @@
 		23A00CE01FBB133B000180A8 /* FTS */ = {
 			isa = PBXGroup;
 			children = (
-				23A00CE11FBB133B000180A8 /* AppleTokenizer.swift */,
-				230DD5E41FBC29B400795D22 /* WCDBTokenizer.swift */,
+				23A00CE11FBB133B000180A8 /* AppleTokenize.swift */,
+				230DD5E41FBC29B400795D22 /* WCDBTokenize.swift */,
 			);
 			path = FTS;
 			sourceTree = "<group>";
@@ -682,7 +682,7 @@
 				238D0B8D1FAB1F7E00BC2659 /* StatementCreateVirtualTable.swift in Sources */,
 				23EB203E1FB068CE00357ED1 /* Select.swift in Sources */,
 				233032AB1FB9479400101373 /* sqliterk_output.cpp in Sources */,
-				23A00CD91FBAF82B000180A8 /* FTSTokenizer.swift in Sources */,
+				23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */,
 				23E737C41FB1601C00EEBC3D /* Master.swift in Sources */,
 				238D0B9B1FAB1F7E00BC2659 /* StatementUpdate.swift in Sources */,
 				238D0BC71FAB1F7E00BC2659 /* Error.swift in Sources */,
@@ -691,7 +691,7 @@
 				23EB20371FB068CE00357ED1 /* Declare.swift in Sources */,
 				23EB202F1FB068CE00357ED1 /* MultiUniqueBinding.swift in Sources */,
 				238D0B931FAB1F7E00BC2659 /* StatementInsert.swift in Sources */,
-				230DD5E51FBC29B400795D22 /* WCDBTokenizer.swift in Sources */,
+				230DD5E51FBC29B400795D22 /* WCDBTokenize.swift in Sources */,
 				23EB202B1FB068CE00357ED1 /* ColumnBinding.swift in Sources */,
 				238D0B9F1FAB1F7E00BC2659 /* Array.swift in Sources */,
 				238D0B9C1FAB1F7E00BC2659 /* StatementVacuum.swift in Sources */,
@@ -707,7 +707,7 @@
 				238D0B7E1FAB1F7E00BC2659 /* Expression.swift in Sources */,
 				238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */,
 				238D0B9E1FAB1F7E00BC2659 /* TableConstraint.swift in Sources */,
-				23A00CE21FBB133B000180A8 /* AppleTokenizer.swift in Sources */,
+				23A00CE21FBB133B000180A8 /* AppleTokenize.swift in Sources */,
 				23EB20261FB068CE00357ED1 /* Core.swift in Sources */,
 				23EB20271FB068CE00357ED1 /* CoreStatement.swift in Sources */,
 				238D0BCA1FAB1F7E00BC2659 /* Recyclable.swift in Sources */,

@@ -20,17 +20,17 @@
 
 import Foundation
 
-public protocol FTSTokenizerInfo: AnyObject {
+public protocol TokenizerInfoBase: AnyObject {
     init(withArgc argc: Int32, andArgv argv: UnsafePointer<UnsafePointer<Int8>?>?) 
 }
 
-public protocol FTSCursorInfo: AnyObject {
-    init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: FTSTokenizerInfo)     
+public protocol CursorInfoBase: AnyObject {
+    init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: TokenizerInfoBase)     
     
     func step(pToken: inout UnsafePointer<Int8>?, count: inout Int32, startOffset: inout Int32, endOffset: inout Int32, position: inout Int32) -> Int32 
 }
 
-public protocol FTSModuleBase {
+public protocol ModuleBase {
     static var name: String {get}
     
     static var module: sqlite3_tokenizer_module {get}
@@ -48,13 +48,13 @@ public protocol FTSModuleBase {
     static func next(pCursor optionalCursorPointer: UnsafeMutablePointer<sqlite3_tokenizer_cursor>?, ppToken: UnsafeMutablePointer<UnsafePointer<Int8>?>?, pnBytes: UnsafeMutablePointer<Int32>?, piStartOffset: UnsafeMutablePointer<Int32>?, piEndOffset: UnsafeMutablePointer<Int32>?, piPosition: UnsafeMutablePointer<Int32>?) -> Int32 
 }
 
-public protocol FTSModule: FTSModuleBase {
-    associatedtype TokenizerInfo: FTSTokenizerInfo
+public protocol Module: ModuleBase {
+    associatedtype TokenizerInfo: TokenizerInfoBase
     
-    associatedtype CursorInfo: FTSCursorInfo
+    associatedtype CursorInfo: CursorInfoBase
 } 
 
-extension FTSModule {
+extension Module {
     public static func create(argc: Int32, argv: UnsafePointer<UnsafePointer<Int8>?>?, ppTokenizer: UnsafeMutablePointer<UnsafeMutablePointer<sqlite3_tokenizer>?>?) -> Int32 {
         let tokenizerSize = MemoryLayout<Tokenizer>.size
         let optionalTokenizerPointer = sqlite3_malloc(Int32(tokenizerSize))
@@ -129,6 +129,6 @@ extension FTSModule {
     }
 }
 
-public struct FTSDefinedModule {
-    let module: FTSModuleBase.Type
+public struct Tokenize {    
+    let module: ModuleBase.Type
 }
