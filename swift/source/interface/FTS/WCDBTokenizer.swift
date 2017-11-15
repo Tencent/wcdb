@@ -223,15 +223,15 @@ public class WCDBCursorInfo: FTSCursorInfo {
                     return SQLITE_DONE
                 }
                 
-                let type = cursorTokenType!
-                switch type {
+                let tokenType = cursorTokenType!
+                switch tokenType {
                 case .basicMultilingualPlaneLetter:
                     fallthrough
                 case .basicMultilingualPlaneDigit:
                     self.startOffset = self.cursor
                     repeat {
                         rc = cursorStep()
-                    }while(rc == SQLITE_OK && cursorTokenType == type)
+                    }while(rc == SQLITE_OK && cursorTokenType == tokenType)
                     guard rc == SQLITE_OK else {
                         return rc
                     }
@@ -244,7 +244,7 @@ public class WCDBCursorInfo: FTSCursorInfo {
                     self.subTokensCursor = self.cursor
                     self.subTokensDoubleChar = true
                     rc = cursorStep()
-                    while rc == SQLITE_OK && self.cursorTokenType == type {
+                    while rc == SQLITE_OK && self.cursorTokenType == tokenType {
                         self.subTokensLengthArray.append(UInt8(cursorTokenLength))
                         rc = cursorStep()
                     }
@@ -254,7 +254,7 @@ public class WCDBCursorInfo: FTSCursorInfo {
                     subTokensStep()
                 default: break
                 }
-                if type == .basicMultilingualPlaneLetter {
+                if tokenType == .basicMultilingualPlaneLetter {
                     rc = lemmatization(input: input.advanced(by: Int(self.startOffset)), inputLength: self.bufferLength)
                     guard rc == SQLITE_OK else {
                         return rc
