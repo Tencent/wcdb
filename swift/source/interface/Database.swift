@@ -217,6 +217,23 @@ extension Database {
             handle.setTrace(forPerformance: performanceTrace)
         }
     }
+    
+    public func setTokenizes(_ definedModules: FTSDefinedModule...) {
+        setTokenizes(definedModules)
+    }
+    
+    public func setTokenizes(_ definedModules: [FTSDefinedModule]) {
+        handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
+            for definedModule in definedModules {
+                let module = definedModule.module
+                let handleStatement = try handle.prepare(StatementSelect.fts3Tokenizer)
+                handleStatement.bind(module.name, toIndex: 1)
+                handleStatement.bind(module.address, toIndex: 2)
+                try handleStatement.step()
+                try handleStatement.finalize()
+            }
+        }
+    }
 }
 
 //Basic

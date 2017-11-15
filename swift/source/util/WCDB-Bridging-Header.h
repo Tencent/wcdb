@@ -22,6 +22,5 @@
 #define SQLITE_HAS_CODEC
 #endif //WCDB_BUILTIN_SQLCIPHER
 
-#import <sqlcipher/sqlite3.h>
 #import <WCDB/SQLite-Bridging-Header.h>
 #import <WCDB/SQLiteRepairKit.h>

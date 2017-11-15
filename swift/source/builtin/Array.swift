@@ -135,3 +135,18 @@ extension Array where Element==PropertyConvertible {
         })
     }
 }
+
+extension Array {
+    mutating func expand(toNewSize newSize: IndexDistance, fillWith value: Iterator.Element) {
+        if count < newSize {
+            append(contentsOf: repeatElement(value, count: count.distance(to: newSize)))
+        } 
+    }
+}
+
+extension Array where Iterator.Element: FixedWidthInteger {
+    mutating func expand(toNewSize newSize: IndexDistance) {
+        self.expand(toNewSize: newSize, fillWith: 0)
+    }
+}
+

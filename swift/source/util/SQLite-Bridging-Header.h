@@ -21,6 +21,21 @@
 #ifndef SQLite_Bridging_h
 #define SQLite_Bridging_h
 
+#import <sqlcipher/sqlite3.h>
+#import <sqlcipher/fts3_tokenizer.h>
+
+struct Tokenizer {
+    sqlite3_tokenizer base;
+    void *info;
+};
+typedef struct Tokenizer Tokenizer;
+
+struct Cursor {
+    sqlite3_tokenizer_cursor base;
+    void *info;
+};
+typedef struct Cursor Cursor;
+
 typedef struct sqlite3_stmt sqlite3_stmt;
 
 int sqlite3_bind_text_transient(sqlite3_stmt*,int,const char*,int);
