@@ -82,7 +82,7 @@ bool RWLock::tryLockWrite()
     if (m_writer > 0 || m_reader > 0) {
         return false;
     }
-    m_writer = true;
+    ++m_writer;
     return true;
 }
 
