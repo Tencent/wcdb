@@ -57,8 +57,8 @@ public protocol FTSModule: FTSModuleBase {
 extension FTSModule {
     public static func create(argc: Int32, argv: UnsafePointer<UnsafePointer<Int8>?>?, ppTokenizer: UnsafeMutablePointer<UnsafeMutablePointer<sqlite3_tokenizer>?>?) -> Int32 {
         let tokenizerSize = MemoryLayout<Tokenizer>.size
-        var optionalTokenizerPointer = sqlite3_malloc(Int32(tokenizerSize))
-        guard var tokenizerPointer = optionalTokenizerPointer else {
+        let optionalTokenizerPointer = sqlite3_malloc(Int32(tokenizerSize))
+        guard let tokenizerPointer = optionalTokenizerPointer else {
             return SQLITE_NOMEM
         }  
         memset(tokenizerPointer, 0, tokenizerSize)
@@ -67,11 +67,7 @@ extension FTSModule {
         let info = TokenizerInfo(withArgc: argc, andArgv: argv)
         tokenizer.info = Unmanaged.passRetained(info).toOpaque()
         
-        //FIXME: What's the right way?
-        func assign(_ p: UnsafeMutablePointer<sqlite3_tokenizer>?) {
-            ppTokenizer!.pointee = p
-        }
-        assign(&tokenizer.base)
+        ppTokenizer!.pointee = UnsafeMutablePointer<sqlite3_tokenizer>(&tokenizer.base)
         
         return SQLITE_OK
     }
@@ -95,22 +91,19 @@ extension FTSModule {
         }
         
         let cursorSize = MemoryLayout<Cursor>.size
-        var optionalCursorPointer = sqlite3_malloc(Int32(cursorSize))
-        guard var cursorPointer = optionalCursorPointer else {
+        let optionalCursorPointer = sqlite3_malloc(Int32(cursorSize))
+        guard let cursorPointer = optionalCursorPointer else {
             return SQLITE_NOMEM
         }
         memset(cursorPointer, 0, cursorSize)
         
-        var tokenizer = unsafeBitCast(pTokenizer, to: Tokenizer.self)
+        let tokenizer = unsafeBitCast(pTokenizer, to: Tokenizer.self)
         var cursor = unsafeBitCast(cursorPointer, to: Cursor.self)
         let tokenizerInfo = Unmanaged<TokenizerInfo>.fromOpaque(tokenizer.info).takeUnretainedValue()
         let cursorInfo = CursorInfo(withInput: pInput, count: bytes, tokenizerInfo: tokenizerInfo)
+        cursor.info = Unmanaged.passRetained(cursorInfo).toOpaque()
         
-        //FIXME: What's the right way?
-        func assign(_ p: UnsafeMutablePointer<sqlite3_tokenizer_cursor>?) {
-            ppCursor!.pointee = p
-        }
-        assign(&cursor.base)
+        ppCursor!.pointee = UnsafeMutablePointer<sqlite3_tokenizer_cursor>(&cursor.base)
         
         return SQLITE_OK
     }
