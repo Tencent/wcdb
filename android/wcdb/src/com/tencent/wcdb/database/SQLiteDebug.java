@@ -21,13 +21,17 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.util.Printer;
 
+import com.tencent.wcdb.support.Log;
+
 /**
  * Provides debugging info about all SQLite databases running in the current process.
  *
  * {@hide}
  */
 public final class SQLiteDebug {
-	
+
+    private static final String TAG = "WCDB.SQLiteDebug";
+
     private static native void nativeGetPagerStats(PagerStats stats);
     private static native int nativeGetLastErrorLine();
     private static native void nativeSetIOTraceFlags(int flags);
@@ -162,8 +166,8 @@ public final class SQLiteDebug {
     }
 
 
-    private static int sLastErrorLine;
-    private static ArrayList<IOTraceStats> sLastIOTraceStats;
+    private static volatile int sLastErrorLine;
+    private static volatile ArrayList<IOTraceStats> sLastIOTraceStats;
 
     public static int getLastErrorLine() {
         return sLastErrorLine;
@@ -174,29 +178,37 @@ public final class SQLiteDebug {
     }
 
     static void collectLastIOTraceStats(SQLiteConnection connection) {
-        sLastErrorLine = nativeGetLastErrorLine();
+        try {
+            sLastErrorLine = nativeGetLastErrorLine();
 
-        ArrayList<IOTraceStats> stats = new ArrayList<>();
-        long ptr = connection.getNativeHandle(null);
-        if (ptr != 0) {
-            nativeGetIOTraceStats(ptr, stats);
-            connection.endNativeHandle(null);
+            ArrayList<IOTraceStats> stats = new ArrayList<>();
+            long ptr = connection.getNativeHandle(null);
+            if (ptr != 0) {
+                nativeGetIOTraceStats(ptr, stats);
+                connection.endNativeHandle(null);
+            }
+
+            sLastIOTraceStats = stats;
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Cannot collect I/O trace statistics: " + e.getMessage());
         }
-
-        sLastIOTraceStats = stats;
     }
 
     static void collectLastIOTraceStats(SQLiteDatabase db) {
-        sLastErrorLine = nativeGetLastErrorLine();
+        try {
+            sLastErrorLine = nativeGetLastErrorLine();
 
-        ArrayList<IOTraceStats> stats = new ArrayList<>();
-        long ptr = db.acquireNativeConnectionHandle("collectIoStat", false, false);
-        if (ptr != 0) {
-            nativeGetIOTraceStats(ptr, stats);
+            ArrayList<IOTraceStats> stats = new ArrayList<>();
+            long ptr = db.acquireNativeConnectionHandle("collectIoStat", false, false);
+            if (ptr != 0) {
+                nativeGetIOTraceStats(ptr, stats);
+            }
+            db.releaseNativeConnection(ptr, null);
+
+            sLastIOTraceStats = stats;
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Cannot collect I/O trace statistics: " + e.getMessage());
         }
-        db.releaseNativeConnection(ptr, null);
-
-        sLastIOTraceStats = stats;
     }
 
 
