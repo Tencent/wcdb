@@ -121,6 +121,10 @@ public final class SQLiteConnectionPool implements Closeable {
     private final WeakHashMap<SQLiteConnection, AcquiredConnectionStatus> mAcquiredConnections =
             new WeakHashMap<>();
 
+    private static final int OPEN_FLAG_REOPEN_MASK =
+            SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS |
+            SQLiteDatabase.CREATE_IF_NECESSARY;
+
     /**
      * Connection flag: Read-only.
      * <p>
@@ -310,7 +314,7 @@ public final class SQLiteConnectionPool implements Closeable {
                 }
             }
 
-            if (mConfiguration.openFlags != configuration.openFlags ||
+            if (((mConfiguration.openFlags ^ configuration.openFlags) & OPEN_FLAG_REOPEN_MASK) != 0 ||
                     !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName)) {
                 // If we are changing open flags and WAL mode at the same time, then
                 // we have no choice but to close the primary connection beforehand

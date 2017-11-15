@@ -169,9 +169,9 @@ static jlong nativeOpen(JNIEnv *env,
     int sqliteFlags;
     if (openFlags & SQLiteConnection::CREATE_IF_NECESSARY) {
         sqliteFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
-    } else if (openFlags & SQLiteConnection::OPEN_READONLY) {
-        sqliteFlags = SQLITE_OPEN_READONLY;
     } else {
+        // Try read/write mode even if OPEN_READONLY flag is set, 
+        // for compatibility to WAL.
         sqliteFlags = SQLITE_OPEN_READWRITE;
     }
 
@@ -194,7 +194,7 @@ static jlong nativeOpen(JNIEnv *env,
         return 0;
     }
     // Check that the database is really read/write when that is what we asked for.
-    if ((sqliteFlags & SQLITE_OPEN_READWRITE) &&
+    if (!(openFlags & SQLiteConnection::OPEN_READONLY) &&
         sqlite3_db_readonly(db, NULL)) {
         throw_sqlite3_exception(
             env, db, "Could not open the database in read/write mode.");

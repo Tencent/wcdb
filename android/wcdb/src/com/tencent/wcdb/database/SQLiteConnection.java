@@ -263,6 +263,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         setPageSize();
 
         // 4. Other initialization steps from original SQLiteConnection.
+        setReadOnlyFromConfiguration();
         setForeignKeyModeFromConfiguration();
         setWalModeFromConfiguration();
         setSyncModeFromConfiguration();
@@ -462,6 +463,14 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
     }
 
+    private void setReadOnlyFromConfiguration() {
+        // Currently, read-only flag can only be changed via reopening connection, so no operation
+        // needed for read/write connections.
+        if (mIsReadOnlyConnection) {
+            execute("PRAGMA query_only = 1", null, null);
+        }
+    }
+
     // Called by SQLiteConnectionPool only.
     void reconfigure(SQLiteDatabaseConfiguration configuration) {
         mOnlyAllowReadOnlyOperations = false;
@@ -476,10 +485,10 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
 
         // Remember what changed.
+        int openFlagsChanged = configuration.openFlags ^ mConfiguration.openFlags;
+        boolean walModeChanged = (openFlagsChanged & SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING) != 0;
         boolean foreignKeyModeChanged = configuration.foreignKeyConstraintsEnabled
                 != mConfiguration.foreignKeyConstraintsEnabled;
-        boolean walModeChanged = ((configuration.openFlags ^ mConfiguration.openFlags)
-                & SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING) != 0;
         boolean localeChanged = !configuration.locale.equals(mConfiguration.locale);
         boolean checkpointStrategyChanged = configuration.customWALHookEnabled
                 != mConfiguration.customWALHookEnabled;

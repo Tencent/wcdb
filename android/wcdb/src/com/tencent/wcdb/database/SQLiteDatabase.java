@@ -247,12 +247,6 @@ public final class SQLiteDatabase extends SQLiteClosable {
     public static final int ENABLE_IO_TRACE = 0x00000100;
 
     /**
-     * Open flag: Flag for {@link #openDatabase} that indicates no backup for database files is
-     * done when corruption is detected.
-     */
-    public static final int NO_CORRUPTION_BACKUP = 0x00000200;
-
-    /**
      * Open flag: Flag for {@link #openDatabase} to create the database file if it does not
      * already exist.
      */
@@ -282,7 +276,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
             DatabaseErrorHandler errorHandler) {
         mCursorFactory = cursorFactory;
         mErrorHandler = errorHandler != null ? errorHandler :
-                new DefaultDatabaseErrorHandler((openFlags & NO_CORRUPTION_BACKUP) != 0);
+                new DefaultDatabaseErrorHandler(true);
         mConfigurationLocked = new SQLiteDatabaseConfiguration(path, openFlags);
     }
 
@@ -2267,10 +2261,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
             // make sure this database has NO attached databases because sqlite's write-ahead-logging
             // doesn't work for databases with attached databases
             if (mHasAttachedDbsLocked) {
-//                if (Log.isLoggable(TAG, Log.DEBUG)) {
                 Log.i(TAG, "this database: " + mConfigurationLocked.label
                         + " has attached databases. can't  enable WAL.");
-//                }
                 return false;
             }
 
