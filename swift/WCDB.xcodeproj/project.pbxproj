@@ -854,6 +854,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "-D WCDB_HAS_CODEC -D DEBUG";
+				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D WCDB_HAS_CODEC -D DEBUG -D WCDB_IOS";
+				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D WCDB_HAS_CODEC -D DEBUG -D WCDB_IOS";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VALID_ARCHS = "armv7 arm64 x86_64";
@@ -923,6 +925,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "-D WCDB_HAS_CODEC -D DEBUG";
+				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D WCDB_HAS_CODEC -D DEBUG -D WCDB_IOS";
+				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D WCDB_HAS_CODEC -D DEBUG -D WCDB_IOS";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALID_ARCHS = "armv7 arm64 x86_64";

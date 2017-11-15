@@ -19,6 +19,9 @@
  */
 
 import Foundation
+#if WCDB_IOS
+import UIKit
+#endif //WCDB_IOS
 
 public class Database {
     private let recyclableHandlePool: RecyclableHandlePool
@@ -27,7 +30,23 @@ public class Database {
         self.init(withFileURL: URL(fileURLWithPath: path))
     }
     
+    #if WCDB_IOS
+    private static let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "WCDB-PurgeFreeHandle")
+    
+    private static let lazyObserver: Void = {
+        _ = NotificationCenter.default.addObserver(forName: .UIApplicationDidReceiveMemoryWarning,
+                                                   object: nil,
+                                                   queue: nil, 
+                                                   using: { (notification) in
+                                                    Database.purgeFreeHandleQueue.async {
+                                                        Database.purgeFreeHandlesInAllDatabase()
+                                                    }
+        })
+    }()
+    #endif //WCDB_IOS
+    
     public init(withFileURL url: URL) {
+        Database.lazyObserver
         //TODO: File protection
         self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path, defaultConfigs: Database.defaultConfigs)
     }

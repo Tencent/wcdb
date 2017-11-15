@@ -56,7 +56,7 @@ public class Handle {
         try? close()
     }
     
-    private static var once: Void = {
+    private static let once: Void = {
         sqlite3_config_multithread()
         sqlite3_config_memstatus(Int32(truncating: false))
         sqlite3_config_log({ (_, code, message) in
