@@ -72,4 +72,29 @@ class File {
             throw Error.reportSystemCall(operation: .CreateDirectory, path: path, errno: error.code, message: error.localizedDescription)
         }
     }
+    
+#if WCDB_IOS
+    static func addFirstUserAuthenticationFileProtection(atPath path: String) throws {
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: path) else {
+            return
+        }
+        var attributes: [FileAttributeKey:Any]!
+        do {
+            attributes = try fileManager.attributesOfItem(atPath: path)
+        }catch let error as NSError {
+            throw Error.reportSystemCall(operation: .GetAttributes, path: path, errno: error.code, message: error.localizedDescription)
+        }
+        let fileProtection = attributes[.protectionKey] as? String
+        guard fileProtection != nil && (fileProtection! == FileProtectionType.completeUntilFirstUserAuthentication.rawValue || fileProtection! == FileProtectionType.none.rawValue) else {
+            return 
+        }
+        attributes[.protectionKey] = FileProtectionType.completeUntilFirstUserAuthentication.rawValue
+        do {
+            try fileManager.setAttributes(attributes, ofItemAtPath: path)
+        }catch let error as NSError {
+            throw Error.reportSystemCall(operation: .SetAttributes, path: path, errno: error.code, message: error.localizedDescription)
+        }
+    }
+#endif //WCDB_IOS
 }

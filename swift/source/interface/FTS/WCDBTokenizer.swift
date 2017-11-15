@@ -25,7 +25,7 @@ public class WCDBTokenizerInfo: FTSTokenizerInfo {
 }
 
 public class WCDBCursorInfo: FTSCursorInfo {
-    enum TokenType: Int {
+    enum TokenType: UInt {
         case basicMultilingualPlaneLetter = 0x00000001
         case basicMultilingualPlaneDigit = 0x00000002
         case basicMultilingualPlaneSymbol = 0x00000003

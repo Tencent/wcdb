@@ -131,9 +131,9 @@ extension Handle {
 
 //Repair
 extension Handle {
-    static let backupSubfix = "-backup"
+    public static let backupSubfix = "-backup"
     
-    var backupPath: String {
+    public var backupPath: String {
         return path+Handle.backupSubfix
     }
     
@@ -198,7 +198,13 @@ extension Handle {
 }
 
 extension Handle {
-    static let subfixs: [String] = ["", "-wal", "-journal", "-shm", Handle.backupSubfix]
+    public static let subfixs: [String] = ["", "-wal", "-journal", "-shm", Handle.backupSubfix]
+    
+    public var paths: [String] {
+        return Handle.subfixs.map({ (subfix) -> String in
+            return path+subfix
+        })
+    }
 }
 
 //TODO: refactor to a Tracer class

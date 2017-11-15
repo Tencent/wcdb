@@ -46,8 +46,9 @@ public class Database {
     #endif //WCDB_IOS
     
     public init(withFileURL url: URL) {
+        #if WCDB_IOS
         Database.lazyObserver
-        //TODO: File protection
+        #endif //WCDB_IOS            
         self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path, defaultConfigs: Database.defaultConfigs)
     }
     
@@ -132,6 +133,13 @@ extension Database {
     }
     
     private static let defaultConfigs: Configs = Configs(
+        Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
+            #if WCDB_IOS
+            for path in handle.paths {
+                 try File.addFirstUserAuthenticationFileProtection(atPath: path)
+            }
+            #endif //WCDB_IOS
+        }, orderBy: DefaultConfigOrder.fileProtection.rawValue),
         Configs.Config(named: DefaultConfigOrder.trace.description, with: { (handle: Handle) throws in
             if sqlTrace.raw != nil {
                 handle.setTrace(forSQL: sqlTrace.raw!)
@@ -180,15 +188,18 @@ extension Database {
     )
     
     public enum DefaultConfigOrder: Int, CustomStringConvertible {
-        case trace = 0
-        case cipher = 1
-        case basic = 2
-        case synchronous = 3
-        case checkpoint = 4
-        case tokenize = 5
+        case fileProtection = 0
+        case trace = 1
+        case cipher = 2
+        case basic = 3
+        case synchronous = 4
+        case checkpoint = 5
+        case tokenize = 6
         
         public var description: String {
             switch self {
+            case .fileProtection:
+                return "fileProtection"
             case .trace:
                 return "trace"
             case .cipher:

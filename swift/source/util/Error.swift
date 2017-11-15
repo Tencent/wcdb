@@ -162,6 +162,8 @@ public class Error: Swift.Error, CustomStringConvertible {
             case Link = 258
             case CreateDirectory = 259
             case GetFileSize = 260
+            case GetAttributes = 261
+            case SetAttributes = 262
         }
         
         public enum RepairOperation: Int {
