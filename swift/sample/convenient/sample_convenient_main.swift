@@ -24,122 +24,154 @@ import WCDB
 func sample_convenient_main(baseDirectory: String) {
     print("Sample-convenient Begin")
     
-    do {
-        let className = String(describing: SampleConvenient.self)
-        let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
-        let database = Database(withPath: path)
-        let tableName = className
-        database.close(onClosed: { 
-            try database.removeFiles()
-        })
+    let className = String(describing: SampleConvenient.self)
+    let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
+    let database = Database(withPath: path)
+    let tableName = className
+    database.close(onClosed: { 
+        try? database.removeFiles()
+    })
         
+    do{
         try database.create(table: tableName, of: SampleConvenient.self)
+    }catch let error {
+        print("create table error: \(error)")
+    }
         
-        //Insert one object
-        do {
-            let object = SampleConvenient()
-            object.intValue = 1
-            object.stringValue = "Insert onr object"
-            try database.insert(objects: object, into: tableName)
-        }
-        
-        //Insert objects
-        do {
-            var objects: [SampleConvenient] = []
-            let object1 = SampleConvenient()
-            object1.intValue = 2
-            object1.stringValue = "Insert objects"
-            objects.append(object1)
-            let object2 = SampleConvenient()
-            object2.intValue = 3
-            object2.stringValue = "Insert objects"
-            objects.append(object2)
-            try database.insert(objects: objects, into: tableName)
-        }
-        
-        //Insert or replace objects 
-        do {
-           let object = SampleConvenient()
-            object.isAutoIncrement = true
-            object.stringValue = "Insert auto increment"
-            try database.insert(objects: object, into: tableName)
-        }
-        
-        //Update by objects
-        do {
-            let object = SampleConvenient()
-            object.stringValue = "Update by object"
-            try database.update(table: tableName, on: \SampleConvenient.stringValue, with: object)
-        }
-        
-        //Update with condition/order/offset/limit
-        do {
-            let object = SampleConvenient()
-            object.stringValue = "Update with condition/order/offset/limit"
-            try database.update(table: tableName, on: \SampleConvenient.stringValue, with: object, where: \SampleConvenient.intValue > 0)
-        }
-        
-        //Select one object
-        do {
-            let object = try database.getObject(of: SampleConvenient.self, from: tableName)
-        }
-        
-        //Select objects
-        do {
-            let objects = try database.getObjects(of: SampleConvenient.self, from: tableName)
-        }
-        
-        //Select objects with condition/order/offset/limit
-        do {
-            let objects = try database.getObjects(of: SampleConvenient.self, from: tableName, orderBy: [(\SampleChainCall.intValue).asOrder(by: .Ascending)], limit: 1, offset: 2)
-        }
-        
-        //Select part of objects
-        do {
-            let objects: [SampleConvenient] = try database.getObjects(on: \SampleConvenient.stringValue, from: tableName)
-        }
-        
-        //Select column
-        do {
-            let column: OneColumn = try database.getColumn(on: \SampleConvenient.stringValue, from: tableName)
-            for string in column {
-                //do sth
-            }
-        }
-        
-        //Select row
-        do {
-            let row: OneRow? = try database.getRow(on: \SampleConvenient.intValue, \SampleConvenient.stringValue, from: tableName)
-            let intValue = row?[0]
-            let stringValue = row?[1]
-        }
-        
-        //Select one value
-        do {
-            let count = try database.getValue(on: SampleConvenient.anyProperty.count(), from: tableName)
-        }
-        
-        //Select aggregation
-        do {
-            let row: OneRow? = try database.getRow(on: (\SampleConvenient.intValue).avg(), (\SampleConvenient.stringValue).count(), from: tableName)
-        }
-        
-        //Select distinct result
-        do {
-            let distinctCount = try database.getDistinctValue(on: \SampleConvenient.intValue, from: tableName)
-        }
-        
-        //Delete
-        do {
-            try database.delete(from: tableName)
-        }
-        
-        //Delete with condition/order/offset/limit
-        do {
-            try database.delete(from: tableName, where: (\SampleConvenient.intValue).in(1, 2, 3))
+    //Insert one object
+    do {
+        let object = SampleConvenient()
+        object.intValue = 1
+        object.stringValue = "Insert onr object"
+        try database.insert(objects: object, into: tableName)
+    }catch let error {
+        print("insert one object error: \(error)")
+    }
+    
+    //Insert objects
+    do {
+        var objects: [SampleConvenient] = []
+        let object1 = SampleConvenient()
+        object1.intValue = 2
+        object1.stringValue = "Insert objects"
+        objects.append(object1)
+        let object2 = SampleConvenient()
+        object2.intValue = 3
+        object2.stringValue = "Insert objects"
+        objects.append(object2)
+        try database.insert(objects: objects, into: tableName)
+    }catch let error {
+        print("insert objects error: \(error)")
+    }
+    
+    //Insert or replace objects 
+    do {
+       let object = SampleConvenient()
+        object.isAutoIncrement = true
+        object.stringValue = "Insert auto increment"
+        try database.insert(objects: object, into: tableName)
+    }catch let error {
+        print("insert or replace objects error: \(error)")
+    }
+    
+    //Update by objects
+    do {
+        let object = SampleConvenient()
+        object.stringValue = "Update by object"
+        try database.update(table: tableName, on: \SampleConvenient.stringValue, with: object)
+    }catch let error {
+        print("update by objects \(error)")
+    }
+    
+    //Update with condition/order/offset/limit
+    do {
+        let object = SampleConvenient()
+        object.stringValue = "Update with condition/order/offset/limit"
+        try database.update(table: tableName, on: \SampleConvenient.stringValue, with: object, where: \SampleConvenient.intValue > 0)
+    }catch let error {
+        print("Update with condition/order/offset/limit \(error)")
+    }
+    
+    //Select one object
+    do {
+        let object = try database.getObject(of: SampleConvenient.self, from: tableName)
+    }catch let error {
+        print("select one object error: \(error)")
+    }
+    
+    //Select objects
+    do {
+        let objects = try database.getObjects(of: SampleConvenient.self, from: tableName)
+    }catch let error {
+        print("select objects error: \(error)")
+    }
+    
+    //Select objects with condition/order/offset/limit
+    do {
+        let objects = try database.getObjects(of: SampleConvenient.self, from: tableName, orderBy: [(\SampleChainCall.intValue).asOrder(by: .Ascending)], limit: 1, offset: 2)
+    }catch let error {
+        print("select objects error: \(error)")
+    }
+    
+    //Select part of objects
+    do {
+        let objects: [SampleConvenient] = try database.getObjects(on: \SampleConvenient.stringValue, from: tableName)
+    }catch let error {
+        print("select part of objects error: \(error)")
+    }
+    
+    //Select column
+    do {
+        let column: OneColumn = try database.getColumn(on: \SampleConvenient.stringValue, from: tableName)
+        for string in column {
+            //do sth
         }
     }catch let error {
-        print(error)
+        print("select column error: \(error)")
+    }
+    
+    //Select row
+    do {
+        let row: OneRow? = try database.getRow(on: \SampleConvenient.intValue, \SampleConvenient.stringValue, from: tableName)
+        let intValue = row?[0]
+        let stringValue = row?[1]
+    }catch let error {
+        print("select row error: \(error)")
+    }
+    
+    //Select one value
+    do {
+        let count = try database.getValue(on: SampleConvenient.anyProperty.count(), from: tableName)
+    }catch let error {
+        print("select one value error: \(error)")
+    }
+    
+    //Select aggregation
+    do {
+        let row: OneRow? = try database.getRow(on: (\SampleConvenient.intValue).avg(), (\SampleConvenient.stringValue).count(), from: tableName)
+    }catch let error {
+        print("select aggregation error: \(error)")
+    }
+    
+    //Select distinct result
+    do {
+        let distinctCount = try database.getDistinctValue(on: \SampleConvenient.intValue, from: tableName)
+    }catch let error {
+        print("select distinct result error: \(error)")
+    }
+    
+    //Delete
+    do {
+        try database.delete(from: tableName)
+    }catch let error {
+        print("delete error: \(error)")
+    }
+    
+    //Delete with condition/order/offset/limit
+    do {
+        try database.delete(from: tableName, where: (\SampleConvenient.intValue).in(1, 2, 3))
+    }catch let error {
+        print("delete with condition/order/offset/limit error: \(error)")
     }
     
     print("Sample-convenient End")

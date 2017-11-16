@@ -24,28 +24,32 @@ import WCDB
 func sample_orm_main(baseDirectory: String) {
     print("Sample-ORM Begin")
     
-    do {
-        let clses: [TableCoding.Type] = [ SampleORM.self, SampleORMIndex.self, SampleORMColumnConstraint.self, SampleORMTableConstraint.self ]
-        for cls in clses {
-            let className = String(describing: cls)
-            let filename = className
-            let tableName = className
-            
-            let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(filename).path
-            let database = Database(withPath: path)
-            database.close(onClosed: { 
-                try database.removeFiles()
-            })
-            
+    let clses: [TableCoding.Type] = [ SampleORM.self, SampleORMIndex.self, SampleORMColumnConstraint.self, SampleORMTableConstraint.self ]
+    for cls in clses {
+        let className = String(describing: cls)
+        let filename = className
+        let tableName = className
+        
+        let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(filename).path
+        let database = Database(withPath: path)
+        database.close(onClosed: { 
+            try? database.removeFiles()
+        })
+        
+        do {
             try database.create(table: tableName, of: cls)
-            
+        }catch let error {
+            print("create table error: \(error)")
+        }
+        
+        do {
             let schemas: [Master] = try database.getObjects(on: \Master.name, \Master.sql, from: Master.tableName)
             schemas.forEach({ (table) in
                 print("SQL of \(table.name ?? ""): \(table.sql ?? "" )")
             })
+        }catch let error {
+            print("get schemas error: \(error)")
         }
-    }catch let error {
-        print(error)
     }
     
     print("Sample-ORM End")

@@ -24,19 +24,23 @@ import WCDB
 func sample_fts_main(baseDirectory: String) {
     print("Sample-fts Begin")
     
+    let classNameOrigin = String(describing: SampleFTSOrigin.self)
+    let pathOrigin = URL(fileURLWithPath: baseDirectory).appendingPathComponent(classNameOrigin).path
+    let tableNameOrigin = classNameOrigin
+    
+    let databaseOrigin = Database(withPath: pathOrigin)
+    databaseOrigin.close(onClosed: { 
+        try? databaseOrigin.removeFiles()
+    })
+        
     do {
-        let classNameOrigin = String(describing: SampleFTSOrigin.self)
-        let pathOrigin = URL(fileURLWithPath: baseDirectory).appendingPathComponent(classNameOrigin).path
-        let tableNameOrigin = classNameOrigin
-        
-        let databaseOrigin = Database(withPath: pathOrigin)
-        databaseOrigin.close(onClosed: { 
-            try databaseOrigin.removeFiles()
-        })
-        
         try databaseOrigin.create(table: tableNameOrigin, of: SampleFTSOrigin.self)
+    }catch let error {
+        print("creat table error: \(error)")
+    }
         
-        //prepare
+    //prepare
+    do {
         do {
             //English
             let object = SampleFTSOrigin()
@@ -61,51 +65,62 @@ func sample_fts_main(baseDirectory: String) {
             object.isAutoIncrement = true
             try databaseOrigin.insert(objects: object, into: tableNameOrigin)
         }
+    }catch let error {
+        print("prepare error: \(error)")
+    }
         
-        let classNameFTS = String(describing: SampleFTSData.self)
-        let pathFTS = URL(fileURLWithPath: baseDirectory).appendingPathComponent(classNameFTS).path
-        let tableNameFTS = classNameFTS
+    let classNameFTS = String(describing: SampleFTSData.self)
+    let pathFTS = URL(fileURLWithPath: baseDirectory).appendingPathComponent(classNameFTS).path
+    let tableNameFTS = classNameFTS
+    
+    let databaseFTS = Database(withPath: pathFTS)
+    databaseFTS.close(onClosed: { 
+        try databaseFTS.removeFiles()
+    })
+    
+    databaseFTS.setTokenizes(.WCDB)
         
-        let databaseFTS = Database(withPath: pathFTS)
-        databaseFTS.close(onClosed: { 
-            try databaseFTS.removeFiles()
-        })
-        
-        databaseFTS.setTokenizes(.WCDB)
-        
+    do {
         try databaseFTS.create(virtualTable: tableNameFTS, of: SampleFTSData.self)
+    }catch let error {
+        print("create virtual table error: \(error)")
+    }
         
-        //Build Full-Text-Search Index
-        do {
-            let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(of: SampleFTSOrigin.self, from: tableNameOrigin)
-            var ftsDataArray: [SampleFTSData] = []
-            for object in objects {
-                let ftsData = SampleFTSData()
-                ftsData.name = object.name
-                ftsData.content = object.content
-                ftsDataArray.append(ftsData)
-            }
-            try databaseFTS.insert(objects: ftsDataArray, into: tableNameFTS)
+    //Build Full-Text-Search Index
+    do {
+        let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(of: SampleFTSOrigin.self, from: tableNameOrigin)
+        var ftsDataArray: [SampleFTSData] = []
+        for object in objects {
+            let ftsData = SampleFTSData()
+            ftsData.name = object.name
+            ftsData.content = object.content
+            ftsDataArray.append(ftsData)
         }
-        
-        //Full-Text-Search by `match`
-        do {
-            let ftsDataArray = try databaseFTS.getObjects(of: SampleFTSData.self, from: tableNameFTS, where: SampleFTSData.property(named: tableNameFTS).match("Eng*"))
-            for ftsData in ftsDataArray {
-                print("Match name:\(ftsData.name ?? "") content:\(ftsData.content ?? "")")
-            }
-        }
-        
-        //Full-Text-Search info by `match`
-        //See http://www.sqlite.org/fts3.html#snippet for further information
-        do {
-            let tableProperty = SampleFTSData.property(named: tableNameFTS) 
-            let row: OneRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), from: tableNameFTS, where: tableProperty.match("12*")))!
-            
-            print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
+        try databaseFTS.insert(objects: ftsDataArray, into: tableNameFTS)
+    }catch let error {
+        print("build full-text-search index error: \(error)")
+    }
+    
+    //Full-Text-Search by `match`
+    do {
+        let ftsDataArray = try databaseFTS.getObjects(of: SampleFTSData.self, from: tableNameFTS, where: SampleFTSData.property(named: tableNameFTS).match("Eng*"))
+        for ftsData in ftsDataArray {
+            print("Match name:\(ftsData.name ?? "") content:\(ftsData.content ?? "")")
         }
     }catch let error {
-        print(error)
+        print("full-text-search error: \(error)")
     }
+    
+    //Full-Text-Search info by `match`
+    //See http://www.sqlite.org/fts3.html#snippet for further information
+    do {
+        let tableProperty = SampleFTSData.property(named: tableNameFTS) 
+        let row: OneRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), from: tableNameFTS, where: tableProperty.match("12*")))!
+        
+        print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
+    }catch let error {
+        print("full-text-search info error: \(error)")
+    }
+
     print("Sample-fts End")
 }

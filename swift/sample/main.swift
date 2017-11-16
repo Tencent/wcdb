@@ -30,3 +30,8 @@ sample_convenient_main(baseDirectory: baseDirectory)
 sample_transaction_main(baseDirectory: baseDirectory)
 sample_advance_main(baseDirectory: baseDirectory)
 sample_core_main(baseDirectory: baseDirectory)
+sample_file_main(baseDirectory: baseDirectory)
+sample_repair_main(baseDirectory: baseDirectory)
+sample_statistics_main(baseDirectory: baseDirectory)
+sample_fts_main(baseDirectory: baseDirectory)
+

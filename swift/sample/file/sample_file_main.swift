@@ -35,7 +35,11 @@ func sample_file_main(baseDirectory: String) {
         try? database.removeFiles()
     })
     
-    try? database.create(table: tableName, of: SampleFile.self)
+    do {
+        try database.create(table: tableName, of: SampleFile.self)
+    }catch let error {
+        print("create table error: \(error)")
+    }
     
     //Get file size
     do {
@@ -48,8 +52,10 @@ func sample_file_main(baseDirectory: String) {
     //Move files
     do {
         database.close(onClosed: { 
-            try? database.moveFiles(toDirectory: otherDirectory)
+            try database.moveFiles(toDirectory: otherDirectory)
         })
+    }catch let error {
+        print("move file error: \(error)")
     }
     
     //Get paths
