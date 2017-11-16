@@ -130,12 +130,12 @@ extension Transaction: Core {
         }
     }
     
-    public func run(transaction: ControlableTransactionClosure) throws {
+    public func run(controlableTransaction: ControlableTransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         try handle.exec(StatementTransaction().begin(.Immediate)) 
         isInTransaction = true
         do {
-            if try transaction() {
+            if try controlableTransaction() {
                 try handle.exec(StatementTransaction().commit()) 
                 isInTransaction = false
             }else { 

@@ -120,15 +120,15 @@ extension Database {
     static private var performanceTrace: Atomic<PerformanceTrace?> = Atomic(nil)
     static private var sqlTrace: Atomic<SQLTrace?> = Atomic(nil)
     
-    static func setGlobal(ofPerformanceTrace trace: @escaping PerformanceTrace) {
+    public static func setGlobal(ofPerformanceTrace trace: @escaping PerformanceTrace) {
         performanceTrace.assign(trace)
     }
     
-    static func setGlobal(ofSQLTrace trace: @escaping SQLTrace) {
+    public static func setGlobal(ofSQLTrace trace: @escaping SQLTrace) {
         sqlTrace.assign(trace)
     }
     
-    static func setGlobal(ofErrorReport errorReporter: @escaping Error.Reporter) {
+    public static func setGlobal(ofErrorReport errorReporter: @escaping Error.Reporter) {
         Error.setReporter(errorReporter)
     }
     
@@ -346,11 +346,11 @@ extension Database: Core {
         }
     }
 
-    public func run(transaction: ControlableTransactionClosure) throws {
+    public func run(controlableTransaction: ControlableTransactionClosure) throws {
         try begin(.Immediate)
         var shouldRollback = true
         do {
-            if try transaction() {
+            if try controlableTransaction() {
                 try commit()
             }else {
                 shouldRollback = false
