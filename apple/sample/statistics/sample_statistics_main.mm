@@ -69,6 +69,8 @@ void sample_statistics_main(NSString *baseDirectory)
             WCTSampleStatistics *object = [[WCTSampleStatistics alloc] init];
             object.intValue = i;
         }
+        [database insertObjects:objects into:tableName]
+        
         [database runTransaction:^BOOL {
           NSArray *results = [database getAllObjectsOfClass:WCTSampleStatistics.class
                                                   fromTable:tableName];
