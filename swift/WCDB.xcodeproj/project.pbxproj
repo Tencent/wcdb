@@ -82,6 +82,7 @@
 		233032B21FB947F100101373 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
 		23794DB41FAB23AD001E79DE /* WCDB-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237BD9351FBEE4AF00F6A094 /* KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BD9341FBEE4AF00F6A094 /* KeyPath.swift */; };
+		237BD9381FBEEB2800F6A094 /* Archivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BD9371FBEEB2800F6A094 /* Archivable.swift */; };
 		238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B131FAB1F7E00BC2659 /* Column.swift */; };
 		238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */; };
 		238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B151FAB1F7E00BC2659 /* ColumnIndex.swift */; };
@@ -225,6 +226,7 @@
 		2330329E1FB9479400101373 /* sqliterk_values.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_values.h; sourceTree = "<group>"; };
 		23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Bridging-Header.h"; sourceTree = "<group>"; };
 		237BD9341FBEE4AF00F6A094 /* KeyPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPath.swift; sourceTree = "<group>"; };
+		237BD9371FBEEB2800F6A094 /* Archivable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Archivable.swift; sourceTree = "<group>"; };
 		238D0B031FAB1F4300BC2659 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		238D0B0F1FAB1F7E00BC2659 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		238D0B131FAB1F7E00BC2659 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 				23E737C31FB1601C00EEBC3D /* Master.swift */,
 				23E737C51FB1602800EEBC3D /* Sequence.swift */,
 				230209C31FBEE43A000D69B6 /* Codable.swift */,
+				237BD9371FBEEB2800F6A094 /* Archivable.swift */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 				238D0B8C1FAB1F7E00BC2659 /* StatementCreateTable.swift in Sources */,
 				238D0B891FAB1F7E00BC2659 /* StatementAlter.swift in Sources */,
 				230209AA1FBED533000D69B6 /* Select.swift in Sources */,
+				237BD9381FBEEB2800F6A094 /* Archivable.swift in Sources */,
 				233032A71FB9479400101373 /* sqliterk_crypto.c in Sources */,
 				238D0B841FAB1F7E00BC2659 /* ModuleArgument.swift in Sources */,
 				230209B51FBED75C000D69B6 /* CodableColumn.swift in Sources */,

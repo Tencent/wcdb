@@ -21,7 +21,7 @@
 import Foundation
 
 /*
- * Builtin codable implementation for
+ * Builtin codable implementation for basic type
  *
  * Bool
  * Int, Int8, Int16, UInt, UInt8, UInt16, UInt32, UInt64
