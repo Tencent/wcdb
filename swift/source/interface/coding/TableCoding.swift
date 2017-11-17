@@ -78,19 +78,12 @@ extension TableCoding {
     }
     
     public var isAutoIncrement: Bool {
-        get {
-            return false
-        }
-        set {
-            
-        }
+        get { return false }
+        set { }
     }
     public var lastInsertedRowID: Int64 {
-        get {
-            return 0
-        }
-        set {
-        }
+        get { return 0 }
+        set { }
     }
 }
 
