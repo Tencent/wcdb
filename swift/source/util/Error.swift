@@ -261,9 +261,7 @@ public class Error: Swift.Error, CustomStringConvertible {
     static private let reporter: Atomic<Reporter> = Atomic({
         switch $0.type {
         case Error.ErrorType.SQLiteGlobal:
-            #if DEBUG
-                print("[WCDB][DEBUG] \($0.description)")
-            #endif
+            debugPrint("[WCDB][DEBUG] \($0.description)")
         case Error.ErrorType.Warning:
             print("[WCDB][WARNING] \($0.description)")
         default:
