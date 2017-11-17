@@ -33,7 +33,7 @@ public class Database {
     #if WCDB_IOS
     private static let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "WCDB-PurgeFreeHandle")
     
-    private static let lazyObserver: Void = {
+    private static let once: Void = {
         _ = NotificationCenter.default.addObserver(forName: .UIApplicationDidReceiveMemoryWarning,
                                                    object: nil,
                                                    queue: nil, 
@@ -47,7 +47,7 @@ public class Database {
     
     public init(withFileURL url: URL) {
         #if WCDB_IOS
-        Database.lazyObserver
+        Database.once
         #endif //WCDB_IOS            
         self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path, defaultConfigs: Database.defaultConfigs)
     }
