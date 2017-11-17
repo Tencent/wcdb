@@ -22,19 +22,16 @@ import Foundation
 
 public class TableBinding {
     private static let spin = Spin()
-    private static var tableBindings: [String:TableBinding] = [:]
+    private static var collection: [String:TableBinding] = [:]
     
     static func from(_ type: TableCoding.Type) -> TableBinding {
         let description = String(describing: type)
-        do {
-            spin.lock(); defer { spin.unlock() }
-            if let tableBinding = tableBindings[description] {
-                return tableBinding
-            }
-        }
         spin.lock(); defer { spin.unlock() }
-        let tableBinding = TableBinding(type)
-        tableBindings[description] = tableBinding
+        var tableBinding: TableBinding! = collection[description]
+        if tableBinding == nil  {
+            tableBinding = TableBinding(type)
+            collection[description] = tableBinding
+        }
         return tableBinding
     }
     
