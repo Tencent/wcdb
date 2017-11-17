@@ -20,6 +20,18 @@
 
 import Foundation
 
+/*
+ * Builtin codable implementation for
+ *
+ * Bool
+ * Int, Int8, Int16, UInt, UInt8, UInt16, UInt32, UInt64
+ * Float
+ * Date
+ * 
+ * Note that Int32, Int64, Double, String, Data are fundamental types so they are codable too.
+ * 
+ */
+
 extension Int : CodableStructColumn {
     public typealias FundamentalType = Int64
     public typealias SelfType = Int
@@ -30,7 +42,7 @@ extension Int : CodableStructColumn {
         }
         self = Int(value!)
     }
-
+    
     public func archivedTypedValue() -> Int64? {
         return Int64(self)
     }    
@@ -146,4 +158,51 @@ extension UInt64 : CodableStructColumn {
     public func archivedTypedValue() -> Int64? {
         return Int64(self)
     }    
+}
+
+extension Float: CodableStructColumn {
+    public typealias FundamentalType = Double
+    public typealias SelfType = Float
+    
+    public func archivedTypedValue() -> Double? {
+        return Double(self)
+    }
+    
+    public init?(withTypedValue value: Double?) {
+        guard value != nil else {
+            return nil
+        }
+        self = Float(value!)
+    }
+}
+
+extension Bool : CodableStructColumn {
+    public typealias FundamentalType = Int32
+    public typealias SelfType = Bool
+    
+    public init?(withTypedValue value: Int32?) {
+        guard value != nil else {
+            return nil
+        }
+        self = value != 0
+    }
+    
+    public func archivedTypedValue() -> Int32? {
+        return self ? 1 : 0
+    }    
+}
+
+extension Date: CodableStructColumn {
+    public typealias FundamentalType = Int64
+    
+    public init?(withTypedValue optionalValue: Int64?) {
+        guard let value = optionalValue else {
+            return nil
+        }
+        self.init(timeIntervalSince1970: TimeInterval(value))
+    }
+    
+    public func archivedTypedValue() -> Int64? {
+        return Int64(self.timeIntervalSince1970)
+    }
 }

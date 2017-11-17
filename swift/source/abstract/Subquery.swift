@@ -44,3 +44,10 @@ extension Subquery: TableOrSubqueryConvertible{
         return self
     }
 } 
+
+extension String: TableOrSubqueryConvertible{
+    public func asTableOrSubquery() -> Subquery {
+        return Subquery(withTable: self)
+    }
+}
+

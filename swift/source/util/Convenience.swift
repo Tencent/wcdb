@@ -150,3 +150,45 @@ extension Array where Iterator.Element: FixedWidthInteger {
     }
 }
 
+extension Dictionary {
+    func joined(_ map: (Key, Value)->String, separator: String = "," ) -> String {
+        var output: String = ""
+        var flag = false
+        for (key, value) in self {
+            if flag {
+                output.append(separator)
+            } else {
+                flag = true
+            }
+            output.append(map(key, value))
+        }
+        return output
+    }
+}
+
+extension String {
+    var lastPathComponent: String {
+        return URL(fileURLWithPath: self).lastPathComponent
+    }
+    
+    func stringByAppending(pathComponent: String) -> String {
+        return URL(fileURLWithPath: self).appendingPathComponent(pathComponent).path
+    }
+
+    var cString: UnsafePointer<Int8>? {
+        return UnsafePointer<Int8>((self as NSString).utf8String)
+    }
+    
+    func substring(with range: CFRange) -> String {
+        return String(self[self.range(from: range.location, to: range.location+range.length)])
+    }
+    
+    init?(bytes: UnsafeRawPointer, count: Int, encoding: String.Encoding) {
+        self.init(data: Data(bytes: bytes, count: count), encoding: encoding)
+    }
+    
+    func range(from: Int, to: Int) -> Range<String.Index> {
+        return self.index(self.startIndex, offsetBy: from)..<self.index(self.startIndex, offsetBy: to)
+    }
+}
+
