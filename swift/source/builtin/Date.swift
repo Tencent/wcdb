@@ -20,7 +20,7 @@
 
 import Foundation
 
-extension Date: StructCodableColumn {
+extension Date: CodableStructColumn {
     public typealias FundamentalType = Int64
     
     public init?(withTypedValue optionalValue: Int64?) {

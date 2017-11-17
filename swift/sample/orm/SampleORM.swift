@@ -20,7 +20,7 @@
 
 import WCDB
 
-enum SampleORMType: Int, EnumCodableColumn {
+enum SampleORMType: Int, CodableEnumColumn {
     case SampleORMType1 = 1
     case SampleORMType2 = 2
 }

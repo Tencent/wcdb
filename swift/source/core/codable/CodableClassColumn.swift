@@ -20,6 +20,6 @@
 
 import Foundation
 
-public protocol ClassCodableColumn: CodableColumn, AnyObject {
+public protocol CodableClassColumn: CodableColumn, AnyObject {
     init()
 }

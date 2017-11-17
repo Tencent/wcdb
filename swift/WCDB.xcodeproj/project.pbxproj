@@ -39,12 +39,6 @@
 		230209991FBED533000D69B6 /* MultiUniqueBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209731FBED533000D69B6 /* MultiUniqueBinding.swift */; };
 		2302099A1FBED533000D69B6 /* TableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209741FBED533000D69B6 /* TableBinding.swift */; };
 		2302099B1FBED533000D69B6 /* VirtualTableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209751FBED533000D69B6 /* VirtualTableBinding.swift */; };
-		2302099C1FBED533000D69B6 /* ClassColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209781FBED533000D69B6 /* ClassColumnCoding.swift */; };
-		2302099D1FBED533000D69B6 /* ColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209791FBED533000D69B6 /* ColumnCoding.swift */; };
-		2302099E1FBED533000D69B6 /* EnumColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302097A1FBED533000D69B6 /* EnumColumnCoding.swift */; };
-		2302099F1FBED533000D69B6 /* FundamentalCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302097B1FBED533000D69B6 /* FundamentalCoding.swift */; };
-		230209A01FBED533000D69B6 /* StructColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302097C1FBED533000D69B6 /* StructColumnCoding.swift */; };
-		230209A11FBED533000D69B6 /* TableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302097D1FBED533000D69B6 /* TableCoding.swift */; };
 		230209A21FBED533000D69B6 /* AppleTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302097F1FBED533000D69B6 /* AppleTokenize.swift */; };
 		230209A31FBED533000D69B6 /* WCDBTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209801FBED533000D69B6 /* WCDBTokenize.swift */; };
 		230209A41FBED533000D69B6 /* ChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209821FBED533000D69B6 /* ChainCall.swift */; };
@@ -56,6 +50,12 @@
 		230209AA1FBED533000D69B6 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209881FBED533000D69B6 /* Select.swift */; };
 		230209AB1FBED533000D69B6 /* SelectBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209891FBED533000D69B6 /* SelectBase.swift */; };
 		230209AC1FBED533000D69B6 /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302098A1FBED533000D69B6 /* Update.swift */; };
+		230209B41FBED75C000D69B6 /* CodableClassColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209AE1FBED75C000D69B6 /* CodableClassColumn.swift */; };
+		230209B51FBED75C000D69B6 /* CodableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209AF1FBED75C000D69B6 /* CodableColumn.swift */; };
+		230209B61FBED75C000D69B6 /* CodableEnumColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209B01FBED75C000D69B6 /* CodableEnumColumn.swift */; };
+		230209B71FBED75C000D69B6 /* CodableFundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209B11FBED75C000D69B6 /* CodableFundamentalValue.swift */; };
+		230209B81FBED75C000D69B6 /* CodableTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209B21FBED75C000D69B6 /* CodableTable.swift */; };
+		230209B91FBED75C000D69B6 /* CodableStructColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209B31FBED75C000D69B6 /* CodableStructColumn.swift */; };
 		230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230686DB1FAC0E5B0005EE8B /* Convertible.swift */; };
 		2330329F1FB9479400101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330328C1FB9479400101373 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233032A01FB9479400101373 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 2330328D1FB9479400101373 /* sqliterk.c */; };
@@ -187,12 +187,6 @@
 		230209731FBED533000D69B6 /* MultiUniqueBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiUniqueBinding.swift; sourceTree = "<group>"; };
 		230209741FBED533000D69B6 /* TableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableBinding.swift; sourceTree = "<group>"; };
 		230209751FBED533000D69B6 /* VirtualTableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualTableBinding.swift; sourceTree = "<group>"; };
-		230209781FBED533000D69B6 /* ClassColumnCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassColumnCoding.swift; sourceTree = "<group>"; };
-		230209791FBED533000D69B6 /* ColumnCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnCoding.swift; sourceTree = "<group>"; };
-		2302097A1FBED533000D69B6 /* EnumColumnCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumColumnCoding.swift; sourceTree = "<group>"; };
-		2302097B1FBED533000D69B6 /* FundamentalCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FundamentalCoding.swift; sourceTree = "<group>"; };
-		2302097C1FBED533000D69B6 /* StructColumnCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StructColumnCoding.swift; sourceTree = "<group>"; };
-		2302097D1FBED533000D69B6 /* TableCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCoding.swift; sourceTree = "<group>"; };
 		2302097F1FBED533000D69B6 /* AppleTokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleTokenize.swift; sourceTree = "<group>"; };
 		230209801FBED533000D69B6 /* WCDBTokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCDBTokenize.swift; sourceTree = "<group>"; };
 		230209821FBED533000D69B6 /* ChainCall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainCall.swift; sourceTree = "<group>"; };
@@ -204,6 +198,12 @@
 		230209881FBED533000D69B6 /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Select.swift; sourceTree = "<group>"; };
 		230209891FBED533000D69B6 /* SelectBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBase.swift; sourceTree = "<group>"; };
 		2302098A1FBED533000D69B6 /* Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
+		230209AE1FBED75C000D69B6 /* CodableClassColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableClassColumn.swift; sourceTree = "<group>"; };
+		230209AF1FBED75C000D69B6 /* CodableColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableColumn.swift; sourceTree = "<group>"; };
+		230209B01FBED75C000D69B6 /* CodableEnumColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableEnumColumn.swift; sourceTree = "<group>"; };
+		230209B11FBED75C000D69B6 /* CodableFundamentalValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableFundamentalValue.swift; sourceTree = "<group>"; };
+		230209B21FBED75C000D69B6 /* CodableTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableTable.swift; sourceTree = "<group>"; };
+		230209B31FBED75C000D69B6 /* CodableStructColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableStructColumn.swift; sourceTree = "<group>"; };
 		230686DB1FAC0E5B0005EE8B /* Convertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convertible.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2330328C1FB9479400101373 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
@@ -310,10 +310,10 @@
 		230209621FBED533000D69B6 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				230209AD1FBED75C000D69B6 /* codable */,
 				230209631FBED533000D69B6 /* base */,
 				2302096D1FBED533000D69B6 /* binding */,
 				230209761FBED533000D69B6 /* chaincall */,
-				230209771FBED533000D69B6 /* coding */,
 				2302097E1FBED533000D69B6 /* fts */,
 				230209811FBED533000D69B6 /* interface */,
 			);
@@ -358,19 +358,6 @@
 			path = chaincall;
 			sourceTree = "<group>";
 		};
-		230209771FBED533000D69B6 /* coding */ = {
-			isa = PBXGroup;
-			children = (
-				230209781FBED533000D69B6 /* ClassColumnCoding.swift */,
-				230209791FBED533000D69B6 /* ColumnCoding.swift */,
-				2302097A1FBED533000D69B6 /* EnumColumnCoding.swift */,
-				2302097B1FBED533000D69B6 /* FundamentalCoding.swift */,
-				2302097C1FBED533000D69B6 /* StructColumnCoding.swift */,
-				2302097D1FBED533000D69B6 /* TableCoding.swift */,
-			);
-			path = coding;
-			sourceTree = "<group>";
-		};
 		2302097E1FBED533000D69B6 /* fts */ = {
 			isa = PBXGroup;
 			children = (
@@ -394,6 +381,19 @@
 				2302098A1FBED533000D69B6 /* Update.swift */,
 			);
 			path = interface;
+			sourceTree = "<group>";
+		};
+		230209AD1FBED75C000D69B6 /* codable */ = {
+			isa = PBXGroup;
+			children = (
+				230209AF1FBED75C000D69B6 /* CodableColumn.swift */,
+				230209B01FBED75C000D69B6 /* CodableEnumColumn.swift */,
+				230209B31FBED75C000D69B6 /* CodableStructColumn.swift */,
+				230209AE1FBED75C000D69B6 /* CodableClassColumn.swift */,
+				230209B11FBED75C000D69B6 /* CodableFundamentalValue.swift */,
+				230209B21FBED75C000D69B6 /* CodableTable.swift */,
+			);
+			path = codable;
 			sourceTree = "<group>";
 		};
 		2330328B1FB9479400101373 /* repair */ = {
@@ -687,11 +687,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				230209991FBED533000D69B6 /* MultiUniqueBinding.swift in Sources */,
+				230209B61FBED75C000D69B6 /* CodableEnumColumn.swift in Sources */,
 				238D0B8C1FAB1F7E00BC2659 /* StatementCreateTable.swift in Sources */,
 				238D0B891FAB1F7E00BC2659 /* StatementAlter.swift in Sources */,
 				230209AA1FBED533000D69B6 /* Select.swift in Sources */,
 				233032A71FB9479400101373 /* sqliterk_crypto.c in Sources */,
 				238D0B841FAB1F7E00BC2659 /* ModuleArgument.swift in Sources */,
+				230209B51FBED75C000D69B6 /* CodableColumn.swift in Sources */,
 				238D0BC51FAB1F7E00BC2659 /* Atomic.swift in Sources */,
 				238D0B871FAB1F7E00BC2659 /* Pragma.swift in Sources */,
 				238D0B961FAB1F7E00BC2659 /* StatementRelease.swift in Sources */,
@@ -711,11 +713,11 @@
 				2302098F1FBED533000D69B6 /* Declare.swift in Sources */,
 				23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */,
 				23E737C41FB1601C00EEBC3D /* Master.swift in Sources */,
+				230209B41FBED75C000D69B6 /* CodableClassColumn.swift in Sources */,
 				230209931FBED533000D69B6 /* Transaction.swift in Sources */,
 				230209901FBED533000D69B6 /* HandlePool.swift in Sources */,
 				238D0B9B1FAB1F7E00BC2659 /* StatementUpdate.swift in Sources */,
 				238D0BC71FAB1F7E00BC2659 /* Error.swift in Sources */,
-				2302099C1FBED533000D69B6 /* ClassColumnCoding.swift in Sources */,
 				233032AC1FB9479400101373 /* sqliterk_pager.c in Sources */,
 				238D0B7C1FAB1F7E00BC2659 /* Conflict.swift in Sources */,
 				238D0B931FAB1F7E00BC2659 /* StatementInsert.swift in Sources */,
@@ -724,12 +726,11 @@
 				238D0B941FAB1F7E00BC2659 /* StatementPragma.swift in Sources */,
 				2302098E1FBED533000D69B6 /* Database.swift in Sources */,
 				230209911FBED533000D69B6 /* Property.swift in Sources */,
+				230209B81FBED75C000D69B6 /* CodableTable.swift in Sources */,
 				233032A51FB9479400101373 /* sqliterk_column.c in Sources */,
 				238D0B851FAB1F7E00BC2659 /* Order.swift in Sources */,
 				238D0B831FAB1F7E00BC2659 /* LiteralValue.swift in Sources */,
 				238D0B971FAB1F7E00BC2659 /* StatementRollback.swift in Sources */,
-				2302099D1FBED533000D69B6 /* ColumnCoding.swift in Sources */,
-				230209A11FBED533000D69B6 /* TableCoding.swift in Sources */,
 				238D0B7E1FAB1F7E00BC2659 /* Expression.swift in Sources */,
 				238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */,
 				238D0B9E1FAB1F7E00BC2659 /* TableConstraint.swift in Sources */,
@@ -743,22 +744,21 @@
 				238D0B861FAB1F7E00BC2659 /* OrderTerm.swift in Sources */,
 				235CAEFD1FB586A7003039F0 /* Bool.swift in Sources */,
 				238D0B801FAB1F7E00BC2659 /* Handle.swift in Sources */,
+				230209B91FBED75C000D69B6 /* CodableStructColumn.swift in Sources */,
 				230209A81FBED533000D69B6 /* MultiSelect.swift in Sources */,
 				238D0B8E1FAB1F7E00BC2659 /* StatementDelete.swift in Sources */,
 				238D0B821FAB1F7E00BC2659 /* JoinClause.swift in Sources */,
 				238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */,
 				230209AB1FBED533000D69B6 /* SelectBase.swift in Sources */,
 				233032A31FB9479400101373 /* sqliterk_btree.c in Sources */,
-				2302099F1FBED533000D69B6 /* FundamentalCoding.swift in Sources */,
 				2302098C1FBED533000D69B6 /* Core.swift in Sources */,
 				230209A71FBED533000D69B6 /* Interface.swift in Sources */,
 				230209AC1FBED533000D69B6 /* Update.swift in Sources */,
-				230209A01FBED533000D69B6 /* StructColumnCoding.swift in Sources */,
 				238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */,
 				238D0B911FAB1F7E00BC2659 /* StatementDropTable.swift in Sources */,
 				238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */,
-				2302099E1FBED533000D69B6 /* EnumColumnCoding.swift in Sources */,
 				238D0B9D1FAB1F7E00BC2659 /* Subquery.swift in Sources */,
+				230209B71FBED75C000D69B6 /* CodableFundamentalValue.swift in Sources */,
 				230209611FBED097000D69B6 /* Fundamental.swift in Sources */,
 				230209961FBED533000D69B6 /* ConstraintBinding.swift in Sources */,
 				238D0BA41FAB1F7E00BC2659 /* KeyPath.swift in Sources */,

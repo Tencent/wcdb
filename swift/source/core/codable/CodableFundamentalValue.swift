@@ -20,19 +20,23 @@
 
 import Foundation
 
-public protocol EnumCodableColumn: CodableColumn, RawRepresentable where Self.RawValue: CodableColumn {}
+public protocol CodableFundamentalValueBase {}
 
-extension EnumCodableColumn {
-    public typealias FundamentalType = RawValue.FundamentalType
+//Int32, Int64, Double, String, Data
+public protocol CodableFundamentalValue: CodableStructColumn, CodableFundamentalValueBase {}
+
+extension CodableFundamentalValue {
+    public typealias FundamentalType = Self
     
-    public init?(withTypedValue optionalValue: RawValue.FundamentalType?) {
-        guard let value = RawValue(withTypedValue: optionalValue) else {
+    public init?(withTypedValue value: FundamentalType?) {
+        guard value != nil else {
             return nil
         }
-        self.init(rawValue: value)
+        self = value!
     }
     
-    public func archivedTypedValue() -> RawValue.FundamentalType? {
-        return rawValue.archivedTypedValue()
+    public func archivedTypedValue() -> FundamentalType? {
+        return self
     }
 }
+

@@ -42,7 +42,7 @@ extension CodableColumn {
     }
     
     public func archivedFundamentalValue() -> FundamentalValue {
-        return archivedTypedValue() as? FundamentalCodingBase 
+        return archivedTypedValue() as? CodableFundamentalValueBase 
     }
     
     public func asLiteralValue() -> LiteralValue {

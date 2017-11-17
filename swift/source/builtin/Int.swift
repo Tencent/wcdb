@@ -20,7 +20,7 @@
 
 import Foundation
 
-extension Int : StructCodableColumn {
+extension Int : CodableStructColumn {
     public typealias FundamentalType = Int64
     public typealias SelfType = Int
     
@@ -36,7 +36,7 @@ extension Int : StructCodableColumn {
     }    
 }
 
-extension UInt : StructCodableColumn {
+extension UInt : CodableStructColumn {
     public typealias FundamentalType = Int64
     public typealias SelfType = UInt
     
@@ -52,7 +52,7 @@ extension UInt : StructCodableColumn {
     }    
 }
 
-extension Int8 : StructCodableColumn {
+extension Int8 : CodableStructColumn {
     public typealias FundamentalType = Int32
     public typealias SelfType = Int8
     
@@ -68,7 +68,7 @@ extension Int8 : StructCodableColumn {
     }    
 }
 
-extension Int16 : StructCodableColumn {
+extension Int16 : CodableStructColumn {
     public typealias FundamentalType = Int32
     public typealias SelfType = Int16
     
@@ -84,7 +84,7 @@ extension Int16 : StructCodableColumn {
     }    
 }
 
-extension UInt8 : StructCodableColumn {
+extension UInt8 : CodableStructColumn {
     public typealias FundamentalType = Int32
     public typealias SelfType = UInt8
     
@@ -100,7 +100,7 @@ extension UInt8 : StructCodableColumn {
     }    
 }
 
-extension UInt16 : StructCodableColumn {
+extension UInt16 : CodableStructColumn {
     public typealias FundamentalType = Int32
     public typealias SelfType = UInt16
     
@@ -116,7 +116,7 @@ extension UInt16 : StructCodableColumn {
     }    
 }
 
-extension UInt32 : StructCodableColumn {
+extension UInt32 : CodableStructColumn {
     public typealias FundamentalType = Int32
     public typealias SelfType = UInt32
     
@@ -132,7 +132,7 @@ extension UInt32 : StructCodableColumn {
     }    
 }
 
-extension UInt64 : StructCodableColumn {
+extension UInt64 : CodableStructColumn {
     public typealias FundamentalType = Int64
     public typealias SelfType = UInt64
     
