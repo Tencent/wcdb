@@ -36,6 +36,22 @@ extension Int : StructColumnCoding {
     }    
 }
 
+extension UInt : StructColumnCoding {
+    public typealias FundamentalType = Int64
+    public typealias SelfType = UInt
+    
+    public init?(withTypedValue value: Int64?) {
+        guard value != nil else {
+            return nil
+        }
+        self = UInt(UInt64(bitPattern: value!))
+    }
+    
+    public func archivedTypedValue() -> Int64? {
+        return Int64(self)
+    }    
+}
+
 extension Int8 : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = Int8
@@ -65,26 +81,6 @@ extension Int16 : StructColumnCoding {
     
     public func archivedTypedValue() -> Int32? {
         return Int32(self)
-    }    
-}
-
-extension Int32 : FundamentalCoding {}
-
-extension Int64 : FundamentalCoding {}
-
-extension UInt : StructColumnCoding {
-    public typealias FundamentalType = Int64
-    public typealias SelfType = UInt
-    
-    public init?(withTypedValue value: Int64?) {
-        guard value != nil else {
-            return nil
-        }
-        self = UInt(UInt64(bitPattern: value!))
-    }
-    
-    public func archivedTypedValue() -> Int64? {
-        return Int64(self)
     }    
 }
 

@@ -20,4 +20,12 @@
 
 import Foundation
 
+extension Int32 : FundamentalCoding {}
+
+extension Int64 : FundamentalCoding {}
+
+extension Double : FundamentalCoding {}
+
+extension String: FundamentalCoding {}
+
 extension Data: FundamentalCoding {}

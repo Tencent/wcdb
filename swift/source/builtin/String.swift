@@ -20,8 +20,6 @@
 
 import Foundation
 
-extension String: FundamentalCoding {}
-
 extension String: TableOrSubqueryConvertible{
     public func asTableOrSubquery() -> Subquery {
         return Subquery(withTable: self)
