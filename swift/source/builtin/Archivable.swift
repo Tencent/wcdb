@@ -24,7 +24,7 @@ import Foundation
  * Builtin codable implementation for archivable type
  *
  * Array, Dictionary, Set
- * NSArray/NSMutableArray, NSDictionary/NSMutableDictionary, NSSet/NSMutableSet
+ * all [NSObject]s, e.g. NSArray/NSMutableArray, NSDictionary/NSMutableDictionary, NSSet/NSMutableSet
  * URL
  * 
  */
@@ -57,8 +57,6 @@ extension Array: ArchivableStructColumn {}
 extension Dictionary: ArchivableStructColumn {}
 extension Set: ArchivableStructColumn {}
 
-extension NSArray: ArchivableClassColumn {}
-extension NSSet: ArchivableClassColumn {}
-extension NSDictionary: ArchivableClassColumn {}
+extension NSObject: ArchivableClassColumn {}
 
 extension URL: ArchivableStructColumn {}
