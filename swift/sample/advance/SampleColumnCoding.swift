@@ -21,9 +21,5 @@
 import Foundation
 
 final class SampleColumnCoding {
-    var floatValue: Float
-    
-    init(withFloat floatValue: Float) {
-        self.floatValue = floatValue
-    }
+    var floatValue: Float? = nil
 }

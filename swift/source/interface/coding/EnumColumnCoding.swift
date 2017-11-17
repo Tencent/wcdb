@@ -20,23 +20,19 @@
 
 import Foundation
 
-public protocol FundamentalCodingBase {}
+public protocol EnumColumnCoding: ColumnCoding, RawRepresentable where Self.RawValue: ColumnCoding {}
 
-//Int32, Int64, Double, String, Data
-public protocol FundamentalCoding: StructColumnCoding, FundamentalCodingBase {}
-
-extension FundamentalCoding {
-    public typealias FundamentalType = Self
+extension EnumColumnCoding {
+    public typealias FundamentalType = RawValue.FundamentalType
     
-    public init?(withTypedValue value: FundamentalType?) {
-        guard value != nil else {
+    public init?(withTypedValue optionalValue: RawValue.FundamentalType?) {
+        guard let value = RawValue(withTypedValue: optionalValue) else {
             return nil
         }
-        self = value!
+        self.init(rawValue: value)
     }
     
-    public func archivedTypedValue() -> FundamentalType? {
-        return self
+    public func archivedTypedValue() -> RawValue.FundamentalType? {
+        return rawValue.archivedTypedValue()
     }
 }
-

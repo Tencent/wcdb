@@ -20,17 +20,17 @@
 
 import Foundation
 
-extension Date: WCDB.ColumnCoding {
+extension Date: StructColumnCoding {
     public typealias FundamentalType = Int64
     
-    public init?(with optionalValue: Int64?) {
+    public init?(withTypedValue optionalValue: Int64?) {
         guard let value = optionalValue else {
             return nil
         }
         self.init(timeIntervalSince1970: TimeInterval(value))
     }
     
-    public func archivedValue() -> Int64? {
+    public func archivedTypedValue() -> Int64? {
         return Int64(self.timeIntervalSince1970)
     }
 }

@@ -23,35 +23,26 @@ import Foundation
 public protocol ColumnCodingBase {
     static var columnType: ColumnType {get}
     
-    func archivedValue() -> FundamentalCodingBase?
+    init?(withFundamentalValue value: FundamentalCodingBase?)
     
-    init?(with value: FundamentalCodingBase?)
-}
-
-extension ColumnCodingBase {
-    public static var columnType: ColumnType {
-        fatalError()
-    }
+    func archivedFundamentalValue() -> FundamentalCodingBase?
 }
 
 public protocol ColumnCoding: ColumnCodingBase, LiteralValueConvertible {
     associatedtype FundamentalType   // Int32 Int64 String Double Data
     
-    init?(with value: FundamentalType?)
+    init?(withTypedValue value: FundamentalType?)
     
-    func archivedValue() -> FundamentalType?
-    
-    init() //FIXME: remove it before Beta release
+    func archivedTypedValue() -> FundamentalType?
 }
 
 extension ColumnCoding {
-    public init?(with value: FundamentalCodingBase?) {
-        self.init(with: value as? FundamentalType)
+    public init?(withFundamentalValue value: FundamentalCodingBase?) {
+        self.init(withTypedValue: (value as? FundamentalType))
     }
     
-    public func archivedValue() -> FundamentalCodingBase? {
-        let value: FundamentalType? = archivedValue()
-        return value as? FundamentalCodingBase
+    public func archivedFundamentalValue() -> FundamentalCodingBase? {
+        return archivedTypedValue() as? FundamentalCodingBase 
     }
     
     public func asLiteralValue() -> LiteralValue {

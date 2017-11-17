@@ -20,23 +20,6 @@
 
 import Foundation
 
-public protocol FundamentalCodingBase {}
-
-//Int32, Int64, Double, String, Data
-public protocol FundamentalCoding: StructColumnCoding, FundamentalCodingBase {}
-
-extension FundamentalCoding {
-    public typealias FundamentalType = Self
-    
-    public init?(withTypedValue value: FundamentalType?) {
-        guard value != nil else {
-            return nil
-        }
-        self = value!
-    }
-    
-    public func archivedTypedValue() -> FundamentalType? {
-        return self
-    }
+public protocol ClassColumnCoding: ColumnCoding, AnyObject {
+    init()
 }
-

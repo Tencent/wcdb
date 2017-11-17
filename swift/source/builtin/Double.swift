@@ -22,18 +22,18 @@ import Foundation
 
 extension Double : FundamentalCoding {}
 
-extension Float: ColumnCoding {
+extension Float: StructColumnCoding {
     public typealias FundamentalType = Double
     public typealias SelfType = Float
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Double? {
+        return Double(self)
     }
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Double?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = Float(value!)
     }
 }

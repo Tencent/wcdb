@@ -21,22 +21,21 @@
 import Foundation
 import WCDB
 
-extension SampleColumnCoding: WCDB.ColumnCoding {
-    //FIXME: remove it before beta release
-    convenience init() {
-        self.init(withFloat: 0)
-    }
-    
+extension SampleColumnCoding: WCDB.ClassColumnCoding {    
     typealias FundamentalType = Double
     
-    convenience init?(with optionalValue: Double?) {
+    convenience init?(withTypedValue optionalValue: Double?) {
         guard let value = optionalValue else {
             return nil
         }
-        self.init(withFloat: Float(value))
+        self.init()
+        self.floatValue = Float(value)
     }
     
-    func archivedValue() -> Double? {
-        return Double(floatValue)
+    func archivedTypedValue() -> Double? {
+        guard floatValue != nil else {
+            return nil
+        }
+        return Double(floatValue!)
     }
 }

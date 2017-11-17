@@ -50,19 +50,22 @@ public final class LiteralValue : Describable {
     }
 
     public convenience init<ColumnCodingType: ColumnCoding>(_ columnCodingType: ColumnCodingType) {
-        let archivedValue = columnCodingType.archivedValue()
-        switch ColumnCodingType.columnType {
-        case .Integer32:
-            self.init(archivedValue as! Int32)
-        case .Integer64:
-            self.init(archivedValue as! Int64)
-        case .Float:
-            self.init(archivedValue as! Double)
-        case .Text:
-            self.init(archivedValue as! String)
-        case .BLOB:
-            self.init(archivedValue as! Data)
-        case .Null:
+        if let value = columnCodingType.archivedFundamentalValue() {
+            switch ColumnCodingType.columnType {
+            case .Integer32:
+                self.init(value as! Int32)
+            case .Integer64:
+                self.init(value as! Int64)
+            case .Float:
+                self.init(value as! Double)
+            case .Text:
+                self.init(value as! String)
+            case .BLOB:
+                self.init(value as! Data)
+            case .Null:
+                self.init(nil)
+            }
+        }else {
             self.init(nil)
         }
     }

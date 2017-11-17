@@ -20,29 +20,9 @@
 
 import WCDB
 
-enum SampleORMType: Int, ColumnCoding {
+enum SampleORMType: Int, EnumColumnCoding {
     case SampleORMType1 = 1
     case SampleORMType2 = 2
-    
-    init() {
-        self = .SampleORMType1
-    }
-    
-    typealias FundamentalType = Int32
-    
-    init?(with value: Int32?) {
-        guard value != nil else {
-            return nil
-        }
-        guard let ormType = SampleORMType(rawValue: Int(value!)) else {
-            return nil
-        } 
-        self = ormType
-    }
-
-    func archivedValue() -> Int32? {
-        return Int32(self.rawValue)
-    }
 }
 
 class SampleORM: WCDB.TableCoding {
@@ -50,7 +30,7 @@ class SampleORM: WCDB.TableCoding {
     var desc: String = "nil"
     var value: Double = 0
     var timestamp: String? = nil
-    var type: SampleORMType = .SampleORMType1
+    var type: SampleORMType? = nil
     
     required init() {}
 

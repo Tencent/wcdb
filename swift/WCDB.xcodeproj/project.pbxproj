@@ -21,6 +21,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2302095A1FBE970A000D69B6 /* ClassColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209591FBE970A000D69B6 /* ClassColumnCoding.swift */; };
+		2302095D1FBE9710000D69B6 /* EnumColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302095C1FBE9710000D69B6 /* EnumColumnCoding.swift */; };
+		2302095F1FBE9717000D69B6 /* StructColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302095E1FBE9717000D69B6 /* StructColumnCoding.swift */; };
 		230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230686DB1FAC0E5B0005EE8B /* Convertible.swift */; };
 		230DD5E51FBC29B400795D22 /* WCDBTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230DD5E41FBC29B400795D22 /* WCDBTokenize.swift */; };
 		2330329F1FB9479400101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330328C1FB9479400101373 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -166,6 +169,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		230209591FBE970A000D69B6 /* ClassColumnCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassColumnCoding.swift; sourceTree = "<group>"; };
+		2302095C1FBE9710000D69B6 /* EnumColumnCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumColumnCoding.swift; sourceTree = "<group>"; };
+		2302095E1FBE9717000D69B6 /* StructColumnCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructColumnCoding.swift; sourceTree = "<group>"; };
 		230686DB1FAC0E5B0005EE8B /* Convertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convertible.swift; sourceTree = "<group>"; };
 		230DD5E41FBC29B400795D22 /* WCDBTokenize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCDBTokenize.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -525,9 +531,12 @@
 		23EB20151FB068CE00357ED1 /* coding */ = {
 			isa = PBXGroup;
 			children = (
-				23EB20161FB068CE00357ED1 /* ColumnCoding.swift */,
-				23EB20171FB068CE00357ED1 /* FundamentalCoding.swift */,
 				23EB20181FB068CE00357ED1 /* TableCoding.swift */,
+				23EB20171FB068CE00357ED1 /* FundamentalCoding.swift */,
+				23EB20161FB068CE00357ED1 /* ColumnCoding.swift */,
+				230209591FBE970A000D69B6 /* ClassColumnCoding.swift */,
+				2302095C1FBE9710000D69B6 /* EnumColumnCoding.swift */,
+				2302095E1FBE9717000D69B6 /* StructColumnCoding.swift */,
 			);
 			path = coding;
 			sourceTree = "<group>";
@@ -720,6 +729,8 @@
 				235CAEFD1FB586A7003039F0 /* Bool.swift in Sources */,
 				238D0B801FAB1F7E00BC2659 /* Handle.swift in Sources */,
 				23EB20341FB068CE00357ED1 /* FundamentalCoding.swift in Sources */,
+				2302095F1FBE9717000D69B6 /* StructColumnCoding.swift in Sources */,
+				2302095A1FBE970A000D69B6 /* ClassColumnCoding.swift in Sources */,
 				23EB203C1FB068CE00357ED1 /* Property.swift in Sources */,
 				238D0B8E1FAB1F7E00BC2659 /* StatementDelete.swift in Sources */,
 				238D0B821FAB1F7E00BC2659 /* JoinClause.swift in Sources */,
@@ -761,6 +772,7 @@
 				238D0BA31FAB1F7E00BC2659 /* Int.swift in Sources */,
 				230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */,
 				23EB202C1FB068CE00357ED1 /* ConstraintBinding.swift in Sources */,
+				2302095D1FBE9710000D69B6 /* EnumColumnCoding.swift in Sources */,
 				238D0B991FAB1F7E00BC2659 /* StatementSelect.swift in Sources */,
 				238D0B8B1FAB1F7E00BC2659 /* StatementCreateIndex.swift in Sources */,
 				233032A01FB9479400101373 /* sqliterk.c in Sources */,

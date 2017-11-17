@@ -20,18 +20,18 @@
 
 import Foundation
 
-extension Bool : ColumnCoding {
+extension Bool : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = Bool
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int32?) {
         guard value != nil else {
             return nil
         }
         self = value != 0
     }
     
-    public func archivedValue() -> FundamentalType? {
+    public func archivedTypedValue() -> Int32? {
         return self ? 1 : 0
     }    
 }

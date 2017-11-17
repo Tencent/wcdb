@@ -20,51 +20,51 @@
 
 import Foundation
 
-extension Int : ColumnCoding {
+extension Int : StructColumnCoding {
     public typealias FundamentalType = Int64
     public typealias SelfType = Int
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int64?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = Int(value!)
     }
 
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int64? {
+        return Int64(self)
     }    
 }
 
-extension Int8 : ColumnCoding {
+extension Int8 : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = Int8
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int32?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = Int8(value!)
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int32? {
+        return Int32(self)
     }    
 }
 
-extension Int16 : ColumnCoding {
+extension Int16 : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = Int16
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int32?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = Int16(value!)
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int32? {
+        return Int32(self)
     }    
 }
 
@@ -72,83 +72,82 @@ extension Int32 : FundamentalCoding {}
 
 extension Int64 : FundamentalCoding {}
 
-extension UInt : ColumnCoding {
-    public typealias FundamentalType = Int32
+extension UInt : StructColumnCoding {
+    public typealias FundamentalType = Int64
     public typealias SelfType = UInt
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int64?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = UInt(UInt64(bitPattern: value!))
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int64? {
+        return Int64(self)
     }    
 }
 
-extension UInt8 : ColumnCoding {
+extension UInt8 : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = UInt8
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int32?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = UInt8(value!)
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int32? {
+        return Int32(self)
     }    
 }
 
-extension UInt16 : ColumnCoding {
+extension UInt16 : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = UInt16
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int32?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = UInt16(value!)
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int32? {
+        return Int32(self)
     }    
 }
 
-extension UInt32 : ColumnCoding {
+extension UInt32 : StructColumnCoding {
     public typealias FundamentalType = Int32
     public typealias SelfType = UInt32
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int32?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = UInt32(bitPattern: value!)
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int32? {
+        return Int32(self)
     }    
 }
 
-extension UInt64 : ColumnCoding {
+extension UInt64 : StructColumnCoding {
     public typealias FundamentalType = Int64
     public typealias SelfType = UInt64
     
-    public init?(with value: FundamentalType?) {
+    public init?(withTypedValue value: Int64?) {
         guard value != nil else {
             return nil
         }
-        self = SelfType(value!)
+        self = UInt64(bitPattern: value!)
     }
     
-    public func archivedValue() -> FundamentalType? {
-        return FundamentalType(self)
+    public func archivedTypedValue() -> Int64? {
+        return Int64(self)
     }    
 }
-

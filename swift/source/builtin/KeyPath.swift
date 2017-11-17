@@ -42,78 +42,114 @@ extension AnyKeyPath: ColumnBindingRepresentable {
     }
 }
 
-//FIXME: refactor
-extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: ColumnCoding {
-    public var name: String {
-        var propertyName: String! = nil
-        
+extension WritableKeyPath {
+    private static func getReferenceTypeName<Root: TableCoding, Value: ClassColumnCoding>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
         var root = Root()
-        var property = Value.WrappedType()
-        var isSameProperty: (inout Value.WrappedType, inout Value.WrappedType) -> Bool
-        if Value.WrappedType.self is AnyClass {
-            //TODO: use === ?
-            isSameProperty = { unsafeBitCast($0, to: Int.self)==unsafeBitCast($1, to: Int.self) }
-        }else {
-            let size = MemoryLayout<Value.WrappedType>.size
-            guard size > 0 else {
-                fatalError("A non-class property with empty memory size is not supported")
+        root[keyPath: keyPath] = Value()
+        
+        let results = Mirror(reflecting: root).children.filter { 
+            guard let value = $0.value as? Value else {
+                return false
             }
-            memset(&property, Root.magicNumber, size)
-            isSameProperty = { memcmp(&$0, &$1, size)==0 }
+            return value === root[keyPath: keyPath]
         }
         
-        let o: Value.WrappedType? = property
-        root[keyPath: self] = o as! Value 
-        
-        Mirror(reflecting: root).children.forEach { (child) in
-            guard var value = child.value as? Value.WrappedType else {
-                return
-            }
-            guard isSameProperty(&value, &property) else {
-                return
-            }
-            guard propertyName == nil else {
+        guard results.count == 1 else {
+            switch results.count {
+            case 0:
+                fatalError("Cannot find the property. You may specify the property name or issue us.")
+            default:
                 fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
             }
-            propertyName = child.label
         }
-        assert(propertyName != nil)
-        return propertyName
+        return results[0].label!
+    }
+    
+    private static func getOptionalReferenceTypeName<Root: TableCoding, Value: OptionalExpressible>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String where Value.WrappedType: ClassColumnCoding {
+        var root = Root()
+        root[keyPath: keyPath] = Value.WrappedType() as! Value
+        
+        let results = Mirror(reflecting: root).children.filter { 
+            guard let value = $0.value as? Value.WrappedType else {
+                return false
+            }
+            return value === root[keyPath: keyPath].wrapped
+        }
+        
+        guard results.count == 1 else {
+            switch results.count {
+            case 0:
+                fatalError("Cannot find the property. You may specify the property name or issue us.")
+            default:
+                fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
+            }
+        }
+        
+        return results[0].label!
+    }
+    
+    private static func getValueTypeName<Root: TableCoding, Value>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
+        guard !(Value.self is AnyClass) else {
+            fatalError()
+        }
+        
+        var root = Root()
+        
+        let size = MemoryLayout<Value>.size
+        memset(&root[keyPath: keyPath], Root.magicNumber, size)
+        
+        let results = Mirror(reflecting: root).children.filter { 
+            guard var value = $0.value as? Value else {
+                return false
+            }
+            return memcmp(&value, &root[keyPath: keyPath], size) == 0
+        }
+        
+        guard results.count == 1 else {
+            switch results.count {
+            case 0:
+                fatalError("Cannot find the property. You may specify the property name or issue us.")
+            default:
+                fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
+            }
+        }
+        
+        return results[0].label!
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: ColumnCoding {
-    public var name: String {
-        var propertyName: String! = nil 
-        
-        var root = Root()
-        root[keyPath: self] = Value()
-        var isSameProperty: (inout Value, inout Value) -> Bool
-        if Value.self is AnyClass {
-            //TODO: use === ?
-            isSameProperty = { unsafeBitCast($0, to: Int.self)==unsafeBitCast($1, to: Int.self) }
-        }else {
-            let size = MemoryLayout<Value>.size
-            guard size > 0 else {
-                fatalError("A non-class property with empty memory size is not supported")
-            }
-            memset(&root[keyPath: self], Root.magicNumber, size)
-            isSameProperty = { memcmp(&$0, &$1, size)==0 }
-        }
-        
-        Mirror(reflecting: root).children.forEach { (child) in
-            guard var value = child.value as? Value else {
-                return
-            }
-            guard isSameProperty(&value, &root[keyPath: self]) else {
-                return 
-            }
-            guard propertyName == nil else {
-                fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
-            }
-            propertyName = child.label
-        }
-        assert(propertyName != nil)
-        return propertyName
+extension WritableKeyPath where Root: TableCoding, Value: ClassColumnCoding {
+    var name: String {
+        return WritableKeyPath.getReferenceTypeName(fromKeyPath: self)
+    }
+}
+
+extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: ClassColumnCoding {
+    var name: String {
+        return WritableKeyPath.getOptionalReferenceTypeName(fromKeyPath: self)
+    }
+}
+
+extension WritableKeyPath where Root: TableCoding, Value: EnumColumnCoding {
+    var name: String {
+        return WritableKeyPath.getValueTypeName(fromKeyPath: self)
+    }
+}
+
+extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: EnumColumnCoding {
+    var name: String {
+        return WritableKeyPath.getValueTypeName(fromKeyPath: self)
+    }
+}
+
+extension WritableKeyPath where Root: TableCoding, Value: StructColumnCoding {
+    var name: String {
+        return WritableKeyPath.getValueTypeName(fromKeyPath: self)
+    }
+}
+
+extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: StructColumnCoding {
+    var name: String {
+        return WritableKeyPath.getValueTypeName(fromKeyPath: self)
     }
 }

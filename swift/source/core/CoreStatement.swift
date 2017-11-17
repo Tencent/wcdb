@@ -35,7 +35,7 @@ public class CoreStatement: CoreRepresentable {
     public func bind(_ value: ColumnCodingBase?, toIndex index: Int) {
         if value != nil {
             let cls = Swift.type(of: value!)
-            let fundamentalValue = value!.archivedValue()
+            let fundamentalValue = value!.archivedFundamentalValue()
             switch cls.columnType {
             case .Integer32:
                 handleStatement.bind(fundamentalValue as! Int32, toIndex: index)
