@@ -28,6 +28,7 @@ public protocol CodableColumnBase {
     func archivedFundamentalValue() -> FundamentalValue
 }
 
+//TODO: Maybe I should use Codable protocol to implement this ?
 public protocol CodableColumn: CodableColumnBase, LiteralValueConvertible {
     associatedtype FundamentalType   // Int32 Int64 String Double Data
     
@@ -47,6 +48,12 @@ extension CodableColumn {
     
     public func asLiteralValue() -> LiteralValue {
         return LiteralValue(self)
+    }
+}
+
+extension CodableColumn {
+    public static var columnType: ColumnType {
+        fatalError()
     }
 }
 
