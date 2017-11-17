@@ -23,9 +23,9 @@ import Foundation
 public protocol ColumnCodingBase {
     static var columnType: ColumnType {get}
     
-    init?(withFundamentalValue value: FundamentalCodingBase?)
+    init?(withFundamentalValue value: FundamentalValue)
     
-    func archivedFundamentalValue() -> FundamentalCodingBase?
+    func archivedFundamentalValue() -> FundamentalValue
 }
 
 public protocol ColumnCoding: ColumnCodingBase, LiteralValueConvertible {
@@ -37,11 +37,11 @@ public protocol ColumnCoding: ColumnCodingBase, LiteralValueConvertible {
 }
 
 extension ColumnCoding {
-    public init?(withFundamentalValue value: FundamentalCodingBase?) {
+    public init?(withFundamentalValue value: FundamentalValue) {
         self.init(withTypedValue: (value as? FundamentalType))
     }
     
-    public func archivedFundamentalValue() -> FundamentalCodingBase? {
+    public func archivedFundamentalValue() -> FundamentalValue {
         return archivedTypedValue() as? FundamentalCodingBase 
     }
     

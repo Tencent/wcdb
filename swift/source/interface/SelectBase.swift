@@ -159,7 +159,7 @@ public class SelectBase: CoreRepresentable {
         }
     }
     
-    func extract(atIndex index: Int) throws -> OneValue {
+    func extract(atIndex index: Int) throws -> FundamentalValue {
         let coreStatement = try self.lazyCoreStatement()
         switch coreStatement.type(atIndex: index) {
         case .Integer32:
@@ -177,8 +177,8 @@ public class SelectBase: CoreRepresentable {
         }
     }
     
-    func extract() throws -> OneRow {
-        var row: OneRow = []
+    func extract() throws -> FundamentalRow {
+        var row: FundamentalRow = []
         let coreStatement = try self.lazyCoreStatement()
         for index in 0..<coreStatement.columnCount() {
             row.append(try extract(atIndex: index))

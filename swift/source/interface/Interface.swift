@@ -122,21 +122,21 @@ extension DeleteInterface where Self: Core {
 }
 
 public protocol RowSelectInterface {
-    func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> RowXColumn     
-    func getRows(on columnResultConvertiableList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> RowXColumn 
+    func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn     
+    func getRows(on columnResultConvertiableList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn 
     
-    func getRow(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> OneRow?
-    func getRow(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> OneRow? 
+    func getRow(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> FundamentalRow?
+    func getRow(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> FundamentalRow? 
     
-    func getColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> OneColumn 
-    func getDistinctColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> OneColumn 
+    func getColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalColumn 
+    func getDistinctColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalColumn 
     
-    func getValue(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> OneValue 
-    func getDistinctValue(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> OneValue 
+    func getValue(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalValue 
+    func getDistinctValue(on result: ColumnResultConvertible, from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalValue 
 }
 
 extension RowSelectInterface where Self: Core {
-    public func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> RowXColumn {
+    public func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
         var rowSelect = try RowSelect(with: self, results: columnResultConvertiableList, tables: [table], isDistinct: false)
         if condition != nil {
             rowSelect = rowSelect.where(condition!)
@@ -153,19 +153,19 @@ extension RowSelectInterface where Self: Core {
         return try rowSelect.allRows()
     }
     
-    public func getRows(on columnResultConvertiableList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> RowXColumn {
+    public func getRows(on columnResultConvertiableList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
         return try getRows(on: columnResultConvertiableList, from: table, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
-    public func getRow(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> OneRow? {
+    public func getRow(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> FundamentalRow? {
         return try getRows(on: columnResultConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
     
-    public func getRow(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> OneRow? {
+    public func getRow(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> FundamentalRow? {
         return try getRows(on: columnResultConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
     
-    public func getColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> OneColumn {
+    public func getColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalColumn {
         var rowSelect = try RowSelect(with: self, results: [result], tables: [table], isDistinct: false)
         if condition != nil {
             rowSelect = rowSelect.where(condition!)
@@ -182,7 +182,7 @@ extension RowSelectInterface where Self: Core {
         return try rowSelect.allValues()
     }
     
-    public func getDistinctColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> OneColumn {
+    public func getDistinctColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalColumn {
         var rowSelect = try RowSelect(with: self, results: [result], tables: [table], isDistinct: true)
         if condition != nil {
             rowSelect = rowSelect.where(condition!)
@@ -199,12 +199,12 @@ extension RowSelectInterface where Self: Core {
         return try rowSelect.allValues()
     }
     
-    public func getValue(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> OneValue {
+    public func getValue(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalValue {
         //TODO: ??
         return (try getRows(on: result, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first?.first)!
     }
     
-    public func getDistinctValue(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> OneValue {
+    public func getDistinctValue(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalValue {
         //TODO: ??
         return try getDistinctColumn(on: result, from: table).first as? FundamentalCodingBase
     }   

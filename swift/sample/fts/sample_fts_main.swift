@@ -115,7 +115,7 @@ func sample_fts_main(baseDirectory: String) {
     //See http://www.sqlite.org/fts3.html#snippet for further information
     do {
         let tableProperty = SampleFTSData.property(named: tableNameFTS) 
-        let row: OneRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), from: tableNameFTS, where: tableProperty.match("12*")))!
+        let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), from: tableNameFTS, where: tableProperty.match("12*")))!
         
         print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
     }catch let error {

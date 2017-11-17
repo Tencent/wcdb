@@ -85,7 +85,7 @@ func sample_core_main(baseDirectory: String) {
         try coreStatement.step()
         for i in 0..<coreStatement.columnCount() {
             let columnName = coreStatement.columnName(atIndex: i)
-            let value: OneValue = coreStatement.value(atIndex: i)
+            let value: FundamentalValue = coreStatement.value(atIndex: i)
             print("\(columnName): \(value ?? "")")
         }
     }catch let error {
@@ -106,7 +106,7 @@ func sample_core_main(baseDirectory: String) {
         while try coreStatement.step() {
             for i in 0..<coreStatement.columnCount() {
                 let columnName = coreStatement.columnName(atIndex: i)
-                let value: OneValue = coreStatement.value(atIndex: i)
+                let value: FundamentalValue = coreStatement.value(atIndex: i)
                 print("\(columnName): \(String(describing: value))")
             }
         }

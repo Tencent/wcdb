@@ -27,7 +27,7 @@ public typealias GroupBy = ExpressionConvertible
 public typealias Having = ExpressionConvertible
 public typealias OrderBy = OrderConvertible
 
-public typealias OneValue = FundamentalCodingBase?// nullable
-public typealias OneColumn = [OneValue]
-public typealias OneRow = [OneValue]
-public typealias RowXColumn = [OneRow]
+public typealias FundamentalValue = FundamentalCodingBase?// nullable, Int32, Int64, Double, String, Data
+public typealias FundamentalColumn = [FundamentalValue]
+public typealias FundamentalRow = [FundamentalValue]
+public typealias FundamentalRowXColumn = [FundamentalRow]

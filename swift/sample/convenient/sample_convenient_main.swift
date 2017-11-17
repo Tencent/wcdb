@@ -122,7 +122,7 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select column
     do {
-        let column: OneColumn = try database.getColumn(on: \SampleConvenient.stringValue, from: tableName)
+        let column: FundamentalColumn = try database.getColumn(on: \SampleConvenient.stringValue, from: tableName)
         for string in column {
             //do sth
         }
@@ -132,7 +132,7 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select row
     do {
-        let row: OneRow? = try database.getRow(on: \SampleConvenient.intValue, \SampleConvenient.stringValue, from: tableName)
+        let row: FundamentalRow? = try database.getRow(on: \SampleConvenient.intValue, \SampleConvenient.stringValue, from: tableName)
         let intValue = row?[0]
         let stringValue = row?[1]
     }catch let error {
@@ -148,7 +148,7 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select aggregation
     do {
-        let row: OneRow? = try database.getRow(on: (\SampleConvenient.intValue).avg(), (\SampleConvenient.stringValue).count(), from: tableName)
+        let row: FundamentalRow? = try database.getRow(on: (\SampleConvenient.intValue).avg(), (\SampleConvenient.stringValue).count(), from: tableName)
     }catch let error {
         print("select aggregation error: \(error)")
     }

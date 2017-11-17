@@ -115,7 +115,7 @@ public class CoreStatement: CoreRepresentable {
         return handleStatement.columnValue(atIndex: index)
     }
     
-    public func value(atIndex index: Int) -> OneValue {
+    public func value(atIndex index: Int) -> FundamentalValue {
         switch handleStatement.columnType(atIndex: index) {
         case .Integer32:
             let value: Int32 = handleStatement.columnValue(atIndex: index) 
@@ -137,7 +137,7 @@ public class CoreStatement: CoreRepresentable {
         }        
     }
     
-    public func value(byName name: String) -> OneValue {
+    public func value(byName name: String) -> FundamentalValue {
         guard let index = index(byName: name) else {
             return nil
         }

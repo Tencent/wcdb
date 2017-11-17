@@ -31,26 +31,26 @@ public class RowSelect : SelectBase {
         statementSelect.select(distinct: isDistinct, columnResultConvertibleList).from(tables)
     }
     
-    public func nextRow() throws -> OneRow? {
+    public func nextRow() throws -> FundamentalRow? {
         try next()
         return try extract()
     }
     
-    public func allRows() throws -> RowXColumn {
-        var rows: [[FundamentalCodingBase?]] = []
+    public func allRows() throws -> FundamentalRowXColumn {
+        var rows: [[FundamentalValue]] = []
         while try next() {
             rows.append(try extract())
         }
         return rows
     }
     
-    public func nextValue() throws -> OneValue {
+    public func nextValue() throws -> FundamentalValue {
         try next()
         return try extract(atIndex: 0)
     }
     
-    public func allValues() throws -> OneColumn {
-        var values: [FundamentalCodingBase?] = []
+    public func allValues() throws -> FundamentalColumn {
+        var values: [FundamentalValue] = []
         while try next() {
             values.append(try extract(atIndex: 0))
         }
