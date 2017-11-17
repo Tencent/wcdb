@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleCore: WCDB.TableCoding {
+class SampleCore: WCDB.CodableTable {
     var localID: Int? = nil
     var content: String? = nil
     

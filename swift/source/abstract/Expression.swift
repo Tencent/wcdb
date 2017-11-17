@@ -67,7 +67,7 @@ public final class Expression : Describable {
         self.init(with: LiteralValue(value))
     }
     
-    public convenience init<ColumnCodingType: ColumnCoding>(_ value: ColumnCodingType) {
+    public convenience init<CodableColumnType: CodableColumn>(_ value: CodableColumnType) {
         self.init(with: LiteralValue(value))
     }
 }

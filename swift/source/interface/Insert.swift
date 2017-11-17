@@ -41,11 +41,11 @@ public class Insert: CoreRepresentable {
     
     private lazy var statement: StatementInsert = StatementInsert().insert(intoTable: name, with: properties!, onConflict: isReplace ? Conflict.Replace : Conflict.Fail).values(Array(repeating: Expression.bindingParameter, count: properties!.count))
     
-    public func execute(with objects: TableCoding...) throws {
+    public func execute(with objects: CodableTable...) throws {
         try execute(with: objects)
     }
     
-    public func execute(with objects: [TableCoding]) throws {
+    public func execute(with objects: [CodableTable]) throws {
         guard objects.count > 0 else {
             Error.warning("Inserting with an empty/nil object")
             return

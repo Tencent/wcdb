@@ -20,9 +20,9 @@
 
 import Foundation
 
-public protocol EnumColumnCoding: ColumnCoding, RawRepresentable where Self.RawValue: ColumnCoding {}
+public protocol EnumCodableColumn: CodableColumn, RawRepresentable where Self.RawValue: CodableColumn {}
 
-extension EnumColumnCoding {
+extension EnumCodableColumn {
     public typealias FundamentalType = RawValue.FundamentalType
     
     public init?(withTypedValue optionalValue: RawValue.FundamentalType?) {

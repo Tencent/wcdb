@@ -24,7 +24,7 @@ import WCDB
 func sample_orm_main(baseDirectory: String) {
     print("Sample-ORM Begin")
     
-    let clses: [TableCoding.Type] = [ SampleORM.self, SampleORMIndex.self, SampleORMColumnConstraint.self, SampleORMTableConstraint.self ]
+    let clses: [CodableTable.Type] = [ SampleORM.self, SampleORMIndex.self, SampleORMColumnConstraint.self, SampleORMTableConstraint.self ]
     for cls in clses {
         let className = String(describing: cls)
         let filename = className

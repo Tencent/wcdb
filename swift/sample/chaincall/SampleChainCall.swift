@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleChainCall: WCDB.TableCoding {
+class SampleChainCall: WCDB.CodableTable {
     var intValue: Int? = nil
     var stringValue: String? = nil
     

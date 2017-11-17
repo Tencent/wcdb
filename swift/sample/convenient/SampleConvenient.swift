@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleConvenient: WCDB.TableCoding {
+class SampleConvenient: WCDB.CodableTable {
     var intValue: Int? = nil
     var stringValue: String? = nil
     

@@ -20,7 +20,7 @@
 
 import Foundation
 
-extension Float: StructColumnCoding {
+extension Float: StructCodableColumn {
     public typealias FundamentalType = Double
     public typealias SelfType = Float
     

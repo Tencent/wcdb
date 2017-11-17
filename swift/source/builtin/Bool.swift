@@ -20,7 +20,7 @@
 
 import Foundation
 
-extension Bool : StructColumnCoding {
+extension Bool : StructCodableColumn {
     public typealias FundamentalType = Int32
     public typealias SelfType = Bool
     

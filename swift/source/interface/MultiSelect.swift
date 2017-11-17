@@ -39,13 +39,13 @@ public class MultiSelect: SelectBase {
         statementSelect.select(distinct: isDistinct, properties).from(tables)
     }
     
-    public func nextMultiObject() throws -> [String:TableCoding]? {
+    public func nextMultiObject() throws -> [String:CodableTable]? {
         try next()
         return try extractMultiObject(from: properties)
     }
     
-    public func allMultiObjects() throws -> [[String:TableCoding]] {
-        var multiObjects: [[String:TableCoding]] = []
+    public func allMultiObjects() throws -> [[String:CodableTable]] {
+        var multiObjects: [[String:CodableTable]] = []
         while try next() {
             multiObjects.append(try extractMultiObject(from: properties))
         }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public protocol TableCoding {
+public protocol CodableTable {
     static func columnBindings() -> [AnyColumnBinding]
     static func indexBindings() -> [IndexBinding]?
     static func constraintBindings() -> [ConstraintBinding]?
@@ -39,7 +39,7 @@ public protocol TableCoding {
     static func property(fromAccessor accessor: AnyKeyPath) -> Property
 }
 
-extension TableCoding {
+extension CodableTable {
     public static var allProperties: [Property] {
         return objectRelationalMapping.properties
     }

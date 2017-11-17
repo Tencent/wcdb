@@ -24,7 +24,7 @@ public class TableBinding {
     private static let spin = Spin()
     private static var collection: [String:TableBinding] = [:]
     
-    static func from(_ type: TableCoding.Type) -> TableBinding {
+    static func from(_ type: CodableTable.Type) -> TableBinding {
         let description = String(describing: type)
         spin.lock(); defer { spin.unlock() }
         var tableBinding: TableBinding! = collection[description]
@@ -35,12 +35,12 @@ public class TableBinding {
         return tableBinding
     }
     
-    let bindingClass: TableCoding.Type
+    let bindingClass: CodableTable.Type
     let accessors2Properties: [AnyColumnBinding.AnyAccessor:Property]
     let properties: [Property]
     let columnBindings: [String:AnyColumnBinding]
     
-    public init(_ bindingClass: TableCoding.Type) {
+    public init(_ bindingClass: CodableTable.Type) {
         var columnBindings: [String:AnyColumnBinding] = [:]
         var accessors2Properties: [AnyColumnBinding.AnyAccessor:Property] = [:]
         var properties: [Property] = []

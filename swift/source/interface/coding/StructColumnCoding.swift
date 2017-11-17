@@ -20,4 +20,4 @@
 
 import Foundation
 
-public protocol StructColumnCoding: ColumnCoding {}
+public protocol StructCodableColumn: CodableColumn {}

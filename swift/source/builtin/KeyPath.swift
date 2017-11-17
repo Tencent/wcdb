@@ -23,27 +23,27 @@ import Foundation
 extension AnyKeyPath: PropertyOperable {
     public func asProperty() -> Property {
         let cls = type(of: self)
-        if cls.rootType is TableCoding.Type {
-            let property = (cls.rootType as! TableCoding.Type).property(fromAccessor: self)
+        if cls.rootType is CodableTable.Type {
+            let property = (cls.rootType as! CodableTable.Type).property(fromAccessor: self)
             property.columnBinding = self.columnBinding
             return property
         }
-        fatalError("\(cls.rootType) is not conform to protocol: TableCoding")
+        fatalError("\(cls.rootType) is not conform to protocol: CodableTable")
     }
 }
 
 extension AnyKeyPath: ColumnBindingRepresentable {
     public var columnBinding: AnyColumnBinding? {
         let cls = type(of: self)
-        if cls.rootType is TableCoding.Type {
-            return (cls.rootType as! TableCoding.Type).objectRelationalMapping.columnBinding(fromAccessor: self)
+        if cls.rootType is CodableTable.Type {
+            return (cls.rootType as! CodableTable.Type).objectRelationalMapping.columnBinding(fromAccessor: self)
         }
-        fatalError("\(cls.rootType) is not conform to protocol: TableCoding")
+        fatalError("\(cls.rootType) is not conform to protocol: CodableTable")
     }
 }
 
 extension WritableKeyPath {
-    private static func getReferenceTypeName<Root: TableCoding, Value: ClassColumnCoding>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
+    private static func getReferenceTypeName<Root: CodableTable, Value: ClassCodableColumn>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
         var root = Root()
         root[keyPath: keyPath] = Value()
         
@@ -65,7 +65,7 @@ extension WritableKeyPath {
         return results[0].label!
     }
     
-    private static func getOptionalReferenceTypeName<Root: TableCoding, Value: OptionalExpressible>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String where Value.WrappedType: ClassColumnCoding {
+    private static func getOptionalReferenceTypeName<Root: CodableTable, Value: OptionalExpressible>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String where Value.WrappedType: ClassCodableColumn {
         var root = Root()
         root[keyPath: keyPath] = Value.WrappedType() as! Value
         
@@ -88,7 +88,7 @@ extension WritableKeyPath {
         return results[0].label!
     }
     
-    private static func getValueTypeName<Root: TableCoding, Value>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
+    private static func getValueTypeName<Root: CodableTable, Value>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
         guard !(Value.self is AnyClass) else {
             fatalError()
         }
@@ -118,37 +118,37 @@ extension WritableKeyPath {
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: ClassColumnCoding {
+extension WritableKeyPath where Root: CodableTable, Value: ClassCodableColumn {
     var name: String {
         return WritableKeyPath.getReferenceTypeName(fromKeyPath: self)
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: ClassColumnCoding {
+extension WritableKeyPath where Root: CodableTable, Value: OptionalExpressible, Value.WrappedType: ClassCodableColumn {
     var name: String {
         return WritableKeyPath.getOptionalReferenceTypeName(fromKeyPath: self)
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: EnumColumnCoding {
+extension WritableKeyPath where Root: CodableTable, Value: EnumCodableColumn {
     var name: String {
         return WritableKeyPath.getValueTypeName(fromKeyPath: self)
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: EnumColumnCoding {
+extension WritableKeyPath where Root: CodableTable, Value: OptionalExpressible, Value.WrappedType: EnumCodableColumn {
     var name: String {
         return WritableKeyPath.getValueTypeName(fromKeyPath: self)
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: StructColumnCoding {
+extension WritableKeyPath where Root: CodableTable, Value: StructCodableColumn {
     var name: String {
         return WritableKeyPath.getValueTypeName(fromKeyPath: self)
     }
 }
 
-extension WritableKeyPath where Root: TableCoding, Value: OptionalExpressible, Value.WrappedType: StructColumnCoding {
+extension WritableKeyPath where Root: CodableTable, Value: OptionalExpressible, Value.WrappedType: StructCodableColumn {
     var name: String {
         return WritableKeyPath.getValueTypeName(fromKeyPath: self)
     }

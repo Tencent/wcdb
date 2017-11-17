@@ -20,7 +20,7 @@
 
 import WCDB
 
-class SampleORMIndex: WCDB.TableCoding {
+class SampleORMIndex: WCDB.CodableTable {
     var indexProperty: Int? = nil
     var uniqueIndexProperty: Int? = nil
     var multiIndexPart1: String? = nil

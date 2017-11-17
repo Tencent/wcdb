@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleRepair: WCDB.TableCoding {
+class SampleRepair: WCDB.CodableTable {
     var identifier: Int? = nil
     var content: String? = nil
     

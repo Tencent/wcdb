@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleFile: WCDB.TableCoding {
+class SampleFile: WCDB.CodableTable {
     var intValue: Int? = nil
     
     required init() {}

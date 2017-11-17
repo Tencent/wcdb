@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleFTSOrigin: WCDB.TableCoding {
+class SampleFTSOrigin: WCDB.CodableTable {
     var localID: Int? = nil
     var name: String? = nil
     var content: String? = nil

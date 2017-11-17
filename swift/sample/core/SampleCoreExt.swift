@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleCoreExt: WCDB.TableCoding {
+class SampleCoreExt: WCDB.CodableTable {
     var localID: Int? = nil
     var createTime: Date? = nil
     

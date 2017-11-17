@@ -20,7 +20,7 @@
 
 import Foundation
 
-class Sequence: WCDB.TableCoding, CustomStringConvertible {
+class Sequence: WCDB.CodableTable, CustomStringConvertible {
     public static let tableName: String = "sqlite_sequence"
     
     public var name: String? = nil

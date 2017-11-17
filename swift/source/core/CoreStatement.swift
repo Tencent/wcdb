@@ -32,7 +32,7 @@ public class CoreStatement: CoreRepresentable {
         return recyclableHandleStatement.raw
     }
     
-    public func bind(_ value: ColumnCodingBase?, toIndex index: Int) {
+    public func bind(_ value: CodableColumnBase?, toIndex index: Int) {
         if value != nil {
             let cls = Swift.type(of: value!)
             let fundamentalValue = value!.archivedFundamentalValue()
@@ -55,7 +55,7 @@ public class CoreStatement: CoreRepresentable {
         }
     }
        
-    func bind(_ columnBinding: AnyColumnBinding, of object: TableCoding, toIndex index: Int) {
+    func bind(_ columnBinding: AnyColumnBinding, of object: CodableTable, toIndex index: Int) {
         switch columnBinding.columnType {
         case .Integer32:
             let value: Int32? = columnBinding.access(getFundamentalValueFromObject: object)

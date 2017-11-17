@@ -21,8 +21,8 @@
 import Foundation
 
 public protocol InsertChainCallInterface {
-    func prepareInsert(ofClass cls: TableCoding.Type, into table: String) throws -> Insert 
-    func prepareInsertOrReplace(ofClass cls: TableCoding.Type, into table: String) throws -> Insert 
+    func prepareInsert(ofClass cls: CodableTable.Type, into table: String) throws -> Insert 
+    func prepareInsertOrReplace(ofClass cls: CodableTable.Type, into table: String) throws -> Insert 
     func prepareInsert(onProperties propertyConvertibleList: PropertyConvertible..., into table: String) throws -> Insert
     func prepareInsertOrReplace(onProperties propertyConvertibleList: PropertyConvertible..., into table: String) throws -> Insert
     func prepareInsert(onProperties propertyConvertibleList: [PropertyConvertible], into table: String) throws -> Insert
@@ -30,11 +30,11 @@ public protocol InsertChainCallInterface {
 }
 
 extension InsertChainCallInterface where Self: Core {
-    public func prepareInsert(ofClass cls: TableCoding.Type, into table: String) throws -> Insert {
+    public func prepareInsert(ofClass cls: CodableTable.Type, into table: String) throws -> Insert {
         return try Insert(with: self, named: table, on: cls.allProperties, isReplace: false)
     }
     
-    public func prepareInsertOrReplace(ofClass cls: TableCoding.Type, into table: String) throws -> Insert  {
+    public func prepareInsertOrReplace(ofClass cls: CodableTable.Type, into table: String) throws -> Insert  {
         return try Insert(with: self, named: table, on: cls.allProperties, isReplace: true)
     }
     
@@ -106,13 +106,13 @@ extension RowSelectChainCallInterface where Self: Core {
 }
 
 public protocol SelectChainCallInterface {
-    func prepareSelect(of cls: TableCoding.Type, from table: String, isDistinct: Bool) throws -> Select
+    func prepareSelect(of cls: CodableTable.Type, from table: String, isDistinct: Bool) throws -> Select
     func prepareSelect(on propertyConvertibleList: PropertyConvertible..., from table : String, isDistinct: Bool) throws -> Select
     func prepareSelect(on propertyConvertibleList: [PropertyConvertible], from table : String, isDistinct: Bool) throws -> Select
 }
 
 extension SelectChainCallInterface where Self: Core {
-    public func prepareSelect(of cls: TableCoding.Type, from table: String, isDistinct: Bool = false) throws -> Select {
+    public func prepareSelect(of cls: CodableTable.Type, from table: String, isDistinct: Bool = false) throws -> Select {
         return try Select(with: self, on: cls.allProperties, table: table, isDistinct: isDistinct)
     }
     

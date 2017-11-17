@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleORMTableConstraint: WCDB.TableCoding {
+class SampleORMTableConstraint: WCDB.CodableTable {
     var primaryKeyPart1: Int? = nil
     var primaryKeyPart2: String? = nil
     

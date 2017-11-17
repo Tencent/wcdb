@@ -20,6 +20,6 @@
 
 import Foundation
 
-final class SampleColumnCoding {
+final class SampleCodableColumn {
     var floatValue: Float? = nil
 }

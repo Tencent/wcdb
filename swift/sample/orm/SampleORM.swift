@@ -20,12 +20,12 @@
 
 import WCDB
 
-enum SampleORMType: Int, EnumColumnCoding {
+enum SampleORMType: Int, EnumCodableColumn {
     case SampleORMType1 = 1
     case SampleORMType2 = 2
 }
 
-class SampleORM: WCDB.TableCoding {
+class SampleORM: WCDB.CodableTable {
     var identifier: Int = 0
     var desc: String = "nil"
     var value: Double = 0

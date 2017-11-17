@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-extension SampleColumnCoding: WCDB.ClassColumnCoding {    
+extension SampleCodableColumn: WCDB.ClassCodableColumn {    
     typealias FundamentalType = Double
     
     convenience init?(withTypedValue optionalValue: Double?) {

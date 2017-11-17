@@ -40,7 +40,7 @@ public class Select: SelectBase {
     }
     
     //TODO: support [for in]
-    public func nextObject<T: TableCoding>() throws -> T? {
+    public func nextObject<T: CodableTable>() throws -> T? {
         assert((properties.first!.columnBinding!.`class` == T.self))
         try next()
         return try extract(from: properties)
@@ -60,7 +60,7 @@ public class Select: SelectBase {
         return objects
     }
     
-    public func allObjects<T: TableCoding>() throws -> [T] {
+    public func allObjects<T: CodableTable>() throws -> [T] {
         assert((properties.first!.columnBinding!.`class` == T.self))
         var objects: [T] = []
         while try next() {

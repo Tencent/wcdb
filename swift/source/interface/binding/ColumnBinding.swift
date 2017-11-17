@@ -58,11 +58,11 @@ public class AnyColumnBinding : AnyBinding {
         super.init(with: .Column)
     }
     
-    convenience init(accessor: AnyAccessor, class: AnyClass, columnName: String, columnType: ColumnType, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    convenience init(accessor: AnyAccessor, class: AnyClass, columnName: String, columnType: ColumnType, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor: accessor, class: `class`, columnName: columnName, columnType: columnType, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
     
-    static func defaultType(from defaultValue: ColumnCodingBase?) -> ColumnDef.DefaultType {
+    static func defaultType(from defaultValue: CodableColumnBase?) -> ColumnDef.DefaultType {
         var defaultType = ColumnDef.DefaultType.Null
         if defaultValue != nil {
             let cls = Swift.type(of: defaultValue!)
@@ -86,27 +86,27 @@ public class AnyColumnBinding : AnyBinding {
         return defaultType
     }
 
-    func access<FundamentalType: FundamentalCoding>(getFundamentalValueFromObject object: TableCoding) -> FundamentalType? {
+    func access<FundamentalType: FundamentalCoding>(getFundamentalValueFromObject object: CodableTable) -> FundamentalType? {
         fatalError("This function is not implemented")
     }
     
-    func access<FundamentalType: FundamentalCoding>(setFundamentalValue value: FundamentalType?, forObject object: inout TableCoding) {
+    func access<FundamentalType: FundamentalCoding>(setFundamentalValue value: FundamentalType?, forObject object: inout CodableTable) {
         fatalError("This function is not implemented")
     }
 }
 
-public class PartialColumnBinding<ModelType: TableCoding> : AnyColumnBinding {
+public class PartialColumnBinding<ModelType: CodableTable> : AnyColumnBinding {
     typealias PartialAccessor = PartialKeyPath<ModelType>
     
     init(accessor: PartialAccessor, columnName: String, columnType: ColumnType, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         super.init(accessor: accessor, class: ModelType.self as! AnyClass, columnName: columnName, columnType: columnType, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
-    convenience init(accessor: PartialAccessor, columnName: String, columnType: ColumnType, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    convenience init(accessor: PartialAccessor, columnName: String, columnType: ColumnType, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor: accessor, columnName: columnName, columnType: columnType, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
     
-    func access<PropertyType: ColumnCoding>(setValue value: PropertyType?, forObject object: inout ModelType) {
+    func access<PropertyType: CodableColumn>(setValue value: PropertyType?, forObject object: inout ModelType) {
         guard !(value == nil && accessor is WritableKeyPath<ModelType, PropertyType>) else {
             return
         }
@@ -120,7 +120,7 @@ public class PartialColumnBinding<ModelType: TableCoding> : AnyColumnBinding {
         }
     }
     
-    func access<PropertyType: ColumnCoding>(getValueFromObject object: ModelType) -> PropertyType? {
+    func access<PropertyType: CodableColumn>(getValueFromObject object: ModelType) -> PropertyType? {
         if accessor is WritableKeyPath<ModelType, PropertyType> {
             return object[keyPath: accessor as! WritableKeyPath<ModelType, PropertyType>] 
         }else {
@@ -129,7 +129,7 @@ public class PartialColumnBinding<ModelType: TableCoding> : AnyColumnBinding {
     }    
 }
 
-public class ColumnBinding<ModelType: TableCoding, PropertyType: ColumnCoding> : PartialColumnBinding<ModelType> {
+public class ColumnBinding<ModelType: CodableTable, PropertyType: CodableColumn> : PartialColumnBinding<ModelType> {
     public typealias Accessor = WritableKeyPath<ModelType, PropertyType>
     public typealias OptionalAccessor = WritableKeyPath<ModelType, PropertyType?>
     
@@ -141,27 +141,27 @@ public class ColumnBinding<ModelType: TableCoding, PropertyType: ColumnCoding> :
         super.init(accessor: accessor, columnName: columnName, columnType: PropertyType.columnType, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
-    public convenience init(_ accessor: OptionalAccessor, alias columnName: String, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: OptionalAccessor, alias columnName: String, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
     
-    public convenience init(_ accessor: Accessor, alias columnName: String, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: Accessor, alias columnName: String, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
 
-    override func access<FundamentalType: FundamentalCoding>(getFundamentalValueFromObject object: TableCoding) -> FundamentalType? {
+    override func access<FundamentalType: FundamentalCoding>(getFundamentalValueFromObject object: CodableTable) -> FundamentalType? {
         let propertyValue: PropertyType? = access(getValueFromObject: (object as! ModelType))
         return propertyValue?.archivedFundamentalValue() as! FundamentalType?
     }
     
-    override func access<FundamentalType: FundamentalCoding>(setFundamentalValue value: FundamentalType?, forObject object: inout TableCoding) {
+    override func access<FundamentalType: FundamentalCoding>(setFundamentalValue value: FundamentalType?, forObject object: inout CodableTable) {
         let fundamentalValue = value as! PropertyType.FundamentalType
         var objectAsModelType = object as! ModelType
         access(setValue: PropertyType(withTypedValue: fundamentalValue), forObject: &objectAsModelType)
     }
 }
 
-extension ColumnBinding where PropertyType: ClassColumnCoding {
+extension ColumnBinding where PropertyType: ClassCodableColumn {
     public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
@@ -170,16 +170,16 @@ extension ColumnBinding where PropertyType: ClassColumnCoding {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
-    public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
     
-    public convenience init(_ accessor: Accessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: Accessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
 }
 
-extension ColumnBinding where PropertyType: EnumColumnCoding {
+extension ColumnBinding where PropertyType: EnumCodableColumn {
     public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
@@ -188,16 +188,16 @@ extension ColumnBinding where PropertyType: EnumColumnCoding {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
-    public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
     
-    public convenience init(_ accessor: Accessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: Accessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
 }
 
-extension ColumnBinding where PropertyType: StructColumnCoding {
+extension ColumnBinding where PropertyType: StructCodableColumn {
     public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
@@ -206,11 +206,11 @@ extension ColumnBinding where PropertyType: StructColumnCoding {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
-    public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: OptionalAccessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
     
-    public convenience init(_ accessor: Accessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnCodingBase?) {
+    public convenience init(_ accessor: Accessor, alias columnName: String? = nil, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: CodableColumnBase?) {
         self.init(accessor, alias: columnName ?? accessor.name, isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: AnyColumnBinding.defaultType(from: defaultValue))
     }
 }

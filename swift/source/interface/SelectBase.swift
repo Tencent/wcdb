@@ -104,12 +104,12 @@ public class SelectBase: CoreRepresentable {
         }
     }
         
-    func extractMultiObject(from properties: [Property]) throws -> [String:TableCoding] {
-        var multiObject: [String:TableCoding] = [:]
+    func extractMultiObject(from properties: [Property]) throws -> [String:CodableTable] {
+        var multiObject: [String:CodableTable] = [:]
         for (index, property) in properties.enumerated() {
             let tableName = try self.lazyCoreStatement().columnTableName(atIndex: index)
             let columnBinding = property.columnBinding!
-            let cls = columnBinding.`class` as! TableCoding.Type
+            let cls = columnBinding.`class` as! CodableTable.Type
             var object = multiObject[tableName]
             if object == nil {
                 object = cls.init()
@@ -120,14 +120,14 @@ public class SelectBase: CoreRepresentable {
         return multiObject
     }
     
-    func extract<T: TableCoding>(from properties: [Property]) throws -> T {
+    func extract<T: CodableTable>(from properties: [Property]) throws -> T {
         assert((properties.first!.columnBinding!.`class` == T.self))
         let object = try extract(from: properties)
         return object as! T
     }
     
     func extract(from properties: [Property]) throws -> Any {
-        let cls = (properties.first!.columnBinding!.`class` as! TableCoding.Type)
+        let cls = (properties.first!.columnBinding!.`class` as! CodableTable.Type)
         var object = cls.init()
         for (index, property) in properties.enumerated() {
             try extract(from: property, at: index, into: &object)
@@ -135,7 +135,7 @@ public class SelectBase: CoreRepresentable {
         return object
     }
     
-    func extract(from property: Property, at index: Int, into object: inout TableCoding) throws {
+    func extract(from property: Property, at index: Int, into object: inout CodableTable) throws {
         let columnBinding = property.columnBinding! 
         let coreStatement = try self.lazyCoreStatement()
         switch columnBinding.columnType {

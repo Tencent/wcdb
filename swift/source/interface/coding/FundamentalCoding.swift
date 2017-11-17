@@ -23,7 +23,7 @@ import Foundation
 public protocol FundamentalCodingBase {}
 
 //Int32, Int64, Double, String, Data
-public protocol FundamentalCoding: StructColumnCoding, FundamentalCodingBase {}
+public protocol FundamentalCoding: StructCodableColumn, FundamentalCodingBase {}
 
 extension FundamentalCoding {
     public typealias FundamentalType = Self

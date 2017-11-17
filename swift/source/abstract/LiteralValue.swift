@@ -49,9 +49,9 @@ public final class LiteralValue : Describable {
         super.init("NULL")
     }
 
-    public convenience init<ColumnCodingType: ColumnCoding>(_ columnCodingType: ColumnCodingType) {
+    public convenience init<CodableColumnType: CodableColumn>(_ columnCodingType: CodableColumnType) {
         if let value = columnCodingType.archivedFundamentalValue() {
-            switch ColumnCodingType.columnType {
+            switch CodableColumnType.columnType {
             case .Integer32:
                 self.init(value as! Int32)
             case .Integer64:

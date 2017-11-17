@@ -20,7 +20,7 @@
 
 import Foundation
 
-public protocol ColumnCodingBase {
+public protocol CodableColumnBase {
     static var columnType: ColumnType {get}
     
     init?(withFundamentalValue value: FundamentalValue)
@@ -28,7 +28,7 @@ public protocol ColumnCodingBase {
     func archivedFundamentalValue() -> FundamentalValue
 }
 
-public protocol ColumnCoding: ColumnCodingBase, LiteralValueConvertible {
+public protocol CodableColumn: CodableColumnBase, LiteralValueConvertible {
     associatedtype FundamentalType   // Int32 Int64 String Double Data
     
     init?(withTypedValue value: FundamentalType?)
@@ -36,7 +36,7 @@ public protocol ColumnCoding: ColumnCodingBase, LiteralValueConvertible {
     func archivedTypedValue() -> FundamentalType?
 }
 
-extension ColumnCoding {
+extension CodableColumn {
     public init?(withFundamentalValue value: FundamentalValue) {
         self.init(withTypedValue: (value as? FundamentalType))
     }
@@ -50,31 +50,31 @@ extension ColumnCoding {
     }
 }
 
-extension ColumnCoding where FundamentalType==Int32 {
+extension CodableColumn where FundamentalType==Int32 {
     public static var columnType: ColumnType {
         return ColumnType.Integer32
     }
 }
 
-extension ColumnCoding where FundamentalType==Int64 {
+extension CodableColumn where FundamentalType==Int64 {
     public static var columnType: ColumnType {
         return ColumnType.Integer64
     }
 }
 
-extension ColumnCoding where FundamentalType==String {
+extension CodableColumn where FundamentalType==String {
     public static var columnType: ColumnType {
         return ColumnType.Text
     }
 }
 
-extension ColumnCoding where FundamentalType==Double {
+extension CodableColumn where FundamentalType==Double {
     public static var columnType: ColumnType {
         return ColumnType.Float
     }
 }
 
-extension ColumnCoding where FundamentalType==Data {
+extension CodableColumn where FundamentalType==Data {
     public static var columnType: ColumnType {
         return ColumnType.BLOB
     }
