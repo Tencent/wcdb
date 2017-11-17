@@ -588,12 +588,11 @@ static int executeNonQuery(JNIEnv *env,
                            SQLiteConnection *connection,
                            sqlite3_stmt *statement)
 {
-    int err = sqlite3_step(statement);
-    if (err == SQLITE_ROW) {
-        throw_sqlite3_exception(env, "Queries can be performed using "
-                                     "SQLiteDatabase query or rawQuery methods "
-                                     "only.");
-    } else if (err != SQLITE_DONE) {
+    int err;
+    do {
+        err = sqlite3_step(statement);
+    } while (err == SQLITE_ROW);
+    if (err != SQLITE_DONE) {
         throw_sqlite3_exception(env, connection->db);
     }
     return err;
