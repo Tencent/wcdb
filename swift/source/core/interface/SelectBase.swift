@@ -108,7 +108,7 @@ public class SelectBase: CoreRepresentable {
         var multiObject: [String:CodableTable] = [:]
         for (index, property) in properties.enumerated() {
             let tableName = try self.lazyCoreStatement().columnTableName(atIndex: index)
-            let columnBinding = property.columnBinding!
+            let columnBinding = property.columnBinding
             let cls = columnBinding.`class` as! CodableTable.Type
             var object = multiObject[tableName]
             if object == nil {
@@ -121,13 +121,13 @@ public class SelectBase: CoreRepresentable {
     }
     
     func extract<T: CodableTable>(from properties: [Property]) throws -> T {
-        assert((properties.first!.columnBinding!.`class` == T.self))
+        assert((properties.first!.columnBinding.`class` == T.self))
         let object = try extract(from: properties)
         return object as! T
     }
     
     func extract(from properties: [Property]) throws -> Any {
-        let cls = (properties.first!.columnBinding!.`class` as! CodableTable.Type)
+        let cls = (properties.first!.columnBinding.`class` as! CodableTable.Type)
         var object = cls.init()
         for (index, property) in properties.enumerated() {
             try extract(from: property, at: index, into: &object)
@@ -136,7 +136,7 @@ public class SelectBase: CoreRepresentable {
     }
     
     func extract(from property: Property, at index: Int, into object: inout CodableTable) throws {
-        let columnBinding = property.columnBinding! 
+        let columnBinding = property.columnBinding 
         let coreStatement = try self.lazyCoreStatement()
         switch columnBinding.columnType {
         case .Integer32:

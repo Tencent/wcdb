@@ -35,25 +35,20 @@ public class TableBinding {
         return tableBinding
     }
     
+    typealias Accessor = AnyColumnBinding.AnyAccessor
+    
     let bindingClass: CodableTable.Type
-    let accessors2Properties: [AnyColumnBinding.AnyAccessor:Property]
-    let properties: [Property]
-    let columnBindings: [String:AnyColumnBinding]
+    private let properties: [Accessor:Property]
+    lazy var allProperties: [Property] = Array(properties.values)
     
     public init(_ bindingClass: CodableTable.Type) {
-        var columnBindings: [String:AnyColumnBinding] = [:]
-        var accessors2Properties: [AnyColumnBinding.AnyAccessor:Property] = [:]
-        var properties: [Property] = []
+        var properties: [AnyColumnBinding.AnyAccessor:Property] = [:]
         for columnBinding in bindingClass.columnBindings() {
-            let property = Property(columnBinding)
+            let property = Property(with: columnBinding)
             
-            properties.append(property)
-            accessors2Properties[columnBinding.accessor] = property
-            columnBindings[columnBinding.columnName] = columnBinding
+            properties[columnBinding.accessor] = property
         }
-        self.accessors2Properties = accessors2Properties
         self.properties = properties
-        self.columnBindings = columnBindings
         self.bindingClass = bindingClass
     }
     
@@ -68,39 +63,42 @@ public class TableBinding {
     private var virtualTableBinding: VirtualTableBinding? {
         return bindingClass.virtualTableBinding()
     }
+    
+    var columnBindings: [String:AnyColumnBinding] {
+        return properties.values.reduce(into: [String:AnyColumnBinding]()) { (dic, property) in
+            dic["property.name"] = property.columnBinding
+        }
+    }
 
-    func columnBinding(fromAccessor accessor: AnyKeyPath) -> AnyColumnBinding {
-        return accessors2Properties[accessor]!.columnBinding!
+    func property(from accessor: Accessor) -> Property {
+        guard let property = properties[accessor] else {
+            fatalError()
+        } 
+        return property 
     }
     
     func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
         guard virtualTableBinding != nil else {
             Error.abort("Virtual table binding is not defined")
         }
-        var moduleArguments: [ModuleArgument] = virtualTableBinding?.arguments ?? []
-        for property in properties {
-            moduleArguments.append(ModuleArgument(with: property.columnBinding!.columnDef))
+        var moduleArguments = properties.values.reduce(into: [ModuleArgument]()) { 
+            $0.append(ModuleArgument(with: $1.columnBinding.columnDef))
         }
         if constraintBindings != nil {
-            for constraintBinding in constraintBindings! {
-                moduleArguments.append(ModuleArgument(with:constraintBinding.generateConstraint()))
-            }
+            moduleArguments = constraintBindings!.reduce(into: moduleArguments, { 
+                $0.append(ModuleArgument(with:$1.generateConstraint()))
+            })
         }
         return StatementCreateVirtualTable().create(virtualTable: table).using(module: virtualTableBinding!.module, arguments: moduleArguments)
     }
     
     func generateCreateTableStatement(named table: String) -> StatementCreateTable {
-        var columnDefList: [ColumnDef] = []
-        for property in properties {
-            columnDefList.append(property.columnBinding!.columnDef)
+        let columnDefList = properties.values.reduce(into: [ColumnDef]()) { 
+            $0.append($1.columnBinding.columnDef)
         }
-        var tableConstraints: [TableConstraint]? = nil
-        if constraintBindings != nil {
-            tableConstraints = []
-            for constraintBinding in constraintBindings! {
-                tableConstraints!.append(constraintBinding.generateConstraint())
-            }
-        }
+        let tableConstraints = constraintBindings?.reduce(into: [TableConstraint](), { 
+            $0.append($1.generateConstraint())
+        })
         return StatementCreateTable().create(table: table, with: columnDefList, and: tableConstraints)
     }
     

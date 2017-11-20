@@ -20,12 +20,12 @@
 
 import Foundation
 
-public protocol OptionalExpressible {
+public protocol OptionalRepresentable {
     associatedtype WrappedType
     var wrapped: WrappedType {get}
 }
 
-extension Optional: OptionalExpressible {
+extension Optional: OptionalRepresentable {
     public typealias WrappedType = Wrapped
     
     public var wrapped: WrappedType {

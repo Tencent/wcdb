@@ -285,15 +285,15 @@ extension TableInterface where Self: Core {
                 }
                 var columnBindings = orm.columnBindings
                 for columnName in columnNames {
-                    let elements = columnBindings.filter({ (arg) -> Bool in
-                        return arg.key.caseInsensitiveCompare(columnName) == ComparisonResult.orderedSame
+                    let elements = columnBindings.filter({ (kv) -> Bool in
+                        return kv.key.caseInsensitiveCompare(columnName) == ComparisonResult.orderedSame
                     })
                     if elements.isEmpty {
                         Error.warning("Skip column named [\(elements.keys)] for table [\(name)]")
                     }else {
-                        for element in elements {
-                            columnBindings.removeValue(forKey: element.key)
-                        }
+                        elements.keys.forEach({ (key) in
+                            columnBindings.removeValue(forKey: key)
+                        })
                     }
                 }
                 for (_, columnBinding) in columnBindings {

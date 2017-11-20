@@ -72,8 +72,7 @@ public class Update : CoreRepresentable {
         let coreStatement = try core.prepare(statement)
         for (index, property) in properties.enumerated() {
             let bindingIndex = index + 1
-            let columnBinding = property.columnBinding!
-            coreStatement.bind(columnBinding, of: object, toIndex: bindingIndex)
+            coreStatement.bind(property.columnBinding, of: object, toIndex: bindingIndex)
         }
         try coreStatement.step()
         changes = coreStatement.changes

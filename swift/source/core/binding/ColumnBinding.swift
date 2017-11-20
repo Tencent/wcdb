@@ -21,7 +21,7 @@
 import Foundation
 
 public protocol ColumnBindingRepresentable {
-    var columnBinding: AnyColumnBinding? {get}
+    var columnBinding: AnyColumnBinding {get}
 }
 
 public class AnyColumnBinding : AnyBinding {

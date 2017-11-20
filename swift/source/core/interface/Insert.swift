@@ -59,7 +59,7 @@ public class Insert: CoreRepresentable {
                 var fillLastInsertedRowID = false
                 for (index, property) in properties!.enumerated() {
                     let bindingIndex = index + 1 
-                    let columnBinding = property.columnBinding!
+                    let columnBinding = property.columnBinding
                     if !isReplace && columnBinding.isPrimary && columnBinding.isAutoIncrement && object.isAutoIncrement {
                         fillLastInsertedRowID = true
                         coreStatement.bind(nil, toIndex: bindingIndex)

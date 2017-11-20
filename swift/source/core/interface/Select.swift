@@ -28,11 +28,7 @@ public class Select: SelectBase {
         }
         var properties: [Property] = []
         for propertyConvertible in propertyConvertibleList {
-            let property = propertyConvertible.asProperty()
-            guard property.columnBinding != nil else {
-                throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "This Result does not contain any column binding")
-            }
-            properties.append(property)
+            properties.append(propertyConvertible.asProperty())
         }
         self.properties = properties
         super.init(with: core)
@@ -41,7 +37,7 @@ public class Select: SelectBase {
     
     //TODO: support [for in]
     public func nextObject<T: CodableTable>() throws -> T? {
-        assert((properties.first!.columnBinding!.`class` == T.self))
+        assert((properties.first!.columnBinding.`class` == T.self))
         try next()
         return try extract(from: properties)
     }
@@ -61,7 +57,7 @@ public class Select: SelectBase {
     }
     
     public func allObjects<T: CodableTable>() throws -> [T] {
-        assert((properties.first!.columnBinding!.`class` == T.self))
+        assert((properties.first!.columnBinding.`class` == T.self))
         var objects: [T] = []
         while try next() {
             let object: T = try extract(from: properties)

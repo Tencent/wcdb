@@ -33,27 +33,16 @@ public protocol CodableTable {
     
     static var objectRelationalMapping: TableBinding {get}
     static var allProperties: [Property] {get}
-    static var anyProperty: Property {get}
     static var magicNumber: Int32 {get}
-    static func property(named name: String) -> Property
-    static func property(fromAccessor accessor: AnyKeyPath) -> Property
 }
 
 extension CodableTable {
     public static var allProperties: [Property] {
-        return objectRelationalMapping.properties
+        return objectRelationalMapping.allProperties
     }
-    
-    public static var anyProperty: Property {
-        return Property.anyProperty
-    }
-    
+   
     public static var magicNumber: Int32 {
         return 0x539D7C2
-    }
-    
-    public static func property(named name: String) -> Property {
-        return Property(named: name)
     }
     
     public static func indexBindings() -> [IndexBinding]? {
@@ -68,10 +57,6 @@ extension CodableTable {
         return nil
     }
 
-    public static func property(fromAccessor accessor: AnyKeyPath) -> Property {
-        return objectRelationalMapping.accessors2Properties[accessor]!
-    }
-    
     public static var objectRelationalMapping: TableBinding {
         Error.warning("It's recommended to add [objectRelationalMapping] as a stored property for class \(self) to get a better performance")
         return TableBinding.from(self)

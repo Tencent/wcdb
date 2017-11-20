@@ -30,11 +30,6 @@ public class MultiSelect: SelectBase {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Empty table")
         }
         self.properties = propertyConvertibleList.asProperties()
-        for property in self.properties { 
-            guard property.columnBinding != nil else {
-                throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "This Result does not contain any column binding")
-            }
-        } 
         super.init(with: core)
         statementSelect.select(distinct: isDistinct, properties).from(tables)
     }
