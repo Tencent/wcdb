@@ -25,10 +25,12 @@ import Foundation
  *
  * Bool
  * Int, Int8, Int16, UInt, UInt8, UInt16, UInt32, UInt64
- * Float
- * Date
+ * Float, NSNumber
+ * Date, NSDate
+ * NSString
+ * NSData
  * 
- * Note that Int32, Int64, Double, String, Data are fundamental types so they are codable too.
+ * Note that Int32, Int64, Double, String, Data are fundamental codable types.
  * 
  */
 
@@ -206,3 +208,64 @@ extension Date: CodableStructColumn {
         return Int64(self.timeIntervalSince1970)
     }
 }
+
+extension NSNumber {
+    public typealias FundamentalType = Double
+    
+    public convenience init?(withTypedValue optionalValue: Double?){
+        guard let value = optionalValue else {
+            return nil
+        }
+        self.init(value: value)
+    }
+    
+    public func archivedTypedValue() -> Double? {
+        return self.doubleValue
+    }
+}
+
+extension NSDate {
+    public typealias FundamentalType = Int64
+    
+    public convenience init?(withTypedValue optionalValue: Int64?){
+        guard let value = optionalValue else {
+            return nil
+        }
+        self.init(timeIntervalSince1970: TimeInterval(value))
+    }
+    
+    public func archivedTypedValue() -> Int64? {
+        return Int64(self.timeIntervalSince1970)
+    }
+}
+
+extension NSData {
+    public typealias FundamentalType = Data
+    
+    public convenience init?(withTypedValue optionalValue: Data?){
+        guard let value = optionalValue else {
+            return nil
+        }
+        self.init(data: value)
+    }
+    
+    public func archivedTypedValue() -> Data? {
+        return (self as Data)
+    }
+}
+
+extension NSString {
+    public typealias FundamentalType = String
+    
+    public convenience init?(withTypedValue optionalValue: String?){
+        guard let value = optionalValue else {
+            return nil
+        }
+        self.init(string: value)
+    }
+    
+    public func archivedTypedValue() -> String? {
+        return (self as String)
+    }
+}
+

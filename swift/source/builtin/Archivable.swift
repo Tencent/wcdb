@@ -57,6 +57,6 @@ extension Array: ArchivableStructColumn {}
 extension Dictionary: ArchivableStructColumn {}
 extension Set: ArchivableStructColumn {}
 
-extension NSObject: ArchivableClassColumn {}
-
 extension URL: ArchivableStructColumn {}
+
+extension NSObject: ArchivableClassColumn {}
