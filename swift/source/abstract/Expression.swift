@@ -27,8 +27,8 @@ public final class Expression : Describable {
         super.init(columnConvertible.asColumn().description)
     }
     
-    public init(with value: LiteralValue) {
-        super.init(value.description)
+    public init(with literalValueConvertible: LiteralValueConvertible) {
+        super.init(literalValueConvertible.asLiteralValue().description)
     }
     
     public init(with statementSelect: StatementSelect) {
@@ -37,38 +37,6 @@ public final class Expression : Describable {
     
     init(withRaw raw: String) {
         super.init(raw)
-    }
-    
-    public convenience init(_ value: ()) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience init(_ value: Bool) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience init(_ value: Int) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience init(_ value: Double) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience override init(_ value: String) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience init(_ value: Data) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience init(_ value: Void?) {
-        self.init(with: LiteralValue(value))
-    }
-    
-    public convenience init<CodableColumnType: CodableColumn>(_ value: CodableColumnType) {
-        self.init(with: LiteralValue(value))
     }
 }
 

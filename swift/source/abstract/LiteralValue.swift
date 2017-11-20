@@ -45,7 +45,7 @@ public final class LiteralValue : Describable {
         super.init("'" + string.replacingOccurrences(of: "'", with: "''") + "'")
     }
     
-    public init(_ value:Void?) {
+    public init(_ value: Void?) {
         super.init("NULL")
     }
 
@@ -101,4 +101,9 @@ extension LiteralValue: ExpressibleByStringLiteral {
     }
 }
 
+extension LiteralValue: LiteralValueConvertible {
+    public func asLiteralValue() -> LiteralValue {
+        return self
+    }
+}
 

@@ -34,6 +34,11 @@ extension SpecificOrderConvertible {
     }
 }
 
+
+public protocol SpecificColumnDefConvertible {
+    func asDef(with columnType: ColumnType) -> ColumnDef
+}
+
 public protocol ColumnIndexConvertible {
     func asIndex() -> ColumnIndex
 }
@@ -69,18 +74,24 @@ extension ExpressionConvertible {
     }
 }
 
-public protocol ColumnConvertible: ExpressionConvertible, SpecificColumnIndexConvertible {
+public protocol ColumnConvertible: ExpressionConvertible, SpecificColumnIndexConvertible, SpecificColumnDefConvertible {
     func asColumn() -> Column 
     func `in`(table: String) -> Column 
 }
 
 extension ColumnConvertible {
     public func asExpression() -> Expression {
-        return Expression(with: asColumn())
+        return Expression(with: self)
     }
+    
     public func asIndex(orderBy term: OrderTerm?) -> ColumnIndex {
-        return ColumnIndex(with: asColumn(), orderBy: term)
+        return ColumnIndex(with: self, orderBy: term)
     }
+    
+    public func asDef(with columnType: ColumnType) -> ColumnDef {
+        return ColumnDef(with: self, and: columnType)
+    }
+    
     public func `in`(table: String) -> Column {
         return asColumn().in(table: table)
     }
@@ -621,6 +632,7 @@ public protocol LiteralValueConvertible: ExpressionConvertible {
 
 extension LiteralValueConvertible {
     public func asExpression() -> Expression {
-        return Expression(with: asLiteralValue())
+        return Expression(with: self)
     }
 }
+

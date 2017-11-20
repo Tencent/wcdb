@@ -20,13 +20,7 @@
 
 import Foundation
 
-public class ColumnResult : Describable {
-    public static let any: ColumnResult = Column.any.asColumnResult()
-    
-    public static func any(inTable table: String) -> ColumnResult {
-        return Column.any.in(table: table).asColumnResult()
-    }
-    
+public class ColumnResult : Describable {    
     public init(with expressionConvertible: ExpressionConvertible) {
         super.init(expressionConvertible.asExpression().description)
     }
