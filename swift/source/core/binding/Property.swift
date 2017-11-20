@@ -20,12 +20,14 @@
 
 import Foundation
 
+public protocol PropertyConvertible {
+    func asProperty() -> Property
+    
+    func `in`(table: String) -> Property
+}
+
 public class Property: Describable, ColumnBindingRepresentable {
     public let columnBinding: AnyColumnBinding
-    
-    public var name: String {
-        return description
-    }
     
     public init(named name: String, with columnBinding: AnyColumnBinding) {
         self.columnBinding = columnBinding
@@ -36,12 +38,10 @@ public class Property: Describable, ColumnBindingRepresentable {
         self.columnBinding = columnBinding
         super.init(columnBinding.columnName)
     }
-}
-
-public protocol PropertyConvertible {
-    func asProperty() -> Property
     
-    func `in`(table: String) -> Property
+    public var name: String {
+        return description
+    }    
 }
 
 extension Property: PropertyConvertible {
@@ -62,17 +62,3 @@ extension Property: ColumnConvertible {
 
 extension Property: ExpressionOperable {}
 
-public protocol PropertyRedirectable {
-    func `as`(_ columnBinding: ColumnBindingRepresentable) -> Property
-}
-
-extension PropertyRedirectable where Self: Describable {
-    public func `as`(_ columnBindingRepresentable: ColumnBindingRepresentable) -> Property {
-        return Property(named: description, with: columnBindingRepresentable.columnBinding)
-    }
-}
-
-extension Property: PropertyRedirectable {}
-extension Column: PropertyRedirectable {}
-extension ColumnResult: PropertyRedirectable {}
-extension Expression: PropertyRedirectable {}
