@@ -22,7 +22,7 @@ import Foundation
 
 extension WritableKeyPath: PropertyConvertible {
     public func asProperty() -> Property {
-        fatalError()
+        Error.abort()
     }
     
     public func `in`(table: String) -> Property {
@@ -69,9 +69,9 @@ extension WritableKeyPath {
         guard results.count == 1 else {
             switch results.count {
             case 0:
-                fatalError("Cannot find the property. You may specify the property name or issue us.")
+                Error.abort("Cannot find the property. You may specify the property name or issue us.")
             default:
-                fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
+                Error.abort("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
             }
         }
         return results[0].label!
@@ -91,9 +91,9 @@ extension WritableKeyPath {
         guard results.count == 1 else {
             switch results.count {
             case 0:
-                fatalError("Cannot find the property. You may specify the property name or issue us.")
+                Error.abort("Cannot find the property. You may specify the property name or issue us.")
             default:
-                fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
+                Error.abort("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
             }
         }
         
@@ -102,7 +102,7 @@ extension WritableKeyPath {
     
     private static func getValueTypeName<Root: CodableTable, Value>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
         guard !(Value.self is AnyClass) else {
-            fatalError()
+            Error.abort()
         }
         
         var root = Root()
@@ -120,9 +120,9 @@ extension WritableKeyPath {
         guard results.count == 1 else {
             switch results.count {
             case 0:
-                fatalError("Cannot find the property. You may specify the property name or issue us.")
+                Error.abort("Cannot find the property. You may specify the property name or issue us.")
             default:
-                fatalError("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
+                Error.abort("Multiple properties found. You may change the \(Root.self).MagicNumber to an unique value")
             }
         }
         

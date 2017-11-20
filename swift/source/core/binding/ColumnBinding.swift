@@ -87,11 +87,11 @@ public class AnyColumnBinding : AnyBinding {
     }
 
     func access<FundamentalType: CodableFundamentalValue>(getFundamentalValueFromObject object: CodableTable) -> FundamentalType? {
-        fatalError("This function is not implemented")
+        Error.abort("This function is not implemented")
     }
     
     func access<FundamentalType: CodableFundamentalValue>(setFundamentalValue value: FundamentalType?, forObject object: inout CodableTable) {
-        fatalError("This function is not implemented")
+        Error.abort("This function is not implemented")
     }
 }
 

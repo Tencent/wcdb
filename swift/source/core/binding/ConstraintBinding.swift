@@ -34,6 +34,6 @@ public class ConstraintBinding: AnyBinding {
     }
     
     func generateConstraint() -> TableConstraint {
-        fatalError()
+        Error.abort()
     }
 }

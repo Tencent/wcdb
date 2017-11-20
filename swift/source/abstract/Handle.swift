@@ -131,7 +131,7 @@ extension Handle {
                 throw Error.reportSQLite(tag: tag, path: path, operation: .SetCipherKey, extendedError: sqlite3_extended_errcode(handle), rc: rc, message: String(cString: sqlite3_errmsg(handle)))
             }
         #else
-            fatalError("[sqlite3_key] is not supported for current config")
+            Error.abort("[sqlite3_key] is not supported for current config")
         #endif
     }
 }

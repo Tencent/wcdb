@@ -22,11 +22,11 @@ import Foundation
 
 class Lock{
     func lock() {
-        fatalError()
+        Error.abort()
     }
     
     func unlock() {
-        fatalError()
+        Error.abort()
     }
 }
 
@@ -35,14 +35,14 @@ class UnfairLock: Lock {
 
     override func lock() {
         guard #available(iOS 10.0, macOS 10.12, *) else {
-            fatalError()
+            Error.abort()
         } 
         os_unfair_lock_lock(&unfairLock)
     }
     
     override func unlock() {
         guard #available(iOS 10.0, macOS 10.12, *) else {
-            fatalError()
+            Error.abort()
         } 
         os_unfair_lock_unlock(&unfairLock)
     }
