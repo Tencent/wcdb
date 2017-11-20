@@ -50,7 +50,7 @@ public:
             m_map.erase(iter);
         }
 
-        //delay 2 seconds
+        //delay
         m_list.push_front({key, std::chrono::steady_clock::now() + m_delay});
         auto last = m_list.begin();
         m_map.insert({key, last});
