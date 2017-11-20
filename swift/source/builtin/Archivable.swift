@@ -38,7 +38,7 @@ extension ArchivableColumn {
         guard let value = optionalValue, value.count > 0 else {
             return nil
         }
-        guard let anyObject = NSKeyedUnarchiver.unarchiveObject(with: value), let object = anyObject as? Self else {
+        guard let unarchived = NSKeyedUnarchiver.unarchiveObject(with: value), let object = unarchived as? Self else {
             return nil
         }
         self = object
