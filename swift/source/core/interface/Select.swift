@@ -26,11 +26,7 @@ public class Select: SelectBase {
         guard propertyConvertibleList.count > 0 else {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Selecting nothing from \(table) is invalid")
         }
-        var properties: [Property] = []
-        for propertyConvertible in propertyConvertibleList {
-            properties.append(propertyConvertible.asProperty())
-        }
-        self.properties = properties
+        self.properties = propertyConvertibleList.asProperties()
         super.init(with: core)
         statementSelect.select(distinct: isDistinct, properties).from(table)
     }

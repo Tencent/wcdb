@@ -30,11 +30,7 @@ public class Insert: CoreRepresentable {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Insert, code: .Misuse, message: "Empty table name")
         }
         self.name = name
-        if propertyConvertibleList != nil {
-            self.properties = propertyConvertibleList!.asProperties()
-        }else {
-            self.properties = nil
-        }
+        self.properties = propertyConvertibleList?.asProperties()
         self.isReplace = isReplace
         self.core = core
     }
@@ -46,12 +42,12 @@ public class Insert: CoreRepresentable {
     }
     
     public func execute(with objects: [CodableTable]) throws {
-        guard objects.count > 0 else {
+        guard let first = objects.first else {
             Error.warning("Inserting with an empty/nil object")
             return
         }
-        properties = properties ?? type(of: objects.first!).allProperties
-        let cls = type(of: objects.first!)
+        properties = properties ?? type(of: first).allProperties
+        let cls = type(of: first)
         let orm = cls.objectRelationalMapping
         func doInsertObject() throws {
             let coreStatement = try core.prepare(statement) 

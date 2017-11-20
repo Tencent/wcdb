@@ -42,14 +42,10 @@ public class TableBinding {
     lazy var allProperties: [Property] = Array(properties.values)
     
     public init(_ bindingClass: CodableTable.Type) {
-        var properties: [AnyColumnBinding.AnyAccessor:Property] = [:]
-        for columnBinding in bindingClass.columnBindings() {
-            let property = Property(with: columnBinding)
-            
-            properties[columnBinding.accessor] = property
-        }
-        self.properties = properties
         self.bindingClass = bindingClass
+        self.properties = bindingClass.columnBindings().reduce(into: [AnyColumnBinding.AnyAccessor:Property]()) {
+            $0[$1.accessor] = Property(with: $1)
+        }
     }
     
     private var indexBindings: [IndexBinding]? {
@@ -103,14 +99,12 @@ public class TableBinding {
     }
     
     func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
-        guard indexBindings != nil else {
+        guard let indexBindings = self.indexBindings else {
             return nil
         }
-        var statementIndexes: [StatementCreateIndex] = []
-        for indexBinding in indexBindings! {
-            statementIndexes.append(indexBinding.generateCreateIndexStatement(prefix: table))
+        return indexBindings.reduce(into: [StatementCreateIndex]()) { 
+            $0.append($1.generateCreateIndexStatement(prefix: table))
         }
-        return statementIndexes
     }
 }
 

@@ -64,14 +64,13 @@ public struct Configs {
     }
     
     mutating func setConfig(named name: String, with callback: @escaping Callback, orderBy order: Order) {
-        var newConfigs: [Config] = []
         var inserted: Bool = false
-        for config in configs {
+        var newConfigs: [Config] = configs.reduce(into: []) { (result, config) in
             if !inserted && order < config.order {
-                newConfigs.append(Config(named: name, with: callback, orderBy: order))
+                result.append(Config(named: name, with: callback, orderBy: order))
                 inserted = true
             }else if name != config.name {
-                newConfigs.append(config)
+                result.append(config)
             }
         }
         if !inserted {
@@ -81,13 +80,12 @@ public struct Configs {
     }
     
     mutating func setConfig(named name: String, with callback: @escaping Callback) {
-        var newConfigs: [Config] = []
         var inserted: Bool = false
-        for config in configs {
+        var newConfigs: [Config] = configs.reduce(into: []) { (result, config) in
             if name != config.name {
-                newConfigs.append(config)
+                result.append(config)
             }else {
-                newConfigs.append(Config(named: name, with: callback, orderBy: config.order))
+                result.append(Config(named: name, with: callback, orderBy: config.order))
                 inserted = true
             }
         }
@@ -100,12 +98,12 @@ public struct Configs {
     func invoke(handle: Handle) throws{
         let configs = self.configs
         do {
-            for config in configs {
+            try configs.forEach({ (config) in
                 guard config.callback != nil else {
-                    continue
+                    return
                 } 
                 try config.callback!.value(handle)
-            }
+            })
         }catch let error {
             throw error
         }

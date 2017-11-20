@@ -22,9 +22,8 @@ import Foundation
 
 extension Array {
     func joined(_ map: (Element)->String, separator: String = "," ) -> String {
-        var output: String = ""
         var flag = false
-        for element in self {
+        return reduce(into: "") { (output, element) in
             if flag {
                 output.append(separator)
             } else {
@@ -32,7 +31,6 @@ extension Array {
             }
             output.append(map(element))
         }
-        return output
     }
 }
 
@@ -152,17 +150,15 @@ extension Array where Iterator.Element: FixedWidthInteger {
 
 extension Dictionary {
     func joined(_ map: (Key, Value)->String, separator: String = "," ) -> String {
-        var output: String = ""
         var flag = false
-        for (key, value) in self {
+        return reduce(into: "", { (output, arg) in
             if flag {
                 output.append(separator)
             } else {
                 flag = true
             }
-            output.append(map(key, value))
-        }
-        return output
+            output.append(map(arg.key, arg.value))
+        })
     }
 }
 

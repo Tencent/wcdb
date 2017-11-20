@@ -33,15 +33,13 @@ public class Update : CoreRepresentable {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Update, code: .Misuse, message: "Nil table name")
         }
         var updateValueList: [StatementUpdate.ValueType] = []
-        var properties: [Property] = []
-        for propertyConvertible in propertyConvertibleList {
-            let property = propertyConvertible.asProperty()
+        self.properties = propertyConvertibleList.reduce(into: []) {
+            let property = $1.asProperty()
             updateValueList.append((property, Expression.bindingParameter))
-            properties.append(property)
+            $0.append(property)
         }
-        statement.update(table: table).set(updateValueList)
-        self.properties = properties
         self.core = core
+        self.statement.update(table: table).set(updateValueList)
     }
     
     @discardableResult

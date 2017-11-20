@@ -607,9 +607,7 @@ extension ExpressionOperable {
     }
     public static func `case`(_ `case`: ExpressionConvertible, _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)], `else`: ExpressionConvertible) -> Expression {
         var descrption = "CASE \(`case`.asExpression().description) "
-        for flow in flows {
-            descrption.append("WHEN \(flow.when) THEN \(flow.then) ")
-        }
+        descrption.append(flows.joined({ "WHEN \($0.when) THEN \($0.then) " }))
         descrption.append("ELSE \(`else`.asExpression().description) END")
         return Expression(withRaw: descrption)
     }

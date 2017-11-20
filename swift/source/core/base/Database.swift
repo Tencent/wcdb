@@ -268,14 +268,14 @@ extension Database {
     
     public func setTokenizes(_ tokenizes: [Tokenize]) {
         handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
-            for tokenize in tokenizes {
+            try tokenizes.forEach({ (tokenize) in
                 let module = tokenize.module
                 let handleStatement = try handle.prepare(StatementSelect.fts3Tokenizer)
                 handleStatement.bind(module.name, toIndex: 1)
                 handleStatement.bind(module.address, toIndex: 2)
                 try handleStatement.step()
                 try handleStatement.finalize()
-            }
+            })
         }
     }
 }
@@ -410,9 +410,9 @@ extension Database {
         var recovers: [String] = []
         let paths = self.paths + (extraFiles ?? [])
         do {
-            for path in paths {
+            try paths.forEach({ (path) in
                 guard File.isExists(atPath: path) else {
-                    continue
+                    return
                 }
                 let file = path.lastPathComponent
                 let newFile = directory.stringByAppending(pathComponent: file)
@@ -421,7 +421,7 @@ extension Database {
                 }
                 try File.hardlink(atPath: file, toPath: newFile)
                 recovers.append(newFile)
-            }
+            })
         }catch let error {
             try? File.remove(files: recovers)
             throw error

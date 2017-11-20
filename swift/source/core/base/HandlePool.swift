@@ -183,12 +183,10 @@ public class HandlePool {
     }
 
     static func purgeFreeHandlesInAllPool() {
-        var handlePools: [HandlePool] = []
+        let handlePools: [HandlePool]!
         do {
             spin.lock(); defer { spin.unlock() }
-            for (_, wrap) in pools {
-                handlePools.append(wrap.handlePool)
-            }
+            handlePools = pools.values.reduce(into: []) { $0.append($1.handlePool) }
         }
         for handlePool in handlePools {
             handlePool.purgeFreeHandles()

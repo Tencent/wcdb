@@ -296,17 +296,13 @@ extension TableInterface where Self: Core {
                         })
                     }
                 }
-                for (_, columnBinding) in columnBindings {
-                    try exec(StatementAlterTable().alter(table: name).addColumn(with: columnBinding.columnDef))
+                try columnBindings.values.forEach { 
+                    try exec(StatementAlterTable().alter(table: name).addColumn(with: $0.columnDef))
                 }
             }else {
                 try exec(orm.generateCreateTableStatement(named: name))
             }
-            if let statementIndexes = orm.generateCreateIndexStatements(onTable: name) {
-                for statementIndex in statementIndexes {
-                    try exec(statementIndex)
-                }
-            }
+            try orm.generateCreateIndexStatements(onTable: name)?.forEach { try exec($0) }
         })
     }
     
