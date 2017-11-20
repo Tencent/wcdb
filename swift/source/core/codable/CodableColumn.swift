@@ -53,7 +53,7 @@ extension CodableColumn {
 
 extension CodableColumn {
     public static var columnType: ColumnType {
-        Error.abort()
+        Error.abort("")
     }
 }
 

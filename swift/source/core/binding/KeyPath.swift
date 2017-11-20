@@ -22,7 +22,7 @@ import Foundation
 
 extension WritableKeyPath: PropertyConvertible {
     public func asProperty() -> Property {
-        Error.abort()
+        Error.abort("")
     }
     
     public func `in`(table: String) -> Property {
@@ -102,7 +102,7 @@ extension WritableKeyPath {
     
     private static func getValueTypeName<Root: CodableTable, Value>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
         guard !(Value.self is AnyClass) else {
-            Error.abort()
+            Error.abort("")
         }
         
         var root = Root()

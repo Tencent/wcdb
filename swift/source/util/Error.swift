@@ -354,7 +354,7 @@ public class Error: Swift.Error, CustomStringConvertible {
     static func abort(_ message: String) -> Never {
         Error.report(type: ErrorType.Abort, code: Error.Code.Global(.Abort), infos: [
             Error.Key.Message: ErrorValue(message)])
-        Error.abort()
+        Error.abort("")
     }
     
     static func warning(_ message: String) {

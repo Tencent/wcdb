@@ -68,7 +68,7 @@ public class TableBinding {
 
     func property(from accessor: Accessor) -> Property {
         guard let property = properties[accessor] else {
-            Error.abort()
+            Error.abort("")
         } 
         return property 
     }
