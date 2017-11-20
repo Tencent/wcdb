@@ -46,6 +46,13 @@ public class Handle {
     private var footprint: [String:Int] = [:]
     private var cost: Int64 = 0
     
+    typealias CommittedHook = (Handle, Int, Void?) -> Void
+    private struct CommittedHookInfo {
+        var onCommitted: CommittedHook
+        weak var handle: Handle?
+    }
+    private var committedHookInfo: CommittedHookInfo? = nil 
+    
     init(withPath path: String) {
         _ = Handle.once
         self.path = path
@@ -276,5 +283,22 @@ extension Handle {
     
     func setTrace(forPerformance performanceTrace: @escaping PerformanceTrace) {
         self.performanceTrace = performanceTrace
+    }
+}
+
+//Commit hook
+extension Handle {
+    func register(onCommitted optionalOnCommitted: CommittedHook?) {
+        guard let onCommitted = optionalOnCommitted else {
+            committedHookInfo = nil
+            sqlite3_wal_hook(handle, nil, nil)
+            return 
+        }
+        committedHookInfo = CommittedHookInfo(onCommitted: onCommitted, handle: self)
+        sqlite3_wal_hook(handle, { (p, _, _, pages) -> Int32 in
+            let committedHookInfo = p!.assumingMemoryBound(to: CommittedHookInfo.self).pointee
+            committedHookInfo.onCommitted(committedHookInfo.handle!, Int(pages), nil)
+            return SQLITE_OK
+        }, &committedHookInfo)
     }
 }

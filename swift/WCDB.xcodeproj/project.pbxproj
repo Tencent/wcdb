@@ -61,6 +61,8 @@
 		230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230686DB1FAC0E5B0005EE8B /* Convertible.swift */; };
 		231BC02B1FC29A3C00011C69 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02A1FC29A3B00011C69 /* Property.swift */; };
 		231BC02D1FC2CB1B00011C69 /* Redirectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02C1FC2CB1B00011C69 /* Redirectable.swift */; };
+		231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */; };
+		231BC0311FC2CDCA00011C69 /* SteadyClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC0301FC2CDCA00011C69 /* SteadyClock.swift */; };
 		2330329F1FB9479400101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330328C1FB9479400101373 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233032A01FB9479400101373 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 2330328D1FB9479400101373 /* sqliterk.c */; };
 		233032A11FB9479400101373 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330328E1FB9479400101373 /* sqliterk.h */; };
@@ -206,6 +208,8 @@
 		230686DB1FAC0E5B0005EE8B /* Convertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convertible.swift; sourceTree = "<group>"; };
 		231BC02A1FC29A3B00011C69 /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		231BC02C1FC2CB1B00011C69 /* Redirectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redirectable.swift; sourceTree = "<group>"; };
+		231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedQueue.swift; sourceTree = "<group>"; };
+		231BC0301FC2CDCA00011C69 /* SteadyClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyClock.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2330328C1FB9479400101373 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
 		2330328D1FB9479400101373 /* sqliterk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk.c; sourceTree = "<group>"; };
@@ -527,6 +531,8 @@
 				238D0B711FAB1F7E00BC2659 /* Tagged.swift */,
 				238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */,
 				230209BF1FBEE3CC000D69B6 /* Convenience.swift */,
+				231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */,
+				231BC0301FC2CDCA00011C69 /* SteadyClock.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -714,6 +720,7 @@
 				230209B81FBED75C000D69B6 /* CodableTable.swift in Sources */,
 				233032A51FB9479400101373 /* sqliterk_column.c in Sources */,
 				238D0B851FAB1F7E00BC2659 /* Order.swift in Sources */,
+				231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */,
 				238D0B831FAB1F7E00BC2659 /* LiteralValue.swift in Sources */,
 				238D0B971FAB1F7E00BC2659 /* StatementRollback.swift in Sources */,
 				238D0B7E1FAB1F7E00BC2659 /* Expression.swift in Sources */,
@@ -725,6 +732,7 @@
 				238D0B901FAB1F7E00BC2659 /* StatementDropIndex.swift in Sources */,
 				233032AE1FB9479400101373 /* sqliterk_util.c in Sources */,
 				230209A41FBED533000D69B6 /* ChainCall.swift in Sources */,
+				231BC0311FC2CDCA00011C69 /* SteadyClock.swift in Sources */,
 				233032A21FB9479400101373 /* sqliterk_api.c in Sources */,
 				238D0B861FAB1F7E00BC2659 /* OrderTerm.swift in Sources */,
 				238D0B801FAB1F7E00BC2659 /* Handle.swift in Sources */,

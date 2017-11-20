@@ -132,6 +132,9 @@ extension Database {
         Error.setReporter(errorReporter)
     }
     
+    private static let timedQueue = TimedQueue<String>(withDelay: 2)
+    private static let checkpointThread = DispatchQueue(label: "WCDB-"+Database.DefaultConfigOrder.checkpoint.description)
+    
     private static let defaultConfigs: Configs = Configs(
         Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
             #if WCDB_IOS
@@ -182,7 +185,18 @@ extension Database {
         }, orderBy: DefaultConfigOrder.basic.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description, orderBy: DefaultConfigOrder.synchronous.rawValue),
         Configs.Config(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
-            //TODO:
+            handle.register(onCommitted: { (handle, pages, _) in
+                guard pages > 1000 else {
+                    return
+                }
+                Database.checkpointThread.async {
+                    while true {
+                        Database.timedQueue.wait(untilExpired: {
+                            try? Database(withPath: $0).exec(StatementPragma().pragma(.walCheckpoint))
+                        })
+                    }
+                }
+            })
         }, orderBy: DefaultConfigOrder.checkpoint.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.tokenize.description, orderBy: DefaultConfigOrder.tokenize.rawValue)
     )

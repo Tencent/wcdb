@@ -49,7 +49,7 @@ class UnfairLock: Lock {
 }
 
 class Mutex: Lock {
-    var mutex: pthread_mutex_t = pthread_mutex_t()
+    var mutex = pthread_mutex_t()
     
     override init() {
         pthread_mutex_init(&mutex, nil)
@@ -96,5 +96,41 @@ class Spin: Lock {
         }else {
             mutex!.unlock()
         }
+    }
+}
+
+
+class ConditionLock: Lock {
+    var mutex = pthread_mutex_t()
+    var cond = pthread_cond_t()
+    
+    override init() {
+        pthread_mutex_init(&mutex, nil)
+        pthread_cond_init(&cond, nil)
+    }
+    
+    deinit {
+        pthread_cond_destroy(&cond)
+        pthread_mutex_destroy(&mutex)
+    }
+    
+    override func lock() {
+        pthread_mutex_lock(&mutex)
+    }
+    
+    override func unlock() {
+        pthread_mutex_unlock(&mutex)
+    }
+    
+    func wait() {
+        pthread_cond_wait(&cond, &mutex)
+    }
+    
+    func signal() {
+        pthread_cond_signal(&cond)
+    }
+    
+    func broadcast() {
+        pthread_cond_broadcast(&cond)
     }
 }

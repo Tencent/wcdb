@@ -19,6 +19,7 @@
  */
 
 import Foundation
+
 class RWLock {
     var mutex = pthread_mutex_t()
     var cond = pthread_cond_t()
@@ -28,9 +29,11 @@ class RWLock {
     
     init() {
         pthread_mutex_init(&mutex, nil)
+        pthread_cond_init(&cond, nil)
     }
     
     deinit {
+        pthread_cond_destroy(&cond)
         pthread_mutex_destroy(&mutex)
     }
     
