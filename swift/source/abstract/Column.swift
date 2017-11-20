@@ -43,7 +43,7 @@ public class Column: Describable {
     }
 }
 
-extension Column: ColumnConvertible {
+extension Column: ColumnConvertible, ExpressionOperable {
     public func asColumn() -> Column {
         return self
     }
