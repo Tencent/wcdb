@@ -25,10 +25,9 @@ import Foundation
  *
  * Bool
  * Int, Int8, Int16, UInt, UInt8, UInt16, UInt32, UInt64
- * Float, NSNumber
- * Date, NSDate
- * NSString
- * NSData
+ * Float 
+ * Date
+ * NSNumber, NSString, NSDate, NSData
  * 
  * Note that Int32, Int64, Double, String, Data are fundamental codable types.
  * 

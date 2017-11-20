@@ -24,7 +24,7 @@ import Foundation
  * Builtin codable implementation for archivable type
  *
  * Array, Dictionary, Set
- * all [NSObject]s, e.g. NSArray/NSMutableArray, NSDictionary/NSMutableDictionary, NSSet/NSMutableSet
+ * all [NSObject]s, except NSNumber, NSData, NSString, NSDate. e.g. NSArray/NSMutableArray, NSDictionary/NSMutableDictionary, NSSet/NSMutableSet
  * URL
  * 
  */
