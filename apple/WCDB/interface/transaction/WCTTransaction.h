@@ -80,7 +80,7 @@ typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
 /**
  @brief Run a transaction in block.
  
-     BOOL commited = [transaction runTransaction:^BOOL(){
+     BOOL committed = [transaction runTransaction:^BOOL(){
      BOOL result = [transaction insertObject:object into:tableName];
         return result;//return YES to commit transaction and return NO to rollback transaction.
      } event:^(WCTTransactionEvent event) {
@@ -102,7 +102,7 @@ typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
 
  @param inTransaction Operation inside transaction.
  @param onTransactionStateChanged State changed event.
- @return YES only if transaction is commited.
+ @return YES only if transaction is committed.
  @see WCTTransactionBlock
  @see WCTTransactionEventBlock
  */
@@ -112,7 +112,7 @@ typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
  @brief This interface is equivalent to [transaction runTransaction:transaction event:nil];
  @param inTransaction Operation inside transaction.
  @see runTransaction:event:
- @return YES only if transaction is commited.
+ @return YES only if transaction is committed.
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 

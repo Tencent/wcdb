@@ -267,21 +267,21 @@ bool Handle::setCipherKey(const void *data, int size)
 #endif //SQLITE_HAS_CODEC
 }
 
-void Handle::registerCommitedHook(const CommitedHook &onCommited, void *info)
+void Handle::registerCommittedHook(const CommittedHook &onCommitted, void *info)
 {
-    m_commitedHookInfo.onCommited = onCommited;
-    m_commitedHookInfo.info = info;
-    m_commitedHookInfo.handle = this;
-    if (m_commitedHookInfo.onCommited) {
+    m_committedHookInfo.onCommitted = onCommitted;
+    m_committedHookInfo.info = info;
+    m_committedHookInfo.handle = this;
+    if (m_committedHookInfo.onCommitted) {
         sqlite3_wal_hook(
             (sqlite3 *) m_handle,
             [](void *p, sqlite3 *, const char *, int pages) -> int {
-                CommitedHookInfo *commitedHookInfo = (CommitedHookInfo *) p;
-                commitedHookInfo->onCommited(commitedHookInfo->handle, pages,
-                                             commitedHookInfo->info);
+                CommittedHookInfo *committedHookInfo = (CommittedHookInfo *) p;
+                committedHookInfo->onCommitted(committedHookInfo->handle, pages,
+                                             committedHookInfo->info);
                 return SQLITE_OK;
             },
-            &m_commitedHookInfo);
+            &m_committedHookInfo);
     } else {
         sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
     }

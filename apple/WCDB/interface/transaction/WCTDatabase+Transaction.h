@@ -33,7 +33,7 @@
 /**
  @brief Run a transaction in block.
  
-     BOOL commited = [database runTransaction:^BOOL(){
+     BOOL committed = [database runTransaction:^BOOL(){
         BOOL result = [database insertObject:object into:tableName];
         return result;//return YES to commit transaction and return NO to rollback transaction.
      } event:^(WCTTransactionEvent event) {
@@ -55,7 +55,7 @@
 
  @param inTransaction Operation inside transaction.
  @param onTransactionStateChanged State changed event.
- @return YES only if transaction is commited.
+ @return YES only if transaction is committed.
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged;
 
@@ -63,7 +63,7 @@
  @brief This interface is equivalent to [database runTransaction:transaction event:nil];
  @param inTransaction Operation inside transaction.
  @see runTransaction:event:
- @return YES only if transaction is commited.
+ @return YES only if transaction is committed.
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 

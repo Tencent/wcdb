@@ -198,7 +198,7 @@ const Configs Database::defaultConfigs(
      {
          Database::defaultCheckpointConfigName,
          [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
-             handle->registerCommitedHook(
+             handle->registerCommittedHook(
                  [](Handle *handle, int pages, void *) {
                      static TimedQueue<std::string> s_timedQueue(2);
                      if (pages > 1000) {

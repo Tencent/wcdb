@@ -41,7 +41,7 @@ void sample_transaction_main(NSString *baseDirectory)
 
     //Run blocked transaction
     {
-        BOOL commited = [database runTransaction:^BOOL {
+        BOOL committed = [database runTransaction:^BOOL {
           WCTSampleTransaction *object = [[WCTSampleTransaction alloc] init];
           BOOL ret = [database insertObject:object
                                        into:tableName];

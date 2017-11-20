@@ -39,7 +39,7 @@ typedef std::function<void(
 
 typedef std::function<void(const std::string &)> SQLTrace;
 
-typedef std::function<void(Handle *, int, void *)> CommitedHook;
+typedef std::function<void(Handle *, int, void *)> CommittedHook;
 
 class Handle {
 public:
@@ -73,7 +73,7 @@ public:
 
     const Error &getError() const;
 
-    void registerCommitedHook(const CommitedHook &onCommited, void *info);
+    void registerCommittedHook(const CommittedHook &onCommitted, void *info);
 
     static const std::string backupSuffix;
 
@@ -94,11 +94,11 @@ protected:
     void reportSQL(const std::string &sql);
 
     typedef struct {
-        CommitedHook onCommited;
+        CommittedHook onCommitted;
         void *info;
         Handle *handle;
-    } CommitedHookInfo;
-    CommitedHookInfo m_commitedHookInfo;
+    } CommittedHookInfo;
+    CommittedHookInfo m_committedHookInfo;
 
     void setupTrace();
     PerformanceTrace m_performanceTrace;
