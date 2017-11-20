@@ -48,7 +48,7 @@ class TimedQueue<Key: Hashable> {
         }
         
         //delay
-        list.append((key, SteadyClock()+delay))
+        list.append((key, SteadyClock.now()+delay))
         map[key] = list.startIndex
         if signal {
             conditionLock.signal()
@@ -68,7 +68,7 @@ class TimedQueue<Key: Hashable> {
         var get = false
         while !get {
             var element: Element!
-            let now = SteadyClock()
+            let now = SteadyClock.now()
             do {
                 conditionLock.lock(); defer { conditionLock.unlock() }
                 element = list.first!

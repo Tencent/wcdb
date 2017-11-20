@@ -37,24 +37,20 @@ struct SteadyClock {
         return absoluteTime - other.absoluteTime
     }
     
-    mutating func add(timeInterval: AbsoluteTime) {
-        absoluteTime += timeInterval
-    }
-    
-    mutating func sub(timeInterval: AbsoluteTime) {
-        absoluteTime += timeInterval
-    }
-    
-    static func +(steadyClock: SteadyClock, timeInterval: AbsoluteTime) -> SteadyClock {
+    static func + (steadyClock: SteadyClock, timeInterval: AbsoluteTime) -> SteadyClock {
         return SteadyClock(with: steadyClock.absoluteTime + timeInterval)
     }
     
-    static func -(steadyClock: SteadyClock, timeInterval: AbsoluteTime) -> SteadyClock {
+    static func - (steadyClock: SteadyClock, timeInterval: AbsoluteTime) -> SteadyClock {
         return SteadyClock(with: steadyClock.absoluteTime - timeInterval)
     }
     
     static func timeIntervalSince(_ other: SteadyClock) -> AbsoluteTime {
-        return SteadyClock().timeIntervalSince(other)
+        return SteadyClock.now().timeIntervalSince(other)
+    }
+    
+    static func now() -> SteadyClock {
+        return SteadyClock()
     }
 }
 
