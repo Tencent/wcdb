@@ -48,21 +48,25 @@ public class HandlePool {
     
     static func getPool(with tag: Tag) -> RecyclableHandlePool? {
         spin.lock(); defer { spin.unlock() }
-        for (path, var wrap) in pools {
-            guard wrap.handlePool.tag == tag else {
-                continue
+        var path: String!
+        guard var wrap = (pools.first { (arg) -> Bool in
+            guard arg.value.handlePool.tag == tag else {
+                return false
             }
-            wrap.reference += 1
-            return Recyclable(wrap.handlePool, onRecycled: {
-                spin.lock(); defer { spin.unlock() }
-                var wrap = pools[path]!
-                wrap.reference -= 1
-                if wrap.reference == 0 {
-                    pools.removeValue(forKey: path)
-                }
-            })
+            path = arg.key
+            return true
+        })?.value else {
+            return nil
         }
-        return nil
+        wrap.reference += 1
+        return Recyclable(wrap.handlePool, onRecycled: {
+            spin.lock(); defer { spin.unlock() }
+            var wrap = pools[path]!
+            wrap.reference -= 1
+            if wrap.reference == 0 {
+                pools.removeValue(forKey: path)
+            }
+        })
     }
     
     static let hardwareConcurrency = ProcessInfo.processInfo.processorCount 
@@ -188,8 +192,6 @@ public class HandlePool {
             spin.lock(); defer { spin.unlock() }
             handlePools = pools.values.reduce(into: []) { $0.append($1.handlePool) }
         }
-        for handlePool in handlePools {
-            handlePool.purgeFreeHandles()
-        }
+        handlePools.forEach { $0.purgeFreeHandles() }
     }
 }

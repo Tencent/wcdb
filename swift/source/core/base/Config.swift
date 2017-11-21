@@ -112,15 +112,7 @@ public struct Configs {
     
     func config(by name: String) -> Callback? {
         let configs = self.configs
-        for config in configs {
-            if config.name == name {
-                guard config.callback != nil else {
-                    return nil
-                } 
-                return config.callback!.value
-            }
-        }
-        return nil
+        return configs.first { $0.name == name }?.callback?.value
     }
 }
 
