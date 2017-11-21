@@ -327,6 +327,13 @@ extension Database: Core {
         return true
     }
     
+    public func getTable<Root: CodableTable>(named name: String) throws -> Table<Root>? {
+        guard try isTableExists(name) else {
+            return nil
+        }
+        return Table<Root>(withDatabase: self, named: name)
+    }
+    
     public func begin() throws {
         try begin(.Immediate)
     }

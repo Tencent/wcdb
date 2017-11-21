@@ -19,6 +19,7 @@
  */
 
 import Foundation
+
 public class SelectBase: CoreRepresentable {
     var core: Core
     let statementSelect: StatementSelect = StatementSelect()

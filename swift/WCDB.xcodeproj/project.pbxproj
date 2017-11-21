@@ -143,6 +143,8 @@
 		23E737C61FB1602800EEBC3D /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C51FB1602800EEBC3D /* Sequence.swift */; };
 		23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0011FC3C5CB005DE71C /* Tracer.swift */; };
 		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
+		23E9E0071FC3D80B005DE71C /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0061FC3D80B005DE71C /* Table.swift */; };
+		23E9E0091FC3D810005DE71C /* TableInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0081FC3D810005DE71C /* TableInterface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -294,6 +296,8 @@
 		23E737C51FB1602800EEBC3D /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		23E9E0011FC3C5CB005DE71C /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
 		23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
+		23E9E0061FC3D80B005DE71C /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
+		23E9E0081FC3D810005DE71C /* TableInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableInterface.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,6 +379,8 @@
 				230209881FBED533000D69B6 /* Select.swift */,
 				230209891FBED533000D69B6 /* SelectBase.swift */,
 				2302098A1FBED533000D69B6 /* Update.swift */,
+				23E9E0061FC3D80B005DE71C /* Table.swift */,
+				23E9E0081FC3D810005DE71C /* TableInterface.swift */,
 			);
 			path = interface;
 			sourceTree = "<group>";
@@ -729,6 +735,7 @@
 				238D0B851FAB1F7E00BC2659 /* Order.swift in Sources */,
 				231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */,
 				238D0B831FAB1F7E00BC2659 /* LiteralValue.swift in Sources */,
+				23E9E0091FC3D810005DE71C /* TableInterface.swift in Sources */,
 				238D0B971FAB1F7E00BC2659 /* StatementRollback.swift in Sources */,
 				238D0B7E1FAB1F7E00BC2659 /* Expression.swift in Sources */,
 				238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */,
@@ -757,6 +764,7 @@
 				238D0B911FAB1F7E00BC2659 /* StatementDropTable.swift in Sources */,
 				238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */,
 				238D0B9D1FAB1F7E00BC2659 /* Subquery.swift in Sources */,
+				23E9E0071FC3D80B005DE71C /* Table.swift in Sources */,
 				230209B71FBED75C000D69B6 /* CodableFundamentalValue.swift in Sources */,
 				230209961FBED533000D69B6 /* ConstraintBinding.swift in Sources */,
 				238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c in Sources */,
