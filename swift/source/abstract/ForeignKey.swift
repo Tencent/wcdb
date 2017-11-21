@@ -21,10 +21,10 @@
 import Foundation
 
 public class ForeignKey : Describable{   
-    public init(withForeignTable table: String, andColumnNames columnNames: [String]? = nil) {
+    public init(withForeignTable table: String, andColumnNames columnNames: [String]) {
         super.init("REFERENCES \(table)")
-        if columnNames != nil && !columnNames!.isEmpty {
-            description.append("(\(columnNames!.joined(separator: ","))")
+        if !columnNames.isEmpty {
+            description.append("(\(columnNames.joined(separator: ","))")
         }
     }
 
