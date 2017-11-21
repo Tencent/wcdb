@@ -252,11 +252,14 @@ public protocol TableInterface {
     func create(table name: String, of class: CodableTable.Type) throws 
     func create(virtualTable name: String, of class: CodableTable.Type) throws
     
-    func create(table name: String, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]) throws
-    func addColumn(with columnDef: ColumnDef, for table: String) throws 
+    func create(table name: String, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]?) throws
+    func create(table name: String, with columnDefList: ColumnDef..., and constraintList: [TableConstraint]?) throws
+    
+    func addColumn(with columnDef: ColumnDef, forTable table: String) throws 
     func drop(table name: String) throws 
     
-    func create(index name: String, with columnIndexConvertibleList: [ColumnIndexConvertible], for table: String) throws 
+    func create(index name: String, with columnIndexConvertibleList: [ColumnIndexConvertible], forTable table: String) throws 
+    func create(index name: String, with columnIndexConvertibleList: ColumnIndexConvertible..., forTable table: String) throws 
     func drop(index name: String) throws 
 }
 
@@ -301,11 +304,15 @@ extension TableInterface where Self: Core {
         })
     }
     
-    public func create(table name: String, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]) throws {
+    public func create(table name: String, with columnDefList: ColumnDef..., and constraintList: [TableConstraint]? = nil) throws {
+        try create(table: name, with: columnDefList, and: constraintList)
+    }
+    
+    public func create(table name: String, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]? = nil) throws {
         try exec(StatementCreateTable().create(table: name, with: columnDefList, and: constraintList))
     }
     
-    public func addColumn(with columnDef: ColumnDef, for table: String) throws {
+    public func addColumn(with columnDef: ColumnDef, forTable table: String) throws {
         try exec(StatementAlterTable().alter(table: table).addColumn(with: columnDef))
     }
     
@@ -313,7 +320,11 @@ extension TableInterface where Self: Core {
         try exec(StatementDropTable().drop(table: name))
     }
     
-    public func create(index name: String, with columnIndexConvertibleList: [ColumnIndexConvertible], for table: String) throws {
+    public func create(index name: String, with columnIndexConvertibleList: ColumnIndexConvertible..., forTable table: String) throws {
+        try create(index: name, with: columnIndexConvertibleList, forTable: table)
+    }
+
+    public func create(index name: String, with columnIndexConvertibleList: [ColumnIndexConvertible], forTable table: String) throws {
         try exec(StatementCreateIndex().create(index: name).on(table: table, indexesBy: columnIndexConvertibleList))
     }
     
