@@ -200,13 +200,11 @@ extension RowSelectInterface where Self: Core {
     }
     
     public func getValue(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalValue {
-        //TODO: ??
-        return (try getRows(on: result, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first?.first)!
+        return (try getRows(on: result, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first?.first) ?? nil
     }
     
     public func getDistinctValue(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalValue {
-        //TODO: ??
-        return try getDistinctColumn(on: result, from: table).first as? CodableFundamentalValueBase
+        return (try getDistinctColumn(on: result, from: table).first) ?? nil
     }   
 }
 
