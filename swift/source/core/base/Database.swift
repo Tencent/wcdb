@@ -128,7 +128,7 @@ extension Database {
         sqlTracer.assign(trace)
     }
     
-    public static func setGlobal(ofErrorReport errorReporter: @escaping Error.Reporter) {
+    public static func globalTrace(ofErrorReport errorReporter: @escaping Error.Reporter) {
         Error.setReporter(errorReporter)
     }
     

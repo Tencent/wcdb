@@ -31,14 +31,27 @@ public protocol CodableTable {
     
     init()
     
-    static var objectRelationalMapping: TableBinding {get}
     static var allProperties: [Property] {get}
+    
+    static var any: Column {get}
+    
+    static func column(named: String) -> Column
+    
+    static var objectRelationalMapping: TableBinding {get}
     static var magicNumber: Int32 {get}
 }
 
 extension CodableTable {
     public static var allProperties: [Property] {
         return objectRelationalMapping.allProperties
+    }
+    
+    public static var any: Column {
+        return Column.any
+    }
+    
+    public static func column(named name: String) -> Column {
+        return Column(named: name)
     }
    
     public static var magicNumber: Int32 {

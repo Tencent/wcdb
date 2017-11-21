@@ -56,7 +56,7 @@ func sample_advance_main(baseDirectory: String) {
     
     //Using [as] to redirect selection
     do {
-        let object: SampleAdvance = (try database.getObject(on: SampleAdvance.anyProperty.as(\SampleAdvance.intValue), from: tableName))!
+        let object: SampleAdvance = (try database.getObject(on: SampleAdvance.any.as(\SampleAdvance.intValue), from: tableName))!
         print("Count: \(object.intValue!)")
     }catch let error {
         print("redirect selection error: \(error)")
@@ -72,7 +72,7 @@ func sample_advance_main(baseDirectory: String) {
     
     //Column coding
     do {
-        let object = try database.getObject(of: SampleAdvance.self, from: tableName)
+        let object: SampleAdvance? = try database.getObject(from: tableName)
         let value: Float? = object?.columnCoding?.floatValue
     }catch let error {
         print("column coding error: \(error)")

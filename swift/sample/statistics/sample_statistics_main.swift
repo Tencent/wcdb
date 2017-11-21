@@ -36,7 +36,7 @@ func sample_statistics_main(baseDirectory: String) {
     //trace
     //You should register trace before all db operation.
     do {
-        Database.setGlobal(ofPerformanceTrace: { (tag, sqls, cost) in
+        Database.globalTrace(ofPerformance: { (tag, sqls, cost) in
             print("Tag: \(tag ?? 0)")
             for (sql, count) in sqls {
                 print("SQL: \(sql) Count: \(count)")
@@ -47,14 +47,14 @@ func sample_statistics_main(baseDirectory: String) {
     
     //SQL
     do {
-        Database.setGlobal(ofSQLTrace: { (sql) in
+        Database.globalTrace(ofSQL: { (sql) in
             print("SQL: \(sql)")
         })
     }
     
     //error
     do {
-        Database.setGlobal(ofErrorReport: { (error) in
+        Database.globalTrace(ofErrorReport: { (error) in
             print("Error: \(error)")
         })
     }
@@ -85,7 +85,7 @@ func sample_statistics_main(baseDirectory: String) {
         try database.insert(objects: objects, into: tableName)
         
         try database.run(transaction: { 
-            let results = try database.getObjects(of: SampleStatistics.self, from: tableName)
+            let results: [SampleStatistics] = try database.getObjects(from: tableName)
             for object in results {
                 object.intValue = -(object.intValue ?? 0)
             }

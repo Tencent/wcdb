@@ -54,6 +54,12 @@ extension WritableKeyPath: PropertyRedirectable {
     }
 }
 
+extension WritableKeyPath: ColumnConvertible {
+    public func asColumn() -> Column {
+        return asProperty().asColumn()
+    }
+}
+
 extension WritableKeyPath {
     private static func getReferenceTypeName<Root: CodableTable, Value: CodableClassColumn>(fromKeyPath keyPath: WritableKeyPath<Root, Value>) -> String {
         var root = Root()

@@ -94,21 +94,21 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select one object
     do {
-        let object = try database.getObject(of: SampleConvenient.self, from: tableName)
+        let object: SampleConvenient? = try database.getObject(from: tableName)
     }catch let error {
         print("select one object error: \(error)")
     }
     
     //Select objects
     do {
-        let objects = try database.getObjects(of: SampleConvenient.self, from: tableName)
+        let objects: [SampleConvenient] = try database.getObjects(from: tableName)
     }catch let error {
         print("select objects error: \(error)")
     }
     
     //Select objects with condition/order/offset/limit
     do {
-        let objects = try database.getObjects(of: SampleConvenient.self, from: tableName, orderBy: [(\SampleChainCall.intValue).asOrder(by: .Ascending)], limit: 1, offset: 2)
+        let objects: [SampleConvenient] = try database.getObjects(from: tableName, orderBy: [(\SampleChainCall.intValue).asOrder(by: .Ascending)], limit: 1, offset: 2)
     }catch let error {
         print("select objects error: \(error)")
     }
@@ -141,7 +141,7 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select one value
     do {
-        let count = try database.getValue(on: SampleConvenient.anyProperty.count(), from: tableName)
+        let count = try database.getValue(on: SampleConvenient.any.count(), from: tableName)
     }catch let error {
         print("select one value error: \(error)")
     }

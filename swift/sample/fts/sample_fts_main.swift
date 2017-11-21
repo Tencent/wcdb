@@ -88,7 +88,7 @@ func sample_fts_main(baseDirectory: String) {
         
     //Build Full-Text-Search Index
     do {
-        let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(of: SampleFTSOrigin.self, from: tableNameOrigin)
+        let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(from: tableNameOrigin)
         var ftsDataArray: [SampleFTSData] = []
         for object in objects {
             let ftsData = SampleFTSData()
@@ -103,7 +103,7 @@ func sample_fts_main(baseDirectory: String) {
     
     //Full-Text-Search by `match`
     do {
-        let ftsDataArray = try databaseFTS.getObjects(of: SampleFTSData.self, from: tableNameFTS, where: SampleFTSData.property(named: tableNameFTS).match("Eng*"))
+        let ftsDataArray: [SampleFTSData] = try databaseFTS.getObjects(from: tableNameFTS, where: SampleFTSData.column(named: tableNameFTS).match("Eng*"))
         for ftsData in ftsDataArray {
             print("Match name:\(ftsData.name ?? "") content:\(ftsData.content ?? "")")
         }
@@ -114,7 +114,7 @@ func sample_fts_main(baseDirectory: String) {
     //Full-Text-Search info by `match`
     //See http://www.sqlite.org/fts3.html#snippet for further information
     do {
-        let tableProperty = SampleFTSData.property(named: tableNameFTS) 
+        let tableProperty = SampleFTSData.column(named: tableNameFTS) 
         let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), from: tableNameFTS, where: tableProperty.match("12*")))!
         
         print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
