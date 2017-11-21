@@ -209,6 +209,7 @@ extension RowSelectInterface where Self: Core {
 }
 
 public protocol SelectInterface {
+    //TODO: Add generic property convertible to fit the type
     func getObjects<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> [Object] 
     func getObjects<Object: CodableTable>(on propertyConvertibleList: PropertyConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> [Object] 
 
