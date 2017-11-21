@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
         applicationId "com.tencent.wcdb.sample.repairdb"
-        minSdkVersion 12
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -28,10 +28,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    debugCompile project(path: ':wcdb', configuration: 'debug')
-    releaseCompile project(path: ':wcdb', configuration: 'release')
+    compile project(':wcdb')
     //compile 'com.tencent.wcdb:wcdb-android:1.0.4'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
