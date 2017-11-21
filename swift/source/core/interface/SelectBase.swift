@@ -94,6 +94,7 @@ public class SelectBase: CoreRepresentable {
         return self
     }
     
+    //Since `next()` may throw errors, it can't conform to `Sequence` protocol to fit a `for in` loop.
     @discardableResult
     public func next() throws -> Bool {
         do {
