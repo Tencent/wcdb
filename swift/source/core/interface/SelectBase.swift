@@ -121,10 +121,12 @@ public class SelectBase: CoreRepresentable {
         return multiObject
     }
     
-    func extract<T: CodableTable>(from properties: [Property]) throws -> T {
-        assert((properties.first!.columnBinding.`class` == T.self))
+    func extract<Object: CodableTable>(from properties: [Property]) throws -> Object {
+        guard properties.first!.columnBinding.`class` is Object.Type else {
+            Error.abort("")
+        }
         let object = try extract(from: properties)
-        return object as! T
+        return object as! Object
     }
     
     func extract(from properties: [Property]) throws -> Any {

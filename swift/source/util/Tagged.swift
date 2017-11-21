@@ -28,11 +28,11 @@ class Counter{
     }
 }
 
-class Tagged<T>: Equatable {
+class Tagged<Value>: Equatable {
     let id: Int
-    let value: T
+    let value: Value
     
-    init(_ value: T) {
+    init(_ value: Value) {
         self.value = value
         self.id = Counter.step()
     }

@@ -31,9 +31,10 @@ public class Select: SelectBase {
         statementSelect.select(distinct: isDistinct, properties).from(table)
     }
     
-    //TODO: support [for in]
-    public func nextObject<T: CodableTable>() throws -> T? {
-        assert((properties.first!.columnBinding.`class` == T.self))
+    public func nextObject<Object: CodableTable>() throws -> Object? {
+        guard properties.first!.columnBinding.`class` is Object.Type else {
+            Error.abort("")
+        }
         try next()
         return try extract(from: properties)
     }
@@ -52,11 +53,11 @@ public class Select: SelectBase {
         return objects
     }
     
-    public func allObjects<T: CodableTable>() throws -> [T] {
-        assert((properties.first!.columnBinding.`class` == T.self))
-        var objects: [T] = []
+    public func allObjects<Object: CodableTable>() throws -> [Object] {
+        assert((properties.first!.columnBinding.`class` == Object.self))
+        var objects: [Object] = []
         while try next() {
-            let object: T = try extract(from: properties)
+            let object: Object = try extract(from: properties)
             objects.append(object)
         }
         return objects

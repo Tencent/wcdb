@@ -20,8 +20,8 @@
 
 import Foundation
 
-class ConcurrentList<T>{
-    var values: [T] = []
+class ConcurrentList<Value>{
+    var values: [Value] = []
     let capacityCap: Int
     let spin = Spin()
     
@@ -29,7 +29,7 @@ class ConcurrentList<T>{
         self.capacityCap = capacityCap
     }
     
-    func pushBack(_ value: T) -> Bool {
+    func pushBack(_ value: Value) -> Bool {
         spin.lock(); defer { spin.unlock() }
         if values.count < capacityCap {
             values.append(value)
@@ -38,7 +38,7 @@ class ConcurrentList<T>{
         return false
     }
     
-    func popBack() -> T? {
+    func popBack() -> Value? {
         spin.lock(); defer { spin.unlock() }
         if !values.isEmpty {
             return values.removeLast()

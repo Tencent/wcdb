@@ -19,15 +19,15 @@
  */
 
 import Foundation
-class Atomic<T> {
-    var raw: T
+class Atomic<Value> {
+    var raw: Value
     let spin = Spin()
     
-    init(_ raw: T) {
+    init(_ raw: Value) {
         self.raw = raw
     }
     
-    var value: T {
+    var value: Value {
         get {
             spin.lock(); defer { spin.unlock() }
             return raw
@@ -38,63 +38,63 @@ class Atomic<T> {
         }
     }
 
-    func withValue(_ closure: (T)->T) {
+    func withValue(_ closure: (Value)->Value) {
         spin.lock(); defer { spin.unlock() }
         raw = closure(raw)
     }
     
-    func assign(_ newValue: T) {
+    func assign(_ newValue: Value) {
         spin.lock(); defer { spin.unlock() }
         self.raw = newValue
     }
 }
 
-extension Atomic where T==Int {
-    static func +=(left: Atomic, right: T) {
-        left.withValue { (value) -> T in
-            return value+right
+extension Atomic where Value==Int {
+    static func += (left: Atomic, right: Value) {
+        left.withValue { (value) -> Value in
+            return value + right
         }
     }
     
-    static func -=(left: Atomic, right: T) {
-        left.withValue { (value) -> T in
-            return value-right
+    static func -= (left: Atomic, right: Value) {
+        left.withValue { (value) -> Value in
+            return value - right
         }
     }
     
-    static prefix func ++(atomic: Atomic) -> T {
-        var newValue: T = 0
-        atomic.withValue { (value) -> T in
-            newValue = value-1
+    static prefix func ++ (atomic: Atomic) -> Value {
+        var newValue: Value = 0
+        atomic.withValue { (value) -> Value in
+            newValue = value - 1
             return newValue
         }
         return newValue
     }
 }
 
-extension Atomic where T: Equatable {
-    static func == (left: Atomic, right: T) -> Bool {
+extension Atomic where Value: Equatable {
+    static func == (left: Atomic, right: Value) -> Bool {
         return left.value == right
     }
 }
 
-extension Atomic where T: Comparable {
-    static func < (left: Atomic, right: T) -> Bool {
+extension Atomic where Value: Comparable {
+    static func < (left: Atomic, right: Value) -> Bool {
         return left.value < right
     }
-    static func <= (left: Atomic, right: T) -> Bool {
+    static func <= (left: Atomic, right: Value) -> Bool {
         return left.value <= right
     }
-    static func > (left: Atomic, right: T) -> Bool {
+    static func > (left: Atomic, right: Value) -> Bool {
         return left.value > right
     }
-    static func >= (left: Atomic, right: T) -> Bool {
+    static func >= (left: Atomic, right: Value) -> Bool {
         return left.value >= right
     }
 }
 
-extension Atomic where T: OptionalRepresentable {
+extension Atomic where Value: OptionalRepresentable {
     convenience init() {
-        self.init(T.`nil`)
+        self.init(Value.`nil`)
     }
 }
