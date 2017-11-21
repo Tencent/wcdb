@@ -114,18 +114,18 @@ extension Database {
         })
     }
 
-    public typealias PerformanceTrace = Handle.PerformanceTrace
-    public typealias SQLTrace = Handle.SQLTrace
+    public typealias PerformanceTracer = Handle.PerformanceTracer
+    public typealias SQLTracer = Handle.SQLTracer
 
-    static private var performanceTrace: Atomic<PerformanceTrace?> = Atomic(nil)
-    static private var sqlTrace: Atomic<SQLTrace?> = Atomic(nil)
+    static private var performanceTracer = Atomic<PerformanceTracer?>()
+    static private var sqlTracer = Atomic<SQLTracer?>()
     
-    public static func setGlobal(ofPerformanceTrace trace: @escaping PerformanceTrace) {
-        performanceTrace.assign(trace)
+    public static func globalTrace(ofPerformance trace: @escaping PerformanceTracer) {
+        performanceTracer.assign(trace)
     }
     
-    public static func setGlobal(ofSQLTrace trace: @escaping SQLTrace) {
-        sqlTrace.assign(trace)
+    public static func globalTrace(ofSQL trace: @escaping SQLTracer) {
+        sqlTracer.assign(trace)
     }
     
     public static func setGlobal(ofErrorReport errorReporter: @escaping Error.Reporter) {
@@ -144,11 +144,11 @@ extension Database {
             #endif //WCDB_IOS
         }, orderBy: DefaultConfigOrder.fileProtection.rawValue),
         Configs.Config(named: DefaultConfigOrder.trace.description, with: { (handle: Handle) throws in
-            if sqlTrace.raw != nil {
-                handle.setTrace(forSQL: sqlTrace.raw!)
+            if let sqlTracer = Database.sqlTracer.raw {
+                handle.trace(sql: sqlTracer)
             }
-            if performanceTrace.raw != nil {
-                handle.setTrace(forPerformance: performanceTrace.raw!)
+            if let performanceTracer = Database.performanceTracer.raw {
+                handle.trace(performance: performanceTracer)
             }
         }, orderBy: DefaultConfigOrder.trace.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
@@ -256,9 +256,9 @@ extension Database {
         }
     }
     
-    public func setPerformanceTrace(_ performanceTrace: @escaping PerformanceTrace) {
+    public func trace(performance performanceTracer: @escaping PerformanceTracer) {
         handlePool.setConfig(named: DefaultConfigOrder.trace.description) { (handle) in
-            handle.setTrace(forPerformance: performanceTrace)
+            handle.trace(performance: performanceTracer)
         }
     }
     

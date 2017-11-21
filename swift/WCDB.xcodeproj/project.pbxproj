@@ -141,6 +141,8 @@
 		23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A1FF6E1FB084570023527D /* sqlcipher.framework */; };
 		23E737C41FB1601C00EEBC3D /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C31FB1601C00EEBC3D /* Master.swift */; };
 		23E737C61FB1602800EEBC3D /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C51FB1602800EEBC3D /* Sequence.swift */; };
+		23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0011FC3C5CB005DE71C /* Tracer.swift */; };
+		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -290,6 +292,8 @@
 		23A1FF691FB084570023527D /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		23E737C51FB1602800EEBC3D /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
+		23E9E0011FC3C5CB005DE71C /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
+		23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -499,6 +503,7 @@
 				238D0B381FAB1F7E00BC2659 /* StatementVacuum.swift */,
 				238D0B391FAB1F7E00BC2659 /* Subquery.swift */,
 				238D0B3A1FAB1F7E00BC2659 /* TableConstraint.swift */,
+				23E9E0011FC3C5CB005DE71C /* Tracer.swift */,
 			);
 			path = abstract;
 			sourceTree = "<group>";
@@ -528,6 +533,7 @@
 				238D0B6E1FAB1F7E00BC2659 /* RWLock.swift */,
 				238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c */,
 				238D0B701FAB1F7E00BC2659 /* SQLite-Bridging-Header.h */,
+				23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */,
 				238D0B711FAB1F7E00BC2659 /* Tagged.swift */,
 				238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */,
 				230209BF1FBEE3CC000D69B6 /* Convenience.swift */,
@@ -695,6 +701,7 @@
 				230209A61FBED533000D69B6 /* Insert.swift in Sources */,
 				230209941FBED533000D69B6 /* AnyBinding.swift in Sources */,
 				230209C21FBEE431000D69B6 /* Optional.swift in Sources */,
+				23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */,
 				2302099A1FBED533000D69B6 /* TableBinding.swift in Sources */,
 				237BD9351FBEE4AF00F6A094 /* KeyPath.swift in Sources */,
 				233032B01FB9479400101373 /* sqliterk_values.c in Sources */,
@@ -774,6 +781,7 @@
 				233032A91FB9479400101373 /* sqliterk_os.c in Sources */,
 				238D0B811FAB1F7E00BC2659 /* HandleStatement.swift in Sources */,
 				238D0B921FAB1F7E00BC2659 /* StatementExplain.swift in Sources */,
+				23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */,
 				238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */,
 				230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */,
 				238D0B991FAB1F7E00BC2659 /* StatementSelect.swift in Sources */,

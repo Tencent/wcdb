@@ -20,21 +20,5 @@
 
 import Foundation
 
-public protocol OptionalRepresentable {
-    associatedtype WrappedType
-    var wrapped: WrappedType {get}
-    
-    static var `nil`: Self {get}
-}
-
-extension Optional: OptionalRepresentable {
-    public static var `nil`: Optional<Wrapped> {
-        return Optional<Wrapped>.none
-    }
-    
-    public typealias WrappedType = Wrapped
-    
-    public var wrapped: WrappedType {
-        return unsafelyUnwrapped 
-    }
-}
+typealias sqlite3 = OpaquePointer
+typealias sqlite3_stmt = OpaquePointer

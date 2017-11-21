@@ -92,3 +92,9 @@ extension Atomic where T: Comparable {
         return left.value >= right
     }
 }
+
+extension Atomic where T: OptionalRepresentable {
+    convenience init() {
+        self.init(T.`nil`)
+    }
+}

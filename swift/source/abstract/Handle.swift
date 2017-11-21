@@ -23,28 +23,10 @@ import Foundation
 public typealias Tag = Int
 
 public class Handle {
-    typealias sqlite3 = OpaquePointer
     private var handle: sqlite3? = nil
 
     public let path: String
     public internal(set) var tag: Tag? = nil
-    
-    public typealias SQLTrace = (String) -> Void // SQL
-    private var sqlTrace: SQLTrace? = nil {
-        didSet {
-            setupTrace()
-        }
-    }
-    
-    public typealias PerformanceTrace = (Tag?, [String:Int], Int64) -> Void // Tag, (SQL, count), cost
-    private var performanceTrace: PerformanceTrace? = nil {
-        didSet {
-            setupTrace()
-        }
-    }
-    private var shouldAggregation = false
-    private var footprint: [String:Int] = [:]
-    private var cost: Int64 = 0
     
     typealias CommittedHook = (Handle, Int, Void?) -> Void
     private struct CommittedHookInfo {
@@ -53,13 +35,14 @@ public class Handle {
     }
     private var committedHookInfo: CommittedHookInfo? = nil 
     
+    private lazy var tracer = Tracer(with: handle!)
+    
     init(withPath path: String) {
         _ = Handle.once
         self.path = path
     }
     
     deinit {
-        reportPerformance()
         try? close()
     }
     
@@ -214,75 +197,17 @@ extension Handle {
     }
 }
 
-//TODO: refactor to a Tracer class
 extension Handle {
-    private func setupTrace() {
-        var flag: Int32 = 0    
-        if sqlTrace != nil {
-            flag |= SQLITE_TRACE_STMT
-        }
-        if performanceTrace != nil {
-            flag |= SQLITE_TRACE_PROFILE
-        }
-        guard flag > 0 else {
-            return 
-        }
-        var this = self
-        sqlite3_trace_v2(handle, UInt32(flag), { (flag, M, P, X) -> Int32 in
-            let handle = UnsafePointer<Handle>(OpaquePointer(M)!).pointee
-            let stmt = OpaquePointer(P)
-            guard let csql = sqlite3_sql(stmt) else {
-                return SQLITE_MISUSE
-            } 
-            let sql = String(cString: csql)
-            switch (flag) {
-            case UInt32(SQLITE_TRACE_STMT):
-                handle.report(sql: sql)
-            case UInt32(SQLITE_TRACE_PROFILE):
-                let cost: Int64 = UnsafePointer<Int64>(OpaquePointer(X)!).pointee
-                
-                //report last trace 
-                if !handle.shouldAggregation {
-                    handle.reportPerformance()
-                }
-                
-                handle.addPerformanceTrace(sql: sql, cost: cost)
-            default: break
-            }
-            return SQLITE_OK
-        }, &this)
+    public typealias SQLTracer = (String) -> Void
+    
+    func trace(sql sqlTracer: @escaping SQLTracer) {
+        tracer.trace(sql: sqlTracer)
     }
     
-    private func report(sql: String) {
-        guard let sqlTrace = self.sqlTrace else {
-            return 
-        }
-        sqlTrace(sql)
-    }
-    
-    private func reportPerformance() {
-        guard footprint.isEmpty else {
-            return
-        }
-        guard let performanceTrace = self.performanceTrace else {
-            return
-        } 
-        performanceTrace(tag, footprint, cost)
-        footprint.removeAll()
-        cost = 0
-    }
-    
-    private func addPerformanceTrace(sql: String, cost: Int64) {
-        self.footprint[sql] = self.footprint[sql] ?? 1
-        self.cost = cost
-    }
-    
-    func setTrace(forSQL sqlTrace: @escaping SQLTrace) {
-        self.sqlTrace = sqlTrace
-    }
-    
-    func setTrace(forPerformance performanceTrace: @escaping PerformanceTrace) {
-        self.performanceTrace = performanceTrace
+    public typealias PerformanceTracer = (Tag?, [String:Int], Int64) -> Void // Tag?, (SQL, count), cost
+
+    func trace(performance performanceTracer: @escaping PerformanceTracer) {
+        tracer.track { performanceTracer(self.tag, $0 ,$1) }
     }
 }
 

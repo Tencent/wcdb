@@ -21,7 +21,6 @@
 
 import Foundation
 public class HandleStatement {
-    typealias sqlite3_stmt = OpaquePointer
     private var stmt: sqlite3_stmt?
     
     private let handle: Handle

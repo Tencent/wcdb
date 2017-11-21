@@ -20,6 +20,7 @@
 
 import Foundation
 
+//TODO: refactor for configs
 public struct Configs {
     public typealias Callback = Config.Callback
     public typealias Order = Config.Order
