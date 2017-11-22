@@ -25,6 +25,7 @@
 #include <repair/SQLiteRepairKit.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 static int g_error_result = 0;
 static char g_error_msg[2048] = {0};
