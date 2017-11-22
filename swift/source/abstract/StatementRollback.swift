@@ -24,7 +24,11 @@ public class StatementRollback: Statement {
         super.init(with: .Rollback)
     }
     
-    public func rollback(toSavepoint name: String? = nil) {
-        description.append("ROLLBACK TO \(name ?? "")")
+    public func rollback(toSavepoint optionalName: String? = nil) -> StatementRollback {
+        description.append("ROLLBACK")
+        if let name = optionalName {
+            description.append(" TO \(name)")
+        }
+        return self
     }
 }

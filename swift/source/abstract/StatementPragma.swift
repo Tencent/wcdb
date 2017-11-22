@@ -37,13 +37,13 @@ public class StatementPragma: Statement {
     }
     
     @discardableResult
-    public func pragma(_ pragmas: Pragmas) -> StatementPragma {
-        return self.pragma(pragmas.asPragma())
+    public func pragma(_ builtinPragma: BuiltinPragma) -> StatementPragma {
+        return self.pragma(builtinPragma.asPragma())
     }
     
     @discardableResult
-    public func pragma(_ pragmas: Pragmas, to literalValueConvertible: LiteralValueConvertible) -> StatementPragma {
-        return self.pragma(pragmas.asPragma(), to: literalValueConvertible)
+    public func pragma(_ builtinPragma: BuiltinPragma, to literalValueConvertible: LiteralValueConvertible) -> StatementPragma {
+        return self.pragma(builtinPragma.asPragma(), to: literalValueConvertible)
     }
 
 }

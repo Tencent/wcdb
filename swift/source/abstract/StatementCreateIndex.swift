@@ -31,8 +31,9 @@ public class StatementCreateIndex: Statement {
         if isUnique {
             description.append("UNIQUE ")
         }
+        description.append("INDEX ")
         if ifNotExists {
-            description.append("INDEX IF NOT EXISTS ")
+            description.append("IF NOT EXISTS ")
         }
         description.append(index)
         return self

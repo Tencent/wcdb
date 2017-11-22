@@ -25,12 +25,6 @@ public class StatementCreateTable: Statement {
     }
     
     @discardableResult
-    public func `as`(_ statementSelect: StatementSelect) -> StatementCreateTable {
-        description.append(" AS \(statementSelect.description)")
-        return self
-    }
-    
-    @discardableResult
     public func create(table: String, ifNotExists: Bool = true, as statementSelect: StatementSelect) -> StatementCreateTable {
         description.append("CREATE TABLE ")
         if ifNotExists {
@@ -46,14 +40,14 @@ public class StatementCreateTable: Statement {
     }
     
     @discardableResult
-    public func create(table: String, ifNotExists: Bool = true, with columnDefs: [ColumnDef], and tableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
+    public func create(table: String, ifNotExists: Bool = true, with columnDefs: [ColumnDef], and optionalTableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
         description.append("CREATE TABLE ")
         if ifNotExists {
             description.append("IF NOT EXISTS ")
         }
         description.append("\(table)(\(columnDefs.joined())")
-        if tableConstraints != nil {
-            description.append(" ,\(tableConstraints!.description)")
+        if let tableConstraints = optionalTableConstraints {
+            description.append(", \(tableConstraints.joined())")
         }
         description.append(")")
         return self

@@ -54,7 +54,7 @@ public class TableConstraint: Describable {
     
     @discardableResult
     public func check(_ expressionConvertible: ExpressionConvertible) -> TableConstraint {
-        description.append(" CHECK(\(expressionConvertible.asExpression().description))")
+        description.append(" CHECK\(expressionConvertible.asExpression().description)")
         return self
     }
 }

@@ -22,11 +22,11 @@ import Foundation
 
 public class ColumnIndex : Describable {
     public init(with columnConvertible: ColumnConvertible, orderBy term: OrderTerm? = nil) {
-        super.init("\(columnConvertible.asColumn().name)\( term != nil ? term!.description : "")")
+        super.init("\(columnConvertible.asColumn().name)\( term != nil ? " \(term!.description)" : "")")
     }
     
     public init(with expressionConvertible: ExpressionConvertible, orderBy term: OrderTerm? = nil) {
-        super.init("\(expressionConvertible.asExpression().description)\( term != nil ? term!.description : "")")
+        super.init("\(expressionConvertible.asExpression().description)\( term != nil ? " \(term!.description)" : "")")
     }
 }
 

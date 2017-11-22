@@ -21,7 +21,7 @@
 import Foundation
 
 extension Array {
-    func joined(_ map: (Element)->String, separator: String = "," ) -> String {
+    func joined(_ map: (Element)->String, separateBy separator: String = ", ") -> String {
         var flag = false
         return reduce(into: "") { (output, element) in
             if flag {
@@ -35,18 +35,14 @@ extension Array {
 }
 
 extension Array where Element: Describable {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.description }, separateBy: separator)
     }
 }
 
 extension Array where Element==ColumnResultConvertible {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.asColumnResult().description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.asColumnResult().description }, separateBy: separator)
     }
     
     func asColumnResults() -> [ColumnResult] {
@@ -57,80 +53,58 @@ extension Array where Element==ColumnResultConvertible {
 }
 
 extension Array where Element==ExpressionConvertible {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.asExpression().description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.asExpression().description }, separateBy: separator)
     }
     
     func asExpressions() -> [Expression] {
-        return self.map({ (element) -> Expression in
-            return element.asExpression()
-        })
+        return self.map({ $0.asExpression() })
     }
 }
 
 extension Array where Element==ColumnConvertible {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.asColumn().description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.asColumn().description }, separateBy: separator)
     }
     
     func asColumns() -> [Column] {
-        return self.map({ (element) -> Column in
-            return element.asColumn()
-        })
+        return self.map({ $0.asColumn() })
     }
 }
 
 extension Array where Element==TableOrSubqueryConvertible {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.asTableOrSubquery().description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.asTableOrSubquery().description }, separateBy: separator)
     }
     
     func asTableOrSubqueryList() -> [Subquery] {
-        return self.map({ (element) -> Subquery in
-            return element.asTableOrSubquery()
-        })
+        return self.map({ $0.asTableOrSubquery() })
     }
 }
 
 extension Array where Element==OrderConvertible {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.asOrder().description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.asOrder().description }, separateBy: separator)
     }
     
     func asOrders() -> [Order] {
-        return self.map({ (element) -> Order in
-            return element.asOrder()
-        })
+        return self.map({ $0.asOrder() })
     }
 }
 
 extension Array where Element==ColumnIndexConvertible {
-    func joined() -> String {
-        return joined({ (element) -> String in
-            return element.asIndex().description
-        })
+    func joined(separateBy separator: String = ", ") -> String {
+        return joined({ $0.asIndex().description }, separateBy: separator)
     }
     
     func asIndexes() -> [ColumnIndex] {
-        return self.map({ (element) -> ColumnIndex in
-            return element.asIndex()
-        })
+        return self.map({ $0.asIndex() })
     }
 }
 
 extension Array where Element==PropertyConvertible {
     func asProperties() -> [Property] {
-        return self.map({ (element) -> Property in
-            return element.asProperty()
-        })
+        return self.map({ $0.asProperty() })
     }
 }
 
@@ -149,7 +123,7 @@ extension Array where Iterator.Element: FixedWidthInteger {
 }
 
 extension Dictionary {
-    func joined(_ map: (Key, Value)->String, separator: String = "," ) -> String {
+    func joined(_ map: (Key, Value)->String, separateBy separator: String = "," ) -> String {
         var flag = false
         return reduce(into: "", { (output, arg) in
             if flag {

@@ -24,7 +24,7 @@ public class ForeignKey : Describable{
     public init(withForeignTable table: String, andColumnNames columnNames: [String]) {
         super.init("REFERENCES \(table)")
         if !columnNames.isEmpty {
-            description.append("(\(columnNames.joined(separator: ","))")
+            description.append("(\(columnNames.joined(separator: ", ")))")
         }
     }
 
@@ -56,28 +56,28 @@ public class ForeignKey : Describable{
     }
 
     @discardableResult
-    func onDelete(_ action: Action) -> ForeignKey {
+    public func onDelete(_ action: Action) -> ForeignKey {
         description.append(" ON DELETE \(action.description)")
         return self
     }
     
     @discardableResult
-    func onUpdate(_ action: Action) -> ForeignKey {
+    public func onUpdate(_ action: Action) -> ForeignKey {
         description.append(" ON UPDATE \(action.description)")
         return self
     }
     
     @discardableResult
-    func match(name: String) -> ForeignKey {
+    public func match(name: String) -> ForeignKey {
         description.append(" MATCH \(name)")
         return self
     }
     
-    enum Deferrable: CustomStringConvertible {
+    public enum Deferrable: CustomStringConvertible {
         case Deferred
         case Immediate
         
-        var description: String {
+        public var description: String {
             switch self {
             case .Deferred:
                 return "INITIALLY DEFERRED"
@@ -88,13 +88,13 @@ public class ForeignKey : Describable{
     }
     
     @discardableResult
-    func deferrable(_ deferrable: Deferrable) -> ForeignKey {
+    public func deferrable(_ deferrable: Deferrable) -> ForeignKey {
         description.append(" DEFERRABLE \(deferrable.description)")
         return self
     }
     
     @discardableResult
-    func notDeferrable(_ deferrable: Deferrable) -> ForeignKey{
+    public func notDeferrable(_ deferrable: Deferrable) -> ForeignKey{
         description.append(" NOT DEFERRABLE \(deferrable.description)")
         return self
     }

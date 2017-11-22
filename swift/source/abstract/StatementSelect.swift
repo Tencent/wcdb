@@ -53,12 +53,6 @@ public class StatementSelect: Statement {
     }
     
     @discardableResult
-    public func from(_ joinClause: JoinClause) -> StatementSelect {
-        description.append(" FROM \(joinClause.description)")
-        return self
-    }
-    
-    @discardableResult
     public func `where`(_ expressionConvertible: ExpressionConvertible) -> StatementSelect {
         let expression = expressionConvertible.asExpression()
         if !expression.description.isEmpty {

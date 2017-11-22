@@ -37,7 +37,11 @@ public class ModuleArgument: Describable {
         super.init("\(left)=\(right)")
     }
     
-    public convenience init(withTokenize tokenize: Tokenize) {
+    public convenience init(with tokenize: Tokenize) {
         self.init(left: "tokenize", right: tokenize.module.name)
+    }
+    
+    public convenience init(withTokenize tokenize: String) {
+        self.init(left: "tokenize", right: tokenize)
     }
 }

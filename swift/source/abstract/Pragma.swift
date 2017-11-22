@@ -20,7 +20,7 @@
 
 import Foundation
 
-public enum Pragmas: String {
+public enum BuiltinPragma: String {
     case applicationId = "application_id"
     case autoVacuum = "auto_vacuum"
     case automaticIndex = "automatic_index"
