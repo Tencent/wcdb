@@ -104,7 +104,7 @@
 		238D0B861FAB1F7E00BC2659 /* OrderTerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B221FAB1F7E00BC2659 /* OrderTerm.swift */; };
 		238D0B871FAB1F7E00BC2659 /* Pragma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B231FAB1F7E00BC2659 /* Pragma.swift */; };
 		238D0B881FAB1F7E00BC2659 /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B241FAB1F7E00BC2659 /* Statement.swift */; };
-		238D0B891FAB1F7E00BC2659 /* StatementAlter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B251FAB1F7E00BC2659 /* StatementAlter.swift */; };
+		238D0B891FAB1F7E00BC2659 /* StatementAlterTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B251FAB1F7E00BC2659 /* StatementAlterTable.swift */; };
 		238D0B8A1FAB1F7E00BC2659 /* StatementAttach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B261FAB1F7E00BC2659 /* StatementAttach.swift */; };
 		238D0B8B1FAB1F7E00BC2659 /* StatementCreateIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B271FAB1F7E00BC2659 /* StatementCreateIndex.swift */; };
 		238D0B8C1FAB1F7E00BC2659 /* StatementCreateTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B281FAB1F7E00BC2659 /* StatementCreateTable.swift */; };
@@ -257,7 +257,7 @@
 		238D0B221FAB1F7E00BC2659 /* OrderTerm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderTerm.swift; sourceTree = "<group>"; };
 		238D0B231FAB1F7E00BC2659 /* Pragma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pragma.swift; sourceTree = "<group>"; };
 		238D0B241FAB1F7E00BC2659 /* Statement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statement.swift; sourceTree = "<group>"; };
-		238D0B251FAB1F7E00BC2659 /* StatementAlter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementAlter.swift; sourceTree = "<group>"; };
+		238D0B251FAB1F7E00BC2659 /* StatementAlterTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementAlterTable.swift; sourceTree = "<group>"; };
 		238D0B261FAB1F7E00BC2659 /* StatementAttach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementAttach.swift; sourceTree = "<group>"; };
 		238D0B271FAB1F7E00BC2659 /* StatementCreateIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementCreateIndex.swift; sourceTree = "<group>"; };
 		238D0B281FAB1F7E00BC2659 /* StatementCreateTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementCreateTable.swift; sourceTree = "<group>"; };
@@ -487,7 +487,7 @@
 				238D0B221FAB1F7E00BC2659 /* OrderTerm.swift */,
 				238D0B231FAB1F7E00BC2659 /* Pragma.swift */,
 				238D0B241FAB1F7E00BC2659 /* Statement.swift */,
-				238D0B251FAB1F7E00BC2659 /* StatementAlter.swift */,
+				238D0B251FAB1F7E00BC2659 /* StatementAlterTable.swift */,
 				238D0B261FAB1F7E00BC2659 /* StatementAttach.swift */,
 				238D0B271FAB1F7E00BC2659 /* StatementCreateIndex.swift */,
 				238D0B281FAB1F7E00BC2659 /* StatementCreateTable.swift */,
@@ -690,7 +690,7 @@
 				230209991FBED533000D69B6 /* MultiUniqueBinding.swift in Sources */,
 				230209B61FBED75C000D69B6 /* CodableEnumColumn.swift in Sources */,
 				238D0B8C1FAB1F7E00BC2659 /* StatementCreateTable.swift in Sources */,
-				238D0B891FAB1F7E00BC2659 /* StatementAlter.swift in Sources */,
+				238D0B891FAB1F7E00BC2659 /* StatementAlterTable.swift in Sources */,
 				230209AA1FBED533000D69B6 /* Select.swift in Sources */,
 				237BD9381FBEEB2800F6A094 /* Archivable.swift in Sources */,
 				231BC02B1FC29A3C00011C69 /* Property.swift in Sources */,
