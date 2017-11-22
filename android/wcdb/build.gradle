@@ -71,10 +71,6 @@ android {
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-}
-
 android.libraryVariants.all { variant ->
 
     def varName = variant.name

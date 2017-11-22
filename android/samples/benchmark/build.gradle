@@ -24,16 +24,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile project(':wcdb')
-    //compile 'com.tencent.wcdb:wcdb-android:1.0.4'
-    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:26.1.0'
-    testCompile 'junit:junit:4.12'
+    implementation project(':wcdb')
+    //implementation 'com.tencent.wcdb:wcdb-android:1.0.4'
+    implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:26.1.0'
+    testImplementation 'junit:junit:4.12'
 }
