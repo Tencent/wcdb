@@ -101,7 +101,7 @@
 		23D3652D1FC56AB0004B8390 /* StatementVacuumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementVacuumTests.swift; sourceTree = "<group>"; };
 		23D3652F1FC56ABA004B8390 /* SubqueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubqueryTests.swift; sourceTree = "<group>"; };
 		23D365311FC56AC3004B8390 /* TableConstraintTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableConstraintTests.swift; sourceTree = "<group>"; };
-		23E9E0351FC41339005DE71C /* WINQTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WINQTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		23E9E0351FC41339005DE71C /* WINQ.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WINQ.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,7 +187,7 @@
 		23E9E0281FC4132D005DE71C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				23E9E0351FC41339005DE71C /* WINQTest.xctest */,
+				23E9E0351FC41339005DE71C /* WINQ.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,9 +195,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		23E9E0341FC41339005DE71C /* WINQTest */ = {
+		23E9E0341FC41339005DE71C /* WINQ */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 23E9E03A1FC41339005DE71C /* Build configuration list for PBXNativeTarget "WINQTest" */;
+			buildConfigurationList = 23E9E03A1FC41339005DE71C /* Build configuration list for PBXNativeTarget "WINQ" */;
 			buildPhases = (
 				23E9E0311FC41339005DE71C /* Sources */,
 				23E9E0321FC41339005DE71C /* Frameworks */,
@@ -208,9 +208,9 @@
 			dependencies = (
 				231DEBFC1FC4158900B4EF4B /* PBXTargetDependency */,
 			);
-			name = WINQTest;
+			name = WINQ;
 			productName = Testcase1;
-			productReference = 23E9E0351FC41339005DE71C /* WINQTest.xctest */;
+			productReference = 23E9E0351FC41339005DE71C /* WINQ.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -247,7 +247,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				23E9E0341FC41339005DE71C /* WINQTest */,
+				23E9E0341FC41339005DE71C /* WINQ */,
 			);
 		};
 /* End PBXProject section */
@@ -471,7 +471,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23E9E03A1FC41339005DE71C /* Build configuration list for PBXNativeTarget "WINQTest" */ = {
+		23E9E03A1FC41339005DE71C /* Build configuration list for PBXNativeTarget "WINQ" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23E9E03B1FC41339005DE71C /* Debug */,
