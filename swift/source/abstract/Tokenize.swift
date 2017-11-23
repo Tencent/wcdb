@@ -132,3 +132,11 @@ extension Module {
 public struct Tokenize {    
     let module: ModuleBase.Type
 }
+
+public struct FTSModule {
+    public let name: String
+}
+
+extension FTSModule {
+    public static let fts3 = FTSModule(name: "fts3")
+}

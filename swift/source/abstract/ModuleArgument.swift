@@ -20,10 +20,6 @@
 
 import Foundation
 
-public enum FTSModule: String {
-    case fts3 = "fts3"
-}
-
 public class ModuleArgument: Describable {
     public init(with tableConstraint: TableConstraint) {
         super.init(tableConstraint.description)
