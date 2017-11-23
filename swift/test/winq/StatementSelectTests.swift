@@ -31,7 +31,7 @@ class StatementSelectTests: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() {
+    func testStatementSelect() {
         //Give
         let column1 = Column(named: "column1")
         let column2 = Column(named: "column2")
