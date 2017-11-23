@@ -65,9 +65,12 @@ class Tracer {
             sqlite3_trace_v2(handle, 0, nil, nil)
             return 
         }
-        var this = self
+        print(unsafeBitCast(self, to: Int.self))
         sqlite3_trace_v2(handle, UInt32(flag), { (flag, M, P, X) -> Int32 in
-            let tracer = UnsafePointer<Tracer>(OpaquePointer(M)!).pointee
+            let pointer = Unmanaged<Tracer>.fromOpaque(M!)
+            let tracer = pointer.takeUnretainedValue()
+            print(unsafeBitCast(tracer, to: Int.self))
+
             let stmt = OpaquePointer(P)
             guard let csql = sqlite3_sql(stmt) else {
                 return SQLITE_MISUSE
@@ -88,7 +91,7 @@ class Tracer {
             default: break
             }
             return SQLITE_OK
-        }, &this)
+        }, Unmanaged.passUnretained(self).toOpaque())
     }
     
     private func report(sql: String) {
