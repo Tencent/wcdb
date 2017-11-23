@@ -73,7 +73,7 @@ public class TableBinding {
         return property 
     }
     
-    func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
+    public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
         guard virtualTableBinding != nil else {
             Error.abort("Virtual table binding is not defined")
         }
@@ -88,7 +88,7 @@ public class TableBinding {
         return StatementCreateVirtualTable().create(virtualTable: table).using(module: virtualTableBinding!.module, arguments: moduleArguments)
     }
     
-    func generateCreateTableStatement(named table: String) -> StatementCreateTable {
+    public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
         let columnDefList = properties.values.reduce(into: [ColumnDef]()) { 
             $0.append($1.columnBinding.columnDef)
         }
@@ -98,7 +98,7 @@ public class TableBinding {
         return StatementCreateTable().create(table: table, with: columnDefList, and: tableConstraints)
     }
     
-    func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
+    public func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
         guard let indexBindings = self.indexBindings else {
             return nil
         }
