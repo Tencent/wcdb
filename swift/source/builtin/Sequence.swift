@@ -40,7 +40,7 @@ class Sequence: WCDB.CodableTable, CustomStringConvertible {
 extension WCDB.Sequence {
     public static func columnBindings() -> [AnyColumnBinding] {
         return [
-            ColumnBinding(\Sequence.name),
-            ColumnBinding(\Sequence.seq)]
+            ColumnBinding(\Sequence.name, alias: "name"),
+            ColumnBinding(\Sequence.seq, alias: "seq")]
     }
 }

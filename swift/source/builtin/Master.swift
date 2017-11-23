@@ -43,10 +43,10 @@ public class Master: WCDB.CodableTable, CustomStringConvertible {
 extension Master {
     public static func columnBindings() -> [AnyColumnBinding] {
         return [
-            ColumnBinding(\Master.type),
-            ColumnBinding(\Master.name),
+            ColumnBinding(\Master.type, alias: "type"),
+            ColumnBinding(\Master.name, alias: "name"),
             ColumnBinding(\Master.tableName, alias:"tbl_name"),
-            ColumnBinding(\Master.rootpage),
-            ColumnBinding(\Master.sql)]
+            ColumnBinding(\Master.rootpage, alias: "rootpage"),
+            ColumnBinding(\Master.sql, alias: "sql")]
     }
 }

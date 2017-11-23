@@ -41,7 +41,7 @@ public protocol CodableTable {
     static var magicNumber: Int32 {get}
 }
 
-extension CodableTable {
+extension CodableTable {    
     public static var allProperties: [Property] {
         return objectRelationalMapping.allProperties
     }

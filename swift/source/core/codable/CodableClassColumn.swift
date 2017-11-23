@@ -21,5 +21,5 @@
 import Foundation
 
 public protocol CodableClassColumn: CodableColumn, AnyObject {
-    init()
+//    init()
 }
