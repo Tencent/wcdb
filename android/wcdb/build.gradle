@@ -64,7 +64,6 @@ android {
     }
 
     defaultPublishConfig 'release'
-    publishNonDefault true
 
     lintOptions {
         disable 'OldTargetApi', 'GradleDependency'

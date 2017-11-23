@@ -46,7 +46,7 @@ status_t CursorWindow::create(size_t size, CursorWindow **outCursorWindow)
 {
     status_t result;
     void *data = malloc(size);
-    if (data > 0) {
+    if (data) {
         CursorWindow *window = new CursorWindow(data, size);
         result = window->clear();
         if (!result) {

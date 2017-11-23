@@ -3,7 +3,8 @@ root_path := $(call parent-dir, $(real_local_path))
 prebuilt_path := $(root_path)/android/prebuilt/$(TARGET_ARCH)
 build_info_path := $(NDK_OUT)
 
-common_cflags := -Wall -Werror -ffunction-sections -fdata-sections \
+common_cflags := -Wall -Werror -Wno-unused-const-variable \
+	-ffunction-sections -fdata-sections \
 	-DSQLITE_HAS_CODEC -DSQLITE_CORE -DSQLITE_OS_UNIX
 common_c_includes := \
 	$(prebuilt_path)/include \
