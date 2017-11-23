@@ -218,7 +218,7 @@ public protocol SelectInterface {
 }
 
 extension SelectInterface where Self: Core {
-    public func getObjects<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
+    public func getObjects<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible] = Object.allProperties, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
         var select = try Select(with: self, on: propertyConvertibleList, table: table, isDistinct: false)
         if condition != nil {
             select = select.where(condition!)
@@ -236,15 +236,15 @@ extension SelectInterface where Self: Core {
     }
 
     public func getObjects<Object: CodableTable>(on propertyConvertibleList: PropertyConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
-        return try getObjects(on: propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: limit, offset: offset)
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
-    public func getObject<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
+    public func getObject<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible] = Object.allProperties, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
         return try getObjects(on: propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
 
     public func getObject<Object: CodableTable>(on propertyConvertibleList: PropertyConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
-        return try getObjects(on: propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
 }
 
