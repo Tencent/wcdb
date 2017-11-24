@@ -26,9 +26,6 @@ class SampleCore: WCDB.CodableTable {
     var content: String? = nil
     
     required init() {}
-
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(SampleCore.self)
 }
 
 //WCDB

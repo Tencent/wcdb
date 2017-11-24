@@ -25,9 +25,6 @@ class SampleAdvanceMulti: WCDB.CodableTable {
     var intValue: Int? = nil
     
     required init() {}
-
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(SampleAdvanceMulti.self)
 }
 
 //WCDB

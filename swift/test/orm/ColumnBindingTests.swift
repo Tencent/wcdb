@@ -26,7 +26,6 @@ class ColumnBindingTests: XCTestCase {
     class BaselineTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(BaselineTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\BaselineTestObject.variable, alias: "variable")]
         }
@@ -35,7 +34,6 @@ class ColumnBindingTests: XCTestCase {
     class OptionalTestObject: WCDB.CodableTable {
         var variable: Int? = nil        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(OptionalTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\OptionalTestObject.variable, alias: "optionalVariable")]
         }
@@ -44,7 +42,6 @@ class ColumnBindingTests: XCTestCase {
     class PrimaryTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(PrimaryTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\PrimaryTestObject.variable, alias: "primaryVariable", isPrimary: true)]
         }
@@ -53,7 +50,6 @@ class ColumnBindingTests: XCTestCase {
     class OrderedPrimaryTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(OrderedPrimaryTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\OrderedPrimaryTestObject.variable, alias: "orderedPrimaryVariable", isPrimary: true, orderBy: .Ascending)]
         }
@@ -62,7 +58,6 @@ class ColumnBindingTests: XCTestCase {
     class AutoIncrementPrimaryTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(AutoIncrementPrimaryTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\AutoIncrementPrimaryTestObject.variable, alias: "autoIncrementPrimaryVariable", isPrimary: true, isAutoIncrement: true)]
         }
@@ -70,7 +65,6 @@ class ColumnBindingTests: XCTestCase {
     class ConflictPrimaryTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(ConflictPrimaryTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\ConflictPrimaryTestObject.variable, alias: "conflictPrimaryVariable", isPrimary: true, onConflict: .Replace)]
         }
@@ -79,7 +73,6 @@ class ColumnBindingTests: XCTestCase {
     class NotNullTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(NotNullTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\NotNullTestObject.variable, alias: "notNullVariable", isNotNull: true)]
         }
@@ -88,7 +81,6 @@ class ColumnBindingTests: XCTestCase {
     class UniqueTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(UniqueTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\UniqueTestObject.variable, alias: "uniqueVariable", isUnique: true)]
         }
@@ -97,7 +89,6 @@ class ColumnBindingTests: XCTestCase {
     class DefaultValueTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(DefaultValueTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\DefaultValueTestObject.variable, alias: "defaultValueVariable", defaultTo: 1)]
         }

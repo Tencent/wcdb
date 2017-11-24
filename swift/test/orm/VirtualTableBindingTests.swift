@@ -26,7 +26,6 @@ class VirtualTableBindingTests: XCTestCase {
     class BaselineTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(BaselineTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\BaselineTestObject.variable, alias: "variable")]
         }
@@ -36,6 +35,6 @@ class VirtualTableBindingTests: XCTestCase {
     }
 
     func testVirtualBinding() {
-        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable INTEGER)")
+        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable INTEGER, left=right, tokenize=WCDB)")
     }
 }

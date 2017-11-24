@@ -27,7 +27,6 @@ class ConstraintTests: XCTestCase {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(BaselineMultiPrimaryTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\BaselineMultiPrimaryTestObject.variable1, alias: "variable1"),
@@ -44,7 +43,6 @@ class ConstraintTests: XCTestCase {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(MultiPrimaryConflictTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\MultiPrimaryConflictTestObject.variable1, alias: "variable1"),
@@ -61,7 +59,6 @@ class ConstraintTests: XCTestCase {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(MultiPrimaryCheckTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\MultiPrimaryCheckTestObject.variable1, alias: "variable1"),
@@ -86,7 +83,6 @@ class ConstraintTests: XCTestCase {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(BaselineMultiUniqueTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\BaselineMultiUniqueTestObject.variable1, alias: "variable1"),
@@ -103,7 +99,6 @@ class ConstraintTests: XCTestCase {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(MultiUniqueConflictTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\MultiUniqueConflictTestObject.variable1, alias: "variable1"),
@@ -120,7 +115,6 @@ class ConstraintTests: XCTestCase {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(MultiUniqueCheckTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\MultiUniqueCheckTestObject.variable1, alias: "variable1"),

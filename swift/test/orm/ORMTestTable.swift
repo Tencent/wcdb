@@ -40,9 +40,6 @@ class ORMTestObject: WCDB.CodableTable {
     
     required init() {}
 
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(ORMTestObject.self)
-
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }

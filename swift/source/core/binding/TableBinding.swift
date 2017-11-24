@@ -21,16 +21,16 @@
 import Foundation
 
 public class TableBinding {
-    private static let spin = Spin()
-    private static var collection: [String:TableBinding] = [:]
-    
-    static func from(_ type: CodableTable.Type) -> TableBinding {
-        let description = String(describing: type)
-        spin.lock(); defer { spin.unlock() }
-        var tableBinding: TableBinding! = collection[description]
-        if tableBinding == nil  {
-            tableBinding = TableBinding(type)
-            collection[description] = tableBinding
+    private static var atomicCollection = Atomic<[Int:TableBinding]>([:])
+    static func from<CodableTableType: CodableTable>(_ type: CodableTableType.Type) -> TableBinding {
+        let hash = unsafeBitCast(type, to: Int.self)
+        var tableBinding: TableBinding! 
+        atomicCollection.withValue { (collection) -> Void in
+            tableBinding = collection[hash]
+            if tableBinding == nil {
+                tableBinding = TableBinding(type)
+                collection[hash] = tableBinding
+            }
         }
         return tableBinding
     }
@@ -41,9 +41,12 @@ public class TableBinding {
     private let properties: [Accessor:Property]
     lazy var allProperties: [Property] = Array(properties.values)
     
-    public init(_ bindingClass: CodableTable.Type) {
-        self.bindingClass = bindingClass
+    init<CodableTableType: CodableTable>(_ type: CodableTableType.Type) {
+        self.bindingClass = type
         self.properties = bindingClass.columnBindings().reduce(into: [AnyColumnBinding.AnyAccessor:Property]()) {
+            guard $1.class == type else {
+                Error.abort("")
+            }
             $0[$1.accessor] = Property(with: $1)
         }
     }
@@ -74,18 +77,19 @@ public class TableBinding {
     }
     
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
-        guard virtualTableBinding != nil else {
+        guard let virtualTableBinding = self.virtualTableBinding else {
             Error.abort("Virtual table binding is not defined")
         }
         var moduleArguments = properties.values.reduce(into: [ModuleArgument]()) { 
             $0.append(ModuleArgument(with: $1.columnBinding.columnDef))
         }
-        if constraintBindings != nil {
-            moduleArguments = constraintBindings!.reduce(into: moduleArguments, { 
+        if let constraintBindings = self.constraintBindings {
+            moduleArguments = constraintBindings.reduce(into: moduleArguments, { 
                 $0.append(ModuleArgument(with:$1.generateConstraint()))
             })
         }
-        return StatementCreateVirtualTable().create(virtualTable: table).using(module: virtualTableBinding!.module, arguments: moduleArguments)
+        moduleArguments += virtualTableBinding.arguments
+        return StatementCreateVirtualTable().create(virtualTable: table).using(module: virtualTableBinding.module, arguments: moduleArguments)
     }
     
     public func generateCreateTableStatement(named table: String) -> StatementCreateTable {

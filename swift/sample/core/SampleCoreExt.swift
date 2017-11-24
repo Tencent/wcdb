@@ -26,9 +26,6 @@ class SampleCoreExt: WCDB.CodableTable {
     var createTime: Date? = nil
     
     required init() {}
-
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(SampleCoreExt.self)
 }
 
 //WCDB

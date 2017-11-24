@@ -34,9 +34,6 @@ public class Master: WCDB.CodableTable, CustomStringConvertible {
     public var description: String {
         return "type:\(type ?? ""), name:\(name ?? ""), tableName:\(tableName ?? ""), rootpage:\(rootpage ?? Int.max), sql:\(sql ?? "")"
     }
-
-    //WCDB
-    public static var objectRelationalMapping: TableBinding = TableBinding(Master.self)
 }
 
 //WCDB

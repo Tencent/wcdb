@@ -26,9 +26,6 @@ class SampleChainCall: WCDB.CodableTable {
     var stringValue: String? = nil
     
     required init() {}
-
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(SampleChainCall.self)
 }
 
 //WCDB

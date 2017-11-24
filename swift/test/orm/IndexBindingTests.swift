@@ -26,7 +26,6 @@ class IndexBindingTests: XCTestCase {
     class BaselineTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(BaselineTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\BaselineTestObject.variable, alias: "variable")]
         }
@@ -38,7 +37,6 @@ class IndexBindingTests: XCTestCase {
     class UniqueTestObject: WCDB.CodableTable {
         var variable: Int = 0        
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(UniqueTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [ColumnBinding(\UniqueTestObject.variable, alias: "variable")]
         }
@@ -51,7 +49,6 @@ class IndexBindingTests: XCTestCase {
         var variable1: Int = 0 
         var variable2: Int = 0 
         required init() {}        
-        static var objectRelationalMapping: TableBinding = TableBinding(MultiIndexesTestObject.self)        
         static func columnBindings() -> [AnyColumnBinding] {
             return [
                 ColumnBinding(\MultiIndexesTestObject.variable1, alias: "variable1"),

@@ -25,9 +25,6 @@ class SampleTransaction: WCDB.CodableTable {
     var intValue: Int? = nil
     
     required init() {}
-
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(SampleTransaction.self)
 }
 
 //WCDB

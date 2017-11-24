@@ -27,9 +27,6 @@ class SampleAdvance: WCDB.CodableTable {
     
     required init() {}
 
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(SampleAdvance.self)
-
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }

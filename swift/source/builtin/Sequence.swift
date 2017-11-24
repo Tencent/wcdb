@@ -31,9 +31,6 @@ class Sequence: WCDB.CodableTable, CustomStringConvertible {
     public var description: String {
         return "name:\(name ?? ""), seq:\(seq ?? Int.max)"
     }
-
-    //WCDB
-    public static var objectRelationalMapping: TableBinding = TableBinding(Sequence.self)
 }
 
 //WCDB
