@@ -68,11 +68,9 @@ public class HandlePool {
             }
         })
     }
-    
-    static let hardwareConcurrency = ProcessInfo.processInfo.processorCount 
 
     typealias HandleWrap = (handle: Handle, configs: Configs)
-    private let handles = ConcurrentList<HandleWrap>(withCapacityCap: hardwareConcurrency)
+    private let handles = ConcurrentList<HandleWrap>(withCapacityCap: maxHardwareConcurrency)
     
     var tag: Tag? = nil
     let path: String
@@ -106,6 +104,7 @@ public class HandlePool {
     }
     
     static private let maxConcurrency = 64
+    static let maxHardwareConcurrency = ProcessInfo.processInfo.processorCount 
 
     func flowOut() throws -> RecyclableHandle {
         var unlock = true
@@ -117,8 +116,8 @@ public class HandlePool {
             }
             handleWrap = try generate()
             aliveHandleCount += 1
-            if aliveHandleCount > HandlePool.maxConcurrency {
-                Error.warning("The concurrency of database: \(tag ?? 0) with \(aliveHandleCount) exceeds the concurrency of hardware: \(HandlePool.maxConcurrency)")
+            if aliveHandleCount > HandlePool.maxHardwareConcurrency {
+                Error.warning("The concurrency of database: \(tag ?? 0) with \(aliveHandleCount) exceeds the concurrency of hardware: \(HandlePool.maxHardwareConcurrency)")
             }
         }
         handleWrap!.handle.tag = self.tag
@@ -132,7 +131,7 @@ public class HandlePool {
     func flowBack(_ handleWrap: HandleWrap) {
         let inserted = handles.pushBack(handleWrap)
         rwlock.unlockRead()
-        if inserted {
+        if !inserted {
             aliveHandleCount -= 1
         }
     }
