@@ -65,7 +65,7 @@ public class TableBinding {
     
     var columnBindings: [String:AnyColumnBinding] {
         return properties.values.reduce(into: [String:AnyColumnBinding]()) { (dic, property) in
-            dic["property.name"] = property.columnBinding
+            dic[property.name] = property.columnBinding
         }
     }
 
