@@ -399,6 +399,12 @@ extension Database {
         return Handle.subfixs
     }
     
+    public var urls: [URL] {
+        return paths.map({ (path) -> URL in
+            return URL(fileURLWithPath: path)
+        })
+    }
+    
     public var paths: [String] {
         return Database.subfixs.map({ (subfix) -> String in
             return path+subfix
@@ -412,22 +418,26 @@ extension Database {
         try File.remove(files: paths)
     }
     
-    public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: [String]? = nil) throws {
+    public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: String...) throws {
+        try moveFiles(toDirectory: directory, withExtraFiles: extraFiles)
+    }
+    
+    public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: [String]) throws {
         try File.createDirectoryWithIntermediateDirectories(atPath: directory)
         var recovers: [String] = []
-        let paths = self.paths + (extraFiles ?? [])
+        let paths = self.paths + extraFiles
         do {
             try paths.forEach({ (path) in
                 guard File.isExists(atPath: path) else {
                     return
                 }
                 let file = path.lastPathComponent
-                let newFile = directory.stringByAppending(pathComponent: file)
-                if File.isExists(atPath: newFile) {
-                    try File.remove(files: newFile)
+                let newPaths = directory.stringByAppending(pathComponent: file)
+                if File.isExists(atPath: newPaths) {
+                    try File.remove(files: newPaths)
                 }
-                try File.hardlink(atPath: file, toPath: newFile)
-                recovers.append(newFile)
+                try File.hardlink(atPath: path, toPath: newPaths)
+                recovers.append(newPaths)
             })
         }catch let error {
             try? File.remove(files: recovers)
