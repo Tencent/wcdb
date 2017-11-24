@@ -299,5 +299,22 @@ class TableInterfaceTests: XCTestCase {
         }catch let error as WCDB.Error {
             XCTFail(error.description)
         }catch {}
-    }    
+    }
+    
+    func testGetTable() {
+        do {
+            //Give
+            let tableName = String(describing: BaselineObject.self)
+            var table: Table<BaselineObject>? = nil
+            //When
+            table = try database.getTable(named: tableName)
+            XCTAssertNil(table)
+            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+            //Then
+            table = try database.getTable(named: tableName)
+            XCTAssertNotNil(table)
+        }catch let error as WCDB.Error {
+            XCTFail(error.description)
+        }catch {}
+    }
 }
