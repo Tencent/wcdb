@@ -23,13 +23,13 @@ import WCDB
 
 class TableInterfaceTests: XCTestCase {
     static let name = String(describing: TableInterfaceTests.self)
-    static let path = URL(fileURLWithPath: TableInterfaceTests.name, relativeTo: FileManager.default.temporaryDirectory)
+    static let fileURL = URL(fileURLWithPath: TableInterfaceTests.name, relativeTo: FileManager.default.temporaryDirectory)
     
     var database: Database!
     
     override func setUp() {
         super.setUp()
-        database = Database(withFileURL: TableInterfaceTests.path)
+        database = Database(withFileURL: TableInterfaceTests.fileURL)
         database.close { 
             XCTAssertNoThrow(try self.database.removeFiles())
         }
