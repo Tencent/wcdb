@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-func WINQAssertEqual(_ expression1: @autoclosure () -> String, _ expression2: @autoclosure () -> String, file: StaticString, line: UInt) {
+func XCTAssertEqual(_ expression1: @autoclosure () -> String, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     let description1 = expression1()
     let description2 = expression2()
     XCTAssertEqual(description1, description2, {
@@ -30,11 +30,11 @@ func WINQAssertEqual(_ expression1: @autoclosure () -> String, _ expression2: @a
 }
 
 func WINQAssertEqual<DescribableObject>(_ expression1: @autoclosure () -> DescribableObject, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) where DescribableObject : Describable {
-    WINQAssertEqual(expression1().description, expression2(), file: file, line: line)
+    XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
 }
 
 func WINQAssertEqual<StringConvertibleObject>(_ expression1: @autoclosure () -> StringConvertibleObject, _ expression2: @autoclosure () -> String, _ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) where StringConvertibleObject : CustomStringConvertible {
-    WINQAssertEqual(expression1().description, expression2(), file: file, line: line)
+    XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
 }
 
 func ORMColumnBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1: @autoclosure () -> CodableTableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
@@ -42,20 +42,15 @@ func ORMColumnBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1
     let className = String(describing: type)
     let description1 = type.objectRelationalMapping.generateCreateTableStatement(named: className).description
     let description2 = expression2()
-    XCTAssertEqual(description1, description2, {
-        return "different from \"\(description1.commonPrefix(with: description2))\""
-    }(), file: file, line: line)
+    XCTAssertEqual(description1, description2, file: file, line: line)
 }
-
 
 func ORMIndexBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1: @autoclosure () -> CodableTableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
     let description1 = type.objectRelationalMapping.generateCreateIndexStatements(onTable: className)![0].description
     let description2 = expression2()
-    XCTAssertEqual(description1, description2, {
-        return "different from \"\(description1.commonPrefix(with: description2))\""
-    }(), file: file, line: line)
+    XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
 func ORMVirtualTableBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1: @autoclosure () -> CodableTableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
@@ -63,9 +58,7 @@ func ORMVirtualTableBindingAssertEqual<CodableTableObject: CodableTable>(_ expre
     let className = String(describing: type)
     let description1 = type.objectRelationalMapping.generateCreateVirtualTableStatement(named: className).description
     let description2 = expression2()
-    XCTAssertEqual(description1, description2, {
-        return "different from \"\(description1.commonPrefix(with: description2))\""
-    }(), file: file, line: line)
+    XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
 

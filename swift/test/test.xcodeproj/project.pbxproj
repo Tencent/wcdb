@@ -55,6 +55,9 @@
 		23E680991FC6CB1400C54686 /* TableConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D365311FC56AC3004B8390 /* TableConstraintTests.swift */; };
 		23E6809A1FC6CB1900C54686 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6805B1FC6C21A00C54686 /* Assert.swift */; };
 		23E6809E1FC6CB3C00C54686 /* VirtualTableBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6809D1FC6CB3C00C54686 /* VirtualTableBindingTests.swift */; };
+		23E680A71FC6DBF400C54686 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6805B1FC6C21A00C54686 /* Assert.swift */; };
+		23E680AE1FC6DBF400C54686 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
+		23E680B71FC6DC6500C54686 /* TableInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E680B61FC6DC6500C54686 /* TableInterfaceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +76,13 @@
 			remoteInfo = WCDB;
 		};
 		23D3653B1FC59CD7004B8390 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 231DEBEF1FC4157800B4EF4B /* WCDB.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 238D0B021FAB1F4300BC2659;
+			remoteInfo = WCDB;
+		};
+		23E680A11FC6DBF400C54686 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 231DEBEF1FC4157800B4EF4B /* WCDB.xcodeproj */;
 			proxyType = 1;
@@ -129,6 +139,8 @@
 		23E680551FC6B2DB00C54686 /* ORMTestStructColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMTestStructColumn.swift; sourceTree = "<group>"; };
 		23E6805B1FC6C21A00C54686 /* Assert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
 		23E6809D1FC6CB3C00C54686 /* VirtualTableBindingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTableBindingTests.swift; sourceTree = "<group>"; };
+		23E680B31FC6DBF400C54686 /* CRUD.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRUD.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		23E680B61FC6DC6500C54686 /* TableInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableInterfaceTests.swift; sourceTree = "<group>"; };
 		23E9E0351FC41339005DE71C /* WINQ.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WINQ.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -138,6 +150,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D365621FC59CD7004B8390 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23E680AD1FC6DBF400C54686 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23E680AE1FC6DBF400C54686 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,9 +253,18 @@
 			path = util;
 			sourceTree = "<group>";
 		};
+		23E680B51FC6DC2400C54686 /* crud */ = {
+			isa = PBXGroup;
+			children = (
+				23E680B61FC6DC6500C54686 /* TableInterfaceTests.swift */,
+			);
+			path = crud;
+			sourceTree = "<group>";
+		};
 		23E9E01E1FC4132D005DE71C = {
 			isa = PBXGroup;
 			children = (
+				23E680B51FC6DC2400C54686 /* crud */,
 				23E6805A1FC6C20000C54686 /* util */,
 				23D365691FC59CE9004B8390 /* orm */,
 				231DEBFE1FC41B2A00B4EF4B /* winq */,
@@ -250,6 +279,7 @@
 			children = (
 				23E9E0351FC41339005DE71C /* WINQ.xctest */,
 				23D365671FC59CD7004B8390 /* ORM.xctest */,
+				23E680B31FC6DBF400C54686 /* CRUD.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -273,6 +303,24 @@
 			name = ORM;
 			productName = Testcase1;
 			productReference = 23D365671FC59CD7004B8390 /* ORM.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		23E6809F1FC6DBF400C54686 /* CRUD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23E680B01FC6DBF400C54686 /* Build configuration list for PBXNativeTarget "CRUD" */;
+			buildPhases = (
+				23E680A21FC6DBF400C54686 /* Sources */,
+				23E680AD1FC6DBF400C54686 /* Frameworks */,
+				23E680AF1FC6DBF400C54686 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23E680A01FC6DBF400C54686 /* PBXTargetDependency */,
+			);
+			name = CRUD;
+			productName = Testcase1;
+			productReference = 23E680B31FC6DBF400C54686 /* CRUD.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		23E9E0341FC41339005DE71C /* WINQ */ = {
@@ -306,6 +354,9 @@
 					23D365391FC59CD7004B8390 = {
 						ProvisioningStyle = Automatic;
 					};
+					23E6809F1FC6DBF400C54686 = {
+						ProvisioningStyle = Automatic;
+					};
 					23E9E0341FC41339005DE71C = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -332,6 +383,7 @@
 			targets = (
 				23E9E0341FC41339005DE71C /* WINQ */,
 				23D365391FC59CD7004B8390 /* ORM */,
+				23E6809F1FC6DBF400C54686 /* CRUD */,
 			);
 		};
 /* End PBXProject section */
@@ -348,6 +400,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		23D365631FC59CD7004B8390 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23E680AF1FC6DBF400C54686 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -378,6 +437,15 @@
 				23E680501FC6B22E00C54686 /* ORMTestTable.swift in Sources */,
 				23D365721FC5A321004B8390 /* ColumnBindingTests.swift in Sources */,
 				23D365741FC5A327004B8390 /* IndexBindingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23E680A21FC6DBF400C54686 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23E680A71FC6DBF400C54686 /* Assert.swift in Sources */,
+				23E680B71FC6DC6500C54686 /* TableInterfaceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +505,11 @@
 			name = WCDB;
 			targetProxy = 23D3653B1FC59CD7004B8390 /* PBXContainerItemProxy */;
 		};
+		23E680A01FC6DBF400C54686 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WCDB;
+			targetProxy = 23E680A11FC6DBF400C54686 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -453,6 +526,30 @@
 			name = Debug;
 		};
 		23D365661FC59CD7004B8390 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		23E680B11FC6DBF400C54686 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		23E680B21FC6DBF400C54686 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -602,6 +699,15 @@
 			buildConfigurations = (
 				23D365651FC59CD7004B8390 /* Debug */,
 				23D365661FC59CD7004B8390 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23E680B01FC6DBF400C54686 /* Build configuration list for PBXNativeTarget "CRUD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23E680B11FC6DBF400C54686 /* Debug */,
+				23E680B21FC6DBF400C54686 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
