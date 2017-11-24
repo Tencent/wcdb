@@ -35,7 +35,7 @@ public class Insert: CoreRepresentable {
         self.core = core
     }
     
-    private lazy var statement: StatementInsert = StatementInsert().insert(intoTable: name, with: properties!, onConflict: isReplace ? Conflict.Replace : Conflict.Fail).values(Array(repeating: Expression.bindingParameter, count: properties!.count))
+    private lazy var statement: StatementInsert = StatementInsert().insert(intoTable: name, with: properties!, onConflict: isReplace ? Conflict.Replace : nil).values(Array(repeating: Expression.bindingParameter, count: properties!.count))
     
     public func execute(with objects: CodableTable...) throws {
         try execute(with: objects)
