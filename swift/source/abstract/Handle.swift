@@ -85,7 +85,23 @@ public class Handle {
     
     public func exec(_ statement: Statement) throws {
         let rc = sqlite3_exec(handle, statement.description, nil, nil, nil)
-        guard rc == SQLITE_OK else {
+        let result = rc == SQLITE_OK
+        if statement.statementType == .Transaction {
+            let statementTransaction = statement as! StatementTransaction
+            switch statementTransaction.transactionType! {
+            case .Begin:
+                if result {
+                    tracer.shouldAggregation = true
+                }
+            case .Commit:
+                if result {
+                    tracer.shouldAggregation = false
+                }
+            case .Rollback:
+                tracer.shouldAggregation = false
+            }
+        }
+        guard result else {
             throw Error.reportSQLite(tag: tag, path: path, operation: .Exec, extendedError: sqlite3_extended_errcode(handle), sql: statement.description, rc: rc, message: String(cString: sqlite3_errmsg(handle)))
         }
     }

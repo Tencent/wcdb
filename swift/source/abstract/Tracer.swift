@@ -34,7 +34,7 @@ class Tracer {
             setup()
         }
     }
-    private var shouldAggregation = false
+    var shouldAggregation = false
     private var footprint: [String:Int] = [:]
     private var cost: Int64 = 0
     
@@ -100,7 +100,7 @@ class Tracer {
     }
     
     private func reportPerformance() {
-        guard footprint.isEmpty else {
+        guard !footprint.isEmpty else {
             return
         }
         guard let performanceTracer = self.performanceTracer else {
