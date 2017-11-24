@@ -31,7 +31,7 @@ public class HandleStatement {
     }
     
     deinit {
-        try! finalize()
+        try? finalize()
     }
     
     @discardableResult
