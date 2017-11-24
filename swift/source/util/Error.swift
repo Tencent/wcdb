@@ -251,6 +251,30 @@ public class Error: Swift.Error, CustomStringConvertible {
         self.code = code
     }
     
+    public var tag: Tag? {
+        return infos[.Tag]?.intValue
+    } 
+    
+    public var operationValue: Int? {
+        return infos[.Operation]?.intValue
+    }
+    
+    public var extendedCode: Int? {
+        return infos[.ExtendedCode]?.intValue
+    }
+    
+    public var message: String? {
+        return infos[.Message]?.stringValue
+    }
+    
+    public var sql: String? {
+        return infos[.SQL]?.stringValue
+    }
+    
+    public var path: String? {
+        return infos[.Path]?.stringValue
+    }
+
     public var description: String {
         return "Code:\(code), Type:\(type.description), \(infos.joined({ "\($0.description):\($1.stringValue)" }))"
     }
@@ -258,7 +282,7 @@ public class Error: Swift.Error, CustomStringConvertible {
     static let threadedSlient = ThreadLocal<Bool>(defaultTo: false)
         
     public typealias Reporter = (Error)->Void
-    static private let reporter: Atomic<Reporter> = Atomic({
+    static private let reporter: Atomic<Reporter?> = Atomic({
         switch $0.type {
         case Error.ErrorType.SQLiteGlobal:
             debugPrint("[WCDB][DEBUG] \($0.description)")
@@ -271,13 +295,16 @@ public class Error: Swift.Error, CustomStringConvertible {
     
     static public func setReporter(_ reporter: @escaping Reporter) {
         Error.reporter.assign(reporter)
+    }    
+    static public func setReporter(_: Void?) {
+        Error.reporter.assign(nil)
     }
 
     private func report() {
         guard !Error.threadedSlient.value else {
             return
         }
-        Error.reporter.raw(self)
+        Error.reporter.raw?(self)
     }
     
     @discardableResult

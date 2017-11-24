@@ -123,13 +123,22 @@ extension Database {
     public static func globalTrace(ofPerformance trace: @escaping PerformanceTracer) {
         performanceTracer.assign(trace)
     }
+    public static func globalTrace(ofPerformance: Void?) {
+        performanceTracer.assign(nil)
+    }
     
     public static func globalTrace(ofSQL trace: @escaping SQLTracer) {
         sqlTracer.assign(trace)
     }
+    public static func globalTrace(ofSQL: Void?) {
+        sqlTracer.assign(nil)
+    }
     
-    public static func globalTrace(ofErrorReport errorReporter: @escaping Error.Reporter) {
+    public static func globalTrace(ofError errorReporter: @escaping Error.Reporter) {
         Error.setReporter(errorReporter)
+    }
+    public static func globalTrace(ofError: Void?) {
+        Error.setReporter(nil)
     }
     
     private static let timedQueue = TimedQueue<String>(withDelay: 2)
