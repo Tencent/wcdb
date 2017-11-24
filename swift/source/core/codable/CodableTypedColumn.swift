@@ -20,7 +20,7 @@
 
 import Foundation
 
-public protocol CodableEnumColumn: CodableColumn, RawRepresentable where Self.RawValue: CodableColumn {}
+public protocol CodableEnumColumn: CodableColumn, LiteralValueConvertible, RawRepresentable where Self.RawValue: CodableColumn {}
 
 extension CodableEnumColumn {
     public typealias FundamentalType = RawValue.FundamentalType
@@ -36,3 +36,11 @@ extension CodableEnumColumn {
         return rawValue.archivedTypedValue()
     }
 }
+
+public protocol CodableStructColumn: CodableColumn, LiteralValueConvertible {}
+
+public protocol CodableClassColumn: AnyObject, CodableColumn, LiteralValueConvertible {
+    //    init()
+}
+
+public protocol CodableCollectionColumn: CodableColumn {}

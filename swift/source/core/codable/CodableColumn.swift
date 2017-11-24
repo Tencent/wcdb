@@ -29,7 +29,7 @@ public protocol CodableColumnBase {
 }
 
 //TODO: Maybe I should use Codable protocol to implement this ?
-public protocol CodableColumn: CodableColumnBase, LiteralValueConvertible {
+public protocol CodableColumn: CodableColumnBase {
     associatedtype FundamentalType   // Int32 Int64 String Double Data
     
     init?(withTypedValue value: FundamentalType?)
@@ -48,41 +48,5 @@ extension CodableColumn {
     
     public func asLiteralValue() -> LiteralValue {
         return LiteralValue(self)
-    }
-}
-
-extension CodableColumn {
-    public static var columnType: ColumnType {
-        Error.abort("")
-    }
-}
-
-extension CodableColumn where FundamentalType==Int32 {
-    public static var columnType: ColumnType {
-        return ColumnType.Integer32
-    }
-}
-
-extension CodableColumn where FundamentalType==Int64 {
-    public static var columnType: ColumnType {
-        return ColumnType.Integer64
-    }
-}
-
-extension CodableColumn where FundamentalType==String {
-    public static var columnType: ColumnType {
-        return ColumnType.Text
-    }
-}
-
-extension CodableColumn where FundamentalType==Double {
-    public static var columnType: ColumnType {
-        return ColumnType.Float
-    }
-}
-
-extension CodableColumn where FundamentalType==Data {
-    public static var columnType: ColumnType {
-        return ColumnType.BLOB
     }
 }

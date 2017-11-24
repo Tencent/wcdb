@@ -40,3 +40,39 @@ extension CodableFundamentalValue {
     }
 }
 
+
+extension CodableColumn where FundamentalType==Int32 {
+    public static var columnType: ColumnType {
+        return ColumnType.Integer32
+    }
+}
+extension Int32 : CodableFundamentalValue {}
+
+extension CodableColumn where FundamentalType==Int64 {
+    public static var columnType: ColumnType {
+        return ColumnType.Integer64
+    }
+}
+extension Int64 : CodableFundamentalValue {}
+
+extension CodableColumn where FundamentalType==Double {
+    public static var columnType: ColumnType {
+        return ColumnType.Float
+    }
+}
+extension Double : CodableFundamentalValue {}
+
+extension CodableColumn where FundamentalType==String {
+    public static var columnType: ColumnType {
+        return ColumnType.Text
+    }
+}
+extension String: CodableFundamentalValue {}
+
+extension CodableColumn where FundamentalType==Data {
+    public static var columnType: ColumnType {
+        return ColumnType.BLOB
+    }
+}
+extension Data: CodableFundamentalValue {}
+

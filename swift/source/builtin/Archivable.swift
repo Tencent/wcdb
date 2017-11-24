@@ -52,10 +52,11 @@ extension ArchivableColumn {
 public typealias ArchivableEnumColumn = CodableEnumColumn & ArchivableColumn
 public typealias ArchivableStructColumn = CodableStructColumn & ArchivableColumn
 public typealias ArchivableClassColumn = CodableClassColumn & ArchivableColumn
+public typealias ArchivableCollectionColumn = CodableCollectionColumn & ArchivableColumn
 
-extension Array: ArchivableStructColumn {}
-extension Dictionary: ArchivableStructColumn {}
-extension Set: ArchivableStructColumn {}
+extension Array: ArchivableCollectionColumn {}
+extension Dictionary: ArchivableCollectionColumn {}
+extension Set: ArchivableCollectionColumn {}
 
 extension URL: ArchivableStructColumn {}
 

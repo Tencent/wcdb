@@ -71,7 +71,6 @@ extension CodableTable {
     }
 
     public static var objectRelationalMapping: TableBinding {
-        Error.warning("It's recommended to add [objectRelationalMapping] as a stored property for class \(self) to get a better performance")
         return TableBinding.from(self)
     }
     
