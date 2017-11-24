@@ -57,26 +57,24 @@ public protocol Module: ModuleBase {
 extension Module {
     public static func create(argc: Int32, argv: UnsafePointer<UnsafePointer<Int8>?>?, ppTokenizer: UnsafeMutablePointer<UnsafeMutablePointer<sqlite3_tokenizer>?>?) -> Int32 {
         let tokenizerSize = MemoryLayout<Tokenizer>.size
-        let optionalTokenizerPointer = sqlite3_malloc(Int32(tokenizerSize))
-        guard let tokenizerPointer = optionalTokenizerPointer else {
+        let optionalTokenizerRawPointer = sqlite3_malloc(Int32(tokenizerSize))
+        guard let tokenizerRawPointer = optionalTokenizerRawPointer else {
             return SQLITE_NOMEM
         }  
-        memset(tokenizerPointer, 0, tokenizerSize)
+        memset(tokenizerRawPointer, 0, tokenizerSize)
         
-        var tokenizer = unsafeBitCast(tokenizerPointer, to: Tokenizer.self)
         let info = TokenizerInfo(withArgc: argc, andArgv: argv)
-        tokenizer.info = Unmanaged.passRetained(info).toOpaque()
+        tokenizerRawPointer.assumingMemoryBound(to: Tokenizer.self).pointee.info = Unmanaged.passRetained(info).toOpaque()
         
-        ppTokenizer!.pointee = UnsafeMutablePointer<sqlite3_tokenizer>(&tokenizer.base)
+        ppTokenizer!.pointee = tokenizerRawPointer.assumingMemoryBound(to: sqlite3_tokenizer.self)
         
         return SQLITE_OK
     }
     
     public static func destroy(pTokenizer optionalTokenizerPointer: UnsafeMutablePointer<sqlite3_tokenizer>?) -> Int32 {
-        if let tokenizerPointer = optionalTokenizerPointer {
-            let tokenizer = unsafeBitCast(tokenizerPointer, to: Tokenizer.self)
-            Unmanaged<AnyObject>.fromOpaque(tokenizer.info).release()
-            sqlite3_free(tokenizerPointer)
+        if let tokenizerRawPointer = UnsafeMutableRawPointer(optionalTokenizerPointer) {
+            Unmanaged<AnyObject>.fromOpaque(tokenizerRawPointer.assumingMemoryBound(to: Tokenizer.self).pointee.info).release()
+            sqlite3_free(tokenizerRawPointer)
         }
         return SQLITE_OK
     }
@@ -91,38 +89,38 @@ extension Module {
         }
         
         let cursorSize = MemoryLayout<Cursor>.size
-        let optionalCursorPointer = sqlite3_malloc(Int32(cursorSize))
-        guard let cursorPointer = optionalCursorPointer else {
+        let optionalCursorRawPointer = sqlite3_malloc(Int32(cursorSize))
+        guard let cursorRawPointer = optionalCursorRawPointer else {
             return SQLITE_NOMEM
         }
-        memset(cursorPointer, 0, cursorSize)
+        memset(cursorRawPointer, 0, cursorSize)
         
-        let tokenizer = unsafeBitCast(pTokenizer, to: Tokenizer.self)
-        var cursor = unsafeBitCast(cursorPointer, to: Cursor.self)
-        let tokenizerInfo = Unmanaged<TokenizerInfo>.fromOpaque(tokenizer.info).takeUnretainedValue()
+        let tokenizerPointer = UnsafeMutableRawPointer(pTokenizer!).assumingMemoryBound(to: Tokenizer.self)
+        let cursorPointer = cursorRawPointer.assumingMemoryBound(to: Cursor.self)
+        let tokenizerInfo = Unmanaged<TokenizerInfo>.fromOpaque(tokenizerPointer.pointee.info).takeUnretainedValue()
         let cursorInfo = CursorInfo(withInput: pInput, count: bytes, tokenizerInfo: tokenizerInfo)
-        cursor.info = Unmanaged.passRetained(cursorInfo).toOpaque()
+        cursorPointer.pointee.info = Unmanaged.passRetained(cursorInfo).toOpaque()
         
-        ppCursor!.pointee = UnsafeMutablePointer<sqlite3_tokenizer_cursor>(&cursor.base)
+        ppCursor!.pointee = cursorRawPointer.assumingMemoryBound(to: sqlite3_tokenizer_cursor.self)
         
         return SQLITE_OK
     }
     
     public static func close(pCursor optionalCursorPointer: UnsafeMutablePointer<sqlite3_tokenizer_cursor>?) -> Int32 {
-        if let cursorPointer = optionalCursorPointer {
-            let cursor = unsafeBitCast(cursorPointer, to: Cursor.self)
-            Unmanaged<AnyObject>.fromOpaque(cursor.info).release()
-            sqlite3_free(cursorPointer)
+        if let cursorRawPointer = UnsafeMutableRawPointer(optionalCursorPointer) {
+            let cursorPointer = cursorRawPointer.assumingMemoryBound(to: Cursor.self)
+            Unmanaged<AnyObject>.fromOpaque(cursorPointer.pointee.info).release()
+            sqlite3_free(cursorRawPointer)
         }
         return SQLITE_OK
     }
     
     public static func next(pCursor optionalCursorPointer: UnsafeMutablePointer<sqlite3_tokenizer_cursor>?, ppToken: UnsafeMutablePointer<UnsafePointer<Int8>?>?, pnBytes: UnsafeMutablePointer<Int32>?, piStartOffset: UnsafeMutablePointer<Int32>?, piEndOffset: UnsafeMutablePointer<Int32>?, piPosition: UnsafeMutablePointer<Int32>?) -> Int32 {
-        if let cursorPointer = optionalCursorPointer {
-            let cursor = unsafeBitCast(cursorPointer, to: Cursor.self)
-            let cursorInfo = unsafeBitCast(cursor.info, to: CursorInfo.self)
+        if let cursorRawPointer = UnsafeMutableRawPointer(optionalCursorPointer) {
+            let cursorPointer = cursorRawPointer.assumingMemoryBound(to: Cursor.self)
+            let cursorInfoPointer = cursorPointer.pointee.info.assumingMemoryBound(to: CursorInfo.self)
             
-            let rc = cursorInfo.step(pToken: &ppToken!.pointee, count: &pnBytes!.pointee, startOffset: &piStartOffset!.pointee, endOffset: &piEndOffset!.pointee, position: &piPosition!.pointee)
+            let rc = cursorInfoPointer.pointee.step(pToken: &ppToken!.pointee, count: &pnBytes!.pointee, startOffset: &piStartOffset!.pointee, endOffset: &piEndOffset!.pointee, position: &piPosition!.pointee)
             return rc
         }
         return SQLITE_NOMEM
