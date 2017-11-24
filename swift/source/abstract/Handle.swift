@@ -26,7 +26,11 @@ public class Handle {
     private var handle: sqlite3? = nil
 
     public let path: String
-    public internal(set) var tag: Tag? = nil
+    public internal(set) var tag: Tag? = nil {
+        didSet {
+            tracer?.userInfo = tag
+        }
+    }
     
     typealias CommittedHook = (Handle, Int, Void?) -> Void
     private struct CommittedHookInfo {
@@ -35,7 +39,7 @@ public class Handle {
     }
     private var committedHookInfo: CommittedHookInfo? = nil 
     
-    private lazy var tracer = Tracer(with: handle!)
+    private var tracer: Tracer? = nil
     
     init(withPath path: String) {
         _ = Handle.once
@@ -86,19 +90,21 @@ public class Handle {
     public func exec(_ statement: Statement) throws {
         let rc = sqlite3_exec(handle, statement.description, nil, nil, nil)
         let result = rc == SQLITE_OK
-        if statement.statementType == .Transaction {
-            let statementTransaction = statement as! StatementTransaction
-            switch statementTransaction.transactionType! {
-            case .Begin:
-                if result {
-                    tracer.shouldAggregation = true
-                }
-            case .Commit:
-                if result {
+        if let tracer = self.tracer {
+            if  statement.statementType == .Transaction {
+                let statementTransaction = statement as! StatementTransaction
+                switch statementTransaction.transactionType! {
+                case .Begin:
+                    if result {
+                        tracer.shouldAggregation = true
+                    }
+                case .Commit:
+                    if result {
+                        tracer.shouldAggregation = false
+                    }
+                case .Rollback:
                     tracer.shouldAggregation = false
                 }
-            case .Rollback:
-                tracer.shouldAggregation = false
             }
         }
         guard result else {
@@ -216,14 +222,23 @@ extension Handle {
 extension Handle {
     public typealias SQLTracer = (String) -> Void
     
+    func lazyTracer() -> Tracer? {
+        if tracer == nil && handle != nil {
+            tracer = Tracer(with: handle!)
+        }
+        return tracer
+    }
+    
     func trace(sql sqlTracer: @escaping SQLTracer) {
-        tracer.trace(sql: sqlTracer)
+        lazyTracer()?.trace(sql: sqlTracer)
     }
     
     public typealias PerformanceTracer = (Tag?, [String:Int], Int64) -> Void // Tag?, (SQL, count), cost
 
     func trace(performance performanceTracer: @escaping PerformanceTracer) {
-        tracer.track { performanceTracer(self.tag, $0 ,$1) }
+        lazyTracer()?.track(performance: { (sqls, cost, userInfo) in
+            performanceTracer(userInfo as? Tag, sqls, cost)
+        }) 
     }
 }
 
