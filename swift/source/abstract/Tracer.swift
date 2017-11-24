@@ -28,7 +28,7 @@ class Tracer {
         }
     }
     
-    typealias PerformanceTracer = ([String:Int], Int64) -> Void // (SQL, count), cost
+    typealias PerformanceTracer = ([String:Int], Int64, Any?) -> Void // (SQL, count), cost, userInfo
     private var performanceTracer: PerformanceTracer? = nil {
         didSet {
             setup()
@@ -39,6 +39,7 @@ class Tracer {
     private var cost: Int64 = 0
     
     private let handle: sqlite3
+    var userInfo: Any? = nil
     
     init(with handle: sqlite3) {
         self.handle = handle
@@ -106,7 +107,7 @@ class Tracer {
         guard let performanceTracer = self.performanceTracer else {
             return
         } 
-        performanceTracer(footprint, cost)
+        performanceTracer(footprint, cost, userInfo)
         footprint.removeAll()
         cost = 0
     }
