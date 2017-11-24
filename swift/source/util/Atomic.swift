@@ -43,6 +43,11 @@ class Atomic<Value> {
         raw = closure(raw)
     }
     
+    func withValue(_ closure: (inout Value)->Void) {
+        spin.lock(); defer { spin.unlock() }
+        closure(&raw) 
+    }
+    
     func assign(_ newValue: Value) {
         spin.lock(); defer { spin.unlock() }
         self.raw = newValue
@@ -65,7 +70,7 @@ extension Atomic where Value==Int {
     static prefix func ++ (atomic: Atomic) -> Value {
         var newValue: Value = 0
         atomic.withValue { (value) -> Value in
-            newValue = value - 1
+            newValue = value + 1
             return newValue
         }
         return newValue
