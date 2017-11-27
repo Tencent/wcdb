@@ -224,7 +224,7 @@ public protocol SelectTableInterface {
 }
 
 extension SelectTableInterface where Self: TableBase {
-    public func getObjects(on propertyConvertibleList: [PropertyConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
+    public func getObjects(on propertyConvertibleList: [PropertyConvertible] = Object.allProperties, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
         var select = try Select(with: self.database, on: propertyConvertibleList, table: self.name, isDistinct: false)
         if condition != nil {
             select = select.where(condition!)
@@ -245,7 +245,7 @@ extension SelectTableInterface where Self: TableBase {
         return try getObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
-    public func getObject(on propertyConvertibleList: [PropertyConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
+    public func getObject(on propertyConvertibleList: [PropertyConvertible] = Object.allProperties, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
         return try getObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
     

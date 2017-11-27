@@ -336,7 +336,7 @@ extension Database: Core {
         return true
     }
     
-    public func getTable<Root: CodableTable>(named name: String) throws -> Table<Root>? {
+    public func getTable<Root: CodableTable>(named name: String, ofType type: Root.Type = Root.self) throws -> Table<Root>? {
         guard try isTableExists(name) else {
             return nil
         }
