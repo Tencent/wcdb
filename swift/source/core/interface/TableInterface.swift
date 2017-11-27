@@ -246,7 +246,7 @@ extension SelectTableInterface where Self: TableBase {
     }
     
     public func getObjects(on propertyConvertibleList: PropertyConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
-        return try getObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
     public func getObject(on propertyConvertibleList: [PropertyConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
@@ -254,7 +254,7 @@ extension SelectTableInterface where Self: TableBase {
     }
     
     public func getObject(on propertyConvertibleList: PropertyConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
-        return try getObjects(on: propertyConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
 }
 
