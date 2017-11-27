@@ -61,4 +61,14 @@ func ORMVirtualTableBindingAssertEqual<CodableTableObject: CodableTable>(_ expre
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-
+func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line) -> T {
+    var t: T!
+    do {
+        t = try expression()
+    }catch let error as WCDB.Error {
+        XCTFail(error.description, file: file, line: line)
+    }catch {
+        XCTFail(error.localizedDescription, file: file, line: line)
+    }
+    return t
+}

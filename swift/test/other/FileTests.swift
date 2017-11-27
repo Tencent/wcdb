@@ -99,12 +99,8 @@ class FileTests: WCDBTestCase {
         }
         //Then
         database.close { 
-            do {
-                let filesSize = try self.database.getFilesSize()
-                XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
-            }catch let error as WCDB.Error {
-                XCTFail(error.description)
-            }catch {}
+            let filesSize = WCDBAssertNoThrowReturned(try self.database.getFilesSize())
+            XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
         }
     }
 }

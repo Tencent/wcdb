@@ -50,19 +50,15 @@ class TableInterfaceTests: WCDBTestCase {
         }
     }
     func testCreateTable() {
-        do {
-            //Give
-            let tableName = BaselineObject.name
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL)")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = BaselineObject.name
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL)")
     }
 
     class IndexObject: CodableTable, Named {
@@ -81,20 +77,16 @@ class TableInterfaceTests: WCDBTestCase {
         }
     }
     func testCreateTableWithIndex() {
-        do {
-            //Give
-            let tableName = IndexObject.name
-            let indexName = tableName+"_index"
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==indexName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON IndexObject(variable)")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = IndexObject.name
+        let indexName = tableName+"_index"
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==indexName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON IndexObject(variable)")
     }
 
     class ConstraintObject: CodableTable, Named {
@@ -115,19 +107,15 @@ class TableInterfaceTests: WCDBTestCase {
         }
     }
     func testCreateTableWithConstraint() {
-        do {
-            //Give
-            let tableName = ConstraintObject.name
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: ConstraintObject.self))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(variable1 INTEGER, variable2 INTEGER, CONSTRAINT ConstraintObjectConstraint UNIQUE(variable1, variable2))")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = ConstraintObject.name
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: ConstraintObject.self))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(variable1 INTEGER, variable2 INTEGER, CONSTRAINT ConstraintObjectConstraint UNIQUE(variable1, variable2))")
     }
 
     class VirtualTableObject: CodableTable, Named {
@@ -146,20 +134,16 @@ class TableInterfaceTests: WCDBTestCase {
         }
     }
     func testCreateVirtualTable() {
-        do {
-            //Give
-            let tableName = VirtualTableObject.name
-            database.setTokenizes(.WCDB)
-            //When
-            XCTAssertNoThrow(try database.create(virtualTable: tableName, of: VirtualTableObject.self))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE VIRTUAL TABLE VirtualTableObject USING fts3(variable1 INTEGER, variable2 INTEGER, tokenize=WCDB)")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = VirtualTableObject.name
+        database.setTokenizes(.WCDB)
+        //When
+        XCTAssertNoThrow(try database.create(virtualTable: tableName, of: VirtualTableObject.self))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE VIRTUAL TABLE VirtualTableObject USING fts3(variable1 INTEGER, variable2 INTEGER, tokenize=WCDB)")
     }
     
     class AutoFitBaseLineObject: CodableTable, Named {
@@ -185,123 +169,95 @@ class TableInterfaceTests: WCDBTestCase {
         }
     }
     func testCreateTableAutoFitORM() {
-        do {
-            //Give
-            let tableName = AutoFitBaseLineObject.name
-            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-            //Then
-            XCTAssertNoThrow(try database.create(table: tableName, of: AutoFitBaseLineObject.self))
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL, newColumn INTEGER)")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = AutoFitBaseLineObject.name
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        //Then
+        XCTAssertNoThrow(try database.create(table: tableName, of: AutoFitBaseLineObject.self))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL, newColumn INTEGER)")
     }
     
     func testDropTable() {
-        do {
-            //Give
-            let tableName = BaselineObject.name
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-            XCTAssertNoThrow(try database.drop(table: tableName))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNil(optionalObject)
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = BaselineObject.name
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        XCTAssertNoThrow(try database.drop(table: tableName))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNil(optionalObject)
     }
 
     func testDropIndex() {
-        do {
-            //Give
-            let tableName = IndexObject.name
-            let indexName = tableName+"_index"
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
-            XCTAssertNoThrow(try database.drop(index: indexName))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==indexName)
-            XCTAssertNil(optionalObject)
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = IndexObject.name
+        let indexName = tableName+"_index"
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
+        XCTAssertNoThrow(try database.drop(index: indexName))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==indexName))
+        XCTAssertNil(optionalObject)
     }
 
     func testManuallyCreateTable() {
-        do {
-            //Give
-            let tableName = BaselineObject.name
-            let tableConstraint = TableConstraint(named: "BaselineObjectConstraint").check((\BaselineObject.anInt32)>0)
-            let def1 = (\BaselineObject.anInt32).asDef(with: .Integer32)
-            let def2 = (\BaselineObject.anInt64).asDef(with: .Integer64)
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, with: def1, def2, and: [tableConstraint]))
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER, anInt64 INTEGER, CONSTRAINT BaselineObjectConstraint CHECK(anInt32 > 0))")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = BaselineObject.name
+        let tableConstraint = TableConstraint(named: "BaselineObjectConstraint").check((\BaselineObject.anInt32)>0)
+        let def1 = (\BaselineObject.anInt32).asDef(with: .Integer32)
+        let def2 = (\BaselineObject.anInt64).asDef(with: .Integer64)
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, with: def1, def2, and: [tableConstraint]))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER, anInt64 INTEGER, CONSTRAINT BaselineObjectConstraint CHECK(anInt32 > 0))")
     }
     
     func testManuallyAddColumn() {
-        do {
-            //Give
-            let tableName = BaselineObject.name
-            let def = Column(named: "newColumn").asDef(with: .Integer32)
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-            XCTAssertNoThrow(try database.addColumn(with: def, forTable: tableName))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==tableName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL, newColumn INTEGER)")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = BaselineObject.name
+        let def = Column(named: "newColumn").asDef(with: .Integer32)
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        XCTAssertNoThrow(try database.addColumn(with: def, forTable: tableName))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL, newColumn INTEGER)")
     }
     
     
     func testManuallyCreateIndex() {
-        do {
-            //Give
-            let tableName = BaselineObject.name
-            let indexName = tableName+"_index"
-            let index1 = (\BaselineObject.aString).asIndex()
-            let index2 = (\BaselineObject.aDouble).asIndex()
-            //When
-            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-            XCTAssertNoThrow(try database.create(index: indexName, with: index1, index2, forTable: tableName))
-            //Then
-            let optionalObject: Master? = try database.getObject(from: Master.tableName, where: \Master.name==indexName)
-            XCTAssertNotNil(optionalObject)
-            let object = optionalObject!
-            XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON \(tableName)(aString, aDouble)")
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = BaselineObject.name
+        let indexName = tableName+"_index"
+        let index1 = (\BaselineObject.aString).asIndex()
+        let index2 = (\BaselineObject.aDouble).asIndex()
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        XCTAssertNoThrow(try database.create(index: indexName, with: index1, index2, forTable: tableName))
+        //Then
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==indexName))
+        XCTAssertNotNil(optionalObject)
+        let object = optionalObject!
+        XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON \(tableName)(aString, aDouble)")
     }
     
     func testGetTable() {
-        do {
-            //Give
-            let tableName = BaselineObject.name
-            var table: Table<BaselineObject>? = nil
-            //When
-            table = try database.getTable(named: tableName)
-            XCTAssertNil(table)
-            XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
-            //Then
-            table = try database.getTable(named: tableName)
-            XCTAssertNotNil(table)
-        }catch let error as WCDB.Error {
-            XCTFail(error.description)
-        }catch {}
+        //Give
+        let tableName = BaselineObject.name
+        var table: Table<BaselineObject>? = nil
+        //When
+        table = WCDBAssertNoThrowReturned(try database.getTable(named: tableName))
+        XCTAssertNil(table)
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        //Then
+        table = WCDBAssertNoThrowReturned(try database.getTable(named: tableName))
+        XCTAssertNotNil(table)
     }
 }
