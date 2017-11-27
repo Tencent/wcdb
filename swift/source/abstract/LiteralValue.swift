@@ -37,12 +37,12 @@ public final class LiteralValue : Describable {
     }
 
     public override init(_ value: String) {
-        super.init("'" + value.replacingOccurrences(of: "'", with: "''") + "'")
+        super.init("'\(value.replacingOccurrences(of: "'", with: "''"))'")
     }
     
     public init(_ value: Data) {
         let string = String(data: value, encoding: .utf8) ?? ""
-        super.init("'" + string.replacingOccurrences(of: "'", with: "''") + "'")
+        super.init("'\(string.replacingOccurrences(of: "'", with: "''"))'")
     }
     
     public init(_ value: Void?) {
