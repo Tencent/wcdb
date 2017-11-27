@@ -122,8 +122,8 @@ extension DeleteInterface where Self: Core {
 }
 
 public protocol RowSelectInterface {
-    func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn     
-    func getRows(on columnResultConvertiableList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn 
+    func getRows(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn     
+    func getRows(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn 
     
     func getRow(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> FundamentalRow?
     func getRow(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> FundamentalRow? 
@@ -136,8 +136,8 @@ public protocol RowSelectInterface {
 }
 
 extension RowSelectInterface where Self: Core {
-    public func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
-        let rowSelect = try RowSelect(with: self, results: columnResultConvertiableList, tables: [table], isDistinct: false)
+    public func getRows(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
+        let rowSelect = try RowSelect(with: self, results: columnResultConvertibleList, tables: [table], isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -154,12 +154,12 @@ extension RowSelectInterface where Self: Core {
         return try rowSelect.allRows()
     }
     
-    public func getRows(on columnResultConvertiableList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
-        return try getRows(on: columnResultConvertiableList, from: table, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    public func getRows(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList, from: table, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     public func getRow(on columnResultConvertibleList: ColumnResultConvertible..., from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> FundamentalRow? {
-        return try getRows(on: columnResultConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
     
     public func getRow(on columnResultConvertibleList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> FundamentalRow? {

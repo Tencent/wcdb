@@ -67,22 +67,20 @@ public class AnyColumnBinding : AnyBinding {
     static func defaultType(from defaultValue: CodableColumnBase?) -> ColumnDef.DefaultType {
         var defaultType = ColumnDef.DefaultType.Null
         if defaultValue != nil {
-            let cls = Swift.type(of: defaultValue!)
-            if let fundamentalValue = defaultValue!.archivedFundamentalValue() {
-                switch cls.columnType {
-                case .Integer32:
-                    defaultType = .Int32(fundamentalValue as! Int32)
-                case .Integer64:
-                    defaultType = .Int64(fundamentalValue as! Int64)
-                case .Float:
-                    defaultType = .Float(fundamentalValue as! Double)
-                case .Text:
-                    defaultType = .Text(fundamentalValue as! String)
-                case .BLOB:
-                    defaultType = .BLOB(fundamentalValue as! Data)
-                case .Null:
-                    defaultType = .Null
-                }
+            let fundamentalValue = defaultValue!.archivedFundamentalValue()
+            switch fundamentalValue.type {
+            case .Integer32:
+                defaultType = .Int32(fundamentalValue.int32Value)
+            case .Integer64:
+                defaultType = .Int64(fundamentalValue.int64Value)
+            case .Float:
+                defaultType = .Float(fundamentalValue.doubleValue)
+            case .Text:
+                defaultType = .Text(fundamentalValue.stringValue)
+            case .BLOB:
+                defaultType = .BLOB(fundamentalValue.dataValue)
+            case .Null:
+                defaultType = .Null
             }
         }
         return defaultType
@@ -153,7 +151,7 @@ public class ColumnBinding<ModelType: CodableTable, PropertyType: CodableColumn>
 
     override func access<FundamentalType: CodableFundamentalValue>(getFundamentalValueFromObject object: CodableTable) -> FundamentalType? {
         let propertyValue: PropertyType? = access(getValueFromObject: (object as! ModelType))
-        return propertyValue?.archivedFundamentalValue() as! FundamentalType?
+        return propertyValue?.archivedFundamentalValue().base as! FundamentalType?
     }
     
     override func access<FundamentalType: CodableFundamentalValue>(setFundamentalValue value: FundamentalType?, forObject object: inout CodableTable) {

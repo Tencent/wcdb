@@ -19,6 +19,7 @@
  */
 
 import Foundation
+
 public class Select: SelectBase {
     private let properties: [Property]
     

@@ -167,15 +167,15 @@ public class SelectBase: CoreRepresentable {
         let coreStatement = try self.lazyCoreStatement()
         switch coreStatement.type(atIndex: index) {
         case .Integer32:
-            return coreStatement.value(atIndex: index) as Int32
+            return FundamentalValue(coreStatement.value(atIndex: index) as Int32)
         case .Integer64:
-            return coreStatement.value(atIndex: index) as Int64
+            return FundamentalValue(coreStatement.value(atIndex: index) as Int64)
         case .Float:
-            return coreStatement.value(atIndex: index) as Double
+            return FundamentalValue(coreStatement.value(atIndex: index) as Double)
         case .Text:
-            return coreStatement.value(atIndex: index) as String
+            return FundamentalValue(coreStatement.value(atIndex: index) as String)
         case .BLOB:
-            return coreStatement.value(atIndex: index) as Data
+            return FundamentalValue(coreStatement.value(atIndex: index) as Data)
         case .Null:
             return nil
         }

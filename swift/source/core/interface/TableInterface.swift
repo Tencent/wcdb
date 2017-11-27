@@ -126,8 +126,8 @@ extension DeleteTableInterface where Self: TableBase {
 }
 
 public protocol RowSelectTableInterface {
-    func getRows(on columnResultConvertiableList: [ColumnResultConvertible], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn     
-    func getRows(on columnResultConvertiableList: ColumnResultConvertible..., where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn 
+    func getRows(on columnResultConvertibleList: [ColumnResultConvertible], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn     
+    func getRows(on columnResultConvertibleList: ColumnResultConvertible..., where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> FundamentalRowXColumn 
     
     func getRow(on columnResultConvertibleList: ColumnResultConvertible..., where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> FundamentalRow?
     func getRow(on columnResultConvertibleList: [ColumnResultConvertible], where condition: Condition?, orderBy orderList: [OrderBy]?, offset: Offset?) throws -> FundamentalRow? 
@@ -140,8 +140,8 @@ public protocol RowSelectTableInterface {
 }
 
 extension RowSelectTableInterface where Self: TableBase {
-    public func getRows(on columnResultConvertiableList: [ColumnResultConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
-        let rowSelect = try RowSelect(with: self.database, results: columnResultConvertiableList, tables: [self.name], isDistinct: false)
+    public func getRows(on columnResultConvertibleList: [ColumnResultConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
+        let rowSelect = try RowSelect(with: self.database, results: columnResultConvertibleList, tables: [self.name], isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -158,12 +158,12 @@ extension RowSelectTableInterface where Self: TableBase {
         return try rowSelect.allRows()
     }
     
-    public func getRows(on columnResultConvertiableList: ColumnResultConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
-        return try getRows(on: columnResultConvertiableList, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    public func getRows(on columnResultConvertibleList: ColumnResultConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
     public func getRow(on columnResultConvertibleList: ColumnResultConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> FundamentalRow? {
-        return try getRows(on: columnResultConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
     
     public func getRow(on columnResultConvertibleList: [ColumnResultConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> FundamentalRow? {

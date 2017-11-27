@@ -26,8 +26,3 @@ public typealias Offset = ExpressionConvertible
 public typealias GroupBy = ExpressionConvertible
 public typealias Having = ExpressionConvertible
 public typealias OrderBy = OrderConvertible
-
-public typealias FundamentalValue = CodableFundamentalValueBase?// nullable, Int32, Int64, Double, String, Data
-public typealias FundamentalColumn = [FundamentalValue]
-public typealias FundamentalRow = [FundamentalValue]
-public typealias FundamentalRowXColumn = [FundamentalRow]

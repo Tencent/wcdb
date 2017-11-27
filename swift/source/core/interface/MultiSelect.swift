@@ -19,6 +19,7 @@
  */
 
 import Foundation
+
 public class MultiSelect: SelectBase {
     private let properties: [Property]
     

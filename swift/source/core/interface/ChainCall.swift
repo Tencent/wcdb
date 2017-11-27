@@ -89,7 +89,7 @@ public protocol RowSelectChainCallInterface {
 
 extension RowSelectChainCallInterface where Self: Core {
     public func prepareRowSelect(on columnResultConvertibleList: ColumnResultConvertible..., from tables : [String], isDistinct: Bool = false) throws -> RowSelect {
-        return try RowSelect(with: self, results: columnResultConvertibleList, tables: tables, isDistinct: isDistinct)
+        return try RowSelect(with: self, results: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList, tables: tables, isDistinct: isDistinct)
     }
     
     public func prepareRowSelect(on columnResultConvertibleList: [ColumnResultConvertible], from tables : [String], isDistinct: Bool = false) throws -> RowSelect {
@@ -97,7 +97,7 @@ extension RowSelectChainCallInterface where Self: Core {
     }
     
     public func prepareRowSelect(on columnResultConvertibleList: ColumnResultConvertible..., from table : String, isDistinct: Bool = false) throws -> RowSelect {
-        return try RowSelect(with: self, results: columnResultConvertibleList, tables: [table], isDistinct: isDistinct)
+        return try RowSelect(with: self, results: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList, tables: [table], isDistinct: isDistinct)
     }
     
     public func prepareRowSelect(on columnResultConvertibleList: [ColumnResultConvertible], from table : String, isDistinct: Bool = false) throws -> RowSelect {

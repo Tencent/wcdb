@@ -39,11 +39,11 @@ public protocol CodableColumn: CodableColumnBase {
 
 extension CodableColumn {
     public init?(withFundamentalValue value: FundamentalValue) {
-        self.init(withTypedValue: (value as? FundamentalType))
+        self.init(withTypedValue: (value.base as? FundamentalType))
     }
     
     public func archivedFundamentalValue() -> FundamentalValue {
-        return archivedTypedValue() as? CodableFundamentalValueBase 
+        return FundamentalValue(with: archivedTypedValue() as? CodableFundamentalValueBase)
     }
     
     public func asLiteralValue() -> LiteralValue {

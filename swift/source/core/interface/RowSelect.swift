@@ -19,6 +19,7 @@
  */
 
 import Foundation
+
 public class RowSelect : SelectBase {
     init(with core: Core, results columnResultConvertibleList: [ColumnResultConvertible], tables: [String], isDistinct: Bool) throws {
         guard columnResultConvertibleList.count > 0 else {

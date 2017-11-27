@@ -19,6 +19,7 @@
  */
 
 import Foundation
+
 public class Update : CoreRepresentable {
     var core: Core
     private let statement = StatementUpdate()

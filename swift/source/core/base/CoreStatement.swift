@@ -32,21 +32,20 @@ public class CoreStatement: CoreRepresentable {
         return recyclableHandleStatement.raw
     }
     
-    public func bind(_ value: CodableColumnBase?, toIndex index: Int) {
-        if value != nil {
-            let cls = Swift.type(of: value!)
-            let fundamentalValue = value!.archivedFundamentalValue()
-            switch cls.columnType {
+    public func bind(_ optionalValue: CodableColumnBase?, toIndex index: Int) {
+        if let value = optionalValue {
+            let fundamentalValue = value.archivedFundamentalValue()
+            switch fundamentalValue.type {
             case .Integer32:
-                handleStatement.bind(fundamentalValue as! Int32, toIndex: index)
+                handleStatement.bind(fundamentalValue.int32Value, toIndex: index)
             case .Integer64:
-                handleStatement.bind(fundamentalValue as! Int64, toIndex: index)
+                handleStatement.bind(fundamentalValue.int64Value, toIndex: index)
             case .Text:
-                handleStatement.bind(fundamentalValue as! String, toIndex: index)
+                handleStatement.bind(fundamentalValue.stringValue, toIndex: index)
             case .Float:
-                handleStatement.bind(fundamentalValue as! Double, toIndex: index)
+                handleStatement.bind(fundamentalValue.doubleValue, toIndex: index)
             case .BLOB:
-                handleStatement.bind(fundamentalValue as! Data, toIndex: index)
+                handleStatement.bind(fundamentalValue.dataValue, toIndex: index)
             case .Null:
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -119,27 +118,27 @@ public class CoreStatement: CoreRepresentable {
         switch handleStatement.columnType(atIndex: index) {
         case .Integer32:
             let value: Int32 = handleStatement.columnValue(atIndex: index) 
-            return value
+            return FundamentalValue(value)
         case .Integer64:
             let value: Int64 = handleStatement.columnValue(atIndex: index) 
-            return value
+            return FundamentalValue(value)
         case .Text:
             let value: String = handleStatement.columnValue(atIndex: index) 
-            return value
+            return FundamentalValue(value)
         case .Float:
             let value: Double = handleStatement.columnValue(atIndex: index) 
-            return value
+            return FundamentalValue(value)
         case .BLOB:
             let value: Data = handleStatement.columnValue(atIndex: index) 
-            return value
+            return FundamentalValue(value)
         case .Null:
-            return nil
+            return FundamentalValue(nil)
         }        
     }
     
     public func value(byName name: String) -> FundamentalValue {
         guard let index = index(byName: name) else {
-            return nil
+            return FundamentalValue(nil)
         }
         return value(atIndex: index)
     }

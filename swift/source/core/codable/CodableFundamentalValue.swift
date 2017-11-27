@@ -20,7 +20,7 @@
 
 import Foundation
 
-public protocol CodableFundamentalValueBase {}
+public protocol CodableFundamentalValueBase: CodableColumnBase {}
 
 //Int32, Int64, Double, String, Data
 public protocol CodableFundamentalValue: CodableStructColumn, CodableFundamentalValueBase {}
@@ -39,7 +39,6 @@ extension CodableFundamentalValue {
         return self
     }
 }
-
 
 extension CodableColumn where FundamentalType==Int32 {
     public static var columnType: ColumnType {
