@@ -30,8 +30,8 @@ public class AnyColumnBinding : AnyBinding {
     let `class`: AnyClass
     let columnType: ColumnType
     let columnName: String
-    let isPrimary: Bool = false
-    let isAutoIncrement: Bool = false
+    let isPrimary: Bool
+    let isAutoIncrement: Bool
     let accessor: AnyAccessor
     lazy var expression = columnName
     let columnDef: ColumnDef
@@ -39,6 +39,8 @@ public class AnyColumnBinding : AnyBinding {
     init(accessor: AnyAccessor, class: AnyClass, columnName: String, columnType: ColumnType, isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         self.columnName = columnName
         self.columnType = columnType
+        self.isPrimary = isPrimary
+        self.isAutoIncrement = isAutoIncrement
         var columnDef = ColumnDef(with: Column(named: columnName), and: columnType)
         if isPrimary {
             columnDef = columnDef.makePrimary(orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict)
