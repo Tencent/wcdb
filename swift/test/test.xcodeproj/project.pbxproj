@@ -19,6 +19,8 @@
 		2310C6071FCBB8DE0030F3D3 /* Named.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C6051FCBB7B70030F3D3 /* Named.swift */; };
 		2310C6081FCBB8DE0030F3D3 /* Named.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C6051FCBB7B70030F3D3 /* Named.swift */; };
 		2310C6091FCBB8DE0030F3D3 /* Named.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C6051FCBB7B70030F3D3 /* Named.swift */; };
+		2310C6631FCC32FF0030F3D3 /* CRUDObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C65E1FCC32610030F3D3 /* CRUDObject.swift */; };
+		2310C6641FCC32FF0030F3D3 /* CURDTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C6611FCC328B0030F3D3 /* CURDTestCase.swift */; };
 		231DEBFD1FC4158C00B4EF4B /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
 		23D365621FC59CD7004B8390 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
 		23D3656F1FC5A0BD004B8390 /* KeyPathBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3656E1FC5A0BD004B8390 /* KeyPathBindingTests.swift */; };
@@ -119,6 +121,8 @@
 		2310C5FB1FCBB5D40030F3D3 /* Assert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
 		2310C5FD1FCBB5E80030F3D3 /* WCDBTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCDBTestCase.swift; sourceTree = "<group>"; };
 		2310C6051FCBB7B70030F3D3 /* Named.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Named.swift; sourceTree = "<group>"; };
+		2310C65E1FCC32610030F3D3 /* CRUDObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRUDObject.swift; sourceTree = "<group>"; };
+		2310C6611FCC328B0030F3D3 /* CURDTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CURDTestCase.swift; sourceTree = "<group>"; };
 		231DEBEF1FC4157800B4EF4B /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		231DEC011FC41C6200B4EF4B /* ColumnTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnTests.swift; sourceTree = "<group>"; };
 		231DEC041FC41E1500B4EF4B /* ColumnDefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDefTests.swift; sourceTree = "<group>"; };
@@ -305,6 +309,8 @@
 				23E9D3281FC8186A00F55299 /* ChainCallTests.swift */,
 				23E9D32A1FC8188B00F55299 /* TransactionTests.swift */,
 				23E9D32C1FC818BF00F55299 /* AdvanceTests.swift */,
+				2310C65E1FCC32610030F3D3 /* CRUDObject.swift */,
+				2310C6611FCC328B0030F3D3 /* CURDTestCase.swift */,
 			);
 			path = crud;
 			sourceTree = "<group>";
@@ -535,6 +541,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2310C6631FCC32FF0030F3D3 /* CRUDObject.swift in Sources */,
 				23E9D3291FC8186A00F55299 /* ChainCallTests.swift in Sources */,
 				23E9D32D1FC818BF00F55299 /* AdvanceTests.swift in Sources */,
 				23E680B71FC6DC6500C54686 /* TableInterfaceTests.swift in Sources */,
@@ -543,6 +550,7 @@
 				23E9D32B1FC8188B00F55299 /* TransactionTests.swift in Sources */,
 				2310C6031FCBB5EB0030F3D3 /* Assert.swift in Sources */,
 				2310C6001FCBB5E80030F3D3 /* WCDBTestCase.swift in Sources */,
+				2310C6641FCC32FF0030F3D3 /* CURDTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

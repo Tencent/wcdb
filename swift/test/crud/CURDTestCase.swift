@@ -19,7 +19,27 @@
  */
 
 import XCTest
+import WCDB
 
-//CoreStatement, Cipher, Config, redirect, ColumnCoding, FTS
-class AdvanceTests: CURDTestCase {
+class CURDTestCase: WCDBTestCase {
+    
+    var database: Database!
+    lazy var preInsertedObjects: [CRUDObject] = {
+        let object1 = CRUDObject()
+        object1.variable1 = 1
+        object1.variable2 = "object1"
+        let object2 = CRUDObject()
+        object2.variable1 = 2
+        object2.variable2 = "object2"
+        return [object1, object2]
+    }()
+    
+    override func setUp() {
+        super.setUp()
+        database = Database(withFileURL: self.recommendedPath)
+        
+        XCTAssertNoThrow(try database.create(table: CRUDObject.name, of: CRUDObject.self))
+        
+        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, into: CRUDObject.name))
+    }
 }

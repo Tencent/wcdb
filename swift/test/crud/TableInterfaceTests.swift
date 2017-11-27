@@ -58,7 +58,7 @@ class TableInterfaceTests: WCDBTestCase {
         let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
-        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL)")
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL)")
     }
 
     class IndexObject: CodableTable, Named {
@@ -177,7 +177,7 @@ class TableInterfaceTests: WCDBTestCase {
         let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
-        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL, newColumn INTEGER)")
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL, newColumn INTEGER)")
     }
     
     func testDropTable() {
@@ -228,7 +228,7 @@ class TableInterfaceTests: WCDBTestCase {
         let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
-        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(aString TEXT, anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, aData BLOB, anInt64 INTEGER, aDouble REAL, newColumn INTEGER)")
+        XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL, newColumn INTEGER)")
     }
     
     

@@ -21,13 +21,5 @@
 import XCTest
 import WCDB
 
-class ChainCallTests: WCDBTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class ChainCallTests: CURDTestCase {
 }

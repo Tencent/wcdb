@@ -21,13 +21,15 @@
 import XCTest
 import WCDB
 
-class TransactionTests: WCDBTestCase {
-
-    override func setUp() {
-        super.setUp()
+class TransactionTests: CURDTestCase {
+    
+    func testCommitTransaction() {
+        
     }
     
-    override func tearDown() {
-        super.tearDown()
+    func testRollbackTransaction() {
+        
     }
+    
+    
 }
