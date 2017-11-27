@@ -47,6 +47,6 @@ class StatementSelectTests: WCDBTestCase {
 
         WINQAssertEqual(StatementSelect().select(column1).from(table1).limit(from: 1, to: 2), "SELECT column1 FROM table1 LIMIT 1, 2")
 
-        WINQAssertEqual(StatementSelect().select(column1).from(table1).offset(3), "SELECT column1 FROM table1 OFFSET 3")
+        WINQAssertEqual(StatementSelect().select(column1).from(table1).limit(1, offset: 3), "SELECT column1 FROM table1 LIMIT 1 OFFSET 3")
     }
 }
