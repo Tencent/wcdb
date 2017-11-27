@@ -22,19 +22,31 @@ import XCTest
 import WCDB
 
 class WCDBTestCase: XCTestCase {
-    static let baseDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(String(describing: WCDBTestCase.self))
+    static let baseDirectory: URL = {
+        var url = FileManager.default.temporaryDirectory
+        url.appendPathComponent(String(describing: WCDBTestCase.self))
+        return url
+    }()
     
-    lazy var recommendedDirectory = URL(fileURLWithPath: self.className, relativeTo: WCDBTestCase.baseDirectory) .path
+    lazy var recommendedDirectory: URL = {
+        var url = WCDBTestCase.baseDirectory
+        url.appendPathComponent(self.className)
+        return url 
+    }()
     
-    lazy var recommendedPath = URL(fileURLWithPath: String(self.name.hash), relativeTo: URL(fileURLWithPath: recommendedDirectory)).path 
+    lazy var recommendedPath: URL = {
+        var url = recommendedDirectory
+        url.appendPathComponent(String(self.name.hash))
+        return url
+    }() 
     
     let fileManager = FileManager.default
     
     override func setUp() {
         super.setUp()
-        if fileManager.fileExists(atPath: recommendedDirectory) {
-            XCTAssertNoThrow(try fileManager.removeItem(atPath: recommendedDirectory))
+        if fileManager.fileExists(atPath: recommendedDirectory.path) {
+            XCTAssertNoThrow(try fileManager.removeItem(at: recommendedDirectory))
         }
-        XCTAssertNoThrow(try fileManager.createDirectory(atPath: recommendedDirectory, withIntermediateDirectories: true, attributes: nil))
+        XCTAssertNoThrow(try fileManager.createDirectory(at: recommendedDirectory, withIntermediateDirectories: true, attributes: nil))
     }    
 }

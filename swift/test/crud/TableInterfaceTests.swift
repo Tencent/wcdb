@@ -26,7 +26,7 @@ class TableInterfaceTests: WCDBTestCase {
     
     override func setUp() {
         super.setUp()
-        database = Database(withPath: self.recommendedPath)
+        database = Database(withFileURL: self.recommendedPath)
     }    
     
     class BaselineObject: CodableTable, Named {

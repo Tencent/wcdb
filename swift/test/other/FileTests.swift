@@ -26,12 +26,12 @@ class FileTests: WCDBTestCase {
 
     override func setUp() {
         super.setUp()
-        database = Database(withPath: self.recommendedPath)
+        database = Database(withFileURL: self.recommendedPath)
     }
     
     func testPaths() {
         //Give
-        let path = self.recommendedPath
+        let path = self.recommendedPath.path
         let expertedPaths = [path, path+"-wal", path+"-shm", path+"-journal", path+"-backup"]
         //Then
         XCTAssertEqual(database.paths.sorted(), expertedPaths.sorted())

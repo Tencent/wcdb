@@ -52,7 +52,7 @@ class TracerTests: WCDBTestCase {
         }
 
         //Give
-        let database = Database(withPath: self.recommendedPath)
+        let database = Database(withFileURL: self.recommendedPath)
 
         //When
         XCTAssertNoThrow(try database.getRows(on: Master.any, from: Master.tableName))
@@ -97,7 +97,7 @@ class TracerTests: WCDBTestCase {
         }
         
         //Give
-        let database = Database(withPath: self.recommendedPath)
+        let database = Database(withFileURL: self.recommendedPath)
         database.tag = expectedTag
         
         //When
@@ -135,7 +135,7 @@ class TracerTests: WCDBTestCase {
         }
         
         //Give
-        let database = Database(withPath: self.recommendedPath)
+        let database = Database(withFileURL: self.recommendedPath)
         database.close { 
             XCTAssertNoThrow(try database.removeFiles())
         }
