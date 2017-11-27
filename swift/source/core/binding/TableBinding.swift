@@ -39,15 +39,17 @@ public class TableBinding {
     
     let bindingClass: CodableTable.Type
     private let properties: [Accessor:Property]
-    lazy var allProperties: [Property] = Array(properties.values)
+    let allProperties: [Property]
     
     init<CodableTableType: CodableTable>(_ type: CodableTableType.Type) {
         self.bindingClass = type
-        self.properties = bindingClass.columnBindings().reduce(into: [AnyColumnBinding.AnyAccessor:Property]()) {
-            guard $1.class == type else {
+        (self.properties, self.allProperties) = bindingClass.columnBindings().reduce(into: ([AnyColumnBinding.AnyAccessor:Property](), [Property]())) { (result, columnBinding) in 
+            guard columnBinding.class == type else {
                 Error.abort("")
             }
-            $0[$1.accessor] = Property(with: $1)
+            let property = Property(with: columnBinding)
+            result.0[columnBinding.accessor] = property
+            result.1.append(property)
         }
     }
     
@@ -80,7 +82,7 @@ public class TableBinding {
         guard let virtualTableBinding = self.virtualTableBinding else {
             Error.abort("Virtual table binding is not defined")
         }
-        var moduleArguments = properties.values.reduce(into: [ModuleArgument]()) { 
+        var moduleArguments = allProperties.reduce(into: [ModuleArgument]()) { 
             $0.append(ModuleArgument(with: $1.columnBinding.columnDef))
         }
         if let constraintBindings = self.constraintBindings {
@@ -93,7 +95,7 @@ public class TableBinding {
     }
     
     public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
-        let columnDefList = properties.values.reduce(into: [ColumnDef]()) { 
+        let columnDefList = allProperties.reduce(into: [ColumnDef]()) {
             $0.append($1.columnBinding.columnDef)
         }
         let tableConstraints = constraintBindings?.reduce(into: [TableConstraint](), { 
