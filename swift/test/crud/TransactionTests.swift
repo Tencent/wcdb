@@ -21,10 +21,10 @@
 import XCTest
 import WCDB
 
-class TransactionTests: CURDTestCase {
+class TransactionTests: CRUDTestCase {
     
     func testCommitTransaction() {
-        
+
     }
     
     func testRollbackTransaction() {

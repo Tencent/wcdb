@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ConvenienceInterfaceTests: CURDTestCase {
+class ConvenienceInterfaceTests: CRUDTestCase {
 
     func testInsert() {
         //Give

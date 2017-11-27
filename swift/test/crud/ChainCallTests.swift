@@ -21,5 +21,5 @@
 import XCTest
 import WCDB
 
-class ChainCallTests: CURDTestCase {
+class ChainCallTests: CRUDTestCase {
 }

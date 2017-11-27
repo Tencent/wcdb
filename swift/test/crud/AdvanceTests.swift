@@ -21,5 +21,5 @@
 import XCTest
 
 //CoreStatement, Cipher, Config, redirect, ColumnCoding, FTS
-class AdvanceTests: CURDTestCase {
+class AdvanceTests: CRUDTestCase {
 }
