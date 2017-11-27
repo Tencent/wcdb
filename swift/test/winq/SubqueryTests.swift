@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class SubqueryTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class SubqueryTests: WCDBTestCase {
 
     func testSubquery() {
         //Give

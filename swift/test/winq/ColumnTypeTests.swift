@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ColumnTypeTests: XCTestCase {
+class ColumnTypeTests: WCDBTestCase {
 
     func testColumnType() {
         WINQAssertEqual(ColumnType.Integer32, "INTEGER")

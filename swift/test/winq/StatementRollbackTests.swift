@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementRollbackTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementRollbackTests: WCDBTestCase {
 
     func testStatementRollback() {
         WINQAssertEqual(StatementRollback().rollback(), "ROLLBACK")

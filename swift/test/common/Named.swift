@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-import XCTest
-import WCDB
+import Foundation
 
-class StatementPragmaTests: WCDBTestCase {
+protocol Named {
+    static var name: String {get}
+}
 
-    func testStatementPragma() {
-        WINQAssertEqual(StatementPragma().pragma(.pageSize), "PRAGMA page_size")
-        
-        WINQAssertEqual(StatementPragma().pragma(.secureDelete, to: true), "PRAGMA secure_delete=1")
-    }
+extension Named {
+    static var name: String {
+        return String(describing: Self.self)
+    } 
 }

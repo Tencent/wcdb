@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementCreateIndexTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementCreateIndexTests: WCDBTestCase {
 
     func testCreateIndex() {
         //Give

@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementVacuumTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementVacuumTests: WCDBTestCase {
 
     func testStatementVacuum() {
         WINQAssertEqual(StatementVacuum().vacuum(schema: "testSchema"), "VACUUM testSchema")

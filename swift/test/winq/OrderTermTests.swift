@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class OrderTermTests: XCTestCase {
+class OrderTermTests: WCDBTestCase {
 
     func testOrderTerm() {
         WINQAssertEqual(OrderTerm.Ascending, "ASC")

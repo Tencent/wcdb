@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class RepairTests: XCTestCase {
+class RepairTests: WCDBTestCase {
 
     override func setUp() {
         super.setUp()

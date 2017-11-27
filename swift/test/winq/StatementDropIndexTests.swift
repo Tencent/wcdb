@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDropIndexTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementDropIndexTests: WCDBTestCase {
 
     func testStatementDropIndex() {
         let index1 = "index1"

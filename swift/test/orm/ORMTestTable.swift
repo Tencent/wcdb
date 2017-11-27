@@ -62,33 +62,4 @@ extension ORMTestObject {
             ColumnBinding(\ORMTestObject.anOptionalEmptyEnum, alias: "aBuiltinStruct")
         ]
     }
-    
-//    //optional
-//    static func indexBindings() -> [IndexBinding]? {
-//        return [
-//            IndexBinding(withSubfix: "<#subfix name of this index#>", 
-//                         indexesBy: (\ORMTestObject.<#property 1#>).asIndex(orderBy: <#.Ascending or .Descending#>)),
-//            IndexBinding(withSubfix: "<#subfix name of this multiple indexes#>", 
-//                         indexesBy: (\ORMTestObject.<#property 2#>).asIndex(orderBy: <#.Ascending or .Descending#>), 
-//                                    (\ORMTestObject.<#property 3#>).asIndex(orderBy: <#.Ascending or .Descending#>))]
-//    }
-    
-//    //optional
-//    static func constraintBindings() -> [ConstraintBinding]? {
-//        return [
-//            MultiUniqueBinding(named: "<#multiple unique constraint name#>",
-//                               indexesBy: (\ORMTestObject.<#property 1#>).asIndex(), (\ORMTestObject.<#property 2#>).asIndex(), 
-//                               onConflict: .Fail),
-//            MultiPrimaryBinding(named: "<#multiple primary constraint name#>",
-//                               indexesBy: (\ORMTestObject.<#property 3#>).asIndex(), (\ORMTestObject.<#property 4#>).asIndex(),
-//                               onConflict: .Fail)]
-//    }
-    
-//    //optional
-//    static func virtualTableBinding() -> VirtualTableBinding? {
-//        return VirtualTableBinding(withModule: "<#module name#>", and: [
-//            ModuleArgument(left: "<#left argument#>", right: "<#right argument#>"),
-//            ModuleArgument(withTokenize: "<#tokenize#>")
-//            ])
-//    }
 }

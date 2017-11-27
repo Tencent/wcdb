@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementAttachTests: XCTestCase {
+class StatementAttachTests: WCDBTestCase {
 
     func testStatementAttachTests() {
         WINQAssertEqual(StatementAttach().attach("attach1", asSchema: "schema1"), "ATTACH 'attach1' AS schema1")

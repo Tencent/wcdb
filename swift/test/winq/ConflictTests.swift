@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ConflictTests: XCTestCase {
+class ConflictTests: WCDBTestCase {
 
     func testConflict() {
         WINQAssertEqual(Conflict.Rollback, "ROLLBACK")

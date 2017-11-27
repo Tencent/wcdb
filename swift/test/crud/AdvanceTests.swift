@@ -21,7 +21,7 @@
 import XCTest
 
 //CoreStatement, Cipher, Config, redirect, ColumnCoding, FTS
-class AdvanceTests: XCTestCase {
+class AdvanceTests: WCDBTestCase {
 
     override func setUp() {
         super.setUp()

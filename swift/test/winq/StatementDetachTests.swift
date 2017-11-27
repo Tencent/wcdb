@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDetachTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementDetachTests: WCDBTestCase {
 
     func testStatementDetach() {
         WINQAssertEqual(StatementDetach().detach(schema: "testSchema"), "DETACH testSchema")

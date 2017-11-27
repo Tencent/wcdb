@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementSavepointTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementSavepointTests: WCDBTestCase {
 
     func testStatementSavepoint() {
         WINQAssertEqual(StatementSavepoint().savepoint("savepoint1"), "SAVEPOINT savepoint1")

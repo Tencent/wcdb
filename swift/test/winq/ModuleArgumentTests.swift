@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ModuleArgumentTests: XCTestCase {
+class ModuleArgumentTests: WCDBTestCase {
 
     func testModuleArgument() {
         WINQAssertEqual(ModuleArgument(left: "left", right: "right"), "left=right")

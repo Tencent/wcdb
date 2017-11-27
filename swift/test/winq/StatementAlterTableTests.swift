@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementAlterTableTests: XCTestCase {
+class StatementAlterTableTests: WCDBTestCase {
 
     func testStatementAlterTable() {
         WINQAssertEqual(StatementAlterTable().alter(table: "table1").rename(to: "table2"), "ALTER TABLE table1 RENAME TO table2")

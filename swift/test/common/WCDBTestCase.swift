@@ -21,13 +21,20 @@
 import XCTest
 import WCDB
 
-class TransactionTests: WCDBTestCase {
-
+class WCDBTestCase: XCTestCase {
+    static let baseDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(String(describing: WCDBTestCase.self))
+    
+    lazy var recommendedDirectory = URL(fileURLWithPath: self.className, relativeTo: WCDBTestCase.baseDirectory) .path
+    
+    lazy var recommendedPath = URL(fileURLWithPath: String(self.name.hash), relativeTo: URL(fileURLWithPath: recommendedDirectory)).path 
+    
+    let fileManager = FileManager.default
+    
     override func setUp() {
         super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+        if fileManager.fileExists(atPath: recommendedDirectory) {
+            XCTAssertNoThrow(try fileManager.removeItem(atPath: recommendedDirectory))
+        }
+        XCTAssertNoThrow(try fileManager.createDirectory(atPath: recommendedDirectory, withIntermediateDirectories: true, attributes: nil))
+    }    
 }

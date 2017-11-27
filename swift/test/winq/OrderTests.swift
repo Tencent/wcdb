@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class OrderTests: XCTestCase {
+class OrderTests: WCDBTestCase {
 
     func testOrder() {
         //Give

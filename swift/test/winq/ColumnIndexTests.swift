@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ColumnIndexTests: XCTestCase {
+class ColumnIndexTests: WCDBTestCase {
 
     func testColumnIndex() {
         //Give

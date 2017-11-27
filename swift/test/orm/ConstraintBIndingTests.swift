@@ -21,9 +21,9 @@
 import XCTest
 import WCDB
 
-class ConstraintTests: XCTestCase {
+class ConstraintTests: WCDBTestCase {
 
-    class BaselineMultiPrimaryTestObject: WCDB.CodableTable {
+    class BaselineMultiPrimaryTestObject: WCDB.CodableTable, Named {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
@@ -33,13 +33,13 @@ class ConstraintTests: XCTestCase {
                 ColumnBinding(\BaselineMultiPrimaryTestObject.variable2, alias: "variable2")
             ]
         }
-        static let constraintName = String(describing: BaselineMultiPrimaryTestObject.self)+"Constraint"
+        static let constraintName = BaselineMultiPrimaryTestObject.name + "Constraint"
         static func constraintBindings() -> [ConstraintBinding]? {
             return [MultiPrimaryBinding(named: constraintName, indexesBy: \BaselineMultiPrimaryTestObject.variable1, \BaselineMultiPrimaryTestObject.variable2)]
         }
     }
     
-    class MultiPrimaryConflictTestObject: WCDB.CodableTable {
+    class MultiPrimaryConflictTestObject: WCDB.CodableTable, Named {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
@@ -49,13 +49,13 @@ class ConstraintTests: XCTestCase {
                 ColumnBinding(\MultiPrimaryConflictTestObject.variable2, alias: "variable2")
             ]
         }
-        static let constraintName = String(describing: MultiPrimaryConflictTestObject.self)+"Constraint"
+        static let constraintName = MultiPrimaryConflictTestObject.name + "Constraint"
         static func constraintBindings() -> [ConstraintBinding]? {
             return [MultiPrimaryBinding(named: constraintName, indexesBy: \MultiPrimaryConflictTestObject.variable1, \MultiPrimaryConflictTestObject.variable2, onConflict: .Replace)]
         }
     }
     
-    class MultiPrimaryCheckTestObject: WCDB.CodableTable {
+    class MultiPrimaryCheckTestObject: WCDB.CodableTable, Named {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
@@ -65,7 +65,7 @@ class ConstraintTests: XCTestCase {
                 ColumnBinding(\MultiPrimaryCheckTestObject.variable2, alias: "variable2")
             ]
         }
-        static let constraintName = String(describing: MultiPrimaryCheckTestObject.self)+"Constraint"
+        static let constraintName = MultiPrimaryCheckTestObject.name + "Constraint"
         static func constraintBindings() -> [ConstraintBinding]? {
             return [MultiPrimaryBinding(named: constraintName, indexesBy: \MultiPrimaryCheckTestObject.variable1, \MultiPrimaryCheckTestObject.variable2, check: \MultiPrimaryCheckTestObject.variable1 > 1)]
         }
@@ -79,7 +79,7 @@ class ConstraintTests: XCTestCase {
         ORMColumnBindingAssertEqual(MultiPrimaryCheckTestObject.self, "CREATE TABLE IF NOT EXISTS MultiPrimaryCheckTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT MultiPrimaryCheckTestObjectConstraint PRIMARY KEY(variable1, variable2) CHECK(variable1 > 1))")
     }
     
-    class BaselineMultiUniqueTestObject: WCDB.CodableTable {
+    class BaselineMultiUniqueTestObject: WCDB.CodableTable, Named {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
@@ -89,13 +89,13 @@ class ConstraintTests: XCTestCase {
                 ColumnBinding(\BaselineMultiUniqueTestObject.variable2, alias: "variable2")
             ]
         }
-        static let constraintName = String(describing: BaselineMultiUniqueTestObject.self)+"Constraint"
+        static let constraintName = BaselineMultiUniqueTestObject.name + "Constraint"
         static func constraintBindings() -> [ConstraintBinding]? {
             return [MultiUniqueBinding(named: constraintName, indexesBy: \BaselineMultiUniqueTestObject.variable1, \BaselineMultiUniqueTestObject.variable2)]
         }
     }
     
-    class MultiUniqueConflictTestObject: WCDB.CodableTable {
+    class MultiUniqueConflictTestObject: WCDB.CodableTable, Named {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
@@ -105,13 +105,13 @@ class ConstraintTests: XCTestCase {
                 ColumnBinding(\MultiUniqueConflictTestObject.variable2, alias: "variable2")
             ]
         }
-        static let constraintName = String(describing: MultiUniqueConflictTestObject.self)+"Constraint"
+        static let constraintName = MultiUniqueConflictTestObject.name + "Constraint"
         static func constraintBindings() -> [ConstraintBinding]? {
             return [MultiUniqueBinding(named: constraintName, indexesBy: \MultiUniqueConflictTestObject.variable1, \MultiUniqueConflictTestObject.variable2, onConflict: .Replace)]
         }
     }
     
-    class MultiUniqueCheckTestObject: WCDB.CodableTable {
+    class MultiUniqueCheckTestObject: WCDB.CodableTable, Named {
         var variable1: Int = 0        
         var variable2: Int = 0        
         required init() {}        
@@ -121,7 +121,7 @@ class ConstraintTests: XCTestCase {
                 ColumnBinding(\MultiUniqueCheckTestObject.variable2, alias: "variable2")
             ]
         }
-        static let constraintName = String(describing: MultiUniqueCheckTestObject.self)+"Constraint"
+        static let constraintName = MultiUniqueCheckTestObject.name + "Constraint"
         static func constraintBindings() -> [ConstraintBinding]? {
             return [MultiUniqueBinding(named: constraintName, indexesBy: \MultiUniqueCheckTestObject.variable1, \MultiUniqueCheckTestObject.variable2, check: \MultiUniqueCheckTestObject.variable1 > 1)]
         }

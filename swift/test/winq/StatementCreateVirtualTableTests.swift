@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementCreateVirtualTableTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementCreateVirtualTableTests: WCDBTestCase {
 
     func testStatementCreateVirtualTable() {
         //Give

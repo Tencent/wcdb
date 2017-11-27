@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementReindexTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementReindexTests: WCDBTestCase {
 
     func testStatementReindex() {
         WINQAssertEqual(StatementReindex().reindex("tableOrIndex"), "REINDEX tableOrIndex")

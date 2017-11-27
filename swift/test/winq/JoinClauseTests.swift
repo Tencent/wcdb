@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class JoinClauseTests: XCTestCase {
+class JoinClauseTests: WCDBTestCase {
     
     func generateJoinClause() -> JoinClause {
         return JoinClause(withTable: "testJoinClauseTable")

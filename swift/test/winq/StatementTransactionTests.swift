@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementTransactionTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementTransactionTests: WCDBTestCase {
 
     func testStatementTransaction() {
         WINQAssertEqual(StatementTransaction().begin(), "BEGIN")

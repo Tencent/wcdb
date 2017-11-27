@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementExplainTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementExplainTests: WCDBTestCase {
 
     func testStatementExplain() {
         let statement = StatementSelect().select(1).from("table1")

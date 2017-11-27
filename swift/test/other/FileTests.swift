@@ -21,30 +21,17 @@
 import XCTest
 import WCDB
 
-class FileTests: XCTestCase {
-    static let name = String(describing: FileTests.self)
-    static let fileURL = URL(fileURLWithPath: FileTests.name, relativeTo: FileManager.default.temporaryDirectory)
-
+class FileTests: WCDBTestCase {
     var database: Database!
 
     override func setUp() {
         super.setUp()
-        database = Database(withFileURL: FileTests.fileURL)
-        database.close { 
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
-    }
-    
-    override func tearDown() {
-        database.close { 
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
-        super.tearDown()
+        database = Database(withPath: self.recommendedPath)
     }
     
     func testPaths() {
         //Give
-        let path = FileTests.fileURL.path
+        let path = self.recommendedPath
         let expertedPaths = [path, path+"-wal", path+"-shm", path+"-journal", path+"-backup"]
         //Then
         XCTAssertEqual(database.paths.sorted(), expertedPaths.sorted())
@@ -52,8 +39,6 @@ class FileTests: XCTestCase {
     
     func testRemoveFiles() {
         //Give
-        let fileManager = FileManager.default
-
         for path in database.paths {
             if fileManager.fileExists(atPath: path) {
                 XCTAssertNoThrow(try fileManager.removeItem(atPath: path))
@@ -72,8 +57,6 @@ class FileTests: XCTestCase {
     
     func testMoveFiles() {
         //Give
-        let fileManager = FileManager.default
-
         let extraFile = URL(fileURLWithPath: "extraFile", relativeTo: fileManager.temporaryDirectory).path
         let paths = database.paths + [extraFile]
         for path in paths {
@@ -106,7 +89,6 @@ class FileTests: XCTestCase {
     
     func testGetFilesSize() {
         //Give
-        let fileManager = FileManager.default
         let data = "testGetFilesSize".data(using: .ascii)!
         let expectedFilesSize = data.count * database.paths.count
         for path in database.paths {

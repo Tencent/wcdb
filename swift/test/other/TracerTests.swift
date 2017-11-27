@@ -21,19 +21,13 @@
 import XCTest
 import WCDB
 
-class TracerTests: XCTestCase {
-    static let name = String(describing: TracerTests.self)
-    static let fileURL = URL(fileURLWithPath: TracerTests.name, relativeTo: FileManager.default.temporaryDirectory)
+class TracerTests: WCDBTestCase {
 
     override func setUp() {
         super.setUp()
         Database.globalTrace(ofPerformance: nil)
         Database.globalTrace(ofSQL: nil)
         Database.globalTrace(ofError: nil)
-    }
-    
-    override func tearDown() {
-        super.tearDown()
     }
     
     func testTraceSQL() {
@@ -49,7 +43,7 @@ class TracerTests: XCTestCase {
         }
 
         //Give
-        let database = Database(withFileURL: TracerTests.fileURL)
+        let database = Database(withPath: self.recommendedPath)
 
         //When
         XCTAssertNoThrow(try database.getRows(on: Master.any, from: Master.tableName))
@@ -94,7 +88,7 @@ class TracerTests: XCTestCase {
         }
         
         //Give
-        let database = Database(withFileURL: TracerTests.fileURL)
+        let database = Database(withPath: self.recommendedPath)
         database.tag = expectedTag
         
         //When
@@ -103,7 +97,7 @@ class TracerTests: XCTestCase {
         XCTAssertTrue(`catch`)
     }
     
-    class TracerObject: CodableTable {
+    class TracerObject: CodableTable, Named {
         var variable = 0
         required init() {}        
         var isAutoIncrement: Bool = false
@@ -116,14 +110,13 @@ class TracerTests: XCTestCase {
     
     func testTracePerformance() {
         //Give
-        let tableName = String(describing: TracerObject.self)
+        let tableName = TracerObject.name
         let expectedTag = 12352345
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
         
         //Then
         var `catch` = false
         Database.globalTrace { (tag, sqls, cost) in
-            print("sqksss \(sqls) cost \(cost)")
             if tag != nil && tag! == expectedTag && sqls.contains(where: { (arg) -> Bool in
                 return arg.key == expectedSQL
             }) {
@@ -133,7 +126,7 @@ class TracerTests: XCTestCase {
         }
         
         //Give
-        let database = Database(withFileURL: TracerTests.fileURL)
+        let database = Database(withPath: self.recommendedPath)
         database.close { 
             XCTAssertNoThrow(try database.removeFiles())
         }
@@ -145,7 +138,7 @@ class TracerTests: XCTestCase {
         template.isAutoIncrement = true
         let objects = Array<TracerObject>(repeating: template, count: 100000)
         XCTAssertNoThrow(try database.insert(objects: objects, into: tableName))
-        XCTAssertNoThrow(try database.close())
+        XCTAssertNoThrow(database.close())
         
         XCTAssertTrue(`catch`)
     }

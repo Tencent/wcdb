@@ -21,28 +21,15 @@
 import XCTest
 import WCDB
 
-class TableInterfaceTests: XCTestCase {
-    static let name = String(describing: TableInterfaceTests.self)
-    static let fileURL = URL(fileURLWithPath: TableInterfaceTests.name, relativeTo: FileManager.default.temporaryDirectory)
-    
+class TableInterfaceTests: WCDBTestCase {    
     var database: Database!
     
     override func setUp() {
         super.setUp()
-        database = Database(withFileURL: TableInterfaceTests.fileURL)
-        database.close { 
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
-    }
+        database = Database(withPath: self.recommendedPath)
+    }    
     
-    override func tearDown() {
-        database.close { 
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
-        super.tearDown()
-    }
-    
-    class BaselineObject: CodableTable {
+    class BaselineObject: CodableTable, Named {
         var anInt32: Int32 = -1
         var anInt64: Int64 = 17626545782784
         var aString: String = "string"
@@ -65,7 +52,7 @@ class TableInterfaceTests: XCTestCase {
     func testCreateTable() {
         do {
             //Give
-            let tableName = String(describing: BaselineObject.self)
+            let tableName = BaselineObject.name
             //When
             XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
             //Then
@@ -78,7 +65,7 @@ class TableInterfaceTests: XCTestCase {
         }catch {}
     }
 
-    class IndexObject: CodableTable {
+    class IndexObject: CodableTable, Named {
         var variable: Int32 = 0
         
         required init() {}        
@@ -96,7 +83,7 @@ class TableInterfaceTests: XCTestCase {
     func testCreateTableWithIndex() {
         do {
             //Give
-            let tableName = String(describing: IndexObject.self)
+            let tableName = IndexObject.name
             let indexName = tableName+"_index"
             //When
             XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
@@ -110,7 +97,7 @@ class TableInterfaceTests: XCTestCase {
         }catch {}
     }
 
-    class ConstraintObject: CodableTable {
+    class ConstraintObject: CodableTable, Named {
         var variable1: Int32 = 0
         var variable2: Int32 = 0
         
@@ -130,7 +117,7 @@ class TableInterfaceTests: XCTestCase {
     func testCreateTableWithConstraint() {
         do {
             //Give
-            let tableName = String(describing: ConstraintObject.self)
+            let tableName = ConstraintObject.name
             //When
             XCTAssertNoThrow(try database.create(table: tableName, of: ConstraintObject.self))
             //Then
@@ -143,7 +130,7 @@ class TableInterfaceTests: XCTestCase {
         }catch {}
     }
 
-    class VirtualTableObject: CodableTable {
+    class VirtualTableObject: CodableTable, Named {
         var variable1: Int32 = 0
         var variable2: Int32 = 0
         
@@ -161,7 +148,7 @@ class TableInterfaceTests: XCTestCase {
     func testCreateVirtualTable() {
         do {
             //Give
-            let tableName = String(describing: VirtualTableObject.self)
+            let tableName = VirtualTableObject.name
             database.setTokenizes(.WCDB)
             //When
             XCTAssertNoThrow(try database.create(virtualTable: tableName, of: VirtualTableObject.self))
@@ -175,7 +162,7 @@ class TableInterfaceTests: XCTestCase {
         }catch {}
     }
     
-    class AutoFitBaseLineObject: CodableTable {
+    class AutoFitBaseLineObject: CodableTable, Named {
         var anInt32: Int32 = -1
         var anInt64: Int64 = 17626545782784
         var aString: String = "string"
@@ -200,7 +187,7 @@ class TableInterfaceTests: XCTestCase {
     func testCreateTableAutoFitORM() {
         do {
             //Give
-            let tableName = String(describing: AutoFitBaseLineObject.self)
+            let tableName = AutoFitBaseLineObject.name
             XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
             //Then
             XCTAssertNoThrow(try database.create(table: tableName, of: AutoFitBaseLineObject.self))
@@ -216,7 +203,7 @@ class TableInterfaceTests: XCTestCase {
     func testDropTable() {
         do {
             //Give
-            let tableName = String(describing: BaselineObject.self)
+            let tableName = BaselineObject.name
             //When
             XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
             XCTAssertNoThrow(try database.drop(table: tableName))
@@ -231,7 +218,7 @@ class TableInterfaceTests: XCTestCase {
     func testDropIndex() {
         do {
             //Give
-            let tableName = String(describing: IndexObject.self)
+            let tableName = IndexObject.name
             let indexName = tableName+"_index"
             //When
             XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
@@ -247,7 +234,7 @@ class TableInterfaceTests: XCTestCase {
     func testManuallyCreateTable() {
         do {
             //Give
-            let tableName = String(describing: BaselineObject.self)
+            let tableName = BaselineObject.name
             let tableConstraint = TableConstraint(named: "BaselineObjectConstraint").check((\BaselineObject.anInt32)>0)
             let def1 = (\BaselineObject.anInt32).asDef(with: .Integer32)
             let def2 = (\BaselineObject.anInt64).asDef(with: .Integer64)
@@ -265,7 +252,7 @@ class TableInterfaceTests: XCTestCase {
     func testManuallyAddColumn() {
         do {
             //Give
-            let tableName = String(describing: BaselineObject.self)
+            let tableName = BaselineObject.name
             let def = Column(named: "newColumn").asDef(with: .Integer32)
             //When
             XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
@@ -284,7 +271,7 @@ class TableInterfaceTests: XCTestCase {
     func testManuallyCreateIndex() {
         do {
             //Give
-            let tableName = String(describing: BaselineObject.self)
+            let tableName = BaselineObject.name
             let indexName = tableName+"_index"
             let index1 = (\BaselineObject.aString).asIndex()
             let index2 = (\BaselineObject.aDouble).asIndex()
@@ -304,7 +291,7 @@ class TableInterfaceTests: XCTestCase {
     func testGetTable() {
         do {
             //Give
-            let tableName = String(describing: BaselineObject.self)
+            let tableName = BaselineObject.name
             var table: Table<BaselineObject>? = nil
             //When
             table = try database.getTable(named: tableName)

@@ -21,15 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDeleteTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+class StatementDeleteTests: WCDBTestCase {
     
     func generateStatementDelete() -> StatementDelete {
         let table1 = "table1"

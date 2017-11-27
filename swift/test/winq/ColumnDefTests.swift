@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ColumnDefTests: XCTestCase {
+class ColumnDefTests: WCDBTestCase {
     
     func generateColumnDef() -> ColumnDef {
         return ColumnDef(with: Column("testColumnDef"), and: .Integer32)
