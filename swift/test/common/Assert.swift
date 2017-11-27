@@ -61,14 +61,31 @@ func ORMVirtualTableBindingAssertEqual<CodableTableObject: CodableTable>(_ expre
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line) -> T {
-    var t: T!
+func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line, whenFailed failedValue: T) -> T {
     do {
-        t = try expression()
+        return try expression()
     }catch let error as WCDB.Error {
-        XCTFail(error.description, file: file, line: line)
+        XCTFail(error.description)
     }catch {
-        XCTFail(error.localizedDescription, file: file, line: line)
+        XCTFail(error.localizedDescription)
     }
-    return t
+    return failedValue
 }
+
+func WCDBAssertNoThrowReturned<T: OptionalRepresentable>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line) -> T {
+    return WCDBAssertNoThrowReturned(expression, file: file, line: line, whenFailed: T.`nil`)
+}
+
+protocol ArrayRepresentable {
+    associatedtype ElementType
+    init()
+}
+
+extension Array: ArrayRepresentable {
+    typealias ElementType = Element
+}
+
+func WCDBAssertNoThrowReturned<T: ArrayRepresentable>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line) -> T {
+    return WCDBAssertNoThrowReturned(expression, file: file, line: line, whenFailed: T())
+}
+
