@@ -294,7 +294,7 @@ extension Database {
 
 //Basic
 extension Database {
-    public func transaction() throws -> Transaction {
+    public func getTransaction() throws -> Transaction {
         let handle = try flowOut() 
         return Transaction(with: recyclableHandlePool, and: handle)
     }
