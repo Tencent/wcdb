@@ -22,12 +22,21 @@ import XCTest
 import WCDB
 
 class TracerTests: WCDBTestCase {
+    
+    func reset() {
+        Database.globalTrace(ofPerformance: nil)
+        Database.globalTrace(ofSQL: nil)
+        Database.resetGlobalTraceOfError()
+    }
 
     override func setUp() {
         super.setUp()
-        Database.globalTrace(ofPerformance: nil)
-        Database.globalTrace(ofSQL: nil)
-        Database.globalTrace(ofError: nil)
+        reset()
+    }
+    
+    override func tearDown() {
+        reset()
+        super.tearDown()
     }
     
     func testTraceSQL() {

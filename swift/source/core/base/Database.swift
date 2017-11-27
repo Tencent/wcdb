@@ -140,6 +140,9 @@ extension Database {
     public static func globalTrace(ofError: Void?) {
         Error.setReporter(nil)
     }
+    public static func resetGlobalTraceOfError() {
+        Error.resetReporter()
+    }
     
     private static let timedQueue = TimedQueue<String>(withDelay: 2)
     private static let checkpointThread = DispatchQueue(label: "WCDB-"+Database.DefaultConfigOrder.checkpoint.description)

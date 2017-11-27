@@ -282,7 +282,7 @@ public class Error: Swift.Error, CustomStringConvertible {
     static let threadedSlient = ThreadLocal<Bool>(defaultTo: false)
         
     public typealias Reporter = (Error)->Void
-    static private let reporter: Atomic<Reporter?> = Atomic({
+    static private let defaultReporter: Reporter = {
         switch $0.type {
         case Error.ErrorType.SQLiteGlobal:
             debugPrint("[WCDB][DEBUG] \($0.description)")
@@ -291,13 +291,17 @@ public class Error: Swift.Error, CustomStringConvertible {
         default:
             print("[WCDB][ERROR] \($0.description)")
         }
-    })
+    }
+    static private let reporter: Atomic<Reporter?> = Atomic(defaultReporter)
     
     static public func setReporter(_ reporter: @escaping Reporter) {
         Error.reporter.assign(reporter)
     }    
     static public func setReporter(_: Void?) {
         Error.reporter.assign(nil)
+    }
+    static public func resetReporter() {
+        Error.reporter.assign(defaultReporter)
     }
 
     private func report() {
