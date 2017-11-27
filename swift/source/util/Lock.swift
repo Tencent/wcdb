@@ -68,6 +68,29 @@ class Mutex: Lock {
     }
 }
 
+class RecursiveMutex: Lock {
+    var mutex = pthread_mutex_t()
+    
+    override init() {
+        var attr = pthread_mutexattr_t()
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+        pthread_mutex_init(&mutex, &attr);
+    }
+    
+    deinit {
+        pthread_mutex_destroy(&mutex)
+    }
+    
+    override func lock() {
+        pthread_mutex_lock(&mutex)
+    }
+    
+    override func unlock() {
+        pthread_mutex_unlock(&mutex)
+    }
+}
+
 class Spin: Lock {
     let unfair: UnfairLock?
     let mutex: Mutex?
