@@ -148,7 +148,7 @@ extension RowSelectInterface where Self: Core {
             if offset != nil {
                 rowSelect.limit(limit!, offset: offset!)
             }else {
-                rowSelect.limit(offset!)                
+                rowSelect.limit(limit!)                
             }
         }
         return try rowSelect.allRows()
