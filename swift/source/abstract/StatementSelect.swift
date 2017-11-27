@@ -97,10 +97,14 @@ public class StatementSelect: Statement {
     }
     
     @discardableResult
-    public func offset(_ expressionConvertibleOffset: ExpressionConvertible) -> StatementSelect {
-        let offset = expressionConvertibleOffset.asExpression()
-        if !offset.description.isEmpty {
-            description.append(" OFFSET \(offset.description)")
+    public func limit(_ expressionConvertibleLimit: ExpressionConvertible, offset expressionConvertibleOffset: ExpressionConvertible) -> StatementSelect {
+        let limit = expressionConvertibleLimit.asExpression()
+        if !limit.description.isEmpty {
+            description.append(" LIMIT \(limit.description)")
+            let offset = expressionConvertibleOffset.asExpression()
+            if !offset.description.isEmpty {
+                description.append(" OFFSET \(offset.description)")
+            }
         }
         return self
     }

@@ -137,18 +137,19 @@ public protocol RowSelectInterface {
 
 extension RowSelectInterface where Self: Core {
     public func getRows(on columnResultConvertiableList: [ColumnResultConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalRowXColumn {
-        var rowSelect = try RowSelect(with: self, results: columnResultConvertiableList, tables: [table], isDistinct: false)
+        let rowSelect = try RowSelect(with: self, results: columnResultConvertiableList, tables: [table], isDistinct: false)
         if condition != nil {
-            rowSelect = rowSelect.where(condition!)
+            rowSelect.where(condition!)
         }
         if orderList != nil {
-            rowSelect = rowSelect.order(by: orderList!)
+            rowSelect.order(by: orderList!)
         }
         if limit != nil {
-            rowSelect = rowSelect.limit(limit!)
-        }
-        if offset != nil {
-            rowSelect = rowSelect.offset(offset!)
+            if offset != nil {
+                rowSelect.limit(limit!, offset: offset!)
+            }else {
+                rowSelect.limit(offset!)                
+            }
         }
         return try rowSelect.allRows()
     }
@@ -166,35 +167,37 @@ extension RowSelectInterface where Self: Core {
     }
     
     public func getColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalColumn {
-        var rowSelect = try RowSelect(with: self, results: [result], tables: [table], isDistinct: false)
+        let rowSelect = try RowSelect(with: self, results: [result], tables: [table], isDistinct: false)
         if condition != nil {
-            rowSelect = rowSelect.where(condition!)
+            rowSelect.where(condition!)
         }
         if orderList != nil {
-            rowSelect = rowSelect.order(by: orderList!)
+            rowSelect.order(by: orderList!)
         }
         if limit != nil {
-            rowSelect = rowSelect.limit(limit!)
-        }
-        if offset != nil {
-            rowSelect = rowSelect.offset(offset!)
+            if offset != nil {
+                rowSelect.limit(limit!, offset: offset!)
+            }else {
+                rowSelect.limit(limit!)
+            }
         }
         return try rowSelect.allValues()
     }
     
     public func getDistinctColumn(on result: ColumnResultConvertible, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> FundamentalColumn {
-        var rowSelect = try RowSelect(with: self, results: [result], tables: [table], isDistinct: true)
+        let rowSelect = try RowSelect(with: self, results: [result], tables: [table], isDistinct: true)
         if condition != nil {
-            rowSelect = rowSelect.where(condition!)
+            rowSelect.where(condition!)
         }
         if orderList != nil {
-            rowSelect = rowSelect.order(by: orderList!)
+            rowSelect.order(by: orderList!)
         }
         if limit != nil {
-            rowSelect = rowSelect.limit(limit!)
-        }
-        if offset != nil {
-            rowSelect = rowSelect.offset(offset!)
+            if offset != nil {
+                rowSelect.limit(limit!, offset: offset!)
+            }else {
+                rowSelect.limit(limit!)
+            }
         }
         return try rowSelect.allValues()
     }
@@ -218,19 +221,20 @@ public protocol SelectInterface {
 }
 
 extension SelectInterface where Self: Core {
-    public func getObjects<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible] = Object.allProperties, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
-        var select = try Select(with: self, on: propertyConvertibleList, table: table, isDistinct: false)
+    public func getObjects<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
+        let select = try Select(with: self, on: propertyConvertibleList, table: table, isDistinct: false)
         if condition != nil {
-            select = select.where(condition!)
+            select.where(condition!)
         }
         if orderList != nil {
-            select = select.order(by: orderList!)
+            select.order(by: orderList!)
         }
         if limit != nil {
-            select = select.limit(limit!)
-        }
-        if offset != nil {
-            select = select.offset(offset!)
+            if offset != nil {
+                select.limit(limit!, offset: offset!)
+            }else {
+                select.limit(limit!)
+            }
         }
         return try select.allObjects()
     }
@@ -239,7 +243,7 @@ extension SelectInterface where Self: Core {
         return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
-    public func getObject<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible] = Object.allProperties, from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
+    public func getObject<Object: CodableTable>(on propertyConvertibleList: [PropertyConvertible], from table: String, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
         return try getObjects(on: propertyConvertibleList, from: table, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
 
