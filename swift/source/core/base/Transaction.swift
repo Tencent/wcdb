@@ -23,7 +23,7 @@ public class Transaction {
     private let recyclableHandlePool: RecyclableHandlePool
     private let recyclableHandle: RecyclableHandle
     public private(set) var isInTransaction: Bool = false
-    private var mutex: Mutex = Mutex()
+    private var mutex: RecursiveMutex = RecursiveMutex()
 
     init(with recyclableHandlePool: RecyclableHandlePool, and recyclableHandle: RecyclableHandle) {
         self.recyclableHandlePool = recyclableHandlePool
@@ -32,7 +32,7 @@ public class Transaction {
     
     deinit {
         if isInTransaction {
-            try! rollback()
+            try? rollback()
         }
     }
     
@@ -119,33 +119,28 @@ extension Transaction: Core {
     
     public func run(transaction: TransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(StatementTransaction().begin(.Immediate)) 
-        isInTransaction = true
+        try begin() 
         do {
             try transaction()
-            try handle.exec(StatementTransaction().commit()) 
+            try commit() 
         }catch let error {
-            try handle.exec(StatementTransaction().rollback()) 
+            try rollback() 
             throw error
         }
     }
     
     public func run(controlableTransaction: ControlableTransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(StatementTransaction().begin(.Immediate)) 
-        isInTransaction = true
+        try begin()
         do {
             if try controlableTransaction() {
-                try handle.exec(StatementTransaction().commit()) 
-                isInTransaction = false
+                try commit()
             }else { 
-                isInTransaction = false
-                try handle.exec(StatementTransaction().rollback()) 
+                try rollback()
             }
         }catch let error {
             if isInTransaction { 
-                isInTransaction = false
-                try handle.exec(StatementTransaction().rollback()) 
+                try rollback()
             }
             throw error
         }
