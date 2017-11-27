@@ -85,13 +85,21 @@ public typealias FundamentalRow = [FundamentalValue]
 
 public typealias FundamentalRowXColumn = [FundamentalRow]
 
-extension Array where Array.Element==Array<FundamentalValue> {
-    public subscript(row row: Array.Index, column column: Array.Index) -> FundamentalValue {
+extension Array where Element==Array<FundamentalValue> {
+    public subscript(row row: Array.Index, column column: Array<FundamentalValue>.Index) -> FundamentalValue {
         return self[row][column]
     }
     
     public subscript(row row: Array.Index) -> FundamentalColumn {
         return self[row]
+    }
+    
+    public func forEach(_ body: (_ row: Array.Index, _ column: Array<FundamentalValue>.Index, _ value: FundamentalValue) throws -> Void) rethrows {
+        for (rowIndex, row) in self.enumerated() {
+            for (columnIndex, value) in row.enumerated() {
+                try body(rowIndex, columnIndex, value)
+            }
+        }
     }
 }
 
