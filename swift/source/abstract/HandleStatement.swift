@@ -133,7 +133,7 @@ public class HandleStatement {
     }
     
     public var lastInsertedRowID: Int64 {
-        return sqlite3_last_insert_rowid(stmt)
+        return sqlite3_last_insert_rowid(sqlite3_db_handle(stmt))
     }
     
     public func finalize() throws {
