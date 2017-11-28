@@ -99,12 +99,10 @@ public class CoreStatement: CoreRepresentable {
     
     public func value(atIndex index: Int) -> Int32 {
         return handleStatement.columnValue(atIndex: index)
-    }
-    
+    }    
     public func value(atIndex index: Int) -> Int64 {
         return handleStatement.columnValue(atIndex: index)
-    }
-    
+    }    
     public func value(atIndex index: Int) -> String {
         return handleStatement.columnValue(atIndex: index)
     }
@@ -113,8 +111,7 @@ public class CoreStatement: CoreRepresentable {
     }
     public func value(atIndex index: Int) -> Data {
         return handleStatement.columnValue(atIndex: index)
-    }
-    
+    }    
     public func value(atIndex index: Int) -> FundamentalValue {
         switch handleStatement.columnType(atIndex: index) {
         case .Integer32:
@@ -137,9 +134,39 @@ public class CoreStatement: CoreRepresentable {
         }        
     }
     
-    public func value(byName name: String) -> FundamentalValue {
+    public func value(byName name: String) -> Int32? {
         guard let index = index(byName: name) else {
-            return FundamentalValue(nil)
+            return nil
+        }
+        return handleStatement.columnValue(atIndex: index)
+    }    
+    public func value(byName name: String) -> Int64? {
+        guard let index = index(byName: name) else {
+            return nil
+        }
+        return handleStatement.columnValue(atIndex: index)
+    }    
+    public func value(byName name: String) -> String? {
+        guard let index = index(byName: name) else {
+            return nil
+        }
+        return handleStatement.columnValue(atIndex: index)
+    }
+    public func value(byName name: String) -> Double? {
+        guard let index = index(byName: name) else {
+            return nil
+        }
+        return handleStatement.columnValue(atIndex: index)
+    }
+    public func value(byName name: String) -> Data? {
+        guard let index = index(byName: name) else {
+            return nil
+        }
+        return handleStatement.columnValue(atIndex: index)
+    }
+    public func value(byName name: String) -> FundamentalValue? {
+        guard let index = index(byName: name) else {
+            return nil
         }
         return value(atIndex: index)
     }
