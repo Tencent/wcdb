@@ -29,19 +29,23 @@ public class Select: SelectBase {
         }
         self.properties = propertyConvertibleList.asProperties()
         super.init(with: core)
-        statementSelect.select(distinct: isDistinct, properties).from(table)
+        statement.select(distinct: isDistinct, properties).from(table)
     }
     
     public func nextObject<Object: CodableTable>() throws -> Object? {
         guard properties.first!.columnBinding.`class` is Object.Type else {
             Error.abort("")
         }
-        try next()
+        guard try next() else {
+            return nil
+        }        
         return try extract(from: properties)
     }
     
     public func nextObject() throws -> Any? {
-        try next()
+        guard try next() else {
+            return nil
+        }         
         return try extract(from: properties)
     }
     

@@ -51,14 +51,20 @@ public class Delete: CoreRepresentable {
     }
     
     @discardableResult
+    public func limit(from: Limit, to: Limit) -> Delete {
+        statement.limit(from: from, to: to)
+        return self
+    }
+    
+    @discardableResult
     public func limit(_ limit: Limit) -> Delete {
         statement.limit(limit)
         return self
     }
     
     @discardableResult
-    public func offset(_ offset: Offset) -> Delete {
-        statement.offset(offset)
+    public func limit(_ limit: Limit, offset: Offset) -> Delete {
+        statement.limit(limit, offset: offset)
         return self
     }
     

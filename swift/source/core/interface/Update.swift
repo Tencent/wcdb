@@ -50,8 +50,20 @@ public class Update : CoreRepresentable {
     }
     
     @discardableResult
+    public func order(by orderList: OrderBy...) -> Update {
+        statement.order(by: orderList) 
+        return self
+    }
+    
+    @discardableResult
     public func order(by orderList: [OrderBy]) -> Update {
         statement.order(by: orderList) 
+        return self
+    }
+    
+    @discardableResult
+    public func limit(from: Limit, to: Limit) -> Update {
+        statement.limit(from: from, to: to)
         return self
     }
     
@@ -62,11 +74,11 @@ public class Update : CoreRepresentable {
     }
     
     @discardableResult
-    public func offset(_ offset: Offset) -> Update {
-        statement.offset(offset)
+    public func limit(_ limit: Limit, offset: Offset) -> Update {
+        statement.limit(limit, offset: offset)
         return self
     }
-    
+   
     public func execute(with object: CodableTable) throws {
         let coreStatement = try core.prepare(statement)
         for (index, property) in properties.enumerated() {

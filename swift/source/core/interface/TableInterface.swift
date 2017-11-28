@@ -69,9 +69,11 @@ extension UpdateTableInterface where Self: TableBase {
         }
         if limit != nil {
             update.limit(limit!)
-        }
-        if offset != nil {
-            update.offset(offset!)
+            if offset != nil {
+                update.limit(limit!, offset: offset!)
+            }else {
+                update.limit(limit!)
+            }
         }
         return try update.execute(with: object)
     }
@@ -94,9 +96,11 @@ extension UpdateTableInterface where Self: TableBase {
         }
         if limit != nil {
             update.limit(limit!)
-        }
-        if offset != nil {
-            update.offset(offset!)
+            if offset != nil {
+                update.limit(limit!, offset: offset!)
+            }else {
+                update.limit(limit!)
+            }
         }
         return try update.execute(with: row)
     }
@@ -117,9 +121,11 @@ extension DeleteTableInterface where Self: TableBase {
         }
         if limit != nil {
             delete.limit(limit!)
-        }
-        if offset != nil {
-            delete.offset(offset!)
+            if offset != nil {
+                delete.limit(limit!, offset: offset!)
+            }else {
+                delete.limit(limit!)
+            }
         }
         return try delete.execute()
     }

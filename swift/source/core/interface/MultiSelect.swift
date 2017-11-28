@@ -32,11 +32,13 @@ public class MultiSelect: SelectBase {
         }
         self.properties = propertyConvertibleList.asProperties()
         super.init(with: core)
-        statementSelect.select(distinct: isDistinct, properties).from(tables)
+        statement.select(distinct: isDistinct, properties).from(tables)
     }
     
     public func nextMultiObject() throws -> [String:CodableTable]? {
-        try next()
+        guard try next() else {
+            return nil
+        }
         return try extractMultiObject(from: properties)
     }
     

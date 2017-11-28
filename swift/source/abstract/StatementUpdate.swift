@@ -95,10 +95,14 @@ public class StatementUpdate: Statement {
     }
     
     @discardableResult
-    public func offset(_ expressionConvertibleOffset: ExpressionConvertible) -> StatementUpdate {
-        let offset = expressionConvertibleOffset.asExpression()
-        if !offset.description.isEmpty {
-            description.append(" OFFSET \(offset.description)")
+    public func limit(_ expressionConvertibleLimit: ExpressionConvertible, offset expressionConvertibleOffset: ExpressionConvertible) -> StatementUpdate {
+        let limit = expressionConvertibleLimit.asExpression()
+        if !limit.description.isEmpty {
+            description.append(" LIMIT \(limit.description)")
+            let offset = expressionConvertibleOffset.asExpression()
+            if !offset.description.isEmpty {
+                description.append(" OFFSET \(offset.description)")
+            }
         }
         return self
     }

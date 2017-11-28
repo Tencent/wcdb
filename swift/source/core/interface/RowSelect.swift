@@ -29,11 +29,13 @@ public class RowSelect : SelectBase {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Empty table")
         }
         super.init(with: core)
-        statementSelect.select(distinct: isDistinct, columnResultConvertibleList).from(tables)
+        statement.select(distinct: isDistinct, columnResultConvertibleList).from(tables)
     }
     
     public func nextRow() throws -> FundamentalRow? {
-        try next()
+        guard try next() else {
+            return nil
+        }         
         return try extract()
     }
     
@@ -45,8 +47,10 @@ public class RowSelect : SelectBase {
         return rows
     }
     
-    public func nextValue() throws -> FundamentalValue {
-        try next()
+    public func nextValue() throws -> FundamentalValue? {
+        guard try next() else {
+            return nil
+        }
         return try extract(atIndex: 0)
     }
     

@@ -22,7 +22,7 @@ import Foundation
 
 public class SelectBase: CoreRepresentable {
     var core: Core
-    let statementSelect: StatementSelect = StatementSelect()
+    let statement: StatementSelect = StatementSelect()
     private var optionalCoreStatement: CoreStatement? = nil
     
     init(with core: Core) {
@@ -31,7 +31,7 @@ public class SelectBase: CoreRepresentable {
     
     func lazyCoreStatement() throws -> CoreStatement {
         if optionalCoreStatement == nil {
-            optionalCoreStatement = try core.prepare(statementSelect)
+            optionalCoreStatement = try core.prepare(statement)
         }
         return optionalCoreStatement!
     }
@@ -45,7 +45,7 @@ public class SelectBase: CoreRepresentable {
     
     @discardableResult
     public func `where`(_ condition: Condition) -> Self {
-        statementSelect.where(condition)
+        statement.where(condition)
         return self
     }
     
@@ -56,25 +56,25 @@ public class SelectBase: CoreRepresentable {
     
     @discardableResult
     public func order(by orderConvertibleList: [OrderBy]) -> Self {
-        statementSelect.order(by: orderConvertibleList)
+        statement.order(by: orderConvertibleList)
         return self
     }
     
     @discardableResult
     public func limit(from expressionConvertibleFrom: Limit, to expressionConvertibleTo: Limit) -> Self {
-        statementSelect.limit(from: expressionConvertibleFrom, to: expressionConvertibleTo)
+        statement.limit(from: expressionConvertibleFrom, to: expressionConvertibleTo)
         return self
     }
     
     @discardableResult
     public func limit(_ expressionConvertibleLimit: Limit) -> Self {
-        statementSelect.limit(expressionConvertibleLimit)
+        statement.limit(expressionConvertibleLimit)
         return self
     }
     
     @discardableResult
     public func limit(_ expressionConvertibleLimit: Limit, offset expressionConvertibleOffset: Offset) -> Self {
-        statementSelect.limit(expressionConvertibleOffset, offset: expressionConvertibleOffset)
+        statement.limit(expressionConvertibleOffset, offset: expressionConvertibleOffset)
         return self
     }
     
@@ -85,13 +85,13 @@ public class SelectBase: CoreRepresentable {
     
     @discardableResult
     public func group(by expressionConvertibleGroupList: [GroupBy]) -> Self {
-        statementSelect.group(by: expressionConvertibleGroupList)
+        statement.group(by: expressionConvertibleGroupList)
         return self
     }
     
     @discardableResult
     public func having(_ expressionConvertibleHaving: Having) -> Self {
-        statementSelect.having(expressionConvertibleHaving)
+        statement.having(expressionConvertibleHaving)
         return self
     }
     
@@ -101,7 +101,7 @@ public class SelectBase: CoreRepresentable {
         do {
             return try self.lazyCoreStatement().step()
         }catch let error {
-            try! finalize()
+            try? finalize()
             throw error
         }
     }
