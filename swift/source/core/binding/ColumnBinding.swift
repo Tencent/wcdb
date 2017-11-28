@@ -216,8 +216,8 @@ public protocol ColumnBindingRepresentable {
     var columnBinding: AnyColumnBinding {get}
 }
 
-extension AnyColumnBinding {
-    var columnBinding: AnyColumnBinding {
+extension AnyColumnBinding: ColumnBindingRepresentable {
+    public var columnBinding: AnyColumnBinding {
         return self
     }
 }
