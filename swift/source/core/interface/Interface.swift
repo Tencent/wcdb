@@ -64,10 +64,6 @@ extension UpdateInterface where Self: Core {
             update.order(by: orderList!)
         }
         if limit != nil {
-            update.limit(limit!)
-        }
-        if limit != nil {
-            update.limit(limit!)
             if offset != nil {
                 update.limit(limit!, offset: offset!)
             }else {
@@ -94,7 +90,6 @@ extension UpdateInterface where Self: Core {
             update.order(by: orderList!)
         }
         if limit != nil {
-            update.limit(limit!)
             if offset != nil {
                 update.limit(limit!, offset: offset!)
             }else {
@@ -119,7 +114,6 @@ extension DeleteInterface where Self: Core {
             delete.order(by: orderList!)
         }
         if limit != nil {
-            delete.limit(limit!)
             if offset != nil {
                 delete.limit(limit!, offset: offset!)
             }else {
