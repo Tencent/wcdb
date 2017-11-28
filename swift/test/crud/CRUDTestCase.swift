@@ -40,6 +40,6 @@ class CRUDTestCase: WCDBTestCase {
         
         XCTAssertNoThrow(try database.create(table: CRUDObject.name, of: CRUDObject.self))
         
-        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, into: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: CRUDObject.name))
     }
 }

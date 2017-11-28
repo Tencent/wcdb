@@ -55,7 +55,7 @@ class TableInterfaceTests: WCDBTestCase {
         //When
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL)")
@@ -83,7 +83,7 @@ class TableInterfaceTests: WCDBTestCase {
         //When
         XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==indexName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==indexName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON IndexObject(variable)")
@@ -112,7 +112,7 @@ class TableInterfaceTests: WCDBTestCase {
         //When
         XCTAssertNoThrow(try database.create(table: tableName, of: ConstraintObject.self))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(variable1 INTEGER, variable2 INTEGER, CONSTRAINT ConstraintObjectConstraint UNIQUE(variable1, variable2))")
@@ -140,7 +140,7 @@ class TableInterfaceTests: WCDBTestCase {
         //When
         XCTAssertNoThrow(try database.create(virtualTable: tableName, of: VirtualTableObject.self))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE VIRTUAL TABLE VirtualTableObject USING fts3(variable1 INTEGER, variable2 INTEGER, tokenize=WCDB)")
@@ -174,7 +174,7 @@ class TableInterfaceTests: WCDBTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         //Then
         XCTAssertNoThrow(try database.create(table: tableName, of: AutoFitBaseLineObject.self))
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL, newColumn INTEGER)")
@@ -187,7 +187,7 @@ class TableInterfaceTests: WCDBTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         XCTAssertNoThrow(try database.drop(table: tableName))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNil(optionalObject)
     }
 
@@ -199,7 +199,7 @@ class TableInterfaceTests: WCDBTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
         XCTAssertNoThrow(try database.drop(index: indexName))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==indexName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==indexName))
         XCTAssertNil(optionalObject)
     }
 
@@ -211,7 +211,7 @@ class TableInterfaceTests: WCDBTestCase {
         let def2 = (\BaselineObject.anInt64).asDef(with: .Integer64)
         //When
         XCTAssertNoThrow(try database.create(table: tableName, with: def1, def2, and: [tableConstraint]))
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER, anInt64 INTEGER, CONSTRAINT BaselineObjectConstraint CHECK(anInt32 > 0))")
@@ -225,7 +225,7 @@ class TableInterfaceTests: WCDBTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         XCTAssertNoThrow(try database.addColumn(with: def, forTable: tableName))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==tableName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==tableName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE TABLE \(tableName)(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL, newColumn INTEGER)")
@@ -242,7 +242,7 @@ class TableInterfaceTests: WCDBTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         XCTAssertNoThrow(try database.create(index: indexName, with: index1, index2, forTable: tableName))
         //Then
-        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(from: Master.tableName, where: \Master.name==indexName))
+        let optionalObject: Master? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: Master.tableName, where: \Master.name==indexName))
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
         XCTAssertEqual(object.sql!, "CREATE INDEX \(indexName) ON \(tableName)(aString, aDouble)")

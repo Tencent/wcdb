@@ -55,7 +55,7 @@ class TracerTests: WCDBTestCase {
         let database = Database(withFileURL: self.recommendedPath)
 
         //When
-        XCTAssertNoThrow(try database.getRows(on: Master.any, from: Master.tableName))
+        XCTAssertNoThrow(try database.getRows(on: Master.any, fromTable: Master.tableName))
 
         XCTAssertTrue(pass)
     }
@@ -101,7 +101,7 @@ class TracerTests: WCDBTestCase {
         database.tag = expectedTag
         
         //When
-        XCTAssertThrowsError(try database.getRows(on: WCDB.Sequence.any, from: WCDB.Sequence.tableName))
+        XCTAssertThrowsError(try database.getRows(on: WCDB.Sequence.any, fromTable: WCDB.Sequence.tableName))
         
         XCTAssertTrue(`catch`)
     }
@@ -146,7 +146,7 @@ class TracerTests: WCDBTestCase {
         let template = TracerObject()
         template.isAutoIncrement = true
         let objects = Array<TracerObject>(repeating: template, count: 100000)
-        XCTAssertNoThrow(try database.insert(objects: objects, into: tableName))
+        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
         XCTAssertNoThrow(database.close())
         
         XCTAssertTrue(`catch`)
