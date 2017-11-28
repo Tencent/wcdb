@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class TableInterfaceTests: WCDBTestCase {    
+class TableTests: WCDBTestCase {    
     var database: Database!
     
     override func setUp() {

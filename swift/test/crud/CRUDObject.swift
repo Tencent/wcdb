@@ -21,13 +21,36 @@
 import Foundation
 import WCDB
 
-class CRUDObject: WCDB.CodableTable, Named, Equatable, Comparable {        
-    var variable1: Int = 0
-    var variable2: String = ""
+class CRUDObjectBase: Named, Hashable, Comparable {    
+    var hashValue: Int {
+        fatalError()
+    }
     
     required init() {}        
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
+    
+    func isSame(_ other: CRUDObjectBase) -> Bool {
+        fatalError()
+    }
+    
+    func isLessThan(_ other: CRUDObjectBase) -> Bool {
+        fatalError()
+    }
+    
+    static func ==(lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
+        return lhs.hashValue == rhs.hashValue
+    }
+
+    static func <(lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
+        return lhs.hashValue < rhs.hashValue
+    }
+}
+
+class CRUDObject: CRUDObjectBase, WCDB.CodableTable {        
+    var variable1: Int = 0
+    var variable2: String = ""
+    
     static func columnBindings() -> [AnyColumnBinding] {
         return [
             ColumnBinding(\CRUDObject.variable1, alias: "variable1", isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
@@ -35,14 +58,7 @@ class CRUDObject: WCDB.CodableTable, Named, Equatable, Comparable {
         ]
     }
     
-    static func ==(lhs: CRUDObject, rhs: CRUDObject) -> Bool {
-        return lhs.variable1==rhs.variable1 && lhs.variable2==rhs.variable2
-    }
-    
-    static func <(lhs: CRUDObject, rhs: CRUDObject) -> Bool {
-        guard lhs.variable1 != rhs.variable1 else {
-            return lhs.variable2 < lhs.variable2
-        }
-        return lhs.variable1 < rhs.variable1
+    override var hashValue: Int {
+        return (String(variable1)+variable2).hashValue
     }
 }

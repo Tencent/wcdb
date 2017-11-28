@@ -44,6 +44,6 @@ class StatementUpdateTests: WCDBTestCase {
 
         WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).limit(from: 1, to: 2), "UPDATE table1 SET column1=1 LIMIT 1, 2")
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).offset(3), "UPDATE table1 SET column1=1 OFFSET 3")
+        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).limit(1, offset: 3), "UPDATE table1 SET column1=1 LIMIT 1 OFFSET 3")
     }
 }

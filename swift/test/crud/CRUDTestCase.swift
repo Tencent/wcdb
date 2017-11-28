@@ -24,7 +24,7 @@ import WCDB
 class CRUDTestCase: WCDBTestCase {
     
     var database: Database!
-    lazy var preInsertedObjects: [CRUDObject] = {
+    var preInsertedObjects: [CRUDObject] = {
         let object1 = CRUDObject()
         object1.variable1 = 1
         object1.variable2 = "object1"
