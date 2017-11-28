@@ -106,14 +106,18 @@ public class Database {
 
 //Config
 extension Database {
-    public func setCipher(key: Data, pageSize: Int = 4096) {
-        handlePool.setConfig(named: DefaultConfigOrder.cipher.description, with: { (handle: Handle) throws in
-            let statementPragmaPageSize = StatementPragma().pragma(.pageSize, to: pageSize)
-            try handle.setCipher(key: key) 
-            try handle.exec(statementPragmaPageSize) 
-        })
+    public func setCipher(key optionalKey: Data?, pageSize: Int = 4096) {
+        if let key = optionalKey {
+            handlePool.setConfig(named: DefaultConfigOrder.cipher.description, with: { (handle: Handle) throws in
+                let statementPragmaPageSize = StatementPragma().pragma(.cipherPageSize, to: pageSize)
+                try handle.setCipher(key: key) 
+                try handle.exec(statementPragmaPageSize) 
+            })
+        }else {
+            handlePool.setConfig(named: DefaultConfigOrder.cipher.description, with: { (_) in })
+        }
     }
-
+    
     public typealias PerformanceTracer = Handle.PerformanceTracer
     public typealias SQLTracer = Handle.SQLTracer
 
@@ -166,6 +170,14 @@ extension Database {
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
             guard !handle.isReadonly else {
+                let statementJournalMode = StatementPragma().pragma(.journalMode)
+                let handleStatement = try handle.prepare(statementJournalMode)
+                try handleStatement.step()
+                let journalMode: String = handleStatement.columnValue(atIndex: 0)
+                try handleStatement.finalize()
+                if journalMode.caseInsensitiveCompare("WAL") == ComparisonResult.orderedSame {
+                    Error.abort("It is not possible to open read-only WAL databases. See also: http://www.sqlite.org/wal.html#readonly");
+                }
                 return
             }
             do {
