@@ -20,10 +20,6 @@
 
 import Foundation
 
-public protocol ColumnBindingRepresentable {
-    var columnBinding: AnyColumnBinding {get}
-}
-
 public class AnyColumnBinding : AnyBinding {
     typealias AnyAccessor = AnyKeyPath
     
@@ -215,3 +211,14 @@ public class ColumnBinding<ModelType: CodableTable, PropertyType: CodableColumn>
 //    }
 //}
 //
+
+public protocol ColumnBindingRepresentable {
+    var columnBinding: AnyColumnBinding {get}
+}
+
+extension AnyColumnBinding {
+    var columnBinding: AnyColumnBinding {
+        return self
+    }
+}
+

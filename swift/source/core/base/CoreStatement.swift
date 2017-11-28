@@ -54,7 +54,8 @@ public class CoreStatement: CoreRepresentable {
         }
     }
        
-    func bind(_ columnBinding: AnyColumnBinding, of object: CodableTable, toIndex index: Int) {
+    func bind(_ columnBindingRepresentable: ColumnBindingRepresentable, of object: CodableTable, toIndex index: Int) {
+        let columnBinding = columnBindingRepresentable.columnBinding
         switch columnBinding.columnType {
         case .Integer32:
             let value: Int32? = columnBinding.access(getFundamentalValueFromObject: object)
