@@ -230,13 +230,9 @@
 		23516A9D1FCEE81700B465DD /* BaselinePerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselinePerformanceTests.swift; sourceTree = "<group>"; };
 		23516A9F1FCEE81700B465DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		23516AB31FCEE82400B465DD /* BaselinePerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaselinePerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		23516AB41FCEE82400B465DD /* OtherTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OtherTests copy-Info.plist"; path = "/Users/sanhuazhang/Developer/Github/wcdb/swift/testcase/OtherTests copy-Info.plist"; sourceTree = "<absolute>"; };
 		23516AC51FCEE82700B465DD /* MultithreadPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MultithreadPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		23516AC61FCEE82700B465DD /* OtherTests copy 2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OtherTests copy 2-Info.plist"; path = "/Users/sanhuazhang/Developer/Github/wcdb/swift/testcase/OtherTests copy 2-Info.plist"; sourceTree = "<absolute>"; };
 		23516AD71FCEE82900B465DD /* CipherPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CipherPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		23516AD81FCEE82900B465DD /* OtherTests copy 3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OtherTests copy 3-Info.plist"; path = "/Users/sanhuazhang/Developer/Github/wcdb/swift/testcase/OtherTests copy 3-Info.plist"; sourceTree = "<absolute>"; };
 		23516AE91FCEE82A00B465DD /* OtherPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OtherPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		23516AEA1FCEE82A00B465DD /* OtherTests copy 4-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OtherTests copy 4-Info.plist"; path = "/Users/sanhuazhang/Developer/Github/wcdb/swift/testcase/OtherTests copy 4-Info.plist"; sourceTree = "<absolute>"; };
 		23D365671FC59CD7004B8390 /* ORMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E680B31FC6DBF400C54686 /* CRUDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRUDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E9D36C1FC81BCD00F55299 /* OtherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OtherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -500,10 +496,6 @@
 				23516A9C1FCEE81700B465DD /* BaselinePerformanceTests */,
 				23E9E0281FC4132D005DE71C /* Products */,
 				2377804E1FC414F600097D9F /* Frameworks */,
-				23516AB41FCEE82400B465DD /* OtherTests copy-Info.plist */,
-				23516AC61FCEE82700B465DD /* OtherTests copy 2-Info.plist */,
-				23516AD81FCEE82900B465DD /* OtherTests copy 3-Info.plist */,
-				23516AEA1FCEE82A00B465DD /* OtherTests copy 4-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
