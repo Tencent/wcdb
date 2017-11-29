@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-//class KeyPathTests: WCDBTestCase {
+//class KeyPathTests: BaseTestCase {
 //    
 //    func testKeyPathBinding() {
 //        XCTAssertEqual((\TestCodableTable.aBuiltinStruct).asProperty().name, "aBuiltinStruct")

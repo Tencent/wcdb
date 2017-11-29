@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementVacuumTests: WCDBTestCase {
+class StatementVacuumTests: BaseTestCase {
 
     func testStatementVacuum() {
         WINQAssertEqual(StatementVacuum().vacuum(schema: "testSchema"), "VACUUM testSchema")

@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDetachTests: WCDBTestCase {
+class StatementDetachTests: BaseTestCase {
 
     func testStatementDetach() {
         WINQAssertEqual(StatementDetach().detach(schema: "testSchema"), "DETACH testSchema")

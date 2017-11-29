@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDropIndexTests: WCDBTestCase {
+class StatementDropIndexTests: BaseTestCase {
 
     func testStatementDropIndex() {
         let index1 = "index1"

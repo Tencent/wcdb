@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class LiteralValueTests: WCDBTestCase {
+class LiteralValueTests: BaseTestCase {
 
     func testLiteralValue() {
         WINQAssertEqual(LiteralValue(1), "1")

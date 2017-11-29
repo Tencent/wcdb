@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class SubqueryTests: WCDBTestCase {
+class SubqueryTests: BaseTestCase {
 
     func testSubquery() {
         //Give

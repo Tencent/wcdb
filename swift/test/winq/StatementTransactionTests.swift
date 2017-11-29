@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementTransactionTests: WCDBTestCase {
+class StatementTransactionTests: BaseTestCase {
 
     func testStatementTransaction() {
         WINQAssertEqual(StatementTransaction().begin(), "BEGIN")

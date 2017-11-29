@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class RepairTests: WCDBTestCase {
+class RepairTests: BaseTestCase {
     
     class RepairObject: WCDB.CodableTable, Named, Equatable, Comparable {
         var variable1: Int = 0

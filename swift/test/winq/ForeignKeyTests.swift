@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ForeignKeyTests: WCDBTestCase {
+class ForeignKeyTests: BaseTestCase {
     
     func generateForeignKey() -> ForeignKey {
         return ForeignKey(withForeignTable: "testForeignKeyTable", andColumnNames: "column1", "column2")

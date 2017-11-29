@@ -22,10 +22,22 @@ import Foundation
 
 protocol Named {
     static var name: String {get}
+    var className: String {get}
 }
 
 extension Named {
     static var name: String {
         return String(describing: Self.self)
     } 
+    var className: String {
+        return Self.name
+    }
+}
+
+extension URL {
+    func urlByAppendingPathComponent(_ pathComponent: String) -> URL {
+        var url = self
+        url.appendPathComponent(pathComponent)
+        return url
+    }
 }

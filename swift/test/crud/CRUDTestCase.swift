@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class CRUDTestCase: WCDBTestCase {
+class CRUDTestCase: BaseTestCase {
     
     var database: Database!
     let preInsertedObjects: [CRUDObject] = {

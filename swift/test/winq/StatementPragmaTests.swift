@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementPragmaTests: WCDBTestCase {
+class StatementPragmaTests: BaseTestCase {
 
     func testStatementPragma() {
         WINQAssertEqual(StatementPragma().pragma(.pageSize), "PRAGMA page_size")

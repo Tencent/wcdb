@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class TableConstraintTests: WCDBTestCase {
+class TableConstraintTests: BaseTestCase {
 
     func generateTableConstraint() -> TableConstraint {
         let table1 = "table1"

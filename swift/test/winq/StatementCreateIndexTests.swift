@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementCreateIndexTests: WCDBTestCase {
+class StatementCreateIndexTests: BaseTestCase {
 
     func testCreateIndex() {
         //Give

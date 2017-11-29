@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ColumnTests: WCDBTestCase {
+class ColumnTests: BaseTestCase {
 
     func testColumn() {
         WINQAssertEqual(Column.any, "*")

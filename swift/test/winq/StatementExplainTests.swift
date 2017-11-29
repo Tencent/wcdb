@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementExplainTests: WCDBTestCase {
+class StatementExplainTests: BaseTestCase {
 
     func testStatementExplain() {
         let statement = StatementSelect().select(1).from("table1")

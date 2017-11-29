@@ -21,15 +21,15 @@
 import XCTest
 import WCDB
 
-class WCDBTestCase: XCTestCase {
+class BaseTestCase: XCTestCase, Named {
     static let baseDirectory: URL = {
-        var url = FileManager.default.temporaryDirectory
-        url.appendPathComponent(String(describing: WCDBTestCase.self))
+        var url = URL(fileURLWithPath: NSTemporaryDirectory())
+        url.appendPathComponent(String(describing: BaseTestCase.self))
         return url
     }()
     
     lazy var recommendedDirectory: URL = {
-        var url = WCDBTestCase.baseDirectory
+        var url = BaseTestCase.baseDirectory
         url.appendPathComponent(self.className)
         return url 
     }()

@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementCreateTableTests: WCDBTestCase {
+class StatementCreateTableTests: BaseTestCase {
 
     func testCreateTable() {
         //Give

@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class TracerTests: WCDBTestCase {
+class TracerTests: BaseTestCase {
     
     func reset() {
         Database.globalTrace(ofPerformance: nil)

@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDropTableTests: WCDBTestCase {
+class StatementDropTableTests: BaseTestCase {
 
     func testStatementDropTable() {
         let table1 = "table1"

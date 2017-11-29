@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ExpresssionTests: WCDBTestCase {
+class ExpresssionTests: BaseTestCase {
 
     func testExpression() {
         let integerExpression: Expression = 1

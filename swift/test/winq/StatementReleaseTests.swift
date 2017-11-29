@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementReleaseTests: WCDBTestCase {
+class StatementReleaseTests: BaseTestCase {
 
     func testStatementRelease() {
         WINQAssertEqual(StatementRelease().release(savepoint: "savepoint1"), "RELEASE savepoint1")

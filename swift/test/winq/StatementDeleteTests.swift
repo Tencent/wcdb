@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class StatementDeleteTests: WCDBTestCase {
+class StatementDeleteTests: BaseTestCase {
     
     func generateStatementDelete() -> StatementDelete {
         let table1 = "table1"

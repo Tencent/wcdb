@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class FileTests: WCDBTestCase {
+class FileTests: BaseTestCase {
     var database: Database!
 
     override func setUp() {
@@ -57,13 +57,13 @@ class FileTests: WCDBTestCase {
     
     func testMoveFiles() {
         //Give
-        let extraFile = URL(fileURLWithPath: "extraFile", relativeTo: fileManager.temporaryDirectory).path
+        let extraFile = self.recommendedDirectory.urlByAppendingPathComponent("extraFile").path
         let paths = database.paths + [extraFile]
         for path in paths {
             XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil)) 
         }
         
-        let newDirectory = URL(fileURLWithPath: "newDirectory", relativeTo: fileManager.temporaryDirectory).path
+        let newDirectory = self.recommendedDirectory.urlByAppendingPathComponent("newDirectory").path
         
         let newPaths = paths.map { (path) -> String in
             let fileName = URL(fileURLWithPath: path).lastPathComponent

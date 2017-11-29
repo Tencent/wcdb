@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class ColumnBindingTests: WCDBTestCase {
+class ColumnBindingTests: BaseTestCase {
     
     class BaselineTestObject: WCDB.CodableTable {
         var variable: Int = 0        
