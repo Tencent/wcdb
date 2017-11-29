@@ -81,23 +81,24 @@ public class AppleModule: Module {
     public typealias CursorInfo = AppleCursorInfo
     public static let name = "Apple"
     
-    public private(set) static var module = sqlite3_tokenizer_module(iVersion: 0, 
-                                                 xCreate: { (argc, argv, ppTokenizer) -> Int32 in
-                                                    return AppleModule.create(argc: argc, argv: argv, ppTokenizer: ppTokenizer)
+    public private(set) static var module = sqlite3_tokenizer_module(
+        iVersion: 0, 
+        xCreate: { (argc, argv, ppTokenizer) -> Int32 in
+            return AppleModule.create(argc: argc, argv: argv, ppTokenizer: ppTokenizer)
     }, 
-                                                 xDestroy: { (pTokenizer) -> Int32 in
-                                                    return AppleModule.destroy(pTokenizer: pTokenizer)
+        xDestroy: { (pTokenizer) -> Int32 in
+            return AppleModule.destroy(pTokenizer: pTokenizer)
     }, 
-                                                 xOpen: { (pTokenizer, pInput, nBytes, ppCursor) -> Int32 in
-                                                    return AppleModule.open(pTokenizer: pTokenizer, pInput: pInput, nBytes: nBytes, ppCursor: ppCursor)
+        xOpen: { (pTokenizer, pInput, nBytes, ppCursor) -> Int32 in
+            return AppleModule.open(pTokenizer: pTokenizer, pInput: pInput, nBytes: nBytes, ppCursor: ppCursor)
     }, 
-                                                 xClose: { (pCursor) -> Int32 in
-                                                    return AppleModule.close(pCursor: pCursor)
+        xClose: { (pCursor) -> Int32 in
+            return AppleModule.close(pCursor: pCursor)
     }, 
-                                                 xNext: { (pCursor, ppToken, pnBytes, piStartOffset, piEndOffset, piPosition) -> Int32 in
-                                                    return AppleModule.next(pCursor: pCursor, ppToken: ppToken, pnBytes: pnBytes, piStartOffset: piStartOffset, piEndOffset: piEndOffset, piPosition: piPosition)
+        xNext: { (pCursor, ppToken, pnBytes, piStartOffset, piEndOffset, piPosition) -> Int32 in
+            return AppleModule.next(pCursor: pCursor, ppToken: ppToken, pnBytes: pnBytes, piStartOffset: piStartOffset, piEndOffset: piEndOffset, piPosition: piPosition)
     }, 
-                                                 xLanguageid: nil)
+        xLanguageid: nil)
     
     public static let address = { () -> Data in 
         var pointer = UnsafeMutableRawPointer(&module)
