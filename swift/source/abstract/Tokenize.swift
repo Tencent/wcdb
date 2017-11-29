@@ -118,9 +118,9 @@ extension Module {
     public static func next(pCursor optionalCursorPointer: UnsafeMutablePointer<sqlite3_tokenizer_cursor>?, ppToken: UnsafeMutablePointer<UnsafePointer<Int8>?>?, pnBytes: UnsafeMutablePointer<Int32>?, piStartOffset: UnsafeMutablePointer<Int32>?, piEndOffset: UnsafeMutablePointer<Int32>?, piPosition: UnsafeMutablePointer<Int32>?) -> Int32 {
         if let cursorRawPointer = UnsafeMutableRawPointer(optionalCursorPointer) {
             let cursorPointer = cursorRawPointer.assumingMemoryBound(to: Cursor.self)
-            let cursorInfoPointer = cursorPointer.pointee.info.assumingMemoryBound(to: CursorInfo.self)
+            let cursorInfoPointer = Unmanaged<CursorInfo>.fromOpaque(cursorPointer.pointee.info)
             
-            let rc = cursorInfoPointer.pointee.step(pToken: &ppToken!.pointee, count: &pnBytes!.pointee, startOffset: &piStartOffset!.pointee, endOffset: &piEndOffset!.pointee, position: &piPosition!.pointee)
+            let rc = cursorInfoPointer.takeUnretainedValue().step(pToken: &ppToken!.pointee, count: &pnBytes!.pointee, startOffset: &piStartOffset!.pointee, endOffset: &piEndOffset!.pointee, position: &piPosition!.pointee)
             return rc
         }
         return SQLITE_NOMEM
