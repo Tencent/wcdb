@@ -153,10 +153,10 @@ extension Handle {
         var rc = SQLITE_OK
         if let key = optionalKey {
             key.withUnsafeBytes { (bytes: UnsafePointer<Int8>) -> Void in
-                rc = sqliterk_save_master(handle, path, bytes, Int32(key.count))
+                rc = sqliterk_save_master(handle, backupPath, bytes, Int32(key.count))
             }            
         }else {
-            rc = sqliterk_save_master(handle, path, nil, 0)
+            rc = sqliterk_save_master(handle, backupPath, nil, 0)
         }
         guard rc == SQLITERK_OK else {
             throw Error.reportRepair(path: path, operation: .SaveMaster, code: Int(rc))
