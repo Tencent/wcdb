@@ -44,20 +44,20 @@ public class AppleCursorInfo: CursorInfoBase {
         
         let range = CFStringTokenizerGetCurrentTokenRange(tokenizer)
         let maxBufferSize = CFStringGetMaximumSizeForEncoding(range.length, CFStringBuiltInEncodings.UTF8.rawValue)
-        if maxBufferSize > buffer.capacity {
+        if maxBufferSize > buffer.count {
             buffer.expand(toNewSize: maxBufferSize)
         }
         
         var used: Int = 0
-        let rangeExpression = input.index(input.startIndex, offsetBy: range.location)..<input.index(input.startIndex, offsetBy: range.location + range.length)
         let remaining = UnsafeMutablePointer<Range<String.Index>>.allocate(capacity: 1); defer {remaining.deallocate(capacity: 1)}
+        
         guard input.getBytes(&buffer, 
-                             maxLength: buffer.capacity, 
+                             maxLength: buffer.count, 
                              usedLength: &used, 
                              encoding: String.Encoding.utf8, 
-                             range: rangeExpression, 
+                             range: input.range(location: range.location, length: range.length), 
                              remaining: remaining) else {
-            return SQLITE_ERROR
+                                return SQLITE_ERROR
         }
         
         pToken = buffer.withUnsafeBytes { (bytes) -> UnsafePointer<Int8> in
