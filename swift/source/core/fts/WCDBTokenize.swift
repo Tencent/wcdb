@@ -112,7 +112,7 @@ public class WCDBCursorInfo: CursorInfoBase {
             for i in cursor+1..<cursor+cursorTokenLength {
                 guard i < inputLength else {
                     cursorTokenType = nil
-                    cursorTokenLength = inputLength-i
+                    cursorTokenLength = inputLength - i
                     return SQLITE_OK
                 }
                 unicode = (unicode << 6) | UInt16(UInt8(bitPattern: input.advanced(by: Int(i)).pointee) & 0x3F)
@@ -146,11 +146,11 @@ public class WCDBCursorInfo: CursorInfoBase {
     }
     
     func lemmatization(input: UnsafePointer<Int8>, inputLength: Int32) -> Int32 {
-        if inputLength > buffer.capacity {
+        if inputLength > buffer.count {
             buffer.expand(toNewSize: Int(inputLength))
         }
         for i in 0..<Int(inputLength) {
-            buffer[i] = UInt8(tolower(Int32(buffer[i])))
+            buffer[i] = UInt8(tolower(Int32(input.advanced(by: i).pointee)))
         }
         let optionalString = buffer.withUnsafeBytes { (bytes) -> String? in
             return String(bytes: bytes.baseAddress!.assumingMemoryBound(to: Int8.self), count: Int(inputLength), encoding: .ascii)
@@ -158,16 +158,16 @@ public class WCDBCursorInfo: CursorInfoBase {
         guard let string = optionalString else {
             return SQLITE_OK
         }
-        var lemma: String!
-        string.enumerateLinguisticTags(in: string.range(from: 0, to: string.count), 
+        var optionalLemma: String? = nil
+        string.enumerateLinguisticTags(in: string.startIndex..<string.endIndex, 
                                        scheme: NSLinguisticTagScheme.lemma.rawValue, 
                                        options: NSLinguisticTagger.Options.omitWhitespace,
                                        orthography: NSOrthography(dominantScript: "Latin", languageMap: [ "Latn": ["en"]]), 
                                        invoking: { (tag, _, _, stop) in
-                                        lemma = tag.lowercased()
+                                        optionalLemma = tag.lowercased()
                                         stop = true
         })
-        guard lemma != nil && lemma.count > 0 && lemma.caseInsensitiveCompare(string) != ComparisonResult.orderedSame else {
+        guard let lemma = optionalLemma, lemma.count > 0, lemma.caseInsensitiveCompare(string) != ComparisonResult.orderedSame else {
             return SQLITE_OK
         }
         lemmaBufferLength = Int32(lemma.count)
@@ -179,51 +179,50 @@ public class WCDBCursorInfo: CursorInfoBase {
     }
 
     func subTokensStep() {
-        startOffset = subTokensCursor
-        bufferLength = Int32(subTokensLengthArray[0])
-        if subTokensDoubleChar {
-            if subTokensLengthArray.count > 1 {
-                bufferLength += Int32(subTokensLengthArray[1])
-                subTokensDoubleChar = false
+        self.startOffset = self.subTokensCursor
+        self.bufferLength = Int32(self.subTokensLengthArray[0])
+        if self.subTokensDoubleChar {
+            if self.subTokensLengthArray.count > 1 {
+                self.bufferLength += Int32(self.subTokensLengthArray[1])
+                self.subTokensDoubleChar = false
             }else {
-                subTokensLengthArray.removeAll()
+                self.subTokensLengthArray.removeAll()
             }
         }else {
-            subTokensCursor += Int32(subTokensLengthArray[0])
-            subTokensLengthArray.removeFirst()
-            subTokensDoubleChar = true
+            self.subTokensCursor += Int32(subTokensLengthArray[0])
+            self.subTokensLengthArray.removeFirst()
+            self.subTokensDoubleChar = true
         }
-        endOffset = startOffset + bufferLength
+        self.endOffset = self.startOffset + self.bufferLength
     }
     
     public func step(pToken: inout UnsafePointer<Int8>?, count: inout Int32, startOffset: inout Int32, endOffset: inout Int32, position: inout Int32) -> Int32 {
         var rc = SQLITE_OK
         if self.position == 0{
             rc = cursorSetup()
-            guard rc != SQLITE_OK else {
+            guard rc == SQLITE_OK else {
                 return rc
             }
         }
         
-        if (lemmaBufferLength == 0) {
-            if subTokensLengthArray.isEmpty {
-                guard cursorTokenType != nil else {
+        if (self.lemmaBufferLength == 0) {
+            if self.subTokensLengthArray.isEmpty {
+                guard self.cursorTokenType != nil else {
                     return SQLITE_DONE
                 }
                 
                 //Skip symbol
-                while cursorTokenType == .basicMultilingualPlaneSymbol {
+                while self.cursorTokenType == .basicMultilingualPlaneSymbol {
                     rc = cursorStep()
-                    guard rc != SQLITE_OK else{
+                    guard rc == SQLITE_OK else{
                         return rc
                     }
                 }
 
-                guard cursorTokenType != nil else {
+                guard let tokenType = self.cursorTokenType else {
                     return SQLITE_DONE
                 }
                 
-                let tokenType = cursorTokenType!
                 switch tokenType {
                 case .basicMultilingualPlaneLetter:
                     fallthrough
@@ -231,11 +230,11 @@ public class WCDBCursorInfo: CursorInfoBase {
                     self.startOffset = self.cursor
                     repeat {
                         rc = cursorStep()
-                    }while(rc == SQLITE_OK && cursorTokenType == tokenType)
+                    }while(rc == SQLITE_OK && self.cursorTokenType == tokenType)
                     guard rc == SQLITE_OK else {
                         return rc
                     }
-                    self.endOffset = cursor
+                    self.endOffset = self.cursor
                     self.bufferLength = self.endOffset - self.startOffset
                 case .basicMultilingualPlaneOther:
                     fallthrough
@@ -255,12 +254,12 @@ public class WCDBCursorInfo: CursorInfoBase {
                 default: break
                 }
                 if tokenType == .basicMultilingualPlaneLetter {
-                    rc = lemmatization(input: input.advanced(by: Int(self.startOffset)), inputLength: self.bufferLength)
+                    rc = lemmatization(input: self.input.advanced(by: Int(self.startOffset)), inputLength: self.bufferLength)
                     guard rc == SQLITE_OK else {
                         return rc
                     }
                 }else {
-                    if self.bufferLength > self.buffer.capacity {
+                    if self.bufferLength > self.buffer.count {
                         self.buffer.expand(toNewSize: Int(self.bufferLength))
                     }
                     memcpy(&self.buffer, input.advanced(by: Int(self.startOffset)), Int(self.bufferLength))
