@@ -160,5 +160,9 @@ extension String {
     func range(from: Int, to: Int) -> Range<String.Index> {
         return self.index(self.startIndex, offsetBy: from)..<self.index(self.startIndex, offsetBy: to)
     }
+    
+    func range(location: Int, length: Int) -> Range<String.Index> {
+        return self.range(from: location, to: location + length)
+    }
 }
 
