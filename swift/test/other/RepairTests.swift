@@ -52,7 +52,7 @@ class RepairTests: WCDBTestCase {
 
     var database: Database!
     var pageSize: Int32!
-    var preInsertedObjects: [RepairObject] = {
+    let preInsertedObjects: [RepairObject] = {
         let object1 = RepairObject()
         object1.variable1 = 1
         object1.variable2 = "object1"
