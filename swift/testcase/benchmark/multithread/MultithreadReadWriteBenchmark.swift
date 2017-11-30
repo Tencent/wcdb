@@ -19,27 +19,44 @@
  */
 
 import XCTest
+import WCDB
 
-class BaselineReadBenchmark: BaseBenchmark {
+class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
     
     override func setUp() {
         super.setUp()
-        
+
         setUpWithPreCreateTable()
         
         setUpWithPreInsertObjects(count: config.readCount)
-
+        
+        setUpWithPreCreateTable(count: config.batchWriteCount)
+        
         clearCache()
         
         setUpDatabaseCache()
     }
 
-    func testBaselineRead() {
-        var results: [BenchmarkObject]? = nil
+    func testMultithreadRead() {
         let tableName = getTableName()
+        var results: [BenchmarkObject]? = nil
         self.measure {
-            results = try? database.getObjects(fromTable: tableName)
+            queue.async(group: group, execute: { 
+                results = try? self.database.getObjects(fromTable: tableName)
+            })
+            queue.async(group: group, execute: { 
+                do {
+                    try self.database.insert(objects: self.objects, intoTable: tableName)
+                }catch let error as WCDB.Error {
+                    XCTFail(error.description)
+                }catch let error {
+                    XCTFail(error.localizedDescription)
+                }
+            })
+            group.wait()
         }
         XCTAssertEqual(results?.count, config.readCount)
+        let count = try? database.getValue(on: Column.any, fromTable: tableName)
+        XCTAssertEqual(Int(count?.int32Value ?? 0), config.readCount + config.batchWriteCount)
     }
 }

@@ -20,26 +20,7 @@
 
 import XCTest
 
-class BaselineReadBenchmark: BaseBenchmark {
-    
-    override func setUp() {
-        super.setUp()
-        
-        setUpWithPreCreateTable()
-        
-        setUpWithPreInsertObjects(count: config.readCount)
-
-        clearCache()
-        
-        setUpDatabaseCache()
-    }
-
-    func testBaselineRead() {
-        var results: [BenchmarkObject]? = nil
-        let tableName = getTableName()
-        self.measure {
-            results = try? database.getObjects(fromTable: tableName)
-        }
-        XCTAssertEqual(results?.count, config.readCount)
-    }
+class BaseMultithreadBenchmark: BaseBenchmark {
+    let group = DispatchGroup()
+    let queue = DispatchQueue(label: BaseMultithreadBenchmark.name)
 }

@@ -27,6 +27,8 @@ class BaseBenchmark: BaseTestCase {
     var database: Database!
     lazy var randomGenerator = RandomData(withSeed: config.randomSeed)
     
+    var objects: [BenchmarkObject] = []
+    
     override func setUp() {
         super.setUp()
         let deviceInfo = DeviceInfo.current
@@ -36,5 +38,39 @@ class BaseBenchmark: BaseTestCase {
         }
         
         database = Database(withFileURL: self.recommendedPath)
+    }
+    
+    func getTableName(withIndex index: Int = 0) -> String {
+        return "\(BenchmarkObject.name)\(index)"
+    }
+    
+    func setUpWithPreCreateTable(count: Int = 1) {
+        XCTAssertNoThrow(try database.run(transaction: {
+            for i in 0..<count {
+                try database.create(table: getTableName(withIndex: i), of: BenchmarkObject.self)
+            }
+        }))
+    }
+    
+    func setUpWithPreInsertObjects(count: Int, intoIndexedTable index: Int = 0) {
+        var objects = [BenchmarkObject]()
+        for i in 0..<count {
+            objects.append(BenchmarkObject(withKey: i, and: randomGenerator.data(withLength: config.valueLength)))
+        }
+        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: getTableName(withIndex: index)))
+    }
+    
+    func setUpWithPreCreateObject(count: Int) {
+        for i in 0..<count {
+            objects.append(BenchmarkObject(withKey: i, and: randomGenerator.data(withLength: config.valueLength)))
+        }
+    }
+    
+    func setUpDatabaseCache() {
+        XCTAssertTrue(database.canOpen)
+    }
+    
+    func clearCache() {
+        database.close()
     }
 }

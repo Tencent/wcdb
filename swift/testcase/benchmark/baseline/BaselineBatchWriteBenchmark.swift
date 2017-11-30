@@ -19,27 +19,34 @@
  */
 
 import XCTest
+import WCDB
 
-class BaselineReadBenchmark: BaseBenchmark {
-    
+class BaselineBatchWriteBenchmark: BaseBenchmark {
+
     override func setUp() {
         super.setUp()
         
         setUpWithPreCreateTable()
         
-        setUpWithPreInsertObjects(count: config.readCount)
-
+        setUpWithPreCreateObject(count: config.batchWriteCount)
+        
         clearCache()
         
         setUpDatabaseCache()
     }
-
-    func testBaselineRead() {
-        var results: [BenchmarkObject]? = nil
+    
+    func testBaselineWrite() {
         let tableName = getTableName()
         self.measure {
-            results = try? database.getObjects(fromTable: tableName)
+            do {
+                try database.insert(objects: objects, intoTable: tableName)
+            }catch let error as WCDB.Error {
+                XCTFail(error.description)
+            }catch let error {
+                XCTFail(error.localizedDescription)
+            }
         }
-        XCTAssertEqual(results?.count, config.readCount)
+        let count = try? database.getValue(on: Column.any, fromTable: tableName)
+        XCTAssertEqual(Int(count?.int32Value ?? 0), config.batchWriteCount)
     }
 }

@@ -20,23 +20,25 @@
 
 import XCTest
 
-class BaselineReadBenchmark: BaseBenchmark {
+class CipherReadBenchmark: BaseBenchmark {
     
     override func setUp() {
         super.setUp()
+
+        database.setCipher(key: "cipher".data(using: .ascii)!)
         
         setUpWithPreCreateTable()
         
         setUpWithPreInsertObjects(count: config.readCount)
-
+        
         clearCache()
         
         setUpDatabaseCache()
     }
 
     func testBaselineRead() {
-        var results: [BenchmarkObject]? = nil
         let tableName = getTableName()
+        var results: [BenchmarkObject]? = nil
         self.measure {
             results = try? database.getObjects(fromTable: tableName)
         }

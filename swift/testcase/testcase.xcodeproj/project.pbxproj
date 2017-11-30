@@ -110,6 +110,19 @@
 		23516B791FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
 		23516B7A1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
 		23516B7B1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
+		23516B7D1FCFBC1000B465DD /* BaselineWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B7C1FCFBC1000B465DD /* BaselineWriteBenchmark.swift */; };
+		23516B7F1FCFBC4200B465DD /* BaselineBatchWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B7E1FCFBC4200B465DD /* BaselineBatchWriteBenchmark.swift */; };
+		23516B841FCFE32200B465DD /* CipherReadBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B801FCFE32100B465DD /* CipherReadBenchmark.swift */; };
+		23516B881FCFE32200B465DD /* CipherWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B811FCFE32200B465DD /* CipherWriteBenchmark.swift */; };
+		23516B8F1FCFE3EE00B465DD /* InitializationBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B8A1FCFE3ED00B465DD /* InitializationBenchmark.swift */; };
+		23516B931FCFE3EE00B465DD /* SyncWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B8B1FCFE3ED00B465DD /* SyncWriteBenchmark.swift */; };
+		23516B941FCFE4AA00B465DD /* BaseBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B751FCFAD4900B465DD /* BaseBenchmark.swift */; };
+		23516B951FCFE4AB00B465DD /* BaseBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B751FCFAD4900B465DD /* BaseBenchmark.swift */; };
+		23516B961FCFE4AB00B465DD /* BaseBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B751FCFAD4900B465DD /* BaseBenchmark.swift */; };
+		23516B981FCFE4D800B465DD /* MultithreadReadReadBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B971FCFE4D800B465DD /* MultithreadReadReadBenchmark.swift */; };
+		23516B9C1FCFE50300B465DD /* MultithreadReadWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B991FCFE50300B465DD /* MultithreadReadWriteBenchmark.swift */; };
+		23516BA01FCFE50300B465DD /* MultithreadWriteWriteBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B9A1FCFE50300B465DD /* MultithreadWriteWriteBenchmark.swift */; };
+		23516BA41FCFE8E700B465DD /* BaseMultithreadBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516BA31FCFE8E700B465DD /* BaseMultithreadBenchmark.swift */; };
 		23D365621FC59CD7004B8390 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
 		23E680AE1FC6DBF400C54686 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
 		23E9D3671FC81BCD00F55299 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
@@ -255,6 +268,16 @@
 		23516B6B1FCFA81600B465DD /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		23516B751FCFAD4900B465DD /* BaseBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBenchmark.swift; sourceTree = "<group>"; };
 		23516B771FCFAF0700B465DD /* BenchmarkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkObject.swift; sourceTree = "<group>"; };
+		23516B7C1FCFBC1000B465DD /* BaselineWriteBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineWriteBenchmark.swift; sourceTree = "<group>"; };
+		23516B7E1FCFBC4200B465DD /* BaselineBatchWriteBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineBatchWriteBenchmark.swift; sourceTree = "<group>"; };
+		23516B801FCFE32100B465DD /* CipherReadBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CipherReadBenchmark.swift; sourceTree = "<group>"; };
+		23516B811FCFE32200B465DD /* CipherWriteBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CipherWriteBenchmark.swift; sourceTree = "<group>"; };
+		23516B8A1FCFE3ED00B465DD /* InitializationBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitializationBenchmark.swift; sourceTree = "<group>"; };
+		23516B8B1FCFE3ED00B465DD /* SyncWriteBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncWriteBenchmark.swift; sourceTree = "<group>"; };
+		23516B971FCFE4D800B465DD /* MultithreadReadReadBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultithreadReadReadBenchmark.swift; sourceTree = "<group>"; };
+		23516B991FCFE50300B465DD /* MultithreadReadWriteBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultithreadReadWriteBenchmark.swift; sourceTree = "<group>"; };
+		23516B9A1FCFE50300B465DD /* MultithreadWriteWriteBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultithreadWriteWriteBenchmark.swift; sourceTree = "<group>"; };
+		23516BA31FCFE8E700B465DD /* BaseMultithreadBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMultithreadBenchmark.swift; sourceTree = "<group>"; };
 		23D365671FC59CD7004B8390 /* ORMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E680B31FC6DBF400C54686 /* CRUDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRUDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E9D36C1FC81BCD00F55299 /* OtherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OtherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -453,7 +476,6 @@
 				23516A3D1FCEE7CF00B465DD /* cipher */,
 				23516A3E1FCEE7CF00B465DD /* multithread */,
 				23516A3F1FCEE7CF00B465DD /* other */,
-				23516A401FCEE7CF00B465DD /* result */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -462,6 +484,8 @@
 			isa = PBXGroup;
 			children = (
 				23516B5B1FCFA23A00B465DD /* BaselineReadBenchmark.swift */,
+				23516B7C1FCFBC1000B465DD /* BaselineWriteBenchmark.swift */,
+				23516B7E1FCFBC4200B465DD /* BaselineBatchWriteBenchmark.swift */,
 			);
 			path = baseline;
 			sourceTree = "<group>";
@@ -469,6 +493,8 @@
 		23516A3D1FCEE7CF00B465DD /* cipher */ = {
 			isa = PBXGroup;
 			children = (
+				23516B801FCFE32100B465DD /* CipherReadBenchmark.swift */,
+				23516B811FCFE32200B465DD /* CipherWriteBenchmark.swift */,
 			);
 			path = cipher;
 			sourceTree = "<group>";
@@ -476,6 +502,10 @@
 		23516A3E1FCEE7CF00B465DD /* multithread */ = {
 			isa = PBXGroup;
 			children = (
+				23516B991FCFE50300B465DD /* MultithreadReadWriteBenchmark.swift */,
+				23516B9A1FCFE50300B465DD /* MultithreadWriteWriteBenchmark.swift */,
+				23516B971FCFE4D800B465DD /* MultithreadReadReadBenchmark.swift */,
+				23516BA31FCFE8E700B465DD /* BaseMultithreadBenchmark.swift */,
 			);
 			path = multithread;
 			sourceTree = "<group>";
@@ -483,15 +513,10 @@
 		23516A3F1FCEE7CF00B465DD /* other */ = {
 			isa = PBXGroup;
 			children = (
+				23516B8A1FCFE3ED00B465DD /* InitializationBenchmark.swift */,
+				23516B8B1FCFE3ED00B465DD /* SyncWriteBenchmark.swift */,
 			);
 			path = other;
-			sourceTree = "<group>";
-		};
-		23516A401FCEE7CF00B465DD /* result */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = result;
 			sourceTree = "<group>";
 		};
 		23516B601FCFA2DF00B465DD /* supporting */ = {
@@ -834,9 +859,11 @@
 				23516B5C1FCFA23A00B465DD /* BaselineReadBenchmark.swift in Sources */,
 				23516AA81FCEE82400B465DD /* Convenience.swift in Sources */,
 				23516B761FCFAD4900B465DD /* BaseBenchmark.swift in Sources */,
+				23516B7D1FCFBC1000B465DD /* BaselineWriteBenchmark.swift in Sources */,
 				23516B621FCFA31300B465DD /* Config.swift in Sources */,
 				23516AAB1FCEE82400B465DD /* BaseTestCase.swift in Sources */,
 				23516AAC1FCEE82400B465DD /* Assert.swift in Sources */,
+				23516B7F1FCFBC4200B465DD /* BaselineBatchWriteBenchmark.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -846,10 +873,15 @@
 			files = (
 				23516B791FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ABA1FCEE82700B465DD /* Convenience.swift in Sources */,
+				23516BA41FCFE8E700B465DD /* BaseMultithreadBenchmark.swift in Sources */,
 				23516B6D1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
+				23516B981FCFE4D800B465DD /* MultithreadReadReadBenchmark.swift in Sources */,
 				23516B631FCFA31300B465DD /* Config.swift in Sources */,
+				23516B941FCFE4AA00B465DD /* BaseBenchmark.swift in Sources */,
 				23516ABD1FCEE82700B465DD /* BaseTestCase.swift in Sources */,
+				23516B9C1FCFE50300B465DD /* MultithreadReadWriteBenchmark.swift in Sources */,
 				23516ABE1FCEE82700B465DD /* Assert.swift in Sources */,
+				23516BA01FCFE50300B465DD /* MultithreadWriteWriteBenchmark.swift in Sources */,
 				23516B681FCFA57000B465DD /* RandomData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -864,6 +896,9 @@
 				23516B641FCFA31300B465DD /* Config.swift in Sources */,
 				23516ACF1FCEE82900B465DD /* BaseTestCase.swift in Sources */,
 				23516AD01FCEE82900B465DD /* Assert.swift in Sources */,
+				23516B841FCFE32200B465DD /* CipherReadBenchmark.swift in Sources */,
+				23516B881FCFE32200B465DD /* CipherWriteBenchmark.swift in Sources */,
+				23516B951FCFE4AB00B465DD /* BaseBenchmark.swift in Sources */,
 				23516B691FCFA57000B465DD /* RandomData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -875,9 +910,12 @@
 				23516B7B1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ADE1FCEE82A00B465DD /* Convenience.swift in Sources */,
 				23516B6F1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
+				23516B8F1FCFE3EE00B465DD /* InitializationBenchmark.swift in Sources */,
 				23516B651FCFA31300B465DD /* Config.swift in Sources */,
 				23516AE11FCEE82A00B465DD /* BaseTestCase.swift in Sources */,
+				23516B931FCFE3EE00B465DD /* SyncWriteBenchmark.swift in Sources */,
 				23516AE21FCEE82A00B465DD /* Assert.swift in Sources */,
+				23516B961FCFE4AB00B465DD /* BaseBenchmark.swift in Sources */,
 				23516B6A1FCFA57000B465DD /* RandomData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
