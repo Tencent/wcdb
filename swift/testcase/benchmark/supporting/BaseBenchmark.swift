@@ -31,11 +31,6 @@ class BaseBenchmark: BaseTestCase {
     
     override func setUp() {
         super.setUp()
-        let deviceInfo = DeviceInfo.current
-        print("Device Info:\n\(deviceInfo)")
-        if deviceInfo.isBeingDebugged {
-            print("Note: Since this benchmark is done in debug mode, the result can't be trusted.")
-        }
         
         database = Database(withFileURL: self.recommendedPath)
     }

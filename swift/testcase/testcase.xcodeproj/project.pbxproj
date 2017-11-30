@@ -101,10 +101,6 @@
 		23516B681FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
 		23516B691FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
 		23516B6A1FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
-		23516B6C1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
-		23516B6D1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
-		23516B6E1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
-		23516B6F1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
 		23516B761FCFAD4900B465DD /* BaseBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B751FCFAD4900B465DD /* BaseBenchmark.swift */; };
 		23516B781FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
 		23516B791FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
@@ -265,7 +261,6 @@
 		23516B5B1FCFA23A00B465DD /* BaselineReadBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineReadBenchmark.swift; sourceTree = "<group>"; };
 		23516B611FCFA31300B465DD /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		23516B661FCFA57000B465DD /* RandomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomData.swift; sourceTree = "<group>"; };
-		23516B6B1FCFA81600B465DD /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		23516B751FCFAD4900B465DD /* BaseBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBenchmark.swift; sourceTree = "<group>"; };
 		23516B771FCFAF0700B465DD /* BenchmarkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkObject.swift; sourceTree = "<group>"; };
 		23516B7C1FCFBC1000B465DD /* BaselineWriteBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineWriteBenchmark.swift; sourceTree = "<group>"; };
@@ -524,7 +519,6 @@
 			children = (
 				23516B611FCFA31300B465DD /* Config.swift */,
 				23516B661FCFA57000B465DD /* RandomData.swift */,
-				23516B6B1FCFA81600B465DD /* DeviceInfo.swift */,
 				23516B751FCFAD4900B465DD /* BaseBenchmark.swift */,
 				23516B771FCFAF0700B465DD /* BenchmarkObject.swift */,
 			);
@@ -853,7 +847,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23516B6C1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
 				23516B671FCFA57000B465DD /* RandomData.swift in Sources */,
 				23516B781FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516B5C1FCFA23A00B465DD /* BaselineReadBenchmark.swift in Sources */,
@@ -874,7 +867,6 @@
 				23516B791FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ABA1FCEE82700B465DD /* Convenience.swift in Sources */,
 				23516BA41FCFE8E700B465DD /* BaseMultithreadBenchmark.swift in Sources */,
-				23516B6D1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
 				23516B981FCFE4D800B465DD /* MultithreadReadReadBenchmark.swift in Sources */,
 				23516B631FCFA31300B465DD /* Config.swift in Sources */,
 				23516B941FCFE4AA00B465DD /* BaseBenchmark.swift in Sources */,
@@ -892,7 +884,6 @@
 			files = (
 				23516B7A1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ACC1FCEE82900B465DD /* Convenience.swift in Sources */,
-				23516B6E1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
 				23516B641FCFA31300B465DD /* Config.swift in Sources */,
 				23516ACF1FCEE82900B465DD /* BaseTestCase.swift in Sources */,
 				23516AD01FCEE82900B465DD /* Assert.swift in Sources */,
@@ -909,7 +900,6 @@
 			files = (
 				23516B7B1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ADE1FCEE82A00B465DD /* Convenience.swift in Sources */,
-				23516B6F1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
 				23516B8F1FCFE3EE00B465DD /* InitializationBenchmark.swift in Sources */,
 				23516B651FCFA31300B465DD /* Config.swift in Sources */,
 				23516AE11FCEE82A00B465DD /* BaseTestCase.swift in Sources */,
@@ -1283,6 +1273,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D DEBUG -D WCDB_IOS";
+				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D DEBUG -D WCDB_IOS";
+				"OTHER_SWIFT_FLAGS[sdk=macosx*]" = "-D DEBUG -D WCDB_OSX";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphonesos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1350,6 +1343,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				"OTHER_SWIFT_FLAGS[sdk=iphoneos*]" = "-D DEBUG -D WCDB_IOS";
+				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-D DEBUG -D WCDB_IOS";
+				"OTHER_SWIFT_FLAGS[sdk=macosx*]" = "-D DEBUG -D WCDB_OSX";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphonesos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALID_ARCHS = "i386 x86_64 arm64";
