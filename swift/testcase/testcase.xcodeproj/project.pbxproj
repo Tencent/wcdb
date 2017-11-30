@@ -92,6 +92,24 @@
 		23516AE11FCEE82A00B465DD /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169EE1FCEE65F00B465DD /* BaseTestCase.swift */; };
 		23516AE21FCEE82A00B465DD /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		23516AE41FCEE82A00B465DD /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
+		23516B5C1FCFA23A00B465DD /* BaselineReadBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B5B1FCFA23A00B465DD /* BaselineReadBenchmark.swift */; };
+		23516B621FCFA31300B465DD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B611FCFA31300B465DD /* Config.swift */; };
+		23516B631FCFA31300B465DD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B611FCFA31300B465DD /* Config.swift */; };
+		23516B641FCFA31300B465DD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B611FCFA31300B465DD /* Config.swift */; };
+		23516B651FCFA31300B465DD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B611FCFA31300B465DD /* Config.swift */; };
+		23516B671FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
+		23516B681FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
+		23516B691FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
+		23516B6A1FCFA57000B465DD /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B661FCFA57000B465DD /* RandomData.swift */; };
+		23516B6C1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
+		23516B6D1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
+		23516B6E1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
+		23516B6F1FCFA81600B465DD /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B6B1FCFA81600B465DD /* DeviceInfo.swift */; };
+		23516B761FCFAD4900B465DD /* BaseBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B751FCFAD4900B465DD /* BaseBenchmark.swift */; };
+		23516B781FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
+		23516B791FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
+		23516B7A1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
+		23516B7B1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516B771FCFAF0700B465DD /* BenchmarkObject.swift */; };
 		23D365621FC59CD7004B8390 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
 		23E680AE1FC6DBF400C54686 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
 		23E9D3671FC81BCD00F55299 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231DEBF51FC4157800B4EF4B /* WCDB.framework */; };
@@ -227,12 +245,16 @@
 		23516A381FCEE7CF00B465DD /* StatementVacuumTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatementVacuumTests.swift; sourceTree = "<group>"; };
 		23516A391FCEE7CF00B465DD /* SubqueryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubqueryTests.swift; sourceTree = "<group>"; };
 		23516A3A1FCEE7CF00B465DD /* TableConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableConstraintTests.swift; sourceTree = "<group>"; };
-		23516A9D1FCEE81700B465DD /* BaselinePerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselinePerformanceTests.swift; sourceTree = "<group>"; };
-		23516A9F1FCEE81700B465DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		23516AB31FCEE82400B465DD /* BaselinePerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaselinePerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23516AC51FCEE82700B465DD /* MultithreadPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MultithreadPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23516AD71FCEE82900B465DD /* CipherPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CipherPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23516AE91FCEE82A00B465DD /* OtherPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OtherPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		23516B5B1FCFA23A00B465DD /* BaselineReadBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineReadBenchmark.swift; sourceTree = "<group>"; };
+		23516B611FCFA31300B465DD /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		23516B661FCFA57000B465DD /* RandomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomData.swift; sourceTree = "<group>"; };
+		23516B6B1FCFA81600B465DD /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		23516B751FCFAD4900B465DD /* BaseBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBenchmark.swift; sourceTree = "<group>"; };
+		23516B771FCFAF0700B465DD /* BenchmarkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkObject.swift; sourceTree = "<group>"; };
 		23D365671FC59CD7004B8390 /* ORMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E680B31FC6DBF400C54686 /* CRUDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRUDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E9D36C1FC81BCD00F55299 /* OtherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OtherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -426,6 +448,7 @@
 		23516A3B1FCEE7CF00B465DD /* benchmark */ = {
 			isa = PBXGroup;
 			children = (
+				23516B601FCFA2DF00B465DD /* supporting */,
 				23516A3C1FCEE7CF00B465DD /* baseline */,
 				23516A3D1FCEE7CF00B465DD /* cipher */,
 				23516A3E1FCEE7CF00B465DD /* multithread */,
@@ -438,6 +461,7 @@
 		23516A3C1FCEE7CF00B465DD /* baseline */ = {
 			isa = PBXGroup;
 			children = (
+				23516B5B1FCFA23A00B465DD /* BaselineReadBenchmark.swift */,
 			);
 			path = baseline;
 			sourceTree = "<group>";
@@ -470,13 +494,16 @@
 			path = result;
 			sourceTree = "<group>";
 		};
-		23516A9C1FCEE81700B465DD /* BaselinePerformanceTests */ = {
+		23516B601FCFA2DF00B465DD /* supporting */ = {
 			isa = PBXGroup;
 			children = (
-				23516A9D1FCEE81700B465DD /* BaselinePerformanceTests.swift */,
-				23516A9F1FCEE81700B465DD /* Info.plist */,
+				23516B611FCFA31300B465DD /* Config.swift */,
+				23516B661FCFA57000B465DD /* RandomData.swift */,
+				23516B6B1FCFA81600B465DD /* DeviceInfo.swift */,
+				23516B751FCFAD4900B465DD /* BaseBenchmark.swift */,
+				23516B771FCFAF0700B465DD /* BenchmarkObject.swift */,
 			);
-			path = BaselinePerformanceTests;
+			path = supporting;
 			sourceTree = "<group>";
 		};
 		2377804E1FC414F600097D9F /* Frameworks */ = {
@@ -493,7 +520,6 @@
 				23516A3B1FCEE7CF00B465DD /* benchmark */,
 				235169FB1FCEE7CF00B465DD /* test */,
 				2310C5FA1FCBB5D40030F3D3 /* common */,
-				23516A9C1FCEE81700B465DD /* BaselinePerformanceTests */,
 				23E9E0281FC4132D005DE71C /* Products */,
 				2377804E1FC414F600097D9F /* Frameworks */,
 			);
@@ -802,7 +828,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23516B6C1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
+				23516B671FCFA57000B465DD /* RandomData.swift in Sources */,
+				23516B781FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
+				23516B5C1FCFA23A00B465DD /* BaselineReadBenchmark.swift in Sources */,
 				23516AA81FCEE82400B465DD /* Convenience.swift in Sources */,
+				23516B761FCFAD4900B465DD /* BaseBenchmark.swift in Sources */,
+				23516B621FCFA31300B465DD /* Config.swift in Sources */,
 				23516AAB1FCEE82400B465DD /* BaseTestCase.swift in Sources */,
 				23516AAC1FCEE82400B465DD /* Assert.swift in Sources */,
 			);
@@ -812,9 +844,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23516B791FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ABA1FCEE82700B465DD /* Convenience.swift in Sources */,
+				23516B6D1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
+				23516B631FCFA31300B465DD /* Config.swift in Sources */,
 				23516ABD1FCEE82700B465DD /* BaseTestCase.swift in Sources */,
 				23516ABE1FCEE82700B465DD /* Assert.swift in Sources */,
+				23516B681FCFA57000B465DD /* RandomData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,9 +858,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23516B7A1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ACC1FCEE82900B465DD /* Convenience.swift in Sources */,
+				23516B6E1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
+				23516B641FCFA31300B465DD /* Config.swift in Sources */,
 				23516ACF1FCEE82900B465DD /* BaseTestCase.swift in Sources */,
 				23516AD01FCEE82900B465DD /* Assert.swift in Sources */,
+				23516B691FCFA57000B465DD /* RandomData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -832,9 +872,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23516B7B1FCFAF0700B465DD /* BenchmarkObject.swift in Sources */,
 				23516ADE1FCEE82A00B465DD /* Convenience.swift in Sources */,
+				23516B6F1FCFA81600B465DD /* DeviceInfo.swift in Sources */,
+				23516B651FCFA31300B465DD /* Config.swift in Sources */,
 				23516AE11FCEE82A00B465DD /* BaseTestCase.swift in Sources */,
 				23516AE21FCEE82A00B465DD /* Assert.swift in Sources */,
+				23516B6A1FCFA57000B465DD /* RandomData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1200,6 +1244,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphonesos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1266,6 +1311,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphonesos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALID_ARCHS = "i386 x86_64 arm64";
