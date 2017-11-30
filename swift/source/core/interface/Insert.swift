@@ -37,18 +37,17 @@ public class Insert: CoreRepresentable {
     
     private lazy var statement: StatementInsert = StatementInsert().insert(intoTable: name, with: properties!, onConflict: isReplace ? Conflict.Replace : nil).values(Array(repeating: Expression.bindingParameter, count: properties!.count))
     
-    public func execute(with objects: CodableTable...) throws {
+    public func execute<Object: CodableTable>(with objects: Object...) throws {
         try execute(with: objects)
     }
     
-    public func execute(with objects: [CodableTable]) throws {
+    public func execute<Object: CodableTable>(with objects: [Object]) throws {
         guard let first = objects.first else {
             Error.warning("Inserting with an empty/nil object")
             return
         }
         properties = properties ?? type(of: first).allProperties
-        let cls = type(of: first)
-        let orm = cls.objectRelationalMapping
+        let orm = Object.objectRelationalMapping
         func doInsertObject() throws {
             let coreStatement = try core.prepare(statement) 
             for var object in objects {

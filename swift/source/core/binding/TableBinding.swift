@@ -22,7 +22,7 @@ import Foundation
 
 public class TableBinding {
     private static var atomicCollection = Atomic<[Int:TableBinding]>([:])
-    static func from<CodableTableType: CodableTable>(_ type: CodableTableType.Type) -> TableBinding {
+    static func from<Root: CodableTable>(_ type: Root.Type) -> TableBinding {
         let hash = unsafeBitCast(type, to: Int.self)
         var tableBinding: TableBinding! 
         atomicCollection.withValue { (collection) -> Void in
@@ -41,7 +41,7 @@ public class TableBinding {
     private let properties: [Accessor:Property]
     let allProperties: [Property]
     
-    init<CodableTableType: CodableTable>(_ type: CodableTableType.Type) {
+    init<Root: CodableTable>(_ type: Root.Type) {
         self.bindingClass = type
         (self.properties, self.allProperties) = bindingClass.columnBindings().reduce(into: ([AnyColumnBinding.AnyAccessor:Property](), [Property]())) { (result, columnBinding) in 
             guard columnBinding.class == type else {

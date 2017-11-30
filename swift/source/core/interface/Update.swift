@@ -79,7 +79,7 @@ public class Update : CoreRepresentable {
         return self
     }
    
-    public func execute(with object: CodableTable) throws {
+    public func execute<Object: CodableTable>(with object: Object) throws {
         let coreStatement = try core.prepare(statement)
         for (index, property) in properties.enumerated() {
             let bindingIndex = index + 1

@@ -32,7 +32,7 @@ public class Select: SelectBase {
         statement.select(distinct: isDistinct, properties).from(table)
     }
     
-    public func nextObject<Object: CodableTable>() throws -> Object? {
+    public func nextObject<Object: CodableTable>(of type: Object.Type = Object.self) throws -> Object? {
         guard properties.first!.columnBinding.`class` is Object.Type else {
             Error.abort("")
         }
@@ -58,7 +58,7 @@ public class Select: SelectBase {
         return objects
     }
     
-    public func allObjects<Object: CodableTable>() throws -> [Object] {
+    public func allObjects<Object: CodableTable>(of type: Object.Type = Object.self) throws -> [Object] {
         assert((properties.first!.columnBinding.`class` == Object.self))
         var objects: [Object] = []
         while try next() {

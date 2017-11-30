@@ -21,41 +21,41 @@
 import Foundation
 
 public protocol InsertInterface {
-    func insert(objects: CodableTable..., on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws
-    func insert(objects: [CodableTable], on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws
-    func insertOrReplace(objects: CodableTable..., on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws 
-    func insertOrReplace(objects: [CodableTable], on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws 
+    func insert<Object: CodableTable>(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws
+    func insert<Object: CodableTable>(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws
+    func insertOrReplace<Object: CodableTable>(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws 
+    func insertOrReplace<Object: CodableTable>(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?, intoTable table: String) throws 
 }
 
 extension InsertInterface where Self: Core {
-    public func insert(objects: [CodableTable], on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
+    public func insert<Object: CodableTable>(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
         let insert = try Insert(with: self, named: table, on: propertyConvertibleList, isReplace: false)
         return try insert.execute(with: objects)
     }
     
-    public func insertOrReplace(objects: [CodableTable], on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
+    public func insertOrReplace<Object: CodableTable>(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
         let insert = try Insert(with: self, named: table, on: propertyConvertibleList, isReplace: true)
         return try insert.execute(with: objects)
     }
     
-    public func insert(objects: CodableTable..., on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
+    public func insert<Object: CodableTable>(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
         return try insert(objects: objects, on: propertyConvertibleList, intoTable: table)
     }
     
-    public func insertOrReplace(objects: CodableTable..., on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
+    public func insertOrReplace<Object: CodableTable>(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil, intoTable table: String) throws {
         return try insertOrReplace(objects: objects, on: propertyConvertibleList, intoTable: table)
     }
 }
 
 public protocol UpdateInterface {
-    func update(table: String, on propertyConvertibleList: PropertyConvertible..., with object: CodableTable, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws
-    func update(table: String, on propertyConvertibleList: [PropertyConvertible], with object: CodableTable, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
+    func update<Object: CodableTable>(table: String, on propertyConvertibleList: PropertyConvertible..., with object: Object, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws
+    func update<Object: CodableTable>(table: String, on propertyConvertibleList: [PropertyConvertible], with object: Object, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
     func update(table: String, on propertyConvertibleList: PropertyConvertible..., with row: [CodableColumnBase], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
     func update(table: String, on propertyConvertibleList: [PropertyConvertible], with row: [CodableColumnBase], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
 }
 
 extension UpdateInterface where Self: Core {
-    public func update(table: String, on propertyConvertibleList: [PropertyConvertible], with object: CodableTable, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
+    public func update<Object: CodableTable>(table: String, on propertyConvertibleList: [PropertyConvertible], with object: Object, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
         let update = try Update(with: self, on: propertyConvertibleList, andTable: table)
         if condition != nil {
             update.where(condition!)
@@ -73,7 +73,7 @@ extension UpdateInterface where Self: Core {
         return try update.execute(with: object)
     }
 
-    public func update(table: String, on propertyConvertibleList: PropertyConvertible..., with object: CodableTable, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
+    public func update<Object: CodableTable>(table: String, on propertyConvertibleList: PropertyConvertible..., with object: Object, where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
         return try update(table: table, on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
@@ -256,8 +256,8 @@ extension SelectInterface where Self: Core {
 }
 
 public protocol TableInterface {
-    func create(table name: String, of class: CodableTable.Type) throws 
-    func create(virtualTable name: String, of class: CodableTable.Type) throws
+    func create<Root: CodableTable>(table name: String, of class: Root.Type) throws 
+    func create<Root: CodableTable>(virtualTable name: String, of class: Root.Type) throws
     
     func create(table name: String, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]?) throws
     func create(table name: String, with columnDefList: ColumnDef..., and constraintList: [TableConstraint]?) throws
@@ -271,7 +271,7 @@ public protocol TableInterface {
 }
 
 extension TableInterface where Self: Core {
-    public func create(table name: String, of class: CodableTable.Type) throws {
+    public func create<Root: CodableTable>(table name: String, of class: Root.Type) throws {
         try run(embeddedTransaction: {
             let orm = `class`.objectRelationalMapping
             if try isTableExists(name) {
@@ -305,7 +305,7 @@ extension TableInterface where Self: Core {
         })
     }
     
-    public func create(virtualTable name: String, of class: CodableTable.Type) throws {
+    public func create<Root: CodableTable>(virtualTable name: String, of class: Root.Type) throws {
         try run(transaction: {
             try exec(`class`.objectRelationalMapping.generateCreateVirtualTableStatement(named: name))
         })
