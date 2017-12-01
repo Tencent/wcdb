@@ -60,23 +60,96 @@ public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLite
     }
     
     public var int32Value: Int32 {
-        return base as? Int32 ?? 0
+        switch type {
+        case .Integer32:
+            return base as! Int32
+        case .Integer64:
+            let int64Value = base as! Int64
+            return Int32(truncatingIfNeeded: int64Value)
+        case .Float:
+            let doubleValue = base as! Double
+            return Int32(doubleValue)
+        case .Text:
+            let stringValue = base as! String
+            return Int32(stringValue) ?? 0
+        default:
+            return 0
+        }
     }
     
     public var int64Value: Int64 {
-        return base as? Int64 ?? 0
+        switch type {
+        case .Integer32:
+            let int32Value = base as! Int32
+            return Int64(int32Value)
+        case .Integer64:
+            return base as! Int64
+        case .Float:
+            let doubleValue = base as! Double
+            return Int64(doubleValue)
+        case .Text:
+            let stringValue = base as! String
+            return Int64(stringValue) ?? 0
+        default:
+            return 0
+        }
     }
 
     public var stringValue: String {
-        return base as? String ?? ""
+        switch type {
+        case .Integer32:
+            let int32Value = base as! Int32
+            return "\(int32Value)"
+        case .Integer64:
+            let int64Value = base as! Int64
+            return "\(int64Value)"
+        case .Float:
+            let doubleValue = base as! Double
+            return "\(doubleValue)"
+        case .Text:
+            return base as! String
+        case .BLOB:
+            let dataValue = base as! Data
+            return String(data: dataValue, encoding: .utf8) ?? ""
+        default:
+            return ""
+        }
     }
 
     public var doubleValue: Double {
-        return base as? Double ?? 0
+        switch type {
+        case .Integer32:
+            let int32Value = base as! Int32
+            return Double(int32Value)
+        case .Integer64:
+            let int64Value = base as! Int64
+            return Double(int64Value)
+        case .Float:
+            return base as! Double
+        case .Text:
+            let stringValue = base as! String
+            return Double(stringValue) ?? 0
+        default:
+            return 0
+        }
     }
 
     public var dataValue: Data {
-        return base as? Data ?? Data()
+        switch type {
+        case .Integer32:
+            fallthrough
+        case .Integer64:
+            fallthrough
+        case .Float:
+            fallthrough
+        case .Text:
+            let stringValue = base as! String
+            return stringValue.data(using: .utf8) ?? Data()
+        case .BLOB:
+            return base as! Data
+        default:
+            return Data()
+        }
     }
 }
 
