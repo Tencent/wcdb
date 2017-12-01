@@ -28,7 +28,7 @@ class CipherWriteBenchmark: BaseBenchmark {
         
         database.setCipher(key: "cipher".data(using: .ascii)!)
                 
-        setUpWithPreCreateTable()
+        setUpWithPreCreateObject(count: config.writeCount)
     }
     
     func testCipherWrite() {
@@ -36,11 +36,11 @@ class CipherWriteBenchmark: BaseBenchmark {
         measure(onSetUp: { 
             tearDownDatabase()
             
-            setUpWithPreCreateObject(count: config.writeCount)
+            setUpWithPreCreateTable()
             
             tearDownDatabaseCache()
             
-            setUpDatabaseCache()
+            setUpDatabaseCache()    
         }, for: { 
             do {
                 for object in objects {

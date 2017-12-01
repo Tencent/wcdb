@@ -26,8 +26,6 @@ class BaselineBatchWriteBenchmark: BaseBenchmark {
     override func setUp() {
         super.setUp()
         
-        setUpWithPreCreateTable()
-        
         setUpWithPreCreateObject(count: config.batchWriteCount)
     }
     

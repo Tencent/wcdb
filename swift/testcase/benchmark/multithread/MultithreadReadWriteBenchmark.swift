@@ -26,10 +26,7 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
     override func setUp() {
         super.setUp()
 
-        setUpWithPreCreateTable()
-        
-        setUpWithPreInsertObjects(count: config.readCount)
-        
+        setUpWithPreCreateObject(count: config.batchWriteCount)
     }
 
     func testMultithreadReadWrite() {
@@ -40,7 +37,9 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
             
             tearDownDatabase()
             
-            setUpWithPreCreateTable(count: config.batchWriteCount)
+            setUpWithPreCreateTable()
+            
+            setUpWithPreInsertObjects(count: config.readCount)
             
             tearDownDatabaseCache()
             

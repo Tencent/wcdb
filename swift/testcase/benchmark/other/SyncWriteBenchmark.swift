@@ -27,9 +27,8 @@ class SyncWriteBenchmark: BaseBenchmark {
         super.setUp()
         
         database.setSynchronous(isFull: true)
-                
-        setUpWithPreCreateObject(count: config.syncWriteCount)
         
+        setUpWithPreCreateObject(count: config.syncWriteCount)
     }
     
     func testSyncWrite() {
@@ -38,11 +37,11 @@ class SyncWriteBenchmark: BaseBenchmark {
         measure(onSetUp: { 
             tearDownDatabase()
             
-            setUpWithPreCreateObject(count: config.syncWriteCount)
+            setUpWithPreCreateTable()
             
             tearDownDatabaseCache()
             
-            setUpDatabaseCache()
+            setUpDatabaseCache()    
         }, for: { 
             do {
                 for object in objects {

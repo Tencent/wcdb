@@ -28,7 +28,6 @@ class BaselineReadBenchmark: BaseBenchmark {
         setUpWithPreCreateTable()
         
         setUpWithPreInsertObjects(count: config.readCount)
-
     }
 
     func testBaselineRead() {

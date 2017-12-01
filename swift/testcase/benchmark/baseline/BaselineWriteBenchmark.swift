@@ -41,11 +41,9 @@ class BaselineWriteBenchmark: BaseBenchmark {
             setUpDatabaseCache()    
         }, for: { 
             do { 
-                startMeasuring()
                 for object in objects {
                     try database.insert(objects: object, intoTable: tableName)
                 }
-                stopMeasuring()
             }catch let error as WCDB.Error {
                 XCTFail(error.description)
             }catch let error {
