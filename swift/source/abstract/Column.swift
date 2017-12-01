@@ -30,16 +30,12 @@ public class Column: Describable {
         super.init(name)
     }
 
-    public convenience override init(_ name: String) {
-        self.init(named: name)
-    }
-    
     public var name: String {
         return description
     }
     
     public func `in`(table: String) -> Column {
-        return Column(table + "." + self.name)
+        return Column(named: table + "." + self.name)
     }
 }
 
