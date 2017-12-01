@@ -25,25 +25,14 @@ public class StatementPragma: Statement {
     }
     
     @discardableResult
-    private func pragma(_ pragma: Pragma) -> StatementPragma {
+    public func pragma(_ pragma: Pragma) -> StatementPragma {
         description.append("PRAGMA \(pragma.description)")
         return self
     }
     
     @discardableResult
-    private func pragma(_ pragma: Pragma, to literalValueConvertible: LiteralValueConvertible) -> StatementPragma {
+    public func pragma(_ pragma: Pragma, to literalValueConvertible: LiteralValueConvertible) -> StatementPragma {
         description.append("PRAGMA \(pragma.description)=\(literalValueConvertible.asLiteralValue().description)")
         return self
-    }
-    
-    @discardableResult
-    public func pragma(_ builtinPragma: BuiltinPragma) -> StatementPragma {
-        return self.pragma(builtinPragma.asPragma())
-    }
-    
-    @discardableResult
-    public func pragma(_ builtinPragma: BuiltinPragma, to literalValueConvertible: LiteralValueConvertible) -> StatementPragma {
-        return self.pragma(builtinPragma.asPragma(), to: literalValueConvertible)
-    }
-
+    }    
 }
