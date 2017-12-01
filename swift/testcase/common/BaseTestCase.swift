@@ -44,6 +44,8 @@ class BaseTestCase: XCTestCase, Named {
     
     override func setUp() {
         super.setUp()
+        self.continueAfterFailure = false
+        
         if fileManager.fileExists(atPath: recommendedDirectory.path) {
             XCTAssertNoThrow(try fileManager.removeItem(at: recommendedDirectory))
         }

@@ -29,15 +29,19 @@ class BaselineBatchWriteBenchmark: BaseBenchmark {
         setUpWithPreCreateTable()
         
         setUpWithPreCreateObject(count: config.batchWriteCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
     
-    func testBaselineWrite() {
+    func testBaselineBatchWrite() {
         let tableName = getTableName()
-        self.measure {
+        measure(onSetUp: { 
+            tearDownDatabase()
+            
+            setUpWithPreCreateTable()
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()    
+        }, for: { 
             do {
                 try database.insert(objects: objects, intoTable: tableName)
             }catch let error as WCDB.Error {
@@ -45,8 +49,9 @@ class BaselineBatchWriteBenchmark: BaseBenchmark {
             }catch let error {
                 XCTFail(error.localizedDescription)
             }
-        }
-        let count = try? database.getValue(on: Column.any, fromTable: tableName)
-        XCTAssertEqual(Int(count?.int32Value ?? 0), config.batchWriteCount)
+        }, checkCorrectness: {
+            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            XCTAssertEqual(Int(count?.int32Value ?? 0), config.batchWriteCount)
+        })
     }
 }

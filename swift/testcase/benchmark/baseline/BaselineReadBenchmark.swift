@@ -29,17 +29,21 @@ class BaselineReadBenchmark: BaseBenchmark {
         
         setUpWithPreInsertObjects(count: config.readCount)
 
-        clearCache()
-        
-        setUpDatabaseCache()
     }
 
     func testBaselineRead() {
         var results: [BenchmarkObject]? = nil
         let tableName = getTableName()
-        self.measure {
+        measure(onSetUp: { 
+            results = nil
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             results = try? database.getObjects(fromTable: tableName)
-        }
-        XCTAssertEqual(results?.count, config.readCount)
+        }, checkCorrectness: { 
+            XCTAssertEqual(results?.count, config.readCount)
+        })
     }
 }

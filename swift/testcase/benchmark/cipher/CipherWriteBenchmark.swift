@@ -29,17 +29,19 @@ class CipherWriteBenchmark: BaseBenchmark {
         database.setCipher(key: "cipher".data(using: .ascii)!)
                 
         setUpWithPreCreateTable()
-        
-        setUpWithPreCreateObject(count: config.writeCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
     
-    func testBaselineWrite() {
+    func testCipherWrite() {
         let tableName = getTableName()
-        self.measure {
+        measure(onSetUp: { 
+            tearDownDatabase()
+            
+            setUpWithPreCreateObject(count: config.writeCount)
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             do {
                 for object in objects {
                     try database.insert(objects: object, intoTable: tableName)
@@ -49,8 +51,9 @@ class CipherWriteBenchmark: BaseBenchmark {
             }catch let error {
                 XCTFail(error.localizedDescription)
             }
-        }
-        let count = try? database.getValue(on: Column.any, fromTable: tableName)
-        XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount)
+        }, checkCorrectness: {
+            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount)
+        })
     }
 }

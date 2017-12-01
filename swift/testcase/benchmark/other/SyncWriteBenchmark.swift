@@ -30,16 +30,20 @@ class SyncWriteBenchmark: BaseBenchmark {
                 
         setUpWithPreCreateObject(count: config.syncWriteCount)
         
-        setUpWithPreCreateTable()
-
-        clearCache()
-        
-        setUpDatabaseCache()
     }
     
-    func testBaselineWrite() {
+    func testSyncWrite() {
         let tableName = getTableName()
-        self.measure {
+        
+        measure(onSetUp: { 
+            tearDownDatabase()
+            
+            setUpWithPreCreateObject(count: config.syncWriteCount)
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             do {
                 for object in objects {
                     try database.insert(objects: object, intoTable: tableName)
@@ -49,8 +53,9 @@ class SyncWriteBenchmark: BaseBenchmark {
             }catch let error {
                 XCTFail(error.localizedDescription)
             }
-        }
-        let count = try? database.getValue(on: Column.any, fromTable: tableName)
-        XCTAssertEqual(Int(count?.int32Value ?? 0), config.syncWriteCount)
+        }, checkCorrectness: {
+            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            XCTAssertEqual(Int(count?.int32Value ?? 0), config.syncWriteCount)
+        })
     }
 }

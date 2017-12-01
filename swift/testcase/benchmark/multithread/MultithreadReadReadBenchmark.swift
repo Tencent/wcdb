@@ -28,17 +28,22 @@ class MultithreadReadReadBenchmark: BaseMultithreadBenchmark {
         setUpWithPreCreateTable()
         
         setUpWithPreInsertObjects(count: config.readCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
 
     func testMultithreadReadRead() {
         let tableName = getTableName()
         var results1: [BenchmarkObject]? = nil
         var results2: [BenchmarkObject]? = nil
-        self.measure {
+
+        measure(onSetUp: { 
+            results1 = nil
+            
+            results2 = nil
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             queue.async(group: group, execute: { 
                 results1 = try? self.database.getObjects(fromTable: tableName)
             })
@@ -46,8 +51,9 @@ class MultithreadReadReadBenchmark: BaseMultithreadBenchmark {
                 results2 = try? self.database.getObjects(fromTable: tableName)
             })
             group.wait()
-        }
-        XCTAssertEqual(results1?.count, config.readCount)
-        XCTAssertEqual(results2?.count, config.readCount)
+        }, checkCorrectness: {
+            XCTAssertEqual(results1?.count, config.readCount)
+            XCTAssertEqual(results2?.count, config.readCount)
+        })
     }
 }

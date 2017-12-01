@@ -26,29 +26,34 @@ class BaselineWriteBenchmark: BaseBenchmark {
     override func setUp() {
         super.setUp()
         
-        setUpWithPreCreateTable()
-                
         setUpWithPreCreateObject(count: config.writeCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
     
     func testBaselineWrite() {
         let tableName = getTableName()
-        self.measure {
-            do {
+        measure(onSetUp: { 
+            tearDownDatabase()
+            
+            setUpWithPreCreateTable()
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()    
+        }, for: { 
+            do { 
+                startMeasuring()
                 for object in objects {
                     try database.insert(objects: object, intoTable: tableName)
                 }
+                stopMeasuring()
             }catch let error as WCDB.Error {
                 XCTFail(error.description)
             }catch let error {
                 XCTFail(error.localizedDescription)
             }
-        }
-        let count = try? database.getValue(on: Column.any, fromTable: tableName)
-        XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount)
+        }, checkCorrectness: { 
+            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount)
+        })
     }
 }

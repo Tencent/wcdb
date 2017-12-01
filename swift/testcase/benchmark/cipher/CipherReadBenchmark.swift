@@ -30,18 +30,21 @@ class CipherReadBenchmark: BaseBenchmark {
         setUpWithPreCreateTable()
         
         setUpWithPreInsertObjects(count: config.readCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
 
-    func testBaselineRead() {
+    func testCipherRead() {
         let tableName = getTableName()
         var results: [BenchmarkObject]? = nil
-        self.measure {
+        measure(onSetUp: { 
+            results = nil
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             results = try? database.getObjects(fromTable: tableName)
-        }
-        XCTAssertEqual(results?.count, config.readCount)
+        }, checkCorrectness: {
+            XCTAssertEqual(results?.count, config.readCount)
+        })
     }
 }

@@ -29,15 +29,15 @@ class MultithreadWriteWriteBenchmark: BaseMultithreadBenchmark {
         setUpWithPreCreateTable()
         
         setUpWithPreCreateObject(count: config.writeCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
     
     func testMultithreadWriteWrite() {
         let tableName = getTableName()
-        self.measure {
+        measure(onSetUp: { 
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             queue.async(group: group, execute: { 
                 do {
                     try self.database.insert(objects: self.objects, intoTable: tableName)
@@ -57,8 +57,9 @@ class MultithreadWriteWriteBenchmark: BaseMultithreadBenchmark {
                 }
             })
             group.wait()
-        }
-        let count = try? database.getValue(on: Column.any, fromTable: tableName)
-        XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount * 2)
+        }, checkCorrectness: {
+            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount * 2)
+        })
     }
 }

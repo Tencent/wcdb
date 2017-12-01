@@ -65,7 +65,27 @@ class BaseBenchmark: BaseTestCase {
         XCTAssertTrue(database.canOpen)
     }
     
-    func clearCache() {
+    func tearDownDatabaseCache() {
         database.close()
+    }
+    
+    func tearDownDatabase() {
+        database.close { 
+            XCTAssertNoThrow(try self.database.removeFiles())
+        }
+    }
+    
+    func measure(onSetUp setUpBlock: () -> Swift.Void, for block: () -> Swift.Void, checkCorrectness correctnessBlock: () -> Swift.Void) {
+        measureMetrics(type(of: self).defaultPerformanceMetrics, automaticallyStartMeasuring: false) { 
+            setUpBlock()
+            
+            startMeasuring()
+            
+            block()
+            
+            stopMeasuring()
+            
+            correctnessBlock()
+        }
     }
 }

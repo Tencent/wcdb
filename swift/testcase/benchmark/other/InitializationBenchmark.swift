@@ -27,15 +27,16 @@ class InitializationBenchmark: BaseBenchmark {
         super.setUp()
         
         setUpWithPreCreateTable(count: config.tableCount)
-
-        clearCache()        
     }
 
-    func testBaselineRead() {
-        self.measure {
+    func testInitialization() {
+        measure(onSetUp: { 
+            tearDownDatabaseCache()        
+        }, for: { 
             XCTAssertTrue(database.canOpen)
-        }
-        let results = try? database.getValue(on: Column.any, fromTable: Master.tableName)
-        XCTAssertEqual(Int(results?.int32Value ?? 0), config.tableCount)
+        }, checkCorrectness: {
+            let results = try? database.getValue(on: Column.any.count(), fromTable: Master.tableName)
+            XCTAssertEqual(Int(results?.int32Value ?? 0), config.tableCount)
+        })
     }
 }

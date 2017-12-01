@@ -30,17 +30,22 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
         
         setUpWithPreInsertObjects(count: config.readCount)
         
-        setUpWithPreCreateTable(count: config.batchWriteCount)
-        
-        clearCache()
-        
-        setUpDatabaseCache()
     }
 
-    func testMultithreadRead() {
+    func testMultithreadReadWrite() {
         let tableName = getTableName()
         var results: [BenchmarkObject]? = nil
-        self.measure {
+        measure(onSetUp: { 
+            results = nil
+            
+            tearDownDatabase()
+            
+            setUpWithPreCreateTable(count: config.batchWriteCount)
+            
+            tearDownDatabaseCache()
+            
+            setUpDatabaseCache()
+        }, for: { 
             queue.async(group: group, execute: { 
                 results = try? self.database.getObjects(fromTable: tableName)
             })
@@ -54,9 +59,10 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
                 }
             })
             group.wait()
-        }
-        XCTAssertEqual(results?.count, config.readCount)
-        let count = try? database.getValue(on: Column.any, fromTable: tableName)
-        XCTAssertEqual(Int(count?.int32Value ?? 0), config.readCount + config.batchWriteCount)
+        }, checkCorrectness: {
+            XCTAssertEqual(results?.count, config.readCount)
+            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            XCTAssertEqual(Int(count?.int32Value ?? 0), config.readCount + config.batchWriteCount)
+        })
     }
 }
