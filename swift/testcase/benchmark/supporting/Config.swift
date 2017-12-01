@@ -35,22 +35,22 @@ class Config {
         
     
     private init() {
-        #if WCDB_IOS
-            readCount = 1000000
-            writeCount = 10000
-            batchWriteCount = 300000
-            
-            tableCount = 30000
-            syncWriteCount = 2000
-        #elseif WCDB_OSX
+//        #if WCDB_IOS
+//            readCount = 1000000
+//            writeCount = 10000
+//            batchWriteCount = 300000
+//            
+//            tableCount = 30000
+//            syncWriteCount = 2000
+//        #elseif WCDB_OSX
             readCount = 500000
-            writeCount = 100000
-            batchWriteCount = 1000000
+            writeCount = 50000
+            batchWriteCount = 500000
             
             tableCount = 50000
             syncWriteCount = 500
-        #else
-            fatalError()
-        #endif
+//        #else
+//            fatalError()
+//        #endif
     }
 }
