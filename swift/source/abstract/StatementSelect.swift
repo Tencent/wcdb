@@ -20,8 +20,6 @@
 
 import Foundation
 public class StatementSelect: Statement {
-    public static let fts3Tokenizer = StatementSelect().select(Expression.function(named: "fts3_tokenizer", Array(repeating: Expression.bindingParameter, count: 2)))
-
     public init() {
         super.init(with: .Select)
     }

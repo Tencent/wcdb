@@ -170,8 +170,7 @@ extension Database {
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
             guard !handle.isReadonly else {
-                let statementJournalMode = StatementPragma().pragma(.journalMode)
-                let handleStatement = try handle.prepare(statementJournalMode)
+                let handleStatement = try handle.prepare(.getJournalMode)
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
@@ -183,40 +182,34 @@ extension Database {
             //Locking Mode
             do {
                 //Get Locking Mode
-                let statementLockMode = StatementPragma().pragma(.lockingMode)
-                let statementLockModeNormal = StatementPragma().pragma(.lockingMode, to: "NORMAL")
-                let handleStatement = try handle.prepare(statementLockMode)
+                let handleStatement = try handle.prepare(.getLockingMode)
                 try handleStatement.step()
                 let lockingMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
                 //Set Locking Mode
                 if lockingMode.caseInsensitiveCompare("NORMAL") != ComparisonResult.orderedSame {
-                    try handle.exec(statementLockModeNormal)
+                    try handle.exec(.enableLockingModeNormal)
                 }
             }
             //Synchronous
             do {
-                let statementSynchronousNormal = StatementPragma().pragma(.synchronous, to: "NORMAL") 
-                try handle.exec(statementSynchronousNormal) 
+                try handle.exec(.enableSynchronousNormal) 
             }
             //Journal Mode
             do {
                 //Get Journal Mode
-                let statementJournalMode = StatementPragma().pragma(.journalMode)
-                let statementJournalModeWAL = StatementPragma().pragma(.journalMode, to: "WAL")
-                let handleStatement = try handle.prepare(statementJournalMode)
+                let handleStatement = try handle.prepare(.getJournalMode)
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
                 //Set Journal Mode
                 if journalMode.caseInsensitiveCompare("WAL") != ComparisonResult.orderedSame {
-                    try handle.exec(statementJournalModeWAL)
+                    try handle.exec(.enableJournalModeWAL)
                 }
             }
             //Fullfsync
             do {
-                let statementFullFsync = StatementPragma().pragma(.fullfsync, to: true)
-                try handle.exec(statementFullFsync)
+                try handle.exec(.enableFullfsync)
             }
         }, orderBy: DefaultConfigOrder.basic.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description, orderBy: DefaultConfigOrder.synchronous.rawValue),
@@ -228,7 +221,7 @@ extension Database {
                 Database.checkpointThread.async {
                     while true {
                         Database.timedQueue.wait(untilExpired: {
-                            try? Database(withPath: $0).exec(StatementPragma().pragma(.walCheckpoint))
+                            try? Database(withPath: $0).exec(.checkpoint)
                         })
                     }
                 }
@@ -280,8 +273,7 @@ extension Database {
     public func setSynchronous(isFull: Bool) {
         if isFull {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
-                let statementSynchronousFull = StatementPragma().pragma(.synchronous, to: "FULL")
-                try handle.exec(statementSynchronousFull) 
+                try handle.exec(.enableSynchronousFull) 
             })
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
             })
@@ -306,7 +298,7 @@ extension Database {
         handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
             try tokenizes.forEach({ (tokenize) in
                 let module = tokenize.module
-                let handleStatement = try handle.prepare(StatementSelect.fts3Tokenizer)
+                let handleStatement = try handle.prepare(.fts3Tokenizer)
                 handleStatement.bind(module.name, toIndex: 1)
                 handleStatement.bind(module.address, toIndex: 2)
                 try handleStatement.step()
@@ -376,20 +368,20 @@ extension Database: Core {
     
     func begin(_ mode: StatementTransaction.Mode) throws {
         let recyclableHandle = try flowOut()
-        try recyclableHandle.raw.handle.exec(StatementTransaction().begin(mode))
+        try recyclableHandle.raw.handle.exec(mode == .Immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode))
         Database.threadedHandles.value[path] = recyclableHandle
     }
     
     public func commit() throws {
         let recyclableHandle = try flowOut()
-        try recyclableHandle.raw.handle.exec(StatementTransaction().commit())
+        try recyclableHandle.raw.handle.exec(.commitTransaction)
         Database.threadedHandles.value.removeValue(forKey: path)
     }
     
     public func rollback() throws {
         let recyclableHandle = try flowOut()
         Database.threadedHandles.value.removeValue(forKey: path)
-        try recyclableHandle.raw.handle.exec(StatementTransaction().rollback())
+        try recyclableHandle.raw.handle.exec(.rollbackTransaction)
     }
     
     public func run(transaction: TransactionClosure) throws {
