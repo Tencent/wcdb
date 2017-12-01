@@ -24,7 +24,7 @@ import WCDB
 class ColumnDefTests: BaseTestCase {
     
     func generateColumnDef() -> ColumnDef {
-        return ColumnDef(with: Column("testColumnDef"), and: .Integer32)
+        return ColumnDef(with: Column(named: "testColumnDef"), and: .Integer32)
     }
 
     func testColumnDef() {
