@@ -21,7 +21,7 @@
 import Foundation
 
 public final class Expression : Describable {
-    public static let bindingParameter = Column(named: "?").asExpression()
+    public static let bindingParameter = Expression(withRaw: "?")
 
     public init(with columnConvertible: ColumnConvertible) {
         super.init(columnConvertible.asColumn().description)
