@@ -180,31 +180,43 @@ extension Database {
                 }
                 return
             }
+            //Locking Mode
             do {
+                //Get Locking Mode
                 let statementLockMode = StatementPragma().pragma(.lockingMode)
                 let statementLockModeNormal = StatementPragma().pragma(.lockingMode, to: "NORMAL")
                 let handleStatement = try handle.prepare(statementLockMode)
                 try handleStatement.step()
                 let lockingMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
+                //Set Locking Mode
                 if lockingMode.caseInsensitiveCompare("NORMAL") != ComparisonResult.orderedSame {
                     try handle.exec(statementLockModeNormal)
                 }
             }
+            //Synchronous
             do {
                 let statementSynchronousNormal = StatementPragma().pragma(.synchronous, to: "NORMAL") 
                 try handle.exec(statementSynchronousNormal) 
             }
+            //Journal Mode
             do {
+                //Get Journal Mode
                 let statementJournalMode = StatementPragma().pragma(.journalMode)
                 let statementJournalModeWAL = StatementPragma().pragma(.journalMode, to: "WAL")
                 let handleStatement = try handle.prepare(statementJournalMode)
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
+                //Set Journal Mode
                 if journalMode.caseInsensitiveCompare("WAL") != ComparisonResult.orderedSame {
                     try handle.exec(statementJournalModeWAL)
                 }
+            }
+            //Fullfsync
+            do {
+                let statementFullFsync = StatementPragma().pragma(.fullfsync, to: true)
+                try handle.exec(statementFullFsync)
             }
         }, orderBy: DefaultConfigOrder.basic.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description, orderBy: DefaultConfigOrder.synchronous.rawValue),
