@@ -31,6 +31,20 @@ Order::Order(const Expr &expr, OrderTerm term)
         m_description.append(OrderTermName(term));
     }
 }
+    
+    
+Order::Order(const Expr &expr, const std::string& collation, OrderTerm term)
+    : Describable(expr.getDescription())
+{
+    if (!collation.empty()) {
+        m_description.append(" ");
+        m_description.append(collation);
+    }
+    if (term != OrderTerm::NotSet) {
+        m_description.append(" ");
+        m_description.append(OrderTermName(term));
+    }
+}
 
 Order::operator OrderList() const
 {

@@ -29,6 +29,8 @@ namespace WCDB {
 
 class Order : public Describable {
 public:
+    Order(const Expr &expr, const std::string& collation, OrderTerm term = OrderTerm::NotSet);
+    
     Order(const Expr &expr, OrderTerm term = OrderTerm::NotSet);
 
     operator OrderList() const;
