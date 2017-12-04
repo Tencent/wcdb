@@ -32,8 +32,9 @@ StatementCreateIndex &StatementCreateIndex::create(const std::string &index,
     if (unique) {
         m_description.append("UNIQUE ");
     }
+    m_description.append("INDEX ");
     if (ifNotExists) {
-        m_description.append("INDEX IF NOT EXISTS ");
+        m_description.append("IF NOT EXISTS ");
     }
     m_description.append(index);
     return *this;
