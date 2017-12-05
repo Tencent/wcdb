@@ -16,6 +16,7 @@
 
 package com.tencent.wcdb.database;
 
+import android.os.Environment;
 import android.os.StatFs;
 
 import java.lang.reflect.Method;
@@ -36,8 +37,9 @@ import java.lang.reflect.Method;
  */
 public final class SQLiteGlobal {
     private static final String TAG = "WCDB.SQLiteGlobal";
+
     private static native int nativeReleaseMemory();
-    /*package*/ static native void nativeTestJNIRegistration();
+    private static native void nativeSetDefaultPageSize(int pageSize);
 
     /** Default page size to use when creating a database. */
     public static final int defaultPageSize;
@@ -61,17 +63,29 @@ public final class SQLiteGlobal {
     public static final int walConnectionPoolSize = 4;
 
     static {
+        int pageSize;
         try {
-            Class<?> cls = Class.forName("android.os.SystemProperties");
-            Method getSystemIntMethod = cls.getMethod("getInt", String.class, int.class);
+            String dataPath = Environment.getDataDirectory().getAbsolutePath();
+            pageSize = new StatFs(dataPath).getBlockSize();
+        } catch (RuntimeException e) {
+            pageSize = 4096;
+        }
+        defaultPageSize = pageSize;
 
-            int pageSize = new StatFs("/data").getBlockSize();
-            defaultPageSize = (Integer) getSystemIntMethod.invoke(null, "debug.sqlite.pagesize", pageSize);
-        } catch (Exception e) {
-            // Reflection failed, this should not happen.
-            throw new NoClassDefFoundError();
+        // To be compatible to frameworks which handle native library loading themselves,
+        // we do a simple test for whether native methods have been registered already.
+        try {
+            nativeSetDefaultPageSize(pageSize);
+        } catch (UnsatisfiedLinkError e) {
+            // If we reached here, native methods are not registered.
+            // Load shared library and try again.
+            System.loadLibrary("wcdb");
+            nativeSetDefaultPageSize(pageSize);
         }
     }
+    // Dummy static method to trigger class initialization.
+    // See [JLS 12.4.1](http://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4.1)
+    public static void loadLib() {}
 
     private SQLiteGlobal() {
     }

@@ -27,6 +27,7 @@ import com.tencent.wcdb.FileUtils;
 import com.tencent.wcdb.database.SQLiteCipherSpec;
 import com.tencent.wcdb.database.SQLiteDatabase;
 import com.tencent.wcdb.database.SQLiteDatabase.CursorFactory;
+import com.tencent.wcdb.database.SQLiteGlobal;
 
 /**
  * Wrapper class to implement database opening methods as {@link android.content.Context}
@@ -36,7 +37,7 @@ public final class Context {
 
 	static {
 		// Ensure libwcdb.so is loaded.
-		SQLiteDatabase.loadLib();
+		SQLiteGlobal.loadLib();
 	}
 
 	private static File getDataDirFile(android.content.Context context) {

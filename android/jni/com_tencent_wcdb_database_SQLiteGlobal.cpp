@@ -23,7 +23,8 @@
 #include "ModuleLoader.h"
 #include "fts/mm_fts.h"
 
-// Forward declaration from vfslog.c
+// Forward declarations
+extern "C" void sqlcipher_set_default_pagesize(int);
 extern "C" int sqlite3_register_vfslog(const char *);
 extern volatile uint32_t vlogDefaultLogFlags;
 
@@ -105,15 +106,15 @@ static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
     return sqlite3_release_memory(SOFT_HEAP_LIMIT);
 }
 
-static void nativeTestJNIRegistration(JNIEnv *env, jclass clazz)
+static void nativeSetDefaultPageSize(JNIEnv *env, jclass clazz, jint pageSize)
 {
-    // do nothing
+    sqlcipher_set_default_pagesize(pageSize);
 }
 
 static JNINativeMethod sMethods[] = {
     /* name, signature, funcPtr */
     {"nativeReleaseMemory", "()I", (void *) nativeReleaseMemory},
-    {"nativeTestJNIRegistration", "()V", (void *) nativeTestJNIRegistration},
+    {"nativeSetDefaultPageSize", "(I)V", (void *) nativeSetDefaultPageSize},
 };
 
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)

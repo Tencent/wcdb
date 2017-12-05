@@ -39,7 +39,7 @@ public final class SQLiteDebug {
 
     static {
         // Ensure libmmdb.so is loaded.
-        SQLiteDatabase.loadLib();
+        SQLiteGlobal.loadLib();
     }
 
     private SQLiteDebug() {

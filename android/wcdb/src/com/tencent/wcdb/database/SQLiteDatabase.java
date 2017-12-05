@@ -69,18 +69,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private static final String TAG = "WCDB.SQLiteDatabase";
 
     static {
-        // To be compatible to frameworks which handle native library loading themselves,
-        // we do a simple test for whether native methods have been registered already.
-        try {
-            SQLiteGlobal.nativeTestJNIRegistration();
-        } catch (UnsatisfiedLinkError e) {
-            // If we reached here, native methods are not registered.
-            System.loadLibrary("wcdb");
-        }
+        // Ensure libmmdb.so is loaded.
+        SQLiteGlobal.loadLib();
     }
-    // Dummy static method to trigger class initialization.
-    // See [JLS 12.4.1](http://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4.1)
-    public static void loadLib() {}
 
     // Stores reference to all databases opened in the current process.
     // (The referent Object is not used at this time.)
