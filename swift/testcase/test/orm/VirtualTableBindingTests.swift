@@ -23,18 +23,18 @@ import WCDB
 
 class VirtualTableBindingTests: BaseTestCase {
 
-    class BaselineTestObject: WCDB.CodableTable {
+    class BaselineTestObject: WCDB.TableCodable {
         var variable: Int = 0        
-        required init() {}        
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [ColumnBinding(\BaselineTestObject.variable, alias: "variable")]
-        }
-        static func virtualTableBinding() -> VirtualTableBinding? {
-            return VirtualTableBinding(with: .fts3, and: ModuleArgument(left: "left", right: "right"), ModuleArgument(with: .WCDB))
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = BaselineTestObject
+            case variable
+            static var __virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(with: .fts3, and: ModuleArgument(left: "left", right: "right"), ModuleArgument(with: .WCDB))
+            }
         }
     }
 
     func testVirtualBinding() {
-        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable INTEGER, left=right, tokenize=WCDB)")
+        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable, left=right, tokenize=WCDB)")
     }
 }

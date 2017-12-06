@@ -37,26 +37,26 @@ func WINQAssertEqual<StringConvertibleObject>(_ expression1: @autoclosure () -> 
     XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
 }
 
-func ORMColumnBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1: @autoclosure () -> CodableTableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func ORMColumnConstraintBindingAssertEqual<TableCodableObject: TableCodable>(_ expression1: @autoclosure () -> TableCodableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
-    let description1 = type.objectRelationalMapping.generateCreateTableStatement(named: className).description
+    let description1 = type.CodingKeys.__objectRelationalMapping.generateCreateTableStatement(named: className).description
     let description2 = expression2()
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-func ORMIndexBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1: @autoclosure () -> CodableTableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func ORMIndexBindingAssertEqual<TableCodableObject: TableCodable>(_ expression1: @autoclosure () -> TableCodableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
-    let description1 = type.objectRelationalMapping.generateCreateIndexStatements(onTable: className)![0].description
+    let description1 = type.CodingKeys.__objectRelationalMapping.generateCreateIndexStatements(onTable: className)![0].description
     let description2 = expression2()
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-func ORMVirtualTableBindingAssertEqual<CodableTableObject: CodableTable>(_ expression1: @autoclosure () -> CodableTableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func ORMVirtualTableBindingAssertEqual<TableCodableObject: TableCodable>(_ expression1: @autoclosure () -> TableCodableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
-    let description1 = type.objectRelationalMapping.generateCreateVirtualTableStatement(named: className).description
+    let description1 = type.CodingKeys.__objectRelationalMapping.generateCreateVirtualTableStatement(named: className).description
     let description2 = expression2()
     XCTAssertEqual(description1, description2, file: file, line: line)
 }

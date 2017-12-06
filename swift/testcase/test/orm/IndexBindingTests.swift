@@ -23,40 +23,38 @@ import WCDB
 
 class IndexBindingTests: BaseTestCase {
 
-    class BaselineTestObject: WCDB.CodableTable {
-        var variable: Int = 0        
-        required init() {}        
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [ColumnBinding(\BaselineTestObject.variable, alias: "variable")]
-        }
-        static func indexBindings() -> [IndexBinding]? {
-            return [IndexBinding(withSubfix: "_index", indexesBy: \BaselineTestObject.variable)]
+    class BaselineTestObject: WCDB.TableCodable {
+        var variable: Int = 0   
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = BaselineTestObject
+            case variable
+            static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+                return ["_index":IndexBinding(indexesBy: CodingKeys.variable)]
+            }
         }
     }
     
-    class UniqueTestObject: WCDB.CodableTable {
+    class UniqueTestObject: WCDB.TableCodable {
         var variable: Int = 0        
-        required init() {}        
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [ColumnBinding(\UniqueTestObject.variable, alias: "variable")]
-        }
-        static func indexBindings() -> [IndexBinding]? {
-            return [IndexBinding(withSubfix: "_index", isUnique: true, indexesBy: \UniqueTestObject.variable)]
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = UniqueTestObject
+            case variable
+            static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+                return ["_index":IndexBinding(isUnique: true, indexesBy: CodingKeys.variable)]
+            }
         }
     }
 
-    class MultiIndexesTestObject: WCDB.CodableTable {
+    class MultiIndexesTestObject: WCDB.TableCodable {
         var variable1: Int = 0 
         var variable2: Int = 0 
-        required init() {}        
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [
-                ColumnBinding(\MultiIndexesTestObject.variable1, alias: "variable1"),
-                ColumnBinding(\MultiIndexesTestObject.variable2, alias: "variable2")
-            ]
-        }
-        static func indexBindings() -> [IndexBinding]? {
-            return [IndexBinding(withSubfix: "_index", indexesBy: \MultiIndexesTestObject.variable1, \MultiIndexesTestObject.variable2)]
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = MultiIndexesTestObject
+            case variable1
+            case variable2
+            static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+                return ["_index":IndexBinding(indexesBy: CodingKeys.variable1, CodingKeys.variable2)]
+            }
         }
     }
 

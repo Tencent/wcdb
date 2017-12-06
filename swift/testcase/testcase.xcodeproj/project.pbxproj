@@ -64,14 +64,9 @@
 		23516A851FCEE7D500B465DD /* TableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A061FCEE7CF00B465DD /* TableTests.swift */; };
 		23516A861FCEE7D500B465DD /* TransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A071FCEE7CF00B465DD /* TransactionTests.swift */; };
 		23516A871FCEE7D500B465DD /* UpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A081FCEE7CF00B465DD /* UpdateTests.swift */; };
-		23516A881FCEE7DB00B465DD /* ColumnBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0A1FCEE7CF00B465DD /* ColumnBindingTests.swift */; };
-		23516A891FCEE7DB00B465DD /* ConstraintBIndingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0B1FCEE7CF00B465DD /* ConstraintBIndingTests.swift */; };
+		23516A881FCEE7DB00B465DD /* ColumnConstraintBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0A1FCEE7CF00B465DD /* ColumnConstraintBindingTests.swift */; };
+		23516A891FCEE7DB00B465DD /* TableConstraintBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0B1FCEE7CF00B465DD /* TableConstraintBindingTests.swift */; };
 		23516A8A1FCEE7DB00B465DD /* IndexBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0C1FCEE7CF00B465DD /* IndexBindingTests.swift */; };
-		23516A8B1FCEE7DB00B465DD /* KeyPathBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0D1FCEE7CF00B465DD /* KeyPathBindingTests.swift */; };
-		23516A8C1FCEE7DB00B465DD /* ORMTestClassColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0E1FCEE7CF00B465DD /* ORMTestClassColumn.swift */; };
-		23516A8D1FCEE7DB00B465DD /* ORMTestEnumColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0F1FCEE7CF00B465DD /* ORMTestEnumColumn.swift */; };
-		23516A8E1FCEE7DB00B465DD /* ORMTestStructColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A101FCEE7CF00B465DD /* ORMTestStructColumn.swift */; };
-		23516A8F1FCEE7DB00B465DD /* ORMTestTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A111FCEE7CF00B465DD /* ORMTestTable.swift */; };
 		23516A901FCEE7DB00B465DD /* VirtualTableBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A121FCEE7CF00B465DD /* VirtualTableBindingTests.swift */; };
 		23516A941FCEE7FE00B465DD /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169EE1FCEE65F00B465DD /* BaseTestCase.swift */; };
 		23516A951FCEE7FE00B465DD /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169EE1FCEE65F00B465DD /* BaseTestCase.swift */; };
@@ -151,14 +146,9 @@
 		23516C2F1FD033F000B465DD /* TableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A061FCEE7CF00B465DD /* TableTests.swift */; };
 		23516C301FD033F000B465DD /* TransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A071FCEE7CF00B465DD /* TransactionTests.swift */; };
 		23516C311FD033F000B465DD /* UpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A081FCEE7CF00B465DD /* UpdateTests.swift */; };
-		23516C321FD033F400B465DD /* ColumnBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0A1FCEE7CF00B465DD /* ColumnBindingTests.swift */; };
-		23516C331FD033F400B465DD /* ConstraintBIndingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0B1FCEE7CF00B465DD /* ConstraintBIndingTests.swift */; };
+		23516C321FD033F400B465DD /* ColumnConstraintBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0A1FCEE7CF00B465DD /* ColumnConstraintBindingTests.swift */; };
+		23516C331FD033F400B465DD /* TableConstraintBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0B1FCEE7CF00B465DD /* TableConstraintBindingTests.swift */; };
 		23516C341FD033F400B465DD /* IndexBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0C1FCEE7CF00B465DD /* IndexBindingTests.swift */; };
-		23516C351FD033F400B465DD /* KeyPathBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0D1FCEE7CF00B465DD /* KeyPathBindingTests.swift */; };
-		23516C361FD033F400B465DD /* ORMTestClassColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0E1FCEE7CF00B465DD /* ORMTestClassColumn.swift */; };
-		23516C371FD033F400B465DD /* ORMTestEnumColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A0F1FCEE7CF00B465DD /* ORMTestEnumColumn.swift */; };
-		23516C381FD033F400B465DD /* ORMTestStructColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A101FCEE7CF00B465DD /* ORMTestStructColumn.swift */; };
-		23516C391FD033F400B465DD /* ORMTestTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A111FCEE7CF00B465DD /* ORMTestTable.swift */; };
 		23516C3A1FD033F400B465DD /* VirtualTableBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A121FCEE7CF00B465DD /* VirtualTableBindingTests.swift */; };
 		23516C3B1FD033F900B465DD /* FileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A141FCEE7CF00B465DD /* FileTests.swift */; };
 		23516C3C1FD033F900B465DD /* RepairTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A151FCEE7CF00B465DD /* RepairTests.swift */; };
@@ -306,14 +296,9 @@
 		23516A061FCEE7CF00B465DD /* TableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableTests.swift; sourceTree = "<group>"; };
 		23516A071FCEE7CF00B465DD /* TransactionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionTests.swift; sourceTree = "<group>"; };
 		23516A081FCEE7CF00B465DD /* UpdateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateTests.swift; sourceTree = "<group>"; };
-		23516A0A1FCEE7CF00B465DD /* ColumnBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnBindingTests.swift; sourceTree = "<group>"; };
-		23516A0B1FCEE7CF00B465DD /* ConstraintBIndingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintBIndingTests.swift; sourceTree = "<group>"; };
+		23516A0A1FCEE7CF00B465DD /* ColumnConstraintBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnConstraintBindingTests.swift; sourceTree = "<group>"; };
+		23516A0B1FCEE7CF00B465DD /* TableConstraintBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableConstraintBindingTests.swift; sourceTree = "<group>"; };
 		23516A0C1FCEE7CF00B465DD /* IndexBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexBindingTests.swift; sourceTree = "<group>"; };
-		23516A0D1FCEE7CF00B465DD /* KeyPathBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPathBindingTests.swift; sourceTree = "<group>"; };
-		23516A0E1FCEE7CF00B465DD /* ORMTestClassColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMTestClassColumn.swift; sourceTree = "<group>"; };
-		23516A0F1FCEE7CF00B465DD /* ORMTestEnumColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMTestEnumColumn.swift; sourceTree = "<group>"; };
-		23516A101FCEE7CF00B465DD /* ORMTestStructColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMTestStructColumn.swift; sourceTree = "<group>"; };
-		23516A111FCEE7CF00B465DD /* ORMTestTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMTestTable.swift; sourceTree = "<group>"; };
 		23516A121FCEE7CF00B465DD /* VirtualTableBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualTableBindingTests.swift; sourceTree = "<group>"; };
 		23516A141FCEE7CF00B465DD /* FileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTests.swift; sourceTree = "<group>"; };
 		23516A151FCEE7CF00B465DD /* RepairTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepairTests.swift; sourceTree = "<group>"; };
@@ -515,14 +500,9 @@
 		23516A091FCEE7CF00B465DD /* orm */ = {
 			isa = PBXGroup;
 			children = (
-				23516A0A1FCEE7CF00B465DD /* ColumnBindingTests.swift */,
-				23516A0B1FCEE7CF00B465DD /* ConstraintBIndingTests.swift */,
+				23516A0A1FCEE7CF00B465DD /* ColumnConstraintBindingTests.swift */,
+				23516A0B1FCEE7CF00B465DD /* TableConstraintBindingTests.swift */,
 				23516A0C1FCEE7CF00B465DD /* IndexBindingTests.swift */,
-				23516A0D1FCEE7CF00B465DD /* KeyPathBindingTests.swift */,
-				23516A0E1FCEE7CF00B465DD /* ORMTestClassColumn.swift */,
-				23516A0F1FCEE7CF00B465DD /* ORMTestEnumColumn.swift */,
-				23516A101FCEE7CF00B465DD /* ORMTestStructColumn.swift */,
-				23516A111FCEE7CF00B465DD /* ORMTestTable.swift */,
 				23516A121FCEE7CF00B465DD /* VirtualTableBindingTests.swift */,
 			);
 			path = orm;
@@ -1102,7 +1082,6 @@
 				23516C5F1FD0340100B465DD /* StatementTransactionTests.swift in Sources */,
 				23516C601FD0340100B465DD /* StatementUpdateTests.swift in Sources */,
 				23516C521FD0340100B465DD /* StatementCreateVirtualTableTests.swift in Sources */,
-				23516C371FD033F400B465DD /* ORMTestEnumColumn.swift in Sources */,
 				23516C3C1FD033F900B465DD /* RepairTests.swift in Sources */,
 				23516C4A1FD0340100B465DD /* LiteralValueTests.swift in Sources */,
 				23516C2A1FD033F000B465DD /* DeleteTests.swift in Sources */,
@@ -1119,23 +1098,20 @@
 				23516C551FD0340100B465DD /* StatementDropIndexTests.swift in Sources */,
 				23516C591FD0340100B465DD /* StatementPragmaTests.swift in Sources */,
 				23516C581FD0340100B465DD /* StatementInsertTests.swift in Sources */,
-				23516C321FD033F400B465DD /* ColumnBindingTests.swift in Sources */,
+				23516C321FD033F400B465DD /* ColumnConstraintBindingTests.swift in Sources */,
 				23516C4B1FD0340100B465DD /* ModuleArgumentTests.swift in Sources */,
 				23516C3A1FD033F400B465DD /* VirtualTableBindingTests.swift in Sources */,
 				23516C4F1FD0340100B465DD /* StatementAttachTests.swift in Sources */,
 				23516C621FD0340100B465DD /* SubqueryTests.swift in Sources */,
 				23516C441FD0340100B465DD /* ColumnTests.swift in Sources */,
-				23516C351FD033F400B465DD /* KeyPathBindingTests.swift in Sources */,
 				23516C2C1FD033F000B465DD /* MultiSelectTests.swift in Sources */,
 				23516C471FD0340100B465DD /* ExpresssionTests.swift in Sources */,
-				23516C331FD033F400B465DD /* ConstraintBIndingTests.swift in Sources */,
+				23516C331FD033F400B465DD /* TableConstraintBindingTests.swift in Sources */,
 				23516C561FD0340100B465DD /* StatementDropTableTests.swift in Sources */,
 				23516C301FD033F000B465DD /* TransactionTests.swift in Sources */,
-				23516C361FD033F400B465DD /* ORMTestClassColumn.swift in Sources */,
 				23516C421FD0340100B465DD /* ColumnIndexTests.swift in Sources */,
 				23516C271FD033F000B465DD /* ConvenieceTests.swift in Sources */,
 				23516C481FD0340100B465DD /* ForeignKeyTests.swift in Sources */,
-				23516C391FD033F400B465DD /* ORMTestTable.swift in Sources */,
 				23516C651FD0340500B465DD /* Assert.swift in Sources */,
 				23516C261FD033F000B465DD /* AdvanceTests.swift in Sources */,
 				23516C501FD0340100B465DD /* StatementCreateIndexTests.swift in Sources */,
@@ -1148,7 +1124,6 @@
 				23516C641FD0340500B465DD /* BaseTestCase.swift in Sources */,
 				23516C2F1FD033F000B465DD /* TableTests.swift in Sources */,
 				23516C291FD033F000B465DD /* CRUDTestCase.swift in Sources */,
-				23516C381FD033F400B465DD /* ORMTestStructColumn.swift in Sources */,
 				23516C4C1FD0340100B465DD /* OrderTermTests.swift in Sources */,
 				23516C5D1FD0340100B465DD /* StatementSavepointTests.swift in Sources */,
 				23516C631FD0340100B465DD /* TableConstraintTests.swift in Sources */,
@@ -1185,17 +1160,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23516A8B1FCEE7DB00B465DD /* KeyPathBindingTests.swift in Sources */,
 				2310C6021FCBB5EA0030F3D3 /* Assert.swift in Sources */,
 				235169B41FCEE30B00B465DD /* Convenience.swift in Sources */,
 				23516A901FCEE7DB00B465DD /* VirtualTableBindingTests.swift in Sources */,
 				23516A941FCEE7FE00B465DD /* BaseTestCase.swift in Sources */,
-				23516A8D1FCEE7DB00B465DD /* ORMTestEnumColumn.swift in Sources */,
-				23516A891FCEE7DB00B465DD /* ConstraintBIndingTests.swift in Sources */,
-				23516A8F1FCEE7DB00B465DD /* ORMTestTable.swift in Sources */,
-				23516A8E1FCEE7DB00B465DD /* ORMTestStructColumn.swift in Sources */,
-				23516A8C1FCEE7DB00B465DD /* ORMTestClassColumn.swift in Sources */,
-				23516A881FCEE7DB00B465DD /* ColumnBindingTests.swift in Sources */,
+				23516A891FCEE7DB00B465DD /* TableConstraintBindingTests.swift in Sources */,
+				23516A881FCEE7DB00B465DD /* ColumnConstraintBindingTests.swift in Sources */,
 				23516A8A1FCEE7DB00B465DD /* IndexBindingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
