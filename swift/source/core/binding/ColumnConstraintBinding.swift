@@ -29,7 +29,7 @@ public class ColumnConstraintBinding: AnyBinding {
     let isUnique: Bool
     let term: OrderTerm?
     
-    init(isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
+    public init(isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         self.isPrimary = isPrimary
         self.isAutoIncrement = isAutoIncrement
         self.isNotNull = isNotNull
@@ -38,6 +38,26 @@ public class ColumnConstraintBinding: AnyBinding {
         self.term = term
         self.conflict = conflict
         super.init(with: .ColumnConstraint)
+    }
+    
+    public convenience init<ColumnEncodableType: ColumnEncodable>(isPrimary: Bool = false, orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil, isNotNull: Bool = false, isUnique: Bool = false, defaultTo defaultEncodableValue: ColumnEncodableType) {
+        var defaultValue: ColumnDef.DefaultType!
+        let value = defaultEncodableValue.archivedValue()
+        switch ColumnEncodableType.columnType {
+        case .Integer32:
+            defaultValue = .Int32((value as? Int32) ?? 0)
+        case .Integer64:
+            defaultValue = .Int64((value as? Int64) ?? 0)
+        case .Text:
+            defaultValue = .Text((value as? String) ?? "")
+        case .Float:
+            defaultValue = .Float((value as? Double) ?? 0)
+        case .BLOB:
+            defaultValue = .BLOB((value as? Data) ?? Data())
+        case .Null:
+            defaultValue = .Null
+        }
+        self.init(isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
     func generateColumnDef(with columnConvertible: ColumnConvertible) -> ColumnDef {

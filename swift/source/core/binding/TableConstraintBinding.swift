@@ -27,7 +27,12 @@ public class TableConstraintBinding: AnyBinding {
     let columnIndexes: [ColumnIndex]
     let condition: Condition?
     
-    init(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible], onConflict conflict: Conflict? = nil, check condition: Condition? = nil) {
+    
+    public convenience init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible..., onConflict conflict: Conflict? = nil, check condition: Condition? = nil) {
+        self.init(indexesBy: columnIndexConvertibleList, onConflict: conflict, check: condition)
+    }
+    
+    public init(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible], onConflict conflict: Conflict? = nil, check condition: Condition? = nil) {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
         self.conflict = conflict
         self.condition = condition
