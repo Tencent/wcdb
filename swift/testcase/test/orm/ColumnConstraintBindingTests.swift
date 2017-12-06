@@ -24,7 +24,7 @@ import WCDB
 class ColumnConstraintBindingTests: BaseTestCase {
     
     class BaselineTestObject: WCDB.TableCodable {
-        var variable: Int = 0 
+        let variable: Int = 0 
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
@@ -32,7 +32,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
     
     class PrimaryTestObject: WCDB.TableCodable {
-        var variable: Int = 0  
+        let variable: Int = 0  
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PrimaryTestObject
             case variable = "primaryVariable"
@@ -43,7 +43,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class OrderedPrimaryTestObject: WCDB.TableCodable {
-        var variable: Int = 0        
+        let variable: Int = 0        
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OrderedPrimaryTestObject
             case variable = "orderedPrimaryVariable"
@@ -54,7 +54,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class AutoIncrementPrimaryTestObject: WCDB.TableCodable {
-        var variable: Int = 0       
+        let variable: Int = 0       
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoIncrementPrimaryTestObject
             case variable = "autoIncrementPrimaryVariable"
@@ -64,7 +64,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
     class ConflictPrimaryTestObject: WCDB.TableCodable {
-        var variable: Int = 0    
+        let variable: Int = 0    
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConflictPrimaryTestObject
             case variable = "conflictPrimaryVariable"
@@ -75,7 +75,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class NotNullTestObject: WCDB.TableCodable {
-        var variable: Int = 0        
+        let variable: Int = 0        
         enum CodingKeys: String, CodingTableKey {
             typealias Root = NotNullTestObject
             case variable = "notNullVariable"
@@ -86,7 +86,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class UniqueTestObject: WCDB.TableCodable {
-        var variable: Int = 0        
+        let variable: Int = 0        
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable = "uniqueVariable"
@@ -97,7 +97,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultValueTestObject: WCDB.TableCodable {
-        var variable: Int = 0        
+        let variable: Int = 0        
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultValueTestObject
             case variable = "defaultValueVariable"

@@ -24,7 +24,7 @@ import WCDB
 class VirtualTableBindingTests: BaseTestCase {
 
     class BaselineTestObject: WCDB.TableCodable {
-        var variable: Int = 0        
+        let variable: Int = 0        
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable

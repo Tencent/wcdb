@@ -24,8 +24,8 @@ import WCDB
 class TableConstraintTests: BaseTestCase {
 
     class BaselineMultiPrimaryTestObject: WCDB.TableCodable, Named {
-        var variable1: Int = 0        
-        var variable2: Int = 0   
+        let variable1: Int = 0        
+        let variable2: Int = 0   
         static let constraintName = BaselineMultiPrimaryTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiPrimaryTestObject
@@ -38,8 +38,8 @@ class TableConstraintTests: BaseTestCase {
     }
     
     class MultiPrimaryConflictTestObject: WCDB.TableCodable, Named {
-        var variable1: Int = 0        
-        var variable2: Int = 0        
+        let variable1: Int = 0        
+        let variable2: Int = 0        
         static let constraintName = MultiPrimaryConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiPrimaryConflictTestObject
@@ -52,8 +52,8 @@ class TableConstraintTests: BaseTestCase {
     }
     
     class MultiPrimaryCheckTestObject: WCDB.TableCodable, Named {
-        var variable1: Int = 0        
-        var variable2: Int = 0
+        let variable1: Int = 0        
+        let variable2: Int = 0
         static let constraintName = MultiPrimaryCheckTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiPrimaryCheckTestObject
@@ -74,8 +74,8 @@ class TableConstraintTests: BaseTestCase {
     }
     
     class BaselineMultiUniqueTestObject: WCDB.TableCodable, Named {
-        var variable1: Int = 0        
-        var variable2: Int = 0     
+        let variable1: Int = 0        
+        let variable2: Int = 0     
         static let constraintName = BaselineMultiUniqueTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiUniqueTestObject
@@ -88,8 +88,8 @@ class TableConstraintTests: BaseTestCase {
     }
     
     class MultiUniqueConflictTestObject: WCDB.TableCodable, Named {
-        var variable1: Int = 0        
-        var variable2: Int = 0   
+        let variable1: Int = 0        
+        let variable2: Int = 0   
         static let constraintName = MultiUniqueConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiUniqueConflictTestObject
@@ -102,8 +102,8 @@ class TableConstraintTests: BaseTestCase {
     }
     
     class MultiUniqueCheckTestObject: WCDB.TableCodable, Named {
-        var variable1: Int = 0        
-        var variable2: Int = 0      
+        let variable1: Int = 0        
+        let variable2: Int = 0      
         static let constraintName = MultiUniqueCheckTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiUniqueCheckTestObject
