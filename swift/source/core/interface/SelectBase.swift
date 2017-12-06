@@ -29,6 +29,10 @@ public class SelectBase: CoreRepresentable {
         self.core = core
     }
     
+    deinit {
+        try? optionalCoreStatement?.finalize()
+    }
+    
     func lazyCoreStatement() throws -> CoreStatement {
         if optionalCoreStatement == nil {
             optionalCoreStatement = try core.prepare(statement)
@@ -105,77 +109,31 @@ public class SelectBase: CoreRepresentable {
             throw error
         }
     }
-        
-    func extractMultiObject(from properties: [Property]) throws -> [String:CodableTable] {
-        var multiObject: [String:CodableTable] = [:]
-        for (index, property) in properties.enumerated() {
-            let tableName = try self.lazyCoreStatement().columnTableName(atIndex: index)
-            let columnBinding = property.columnBinding
-            let cls = columnBinding.`class` as! CodableTable.Type
-            var object = multiObject[tableName]
-            if object == nil {
-                object = cls.init()
-                multiObject[tableName] = object
-            }
-            try extract(from: property, at: index, into: &object!)
-        }
-        return multiObject
-    }
     
-    func extract<Object: CodableTable>(from properties: [Property]) throws -> Object {
-        guard properties.first!.columnBinding.`class` is Object.Type else {
-            Error.abort("")
-        }
-        let object = try extract(from: properties)
-        return object as! Object
-    }
-    
-    func extract(from properties: [Property]) throws -> Any {
-        let cls = (properties.first!.columnBinding.`class` as! CodableTable.Type)
-        var object = cls.init()
-        for (index, property) in properties.enumerated() {
-            try extract(from: property, at: index, into: &object)
-        }
-        return object
-    }
-    
-    func extract(from property: Property, at index: Int, into object: inout CodableTable) throws {
-        let columnBinding = property.columnBinding 
+    func extract<Object: TableDecodable>(from keys: [Object.CodingKeys]) throws -> Object {
         let coreStatement = try self.lazyCoreStatement()
-        switch columnBinding.columnType {
-        case .Integer32:
-            let value: Int32 = coreStatement.value(atIndex: index)
-            columnBinding.access(setFundamentalValue: value, forObject: &object)
-        case .Integer64:
-            let value: Int64 = coreStatement.value(atIndex: index)
-            columnBinding.access(setFundamentalValue: value, forObject: &object)
-        case .Float:
-            let value: Double = coreStatement.value(atIndex: index)
-            columnBinding.access(setFundamentalValue: value, forObject: &object)
-        case .Text:
-            let value: String = coreStatement.value(atIndex: index)
-            columnBinding.access(setFundamentalValue: value, forObject: &object)
-        case .BLOB:
-            let value: Data = coreStatement.value(atIndex: index)
-            columnBinding.access(setFundamentalValue: value, forObject: &object) 
-        default:
-            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "Extracting column \(columnBinding.columnName) with unknown type \(columnBinding.columnType.description)")
-        }
+        let decoder = TableDecoder(keys, on: coreStatement)
+        return try Object.init(from: decoder)
     }
     
     func extract(atIndex index: Int) throws -> FundamentalValue {
         let coreStatement = try self.lazyCoreStatement()
-        switch coreStatement.type(atIndex: index) {
+        switch coreStatement.columnType(atIndex: index) {
         case .Integer32:
-            return FundamentalValue(coreStatement.value(atIndex: index) as Int32)
+            let value: Int32 = coreStatement.value(atIndex: index) ?? 0
+            return FundamentalValue(value)
         case .Integer64:
-            return FundamentalValue(coreStatement.value(atIndex: index) as Int64)
+            let value: Int64 = coreStatement.value(atIndex: index) ?? 0 
+            return FundamentalValue(value)
         case .Float:
-            return FundamentalValue(coreStatement.value(atIndex: index) as Double)
+            let value: Double = coreStatement.value(atIndex: index)  ?? 0
+            return FundamentalValue(value)
         case .Text:
-            return FundamentalValue(coreStatement.value(atIndex: index) as String)
+            let value: String = coreStatement.value(atIndex: index)  ?? ""
+            return FundamentalValue(value)
         case .BLOB:
-            return FundamentalValue(coreStatement.value(atIndex: index) as Data)
+            let value: Data = coreStatement.value(atIndex: index)  ?? Data()
+            return FundamentalValue(value)
         case .Null:
             return nil
         }

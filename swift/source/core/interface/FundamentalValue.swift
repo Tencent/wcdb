@@ -22,36 +22,36 @@ import Foundation
 
 // nullable, Int32, Int64, Double, String, Data
 public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLiteral, ExpressibleByBooleanLiteral, ExpressibleByFloatLiteral, ExpressibleByStringLiteral {
-    let base: CodableFundamentalValueBase?
+    let base: FundamentalColumnType?
     
-    init(with codableFundamentalValueBase: CodableFundamentalValueBase?) {
-        base = codableFundamentalValueBase
+    init(_ _: Void? = nil) {
+        base = nil
     }
     
-    init(_ codableFundamentalValueBase: CodableFundamentalValueBase?) {
-        base = codableFundamentalValueBase
+    init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
+        base = columnEncodableValue.archivedValue()
     }
     
     public convenience required init(nilLiteral: ()) {
         self.init(nil)
     }
-
+    
     public convenience required init(integerLiteral value: Int) {
-        self.init(Int64(value))
+        self.init(value)
     }
-
+    
     public convenience required init(booleanLiteral value: Bool) {
-        self.init(value ? 1 : 0)
+        self.init(value)
     }
-
+    
     public convenience required init(floatLiteral value: Double) {
         self.init(value)
     }
-
+    
     public convenience required init(stringLiteral value: String) {
         self.init(value)
     }
-        
+    
     public var type: ColumnType {
         guard base != nil else {
             return .Null
@@ -94,7 +94,7 @@ public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLite
             return 0
         }
     }
-
+    
     public var stringValue: String {
         switch type {
         case .Integer32:
@@ -115,7 +115,7 @@ public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLite
             return ""
         }
     }
-
+    
     public var doubleValue: Double {
         switch type {
         case .Integer32:
@@ -133,7 +133,7 @@ public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLite
             return 0
         }
     }
-
+    
     public var dataValue: Data {
         switch type {
         case .Integer32:
@@ -175,4 +175,5 @@ extension Array where Element==Array<FundamentalValue> {
         }
     }
 }
+
 

@@ -20,14 +20,18 @@
 
 import Foundation
 
-public class TableBinding {
-    private static var atomicCollection = Atomic<[Int:TableBinding]>([:])
-    static func from<Root: CodableTable>(_ type: Root.Type) -> TableBinding {
+public class TableBindingBase {
+    private static var atomicCollection = Atomic<[Int:TableBindingBase]>([:])
+    static func from<CodingTableKeyType: CodingTableKey>(_ type: CodingTableKeyType.Type) -> TableBinding<CodingTableKeyType> {
         let hash = unsafeBitCast(type, to: Int.self)
-        var tableBinding: TableBinding! 
+        var tableBinding: TableBinding<CodingTableKeyType>! 
         atomicCollection.withValue { (collection) -> Void in
-            tableBinding = collection[hash]
-            if tableBinding == nil {
+            if let foundTableBinding = collection[hash] {
+                guard let typedTableBinding = foundTableBinding as? TableBinding<CodingTableKeyType> else {
+                    Error.abort("")
+                }
+                tableBinding = typedTableBinding
+            }else {
                 tableBinding = TableBinding(type)
                 collection[hash] = tableBinding
             }
@@ -35,82 +39,134 @@ public class TableBinding {
         return tableBinding
     }
     
-    typealias Accessor = AnyColumnBinding.AnyAccessor
-    
-    let bindingClass: CodableTable.Type
-    private let properties: [Accessor:Property]
     let allProperties: [Property]
-    
-    init<Root: CodableTable>(_ type: Root.Type) {
-        self.bindingClass = type
-        (self.properties, self.allProperties) = bindingClass.columnBindings().reduce(into: ([AnyColumnBinding.AnyAccessor:Property](), [Property]())) { (result, columnBinding) in 
-            guard columnBinding.class == type else {
-                Error.abort("")
-            }
-            let property = Property(with: columnBinding)
-            result.0[columnBinding.accessor] = property
-            result.1.append(property)
-        }
-    }
-    
-    private var indexBindings: [IndexBinding]? {
-        return bindingClass.indexBindings()
-    }
-    
-    private var constraintBindings: [ConstraintBinding]? {
-        return bindingClass.constraintBindings()
-    }
-    
-    private var virtualTableBinding: VirtualTableBinding? {
-        return bindingClass.virtualTableBinding()
-    }
-    
-    var columnBindings: [String:AnyColumnBinding] {
-        return properties.values.reduce(into: [String:AnyColumnBinding]()) { (dic, property) in
-            dic[property.name] = property.columnBinding
-        }
-    }
 
-    func property(from accessor: Accessor) -> Property {
-        guard let property = properties[accessor] else {
-            Error.abort("")
-        } 
-        return property 
+    init(with properties: [Property]) {
+        allProperties = properties
     }
     
+    func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
+        Error.abort("")
+    }   
+
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
-        guard let virtualTableBinding = self.virtualTableBinding else {
-            Error.abort("Virtual table binding is not defined")
-        }
-        var moduleArguments = allProperties.reduce(into: [ModuleArgument]()) { 
-            $0.append(ModuleArgument(with: $1.columnBinding.columnDef))
-        }
-        if let constraintBindings = self.constraintBindings {
-            moduleArguments = constraintBindings.reduce(into: moduleArguments, { 
-                $0.append(ModuleArgument(with:$1.generateConstraint()))
-            })
-        }
-        moduleArguments += virtualTableBinding.arguments
-        return StatementCreateVirtualTable().create(virtualTable: table).using(module: virtualTableBinding.module, arguments: moduleArguments)
+        Error.abort("")
     }
     
     public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
-        let columnDefList = allProperties.reduce(into: [ColumnDef]()) {
-            $0.append($1.columnBinding.columnDef)
-        }
-        let tableConstraints = constraintBindings?.reduce(into: [TableConstraint](), { 
-            $0.append($1.generateConstraint())
-        })
-        return StatementCreateTable().create(table: table, with: columnDefList, and: tableConstraints)
+        Error.abort("")
     }
     
     public func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
+        Error.abort("")
+    }
+    
+    func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
+        Error.abort("")
+    }
+
+    func getPrimaryKey() -> CodingTableKeyBase? {
+        Error.abort("")
+    }
+}
+
+public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase {
+    private let properties: [CodingTableKeyType:Property]
+    private let type: CodingTableKeyType.Type
+    let allKeys: [CodingTableKeyType] = {
+        var i = 1
+        var allKeys: [CodingTableKeyType] = []
+        while true {
+            let key = withUnsafePointer(to: &i) { 
+                return $0.withMemoryRebound(to: CodingTableKeyType.self, capacity: 1, { return $0.pointee })
+            }
+            guard key.hashValue != 0 else {
+                break
+            }
+            allKeys.append(key)
+        }
+        return allKeys
+    }()
+    private lazy var allColumnDef: [ColumnDef] = allKeys.map { (key) -> ColumnDef in
+        return generateColumnDef(with: key)
+    }
+    
+    private lazy var columnConstraintBindings: [CodingTableKeyType:ColumnConstraintBinding]? = type.__columnConstraintBindings
+    private lazy var indexBindings: [IndexBinding.Subfix:IndexBinding]? = type.__indexBindings
+    private lazy var tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? = type.__tableConstraintBindings
+    private lazy var virtualTableBinding: VirtualTableBinding? = type.__virtualTableBinding
+    
+    private lazy var primaryKey: CodingTableKeyType? = {
+        guard let filtered = columnConstraintBindings?.filter({ (args) -> Bool in
+            return args.value.isPrimary 
+        }) else {
+            return nil
+        }
+        guard filtered.count == 1 else {
+            if filtered.count == 0 {
+                return nil
+            }else {
+                Error.abort("")
+            }
+        }
+        return filtered.first!.key
+    }()
+    
+    init(_ type: CodingTableKeyType.Type) {
+        self.type = type        
+        var allProperties: [Property] = []
+        (self.properties, allProperties) = allKeys.reduce(into: ([CodingTableKeyType:Property](), [Property]()), { (result, codingTableKey) in
+            let property = Property(with: codingTableKey)
+            result.0[codingTableKey] = property
+            result.1.append(property)
+        })
+        super.init(with: allProperties)
+    }
+    
+    typealias TypedCodingTableKeyType = CodingTableKeyType
+    override func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
+        guard let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType else {
+            Error.abort("")
+        }
+        guard let typedProperty = properties[typedCodingTableKey] else {
+            Error.abort("")
+        } 
+        return typedProperty
+    }   
+
+    override func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
+        guard let codingTableKey = key as? CodingTableKeyType else {
+            Error.abort("")
+        }
+        if let index = columnConstraintBindings?.index(forKey: codingTableKey) {
+            return columnConstraintBindings![index].value.generateColumnDef(with: codingTableKey)
+        }else {
+            return codingTableKey.asDef()
+        }
+    }
+       
+    public override func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
+        guard let virtualTableBinding = self.virtualTableBinding else {
+            Error.abort("Virtual table binding is not defined")
+        }
+        let columnModuleArguments = allColumnDef.map { ModuleArgument(with: $0) }
+        let tableCostraintArguments = tableConstraintBindings?.map { ModuleArgument(with: $0.value.generateConstraint(withName: $0.key)) } ?? []
+        return StatementCreateVirtualTable().create(virtualTable: table).using(module: virtualTableBinding.module, arguments: columnModuleArguments + tableCostraintArguments + virtualTableBinding.arguments)
+    }
+    
+    public override func generateCreateTableStatement(named table: String) -> StatementCreateTable {
+        return StatementCreateTable().create(table: table, with: allColumnDef, and: tableConstraintBindings?.map { $0.value.generateConstraint(withName: $0.key) })
+    }
+    
+    public override func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
         guard let indexBindings = self.indexBindings else {
             return nil
         }
-        return indexBindings.reduce(into: [StatementCreateIndex]()) { 
-            $0.append($1.generateCreateIndexStatement(prefix: table))
-        }
+        return indexBindings.map { $0.value.generateCreateIndexStatement(onTable: table, withIndexSubfix: $0.key)}
+    }
+    
+    override func getPrimaryKey() -> CodingTableKeyBase? {
+        return primaryKey
     }
 }
 

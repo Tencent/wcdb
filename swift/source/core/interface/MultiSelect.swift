@@ -21,7 +21,7 @@
 import Foundation
 
 public class MultiSelect: SelectBase {
-    private let properties: [Property]
+    private let keys: [CodingTableKeyBase]
     
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], tables: [String], isDistinct: Bool = false) throws {
         guard propertyConvertibleList.count > 0 else {
@@ -30,22 +30,61 @@ public class MultiSelect: SelectBase {
         guard tables.count > 0 else {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Empty table")
         }
-        self.properties = propertyConvertibleList.asProperties()
+        var properties: [Property] = []
+        (self.keys, properties) = propertyConvertibleList.reduce(into: ([CodingTableKeyBase](), [Property]()), { (result, propertyConvertible) in
+            guard propertyConvertible.codingTableKey.rootType is TableDecodableBase.Type else {
+                Error.abort("")
+            }
+            result.0.append(propertyConvertible.codingTableKey)
+            result.1.append(propertyConvertible.asProperty())
+        })
+        
         super.init(with: core)
         statement.select(distinct: isDistinct, properties).from(tables)
-    }
+    }    
     
-    public func nextMultiObject() throws -> [String:CodableTable]? {
+    private typealias Generator = () throws -> TableDecodableBase
+    private lazy var generators: [String:Generator] = {
+        var mappedKeys: [String:(type: TableDecodableBase.Type, keys: [CodingTableKeyBase])] = [:]
+        let coreStatement = try! lazyCoreStatement()
+        for (index, key) in keys.enumerated() {
+            let tableName = coreStatement.columnTableName(atIndex: index)
+            var keys: (type: TableDecodableBase.Type, keys: [CodingTableKeyBase])! = mappedKeys[tableName]
+            if keys == nil {
+                keys = (key.rootType as! TableDecodableBase.Type, [key])
+            }
+            mappedKeys[tableName] = keys
+        }
+        var generators: [String:Generator] = [:]
+        for (tableName, mappedKey) in mappedKeys {
+            let decoder = TableDecoder(mappedKey.keys, on: coreStatement)
+            let generator = { () throws -> TableDecodableBase in 
+                return try mappedKey.type.init(from: decoder)
+            }
+            generators[tableName] = generator
+        }
+        return generators
+    }()
+    
+    private func extractMultiObject() throws -> [String:TableDecodableBase] {
+        var multiObject: [String:TableDecodableBase] = [:]
+        for (tableName, generator) in generators {
+            multiObject[tableName] = try generator()
+        }
+        return multiObject
+    }
+
+    public func nextMultiObject() throws -> [String:TableDecodableBase]? {
         guard try next() else {
             return nil
         }
-        return try extractMultiObject(from: properties)
-    }
-    
-    public func allMultiObjects() throws -> [[String:CodableTable]] {
-        var multiObjects: [[String:CodableTable]] = []
+        return try extractMultiObject()
+    }    
+        
+    public func allMultiObjects() throws -> [[String:TableDecodableBase]] {
+        var multiObjects: [[String:TableDecodableBase]] = []
         while try next() {
-            multiObjects.append(try extractMultiObject(from: properties))
+            multiObjects.append(try extractMultiObject())
         }
         return multiObjects
     }

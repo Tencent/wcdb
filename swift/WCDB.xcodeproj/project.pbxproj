@@ -29,11 +29,9 @@
 		230209921FBED533000D69B6 /* RecyclableCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096B1FBED533000D69B6 /* RecyclableCore.swift */; };
 		230209931FBED533000D69B6 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096C1FBED533000D69B6 /* Transaction.swift */; };
 		230209941FBED533000D69B6 /* AnyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096E1FBED533000D69B6 /* AnyBinding.swift */; };
-		230209951FBED533000D69B6 /* ColumnBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096F1FBED533000D69B6 /* ColumnBinding.swift */; };
-		230209961FBED533000D69B6 /* ConstraintBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209701FBED533000D69B6 /* ConstraintBinding.swift */; };
+		230209951FBED533000D69B6 /* ColumnConstraintBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096F1FBED533000D69B6 /* ColumnConstraintBinding.swift */; };
+		230209961FBED533000D69B6 /* TableConstraintBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209701FBED533000D69B6 /* TableConstraintBinding.swift */; };
 		230209971FBED533000D69B6 /* IndexBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209711FBED533000D69B6 /* IndexBinding.swift */; };
-		230209981FBED533000D69B6 /* MultiPrimaryBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209721FBED533000D69B6 /* MultiPrimaryBinding.swift */; };
-		230209991FBED533000D69B6 /* MultiUniqueBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209731FBED533000D69B6 /* MultiUniqueBinding.swift */; };
 		2302099A1FBED533000D69B6 /* TableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209741FBED533000D69B6 /* TableBinding.swift */; };
 		2302099B1FBED533000D69B6 /* VirtualTableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209751FBED533000D69B6 /* VirtualTableBinding.swift */; };
 		230209A21FBED533000D69B6 /* AppleTokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302097F1FBED533000D69B6 /* AppleTokenize.swift */; };
@@ -47,24 +45,23 @@
 		230209AA1FBED533000D69B6 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209881FBED533000D69B6 /* Select.swift */; };
 		230209AB1FBED533000D69B6 /* SelectBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209891FBED533000D69B6 /* SelectBase.swift */; };
 		230209AC1FBED533000D69B6 /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302098A1FBED533000D69B6 /* Update.swift */; };
-		230209B51FBED75C000D69B6 /* CodableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209AF1FBED75C000D69B6 /* CodableColumn.swift */; };
-		230209B71FBED75C000D69B6 /* CodableFundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209B11FBED75C000D69B6 /* CodableFundamentalValue.swift */; };
-		230209B81FBED75C000D69B6 /* CodableTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209B21FBED75C000D69B6 /* CodableTable.swift */; };
 		230209C01FBEE3CC000D69B6 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209BF1FBEE3CC000D69B6 /* Convenience.swift */; };
 		230209C21FBEE431000D69B6 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209C11FBEE431000D69B6 /* Optional.swift */; };
-		230209C41FBEE43A000D69B6 /* Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209C31FBEE43A000D69B6 /* Codable.swift */; };
-		2306801A1FD13B8500EAD5C4 /* BuiltinStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230680191FD13B8500EAD5C4 /* BuiltinStatement.swift */; };
+		2306801A1FD13B8500EAD5C4 /* CommonStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230680191FD13B8500EAD5C4 /* CommonStatement.swift */; };
 		230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230686DB1FAC0E5B0005EE8B /* Convertible.swift */; };
 		2310C60B1FCC23520030F3D3 /* Declare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C60A1FCC23520030F3D3 /* Declare.swift */; };
-		2310C60E1FCC23A90030F3D3 /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C60D1FCC23A90030F3D3 /* FundamentalValue.swift */; };
 		231BC02B1FC29A3C00011C69 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02A1FC29A3B00011C69 /* Property.swift */; };
 		231BC02D1FC2CB1B00011C69 /* Redirectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02C1FC2CB1B00011C69 /* Redirectable.swift */; };
 		231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */; };
 		231BC0311FC2CDCA00011C69 /* SteadyClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC0301FC2CDCA00011C69 /* SteadyClock.swift */; };
 		233032B21FB947F100101373 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
+		235619C31FD69B250085C86B /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235619C21FD69B250085C86B /* FundamentalValue.swift */; };
+		237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C01FD50140003BBA5F /* TableEncoder.swift */; };
+		237931C31FD52C75003BBA5F /* TableDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C21FD52C75003BBA5F /* TableDecoder.swift */; };
+		237931C51FD52CB4003BBA5F /* TableCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C41FD52CB4003BBA5F /* TableCodable.swift */; };
+		237931C81FD538F8003BBA5F /* ColumnCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C71FD538F8003BBA5F /* ColumnCodable.swift */; };
+		237931CB1FD547CC003BBA5F /* CodingTableKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931CA1FD547CC003BBA5F /* CodingTableKey.swift */; };
 		23794DB41FAB23AD001E79DE /* WCDB-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		237BD9351FBEE4AF00F6A094 /* KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BD9341FBEE4AF00F6A094 /* KeyPath.swift */; };
-		237BD9381FBEEB2800F6A094 /* Archivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BD9371FBEEB2800F6A094 /* Archivable.swift */; };
 		238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B131FAB1F7E00BC2659 /* Column.swift */; };
 		238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */; };
 		238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B151FAB1F7E00BC2659 /* ColumnIndex.swift */; };
@@ -139,11 +136,13 @@
 		23E9D3201FC7CE9F00F55299 /* sqliterk_util.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D30D1FC7CE9F00F55299 /* sqliterk_util.h */; };
 		23E9D3211FC7CE9F00F55299 /* sqliterk_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D30E1FC7CE9F00F55299 /* sqliterk_values.c */; };
 		23E9D3221FC7CE9F00F55299 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D30F1FC7CE9F00F55299 /* sqliterk_values.h */; };
-		23E9D3241FC7CEA800F55299 /* CodableTypedColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3231FC7CEA800F55299 /* CodableTypedColumn.swift */; };
 		23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0011FC3C5CB005DE71C /* Tracer.swift */; };
 		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
 		23E9E0071FC3D80B005DE71C /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0061FC3D80B005DE71C /* Table.swift */; };
 		23E9E0091FC3D810005DE71C /* TableInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0081FC3D810005DE71C /* TableInterface.swift */; };
+		23EAA4C91FD685CF00A0BC2D /* ColumnNSCodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EAA4C81FD685CF00A0BC2D /* ColumnNSCodableType.swift */; };
+		23EAA4CB1FD685D900A0BC2D /* ColumnJSONCodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EAA4CA1FD685D900A0BC2D /* ColumnJSONCodableType.swift */; };
+		23EAA4CD1FD686EC00A0BC2D /* ColumnCodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EAA4CC1FD686EC00A0BC2D /* ColumnCodableType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,11 +178,9 @@
 		2302096B1FBED533000D69B6 /* RecyclableCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecyclableCore.swift; sourceTree = "<group>"; };
 		2302096C1FBED533000D69B6 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		2302096E1FBED533000D69B6 /* AnyBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyBinding.swift; sourceTree = "<group>"; };
-		2302096F1FBED533000D69B6 /* ColumnBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnBinding.swift; sourceTree = "<group>"; };
-		230209701FBED533000D69B6 /* ConstraintBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintBinding.swift; sourceTree = "<group>"; };
+		2302096F1FBED533000D69B6 /* ColumnConstraintBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnConstraintBinding.swift; sourceTree = "<group>"; };
+		230209701FBED533000D69B6 /* TableConstraintBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableConstraintBinding.swift; sourceTree = "<group>"; };
 		230209711FBED533000D69B6 /* IndexBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexBinding.swift; sourceTree = "<group>"; };
-		230209721FBED533000D69B6 /* MultiPrimaryBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiPrimaryBinding.swift; sourceTree = "<group>"; };
-		230209731FBED533000D69B6 /* MultiUniqueBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiUniqueBinding.swift; sourceTree = "<group>"; };
 		230209741FBED533000D69B6 /* TableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableBinding.swift; sourceTree = "<group>"; };
 		230209751FBED533000D69B6 /* VirtualTableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualTableBinding.swift; sourceTree = "<group>"; };
 		2302097F1FBED533000D69B6 /* AppleTokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleTokenize.swift; sourceTree = "<group>"; };
@@ -197,24 +194,23 @@
 		230209881FBED533000D69B6 /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Select.swift; sourceTree = "<group>"; };
 		230209891FBED533000D69B6 /* SelectBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBase.swift; sourceTree = "<group>"; };
 		2302098A1FBED533000D69B6 /* Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
-		230209AF1FBED75C000D69B6 /* CodableColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableColumn.swift; sourceTree = "<group>"; };
-		230209B11FBED75C000D69B6 /* CodableFundamentalValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableFundamentalValue.swift; sourceTree = "<group>"; };
-		230209B21FBED75C000D69B6 /* CodableTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableTable.swift; sourceTree = "<group>"; };
 		230209BF1FBEE3CC000D69B6 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		230209C11FBEE431000D69B6 /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
-		230209C31FBEE43A000D69B6 /* Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codable.swift; sourceTree = "<group>"; };
-		230680191FD13B8500EAD5C4 /* BuiltinStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuiltinStatement.swift; sourceTree = "<group>"; };
+		230680191FD13B8500EAD5C4 /* CommonStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStatement.swift; sourceTree = "<group>"; };
 		230686DB1FAC0E5B0005EE8B /* Convertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convertible.swift; sourceTree = "<group>"; };
 		2310C60A1FCC23520030F3D3 /* Declare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Declare.swift; sourceTree = "<group>"; };
-		2310C60D1FCC23A90030F3D3 /* FundamentalValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
 		231BC02A1FC29A3B00011C69 /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		231BC02C1FC2CB1B00011C69 /* Redirectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redirectable.swift; sourceTree = "<group>"; };
 		231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedQueue.swift; sourceTree = "<group>"; };
 		231BC0301FC2CDCA00011C69 /* SteadyClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyClock.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		235619C21FD69B250085C86B /* FundamentalValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
+		237931C01FD50140003BBA5F /* TableEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableEncoder.swift; sourceTree = "<group>"; };
+		237931C21FD52C75003BBA5F /* TableDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableDecoder.swift; sourceTree = "<group>"; };
+		237931C41FD52CB4003BBA5F /* TableCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCodable.swift; sourceTree = "<group>"; };
+		237931C71FD538F8003BBA5F /* ColumnCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnCodable.swift; sourceTree = "<group>"; };
+		237931CA1FD547CC003BBA5F /* CodingTableKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingTableKey.swift; sourceTree = "<group>"; };
 		23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Bridging-Header.h"; sourceTree = "<group>"; };
-		237BD9341FBEE4AF00F6A094 /* KeyPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPath.swift; sourceTree = "<group>"; };
-		237BD9371FBEEB2800F6A094 /* Archivable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Archivable.swift; sourceTree = "<group>"; };
 		238D0B031FAB1F4300BC2659 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		238D0B0F1FAB1F7E00BC2659 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		238D0B131FAB1F7E00BC2659 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
@@ -291,11 +287,13 @@
 		23E9D30D1FC7CE9F00F55299 /* sqliterk_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_util.h; sourceTree = "<group>"; };
 		23E9D30E1FC7CE9F00F55299 /* sqliterk_values.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_values.c; sourceTree = "<group>"; };
 		23E9D30F1FC7CE9F00F55299 /* sqliterk_values.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_values.h; sourceTree = "<group>"; };
-		23E9D3231FC7CEA800F55299 /* CodableTypedColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableTypedColumn.swift; sourceTree = "<group>"; };
 		23E9E0011FC3C5CB005DE71C /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
 		23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
 		23E9E0061FC3D80B005DE71C /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		23E9E0081FC3D810005DE71C /* TableInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableInterface.swift; sourceTree = "<group>"; };
+		23EAA4C81FD685CF00A0BC2D /* ColumnNSCodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnNSCodableType.swift; sourceTree = "<group>"; };
+		23EAA4CA1FD685D900A0BC2D /* ColumnJSONCodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnJSONCodableType.swift; sourceTree = "<group>"; };
+		23EAA4CC1FD686EC00A0BC2D /* ColumnCodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnCodableType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,13 +339,10 @@
 			isa = PBXGroup;
 			children = (
 				231BC02A1FC29A3B00011C69 /* Property.swift */,
-				237BD9341FBEE4AF00F6A094 /* KeyPath.swift */,
 				2302096E1FBED533000D69B6 /* AnyBinding.swift */,
-				2302096F1FBED533000D69B6 /* ColumnBinding.swift */,
-				230209701FBED533000D69B6 /* ConstraintBinding.swift */,
+				2302096F1FBED533000D69B6 /* ColumnConstraintBinding.swift */,
+				230209701FBED533000D69B6 /* TableConstraintBinding.swift */,
 				230209711FBED533000D69B6 /* IndexBinding.swift */,
-				230209721FBED533000D69B6 /* MultiPrimaryBinding.swift */,
-				230209731FBED533000D69B6 /* MultiUniqueBinding.swift */,
 				230209741FBED533000D69B6 /* TableBinding.swift */,
 				230209751FBED533000D69B6 /* VirtualTableBinding.swift */,
 				231BC02C1FC2CB1B00011C69 /* Redirectable.swift */,
@@ -379,6 +374,7 @@
 				23E9E0061FC3D80B005DE71C /* Table.swift */,
 				23E9E0081FC3D810005DE71C /* TableInterface.swift */,
 				2310C60A1FCC23520030F3D3 /* Declare.swift */,
+				235619C21FD69B250085C86B /* FundamentalValue.swift */,
 			);
 			path = interface;
 			sourceTree = "<group>";
@@ -386,11 +382,11 @@
 		230209AD1FBED75C000D69B6 /* codable */ = {
 			isa = PBXGroup;
 			children = (
-				2310C60D1FCC23A90030F3D3 /* FundamentalValue.swift */,
-				23E9D3231FC7CEA800F55299 /* CodableTypedColumn.swift */,
-				230209AF1FBED75C000D69B6 /* CodableColumn.swift */,
-				230209B11FBED75C000D69B6 /* CodableFundamentalValue.swift */,
-				230209B21FBED75C000D69B6 /* CodableTable.swift */,
+				237931C71FD538F8003BBA5F /* ColumnCodable.swift */,
+				237931C21FD52C75003BBA5F /* TableDecoder.swift */,
+				237931C01FD50140003BBA5F /* TableEncoder.swift */,
+				237931C41FD52CB4003BBA5F /* TableCodable.swift */,
+				237931CA1FD547CC003BBA5F /* CodingTableKey.swift */,
 			);
 			path = codable;
 			sourceTree = "<group>";
@@ -489,9 +485,10 @@
 			children = (
 				23E737C31FB1601C00EEBC3D /* Master.swift */,
 				23E737C51FB1602800EEBC3D /* Sequence.swift */,
-				230209C31FBEE43A000D69B6 /* Codable.swift */,
-				237BD9371FBEEB2800F6A094 /* Archivable.swift */,
-				230680191FD13B8500EAD5C4 /* BuiltinStatement.swift */,
+				230680191FD13B8500EAD5C4 /* CommonStatement.swift */,
+				23EAA4C81FD685CF00A0BC2D /* ColumnNSCodableType.swift */,
+				23EAA4CA1FD685D900A0BC2D /* ColumnJSONCodableType.swift */,
+				23EAA4CC1FD686EC00A0BC2D /* ColumnCodableType.swift */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -686,37 +683,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				23E9D31D1FC7CE9F00F55299 /* sqliterk_pager.c in Sources */,
-				230209991FBED533000D69B6 /* MultiUniqueBinding.swift in Sources */,
 				238D0B8C1FAB1F7E00BC2659 /* StatementCreateTable.swift in Sources */,
 				238D0B891FAB1F7E00BC2659 /* StatementAlterTable.swift in Sources */,
 				230209AA1FBED533000D69B6 /* Select.swift in Sources */,
 				23E9D31A1FC7CE9F00F55299 /* sqliterk_os.c in Sources */,
-				237BD9381FBEEB2800F6A094 /* Archivable.swift in Sources */,
 				231BC02B1FC29A3C00011C69 /* Property.swift in Sources */,
 				238D0B841FAB1F7E00BC2659 /* ModuleArgument.swift in Sources */,
-				230209B51FBED75C000D69B6 /* CodableColumn.swift in Sources */,
 				238D0BC51FAB1F7E00BC2659 /* Atomic.swift in Sources */,
 				238D0B871FAB1F7E00BC2659 /* Pragma.swift in Sources */,
 				238D0B961FAB1F7E00BC2659 /* StatementRelease.swift in Sources */,
 				238D0BC91FAB1F7E00BC2659 /* Lock.swift in Sources */,
 				2302098D1FBED533000D69B6 /* CoreStatement.swift in Sources */,
-				2310C60E1FCC23A90030F3D3 /* FundamentalValue.swift in Sources */,
 				2310C60B1FCC23520030F3D3 /* Declare.swift in Sources */,
 				230209971FBED533000D69B6 /* IndexBinding.swift in Sources */,
-				230209C41FBEE43A000D69B6 /* Codable.swift in Sources */,
 				230209A61FBED533000D69B6 /* Insert.swift in Sources */,
 				230209941FBED533000D69B6 /* AnyBinding.swift in Sources */,
 				23E9D3161FC7CE9F00F55299 /* sqliterk_column.c in Sources */,
 				230209C21FBEE431000D69B6 /* Optional.swift in Sources */,
 				23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */,
 				2302099A1FBED533000D69B6 /* TableBinding.swift in Sources */,
-				237BD9351FBEE4AF00F6A094 /* KeyPath.swift in Sources */,
 				238D0B8D1FAB1F7E00BC2659 /* StatementCreateVirtualTable.swift in Sources */,
+				237931C81FD538F8003BBA5F /* ColumnCodable.swift in Sources */,
 				23E9D31F1FC7CE9F00F55299 /* sqliterk_util.c in Sources */,
 				230209921FBED533000D69B6 /* RecyclableCore.swift in Sources */,
 				230209A91FBED533000D69B6 /* RowSelect.swift in Sources */,
 				23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */,
-				2306801A1FD13B8500EAD5C4 /* BuiltinStatement.swift in Sources */,
+				2306801A1FD13B8500EAD5C4 /* CommonStatement.swift in Sources */,
 				23E737C41FB1601C00EEBC3D /* Master.swift in Sources */,
 				230209931FBED533000D69B6 /* Transaction.swift in Sources */,
 				230209901FBED533000D69B6 /* HandlePool.swift in Sources */,
@@ -730,7 +722,6 @@
 				23E9D3111FC7CE9F00F55299 /* sqliterk.c in Sources */,
 				23E9D3131FC7CE9F00F55299 /* sqliterk_api.c in Sources */,
 				230209C01FBEE3CC000D69B6 /* Convenience.swift in Sources */,
-				230209B81FBED75C000D69B6 /* CodableTable.swift in Sources */,
 				238D0B851FAB1F7E00BC2659 /* Order.swift in Sources */,
 				231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */,
 				238D0B831FAB1F7E00BC2659 /* LiteralValue.swift in Sources */,
@@ -738,16 +729,20 @@
 				238D0B971FAB1F7E00BC2659 /* StatementRollback.swift in Sources */,
 				238D0B7E1FAB1F7E00BC2659 /* Expression.swift in Sources */,
 				238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */,
+				235619C31FD69B250085C86B /* FundamentalValue.swift in Sources */,
 				238D0B9E1FAB1F7E00BC2659 /* TableConstraint.swift in Sources */,
 				238D0BCA1FAB1F7E00BC2659 /* Recyclable.swift in Sources */,
 				238D0B9A1FAB1F7E00BC2659 /* StatementTransaction.swift in Sources */,
 				2302099B1FBED533000D69B6 /* VirtualTableBinding.swift in Sources */,
 				238D0B901FAB1F7E00BC2659 /* StatementDropIndex.swift in Sources */,
+				237931C31FD52C75003BBA5F /* TableDecoder.swift in Sources */,
 				230209A41FBED533000D69B6 /* ChainCall.swift in Sources */,
 				231BC0311FC2CDCA00011C69 /* SteadyClock.swift in Sources */,
 				238D0B861FAB1F7E00BC2659 /* OrderTerm.swift in Sources */,
 				238D0B801FAB1F7E00BC2659 /* Handle.swift in Sources */,
 				230209A81FBED533000D69B6 /* MultiSelect.swift in Sources */,
+				23EAA4CB1FD685D900A0BC2D /* ColumnJSONCodableType.swift in Sources */,
+				237931C51FD52CB4003BBA5F /* TableCodable.swift in Sources */,
 				238D0B8E1FAB1F7E00BC2659 /* StatementDelete.swift in Sources */,
 				238D0B821FAB1F7E00BC2659 /* JoinClause.swift in Sources */,
 				238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */,
@@ -761,35 +756,36 @@
 				238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */,
 				238D0B9D1FAB1F7E00BC2659 /* Subquery.swift in Sources */,
 				23E9E0071FC3D80B005DE71C /* Table.swift in Sources */,
-				230209B71FBED75C000D69B6 /* CodableFundamentalValue.swift in Sources */,
 				23E9D3141FC7CE9F00F55299 /* sqliterk_btree.c in Sources */,
-				230209961FBED533000D69B6 /* ConstraintBinding.swift in Sources */,
+				230209961FBED533000D69B6 /* TableConstraintBinding.swift in Sources */,
 				238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c in Sources */,
 				23E737C61FB1602800EEBC3D /* Sequence.swift in Sources */,
-				230209981FBED533000D69B6 /* MultiPrimaryBinding.swift in Sources */,
 				238D0BC81FAB1F7E00BC2659 /* File.swift in Sources */,
 				238D0B981FAB1F7E00BC2659 /* StatementSavepoint.swift in Sources */,
 				238D0B7D1FAB1F7E00BC2659 /* Describable.swift in Sources */,
 				230209A21FBED533000D69B6 /* AppleTokenize.swift in Sources */,
 				238D0B951FAB1F7E00BC2659 /* StatementReindex.swift in Sources */,
-				23E9D3241FC7CEA800F55299 /* CodableTypedColumn.swift in Sources */,
+				237931CB1FD547CC003BBA5F /* CodingTableKey.swift in Sources */,
 				238D0B8A1FAB1F7E00BC2659 /* StatementAttach.swift in Sources */,
 				230209A31FBED533000D69B6 /* WCDBTokenize.swift in Sources */,
 				238D0BC61FAB1F7E00BC2659 /* ConcurrentList.swift in Sources */,
 				238D0B881FAB1F7E00BC2659 /* Statement.swift in Sources */,
-				230209951FBED533000D69B6 /* ColumnBinding.swift in Sources */,
+				230209951FBED533000D69B6 /* ColumnConstraintBinding.swift in Sources */,
 				238D0B7F1FAB1F7E00BC2659 /* ForeignKey.swift in Sources */,
 				23E9D3211FC7CE9F00F55299 /* sqliterk_values.c in Sources */,
 				238D0B8F1FAB1F7E00BC2659 /* StatementDetach.swift in Sources */,
 				238D0B7A1FAB1F7E00BC2659 /* ColumnResult.swift in Sources */,
+				237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */,
 				2302098B1FBED533000D69B6 /* Config.swift in Sources */,
 				238D0BCB1FAB1F7E00BC2659 /* RWLock.swift in Sources */,
 				238D0B811FAB1F7E00BC2659 /* HandleStatement.swift in Sources */,
+				23EAA4C91FD685CF00A0BC2D /* ColumnNSCodableType.swift in Sources */,
 				238D0B921FAB1F7E00BC2659 /* StatementExplain.swift in Sources */,
 				23E9D31C1FC7CE9F00F55299 /* sqliterk_output.cpp in Sources */,
 				23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */,
 				238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */,
 				230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */,
+				23EAA4CD1FD686EC00A0BC2D /* ColumnCodableType.swift in Sources */,
 				238D0B991FAB1F7E00BC2659 /* StatementSelect.swift in Sources */,
 				238D0B8B1FAB1F7E00BC2659 /* StatementCreateIndex.swift in Sources */,
 				230209A51FBED533000D69B6 /* Delete.swift in Sources */,

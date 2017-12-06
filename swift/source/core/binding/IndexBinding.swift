@@ -20,23 +20,23 @@
 
 import Foundation
 public class IndexBinding: AnyBinding {
+    public typealias Subfix = String
+    
     let columnIndexes: [ColumnIndex]
-    let subfix: String 
     let isUnique: Bool
     
-    public init(withSubfix subfix: String, isUnique: Bool = false, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) {
-        self.subfix = subfix
+    public init(isUnique: Bool = false, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
         self.isUnique = isUnique
         super.init(with: .Index)
     }
     
-    public convenience init(withSubfix subfix: String, isUnique: Bool = false, indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) {
-        self.init(withSubfix: subfix, isUnique: isUnique, indexesBy: columnIndexConvertibleList)
+    public convenience init(isUnique: Bool = false, indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) {
+        self.init(isUnique: isUnique, indexesBy: columnIndexConvertibleList)
     }
     
-    func generateCreateIndexStatement(prefix tableName: String) -> StatementCreateIndex {
-        return StatementCreateIndex().create(index: tableName+subfix, isUnique: isUnique, ifNotExists: true).on(table: tableName, indexesBy: columnIndexes)
+    func generateCreateIndexStatement(onTable tableName: String, withIndexSubfix indexSubfix: String) -> StatementCreateIndex {
+        return StatementCreateIndex().create(index: tableName+indexSubfix, isUnique: isUnique, ifNotExists: true).on(table: tableName, indexesBy: columnIndexes)
     }
 }
 

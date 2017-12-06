@@ -20,27 +20,27 @@
 
 import Foundation
 
-public protocol CodableEnumColumn: CodableColumn, LiteralValueConvertible, RawRepresentable where Self.RawValue: CodableColumn {}
+public protocol ColumnNSEncodable: ColumnEncodable where FundamentalType == Data {}
+extension ColumnNSEncodable {
+    public func archivedFundamentalValue() -> FundamentalType? {
+        return NSKeyedArchiver.archivedData(withRootObject: self)
+    }
+}
 
-extension CodableEnumColumn {
-    public typealias FundamentalType = RawValue.FundamentalType
-    
-    public init?(withTypedValue optionalValue: RawValue.FundamentalType?) {
-        guard let value = RawValue(withTypedValue: optionalValue) else {
+public protocol ColumnNSDecodable: ColumnDecodable where FundamentalType == Data {}
+extension ColumnNSDecodable {
+    public init?(with value: FundamentalType) {
+        guard value.count > 0 else {
             return nil
         }
-        self.init(rawValue: value)
-    }
-    
-    public func archivedTypedValue() -> RawValue.FundamentalType? {
-        return rawValue.archivedTypedValue()
+        guard let object = NSKeyedUnarchiver.unarchiveObject(with: value) else {
+            return nil
+        } 
+        guard let typedObject = object as? Self else {
+            return nil
+        }
+        self = typedObject
     }
 }
 
-public protocol CodableStructColumn: CodableColumn, LiteralValueConvertible {}
-
-public protocol CodableClassColumn: AnyObject, CodableColumn, LiteralValueConvertible {
-    //    init()
-}
-
-public protocol CodableCollectionColumn: CodableColumn {}
+public typealias ColumnNSCodable = ColumnNSEncodable & ColumnNSDecodable

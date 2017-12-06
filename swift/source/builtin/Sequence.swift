@@ -20,11 +20,18 @@
 
 import Foundation
 
-public class Sequence: WCDB.CodableTable, CustomStringConvertible {
+public class Sequence: WCDB.TableCodable, CustomStringConvertible {
     public static let tableName: String = "sqlite_sequence"
     
     public var name: String? = nil
     public var seq: Int? = nil
+    
+    public enum CodingKeys: String, CodingTableKey {
+        public typealias Root = Sequence
+        
+        case name
+        case seq
+    }
     
     public required init() {}
     
@@ -33,11 +40,3 @@ public class Sequence: WCDB.CodableTable, CustomStringConvertible {
     }
 }
 
-//WCDB
-extension WCDB.Sequence {
-    public static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\Sequence.name, alias: "name"),
-            ColumnBinding(\Sequence.seq, alias: "seq")]
-    }
-}

@@ -32,139 +32,57 @@ public class CoreStatement: CoreRepresentable {
         return recyclableHandleStatement.raw
     }
     
-    public func bind(_ optionalValue: CodableColumnBase?, toIndex index: Int) {
-        if let value = optionalValue {
-            let fundamentalValue = value.archivedFundamentalValue()
-            switch fundamentalValue.type {
+    public func bind(_ value: ColumnEncodableBase?, toIndex index: Int) {
+        if let wrappedValue = value {
+            let fundamentalValue = wrappedValue.archivedFundamentalValue() 
+            switch wrappedValue.columnType {
             case .Integer32:
-                handleStatement.bind(fundamentalValue.int32Value, toIndex: index)
+                let int32Value = (fundamentalValue as? Int32) ?? 0
+                handleStatement.bind(int32Value, toIndex: index)
             case .Integer64:
-                handleStatement.bind(fundamentalValue.int64Value, toIndex: index)
+                let int64Value = (fundamentalValue as? Int64) ?? 0
+                handleStatement.bind(int64Value, toIndex: index)
             case .Text:
-                handleStatement.bind(fundamentalValue.stringValue, toIndex: index)
+                let stringValue = (fundamentalValue as? String) ?? ""
+                handleStatement.bind(stringValue, toIndex: index)
             case .Float:
-                handleStatement.bind(fundamentalValue.doubleValue, toIndex: index)
+                let doubleValue = (fundamentalValue as? Double) ?? 0
+                handleStatement.bind(doubleValue, toIndex: index)
             case .BLOB:
-                handleStatement.bind(fundamentalValue.dataValue, toIndex: index)
-            case .Null:
+                let dataValue = (fundamentalValue as? Data) ?? Data()
+                handleStatement.bind(dataValue, toIndex: index)
+            case .Null: 
                 handleStatement.bind(nil, toIndex: index)
             }
         }else {
             handleStatement.bind(nil, toIndex: index)
         }
     }
-       
-    public func bind<Object: CodableTable>(_ columnBindingRepresentable: ColumnBindingRepresentable, of object: Object, toIndex index: Int) {
-        let columnBinding = columnBindingRepresentable.columnBinding
-        switch columnBinding.columnType {
-        case .Integer32:
-            let value: Int32? = columnBinding.access(getFundamentalValueFromObject: object)
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
-            }else {
-                handleStatement.bind(nil, toIndex: index)
-            }
-        case .Integer64:
-            let value: Int64? = columnBinding.access(getFundamentalValueFromObject: object)
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
-            }else {
-                handleStatement.bind(nil, toIndex: index)
-            }
-        case .Text:
-            let value: String? = columnBinding.access(getFundamentalValueFromObject: object)
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
-            }else {
-                handleStatement.bind(nil, toIndex: index)
-            }
-        case .Float:
-            let value: Double? = columnBinding.access(getFundamentalValueFromObject: object)
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
-            }else {
-                handleStatement.bind(nil, toIndex: index)
-            }
-        case .BLOB:
-            let value: Data? = columnBinding.access(getFundamentalValueFromObject: object)
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
-            }else {
-                handleStatement.bind(nil, toIndex: index)
-            }
-        case .Null:
-            handleStatement.bind(nil, toIndex: index)
-        }
-    }
     
-    public func value(atIndex index: Int) -> Int32 {
-        return handleStatement.columnValue(atIndex: index)
-    }    
-    public func value(atIndex index: Int) -> Int64 {
-        return handleStatement.columnValue(atIndex: index)
-    }    
-    public func value(atIndex index: Int) -> String {
-        return handleStatement.columnValue(atIndex: index)
-    }
-    public func value(atIndex index: Int) -> Double {
-        return handleStatement.columnValue(atIndex: index)
-    }
-    public func value(atIndex index: Int) -> Data {
-        return handleStatement.columnValue(atIndex: index)
-    }    
-    public func value(atIndex index: Int) -> FundamentalValue {
-        switch handleStatement.columnType(atIndex: index) {
+    public func value<ColumnDecodableType: ColumnDecodable>(atIndex index: Int, of type: ColumnDecodableType.Type = ColumnDecodableType.self) -> ColumnDecodableType? {
+        var result: ColumnDecodableType? = nil
+        switch ColumnDecodableType.columnType {
         case .Integer32:
-            let value: Int32 = handleStatement.columnValue(atIndex: index) 
-            return FundamentalValue(value)
+            let value: Int32 = handleStatement.columnValue(atIndex: index)
+            result = ColumnDecodableType.init(with: value)
         case .Integer64:
-            let value: Int64 = handleStatement.columnValue(atIndex: index) 
-            return FundamentalValue(value)
-        case .Text:
-            let value: String = handleStatement.columnValue(atIndex: index) 
-            return FundamentalValue(value)
+            let value: Int64 = handleStatement.columnValue(atIndex: index)
+            result = ColumnDecodableType.init(with: value)
         case .Float:
-            let value: Double = handleStatement.columnValue(atIndex: index) 
-            return FundamentalValue(value)
+            let value: Double = handleStatement.columnValue(atIndex: index)
+            result = ColumnDecodableType.init(with: value)
+        case .Text:
+            let value: String = handleStatement.columnValue(atIndex: index)
+            result = ColumnDecodableType.init(with: value)
         case .BLOB:
-            let value: Data = handleStatement.columnValue(atIndex: index) 
-            return FundamentalValue(value)
-        case .Null:
-            return FundamentalValue(nil)
-        }        
+            let value: Data = handleStatement.columnValue(atIndex: index)
+            result = ColumnDecodableType.init(with: value)
+        default: break
+        }
+        return result
     }
-    
-    public func value(byName name: String) -> Int32? {
-        guard let index = index(byName: name) else {
-            return nil
-        }
-        return handleStatement.columnValue(atIndex: index)
-    }    
-    public func value(byName name: String) -> Int64? {
-        guard let index = index(byName: name) else {
-            return nil
-        }
-        return handleStatement.columnValue(atIndex: index)
-    }    
-    public func value(byName name: String) -> String? {
-        guard let index = index(byName: name) else {
-            return nil
-        }
-        return handleStatement.columnValue(atIndex: index)
-    }
-    public func value(byName name: String) -> Double? {
-        guard let index = index(byName: name) else {
-            return nil
-        }
-        return handleStatement.columnValue(atIndex: index)
-    }
-    public func value(byName name: String) -> Data? {
-        guard let index = index(byName: name) else {
-            return nil
-        }
-        return handleStatement.columnValue(atIndex: index)
-    }
-    public func value(byName name: String) -> FundamentalValue? {
+          
+    public func value<ColumnDecodableType: ColumnDecodable>(byName name: String, of type: ColumnDecodableType.Type = ColumnDecodableType.self) -> ColumnDecodableType? {
         guard let index = index(byName: name) else {
             return nil
         }
@@ -189,18 +107,18 @@ public class CoreStatement: CoreRepresentable {
         try handleStatement.reset()
     }
     
-    public func type(atIndex index: Int) -> ColumnType {
+    public func columnType(atIndex index: Int) -> ColumnType {
         return handleStatement.columnType(atIndex: index)
     }
     
-    public func type(byName name: String) -> ColumnType {
+    public func columnType(byName name: String) -> ColumnType {
         guard let index = index(byName: name) else {
             return .Null
         }
         return handleStatement.columnType(atIndex: index)
     }
     
-    public func columnCount() -> Int{
+    public func columnCount() -> Int {
         return handleStatement.columnCount()
     }
     

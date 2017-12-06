@@ -21,8 +21,11 @@
 import Foundation
 
 public class ColumnDef : Describable {
-    public init(with columnConvertible: ColumnConvertible, and type: ColumnType) {
-        super.init(columnConvertible.asColumn().name + " " + type.description)
+    public init(with columnConvertible: ColumnConvertible, and optionalType: ColumnType? = nil) {
+        super.init(columnConvertible.asColumn().name)
+        if let type = optionalType {
+            description.append(" \(type.description)")
+        }
     }
     
     @discardableResult

@@ -34,9 +34,8 @@ extension SpecificOrderConvertible {
     }
 }
 
-
 public protocol SpecificColumnDefConvertible {
-    func asDef(with columnType: ColumnType) -> ColumnDef
+    func asDef(with columnType: ColumnType?) -> ColumnDef
 }
 
 public protocol ColumnIndexConvertible {
@@ -88,7 +87,7 @@ extension ColumnConvertible {
         return ColumnIndex(with: self, orderBy: term)
     }
     
-    public func asDef(with columnType: ColumnType) -> ColumnDef {
+    public func asDef(with columnType: ColumnType? = nil) -> ColumnDef {
         return ColumnDef(with: self, and: columnType)
     }
     

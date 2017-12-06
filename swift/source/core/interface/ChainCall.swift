@@ -21,8 +21,8 @@
 import Foundation
 
 public protocol InsertChainCallInterface {
-    func prepareInsert<Root: CodableTable>(of cls: Root.Type, intoTable table: String) throws -> Insert 
-    func prepareInsertOrReplace<Root: CodableTable>(of cls: Root.Type, intoTable table: String) throws -> Insert 
+    func prepareInsert<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert 
+    func prepareInsertOrReplace<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert 
     func prepareInsert(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) throws -> Insert
     func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) throws -> Insert
     func prepareInsert(on propertyConvertibleList: [PropertyConvertible], intoTable table: String) throws -> Insert
@@ -30,12 +30,12 @@ public protocol InsertChainCallInterface {
 }
 
 extension InsertChainCallInterface where Self: Core {
-    public func prepareInsert<Root: CodableTable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
-        return try Insert(with: self, named: table, on: cls.allProperties, isReplace: false)
+    public func prepareInsert<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
+        return try Insert(with: self, named: table, on: cls.Properties.all, isReplace: false)
     }
     
-    public func prepareInsertOrReplace<Root: CodableTable>(of cls: Root.Type, intoTable table: String) throws -> Insert  {
-        return try Insert(with: self, named: table, on: cls.allProperties, isReplace: true)
+    public func prepareInsertOrReplace<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert  {
+        return try Insert(with: self, named: table, on: cls.Properties.all, isReplace: true)
     }
     
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) throws -> Insert {
@@ -106,14 +106,14 @@ extension RowSelectChainCallInterface where Self: Core {
 }
 
 public protocol SelectChainCallInterface {
-    func prepareSelect<Root: CodableTable>(of cls: Root.Type, fromTable table: String, isDistinct: Bool) throws -> Select
+    func prepareSelect<Root: TableCodable>(of cls: Root.Type, fromTable table: String, isDistinct: Bool) throws -> Select
     func prepareSelect(on propertyConvertibleList: PropertyConvertible..., fromTable table : String, isDistinct: Bool) throws -> Select
     func prepareSelect(on propertyConvertibleList: [PropertyConvertible], fromTable table : String, isDistinct: Bool) throws -> Select
 }
 
 extension SelectChainCallInterface where Self: Core {
-    public func prepareSelect<Root: CodableTable>(of cls: Root.Type, fromTable table: String, isDistinct: Bool = false) throws -> Select {
-        return try Select(with: self, on: cls.allProperties, table: table, isDistinct: isDistinct)
+    public func prepareSelect<Root: TableCodable>(of cls: Root.Type, fromTable table: String, isDistinct: Bool = false) throws -> Select {
+        return try Select(with: self, on: cls.Properties.all, table: table, isDistinct: isDistinct)
     }
     
     public func prepareSelect(on propertyConvertibleList: PropertyConvertible..., fromTable table : String, isDistinct: Bool = false) throws -> Select {

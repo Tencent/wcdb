@@ -37,33 +37,22 @@ public class Insert: CoreRepresentable {
     
     private lazy var statement: StatementInsert = StatementInsert().insert(intoTable: name, with: properties!, onConflict: isReplace ? Conflict.Replace : nil).values(Array(repeating: Expression.bindingParameter, count: properties!.count))
     
-    public func execute<Object: CodableTable>(with objects: Object...) throws {
+    public func execute<Object: TableEncodable>(with objects: Object...) throws {
         try execute(with: objects)
     }
     
-    public func execute<Object: CodableTable>(with objects: [Object]) throws {
-        guard let first = objects.first else {
+    public func execute<Object: TableEncodable>(with objects: [Object]) throws {
+        guard objects.count > 0 else {
             Error.warning("Inserting with an empty/nil object")
             return
         }
-        properties = properties ?? type(of: first).allProperties
-        let orm = Object.objectRelationalMapping
+        let orm = Object.CodingKeys.__objectRelationalMapping
         func doInsertObject() throws {
-            let coreStatement = try core.prepare(statement) 
+            let coreStatement = try core.prepare(statement)
+            let encoder = TableEncoder((properties ?? Object.Properties.all).asCodingTableKeys(), on: coreStatement) 
             for var object in objects {
-                var fillLastInsertedRowID = false
-                for (index, property) in properties!.enumerated() {
-                    let bindingIndex = index + 1 
-                    let columnBinding = property.columnBinding
-                    if !isReplace && columnBinding.isPrimary && columnBinding.isAutoIncrement && object.isAutoIncrement {
-                        fillLastInsertedRowID = true
-                        coreStatement.bind(nil, toIndex: bindingIndex)
-                    }else {
-                        coreStatement.bind(columnBinding, of: object, toIndex: bindingIndex)
-                    }
-                }
-                try coreStatement.step()
-                if fillLastInsertedRowID {
+                try encoder.bind(object)
+                if object.isAutoIncrement {
                     object.lastInsertedRowID = coreStatement.lastInsertedRowID
                 }
                 try coreStatement.reset()

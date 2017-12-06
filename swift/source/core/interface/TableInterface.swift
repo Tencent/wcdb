@@ -21,7 +21,7 @@
 import Foundation
 
 public protocol InsertTableInterface {
-    associatedtype Object: CodableTable
+    associatedtype Object: TableCodable
     
     func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
     func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
@@ -50,12 +50,12 @@ extension InsertTableInterface where Self: TableBase {
 }
 
 public protocol UpdateTableInterface {
-    associatedtype Object: CodableTable
+    associatedtype Object: TableCodable
 
     func update(on propertyConvertibleList: PropertyConvertible..., with object: Object, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws
     func update(on propertyConvertibleList: [PropertyConvertible], with object: Object, where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
-    func update(on propertyConvertibleList: PropertyConvertible..., with row: [CodableColumnBase], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
-    func update(on propertyConvertibleList: [PropertyConvertible], with row: [CodableColumnBase], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
+    func update(on propertyConvertibleList: PropertyConvertible..., with row: [ColumnEncodableBase], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
+    func update(on propertyConvertibleList: [PropertyConvertible], with row: [ColumnEncodableBase], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws 
 }
 
 extension UpdateTableInterface where Self: TableBase {
@@ -81,11 +81,11 @@ extension UpdateTableInterface where Self: TableBase {
         return try update(on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
-    public func update(on propertyConvertibleList: PropertyConvertible..., with row: [CodableColumnBase], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
+    public func update(on propertyConvertibleList: PropertyConvertible..., with row: [ColumnEncodableBase], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
         return try update(on: propertyConvertibleList, with: row, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
-    public func update(on propertyConvertibleList: [PropertyConvertible], with row: [CodableColumnBase], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
+    public func update(on propertyConvertibleList: [PropertyConvertible], with row: [ColumnEncodableBase], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws {
         let update = try Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
         if condition != nil {
             update.where(condition!)
@@ -219,7 +219,7 @@ extension RowSelectTableInterface where Self: TableBase {
 }
 
 public protocol SelectTableInterface {
-    associatedtype Object: CodableTable
+    associatedtype Object: TableCodable
     
     //TODO: Add generic property convertible to fit the type
     func getObjects(on propertyConvertibleList: [PropertyConvertible], where condition: Condition?, orderBy orderList: [OrderBy]?, limit: Limit?, offset: Offset?) throws -> [Object] 
@@ -249,7 +249,7 @@ extension SelectTableInterface where Self: TableBase {
     }
     
     public func getObjects(on propertyConvertibleList: PropertyConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, limit: Limit? = nil, offset: Offset? = nil) throws -> [Object] {
-        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
     
     public func getObject(on propertyConvertibleList: [PropertyConvertible], where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
@@ -257,7 +257,7 @@ extension SelectTableInterface where Self: TableBase {
     }
     
     public func getObject(on propertyConvertibleList: PropertyConvertible..., where condition: Condition? = nil, orderBy orderList: [OrderBy]? = nil, offset: Offset? = nil) throws -> Object? {
-        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.allProperties : propertyConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList, where: condition, orderBy: orderList, limit: 1, offset: offset).first
     }
 }
 

@@ -46,9 +46,7 @@ extension Array where Element==ColumnResultConvertible {
     }
     
     func asColumnResults() -> [ColumnResult] {
-        return self.map({ (element) -> ColumnResult in
-            return element.asColumnResult()
-        })
+        return map { $0.asColumnResult() }
     }
 }
 
@@ -58,7 +56,7 @@ extension Array where Element==ExpressionConvertible {
     }
     
     func asExpressions() -> [Expression] {
-        return self.map({ $0.asExpression() })
+        return map { $0.asExpression() }
     }
 }
 
@@ -68,7 +66,7 @@ extension Array where Element==ColumnConvertible {
     }
     
     func asColumns() -> [Column] {
-        return self.map({ $0.asColumn() })
+        return map { $0.asColumn() }
     }
 }
 
@@ -78,7 +76,7 @@ extension Array where Element==TableOrSubqueryConvertible {
     }
     
     func asTableOrSubqueryList() -> [Subquery] {
-        return self.map({ $0.asTableOrSubquery() })
+        return map { $0.asTableOrSubquery() }
     }
 }
 
@@ -88,7 +86,7 @@ extension Array where Element==OrderConvertible {
     }
     
     func asOrders() -> [Order] {
-        return self.map({ $0.asOrder() })
+        return map { $0.asOrder() }
     }
 }
 
@@ -98,13 +96,22 @@ extension Array where Element==ColumnIndexConvertible {
     }
     
     func asIndexes() -> [ColumnIndex] {
-        return self.map({ $0.asIndex() })
+        return map { $0.asIndex() }
     }
 }
 
 extension Array where Element==PropertyConvertible {
     func asProperties() -> [Property] {
-        return self.map({ $0.asProperty() })
+        return map { $0.asProperty() }
+    }
+    func asCodingTableKeys() -> [CodingTableKeyBase] {
+        return map { $0.codingTableKey }
+    }
+}
+
+extension Array where Element: PropertyConvertible {
+    func asCodingTableKeys() -> [CodingTableKeyBase] {
+        return map { $0.codingTableKey }
     }
 }
 
@@ -118,7 +125,7 @@ extension Array {
 
 extension Array where Iterator.Element: FixedWidthInteger {
     mutating func expand(toNewSize newSize: IndexDistance) {
-        self.expand(toNewSize: newSize, fillWith: 0)
+        expand(toNewSize: newSize, fillWith: 0)
     }
 }
 
@@ -149,8 +156,8 @@ extension String {
         return UnsafePointer<Int8>((self as NSString).utf8String)
     }
     
-    func substring(with range: CFRange) -> String {
-        return String(self[self.range(from: range.location, to: range.location+range.length)])
+    func substring(with cfRange: CFRange) -> String {
+        return String(self[range(from: cfRange.location, to: cfRange.location+cfRange.length)])
     }
     
     init?(bytes: UnsafeRawPointer, count: Int, encoding: String.Encoding) {
@@ -158,11 +165,11 @@ extension String {
     }
     
     func range(from: Int, to: Int) -> Range<String.Index> {
-        return self.index(self.startIndex, offsetBy: from)..<self.index(self.startIndex, offsetBy: to)
+        return index(startIndex, offsetBy: from)..<index(startIndex, offsetBy: to)
     }
     
     func range(location: Int, length: Int) -> Range<String.Index> {
-        return self.range(from: location, to: location + length)
+        return range(from: location, to: location + length)
     }
 }
 

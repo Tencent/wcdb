@@ -155,6 +155,8 @@ public class Error: Swift.Error, CustomStringConvertible {
             case GetThreadedHandle = 6
             case FlowOut = 7
             case Tokenize = 8
+            case Encode = 9
+            case Decode = 10
         }
         
         public enum SystemCallOperation: Int {

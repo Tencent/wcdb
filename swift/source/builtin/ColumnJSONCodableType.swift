@@ -20,20 +20,25 @@
 
 import Foundation
 
-public protocol PropertyRedirectable {
-    func `as`(_ propertyConvertible: PropertyConvertible) -> Property
-}
-
-extension PropertyRedirectable where Self: Describable {
-    public func `as`(_ propertyConvertible: PropertyConvertible) -> Property {
-        return Property(named: description, with: propertyConvertible.codingTableKey)
+public protocol ColumnJSONEncodable: ColumnEncodable where FundamentalType == Data {}
+extension ColumnJSONEncodable {
+    public func archivedFundamentalValue() -> FundamentalType? {
+        return try? JSONEncoder().encode(self)
     }
 }
 
-extension Column: PropertyRedirectable {}
+public protocol ColumnJSONDecodable: ColumnDecodable where FundamentalType == Data {}
+extension ColumnJSONDecodable {
+    public init?(with value: FundamentalType) {
+        guard value.count > 0 else {
+            return nil
+        }
+        guard let object = try? JSONDecoder().decode(Self.self, from: value) else {
+            return nil
+        }
+        self = object
+    }
+}
 
-extension ColumnResult: PropertyRedirectable {}
+public typealias CodableJSONColumn = ColumnJSONEncodable & ColumnJSONDecodable
 
-extension Expression: PropertyRedirectable {}
-
-extension Property: PropertyRedirectable {}

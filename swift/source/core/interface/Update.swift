@@ -79,17 +79,15 @@ public class Update : CoreRepresentable {
         return self
     }
    
-    public func execute<Object: CodableTable>(with object: Object) throws {
+    public func execute<Object: TableEncodable>(with object: Object) throws {
         let coreStatement = try core.prepare(statement)
-        for (index, property) in properties.enumerated() {
-            let bindingIndex = index + 1
-            coreStatement.bind(property.columnBinding, of: object, toIndex: bindingIndex)
-        }
+        let encoder = TableEncoder(properties.asCodingTableKeys(), on: coreStatement)
+        try encoder.bind(object)
         try coreStatement.step()
         changes = coreStatement.changes
     }
     
-    public func execute(with row: [CodableColumnBase?]) throws {
+    public func execute(with row: [ColumnEncodableBase?]) throws {
         let coreStatement = try core.prepare(statement)
         for (index, value) in row.enumerated() {
             let bindingIndex = index + 1

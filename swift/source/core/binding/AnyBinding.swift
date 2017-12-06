@@ -19,12 +19,12 @@
  */
 
 import Foundation
+
 public class AnyBinding {
     public enum BindingType {
-        case Column
-        case MultiPrimary
-        case MultiUnique
+        case ColumnConstraint
         case Index
+        case TableConstraint
         case VirtualTable
     }
     

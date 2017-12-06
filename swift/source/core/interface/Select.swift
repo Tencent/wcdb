@@ -32,38 +32,23 @@ public class Select: SelectBase {
         statement.select(distinct: isDistinct, properties).from(table)
     }
     
-    public func nextObject<Object: CodableTable>(of type: Object.Type = Object.self) throws -> Object? {
-        guard properties.first!.columnBinding.`class` is Object.Type else {
-            Error.abort("")
+    public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
+        guard let keys = properties.asCodingTableKeys() as? [Object.CodingKeys] else {
+            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "")
         }
         guard try next() else {
             return nil
-        }        
-        return try extract(from: properties)
-    }
-    
-    public func nextObject() throws -> Any? {
-        guard try next() else {
-            return nil
-        }         
-        return try extract(from: properties)
-    }
-    
-    public func allObjects() throws -> [Any] {
-        var objects: [Any] = []
-        while try next() {
-            let object = try extract(from: properties)
-            objects.append(object)
         }
-        return objects
+        return try extract(from: keys)
     }
     
-    public func allObjects<Object: CodableTable>(of type: Object.Type = Object.self) throws -> [Object] {
-        assert((properties.first!.columnBinding.`class` == Object.self))
+    public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
+        guard let keys = properties.asCodingTableKeys() as? [Object.CodingKeys] else {
+            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "")
+        }
         var objects: [Object] = []
         while try next() {
-            let object: Object = try extract(from: properties)
-            objects.append(object)
+            objects.append(try extract(from: keys))
         }
         return objects
     }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Master: WCDB.CodableTable, CustomStringConvertible {
+public class Master: WCDB.TableCodable, CustomStringConvertible {
     public static let tableName: String = "sqlite_master"
     
     public var type: String? = nil
@@ -29,21 +29,19 @@ public class Master: WCDB.CodableTable, CustomStringConvertible {
     public var rootpage: Int? = nil
     public var sql: String? = nil
     
+    public enum CodingKeys: String, CodingTableKey {
+        public typealias Root = Master
+        
+        case type
+        case name
+        case tableName = "tbl_name"
+        case rootpage
+        case sql
+    }
+    
     public required init() {}
     
     public var description: String {
         return "type:\(type ?? ""), name:\(name ?? ""), tableName:\(tableName ?? ""), rootpage:\(rootpage ?? Int.max), sql:\(sql ?? "")"
-    }
-}
-
-//WCDB
-extension Master {
-    public static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\Master.type, alias: "type"),
-            ColumnBinding(\Master.name, alias: "name"),
-            ColumnBinding(\Master.tableName, alias:"tbl_name"),
-            ColumnBinding(\Master.rootpage, alias: "rootpage"),
-            ColumnBinding(\Master.sql, alias: "sql")]
     }
 }

@@ -49,20 +49,43 @@ public final class LiteralValue : Describable {
         super.init("NULL")
     }
 
-    public convenience init<CodableColumnType: CodableColumn>(_ columnCodingType: CodableColumnType) {
-        let value = columnCodingType.archivedFundamentalValue()
-        switch value.type {
-        case .Integer32:
-            self.init(value.int32Value)
-        case .Integer64:
-            self.init(value.int64Value)
-        case .Float:
-            self.init(value.doubleValue)
-        case .Text:
-            self.init(value.stringValue)
-        case .BLOB:
-            self.init(value.dataValue)
-        case .Null:
+    public convenience init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
+        if let value = columnEncodableValue.archivedFundamentalValue() {
+            switch ColumnEncodableType.columnType {
+            case .Integer32:
+                if let int32Value = value as? Int32 {
+                    self.init(int32Value)
+                }else {
+                    self.init(nil)
+                }
+            case .Integer64:
+                if let int64Value = value as? Int64 {
+                    self.init(int64Value)
+                }else {
+                    self.init(nil)
+                }
+            case .Float:
+                if let doubleValue = value as? Double {
+                    self.init(doubleValue)
+                }else {
+                    self.init(nil)
+                }
+            case .Text:
+                if let stringValue = value as? String {
+                    self.init(stringValue)
+                }else {
+                    self.init(nil)
+                }
+            case .BLOB:
+                if let dataValue = value as? Data {
+                    self.init(dataValue)
+                }else {
+                    self.init(nil)
+                }
+            default: 
+                self.init(nil)
+            }
+        }else {
             self.init(nil)
         }
     }

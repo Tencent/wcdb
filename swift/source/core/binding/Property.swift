@@ -21,24 +21,26 @@
 import Foundation
 
 public protocol PropertyConvertible {
+    var codingTableKey: CodingTableKeyBase {get}
+    
     func asProperty() -> Property
     
     func `in`(table: String) -> Property
 }
 
-public class Property: Describable, ColumnBindingRepresentable {
-    public let columnBinding: AnyColumnBinding
+public class Property: Describable {
+    public private(set) var codingTableKey: CodingTableKeyBase
     
-    public init(named name: String, with columnBinding: AnyColumnBinding) {
-        self.columnBinding = columnBinding
+    public init(named name: String, with codingTableKey: CodingTableKeyBase) {
+        self.codingTableKey = codingTableKey
         super.init(name)
     }    
     
-    public init(with columnBinding: AnyColumnBinding) {
-        self.columnBinding = columnBinding
-        super.init(columnBinding.columnName)
+    public init(with codingTableKey: CodingTableKeyBase) {
+        self.codingTableKey = codingTableKey
+        super.init(codingTableKey.stringValue)
     }
-    
+   
     public var name: String {
         return description
     }    
@@ -50,7 +52,7 @@ extension Property: PropertyConvertible {
     }
     
     public func `in`(table: String) -> Property {
-        return Property(named: asColumn().in(table: table).description, with: columnBinding)
+        return Property(named: asColumn().in(table: table).description, with: codingTableKey)
     }
 }
 

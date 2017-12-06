@@ -19,21 +19,35 @@
  */
 
 import Foundation
-public class ConstraintBinding: AnyBinding {
-    let name: String
-    let conflict: Conflict?
-    let columnIndexes: [ColumnIndex]
-    let condition: Condition?
+
+public protocol TableCodableBase {}
+
+public protocol TableEncodable: Encodable, TableCodableBase {
+    associatedtype CodingKeys: CodingTableKey
+    typealias Properties = CodingKeys
     
-    init(with type: AnyBinding.BindingType, named name: String, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible], onConflict conflict: Conflict? = nil, check condition: Condition? = nil) {
-        self.name = name
-        self.columnIndexes = columnIndexConvertibleList.asIndexes()
-        self.conflict = conflict
-        self.condition = condition
-        super.init(with: type)
+    var isAutoIncrement: Bool {get set}
+    var lastInsertedRowID: Int64 {get set}
+}
+
+extension TableEncodable {
+    public var isAutoIncrement: Bool {
+        get { return false }
+        set { }
     }
     
-    func generateConstraint() -> TableConstraint {
-        Error.abort("")
+    public var lastInsertedRowID: Int64 {
+        get { return Int64.min }
+        set { }
     }
 }
+
+public protocol TableDecodableBase: Decodable, TableCodableBase {
+}
+
+public protocol TableDecodable: TableDecodableBase {
+    associatedtype CodingKeys: CodingTableKey
+    typealias Properties = CodingKeys
+}
+
+public typealias TableCodable = TableEncodable & TableDecodable 

@@ -46,3 +46,51 @@ public enum ColumnType: CustomStringConvertible {
     }
 }
 
+public protocol FundamentalColumnType {
+    static var columnType: ColumnType {get}
+    var columnType: ColumnType {get}
+}
+extension Int32: FundamentalColumnType {
+    public static var columnType: ColumnType {
+        return .Integer32
+    }
+    public var columnType: ColumnType {
+        return .Integer32
+    }
+}
+
+extension Int64: FundamentalColumnType {
+    public static var columnType: ColumnType {
+        return .Integer64
+    }
+    public var columnType: ColumnType {
+        return .Integer64
+    }
+}
+
+extension Double: FundamentalColumnType {
+    public static var columnType: ColumnType {
+        return .Float
+    }
+    public var columnType: ColumnType {
+        return .Float
+    }
+}
+
+extension String: FundamentalColumnType {
+    public static var columnType: ColumnType {
+        return .Text
+    }
+    public var columnType: ColumnType {
+        return .Text
+    }
+}
+
+extension Data: FundamentalColumnType {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public var columnType: ColumnType {
+        return .BLOB
+    }
+}
