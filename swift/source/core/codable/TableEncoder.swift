@@ -285,6 +285,11 @@ class TableEncoder: Encoder {
         self.indexedCodingTableKeys = indexedCodingTableKeys
         self.coreStatement = coreStatement
     }
+    
+    init(_ indexedCodingTableKeys: [String:Int], on coreStatement: CoreStatement) {
+        self.indexedCodingTableKeys = indexedCodingTableKeys
+        self.coreStatement = coreStatement
+    }
 
     func bind<TableEncodableType: TableEncodable>(_ object: TableEncodableType) throws {
         if object.isAutoIncrement {
