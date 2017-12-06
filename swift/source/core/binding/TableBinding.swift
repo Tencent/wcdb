@@ -74,16 +74,17 @@ public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase 
     private let properties: [CodingTableKeyType:Property]
     private let type: CodingTableKeyType.Type
     let allKeys: [CodingTableKeyType] = {
-        var i = 1
+        var i = 0
         var allKeys: [CodingTableKeyType] = []
         while true {
             let key = withUnsafePointer(to: &i) { 
                 return $0.withMemoryRebound(to: CodingTableKeyType.self, capacity: 1, { return $0.pointee })
             }
-            guard key.hashValue != 0 else {
+            guard key.hashValue == i else {
                 break
             }
             allKeys.append(key)
+            i += 1
         }
         return allKeys
     }()
