@@ -71,6 +71,11 @@ void throw_sqlite3_exception(JNIEnv *env,
                              int sysErrno,
                              const char *sqlite3Message,
                              const char *message);
+
+void throw_sqlite3_exception_format(JNIEnv *env,
+                                    sqlite3 *handle,
+                                    const char *fmt,
+                                    ...);
 }
 
 #endif // _ANDROID_DATABASE_SQLITE_COMMON_H

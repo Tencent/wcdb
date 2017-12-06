@@ -170,7 +170,7 @@ static jlong nativeOpen(JNIEnv *env,
     if (openFlags & SQLiteConnection::CREATE_IF_NECESSARY) {
         sqliteFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
     } else {
-        // Try read/write mode even if OPEN_READONLY flag is set, 
+        // Try read/write mode even if OPEN_READONLY flag is set,
         // for compatibility to WAL.
         sqliteFlags = SQLITE_OPEN_READWRITE;
     }
@@ -748,8 +748,9 @@ static CopyRowResult copyRow(JNIEnv *env,
             double value = sqlite3_column_double(statement, i);
             status = window->putDouble(rowSlot, i, value);
             if (status) {
-                LOGW(LOG_TAG, "Failed allocating space for a double in column "
-                              "%d, error=%d",
+                LOGW(LOG_TAG,
+                     "Failed allocating space for a double in column "
+                     "%d, error=%d",
                      i, status);
                 result = CPR_FULL;
                 break;
@@ -810,25 +811,13 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
 
     status_t status = window->clear();
     if (status) {
-        char buf[128];
-        snprintf(buf, sizeof(buf),
-                 "Failed to clear the cursor window, status=%d", status);
-        throw_sqlite3_exception(env, connection->db, buf);
+        throw_sqlite3_exception_format(
+            env, connection->db, "Failed to clear the cursor window, status=%d",
+            status);
         return 0;
     }
 
-    int numColumns = sqlite3_column_count(statement);
-    status = window->setNumColumns(numColumns);
-    if (status) {
-        char buf[128];
-        snprintf(
-            buf, sizeof(buf),
-            "Failed to set the cursor window column count to %d, status=%d",
-            numColumns, status);
-        throw_sqlite3_exception(env, connection->db, buf);
-        return 0;
-    }
-
+    int numColumns = -1;
     int retryCount = 0;
     int totalRows = 0;
     int addedRows = 0;
@@ -837,7 +826,24 @@ static jlong nativeExecuteForCursorWindow(JNIEnv *env,
     while (!gotException && (!windowFull || countAllRows)) {
         int err = sqlite3_step(statement);
         if (err == SQLITE_ROW) {
-            //            LOGV(LOG_TAG,"Stepped statement %p to row %d", statement, totalRows);
+
+            // Delay column count determination to the first time we got a row.
+            // This is because schema can be changed by other connection but we
+            // cannot notice before statement was actually executed by sqlite3_step().
+            if (numColumns < 0) {
+                numColumns = sqlite3_column_count(statement);
+                status = window->setNumColumns(numColumns);
+                if (status) {
+                    throw_sqlite3_exception_format(env, connection->db,
+                                                   "Failed to set the cursor "
+                                                   "window column count to %d, "
+                                                   "status=%d",
+                                                   numColumns, status);
+                    return 0;
+                }
+            }
+
+            //LOGV(LOG_TAG,"Stepped statement %p to row %d", statement, totalRows);
             retryCount = 0;
             totalRows += 1;
 

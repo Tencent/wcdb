@@ -20,21 +20,24 @@
 
 namespace wcdb {
 
-/* throw a SQLiteException with a message appropriate for the error in handle */
+/** 
+ * Throw a SQLiteException with a message appropriate for the error in handle.
+ */
 void throw_sqlite3_exception(JNIEnv *env, sqlite3 *handle)
 {
     throw_sqlite3_exception(env, handle, NULL);
 }
 
-/* throw a SQLiteException with the given message */
+/** Throw a SQLiteException with the given message */
 void throw_sqlite3_exception(JNIEnv *env, const char *message)
 {
     throw_sqlite3_exception(env, NULL, message);
 }
 
-/* throw a SQLiteException with a message appropriate for the error in handle
-       concatenated with the given message
-     */
+/** 
+ * Throw a SQLiteException with a message appropriate for the error in handle
+ * concatenated with the given message.
+ */
 void throw_sqlite3_exception(JNIEnv *env, sqlite3 *handle, const char *message)
 {
     if (handle) {
@@ -52,9 +55,11 @@ void throw_sqlite3_exception(JNIEnv *env, sqlite3 *handle, const char *message)
     }
 }
 
-/* throw a SQLiteException for a given error code
-     * should only be used when the database connection is not available because the
-     * error information will not be quite as rich */
+/** 
+ * Throw a SQLiteException for a given error code should only be used when the
+ * database connection is not available because the error information will not 
+ * be quite as rich.
+ */
 void throw_sqlite3_exception_errcode(JNIEnv *env,
                                      int errcode,
                                      const char *message)
@@ -62,9 +67,10 @@ void throw_sqlite3_exception_errcode(JNIEnv *env,
     throw_sqlite3_exception(env, errcode, "unknown error", message);
 }
 
-/* throw a SQLiteException for a given error code, sqlite3message, and
-       user message
-     */
+/** 
+ * Throw a SQLiteException for a given error code, sqlite3message, and user 
+ * message. 
+ */
 void throw_sqlite3_exception(JNIEnv *env,
                              int errcode,
                              const char *sqlite3Message,
@@ -73,9 +79,10 @@ void throw_sqlite3_exception(JNIEnv *env,
     throw_sqlite3_exception(env, errcode, -1, sqlite3Message, message);
 }
 
-/* throw a SQLiteException for a given error code, errno, sqlite3message, and
-       user message
-     */
+/** 
+ * Throw a SQLiteException for a given error code, errno, sqlite3message, 
+ * and user message.
+ */
 void throw_sqlite3_exception(JNIEnv *env,
                              int errcode,
                              int sysErrno,
@@ -163,6 +170,21 @@ void throw_sqlite3_exception(JNIEnv *env,
     } else {
         jniThrowException(env, exceptionClass, message);
     }
+}
+
+void throw_sqlite3_exception_format(JNIEnv *env,
+                                    sqlite3 *handle,
+                                    const char *fmt,
+                                    ...)
+{
+    char buf[256];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
+    va_end(ap);
+
+    throw_sqlite3_exception(env, handle, buf);
 }
 
 } // namespace wcdb
