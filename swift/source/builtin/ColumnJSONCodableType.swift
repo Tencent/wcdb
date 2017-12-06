@@ -40,5 +40,5 @@ extension ColumnJSONDecodable {
     }
 }
 
-public typealias CodableJSONColumn = ColumnJSONEncodable & ColumnJSONDecodable
+public typealias ColumnJSONCodable = ColumnJSONEncodable & ColumnJSONDecodable
 
