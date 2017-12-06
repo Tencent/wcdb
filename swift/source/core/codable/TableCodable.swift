@@ -22,7 +22,9 @@ import Foundation
 
 public protocol TableCodableBase {}
 
-public protocol TableEncodable: Encodable, TableCodableBase {
+public protocol TableEncodableBase: Encodable, TableCodableBase {} 
+
+public protocol TableEncodable: TableEncodableBase where CodingKeys.Root == Self {
     associatedtype CodingKeys: CodingTableKey
     typealias Properties = CodingKeys
     
@@ -42,10 +44,9 @@ extension TableEncodable {
     }
 }
 
-public protocol TableDecodableBase: Decodable, TableCodableBase {
-}
+public protocol TableDecodableBase: Decodable, TableCodableBase {}
 
-public protocol TableDecodable: TableDecodableBase {
+public protocol TableDecodable: TableDecodableBase where CodingKeys.Root == Self  {
     associatedtype CodingKeys: CodingTableKey
     typealias Properties = CodingKeys
 }
