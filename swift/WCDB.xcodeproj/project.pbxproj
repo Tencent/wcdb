@@ -115,6 +115,7 @@
 		238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */; };
 		23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* Tokenize.swift */; };
 		23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A1FF6E1FB084570023527D /* sqlcipher.framework */; };
+		23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8E0031FD8184300DAE97D /* CodableType.swift */; };
 		23E737C41FB1601C00EEBC3D /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C31FB1601C00EEBC3D /* Master.swift */; };
 		23E737C61FB1602800EEBC3D /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C51FB1602800EEBC3D /* Sequence.swift */; };
 		23E9D3101FC7CE9F00F55299 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D2FD1FC7CE9F00F55299 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -140,9 +141,6 @@
 		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
 		23E9E0071FC3D80B005DE71C /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0061FC3D80B005DE71C /* Table.swift */; };
 		23E9E0091FC3D810005DE71C /* TableInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0081FC3D810005DE71C /* TableInterface.swift */; };
-		23EAA4C91FD685CF00A0BC2D /* ColumnNSCodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EAA4C81FD685CF00A0BC2D /* ColumnNSCodableType.swift */; };
-		23EAA4CB1FD685D900A0BC2D /* ColumnJSONCodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EAA4CA1FD685D900A0BC2D /* ColumnJSONCodableType.swift */; };
-		23EAA4CD1FD686EC00A0BC2D /* ColumnCodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EAA4CC1FD686EC00A0BC2D /* ColumnCodableType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -266,6 +264,7 @@
 		238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
 		23A00CD81FBAF82B000180A8 /* Tokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenize.swift; sourceTree = "<group>"; };
 		23A1FF691FB084570023527D /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
+		23C8E0031FD8184300DAE97D /* CodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableType.swift; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		23E737C51FB1602800EEBC3D /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		23E9D2FD1FC7CE9F00F55299 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
@@ -291,9 +290,6 @@
 		23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
 		23E9E0061FC3D80B005DE71C /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		23E9E0081FC3D810005DE71C /* TableInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableInterface.swift; sourceTree = "<group>"; };
-		23EAA4C81FD685CF00A0BC2D /* ColumnNSCodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnNSCodableType.swift; sourceTree = "<group>"; };
-		23EAA4CA1FD685D900A0BC2D /* ColumnJSONCodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnJSONCodableType.swift; sourceTree = "<group>"; };
-		23EAA4CC1FD686EC00A0BC2D /* ColumnCodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnCodableType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,9 +482,7 @@
 				23E737C31FB1601C00EEBC3D /* Master.swift */,
 				23E737C51FB1602800EEBC3D /* Sequence.swift */,
 				230680191FD13B8500EAD5C4 /* CommonStatement.swift */,
-				23EAA4C81FD685CF00A0BC2D /* ColumnNSCodableType.swift */,
-				23EAA4CA1FD685D900A0BC2D /* ColumnJSONCodableType.swift */,
-				23EAA4CC1FD686EC00A0BC2D /* ColumnCodableType.swift */,
+				23C8E0031FD8184300DAE97D /* CodableType.swift */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -698,6 +692,7 @@
 				230209971FBED533000D69B6 /* IndexBinding.swift in Sources */,
 				230209A61FBED533000D69B6 /* Insert.swift in Sources */,
 				230209941FBED533000D69B6 /* AnyBinding.swift in Sources */,
+				23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */,
 				23E9D3161FC7CE9F00F55299 /* sqliterk_column.c in Sources */,
 				230209C21FBEE431000D69B6 /* Optional.swift in Sources */,
 				23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */,
@@ -741,7 +736,6 @@
 				238D0B861FAB1F7E00BC2659 /* OrderTerm.swift in Sources */,
 				238D0B801FAB1F7E00BC2659 /* Handle.swift in Sources */,
 				230209A81FBED533000D69B6 /* MultiSelect.swift in Sources */,
-				23EAA4CB1FD685D900A0BC2D /* ColumnJSONCodableType.swift in Sources */,
 				237931C51FD52CB4003BBA5F /* TableCodable.swift in Sources */,
 				238D0B8E1FAB1F7E00BC2659 /* StatementDelete.swift in Sources */,
 				238D0B821FAB1F7E00BC2659 /* JoinClause.swift in Sources */,
@@ -779,13 +773,11 @@
 				2302098B1FBED533000D69B6 /* Config.swift in Sources */,
 				238D0BCB1FAB1F7E00BC2659 /* RWLock.swift in Sources */,
 				238D0B811FAB1F7E00BC2659 /* HandleStatement.swift in Sources */,
-				23EAA4C91FD685CF00A0BC2D /* ColumnNSCodableType.swift in Sources */,
 				238D0B921FAB1F7E00BC2659 /* StatementExplain.swift in Sources */,
 				23E9D31C1FC7CE9F00F55299 /* sqliterk_output.cpp in Sources */,
 				23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */,
 				238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */,
 				230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */,
-				23EAA4CD1FD686EC00A0BC2D /* ColumnCodableType.swift in Sources */,
 				238D0B991FAB1F7E00BC2659 /* StatementSelect.swift in Sources */,
 				238D0B8B1FAB1F7E00BC2659 /* StatementCreateIndex.swift in Sources */,
 				230209A51FBED533000D69B6 /* Delete.swift in Sources */,

@@ -20,6 +20,7 @@
 
 import Foundation
 
+//Bultin Column Codable
 extension Int8: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
@@ -169,3 +170,88 @@ extension Data: ColumnCodable {
         return self
     }   
 }
+
+//Bultin Coder
+enum TableCoder {
+    case NSCoder
+    case JSON
+}
+
+extension Encodable {
+    static var defaultTableCoder: TableCoder {
+        return .NSCoder 
+    }
+}
+extension Decodable {
+    static var defaultTableCoder: TableCoder {
+        return .NSCoder 
+    }
+}
+
+//JSONCodable
+public protocol ColumnJSONEncodable: ColumnEncodable where FundamentalType == Data {}
+extension ColumnJSONEncodable {
+    public func archivedValue() -> FundamentalType? {
+        return try? JSONEncoder().encode(self)
+    }
+}
+
+public protocol ColumnJSONDecodable: ColumnDecodable where FundamentalType == Data {}
+extension ColumnJSONDecodable {
+    public init?(with value: FundamentalType) {
+        guard value.count > 0 else {
+            return nil
+        }
+        guard let object = try? JSONDecoder().decode(Self.self, from: value) else {
+            return nil
+        }
+        self = object
+    }
+}
+
+public protocol ColumnJSONCodable: ColumnJSONEncodable, ColumnJSONDecodable {}
+extension ColumnJSONCodable {
+    public typealias FundamentalType = Data
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public var columnType: ColumnType {
+        return .BLOB
+    }
+}
+
+//NSCodable
+public protocol ColumnNSEncodable: ColumnEncodable where FundamentalType == Data {}
+extension ColumnNSEncodable {
+    public func archivedValue() -> FundamentalType? {
+        return NSKeyedArchiver.archivedData(withRootObject: self)
+    }
+}
+
+public protocol ColumnNSDecodable: ColumnDecodable where FundamentalType == Data {}
+extension ColumnNSDecodable {
+    public init?(with value: FundamentalType) {
+        guard value.count > 0 else {
+            return nil
+        }
+        guard let object = NSKeyedUnarchiver.unarchiveObject(with: value) else {
+            return nil
+        } 
+        guard let typedObject = object as? Self else {
+            return nil
+        }
+        self = typedObject
+    }
+}
+
+public protocol ColumnNSCodable: ColumnNSEncodable, ColumnNSDecodable {}
+extension ColumnNSCodable {
+    public typealias FundamentalType = Data
+    static var columnType: ColumnType {
+        return .BLOB
+    }
+    var columnType: ColumnType {
+        return .BLOB
+    }
+}
+

@@ -72,19 +72,3 @@ extension ColumnCodable {
         return FundamentalType.columnType
     }
 }
-
-enum TableCoder {
-    case NSCoder
-    case JSON
-}
-
-extension Encodable {
-    static var defaultTableCoder: TableCoder {
-        return .NSCoder 
-    }
-}
-extension Decodable {
-    static var defaultTableCoder: TableCoder {
-        return .NSCoder 
-    }
-}
