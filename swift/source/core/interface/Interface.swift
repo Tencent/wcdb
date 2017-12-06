@@ -273,6 +273,9 @@ public protocol TableInterface {
 extension TableInterface where Self: Core {
     public func create<Root: TableEncodable>(table name: String, of RootType: Root.Type) throws {
         try run(embeddedTransaction: {
+            guard Root.CodingKeys.Root.self == Root.self else {
+                Error.abort("")
+            }
             let orm = RootType.CodingKeys.__objectRelationalMapping
             if try isTableExists(name) {
                 var columnNames: [String] = []
