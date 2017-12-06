@@ -32,6 +32,24 @@ public class CoreStatement: CoreRepresentable {
         return recyclableHandleStatement.raw
     }
     
+    public func bind<TableEncodableType: TableEncodable>(_ propertyConvertible: PropertyConvertible, of object: TableEncodableType, toIndex index: Int = 1) throws {
+        try bind([(propertyConvertible, toIndex: index)], of: object)
+    }
+    
+    public func bind<TableEncodableType: TableEncodable>(_ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)], of object: TableEncodableType) throws {
+        var indexedCodingTableKeys: [String:Int] = [:]
+        for args in indexedPropertyConvertibleList {
+            indexedCodingTableKeys[args.0.codingTableKey.stringValue] = args.toIndex
+        }
+        let encoder = TableEncoder(indexedCodingTableKeys, on: self)
+        try encoder.bind(object)
+    }
+    
+    public func bind<TableEncodableType: TableEncodable>(_ propertyConvertibleList: [PropertyConvertible], of object: TableEncodableType) throws {
+        let encoder = TableEncoder(propertyConvertibleList.asCodingTableKeys(), on: self)
+        try encoder.bind(object)
+    }
+    
     public func bind(_ value: ColumnEncodableBase?, toIndex index: Int) {
         if let wrappedValue = value {
             let fundamentalValue = wrappedValue.archivedFundamentalValue() 
