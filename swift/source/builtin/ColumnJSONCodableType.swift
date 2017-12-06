@@ -22,7 +22,7 @@ import Foundation
 
 public protocol ColumnJSONEncodable: ColumnEncodable where FundamentalType == Data {}
 extension ColumnJSONEncodable {
-    public func archivedFundamentalValue() -> FundamentalType? {
+    public func archivedValue() -> FundamentalType? {
         return try? JSONEncoder().encode(self)
     }
 }
@@ -40,5 +40,14 @@ extension ColumnJSONDecodable {
     }
 }
 
-public typealias ColumnJSONCodable = ColumnJSONEncodable & ColumnJSONDecodable
+public protocol ColumnJSONCodable: ColumnJSONEncodable, ColumnJSONDecodable {}
+extension ColumnJSONCodable {
+    public typealias FundamentalType = Data
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public var columnType: ColumnType {
+        return .BLOB
+    }
+}
 

@@ -22,7 +22,7 @@ import Foundation
 
 public protocol ColumnNSEncodable: ColumnEncodable where FundamentalType == Data {}
 extension ColumnNSEncodable {
-    public func archivedFundamentalValue() -> FundamentalType? {
+    public func archivedValue() -> FundamentalType? {
         return NSKeyedArchiver.archivedData(withRootObject: self)
     }
 }
@@ -43,4 +43,13 @@ extension ColumnNSDecodable {
     }
 }
 
-public typealias ColumnNSCodable = ColumnNSEncodable & ColumnNSDecodable
+public protocol ColumnNSCodable: ColumnNSEncodable, ColumnNSDecodable {}
+extension ColumnNSCodable {
+    public typealias FundamentalType = Data
+    static var columnType: ColumnType {
+        return .BLOB
+    }
+    var columnType: ColumnType {
+        return .BLOB
+    }
+}
