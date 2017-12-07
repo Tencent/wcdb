@@ -55,7 +55,7 @@ class TracerTests: BaseTestCase {
         let database = Database(withFileURL: self.recommendedPath)
 
         //When
-        XCTAssertNoThrow(try database.getRows(on: Master.any, fromTable: Master.tableName))
+        XCTAssertNoThrow(try database.getRows(on: Master.Properties.any, fromTable: Master.tableName))
 
         XCTAssertTrue(pass)
     }
@@ -101,20 +101,22 @@ class TracerTests: BaseTestCase {
         database.tag = expectedTag
         
         //When
-        XCTAssertThrowsError(try database.getRows(on: WCDB.Sequence.any, fromTable: WCDB.Sequence.tableName))
+        XCTAssertThrowsError(try database.getRows(on: WCDB.Sequence.Properties.any, fromTable: WCDB.Sequence.tableName))
         
         XCTAssertTrue(`catch`)
     }
     
-    class TracerObject: CodableTable, Named {
+    class TracerObject: TableCodable, Named {
         var variable = 0
-        required init() {}        
-        var isAutoIncrement: Bool = false
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [
-                ColumnBinding(\TracerObject.variable, alias: "variable", isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
-            ]
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = TracerObject
+            case variable
+            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+                return [.variable:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
+            }
         }
+        required init() {}    
+        var isAutoIncrement: Bool = false
     }
     
     func testTracePerformance() {

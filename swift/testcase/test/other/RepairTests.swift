@@ -23,20 +23,17 @@ import WCDB
 
 class RepairTests: BaseTestCase {
     
-    class RepairObject: WCDB.CodableTable, Named, Equatable, Comparable {
+    class RepairObject: WCDB.TableCodable, Named, Equatable, Comparable {
         var variable1: Int = 0
         var variable2: String = ""
-        
-        required init() {}        
+        required init() {}   
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = RepairObject
+            case variable1
+            case variable2
+        }
         var isAutoIncrement: Bool = false
         var lastInsertedRowID: Int64 = 0
-        
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [
-                ColumnBinding(\RepairObject.variable1, alias: "variable1"),
-                ColumnBinding(\RepairObject.variable2, alias: "variable2")
-            ]
-        }        
         
         static func ==(lhs: RepairObject, rhs: RepairObject) -> Bool {
             return lhs.variable1 == rhs.variable1 && lhs.variable2 == rhs.variable2
