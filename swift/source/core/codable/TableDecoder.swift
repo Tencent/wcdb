@@ -73,7 +73,7 @@ class TableDecoder : Decoder {
                 object = decodableColumn as? Object
             }else {
                 if let value: Data = coreStatement.value(atIndex: index) {
-                    switch type.defaultTableCoder {
+                    switch type.defaultTableDecoder {
                     case .NSCoder:
                         object = NSKeyedUnarchiver.unarchiveObject(with: value) as? Object
                     case .JSON:

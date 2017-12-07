@@ -150,7 +150,7 @@ class TableEncoder: Encoder {
                     }
                 }else {
                     var data: Data? = nil
-                    switch Object.defaultTableCoder {
+                    switch Object.defaultTableEncoder {
                     case .NSCoder:
                         data = NSKeyedArchiver.archivedData(withRootObject: value)
                     case .JSON:
@@ -291,8 +291,8 @@ class TableEncoder: Encoder {
         self.coreStatement = coreStatement
     }
 
-    func bind<TableEncodableType: TableEncodable>(_ object: TableEncodableType) throws {
-        if object.isAutoIncrement {
+    func bind<TableEncodableType: TableEncodable>(_ object: TableEncodableType, isReplace: Bool = false) throws {
+        if !isReplace && object.isAutoIncrement {
             primaryKey = TableEncodableType.CodingKeys.__objectRelationalMapping.getPrimaryKey()
         }
         try object.encode(to: self)
