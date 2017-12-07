@@ -194,23 +194,6 @@ extension Date: ColumnCodable {
     }   
 }
 
-//Bultin Coder
-public enum TableCoder {
-    case NSCoder
-    case JSON
-}
-
-extension Encodable {
-    public static var defaultTableEncoder: TableCoder {
-        return .NSCoder 
-    }
-}
-extension Decodable {
-    public static var defaultTableDecoder: TableCoder {
-        return .NSCoder 
-    }
-}
-
 //JSONCodable
 public protocol ColumnJSONEncodable: ColumnEncodable where FundamentalType == Data {}
 extension ColumnJSONEncodable {

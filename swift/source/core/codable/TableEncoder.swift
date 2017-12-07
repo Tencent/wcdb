@@ -57,56 +57,46 @@ class TableEncoder: Encoder {
             return true
         }
         
-        func encodeNil(forKey key: Key) throws {
+        public func generalEncode(_ value: ColumnEncodableBase?, forKey key: Key) {
             guard let bindingIndex = bindingIndex(by: key) else {
                 return
             }
-            coreStatement.bind(nil, toIndex: bindingIndex)
+            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
+                coreStatement.bind(value, toIndex: bindingIndex)
+            }
+        }
+        
+        public func generalEncode(_ value: ColumnEncodableBase, forKey key: Key) {
+            guard let bindingIndex = bindingIndex(by: key) else {
+                return
+            }
+            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
+                coreStatement.bind(value, toIndex: bindingIndex)
+            }
+        }
+        
+        func encodeNil(forKey key: Key) throws {
+            generalEncode(nil, forKey: key)
         }
         
         func encode(_ value: Int, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: Bool, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: Float, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: Double, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: String, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encodeConditional<Object>(_ object: Object, forKey key: Key) throws where Object : AnyObject, Object : Encodable {
@@ -114,140 +104,109 @@ class TableEncoder: Encoder {
         }
         
         func encode<Object>(_ value: Object, forKey key: Key) throws where Object : Encodable {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
+            guard let encodableColumnValue = value as? ColumnEncodableBase else {
+                Error.abort("")
             }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                if let encodableColumnValue = value as? ColumnEncodableBase {
-                    var bound = false
-                    let fundamentalValue = encodableColumnValue.archivedFundamentalValue()
-                    switch type(of: encodableColumnValue).columnType {
-                    case .Integer32:
-                        if let wrappedFundamentalValue = fundamentalValue as? Int32 {
-                            coreStatement.bind(wrappedFundamentalValue, toIndex: bindingIndex)
-                            bound = true
-                        }
-                    case .Integer64:
-                        if let wrappedFundamentalValue = fundamentalValue as? Int64 {
-                            coreStatement.bind(wrappedFundamentalValue, toIndex: bindingIndex)
-                            bound = true
-                        }
-                    case .Float:
-                        if let wrappedFundamentalValue = fundamentalValue as? Double {
-                            coreStatement.bind(wrappedFundamentalValue, toIndex: bindingIndex)
-                            bound = true
-                        }
-                    case .Text:
-                        if let wrappedFundamentalValue = fundamentalValue as? String {
-                            coreStatement.bind(wrappedFundamentalValue, toIndex: bindingIndex)
-                            bound = true
-                        }
-                    case .BLOB:
-                        if let wrappedFundamentalValue = fundamentalValue as? Data {
-                            coreStatement.bind(wrappedFundamentalValue, toIndex: bindingIndex)
-                            bound = true
-                        }
-                    default: break
-                    }
-                    if !bound {
-                        coreStatement.bind(nil, toIndex: bindingIndex)
-                    }
-                }else {
-                    var data: Data? = nil
-                    switch Object.defaultTableEncoder {
-                    case .NSCoder:
-                        data = NSKeyedArchiver.archivedData(withRootObject: value)
-                    case .JSON:
-                        data = try JSONEncoder().encode(value)
-                    }
-                    if let wrappedData = data {
-                        coreStatement.bind(wrappedData, toIndex: bindingIndex)
-                    }else {
-                        coreStatement.bind(nil, toIndex: bindingIndex)
-                    }
-                }
-            }
+            generalEncode(encodableColumnValue, forKey: key)
         }
         
         func encode(_ value: Int8, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: Int16, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: Int32, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: Int64, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: UInt, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: UInt8, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: UInt16, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: UInt32, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value, forKey: key)
         }
         
         func encode(_ value: UInt64, forKey key: Key) throws {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Int?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+
+        func encodeIfPresent(_ value: Int8?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Int16?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Int32?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Int64?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: UInt?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: UInt8?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: UInt16?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: UInt32?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: UInt64?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Float?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: Double?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent(_ value: String?, forKey key: Key) throws {
+            generalEncode(value, forKey: key)
+        }
+        
+        func encodeIfPresent<Object>(_ value: Object?, forKey key: Key) throws where Object : Encodable {
+            guard Object.self is ColumnEncodableBase.Type else {
+                Error.abort("")
             }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
-            }
+            generalEncode(value as? ColumnEncodableBase, forKey: key)
         }
         
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {

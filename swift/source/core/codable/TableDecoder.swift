@@ -47,46 +47,6 @@ class TableDecoder : Decoder {
             return columnIndex(by: key) != nil
         }
 
-        func decode<Object: Decodable>(_ type: Object.Type, atIndex index: Int) throws -> Object{
-            var object: Object? = nil
-            if let decodableType = Object.self as? ColumnDecodableBase.Type {
-                var decodableColumn: ColumnDecodableBase? = nil
-                switch decodableType.columnType {
-                case .BLOB:
-                    let value: Data = coreStatement.value(atIndex: index) ?? Data()
-                    decodableColumn = decodableType.init(with: value)
-                case .Float:
-                    let value: Double = coreStatement.value(atIndex: index) ?? 0
-                    decodableColumn = decodableType.init(with: value)
-                case .Integer32:
-                    let value: Int32 = coreStatement.value(atIndex: index) ?? 0
-                    decodableColumn = decodableType.init(with: value)
-                case .Integer64:
-                    let value: Int64 = coreStatement.value(atIndex: index) ?? 0
-                    decodableColumn = decodableType.init(with: value)
-                case .Text:
-                    let value: String = coreStatement.value(atIndex: index) ?? ""
-                    decodableColumn = decodableType.init(with: value)
-                default:
-                    decodableColumn = nil
-                }
-                object = decodableColumn as? Object
-            }else {
-                if let value: Data = coreStatement.value(atIndex: index) {
-                    switch type.defaultTableDecoder {
-                    case .NSCoder:
-                        object = NSKeyedUnarchiver.unarchiveObject(with: value) as? Object
-                    case .JSON:
-                        object = try JSONDecoder().decode(type, from: value)
-                    }
-                }
-            }
-            guard let wrappedObject = object else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
-            }
-            return wrappedObject
-        }
-
         //Decode
         func decodeNil(forKey key: Key) throws -> Bool {
             guard let index = columnIndex(by: key) else {
@@ -197,7 +157,13 @@ class TableDecoder : Decoder {
             guard let index = columnIndex(by: key) else {
                 throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
             }
-            return try decode(type, atIndex: index)
+            guard let decodableType = Object.self as? ColumnDecodableBase.Type else {
+                Error.abort("")
+            }
+            guard let object = coreStatement.value(atIndex: index, of: decodableType) as? Object else {
+                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+            }
+            return object
         }        
         
         //Decode if present
@@ -303,7 +269,10 @@ class TableDecoder : Decoder {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
-            return try decode(type, atIndex: index)
+            guard let decodableType = Object.self as? ColumnDecodableBase.Type else {
+                Error.abort("")
+            }
+            return coreStatement.value(atIndex: index, of: decodableType) as? Object
         }
         
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
