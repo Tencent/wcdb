@@ -23,7 +23,7 @@ import Foundation
 public class Update : CoreRepresentable {
     var core: Core
     private let statement = StatementUpdate()
-    private let properties: [Property]
+    private let keys: [CodingTableKeyBase]
     public var changes: Int = Int.max
     
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
@@ -33,14 +33,11 @@ public class Update : CoreRepresentable {
         guard table.count > 0 else {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Update, code: .Misuse, message: "Nil table name")
         }
-        var updateValueList: [StatementUpdate.ValueType] = []
-        self.properties = propertyConvertibleList.reduce(into: []) {
-            let property = $1.asProperty()
-            updateValueList.append((property, Expression.bindingParameter))
-            $0.append(property)
-        }
+        self.keys = propertyConvertibleList.asCodingTableKeys()
         self.core = core
-        self.statement.update(table: table).set(updateValueList)
+        self.statement.update(table: table).set(propertyConvertibleList.map { (propertyConvertible) -> StatementUpdate.ValueType in
+            return (propertyConvertible, Expression.bindingParameter)
+        })
     }
     
     @discardableResult
@@ -81,7 +78,7 @@ public class Update : CoreRepresentable {
    
     public func execute<Object: TableEncodable>(with object: Object) throws {
         let coreStatement = try core.prepare(statement)
-        let encoder = TableEncoder(properties.asCodingTableKeys(), on: coreStatement)
+        let encoder = TableEncoder(keys, on: coreStatement)
         try encoder.bind(object)
         try coreStatement.step()
         changes = coreStatement.changes

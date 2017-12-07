@@ -21,7 +21,7 @@
 import Foundation
 public class Insert: CoreRepresentable {
     let core: Core
-    private var properties: [Property]?
+    private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
     
@@ -30,7 +30,7 @@ public class Insert: CoreRepresentable {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Insert, code: .Misuse, message: "Empty table name")
         }
         self.name = name
-        self.properties = propertyConvertibleList?.asProperties()
+        self.properties = propertyConvertibleList
         self.isReplace = isReplace
         self.core = core
     }
@@ -48,11 +48,12 @@ public class Insert: CoreRepresentable {
         }
         let orm = Object.CodingKeys.__objectRelationalMapping
         func doInsertObject() throws {
+            properties = properties ?? Object.Properties.all
             let coreStatement = try core.prepare(statement)
-            let encoder = TableEncoder((properties ?? Object.Properties.all).asCodingTableKeys(), on: coreStatement) 
+            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: coreStatement) 
             for var object in objects {
-                try encoder.bind(object)
-                if object.isAutoIncrement {
+                try encoder.bind(object, isReplace: isReplace)
+                if !isReplace && object.isAutoIncrement {
                     object.lastInsertedRowID = coreStatement.lastInsertedRowID
                 }
                 try coreStatement.reset()

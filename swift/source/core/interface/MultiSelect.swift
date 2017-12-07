@@ -30,17 +30,16 @@ public class MultiSelect: SelectBase {
         guard tables.count > 0 else {
             throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Empty table")
         }
-        var properties: [Property] = []
-        (self.keys, properties) = propertyConvertibleList.reduce(into: ([CodingTableKeyBase](), [Property]()), { (result, propertyConvertible) in
-            guard propertyConvertible.codingTableKey.rootType is TableDecodableBase.Type else {
+        self.keys = propertyConvertibleList.map({ (propertyConvertible) -> CodingTableKeyBase in
+            let codingTableKey = propertyConvertible.codingTableKey 
+            guard codingTableKey.rootType is TableDecodableBase.Type else {
                 Error.abort("")
             }
-            result.0.append(propertyConvertible.codingTableKey)
-            result.1.append(propertyConvertible.asProperty())
+            return codingTableKey
         })
         
         super.init(with: core)
-        statement.select(distinct: isDistinct, properties).from(tables)
+        statement.select(distinct: isDistinct, propertyConvertibleList).from(tables)
     }    
     
     private typealias Generator = () throws -> TableDecodableBase

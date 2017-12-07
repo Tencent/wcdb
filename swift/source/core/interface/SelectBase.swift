@@ -109,42 +109,4 @@ public class SelectBase: CoreRepresentable {
             throw error
         }
     }
-    
-    func extract<Object: TableDecodable>(from keys: [Object.CodingKeys]) throws -> Object {
-        let coreStatement = try self.lazyCoreStatement()
-        let decoder = TableDecoder(keys, on: coreStatement)
-        return try Object.init(from: decoder)
-    }
-    
-    func extract(atIndex index: Int) throws -> FundamentalValue {
-        let coreStatement = try self.lazyCoreStatement()
-        switch coreStatement.columnType(atIndex: index) {
-        case .Integer32:
-            let value: Int32 = coreStatement.value(atIndex: index) ?? 0
-            return FundamentalValue(value)
-        case .Integer64:
-            let value: Int64 = coreStatement.value(atIndex: index) ?? 0 
-            return FundamentalValue(value)
-        case .Float:
-            let value: Double = coreStatement.value(atIndex: index)  ?? 0
-            return FundamentalValue(value)
-        case .Text:
-            let value: String = coreStatement.value(atIndex: index)  ?? ""
-            return FundamentalValue(value)
-        case .BLOB:
-            let value: Data = coreStatement.value(atIndex: index)  ?? Data()
-            return FundamentalValue(value)
-        case .Null:
-            return nil
-        }
-    }
-    
-    func extract() throws -> FundamentalRow {
-        var row: FundamentalRow = []
-        let coreStatement = try self.lazyCoreStatement()
-        for index in 0..<coreStatement.columnCount() {
-            row.append(try extract(atIndex: index))
-        }
-        return row
-    }
 }
