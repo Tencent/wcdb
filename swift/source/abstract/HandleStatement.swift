@@ -102,7 +102,11 @@ public class HandleStatement {
     }
     
     public func columnValue(atIndex index: Int) -> Data {
-        return Data(bytes: sqlite3_column_blob(stmt, Int32(index)), count: Int(sqlite3_column_bytes(stmt, Int32(index))))
+        guard let bytes = sqlite3_column_blob(stmt, Int32(index)) else {
+            return Data()
+        }           
+        let count = Int(sqlite3_column_bytes(stmt, Int32(index))) 
+        return Data(bytes: bytes, count: count)
     }
     
     public func columnCount() -> Int {
