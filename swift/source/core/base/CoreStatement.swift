@@ -78,29 +78,34 @@ public class CoreStatement: CoreRepresentable {
     }
     
     public func value(atIndex index: Int, of type: ColumnDecodableBase.Type) -> ColumnDecodableBase? {
-        var result: ColumnDecodableBase? = nil
+        guard handleStatement.columnType(atIndex: index) != .Null else {
+            return nil
+        }
         switch type.columnType {
         case .Integer32:
             let value: Int32 = handleStatement.columnValue(atIndex: index)
-            result = type.init(with: value)
+            return type.init(with: value)
         case .Integer64:
             let value: Int64 = handleStatement.columnValue(atIndex: index)
-            result = type.init(with: value)
+            return type.init(with: value)
         case .Float:
             let value: Double = handleStatement.columnValue(atIndex: index)
-            result = type.init(with: value)
+            return type.init(with: value)
         case .Text:
             let value: String = handleStatement.columnValue(atIndex: index)
-            result = type.init(with: value)
+            return type.init(with: value)
         case .BLOB:
             let value: Data = handleStatement.columnValue(atIndex: index)
-            result = type.init(with: value)
+            return type.init(with: value)
         default: break
         }
-        return result
+        return nil
     }
     
     public func value<ColumnDecodableType: ColumnDecodable>(atIndex index: Int, of type: ColumnDecodableType.Type = ColumnDecodableType.self) -> ColumnDecodableType? {
+        guard handleStatement.columnType(atIndex: index) != .Null else {
+            return nil
+        }
         var result: ColumnDecodableType? = nil
         switch ColumnDecodableType.columnType {
         case .Integer32:
