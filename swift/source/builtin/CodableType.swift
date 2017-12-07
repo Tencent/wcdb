@@ -172,18 +172,18 @@ extension Data: ColumnCodable {
 }
 
 //Bultin Coder
-enum TableCoder {
+public enum TableCoder {
     case NSCoder
     case JSON
 }
 
 extension Encodable {
-    static var defaultTableCoder: TableCoder {
+    public static var defaultTableEncoder: TableCoder {
         return .NSCoder 
     }
 }
 extension Decodable {
-    static var defaultTableCoder: TableCoder {
+    public static var defaultTableDecoder: TableCoder {
         return .NSCoder 
     }
 }
@@ -247,10 +247,10 @@ extension ColumnNSDecodable {
 public protocol ColumnNSCodable: ColumnNSEncodable, ColumnNSDecodable {}
 extension ColumnNSCodable {
     public typealias FundamentalType = Data
-    static var columnType: ColumnType {
+    public static var columnType: ColumnType {
         return .BLOB
     }
-    var columnType: ColumnType {
+    public var columnType: ColumnType {
         return .BLOB
     }
 }
