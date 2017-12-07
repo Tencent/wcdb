@@ -20,6 +20,18 @@
 
 import Foundation
 
+/*
+ * Builtin codable implementation
+ *
+ * Bool, Int, Int8, Int16, Int32, Int64, UInt, UInt8, UInt16, UInt32, UInt64, Float, Double, NSNumber 
+ * String
+ * Data
+ * Date
+ * 
+ * TODO: Array, Dictionary, Set, URL 
+ *
+ */
+
 //Bultin Column Codable
 extension Int8: ColumnCodable {
     public typealias FundamentalType = Int32
@@ -168,6 +180,17 @@ extension Data: ColumnCodable {
     }    
     public func archivedValue() -> Data? {
         return self
+    }   
+}
+
+
+extension Date: ColumnCodable {
+    public typealias FundamentalType = Int64
+    public init?(with value: Int64) {
+        self.init(timeIntervalSince1970: TimeInterval(value))
+    }    
+    public func archivedValue() -> Int64? {
+        return Int64(timeIntervalSince1970)
     }   
 }
 
