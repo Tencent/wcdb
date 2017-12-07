@@ -74,20 +74,26 @@ extension Array where Element==Dictionary<String, CRUDObjectBase> {
 
 class MultiSelectTests: CRUDTestCase {
     
-    class MultiSelectObject: CRUDObjectBase, WCDB.CodableTable {        
+    class MultiSelectObject: CRUDObjectBase, WCDB.TableCodable {        
         var variable1: Int = 0
         var variable2: String = ""
         
-        static func columnBindings() -> [AnyColumnBinding] {
-            return [
-                ColumnBinding(\MultiSelectObject.variable1, alias: "variable1", isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
-                ColumnBinding(\MultiSelectObject.variable2, alias: "variable2")
-            ]
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = MultiSelectObject
+            case variable1
+            case variable2
+            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+                return [.variable1:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
+            }
         }
         
         override var hashValue: Int {
             return (String(variable1)+variable2).hashValue
         }        
+        
+        override var debugDescription: String {
+            return "\(variable1), \(variable2)"
+        }
     }
     
     var preInsertedMultiSelectObjects: [MultiSelectObject] = {
@@ -122,29 +128,33 @@ class MultiSelectTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: preInsertedMultiSelectObjects, intoTable: MultiSelectObject.name))
         
         let properties = [
-            (\CRUDObject.variable1).in(table: CRUDObject.name),
-            (\CRUDObject.variable2).in(table: CRUDObject.name),
-            (\MultiSelectObject.variable1).in(table: MultiSelectObject.name),
-            (\MultiSelectObject.variable2).in(table: MultiSelectObject.name)
+            (CRUDObject.CodingKeys.variable1).in(table: CRUDObject.name),
+            (CRUDObject.CodingKeys.variable2).in(table: CRUDObject.name),
+            (MultiSelectObject.CodingKeys.variable1).in(table: MultiSelectObject.name),
+            (MultiSelectObject.CodingKeys.variable2).in(table: MultiSelectObject.name)
         ]        
         let tables = [CRUDObject.name, MultiSelectObject.name]
         let optionalMultiSelect = WCDBAssertNoThrowReturned(try database.prepareMultiSelect(on: properties, fromTables: tables), whenFailed: nil)
         XCTAssertNotNil(optionalMultiSelect)
-        multiSelect = optionalMultiSelect!.where((\CRUDObject.variable1).in(table: CRUDObject.name) == (\MultiSelectObject.variable1).in(table: MultiSelectObject.name))
+        multiSelect = optionalMultiSelect!.where((CRUDObject.CodingKeys.variable1).in(table: CRUDObject.name) == (MultiSelectObject.CodingKeys.variable1).in(table: MultiSelectObject.name))
     }
     
     func testSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.allMultiObjects(), whenFailed: [[String:CodableTable]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
+        for i in 0..<2 {
+            print(baseResults![i])
+//            print(preInsertedMultiObjects[i])
+        }
         XCTAssertTrue(baseResults!.sorted() == preInsertedMultiObjects.sorted())
     }
     
     func testOrderedSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.order(by: (\CRUDObject.variable1).in(table: CRUDObject.name).asOrder(by: .Descending)).allMultiObjects(), whenFailed: [[String:CodableTable]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.order(by: (CRUDObject.CodingKeys.variable1).in(table: CRUDObject.name).asOrder(by: .Descending)).allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
@@ -153,7 +163,7 @@ class MultiSelectTests: CRUDTestCase {
     
     func testLimitedSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.limit(1).allMultiObjects(), whenFailed: [[String:CodableTable]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.limit(1).allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
@@ -163,7 +173,7 @@ class MultiSelectTests: CRUDTestCase {
     
     func testOffsetSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.limit(1, offset: 1).allMultiObjects(), whenFailed: [[String:CodableTable]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.limit(1, offset: 1).allMultiObjects(), whenFailed: [[String:TableDecodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)

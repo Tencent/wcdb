@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class CRUDObjectBase: Named, Hashable, Comparable {    
+class CRUDObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible {    
     var hashValue: Int {
         fatalError()
     }
@@ -45,20 +45,30 @@ class CRUDObjectBase: Named, Hashable, Comparable {
     static func <(lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
         return lhs.hashValue < rhs.hashValue
     }
+    
+    var debugDescription: String {
+        fatalError()
+    }
 }
 
-class CRUDObject: CRUDObjectBase, WCDB.CodableTable {        
-    var variable1: Int = 0
-    var variable2: String = ""
+class CRUDObject: CRUDObjectBase, WCDB.TableCodable {        
+    var variable1: Int? = 0
+    var variable2: String? = ""
     
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\CRUDObject.variable1, alias: "variable1", isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
-            ColumnBinding(\CRUDObject.variable2, alias: "variable2")
-        ]
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = CRUDObject
+        case variable1
+        case variable2
+        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+            return [.variable1:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
+        }
     }
     
     override var hashValue: Int {
-        return (String(variable1)+variable2).hashValue
+        return (String(variable1 ?? 0)+(variable2 ?? "")).hashValue
     }
+    
+    override var debugDescription: String {
+        return "\(variable1 != nil ? String(variable1!) : "nil"), \(variable2 ?? "nil")"
+    }        
 }

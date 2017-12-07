@@ -28,7 +28,7 @@ class UpdateTests: CRUDTestCase {
     override func setUp() {
         super.setUp()
         
-        let optionalUpdate = WCDBAssertNoThrowReturned(try database.prepareUpdate(table: CRUDObject.name, on: \CRUDObject.variable2), whenFailed: nil)
+        let optionalUpdate = WCDBAssertNoThrowReturned(try database.prepareUpdate(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2), whenFailed: nil)
         XCTAssertNotNil(optionalUpdate)
         update = optionalUpdate!
     }
@@ -41,7 +41,10 @@ class UpdateTests: CRUDTestCase {
         XCTAssertNoThrow(try update.execute(with: object))
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name), whenFailed: [CRUDObject]())
-        XCTAssertEqual(Array(repeating: self.name, count: preInsertedObjects.count), results.map({ $0.variable2 }))
+        XCTAssertEqual(Array(repeating: self.name, count: preInsertedObjects.count), results.map({
+            XCTAssertNotNil($0.variable2)
+            return $0.variable2!
+        }))
     }
     
     func testConditionalUpdate() {
@@ -49,9 +52,9 @@ class UpdateTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try update.where(\CRUDObject.variable1 == 1).execute(with: object))
+        XCTAssertNoThrow(try update.where(CRUDObject.CodingKeys.variable1 == 1).execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: \CRUDObject.variable1 == 1))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 1))
         XCTAssertNotNil(result)
         XCTAssertEqual(self.name, result!.variable2)
     }
@@ -60,11 +63,11 @@ class UpdateTests: CRUDTestCase {
         //Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let order = (\CRUDObject.variable1).asOrder(by: .Descending)
+        let order = (CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)
         //When
         XCTAssertNoThrow(try update.order(by: order).limit(1).execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: \CRUDObject.variable1 == 2))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 2))
         XCTAssertNotNil(result)
         XCTAssertEqual(self.name, result!.variable2)
     }

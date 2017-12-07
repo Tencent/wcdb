@@ -43,7 +43,7 @@ class DeleteTests: CRUDTestCase {
     
     func testConditionalDelete() {
         //When
-        XCTAssertNoThrow(try delete.where(\CRUDObject.variable1 == 2).execute())
+        XCTAssertNoThrow(try delete.where(CRUDObject.CodingKeys.variable1 == 2).execute())
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
         XCTAssertEqual(results.count, 1)
@@ -52,7 +52,7 @@ class DeleteTests: CRUDTestCase {
     
     func testOrderedDelete() {
         //Give
-        let order = (\CRUDObject.variable1).asOrder(by: .Descending)
+        let order = (CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)
         //When
         XCTAssertNoThrow(try delete.order(by: order).limit(1).execute())
         //Then

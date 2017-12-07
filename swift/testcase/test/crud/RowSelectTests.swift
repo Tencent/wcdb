@@ -46,7 +46,7 @@ class RowSelectTests: CRUDTestCase {
     
     func testConditionalRowSelect() {
         //When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.where(\CRUDObject.variable1 == 1).allRows())
+        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.where(CRUDObject.CodingKeys.variable1 == 1).allRows())
         //Then
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
@@ -55,7 +55,7 @@ class RowSelectTests: CRUDTestCase {
     
     func testOrderedRowSelect() {
         //Give
-        let order = (\CRUDObject.variable1).asOrder(by: .Descending)
+        let order = (CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)
         //When
         let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.order(by: order).allRows())
         //Then
@@ -86,7 +86,7 @@ class RowSelectTests: CRUDTestCase {
     
     func testHalfRowSelect() {
         //Give
-        let optionalRowSelect = WCDBAssertNoThrowReturned(try database.prepareRowSelect(on: \CRUDObject.variable2, fromTable: CRUDObject.name), whenFailed: nil)
+        let optionalRowSelect = WCDBAssertNoThrowReturned(try database.prepareRowSelect(on: CRUDObject.CodingKeys.variable2, fromTable: CRUDObject.name), whenFailed: nil)
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
         //When

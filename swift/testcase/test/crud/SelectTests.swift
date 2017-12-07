@@ -39,13 +39,13 @@ class SelectTests: CRUDTestCase {
     }
     
     func testConditionalSelect() {
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.where(\CRUDObject.variable1 == 2).allObjects(), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.where(CRUDObject.CodingKeys.variable1 == 2).allObjects(), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, "object2")
     }
     
     func testOrderedSelect() {
-        let order = (\CRUDObject.variable2).asOrder(by: .Descending)
+        let order = (CRUDObject.CodingKeys.variable2).asOrder(by: .Descending)
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.order(by: order).allObjects(), whenFailed: [CRUDObject]())
         XCTAssertEqual(results, preInsertedObjects.sorted().reversed())
     }
@@ -63,12 +63,18 @@ class SelectTests: CRUDTestCase {
     }
     
     func testHalfSelect() {
-        let optionalSelect = WCDBAssertNoThrowReturned(try database.prepareSelect(on: \CRUDObject.variable2, fromTable: CRUDObject.name), whenFailed: nil)
+        let optionalSelect = WCDBAssertNoThrowReturned(try database.prepareSelect(on: CRUDObject.CodingKeys.variable2, fromTable: CRUDObject.name), whenFailed: nil)
         XCTAssertNotNil(optionalSelect)
         let select = optionalSelect!
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.allObjects(), whenFailed: [CRUDObject]()) 
-        XCTAssertEqual(results.map({ $0.variable1 }), Array(repeating: 0, count: preInsertedObjects.count))
-        XCTAssertEqual(results.map({ $0.variable2 }), preInsertedObjects.map({ $0.variable2 }))
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.allObjects(), whenFailed: [CRUDObject]())
+        XCTAssertEqual(results.map({ (object) -> String in
+            XCTAssertNil(object.variable1)
+            XCTAssertNotNil(object.variable2)
+            return object.variable2!
+        }), preInsertedObjects.map({ 
+            XCTAssertNotNil($0.variable2)
+            return $0.variable2!
+        }))
     }
     
     func testSelectIteration() {

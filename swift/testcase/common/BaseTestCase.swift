@@ -36,7 +36,7 @@ class BaseTestCase: XCTestCase, Named {
     
     lazy var recommendedPath: URL = {
         var url = recommendedDirectory
-        url.appendPathComponent(String(self.name.hash))
+        url.appendPathComponent(String(UInt(bitPattern: self.name.hash)))
         return url
     }() 
     
