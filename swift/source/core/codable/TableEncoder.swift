@@ -281,13 +281,12 @@ class TableEncoder: Encoder {
         return KeyedEncodingContainer(KeyedEncodingTableContainer(with: indexedCodingTableKeys, on: coreStatement, and: primaryKey, keyType: Key.self))
     }
     
-    init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
+    convenience init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
         var indexedCodingTableKeys: [String:Int] = [:]
         for (index, codingTableKey) in codingTableKeys.enumerated() {
             indexedCodingTableKeys[codingTableKey.stringValue] = index + 1
         }
-        self.indexedCodingTableKeys = indexedCodingTableKeys
-        self.coreStatement = coreStatement
+        self.init(indexedCodingTableKeys, on: coreStatement)
     }
     
     init(_ indexedCodingTableKeys: [String:Int], on coreStatement: CoreStatement) {

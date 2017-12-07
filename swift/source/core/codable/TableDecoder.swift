@@ -329,11 +329,15 @@ class TableDecoder : Decoder {
     private let coreStatement: CoreStatement
     private let indexedCodingTableKeys: [String:Int]
 
-    init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
+    convenience init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
         var indexedCodingTableKeys: [String:Int] = [:]
         for (index, codingTableKey) in codingTableKeys.enumerated() {
             indexedCodingTableKeys[codingTableKey.stringValue] = index
         }
+        self.init(indexedCodingTableKeys, on: coreStatement)
+    }
+    
+    init(_ indexedCodingTableKeys: [String:Int], on coreStatement: CoreStatement) {
         self.indexedCodingTableKeys = indexedCodingTableKeys
         self.coreStatement = coreStatement
     }

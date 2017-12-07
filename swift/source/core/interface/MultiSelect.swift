@@ -43,22 +43,34 @@ public class MultiSelect: SelectBase {
     }    
     
     private typealias Generator = () throws -> TableDecodableBase
+
+    struct TypedIndexedKeys {
+        let type: TableDecodableBase.Type
+        var indexedKeys: [String:Int]
+        init(_ type: TableDecodableBase.Type, key: String, index: Int) {
+            self.type = type
+            self.indexedKeys = [key:index]
+        }
+    }
     private lazy var generators: [String:Generator] = {
-        var mappedKeys: [String:(type: TableDecodableBase.Type, keys: [CodingTableKeyBase])] = [:]
+        var mappedKeys: [String:TypedIndexedKeys] = [:]
         let coreStatement = try! lazyCoreStatement()
         for (index, key) in keys.enumerated() {
             let tableName = coreStatement.columnTableName(atIndex: index)
-            var keys: (type: TableDecodableBase.Type, keys: [CodingTableKeyBase])! = mappedKeys[tableName]
-            if keys == nil {
-                keys = (key.rootType as! TableDecodableBase.Type, [key])
+            var typedIndexedKeys: TypedIndexedKeys! = mappedKeys[tableName]
+            if typedIndexedKeys == nil {
+                typedIndexedKeys = TypedIndexedKeys(key.rootType as! TableDecodableBase.Type, key: key.stringValue, index: index)
+            }else {
+                typedIndexedKeys.indexedKeys[key.stringValue] = index
             }
-            mappedKeys[tableName] = keys
+            mappedKeys[tableName] = typedIndexedKeys
         }
         var generators: [String:Generator] = [:]
-        for (tableName, mappedKey) in mappedKeys {
-            let decoder = TableDecoder(mappedKey.keys, on: coreStatement)
+        for (tableName, typedIndexedKey) in mappedKeys {
+            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: coreStatement)
+            let type = typedIndexedKey.type
             let generator = { () throws -> TableDecodableBase in 
-                return try mappedKey.type.init(from: decoder)
+                return try type.init(from: decoder)
             }
             generators[tableName] = generator
         }
