@@ -76,7 +76,7 @@ class ConvenienceTests: CRUDTestCase {
         //Then
         let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == object.variable1!))
         XCTAssertNotNil(result)
-        XCTAssertEqual(result!.variable2, "")
+        XCTAssertNil(result!.variable2)
     }
     
     func testTableInsert() {

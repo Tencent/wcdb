@@ -226,6 +226,7 @@ class TypedTests: CRUDTestCase {
     
     func testLowerBoundary() {
         //Give
+        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))        
         let object = TypedTestObject(with: .lowerBoundary)
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: TypedTestObject.name))
         //When

@@ -21,7 +21,7 @@
 import XCTest
 import WCDB
 
-class TableConstraintTests: BaseTestCase {
+class TableConstraintBindingTests: BaseTestCase {
 
     class BaselineMultiPrimaryTestObject: WCDB.TableCodable, Named {
         let variable1: Int = 0        
