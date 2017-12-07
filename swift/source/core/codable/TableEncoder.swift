@@ -22,7 +22,7 @@ import Foundation
 
 
 class TableEncoder: Encoder {
-    class KeyedEncodingTableContainer<CodingTableKeyType: CodingKey>: KeyedEncodingContainerProtocol {
+    private class KeyedEncodingTableContainer<CodingTableKeyType: CodingKey>: KeyedEncodingContainerProtocol {
         typealias Key = CodingTableKeyType
         
         let codingPath: [CodingKey] = []
@@ -107,6 +107,10 @@ class TableEncoder: Encoder {
             if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
                 coreStatement.bind(value, toIndex: bindingIndex)
             }
+        }
+        
+        func encodeConditional<Object>(_ object: Object, forKey key: Key) throws where Object : AnyObject, Object : Encodable {
+            try encode(object, forKey: key)
         }
         
         func encode<Object>(_ value: Object, forKey key: Key) throws where Object : Encodable {
@@ -258,9 +262,9 @@ class TableEncoder: Encoder {
     let codingPath: [CodingKey] = []
     let userInfo: [CodingUserInfoKey:Any] = [:]
     
-    let coreStatement: CoreStatement
-    let indexedCodingTableKeys: [String:Int]
-    var primaryKey: CodingTableKeyBase? = nil
+    private let coreStatement: CoreStatement
+    private let indexedCodingTableKeys: [String:Int]
+    private var primaryKey: CodingTableKeyBase? = nil
     
     func singleValueContainer() -> SingleValueEncodingContainer {
         Error.abort("")

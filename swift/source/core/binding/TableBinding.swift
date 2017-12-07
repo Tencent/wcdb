@@ -88,6 +88,14 @@ public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase 
         }
         return allKeys
     }()
+    
+    private lazy var columnTypes: [String:ColumnType] = {
+        guard let tableEncodableType = CodingTableKeyType.Root.self as? TableEncodableBase.Type else {
+            Error.abort("")
+        }
+        return ColumnTypeEncoder.getColumnTypes(of: tableEncodableType)
+    }()
+    
     private lazy var allColumnDef: [ColumnDef] = allKeys.map { (key) -> ColumnDef in
         return generateColumnDef(with: key)
     }
@@ -139,11 +147,14 @@ public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase 
         guard let codingTableKey = key as? CodingTableKeyType else {
             Error.abort("")
         }
-        if let index = columnConstraintBindings?.index(forKey: codingTableKey) {
-            return columnConstraintBindings![index].value.generateColumnDef(with: codingTableKey)
-        }else {
-            return codingTableKey.asDef()
+        guard let columnType = columnTypes[codingTableKey.stringValue] else {
+            Error.abort("")
         }
+        var columnDef = ColumnDef(with: codingTableKey, and: columnType)
+        if let index = columnConstraintBindings?.index(forKey: codingTableKey) {
+            columnDef = columnConstraintBindings![index].value.generateColumnDef(with: columnDef)
+        }
+        return columnDef
     }
        
     public override func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {

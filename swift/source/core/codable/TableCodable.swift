@@ -22,7 +22,10 @@ import Foundation
 
 public protocol TableCodableBase {}
 
-public protocol TableEncodableBase: Encodable, TableCodableBase {} 
+public protocol TableEncodableBase: Encodable, TableCodableBase {
+    //FIXME: Find a better way to get variable type and remove this
+    init()
+} 
 
 public protocol TableEncodable: TableEncodableBase where CodingKeys.Root == Self {
     associatedtype CodingKeys: CodingTableKey

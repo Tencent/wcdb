@@ -60,8 +60,8 @@ public class ColumnConstraintBinding: AnyBinding {
         self.init(isPrimary: isPrimary, orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict, isNotNull: isNotNull, isUnique: isUnique, defaultTo: defaultValue)
     }
     
-    func generateColumnDef(with columnConvertible: ColumnConvertible) -> ColumnDef {
-        let columnDef = columnConvertible.asDef()
+    func generateColumnDef(with rawColumnDef: ColumnDef) -> ColumnDef {
+        let columnDef = rawColumnDef
         if isPrimary {
             columnDef.makePrimary(orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict)
         }

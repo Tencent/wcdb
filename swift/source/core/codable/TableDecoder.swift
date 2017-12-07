@@ -22,7 +22,7 @@ import Foundation
 
 
 class TableDecoder : Decoder {
-    class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> : KeyedDecodingContainerProtocol {
+    private class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> : KeyedDecodingContainerProtocol {
         typealias Key = CodingTableKeyType
         
         let codingPath: [CodingKey] = []
@@ -326,8 +326,8 @@ class TableDecoder : Decoder {
     let codingPath: [CodingKey] = []
     let userInfo: [CodingUserInfoKey: Any] = [:]
     
-    let coreStatement: CoreStatement
-    let indexedCodingTableKeys: [String:Int]
+    private let coreStatement: CoreStatement
+    private let indexedCodingTableKeys: [String:Int]
 
     init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
         var indexedCodingTableKeys: [String:Int] = [:]
