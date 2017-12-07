@@ -53,10 +53,10 @@ public class Insert: CoreRepresentable {
             let encoder = TableEncoder(properties!.asCodingTableKeys(), on: coreStatement) 
             for var object in objects {
                 try encoder.bind(object, isReplace: isReplace)
+                try coreStatement.step()
                 if !isReplace && object.isAutoIncrement {
                     object.lastInsertedRowID = coreStatement.lastInsertedRowID
                 }
-                try coreStatement.step()
                 try coreStatement.reset()
             }
         }
