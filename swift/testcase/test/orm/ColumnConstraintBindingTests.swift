@@ -24,7 +24,8 @@ import WCDB
 class ColumnConstraintBindingTests: BaseTestCase {
     
     class BaselineTestObject: WCDB.TableCodable {
-        let variable: Int = 0 
+        let variable: Int = 0  
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
@@ -32,7 +33,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
     
     class PrimaryTestObject: WCDB.TableCodable {
-        let variable: Int = 0  
+        let variable: Int = 0   
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PrimaryTestObject
             case variable = "primaryVariable"
@@ -44,6 +46,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
 
     class OrderedPrimaryTestObject: WCDB.TableCodable {
         let variable: Int = 0        
+        required init() {} 
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OrderedPrimaryTestObject
             case variable = "orderedPrimaryVariable"
@@ -55,6 +58,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
 
     class AutoIncrementPrimaryTestObject: WCDB.TableCodable {
         let variable: Int = 0       
+        required init() {} 
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoIncrementPrimaryTestObject
             case variable = "autoIncrementPrimaryVariable"
@@ -64,7 +68,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
     class ConflictPrimaryTestObject: WCDB.TableCodable {
-        let variable: Int = 0    
+        let variable: Int = 0     
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConflictPrimaryTestObject
             case variable = "conflictPrimaryVariable"
@@ -75,7 +80,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class NotNullTestObject: WCDB.TableCodable {
-        let variable: Int = 0        
+        let variable: Int = 0      
+        required init() {}   
         enum CodingKeys: String, CodingTableKey {
             typealias Root = NotNullTestObject
             case variable = "notNullVariable"
@@ -86,7 +92,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class UniqueTestObject: WCDB.TableCodable {
-        let variable: Int = 0        
+        let variable: Int = 0     
+        required init() {}    
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable = "uniqueVariable"
@@ -97,7 +104,8 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultValueTestObject: WCDB.TableCodable {
-        let variable: Int = 0        
+        let variable: Int = 0         
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultValueTestObject
             case variable = "defaultValueVariable"
@@ -109,20 +117,20 @@ class ColumnConstraintBindingTests: BaseTestCase {
     
     func testColumnConstraintBinding() {
         
-        ORMColumnConstraintBindingAssertEqual(BaselineTestObject.self, "CREATE TABLE IF NOT EXISTS BaselineTestObject(variable)")
+        ORMColumnConstraintBindingAssertEqual(BaselineTestObject.self, "CREATE TABLE IF NOT EXISTS BaselineTestObject(variable INTEGER)")
         
-        ORMColumnConstraintBindingAssertEqual(PrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS PrimaryTestObject(primaryVariable PRIMARY KEY)")
+        ORMColumnConstraintBindingAssertEqual(PrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS PrimaryTestObject(primaryVariable INTEGER PRIMARY KEY)")
         
-        ORMColumnConstraintBindingAssertEqual(OrderedPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS OrderedPrimaryTestObject(orderedPrimaryVariable PRIMARY KEY ASC)")
+        ORMColumnConstraintBindingAssertEqual(OrderedPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS OrderedPrimaryTestObject(orderedPrimaryVariable INTEGER PRIMARY KEY ASC)")
         
-        ORMColumnConstraintBindingAssertEqual(AutoIncrementPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS AutoIncrementPrimaryTestObject(autoIncrementPrimaryVariable PRIMARY KEY AUTOINCREMENT)")
+        ORMColumnConstraintBindingAssertEqual(AutoIncrementPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS AutoIncrementPrimaryTestObject(autoIncrementPrimaryVariable INTEGER PRIMARY KEY AUTOINCREMENT)")
         
-        ORMColumnConstraintBindingAssertEqual(ConflictPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS ConflictPrimaryTestObject(conflictPrimaryVariable PRIMARY KEY ON CONFLICT REPLACE)")
+        ORMColumnConstraintBindingAssertEqual(ConflictPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS ConflictPrimaryTestObject(conflictPrimaryVariable INTEGER PRIMARY KEY ON CONFLICT REPLACE)")
         
-        ORMColumnConstraintBindingAssertEqual(NotNullTestObject.self, "CREATE TABLE IF NOT EXISTS NotNullTestObject(notNullVariable NOT NULL)")
+        ORMColumnConstraintBindingAssertEqual(NotNullTestObject.self, "CREATE TABLE IF NOT EXISTS NotNullTestObject(notNullVariable INTEGER NOT NULL)")
         
-        ORMColumnConstraintBindingAssertEqual(UniqueTestObject.self, "CREATE TABLE IF NOT EXISTS UniqueTestObject(uniqueVariable UNIQUE)")
+        ORMColumnConstraintBindingAssertEqual(UniqueTestObject.self, "CREATE TABLE IF NOT EXISTS UniqueTestObject(uniqueVariable INTEGER UNIQUE)")
         
-        ORMColumnConstraintBindingAssertEqual(DefaultValueTestObject.self, "CREATE TABLE IF NOT EXISTS DefaultValueTestObject(defaultValueVariable DEFAULT 1)")
+        ORMColumnConstraintBindingAssertEqual(DefaultValueTestObject.self, "CREATE TABLE IF NOT EXISTS DefaultValueTestObject(defaultValueVariable INTEGER DEFAULT 1)")
     }
 }

@@ -24,7 +24,8 @@ import WCDB
 class VirtualTableBindingTests: BaseTestCase {
 
     class BaselineTestObject: WCDB.TableCodable {
-        let variable: Int = 0        
+        let variable: Int = 0 
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
@@ -35,6 +36,6 @@ class VirtualTableBindingTests: BaseTestCase {
     }
 
     func testVirtualBinding() {
-        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable, left=right, tokenize=WCDB)")
+        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable INTEGER, left=right, tokenize=WCDB)")
     }
 }

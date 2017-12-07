@@ -25,6 +25,7 @@ class IndexBindingTests: BaseTestCase {
 
     class BaselineTestObject: WCDB.TableCodable {
         let variable: Int = 0   
+        required init() {} 
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
@@ -35,7 +36,8 @@ class IndexBindingTests: BaseTestCase {
     }
     
     class UniqueTestObject: WCDB.TableCodable {
-        let variable: Int = 0        
+        let variable: Int = 0       
+        required init() {}  
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable
@@ -47,7 +49,8 @@ class IndexBindingTests: BaseTestCase {
 
     class MultiIndexesTestObject: WCDB.TableCodable {
         let variable1: Int = 0 
-        let variable2: Int = 0 
+        let variable2: Int = 0  
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiIndexesTestObject
             case variable1
