@@ -20,7 +20,7 @@
 
 import Foundation
 
-public protocol PropertyConvertible {
+public protocol PropertyConvertible: ColumnConvertible, PropertyRedirectable {
     var codingTableKey: CodingTableKeyBase {get}
     
     func asProperty() -> Property
@@ -28,7 +28,7 @@ public protocol PropertyConvertible {
     func `in`(table: String) -> Property
 }
 
-public class Property: Describable {
+public class Property: Describable, ExpressionOperable {
     public private(set) var codingTableKey: CodingTableKeyBase
     
     public init(named name: String, with codingTableKey: CodingTableKeyBase) {
@@ -54,13 +54,8 @@ extension Property: PropertyConvertible {
     public func `in`(table: String) -> Property {
         return Property(named: asColumn().in(table: table).description, with: codingTableKey)
     }
-}
-
-extension Property: ColumnConvertible {
+    
     public func asColumn() -> Column {
         return Column(named: name)
     }
 }
-
-extension Property: ExpressionOperable {}
-

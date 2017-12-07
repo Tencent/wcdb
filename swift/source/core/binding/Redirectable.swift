@@ -36,4 +36,3 @@ extension ColumnResult: PropertyRedirectable {}
 
 extension Expression: PropertyRedirectable {}
 
-extension Property: PropertyRedirectable {}

@@ -25,7 +25,7 @@ public protocol CodingTableKeyBase: CodingKey {
     var rootType: TableCodableBase.Type {get}
 }
 
-public protocol CodingTableKey: CodingTableKeyBase, Hashable, PropertyConvertible, ExpressionOperable, PropertyRedirectable, ColumnConvertible, RawRepresentable where RawValue == String  {
+public protocol CodingTableKey: CodingTableKeyBase, Hashable, PropertyConvertible, ExpressionOperable, RawRepresentable where RawValue == String {
     associatedtype Root: TableCodableBase
     
     static var all: [Property] {get}
