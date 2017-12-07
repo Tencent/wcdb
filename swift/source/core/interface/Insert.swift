@@ -56,6 +56,7 @@ public class Insert: CoreRepresentable {
                 if !isReplace && object.isAutoIncrement {
                     object.lastInsertedRowID = coreStatement.lastInsertedRowID
                 }
+                try coreStatement.step()
                 try coreStatement.reset()
             }
         }
