@@ -31,7 +31,7 @@ class ConvenienceTests: CRUDTestCase {
         //When
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == object.variable1!))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == object.variable1!))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!, object)
     }
@@ -46,7 +46,7 @@ class ConvenienceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         //Then
         XCTAssertEqual(object.lastInsertedRowID, Int64(expectedRowID))
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == expectedRowID))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == expectedRowID))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable1, expectedRowID)
         XCTAssertEqual(result!.variable2, object.variable2)
@@ -61,7 +61,7 @@ class ConvenienceTests: CRUDTestCase {
         //When
         XCTAssertNoThrow(try database.insertOrReplace(objects: object, intoTable: CRUDObject.name))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == expectedReplacedRowID))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == expectedReplacedRowID))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable2, self.name)
     }
@@ -72,9 +72,9 @@ class ConvenienceTests: CRUDTestCase {
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.insert(objects: object, on: [CRUDObject.CodingKeys.variable1], intoTable: CRUDObject.name))
+        XCTAssertNoThrow(try database.insert(objects: object, on: [CRUDObject.Properties.variable1], intoTable: CRUDObject.name))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == object.variable1!))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == object.variable1!))
         XCTAssertNotNil(result)
         XCTAssertNil(result!.variable2)
     }
@@ -89,7 +89,7 @@ class ConvenienceTests: CRUDTestCase {
         //When
         XCTAssertNoThrow(try table!.insert(objects: object))
         //Then
-        let result = WCDBAssertNoThrowReturned(try table!.getObject(where: CRUDObject.CodingKeys.variable1 == object.variable1!))
+        let result = WCDBAssertNoThrowReturned(try table!.getObject(where: CRUDObject.Properties.variable1 == object.variable1!))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!, object)
     }    
@@ -100,13 +100,13 @@ class ConvenienceTests: CRUDTestCase {
     }
     
     func testConditionalSelect() {
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 2), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 2), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, "object2")
     }
     
     func testOrderedSelect() {
-        let order = [(CRUDObject.CodingKeys.variable2).asOrder(by: .Descending)]
+        let order = [(CRUDObject.Properties.variable2).asOrder(by: .Descending)]
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, orderBy: order), whenFailed: [CRUDObject]())
         XCTAssertEqual(results, preInsertedObjects.sorted().reversed())
     }
@@ -124,7 +124,7 @@ class ConvenienceTests: CRUDTestCase {
     }
     
     func testHalfSelect() {
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(on: CRUDObject.CodingKeys.variable2, fromTable: CRUDObject.name), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.map({ (object) in
             XCTAssertNil(object.variable1)
             XCTAssertNotNil(object.variable2)
@@ -155,7 +155,7 @@ class ConvenienceTests: CRUDTestCase {
     
     func testConditionalRowSelect() {
         //When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try database.getRows(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 1))
+        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try database.getRows(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 1))
         //Then
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
@@ -164,7 +164,7 @@ class ConvenienceTests: CRUDTestCase {
     
     func testOrderedRowSelect() {
         //Give
-        let order = [(CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)]
+        let order = [(CRUDObject.Properties.variable1).asOrder(by: .Descending)]
         //When
         let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try database.getRows(fromTable: CRUDObject.name, orderBy: order))
         //Then
@@ -195,7 +195,7 @@ class ConvenienceTests: CRUDTestCase {
     
     func testHalfRowSelect() {
         //When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try database.getRows(on: CRUDObject.CodingKeys.variable2, fromTable: CRUDObject.name))
+        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try database.getRows(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name))
         //Then
         XCTAssertEqual(results.count, preInsertedObjects.count)
         XCTAssertEqual(results[row: 0, column: 0].stringValue, preInsertedObjects[0].variable2)
@@ -221,7 +221,7 @@ class ConvenienceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2, with: object))
+        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.Properties.variable2, with: object))
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name), whenFailed: [CRUDObject]())
         XCTAssertEqual(Array(repeating: self.name, count: preInsertedObjects.count), results.map({
@@ -235,9 +235,9 @@ class ConvenienceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2, with: object, where: CRUDObject.CodingKeys.variable1 == 1))
+        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.Properties.variable2, with: object, where: CRUDObject.Properties.variable1 == 1))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 1))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 1))
         XCTAssertNotNil(result)
         XCTAssertEqual(self.name, result!.variable2)
     }
@@ -246,11 +246,11 @@ class ConvenienceTests: CRUDTestCase {
         //Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let order = [(CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)]
+        let order = [(CRUDObject.Properties.variable1).asOrder(by: .Descending)]
         //When
-        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2, with: object, orderBy: order, limit: 1))
+        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.Properties.variable2, with: object, orderBy: order, limit: 1))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 2))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 2))
         XCTAssertNotNil(result)
         XCTAssertEqual(self.name, result!.variable2)
     }
@@ -260,7 +260,7 @@ class ConvenienceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2, with: object, limit: 1))
+        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.Properties.variable2, with: object, limit: 1))
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
         XCTAssertEqual(results[0].variable2, self.name)
@@ -272,7 +272,7 @@ class ConvenienceTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2, with: object, limit: 1, offset: 1))
+        XCTAssertNoThrow(try database.update(table: CRUDObject.name, on: CRUDObject.Properties.variable2, with: object, limit: 1, offset: 1))
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
         XCTAssertEqual(results[0], preInsertedObjects[0])
@@ -286,7 +286,7 @@ class ConvenienceTests: CRUDTestCase {
         let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
         XCTAssertNotNil(table)
         //When
-        XCTAssertNoThrow(try table!.update(on: CRUDObject.CodingKeys.variable2, with: object))
+        XCTAssertNoThrow(try table!.update(on: CRUDObject.Properties.variable2, with: object))
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try table!.getObjects())
         XCTAssertEqual(results.map({
@@ -305,7 +305,7 @@ class ConvenienceTests: CRUDTestCase {
     
     func testConditionalDelete() {
         //When
-        XCTAssertNoThrow(try database.delete(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 2))
+        XCTAssertNoThrow(try database.delete(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 2))
         //Then
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
         XCTAssertEqual(results.count, 1)
@@ -314,7 +314,7 @@ class ConvenienceTests: CRUDTestCase {
     
     func testOrderedDelete() {
         //Give
-        let order = [(CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)]
+        let order = [(CRUDObject.Properties.variable1).asOrder(by: .Descending)]
         //When
         XCTAssertNoThrow(try database.delete(fromTable: CRUDObject.name, orderBy: order, limit: 1))
         //Then

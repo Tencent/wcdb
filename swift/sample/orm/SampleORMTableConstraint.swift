@@ -36,8 +36,8 @@ class SampleORMTableConstraint: TableCodable {
         case uniqueKeyPart2    
         static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
             return [
-                "MultiPrimaryConstraint":MultiPrimaryBinding(indexesBy: CodingKeys.primaryKeyPart1.asIndex(orderBy: .Descending), CodingKeys.primaryKeyPart2),
-                "MultiUniqueConstraint":MultiUniqueBinding(indexesBy: CodingKeys.primaryKeyPart1, CodingKeys.primaryKeyPart2.asIndex(orderBy: .Ascending)),
+                "MultiPrimaryConstraint":MultiPrimaryBinding(indexesBy: Properties.primaryKeyPart1.asIndex(orderBy: .Descending), Properties.primaryKeyPart2),
+                "MultiUniqueConstraint":MultiUniqueBinding(indexesBy: Properties.primaryKeyPart1, Properties.primaryKeyPart2.asIndex(orderBy: .Ascending)),
             ]        
         }
     }

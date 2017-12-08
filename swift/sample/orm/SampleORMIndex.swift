@@ -34,9 +34,9 @@ class SampleORMIndex: TableCodable {
         case multiIndexPart2
         static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
             return [
-                "_indexSubfix":IndexBinding(indexesBy: CodingKeys.indexProperty),
-                "_uniqueIndexSubfix":IndexBinding(indexesBy: CodingKeys.uniqueIndexProperty),
-                "_multiIndexSubfix":IndexBinding(indexesBy: CodingKeys.multiIndexPart1, CodingKeys.multiIndexPart2),
+                "_indexSubfix":IndexBinding(indexesBy: Properties.indexProperty),
+                "_uniqueIndexSubfix":IndexBinding(indexesBy: Properties.uniqueIndexProperty),
+                "_multiIndexSubfix":IndexBinding(indexesBy: Properties.multiIndexPart1, Properties.multiIndexPart2),
             ]
         }
     }

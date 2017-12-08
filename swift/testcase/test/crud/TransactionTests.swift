@@ -33,7 +33,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try database.commit())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -48,7 +48,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try database.rollback())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 0)
     }
     
@@ -62,7 +62,7 @@ class TransactionTests: CRUDTestCase {
             try database.insert(objects: object, intoTable: CRUDObject.name)
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -78,7 +78,7 @@ class TransactionTests: CRUDTestCase {
             return false
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 0)
     }
 
@@ -93,7 +93,7 @@ class TransactionTests: CRUDTestCase {
             return true
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -110,7 +110,7 @@ class TransactionTests: CRUDTestCase {
             })
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -128,7 +128,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try transaction.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try transaction.commit())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -146,7 +146,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try transaction.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try transaction.rollback())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 0)
     }
     
@@ -163,7 +163,7 @@ class TransactionTests: CRUDTestCase {
             try transaction.insert(objects: object, intoTable: CRUDObject.name)
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -182,7 +182,7 @@ class TransactionTests: CRUDTestCase {
             return false
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 0)
     }
     
@@ -200,7 +200,7 @@ class TransactionTests: CRUDTestCase {
             return true
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -220,7 +220,7 @@ class TransactionTests: CRUDTestCase {
             })
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }

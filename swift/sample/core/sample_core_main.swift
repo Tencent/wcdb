@@ -96,10 +96,10 @@ func sample_core_main(baseDirectory: String) {
     //SELECT message.content, message_ext.createTime FROM message LEFT OUTER JOIN message_ext ON message.localID=message_ext.localID
     do {
         //Column result list
-        let resultList = [(SampleCore.Properties.content).in(table: "message"), (SampleCoreExt.CodingKeys.createTime).in(table: "message_ext")]
+        let resultList = [(SampleCore.Properties.content).in(table: "message"), (SampleCoreExt.Properties.createTime).in(table: "message_ext")]
         
         //Join clause
-        let joinClause = JoinClause(withTable: "message").join("message_ext", with: .LeftOuter).on((SampleCore.CodingKeys.localID).in(table: "message") == (SampleCoreExt.CodingKeys.localID).in(table: "message_ext"))
+        let joinClause = JoinClause(withTable: "message").join("message_ext", with: .LeftOuter).on((SampleCore.Properties.localID).in(table: "message") == (SampleCoreExt.Properties.localID).in(table: "message_ext"))
         
         let statementSelect = StatementSelect().select(resultList).from(joinClause)
         let coreStatement = try database.prepare(statementSelect)

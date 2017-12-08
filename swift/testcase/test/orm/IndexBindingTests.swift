@@ -31,7 +31,7 @@ class IndexBindingTests: BaseTestCase {
             case variable
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(indexesBy: CodingKeys.variable)]
+                return ["_index":IndexBinding(indexesBy: Properties.variable)]
             }
         }
     }
@@ -44,7 +44,7 @@ class IndexBindingTests: BaseTestCase {
             case variable
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(isUnique: true, indexesBy: CodingKeys.variable)]
+                return ["_index":IndexBinding(isUnique: true, indexesBy: Properties.variable)]
             }
         }
     }
@@ -59,7 +59,7 @@ class IndexBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(indexesBy: CodingKeys.variable1, CodingKeys.variable2)]
+                return ["_index":IndexBinding(indexesBy: Properties.variable1, Properties.variable2)]
             }
         }
     }

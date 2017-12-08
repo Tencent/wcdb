@@ -41,7 +41,7 @@ class InsertTests: CRUDTestCase {
         //When
         XCTAssertNoThrow(try insert.execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == object.variable1!))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == object.variable1!))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!, object)
     }
@@ -56,7 +56,7 @@ class InsertTests: CRUDTestCase {
         XCTAssertNoThrow(try insert.execute(with: object))
         //Then
         XCTAssertEqual(object.lastInsertedRowID, Int64(expectedRowID))
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == expectedRowID))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == expectedRowID))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable1, expectedRowID)
         XCTAssertEqual(result!.variable2, object.variable2)
@@ -74,7 +74,7 @@ class InsertTests: CRUDTestCase {
         //When
         XCTAssertNoThrow(try insert.execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == expectedReplacedRowID))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == expectedReplacedRowID))
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable2, self.name)
     }
@@ -84,13 +84,13 @@ class InsertTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
-        let optionalInsert = WCDBAssertNoThrowReturned(try database.prepareInsertOrReplace(on: CRUDObject.CodingKeys.variable1, intoTable: CRUDObject.name), whenFailed: nil)
+        let optionalInsert = WCDBAssertNoThrowReturned(try database.prepareInsertOrReplace(on: CRUDObject.Properties.variable1, intoTable: CRUDObject.name), whenFailed: nil)
         XCTAssertNotNil(optionalInsert)
         let insert = optionalInsert!
         //When
         XCTAssertNoThrow(try insert.execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == object.variable1!))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == object.variable1!))
         XCTAssertNotNil(result)
         XCTAssertNil(result!.variable2)
     }

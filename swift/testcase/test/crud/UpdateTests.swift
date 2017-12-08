@@ -28,7 +28,7 @@ class UpdateTests: CRUDTestCase {
     override func setUp() {
         super.setUp()
         
-        let optionalUpdate = WCDBAssertNoThrowReturned(try database.prepareUpdate(table: CRUDObject.name, on: CRUDObject.CodingKeys.variable2), whenFailed: nil)
+        let optionalUpdate = WCDBAssertNoThrowReturned(try database.prepareUpdate(table: CRUDObject.name, on: CRUDObject.Properties.variable2), whenFailed: nil)
         XCTAssertNotNil(optionalUpdate)
         update = optionalUpdate!
     }
@@ -52,9 +52,9 @@ class UpdateTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try update.where(CRUDObject.CodingKeys.variable1 == 1).execute(with: object))
+        XCTAssertNoThrow(try update.where(CRUDObject.Properties.variable1 == 1).execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 1))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 1))
         XCTAssertNotNil(result)
         XCTAssertEqual(self.name, result!.variable2)
     }
@@ -63,11 +63,11 @@ class UpdateTests: CRUDTestCase {
         //Give
         let object = CRUDObject()
         object.variable2 = self.name
-        let order = (CRUDObject.CodingKeys.variable1).asOrder(by: .Descending)
+        let order = (CRUDObject.Properties.variable1).asOrder(by: .Descending)
         //When
         XCTAssertNoThrow(try update.order(by: order).limit(1).execute(with: object))
         //Then
-        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == 2))
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 2))
         XCTAssertNotNil(result)
         XCTAssertEqual(self.name, result!.variable2)
     }

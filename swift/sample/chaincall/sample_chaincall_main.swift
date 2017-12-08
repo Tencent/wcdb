@@ -57,7 +57,7 @@ func sample_chailcall_main(baseDirectory: String) {
     
     //Select objects
     do {
-        let select = try database.prepareSelect(on: (SampleChainCall.CodingKeys.intValue).max().as((SampleChainCall.CodingKeys.intValue)), fromTable: tableName).where(SampleChainCall.CodingKeys.intValue==1).group(by: SampleChainCall.CodingKeys.intValue).limit(3)
+        let select = try database.prepareSelect(on: (SampleChainCall.Properties.intValue).max().as((SampleChainCall.Properties.intValue)), fromTable: tableName).where(SampleChainCall.Properties.intValue==1).group(by: SampleChainCall.Properties.intValue).limit(3)
         let objects: [SampleChainCall] = try select.allObjects()
     }catch let error {
         print("select objects error: \(error)")
@@ -65,7 +65,7 @@ func sample_chailcall_main(baseDirectory: String) {
     
     //Select rows
     do {
-        let rowSelect = try database.prepareRowSelect(on: SampleChainCall.Properties.all, fromTable: tableName).where(SampleChainCall.CodingKeys.intValue==1).limit(3)
+        let rowSelect = try database.prepareRowSelect(on: SampleChainCall.Properties.all, fromTable: tableName).where(SampleChainCall.Properties.intValue==1).limit(3)
         let needBreak = true
         while let row = try rowSelect.nextRow() {
             if needBreak {

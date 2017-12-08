@@ -39,13 +39,13 @@ class SelectTests: CRUDTestCase {
     }
     
     func testConditionalSelect() {
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.where(CRUDObject.CodingKeys.variable1 == 2).allObjects(), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.where(CRUDObject.Properties.variable1 == 2).allObjects(), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, "object2")
     }
     
     func testOrderedSelect() {
-        let order = (CRUDObject.CodingKeys.variable2).asOrder(by: .Descending)
+        let order = (CRUDObject.Properties.variable2).asOrder(by: .Descending)
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.order(by: order).allObjects(), whenFailed: [CRUDObject]())
         XCTAssertEqual(results, preInsertedObjects.sorted().reversed())
     }
@@ -63,7 +63,7 @@ class SelectTests: CRUDTestCase {
     }
     
     func testHalfSelect() {
-        let optionalSelect = WCDBAssertNoThrowReturned(try database.prepareSelect(on: CRUDObject.CodingKeys.variable2, fromTable: CRUDObject.name), whenFailed: nil)
+        let optionalSelect = WCDBAssertNoThrowReturned(try database.prepareSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name), whenFailed: nil)
         XCTAssertNotNil(optionalSelect)
         let select = optionalSelect!
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.allObjects(), whenFailed: [CRUDObject]())

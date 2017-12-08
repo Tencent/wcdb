@@ -91,19 +91,19 @@ class AdvanceTests: CRUDTestCase {
         let expectedObject = CRUDObject()
         expectedObject.variable1 = 4
         expectedObject.variable2 = "object4"
-        XCTAssertNoThrow(try coreStatement.bind(CRUDObject.CodingKeys.variable1, of: expectedObject, toIndex: 1))
-        XCTAssertNoThrow(try coreStatement.bind(CRUDObject.CodingKeys.variable2, of: expectedObject, toIndex: 2))
+        XCTAssertNoThrow(try coreStatement.bind(CRUDObject.Properties.variable1, of: expectedObject, toIndex: 1))
+        XCTAssertNoThrow(try coreStatement.bind(CRUDObject.Properties.variable2, of: expectedObject, toIndex: 2))
         XCTAssertNoThrow(try coreStatement.step())
         
         XCTAssertNoThrow(try coreStatement.finalize())
         //Then
         do {
-            let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == expectedVariable1))
+            let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == expectedVariable1))
             XCTAssertNotNil(result)
             XCTAssertEqual(result!.variable2, expectedVariable2)
         }
         do {
-            let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.CodingKeys.variable1 == expectedObject.variable1!))
+            let result: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == expectedObject.variable1!))
             XCTAssertNotNil(result)
             XCTAssertEqual(result!, expectedObject)
         }
@@ -169,7 +169,7 @@ class AdvanceTests: CRUDTestCase {
     }
     
     func testRedirect() {
-        let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(on: CRUDObject.Properties.any.count().as(CRUDObject.CodingKeys.variable1), fromTable: CRUDObject.name), whenFailed: nil)
+        let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(try database.getObject(on: CRUDObject.Properties.any.count().as(CRUDObject.Properties.variable1), fromTable: CRUDObject.name), whenFailed: nil)
         XCTAssertNotNil(optionalObject)
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects.count)
     }
@@ -232,7 +232,7 @@ class AdvanceTests: CRUDTestCase {
         //English
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.CodingKeys.variable2).match("Engl*")), whenFailed: [AppleFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.Properties.variable2).match("Engl*")), whenFailed: [AppleFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedEnglishFTSObject)
@@ -240,7 +240,7 @@ class AdvanceTests: CRUDTestCase {
         //Chinese
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.CodingKeys.variable2).match("中文")), whenFailed: [AppleFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.Properties.variable2).match("中文")), whenFailed: [AppleFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
@@ -248,7 +248,7 @@ class AdvanceTests: CRUDTestCase {
         //Numberic
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.CodingKeys.variable2).match("123*")), whenFailed: [AppleFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.Properties.variable2).match("123*")), whenFailed: [AppleFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedNumbericFTSObject)
@@ -256,7 +256,7 @@ class AdvanceTests: CRUDTestCase {
         //Symbolic
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.CodingKeys.variable2).match("def")), whenFailed: [AppleFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.Properties.variable2).match("def")), whenFailed: [AppleFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedSymbolicFTSObject)
@@ -265,7 +265,7 @@ class AdvanceTests: CRUDTestCase {
         //Failed to find Chinese
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.CodingKeys.variable2).match("文测")), whenFailed: [AppleFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: AppleFTSObject.name, where: (AppleFTSObject.Properties.variable2).match("文测")), whenFailed: [AppleFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 0)
         }
@@ -329,7 +329,7 @@ class AdvanceTests: CRUDTestCase {
         //English
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.CodingKeys.variable2).match("Engl*")), whenFailed: [WCDBFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.Properties.variable2).match("Engl*")), whenFailed: [WCDBFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedEnglishFTSObject)
@@ -337,7 +337,7 @@ class AdvanceTests: CRUDTestCase {
         //Chinese
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.CodingKeys.variable2).match("中文")), whenFailed: [WCDBFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.Properties.variable2).match("中文")), whenFailed: [WCDBFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
@@ -345,7 +345,7 @@ class AdvanceTests: CRUDTestCase {
         //Numberic
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.CodingKeys.variable2).match("123*")), whenFailed: [WCDBFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.Properties.variable2).match("123*")), whenFailed: [WCDBFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedNumbericFTSObject)
@@ -353,7 +353,7 @@ class AdvanceTests: CRUDTestCase {
         //Symbolic
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.CodingKeys.variable2).match("def")), whenFailed: [WCDBFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.Properties.variable2).match("def")), whenFailed: [WCDBFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedSymbolicFTSObject)
@@ -362,7 +362,7 @@ class AdvanceTests: CRUDTestCase {
         //Find Chinese
         do {
             //When
-            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.CodingKeys.variable2).match("文测")), whenFailed: [WCDBFTSObject]())
+            let objects = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: WCDBFTSObject.name, where: (WCDBFTSObject.Properties.variable2).match("文测")), whenFailed: [WCDBFTSObject]())
             //Then
             XCTAssertEqual(objects.count, 1)
             XCTAssertEqual(objects[0], preInsertedChineseFTSObject)

@@ -129,15 +129,15 @@ class MultiSelectTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: preInsertedMultiSelectObjects, intoTable: MultiSelectObject.name))
         
         let properties = [
-            (CRUDObject.CodingKeys.variable1).in(table: CRUDObject.name),
-            (CRUDObject.CodingKeys.variable2).in(table: CRUDObject.name),
-            (MultiSelectObject.CodingKeys.variable1).in(table: MultiSelectObject.name),
-            (MultiSelectObject.CodingKeys.variable2).in(table: MultiSelectObject.name)
+            (CRUDObject.Properties.variable1).in(table: CRUDObject.name),
+            (CRUDObject.Properties.variable2).in(table: CRUDObject.name),
+            (MultiSelectObject.Properties.variable1).in(table: MultiSelectObject.name),
+            (MultiSelectObject.Properties.variable2).in(table: MultiSelectObject.name)
         ]        
         let tables = [CRUDObject.name, MultiSelectObject.name]
         let optionalMultiSelect = WCDBAssertNoThrowReturned(try database.prepareMultiSelect(on: properties, fromTables: tables), whenFailed: nil)
         XCTAssertNotNil(optionalMultiSelect)
-        multiSelect = optionalMultiSelect!.where((CRUDObject.CodingKeys.variable1).in(table: CRUDObject.name) == (MultiSelectObject.CodingKeys.variable1).in(table: MultiSelectObject.name))
+        multiSelect = optionalMultiSelect!.where((CRUDObject.Properties.variable1).in(table: CRUDObject.name) == (MultiSelectObject.Properties.variable1).in(table: MultiSelectObject.name))
     }
     
     func testSelect() {
@@ -155,7 +155,7 @@ class MultiSelectTests: CRUDTestCase {
     
     func testOrderedSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.order(by: (CRUDObject.CodingKeys.variable1).in(table: CRUDObject.name).asOrder(by: .Descending)).allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.order(by: (CRUDObject.Properties.variable1).in(table: CRUDObject.name).asOrder(by: .Descending)).allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
