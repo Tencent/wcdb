@@ -1,4 +1,4 @@
-# pod spec lint --verbose --skip-import-validation
+# pod lib lint --verbose --skip-import-validation WCDB.spec
 # pod trunk push WCDB.podspec --verbose --skip-import-validation
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
