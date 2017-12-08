@@ -21,17 +21,15 @@
 import Foundation
 import WCDB
 
-class BenchmarkObject: WCDB.CodableTable, Named {        
+class BenchmarkObject: WCDB.TableCodable, Named {        
     var key: Int = 0
     var value: Data? = nil
-    
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\BenchmarkObject.key, alias: "key"),
-            ColumnBinding(\BenchmarkObject.value, alias: "value")
-        ]
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = BenchmarkObject
+        case key
+        case value
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)
     }
-    
     required init() {}  
     init(withKey key: Int, and data: Data) {
         self.key = key
