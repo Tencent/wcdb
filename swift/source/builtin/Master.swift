@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Master: WCDB.TableCodable, CustomStringConvertible {
+public class Master: TableCodable, CustomStringConvertible {
     public static let tableName: String = "sqlite_master"
     
     public var type: String? = nil

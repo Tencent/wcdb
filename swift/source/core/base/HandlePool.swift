@@ -23,7 +23,7 @@ import Foundation
 public class HandlePool {
     typealias Wrap = (handlePool: HandlePool, reference: Int)
     
-    private static let spin = WCDB.Spin()
+    private static let spin = Spin()
     private static var pools: [String: Wrap] = [:]
     
     static func getPool(withPath path: String, defaultConfigs: Configs) -> RecyclableHandlePool {
