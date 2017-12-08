@@ -26,11 +26,10 @@ Pod::Spec.new do |wcdb|
                           cd tools/xctemplate; make; cd ../..; \
                           cd sqlcipher; make -f Makefile.preprocessed; cd ..; \
                           cp sqlcipher/ext/fts3/fts3_tokenizer.h sqlcipher/"
-  wcdb.compiler_flags = "-DWCDB_COCOAPODS"
   wcdb.pod_target_xcconfig = { 'SWIFT_WHOLE_MODULE_OPTIMIZATION' => 'YES',
                                'APPLICATION_EXTENSION_API_ONLY' => 'YES' }
   wcdb.xcconfig = {
-    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) WCDB_BUILTIN_SQLCIPHER",
+    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) WCDB_BUILTIN_SQLCIPHER WCDB_COCOAPODS",
     "HEADER_SEARCH_PATHS" => "$(inherited) ${PODS_ROOT}/WCDBSwift",
     "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(inherited) $(SDKROOT)/usr/lib/system",
     "OTHER_SWIFT_FLAGS" => "-D WCDB_HAS_CODEC",
