@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleAdvance: WCDB.TableCodable {
+class SampleAdvance: TableCodable {
     var intValue: Int? = nil
     var columnCoding: SampleCodableColumn? = nil
     enum CodingKeys: String, CodingTableKey {

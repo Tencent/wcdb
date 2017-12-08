@@ -23,7 +23,7 @@ import WCDB
 
 class IndexBindingTests: BaseTestCase {
 
-    class BaselineTestObject: WCDB.TableCodable {
+    class BaselineTestObject: TableCodable {
         let variable: Int = 0   
         required init() {} 
         enum CodingKeys: String, CodingTableKey {
@@ -36,7 +36,7 @@ class IndexBindingTests: BaseTestCase {
         }
     }
     
-    class UniqueTestObject: WCDB.TableCodable {
+    class UniqueTestObject: TableCodable {
         let variable: Int = 0       
         required init() {}  
         enum CodingKeys: String, CodingTableKey {
@@ -49,7 +49,7 @@ class IndexBindingTests: BaseTestCase {
         }
     }
 
-    class MultiIndexesTestObject: WCDB.TableCodable {
+    class MultiIndexesTestObject: TableCodable {
         let variable1: Int = 0 
         let variable2: Int = 0  
         required init() {}

@@ -23,7 +23,7 @@ import WCDB
 
 class VirtualTableBindingTests: BaseTestCase {
 
-    class BaselineTestObject: WCDB.TableCodable {
+    class BaselineTestObject: TableCodable {
         let variable: Int = 0 
         required init() {}
         enum CodingKeys: String, CodingTableKey {

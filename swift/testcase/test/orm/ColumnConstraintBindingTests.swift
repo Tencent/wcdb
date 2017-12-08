@@ -23,7 +23,7 @@ import WCDB
 
 class ColumnConstraintBindingTests: BaseTestCase {
     
-    class BaselineTestObject: WCDB.TableCodable {
+    class BaselineTestObject: TableCodable {
         let variable: Int = 0  
         required init() {}
         enum CodingKeys: String, CodingTableKey {
@@ -33,7 +33,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
     
-    class PrimaryTestObject: WCDB.TableCodable {
+    class PrimaryTestObject: TableCodable {
         let variable: Int = 0   
         required init() {}
         enum CodingKeys: String, CodingTableKey {
@@ -46,7 +46,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class OrderedPrimaryTestObject: WCDB.TableCodable {
+    class OrderedPrimaryTestObject: TableCodable {
         let variable: Int = 0        
         required init() {} 
         enum CodingKeys: String, CodingTableKey {
@@ -59,7 +59,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class AutoIncrementPrimaryTestObject: WCDB.TableCodable {
+    class AutoIncrementPrimaryTestObject: TableCodable {
         let variable: Int = 0       
         required init() {} 
         enum CodingKeys: String, CodingTableKey {
@@ -71,7 +71,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
             }
         }
     }
-    class ConflictPrimaryTestObject: WCDB.TableCodable {
+    class ConflictPrimaryTestObject: TableCodable {
         let variable: Int = 0     
         required init() {}
         enum CodingKeys: String, CodingTableKey {
@@ -84,7 +84,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class NotNullTestObject: WCDB.TableCodable {
+    class NotNullTestObject: TableCodable {
         let variable: Int = 0      
         required init() {}   
         enum CodingKeys: String, CodingTableKey {
@@ -97,7 +97,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class UniqueTestObject: WCDB.TableCodable {
+    class UniqueTestObject: TableCodable {
         let variable: Int = 0     
         required init() {}    
         enum CodingKeys: String, CodingTableKey {
@@ -110,7 +110,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultValueTestObject: WCDB.TableCodable {
+    class DefaultValueTestObject: TableCodable {
         let variable: Int = 0         
         required init() {}
         enum CodingKeys: String, CodingTableKey {

@@ -23,7 +23,7 @@ import WCDB
 
 class RepairTests: BaseTestCase {
     
-    class RepairObject: WCDB.TableCodable, Named, Equatable, Comparable {
+    class RepairObject: TableCodable, Named, Equatable, Comparable {
         var variable1: Int = 0
         var variable2: String = ""
         required init() {}   

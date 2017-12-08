@@ -174,7 +174,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects.count)
     }
     
-    class AppleFTSObject: CRUDObjectBase, WCDB.TableCodable {        
+    class AppleFTSObject: CRUDObjectBase, TableCodable {        
         var variable1: Int = 0
         var variable2: String = ""
         
@@ -271,7 +271,7 @@ class AdvanceTests: CRUDTestCase {
         }
     }
     
-    class WCDBFTSObject: CRUDObjectBase, WCDB.TableCodable {        
+    class WCDBFTSObject: CRUDObjectBase, TableCodable {        
         var variable1: Int = 0
         var variable2: String = ""
         

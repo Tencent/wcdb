@@ -74,7 +74,7 @@ extension Array where Element==Dictionary<String, CRUDObjectBase> {
 
 class MultiSelectTests: CRUDTestCase {
     
-    class MultiSelectObject: CRUDObjectBase, WCDB.TableCodable {        
+    class MultiSelectObject: CRUDObjectBase, TableCodable {        
         var variable1: Int = 0
         var variable2: String = ""
         

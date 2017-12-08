@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleFTSData: WCDB.TableCodable {
+class SampleFTSData: TableCodable {
     var name: String? = nil
     var content: String? = nil
     enum CodingKeys: String, CodingTableKey {

@@ -23,7 +23,7 @@ import WCDB
 
 class TypedTests: CRUDTestCase {
     
-    class TypedJSONCodableObject: WCDB.ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
+    class TypedJSONCodableObject: ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
         static func ==(lhs: TypedJSONCodableObject, rhs: TypedJSONCodableObject) -> Bool {
             return lhs.variable == rhs.variable
         }
@@ -35,7 +35,7 @@ class TypedTests: CRUDTestCase {
         }
     }
 
-    struct TypedNSCodableObject: WCDB.ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
+    struct TypedNSCodableObject: ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
         static func ==(lhs: TypedNSCodableObject, rhs: TypedNSCodableObject) -> Bool {
             return lhs.variable == rhs.variable
         }
@@ -47,7 +47,7 @@ class TypedTests: CRUDTestCase {
         }
     }
     
-    enum TypedCodableObject: Int, WCDB.ColumnCodable, Equatable, CustomDebugStringConvertible {
+    enum TypedCodableObject: Int, ColumnCodable, Equatable, CustomDebugStringConvertible {
         case variable = 0
         
         typealias FundamentalType = Int64
@@ -68,7 +68,7 @@ class TypedTests: CRUDTestCase {
         }
     }
 
-    class TypedTestObject: WCDB.TableCodable, Named, Equatable, CustomDebugStringConvertible {
+    class TypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
         var int: Int = 0
         var int8: Int8 = 0
         var int16: Int16 = 0
@@ -237,7 +237,7 @@ class TypedTests: CRUDTestCase {
         XCTAssertEqual(selected!, object)
     }
     
-    class TypedOverflowTestObject: WCDB.TableCodable, CustomDebugStringConvertible {
+    class TypedOverflowTestObject: TableCodable, CustomDebugStringConvertible {
         var int64_0: Int64 = Int64.max
         var int64_1: Int64 = Int64.max
         var int64_2: Int64 = Int64.max
@@ -315,7 +315,7 @@ class TypedTests: CRUDTestCase {
         XCTAssertEqual(wrapped.double, overflow.double_1)
     }
     
-    class OptionalTypedTestObject: WCDB.TableCodable, Named, Equatable, CustomDebugStringConvertible {
+    class OptionalTypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
         var int: Int? = nil
         var int8: Int8? = nil
         var int16: Int16? = nil

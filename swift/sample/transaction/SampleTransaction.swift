@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleTransaction: WCDB.TableCodable {
+class SampleTransaction: TableCodable {
     var intValue: Int? = nil
     enum CodingKeys: String, CodingTableKey {
         typealias Root = SampleTransaction    

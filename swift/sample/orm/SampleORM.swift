@@ -32,7 +32,7 @@ enum SampleORMType: Int, ColumnCodable {
     }
 }
 
-class SampleORM: WCDB.TableCodable {
+class SampleORM: TableCodable {
     var identifier: Int = 0
     var desc: String = "nil"
     var value: Double = 0

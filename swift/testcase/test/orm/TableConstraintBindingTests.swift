@@ -23,7 +23,7 @@ import WCDB
 
 class TableConstraintBindingTests: BaseTestCase {
 
-    class BaselineMultiPrimaryTestObject: WCDB.TableCodable, Named {
+    class BaselineMultiPrimaryTestObject: TableCodable, Named {
         let variable1: Int = 0        
         let variable2: Int = 0    
         required init() {}
@@ -39,7 +39,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
     
-    class MultiPrimaryConflictTestObject: WCDB.TableCodable, Named {
+    class MultiPrimaryConflictTestObject: TableCodable, Named {
         let variable1: Int = 0        
         let variable2: Int = 0      
         required init() {}   
@@ -55,7 +55,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
     
-    class MultiPrimaryCheckTestObject: WCDB.TableCodable, Named {
+    class MultiPrimaryCheckTestObject: TableCodable, Named {
         let variable1: Int = 0        
         let variable2: Int = 0 
         required init() {}
@@ -79,7 +79,7 @@ class TableConstraintBindingTests: BaseTestCase {
         ORMColumnConstraintBindingAssertEqual(MultiPrimaryCheckTestObject.self, "CREATE TABLE IF NOT EXISTS MultiPrimaryCheckTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT MultiPrimaryCheckTestObjectConstraint PRIMARY KEY(variable1, variable2) CHECK(variable1 > 1))")
     }
     
-    class BaselineMultiUniqueTestObject: WCDB.TableCodable, Named {
+    class BaselineMultiUniqueTestObject: TableCodable, Named {
         let variable1: Int = 0        
         let variable2: Int = 0    
         required init() {}  
@@ -95,7 +95,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
     
-    class MultiUniqueConflictTestObject: WCDB.TableCodable, Named {
+    class MultiUniqueConflictTestObject: TableCodable, Named {
         let variable1: Int = 0        
         let variable2: Int = 0    
         required init() {}
@@ -111,7 +111,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
     
-    class MultiUniqueCheckTestObject: WCDB.TableCodable, Named {
+    class MultiUniqueCheckTestObject: TableCodable, Named {
         let variable1: Int = 0        
         let variable2: Int = 0     
         required init() {}  

@@ -21,7 +21,7 @@
 import Foundation
 import WCDB
 
-class SampleAdvanceMulti: WCDB.TableCodable {
+class SampleAdvanceMulti: TableCodable {
     var intValue: Int? = nil
     enum CodingKeys: String, CodingTableKey {
         typealias Root = SampleAdvanceMulti    

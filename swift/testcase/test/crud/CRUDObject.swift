@@ -51,7 +51,7 @@ class CRUDObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible 
     }
 }
 
-class CRUDObject: CRUDObjectBase, WCDB.TableCodable {        
+class CRUDObject: CRUDObjectBase, TableCodable {        
     var variable1: Int? = 0
     var variable2: String? = ""
     

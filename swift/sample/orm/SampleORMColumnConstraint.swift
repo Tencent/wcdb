@@ -21,7 +21,7 @@
 import WCDB
 import Foundation
 
-class SampleORMColumnConstraint: WCDB.TableCodable {
+class SampleORMColumnConstraint: TableCodable {
     var primaryProperty: Int? = nil
     var uniqueProperty: String? = nil
     var notNullProperty: Data? = nil
