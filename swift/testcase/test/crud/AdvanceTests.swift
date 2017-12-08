@@ -182,6 +182,7 @@ class AdvanceTests: CRUDTestCase {
             typealias Root = AppleFTSObject
             case variable1
             case variable2
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
                 return [.variable1:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
             }
@@ -278,6 +279,7 @@ class AdvanceTests: CRUDTestCase {
             typealias Root = WCDBFTSObject
             case variable1
             case variable2
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
                 return [.variable1:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
             }

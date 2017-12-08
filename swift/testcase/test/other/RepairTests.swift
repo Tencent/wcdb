@@ -31,6 +31,7 @@ class RepairTests: BaseTestCase {
             typealias Root = RepairObject
             case variable1
             case variable2
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
         }
         var isAutoIncrement: Bool = false
         var lastInsertedRowID: Int64 = 0

@@ -59,6 +59,7 @@ class CRUDObject: CRUDObjectBase, WCDB.TableCodable {
         typealias Root = CRUDObject
         case variable1
         case variable2
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)
         static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
             return [.variable1:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
         }

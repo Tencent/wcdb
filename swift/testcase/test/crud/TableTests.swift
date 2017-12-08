@@ -44,6 +44,7 @@ class TableTests: BaseTestCase {
             case aString
             case aData
             case aDouble
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
                 return [.anInt32:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
             }
@@ -70,6 +71,7 @@ class TableTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = IndexObject
             case variable
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
                 return ["_index":IndexBinding(indexesBy: CodingKeys.variable)]
             }
@@ -97,6 +99,7 @@ class TableTests: BaseTestCase {
             typealias Root = ConstraintObject
             case variable1
             case variable2
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
                 return ["ConstraintObjectConstraint":MultiUniqueBinding(indexesBy: CodingKeys.variable1, CodingKeys.variable2)]
             }
@@ -123,6 +126,7 @@ class TableTests: BaseTestCase {
             typealias Root = VirtualTableObject
             case variable1
             case variable2
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __virtualTableBinding: VirtualTableBinding? {
                 return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
             }
@@ -160,6 +164,7 @@ class TableTests: BaseTestCase {
             case aData
             case aDouble
             case newColumn
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
                 return [.anInt32:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
             }

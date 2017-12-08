@@ -29,6 +29,7 @@ class VirtualTableBindingTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __virtualTableBinding: VirtualTableBinding? {
                 return VirtualTableBinding(with: .fts3, and: ModuleArgument(left: "left", right: "right"), ModuleArgument(with: .WCDB))
             }

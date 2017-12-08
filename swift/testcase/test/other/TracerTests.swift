@@ -111,6 +111,7 @@ class TracerTests: BaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TracerObject
             case variable
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
                 return [.variable:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
             }
@@ -147,7 +148,7 @@ class TracerTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: TracerObject.self))
         let template = TracerObject()
         template.isAutoIncrement = true
-        let objects = Array<TracerObject>(repeating: template, count: 100000)
+        let objects = Array<TracerObject>(repeating: template, count: 1000000)
         XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
         XCTAssertNoThrow(database.close())
         

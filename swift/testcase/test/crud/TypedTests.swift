@@ -106,6 +106,7 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case nsCodable
             case codable
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
         }
         
         enum TestType {
@@ -264,6 +265,7 @@ class TypedTests: CRUDTestCase {
             case int64_9 = "uint64"
             case double_0 = "float"
             case double_1 = "double"
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
         }
         
         enum TestType {
@@ -351,6 +353,7 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case nsCodable
             case codable
+            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
         }
         
         enum TestType {
