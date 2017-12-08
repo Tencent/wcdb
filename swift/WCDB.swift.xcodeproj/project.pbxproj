@@ -211,7 +211,7 @@
 		237931C71FD538F8003BBA5F /* ColumnCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnCodable.swift; sourceTree = "<group>"; };
 		237931CA1FD547CC003BBA5F /* CodingTableKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingTableKey.swift; sourceTree = "<group>"; };
 		23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Bridging-Header.h"; sourceTree = "<group>"; };
-		238D0B031FAB1F4300BC2659 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		238D0B031FAB1F4300BC2659 /* WCDBSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		238D0B0F1FAB1F7E00BC2659 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		238D0B131FAB1F7E00BC2659 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
@@ -412,7 +412,7 @@
 		238D0B041FAB1F4300BC2659 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				238D0B031FAB1F4300BC2659 /* WCDB.framework */,
+				238D0B031FAB1F4300BC2659 /* WCDBSwift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -590,7 +590,7 @@
 			);
 			name = WCDB.swift;
 			productName = WCDB;
-			productReference = 238D0B031FAB1F4300BC2659 /* WCDB.framework */;
+			productReference = 238D0B031FAB1F4300BC2659 /* WCDBSwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -972,7 +972,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.WCDB.swift;
-				PRODUCT_NAME = WCDB;
+				PRODUCT_NAME = WCDBSwift;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -997,7 +997,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.WCDB.swift;
-				PRODUCT_NAME = WCDB;
+				PRODUCT_NAME = WCDBSwift;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
