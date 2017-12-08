@@ -21,24 +21,6 @@
 import Foundation
 
 public class TableBindingBase {
-    private static var atomicCollection = Atomic<[Int:TableBindingBase]>([:])
-    static func from<CodingTableKeyType: CodingTableKey>(_ type: CodingTableKeyType.Type) -> TableBinding<CodingTableKeyType> {
-        let hash = unsafeBitCast(type, to: Int.self)
-        var tableBinding: TableBinding<CodingTableKeyType>! 
-        atomicCollection.withValue { (collection) -> Void in
-            if let foundTableBinding = collection[hash] {
-                guard let typedTableBinding = foundTableBinding as? TableBinding<CodingTableKeyType> else {
-                    Error.abort("")
-                }
-                tableBinding = typedTableBinding
-            }else {
-                tableBinding = TableBinding(type)
-                collection[hash] = tableBinding
-            }
-        }
-        return tableBinding
-    }
-    
     let allProperties: [Property]
 
     init(with properties: [Property]) {
@@ -77,10 +59,9 @@ public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase 
         var i = 0
         var allKeys: [CodingTableKeyType] = []
         while true {
-            let key = withUnsafePointer(to: &i) { 
-                return $0.withMemoryRebound(to: CodingTableKeyType.self, capacity: 1, { return $0.pointee })
-            }
-            guard key.hashValue == i else {
+            guard let key = (withUnsafePointer(to: &i) {
+                return $0.withMemoryRebound(to: CodingTableKeyType?.self, capacity: 1, { return $0.pointee })
+            }) else {
                 break
             }
             allKeys.append(key)
@@ -121,7 +102,7 @@ public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase 
         return filtered.first!.key
     }()
     
-    init(_ type: CodingTableKeyType.Type) {
+    public init(_ type: CodingTableKeyType.Type) {
         self.type = type        
         var allProperties: [Property] = []
         (self.properties, allProperties) = allKeys.reduce(into: ([CodingTableKeyType:Property](), [Property]()), { (result, codingTableKey) in

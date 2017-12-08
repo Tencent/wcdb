@@ -57,10 +57,6 @@ extension CodingTableKey {
 }
 
 extension CodingTableKey {        
-    public static var __objectRelationalMapping: TableBinding<Self> {
-        return TableBindingBase.from(self)
-    }
-
     public static var __columnConstraintBindings: [Self:ColumnConstraintBinding]? {
         return nil
     }

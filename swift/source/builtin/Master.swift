@@ -37,6 +37,8 @@ public class Master: WCDB.TableCodable, CustomStringConvertible {
         case tableName = "tbl_name"
         case rootpage
         case sql
+        
+        public static let __objectRelationalMapping = TableBinding(Master.CodingKeys.self)
     }
     
     public required init() {}

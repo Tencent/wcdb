@@ -31,6 +31,8 @@ public class Sequence: WCDB.TableCodable, CustomStringConvertible {
         
         case name
         case seq
+        
+        public static let __objectRelationalMapping = TableBinding(Sequence.CodingKeys.self)
     }
     
     public required init() {}
