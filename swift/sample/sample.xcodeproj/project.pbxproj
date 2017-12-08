@@ -25,7 +25,6 @@
 		232F7AEC1FB1936E0093372C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F7AE81FB1936E0093372C /* main.swift */; };
 		232F7AED1FB1936E0093372C /* SampleORM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F7AEA1FB1936E0093372C /* SampleORM.swift */; };
 		232F7AEE1FB1936E0093372C /* sample_orm_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F7AEB1FB1936E0093372C /* sample_orm_main.swift */; };
-		232F7AFA1FB193840093372C /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232F7AF61FB1937C0093372C /* WCDB.framework */; };
 		232F7AFC1FB193BD0093372C /* SampleORMIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F7AFB1FB193BD0093372C /* SampleORMIndex.swift */; };
 		235CAEE61FB55679003039F0 /* SampleAdvance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEE51FB55679003039F0 /* SampleAdvance.swift */; };
 		235CAEE81FB55680003039F0 /* SampleAdvanceMulti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEE71FB55680003039F0 /* SampleAdvanceMulti.swift */; };
@@ -36,24 +35,25 @@
 		235CAEFB1FB584FC003039F0 /* sample_core_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEFA1FB584FC003039F0 /* sample_core_main.swift */; };
 		237BC58A1FB54A5E006ECEBB /* sample_transaction_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BC5891FB54A5E006ECEBB /* sample_transaction_main.swift */; };
 		237BC58C1FB54A65006ECEBB /* SampleTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BC58B1FB54A65006ECEBB /* SampleTransaction.swift */; };
+		23B996DC1FDAB56700B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D21FDAB51600B0AF2E /* WCDB_swift.framework */; };
 		23E9E00F1FC40534005DE71C /* sample_table_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E00E1FC40534005DE71C /* sample_table_main.swift */; };
 		23E9E0111FC4054C005DE71C /* SampleTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0101FC4054C005DE71C /* SampleTable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		232F7AF51FB1937C0093372C /* PBXContainerItemProxy */ = {
+		23B996D11FDAB51600B0AF2E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 232F7AEF1FB1937C0093372C /* WCDB.xcodeproj */;
+			containerPortal = 23B996CC1FDAB51500B0AF2E /* WCDB.swift.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 238D0B031FAB1F4300BC2659;
-			remoteInfo = WCDB;
+			remoteInfo = WCDB.swift;
 		};
-		232F7AF71FB193810093372C /* PBXContainerItemProxy */ = {
+		23B996DA1FDAB56400B0AF2E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 232F7AEF1FB1937C0093372C /* WCDB.xcodeproj */;
+			containerPortal = 23B996CC1FDAB51500B0AF2E /* WCDB.swift.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 238D0B021FAB1F4300BC2659;
-			remoteInfo = WCDB;
+			remoteInfo = WCDB.swift;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -89,7 +89,6 @@
 		232F7AE81FB1936E0093372C /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		232F7AEA1FB1936E0093372C /* SampleORM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleORM.swift; sourceTree = "<group>"; };
 		232F7AEB1FB1936E0093372C /* sample_orm_main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sample_orm_main.swift; sourceTree = "<group>"; };
-		232F7AEF1FB1937C0093372C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		232F7AFB1FB193BD0093372C /* SampleORMIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleORMIndex.swift; sourceTree = "<group>"; };
 		235CAEE51FB55679003039F0 /* SampleAdvance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleAdvance.swift; sourceTree = "<group>"; };
 		235CAEE71FB55680003039F0 /* SampleAdvanceMulti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleAdvanceMulti.swift; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		235CAEFA1FB584FC003039F0 /* sample_core_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_core_main.swift; sourceTree = "<group>"; };
 		237BC5891FB54A5E006ECEBB /* sample_transaction_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_transaction_main.swift; sourceTree = "<group>"; };
 		237BC58B1FB54A65006ECEBB /* SampleTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTransaction.swift; sourceTree = "<group>"; };
+		23B996CC1FDAB51500B0AF2E /* WCDB.swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.swift.xcodeproj; path = ../WCDB.swift.xcodeproj; sourceTree = "<group>"; };
 		23E9E00E1FC40534005DE71C /* sample_table_main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sample_table_main.swift; sourceTree = "<group>"; };
 		23E9E0101FC4054C005DE71C /* SampleTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,7 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				232F7AFA1FB193840093372C /* WCDB.framework in Frameworks */,
+				23B996DC1FDAB56700B0AF2E /* WCDB_swift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +174,7 @@
 		232F7AD51FB193100093372C = {
 			isa = PBXGroup;
 			children = (
-				232F7AEF1FB1937C0093372C /* WCDB.xcodeproj */,
+				23B996CC1FDAB51500B0AF2E /* WCDB.swift.xcodeproj */,
 				232F7AE81FB1936E0093372C /* main.swift */,
 				23E9E00C1FC40516005DE71C /* table */,
 				230DD6071FBC5FF900795D22 /* fts */,
@@ -210,14 +210,6 @@
 				232D622F1FB474BC00BD479B /* SampleORMTableConstraint.swift */,
 			);
 			path = orm;
-			sourceTree = "<group>";
-		};
-		232F7AF01FB1937C0093372C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				232F7AF61FB1937C0093372C /* WCDB.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		232F7AF91FB193840093372C /* Frameworks */ = {
@@ -257,6 +249,14 @@
 			path = core;
 			sourceTree = "<group>";
 		};
+		23B996CD1FDAB51500B0AF2E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23B996D21FDAB51600B0AF2E /* WCDB_swift.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		23E9E00C1FC40516005DE71C /* table */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,7 +280,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				232F7AF81FB193810093372C /* PBXTargetDependency */,
+				23B996DB1FDAB56400B0AF2E /* PBXTargetDependency */,
 			);
 			name = sample;
 			productName = sample;
@@ -316,8 +316,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 232F7AF01FB1937C0093372C /* Products */;
-					ProjectRef = 232F7AEF1FB1937C0093372C /* WCDB.xcodeproj */;
+					ProductGroup = 23B996CD1FDAB51500B0AF2E /* Products */;
+					ProjectRef = 23B996CC1FDAB51500B0AF2E /* WCDB.swift.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -328,11 +328,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		232F7AF61FB1937C0093372C /* WCDB.framework */ = {
+		23B996D21FDAB51600B0AF2E /* WCDB_swift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = WCDB.framework;
-			remoteRef = 232F7AF51FB1937C0093372C /* PBXContainerItemProxy */;
+			path = WCDB_swift.framework;
+			remoteRef = 23B996D11FDAB51600B0AF2E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -378,10 +378,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		232F7AF81FB193810093372C /* PBXTargetDependency */ = {
+		23B996DB1FDAB56400B0AF2E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 232F7AF71FB193810093372C /* PBXContainerItemProxy */;
+			name = WCDB.swift;
+			targetProxy = 23B996DA1FDAB56400B0AF2E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

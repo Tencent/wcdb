@@ -573,9 +573,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		238D0B021FAB1F4300BC2659 /* WCDB */ = {
+		238D0B021FAB1F4300BC2659 /* WCDB.swift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 238D0B0B1FAB1F4300BC2659 /* Build configuration list for PBXNativeTarget "WCDB" */;
+			buildConfigurationList = 238D0B0B1FAB1F4300BC2659 /* Build configuration list for PBXNativeTarget "WCDB.swift" */;
 			buildPhases = (
 				238D0AFE1FAB1F4300BC2659 /* Sources */,
 				238D0AFF1FAB1F4300BC2659 /* Frameworks */,
@@ -588,7 +588,7 @@
 				23A1FF791FB08CC50023527D /* PBXTargetDependency */,
 				23A1FF701FB0845E0023527D /* PBXTargetDependency */,
 			);
-			name = WCDB;
+			name = WCDB.swift;
 			productName = WCDB;
 			productReference = 238D0B031FAB1F4300BC2659 /* WCDB.framework */;
 			productType = "com.apple.product-type.framework";
@@ -613,7 +613,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 238D0AFD1FAB1F4300BC2659 /* Build configuration list for PBXProject "WCDB" */;
+			buildConfigurationList = 238D0AFD1FAB1F4300BC2659 /* Build configuration list for PBXProject "WCDB.swift" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -631,7 +631,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				238D0B021FAB1F4300BC2659 /* WCDB */,
+				238D0B021FAB1F4300BC2659 /* WCDB.swift */,
 				23A1FF731FB08C780023527D /* Install file template */,
 			);
 		};
@@ -972,7 +972,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.WCDB.swift;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -997,7 +997,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.WCDB.swift;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
@@ -1023,7 +1023,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		238D0AFD1FAB1F4300BC2659 /* Build configuration list for PBXProject "WCDB" */ = {
+		238D0AFD1FAB1F4300BC2659 /* Build configuration list for PBXProject "WCDB.swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				238D0B091FAB1F4300BC2659 /* Debug */,
@@ -1032,7 +1032,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		238D0B0B1FAB1F4300BC2659 /* Build configuration list for PBXNativeTarget "WCDB" */ = {
+		238D0B0B1FAB1F4300BC2659 /* Build configuration list for PBXNativeTarget "WCDB.swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				238D0B0C1FAB1F4300BC2659 /* Debug */,

@@ -1,7 +1,7 @@
-# pod lib lint --verbose WCDBSwift.spec
-# pod trunk push WCDBSwift.podspec --verbose
+# pod lib lint --verbose WCDB.swift.spec
+# pod trunk push WCDB.swift.podspec --verbose
 Pod::Spec.new do |wcdb|
-  wcdb.name         = "WCDBSwift"
+  wcdb.name         = "WCDB.swift"
   wcdb.version      = "1.0.0"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "238D0B021FAB1F4300BC2659"
-               BuildableName = "WCDB.framework"
-               BlueprintName = "WCDB"
-               ReferencedContainer = "container:WCDB.xcodeproj">
+               BuildableName = "WCDB_swift.framework"
+               BlueprintName = "WCDB.swift"
+               ReferencedContainer = "container:WCDB.swift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "238D0B021FAB1F4300BC2659"
-            BuildableName = "WCDB.framework"
-            BlueprintName = "WCDB"
-            ReferencedContainer = "container:WCDB.xcodeproj">
+            BuildableName = "WCDB_swift.framework"
+            BlueprintName = "WCDB.swift"
+            ReferencedContainer = "container:WCDB.swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -68,9 +68,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "238D0B021FAB1F4300BC2659"
-            BuildableName = "WCDB.framework"
-            BlueprintName = "WCDB"
-            ReferencedContainer = "container:WCDB.xcodeproj">
+            BuildableName = "WCDB_swift.framework"
+            BlueprintName = "WCDB.swift"
+            ReferencedContainer = "container:WCDB.swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -86,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "238D0B021FAB1F4300BC2659"
-            BuildableName = "WCDB.framework"
-            BlueprintName = "WCDB"
-            ReferencedContainer = "container:WCDB.xcodeproj">
+            BuildableName = "WCDB_swift.framework"
+            BlueprintName = "WCDB.swift"
+            ReferencedContainer = "container:WCDB.swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
