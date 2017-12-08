@@ -19,7 +19,9 @@
  */
 
 #ifdef WCDB_BUILTIN_SQLCIPHER
+#ifndef SQLITE_HAS_CODEC
 #define SQLITE_HAS_CODEC
+#endif
 #endif //WCDB_BUILTIN_SQLCIPHER
 
 #import <WCDB/SQLite-Bridging-Header.h>
