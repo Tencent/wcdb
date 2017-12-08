@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>BaselineBatchWriteBenchmark</key>
+		<dict>
+			<key>testBaselineBatchWrite()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.0636</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>BaselineReadBenchmark</key>
+		<dict>
+			<key>testBaselineRead()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.687</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>BaselineWriteBenchmark</key>
+		<dict>
+			<key>testBaselineWrite()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.8859</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>CipherReadBenchmark</key>
+		<dict>
+			<key>testCipherRead()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.7825</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>CipherWriteBenchmark</key>
+		<dict>
+			<key>testCipherWrite()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.9859</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>InitializationBenchmark</key>
+		<dict>
+			<key>testInitialization()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.10831</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>MultithreadReadReadBenchmark</key>
+		<dict>
+			<key>testMultithreadReadRead()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>3.4541</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>MultithreadReadWriteBenchmark</key>
+		<dict>
+			<key>testMultithreadReadWrite()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.7573</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>MultithreadWriteWriteBenchmark</key>
+		<dict>
+			<key>testMultithreadWriteWrite()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.2822</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>SyncWriteBenchmark</key>
+		<dict>
+			<key>testSyncWrite()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.2956</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>8 Dec 2017, 10:29:11</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>
