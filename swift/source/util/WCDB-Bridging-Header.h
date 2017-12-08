@@ -24,5 +24,5 @@
 #endif
 #endif //WCDB_BUILTIN_SQLCIPHER
 
-#import <WCDB/SQLite-Bridging-Header.h>
-#import <WCDB/SQLiteRepairKit.h>
+#import <WCDBSwift/SQLite-Bridging-Header.h>
+#import <WCDBSwift/SQLiteRepairKit.h>
