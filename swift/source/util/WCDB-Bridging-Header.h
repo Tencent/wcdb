@@ -18,11 +18,5 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_SQLCIPHER
-#ifndef SQLITE_HAS_CODEC
-#define SQLITE_HAS_CODEC
-#endif
-#endif //WCDB_BUILTIN_SQLCIPHER
-
 #import <WCDBSwift/SQLite-Bridging-Header.h>
 #import <WCDBSwift/SQLiteRepairKit.h>
