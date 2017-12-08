@@ -21,16 +21,14 @@
 import Foundation
 import WCDB
 
-class SampleAdvanceMulti: WCDB.CodableTable {
+class SampleAdvanceMulti: WCDB.TableCodable {
     var intValue: Int? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleAdvanceMulti    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        
+        case intValue
+    }
     required init() {}
 }
 
-//WCDB
-extension SampleAdvanceMulti {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleAdvanceMulti.intValue)]
-    }
-}

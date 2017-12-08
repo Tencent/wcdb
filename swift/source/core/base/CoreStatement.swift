@@ -127,6 +127,28 @@ public class CoreStatement: CoreRepresentable {
         }
         return result
     }
+    
+    public func value(atIndex index: Int) -> FundamentalValue {
+        switch handleStatement.columnType(atIndex: index) {
+        case .Integer32:
+            let value: Int32 = handleStatement.columnValue(atIndex: index)
+            return FundamentalValue(value)
+        case .Integer64:
+            let value: Int64 = handleStatement.columnValue(atIndex: index)
+            return FundamentalValue(value)
+        case .Float:
+            let value: Double = handleStatement.columnValue(atIndex: index)
+            return FundamentalValue(value)
+        case .Text:
+            let value: String = handleStatement.columnValue(atIndex: index)
+            return FundamentalValue(value)
+        case .BLOB:
+            let value: Data = handleStatement.columnValue(atIndex: index)
+            return FundamentalValue(value)
+        case .Null:
+            return FundamentalValue(nil)
+        }
+    }
           
     public func value<ColumnDecodableType: ColumnDecodable>(byName name: String, of type: ColumnDecodableType.Type = ColumnDecodableType.self) -> ColumnDecodableType? {
         guard let index = index(byName: name) else {

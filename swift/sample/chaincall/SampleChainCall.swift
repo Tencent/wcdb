@@ -21,18 +21,15 @@
 import Foundation
 import WCDB
 
-class SampleChainCall: WCDB.CodableTable {
+class SampleChainCall: WCDB.TableCodable {
     var intValue: Int? = nil
     var stringValue: String? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleChainCall    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case intValue    
+        case stringValue    
+    }
     required init() {}
 }
 
-//WCDB
-extension SampleChainCall {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleChainCall.intValue),
-            ColumnBinding(\SampleChainCall.stringValue)]
-    }
-}

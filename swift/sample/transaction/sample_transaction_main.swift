@@ -43,7 +43,7 @@ func sample_transaction_main(baseDirectory: String) {
     do {
         try database.run(transaction: { () -> () in  
             let object = SampleTransaction()
-            try database.insert(objects: object, into: tableName)
+            try database.insert(objects: object, intoTable: tableName)
         })
     }catch let error {
         print("blocked transaction error: \(error)")
@@ -55,7 +55,7 @@ func sample_transaction_main(baseDirectory: String) {
         try database.begin()
         let object = SampleTransaction()
         do {
-            try database.insert(objects: object, into: tableName)
+            try database.insert(objects: object, intoTable: tableName)
             try database.commit()
         }catch let error {
             try? database.rollback()
@@ -69,14 +69,14 @@ func sample_transaction_main(baseDirectory: String) {
     do {
         //You can do a transaction in different threads using [Transaction].
         //But it's better to run serially, or an inner thread mutex will guarantee this.
-        let transaction = try database.transaction()
+        let transaction = try database.getTransaction()
         try transaction.begin()
         DispatchQueue(label: "other thread").async {
             let object = SampleTransaction()
             do {
-                try transaction.insert(objects: object, into: tableName)
+                try transaction.insert(objects: object, intoTable: tableName)
                 try transaction.commit()
-            }catch let error {
+            }catch {
                 try? transaction.rollback()
             }
         }
@@ -92,7 +92,7 @@ func sample_transaction_main(baseDirectory: String) {
         objects.append(object1)
         let object2 = SampleTransaction()
         objects.append(object2)
-        try database.insert(objects: objects, into: tableName)
+        try database.insert(objects: objects, intoTable: tableName)
     }catch let error {
         print("inner batch insert transaction error: \(error)")
     }

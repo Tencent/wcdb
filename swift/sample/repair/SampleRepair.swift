@@ -21,18 +21,16 @@
 import Foundation
 import WCDB
 
-class SampleRepair: WCDB.CodableTable {
+class SampleRepair: WCDB.TableCodable {
     var identifier: Int? = nil
     var content: String? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleRepair    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        
+        case identifier
+        case content
+    }
     required init() {}
 }
 
-//WCDB
-extension SampleRepair {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleRepair.identifier),
-            ColumnBinding(\SampleRepair.content)]
-    }
-}

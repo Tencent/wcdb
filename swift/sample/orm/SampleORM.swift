@@ -20,32 +20,40 @@
 
 import WCDB
 
-enum SampleORMType: Int, CodableEnumColumn {
+enum SampleORMType: Int, ColumnCodable {
     case SampleORMType1 = 1
     case SampleORMType2 = 2
+    typealias FundamentalType = Int64
+    init?(with value: Int64) {
+        self.init(rawValue: Int(truncatingIfNeeded: value))
+    }     
+    func archivedValue() -> Int64? {
+        return Int64(rawValue)
+    }
 }
 
-class SampleORM: WCDB.CodableTable {
+class SampleORM: WCDB.TableCodable {
     var identifier: Int = 0
     var desc: String = "nil"
     var value: Double = 0
     var timestamp: String? = nil
     var type: SampleORMType? = nil
-    
-    required init() {}
-
-    //WCDB
-    static let objectRelationalMapping: TableBinding = TableBinding(SampleORM.self)
-}
-
-//WCDB
-extension SampleORM {    
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleORM.identifier, isPrimary: true),
-            ColumnBinding(\SampleORM.desc),
-            ColumnBinding(\SampleORM.value, defaultTo: 1.0),
-            ColumnBinding(\SampleORM.timestamp, defaultTo: .CurrentTimestamp),
-            ColumnBinding(\SampleORM.type)]
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleORM    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case identifier    
+        case desc    
+        case value    
+        case timestamp    
+        case type
+        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+            return [
+                .identifier:ColumnConstraintBinding(isPrimary: true),
+                .value:ColumnConstraintBinding(defaultTo: 1.0),
+                .timestamp:ColumnConstraintBinding(defaultTo: .CurrentTimestamp)
+            ]
+        }
     }
+    required init() {}
 }
+

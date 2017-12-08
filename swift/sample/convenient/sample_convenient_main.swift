@@ -43,7 +43,7 @@ func sample_convenient_main(baseDirectory: String) {
         let object = SampleConvenient()
         object.intValue = 1
         object.stringValue = "Insert onr object"
-        try database.insert(objects: object, into: tableName)
+        try database.insert(objects: object, intoTable: tableName)
     }catch let error {
         print("insert one object error: \(error)")
     }
@@ -59,7 +59,7 @@ func sample_convenient_main(baseDirectory: String) {
         object2.intValue = 3
         object2.stringValue = "Insert objects"
         objects.append(object2)
-        try database.insert(objects: objects, into: tableName)
+        try database.insert(objects: objects, intoTable: tableName)
     }catch let error {
         print("insert objects error: \(error)")
     }
@@ -69,7 +69,7 @@ func sample_convenient_main(baseDirectory: String) {
        let object = SampleConvenient()
         object.isAutoIncrement = true
         object.stringValue = "Insert auto increment"
-        try database.insert(objects: object, into: tableName)
+        try database.insert(objects: object, intoTable: tableName)
     }catch let error {
         print("insert or replace objects error: \(error)")
     }
@@ -78,7 +78,7 @@ func sample_convenient_main(baseDirectory: String) {
     do {
         let object = SampleConvenient()
         object.stringValue = "Update by object"
-        try database.update(table: tableName, on: \SampleConvenient.stringValue, with: object)
+        try database.update(table: tableName, on: SampleConvenient.CodingKeys.stringValue, with: object)
     }catch let error {
         print("update by objects \(error)")
     }
@@ -87,42 +87,42 @@ func sample_convenient_main(baseDirectory: String) {
     do {
         let object = SampleConvenient()
         object.stringValue = "Update with condition/order/offset/limit"
-        try database.update(table: tableName, on: \SampleConvenient.stringValue, with: object, where: \SampleConvenient.intValue > 0)
+        try database.update(table: tableName, on: SampleConvenient.CodingKeys.stringValue, with: object, where: SampleConvenient.CodingKeys.intValue > 0)
     }catch let error {
         print("Update with condition/order/offset/limit \(error)")
     }
     
     //Select one object
     do {
-        let object: SampleConvenient? = try database.getObject(from: tableName)
+        let object: SampleConvenient? = try database.getObject(fromTable: tableName)
     }catch let error {
         print("select one object error: \(error)")
     }
     
     //Select objects
     do {
-        let objects: [SampleConvenient] = try database.getObjects(from: tableName)
+        let objects: [SampleConvenient] = try database.getObjects(fromTable: tableName)
     }catch let error {
         print("select objects error: \(error)")
     }
     
     //Select objects with condition/order/offset/limit
     do {
-        let objects: [SampleConvenient] = try database.getObjects(from: tableName, orderBy: [(\SampleChainCall.intValue).asOrder(by: .Ascending)], limit: 1, offset: 2)
+        let objects: [SampleConvenient] = try database.getObjects(fromTable: tableName, orderBy: [(SampleChainCall.CodingKeys.intValue).asOrder(by: .Ascending)], limit: 1, offset: 2)
     }catch let error {
         print("select objects error: \(error)")
     }
     
     //Select part of objects
     do {
-        let objects: [SampleConvenient] = try database.getObjects(on: \SampleConvenient.stringValue, from: tableName)
+        let objects: [SampleConvenient] = try database.getObjects(on: SampleConvenient.CodingKeys.stringValue, fromTable: tableName)
     }catch let error {
         print("select part of objects error: \(error)")
     }
     
     //Select column
     do {
-        let column: FundamentalColumn = try database.getColumn(on: \SampleConvenient.stringValue, from: tableName)
+        let column: FundamentalColumn = try database.getColumn(on: SampleConvenient.CodingKeys.stringValue, fromTable: tableName)
         for string in column {
             //do sth
         }
@@ -132,7 +132,7 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select row
     do {
-        let row: FundamentalRow? = try database.getRow(on: \SampleConvenient.intValue, \SampleConvenient.stringValue, from: tableName)
+        let row: FundamentalRow? = try database.getRow(on: SampleConvenient.CodingKeys.intValue, SampleConvenient.CodingKeys.stringValue, fromTable: tableName)
         let intValue = row?[0]
         let stringValue = row?[1]
     }catch let error {
@@ -141,35 +141,35 @@ func sample_convenient_main(baseDirectory: String) {
     
     //Select one value
     do {
-        let count = try database.getValue(on: SampleConvenient.any.count(), from: tableName)
+        let count = try database.getValue(on: SampleConvenient.Properties.any.count(), fromTable: tableName)
     }catch let error {
         print("select one value error: \(error)")
     }
     
     //Select aggregation
     do {
-        let row: FundamentalRow? = try database.getRow(on: (\SampleConvenient.intValue).avg(), (\SampleConvenient.stringValue).count(), from: tableName)
+        let row: FundamentalRow? = try database.getRow(on: (SampleConvenient.CodingKeys.intValue).avg(), (SampleConvenient.CodingKeys.stringValue).count(), fromTable: tableName)
     }catch let error {
         print("select aggregation error: \(error)")
     }
     
     //Select distinct result
     do {
-        let distinctCount = try database.getDistinctValue(on: \SampleConvenient.intValue, from: tableName)
+        let distinctCount = try database.getDistinctValue(on: SampleConvenient.Properties.intValue, fromTable: tableName)
     }catch let error {
         print("select distinct result error: \(error)")
     }
     
     //Delete
     do {
-        try database.delete(from: tableName)
+        try database.delete(fromTable: tableName)
     }catch let error {
         print("delete error: \(error)")
     }
     
     //Delete with condition/order/offset/limit
     do {
-        try database.delete(from: tableName, where: (\SampleConvenient.intValue).in(1, 2, 3))
+        try database.delete(fromTable: tableName, where: (SampleConvenient.CodingKeys.intValue).in(1, 2, 3))
     }catch let error {
         print("delete with condition/order/offset/limit error: \(error)")
     }

@@ -30,8 +30,7 @@
 		235CAEE61FB55679003039F0 /* SampleAdvance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEE51FB55679003039F0 /* SampleAdvance.swift */; };
 		235CAEE81FB55680003039F0 /* SampleAdvanceMulti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEE71FB55680003039F0 /* SampleAdvanceMulti.swift */; };
 		235CAEEC1FB55693003039F0 /* sample_advance_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEEB1FB55693003039F0 /* sample_advance_main.swift */; };
-		235CAEF01FB5580D003039F0 /* SampleColumnCoding+ColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEEF1FB5580D003039F0 /* SampleColumnCoding+ColumnCoding.swift */; };
-		235CAEF21FB55921003039F0 /* SampleColumnCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEF11FB55921003039F0 /* SampleColumnCoding.swift */; };
+		235CAEF21FB55921003039F0 /* SampleCodableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEF11FB55921003039F0 /* SampleCodableColumn.swift */; };
 		235CAEF41FB583E2003039F0 /* SampleCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEF31FB583E2003039F0 /* SampleCore.swift */; };
 		235CAEF61FB58412003039F0 /* SampleCoreExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEF51FB58412003039F0 /* SampleCoreExt.swift */; };
 		235CAEFB1FB584FC003039F0 /* sample_core_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEFA1FB584FC003039F0 /* sample_core_main.swift */; };
@@ -95,8 +94,7 @@
 		235CAEE51FB55679003039F0 /* SampleAdvance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleAdvance.swift; sourceTree = "<group>"; };
 		235CAEE71FB55680003039F0 /* SampleAdvanceMulti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleAdvanceMulti.swift; sourceTree = "<group>"; };
 		235CAEEB1FB55693003039F0 /* sample_advance_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_advance_main.swift; sourceTree = "<group>"; };
-		235CAEEF1FB5580D003039F0 /* SampleColumnCoding+ColumnCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SampleColumnCoding+ColumnCoding.swift"; sourceTree = "<group>"; };
-		235CAEF11FB55921003039F0 /* SampleColumnCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleColumnCoding.swift; sourceTree = "<group>"; };
+		235CAEF11FB55921003039F0 /* SampleCodableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleCodableColumn.swift; sourceTree = "<group>"; };
 		235CAEF31FB583E2003039F0 /* SampleCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleCore.swift; sourceTree = "<group>"; };
 		235CAEF51FB58412003039F0 /* SampleCoreExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleCoreExt.swift; sourceTree = "<group>"; };
 		235CAEFA1FB584FC003039F0 /* sample_core_main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_core_main.swift; sourceTree = "<group>"; };
@@ -244,8 +242,7 @@
 				235CAEEB1FB55693003039F0 /* sample_advance_main.swift */,
 				235CAEE51FB55679003039F0 /* SampleAdvance.swift */,
 				235CAEE71FB55680003039F0 /* SampleAdvanceMulti.swift */,
-				235CAEF11FB55921003039F0 /* SampleColumnCoding.swift */,
-				235CAEEF1FB5580D003039F0 /* SampleColumnCoding+ColumnCoding.swift */,
+				235CAEF11FB55921003039F0 /* SampleCodableColumn.swift */,
 			);
 			path = advance;
 			sourceTree = "<group>";
@@ -348,7 +345,6 @@
 				2307D7B01FBD30DA00C0103B /* SampleFile.swift in Sources */,
 				232D622E1FB4738E00BD479B /* SampleORMColumnConstraint.swift in Sources */,
 				230DD60E1FBC602F00795D22 /* SampleFTSData.swift in Sources */,
-				235CAEF01FB5580D003039F0 /* SampleColumnCoding+ColumnCoding.swift in Sources */,
 				2307D7B41FBD336F00C0103B /* sample_repair_main.swift in Sources */,
 				230AE40D1FB53F5900ABB2C9 /* SampleConvenient.swift in Sources */,
 				235CAEFB1FB584FC003039F0 /* sample_core_main.swift in Sources */,
@@ -372,7 +368,7 @@
 				235CAEEC1FB55693003039F0 /* sample_advance_main.swift in Sources */,
 				232F7AFC1FB193BD0093372C /* SampleORMIndex.swift in Sources */,
 				230AE4101FB53F6400ABB2C9 /* sample_convenient_main.swift in Sources */,
-				235CAEF21FB55921003039F0 /* SampleColumnCoding.swift in Sources */,
+				235CAEF21FB55921003039F0 /* SampleCodableColumn.swift in Sources */,
 				235CAEF41FB583E2003039F0 /* SampleCore.swift in Sources */,
 				235CAEF61FB58412003039F0 /* SampleCoreExt.swift in Sources */,
 				237BC58A1FB54A5E006ECEBB /* sample_transaction_main.swift in Sources */,

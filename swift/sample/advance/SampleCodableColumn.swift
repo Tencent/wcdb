@@ -19,7 +19,15 @@
  */
 
 import Foundation
+import WCDB
 
-final class SampleCodableColumn {
+class SampleCodableColumn: WCDB.ColumnCodable {
+    typealias FundamentalType = Double
     var floatValue: Float? = nil
+    required init?(with value: Double) {
+        self.floatValue = Float(value)
+    }     
+    func archivedValue() -> Double? {
+        return floatValue != nil ? Double(floatValue!) : nil
+    }
 }

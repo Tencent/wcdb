@@ -44,19 +44,19 @@ func sample_advance_main(baseDirectory: String) {
         try database.create(table: tableName, of: SampleAdvance.self)
         let advance = SampleAdvance()
         advance.intValue = 1
-        try database.insert(objects: advance, into: tableName)
+        try database.insert(objects: advance, intoTable: tableName)
         
         try database.create(table: tableName2, of: SampleAdvanceMulti.self)
         let advanceMulti = SampleAdvanceMulti()
         advanceMulti.intValue = 1
-        try database.insert(objects: advanceMulti, into: tableName2)
+        try database.insert(objects: advanceMulti, intoTable: tableName2)
     }catch let error {
         print("prepare error: \(error)")
     }
     
     //Using [as] to redirect selection
     do {
-        let object: SampleAdvance = (try database.getObject(on: SampleAdvance.any.as(\SampleAdvance.intValue), from: tableName))!
+        let object: SampleAdvance = (try database.getObject(on: SampleAdvance.Properties.any.as(SampleAdvance.Properties.intValue), fromTable: tableName))!
         print("Count: \(object.intValue!)")
     }catch let error {
         print("redirect selection error: \(error)")
@@ -64,7 +64,7 @@ func sample_advance_main(baseDirectory: String) {
     
     //Multi select
     do {
-        let select = try database.prepareMultiSelect(on: (\SampleAdvance.intValue).in(table: tableName), (\SampleAdvanceMulti.intValue).in(table: tableName2), from: [tableName, tableName2]).where((\SampleAdvance.intValue).in(table: tableName)==(\SampleAdvanceMulti.intValue).in(table: tableName2))
+        let select = try database.prepareMultiSelect(on: (SampleAdvance.CodingKeys.intValue).in(table: tableName), (SampleAdvanceMulti.CodingKeys.intValue).in(table: tableName2), fromTables: [tableName, tableName2]).where((SampleAdvance.CodingKeys.intValue).in(table: tableName)==(SampleAdvanceMulti.CodingKeys.intValue).in(table: tableName2))
         let multiObjects = select.allMultiObjects
     }catch let error {
         print("multi select error: \(error)")
@@ -72,7 +72,7 @@ func sample_advance_main(baseDirectory: String) {
     
     //Column coding
     do {
-        let object: SampleAdvance? = try database.getObject(from: tableName)
+        let object: SampleAdvance? = try database.getObject(fromTable: tableName)
         let value: Float? = object?.columnCoding?.floatValue
     }catch let error {
         print("column coding error: \(error)")

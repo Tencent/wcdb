@@ -21,21 +21,20 @@
 import Foundation
 import WCDB
 
-class SampleConvenient: WCDB.CodableTable {
+class SampleConvenient: WCDB.TableCodable {
     var intValue: Int? = nil
     var stringValue: String? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleConvenient    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case intValue
+        case stringValue
+        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+            return [.intValue:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
+        }
+    }
     required init() {}
-
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
 
-//WCDB
-extension SampleConvenient {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleConvenient.intValue, isPrimary: true, isAutoIncrement: true),
-            ColumnBinding(\SampleConvenient.stringValue)]
-    }
-}

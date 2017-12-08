@@ -21,18 +21,14 @@
 import Foundation
 import WCDB
 
-class SampleCoreExt: WCDB.CodableTable {
+class SampleCoreExt: WCDB.TableCodable {
     var localID: Int? = nil
     var createTime: Date? = nil
-    
-    required init() {}
-}
-
-//WCDB
-extension SampleCoreExt {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleCoreExt.localID),
-            ColumnBinding(\SampleCoreExt.createTime)]
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleCoreExt    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case localID    
+        case createTime    
     }
+    required init() {}
 }

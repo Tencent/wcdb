@@ -20,36 +20,26 @@
 
 import WCDB
 
-class SampleORMIndex: WCDB.CodableTable {
+class SampleORMIndex: WCDB.TableCodable {
     var indexProperty: Int? = nil
     var uniqueIndexProperty: Int? = nil
     var multiIndexPart1: String? = nil
     var multiIndexPart2: Float? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleORMIndex    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case indexProperty
+        case uniqueIndexProperty
+        case multiIndexPart1
+        case multiIndexPart2
+        static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+            return [
+                "_indexSubfix":IndexBinding(indexesBy: CodingKeys.indexProperty),
+                "_uniqueIndexSubfix":IndexBinding(indexesBy: CodingKeys.uniqueIndexProperty),
+                "_multiIndexSubfix":IndexBinding(indexesBy: CodingKeys.multiIndexPart1, CodingKeys.multiIndexPart2),
+            ]
+        }
+    }
     required init() {}
-
-    //WCDB
-    static let objectRelationalMapping: TableBinding = TableBinding(SampleORMIndex.self)
 }
 
-//WCDB
-extension SampleORMIndex {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleORMIndex.indexProperty),
-            ColumnBinding(\SampleORMIndex.uniqueIndexProperty),
-            ColumnBinding(\SampleORMIndex.multiIndexPart1),
-            ColumnBinding(\SampleORMIndex.multiIndexPart2)]
-    }
-    
-    static func indexBindings() -> [IndexBinding]? {
-        return [
-            IndexBinding(withSubfix: "_indexSubfix",
-                         indexesBy: \SampleORMIndex.indexProperty),
-            IndexBinding(withSubfix: "_uniqueIndexSubfix",
-                         isUnique: true,
-                         indexesBy: \SampleORMIndex.uniqueIndexProperty),
-            IndexBinding(withSubfix: "_multiIndexSubfix",
-                         indexesBy: \SampleORMIndex.multiIndexPart1, \SampleORMIndex.multiIndexPart2)]
-    }
-}

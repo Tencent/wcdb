@@ -21,24 +21,18 @@
 import Foundation
 import WCDB
 
-class SampleFTSData: WCDB.CodableTable {
+class SampleFTSData: WCDB.TableCodable {
     var name: String? = nil
     var content: String? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleFTSData    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case name
+        case content
+        static var __virtualTableBinding: VirtualTableBinding? {
+            return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
+        }
+    }
     required init() {}
 }
 
-//WCDB
-extension SampleFTSData {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleFTSData.name),
-            ColumnBinding(\SampleFTSData.content)]
-    }
-    
-    static func virtualTableBinding() -> VirtualTableBinding? {
-        return VirtualTableBinding(withModule: FTSModule.fts3.rawValue, and: [
-            ModuleArgument(withTokenize: .WCDB)
-            ])
-    }
-}

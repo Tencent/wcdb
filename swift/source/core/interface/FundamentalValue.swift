@@ -21,7 +21,7 @@
 import Foundation
 
 // nullable, Int32, Int64, Double, String, Data
-public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLiteral, ExpressibleByBooleanLiteral, ExpressibleByFloatLiteral, ExpressibleByStringLiteral {
+public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLiteral, ExpressibleByBooleanLiteral, ExpressibleByFloatLiteral, ExpressibleByStringLiteral, CustomDebugStringConvertible {
     let base: FundamentalColumnType?
     
     init(_ _: Void? = nil) {
@@ -149,6 +149,15 @@ public class FundamentalValue: ExpressibleByNilLiteral, ExpressibleByIntegerLite
             return base as! Data
         default:
             return Data()
+        }
+    }
+    
+    public var debugDescription: String {
+        switch type {
+        case .Null:
+            return "NULL"
+        default:
+            return stringValue
         }
     }
 }

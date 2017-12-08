@@ -21,16 +21,13 @@
 import Foundation
 import WCDB
 
-class SampleStatistics: WCDB.CodableTable {
+class SampleStatistics: WCDB.TableCodable {
     var intValue: Int? = nil
-    
-    required init() {}
-}
-
-//WCDB
-extension SampleStatistics {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleStatistics.intValue)]
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleStatistics    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        
+        case intValue
     }
+    required init() {}
 }

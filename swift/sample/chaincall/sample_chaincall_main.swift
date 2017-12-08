@@ -49,7 +49,7 @@ func sample_chailcall_main(baseDirectory: String) {
         object2.intValue = 2
         object2.stringValue = "Insert objects"
         objects.append(object2)
-        let insert = try database.prepareInsert(ofClass: SampleChainCall.self, into: tableName)
+        let insert = try database.prepareInsert(of: SampleChainCall.self, intoTable: tableName)
         try insert.execute(with: objects)            
     }catch let error {
         print("insert objects error: \(error)")
@@ -57,7 +57,7 @@ func sample_chailcall_main(baseDirectory: String) {
     
     //Select objects
     do {
-        let select = try database.prepareSelect(on: (\SampleChainCall.intValue).max().as((\SampleChainCall.intValue)), from: tableName).where(\SampleChainCall.intValue==1).group(by: \SampleChainCall.intValue).limit(3)
+        let select = try database.prepareSelect(on: (SampleChainCall.CodingKeys.intValue).max().as((SampleChainCall.CodingKeys.intValue)), fromTable: tableName).where(SampleChainCall.CodingKeys.intValue==1).group(by: SampleChainCall.CodingKeys.intValue).limit(3)
         let objects: [SampleChainCall] = try select.allObjects()
     }catch let error {
         print("select objects error: \(error)")
@@ -65,7 +65,7 @@ func sample_chailcall_main(baseDirectory: String) {
     
     //Select rows
     do {
-        let rowSelect = try database.prepareRowSelect(on: SampleChainCall.allProperties, from: tableName).where(\SampleChainCall.intValue==1).limit(3)
+        let rowSelect = try database.prepareRowSelect(on: SampleChainCall.Properties.all, fromTable: tableName).where(SampleChainCall.CodingKeys.intValue==1).limit(3)
         let needBreak = true
         while let row = try rowSelect.nextRow() {
             if needBreak {
@@ -78,7 +78,7 @@ func sample_chailcall_main(baseDirectory: String) {
     
     //Update by object
     do {
-        let update = try database.prepareUpdate(table: tableName, onProperties: \SampleChainCall.stringValue)
+        let update = try database.prepareUpdate(table: tableName, on: SampleChainCall.Properties.stringValue)
         let object = SampleChainCall()
         object.stringValue = "Update by object"
         try update.execute(with: object)
@@ -88,7 +88,7 @@ func sample_chailcall_main(baseDirectory: String) {
     
     //Delete
     do {
-        let delete = try database.prepareDelete(from: tableName)
+        let delete = try database.prepareDelete(fromTable: tableName)
         try delete.execute()
     }catch let error {
         print("delete error: \(error)")

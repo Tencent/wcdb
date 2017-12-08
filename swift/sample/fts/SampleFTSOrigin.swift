@@ -21,23 +21,25 @@
 import Foundation
 import WCDB
 
-class SampleFTSOrigin: WCDB.CodableTable {
+class SampleFTSOrigin: WCDB.TableCodable {
     var localID: Int? = nil
     var name: String? = nil
     var content: String? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleFTSOrigin    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case localID    
+        case name    
+        case content     
+        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+            return [
+                .localID:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)
+            ]
+        }
+    }
     required init() {}
 
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
 
-//WCDB
-extension SampleFTSOrigin {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleFTSOrigin.localID, isPrimary: true, isAutoIncrement: true),
-            ColumnBinding(\SampleFTSOrigin.name),
-            ColumnBinding(\SampleFTSOrigin.content)]
-    }
-}

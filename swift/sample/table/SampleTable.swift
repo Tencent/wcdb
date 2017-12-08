@@ -21,21 +21,16 @@
 import Foundation
 import WCDB
 
-class SampleTable: WCDB.CodableTable {
+class SampleTable: WCDB.TableCodable {
     var intValue: Int? = nil
     var stringValue: String? = nil
-    
-    required init() {}
-
-    var isAutoIncrement: Bool = false
-    var lastInsertedRowID: Int64 = 0
-}
-
-//WCDB
-extension SampleTable {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleTable.intValue),
-            ColumnBinding(\SampleTable.stringValue)]
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleTable    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        
+        case intValue
+        case stringValue
     }
+    required init() {}
 }
+

@@ -21,23 +21,26 @@
 import WCDB
 import Foundation
 
-class SampleORMColumnConstraint: WCDB.CodableTable {
+class SampleORMColumnConstraint: WCDB.TableCodable {
     var primaryProperty: Int? = nil
     var uniqueProperty: String? = nil
     var notNullProperty: Data? = nil
-
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleORMColumnConstraint    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case primaryProperty    
+        case uniqueProperty    
+        case notNullProperty    
+        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+            return [
+                .primaryProperty:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
+                .uniqueProperty:ColumnConstraintBinding(isNotNull: true),
+                .notNullProperty:ColumnConstraintBinding(isUnique: true)
+            ]
+        }
+    }
     required init() {}
-
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
 
-//WCDB
-extension SampleORMColumnConstraint {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleORMColumnConstraint.primaryProperty, isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
-            ColumnBinding(\SampleORMColumnConstraint.notNullProperty, isNotNull: true),
-            ColumnBinding(\SampleORMColumnConstraint.uniqueProperty, isUnique: true)]
-    }
-}

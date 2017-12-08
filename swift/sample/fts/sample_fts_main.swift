@@ -47,7 +47,7 @@ func sample_fts_main(baseDirectory: String) {
             object.name = "English"
             object.content = "This is sample content"
             object.isAutoIncrement = true
-            try databaseOrigin.insert(objects: object, into: tableNameOrigin)
+            try databaseOrigin.insert(objects: object, intoTable: tableNameOrigin)
         }
         do {
             //Number
@@ -55,7 +55,7 @@ func sample_fts_main(baseDirectory: String) {
             object.name = "Number"
             object.content = "123"
             object.isAutoIncrement = true
-            try databaseOrigin.insert(objects: object, into: tableNameOrigin)
+            try databaseOrigin.insert(objects: object, intoTable: tableNameOrigin)
         }
         do {
             //Chinese
@@ -63,7 +63,7 @@ func sample_fts_main(baseDirectory: String) {
             object.name = "Chinese"
             object.content = "这是测试内容"
             object.isAutoIncrement = true
-            try databaseOrigin.insert(objects: object, into: tableNameOrigin)
+            try databaseOrigin.insert(objects: object, intoTable: tableNameOrigin)
         }
     }catch let error {
         print("prepare error: \(error)")
@@ -88,7 +88,7 @@ func sample_fts_main(baseDirectory: String) {
         
     //Build Full-Text-Search Index
     do {
-        let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(from: tableNameOrigin)
+        let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(fromTable: tableNameOrigin)
         var ftsDataArray: [SampleFTSData] = []
         for object in objects {
             let ftsData = SampleFTSData()
@@ -96,14 +96,14 @@ func sample_fts_main(baseDirectory: String) {
             ftsData.content = object.content
             ftsDataArray.append(ftsData)
         }
-        try databaseFTS.insert(objects: ftsDataArray, into: tableNameFTS)
+        try databaseFTS.insert(objects: ftsDataArray, intoTable: tableNameFTS)
     }catch let error {
         print("build full-text-search index error: \(error)")
     }
     
     //Full-Text-Search by `match`
     do {
-        let ftsDataArray: [SampleFTSData] = try databaseFTS.getObjects(from: tableNameFTS, where: SampleFTSData.column(named: tableNameFTS).match("Eng*"))
+        let ftsDataArray: [SampleFTSData] = try databaseFTS.getObjects(fromTable: tableNameFTS, where: Column(named: tableNameFTS).match("Eng*"))
         for ftsData in ftsDataArray {
             print("Match name:\(ftsData.name ?? "") content:\(ftsData.content ?? "")")
         }
@@ -114,8 +114,8 @@ func sample_fts_main(baseDirectory: String) {
     //Full-Text-Search info by `match`
     //See http://www.sqlite.org/fts3.html#snippet for further information
     do {
-        let tableProperty = SampleFTSData.column(named: tableNameFTS) 
-        let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), from: tableNameFTS, where: tableProperty.match("12*")))!
+        let tableProperty = Column(named: tableNameFTS) 
+        let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), fromTable: tableNameFTS, where: tableProperty.match("12*")))!
         
         print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
     }catch let error {

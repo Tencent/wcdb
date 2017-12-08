@@ -24,9 +24,8 @@ import WCDB
 func sample_orm_main(baseDirectory: String) {
     print("Sample-ORM Begin")
     
-    let clses: [CodableTable.Type] = [ SampleORM.self, SampleORMIndex.self, SampleORMColumnConstraint.self, SampleORMTableConstraint.self ]
-    for cls in clses {
-        let className = String(describing: cls)
+    func printSchemas<TableEncodableType: TableEncodable>(of type: TableEncodableType.Type) {
+        let className = String(describing: type)
         let filename = className
         let tableName = className
         
@@ -37,13 +36,13 @@ func sample_orm_main(baseDirectory: String) {
         })
         
         do {
-            try database.create(table: tableName, of: cls)
+            try database.create(table: tableName, of: type)
         }catch let error {
             print("create table error: \(error)")
         }
         
         do {
-            let schemas: [Master] = try database.getObjects(on: \Master.name, \Master.sql, from: Master.tableName)
+            let schemas: [Master] = try database.getObjects(on: Master.CodingKeys.name, Master.CodingKeys.sql, fromTable: Master.tableName)
             schemas.forEach({ (table) in
                 print("SQL of \(table.name ?? ""): \(table.sql ?? "" )")
             })
@@ -51,6 +50,11 @@ func sample_orm_main(baseDirectory: String) {
             print("get schemas error: \(error)")
         }
     }
+    
+    printSchemas(of: SampleORM.self)
+    printSchemas(of: SampleORMIndex.self)
+    printSchemas(of: SampleORMColumnConstraint.self)
+    printSchemas(of: SampleORMTableConstraint.self)
     
     print("Sample-ORM End")
 }

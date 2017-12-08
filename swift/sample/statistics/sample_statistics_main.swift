@@ -54,7 +54,7 @@ func sample_statistics_main(baseDirectory: String) {
     
     //error
     do {
-        Database.globalTrace(ofErrorReport: { (error) in
+        Database.globalTrace(ofError: { (error) in
             print("Error: \(error)")
         })
     }
@@ -69,7 +69,7 @@ func sample_statistics_main(baseDirectory: String) {
     do {
         let object = SampleStatistics()
         object.intValue = 100
-        try database.insert(objects: object, into: tableName)
+        try database.insert(objects: object, intoTable: tableName)
     }catch let error {
         print("insert error: \(error)")
     }
@@ -82,14 +82,14 @@ func sample_statistics_main(baseDirectory: String) {
             object.intValue = i
             objects.append(object)
         }
-        try database.insert(objects: objects, into: tableName)
+        try database.insert(objects: objects, intoTable: tableName)
         
         try database.run(transaction: { 
-            let results: [SampleStatistics] = try database.getObjects(from: tableName)
+            let results: [SampleStatistics] = try database.getObjects(fromTable: tableName)
             for object in results {
                 object.intValue = -(object.intValue ?? 0)
             }
-            try database.insert(objects: results, into: tableName)
+            try database.insert(objects: results, intoTable: tableName)
         })
     }catch let error{
         print("transaction error:\(error)")

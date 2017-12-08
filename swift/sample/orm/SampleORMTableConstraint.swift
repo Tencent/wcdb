@@ -21,34 +21,29 @@
 import Foundation
 import WCDB
 
-class SampleORMTableConstraint: WCDB.CodableTable {
+class SampleORMTableConstraint: WCDB.TableCodable {
     var primaryKeyPart1: Int? = nil
     var primaryKeyPart2: String? = nil
     
     var uniqueKeyPart1: Int? = nil
     var uniqueKeyPart2: Float? = nil
-    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = SampleORMTableConstraint    
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        case primaryKeyPart1    
+        case primaryKeyPart2    
+        case uniqueKeyPart1     
+        case uniqueKeyPart2    
+        static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
+            return [
+                "MultiPrimaryConstraint":MultiPrimaryBinding(indexesBy: CodingKeys.primaryKeyPart1.asIndex(orderBy: .Descending), CodingKeys.primaryKeyPart2),
+                "MultiUniqueConstraint":MultiUniqueBinding(indexesBy: CodingKeys.primaryKeyPart1, CodingKeys.primaryKeyPart2.asIndex(orderBy: .Ascending)),
+            ]        
+        }
+    }
     required init() {}
 
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
 
-//WCDB
-extension SampleORMTableConstraint {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\SampleORMTableConstraint.primaryKeyPart1),
-            ColumnBinding(\SampleORMTableConstraint.primaryKeyPart2),
-            ColumnBinding(\SampleORMTableConstraint.uniqueKeyPart1),
-            ColumnBinding(\SampleORMTableConstraint.uniqueKeyPart2)]
-    }
-    
-    static func constraintBindings() -> [ConstraintBinding]? {
-        return [
-            MultiUniqueBinding(named: "MultiPrimaryConstraint",
-                               indexesBy: (\SampleORMTableConstraint.primaryKeyPart1).asIndex(orderBy: .Descending), \SampleORMTableConstraint.primaryKeyPart2),
-            MultiPrimaryBinding(named: "MultiUniqueConstraint",
-                                indexesBy: \SampleORMTableConstraint.uniqueKeyPart1, (\SampleORMTableConstraint.uniqueKeyPart2).asIndex(orderBy: .Ascending))]
-    }
-}

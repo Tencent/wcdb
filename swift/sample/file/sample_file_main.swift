@@ -43,10 +43,13 @@ func sample_file_main(baseDirectory: String) {
     
     //Get file size
     do {
-        var fileSize: UInt64?
+        var fileSize: UInt64!
         database.close(onClosed: { 
-            fileSize = try? database.getFilesSize()
+            fileSize = try database.getFilesSize()
         })
+        print("file size: \(fileSize)")
+    }catch let error {
+        print("file size error: \(error)")
     }
     
     //Move files
@@ -61,6 +64,7 @@ func sample_file_main(baseDirectory: String) {
     //Get paths
     do {
         let paths = database.paths
+        print("paths: \(paths)")
     }
     
     print("Sample-file End")
