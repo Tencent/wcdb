@@ -1,5 +1,5 @@
-# pod lib lint --verbose --skip-import-validation WCDBSwift.spec
-# pod trunk push WCDBSwift.podspec --verbose --skip-import-validation
+# pod lib lint --verbose WCDBSwift.spec
+# pod trunk push WCDBSwift.podspec --verbose
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDBSwift"
   wcdb.version      = "1.0.0"
@@ -15,8 +15,8 @@ Pod::Spec.new do |wcdb|
   wcdb.author             = { "sanhuazhang" => "sanhuazhang@tencent.com" }
   wcdb.ios.deployment_target = "8.0"
   wcdb.osx.deployment_target = "10.9"
-  # s.watchos.deployment_target = "2.0"
-  # s.tvos.deployment_target = "9.0"
+  wcdb.watchos.deployment_target = "2.0"
+  wcdb.tvos.deployment_target = "9.0"
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.source_files  = "swift/source/**/*.swift", "swift/source/**/**/*.swift", "swift/source/util/*.{h,c}", "repair"
   wcdb.module_name = "WCDB"
