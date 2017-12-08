@@ -17,7 +17,6 @@ Pod::Spec.new do |wcdb|
   wcdb.osx.deployment_target = "10.9"
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
-  wcdb.module_name      = 'WCDB'
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.source_files  = "swift/source/**/*.swift", "swift/source/**/**/*.swift", "swift/source/util/*.{h,c}", "repair"
   wcdb.libraries = "z"
