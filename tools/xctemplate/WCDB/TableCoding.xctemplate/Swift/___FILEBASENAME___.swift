@@ -3,58 +3,57 @@
 import Foundation
 import WCDB
 
-class ___VARIABLE_productName___: WCDB.TableCoding {
+class ___VARIABLE_productName___: WCDB.TableCodable {
     //Your own properties
+    let variable1: Int = 0
+    var variable2: String? = nil // Optional if it would be nil in some WCDB selection
+    var variable3: Double? = nil // Optional if it would be nil in some WCDB selection
+    let unbound: Date? = nil
     
+    //It must can be initialized
     required init() {
         <#required init#>
     }
-
-    //WCDB
-    static var objectRelationalMapping: TableBinding = TableBinding(___VARIABLE_productName___.self)
-
-    var isAutoIncrement: Bool = false
-    var lastInsertedRowID: Int64 = 0
-}
-
-//WCDB
-extension ___VARIABLE_productName___ {
-    static func columnBindings() -> [AnyColumnBinding] {
-        return [
-            ColumnBinding(\___VARIABLE_productName___.<#primary property#>, isPrimary: <#true or false#>, orderBy: <#.Ascending or .Descending#>, isAutoIncrement: <#true or false#>),
-            ColumnBinding(\___VARIABLE_productName___.<#property 1#>),
-            ColumnBinding(\___VARIABLE_productName___.<#property 2#>, alias:"<#alias name in database#>"),
-            ColumnBinding(\___VARIABLE_productName___.<#property 3#>, isNotNull: <#true or false#>),
-            ColumnBinding(\___VARIABLE_productName___.<#property 4#>, isUnique: <#true or false#>),
-            ColumnBinding(\___VARIABLE_productName___.<#property 5#>, defaultTo: <#default value#>)]
+    
+    enum CodingKeys: String, CodingTableKey {
+        typealias Root = ___VARIABLE_productName___
+        
+        //List the properties which should be bound to table
+        case variable1 = "custom_name"
+        case variable2
+        case variable3
+        
+        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        
+        //Column constraints for primary key, unique, not null, default value and so on. It is optional.
+        //static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+        //    return [
+        //        .variable:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true),
+        //        .variable2:ColumnConstraintBinding(isUnique: true)
+        //    ]
+        //}
+        
+        //Index bindings. It is optional.
+        //static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+        //    return [
+        //        "_index":IndexBinding(indexesBy: CodingKeys.variable2)
+        //    ]
+        //}
+        
+        //Table constraints for multi-primary, multi-unique and so on. It is optional.
+        //static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
+        //    return [
+        //        "MultiPrimaryConstraint":MultiPrimaryBinding(indexesBy: variable2.asIndex(orderBy: .Descending), variable3.primaryKeyPart2)
+        //    ]
+        //}
+        
+        //Virtual table binding for FTS and so on. It is optional.
+        //static var __virtualTableBinding: VirtualTableBinding? {
+        //    return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
+        //}
     }
-    
-//    //optional
-//    static func indexBindings() -> [IndexBinding]? {
-//        return [
-//            IndexBinding(withSubfix: "<#subfix name of this index#>", 
-//                         indexesBy: (\___VARIABLE_productName___.<#property 1#>).asIndex(orderBy: <#.Ascending or .Descending#>)),
-//            IndexBinding(withSubfix: "<#subfix name of this multiple indexes#>", 
-//                         indexesBy: (\___VARIABLE_productName___.<#property 2#>).asIndex(orderBy: <#.Ascending or .Descending#>), 
-//                                    (\___VARIABLE_productName___.<#property 3#>).asIndex(orderBy: <#.Ascending or .Descending#>))]
-//    }
-    
-//    //optional
-//    static func constraintBindings() -> [ConstraintBinding]? {
-//        return [
-//            MultiUniqueBinding(named: "<#multiple unique constraint name#>",
-//                               indexesBy: (\___VARIABLE_productName___.<#property 1#>).asIndex(), (\___VARIABLE_productName___.<#property 2#>).asIndex(), 
-//                               onConflict: .Fail),
-//            MultiPrimaryBinding(named: "<#multiple primary constraint name#>",
-//                               indexesBy: (\___VARIABLE_productName___.<#property 3#>).asIndex(), (\___VARIABLE_productName___.<#property 4#>).asIndex(),
-//                               onConflict: .Fail)]
-//    }
-    
-//    //optional
-//    static func virtualTableBinding() -> VirtualTableBinding? {
-//        return VirtualTableBinding(withModule: "<#module name#>", and: [
-//            ModuleArgument(left: "<#left argument#>", right: "<#right argument#>"),
-//            ModuleArgument(withTokenize: "<#tokenize#>")
-//            ])
-//    }
+
+    //Properties below are needed only the primary key is auto-incremental
+    //var isAutoIncrement: Bool = false
+    //var lastInsertedRowID: Int64 = 0
 }

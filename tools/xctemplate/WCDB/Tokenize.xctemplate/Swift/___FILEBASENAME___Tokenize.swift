@@ -54,7 +54,10 @@ public class ___VARIABLE_productName___Module: Module {
     }, 
                                                  xLanguageid: nil)
     
-    public static let address = Data(bytes: &module, count: MemoryLayout<UnsafePointer<sqlite3_tokenizer_module>>.size)
+    public static let address = { () -> Data in
+        var pointer = UnsafeMutableRawPointer(&module)
+        return Data(bytes: &pointer, count: MemoryLayout.size(ofValue: pointer))
+    }()
 }
 
 extension Tokenize {
