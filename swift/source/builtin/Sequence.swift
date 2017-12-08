@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Sequence: TableCodable, CustomStringConvertible {
+public class Sequence: TableCodable, CustomDebugStringConvertible {
     public static let tableName: String = "sqlite_sequence"
     
     public var name: String? = nil
@@ -37,7 +37,7 @@ public class Sequence: TableCodable, CustomStringConvertible {
     
     public required init() {}
     
-    public var description: String {
+    public var debugDescription: String {
         return "name:\(name ?? ""), seq:\(seq ?? Int.max)"
     }
 }

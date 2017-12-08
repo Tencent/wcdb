@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Master: TableCodable, CustomStringConvertible {
+public class Master: TableCodable, CustomDebugStringConvertible {
     public static let tableName: String = "sqlite_master"
     
     public var type: String? = nil
@@ -43,7 +43,7 @@ public class Master: TableCodable, CustomStringConvertible {
     
     public required init() {}
     
-    public var description: String {
+    public var debugDescription: String {
         return "type:\(type ?? ""), name:\(name ?? ""), tableName:\(tableName ?? ""), rootpage:\(rootpage ?? Int.max), sql:\(sql ?? "")"
     }
 }
