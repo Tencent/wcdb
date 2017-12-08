@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-import WCDB
+import WCDBSwift
 
 enum SampleORMType: Int, ColumnCodable {
     case SampleORMType1 = 1

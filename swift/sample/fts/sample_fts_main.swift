@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_fts_main(baseDirectory: String) {
     print("Sample-fts Begin")

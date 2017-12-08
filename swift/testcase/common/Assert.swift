@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 func XCTAssertEqual(_ expression1: @autoclosure () -> String, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     let description1 = expression1()
@@ -64,7 +64,7 @@ func ORMVirtualTableBindingAssertEqual<TableCodableObject: TableCodable>(_ expre
 func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line, whenFailed failedValue: @autoclosure () -> T) -> T {
     do {
         return try expression()
-    }catch let error as WCDB.Error {
+    }catch let error as WCDBSwift.Error {
         XCTFail(error.description)
     }catch {
         XCTFail(error.localizedDescription)

@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_statistics_main(baseDirectory: String) {
     print("Sample-statistics Begin")

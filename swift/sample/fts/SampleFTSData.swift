@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class SampleFTSData: TableCodable {
     var name: String? = nil

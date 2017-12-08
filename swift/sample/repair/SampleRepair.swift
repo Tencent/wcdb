@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class SampleRepair: TableCodable {
     var identifier: Int? = nil

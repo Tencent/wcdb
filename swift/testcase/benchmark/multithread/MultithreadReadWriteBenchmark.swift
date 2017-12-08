@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
     
@@ -51,7 +51,7 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
             queue.async(group: group, execute: { 
                 do {
                     try self.database.insert(objects: self.objects, intoTable: tableName)
-                }catch let error as WCDB.Error {
+                }catch let error as WCDBSwift.Error {
                     XCTFail(error.description)
                 }catch let error {
                     XCTFail(error.localizedDescription)

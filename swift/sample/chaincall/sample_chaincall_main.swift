@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_chailcall_main(baseDirectory: String) {
     print("Sample-chaincall Begin")

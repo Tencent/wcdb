@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 class TableTests: BaseTestCase {    
     var database: Database!

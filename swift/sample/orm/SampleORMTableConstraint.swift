@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class SampleORMTableConstraint: TableCodable {
     var primaryKeyPart1: Int? = nil

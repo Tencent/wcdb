@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 class BaseTestCase: XCTestCase, Named {
     static let baseDirectory: URL = {

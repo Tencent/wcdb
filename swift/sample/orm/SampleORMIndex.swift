@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-import WCDB
+import WCDBSwift
 
 class SampleORMIndex: TableCodable {
     var indexProperty: Int? = nil

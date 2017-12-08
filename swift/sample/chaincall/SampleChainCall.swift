@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class SampleChainCall: TableCodable {
     var intValue: Int? = nil

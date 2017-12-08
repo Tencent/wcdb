@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 class FileTests: BaseTestCase {
     var database: Database!

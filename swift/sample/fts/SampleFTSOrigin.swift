@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class SampleFTSOrigin: TableCodable {
     var localID: Int? = nil

@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class CRUDObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible {    
     var hashValue: Int {

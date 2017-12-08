@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_core_main(baseDirectory: String) {
     print("Sample-core Begin")
@@ -73,10 +73,10 @@ func sample_core_main(baseDirectory: String) {
     do {
         print("Explain:")
         //Column def for localID
-        let localIDColumnDef = ColumnDef(with: SampleCore.CodingKeys.localID, and: .Integer32).makePrimary(orderBy: .Ascending)
+        let localIDColumnDef = ColumnDef(with: SampleCore.Properties.localID, and: .Integer32).makePrimary(orderBy: .Ascending)
         
         //Column def for content
-        let contentColumnDef = ColumnDef(with: SampleCore.CodingKeys.content, and: .Text)
+        let contentColumnDef = ColumnDef(with: SampleCore.Properties.content, and: .Text)
         
         //Combine table name and column def list into create table statement
         let statementCreate = StatementCreateTable().create(table: "message", with: localIDColumnDef, contentColumnDef)
@@ -96,7 +96,7 @@ func sample_core_main(baseDirectory: String) {
     //SELECT message.content, message_ext.createTime FROM message LEFT OUTER JOIN message_ext ON message.localID=message_ext.localID
     do {
         //Column result list
-        let resultList = [(SampleCore.CodingKeys.content).in(table: "message"), (SampleCoreExt.CodingKeys.createTime).in(table: "message_ext")]
+        let resultList = [(SampleCore.Properties.content).in(table: "message"), (SampleCoreExt.CodingKeys.createTime).in(table: "message_ext")]
         
         //Join clause
         let joinClause = JoinClause(withTable: "message").join("message_ext", with: .LeftOuter).on((SampleCore.CodingKeys.localID).in(table: "message") == (SampleCoreExt.CodingKeys.localID).in(table: "message_ext"))

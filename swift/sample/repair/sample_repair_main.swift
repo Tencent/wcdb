@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_repair_main(baseDirectory: String) {
     print("Sample-repair Begin")

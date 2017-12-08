@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 class BaselineBatchWriteBenchmark: BaseBenchmark {
 
@@ -42,7 +42,7 @@ class BaselineBatchWriteBenchmark: BaseBenchmark {
         }, for: { 
             do {
                 try database.insert(objects: objects, intoTable: tableName)
-            }catch let error as WCDB.Error {
+            }catch let error as WCDBSwift.Error {
                 XCTFail(error.description)
             }catch let error {
                 XCTFail(error.localizedDescription)

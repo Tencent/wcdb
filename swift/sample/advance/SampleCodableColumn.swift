@@ -19,9 +19,9 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
-class SampleCodableColumn: WCDB.ColumnCodable {
+class SampleCodableColumn: ColumnCodable {
     typealias FundamentalType = Double
     var floatValue: Float? = nil
     required init?(with value: Double) {

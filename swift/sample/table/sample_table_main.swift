@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_table_main(baseDirectory: String) {
     print("Sample-table Begin")
@@ -49,7 +49,7 @@ func sample_table_main(baseDirectory: String) {
         
     //Create table from column def
     do {
-        try database.create(table: tableName, with: (SampleTable.CodingKeys.intValue).asDef(with: .Integer32), (SampleTable.CodingKeys.stringValue).asDef(with: .Text) )
+        try database.create(table: tableName, with: (SampleTable.Properties.intValue).asDef(with: .Integer32), (SampleTable.Properties.stringValue).asDef(with: .Text) )
     }catch let error {
         print("create table from column def error: \(error)")
     }
@@ -58,7 +58,7 @@ func sample_table_main(baseDirectory: String) {
     let indexSubfix = "_index"
     let indexName = tableName + indexSubfix
     do {
-        try database.create(index: indexName, with: (SampleTable.CodingKeys.stringValue).asIndex(orderBy: .Ascending) , forTable: tableName)
+        try database.create(index: indexName, with: (SampleTable.Properties.stringValue).asIndex(orderBy: .Ascending) , forTable: tableName)
     }catch let error {
         print("create index error: \(error)")
     }
@@ -73,8 +73,8 @@ func sample_table_main(baseDirectory: String) {
     //Add column
     do {
         let tableName2 = tableName + "2"
-        try database.create(table: tableName2, with: (SampleTable.CodingKeys.intValue).asDef(with: .Integer32) )
-        try database.addColumn(with: (SampleTable.CodingKeys.stringValue).asDef(with: .Text), forTable: tableName2)
+        try database.create(table: tableName2, with: (SampleTable.Properties.intValue).asDef(with: .Integer32) )
+        try database.addColumn(with: (SampleTable.Properties.stringValue).asDef(with: .Text), forTable: tableName2)
     }catch let error {
         print("add column error: \(error)")
     }

@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 func sample_advance_main(baseDirectory: String) {
     print("Sample-advance Begin")
@@ -64,7 +64,7 @@ func sample_advance_main(baseDirectory: String) {
     
     //Multi select
     do {
-        let select = try database.prepareMultiSelect(on: (SampleAdvance.CodingKeys.intValue).in(table: tableName), (SampleAdvanceMulti.CodingKeys.intValue).in(table: tableName2), fromTables: [tableName, tableName2]).where((SampleAdvance.CodingKeys.intValue).in(table: tableName)==(SampleAdvanceMulti.CodingKeys.intValue).in(table: tableName2))
+        let select = try database.prepareMultiSelect(on: (SampleAdvance.Properties.intValue).in(table: tableName), (SampleAdvanceMulti.Properties.intValue).in(table: tableName2), fromTables: [tableName, tableName2]).where((SampleAdvance.Properties.intValue).in(table: tableName)==(SampleAdvanceMulti.Properties.intValue).in(table: tableName2))
         let multiObjects = select.allMultiObjects
     }catch let error {
         print("multi select error: \(error)")

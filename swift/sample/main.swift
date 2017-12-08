@@ -19,7 +19,7 @@
  */
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 let machPath = CommandLine.arguments.first!
 let baseDirectory = URL(fileURLWithPath: machPath).deletingLastPathComponent().appendingPathComponent("SampleDB").path

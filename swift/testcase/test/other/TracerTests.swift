@@ -19,7 +19,7 @@
  */
 
 import XCTest
-import WCDB
+import WCDBSwift
 
 class TracerTests: BaseTestCase {
     
@@ -64,13 +64,13 @@ class TracerTests: BaseTestCase {
         //Give
         let expectedTag = 1234
         let expectedErrorCode = 1
-        let expectedErrorMessage = "no such table: \(WCDB.Sequence.tableName)"
+        let expectedErrorMessage = "no such table: \(WCDBSwift.Sequence.tableName)"
         let expectedOperation = 3
         let expectedSQL = "SELECT * FROM sqlite_sequence"
         
         //Then
         var `catch` = false
-        Database.globalTrace { (error: WCDB.Error) in
+        Database.globalTrace { (error: WCDBSwift.Error) in
             if error.type == .SQLite {
                 let tag = error.tag
                 XCTAssertNotNil(tag)
@@ -101,7 +101,7 @@ class TracerTests: BaseTestCase {
         database.tag = expectedTag
         
         //When
-        XCTAssertThrowsError(try database.getRows(on: WCDB.Sequence.Properties.any, fromTable: WCDB.Sequence.tableName))
+        XCTAssertThrowsError(try database.getRows(on: WCDBSwift.Sequence.Properties.any, fromTable: WCDBSwift.Sequence.tableName))
         
         XCTAssertTrue(`catch`)
     }
