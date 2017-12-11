@@ -19,7 +19,7 @@
  */
 
 import Foundation
-public final class LiteralValue: Describable {
+public struct LiteralValue: Describable {
     public private(set) var description: String
 
     public init(_ value: Int32) {
@@ -51,7 +51,7 @@ public final class LiteralValue: Describable {
         description = "NULL"
     }
 
-    public convenience init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
+    public init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
         if let value = columnEncodableValue.archivedFundamentalValue() {
             switch ColumnEncodableType.columnType {
             case .integer32:
@@ -94,31 +94,31 @@ public final class LiteralValue: Describable {
 }
 
 extension LiteralValue: ExpressibleByNilLiteral {
-    public convenience init(nilLiteral: ()) {
+    public init(nilLiteral: ()) {
         self.init(nilLiteral)
     }
 }
 
 extension LiteralValue: ExpressibleByIntegerLiteral {
-    public convenience init(integerLiteral value: Int) {
+    public init(integerLiteral value: Int) {
         self.init(value)
     }
 }
 
 extension LiteralValue: ExpressibleByBooleanLiteral {
-    public convenience init(booleanLiteral value: Bool) {
+    public init(booleanLiteral value: Bool) {
         self.init(value)
     }
 }
 
 extension LiteralValue: ExpressibleByFloatLiteral {
-    public convenience init(floatLiteral value: Double) {
+    public init(floatLiteral value: Double) {
         self.init(value)
     }
 }
 
 extension LiteralValue: ExpressibleByStringLiteral {
-    public convenience init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         self.init(value)
     }
 }

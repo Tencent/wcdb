@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class Column: Describable {
+public struct Column: Describable {
     public private(set) var description: String
 
     public static let any: Column = Column(named: "*")

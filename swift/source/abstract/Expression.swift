@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class Expression: Describable {
+public struct Expression: Describable {
     public private(set) var description: String
 
     public static let bindingParameter = Expression(withRaw: "?")
@@ -43,27 +43,27 @@ public final class Expression: Describable {
 }
 
 extension Expression: ExpressibleByNilLiteral {
-    public convenience init(nilLiteral value: ()) {
+    public init(nilLiteral value: ()) {
         self.init(with: LiteralValue(value))
     }
 }
 extension Expression: ExpressibleByBooleanLiteral {
-    public convenience init(booleanLiteral value: Bool) {
+    public init(booleanLiteral value: Bool) {
         self.init(with: LiteralValue(value))
     }
 }
 extension Expression: ExpressibleByIntegerLiteral {
-    public convenience init(integerLiteral value: Int) {
+    public init(integerLiteral value: Int) {
         self.init(with: LiteralValue(value))
     }
 }
 extension Expression: ExpressibleByFloatLiteral {
-    public convenience init(floatLiteral value: Double) {
+    public init(floatLiteral value: Double) {
         self.init(with: LiteralValue(value))
     }
 }
 extension Expression: ExpressibleByStringLiteral {
-    public convenience init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         self.init(with: LiteralValue(value))
     }
 }

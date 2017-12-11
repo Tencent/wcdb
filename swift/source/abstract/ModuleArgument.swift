@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class ModuleArgument: Describable {
+public struct ModuleArgument: Describable {
     public private(set) var description: String
 
     public init(with tableConstraint: TableConstraint) {
@@ -35,11 +35,11 @@ public final class ModuleArgument: Describable {
         description = "\(left)=\(right)"
     }
 
-    public convenience init(with tokenize: Tokenize) {
+    public init(with tokenize: Tokenize) {
         self.init(left: "tokenize", right: tokenize.module.name)
     }
 
-    public convenience init(withTokenize tokenize: String) {
+    public init(withTokenize tokenize: String) {
         self.init(left: "tokenize", right: tokenize)
     }
 }

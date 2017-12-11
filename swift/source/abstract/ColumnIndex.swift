@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class ColumnIndex: Describable {
+public struct ColumnIndex: Describable {
     public private(set) var description: String
 
     public init(with columnConvertible: ColumnConvertible, orderBy term: OrderTerm? = nil) {

@@ -28,7 +28,7 @@ public final class ColumnResult: Describable {
     }
 
     @discardableResult
-    public func `as`(_ alias: String) -> Self {
+    public func `as`(_ alias: String) -> ColumnResult {
         description.append(" AS " + alias)
         return self
     }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class Order: Describable {
+public struct Order: Describable {
     public private(set) var description: String
 
     public init(with expressionConvertible: ExpressionConvertible, by term: OrderTerm? = nil) {

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class VirtualTableBinding {
+public struct VirtualTableBinding {
     let arguments: [ModuleArgument]
     let module: String
 
@@ -29,15 +29,15 @@ public final class VirtualTableBinding {
         self.arguments = arguments
     }
 
-    public convenience init(withModule module: String, and arguments: ModuleArgument...) {
+    public init(withModule module: String, and arguments: ModuleArgument...) {
         self.init(withModule: module, and: arguments)
     }
 
-    public convenience init(with module: FTSModule, and arguments: [ModuleArgument]) {
+    public init(with module: FTSModule, and arguments: [ModuleArgument]) {
         self.init(withModule: module.name, and: arguments)
     }
 
-    public convenience init(with module: FTSModule, and arguments: ModuleArgument...) {
+    public init(with module: FTSModule, and arguments: ModuleArgument...) {
         self.init(withModule: module.name, and: arguments)
     }
 }

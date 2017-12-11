@@ -20,4 +20,5 @@
 
 import Foundation
 
+//TODO: Refactor: change all winq classes into structs
 public typealias Describable = CustomStringConvertible

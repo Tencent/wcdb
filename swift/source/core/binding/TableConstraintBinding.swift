@@ -20,54 +20,85 @@
 
 import Foundation
 
-public class TableConstraintBinding {
-    public typealias Name = String
+public protocol TableConstraintBinding {
+    typealias Name = String
+    func generateConstraint(withName name: String) -> TableConstraint
+}
 
+public struct MultiPrimaryBinding: TableConstraintBinding {
     let conflict: Conflict?
-    let columnIndexes: [ColumnIndex]
-    let condition: Condition?
+    let columnIndexConvertibleList: [ColumnIndexConvertible]
 
-    public convenience init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...,
-                            onConflict conflict: Conflict? = nil,
-                            check condition: Condition? = nil) {
-        self.init(indexesBy: columnIndexConvertibleList, onConflict: conflict, check: condition)
+    public init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...,
+                onConflict conflict: Conflict? = nil) {
+        self.init(indexesBy: columnIndexConvertibleList, onConflict: conflict)
     }
 
     public init(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible],
-                onConflict conflict: Conflict? = nil,
-                check condition: Condition? = nil) {
-        self.columnIndexes = columnIndexConvertibleList.asIndexes()
+                onConflict conflict: Conflict? = nil) {
+        self.columnIndexConvertibleList = columnIndexConvertibleList
         self.conflict = conflict
+    }
+
+    public func generateConstraint(withName name: String) -> TableConstraint {
+        let tableConstraint = TableConstraint(named: name).makePrimary(indexesBy: columnIndexConvertibleList)
+        if let wrappedConflict = conflict {
+            tableConstraint.onConflict(wrappedConflict)
+        }
+        return tableConstraint
+    }
+}
+
+public struct MultiUniqueBinding: TableConstraintBinding {
+    let conflict: Conflict?
+    let columnIndexConvertibleList: [ColumnIndexConvertible]
+
+    public init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...,
+                onConflict conflict: Conflict? = nil) {
+        self.init(indexesBy: columnIndexConvertibleList, onConflict: conflict)
+    }
+
+    public init(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible],
+                onConflict conflict: Conflict? = nil) {
+        self.columnIndexConvertibleList = columnIndexConvertibleList
+        self.conflict = conflict
+    }
+
+    public func generateConstraint(withName name: String) -> TableConstraint {
+        let tableConstraint = TableConstraint(named: name).makeUnique(indexesBy: columnIndexConvertibleList)
+        if let wrappedConflict = conflict {
+            tableConstraint.onConflict(wrappedConflict)
+        }
+        return tableConstraint
+    }
+}
+
+public struct CheckBinding: TableConstraintBinding {
+    let condition: Expression
+
+    public init(check condition: Expression) {
         self.condition = condition
     }
 
-    func generateConstraint(withName name: String) -> TableConstraint {
-        Error.abort("")
+    public func generateConstraint(withName name: String) -> TableConstraint {
+        return TableConstraint(named: name).check(condition)
     }
 }
 
-public final class MultiPrimaryBinding: TableConstraintBinding {
-    override func generateConstraint(withName name: String) -> TableConstraint {
-        var tableConstraint = TableConstraint(named: name).makePrimary(indexesBy: columnIndexes)
-        if conflict != nil {
-            tableConstraint = tableConstraint.onConflict(conflict!)
-        }
-        if condition != nil {
-            tableConstraint = tableConstraint.check(condition!)
-        }
-        return tableConstraint
-    }
-}
+public struct ForeignKeyBinding: TableConstraintBinding {
+    let columnConvertibleList: [ColumnConvertible]
+    let foreignKey: ForeignKey
 
-public final class MultiUniqueBinding: TableConstraintBinding {
-    override func generateConstraint(withName name: String) -> TableConstraint {
-        var tableConstraint = TableConstraint(named: name).makeUnique(indexesBy: columnIndexes)
-        if conflict != nil {
-            tableConstraint = tableConstraint.onConflict(conflict!)
-        }
-        if condition != nil {
-            tableConstraint = tableConstraint.check(condition!)
-        }
-        return tableConstraint
+    public init(_ columnConvertibleList: ColumnConvertible..., foreignKey: ForeignKey) {
+        self.init(columnConvertibleList, foreignKey: foreignKey)
+    }
+
+    public init(_ columnConvertibleList: [ColumnConvertible], foreignKey: ForeignKey) {
+        self.columnConvertibleList = columnConvertibleList
+        self.foreignKey = foreignKey
+    }
+
+    public func generateConstraint(withName name: String) -> TableConstraint {
+        return TableConstraint(named: name).makeForeignKey(columnConvertibleList, foreignKey: foreignKey)
     }
 }

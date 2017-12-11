@@ -59,4 +59,17 @@ public final class TableConstraint: Describable {
         description.append(" CHECK\(expressionConvertible.asExpression().description)")
         return self
     }
+
+    @discardableResult
+    public func makeForeignKey(_ columnConvertibleList: ColumnConvertible...,
+                               foreignKey: ForeignKey) -> TableConstraint {
+        return makeForeignKey(columnConvertibleList, foreignKey: foreignKey)
+    }
+
+    @discardableResult
+    public func makeForeignKey(_ columnConvertibleList: [ColumnConvertible],
+                               foreignKey: ForeignKey) -> TableConstraint {
+        description.append(" FOREIGN KEY(\(columnConvertibleList.joined())) \(foreignKey.description)")
+        return self
+    }
 }

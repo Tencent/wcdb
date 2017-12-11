@@ -21,7 +21,7 @@
 import Foundation
 
 // nullable, Int32, Int64, Double, String, Data
-public final class FundamentalValue {
+public struct FundamentalValue {
     let base: FundamentalColumnType?
 
     init(_ _: Void? = nil) {
@@ -146,31 +146,31 @@ public final class FundamentalValue {
 }
 
 extension FundamentalValue: ExpressibleByNilLiteral {
-    public convenience init(nilLiteral: ()) {
+    public init(nilLiteral: ()) {
         self.init(nil)
     }
 }
 
 extension FundamentalValue: ExpressibleByIntegerLiteral {
-    public convenience init(integerLiteral value: Int) {
+    public init(integerLiteral value: Int) {
         self.init(value)
     }
 }
 
 extension FundamentalValue: ExpressibleByBooleanLiteral {
-    public convenience init(booleanLiteral value: Bool) {
+    public init(booleanLiteral value: Bool) {
         self.init(value)
     }
 }
 
 extension FundamentalValue: ExpressibleByFloatLiteral {
-    public convenience init(floatLiteral value: Double) {
+    public init(floatLiteral value: Double) {
         self.init(value)
     }
 }
 
 extension FundamentalValue: ExpressibleByStringLiteral {
-    public convenience init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         self.init(value)
     }
 }

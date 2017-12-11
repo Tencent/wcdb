@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class Pragma: Describable {
+public struct Pragma: Describable {
     public private(set) var description: String
 
     fileprivate init(named name: String) {

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     public enum ErrorValueType {
         case int
         case string
@@ -38,11 +38,11 @@ public final class ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringL
         self.type = .int
     }
 
-    convenience public init(integerLiteral value: Int) {
+    public init(integerLiteral value: Int) {
         self.init(value)
     }
 
-    convenience public init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         self.init(value)
     }
 
