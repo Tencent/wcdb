@@ -15,8 +15,8 @@ Pod::Spec.new do |wcdb|
   wcdb.author             = { "sanhuazhang" => "sanhuazhang@tencent.com" }
   wcdb.ios.deployment_target = "7.0"
   wcdb.osx.deployment_target = "10.9"
-  # s.watchos.deployment_target = "2.0"
-  # s.tvos.deployment_target = "9.0"
+  wcdb.watchos.deployment_target = "2.0"
+  wcdb.tvos.deployment_target = "9.0"
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.public_header_files = "objc/WCDB/WCDB.h", "objc/WCDB/**/*.{h,hpp}"
   wcdb.source_files  = "objc/WCDB/WCDB.h", "objc/WCDB/**/*.{h,m,hpp,cpp,mm}", "repair", \
