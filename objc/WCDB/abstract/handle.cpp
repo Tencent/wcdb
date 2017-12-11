@@ -278,7 +278,7 @@ void Handle::registerCommittedHook(const CommittedHook &onCommitted, void *info)
             [](void *p, sqlite3 *, const char *, int pages) -> int {
                 CommittedHookInfo *committedHookInfo = (CommittedHookInfo *) p;
                 committedHookInfo->onCommitted(committedHookInfo->handle, pages,
-                                             committedHookInfo->info);
+                                               committedHookInfo->info);
                 return SQLITE_OK;
             },
             &m_committedHookInfo);
@@ -335,8 +335,8 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
     sqliterk *rk;
     rc = sqliterk_open(corruptedDBPath.c_str(), &conf, &rk);
     if (rc != SQLITERK_OK) {
-        Error::ReportRepair(
-            corruptedDBPath, WCDB::Error::RepairOperation::Repair, rc, &m_error);
+        Error::ReportRepair(corruptedDBPath,
+                            WCDB::Error::RepairOperation::Repair, rc, &m_error);
         return false;
     }
 

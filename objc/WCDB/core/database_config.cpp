@@ -75,11 +75,11 @@ const Configs Database::defaultConfigs(
              if (handle->isReadonly()) {
 #if DEBUG
                  static const StatementPragma s_getJournalMode =
-                 StatementPragma().pragma(Pragma::JournalMode);
-                 
+                     StatementPragma().pragma(Pragma::JournalMode);
+
                  //Get Journal Mode
                  std::shared_ptr<StatementHandle> statementHandle =
-                 handle->prepare(s_getJournalMode);
+                     handle->prepare(s_getJournalMode);
                  if (!statementHandle) {
                      error = handle->getError();
                      return false;
@@ -90,11 +90,13 @@ const Configs Database::defaultConfigs(
                      return false;
                  }
                  std::string journalMode =
-                 statementHandle->getValue<WCDB::ColumnType::Text>(0);
+                     statementHandle->getValue<WCDB::ColumnType::Text>(0);
                  statementHandle->finalize();
-                 
+
                  if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
-                     Error::Abort("It is not possible to open read-only WAL databases. See also: http://www.sqlite.org/wal.html#readonly");
+                     Error::Abort("It is not possible to open read-only WAL "
+                                  "databases. See also: "
+                                  "http://www.sqlite.org/wal.html#readonly");
                      return false;
                  }
 #endif

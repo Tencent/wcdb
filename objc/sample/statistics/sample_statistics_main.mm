@@ -70,16 +70,16 @@ void sample_statistics_main(NSString *baseDirectory)
             object.intValue = i;
         }
         [database insertObjects:objects into:tableName]
-        
-        [database runTransaction:^BOOL {
-          NSArray *results = [database getAllObjectsOfClass:WCTSampleStatistics.class
-                                                  fromTable:tableName];
-          for (WCTSampleStatistics *object in results) {
-              object.intValue = -object.intValue;
-          }
-          [database insertObjects:results into:tableName];
-          return YES;
-        }];
+
+            [database runTransaction:^BOOL {
+              NSArray *results = [database getAllObjectsOfClass:WCTSampleStatistics.class
+                                                      fromTable:tableName];
+              for (WCTSampleStatistics *object in results) {
+                  object.intValue = -object.intValue;
+              }
+              [database insertObjects:results into:tableName];
+              return YES;
+            }];
     }
 
     //error
