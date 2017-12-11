@@ -1,4 +1,4 @@
-# pod lib lint --verbose WCDB.swift.spec
+# pod lib lint --verbose WCDB.swift.podspec
 # pod trunk push WCDB.swift.podspec --verbose
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.swift"
