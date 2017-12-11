@@ -12,7 +12,7 @@
 		<string>.mm</string>
 	</array>
 	<key>--output</key>
-	<string>./doc</string>
+	<string>objc/</string>
 	<key>--create-docset</key>
 	<false/>
 	<key>--company-id</key>
