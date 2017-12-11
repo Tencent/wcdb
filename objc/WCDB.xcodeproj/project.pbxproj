@@ -2270,7 +2270,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/xctemplate\nmake || true";
+			shellScript = "cd ${PROJECT_DIR}/../tools/xctemplate\nmake || true";
 		};
 		23DE41AC1EF7707900227551 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2283,7 +2283,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/xctemplate\nmake || true";
+			shellScript = "cd ${PROJECT_DIR}/../tools/xctemplate\nmake || true";
 		};
 /* End PBXShellScriptBuildPhase section */
 
