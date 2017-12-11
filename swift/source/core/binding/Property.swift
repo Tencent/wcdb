@@ -22,39 +22,41 @@ import Foundation
 
 public protocol PropertyConvertible: ColumnConvertible, PropertyRedirectable {
     var codingTableKey: CodingTableKeyBase {get}
-    
+
     func asProperty() -> Property
-    
+
     func `in`(table: String) -> Property
 }
 
-public class Property: Describable, ExpressionOperable {
+public typealias PropertyOperable = PropertyConvertible & ExpressionOperable
+
+public class Property: Describable {
     public private(set) var codingTableKey: CodingTableKeyBase
-    
+
     public init(named name: String, with codingTableKey: CodingTableKeyBase) {
         self.codingTableKey = codingTableKey
         super.init(name)
-    }    
-    
+    }
+
     public init(with codingTableKey: CodingTableKeyBase) {
         self.codingTableKey = codingTableKey
         super.init(codingTableKey.stringValue)
     }
-   
+
     public var name: String {
         return description
-    }    
+    }
 }
 
-extension Property: PropertyConvertible {
+extension Property: PropertyOperable {
     public func asProperty() -> Property {
         return self
     }
-    
+
     public func `in`(table: String) -> Property {
         return Property(named: asColumn().in(table: table).description, with: codingTableKey)
     }
-    
+
     public func asColumn() -> Column {
         return Column(named: name)
     }

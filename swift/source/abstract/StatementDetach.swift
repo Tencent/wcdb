@@ -21,9 +21,9 @@
 import Foundation
 public class StatementDetach: Statement {
     public init() {
-        super.init(with: .Detach)
+        super.init(with: .detach)
     }
-    
+
     @discardableResult
     public func detach(schema: String) -> StatementDetach {
         description.append("DETACH \(schema)")

@@ -20,16 +20,18 @@
 
 import Foundation
 
-public class ColumnDef : Describable {
+public class ColumnDef: Describable {
     public init(with columnConvertible: ColumnConvertible, and optionalType: ColumnType? = nil) {
         super.init(columnConvertible.asColumn().name)
         if let type = optionalType {
             description.append(" \(type.description)")
         }
     }
-    
+
     @discardableResult
-    public func makePrimary(orderBy term: OrderTerm? = nil, isAutoIncrement: Bool = false, onConflict conflict: Conflict? = nil) -> ColumnDef{
+    public func makePrimary(orderBy term: OrderTerm? = nil,
+                            isAutoIncrement: Bool = false,
+                            onConflict conflict: Conflict? = nil) -> ColumnDef {
         description.append(" PRIMARY KEY")
         if term != nil {
             description.append(" \(term!.description)")
@@ -42,60 +44,60 @@ public class ColumnDef : Describable {
         }
         return self
     }
-    
+
     public enum DefaultType: CustomStringConvertible {
-        case Null
-        case Int32(Int32)
-        case Int64(Int64)
-        case Bool(Bool)
-        case Text(String)
-        case Float(Double)
+        case null
+        case int32(Int32)
+        case int64(Int64)
+        case bool(Bool)
+        case text(String)
+        case float(Double)
         case BLOB(Data)
-        case Expression(Expression)
-        case CurrentTime
-        case CurrentDate
-        case CurrentTimestamp
-        
+        case expression(Expression)
+        case currentTime
+        case currentDate
+        case currentTimestamp
+
         public var description: String {
             switch self {
-            case .Null:
+            case .null:
                 return "NULL"
-            case .Int32(let value):
+            case .int32(let value):
                 return LiteralValue(value).description
-            case .Int64(let value):
+            case .int64(let value):
                 return LiteralValue(value).description
-            case .Bool(let value):
+            case .bool(let value):
                 return LiteralValue(value).description
-            case .Text(let value):
+            case .text(let value):
                 return LiteralValue(value).description
-            case .Float(let value):
+            case .float(let value):
                 return LiteralValue(value).description
             case .BLOB(let value):
                 return LiteralValue(value).description
-            case .Expression(let value):
+            case .expression(let value):
                 return value.description
-            case .CurrentDate:
+            case .currentDate:
                 return "CURRENT_DATE"
-            case .CurrentTime:
+            case .currentTime:
                 return "CURRENT_TIME"
-            case .CurrentTimestamp:
+            case .currentTimestamp:
                 return "CURRENT_TIMESTAMP"
             }
         }
     }
-    
+
     @discardableResult
     public func makeDefault(to defaultValue: DefaultType) -> ColumnDef {
         description.append(" DEFAULT \(defaultValue.description)")
         return self
     }
-    
+
     @discardableResult
     public func makeNotNull() -> ColumnDef {
         description.append(" NOT NULL")
         return self
     }
-    
+
     @discardableResult
     public func makeUnique() -> ColumnDef {
         description.append(" UNIQUE")
@@ -103,9 +105,8 @@ public class ColumnDef : Describable {
     }
 
     @discardableResult
-    public func makeForeignKey(_ foreignKey: ForeignKey) -> ColumnDef{
+    public func makeForeignKey(_ foreignKey: ForeignKey) -> ColumnDef {
         description.append(" \(foreignKey.description)")
         return self
     }
 }
-

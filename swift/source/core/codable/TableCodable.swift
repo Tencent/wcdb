@@ -27,12 +27,12 @@ public protocol CanBeInitialized {
 
 public protocol TableCodableBase {}
 
-public protocol TableEncodableBase: Encodable, TableCodableBase, CanBeInitialized {} 
+public protocol TableEncodableBase: Encodable, TableCodableBase, CanBeInitialized {}
 
 public protocol TableEncodable: TableEncodableBase where CodingKeys.Root == Self {
     associatedtype CodingKeys: CodingTableKey
     typealias Properties = CodingKeys
-    
+
     var isAutoIncrement: Bool {get set}
     var lastInsertedRowID: Int64 {get set}
 }
@@ -42,7 +42,7 @@ extension TableEncodable {
         get { return false }
         set { }
     }
-    
+
     public var lastInsertedRowID: Int64 {
         get { return Int64.min }
         set { }
@@ -51,9 +51,9 @@ extension TableEncodable {
 
 public protocol TableDecodableBase: Decodable, TableCodableBase {}
 
-public protocol TableDecodable: TableDecodableBase where CodingKeys.Root == Self  {
+public protocol TableDecodable: TableDecodableBase where CodingKeys.Root == Self {
     associatedtype CodingKeys: CodingTableKey
     typealias Properties = CodingKeys
 }
 
-public typealias TableCodable = TableEncodable & TableDecodable 
+public typealias TableCodable = TableEncodable & TableDecodable

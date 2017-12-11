@@ -21,34 +21,36 @@
 import Foundation
 public class JoinClause: Describable {
     public enum JoinClauseType: CustomStringConvertible {
-        case Left
-        case LeftOuter
-        case Inner
-        case Cross
+        case left
+        case leftOuter
+        case inner
+        case cross
         public var description: String {
             switch self {
-            case .Left:
+            case .left:
                 return "LEFT"
-            case .LeftOuter:
+            case .leftOuter:
                 return "LEFT OUTER"
-            case .Inner:
+            case .inner:
                 return "INNER"
-            case .Cross:
+            case .cross:
                 return "CROSS"
             }
         }
     }
-    
+
     public init() {
         super.init("")
     }
-    
+
     public init(withTable table: String) {
         super.init(table)
     }
-    
+
     @discardableResult
-    private func join(_ subqueryConvertible: TableOrSubqueryConvertible, with type: JoinClauseType? = nil, isNatural: Bool = false) -> JoinClause {
+    private func join(_ subqueryConvertible: TableOrSubqueryConvertible,
+                      with type: JoinClauseType? = nil,
+                      isNatural: Bool = false) -> JoinClause {
         if isNatural {
             description.append(" NATURAL")
         }
@@ -60,26 +62,28 @@ public class JoinClause: Describable {
     }
 
     @discardableResult
-    public func join(_ subqueryConvertible: TableOrSubqueryConvertible, with type: JoinClauseType? = nil) -> JoinClause {
+    public func join(_ subqueryConvertible: TableOrSubqueryConvertible,
+                     with type: JoinClauseType? = nil) -> JoinClause {
         return self.join(subqueryConvertible, with: type, isNatural: false)
     }
-    
+
     @discardableResult
-    public func natureJoin(_ subqueryConvertible: TableOrSubqueryConvertible, with type: JoinClauseType? = nil) -> JoinClause {
+    public func natureJoin(_ subqueryConvertible: TableOrSubqueryConvertible,
+                           with type: JoinClauseType? = nil) -> JoinClause {
         return self.join(subqueryConvertible, with: type, isNatural: true)
     }
-    
+
     @discardableResult
     public func on(_ expressionConvertible: ExpressionConvertible) -> JoinClause {
         description.append(" ON \(expressionConvertible.asExpression().description)")
         return self
     }
-    
+
     @discardableResult
     public func using(_ columnConvertibleList: ColumnConvertible...) -> JoinClause {
         return using(columnConvertibleList)
     }
-    
+
     @discardableResult
     public func using(_ columnConvertibleList: [ColumnConvertible]) -> JoinClause {
         description.append(" USING \(columnConvertibleList.joined())")

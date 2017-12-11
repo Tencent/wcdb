@@ -22,28 +22,34 @@ import Foundation
 
 public class Master: TableCodable, CustomDebugStringConvertible {
     public static let tableName: String = "sqlite_master"
-    
-    public var type: String? = nil
-    public var name: String? = nil
-    public var tableName: String? = nil
-    public var rootpage: Int? = nil
-    public var sql: String? = nil
-    
+
+    public var type: String?
+    public var name: String?
+    public var tableName: String?
+    public var rootpage: Int?
+    public var sql: String?
+
     public enum CodingKeys: String, CodingTableKey {
         public typealias Root = Master
-        
+
         case type
         case name
         case tableName = "tbl_name"
         case rootpage
         case sql
-        
-        public static let __objectRelationalMapping = TableBinding(Master.CodingKeys.self)
+
+        public static let objectRelationalMapping = TableBinding(Master.CodingKeys.self)
     }
-    
+
     public required init() {}
-    
+
     public var debugDescription: String {
-        return "type:\(type ?? ""), name:\(name ?? ""), tableName:\(tableName ?? ""), rootpage:\(rootpage ?? Int.max), sql:\(sql ?? "")"
+        var debugDescription = ""
+        debugDescription.append("type:\(type ?? "")")
+        debugDescription.append(", name:\(name ?? "")")
+        debugDescription.append(", tableName:\(tableName ?? "")")
+        debugDescription.append(", rootpage:\(rootpage ?? Int.min)")
+        debugDescription.append(", sql:\(sql ?? "")")
+        return debugDescription
     }
 }

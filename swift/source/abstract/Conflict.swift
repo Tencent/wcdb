@@ -21,23 +21,23 @@
 import Foundation
 
 public enum Conflict: CustomStringConvertible {
-    case Rollback
-    case Abort
-    case Fail
-    case Ignore
-    case Replace
-    
+    case rollback
+    case abort
+    case fail
+    case ignore
+    case replace
+
     public var description: String {
         switch self {
-        case .Rollback:
+        case .rollback:
             return "ROLLBACK"
-        case .Abort:
+        case .abort:
             return "ABORT"
-        case .Fail:
+        case .fail:
             return "FAIL"
-        case .Ignore:
+        case .ignore:
             return "IGNORE"
-        case .Replace:
+        case .replace:
             return "REPLACE"
         }
     }

@@ -22,7 +22,7 @@ import XCTest
 import WCDBSwift
 
 class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
-    
+
     override func setUp() {
         super.setUp()
 
@@ -32,28 +32,28 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
     func testMultithreadReadWrite() {
         let tableName = getTableName()
         var results: [BenchmarkObject]? = nil
-        measure(onSetUp: { 
+        measure(onSetUp: {
             results = nil
-            
+
             tearDownDatabase()
-            
+
             setUpWithPreCreateTable()
-            
+
             setUpWithPreInsertObjects(count: config.readCount)
-            
+
             tearDownDatabaseCache()
-            
+
             setUpDatabaseCache()
-        }, for: { 
-            queue.async(group: group, execute: { 
+        }, for: {
+            queue.async(group: group, execute: {
                 results = try? self.database.getObjects(fromTable: tableName)
             })
-            queue.async(group: group, execute: { 
+            queue.async(group: group, execute: {
                 do {
                     try self.database.insert(objects: self.objects, intoTable: tableName)
-                }catch let error as WCDBSwift.Error {
+                } catch let error as WCDBSwift.Error {
                     XCTFail(error.description)
-                }catch let error {
+                } catch let error {
                     XCTFail(error.localizedDescription)
                 }
             })

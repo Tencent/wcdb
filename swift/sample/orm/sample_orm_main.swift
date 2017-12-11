@@ -23,38 +23,39 @@ import WCDBSwift
 
 func sample_orm_main(baseDirectory: String) {
     print("Sample-ORM Begin")
-    
+
     func printSchemas<TableEncodableType: TableEncodable>(of type: TableEncodableType.Type) {
         let className = String(describing: type)
         let filename = className
         let tableName = className
-        
+
         let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(filename).path
         let database = Database(withPath: path)
-        database.close(onClosed: { 
+        database.close(onClosed: {
             try? database.removeFiles()
         })
-        
+
         do {
             try database.create(table: tableName, of: type)
-        }catch let error {
+        } catch let error {
             print("create table error: \(error)")
         }
-        
+
         do {
-            let schemas: [Master] = try database.getObjects(on: Master.Properties.name, Master.Properties.sql, fromTable: Master.tableName)
+            let schemas: [Master] = try database.getObjects(on: Master.Properties.name, Master.Properties.sql,
+                                                            fromTable: Master.tableName)
             schemas.forEach({ (table) in
                 print("SQL of \(table.name ?? ""): \(table.sql ?? "" )")
             })
-        }catch let error {
+        } catch let error {
             print("get schemas error: \(error)")
         }
     }
-    
+
     printSchemas(of: SampleORM.self)
     printSchemas(of: SampleORMIndex.self)
     printSchemas(of: SampleORMColumnConstraint.self)
     printSchemas(of: SampleORMTableConstraint.self)
-    
+
     print("Sample-ORM End")
 }

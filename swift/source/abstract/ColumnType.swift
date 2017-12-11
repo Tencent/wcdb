@@ -21,26 +21,26 @@
 import Foundation
 
 public enum ColumnType: CustomStringConvertible {
-    case Integer32
-    case Integer64
-    case Text
-    case Float
+    case integer32
+    case integer64
+    case text
+    case float
     case BLOB
-    case Null
-    
+    case null
+
     public var description: String {
         switch self {
-        case .Integer32:
+        case .integer32:
             fallthrough
-        case .Integer64:
+        case .integer64:
             return "INTEGER"
-        case .Float:
+        case .float:
             return "REAL"
-        case .Text:
+        case .text:
             return "TEXT"
         case .BLOB:
             return "BLOB"
-        case .Null:
+        case .null:
             return "NULL"
         }
     }
@@ -52,37 +52,37 @@ public protocol FundamentalColumnType {
 }
 extension Int32: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .Integer32
+        return .integer32
     }
     public var columnType: ColumnType {
-        return .Integer32
+        return .integer32
     }
 }
 
 extension Int64: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .Integer64
+        return .integer64
     }
     public var columnType: ColumnType {
-        return .Integer64
+        return .integer64
     }
 }
 
 extension Double: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .Float
+        return .float
     }
     public var columnType: ColumnType {
-        return .Float
+        return .float
     }
 }
 
 extension String: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .Text
+        return .text
     }
     public var columnType: ColumnType {
-        return .Text
+        return .text
     }
 }
 

@@ -35,4 +35,3 @@ extension Column: PropertyRedirectable {}
 extension ColumnResult: PropertyRedirectable {}
 
 extension Expression: PropertyRedirectable {}
-

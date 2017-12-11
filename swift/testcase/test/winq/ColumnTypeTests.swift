@@ -24,16 +24,16 @@ import WCDBSwift
 class ColumnTypeTests: BaseTestCase {
 
     func testColumnType() {
-        WINQAssertEqual(ColumnType.Integer32, "INTEGER")
-        
-        WINQAssertEqual(ColumnType.Integer64, "INTEGER")
-        
-        WINQAssertEqual(ColumnType.Float, "REAL")
-        
-        WINQAssertEqual(ColumnType.Text, "TEXT")
-        
+        WINQAssertEqual(ColumnType.integer32, "INTEGER")
+
+        WINQAssertEqual(ColumnType.integer64, "INTEGER")
+
+        WINQAssertEqual(ColumnType.float, "REAL")
+
+        WINQAssertEqual(ColumnType.text, "TEXT")
+
         WINQAssertEqual(ColumnType.BLOB, "BLOB")
-        
-        WINQAssertEqual(ColumnType.Null, "NULL")
+
+        WINQAssertEqual(ColumnType.null, "NULL")
     }
 }

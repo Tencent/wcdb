@@ -23,10 +23,10 @@ import WCDBSwift
 
 class SampleCodableColumn: ColumnCodable {
     typealias FundamentalType = Double
-    var floatValue: Float? = nil
+    var floatValue: Float?
     required init?(with value: Double) {
         self.floatValue = Float(value)
-    }     
+    }
     func archivedValue() -> Double? {
         return floatValue != nil ? Double(floatValue!) : nil
     }

@@ -23,22 +23,22 @@ import WCDBSwift
 
 func sample_fts_main(baseDirectory: String) {
     print("Sample-fts Begin")
-    
+
     let classNameOrigin = String(describing: SampleFTSOrigin.self)
     let pathOrigin = URL(fileURLWithPath: baseDirectory).appendingPathComponent(classNameOrigin).path
     let tableNameOrigin = classNameOrigin
-    
+
     let databaseOrigin = Database(withPath: pathOrigin)
-    databaseOrigin.close(onClosed: { 
+    databaseOrigin.close(onClosed: {
         try? databaseOrigin.removeFiles()
     })
-        
+
     do {
         try databaseOrigin.create(table: tableNameOrigin, of: SampleFTSOrigin.self)
-    }catch let error {
+    } catch let error {
         print("creat table error: \(error)")
     }
-        
+
     //prepare
     do {
         do {
@@ -65,27 +65,27 @@ func sample_fts_main(baseDirectory: String) {
             object.isAutoIncrement = true
             try databaseOrigin.insert(objects: object, intoTable: tableNameOrigin)
         }
-    }catch let error {
+    } catch let error {
         print("prepare error: \(error)")
     }
-        
+
     let classNameFTS = String(describing: SampleFTSData.self)
     let pathFTS = URL(fileURLWithPath: baseDirectory).appendingPathComponent(classNameFTS).path
     let tableNameFTS = classNameFTS
-    
+
     let databaseFTS = Database(withPath: pathFTS)
-    databaseFTS.close(onClosed: { 
+    databaseFTS.close(onClosed: {
         try databaseFTS.removeFiles()
     })
-    
+
     databaseFTS.setTokenizes(.WCDB)
-        
+
     do {
         try databaseFTS.create(virtualTable: tableNameFTS, of: SampleFTSData.self)
-    }catch let error {
+    } catch let error {
         print("create virtual table error: \(error)")
     }
-        
+
     //Build Full-Text-Search Index
     do {
         let objects: [SampleFTSOrigin] = try databaseOrigin.getObjects(fromTable: tableNameOrigin)
@@ -97,28 +97,32 @@ func sample_fts_main(baseDirectory: String) {
             ftsDataArray.append(ftsData)
         }
         try databaseFTS.insert(objects: ftsDataArray, intoTable: tableNameFTS)
-    }catch let error {
+    } catch let error {
         print("build full-text-search index error: \(error)")
     }
-    
+
     //Full-Text-Search by `match`
     do {
-        let ftsDataArray: [SampleFTSData] = try databaseFTS.getObjects(fromTable: tableNameFTS, where: Column(named: tableNameFTS).match("Eng*"))
+        let condition = Column(named: tableNameFTS).match("Eng*")
+        let ftsDataArray: [SampleFTSData] = try databaseFTS.getObjects(fromTable: tableNameFTS,
+                                                                       where: condition)
         for ftsData in ftsDataArray {
             print("Match name:\(ftsData.name ?? "") content:\(ftsData.content ?? "")")
         }
-    }catch let error {
+    } catch let error {
         print("full-text-search error: \(error)")
     }
-    
+
     //Full-Text-Search info by `match`
     //See http://www.sqlite.org/fts3.html#snippet for further information
     do {
-        let tableProperty = Column(named: tableNameFTS) 
-        let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(), fromTable: tableNameFTS, where: tableProperty.match("12*")))!
-        
+        let tableProperty = Column(named: tableNameFTS)
+        let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(),
+                                                          fromTable: tableNameFTS,
+                                                          where: tableProperty.match("12*")))!
+
         print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
-    }catch let error {
+    } catch let error {
         print("full-text-search info error: \(error)")
     }
 

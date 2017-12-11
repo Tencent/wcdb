@@ -22,23 +22,22 @@ import Foundation
 
 public class Sequence: TableCodable, CustomDebugStringConvertible {
     public static let tableName: String = "sqlite_sequence"
-    
-    public var name: String? = nil
-    public var seq: Int? = nil
-    
+
+    public var name: String?
+    public var seq: Int?
+
     public enum CodingKeys: String, CodingTableKey {
         public typealias Root = Sequence
-        
+
         case name
         case seq
-        
-        public static let __objectRelationalMapping = TableBinding(Sequence.CodingKeys.self)
+
+        public static let objectRelationalMapping = TableBinding(Sequence.CodingKeys.self)
     }
-    
+
     public required init() {}
-    
+
     public var debugDescription: String {
         return "name:\(name ?? ""), seq:\(seq ?? Int.max)"
     }
 }
-

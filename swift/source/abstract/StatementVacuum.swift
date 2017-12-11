@@ -21,9 +21,9 @@
 import Foundation
 public class StatementVacuum: Statement {
     public init() {
-        super.init(with: .Vacuum)
+        super.init(with: .vacuum)
     }
-    
+
     @discardableResult
     public func vacuum(schema: String) -> StatementVacuum {
         description.append("VACUUM \(schema)")

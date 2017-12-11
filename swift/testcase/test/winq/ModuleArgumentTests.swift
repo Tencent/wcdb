@@ -25,13 +25,16 @@ class ModuleArgumentTests: BaseTestCase {
 
     func testModuleArgument() {
         WINQAssertEqual(ModuleArgument(left: "left", right: "right"), "left=right")
-        
-        WINQAssertEqual(ModuleArgument(with: ColumnDef(with: Column(named: "column1"), and: .Integer32)), "column1 INTEGER")
-        
+
+        WINQAssertEqual(
+            ModuleArgument(with: ColumnDef(with: Column(named: "column1"), and: .integer32)),
+            "column1 INTEGER"
+        )
+
         WINQAssertEqual(ModuleArgument(with: TableConstraint(named: "constraint1")), "CONSTRAINT constraint1")
-        
+
         WINQAssertEqual(ModuleArgument(with: .WCDB), "tokenize=WCDB")
-        
+
         WINQAssertEqual(ModuleArgument(withTokenize: "WCDB"), "tokenize=WCDB")
     }
 }

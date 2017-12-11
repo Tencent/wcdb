@@ -23,32 +23,32 @@ import WCDBSwift
 
 func sample_transaction_main(baseDirectory: String) {
     print("Sample-transaction Begin")
-    
+
     let className = String(describing: SampleTransaction.self)
     let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
     let database = Database(withPath: path)
     let tableName = className
-    database.close(onClosed: { 
+    database.close(onClosed: {
         try? database.removeFiles()
     })
-        
+
     //Run auto inner create table/indexes transaction
     do {
         try database.create(table: tableName, of: SampleTransaction.self)
-    }catch let error {
+    } catch let error {
         print("auto inner create table transaction error: \(error)")
     }
-    
+
     //Run blocked transaction
     do {
-        try database.run(transaction: { () -> () in  
+        try database.run(transaction: { () -> Void in
             let object = SampleTransaction()
             try database.insert(objects: object, intoTable: tableName)
         })
-    }catch let error {
+    } catch let error {
         print("blocked transaction error: \(error)")
     }
-    
+
     //Run threaded transaction
     do {
         //[begin], [commit], [rollback] and all interfaces inside this transaction should run in same thread
@@ -57,14 +57,14 @@ func sample_transaction_main(baseDirectory: String) {
         do {
             try database.insert(objects: object, intoTable: tableName)
             try database.commit()
-        }catch let error {
+        } catch let error {
             try? database.rollback()
-            throw error 
+            throw error
         }
-    }catch let error {
+    } catch let error {
         print("threaded transaction error: \(error)")
     }
-    
+
     //SampleTransaction using [Transaction]
     do {
         //You can do a transaction in different threads using [Transaction].
@@ -76,24 +76,25 @@ func sample_transaction_main(baseDirectory: String) {
             do {
                 try transaction.insert(objects: object, intoTable: tableName)
                 try transaction.commit()
-            }catch {
+            } catch {
                 try? transaction.rollback()
             }
         }
-    }catch let error {
+    } catch let error {
         print("transaction error: \(error)")
     }
-    
+
     //Run auto inner batch insert transaction
     do {
-        //insertion will automatically run an inner transaction if it's not already in a transaction and objects is more than 1 objects
+        //If it's not already in a transaction and objects is more than 1 objects, 
+        //insertion will automatically run an inner transaction 
         var objects: [SampleTransaction] = []
         let object1 = SampleTransaction()
         objects.append(object1)
         let object2 = SampleTransaction()
         objects.append(object2)
         try database.insert(objects: objects, intoTable: tableName)
-    }catch let error {
+    } catch let error {
         print("inner batch insert transaction error: \(error)")
     }
 

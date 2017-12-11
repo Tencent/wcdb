@@ -21,54 +21,54 @@
 import Foundation
 public class StatementTransaction: Statement {
     public enum TransactionType {
-        case Begin
-        case Commit
-        case Rollback
+        case begin
+        case commit
+        case rollback
     }
-    
-    public private(set) var transactionType: TransactionType? = nil
+
+    public private(set) var transactionType: TransactionType?
 
     public init() {
-        super.init(with: .Transaction)
+        super.init(with: .transaction)
     }
-    
+
     public enum Mode: CustomStringConvertible {
-        case Defered
-        case Immediate
-        case Exclusive
-        
+        case defered
+        case immediate
+        case exclusive
+
         public var description: String {
             switch self {
-            case .Defered:
+            case .defered:
                 return "DEFERED"
-            case .Immediate:
+            case .immediate:
                 return "IMMEDIATE"
-            case .Exclusive:
+            case .exclusive:
                 return "EXCLUSIVE"
             }
         }
     }
 
     @discardableResult
-    public func begin(_ mode: Mode? = nil) -> StatementTransaction{
-        self.transactionType = .Begin
+    public func begin(_ mode: Mode? = nil) -> StatementTransaction {
+        self.transactionType = .begin
         description.append("BEGIN")
         if mode != nil {
             description.append(" \(mode!.description)")
         }
         return self
     }
-    
+
     @discardableResult
-    public func commit() -> StatementTransaction{
-        self.transactionType = .Commit
+    public func commit() -> StatementTransaction {
+        self.transactionType = .commit
         description.append("COMMIT")
         return self
     }
-    
+
     @discardableResult
-    public func rollback() -> StatementTransaction{
-        self.transactionType = .Rollback
+    public func rollback() -> StatementTransaction {
+        self.transactionType = .rollback
         description.append("ROLLBACK")
         return self
     }

@@ -21,16 +21,18 @@
 import Foundation
 public class StatementSelect: Statement {
     public init() {
-        super.init(with: .Select)
+        super.init(with: .select)
     }
-    
+
     @discardableResult
-    public func select(distinct: Bool = false, _ columnResultConvertibleList: ColumnResultConvertible...) -> StatementSelect {
+    public func select(distinct: Bool = false,
+                       _ columnResultConvertibleList: ColumnResultConvertible...) -> StatementSelect {
         return select(distinct: distinct, columnResultConvertibleList)
     }
-    
+
     @discardableResult
-    public func select(distinct: Bool = false, _ columnResultConvertibleList: [ColumnResultConvertible]) -> StatementSelect {
+    public func select(distinct: Bool = false,
+                       _ columnResultConvertibleList: [ColumnResultConvertible]) -> StatementSelect {
         description.append("SELECT ")
         if distinct {
             description.append("DISTINCT ")
@@ -43,13 +45,13 @@ public class StatementSelect: Statement {
     public func from(_ tableOrSubqueryConvertibleList: TableOrSubqueryConvertible...) -> StatementSelect {
         return from(tableOrSubqueryConvertibleList)
     }
-    
+
     @discardableResult
     public func from(_ tableOrSubqueryConvertibleList: [TableOrSubqueryConvertible]) -> StatementSelect {
         description.append(" FROM \(tableOrSubqueryConvertibleList.joined())")
         return self
     }
-    
+
     @discardableResult
     public func `where`(_ expressionConvertible: ExpressionConvertible) -> StatementSelect {
         let expression = expressionConvertible.asExpression()
@@ -58,12 +60,12 @@ public class StatementSelect: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func order(by orderConvertibleList: OrderConvertible...) -> StatementSelect {
         return order(by: orderConvertibleList)
     }
-    
+
     @discardableResult
     public func order(by orderConvertibleList: [OrderConvertible]) -> StatementSelect {
         if !orderConvertibleList.isEmpty {
@@ -71,9 +73,10 @@ public class StatementSelect: Statement {
         }
         return self
     }
-    
+
     @discardableResult
-    public func limit(from expressionConvertibleFrom: ExpressionConvertible, to expressionConvertibleTo: ExpressionConvertible) -> StatementSelect {
+    public func limit(from expressionConvertibleFrom: ExpressionConvertible,
+                      to expressionConvertibleTo: ExpressionConvertible) -> StatementSelect {
         let from = expressionConvertibleFrom.asExpression()
         if !from.description.isEmpty {
             description.append(" LIMIT \(from.description)")
@@ -84,7 +87,7 @@ public class StatementSelect: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func limit(_ expressionConvertibleLimit: ExpressionConvertible) -> StatementSelect {
         let limit = expressionConvertibleLimit.asExpression()
@@ -93,9 +96,10 @@ public class StatementSelect: Statement {
         }
         return self
     }
-    
+
     @discardableResult
-    public func limit(_ expressionConvertibleLimit: ExpressionConvertible, offset expressionConvertibleOffset: ExpressionConvertible) -> StatementSelect {
+    public func limit(_ expressionConvertibleLimit: ExpressionConvertible,
+                      offset expressionConvertibleOffset: ExpressionConvertible) -> StatementSelect {
         let limit = expressionConvertibleLimit.asExpression()
         if !limit.description.isEmpty {
             description.append(" LIMIT \(limit.description)")
@@ -106,12 +110,12 @@ public class StatementSelect: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func group(by expressionConvertibleGroupList: ExpressionConvertible...) -> StatementSelect {
         return group(by: expressionConvertibleGroupList)
     }
-    
+
     @discardableResult
     public func group(by expressionConvertibleGroupList: [ExpressionConvertible]) -> StatementSelect {
         if !expressionConvertibleGroupList.isEmpty {
@@ -119,7 +123,7 @@ public class StatementSelect: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func having(_ expressionConvertibleHaving: ExpressionConvertible) -> StatementSelect {
         let having = expressionConvertibleHaving.asExpression()
@@ -138,4 +142,3 @@ extension StatementSelect: ExpressionConvertible, TableOrSubqueryConvertible {
         return Subquery(with: self)
     }
 }
-

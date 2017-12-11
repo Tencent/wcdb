@@ -24,114 +24,164 @@ import WCDBSwift
 class TableConstraintBindingTests: BaseTestCase {
 
     class BaselineMultiPrimaryTestObject: TableCodable, Named {
-        let variable1: Int = 0        
-        let variable2: Int = 0    
+        let variable1: Int = 0
+        let variable2: Int = 0
         required init() {}
         static let constraintName = BaselineMultiPrimaryTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiPrimaryTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiPrimaryBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: MultiPrimaryBinding(indexesBy: variable1, variable2)]
             }
         }
     }
-    
+
     class MultiPrimaryConflictTestObject: TableCodable, Named {
-        let variable1: Int = 0        
-        let variable2: Int = 0      
-        required init() {}   
+        let variable1: Int = 0
+        let variable2: Int = 0
+        required init() {}
         static let constraintName = MultiPrimaryConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiPrimaryConflictTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiPrimaryBinding(indexesBy: variable1, variable2, onConflict: .Replace)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: MultiPrimaryBinding(indexesBy: variable1, variable2, onConflict: .replace)]
             }
         }
     }
-    
+
     class MultiPrimaryCheckTestObject: TableCodable, Named {
-        let variable1: Int = 0        
-        let variable2: Int = 0 
+        let variable1: Int = 0
+        let variable2: Int = 0
         required init() {}
         static let constraintName = MultiPrimaryCheckTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiPrimaryCheckTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiPrimaryBinding(indexesBy: variable1, variable2, check: variable1 > 1)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: MultiPrimaryBinding(indexesBy: variable1, variable2, check: variable1 > 1)]
             }
         }
     }
 
     func testMultiPrimaryBinding() {
-        ORMColumnConstraintBindingAssertEqual(BaselineMultiPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS BaselineMultiPrimaryTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT BaselineMultiPrimaryTestObjectConstraint PRIMARY KEY(variable1, variable2))")
-        
-        ORMColumnConstraintBindingAssertEqual(MultiPrimaryConflictTestObject.self, "CREATE TABLE IF NOT EXISTS MultiPrimaryConflictTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT MultiPrimaryConflictTestObjectConstraint PRIMARY KEY(variable1, variable2) ON CONFLICT REPLACE)")
+        ORMColumnConstraintBindingAssertEqual(
+            BaselineMultiPrimaryTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS BaselineMultiPrimaryTestObject\
+            (variable1 INTEGER, variable2 INTEGER, \
+            CONSTRAINT BaselineMultiPrimaryTestObjectConstraint PRIMARY KEY(variable1, variable2))
+            """
+        )
 
-        ORMColumnConstraintBindingAssertEqual(MultiPrimaryCheckTestObject.self, "CREATE TABLE IF NOT EXISTS MultiPrimaryCheckTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT MultiPrimaryCheckTestObjectConstraint PRIMARY KEY(variable1, variable2) CHECK(variable1 > 1))")
+        ORMColumnConstraintBindingAssertEqual(
+            MultiPrimaryConflictTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS MultiPrimaryConflictTestObject\
+            (variable1 INTEGER, variable2 INTEGER, \
+            CONSTRAINT MultiPrimaryConflictTestObjectConstraint \
+            PRIMARY KEY(variable1, variable2) ON CONFLICT REPLACE)
+            """
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            MultiPrimaryCheckTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS MultiPrimaryCheckTestObject\
+            (variable1 INTEGER, variable2 INTEGER, \
+            CONSTRAINT MultiPrimaryCheckTestObjectConstraint \
+            PRIMARY KEY(variable1, variable2) CHECK(variable1 > 1))
+            """
+        )
     }
-    
+
     class BaselineMultiUniqueTestObject: TableCodable, Named {
-        let variable1: Int = 0        
-        let variable2: Int = 0    
-        required init() {}  
+        let variable1: Int = 0
+        let variable2: Int = 0
+        required init() {}
         static let constraintName = BaselineMultiUniqueTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiUniqueTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiUniqueBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: MultiUniqueBinding(indexesBy: variable1, variable2)]
             }
         }
     }
-    
+
     class MultiUniqueConflictTestObject: TableCodable, Named {
-        let variable1: Int = 0        
-        let variable2: Int = 0    
+        let variable1: Int = 0
+        let variable2: Int = 0
         required init() {}
         static let constraintName = MultiUniqueConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiUniqueConflictTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiUniqueBinding(indexesBy: variable1, variable2, onConflict: .Replace)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: MultiUniqueBinding(indexesBy: variable1, variable2,
+                                                           onConflict: .replace)]
             }
         }
     }
-    
+
     class MultiUniqueCheckTestObject: TableCodable, Named {
-        let variable1: Int = 0        
-        let variable2: Int = 0     
-        required init() {}  
+        let variable1: Int = 0
+        let variable2: Int = 0
+        required init() {}
         static let constraintName = MultiUniqueCheckTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiUniqueCheckTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiUniqueBinding(indexesBy: variable1, variable2, check: variable1 > 1)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: MultiUniqueBinding(indexesBy: variable1, variable2,
+                                                           check: variable1 > 1)]
             }
         }
     }
 
     func testMultiUniqueBinding() {
-        ORMColumnConstraintBindingAssertEqual(BaselineMultiUniqueTestObject.self, "CREATE TABLE IF NOT EXISTS BaselineMultiUniqueTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT BaselineMultiUniqueTestObjectConstraint UNIQUE(variable1, variable2))")
-        
-        ORMColumnConstraintBindingAssertEqual(MultiUniqueConflictTestObject.self, "CREATE TABLE IF NOT EXISTS MultiUniqueConflictTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT MultiUniqueConflictTestObjectConstraint UNIQUE(variable1, variable2) ON CONFLICT REPLACE)")
-        
-        ORMColumnConstraintBindingAssertEqual(MultiUniqueCheckTestObject.self, "CREATE TABLE IF NOT EXISTS MultiUniqueCheckTestObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT MultiUniqueCheckTestObjectConstraint UNIQUE(variable1, variable2) CHECK(variable1 > 1))")       
+        ORMColumnConstraintBindingAssertEqual(
+            BaselineMultiUniqueTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS BaselineMultiUniqueTestObject\
+            (variable1 INTEGER, \
+            variable2 INTEGER, \
+            CONSTRAINT BaselineMultiUniqueTestObjectConstraint \
+            UNIQUE(variable1, variable2))
+            """
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            MultiUniqueConflictTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS MultiUniqueConflictTestObject\
+            (variable1 INTEGER, variable2 INTEGER, \
+            CONSTRAINT MultiUniqueConflictTestObjectConstraint \
+            UNIQUE(variable1, variable2) ON CONFLICT REPLACE)
+            """
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            MultiUniqueCheckTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS MultiUniqueCheckTestObject\
+            (variable1 INTEGER, variable2 INTEGER, \
+            CONSTRAINT MultiUniqueCheckTestObjectConstraint \
+            UNIQUE(variable1, variable2) CHECK(variable1 > 1))
+            """
+        )
     }
 }

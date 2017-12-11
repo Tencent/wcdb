@@ -27,11 +27,11 @@ public protocol Core {
     func prepare(_ statement: Statement) throws -> CoreStatement
     func exec(_ statement: Statement) throws
     func isTableExists(_ table: String) throws -> Bool
-    
+
     func begin() throws
     func commit() throws
     func rollback() throws
-    typealias TransactionClosure = () throws -> ()
+    typealias TransactionClosure = () throws -> Void
     typealias ControlableTransactionClosure = () throws -> Bool
     func run(transaction: TransactionClosure) throws
     func run(controlableTransaction: ControlableTransactionClosure) throws

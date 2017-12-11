@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class ForeignKey : Describable{   
+public class ForeignKey: Describable {
     public init(withForeignTable table: String, andColumnNames columnNames: [String]) {
         super.init("REFERENCES \(table)")
         if !columnNames.isEmpty {
@@ -31,25 +31,25 @@ public class ForeignKey : Describable{
     public convenience init(withForeignTable table: String, andColumnNames columnNames: String...) {
         self.init(withForeignTable: table, andColumnNames: columnNames)
     }
-    
+
     public enum Action: CustomStringConvertible {
-        case SetNull
-        case SetDefault
-        case Cascade
-        case Restrict
-        case NoAction
-        
+        case setNull
+        case setDefault
+        case cascade
+        case restrict
+        case noAction
+
         public var description: String {
             switch self {
-            case .SetNull:
+            case .setNull:
                 return "SET NULL"
-            case .SetDefault:
+            case .setDefault:
                 return "SET DEFAULT"
-            case .Cascade:
+            case .cascade:
                 return "CASCADE"
-            case .Restrict:
+            case .restrict:
                 return "RESTRICT"
-            case .NoAction:
+            case .noAction:
                 return "NO ACTION"
             }
         }
@@ -60,41 +60,41 @@ public class ForeignKey : Describable{
         description.append(" ON DELETE \(action.description)")
         return self
     }
-    
+
     @discardableResult
     public func onUpdate(_ action: Action) -> ForeignKey {
         description.append(" ON UPDATE \(action.description)")
         return self
     }
-    
+
     @discardableResult
     public func match(name: String) -> ForeignKey {
         description.append(" MATCH \(name)")
         return self
     }
-    
+
     public enum Deferrable: CustomStringConvertible {
-        case Deferred
-        case Immediate
-        
+        case deferred
+        case immediate
+
         public var description: String {
             switch self {
-            case .Deferred:
+            case .deferred:
                 return "INITIALLY DEFERRED"
-            case .Immediate:
+            case .immediate:
                 return "INITIALLY IMMEDIATE"
             }
         }
     }
-    
+
     @discardableResult
     public func deferrable(_ deferrable: Deferrable) -> ForeignKey {
         description.append(" DEFERRABLE \(deferrable.description)")
         return self
     }
-    
+
     @discardableResult
-    public func notDeferrable(_ deferrable: Deferrable) -> ForeignKey{
+    public func notDeferrable(_ deferrable: Deferrable) -> ForeignKey {
         description.append(" NOT DEFERRABLE \(deferrable.description)")
         return self
     }

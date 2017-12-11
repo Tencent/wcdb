@@ -22,11 +22,11 @@ import Foundation
 class Atomic<Value> {
     var raw: Value
     let spin = Spin()
-    
+
     init(_ raw: Value) {
         self.raw = raw
     }
-    
+
     var value: Value {
         get {
             spin.lock(); defer { spin.unlock() }
@@ -38,16 +38,16 @@ class Atomic<Value> {
         }
     }
 
-    func withValue(_ closure: (Value)->Value) {
+    func withValue(_ closure: (Value) -> Value) {
         spin.lock(); defer { spin.unlock() }
         raw = closure(raw)
     }
-    
-    func withValue(_ closure: (inout Value)->Void) {
+
+    func withValue(_ closure: (inout Value) -> Void) {
         spin.lock(); defer { spin.unlock() }
-        closure(&raw) 
+        closure(&raw)
     }
-    
+
     func assign(_ newValue: Value) {
         spin.lock(); defer { spin.unlock() }
         self.raw = newValue
@@ -60,13 +60,13 @@ extension Atomic where Value==Int {
             return value + right
         }
     }
-    
+
     static func -= (left: Atomic, right: Value) {
         left.withValue { (value) -> Value in
             return value - right
         }
     }
-    
+
     static prefix func ++ (atomic: Atomic) -> Value {
         var newValue: Value = 0
         atomic.withValue { (value) -> Value in

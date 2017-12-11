@@ -22,14 +22,14 @@ import Foundation
 
 public class AnyBinding {
     public enum BindingType {
-        case ColumnConstraint
-        case Index
-        case TableConstraint
-        case VirtualTable
+        case columnConstraint
+        case index
+        case tableConstraint
+        case virtualTable
     }
-    
+
     let type: BindingType
-    
+
     init(with type: BindingType) {
         self.type = type
     }

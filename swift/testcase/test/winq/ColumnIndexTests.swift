@@ -26,10 +26,10 @@ class ColumnIndexTests: BaseTestCase {
     func testColumnIndex() {
         //Give
         let column1 = Column(named: "column1")
-        
+
         //Then
         WINQAssertEqual(ColumnIndex(with: column1), "column1")
-        
-        WINQAssertEqual(ColumnIndex(with: column1, orderBy: .Ascending), "column1 ASC")
+
+        WINQAssertEqual(ColumnIndex(with: column1, orderBy: .ascending), "column1 ASC")
     }
 }

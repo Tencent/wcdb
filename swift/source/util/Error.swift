@@ -22,283 +22,292 @@ import Foundation
 
 public final class ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     public enum ErrorValueType {
-        case Int
-        case String
-    } 
+        case int
+        case string
+    }
     private var value: Any
     public var type: ErrorValueType
 
     public init(_ value: String) {
         self.value = value
-        self.type = ErrorValueType.String
+        self.type = .string
     }
-    
+
     public init(_ value: Int) {
         self.value = value
-        self.type = ErrorValueType.Int
+        self.type = .int
     }
-    
+
     convenience public init(integerLiteral value: Int) {
         self.init(value)
     }
-    
+
     convenience public init(stringLiteral value: String) {
         self.init(value)
     }
-    
+
     public var intValue: Int {
         switch type {
-        case .Int:
-            return value as! Int
-        case .String:
-            return Int(value as! String)!
+        case .int:
+            return (value as? Int) ?? 0
+        case .string:
+            guard let stringValue = value as? String, let intValue = Int(stringValue) else {
+                return 0
+            }
+            return intValue
         }
     }
-    
+
     public var stringValue: String {
         switch type {
-        case .Int:
-            return String(value as! Int)
-        case .String:
-            return value as! String
+        case .int:
+            guard let intValue = value as? Int else {
+                return ""
+            }
+            return String(intValue)
+        case .string:
+            guard let stringValue = value as? String else {
+                return ""
+            }
+            return stringValue
         }
     }
 }
 
 public class Error: Swift.Error, CustomStringConvertible {
     public enum Key: Int, CustomStringConvertible {
-        case Tag = 1
-        case Operation = 2
-        case ExtendedCode = 3
-        case Message = 4
+        case tag = 1
+        case operation = 2
+        case extendedCode = 3
+        case message = 4
         case SQL = 5
-        case Path = 6
-        
+        case path = 6
+
         public var description: String {
             switch self {
-            case .Tag:
+            case .tag:
                 return "Tag"
-            case .Operation:
+            case .operation:
                 return "Operation"
-            case .ExtendedCode:
+            case .extendedCode:
                 return "ExtendedCode"
-            case .Message:
+            case .message:
                 return "Message"
             case .SQL:
                 return "SQL"
-            case .Path:
+            case .path:
                 return "Path"
             }
         }
     }
-    
+
     public enum ErrorType: Int, CustomStringConvertible {
-        case SQLite = 1
-        case SystemCall = 2
-        case Core = 3
-        case Interface = 4
-        case Abort = 5
-        case Warning = 6
-        case SQLiteGlobal = 7
-        case Repair = 8
-        
+        case sqlite = 1
+        case systemCall = 2
+        case core = 3
+        case interface = 4
+        case abort = 5
+        case warning = 6
+        case sqliteGlobal = 7
+        case repair = 8
+
         public var description: String {
             switch self {
-            case .SQLite:
+            case .sqlite:
                 return "SQLite"
-            case .SystemCall:
+            case .systemCall:
                 return "SystemCall"
-            case .Core:
+            case .core:
                 return "Core"
-            case .Interface:
+            case .interface:
                 return "Interface"
-            case .Abort:
+            case .abort:
                 return "Abort"
-            case .Warning:
+            case .warning:
                 return "Warning"
-            case .SQLiteGlobal:
+            case .sqliteGlobal:
                 return "SQLiteGlobal"
-            case .Repair:
+            case .repair:
                 return "Repair"
             }
         }
     }
-    
+
     public enum Operation {
         public enum HandleOperation: Int {
-            case Open = 1
-            case Close = 2
-            case Prepare = 3
-            case Exec = 4
-            case Step = 5
-            case Finalize = 6
-            case SetCipherKey = 7
-            case IsTableExists = 8
+            case open = 1
+            case close = 2
+            case prepare = 3
+            case exec = 4
+            case step = 5
+            case finalize = 6
+            case setCipherKey = 7
+            case isTableExists = 8
         }
-        
+
         public enum InterfaceOperation: Int {
-            case HandleStatement = 1
-            case Insert = 2
-            case Update = 3
-            case Select = 4
-            case Table = 5
-            case ChainCall = 6
-            case Delete = 7
+            case handleStatement = 1
+            case insert = 2
+            case update = 3
+            case select = 4
+            case table = 5
+            case chainCall = 6
+            case delete = 7
         }
-        
+
         public enum CoreOperation: Int {
-            case Prepare = 1
-            case Exec = 2
-            case Begin = 3
-            case Commit = 4
-            case Rollback = 5
-            case GetThreadedHandle = 6
-            case FlowOut = 7
-            case Tokenize = 8
-            case Encode = 9
-            case Decode = 10
+            case prepare = 1
+            case exec = 2
+            case begin = 3
+            case commit = 4
+            case rollback = 5
+            case getThreadedHandle = 6
+            case flowOut = 7
+            case tokenize = 8
+            case encode = 9
+            case decode = 10
         }
-        
+
         public enum SystemCallOperation: Int {
-            case Remove = 257 // 1 + 1<<8 Swift not supported
-            case Link = 258
-            case CreateDirectory = 259
-            case GetFileSize = 260
-            case GetAttributes = 261
-            case SetAttributes = 262
+            case remove = 257 // 1 + 1<<8 Swift not supported
+            case link = 258
+            case createDirectory = 259
+            case getFileSize = 260
+            case getAttributes = 261
+            case setAttributes = 262
         }
-        
+
         public enum RepairOperation: Int {
-            case SaveMaster
-            case LoadMaster
-            case Repair
+            case saveMaster
+            case loadMaster
+            case repair
         }
-        
-        case Handle(HandleOperation)
-        case Interface(InterfaceOperation)
-        case Core(CoreOperation)
-        case SystemCall(SystemCallOperation)
-        case Repair(RepairOperation)
-        
+
+        case handle(HandleOperation)
+        case interface(InterfaceOperation)
+        case core(CoreOperation)
+        case systemCall(SystemCallOperation)
+        case repair(RepairOperation)
+
         public var value: Int {
             switch self {
-            case .Handle(let value):
+            case .handle(let value):
                 return value.rawValue
-            case .Interface(let value):
+            case .interface(let value):
                 return value.rawValue
-            case .Core(let value):
+            case .core(let value):
                 return value.rawValue
-            case .SystemCall(let value):
+            case .systemCall(let value):
                 return value.rawValue
-            case .Repair(let value):
+            case .repair(let value):
                 return value.rawValue
             }
         }
     }
-    
+
     public enum Code {
         public enum CoreCode: Int {
-            case Misuse = 1
-            case Exceed = 2
+            case misuse = 1
+            case exceed = 2
         }
-        
+
         public enum InterfaceCode: Int {
             case ORM = 1
-            case Inconsistent = 2
-            case Misuse = 4
+            case inconsistent = 2
+            case misuse = 4
         }
-        
+
         public enum GlobalCode: Int {
-            case Warning = 1
-            case Abort = 2
+            case warning = 1
+            case abort = 2
         }
-        
-        case Repair(Int)
-        case SQLiteGlobal(Int)
-        case SystemCall(Int)
-        case SQLite(Int)
-        case Core(CoreCode)
-        case Interface(InterfaceCode)
-        case Global(GlobalCode)
-        
+
+        case repair(Int)
+        case sqliteGlobal(Int)
+        case systemCall(Int)
+        case sqlite(Int)
+        case core(CoreCode)
+        case interface(InterfaceCode)
+        case global(GlobalCode)
+
         public var value: Int {
             switch self {
-            case .Repair(let value): 
+            case .repair(let value):
                 return value
-            case .SQLiteGlobal(let value): 
+            case .sqliteGlobal(let value):
                 return value
-            case .SystemCall(let value):
+            case .systemCall(let value):
                 return value
-            case .SQLite(let value):
+            case .sqlite(let value):
                 return value
-            case .Core(let value):
+            case .core(let value):
                 return value.rawValue
-            case .Interface(let value):
+            case .interface(let value):
                 return value.rawValue
-            case .Global(let value):
+            case .global(let value):
                 return value.rawValue
             }
         }
     }
-    
-    public typealias Infos = [Error.Key:ErrorValue]
+
+    public typealias Infos = [Error.Key: ErrorValue]
     public let infos: Infos
-    
+
     public let type: ErrorType
     public let code: Error.Code
-    
+
     private init(type: Error.ErrorType, code: Error.Code, infos: Infos) {
         self.infos = infos
         self.type = type
         self.code = code
     }
-    
+
     public var tag: Tag? {
-        return infos[.Tag]?.intValue
-    } 
-    
+        return infos[.tag]?.intValue
+    }
+
     public var operationValue: Int? {
-        return infos[.Operation]?.intValue
+        return infos[.operation]?.intValue
     }
-    
+
     public var extendedCode: Int? {
-        return infos[.ExtendedCode]?.intValue
+        return infos[.extendedCode]?.intValue
     }
-    
+
     public var message: String? {
-        return infos[.Message]?.stringValue
+        return infos[.message]?.stringValue
     }
-    
+
     public var sql: String? {
         return infos[.SQL]?.stringValue
     }
-    
+
     public var path: String? {
-        return infos[.Path]?.stringValue
+        return infos[.path]?.stringValue
     }
 
     public var description: String {
         return "Code:\(code), Type:\(type.description), \(infos.joined({ "\($0.description):\($1.stringValue)" }))"
     }
-    
+
     static let threadedSlient = ThreadLocal<Bool>(defaultTo: false)
-        
-    public typealias Reporter = (Error)->Void
+
+    public typealias Reporter = (Error) -> Void
     static private let defaultReporter: Reporter = {
         switch $0.type {
-        case Error.ErrorType.SQLiteGlobal:
+        case .sqliteGlobal:
             debugPrint("[WCDB][DEBUG] \($0.description)")
-        case Error.ErrorType.Warning:
+        case .warning:
             print("[WCDB][WARNING] \($0.description)")
         default:
             print("[WCDB][ERROR] \($0.description)")
         }
     }
     static private let reporter: Atomic<Reporter?> = Atomic(defaultReporter)
-    
+
     static public func setReporter(_ reporter: @escaping Reporter) {
         Error.reporter.assign(reporter)
-    }    
+    }
     static public func setReporter(_: Void?) {
         Error.reporter.assign(nil)
     }
@@ -312,86 +321,118 @@ public class Error: Swift.Error, CustomStringConvertible {
         }
         Error.reporter.raw?(self)
     }
-    
+
     @discardableResult
-    static func report(type: ErrorType, code: Error.Code, infos: Error.Infos) -> Error {
+    static func report(type: ErrorType,
+                       code: Error.Code,
+                       infos: Error.Infos) -> Error {
         let error = Error(type: type, code: code, infos: infos)
         error.report()
         return error
     }
-    
+
     @discardableResult
-    static func reportSQLite(tag: Tag?, path: String, operation: Error.Operation.HandleOperation, extendedError: Int32? = nil, sql: String? = nil, rc: Int32, message: String) -> Error {
+    static func reportSQLite(tag: Tag?,
+                             path: String,
+                             operation: Error.Operation.HandleOperation,
+                             extendedError: Int32? = nil,
+                             sql: String? = nil,
+                             code: Int32,
+                             message: String) -> Error {
         var infos = [
-            Error.Key.Operation: ErrorValue(operation.rawValue),
-            Error.Key.Message: ErrorValue(message),
-            Error.Key.Path: ErrorValue(path)]
+            Error.Key.operation: ErrorValue(operation.rawValue),
+            Error.Key.message: ErrorValue(message),
+            Error.Key.path: ErrorValue(path)]
         if extendedError != nil {
-            infos[Error.Key.ExtendedCode] = ErrorValue(Int(extendedError!))
+            infos[Error.Key.extendedCode] = ErrorValue(Int(extendedError!))
         }
         if sql != nil {
             infos[Error.Key.SQL] = ErrorValue(sql!)
         }
-        if tag != nil {            
-            infos[Error.Key.Tag] = ErrorValue(tag!)
+        if tag != nil {
+            infos[Error.Key.tag] = ErrorValue(tag!)
         }
-        return Error.report(type: ErrorType.SQLite, code: Error.Code.SQLite(Int(rc)), infos: infos)
+        return Error.report(type: .sqlite,
+                            code: .sqlite(Int(code)),
+                            infos: infos)
     }
-    
+
     @discardableResult
-    static func reportCore(tag: Tag?, path: String, operation: Error.Operation.CoreOperation, code: Error.Code.CoreCode, message: String) -> Error {
+    static func reportCore(tag: Tag?,
+                           path: String,
+                           operation: Error.Operation.CoreOperation,
+                           code: Error.Code.CoreCode, message: String) -> Error {
         var infos = [
-            Error.Key.Operation: ErrorValue(operation.rawValue),
-            Error.Key.Message: ErrorValue(message),
-            Error.Key.Path: ErrorValue(path)]
-        if tag != nil {            
-            infos[Error.Key.Tag] = ErrorValue(tag!)
+            Error.Key.operation: ErrorValue(operation.rawValue),
+            Error.Key.message: ErrorValue(message),
+            Error.Key.path: ErrorValue(path)]
+        if tag != nil {
+            infos[Error.Key.tag] = ErrorValue(tag!)
         }
-        return Error.report(type: ErrorType.Core, code: Error.Code.Core(code), infos: infos)
+        return Error.report(type: .core,
+                            code: .core(code),
+                            infos: infos)
     }
-    
+
     @discardableResult
-    static func reportInterface(tag: Tag?, path: String, operation: Error.Operation.InterfaceOperation, code: Error.Code.InterfaceCode, message: String) -> Error {
+    static func reportInterface(tag: Tag?,
+                                path: String,
+                                operation: Error.Operation.InterfaceOperation,
+                                code: Error.Code.InterfaceCode, message: String) -> Error {
         var infos = [
-            Error.Key.Operation: ErrorValue(operation.rawValue),
-            Error.Key.Message: ErrorValue(message),
-            Error.Key.Path: ErrorValue(path)]
-        if tag != nil {            
-            infos[Error.Key.Tag] = ErrorValue(tag!)
+            Error.Key.operation: ErrorValue(operation.rawValue),
+            Error.Key.message: ErrorValue(message),
+            Error.Key.path: ErrorValue(path)]
+        if tag != nil {
+            infos[Error.Key.tag] = ErrorValue(tag!)
         }
-        return Error.report(type: ErrorType.Interface, code: Error.Code.Interface(code), infos: infos)
+        return Error.report(type: .interface,
+                            code: .interface(code),
+                            infos: infos)
     }
-    
+
     @discardableResult
-    static func reportSystemCall(operation: Error.Operation.SystemCallOperation, path: String, errno: Int, message: String) -> Error {
-        return Error.report(type: Error.ErrorType.SystemCall, code: Error.Code.SystemCall(errno), infos: [
-            Error.Key.Operation: ErrorValue(operation.rawValue),
-            Error.Key.Message: ErrorValue(message),
-            Error.Key.Path: ErrorValue(path)
+    static func reportSystemCall(operation: Error.Operation.SystemCallOperation,
+                                 path: String,
+                                 errno: Int,
+                                 message: String) -> Error {
+        return Error.report(type: .systemCall, code: .systemCall(errno), infos: [
+            Error.Key.operation: ErrorValue(operation.rawValue),
+            Error.Key.message: ErrorValue(message),
+            Error.Key.path: ErrorValue(path)
             ])
     }
-    
+
     @discardableResult
-    static func reportSQLiteGlobal(rc: Int, message: String) -> Error {
-        return Error.report(type: Error.ErrorType.SQLiteGlobal, code: Error.Code.SQLiteGlobal(rc), infos: [
-            Error.Key.Message: ErrorValue(message)])
+    static func reportSQLiteGlobal(code: Int,
+                                   message: String) -> Error {
+        return Error.report(type: .sqliteGlobal,
+                            code: .sqliteGlobal(code),
+                            infos: [Error.Key.message: ErrorValue(message)]
+        )
     }
-    
+
     @discardableResult
-    static func reportRepair(path: String, operation: Error.Operation.RepairOperation, code: Int) -> Error {
-        return Error.report(type: Error.ErrorType.Repair, code: Error.Code.Repair(code), infos: [
-            Error.Key.Path: ErrorValue(path),
-            Error.Key.Operation: ErrorValue(operation.rawValue)])
+    static func reportRepair(path: String,
+                             operation: Error.Operation.RepairOperation,
+                             code: Int) -> Error {
+        return Error.report(type: .repair,
+                            code: .repair(code),
+                            infos: [
+                                Error.Key.path: ErrorValue(path),
+                                Error.Key.operation: ErrorValue(operation.rawValue)])
     }
-    
+
     static func abort(_ message: String) -> Never {
-        Error.report(type: ErrorType.Abort, code: Error.Code.Global(.Abort), infos: [
-            Error.Key.Message: ErrorValue(message)])
+        Error.report(type: .abort,
+                     code: .global(.abort),
+                     infos: [Error.Key.message: ErrorValue(message)])
         fatalError(message)
     }
-    
+
     static func warning(_ message: String) {
-        Error.report(type: ErrorType.Warning, code: Error.Code.Global(.Warning), infos: [
-            Error.Key.Message: ErrorValue(message)])
+        Error.report(type: .warning,
+                     code: .global(.warning),
+                     infos: [Error.Key.message: ErrorValue(message)])
     }
 }

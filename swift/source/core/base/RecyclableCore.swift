@@ -24,11 +24,13 @@ typealias RecyclableHandlePool = Recyclable<HandlePool>
 
 class RecyclableHandleStatement: Recyclable<HandleStatement> {
     private let recyclableHandle: RecyclableHandle
-    
-    init(recyclableHandle: RecyclableHandle, handleStatement: HandleStatement, onRecycled: RecyclableHandleStatement.OnRecycled? = nil) {
+
+    init(recyclableHandle: RecyclableHandle,
+         handleStatement: HandleStatement,
+         onRecycled: RecyclableHandleStatement.OnRecycled? = nil) {
         self.recyclableHandle = recyclableHandle
         super.init(handleStatement, onRecycled: onRecycled)
     }
 }
 
-typealias RecyclableHandle = Recyclable<HandlePool.HandleWrap> 
+typealias RecyclableHandle = Recyclable<HandlePool.HandleWrap>

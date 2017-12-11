@@ -21,9 +21,9 @@
 import Foundation
 public class StatementRelease: Statement {
     public init() {
-        super.init(with: .Release)
+        super.init(with: .release)
     }
-    
+
     @discardableResult
     public func release(savepoint name: String) -> StatementRelease {
         description.append("RELEASE \(name)")

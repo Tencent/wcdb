@@ -28,7 +28,7 @@ protocol Named {
 extension Named {
     static var name: String {
         return String(describing: Self.self)
-    } 
+    }
     var className: String {
         return Self.name
     }

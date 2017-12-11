@@ -48,11 +48,11 @@ extension ColumnEncodable {
 }
 
 public protocol ColumnDecodableBase: Decodable, ColumnCodableBase {
-    init?(with value: FundamentalColumnType)        
+    init?(with value: FundamentalColumnType)
 }
 public protocol ColumnDecodable: ColumnDecodableBase {
     associatedtype FundamentalType: FundamentalColumnType
-    init?(with value: FundamentalType)        
+    init?(with value: FundamentalType)
 }
 extension ColumnDecodable {
     public static var columnType: ColumnType {
@@ -64,7 +64,7 @@ extension ColumnDecodable {
     public init?(with value: FundamentalColumnType) {
         guard let typedValue = value as? FundamentalType else {
             return nil
-        } 
+        }
         self.init(with: typedValue)
     }
 }

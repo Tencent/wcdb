@@ -21,9 +21,9 @@
 import Foundation
 public class StatementCreateVirtualTable: Statement {
     public init() {
-        super.init(with: .CreateVirtualTable)
+        super.init(with: .createVirtualTable)
     }
-    
+
     @discardableResult
     public func create(virtualTable table: String, ifNotExists: Bool = true) -> StatementCreateVirtualTable {
         description.append("CREATE VIRTUAL TABLE ")
@@ -33,7 +33,7 @@ public class StatementCreateVirtualTable: Statement {
         description.append(table)
         return self
     }
-    
+
     @discardableResult
     public func using(module: String, arguments: [ModuleArgument]? = nil) -> StatementCreateVirtualTable {
         description.append(" USING \(module)")
@@ -42,7 +42,7 @@ public class StatementCreateVirtualTable: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func using(module: String, arguments: ModuleArgument...) -> StatementCreateVirtualTable {
         return using(module: module, arguments: arguments)

@@ -21,18 +21,18 @@
 import Foundation
 public class StatementPragma: Statement {
     public init() {
-        super.init(with: .Pragma)
+        super.init(with: .pragma)
     }
-    
+
     @discardableResult
     public func pragma(_ pragma: Pragma) -> StatementPragma {
         description.append("PRAGMA \(pragma.description)")
         return self
     }
-    
+
     @discardableResult
     public func pragma(_ pragma: Pragma, to literalValueConvertible: LiteralValueConvertible) -> StatementPragma {
         description.append("PRAGMA \(pragma.description)=\(literalValueConvertible.asLiteralValue().description)")
         return self
-    }    
+    }
 }

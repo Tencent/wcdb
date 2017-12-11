@@ -27,100 +27,108 @@ class Tracer {
             setup()
         }
     }
-    
-    typealias PerformanceTracer = ([String:Int], Int64, Any?) -> Void // (SQL, count), cost, userInfo
+
+    typealias PerformanceTracer = ([String: Int], Int64, Any?) -> Void // (SQL, count), cost, userInfo
     private var performanceTracer: PerformanceTracer? = nil {
         didSet {
             setup()
         }
     }
     var shouldAggregation = false
-    private var footprint: [String:Int] = [:]
+    private var footprint: [String: Int] = [:]
     private var cost: Int64 = 0
-    
-    private let handle: sqlite3
-    var userInfo: Any? = nil
-    
-    init(with handle: sqlite3) {
+
+    private let handle: SQLite3
+    var userInfo: Any?
+
+    init(with handle: SQLite3) {
         self.handle = handle
     }
-    
+
     deinit {
         reportPerformance()
     }
-    
-    private var flag: Int32 {
-        var flag: Int32 = 0
+
+    struct TraceType: OptionSet {
+        let rawValue: UInt32
+
+        static let stmt = TraceType(rawValue: UInt32(SQLITE_TRACE_STMT))
+        static let profile = TraceType(rawValue: UInt32(SQLITE_TRACE_PROFILE))
+    }
+
+    private var type: TraceType {
+        var type = TraceType()
         if sqlTracer != nil {
-            flag |= SQLITE_TRACE_STMT
+            type.insert(.stmt)
         }
         if performanceTracer != nil {
-            flag |= SQLITE_TRACE_PROFILE
+            type.insert(.profile)
         }
-        return flag
+        return type
     }
-    
+
     private func setup() {
-        let flag: Int32 = self.flag
-        guard flag > 0 else {
+        let traceType = self.type
+        guard !traceType.isEmpty else {
             sqlite3_trace_v2(handle, 0, nil, nil)
-            return 
+            return
         }
-        sqlite3_trace_v2(handle, UInt32(flag), { (flag, M, P, X) -> Int32 in
-            let pointer = Unmanaged<Tracer>.fromOpaque(M!)
+        sqlite3_trace_v2(handle, traceType.rawValue, { (flag, context, stmtPointer, costPointer) -> Int32 in
+            let traceType = TraceType(rawValue: flag)
+            let pointer = Unmanaged<Tracer>.fromOpaque(context!)
             let tracer = pointer.takeUnretainedValue()
 
-            let stmt = OpaquePointer(P)
+            let stmt = OpaquePointer(stmtPointer)
             guard let csql = sqlite3_sql(stmt) else {
                 return SQLITE_MISUSE
-            } 
+            }
             let sql = String(cString: csql)
-            switch (flag) {
-            case UInt32(SQLITE_TRACE_STMT):
+            switch traceType {
+            case .stmt:
                 tracer.report(sql: sql)
-            case UInt32(SQLITE_TRACE_PROFILE):
-                let cost: Int64 = UnsafePointer<Int64>(OpaquePointer(X)!).pointee
-                
+            case .profile:
+                let cost: Int64 = UnsafePointer<Int64>(OpaquePointer(costPointer)!).pointee
+
                 //report last track 
                 if !tracer.shouldAggregation {
                     tracer.reportPerformance()
                 }
-                
+
                 tracer.recordPerformance(sql: sql, cost: cost)
             default: break
             }
             return SQLITE_OK
         }, Unmanaged.passUnretained(self).toOpaque())
     }
-    
+
     private func report(sql: String) {
         guard let sqlTracer = self.sqlTracer else {
-            return 
+            return
         }
         sqlTracer(sql)
     }
-    
+
     private func reportPerformance() {
         guard !footprint.isEmpty else {
             return
         }
         guard let performanceTracer = self.performanceTracer else {
             return
-        } 
+        }
         performanceTracer(footprint, cost, userInfo)
         footprint.removeAll()
         cost = 0
     }
-    
+
     private func recordPerformance(sql: String, cost: Int64) {
         self.footprint[sql] = self.footprint[sql] ?? 1
         self.cost = cost
     }
-    
+
     func trace(sql sqlTracer: @escaping SQLTracer) {
         self.sqlTracer = sqlTracer
     }
-    
+
     func track(performance performanceTracer: @escaping PerformanceTracer) {
         self.performanceTracer = performanceTracer
     }

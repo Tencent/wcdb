@@ -27,19 +27,31 @@ class TableConstraintTests: BaseTestCase {
         let table1 = "table1"
         return TableConstraint(named: table1)
     }
-    
+
     func testTableConstraint() {
         //Give
         let column1 = Column(named: "column1")
         let index1 = column1.asIndex()
         let index2 = Column(named: "column2").asIndex()
-        
-        WINQAssertEqual(generateTableConstraint().makePrimary(indexesBy: index1, index2), "CONSTRAINT table1 PRIMARY KEY(column1, column2)")
-        
-        WINQAssertEqual(generateTableConstraint().makeUnique(indexesBy: index1, index2), "CONSTRAINT table1 UNIQUE(column1, column2)")
-        
-        WINQAssertEqual(generateTableConstraint().onConflict(.Fail), "CONSTRAINT table1 ON CONFLICT FAIL")
-        
-        WINQAssertEqual(generateTableConstraint().check(column1 > 1), "CONSTRAINT table1 CHECK(column1 > 1)")
+
+        WINQAssertEqual(
+            generateTableConstraint().makePrimary(indexesBy: index1, index2),
+            "CONSTRAINT table1 PRIMARY KEY(column1, column2)"
+        )
+
+        WINQAssertEqual(
+            generateTableConstraint().makeUnique(indexesBy: index1, index2),
+            "CONSTRAINT table1 UNIQUE(column1, column2)"
+        )
+
+        WINQAssertEqual(
+            generateTableConstraint().onConflict(.fail),
+            "CONSTRAINT table1 ON CONFLICT FAIL"
+        )
+
+        WINQAssertEqual(
+            generateTableConstraint().check(column1 > 1),
+            "CONSTRAINT table1 CHECK(column1 > 1)"
+        )
     }
 }

@@ -21,9 +21,9 @@
 import Foundation
 public class StatementRollback: Statement {
     public init() {
-        super.init(with: .Rollback)
+        super.init(with: .rollback)
     }
-    
+
     public func rollback(toSavepoint optionalName: String? = nil) -> StatementRollback {
         description.append("ROLLBACK")
         if let name = optionalName {

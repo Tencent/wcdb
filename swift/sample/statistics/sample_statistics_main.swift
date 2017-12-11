@@ -23,16 +23,16 @@ import WCDBSwift
 
 func sample_statistics_main(baseDirectory: String) {
     print("Sample-statistics Begin")
-    
+
     let className = String(describing: SampleStatistics.self)
     let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
     let tableName = className
-    
+
     let database = Database(withPath: path)
-    database.close { 
+    database.close {
         try? database.removeFiles()
     }
-    
+
     //trace
     //You should register trace before all db operation.
     do {
@@ -44,36 +44,36 @@ func sample_statistics_main(baseDirectory: String) {
             print("Total cost \(cost) nanoseconds")
         })
     }
-    
+
     //SQL
     do {
         Database.globalTrace(ofSQL: { (sql) in
             print("SQL: \(sql)")
         })
     }
-    
+
     //error
     do {
         Database.globalTrace(ofError: { (error) in
             print("Error: \(error)")
         })
     }
-    
+
     do {
         try database.create(table: tableName, of: SampleStatistics.self)
-    }catch let error {
+    } catch let error {
         print("create table error: \(error)")
     }
-    
+
     //trace for insertion
     do {
         let object = SampleStatistics()
         object.intValue = 100
         try database.insert(objects: object, intoTable: tableName)
-    }catch let error {
+    } catch let error {
         print("insert error: \(error)")
     }
-    
+
     //trace for transaction
     do {
         var objects: [SampleStatistics] = []
@@ -83,17 +83,17 @@ func sample_statistics_main(baseDirectory: String) {
             objects.append(object)
         }
         try database.insert(objects: objects, intoTable: tableName)
-        
-        try database.run(transaction: { 
+
+        try database.run(transaction: {
             let results: [SampleStatistics] = try database.getObjects(fromTable: tableName)
             for object in results {
                 object.intValue = -(object.intValue ?? 0)
             }
             try database.insert(objects: results, intoTable: tableName)
         })
-    }catch let error{
+    } catch let error {
         print("transaction error:\(error)")
     }
-    
+
     print("Sample-statistics End")
 }

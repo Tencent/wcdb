@@ -20,41 +20,52 @@
 
 import Foundation
 
-public class RowSelect : SelectBase {
-    init(with core: Core, results columnResultConvertibleList: [ColumnResultConvertible], tables: [String], isDistinct: Bool) throws {
+public class RowSelect: SelectBase {
+    init(with core: Core,
+         results columnResultConvertibleList: [ColumnResultConvertible],
+         tables: [String],
+         isDistinct: Bool) throws {
         guard columnResultConvertibleList.count > 0 else {
-            throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Selecting nothing from \(tables) is invalid")
+            throw Error.reportInterface(tag: core.tag,
+                                        path: core.path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "Selecting nothing from \(tables) is invalid")
         }
         guard tables.count > 0 else {
-            throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Empty table")
+            throw Error.reportInterface(tag: core.tag,
+                                        path: core.path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "Empty table")
         }
         super.init(with: core)
         statement.select(distinct: isDistinct, columnResultConvertibleList).from(tables)
     }
-    
+
     private func extract(atIndex index: Int) throws -> FundamentalValue {
         let coreStatement = try self.lazyCoreStatement()
         switch coreStatement.columnType(atIndex: index) {
-        case .Integer32:
+        case .integer32:
             let value: Int32 = coreStatement.value(atIndex: index) ?? 0
             return FundamentalValue(value)
-        case .Integer64:
-            let value: Int64 = coreStatement.value(atIndex: index) ?? 0 
+        case .integer64:
+            let value: Int64 = coreStatement.value(atIndex: index) ?? 0
             return FundamentalValue(value)
-        case .Float:
+        case .float:
             let value: Double = coreStatement.value(atIndex: index)  ?? 0
             return FundamentalValue(value)
-        case .Text:
+        case .text:
             let value: String = coreStatement.value(atIndex: index)  ?? ""
             return FundamentalValue(value)
         case .BLOB:
             let value: Data = coreStatement.value(atIndex: index)  ?? Data()
             return FundamentalValue(value)
-        case .Null:
+        case .null:
             return nil
         }
     }
-    
+
     private func extract() throws -> FundamentalRow {
         var row: FundamentalRow = []
         let coreStatement = try self.lazyCoreStatement()
@@ -63,14 +74,14 @@ public class RowSelect : SelectBase {
         }
         return row
     }
-    
+
     public func nextRow() throws -> FundamentalRow? {
         guard try next() else {
             return nil
-        }         
+        }
         return try extract()
     }
-    
+
     public func allRows() throws -> FundamentalRowXColumn {
         var rows: [[FundamentalValue]] = []
         while try next() {
@@ -78,14 +89,14 @@ public class RowSelect : SelectBase {
         }
         return rows
     }
-    
+
     public func nextValue() throws -> FundamentalValue? {
         guard try next() else {
             return nil
         }
         return try extract(atIndex: 0)
     }
-    
+
     public func allValues() throws -> FundamentalColumn {
         var values: [FundamentalValue] = []
         while try next() {

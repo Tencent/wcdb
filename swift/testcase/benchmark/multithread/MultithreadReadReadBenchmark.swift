@@ -21,12 +21,12 @@
 import XCTest
 
 class MultithreadReadReadBenchmark: BaseMultithreadBenchmark {
-    
+
     override func setUp() {
         super.setUp()
 
         setUpWithPreCreateTable()
-        
+
         setUpWithPreInsertObjects(count: config.readCount)
     }
 
@@ -35,19 +35,19 @@ class MultithreadReadReadBenchmark: BaseMultithreadBenchmark {
         var results1: [BenchmarkObject]? = nil
         var results2: [BenchmarkObject]? = nil
 
-        measure(onSetUp: { 
+        measure(onSetUp: {
             results1 = nil
-            
+
             results2 = nil
-            
+
             tearDownDatabaseCache()
-            
+
             setUpDatabaseCache()
-        }, for: { 
-            queue.async(group: group, execute: { 
+        }, for: {
+            queue.async(group: group, execute: {
                 results1 = try? self.database.getObjects(fromTable: tableName)
             })
-            queue.async(group: group, execute: { 
+            queue.async(group: group, execute: {
                 results2 = try? self.database.getObjects(fromTable: tableName)
             })
             group.wait()

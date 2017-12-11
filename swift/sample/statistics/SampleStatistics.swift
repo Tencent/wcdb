@@ -22,11 +22,11 @@ import Foundation
 import WCDBSwift
 
 class SampleStatistics: TableCodable {
-    var intValue: Int? = nil
+    var intValue: Int?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleStatistics    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        
+        typealias Root = SampleStatistics
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+
         case intValue
     }
     required init() {}

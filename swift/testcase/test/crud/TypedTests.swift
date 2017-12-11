@@ -22,36 +22,36 @@ import XCTest
 import WCDBSwift
 
 class TypedTests: CRUDTestCase {
-    
+
     class TypedJSONCodableObject: ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
-        static func ==(lhs: TypedJSONCodableObject, rhs: TypedJSONCodableObject) -> Bool {
+        static func == (lhs: TypedJSONCodableObject, rhs: TypedJSONCodableObject) -> Bool {
             return lhs.variable == rhs.variable
         }
-        
+
         var variable: Int = 1
-        
+
         var debugDescription: String {
             return "\(variable)"
         }
     }
 
     struct TypedNSCodableObject: ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
-        static func ==(lhs: TypedNSCodableObject, rhs: TypedNSCodableObject) -> Bool {
+        static func == (lhs: TypedNSCodableObject, rhs: TypedNSCodableObject) -> Bool {
             return lhs.variable == rhs.variable
         }
-        
+
         var variable: Int = 1
-        
+
         var debugDescription: String {
             return "\(variable)"
         }
     }
-    
+
     enum TypedCodableObject: Int, ColumnCodable, Equatable, CustomDebugStringConvertible {
         case variable = 0
-        
+
         typealias FundamentalType = Int64
-        
+
         func archivedValue() -> Int64? {
             return Int64(self.rawValue)
         }
@@ -59,10 +59,10 @@ class TypedTests: CRUDTestCase {
         init?(with value: Int64) {
             guard let object = TypedCodableObject(rawValue: Int(truncatingIfNeeded: value)) else {
                 return nil
-            } 
+            }
             self = object
-        }        
-        
+        }
+
         var debugDescription: String {
             return "\(self.rawValue)"
         }
@@ -106,14 +106,14 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case nsCodable
             case codable
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
-        
+
         enum TestType {
             case upperBoundary
             case lowerBoundary
         }
-        
+
         init(with testType: TestType) {
             switch testType {
             case .upperBoundary:
@@ -170,10 +170,10 @@ class TypedTests: CRUDTestCase {
                 codable = .variable
             }
         }
-        
-        static func ==(lhs: TypedTestObject, rhs: TypedTestObject) -> Bool {
-            return lhs.int == rhs.int 
-                && lhs.int8 == rhs.int8 
+
+        static func == (lhs: TypedTestObject, rhs: TypedTestObject) -> Bool {
+            return lhs.int == rhs.int
+                && lhs.int8 == rhs.int8
                 && lhs.int16 == rhs.int16
                 && lhs.int32 == rhs.int32
                 && lhs.int64 == rhs.int64
@@ -212,127 +212,133 @@ class TypedTests: CRUDTestCase {
             """
         }
     }
-    
+
     func testUpperBoundary() {
         //Give
-        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))        
+        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
         let object = TypedTestObject(with: .upperBoundary)
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: TypedTestObject.name))
         //When
-        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: TypedTestObject.name))
+        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: TypedTestObject.name)
+        )
         //Then
         XCTAssertNotNil(selected)
         XCTAssertEqual(selected!, object)
     }
-    
+
     func testLowerBoundary() {
         //Give
-        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))        
+        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
         let object = TypedTestObject(with: .lowerBoundary)
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: TypedTestObject.name))
         //When
-        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: TypedTestObject.name))
+        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: TypedTestObject.name)
+        )
         //Then
         XCTAssertNotNil(selected)
         XCTAssertEqual(selected!, object)
     }
-    
+
     class TypedOverflowTestObject: TableCodable, CustomDebugStringConvertible {
-        var int64_0: Int64 = Int64.max
-        var int64_1: Int64 = Int64.max
-        var int64_2: Int64 = Int64.max
-        var int64_3: Int64 = Int64.max
-        var int64_4: Int64 = Int64.max
-        var int64_5: Int64 = Int64.max
-        var int64_6: Int64 = Int64.max
-        var int64_7: Int64 = Int64.max
-        var int64_8: Int64 = Int64.max
-        var int64_9: Int64 = Int64.max
-        var double_0: Double = Double.pi
-        var double_1: Double = Double.pi
+        var int64Variable0: Int64 = Int64.max
+        var int64Variable1: Int64 = Int64.max
+        var int64Variable2: Int64 = Int64.max
+        var int64Variable3: Int64 = Int64.max
+        var int64Variable4: Int64 = Int64.max
+        var int64Variable5: Int64 = Int64.max
+        var int64Variable6: Int64 = Int64.max
+        var int64Variable7: Int64 = Int64.max
+        var int64Variable8: Int64 = Int64.max
+        var int64Variable9: Int64 = Int64.max
+        var doubleVariable0: Double = Double.pi
+        var doubleVariable1: Double = Double.pi
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedOverflowTestObject
-            case int64_0 = "int"
-            case int64_1 = "int8"
-            case int64_2 = "int16"
-            case int64_3 = "int32"
-            case int64_4 = "int64"
-            case int64_5 = "uint"
-            case int64_6 = "uint8"
-            case int64_7 = "uint16"
-            case int64_8 = "uint32"
-            case int64_9 = "uint64"
-            case double_0 = "float"
-            case double_1 = "double"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
+            case int64Variable0 = "int"
+            case int64Variable1 = "int8"
+            case int64Variable2 = "int16"
+            case int64Variable3 = "int32"
+            case int64Variable4 = "int64"
+            case int64Variable5 = "uint"
+            case int64Variable6 = "uint8"
+            case int64Variable7 = "uint16"
+            case int64Variable8 = "uint32"
+            case int64Variable9 = "uint64"
+            case doubleVariable0 = "float"
+            case doubleVariable1 = "double"
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
-        
+
         enum TestType {
             case upperBoundary
             case lowerBoundary
         }
-        
+
         var debugDescription: String {
             return """
-            int64_0: \(int64_0)
-            int64_1: \(int64_1)
-            int64_2: \(int64_2)
-            int64_3: \(int64_3)
-            int64_4: \(int64_4)
-            int64_5: \(int64_5)
-            int64_6: \(int64_6)
-            int64_7: \(int64_7)
-            int64_8: \(int64_8)
-            int64_9: \(int64_9)
-            double_0: \(double_0)
-            double_1: \(double_1)
+            int64Variable0: \(int64Variable0)
+            int64Variable1: \(int64Variable1)
+            int64Variable2: \(int64Variable2)
+            int64Variable3: \(int64Variable3)
+            int64Variable4: \(int64Variable4)
+            int64Variable5: \(int64Variable5)
+            int64Variable6: \(int64Variable6)
+            int64Variable7: \(int64Variable7)
+            int64Variable8: \(int64Variable8)
+            int64Variable9: \(int64Variable9)
+            doubleVariable0: \(doubleVariable0)
+            doubleVariable1: \(doubleVariable1)
             """
         }
     }
 
     func testOverflowed() {
         //Give
-        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))        
+        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
         let overflow = TypedOverflowTestObject()
         XCTAssertNoThrow(try database.insert(objects: overflow, intoTable: TypedTestObject.name))
         //When
-        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: TypedTestObject.name))
+        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: TypedTestObject.name)
+        )
         //Then
         XCTAssertNotNil(selected)
         let wrapped = selected!
-        XCTAssertEqual(wrapped.int, Int(truncatingIfNeeded: overflow.int64_0))
-        XCTAssertEqual(wrapped.int8, Int8(truncatingIfNeeded: overflow.int64_1))
-        XCTAssertEqual(wrapped.int16, Int16(truncatingIfNeeded: overflow.int64_2))
-        XCTAssertEqual(wrapped.int32, Int32(truncatingIfNeeded: overflow.int64_3))
-        XCTAssertEqual(wrapped.int64, overflow.int64_4)
-        XCTAssertEqual(wrapped.uint, UInt(truncatingIfNeeded: UInt64(bitPattern: overflow.int64_5)))
-        XCTAssertEqual(wrapped.uint8, UInt8(truncatingIfNeeded: UInt64(bitPattern: overflow.int64_6)))
-        XCTAssertEqual(wrapped.uint16, UInt16(truncatingIfNeeded: UInt64(bitPattern: overflow.int64_7)))
-        XCTAssertEqual(wrapped.uint32, UInt32(truncatingIfNeeded: UInt64(bitPattern: overflow.int64_8)))
-        XCTAssertEqual(wrapped.uint64, UInt64(bitPattern: overflow.int64_9))
-        XCTAssertEqual(wrapped.float, Float(overflow.double_0))
-        XCTAssertEqual(wrapped.double, overflow.double_1)
+        XCTAssertEqual(wrapped.int, Int(truncatingIfNeeded: overflow.int64Variable0))
+        XCTAssertEqual(wrapped.int8, Int8(truncatingIfNeeded: overflow.int64Variable1))
+        XCTAssertEqual(wrapped.int16, Int16(truncatingIfNeeded: overflow.int64Variable2))
+        XCTAssertEqual(wrapped.int32, Int32(truncatingIfNeeded: overflow.int64Variable3))
+        XCTAssertEqual(wrapped.int64, overflow.int64Variable4)
+        XCTAssertEqual(wrapped.uint, UInt(truncatingIfNeeded: UInt64(bitPattern: overflow.int64Variable5)))
+        XCTAssertEqual(wrapped.uint8, UInt8(truncatingIfNeeded: UInt64(bitPattern: overflow.int64Variable6)))
+        XCTAssertEqual(wrapped.uint16, UInt16(truncatingIfNeeded: UInt64(bitPattern: overflow.int64Variable7)))
+        XCTAssertEqual(wrapped.uint32, UInt32(truncatingIfNeeded: UInt64(bitPattern: overflow.int64Variable8)))
+        XCTAssertEqual(wrapped.uint64, UInt64(bitPattern: overflow.int64Variable9))
+        XCTAssertEqual(wrapped.float, Float(overflow.doubleVariable0))
+        XCTAssertEqual(wrapped.double, overflow.doubleVariable1)
     }
-    
+
     class OptionalTypedTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
-        var int: Int? = nil
-        var int8: Int8? = nil
-        var int16: Int16? = nil
-        var int32: Int32? = nil
-        var int64: Int64? = nil
-        var uint: UInt? = nil
-        var uint8: UInt8? = nil
-        var uint16: UInt16? = nil
-        var uint32: UInt32? = nil
-        var uint64: UInt64? = nil
-        var string: String? = nil
-        var float: Float? = nil
-        var double: Double? = nil
-        var data: Data? = nil
-        var jsonCodable: TypedJSONCodableObject? = nil
-        var nsCodable: TypedNSCodableObject? = nil
-        var codable: TypedCodableObject? = nil
+        var int: Int?
+        var int8: Int8?
+        var int16: Int16?
+        var int32: Int32?
+        var int64: Int64?
+        var uint: UInt?
+        var uint8: UInt8?
+        var uint16: UInt16?
+        var uint32: UInt32?
+        var uint64: UInt64?
+        var string: String?
+        var float: Float?
+        var double: Double?
+        var data: Data?
+        var jsonCodable: TypedJSONCodableObject?
+        var nsCodable: TypedNSCodableObject?
+        var codable: TypedCodableObject?
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OptionalTypedTestObject
@@ -353,14 +359,14 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case nsCodable
             case codable
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
-        
+
         enum TestType {
             case null
             case zero
         }
-        
+
         init(with testType: TestType) {
             switch testType {
             case .null:
@@ -409,10 +415,10 @@ class TypedTests: CRUDTestCase {
                 codable = .variable
             }
         }
-        
-        static func ==(lhs: OptionalTypedTestObject, rhs: OptionalTypedTestObject) -> Bool {
-            return lhs.int == rhs.int 
-                && lhs.int8 == rhs.int8 
+
+        static func == (lhs: OptionalTypedTestObject, rhs: OptionalTypedTestObject) -> Bool {
+            return lhs.int == rhs.int
+                && lhs.int8 == rhs.int8
                 && lhs.int16 == rhs.int16
                 && lhs.int32 == rhs.int32
                 && lhs.int64 == rhs.int64
@@ -454,11 +460,13 @@ class TypedTests: CRUDTestCase {
 
     func testNull() {
         //Give
-        XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))        
+        XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .null)
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: OptionalTypedTestObject.name))
         //When
-        let selected: OptionalTypedTestObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: OptionalTypedTestObject.name))
+        let selected: OptionalTypedTestObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: OptionalTypedTestObject.name)
+        )
         //Then
         XCTAssertNotNil(selected)
         XCTAssertEqual(selected!, object)
@@ -466,14 +474,15 @@ class TypedTests: CRUDTestCase {
 
     func testZero() {
         //Give
-        XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))        
+        XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
         let object = OptionalTypedTestObject(with: .zero)
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: OptionalTypedTestObject.name))
         //When
-        let selected: OptionalTypedTestObject? = WCDBAssertNoThrowReturned(try database.getObject(fromTable: OptionalTypedTestObject.name))
+        let selected: OptionalTypedTestObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: OptionalTypedTestObject.name)
+        )
         //Then
         XCTAssertNotNil(selected)
         XCTAssertEqual(selected!, object)
-    }    
+    }
 }
-

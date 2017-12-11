@@ -27,28 +27,30 @@ class BaseTestCase: XCTestCase, Named {
         url.appendPathComponent(String(describing: BaseTestCase.self))
         return url
     }()
-    
+
     lazy var recommendedDirectory: URL = {
         var url = BaseTestCase.baseDirectory
         url.appendPathComponent(self.className)
-        return url 
+        return url
     }()
-    
+
     lazy var recommendedPath: URL = {
         var url = recommendedDirectory
         url.appendPathComponent(String(UInt(bitPattern: self.name.hash)))
         return url
-    }() 
-    
+    }()
+
     let fileManager = FileManager.default
-    
+
     override func setUp() {
         super.setUp()
         self.continueAfterFailure = false
-        
+
         if fileManager.fileExists(atPath: recommendedDirectory.path) {
             XCTAssertNoThrow(try fileManager.removeItem(at: recommendedDirectory))
         }
-        XCTAssertNoThrow(try fileManager.createDirectory(at: recommendedDirectory, withIntermediateDirectories: true, attributes: nil))
-    }    
+        XCTAssertNoThrow(try fileManager.createDirectory(at: recommendedDirectory,
+                                                         withIntermediateDirectories: true,
+                                                         attributes: nil))
+    }
 }

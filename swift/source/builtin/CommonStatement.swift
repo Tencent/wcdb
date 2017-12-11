@@ -22,21 +22,24 @@ import Foundation
 
 extension Statement {
     public static let enableFullfsync = StatementPragma().pragma(.fullfsync, to: true)
-    
+
     public static let getJournalMode = StatementPragma().pragma(.journalMode)
     public static let enableJournalModeWAL = StatementPragma().pragma(.journalMode, to: "WAL")
-    
+
     public static let enableSynchronousNormal = StatementPragma().pragma(.synchronous, to: "NORMAL")
     public static let enableSynchronousFull = StatementPragma().pragma(.synchronous, to: "FULL")
-    
+
     public static let getLockingMode = StatementPragma().pragma(.lockingMode)
     public static let enableLockingModeNormal = StatementPragma().pragma(.lockingMode, to: "NORMAL")
-    
-    public static let checkpoint = StatementPragma().pragma(.walCheckpoint)
-    
-    public static let fts3Tokenizer = StatementSelect().select(Expression.function(named: "fts3_tokenizer", Array(repeating: Expression.bindingParameter, count: 2)))
 
-    public static let beginTransactionImmediate = StatementTransaction().begin(.Immediate)
+    public static let checkpoint = StatementPragma().pragma(.walCheckpoint)
+
+    public static let fts3Tokenizer = StatementSelect()
+        .select(Expression.function(named: "fts3_tokenizer",
+                                    Array(repeating: Expression.bindingParameter, count: 2))
+    )
+
+    public static let beginTransactionImmediate = StatementTransaction().begin(.immediate)
     public static let commitTransaction = StatementTransaction().commit()
     public static let rollbackTransaction = StatementTransaction().rollback()
 }

@@ -24,17 +24,20 @@ public protocol CodingTableKeyBase: CodingKey {
     var rootType: TableCodableBase.Type {get}
 }
 
-public protocol CodingTableKey: CodingTableKeyBase, Hashable, PropertyConvertible, ExpressionOperable, RawRepresentable where RawValue == String {
+public protocol CodingTableKey: CodingTableKeyBase,
+    Hashable,
+    PropertyOperable,
+    RawRepresentable where RawValue == String {
     associatedtype Root: TableCodableBase
-    
-    static var all: [Property] {get}
-    static var any: Column {get}    
 
-    static var __objectRelationalMapping: TableBinding<Self> {get}    
-    static var __columnConstraintBindings: [Self:ColumnConstraintBinding]? {get}
-    static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {get}
-    static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {get}
-    static var __virtualTableBinding: VirtualTableBinding? {get}
+    static var all: [Property] {get}
+    static var any: Column {get}
+
+    static var objectRelationalMapping: TableBinding<Self> {get}
+    static var columnConstraintBindings: [Self: ColumnConstraintBinding]? {get}
+    static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {get}
+    static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {get}
+    static var virtualTableBinding: VirtualTableBinding? {get}
 }
 
 extension CodingTableKey {
@@ -45,28 +48,28 @@ extension CodingTableKey {
 
 extension CodingTableKey {
     public static var all: [Property] {
-        return __objectRelationalMapping.allProperties
-    } 
+        return objectRelationalMapping.allProperties
+    }
     public static var any: Column {
         return Column.any
     }
 }
 
-extension CodingTableKey {        
-    public static var __columnConstraintBindings: [Self:ColumnConstraintBinding]? {
+extension CodingTableKey {
+    public static var columnConstraintBindings: [Self: ColumnConstraintBinding]? {
         return nil
     }
-    
-    public static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+
+    public static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
         return nil
     }
-    
-    public static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-        return nil        
+
+    public static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+        return nil
     }
-    
-    public static var __virtualTableBinding: VirtualTableBinding? {
-        return nil        
+
+    public static var virtualTableBinding: VirtualTableBinding? {
+        return nil
     }
 }
 
@@ -74,26 +77,24 @@ extension CodingTableKey {
     public var codingTableKey: CodingTableKeyBase {
         return self
     }
-    
+
     public func `as`(_ propertyConvertible: PropertyConvertible) -> Property {
         return Property(named: stringValue, with: propertyConvertible.codingTableKey)
     }
-    
+
     public func asProperty() -> Property {
-        return Self.__objectRelationalMapping.property(from: self)
+        return Self.objectRelationalMapping.property(from: self)
     }
-    
+
     public func `in`(table: String) -> Property {
         return asProperty().`in`(table: table)
     }
-    
+
     public func asExpression() -> Expression {
         return asColumn().asExpression()
     }
-    
+
     public func asColumn() -> Column {
         return Column(named: stringValue)
     }
 }
-
-

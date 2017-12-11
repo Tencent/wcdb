@@ -24,51 +24,62 @@ import WCDBSwift
 class IndexBindingTests: BaseTestCase {
 
     class BaselineTestObject: TableCodable {
-        let variable: Int = 0   
-        required init() {} 
+        let variable: Int = 0
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(indexesBy: variable)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
+                return ["_index": IndexBinding(indexesBy: variable)]
             }
         }
     }
-    
+
     class UniqueTestObject: TableCodable {
-        let variable: Int = 0       
-        required init() {}  
+        let variable: Int = 0
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(isUnique: true, indexesBy: variable)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
+                return ["_index": IndexBinding(isUnique: true, indexesBy: variable)]
             }
         }
     }
 
     class MultiIndexesTestObject: TableCodable {
-        let variable1: Int = 0 
-        let variable2: Int = 0  
+        let variable1: Int = 0
+        let variable2: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiIndexesTestObject
             case variable1
             case variable2
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(indexesBy: variable1, variable2)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
+                return ["_index": IndexBinding(indexesBy: variable1, variable2)]
             }
         }
     }
 
     func testIndexBinding() {
-        ORMIndexBindingAssertEqual(BaselineTestObject.self, "CREATE INDEX IF NOT EXISTS BaselineTestObject_index ON BaselineTestObject(variable)")
-        
-        ORMIndexBindingAssertEqual(UniqueTestObject.self, "CREATE UNIQUE INDEX IF NOT EXISTS UniqueTestObject_index ON UniqueTestObject(variable)")
-        
-        ORMIndexBindingAssertEqual(MultiIndexesTestObject.self, "CREATE INDEX IF NOT EXISTS MultiIndexesTestObject_index ON MultiIndexesTestObject(variable1, variable2)")
+        ORMIndexBindingAssertEqual(
+            BaselineTestObject.self,
+            "CREATE INDEX IF NOT EXISTS BaselineTestObject_index ON BaselineTestObject(variable)"
+        )
+
+        ORMIndexBindingAssertEqual(
+            UniqueTestObject.self,
+            "CREATE UNIQUE INDEX IF NOT EXISTS UniqueTestObject_index ON UniqueTestObject(variable)"
+        )
+
+        ORMIndexBindingAssertEqual(
+            MultiIndexesTestObject.self,
+            """
+            CREATE INDEX IF NOT EXISTS MultiIndexesTestObject_index \
+            ON MultiIndexesTestObject(variable1, variable2)
+            """)
     }
 }

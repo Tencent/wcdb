@@ -22,19 +22,18 @@ import Foundation
 import WCDBSwift
 
 class SampleAdvance: TableCodable {
-    var intValue: Int? = nil
-    var columnCoding: SampleCodableColumn? = nil
+    var intValue: Int?
+    var columnCoding: SampleCodableColumn?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleAdvance    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        typealias Root = SampleAdvance
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
         case intValue
         case columnCoding
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-            return [.intValue:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+            return [.intValue: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
         }
     }
     required init() {}
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
-

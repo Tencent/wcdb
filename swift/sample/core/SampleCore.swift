@@ -22,14 +22,13 @@ import Foundation
 import WCDBSwift
 
 class SampleCore: TableCodable {
-    var localID: Int? = nil
-    var content: String? = nil
+    var localID: Int?
+    var content: String?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleCore    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        typealias Root = SampleCore
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
         case localID
         case content
     }
     required init() {}
 }
-

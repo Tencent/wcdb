@@ -20,12 +20,11 @@
 
 import Foundation
 
-public class Pragma: Describable
-{
+public class Pragma: Describable {
     fileprivate init(named name: String) {
         super.init(name)
     }
-    
+
     public static let applicationId = Pragma(named: "application_id")
     public static let autoVacuum = Pragma(named: "auto_vacuum")
     public static let automaticIndex = Pragma(named: "automatic_index")
@@ -110,4 +109,3 @@ public class Pragma: Describable
         return description
     }
 }
-

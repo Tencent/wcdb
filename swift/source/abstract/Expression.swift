@@ -20,21 +20,21 @@
 
 import Foundation
 
-public final class Expression : Describable {
+public final class Expression: Describable {
     public static let bindingParameter = Expression(withRaw: "?")
 
     public init(with columnConvertible: ColumnConvertible) {
         super.init(columnConvertible.asColumn().description)
     }
-    
+
     public init(with literalValueConvertible: LiteralValueConvertible) {
         super.init(literalValueConvertible.asLiteralValue().description)
     }
-    
+
     public init(with statementSelect: StatementSelect) {
         super.init(statementSelect.description)
     }
-    
+
     init(withRaw raw: String) {
         super.init(raw)
     }
@@ -66,7 +66,7 @@ extension Expression: ExpressibleByStringLiteral {
     }
 }
 
-extension Expression : ExpressionOperable {
+extension Expression: ExpressionOperable {
     public func asExpression() -> Expression {
         return self
     }

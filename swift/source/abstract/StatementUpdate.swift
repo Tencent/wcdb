@@ -21,9 +21,9 @@
 import Foundation
 public class StatementUpdate: Statement {
     public init() {
-        super.init(with: .Update)
+        super.init(with: .update)
     }
-    
+
     @discardableResult
     public func update(table: String, onConflict conflict: Conflict? = nil) -> StatementUpdate {
         description.append("UPDATE ")
@@ -33,9 +33,9 @@ public class StatementUpdate: Statement {
         description.append(table)
         return self
     }
-    
+
     public typealias ValueType = (_: ColumnConvertible, _: ExpressionConvertible)
-    
+
     @discardableResult
     public func set(_ values: [ValueType]) -> StatementUpdate {
         let valueString = values.joined({
@@ -44,12 +44,12 @@ public class StatementUpdate: Statement {
         description.append(" SET \(valueString)")
         return self
     }
-    
+
     @discardableResult
     public func set(_ values: ValueType...) -> StatementUpdate {
         return set(values)
     }
-    
+
     @discardableResult
     public func `where`(_ expressionConvertible: ExpressionConvertible) -> StatementUpdate {
         let expression = expressionConvertible.asExpression()
@@ -58,12 +58,12 @@ public class StatementUpdate: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func order(by orderConvertibleList: OrderConvertible...) -> StatementUpdate {
         return order(by: orderConvertibleList)
     }
-    
+
     @discardableResult
     public func order(by orderConvertibleList: [OrderConvertible]) -> StatementUpdate {
         if !orderConvertibleList.isEmpty {
@@ -71,9 +71,10 @@ public class StatementUpdate: Statement {
         }
         return self
     }
-    
+
     @discardableResult
-    public func limit(from expressionConvertibleFrom: ExpressionConvertible, to expressionConvertibleTo: ExpressionConvertible) -> StatementUpdate {
+    public func limit(from expressionConvertibleFrom: ExpressionConvertible,
+                      to expressionConvertibleTo: ExpressionConvertible) -> StatementUpdate {
         let from = expressionConvertibleFrom.asExpression()
         if !from.description.isEmpty {
             description.append(" LIMIT \(from.description)")
@@ -84,7 +85,7 @@ public class StatementUpdate: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func limit(_ expressionConvertibleLimit: ExpressionConvertible) -> StatementUpdate {
         let limit = expressionConvertibleLimit.asExpression()
@@ -93,9 +94,10 @@ public class StatementUpdate: Statement {
         }
         return self
     }
-    
+
     @discardableResult
-    public func limit(_ expressionConvertibleLimit: ExpressionConvertible, offset expressionConvertibleOffset: ExpressionConvertible) -> StatementUpdate {
+    public func limit(_ expressionConvertibleLimit: ExpressionConvertible,
+                      offset expressionConvertibleOffset: ExpressionConvertible) -> StatementUpdate {
         let limit = expressionConvertibleLimit.asExpression()
         if !limit.description.isEmpty {
             description.append(" LIMIT \(limit.description)")

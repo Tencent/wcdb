@@ -24,14 +24,14 @@ import WCDBSwift
 class ConflictTests: BaseTestCase {
 
     func testConflict() {
-        WINQAssertEqual(Conflict.Rollback, "ROLLBACK")
-        
-        WINQAssertEqual(Conflict.Abort, "ABORT")
-        
-        WINQAssertEqual(Conflict.Fail, "FAIL")
-        
-        WINQAssertEqual(Conflict.Ignore, "IGNORE")
-        
-        WINQAssertEqual(Conflict.Replace, "REPLACE")
+        WINQAssertEqual(Conflict.rollback, "ROLLBACK")
+
+        WINQAssertEqual(Conflict.abort, "ABORT")
+
+        WINQAssertEqual(Conflict.fail, "FAIL")
+
+        WINQAssertEqual(Conflict.ignore, "IGNORE")
+
+        WINQAssertEqual(Conflict.replace, "REPLACE")
     }
 }

@@ -25,43 +25,44 @@ import UIKit
 
 public class Database {
     private let recyclableHandlePool: RecyclableHandlePool
-    
+
     public convenience init(withPath path: String) {
         self.init(withFileURL: URL(fileURLWithPath: path))
     }
-    
+
     #if WCDB_IOS
     private static let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "WCDB-PurgeFreeHandle")
-    
+
     private static let once: Void = {
         _ = NotificationCenter.default.addObserver(forName: .UIApplicationDidReceiveMemoryWarning,
                                                    object: nil,
-                                                   queue: nil, 
-                                                   using: { (notification) in
+                                                   queue: nil,
+                                                   using: { (_) in
                                                     Database.purgeFreeHandleQueue.async {
                                                         Database.purgeFreeHandlesInAllDatabase()
                                                     }
         })
     }()
     #endif //WCDB_IOS
-    
+
     public init(withFileURL url: URL) {
         #if WCDB_IOS
         Database.once
         #endif //WCDB_IOS            
-        self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path, defaultConfigs: Database.defaultConfigs)
+        self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path,
+                                                       defaultConfigs: Database.defaultConfigs)
     }
-    
+
     public init(with tag: Tag) {
         self.recyclableHandlePool = HandlePool.getPool(with: tag)!
     }
-    
+
     private var handlePool: HandlePool {
         return recyclableHandlePool.raw
     }
-    
-    private static var threadedHandles = ThreadLocal<[String:RecyclableHandle]>(defaultTo: [:])
-    
+
+    private static var threadedHandles = ThreadLocal<[String: RecyclableHandle]>(defaultTo: [:])
+
     private func flowOut() throws -> RecyclableHandle {
         let threadedHandles = Database.threadedHandles.value
         if let handle = threadedHandles[path] {
@@ -73,32 +74,32 @@ public class Database {
     public var canOpen: Bool {
         return !handlePool.isDrained || ((try? handlePool.fillOne()) != nil)
     }
-   
+
     public var isOpened: Bool {
         return !handlePool.isDrained
     }
-    
+
     public typealias OnClosed = HandlePool.OnDrained
     public func close(onClosed: OnClosed? = nil) rethrows {
         handlePool.drain(onDrained: onClosed)
     }
-    
+
     public func blockade() {
         handlePool.blockade()
     }
-    
+
     public func unblockade() {
         handlePool.unblockade()
     }
-    
+
     public var isBlockaded: Bool {
         return handlePool.isBlockaded
     }
-    
+
     public func purgeFreeHandles() {
         handlePool.purgeFreeHandles()
     }
-    
+
     public static func purgeFreeHandlesInAllDatabase() {
         HandlePool.purgeFreeHandlesInAllPool()
     }
@@ -110,34 +111,34 @@ extension Database {
         if let key = optionalKey {
             handlePool.setConfig(named: DefaultConfigOrder.cipher.description, with: { (handle: Handle) throws in
                 let statementPragmaPageSize = StatementPragma().pragma(.cipherPageSize, to: pageSize)
-                try handle.setCipher(key: key) 
-                try handle.exec(statementPragmaPageSize) 
+                try handle.setCipher(key: key)
+                try handle.exec(statementPragmaPageSize)
             })
-        }else {
+        } else {
             handlePool.setConfig(named: DefaultConfigOrder.cipher.description, with: { (_) in })
         }
     }
-    
+
     public typealias PerformanceTracer = Handle.PerformanceTracer
     public typealias SQLTracer = Handle.SQLTracer
 
     static private var performanceTracer = Atomic<PerformanceTracer?>()
     static private var sqlTracer = Atomic<SQLTracer?>()
-    
+
     public static func globalTrace(ofPerformance trace: @escaping PerformanceTracer) {
         performanceTracer.assign(trace)
     }
     public static func globalTrace(ofPerformance: Void?) {
         performanceTracer.assign(nil)
     }
-    
+
     public static func globalTrace(ofSQL trace: @escaping SQLTracer) {
         sqlTracer.assign(trace)
     }
     public static func globalTrace(ofSQL: Void?) {
         sqlTracer.assign(nil)
     }
-    
+
     public static func globalTrace(ofError errorReporter: @escaping Error.Reporter) {
         Error.setReporter(errorReporter)
     }
@@ -147,10 +148,10 @@ extension Database {
     public static func resetGlobalTraceOfError() {
         Error.resetReporter()
     }
-    
+
     private static let timedQueue = TimedQueue<String>(withDelay: 2)
-    private static let checkpointThread = DispatchQueue(label: "WCDB-"+Database.DefaultConfigOrder.checkpoint.description)
-    
+    private static let checkpointThread = DispatchQueue(label: "WCDB-"+DefaultConfigOrder.checkpoint.description)
+
     private static let defaultConfigs: Configs = Configs(
         Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
             #if WCDB_IOS
@@ -167,7 +168,8 @@ extension Database {
                 handle.trace(performance: performanceTracer)
             }
         }, orderBy: DefaultConfigOrder.trace.rawValue),
-        Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description, orderBy: DefaultConfigOrder.cipher.rawValue),
+        Configs.Config(emptyConfigNamed: DefaultConfigOrder.cipher.description,
+                       orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
             guard !handle.isReadonly else {
                 let handleStatement = try handle.prepare(.getJournalMode)
@@ -175,7 +177,8 @@ extension Database {
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
                 if journalMode.caseInsensitiveCompare("WAL") == ComparisonResult.orderedSame {
-                    Error.abort("It is not possible to open read-only WAL databases. See also: http://www.sqlite.org/wal.html#readonly");
+                    //See also: http://www.sqlite.org/wal.html#readonly
+                    Error.abort("It is not possible to open read-only WAL databases.")
                 }
                 return
             }
@@ -193,7 +196,7 @@ extension Database {
             }
             //Synchronous
             do {
-                try handle.exec(.enableSynchronousNormal) 
+                try handle.exec(.enableSynchronousNormal)
             }
             //Journal Mode
             do {
@@ -212,7 +215,8 @@ extension Database {
                 try handle.exec(.enableFullfsync)
             }
         }, orderBy: DefaultConfigOrder.basic.rawValue),
-        Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description, orderBy: DefaultConfigOrder.synchronous.rawValue),
+        Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description,
+                       orderBy: DefaultConfigOrder.synchronous.rawValue),
         Configs.Config(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
             handle.register(onCommitted: { (handle, pages, _) in
                 guard pages > 1000 else {
@@ -227,9 +231,10 @@ extension Database {
                 }
             })
         }, orderBy: DefaultConfigOrder.checkpoint.rawValue),
-        Configs.Config(emptyConfigNamed: DefaultConfigOrder.tokenize.description, orderBy: DefaultConfigOrder.tokenize.rawValue)
+        Configs.Config(emptyConfigNamed: DefaultConfigOrder.tokenize.description,
+                       orderBy: DefaultConfigOrder.tokenize.rawValue)
     )
-    
+
     public enum DefaultConfigOrder: Int, CustomStringConvertible {
         case fileProtection = 0
         case trace = 1
@@ -238,7 +243,7 @@ extension Database {
         case synchronous = 4
         case checkpoint = 5
         case tokenize = 6
-        
+
         public var description: String {
             switch self {
             case .fileProtection:
@@ -258,42 +263,47 @@ extension Database {
             }
         }
     }
-    
+
     public typealias Config = HandlePool.Config
     public typealias ConfigOrder = HandlePool.ConfigOrder
-    
+
     public func setConfig(named name: String, with callback: @escaping Config, orderBy order: ConfigOrder) {
         handlePool.setConfig(named: name, with: callback, orderBy: order)
     }
-    
+
     public func setConfig(named name: String, with callback: @escaping Config) {
         handlePool.setConfig(named: name, with: callback)
     }
-    
+
     public func setSynchronous(isFull: Bool) {
         if isFull {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
-                try handle.exec(.enableSynchronousFull) 
+                try handle.exec(.enableSynchronousFull)
             })
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
             })
-        }else {
+        } else {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
             })
-            handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: Database.defaultConfigs.config(by: DefaultConfigOrder.checkpoint.description)!)
+            guard let checkpointConfig = Database.defaultConfigs.config(
+                by: DefaultConfigOrder.checkpoint.description) else {
+                Error.abort("")
+            }
+            handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description,
+                                 with: checkpointConfig)
         }
     }
-    
+
     public func trace(performance performanceTracer: @escaping PerformanceTracer) {
         handlePool.setConfig(named: DefaultConfigOrder.trace.description) { (handle) in
             handle.trace(performance: performanceTracer)
         }
     }
-    
+
     public func setTokenizes(_ tokenizes: Tokenize...) {
         setTokenizes(tokenizes)
     }
-    
+
     public func setTokenizes(_ tokenizes: [Tokenize]) {
         handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
             try tokenizes.forEach({ (tokenize) in
@@ -311,17 +321,17 @@ extension Database {
 //Basic
 extension Database {
     public func getTransaction() throws -> Transaction {
-        let handle = try flowOut() 
+        let handle = try flowOut()
         return Transaction(with: recyclableHandlePool, and: handle)
     }
 }
 
 //Core
-extension Database: Core {    
+extension Database: Core {
     public var path: String {
         return handlePool.path
     }
-    
+
     public var tag: Tag? {
         get {
             return handlePool.tag
@@ -334,14 +344,17 @@ extension Database: Core {
     public func prepare(_ statement: Statement) throws -> CoreStatement {
         let recyclableHandle = try flowOut()
         let handleStatement = try recyclableHandle.raw.handle.prepare(statement)
-        return CoreStatement(with: self, and: RecyclableHandleStatement(recyclableHandle: recyclableHandle, handleStatement: handleStatement))
+        let recyclableHandleStatement = RecyclableHandleStatement(recyclableHandle: recyclableHandle,
+                                                                  handleStatement: handleStatement)
+        return CoreStatement(with: self,
+                             and: recyclableHandleStatement)
     }
-    
+
     public func exec(_ statement: Statement) throws {
         let recyclableHandle = try flowOut()
         try recyclableHandle.raw.handle.exec(statement)
     }
-    
+
     public func isTableExists(_ table: String) throws -> Bool {
         let handle = try flowOut()
         let select = StatementSelect().select(1).from(table).limit(0)
@@ -354,65 +367,68 @@ extension Database: Core {
         try handleStatement!.step()
         return true
     }
-    
-    public func getTable<Root: TableCodable>(named name: String, ofType type: Root.Type = Root.self) throws -> Table<Root>? {
+
+    public func getTable<Root: TableCodable>(
+        named name: String,
+        of type: Root.Type = Root.self) throws -> Table<Root>? {
         guard try isTableExists(name) else {
             return nil
         }
         return Table<Root>(withDatabase: self, named: name)
     }
-    
+
     public func begin() throws {
-        try begin(.Immediate)
+        try begin(.immediate)
     }
-    
+
     func begin(_ mode: StatementTransaction.Mode) throws {
         let recyclableHandle = try flowOut()
-        try recyclableHandle.raw.handle.exec(mode == .Immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode))
+        let statement = mode == .immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode)
+        try recyclableHandle.raw.handle.exec(statement)
         Database.threadedHandles.value[path] = recyclableHandle
     }
-    
+
     public func commit() throws {
         let recyclableHandle = try flowOut()
         try recyclableHandle.raw.handle.exec(.commitTransaction)
         Database.threadedHandles.value.removeValue(forKey: path)
     }
-    
+
     public func rollback() throws {
         let recyclableHandle = try flowOut()
         Database.threadedHandles.value.removeValue(forKey: path)
         try recyclableHandle.raw.handle.exec(.rollbackTransaction)
     }
-    
+
     public func run(transaction: TransactionClosure) throws {
-        try begin(.Immediate)
+        try begin(.immediate)
         do {
             try transaction()
             try commit()
-        }catch let error {
-            try! rollback()
+        } catch let error {
+            try? rollback()
             throw error
         }
     }
 
     public func run(controlableTransaction: ControlableTransactionClosure) throws {
-        try begin(.Immediate)
+        try begin(.immediate)
         var shouldRollback = true
         do {
             if try controlableTransaction() {
                 try commit()
-            }else {
+            } else {
                 shouldRollback = false
                 try rollback()
             }
-        }catch let error {
+        } catch let error {
             if shouldRollback {
-                try! rollback()
+                try? rollback()
             }
             throw error
         }
     }
-    
+
     public func run(embeddedTransaction: TransactionClosure) throws {
         if Database.threadedHandles.value[path] != nil {
             return try embeddedTransaction()
@@ -426,30 +442,30 @@ extension Database {
     public static var subfixs: [String] {
         return Handle.subfixs
     }
-    
+
     public var urls: [URL] {
         return paths.map({ (path) -> URL in
             return URL(fileURLWithPath: path)
         })
     }
-    
+
     public var paths: [String] {
         return Database.subfixs.map({ (subfix) -> String in
             return path+subfix
         })
     }
-    
+
     public func removeFiles() throws {
         if !isBlockaded || isOpened {
             Error.warning("Removing files on an opened database may cause unknown results")
         }
         try File.remove(files: paths)
     }
-    
+
     public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: String...) throws {
         try moveFiles(toDirectory: directory, withExtraFiles: extraFiles)
     }
-    
+
     public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: [String]) throws {
         try File.createDirectoryWithIntermediateDirectories(atPath: directory)
         var recovers: [String] = []
@@ -467,13 +483,13 @@ extension Database {
                 try File.hardlink(atPath: path, toPath: newPaths)
                 recovers.append(newPaths)
             })
-        }catch let error {
+        } catch let error {
             try? File.remove(files: recovers)
             throw error
         }
         try? File.remove(files: paths)
     }
-    
+
     public func getFilesSize() throws -> UInt64 {
         if !isBlockaded || isOpened {
             Error.warning("Getting files size on an opened database may get incorrect results")
@@ -485,13 +501,19 @@ extension Database {
 //Repair
 extension Database {
     public func backup(withKey key: Data? = nil) throws {
-        let handle = try flowOut() 
-        try handle.raw.handle.backup(withKey: key)        
-    }
-    
-    public func recover(fromPath source: String, withPageSize pageSize: Int32, databaseKey: Data? = nil, backupKey: Data? = nil) throws {
         let handle = try flowOut()
-        try handle.raw.handle.recover(fromPath: source, withPageSize: pageSize, databaseKey: databaseKey, backupKey: backupKey)
+        try handle.raw.handle.backup(withKey: key)
+    }
+
+    public func recover(fromPath source: String,
+                        withPageSize pageSize: Int32,
+                        databaseKey: Data? = nil,
+                        backupKey: Data? = nil) throws {
+        let handle = try flowOut()
+        try handle.raw.handle.recover(fromPath: source,
+                                      withPageSize: pageSize,
+                                      databaseKey: databaseKey,
+                                      backupKey: backupKey)
     }
 }
 
@@ -508,4 +530,3 @@ extension Database: DeleteInterface {}
 extension Database: RowSelectInterface {}
 extension Database: SelectInterface {}
 extension Database: TableInterface {}
-

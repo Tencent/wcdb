@@ -23,60 +23,66 @@ import WCDBSwift
 
 func sample_advance_main(baseDirectory: String) {
     print("Sample-advance Begin")
-    
+
     let className = String(describing: SampleAdvance.self)
     let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
     let database = Database(withPath: path)
     let tableName = className
-    let tableName2 = String(describing: SampleAdvanceMulti.self) 
-    database.close(onClosed: { 
+    let tableName2 = String(describing: SampleAdvanceMulti.self)
+    database.close(onClosed: {
         try? database.removeFiles()
     })
-        
+
     //cipher
     do {
         let key: Data = "password".data(using: .ascii)!
         database.setCipher(key: key)
     }
-    
+
     //prepare
     do {
         try database.create(table: tableName, of: SampleAdvance.self)
         let advance = SampleAdvance()
         advance.intValue = 1
         try database.insert(objects: advance, intoTable: tableName)
-        
+
         try database.create(table: tableName2, of: SampleAdvanceMulti.self)
         let advanceMulti = SampleAdvanceMulti()
         advanceMulti.intValue = 1
         try database.insert(objects: advanceMulti, intoTable: tableName2)
-    }catch let error {
+    } catch let error {
         print("prepare error: \(error)")
     }
-    
+
     //Using [as] to redirect selection
     do {
-        let object: SampleAdvance = (try database.getObject(on: SampleAdvance.Properties.any.as(SampleAdvance.Properties.intValue), fromTable: tableName))!
+        let property = SampleAdvance.Properties.any.as(SampleAdvance.Properties.intValue)
+        let object: SampleAdvance = (try database.getObject(on: property, fromTable: tableName))!
         print("Count: \(object.intValue!)")
-    }catch let error {
+    } catch let error {
         print("redirect selection error: \(error)")
     }
-    
+
     //Multi select
     do {
-        let select = try database.prepareMultiSelect(on: (SampleAdvance.Properties.intValue).in(table: tableName), (SampleAdvanceMulti.Properties.intValue).in(table: tableName2), fromTables: [tableName, tableName2]).where((SampleAdvance.Properties.intValue).in(table: tableName)==(SampleAdvanceMulti.Properties.intValue).in(table: tableName2))
+        let property1 = (SampleAdvance.Properties.intValue).in(table: tableName)
+        let property2 = (SampleAdvanceMulti.Properties.intValue).in(table: tableName2)
+        let properties = [property1, property2]
+        let condition = property1 == property2
+        let tables = [tableName, tableName2]
+        let select = try database.prepareMultiSelect(on: properties, fromTables: tables).where(condition)
         let multiObjects = select.allMultiObjects
-    }catch let error {
+    } catch let error {
         print("multi select error: \(error)")
     }
-    
+
     //Column coding
     do {
         let object: SampleAdvance? = try database.getObject(fromTable: tableName)
         let value: Float? = object?.columnCoding?.floatValue
-    }catch let error {
+    } catch let error {
         print("column coding error: \(error)")
     }
-    
+
     print("Sample-advance End")
 }

@@ -27,9 +27,9 @@ class ColumnTests: BaseTestCase {
         WINQAssertEqual(Column.any, "*")
 
         WINQAssertEqual(Column.rowid, "rowid")
-        
+
         WINQAssertEqual(Column(named: "testColumn"), "testColumn")
-        
+
         WINQAssertEqual(Column(named: "testColumn").in(table: "TestTable"), "TestTable.testColumn")
     }
 }

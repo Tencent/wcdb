@@ -20,7 +20,7 @@
 
 import Foundation
 
-class RandomData {    
+class RandomData {
     private var position = 0
     private let capacity = 1024 * 1024
     private lazy var data: Data = {
@@ -31,11 +31,11 @@ class RandomData {
         }
         return data
     }()
-    
+
     init(withSeed seed: Int) {
         srandom(UInt32(seed))
     }
-    
+
     func data(withLength length: Int) -> Data {
         guard length < capacity else {
             fatalError()

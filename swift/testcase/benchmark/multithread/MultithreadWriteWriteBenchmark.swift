@@ -22,39 +22,39 @@ import XCTest
 import WCDBSwift
 
 class MultithreadWriteWriteBenchmark: BaseMultithreadBenchmark {
-    
+
     override func setUp() {
         super.setUp()
-        
+
         setUpWithPreCreateObject(count: config.batchWriteCount)
     }
-    
+
     func testMultithreadWriteWrite() {
         let tableName = getTableName()
-        measure(onSetUp: { 
+        measure(onSetUp: {
             tearDownDatabase()
-            
+
             setUpWithPreCreateTable()
-            
+
             tearDownDatabaseCache()
-            
-            setUpDatabaseCache()    
-        }, for: { 
-            queue.async(group: group, execute: { 
+
+            setUpDatabaseCache()
+        }, for: {
+            queue.async(group: group, execute: {
                 do {
                     try self.database.insert(objects: self.objects, intoTable: tableName)
-                }catch let error as WCDBSwift.Error {
+                } catch let error as WCDBSwift.Error {
                     XCTFail(error.description)
-                }catch let error {
+                } catch let error {
                     XCTFail(error.localizedDescription)
                 }
             })
-            queue.async(group: group, execute: { 
+            queue.async(group: group, execute: {
                 do {
                     try self.database.insert(objects: self.objects, intoTable: tableName)
-                }catch let error as WCDBSwift.Error {
+                } catch let error as WCDBSwift.Error {
                     XCTFail(error.description)
-                }catch let error {
+                } catch let error {
                     XCTFail(error.localizedDescription)
                 }
             })

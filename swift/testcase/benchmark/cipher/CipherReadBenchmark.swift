@@ -21,27 +21,27 @@
 import XCTest
 
 class CipherReadBenchmark: BaseBenchmark {
-    
+
     override func setUp() {
         super.setUp()
 
         database.setCipher(key: "cipher".data(using: .ascii)!)
-        
+
         setUpWithPreCreateTable()
-        
+
         setUpWithPreInsertObjects(count: config.readCount)
     }
 
     func testCipherRead() {
         let tableName = getTableName()
         var results: [BenchmarkObject]? = nil
-        measure(onSetUp: { 
+        measure(onSetUp: {
             results = nil
-            
+
             tearDownDatabaseCache()
-            
+
             setUpDatabaseCache()
-        }, for: { 
+        }, for: {
             results = try? database.getObjects(fromTable: tableName)
         }, checkCorrectness: {
             XCTAssertEqual(results?.count, config.readCount)

@@ -21,15 +21,15 @@
 import Foundation
 public class StatementExplain: Statement {
     public init() {
-        super.init(with: .Explain)
+        super.init(with: .explain)
     }
-    
+
     @discardableResult
     public func explain(_ statement: Statement) -> StatementExplain {
         description.append("EXPLAIN \(statement.description)")
         return self
     }
-    
+
     @discardableResult
     public func explainQueryPlan(_ statement: Statement) -> StatementExplain {
         description.append("EXPLAIN QUERY PLAN \(statement.description)")

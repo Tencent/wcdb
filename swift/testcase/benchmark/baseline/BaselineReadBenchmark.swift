@@ -21,27 +21,27 @@
 import XCTest
 
 class BaselineReadBenchmark: BaseBenchmark {
-    
+
     override func setUp() {
         super.setUp()
-        
+
         setUpWithPreCreateTable()
-        
+
         setUpWithPreInsertObjects(count: config.readCount)
     }
 
     func testBaselineRead() {
         var results: [BenchmarkObject]? = nil
         let tableName = getTableName()
-        measure(onSetUp: { 
+        measure(onSetUp: {
             results = nil
-            
+
             tearDownDatabaseCache()
-            
+
             setUpDatabaseCache()
-        }, for: { 
+        }, for: {
             results = try? database.getObjects(fromTable: tableName)
-        }, checkCorrectness: { 
+        }, checkCorrectness: {
             XCTAssertEqual(results?.count, config.readCount)
         })
     }

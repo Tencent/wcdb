@@ -22,11 +22,11 @@ import Foundation
 
 public class StatementCreateIndex: Statement {
     public init() {
-        super.init(with: .CreateIndex)
+        super.init(with: .createIndex)
     }
-    
+
     @discardableResult
-    public func create(index: String, isUnique: Bool = false, ifNotExists: Bool = true) -> StatementCreateIndex{
+    public func create(index: String, isUnique: Bool = false, ifNotExists: Bool = true) -> StatementCreateIndex {
         description.append("CREATE ")
         if isUnique {
             description.append("UNIQUE ")
@@ -38,18 +38,20 @@ public class StatementCreateIndex: Statement {
         description.append(index)
         return self
     }
-    
+
     @discardableResult
-    public func on(table: String, indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) -> StatementCreateIndex{
+    public func on(table: String,
+                   indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) -> StatementCreateIndex {
         return on(table: table, indexesBy: columnIndexConvertibleList)
     }
-    
+
     @discardableResult
-    public func on(table: String, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) -> StatementCreateIndex{
+    public func on(table: String,
+                   indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) -> StatementCreateIndex {
         description.append(" ON \(table)(\(columnIndexConvertibleList.joined()))")
         return self
     }
-    
+
     @discardableResult
     public func `where`(_ expressionConvertible: ExpressionConvertible) -> StatementCreateIndex {
         let expression = expressionConvertible.asExpression()

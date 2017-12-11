@@ -20,29 +20,28 @@
 
 import Foundation
 
-
-class TableDecoder : Decoder {
+class TableDecoder: Decoder {
     private class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> : KeyedDecodingContainerProtocol {
         typealias Key = CodingTableKeyType
-        
+
         let codingPath: [CodingKey] = []
-        
+
         let coreStatement: CoreStatement
-        let indexedCodingTableKeys: [String:Int]
-        
-        init(with indexedCodingTableKeys: [String:Int], on coreStatement: CoreStatement, and keyType: Key.Type) {
+        let indexedCodingTableKeys: [String: Int]
+
+        init(with indexedCodingTableKeys: [String: Int], on coreStatement: CoreStatement, and keyType: Key.Type) {
             self.indexedCodingTableKeys = indexedCodingTableKeys
             self.coreStatement = coreStatement
         }
-        
+
         func columnIndex(by key: Key) -> Int? {
             return indexedCodingTableKeys[key.stringValue]
         }
-        
+
         var allKeys: [Key] {
             return []
         }
-        
+
         func contains(_ key: Key) -> Bool {
             return columnIndex(by: key) != nil
         }
@@ -50,122 +49,183 @@ class TableDecoder : Decoder {
         //Decode
         func decodeNil(forKey key: Key) throws -> Bool {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? false
         }
-        
+
         func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? false
         }
-        
+
         func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: Int64.Type, forKey key: Key) throws -> Int64 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse, message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
-        
+
         func decode(_ type: String.Type, forKey key: Key) throws -> String {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? ""
         }
-        
+
         func decode<Object>(_ type: Object.Type, forKey key: Key) throws -> Object where Object: Decodable {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             guard let decodableType = Object.self as? ColumnDecodableBase.Type else {
                 Error.abort("")
             }
             guard let object = coreStatement.value(atIndex: index, of: decodableType) as? Object else {
-                throw Error.reportCore(tag: coreStatement.tag, path: coreStatement.path, operation: .Encode, code: .Misuse, message: "")
+                throw Error.reportCore(tag: coreStatement.tag,
+                                       path: coreStatement.path,
+                                       operation: .encode,
+                                       code: .misuse,
+                                       message: "")
             }
             return object
-        }        
-        
+        }
+
         //Decode if present
         func decodeIfPresent(_ type: Bool.Type, forKey key: Key) throws -> Bool? {
             guard let index = columnIndex(by: key) else {
@@ -173,99 +233,99 @@ class TableDecoder : Decoder {
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Int.Type, forKey key: Key) throws -> Int? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Int8.Type, forKey key: Key) throws -> Int8? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Int16.Type, forKey key: Key) throws -> Int16? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Int32.Type, forKey key: Key) throws -> Int32? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Int64.Type, forKey key: Key) throws -> Int64? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: UInt.Type, forKey key: Key) throws -> UInt? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: UInt8.Type, forKey key: Key) throws -> UInt8? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: UInt16.Type, forKey key: Key) throws -> UInt16? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: UInt32.Type, forKey key: Key) throws -> UInt32? {
             guard let index = columnIndex(by: key) else {
-                return nil                
+                return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: UInt64.Type, forKey key: Key) throws -> UInt64? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Float.Type, forKey key: Key) throws -> Float? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: Double.Type, forKey key: Key) throws -> Double? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
+
         func decodeIfPresent(_ type: String.Type, forKey key: Key) throws -> String? {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
             return coreStatement.value(atIndex: index)
         }
-        
-        func decodeIfPresent<Object>(_ type: Object.Type, forKey key: Key) throws -> Object? where Object : Decodable {
+
+        func decodeIfPresent<Object>(_ type: Object.Type, forKey key: Key) throws -> Object? where Object: Decodable {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
@@ -274,54 +334,59 @@ class TableDecoder : Decoder {
             }
             return coreStatement.value(atIndex: index, of: decodableType) as? Object
         }
-        
-        func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
+
+        func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
+                                        forKey key: Key) throws -> KeyedDecodingContainer<NestedKey>
+            where NestedKey: CodingKey {
             Error.abort("")
         }
-        
+
         func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
             Error.abort("")
         }
-        
+
         func superDecoder() throws -> Swift.Decoder {
             Error.abort("")
         }
-        
+
         func superDecoder(forKey key: Key) throws -> Swift.Decoder {
             Error.abort("")
         }
     }
-    
+
     let codingPath: [CodingKey] = []
     let userInfo: [CodingUserInfoKey: Any] = [:]
-    
+
     private let coreStatement: CoreStatement
-    private let indexedCodingTableKeys: [String:Int]
+    private let indexedCodingTableKeys: [String: Int]
 
     convenience init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
-        var indexedCodingTableKeys: [String:Int] = [:]
+        var indexedCodingTableKeys: [String: Int] = [:]
         for (index, codingTableKey) in codingTableKeys.enumerated() {
             indexedCodingTableKeys[codingTableKey.stringValue] = index
         }
         self.init(indexedCodingTableKeys, on: coreStatement)
     }
-    
-    init(_ indexedCodingTableKeys: [String:Int], on coreStatement: CoreStatement) {
+
+    init(_ indexedCodingTableKeys: [String: Int], on coreStatement: CoreStatement) {
         self.indexedCodingTableKeys = indexedCodingTableKeys
         self.coreStatement = coreStatement
     }
-   
-    func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key : CodingKey {
+
+    func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
         guard Key.self is CodingTableKeyBase.Type else {
             Error.abort("")
         }
-        return KeyedDecodingContainer(KeyedDecodingTableContainer(with: indexedCodingTableKeys, on: coreStatement, and: Key.self))
+        let container = KeyedDecodingTableContainer(with: indexedCodingTableKeys,
+                                                    on: coreStatement,
+                                                    and: Key.self)
+        return KeyedDecodingContainer(container)
     }
-    
+
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
         Error.abort("")
     }
-    
+
     func singleValueContainer() throws -> SingleValueDecodingContainer {
         Error.abort("")
     }

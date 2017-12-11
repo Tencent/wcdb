@@ -29,21 +29,21 @@ public class Transaction {
         self.recyclableHandlePool = recyclableHandlePool
         self.recyclableHandle = recyclableHandle
     }
-    
+
     deinit {
         if isInTransaction {
             try? rollback()
         }
     }
-    
+
     private var handle: Handle {
         return recyclableHandle.raw.handle
     }
-    
+
     private var handlePool: HandlePool {
         return recyclableHandlePool.raw
     }
-       
+
     public var changes: Int {
         mutex.lock(); defer { mutex.unlock() }
         return handle.changes
@@ -54,7 +54,7 @@ extension Transaction: Core {
     public var path: String {
         return handlePool.path
     }
-    
+
     public var tag: Tag? {
         get {
             return handlePool.tag
@@ -63,24 +63,34 @@ extension Transaction: Core {
             handlePool.tag = newValue
         }
     }
-    
+
     public func prepare(_ statement: Statement) throws -> CoreStatement {
         mutex.lock(); defer { mutex.unlock() }
-        guard statement.statementType != .Transaction else {
-            throw Error.reportCore(tag: tag, path: path, operation: .Prepare, code: .Misuse, message: "Using [begin], [commit], [rollback] method to do a transaction")
+        guard statement.statementType != .transaction else {
+            throw Error.reportCore(tag: tag,
+                                   path: path,
+                                   operation: .prepare,
+                                   code: .misuse,
+                                   message: "Using [begin], [commit], [rollback] method to do a transaction")
         }
-        let recyclableHandleStatement = try handle.prepare(statement)
-        return CoreStatement(with: self, and: RecyclableHandleStatement(recyclableHandle: recyclableHandle, handleStatement: recyclableHandleStatement))
+        let handleStatement = try handle.prepare(statement)
+        let recyclableHandleStatement = RecyclableHandleStatement(recyclableHandle: recyclableHandle,
+                                                                  handleStatement: handleStatement)
+        return CoreStatement(with: self, and: recyclableHandleStatement)
     }
-    
+
     public func exec(_ statement: Statement) throws {
         mutex.lock(); defer { mutex.unlock() }
-        guard statement.statementType != .Transaction else {
-            throw Error.reportCore(tag: tag, path: path, operation: .Prepare, code: .Misuse, message: "Using [begin], [commit], [rollback] method to do a transaction")
+        guard statement.statementType != .transaction else {
+            throw Error.reportCore(tag: tag,
+                                   path: path,
+                                   operation: .prepare,
+                                   code: .misuse,
+                                   message: "Using [begin], [commit], [rollback] method to do a transaction")
         }
         try handle.exec(statement)
     }
-    
+
     public func isTableExists(_ table: String) throws -> Bool {
         mutex.lock(); defer { mutex.unlock() }
         let select = StatementSelect().select(1).from(table).limit(0)
@@ -96,61 +106,61 @@ extension Transaction: Core {
     }
 
     public func begin() throws {
-        try begin(.Immediate)
+        try begin(.immediate)
     }
-    
+
     func begin(_ mode: StatementTransaction.Mode) throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(mode == .Immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode)) 
+        try handle.exec(mode == .immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode))
         isInTransaction = true
     }
-    
+
     public func commit() throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(.commitTransaction) 
+        try handle.exec(.commitTransaction)
         isInTransaction = false
     }
-    
+
     public func rollback() throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(.rollbackTransaction) 
+        try handle.exec(.rollbackTransaction)
         isInTransaction = false
     }
-    
+
     public func run(transaction: TransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
-        try begin() 
+        try begin()
         do {
             try transaction()
-            try commit() 
-        }catch let error {
-            try rollback() 
+            try commit()
+        } catch let error {
+            try rollback()
             throw error
         }
     }
-    
+
     public func run(controlableTransaction: ControlableTransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         try begin()
         do {
             if try controlableTransaction() {
                 try commit()
-            }else { 
+            } else {
                 try rollback()
             }
-        }catch let error {
-            if isInTransaction { 
+        } catch let error {
+            if isInTransaction {
                 try rollback()
             }
             throw error
         }
     }
-    
+
     public func run(embeddedTransaction: TransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         if isInTransaction {
             try embeddedTransaction()
-        }else {
+        } else {
             try run(transaction: embeddedTransaction)
         }
     }
@@ -170,4 +180,3 @@ extension Transaction: DeleteInterface {}
 extension Transaction: RowSelectInterface {}
 extension Transaction: SelectInterface {}
 extension Transaction: TableInterface {}
-

@@ -28,22 +28,49 @@ class StatementUpdateTests: BaseTestCase {
         let table1 = "table1"
         let column1 = Column(named: "column1")
         let column2 = Column(named: "column2")
-        
+
         //Then
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)), "UPDATE table1 SET column1=1")
-        
-        WINQAssertEqual(StatementUpdate().update(table: table1, onConflict: .Replace).set((column1, 1), (column2, "test")), "UPDATE OR REPLACE table1 SET column1=1, column2='test'")
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1).set((column1, 1)),
+            "UPDATE table1 SET column1=1"
+        )
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1), (column2, "test")), "UPDATE table1 SET column1=1, column2='test'")
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1, onConflict: .replace).set((column1, 1), (column2, "test")),
+            "UPDATE OR REPLACE table1 SET column1=1, column2='test'"
+        )
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).`where`(column1 > 1), "UPDATE table1 SET column1=1 WHERE (column1 > 1)")
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1).set((column1, 1), (column2, "test")),
+            "UPDATE table1 SET column1=1, column2='test'"
+        )
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).order(by: column1.asOrder(), column2.asOrder()), "UPDATE table1 SET column1=1 ORDER BY column1, column2")
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1).set((column1, 1)).`where`(column1 > 1),
+            "UPDATE table1 SET column1=1 WHERE (column1 > 1)"
+        )
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).limit(1), "UPDATE table1 SET column1=1 LIMIT 1")
+        WINQAssertEqual(
+            StatementUpdate()
+                .update(table: table1)
+                .set((column1, 1))
+                .order(by: column1.asOrder(), column2.asOrder()),
+            "UPDATE table1 SET column1=1 ORDER BY column1, column2"
+        )
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).limit(from: 1, to: 2), "UPDATE table1 SET column1=1 LIMIT 1, 2")
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1).set((column1, 1)).limit(1),
+            "UPDATE table1 SET column1=1 LIMIT 1"
+        )
 
-        WINQAssertEqual(StatementUpdate().update(table: table1).set((column1, 1)).limit(1, offset: 3), "UPDATE table1 SET column1=1 LIMIT 1 OFFSET 3")
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1).set((column1, 1)).limit(from: 1, to: 2),
+            "UPDATE table1 SET column1=1 LIMIT 1, 2"
+        )
+
+        WINQAssertEqual(
+            StatementUpdate().update(table: table1).set((column1, 1)).limit(1, offset: 3),
+            "UPDATE table1 SET column1=1 LIMIT 1 OFFSET 3"
+        )
     }
 }

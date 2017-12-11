@@ -28,7 +28,7 @@
 #else //WCDB_COCOAPODS
 #include <sqlcipher/sqlite3.h>
 #endif //WCDB_COCOAPODS
-#else //WCDB_BUILTIN_SQLCIPHER
+#else  //WCDB_BUILTIN_SQLCIPHER
 #include <sqlite3.h>
 #endif //WCDB_BUILTIN_SQLCIPHER
 #include <string.h>

@@ -22,17 +22,17 @@ import XCTest
 import WCDBSwift
 
 class InitializationBenchmark: BaseBenchmark {
-    
+
     override func setUp() {
         super.setUp()
-        
+
         setUpWithPreCreateTable(count: config.tableCount)
     }
 
     func testInitialization() {
-        measure(onSetUp: { 
-            tearDownDatabaseCache()        
-        }, for: { 
+        measure(onSetUp: {
+            tearDownDatabaseCache()
+        }, for: {
             XCTAssertTrue(database.canOpen)
         }, checkCorrectness: {
             let results = try? database.getValue(on: Column.any.count(), fromTable: Master.tableName)

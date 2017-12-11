@@ -22,16 +22,16 @@ import Foundation
 
 //TODO: Refactor
 class Recyclable<Value> {
-    typealias OnRecycled = ()->Void
+    typealias OnRecycled = () -> Void
     let onRecycled: OnRecycled?
-    
+
     let raw: Value
-    
+
     init(_ raw: Value, onRecycled: OnRecycled? = nil) {
         self.raw = raw
         self.onRecycled = onRecycled
     }
-    
+
     deinit {
         if onRecycled != nil {
             onRecycled!()

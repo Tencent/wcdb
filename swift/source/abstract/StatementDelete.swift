@@ -21,15 +21,15 @@
 import Foundation
 public class StatementDelete: Statement {
     public init() {
-        super.init(with: .Delete)
+        super.init(with: .delete)
     }
-    
+
     @discardableResult
     public func delete(fromTable table: String) -> StatementDelete {
         description.append("DELETE FROM \(table)")
         return self
     }
-    
+
     @discardableResult
     public func `where`(_ expressionConvertible: ExpressionConvertible) -> StatementDelete {
         let expression = expressionConvertible.asExpression()
@@ -38,12 +38,12 @@ public class StatementDelete: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func order(by orderConvertibleList: OrderConvertible...) -> StatementDelete {
         return order(by: orderConvertibleList)
     }
-    
+
     @discardableResult
     public func order(by orderConvertibleList: [OrderConvertible]) -> StatementDelete {
         if !orderConvertibleList.isEmpty {
@@ -51,9 +51,10 @@ public class StatementDelete: Statement {
         }
         return self
     }
-    
+
     @discardableResult
-    public func limit(from expressionConvertibleFrom: ExpressionConvertible, to expressionConvertibleTo: ExpressionConvertible) -> StatementDelete {
+    public func limit(from expressionConvertibleFrom: ExpressionConvertible,
+                      to expressionConvertibleTo: ExpressionConvertible) -> StatementDelete {
         let from = expressionConvertibleFrom.asExpression()
         if !from.description.isEmpty {
             description.append(" LIMIT \(from.description)")
@@ -64,7 +65,7 @@ public class StatementDelete: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func limit(_ expressionConvertibleLimit: ExpressionConvertible) -> StatementDelete {
         let limit = expressionConvertibleLimit.asExpression()
@@ -73,9 +74,10 @@ public class StatementDelete: Statement {
         }
         return self
     }
-    
+
     @discardableResult
-    public func limit(_ expressionConvertibleLimit: ExpressionConvertible, offset expressionConvertibleOffset: ExpressionConvertible) -> StatementDelete {
+    public func limit(_ expressionConvertibleLimit: ExpressionConvertible,
+                      offset expressionConvertibleOffset: ExpressionConvertible) -> StatementDelete {
         let limit = expressionConvertibleLimit.asExpression()
         if !limit.description.isEmpty {
             description.append(" LIMIT \(limit.description)")

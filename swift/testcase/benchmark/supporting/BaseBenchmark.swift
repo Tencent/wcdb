@@ -22,23 +22,23 @@ import XCTest
 import WCDBSwift
 
 class BaseBenchmark: BaseTestCase {
-    
+
     var config = Config.default
     var database: Database!
     lazy var randomGenerator = RandomData(withSeed: config.randomSeed)
-    
+
     var objects: [BenchmarkObject] = []
-    
+
     override func setUp() {
         super.setUp()
-        
+
         database = Database(withFileURL: self.recommendedPath)
     }
-    
+
     func getTableName(withIndex index: Int = 0) -> String {
         return "\(BenchmarkObject.name)\(index)"
     }
-    
+
     func setUpWithPreCreateTable(count: Int = 1) {
         XCTAssertNoThrow(try database.run(transaction: {
             for i in 0..<count {
@@ -46,7 +46,7 @@ class BaseBenchmark: BaseTestCase {
             }
         }))
     }
-    
+
     func setUpWithPreInsertObjects(count: Int, intoIndexedTable index: Int = 0) {
         var objects = [BenchmarkObject]()
         for i in 0..<count {
@@ -54,37 +54,39 @@ class BaseBenchmark: BaseTestCase {
         }
         XCTAssertNoThrow(try database.insert(objects: objects, intoTable: getTableName(withIndex: index)))
     }
-    
+
     func setUpWithPreCreateObject(count: Int) {
         for i in 0..<count {
             objects.append(BenchmarkObject(withKey: i, and: randomGenerator.data(withLength: config.valueLength)))
         }
     }
-    
+
     func setUpDatabaseCache() {
         XCTAssertTrue(database.canOpen)
     }
-    
+
     func tearDownDatabaseCache() {
         database.close()
     }
-    
+
     func tearDownDatabase() {
-        database.close { 
+        database.close {
             XCTAssertNoThrow(try self.database.removeFiles())
         }
     }
-    
-    func measure(onSetUp setUpBlock: () -> Swift.Void, for block: () -> Swift.Void, checkCorrectness correctnessBlock: () -> Swift.Void) {
-        measureMetrics(type(of: self).defaultPerformanceMetrics, automaticallyStartMeasuring: false) { 
+
+    func measure(onSetUp setUpBlock: () -> Swift.Void,
+                 for block: () -> Swift.Void,
+                 checkCorrectness correctnessBlock: () -> Swift.Void) {
+        measureMetrics(type(of: self).defaultPerformanceMetrics, automaticallyStartMeasuring: false) {
             setUpBlock()
-            
+
             startMeasuring()
-            
+
             block()
-            
+
             stopMeasuring()
-            
+
             correctnessBlock()
         }
     }

@@ -21,55 +21,55 @@
 import Foundation
 import WCDBSwift
 
-class CRUDObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible {    
+class CRUDObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible {
     var hashValue: Int {
         fatalError()
     }
-    
-    required init() {}        
+
+    required init() {}
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
-    
+
     func isSame(_ other: CRUDObjectBase) -> Bool {
         fatalError()
     }
-    
+
     func isLessThan(_ other: CRUDObjectBase) -> Bool {
         fatalError()
     }
-    
-    static func ==(lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
+
+    static func == (lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
 
-    static func <(lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
+    static func < (lhs: CRUDObjectBase, rhs: CRUDObjectBase) -> Bool {
         return lhs.hashValue < rhs.hashValue
     }
-    
+
     var debugDescription: String {
         fatalError()
     }
 }
 
-class CRUDObject: CRUDObjectBase, TableCodable {        
+class CRUDObject: CRUDObjectBase, TableCodable {
     var variable1: Int? = 0
     var variable2: String? = ""
-    
+
     enum CodingKeys: String, CodingTableKey {
         typealias Root = CRUDObject
         case variable1
         case variable2
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-            return [.variable1:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true)]
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+            return [.variable1: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
         }
     }
-    
+
     override var hashValue: Int {
         return (String(variable1 ?? 0)+(variable2 ?? "")).hashValue
     }
-    
+
     override var debugDescription: String {
         return "\(variable1 != nil ? String(variable1!) : "nil"), \(variable2 ?? "nil")"
-    }        
+    }
 }

@@ -25,9 +25,9 @@ class StatementExplainTests: BaseTestCase {
 
     func testStatementExplain() {
         let statement = StatementSelect().select(1).from("table1")
-        
+
         WINQAssertEqual(StatementExplain().explain(statement), "EXPLAIN SELECT 1 FROM table1")
-        
+
         WINQAssertEqual(StatementExplain().explainQueryPlan(statement), "EXPLAIN QUERY PLAN SELECT 1 FROM table1")
     }
 }

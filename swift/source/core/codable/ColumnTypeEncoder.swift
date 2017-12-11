@@ -23,190 +23,192 @@ import Foundation
 class ColumnTypeEncoder: Encoder {
     private class KeyedEncodingTypedContainer<CodingsKey: CodingKey>: KeyedEncodingContainerProtocol {
         typealias Key = CodingsKey
-        
+
         let encoder: ColumnTypeEncoder
         let codingPath: [CodingKey] = []
-        
+
         init(encoder: ColumnTypeEncoder) {
             self.encoder = encoder
         }
-        
+
         func superEncoder() -> Swift.Encoder {
             Error.abort("")
         }
-        
+
         func superEncoder(forKey key: Key) -> Swift.Encoder {
             Error.abort("")
         }
-        
+
         func encodeNil(forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: Int, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encode(_ value: Bool, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: Float, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Float
+            encoder.results[key.stringValue] = .float
         }
-        
+
         func encode(_ value: Double, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Float
+            encoder.results[key.stringValue] = .float
         }
-        
+
         func encode(_ value: String, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Text
+            encoder.results[key.stringValue] = .text
         }
-        
-        func encode<Object>(_ value: Object, forKey key: Key) throws where Object : Swift.Encodable {
+
+        func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Swift.Encodable {
             if let columnEncodableObject = Object.self as? ColumnCodableBase.Type {
                 encoder.results[key.stringValue] = columnEncodableObject.columnType
-            }else {
+            } else {
                 encoder.results[key.stringValue] = .BLOB
             }
         }
-        
+
         func encode(_ value: Int8, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: Int16, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: Int32, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: Int64, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encode(_ value: UInt, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encode(_ value: UInt8, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: UInt16, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: UInt32, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encode(_ value: UInt64, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
-        func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+
+        func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
+                                        forKey key: Key) -> KeyedEncodingContainer<NestedKey>
+            where NestedKey: CodingKey {
             Error.abort("")
         }
-        
+
         func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
             Error.abort("")
         }
-        
-        func encodeConditional<T>(_ object: T, forKey key: Key) throws where T : AnyObject, T : Encodable {
+
+        func encodeConditional<T>(_ object: T, forKey key: Key) throws where T: AnyObject, T: Encodable {
             try encode(object, forKey: key)
         }
-        
+
         func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: Int?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encodeIfPresent(_ value: Int8?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: Int16?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: Int32?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: Int64?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encodeIfPresent(_ value: UInt?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encodeIfPresent(_ value: UInt8?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: UInt16?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: UInt32?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer32
+            encoder.results[key.stringValue] = .integer32
         }
-        
+
         func encodeIfPresent(_ value: UInt64?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Integer64
+            encoder.results[key.stringValue] = .integer64
         }
-        
+
         func encodeIfPresent(_ value: Float?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Float
+            encoder.results[key.stringValue] = .float
         }
-        
+
         func encodeIfPresent(_ value: Double?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Float
+            encoder.results[key.stringValue] = .float
         }
-        
+
         func encodeIfPresent(_ value: String?, forKey key: Key) throws {
-            encoder.results[key.stringValue] = .Text
+            encoder.results[key.stringValue] = .text
         }
-        
-        func encodeIfPresent<Object>(_ value: Object?, forKey key: Key) throws where Object : Encodable  {
+
+        func encodeIfPresent<Object>(_ value: Object?, forKey key: Key) throws where Object: Encodable {
             if let columnEncodableObject = Object.self as? ColumnCodableBase.Type {
                 encoder.results[key.stringValue] = columnEncodableObject.columnType
-            }else {
+            } else {
                 encoder.results[key.stringValue] = .BLOB
             }
         }
     }
-    
+
     let codingPath: [CodingKey] = []
     let userInfo: [CodingUserInfoKey: Any] = [:]
-    
-    private var results: [String:ColumnType] = [:]
-    
+
+    private var results: [String: ColumnType] = [:]
+
     func singleValueContainer() -> SingleValueEncodingContainer {
         Error.abort("")
     }
-    
+
     func unkeyedContainer() -> UnkeyedEncodingContainer {
         Error.abort("")
     }
-    
-    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
+
+    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
         return KeyedEncodingContainer(KeyedEncodingTypedContainer(encoder: self))
     }
-    
-    static func getColumnTypes(of type: TableEncodableBase.Type) -> [String:ColumnType] {
+
+    static func getColumnTypes(of type: TableEncodableBase.Type) -> [String: ColumnType] {
         let encoder = ColumnTypeEncoder()
         let dummy = type.init()
         do {
             try dummy.encode(to: encoder)
-        }catch {
+        } catch {
             Error.abort("")
         }
         return encoder.results

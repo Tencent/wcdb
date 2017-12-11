@@ -22,13 +22,12 @@ import Foundation
 import WCDBSwift
 
 class SampleAdvanceMulti: TableCodable {
-    var intValue: Int? = nil
+    var intValue: Int?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleAdvanceMulti    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        
+        typealias Root = SampleAdvanceMulti
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+
         case intValue
     }
     required init() {}
 }
-

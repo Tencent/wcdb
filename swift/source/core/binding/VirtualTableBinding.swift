@@ -20,20 +20,20 @@
 
 import Foundation
 
-public class VirtualTableBinding : AnyBinding {
+public class VirtualTableBinding: AnyBinding {
     let arguments: [ModuleArgument]
     let module: String
-    
+
     public init(withModule module: String, and arguments: [ModuleArgument]) {
         self.module = module
         self.arguments = arguments
-        super.init(with: .VirtualTable)
+        super.init(with: .virtualTable)
     }
-    
+
     public convenience init(withModule module: String, and arguments: ModuleArgument...) {
         self.init(withModule: module, and: arguments)
     }
-    
+
     public convenience init(with module: FTSModule, and arguments: [ModuleArgument]) {
         self.init(withModule: module.name, and: arguments)
     }
@@ -42,4 +42,3 @@ public class VirtualTableBinding : AnyBinding {
         self.init(withModule: module.name, and: arguments)
     }
 }
-

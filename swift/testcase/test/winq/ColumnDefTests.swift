@@ -22,46 +22,99 @@ import XCTest
 import WCDBSwift
 
 class ColumnDefTests: BaseTestCase {
-    
+
     func generateColumnDef() -> ColumnDef {
-        return ColumnDef(with: Column(named: "testColumnDef"), and: .Integer32)
+        return ColumnDef(with: Column(named: "testColumnDef"), and: .integer32)
     }
 
     func testColumnDef() {
-        WINQAssertEqual(generateColumnDef().makePrimary(), "testColumnDef INTEGER PRIMARY KEY")
-        
-        WINQAssertEqual(generateColumnDef().makePrimary(orderBy: .Ascending), "testColumnDef INTEGER PRIMARY KEY ASC")
-        
-        WINQAssertEqual(generateColumnDef().makePrimary(isAutoIncrement: true), "testColumnDef INTEGER PRIMARY KEY AUTOINCREMENT")
-        
-        WINQAssertEqual(generateColumnDef().makePrimary(onConflict: .Ignore), "testColumnDef INTEGER PRIMARY KEY ON CONFLICT IGNORE")
+        WINQAssertEqual(
+            generateColumnDef().makePrimary(),
+            "testColumnDef INTEGER PRIMARY KEY"
+        )
 
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Null), "testColumnDef INTEGER DEFAULT NULL")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Int32(-1)), "testColumnDef INTEGER DEFAULT -1")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Int64(171798691840)), "testColumnDef INTEGER DEFAULT 171798691840")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Bool(false)), "testColumnDef INTEGER DEFAULT false")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Text("SampleText")), "testColumnDef INTEGER DEFAULT 'SampleText'")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Float(0.1)), "testColumnDef INTEGER DEFAULT 0.1")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .BLOB("SampleText".data(using: .ascii)!)), "testColumnDef INTEGER DEFAULT 'SampleText'")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .Expression(1)), "testColumnDef INTEGER DEFAULT 1")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .CurrentDate), "testColumnDef INTEGER DEFAULT CURRENT_DATE")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .CurrentTime), "testColumnDef INTEGER DEFAULT CURRENT_TIME")
-        
-        WINQAssertEqual(generateColumnDef().makeDefault(to: .CurrentTimestamp), "testColumnDef INTEGER DEFAULT CURRENT_TIMESTAMP")
+        WINQAssertEqual(
+            generateColumnDef().makePrimary(orderBy: .ascending),
+            "testColumnDef INTEGER PRIMARY KEY ASC"
+        )
 
-        WINQAssertEqual(generateColumnDef().makeNotNull(), "testColumnDef INTEGER NOT NULL")
+        WINQAssertEqual(
+            generateColumnDef().makePrimary(isAutoIncrement: true),
+            "testColumnDef INTEGER PRIMARY KEY AUTOINCREMENT"
+        )
 
-        WINQAssertEqual(generateColumnDef().makeUnique(), "testColumnDef INTEGER UNIQUE")
-        
-        WINQAssertEqual(generateColumnDef().makeForeignKey(ForeignKey(withForeignTable: "testColumnDefTable")), "testColumnDef INTEGER REFERENCES testColumnDefTable")
+        WINQAssertEqual(
+            generateColumnDef().makePrimary(onConflict: .ignore),
+            "testColumnDef INTEGER PRIMARY KEY ON CONFLICT IGNORE"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .null),
+            "testColumnDef INTEGER DEFAULT NULL"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .int32(-1)),
+            "testColumnDef INTEGER DEFAULT -1"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .int64(171798691840)),
+            "testColumnDef INTEGER DEFAULT 171798691840"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .bool(false)),
+            "testColumnDef INTEGER DEFAULT false"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .text("SampleText")),
+            "testColumnDef INTEGER DEFAULT 'SampleText'"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .float(0.1)),
+            "testColumnDef INTEGER DEFAULT 0.1"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .BLOB("SampleText".data(using: .ascii)!)),
+            "testColumnDef INTEGER DEFAULT 'SampleText'"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .expression(1)),
+            "testColumnDef INTEGER DEFAULT 1"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .currentDate),
+            "testColumnDef INTEGER DEFAULT CURRENT_DATE"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .currentTime),
+            "testColumnDef INTEGER DEFAULT CURRENT_TIME"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeDefault(to: .currentTimestamp),
+            "testColumnDef INTEGER DEFAULT CURRENT_TIMESTAMP")
+
+        WINQAssertEqual(
+            generateColumnDef().makeNotNull(),
+            "testColumnDef INTEGER NOT NULL"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeUnique(),
+            "testColumnDef INTEGER UNIQUE"
+        )
+
+        WINQAssertEqual(
+            generateColumnDef().makeForeignKey(ForeignKey(withForeignTable: "testColumnDefTable")),
+            "testColumnDef INTEGER REFERENCES testColumnDefTable"
+        )
     }
 }

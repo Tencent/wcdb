@@ -22,29 +22,32 @@ import Foundation
 
 public class TableConstraintBinding: AnyBinding {
     public typealias Name = String
-    
+
     let conflict: Conflict?
     let columnIndexes: [ColumnIndex]
     let condition: Condition?
-    
-    
-    public convenience init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible..., onConflict conflict: Conflict? = nil, check condition: Condition? = nil) {
+
+    public convenience init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...,
+                            onConflict conflict: Conflict? = nil,
+                            check condition: Condition? = nil) {
         self.init(indexesBy: columnIndexConvertibleList, onConflict: conflict, check: condition)
     }
-    
-    public init(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible], onConflict conflict: Conflict? = nil, check condition: Condition? = nil) {
+
+    public init(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible],
+                onConflict conflict: Conflict? = nil,
+                check condition: Condition? = nil) {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
         self.conflict = conflict
         self.condition = condition
-        super.init(with: .TableConstraint)
+        super.init(with: .tableConstraint)
     }
-    
+
     func generateConstraint(withName name: String) -> TableConstraint {
         Error.abort("")
     }
 }
 
-public class MultiPrimaryBinding: TableConstraintBinding {   
+public class MultiPrimaryBinding: TableConstraintBinding {
     override func generateConstraint(withName name: String) -> TableConstraint {
         var tableConstraint = TableConstraint(named: name).makePrimary(indexesBy: columnIndexes)
         if conflict != nil {
@@ -57,7 +60,7 @@ public class MultiPrimaryBinding: TableConstraintBinding {
     }
 }
 
-public class MultiUniqueBinding: TableConstraintBinding {    
+public class MultiUniqueBinding: TableConstraintBinding {
     override func generateConstraint(withName name: String) -> TableConstraint {
         var tableConstraint = TableConstraint(named: name).makeUnique(indexesBy: columnIndexes)
         if conflict != nil {

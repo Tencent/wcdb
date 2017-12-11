@@ -23,18 +23,18 @@ import Foundation
 public protocol OptionalRepresentable {
     associatedtype WrappedType
     var wrapped: WrappedType {get}
-    
+
     static var `nil`: Self {get}
 }
 
 extension Optional: OptionalRepresentable {
-    public static var `nil`: Optional<Wrapped> {
-        return Optional<Wrapped>.none
+    public static var `nil`: Wrapped? {
+        return nil
     }
-    
+
     public typealias WrappedType = Wrapped
-    
+
     public var wrapped: WrappedType {
-        return unsafelyUnwrapped 
+        return unsafelyUnwrapped
     }
 }

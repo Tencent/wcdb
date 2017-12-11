@@ -22,9 +22,9 @@ import Foundation
 
 public class TableBase {
     let database: Database
-    public let name: String    
-    let base: Any.Type    
-    
+    public let name: String
+    let base: Any.Type
+
     init(withDatabase database: Database, named name: String, base: Any.Type) {
         self.database = database
         self.name = name
@@ -34,13 +34,17 @@ public class TableBase {
 
 public class Table<Root: TableCodable>: TableBase {
     public let `class`: Root.Type
-    
+
     init(withDatabase database: Database, named name: String) {
         self.`class` = Root.self
         super.init(withDatabase: database, named: name, base: self.`class`)
     }
 }
 
-extension Table: InsertTableInterface, DeleteTableInterface, UpdateTableInterface, SelectTableInterface, RowSelectTableInterface {
+extension Table: InsertTableInterface,
+                 DeleteTableInterface,
+                 UpdateTableInterface,
+                 SelectTableInterface,
+                 RowSelectTableInterface {
     public typealias Object = Root
 }

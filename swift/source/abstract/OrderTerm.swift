@@ -21,14 +21,14 @@
 import Foundation
 
 public enum OrderTerm: CustomStringConvertible {
-    case Ascending
-    case Descending
-    
+    case ascending
+    case descending
+
     public var description: String {
         switch self {
-        case .Ascending:
+        case .ascending:
             return "ASC"
-        case .Descending:
+        case .descending:
             return "DESC"
         }
     }

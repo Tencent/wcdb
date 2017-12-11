@@ -25,15 +25,15 @@ class LiteralValueTests: BaseTestCase {
 
     func testLiteralValue() {
         WINQAssertEqual(LiteralValue(1), "1")
-        
+
         WINQAssertEqual(LiteralValue(17626545782784), "17626545782784")
-        
+
         WINQAssertEqual(LiteralValue(0.1), "0.1")
-        
+
         WINQAssertEqual(LiteralValue("test"), "'test'")
-        
+
         WINQAssertEqual(LiteralValue("test".data(using: .ascii)!), "'test'")
-        
+
         WINQAssertEqual(LiteralValue(nil), "NULL")
     }
 }

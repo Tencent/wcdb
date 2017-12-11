@@ -25,7 +25,7 @@ class StatementPragmaTests: BaseTestCase {
 
     func testStatementPragma() {
         WINQAssertEqual(StatementPragma().pragma(.pageSize), "PRAGMA page_size")
-        
+
         WINQAssertEqual(StatementPragma().pragma(.secureDelete, to: true), "PRAGMA secure_delete=1")
     }
 }

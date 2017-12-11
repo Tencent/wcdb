@@ -22,20 +22,20 @@ import WCDBSwift
 import Foundation
 
 class SampleORMColumnConstraint: TableCodable {
-    var primaryProperty: Int? = nil
-    var uniqueProperty: String? = nil
-    var notNullProperty: Data? = nil
+    var primaryProperty: Int?
+    var uniqueProperty: String?
+    var notNullProperty: Data?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleORMColumnConstraint    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        case primaryProperty    
-        case uniqueProperty    
-        case notNullProperty    
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+        typealias Root = SampleORMColumnConstraint
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        case primaryProperty
+        case uniqueProperty
+        case notNullProperty
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
             return [
-                .primaryProperty:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending, isAutoIncrement: true),
-                .uniqueProperty:ColumnConstraintBinding(isNotNull: true),
-                .notNullProperty:ColumnConstraintBinding(isUnique: true)
+                .primaryProperty: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true),
+                .uniqueProperty: ColumnConstraintBinding(isNotNull: true),
+                .notNullProperty: ColumnConstraintBinding(isUnique: true)
             ]
         }
     }
@@ -43,4 +43,3 @@ class SampleORMColumnConstraint: TableCodable {
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
-

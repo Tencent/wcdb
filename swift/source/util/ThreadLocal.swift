@@ -28,26 +28,26 @@ class ThreadLocal<Value> {
             self.rawValue = rawValue
         }
     }
-    
+
     private var key = pthread_key_t()
-    private let defaultValue: Value  
-    
+    private let defaultValue: Value
+
     init(defaultTo defaultValue: Value) {
         self.defaultValue = defaultValue
         pthread_key_create(&key, {
             Unmanaged<AnyObject>.fromOpaque($0).release()
         })
     }
-    
+
     deinit {
         pthread_key_delete(key)
     }
-    
+
     var value: Value {
         get {
             guard let pointer = pthread_getspecific(key) else {
                 return defaultValue
-            } 
+            }
             return Unmanaged<Wrapper>.fromOpaque(pointer).takeUnretainedValue().rawValue
         }
         set {

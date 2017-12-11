@@ -22,23 +22,27 @@ import Foundation
 import WCDBSwift
 
 class SampleORMTableConstraint: TableCodable {
-    var primaryKeyPart1: Int? = nil
-    var primaryKeyPart2: String? = nil
-    
-    var uniqueKeyPart1: Int? = nil
-    var uniqueKeyPart2: Float? = nil
+    var primaryKeyPart1: Int?
+    var primaryKeyPart2: String?
+
+    var uniqueKeyPart1: Int?
+    var uniqueKeyPart2: Float?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleORMTableConstraint    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        case primaryKeyPart1    
-        case primaryKeyPart2    
-        case uniqueKeyPart1     
-        case uniqueKeyPart2    
-        static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
+        typealias Root = SampleORMTableConstraint
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        case primaryKeyPart1
+        case primaryKeyPart2
+        case uniqueKeyPart1
+        case uniqueKeyPart2
+        static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+            let multiPrimaryBinding =
+                MultiPrimaryBinding(indexesBy: primaryKeyPart1.asIndex(orderBy: .descending), primaryKeyPart2)
+            let multiUniqueBinding =
+                MultiUniqueBinding(indexesBy: primaryKeyPart1, primaryKeyPart2.asIndex(orderBy: .ascending))
             return [
-                "MultiPrimaryConstraint":MultiPrimaryBinding(indexesBy: Properties.primaryKeyPart1.asIndex(orderBy: .Descending), Properties.primaryKeyPart2),
-                "MultiUniqueConstraint":MultiUniqueBinding(indexesBy: Properties.primaryKeyPart1, Properties.primaryKeyPart2.asIndex(orderBy: .Ascending)),
-            ]        
+                "MultiPrimaryConstraint": multiPrimaryBinding,
+                "MultiUniqueConstraint": multiUniqueBinding
+            ]
         }
     }
     required init() {}
@@ -46,4 +50,3 @@ class SampleORMTableConstraint: TableCodable {
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
-

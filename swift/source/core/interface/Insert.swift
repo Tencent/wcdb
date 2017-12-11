@@ -24,33 +24,44 @@ public class Insert: CoreRepresentable {
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
-    
-    init(with core: Core, named name: String, on propertyConvertibleList: [PropertyConvertible]?, isReplace: Bool = false) throws {
+
+    init(with core: Core,
+         named name: String,
+         on propertyConvertibleList: [PropertyConvertible]?,
+         isReplace: Bool = false) throws {
         guard name.count > 0 else {
-            throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Insert, code: .Misuse, message: "Empty table name")
+            throw Error.reportInterface(tag: core.tag,
+                                        path: core.path,
+                                        operation: .insert,
+                                        code: .misuse,
+                                        message: "Empty table name")
         }
         self.name = name
         self.properties = propertyConvertibleList
         self.isReplace = isReplace
         self.core = core
     }
-    
-    private lazy var statement: StatementInsert = StatementInsert().insert(intoTable: name, with: properties!, onConflict: isReplace ? Conflict.Replace : nil).values(Array(repeating: Expression.bindingParameter, count: properties!.count))
-    
+
+    private lazy var statement: StatementInsert = StatementInsert()
+        .insert(intoTable: name,
+                with: properties!,
+                onConflict: isReplace ? Conflict.replace : nil)
+        .values(Array(repeating: Expression.bindingParameter, count: properties!.count))
+
     public func execute<Object: TableEncodable>(with objects: Object...) throws {
         try execute(with: objects)
     }
-    
+
     public func execute<Object: TableEncodable>(with objects: [Object]) throws {
         guard objects.count > 0 else {
             Error.warning("Inserting with an empty/nil object")
             return
         }
-        let orm = Object.CodingKeys.__objectRelationalMapping
+        let orm = Object.CodingKeys.objectRelationalMapping
         func doInsertObject() throws {
             properties = properties ?? Object.Properties.all
             let coreStatement = try core.prepare(statement)
-            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: coreStatement) 
+            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: coreStatement)
             for var object in objects {
                 try encoder.bind(object, isReplace: isReplace)
                 try coreStatement.step()
@@ -63,5 +74,3 @@ public class Insert: CoreRepresentable {
         return objects.count == 1 ? try doInsertObject() : try core.run(embeddedTransaction: doInsertObject )
     }
 }
-
-

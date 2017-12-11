@@ -19,15 +19,15 @@
  */
 
 import Foundation
-public final class LiteralValue : Describable {
+public final class LiteralValue: Describable {
     public init(_ value: Int32) {
         super.init(String(value))
     }
-    
+
     public init(_ value: Int64) {
         super.init(String(value))
     }
-    
+
     public init(_ value: Bool) {
         super.init(String(value))
     }
@@ -39,12 +39,12 @@ public final class LiteralValue : Describable {
     public override init(_ value: String) {
         super.init("'\(value.replacingOccurrences(of: "'", with: "''"))'")
     }
-    
+
     public init(_ value: Data) {
         let string = String(data: value, encoding: .utf8) ?? ""
         super.init("'\(string.replacingOccurrences(of: "'", with: "''"))'")
     }
-    
+
     public init(_ value: Void?) {
         super.init("NULL")
     }
@@ -52,40 +52,40 @@ public final class LiteralValue : Describable {
     public convenience init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
         if let value = columnEncodableValue.archivedFundamentalValue() {
             switch ColumnEncodableType.columnType {
-            case .Integer32:
+            case .integer32:
                 if let int32Value = value as? Int32 {
                     self.init(int32Value)
-                }else {
+                } else {
                     self.init(nil)
                 }
-            case .Integer64:
+            case .integer64:
                 if let int64Value = value as? Int64 {
                     self.init(int64Value)
-                }else {
+                } else {
                     self.init(nil)
                 }
-            case .Float:
+            case .float:
                 if let doubleValue = value as? Double {
                     self.init(doubleValue)
-                }else {
+                } else {
                     self.init(nil)
                 }
-            case .Text:
+            case .text:
                 if let stringValue = value as? String {
                     self.init(stringValue)
-                }else {
+                } else {
                     self.init(nil)
                 }
             case .BLOB:
                 if let dataValue = value as? Data {
                     self.init(dataValue)
-                }else {
+                } else {
                     self.init(nil)
                 }
-            default: 
+            default:
                 self.init(nil)
             }
-        }else {
+        } else {
             self.init(nil)
         }
     }
@@ -126,4 +126,3 @@ extension LiteralValue: LiteralValueConvertible {
         return self
     }
 }
-

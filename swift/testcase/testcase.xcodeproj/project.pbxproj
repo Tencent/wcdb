@@ -187,16 +187,16 @@
 		23516C641FD0340500B465DD /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169EE1FCEE65F00B465DD /* BaseTestCase.swift */; };
 		23516C651FD0340500B465DD /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		23516C661FD0340500B465DD /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169B21FCEE28E00B465DD /* Convenience.swift */; };
-		23B996DF1FDAB57400B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996E21FDAB57E00B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996E51FDAB58400B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996E81FDAB58B00B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996EB1FDAB59100B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996EE1FDAB59700B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996F11FDAB59D00B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996F41FDAB5A300B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996F71FDAB5A800B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
-		23B996FA1FDAB5AE00B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */; };
+		23B996DF1FDAB57400B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996E21FDAB57E00B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996E51FDAB58400B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996E81FDAB58B00B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996EB1FDAB59100B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996EE1FDAB59700B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996F11FDAB59D00B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996F41FDAB5A300B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996F71FDAB5A800B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23B996FA1FDAB5AE00B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
 		23C8E0001FD7FB1800DAE97D /* TypedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8DFFF1FD7FB1700DAE97D /* TypedTests.swift */; };
 		23C8E0011FD7FB2E00DAE97D /* TypedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8DFFF1FD7FB1700DAE97D /* TypedTests.swift */; };
 /* End PBXBuildFile section */
@@ -373,7 +373,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996F11FDAB59D00B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996F11FDAB59D00B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +381,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996F41FDAB5A300B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996F41FDAB5A300B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +389,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996F71FDAB5A800B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996F71FDAB5A800B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,7 +397,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996FA1FDAB5AE00B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996FA1FDAB5AE00B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +405,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996DF1FDAB57400B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996DF1FDAB57400B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,7 +413,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996EE1FDAB59700B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996EE1FDAB59700B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,7 +421,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996E51FDAB58400B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996E51FDAB58400B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,7 +429,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996E81FDAB58B00B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996E81FDAB58B00B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +437,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996EB1FDAB59100B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996EB1FDAB59100B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,7 +445,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996E21FDAB57E00B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996E21FDAB57E00B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,7 +628,7 @@
 		23B996D41FDAB52200B0AF2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */,
+				23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -921,10 +921,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		23B996D91FDAB52200B0AF2E /* WCDB_swift.framework */ = {
+		23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = WCDB_swift.framework;
+			path = WCDBSwift.framework;
 			remoteRef = 23B996D81FDAB52200B0AF2E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

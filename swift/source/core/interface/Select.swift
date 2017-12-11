@@ -22,42 +22,54 @@ import Foundation
 
 public class Select: SelectBase {
     private let keys: [CodingTableKeyBase]
-    
+
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {
         guard propertyConvertibleList.count > 0 else {
-            throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Select, code: .Misuse, message: "Selecting nothing from \(table) is invalid")
-        } 
+            throw Error.reportInterface(tag: core.tag,
+                                        path: core.path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "Selecting nothing from \(table) is invalid")
+        }
         //TODO: Use generic to check all coding table keys conform to same root type
         keys = propertyConvertibleList.asCodingTableKeys()
         super.init(with: core)
         statement.select(distinct: isDistinct, propertyConvertibleList).from(table)
     }
-    
+
     private func extract(from keys: [CodingTableKeyBase], of type: TableDecodableBase.Type) throws -> Any {
         let coreStatement = try self.lazyCoreStatement()
         let decoder = TableDecoder(keys, on: coreStatement)
         return try type.init(from: decoder)
     }
-    
+
     private func extract<Object: TableDecodable>(from keys: [Object.CodingKeys]) throws -> Object {
         let coreStatement = try self.lazyCoreStatement()
         let decoder = TableDecoder(keys, on: coreStatement)
         return try Object.init(from: decoder)
     }
-    
+
     public func nextObject() throws -> Any? {
         guard let rootType = keys[0].rootType as? TableDecodableBase.Type else {
-            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "")
+            throw Error.reportInterface(tag: tag,
+                                        path: path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "")
         }
         guard try next() else {
             return nil
         }
         return try extract(from: keys, of: rootType)
     }
-    
+
     public func allObjects() throws -> [Any] {
         guard let rootType = keys[0].rootType as? TableDecodableBase.Type else {
-            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "")
+            throw Error.reportInterface(tag: tag,
+                                        path: path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "")
         }
         var objects: [Any] = []
         while try next() {
@@ -65,20 +77,28 @@ public class Select: SelectBase {
         }
         return objects
     }
-    
+
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
         guard let keys = self.keys as? [Object.CodingKeys] else {
-            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "")
+            throw Error.reportInterface(tag: tag,
+                                        path: path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "")
         }
         guard try next() else {
             return nil
         }
         return try extract(from: keys)
     }
-    
+
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
         guard let keys = self.keys as? [Object.CodingKeys] else {
-            throw Error.reportInterface(tag: tag, path: path, operation: .Select, code: .Misuse, message: "")
+            throw Error.reportInterface(tag: tag,
+                                        path: path,
+                                        operation: .select,
+                                        code: .misuse,
+                                        message: "")
         }
         var objects: [Object] = []
         while try next() {
@@ -87,4 +107,3 @@ public class Select: SelectBase {
         return objects
     }
 }
-

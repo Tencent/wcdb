@@ -24,8 +24,8 @@ import WCDBSwift
 class OrderTermTests: BaseTestCase {
 
     func testOrderTerm() {
-        WINQAssertEqual(OrderTerm.Ascending, "ASC")
-        
-        WINQAssertEqual(OrderTerm.Descending, "DESC")
+        WINQAssertEqual(OrderTerm.ascending, "ASC")
+
+        WINQAssertEqual(OrderTerm.descending, "DESC")
     }
 }

@@ -23,21 +23,21 @@ import WCDBSwift
 
 func sample_chailcall_main(baseDirectory: String) {
     print("Sample-chaincall Begin")
-    
+
     let className = String(describing: SampleChainCall.self)
     let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
     let database = Database(withPath: path)
     let tableName = className
-    database.close(onClosed: { 
+    database.close(onClosed: {
         try? database.removeFiles()
     })
-        
-    do{
+
+    do {
         try database.create(table: tableName, of: SampleChainCall.self)
-    }catch let error {
+    } catch let error {
         print("create table error: \(error)")
     }
-        
+
     //Insert objects
     do {
         var objects: [SampleChainCall] = []
@@ -50,50 +50,57 @@ func sample_chailcall_main(baseDirectory: String) {
         object2.stringValue = "Insert objects"
         objects.append(object2)
         let insert = try database.prepareInsert(of: SampleChainCall.self, intoTable: tableName)
-        try insert.execute(with: objects)            
-    }catch let error {
+        try insert.execute(with: objects)
+    } catch let error {
         print("insert objects error: \(error)")
     }
-    
+
     //Select objects
     do {
-        let select = try database.prepareSelect(on: (SampleChainCall.Properties.intValue).max().as((SampleChainCall.Properties.intValue)), fromTable: tableName).where(SampleChainCall.Properties.intValue==1).group(by: SampleChainCall.Properties.intValue).limit(3)
+        let property = SampleChainCall.Properties.intValue.max().as(SampleChainCall.Properties.intValue)
+        let select = try database.prepareSelect(on: property,
+                                                fromTable: tableName)
+                                 .where(SampleChainCall.Properties.intValue==1)
+                                 .group(by: SampleChainCall.Properties.intValue)
+                                 .limit(3)
         let objects: [SampleChainCall] = try select.allObjects()
-    }catch let error {
+    } catch let error {
         print("select objects error: \(error)")
     }
-    
+
     //Select rows
     do {
-        let rowSelect = try database.prepareRowSelect(on: SampleChainCall.Properties.all, fromTable: tableName).where(SampleChainCall.Properties.intValue==1).limit(3)
+        let rowSelect = try database.prepareRowSelect(on: SampleChainCall.Properties.all,
+                                                      fromTable: tableName)
+                                    .where(SampleChainCall.Properties.intValue==1)
+                                    .limit(3)
         let needBreak = true
         while let row = try rowSelect.nextRow() {
             if needBreak {
                 break
-            } 
+            }
         }
-    }catch let error {
+    } catch let error {
         print("select rows error: \(error)")
     }
-    
+
     //Update by object
     do {
         let update = try database.prepareUpdate(table: tableName, on: SampleChainCall.Properties.stringValue)
         let object = SampleChainCall()
         object.stringValue = "Update by object"
         try update.execute(with: object)
-    }catch let error {
+    } catch let error {
         print("update by object error: \(error)")
     }
-    
+
     //Delete
     do {
         let delete = try database.prepareDelete(fromTable: tableName)
         try delete.execute()
-    }catch let error {
+    } catch let error {
         print("delete error: \(error)")
     }
-        
+
     print("Sample-chaincall End")
 }
-

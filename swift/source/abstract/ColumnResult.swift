@@ -20,11 +20,11 @@
 
 import Foundation
 
-public class ColumnResult : Describable {    
+public class ColumnResult: Describable {
     public init(with expressionConvertible: ExpressionConvertible) {
         super.init(expressionConvertible.asExpression().description)
     }
-    
+
     @discardableResult
     public func `as`(_ alias: String) -> Self {
         description.append(" AS " + alias)

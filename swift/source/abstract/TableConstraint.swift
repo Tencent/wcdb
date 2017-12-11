@@ -23,23 +23,23 @@ public class TableConstraint: Describable {
     public init(named name: String) {
         super.init("CONSTRAINT \(name)")
     }
-    
+
     @discardableResult
     public func makePrimary(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) -> TableConstraint {
         return makePrimary(indexesBy: columnIndexConvertibleList)
     }
-    
+
     @discardableResult
     public func makePrimary(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) -> TableConstraint {
         description.append(" PRIMARY KEY(\(columnIndexConvertibleList.joined()))")
         return self
     }
-    
+
     @discardableResult
     public func makeUnique(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) -> TableConstraint {
         return makeUnique(indexesBy: columnIndexConvertibleList)
     }
-    
+
     @discardableResult
     public func makeUnique(indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) -> TableConstraint {
         description.append(" UNIQUE(\(columnIndexConvertibleList.joined()))")
@@ -51,7 +51,7 @@ public class TableConstraint: Describable {
         description.append(" ON CONFLICT \(conflict.description)")
         return self
     }
-    
+
     @discardableResult
     public func check(_ expressionConvertible: ExpressionConvertible) -> TableConstraint {
         description.append(" CHECK\(expressionConvertible.asExpression().description)")

@@ -26,20 +26,38 @@ class StatementCreateIndexTests: BaseTestCase {
     func testCreateIndex() {
         //Give
         let column1 = Column(named: "column1")
-        
+
         let index1 = ColumnIndex(with: column1)
-        let index2 = ColumnIndex(with: Column(named: "column2"), orderBy: .Ascending)
-        
+        let index2 = ColumnIndex(with: Column(named: "column2"), orderBy: .ascending)
+
         let indexName1 = "index1"
         let table1 = "table1"
-        
+
         //Then
-        WINQAssertEqual(StatementCreateIndex().create(index: indexName1).on(table: table1, indexesBy: index1, index2), "CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)")
-        
-        WINQAssertEqual(StatementCreateIndex().create(index: indexName1, isUnique: true).on(table: table1, indexesBy: index1, index2), "CREATE UNIQUE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)")
-        
-        WINQAssertEqual(StatementCreateIndex().create(index: indexName1, ifNotExists: false).on(table: table1, indexesBy: index1, index2), "CREATE INDEX index1 ON table1(column1, column2 ASC)")
-        
-        WINQAssertEqual(StatementCreateIndex().create(index: indexName1).on(table: table1, indexesBy: index1, index2).`where`(column1 >= 1), "CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC) WHERE (column1 >= 1)")
+        WINQAssertEqual(
+            StatementCreateIndex().create(index: indexName1).on(table: table1, indexesBy: index1, index2),
+            "CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)"
+        )
+
+        WINQAssertEqual(
+            StatementCreateIndex()
+                .create(index: indexName1, isUnique: true)
+                .on(table: table1, indexesBy: index1, index2),
+            "CREATE UNIQUE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)"
+        )
+
+        WINQAssertEqual(
+            StatementCreateIndex()
+                .create(index: indexName1, ifNotExists: false)
+                .on(table: table1, indexesBy: index1, index2),
+            "CREATE INDEX index1 ON table1(column1, column2 ASC)"
+        )
+
+        WINQAssertEqual(
+            StatementCreateIndex()
+                .create(index: indexName1)
+                .on(table: table1, indexesBy: index1, index2).`where`(column1 >= 1),
+            "CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC) WHERE (column1 >= 1)"
+        )
     }
 }

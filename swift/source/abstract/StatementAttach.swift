@@ -21,9 +21,9 @@
 import Foundation
 public class StatementAttach: Statement {
     public init() {
-        super.init(with: .Attach)
+        super.init(with: .attach)
     }
-    
+
     @discardableResult
     public func attach(_ expressionConvertible: ExpressionConvertible, asSchema schema: String) -> StatementAttach {
         description.append("ATTACH \(expressionConvertible.asExpression().description) AS \(schema)")

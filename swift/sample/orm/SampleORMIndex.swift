@@ -21,25 +21,24 @@
 import WCDBSwift
 
 class SampleORMIndex: TableCodable {
-    var indexProperty: Int? = nil
-    var uniqueIndexProperty: Int? = nil
-    var multiIndexPart1: String? = nil
-    var multiIndexPart2: Float? = nil
+    var indexProperty: Int?
+    var uniqueIndexProperty: Int?
+    var multiIndexPart1: String?
+    var multiIndexPart2: Float?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleORMIndex    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        typealias Root = SampleORMIndex
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
         case indexProperty
         case uniqueIndexProperty
         case multiIndexPart1
         case multiIndexPart2
-        static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
+        static var indexBindings: [IndexBinding.Subfix: IndexBinding]? {
             return [
-                "_indexSubfix":IndexBinding(indexesBy: Properties.indexProperty),
-                "_uniqueIndexSubfix":IndexBinding(indexesBy: Properties.uniqueIndexProperty),
-                "_multiIndexSubfix":IndexBinding(indexesBy: Properties.multiIndexPart1, Properties.multiIndexPart2),
+                "_indexSubfix": IndexBinding(indexesBy: indexProperty),
+                "_uniqueIndexSubfix": IndexBinding(indexesBy: uniqueIndexProperty),
+                "_multiIndexSubfix": IndexBinding(indexesBy: multiIndexPart1, multiIndexPart2)
             ]
         }
     }
     required init() {}
 }
-

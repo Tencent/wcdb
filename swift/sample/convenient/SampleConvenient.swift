@@ -22,19 +22,18 @@ import Foundation
 import WCDBSwift
 
 class SampleConvenient: TableCodable {
-    var intValue: Int? = nil
-    var stringValue: String? = nil
+    var intValue: Int?
+    var stringValue: String?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleConvenient    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        typealias Root = SampleConvenient
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
         case intValue
         case stringValue
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-            return [.intValue:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+            return [.intValue: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
         }
     }
     required init() {}
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
-

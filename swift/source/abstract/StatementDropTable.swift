@@ -21,9 +21,9 @@
 import Foundation
 public class StatementDropTable: Statement {
     public init() {
-        super.init(with: .DropTable)
+        super.init(with: .dropTable)
     }
-    
+
     public func drop(table: String, ifExists: Bool = true) -> StatementDropTable {
         description.append("DROP TABLE ")
         if ifExists {

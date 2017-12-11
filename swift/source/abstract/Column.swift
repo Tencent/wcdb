@@ -1,4 +1,3 @@
-
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -22,10 +21,10 @@
 import Foundation
 
 public class Column: Describable {
-    
+
     public static let any: Column = Column(named: "*")
     public static let rowid: Column = Column(named: "rowid")
-    
+
     public init(named name: String) {
         super.init(name)
     }
@@ -33,7 +32,7 @@ public class Column: Describable {
     public var name: String {
         return description
     }
-    
+
     public func `in`(table: String) -> Column {
         return Column(named: table + "." + self.name)
     }

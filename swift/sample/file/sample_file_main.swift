@@ -23,50 +23,48 @@ import WCDBSwift
 
 func sample_file_main(baseDirectory: String) {
     print("Sample-file Begin")
-    
+
     let className = String(describing: SampleFile.self)
     let path = URL(fileURLWithPath: baseDirectory).appendingPathComponent(className).path
-    let otherDirectory = URL(fileURLWithPath: baseDirectory).appendingPathComponent("moved").path 
+    let otherDirectory = URL(fileURLWithPath: baseDirectory).appendingPathComponent("moved").path
     let tableName = className
-    
-    
+
     let database = Database(withPath: path)
-    database.close(onClosed: { 
+    database.close(onClosed: {
         try? database.removeFiles()
     })
-    
+
     do {
         try database.create(table: tableName, of: SampleFile.self)
-    }catch let error {
+    } catch let error {
         print("create table error: \(error)")
     }
-    
+
     //Get file size
     do {
         var fileSize: UInt64!
-        database.close(onClosed: { 
+        database.close(onClosed: {
             fileSize = try database.getFilesSize()
         })
         print("file size: \(fileSize)")
-    }catch let error {
+    } catch let error {
         print("file size error: \(error)")
     }
-    
+
     //Move files
     do {
-        database.close(onClosed: { 
+        database.close(onClosed: {
             try database.moveFiles(toDirectory: otherDirectory)
         })
-    }catch let error {
+    } catch let error {
         print("move file error: \(error)")
     }
-    
+
     //Get paths
     do {
         let paths = database.paths
         print("paths: \(paths)")
     }
-    
+
     print("Sample-file End")
 }
-

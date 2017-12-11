@@ -21,16 +21,20 @@
 import Foundation
 public class StatementInsert: Statement {
     public init() {
-        super.init(with: .Insert)
+        super.init(with: .insert)
     }
-    
+
     @discardableResult
-    public func insert(intoTable table: String, with columnConvertibleList: ColumnConvertible..., onConflict conflict: Conflict? = nil) -> StatementInsert{
+    public func insert(intoTable table: String,
+                       with columnConvertibleList: ColumnConvertible...,
+                       onConflict conflict: Conflict? = nil) -> StatementInsert {
         return insert(intoTable: table, with: columnConvertibleList, onConflict: conflict)
     }
-    
+
     @discardableResult
-    public func insert(intoTable table: String, with columnConvertibleList: [ColumnConvertible]? = nil, onConflict conflict: Conflict? = nil) -> StatementInsert {
+    public func insert(intoTable table: String,
+                       with columnConvertibleList: [ColumnConvertible]? = nil,
+                       onConflict conflict: Conflict? = nil) -> StatementInsert {
         description.append("INSERT")
         if conflict != nil {
             description.append(" OR \(conflict!.description)")
@@ -41,12 +45,12 @@ public class StatementInsert: Statement {
         }
         return self
     }
-    
+
     @discardableResult
     public func values(_ expressionConvertibleList: ExpressionConvertible...) -> StatementInsert {
         return values(expressionConvertibleList)
     }
-    
+
     @discardableResult
     public func values(_ expressionConvertibleList: [ExpressionConvertible]) -> StatementInsert {
         if !expressionConvertibleList.isEmpty {

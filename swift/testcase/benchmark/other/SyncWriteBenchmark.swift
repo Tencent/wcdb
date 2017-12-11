@@ -25,31 +25,31 @@ class SyncWriteBenchmark: BaseBenchmark {
 
     override func setUp() {
         super.setUp()
-        
+
         database.setSynchronous(isFull: true)
-        
+
         setUpWithPreCreateObject(count: config.syncWriteCount)
     }
-    
+
     func testSyncWrite() {
         let tableName = getTableName()
-        
-        measure(onSetUp: { 
+
+        measure(onSetUp: {
             tearDownDatabase()
-            
+
             setUpWithPreCreateTable()
-            
+
             tearDownDatabaseCache()
-            
-            setUpDatabaseCache()    
-        }, for: { 
+
+            setUpDatabaseCache()
+        }, for: {
             do {
                 for object in objects {
                     try database.insert(objects: object, intoTable: tableName)
                 }
-            }catch let error as WCDBSwift.Error {
+            } catch let error as WCDBSwift.Error {
                 XCTFail(error.description)
-            }catch let error {
+            } catch let error {
                 XCTFail(error.localizedDescription)
             }
         }, checkCorrectness: {

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Order : Describable {
+public class Order: Describable {
     public init(with expressionConvertible: ExpressionConvertible, by term: OrderTerm? = nil) {
         super.init("\(expressionConvertible.asExpression().description)\(term != nil ? " "+term!.description : "")")
     }

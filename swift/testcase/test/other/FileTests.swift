@@ -28,7 +28,7 @@ class FileTests: BaseTestCase {
         super.setUp()
         database = Database(withFileURL: self.recommendedPath)
     }
-    
+
     func testPaths() {
         //Give
         let path = self.recommendedPath.path
@@ -36,17 +36,17 @@ class FileTests: BaseTestCase {
         //Then
         XCTAssertEqual(database.paths.sorted(), expertedPaths.sorted())
     }
-    
+
     func testRemoveFiles() {
         //Give
         for path in database.paths {
             if fileManager.fileExists(atPath: path) {
                 XCTAssertNoThrow(try fileManager.removeItem(atPath: path))
             }
-            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil)) 
+            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil))
         }
         //When
-        database.close { 
+        database.close {
             XCTAssertNoThrow(try self.database.removeFiles())
         }
         //Then
@@ -54,39 +54,39 @@ class FileTests: BaseTestCase {
             XCTAssertFalse(fileManager.fileExists(atPath: path))
         }
     }
-    
+
     func testMoveFiles() {
         //Give
         let extraFile = self.recommendedDirectory.urlByAppendingPathComponent("extraFile").path
         let paths = database.paths + [extraFile]
         for path in paths {
-            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil)) 
+            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil))
         }
-        
+
         let newDirectory = self.recommendedDirectory.urlByAppendingPathComponent("newDirectory").path
-        
+
         let newPaths = paths.map { (path) -> String in
             let fileName = URL(fileURLWithPath: path).lastPathComponent
             return URL(fileURLWithPath: newDirectory).appendingPathComponent(fileName).path
         }
-        
+
         for path in newPaths {
             if fileManager.fileExists(atPath: path) {
                 XCTAssertNoThrow(try fileManager.removeItem(atPath: path))
             }
         }
-        
+
         //When
         XCTAssertNoThrow(try database.moveFiles(toDirectory: newDirectory, withExtraFiles: extraFile))
         //Then
         for path in newPaths {
             XCTAssertTrue(fileManager.fileExists(atPath: path))
         }
-        
+
         //Clear
         XCTAssertNoThrow(try fileManager.removeItem(atPath: newDirectory))
     }
-    
+
     func testGetFilesSize() {
         //Give
         let data = "testGetFilesSize".data(using: .ascii)!
@@ -95,10 +95,10 @@ class FileTests: BaseTestCase {
             if fileManager.fileExists(atPath: path) {
                 XCTAssertNoThrow(try fileManager.removeItem(atPath: path))
             }
-            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: data, attributes: nil)) 
+            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: data, attributes: nil))
         }
         //Then
-        database.close { 
+        database.close {
             let filesSize = WCDBAssertNoThrowReturned(try self.database.getFilesSize()) ?? 0
             XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
         }

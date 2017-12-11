@@ -22,13 +22,13 @@ import Foundation
 import WCDBSwift
 
 class SampleTransaction: TableCodable {
-    var intValue: Int? = nil
+    var intValue: Int?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleTransaction    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        typealias Root = SampleTransaction
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
         case intValue
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-            return [.intValue:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+            return [.intValue: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
         }
     }
     required init() {}

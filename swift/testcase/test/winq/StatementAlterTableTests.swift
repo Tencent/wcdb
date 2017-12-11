@@ -24,8 +24,15 @@ import WCDBSwift
 class StatementAlterTableTests: BaseTestCase {
 
     func testStatementAlterTable() {
-        WINQAssertEqual(StatementAlterTable().alter(table: "table1").rename(to: "table2"), "ALTER TABLE table1 RENAME TO table2")
-        
-        WINQAssertEqual(StatementAlterTable().alter(table: "table1").addColumn(with: ColumnDef(with: Column(named: "column1"), and: .Float)), "ALTER TABLE table1 ADD COLUMN column1 REAL")
+        WINQAssertEqual(
+            StatementAlterTable().alter(table: "table1").rename(to: "table2"),
+            "ALTER TABLE table1 RENAME TO table2"
+        )
+
+        let column = Column(named: "column1")
+        WINQAssertEqual(
+            StatementAlterTable().alter(table: "table1").addColumn(with: column.asDef(with: .float)),
+            "ALTER TABLE table1 ADD COLUMN column1 REAL"
+        )
     }
 }

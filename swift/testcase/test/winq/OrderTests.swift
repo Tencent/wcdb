@@ -26,10 +26,10 @@ class OrderTests: BaseTestCase {
     func testOrder() {
         //Give
         let column1 = Column(named: "column1")
-        
+
         //Then
         WINQAssertEqual(Order(with: column1), "column1")
-        
-        WINQAssertEqual(Order(with: column1, by: .Ascending), "column1 ASC")
+
+        WINQAssertEqual(Order(with: column1, by: .ascending), "column1 ASC")
     }
 }

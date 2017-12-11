@@ -22,7 +22,7 @@ import XCTest
 import WCDBSwift
 
 class CRUDTestCase: BaseTestCase {
-    
+
     var database: Database!
     let preInsertedObjects: [CRUDObject] = {
         let object1 = CRUDObject()
@@ -33,13 +33,13 @@ class CRUDTestCase: BaseTestCase {
         object2.variable2 = "object2"
         return [object1, object2]
     }()
-    
+
     override func setUp() {
         super.setUp()
         database = Database(withFileURL: self.recommendedPath)
-        
+
         XCTAssertNoThrow(try database.create(table: CRUDObject.name, of: CRUDObject.self))
-        
+
         XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: CRUDObject.name))
     }
 }

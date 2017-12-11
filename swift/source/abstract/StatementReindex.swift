@@ -21,9 +21,9 @@
 import Foundation
 public class StatementReindex: Statement {
     public init() {
-        super.init(with: .Reindex)
+        super.init(with: .reindex)
     }
-    
+
     @discardableResult
     public func reindex(_ name: String) -> StatementReindex {
         description.append("REINDEX \(name)")

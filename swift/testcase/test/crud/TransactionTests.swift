@@ -22,7 +22,7 @@ import XCTest
 import WCDBSwift
 
 class TransactionTests: CRUDTestCase {
-    
+
     func testCommitTransactionWithDatabase() {
         //Give
         let object = CRUDObject()
@@ -33,11 +33,14 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try database.commit())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testRollbackTransactionWithDatabase() {
         //Give
         let object = CRUDObject()
@@ -48,25 +51,31 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try database.rollback())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 0)
     }
-    
+
     func testRunTransactionWithDatabase() {
         //Give
         let object = CRUDObject()
         object.variable1 = 3
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.run(transaction: { 
+        XCTAssertNoThrow(try database.run(transaction: {
             try database.insert(objects: object, intoTable: CRUDObject.name)
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testRollbackControllableTransactionWithDatabase() {
         //Give
         let object = CRUDObject()
@@ -78,7 +87,10 @@ class TransactionTests: CRUDTestCase {
             return false
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 0)
     }
 
@@ -93,7 +105,10 @@ class TransactionTests: CRUDTestCase {
             return true
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
@@ -104,17 +119,20 @@ class TransactionTests: CRUDTestCase {
         object.variable1 = 3
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.run(transaction: { 
-            try database.run(embeddedTransaction: { 
+        XCTAssertNoThrow(try database.run(transaction: {
+            try database.run(embeddedTransaction: {
                 try database.insert(objects: object, intoTable: CRUDObject.name)
             })
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testCommitTransactionWithTransaction() {
         //Give
         let object = CRUDObject()
@@ -128,11 +146,14 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try transaction.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try transaction.commit())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testRollbackTransactionWithTransaction() {
         //Give
         let object = CRUDObject()
@@ -146,10 +167,13 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNoThrow(try transaction.insert(objects: object, intoTable: CRUDObject.name))
         XCTAssertNoThrow(try transaction.rollback())
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 0)
     }
-    
+
     func testRunTransactionWithTransaction() {
         //Give
         let object = CRUDObject()
@@ -159,15 +183,18 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
-        XCTAssertNoThrow(try transaction.run(transaction: { 
+        XCTAssertNoThrow(try transaction.run(transaction: {
             try transaction.insert(objects: object, intoTable: CRUDObject.name)
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testRollbackControllableTransactionWithTransaction() {
         //Give
         let object = CRUDObject()
@@ -182,10 +209,13 @@ class TransactionTests: CRUDTestCase {
             return false
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 0)
     }
-    
+
     func testCommitControllableTransactionWithTransaction() {
         //Give
         let object = CRUDObject()
@@ -200,11 +230,14 @@ class TransactionTests: CRUDTestCase {
             return true
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testRunEmbededTransactionWithTransaction() {
         //Give
         let object = CRUDObject()
@@ -214,24 +247,30 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
-        XCTAssertNoThrow(try transaction.run(transaction: { 
-            try transaction.run(embeddedTransaction: { 
+        XCTAssertNoThrow(try transaction.run(transaction: {
+            try transaction.run(embeddedTransaction: {
                 try transaction.insert(objects: object, intoTable: CRUDObject.name)
             })
         }))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name, where: CRUDObject.Properties.variable1 == 3),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
     }
-    
+
     func testPrepareWithTransaction() {
         //Give
         let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
-        let optionalCoreStatement = WCDBAssertNoThrowReturned(try transaction.prepare(StatementPragma().pragma(.journalMode)), whenFailed: nil) 
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(
+            try transaction.prepare(StatementPragma().pragma(.journalMode)),
+            whenFailed: nil
+        )
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
         XCTAssertNoThrow(try coreStatement.step())
@@ -239,7 +278,7 @@ class TransactionTests: CRUDTestCase {
         let journalMode: String = coreStatement.value(atIndex: 0) ?? ""
         XCTAssertEqual(journalMode.lowercased(), "wal")
     }
-    
+
     func testExecWithTransaction() {
         //Give
         let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
@@ -248,21 +287,30 @@ class TransactionTests: CRUDTestCase {
         //When
         XCTAssertNoThrow(try transaction.exec(StatementDelete().delete(fromTable: CRUDObject.name)))
         //Then
-        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name), whenFailed: [CRUDObject]())
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(
+            try database.getObjects(fromTable: CRUDObject.name),
+            whenFailed: [CRUDObject]()
+        )
         XCTAssertEqual(results.count, 0)
     }
-    
+
     func testIsTableExistsWithTransaction() {
         //Give
         let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //Then
-        let randomTableExists = WCDBAssertNoThrowReturned(try transaction.isTableExists("randomTable"), whenFailed: nil)
+        let randomTableExists = WCDBAssertNoThrowReturned(
+            try transaction.isTableExists("randomTable"),
+            whenFailed: nil
+        )
         XCTAssertNotNil(randomTableExists)
         XCTAssertFalse(randomTableExists!)
-        
-        let crudTableExists = WCDBAssertNoThrowReturned(try transaction.isTableExists(CRUDObject.name), whenFailed: nil)
+
+        let crudTableExists = WCDBAssertNoThrowReturned(
+            try transaction.isTableExists(CRUDObject.name),
+            whenFailed: nil
+        )
         XCTAssertNotNil(crudTableExists)
         XCTAssertTrue(crudTableExists!)
     }

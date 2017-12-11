@@ -25,15 +25,15 @@ class StatementTransactionTests: BaseTestCase {
 
     func testStatementTransaction() {
         WINQAssertEqual(StatementTransaction().begin(), "BEGIN")
-        
-        WINQAssertEqual(StatementTransaction().begin(.Defered), "BEGIN DEFERED")
-        
-        WINQAssertEqual(StatementTransaction().begin(.Immediate), "BEGIN IMMEDIATE")
-        
-        WINQAssertEqual(StatementTransaction().begin(.Exclusive), "BEGIN EXCLUSIVE")
-        
+
+        WINQAssertEqual(StatementTransaction().begin(.defered), "BEGIN DEFERED")
+
+        WINQAssertEqual(StatementTransaction().begin(.immediate), "BEGIN IMMEDIATE")
+
+        WINQAssertEqual(StatementTransaction().begin(.exclusive), "BEGIN EXCLUSIVE")
+
         WINQAssertEqual(StatementTransaction().commit(), "COMMIT")
-        
+
         WINQAssertEqual(StatementTransaction().rollback(), "ROLLBACK")
     }
 }

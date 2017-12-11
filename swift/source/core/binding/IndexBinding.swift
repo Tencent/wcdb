@@ -21,22 +21,28 @@
 import Foundation
 public class IndexBinding: AnyBinding {
     public typealias Subfix = String
-    
+
     let columnIndexes: [ColumnIndex]
     let isUnique: Bool
-    
+
     public init(isUnique: Bool = false, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
         self.isUnique = isUnique
-        super.init(with: .Index)
+        super.init(with: .index)
     }
-    
-    public convenience init(isUnique: Bool = false, indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) {
+
+    public convenience init(isUnique: Bool = false,
+                            indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) {
         self.init(isUnique: isUnique, indexesBy: columnIndexConvertibleList)
     }
-    
-    func generateCreateIndexStatement(onTable tableName: String, withIndexSubfix indexSubfix: String) -> StatementCreateIndex {
-        return StatementCreateIndex().create(index: tableName+indexSubfix, isUnique: isUnique, ifNotExists: true).on(table: tableName, indexesBy: columnIndexes)
+
+    func generateCreateIndexStatement(onTable tableName: String,
+                                      withIndexSubfix indexSubfix: String) -> StatementCreateIndex {
+        return StatementCreateIndex()
+            .create(index: tableName+indexSubfix,
+                    isUnique: isUnique,
+                    ifNotExists: true)
+            .on(table: tableName,
+                indexesBy: columnIndexes)
     }
 }
-

@@ -22,13 +22,16 @@ import XCTest
 import WCDBSwift
 
 class RowSelectTests: CRUDTestCase {
-    
+
     var rowSelect: RowSelect!
-    
+
     override func setUp() {
         super.setUp()
-        
-        let optionalRowSelect = WCDBAssertNoThrowReturned(try database.prepareRowSelect(fromTable: CRUDObject.name), whenFailed: nil)
+
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try database.prepareRowSelect(fromTable: CRUDObject.name),
+            whenFailed: nil
+        )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
     }
@@ -43,19 +46,21 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(Int(results[row: 1, column: 0].int64Value), preInsertedObjects[1].variable1)
         XCTAssertEqual(results[row: 1, column: 1].stringValue, preInsertedObjects[1].variable2)
     }
-    
+
     func testConditionalRowSelect() {
         //When
-        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.where(CRUDObject.Properties.variable1 == 1).allRows())
+        let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
+            try rowSelect.where(CRUDObject.Properties.variable1 == 1).allRows()
+        )
         //Then
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
         XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[0].variable2)
     }
-    
+
     func testOrderedRowSelect() {
         //Give
-        let order = (CRUDObject.Properties.variable1).asOrder(by: .Descending)
+        let order = (CRUDObject.Properties.variable1).asOrder(by: .descending)
         //When
         let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.order(by: order).allRows())
         //Then
@@ -65,7 +70,7 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(Int(results[row: 1, column: 0].int64Value), preInsertedObjects[0].variable1)
         XCTAssertEqual(results[row: 1, column: 1].stringValue, preInsertedObjects[0].variable2)
     }
-    
+
     func testLimitedRowSelect() {
         //When
         let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.limit(1).allRows())
@@ -74,7 +79,7 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[0].variable1)
         XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[0].variable2)
     }
-    
+
     func testOffsetRowSelect() {
         //When
         let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(try rowSelect.limit(1, offset: 1).allRows())
@@ -83,10 +88,13 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[1].variable1)
         XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[1].variable2)
     }
-    
+
     func testHalfRowSelect() {
         //Give
-        let optionalRowSelect = WCDBAssertNoThrowReturned(try database.prepareRowSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name), whenFailed: nil)
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try database.prepareRowSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name),
+            whenFailed: nil
+        )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
         //When
@@ -96,7 +104,7 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(results[row: 0, column: 0].stringValue, preInsertedObjects[0].variable2)
         XCTAssertEqual(results[row: 1, column: 0].stringValue, preInsertedObjects[1].variable2)
     }
-    
+
     func testRowSelectIteration() {
         //When
         var results: FundamentalRowXColumn = []

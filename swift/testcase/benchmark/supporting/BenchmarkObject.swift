@@ -21,16 +21,16 @@
 import Foundation
 import WCDBSwift
 
-class BenchmarkObject: TableCodable, Named {        
+class BenchmarkObject: TableCodable, Named {
     var key: Int = 0
-    var value: Data? = nil
+    var value: Data?
     enum CodingKeys: String, CodingTableKey {
         typealias Root = BenchmarkObject
         case key
         case value
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
     }
-    required init() {}  
+    required init() {}
     init(withKey key: Int, and data: Data) {
         self.key = key
         self.value = data

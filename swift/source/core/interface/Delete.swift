@@ -26,13 +26,17 @@ public class Delete: CoreRepresentable {
     public var changes: Int = 0
 
     init(with core: Core, andTableName tableName: String) throws {
-        guard tableName.count > 0 else{
-            throw Error.reportInterface(tag: core.tag, path: core.path, operation: .Delete, code: .Misuse, message: "Nil table name")
+        guard tableName.count > 0 else {
+            throw Error.reportInterface(tag: core.tag,
+                                        path: core.path,
+                                        operation: .delete,
+                                        code: .misuse,
+                                        message: "Nil table name")
         }
         statement.delete(fromTable: tableName)
         self.core = core
-    }    
-    
+    }
+
     @discardableResult
     public func `where`(_ condition: Condition) -> Delete {
         statement.where(condition)
@@ -43,31 +47,31 @@ public class Delete: CoreRepresentable {
     public func order(by orderList: OrderBy...) -> Delete {
         return order(by: orderList)
     }
-    
+
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Delete {
         statement.order(by: orderList)
         return self
     }
-    
+
     @discardableResult
-    public func limit(from: Limit, to: Limit) -> Delete {
-        statement.limit(from: from, to: to)
+    public func limit(from begin: Limit, to end: Limit) -> Delete {
+        statement.limit(from: begin, to: end)
         return self
     }
-    
+
     @discardableResult
     public func limit(_ limit: Limit) -> Delete {
         statement.limit(limit)
         return self
     }
-    
+
     @discardableResult
     public func limit(_ limit: Limit, offset: Offset) -> Delete {
         statement.limit(limit, offset: offset)
         return self
     }
-    
+
     public func execute() throws {
         let coreStatement = try core.prepare(statement)
         try coreStatement.step()

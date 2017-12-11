@@ -19,19 +19,19 @@
  */
 
 import Foundation
-public class Subquery : Describable {
+public class Subquery: Describable {
     public init(with joinClause: JoinClause) {
         super.init("(\(joinClause.description))")
-    }   
-    
+    }
+
     public init(with statementSelect: StatementSelect) {
         super.init("(\(statementSelect.description))")
     }
-    
+
     public init(withTable table: String) {
         super.init(table)
     }
-    
+
     @discardableResult
     public func `as`(alias: String) -> Subquery {
         description.append(" AS \(alias)")
@@ -39,15 +39,14 @@ public class Subquery : Describable {
     }
 }
 
-extension Subquery: TableOrSubqueryConvertible{
+extension Subquery: TableOrSubqueryConvertible {
     public func asTableOrSubquery() -> Subquery {
         return self
     }
-} 
+}
 
-extension String: TableOrSubqueryConvertible{
+extension String: TableOrSubqueryConvertible {
     public func asTableOrSubquery() -> Subquery {
         return Subquery(withTable: self)
     }
 }
-

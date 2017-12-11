@@ -22,13 +22,13 @@ import Foundation
 import WCDBSwift
 
 class SampleCoreExt: TableCodable {
-    var localID: Int? = nil
-    var createTime: Date? = nil
+    var localID: Int?
+    var createTime: Date?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleCoreExt    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        case localID    
-        case createTime    
+        typealias Root = SampleCoreExt
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        case localID
+        case createTime
     }
     required init() {}
 }

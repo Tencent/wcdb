@@ -21,9 +21,9 @@
 import Foundation
 public class StatementSavepoint: Statement {
     public init() {
-        super.init(with: .Savepoint)
+        super.init(with: .savepoint)
     }
-    
+
     @discardableResult
     public func savepoint(_ name: String) -> StatementSavepoint {
         description.append("SAVEPOINT \(name)")

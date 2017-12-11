@@ -24,29 +24,29 @@ class TimedQueue<Key: Hashable> {
     typealias Time = SteadyClock.AbsoluteTime
     typealias Element = (Key, SteadyClock)
     typealias List = [Element]
-    typealias Map = [Key:List.Index]
-    
+    typealias Map = [Key: List.Index]
+
     let delay: Time
-    
+
     let conditionLock = ConditionLock()
-    
+
     var list: List = []
     var map: Map = [:]
-    
+
     init(withDelay delay: Time) {
         self.delay = delay
     }
-    
+
     func reQueue(with key: Key) {
         conditionLock.lock(); defer { conditionLock.unlock() }
-        
+
         let signal = list.isEmpty
-        
+
         if let index = map.index(forKey: key) {
             list.remove(at: map[index].value)
             map.remove(at: index)
         }
-        
+
         //delay
         list.append((key, SteadyClock.now()+delay))
         map[key] = list.startIndex
@@ -54,13 +54,13 @@ class TimedQueue<Key: Hashable> {
             conditionLock.signal()
         }
     }
-    
+
     func wait(untilExpired onExpired: (Key) -> Void, forever: Bool = false) {
         do {
             conditionLock.lock(); defer { conditionLock.unlock() }
             while list.isEmpty {
                 guard forever else {
-                    return 
+                    return
                 }
                 conditionLock.wait()
             }
@@ -80,7 +80,7 @@ class TimedQueue<Key: Hashable> {
             }
             if get {
                 onExpired(element.0)
-            }else {
+            } else {
                 sleep(UInt32(element.1.timeIntervalSince(now)))
             }
         }

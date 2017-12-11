@@ -21,11 +21,12 @@
 import Foundation
 public class StatementCreateTable: Statement {
     public init() {
-        super.init(with: .CreateTable)
+        super.init(with: .createTable)
     }
-    
+
     @discardableResult
-    public func create(table: String, ifNotExists: Bool = true, as statementSelect: StatementSelect) -> StatementCreateTable {
+    public func create(table: String, ifNotExists: Bool = true,
+                       as statementSelect: StatementSelect) -> StatementCreateTable {
         description.append("CREATE TABLE ")
         if ifNotExists {
             description.append("IF NOT EXISTS ")
@@ -35,12 +36,18 @@ public class StatementCreateTable: Statement {
     }
 
     @discardableResult
-    public func create(table: String, ifNotExists: Bool = true, with columnDefs: ColumnDef..., and tableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
+    public func create(table: String,
+                       ifNotExists: Bool = true,
+                       with columnDefs: ColumnDef...,
+                       and tableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
         return self.create(table: table, ifNotExists: ifNotExists, with: columnDefs, and: tableConstraints)
     }
-    
+
     @discardableResult
-    public func create(table: String, ifNotExists: Bool = true, with columnDefs: [ColumnDef], and optionalTableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
+    public func create(table: String,
+                       ifNotExists: Bool = true,
+                       with columnDefs: [ColumnDef],
+                       and optionalTableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
         description.append("CREATE TABLE ")
         if ifNotExists {
             description.append("IF NOT EXISTS ")
@@ -52,5 +59,5 @@ public class StatementCreateTable: Statement {
         description.append(")")
         return self
     }
-    
+
 }

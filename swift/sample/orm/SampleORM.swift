@@ -21,12 +21,12 @@
 import WCDBSwift
 
 enum SampleORMType: Int, ColumnCodable {
-    case SampleORMType1 = 1
-    case SampleORMType2 = 2
+    case type1 = 1
+    case type2 = 2
     typealias FundamentalType = Int64
     init?(with value: Int64) {
         self.init(rawValue: Int(truncatingIfNeeded: value))
-    }     
+    }
     func archivedValue() -> Int64? {
         return Int64(rawValue)
     }
@@ -36,24 +36,23 @@ class SampleORM: TableCodable {
     var identifier: Int = 0
     var desc: String = "nil"
     var value: Double = 0
-    var timestamp: String? = nil
-    var type: SampleORMType? = nil
+    var timestamp: String?
+    var type: SampleORMType?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleORM    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        case identifier    
-        case desc    
-        case value    
-        case timestamp    
+        typealias Root = SampleORM
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        case identifier
+        case desc
+        case value
+        case timestamp
         case type
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
             return [
-                .identifier:ColumnConstraintBinding(isPrimary: true),
-                .value:ColumnConstraintBinding(defaultTo: 1.0),
-                .timestamp:ColumnConstraintBinding(defaultTo: .CurrentTimestamp)
+                .identifier: ColumnConstraintBinding(isPrimary: true),
+                .value: ColumnConstraintBinding(defaultTo: 1.0),
+                .timestamp: ColumnConstraintBinding(defaultTo: .currentTimestamp)
             ]
         }
     }
     required init() {}
 }
-

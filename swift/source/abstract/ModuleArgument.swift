@@ -24,19 +24,19 @@ public class ModuleArgument: Describable {
     public init(with tableConstraint: TableConstraint) {
         super.init(tableConstraint.description)
     }
-    
+
     public init(with columnDef: ColumnDef) {
         super.init(columnDef.description)
     }
-    
+
     public init(left: String, right: String) {
         super.init("\(left)=\(right)")
     }
-    
+
     public convenience init(with tokenize: Tokenize) {
         self.init(left: "tokenize", right: tokenize.module.name)
     }
-    
+
     public convenience init(withTokenize tokenize: String) {
         self.init(left: "tokenize", right: tokenize)
     }

@@ -26,17 +26,17 @@ class RWLock {
     var reader = 0
     var writer = 0
     var pending = 0
-    
+
     init() {
         pthread_mutex_init(&mutex, nil)
         pthread_cond_init(&cond, nil)
     }
-    
+
     deinit {
         pthread_cond_destroy(&cond)
         pthread_mutex_destroy(&mutex)
     }
-    
+
     func lockRead() {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         while writer>0 || pending>0 {
@@ -44,15 +44,15 @@ class RWLock {
         }
         reader += 1
     }
-    
+
     func unlockRead() {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         reader -= 1
-        if reader == 0{
+        if reader == 0 {
             pthread_cond_broadcast(&cond)
         }
     }
-    
+
     func tryLockRead() -> Bool {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         if writer>0||pending>0 {
@@ -61,7 +61,7 @@ class RWLock {
         reader += 1
         return true
     }
-    
+
     func lockWrite() {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         pending += 1
@@ -71,13 +71,13 @@ class RWLock {
         pending -= 1
         writer += 1
     }
-    
+
     func unlockWrite() {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         writer -= 1
         pthread_cond_broadcast(&cond)
     }
-    
+
     func tryLockWrite() -> Bool {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         if writer>0||reader>0 {
@@ -86,15 +86,14 @@ class RWLock {
         writer += 1
         return true
     }
-    
+
     var isWriting: Bool {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         return writer>0
     }
-    
+
     var isReading: Bool {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         return reader>0
     }
 }
-

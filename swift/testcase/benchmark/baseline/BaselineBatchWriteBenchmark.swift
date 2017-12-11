@@ -25,26 +25,26 @@ class BaselineBatchWriteBenchmark: BaseBenchmark {
 
     override func setUp() {
         super.setUp()
-        
+
         setUpWithPreCreateObject(count: config.batchWriteCount)
     }
-    
+
     func testBaselineBatchWrite() {
         let tableName = getTableName()
-        measure(onSetUp: { 
+        measure(onSetUp: {
             tearDownDatabase()
-            
+
             setUpWithPreCreateTable()
-            
+
             tearDownDatabaseCache()
-            
-            setUpDatabaseCache()    
-        }, for: { 
+
+            setUpDatabaseCache()
+        }, for: {
             do {
                 try database.insert(objects: objects, intoTable: tableName)
-            }catch let error as WCDBSwift.Error {
+            } catch let error as WCDBSwift.Error {
                 XCTFail(error.description)
-            }catch let error {
+            } catch let error {
                 XCTFail(error.localizedDescription)
             }
         }, checkCorrectness: {

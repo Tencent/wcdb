@@ -21,7 +21,7 @@
 import Foundation
 
 public protocol OrderConvertible {
-    func asOrder() -> Order 
+    func asOrder() -> Order
 }
 
 public protocol SpecificOrderConvertible: OrderConvertible {
@@ -43,7 +43,7 @@ public protocol ColumnIndexConvertible {
 }
 
 public protocol SpecificColumnIndexConvertible: ColumnIndexConvertible {
-    func asIndex(orderBy term: OrderTerm?) -> ColumnIndex 
+    func asIndex(orderBy term: OrderTerm?) -> ColumnIndex
 }
 
 extension SpecificColumnIndexConvertible {
@@ -61,7 +61,7 @@ public protocol TableOrSubqueryConvertible {
 }
 
 public protocol ExpressionConvertible: ColumnResultConvertible, SpecificOrderConvertible {
-    func asExpression() -> Expression 
+    func asExpression() -> Expression
 }
 
 extension ExpressionConvertible {
@@ -74,23 +74,23 @@ extension ExpressionConvertible {
 }
 
 public protocol ColumnConvertible: ExpressionConvertible, SpecificColumnIndexConvertible, SpecificColumnDefConvertible {
-    func asColumn() -> Column 
-    func `in`(table: String) -> Column 
+    func asColumn() -> Column
+    func `in`(table: String) -> Column
 }
 
 extension ColumnConvertible {
     public func asExpression() -> Expression {
         return Expression(with: self)
     }
-    
+
     public func asIndex(orderBy term: OrderTerm?) -> ColumnIndex {
         return ColumnIndex(with: self, orderBy: term)
     }
-    
+
     public func asDef(with columnType: ColumnType? = nil) -> ColumnDef {
         return ColumnDef(with: self, and: columnType)
     }
-    
+
     public func `in`(table: String) -> Column {
         return asColumn().in(table: table)
     }
@@ -98,147 +98,151 @@ extension ColumnConvertible {
 
 public protocol ExpressionOperable: ExpressionConvertible {
     //Unary
-    prefix static func !(operand: Self) -> Expression 
-    prefix static func +(operand: Self) -> Expression 
-    prefix static func -(operand: Self) -> Expression 
-    prefix static func ~(operand: Self) -> Expression 
-    
+    prefix static func ! (operand: Self) -> Expression
+    prefix static func + (operand: Self) -> Expression
+    prefix static func - (operand: Self) -> Expression
+    prefix static func ~ (operand: Self) -> Expression
+
     //Binary
-    static func ||(left: Self, right: ExpressionConvertible) -> Expression 
-    static func ||(left: ExpressionConvertible, right: Self) -> Expression 
-    static func ||(left: Self, right: Self) -> Expression
-    
-    static func &&(left: Self, right: ExpressionConvertible) -> Expression 
-    static func &&(left: ExpressionConvertible, right: Self) -> Expression 
-    static func &&(left: Self, right: Self) -> Expression
-    
-    static func *(left: ExpressionConvertible, right: Self) -> Expression 
-    static func *(left: Self, right: ExpressionConvertible) -> Expression 
-    static func *(left: Self, right: Self) -> Expression
-    
-    static func /(left: ExpressionConvertible, right: Self) -> Expression 
-    static func /(left: Self, right: ExpressionConvertible) -> Expression 
-    static func /(left: Self, right: Self) -> Expression
-    
-    static func %(left: ExpressionConvertible, right: Self) -> Expression 
-    static func %(left: Self, right: ExpressionConvertible) -> Expression 
-    static func %(left: Self, right: Self) -> Expression 
-    
-    static func +(left: ExpressionConvertible, right: Self) -> Expression 
-    static func +(left: Self, right: ExpressionConvertible) -> Expression 
-    static func +(left: Self, right: Self) -> Expression
-    
-    static func -(left: ExpressionConvertible, right: Self) -> Expression 
-    static func -(left: Self, right: ExpressionConvertible) -> Expression 
-    static func -(left: Self, right: Self) -> Expression
-    
-    static func <<(left: ExpressionConvertible, right: Self) -> Expression 
-    static func <<(left: Self, right: ExpressionConvertible) -> Expression 
-    static func <<(left: Self, right: Self) -> Expression
-    
-    static func >>(left: ExpressionConvertible, right: Self) -> Expression 
-    static func >>(left: Self, right: ExpressionConvertible) -> Expression 
-    static func >>(left: Self, right: Self) -> Expression
-    
-    static func &(left: ExpressionConvertible, right: Self) -> Expression 
-    static func &(left: Self, right: ExpressionConvertible) -> Expression 
-    static func &(left: Self, right: Self) -> Expression
-    
-    static func |(left: ExpressionConvertible, right: Self) -> Expression 
-    static func |(left: Self, right: ExpressionConvertible) -> Expression 
-    static func |(left: Self, right: Self) -> Expression
-    
-    static func <(left: ExpressionConvertible, right: Self) -> Expression 
-    static func <(left: Self, right: ExpressionConvertible) -> Expression 
-    static func <(left: Self, right: Self) -> Expression
-    
-    static func <=(left: ExpressionConvertible, right: Self) -> Expression
-    static func <=(left: Self, right: ExpressionConvertible) -> Expression
-    static func <=(left: Self, right: Self) -> Expression
-    
-    static func >(left: ExpressionConvertible, right: Self) -> Expression 
-    static func >(left: Self, right: ExpressionConvertible) -> Expression 
-    static func >(left: Self, right: Self) -> Expression 
-    
-    static func >=(left: ExpressionConvertible, right: Self) -> Expression
-    static func >=(left: Self, right: ExpressionConvertible) -> Expression
-    static func >=(left: Self, right: Self) -> Expression
-    
-    static func ==(left: ExpressionConvertible, right: Self) -> Expression 
-    static func ==(left: Self, right: ExpressionConvertible) -> Expression 
-    static func ==(left: Self, right: Self) -> Expression 
-    
-    static func !=(left: ExpressionConvertible, right: Self) -> Expression 
-    static func !=(left: Self, right: ExpressionConvertible) -> Expression 
-    static func !=(left: Self, right: Self) -> Expression 
-    
-    func concat(_ operand: ExpressionConvertible) -> Expression 
-    func substr(start: ExpressionConvertible, length: ExpressionConvertible) -> Expression 
-    
-    func like(_ operand: ExpressionConvertible) -> Expression 
-    func glob(_ operand: ExpressionConvertible) -> Expression 
+    static func || (left: Self, right: ExpressionConvertible) -> Expression
+    static func || (left: ExpressionConvertible, right: Self) -> Expression
+    static func || (left: Self, right: Self) -> Expression
+
+    static func && (left: Self, right: ExpressionConvertible) -> Expression
+    static func && (left: ExpressionConvertible, right: Self) -> Expression
+    static func && (left: Self, right: Self) -> Expression
+
+    static func * (left: ExpressionConvertible, right: Self) -> Expression
+    static func * (left: Self, right: ExpressionConvertible) -> Expression
+    static func * (left: Self, right: Self) -> Expression
+
+    static func / (left: ExpressionConvertible, right: Self) -> Expression
+    static func / (left: Self, right: ExpressionConvertible) -> Expression
+    static func / (left: Self, right: Self) -> Expression
+
+    static func % (left: ExpressionConvertible, right: Self) -> Expression
+    static func % (left: Self, right: ExpressionConvertible) -> Expression
+    static func % (left: Self, right: Self) -> Expression
+
+    static func + (left: ExpressionConvertible, right: Self) -> Expression
+    static func + (left: Self, right: ExpressionConvertible) -> Expression
+    static func + (left: Self, right: Self) -> Expression
+
+    static func - (left: ExpressionConvertible, right: Self) -> Expression
+    static func - (left: Self, right: ExpressionConvertible) -> Expression
+    static func - (left: Self, right: Self) -> Expression
+
+    static func << (left: ExpressionConvertible, right: Self) -> Expression
+    static func << (left: Self, right: ExpressionConvertible) -> Expression
+    static func << (left: Self, right: Self) -> Expression
+
+    static func >> (left: ExpressionConvertible, right: Self) -> Expression
+    static func >> (left: Self, right: ExpressionConvertible) -> Expression
+    static func >> (left: Self, right: Self) -> Expression
+
+    static func & (left: ExpressionConvertible, right: Self) -> Expression
+    static func & (left: Self, right: ExpressionConvertible) -> Expression
+    static func & (left: Self, right: Self) -> Expression
+
+    static func | (left: ExpressionConvertible, right: Self) -> Expression
+    static func | (left: Self, right: ExpressionConvertible) -> Expression
+    static func | (left: Self, right: Self) -> Expression
+
+    static func < (left: ExpressionConvertible, right: Self) -> Expression
+    static func < (left: Self, right: ExpressionConvertible) -> Expression
+    static func < (left: Self, right: Self) -> Expression
+
+    static func <= (left: ExpressionConvertible, right: Self) -> Expression
+    static func <= (left: Self, right: ExpressionConvertible) -> Expression
+    static func <= (left: Self, right: Self) -> Expression
+
+    static func > (left: ExpressionConvertible, right: Self) -> Expression
+    static func > (left: Self, right: ExpressionConvertible) -> Expression
+    static func > (left: Self, right: Self) -> Expression
+
+    static func >= (left: ExpressionConvertible, right: Self) -> Expression
+    static func >= (left: Self, right: ExpressionConvertible) -> Expression
+    static func >= (left: Self, right: Self) -> Expression
+
+    static func == (left: ExpressionConvertible, right: Self) -> Expression
+    static func == (left: Self, right: ExpressionConvertible) -> Expression
+    static func == (left: Self, right: Self) -> Expression
+
+    static func != (left: ExpressionConvertible, right: Self) -> Expression
+    static func != (left: Self, right: ExpressionConvertible) -> Expression
+    static func != (left: Self, right: Self) -> Expression
+
+    func concat(_ operand: ExpressionConvertible) -> Expression
+    func substr(start: ExpressionConvertible, length: ExpressionConvertible) -> Expression
+
+    func like(_ operand: ExpressionConvertible) -> Expression
+    func glob(_ operand: ExpressionConvertible) -> Expression
     func match(_ operand: ExpressionConvertible) -> Expression
     func regexp(_ operand: ExpressionConvertible) -> Expression
     func notLike(_ operand: ExpressionConvertible) -> Expression
     func notGlob(_ operand: ExpressionConvertible) -> Expression
     func notMatch(_ operand: ExpressionConvertible) -> Expression
     func notRegexp(_ operand: ExpressionConvertible) -> Expression
-    
-    func like(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression 
-    func glob(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression 
+
+    func like(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
+    func glob(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
     func match(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
     func regexp(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
     func notLike(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
     func notGlob(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
     func notMatch(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
     func notRegexp(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression
-    
-    func isNull() -> Expression 
+
+    func isNull() -> Expression
     func isNotNull() -> Expression
-    func `is`(_ operand: ExpressionConvertible) -> Expression 
+    func `is`(_ operand: ExpressionConvertible) -> Expression
     func isNot(_ operand: ExpressionConvertible) -> Expression
-    func between(from: ExpressionConvertible, to: ExpressionConvertible) -> Expression 
-    func notBetween(from: ExpressionConvertible, to: ExpressionConvertible) -> Expression 
-    static func exists(_ statementSelect: StatementSelect) -> Expression 
-    static func notExists(_ statementSelect: StatementSelect) -> Expression 
-    func `in`(_ statementSelect: StatementSelect) -> Expression 
-    func notIn(_ statementSelect: StatementSelect) -> Expression 
-    func `in`(_ expressionConvertibleList: ExpressionConvertible...) -> Expression 
+    func between(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression
+    func notBetween(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression
+    static func exists(_ statementSelect: StatementSelect) -> Expression
+    static func notExists(_ statementSelect: StatementSelect) -> Expression
+    func `in`(_ statementSelect: StatementSelect) -> Expression
+    func notIn(_ statementSelect: StatementSelect) -> Expression
+    func `in`(_ expressionConvertibleList: ExpressionConvertible...) -> Expression
     func notIn(_ expressionConvertibleList: ExpressionConvertible...) -> Expression
-    func `in`(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression 
+    func `in`(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression
     func notIn(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression
     static func combine(_ expressionConvertibleList: ExpressionConvertible...) -> Expression
     static func combine(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression
-    
+
     //Function
-    static func function(named name: String, _ expressions: ExpressionConvertible..., isDistinct: Bool) -> Expression 
-    static func function(named name: String, _ expressions: [ExpressionConvertible], isDistinct: Bool) -> Expression 
-    
+    static func function(named name: String, _ expressions: ExpressionConvertible..., isDistinct: Bool) -> Expression
+    static func function(named name: String, _ expressions: [ExpressionConvertible], isDistinct: Bool) -> Expression
+
     //aggregate functions
-    func avg(isDistinct: Bool) -> Expression 
+    func avg(isDistinct: Bool) -> Expression
     func count(isDistinct: Bool) -> Expression
     func groupConcat(isDistinct: Bool) -> Expression
     func groupConcat(isDistinct: Bool, separateBy seperator: String) -> Expression
-    func max(isDistinct: Bool) -> Expression 
-    func min(isDistinct: Bool) -> Expression 
-    func sum(isDistinct: Bool) -> Expression 
+    func max(isDistinct: Bool) -> Expression
+    func min(isDistinct: Bool) -> Expression
+    func sum(isDistinct: Bool) -> Expression
     func total(isDistinct: Bool) -> Expression
-    
+
     //core functions
-    func abs(isDistinct: Bool) -> Expression 
-    func hex(isDistinct: Bool) -> Expression 
+    func abs(isDistinct: Bool) -> Expression
+    func hex(isDistinct: Bool) -> Expression
     func length(isDistinct: Bool) -> Expression
-    func lower(isDistinct: Bool) -> Expression 
-    func upper(isDistinct: Bool) -> Expression 
-    func round(isDistinct: Bool) -> Expression 
-    
-    static func `case`(_ `case`: ExpressionConvertible, _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)..., `else`: ExpressionConvertible) -> Expression 
-    static func `case`(_ `case`: ExpressionConvertible, _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)], `else`: ExpressionConvertible) -> Expression 
-    
+    func lower(isDistinct: Bool) -> Expression
+    func upper(isDistinct: Bool) -> Expression
+    func round(isDistinct: Bool) -> Expression
+
+    static func `case`(_ `case`: ExpressionConvertible,
+                       _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)...,
+                       `else`: ExpressionConvertible) -> Expression
+    static func `case`(_ `case`: ExpressionConvertible,
+                       _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)],
+                       `else`: ExpressionConvertible) -> Expression
+
     //FTS3
-    func matchinfo() -> Expression 
-    func offsets() -> Expression 
-    func snippet() -> Expression 
+    func matchinfo() -> Expression
+    func offsets() -> Expression
+    func snippet() -> Expression
 }
 
 extension ExpressionOperable {
@@ -251,205 +255,220 @@ extension ExpressionOperable {
     private static func operate(operand: ExpressionConvertible, postfix: String) -> Expression {
         return Expression(withRaw: "(\(operand.asExpression().description) \(postfix))")
     }
-    private static func operate(left: ExpressionConvertible, `operator`: String, right: ExpressionConvertible) -> Expression {
-        return Expression(withRaw: "(\(left.asExpression().description) \(`operator`) \(right.asExpression().description))")
+    private static func operate(left: ExpressionConvertible,
+                                `operator`: String,
+                                right: ExpressionConvertible) -> Expression {
+        let leftDescription = left.asExpression().description
+        let rightDescription = right.asExpression().description
+        return Expression(withRaw: "(\(leftDescription) \(`operator`) \(rightDescription))")
     }
-    private static func operate(one: ExpressionConvertible, operator1: String, two: ExpressionConvertible, operator2: String, three: ExpressionConvertible) -> Expression {
-        return Expression(withRaw: "(\(one.asExpression().description) \(operator1) \(two.asExpression().description) \(operator2) \(three.asExpression().description))")
+    private static func operate(one: ExpressionConvertible,
+                                operator1: String,
+                                two: ExpressionConvertible,
+                                operator2: String,
+                                three: ExpressionConvertible) -> Expression {
+        let oneDescription = one.asExpression().description
+        let twoDescription = two.asExpression().description
+        let threeDescription = three.asExpression().description
+        let raws = [oneDescription, operator1, twoDescription, operator2, threeDescription]
+        return Expression(withRaw: "(\(raws.joined(separateBy: " ")))")
     }
-    
+
     //Unary
-    public prefix static func !(operand: Self) -> Expression {
+    public prefix static func ! (operand: Self) -> Expression {
         return operate(prefix: "NOT", operand: operand)
     }
-    public prefix static func +(operand: Self) -> Expression {
+    public prefix static func + (operand: Self) -> Expression {
         return operate(prefix: "", operand: operand)
     }
-    public prefix static func -(operand: Self) -> Expression {
+    public prefix static func - (operand: Self) -> Expression {
         return operate(prefix: "-", operand: operand)
     }
-    public prefix static func ~(operand: Self) -> Expression {
+    public prefix static func ~ (operand: Self) -> Expression {
         return operate(prefix: "~", operand: operand)
     }
-    
+
     //Binary
-    public static func ||(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func || (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left as ExpressionConvertible, operator: "OR", right: right as ExpressionConvertible)
     }
-    public static func ||(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func || (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "OR", right: right)
     }
-    public static func ||(left: Self, right: Self) -> Expression {
+    public static func || (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "OR", right: right)
     }
-    
-    public static func &&(left: ExpressionConvertible, right: Self) -> Expression {
+
+    public static func && (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "AND", right: right)
     }
-    public static func &&(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func && (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "AND", right: right)
     }
-    public static func &&(left: Self, right: Self) -> Expression {
+    public static func && (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "AND", right: right)
     }
 
-    public static func *(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func * (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "*", right: right)
     }
-    public static func *(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func * (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "*", right: right)
     }
-    public static func *(left: Self, right: Self) -> Expression {
+    public static func * (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "*", right: right)
     }
 
-    public static func /(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func / (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "/", right: right)
     }
-    public static func /(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func / (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "/", right: right)
     }
-    public static func /(left: Self, right: Self) -> Expression {
+    public static func / (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "/", right: right)
     }
-    
-    public static func %(left: ExpressionConvertible, right: Self) -> Expression {
+
+    public static func % (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "%", right: right)
     }
-    public static func %(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func % (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "%", right: right)
     }
-    public static func %(left: Self, right: Self) -> Expression {
+    public static func % (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "%", right: right)
     }
-    
-    public static func +(left: ExpressionConvertible, right: Self) -> Expression {
+
+    public static func + (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "+", right: right)
     }
-    public static func +(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func + (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "+", right: right)
     }
-    public static func +(left: Self, right: Self) -> Expression {
+    public static func + (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "+", right: right)
     }
 
-    public static func -(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func - (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "-", right: right)
     }
-    public static func -(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func - (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "-", right: right)
     }
-    public static func -(left: Self, right: Self) -> Expression {
+    public static func - (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "-", right: right)
     }
 
-    public static func <<(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func << (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "<<", right: right)
     }
-    public static func <<(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func << (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "<<", right: right)
     }
-    public static func <<(left: Self, right: Self) -> Expression {
+    public static func << (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "<<", right: right)
     }
 
-    public static func >>(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func >> (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: ">>", right: right)
     }
-    public static func >>(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func >> (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: ">>", right: right)
     }
-    public static func >>(left: Self, right: Self) -> Expression {
+    public static func >> (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: ">>", right: right)
     }
-    
-    public static func &(left: ExpressionConvertible, right: Self) -> Expression {
+
+    public static func & (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "&", right: right)
     }
-    public static func &(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func & (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "&", right: right)
     }
-    public static func &(left: Self, right: Self) -> Expression {
+    public static func & (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "&", right: right)
     }
 
-    public static func |(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func | (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "|", right: right)
     }
-    public static func |(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func | (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "|", right: right)
     }
-    public static func |(left: Self, right: Self) -> Expression {
+    public static func | (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "|", right: right)
     }
 
-    public static func <(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func < (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "<", right: right)
     }
-    public static func <(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func < (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "<", right: right)
     }
-    public static func <(left: Self, right: Self) -> Expression {
+    public static func < (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "<", right: right)
     }
-    
-    public static func <=(left: ExpressionConvertible, right: Self) -> Expression {
+
+    public static func <= (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "<=", right: right)
     }
-    public static func <=(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func <= (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "<=", right: right)
     }
-    public static func <=(left: Self, right: Self) -> Expression {
+    public static func <= (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "<=", right: right)
     }
 
-    public static func >(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func > (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: ">", right: right)
     }
-    public static func >(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func > (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: ">", right: right)
     }
-    public static func >(left: Self, right: Self) -> Expression {
+    public static func > (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: ">", right: right)
     }
 
-    public static func >=(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func >= (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: ">=", right: right)
     }
-    public static func >=(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func >= (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: ">=", right: right)
     }
-    public static func >=(left: Self, right: Self) -> Expression {
+    public static func >= (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: ">=", right: right)
     }
 
-    public static func ==(left: ExpressionConvertible, right: Self) -> Expression {
+    public static func == (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "=", right: right)
     }
-    public static func ==(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func == (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "=", right: right)
     }
-    public static func ==(left: Self, right: Self) -> Expression {
+    public static func == (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "=", right: right)
     }
-    
-    public static func !=(left: ExpressionConvertible, right: Self) -> Expression {
+
+    public static func != (left: ExpressionConvertible, right: Self) -> Expression {
         return operate(left: left, operator: "!=", right: right)
     }
-    public static func !=(left: Self, right: ExpressionConvertible) -> Expression {
+    public static func != (left: Self, right: ExpressionConvertible) -> Expression {
         return operate(left: left, operator: "!=", right: right)
     }
-    public static func !=(left: Self, right: Self) -> Expression {
+    public static func != (left: Self, right: Self) -> Expression {
         return operate(left: left, operator: "!=", right: right)
     }
-    
+
     public func concat(_ operand: ExpressionConvertible) -> Expression {
         return Self.operate(left: self, operator: "||", right: operand)
     }
     public func substr(start: ExpressionConvertible, length: ExpressionConvertible) -> Expression {
-        return Expression(withRaw: "SUBSTR(\(self.asExpression().description), \(start.asExpression().description), \(length.asExpression().description))")
+        let description = asExpression().description
+        let startDescription = start.asExpression().description
+        let lengthDescription = length.asExpression().description
+        return Expression(withRaw: "SUBSTR(\(description), \(startDescription), \(lengthDescription))")
     }
-    
+
     public func like(_ operand: ExpressionConvertible) -> Expression {
         return Self.operate(left: self, operator: "LIKE", right: operand)
     }
@@ -474,7 +493,7 @@ extension ExpressionOperable {
     public func notRegexp(_ operand: ExpressionConvertible) -> Expression {
         return Self.operate(left: self, operator: "NOT REGEXP", right: operand)
     }
-    
+
     public func like(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression {
         return Self.operate(one: self, operator1: "LIKE", two: operand, operator2: "ESCAPE", three: escape)
     }
@@ -499,7 +518,7 @@ extension ExpressionOperable {
     public func notRegexp(_ operand: ExpressionConvertible, escape: ExpressionConvertible) -> Expression {
         return Self.operate(one: self, operator1: "NOT REGEXP", two: operand, operator2: "ESCAPE", three: escape)
     }
-    
+
     public func isNull() -> Expression {
         return Self.operate(operand: self, postfix: "ISNULL")
     }
@@ -512,11 +531,11 @@ extension ExpressionOperable {
     public func isNot(_ operand: ExpressionConvertible) -> Expression {
         return Self.operate(left: self, operator: "IS NOT", right: operand)
     }
-    public func between(from: ExpressionConvertible, to: ExpressionConvertible) -> Expression {
-        return Self.operate(one: self, operator1: "BETWEEN", two: from, operator2: "AND", three: to)
+    public func between(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression {
+        return Self.operate(one: self, operator1: "BETWEEN", two: begin, operator2: "AND", three: end)
     }
-    public func notBetween(from: ExpressionConvertible, to: ExpressionConvertible) -> Expression {
-        return Self.operate(one: self, operator1: "NOT BETWEEN", two: from, operator2: "AND", three: to)
+    public func notBetween(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression {
+        return Self.operate(one: self, operator1: "NOT BETWEEN", two: begin, operator2: "AND", three: end)
     }
     public static func exists(_ statementSelect: StatementSelect) -> Expression {
         return Self.operate(prefix: "EXISTS", operand: statementSelect)
@@ -524,7 +543,7 @@ extension ExpressionOperable {
     public static func notExists(_ statementSelect: StatementSelect) -> Expression {
         return Self.operate(prefix: "NOT EXISTS", operand: statementSelect)
     }
-    
+
     public func `in`(_ statementSelect: StatementSelect) -> Expression {
         return Self.operate(prefix: "IN", operand: statementSelect)
     }
@@ -533,32 +552,36 @@ extension ExpressionOperable {
     }
     public func `in`(_ expressionConvertibleList: ExpressionConvertible...) -> Expression {
         return self.`in`(expressionConvertibleList)
-    } 
+    }
     public func notIn(_ expressionConvertibleList: ExpressionConvertible...) -> Expression {
         return self.notIn(expressionConvertibleList)
     }
     public func `in`(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression {
         return Self.operate(operand: self, postfix: "IN(\(expressionConvertibleList.joined()))")
-    } 
+    }
     public func notIn(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression {
         return Self.operate(operand: self, postfix: "NOT IN(\(expressionConvertibleList.joined()))")
     }
-    
+
     public static func combine(_ expressionConvertibleList: ExpressionConvertible...) -> Expression {
         return combine(expressionConvertibleList)
     }
     public static func combine(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression {
         return Expression(withRaw: "(\(expressionConvertibleList.joined()))")
     }
-    
+
     //Function
-    public static func function(named name: String, _ expressions: ExpressionConvertible..., isDistinct: Bool = false) -> Expression {
+    public static func function(named name: String,
+                                _ expressions: ExpressionConvertible...,
+                                isDistinct: Bool = false) -> Expression {
         return function(named: name, expressions, isDistinct: isDistinct)
     }
-    public static func function(named name: String, _ expressions: [ExpressionConvertible], isDistinct: Bool = false) -> Expression {
+    public static func function(named name: String,
+                                _ expressions: [ExpressionConvertible],
+                                isDistinct: Bool = false) -> Expression {
         return Expression.operate(title: name, infix: isDistinct ? "DISTINCT" : nil, operands: expressions)
     }
-    
+
     //aggregate functions
     public func avg(isDistinct: Bool = false) -> Expression {
         return Expression.function(named: "AVG", self, isDistinct: isDistinct)
@@ -603,17 +626,21 @@ extension ExpressionOperable {
     public func round(isDistinct: Bool = false) -> Expression {
         return Expression.function(named: "ROUND", self, isDistinct: isDistinct)
     }
-    
-    public static func `case`(_ expressionConvertible: ExpressionConvertible, _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)..., `else`: ExpressionConvertible) -> Expression {
+
+    public static func `case`(_ expressionConvertible: ExpressionConvertible,
+                              _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)...,
+                              `else`: ExpressionConvertible) -> Expression {
         return `case`(expressionConvertible.asExpression(), flows, else: `else`.asExpression())
     }
-    public static func `case`(_ `case`: ExpressionConvertible, _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)], `else`: ExpressionConvertible) -> Expression {
+    public static func `case`(_ `case`: ExpressionConvertible,
+                              _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)],
+                              `else`: ExpressionConvertible) -> Expression {
         var descrption = "CASE \(`case`.asExpression().description) "
         descrption.append(flows.joined({ "WHEN \($0.when) THEN \($0.then) " }))
         descrption.append("ELSE \(`else`.asExpression().description) END")
         return Expression(withRaw: descrption)
     }
-    
+
     //FTS3
     public func matchinfo() -> Expression {
         return Expression.function(named: "MATCHINFO", self)
@@ -635,4 +662,3 @@ extension LiteralValueConvertible {
         return Expression(with: self)
     }
 }
-

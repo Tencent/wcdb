@@ -27,14 +27,23 @@ class StatementInsertTests: BaseTestCase {
         //Give
         let column1 = Column(named: "column1")
         let column2 = Column(named: "column2")
-        
+
         let table1 = "table1"
-        
+
         //Then
-        WINQAssertEqual(StatementInsert().insert(intoTable: table1).values(1, "value"), "INSERT INTO table1 VALUES(1, 'value')")
-        
-        WINQAssertEqual(StatementInsert().insert(intoTable: table1, with: column1, column2).values(1, "value"), "INSERT INTO table1(column1, column2) VALUES(1, 'value')")
-        
-        WINQAssertEqual(StatementInsert().insert(intoTable: table1, onConflict: .Replace).values(1, "value"), "INSERT OR REPLACE INTO table1 VALUES(1, 'value')")
+        WINQAssertEqual(
+            StatementInsert().insert(intoTable: table1).values(1, "value"),
+            "INSERT INTO table1 VALUES(1, 'value')"
+        )
+
+        WINQAssertEqual(
+            StatementInsert().insert(intoTable: table1, with: column1, column2).values(1, "value"),
+            "INSERT INTO table1(column1, column2) VALUES(1, 'value')"
+        )
+
+        WINQAssertEqual(
+            StatementInsert().insert(intoTable: table1, onConflict: .replace).values(1, "value"),
+            "INSERT OR REPLACE INTO table1 VALUES(1, 'value')"
+        )
     }
 }

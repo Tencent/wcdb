@@ -25,7 +25,7 @@ class StatementRollbackTests: BaseTestCase {
 
     func testStatementRollback() {
         WINQAssertEqual(StatementRollback().rollback(), "ROLLBACK")
-        
+
         WINQAssertEqual(StatementRollback().rollback(toSavepoint: "savepoint1"), "ROLLBACK TO savepoint1")
     }
 }

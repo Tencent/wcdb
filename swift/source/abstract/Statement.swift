@@ -20,32 +20,32 @@
 
 import Foundation
 
-public class Statement : Describable {
+public class Statement: Describable {
     public enum StatementType {
-        case AlterTable
-        case CreateIndex
-        case CreateTable
-        case Delete
-        case DropIndex
-        case DropTable
-        case Insert
-        case Pragma
-        case Select
-        case Transaction
-        case Update
-        case CreateVirtualTable
-        case Attach
-        case Detach
-        case Explain
-        case Savepoint
-        case Release
-        case Rollback
-        case Vacuum
-        case Reindex
+        case alterTable
+        case createIndex
+        case createTable
+        case delete
+        case dropIndex
+        case dropTable
+        case insert
+        case pragma
+        case select
+        case transaction
+        case update
+        case createVirtualTable
+        case attach
+        case detach
+        case explain
+        case savepoint
+        case release
+        case rollback
+        case vacuum
+        case reindex
     }
-    
+
     public let statementType: StatementType
-    
+
     public init(with statementType: StatementType) {
         self.statementType = statementType
         super.init("")

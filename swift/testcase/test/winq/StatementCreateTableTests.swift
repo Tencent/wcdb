@@ -27,27 +27,47 @@ class StatementCreateTableTests: BaseTestCase {
         //Give
         let column1 = Column(named: "column1")
         let column2 = Column(named: "column2")
-        
-        let def1 = column1.asDef(with: .Integer32)
-        let def2 = column2.asDef(with: .Text)
-        
+
+        let def1 = column1.asDef(with: .integer32)
+        let def2 = column2.asDef(with: .text)
+
         let constraint1 = TableConstraint(named: "constraint1").makePrimary(indexesBy: column1.asIndex())
         let constraint2 = TableConstraint(named: "constraint2").makeUnique(indexesBy: column2.asIndex())
-        
+
         let table1 = "table1"
         let table2 = "table2"
 
         let statementSelect = StatementSelect().select(column1).from(table1)
-                
+
         //Then
-        WINQAssertEqual(StatementCreateTable().create(table: table1, with: def1, def2), "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT)")
-        
-        WINQAssertEqual(StatementCreateTable().create(table: table1, ifNotExists: false, with: def1, def2), "CREATE TABLE table1(column1 INTEGER, column2 TEXT)")
-        
-        WINQAssertEqual(StatementCreateTable().create(table: table1, with: def1, def2, and: [constraint1, constraint2]), "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT, CONSTRAINT constraint1 PRIMARY KEY(column1), CONSTRAINT constraint2 UNIQUE(column2))")
-        
-        WINQAssertEqual(StatementCreateTable().create(table: table2, as: statementSelect), "CREATE TABLE IF NOT EXISTS table2 AS SELECT column1 FROM table1")
-        
-        WINQAssertEqual(StatementCreateTable().create(table: table2, ifNotExists: false, as: statementSelect), "CREATE TABLE table2 AS SELECT column1 FROM table1")        
+        WINQAssertEqual(
+            StatementCreateTable().create(table: table1, with: def1, def2),
+            "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT)"
+        )
+
+        WINQAssertEqual(
+            StatementCreateTable().create(table: table1, ifNotExists: false, with: def1, def2),
+            "CREATE TABLE table1(column1 INTEGER, column2 TEXT)"
+        )
+
+        WINQAssertEqual(
+            StatementCreateTable().create(table: table1, with: def1, def2, and: [constraint1, constraint2]),
+            """
+            CREATE TABLE IF NOT EXISTS table1\
+            (column1 INTEGER, column2 TEXT, \
+            CONSTRAINT constraint1 PRIMARY KEY(column1), \
+            CONSTRAINT constraint2 UNIQUE(column2))
+            """
+        )
+
+        WINQAssertEqual(
+            StatementCreateTable().create(table: table2, as: statementSelect),
+            "CREATE TABLE IF NOT EXISTS table2 AS SELECT column1 FROM table1"
+        )
+
+        WINQAssertEqual(
+            StatementCreateTable().create(table: table2, ifNotExists: false, as: statementSelect),
+            "CREATE TABLE table2 AS SELECT column1 FROM table1"
+        )
     }
 }

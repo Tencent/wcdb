@@ -24,53 +24,53 @@ import Foundation
 public struct Configs {
     public typealias Callback = Config.Callback
     public typealias Order = Config.Order
-    
+
     public struct Config: Equatable {
-        public typealias Callback = (Handle) throws -> ()
+        public typealias Callback = (Handle) throws -> Void
         typealias TaggedCallback = Tagged<Callback>
         public typealias Order = Int
 
         let name: String
         let callback: TaggedCallback?
         let order: Order
-        
+
         init(named name: String, with callback: @escaping Callback, orderBy order: Order) {
             self.name = name
             self.callback = Tagged(callback)
             self.order = order
         }
-        
+
         init(emptyConfigNamed name: String, orderBy order: Order) {
             self.name = name
             self.callback = nil
             self.order = order
         }
-        
-        public static func ==(lhs: Config, rhs: Config) -> Bool {
+
+        public static func == (lhs: Config, rhs: Config) -> Bool {
             return lhs.name == rhs.name && lhs.callback == rhs.callback && lhs.order == rhs.order
         }
-        
-        public static func !=(lhs: Config, rhs: Config) -> Bool {
+
+        public static func != (lhs: Config, rhs: Config) -> Bool {
             return !(lhs==rhs)
         }
     }
-    
+
     private var configs: [Config] = []
-    
+
     init(_ configs: Config...) {
         self.init(configs)
     }
     init(_ configs: [Config]) {
         self.configs = configs
     }
-    
+
     mutating func setConfig(named name: String, with callback: @escaping Callback, orderBy order: Order) {
         var inserted: Bool = false
         var newConfigs: [Config] = configs.reduce(into: []) { (result, config) in
             if !inserted && order < config.order {
                 result.append(Config(named: name, with: callback, orderBy: order))
                 inserted = true
-            }else if name != config.name {
+            } else if name != config.name {
                 result.append(config)
             }
         }
@@ -79,13 +79,13 @@ public struct Configs {
         }
         configs = newConfigs
     }
-    
+
     mutating func setConfig(named name: String, with callback: @escaping Callback) {
         var inserted: Bool = false
         var newConfigs: [Config] = configs.reduce(into: []) { (result, config) in
             if name != config.name {
                 result.append(config)
-            }else {
+            } else {
                 result.append(Config(named: name, with: callback, orderBy: config.order))
                 inserted = true
             }
@@ -95,21 +95,21 @@ public struct Configs {
         }
         configs = newConfigs
     }
-    
-    func invoke(handle: Handle) throws{
+
+    func invoke(handle: Handle) throws {
         let configs = self.configs
         do {
             try configs.forEach({ (config) in
                 guard config.callback != nil else {
                     return
-                } 
+                }
                 try config.callback!.value(handle)
             })
-        }catch let error {
+        } catch let error {
             throw error
         }
     }
-    
+
     func config(by name: String) -> Callback? {
         let configs = self.configs
         return configs.first { $0.name == name }?.callback?.value
@@ -120,7 +120,7 @@ extension Configs: Equatable {
     public static func == (lhs: Configs, rhs: Configs) -> Bool {
         return lhs.configs == rhs.configs
     }
-    
+
     public static func != (lhs: Configs, rhs: Configs) -> Bool {
         return lhs.configs != rhs.configs
     }

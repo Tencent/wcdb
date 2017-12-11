@@ -21,9 +21,9 @@
 import Foundation
 public class StatementDropIndex: Statement {
     public init() {
-        super.init(with: .DropIndex)
+        super.init(with: .dropIndex)
     }
-    
+
     @discardableResult
     public func drop(index: String, ifExists: Bool = true) -> StatementDropIndex {
         description.append("DROP INDEX ")

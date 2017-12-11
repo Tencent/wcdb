@@ -22,22 +22,36 @@ import XCTest
 import WCDBSwift
 
 class JoinClauseTests: BaseTestCase {
-    
+
     func generateJoinClause() -> JoinClause {
         return JoinClause(withTable: "testJoinClauseTable")
     }
 
     func testJoinClause() {
-        WINQAssertEqual(generateJoinClause().join("testJoinClauseTable2", with: .Left), "testJoinClauseTable LEFT JOIN testJoinClauseTable2")
-        
-        WINQAssertEqual(generateJoinClause().natureJoin("testJoinClauseTable2", with: .LeftOuter), "testJoinClauseTable NATURAL LEFT OUTER JOIN testJoinClauseTable2")
+        WINQAssertEqual(
+            generateJoinClause().join("testJoinClauseTable2", with: .left),
+            "testJoinClauseTable LEFT JOIN testJoinClauseTable2"
+        )
 
-        WINQAssertEqual(generateJoinClause().join("testJoinClauseTable2", with: .Inner), "testJoinClauseTable INNER JOIN testJoinClauseTable2")
-                
-        WINQAssertEqual(generateJoinClause().natureJoin("testJoinClauseTable2", with: .Cross), "testJoinClauseTable NATURAL CROSS JOIN testJoinClauseTable2")
-        
+        WINQAssertEqual(
+            generateJoinClause().natureJoin("testJoinClauseTable2", with: .leftOuter),
+            "testJoinClauseTable NATURAL LEFT OUTER JOIN testJoinClauseTable2"
+        )
+
+        WINQAssertEqual(generateJoinClause().join("testJoinClauseTable2", with: .inner),
+                        "testJoinClauseTable INNER JOIN testJoinClauseTable2"
+        )
+
+        WINQAssertEqual(
+            generateJoinClause().natureJoin("testJoinClauseTable2", with: .cross),
+            "testJoinClauseTable NATURAL CROSS JOIN testJoinClauseTable2"
+        )
+
         WINQAssertEqual(generateJoinClause().on(1), "testJoinClauseTable ON 1")
-        
-        WINQAssertEqual(generateJoinClause().using(Column(named: "testColumn1"), Column(named: "testColumn2")), "testJoinClauseTable USING testColumn1, testColumn2")
+
+        WINQAssertEqual(
+            generateJoinClause().using(Column(named: "testColumn1"), Column(named: "testColumn2")),
+            "testJoinClauseTable USING testColumn1, testColumn2"
+        )
     }
 }

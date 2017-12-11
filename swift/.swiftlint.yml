@@ -1,0 +1,9 @@
+disabled_rules:
+  - fallthrough
+  - cyclomatic_complexity
+  - file_length
+  - function_parameter_count
+  - todo
+  - function_body_length
+  - type_body_length
+  - nesting

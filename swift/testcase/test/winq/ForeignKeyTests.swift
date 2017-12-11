@@ -22,24 +22,45 @@ import XCTest
 import WCDBSwift
 
 class ForeignKeyTests: BaseTestCase {
-    
+
     func generateForeignKey() -> ForeignKey {
         return ForeignKey(withForeignTable: "testForeignKeyTable", andColumnNames: "column1", "column2")
     }
 
     func testForeignKey() {
-        WINQAssertEqual(generateForeignKey().onDelete(.SetNull), "REFERENCES testForeignKeyTable(column1, column2) ON DELETE SET NULL")
-        
-        WINQAssertEqual(generateForeignKey().onUpdate(.SetDefault), "REFERENCES testForeignKeyTable(column1, column2) ON UPDATE SET DEFAULT")
-        
-        WINQAssertEqual(generateForeignKey().onDelete(.Cascade), "REFERENCES testForeignKeyTable(column1, column2) ON DELETE CASCADE")
-        
-        WINQAssertEqual(generateForeignKey().onUpdate(.Restrict), "REFERENCES testForeignKeyTable(column1, column2) ON UPDATE RESTRICT")
-        
-        WINQAssertEqual(generateForeignKey().onDelete(.NoAction), "REFERENCES testForeignKeyTable(column1, column2) ON DELETE NO ACTION")
-        
-        WINQAssertEqual(generateForeignKey().deferrable(.Deferred), "REFERENCES testForeignKeyTable(column1, column2) DEFERRABLE INITIALLY DEFERRED")
-        
-        WINQAssertEqual(generateForeignKey().notDeferrable(.Immediate), "REFERENCES testForeignKeyTable(column1, column2) NOT DEFERRABLE INITIALLY IMMEDIATE")        
+        WINQAssertEqual(
+            generateForeignKey().onDelete(.setNull),
+            "REFERENCES testForeignKeyTable(column1, column2) ON DELETE SET NULL"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().onUpdate(.setDefault),
+            "REFERENCES testForeignKeyTable(column1, column2) ON UPDATE SET DEFAULT"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().onDelete(.cascade),
+            "REFERENCES testForeignKeyTable(column1, column2) ON DELETE CASCADE"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().onUpdate(.restrict),
+            "REFERENCES testForeignKeyTable(column1, column2) ON UPDATE RESTRICT"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().onDelete(.noAction),
+            "REFERENCES testForeignKeyTable(column1, column2) ON DELETE NO ACTION"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().deferrable(.deferred),
+            "REFERENCES testForeignKeyTable(column1, column2) DEFERRABLE INITIALLY DEFERRED"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().notDeferrable(.immediate),
+            "REFERENCES testForeignKeyTable(column1, column2) NOT DEFERRABLE INITIALLY IMMEDIATE"
+        )
     }
 }

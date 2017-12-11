@@ -35,7 +35,7 @@
 		235CAEFB1FB584FC003039F0 /* sample_core_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235CAEFA1FB584FC003039F0 /* sample_core_main.swift */; };
 		237BC58A1FB54A5E006ECEBB /* sample_transaction_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BC5891FB54A5E006ECEBB /* sample_transaction_main.swift */; };
 		237BC58C1FB54A65006ECEBB /* SampleTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237BC58B1FB54A65006ECEBB /* SampleTransaction.swift */; };
-		23B996DC1FDAB56700B0AF2E /* WCDB_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D21FDAB51600B0AF2E /* WCDB_swift.framework */; };
+		23B996DC1FDAB56700B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D21FDAB51600B0AF2E /* WCDBSwift.framework */; };
 		23E9E00F1FC40534005DE71C /* sample_table_main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E00E1FC40534005DE71C /* sample_table_main.swift */; };
 		23E9E0111FC4054C005DE71C /* SampleTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0101FC4054C005DE71C /* SampleTable.swift */; };
 /* End PBXBuildFile section */
@@ -109,7 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23B996DC1FDAB56700B0AF2E /* WCDB_swift.framework in Frameworks */,
+				23B996DC1FDAB56700B0AF2E /* WCDBSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,7 +252,7 @@
 		23B996CD1FDAB51500B0AF2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				23B996D21FDAB51600B0AF2E /* WCDB_swift.framework */,
+				23B996D21FDAB51600B0AF2E /* WCDBSwift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -328,10 +328,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		23B996D21FDAB51600B0AF2E /* WCDB_swift.framework */ = {
+		23B996D21FDAB51600B0AF2E /* WCDBSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = WCDB_swift.framework;
+			path = WCDBSwift.framework;
 			remoteRef = 23B996D11FDAB51600B0AF2E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

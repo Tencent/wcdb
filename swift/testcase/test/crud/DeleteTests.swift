@@ -22,13 +22,16 @@ import XCTest
 import WCDBSwift
 
 class DeleteTests: CRUDTestCase {
-    
+
     var delete: Delete!
-    
+
     override func setUp() {
         super.setUp()
-        
-        let optionalDelete = WCDBAssertNoThrowReturned(try database.prepareDelete(fromTable: CRUDObject.name), whenFailed: nil)
+
+        let optionalDelete = WCDBAssertNoThrowReturned(
+            try database.prepareDelete(fromTable: CRUDObject.name),
+            whenFailed: nil
+        )
         XCTAssertNotNil(optionalDelete)
         delete = optionalDelete!
     }
@@ -40,7 +43,7 @@ class DeleteTests: CRUDTestCase {
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
         XCTAssertEqual(results.count, 0)
     }
-    
+
     func testConditionalDelete() {
         //When
         XCTAssertNoThrow(try delete.where(CRUDObject.Properties.variable1 == 2).execute())
@@ -49,10 +52,10 @@ class DeleteTests: CRUDTestCase {
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0], preInsertedObjects[0])
     }
-    
+
     func testOrderedDelete() {
         //Give
-        let order = (CRUDObject.Properties.variable1).asOrder(by: .Descending)
+        let order = (CRUDObject.Properties.variable1).asOrder(by: .descending)
         //When
         XCTAssertNoThrow(try delete.order(by: order).limit(1).execute())
         //Then
@@ -60,7 +63,7 @@ class DeleteTests: CRUDTestCase {
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0], preInsertedObjects[0])
     }
-    
+
     func testLimitedDelete() {
         //When
         XCTAssertNoThrow(try delete.limit(1).execute())
@@ -69,7 +72,7 @@ class DeleteTests: CRUDTestCase {
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0], preInsertedObjects[1])
     }
-    
+
     func testOffsetDelete() {
         //When
         XCTAssertNoThrow(try delete.limit(1, offset: 1).execute())
@@ -77,8 +80,8 @@ class DeleteTests: CRUDTestCase {
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0], preInsertedObjects[0])
-    }    
-    
+    }
+
     func testDeleteChanges() {
         //When
         XCTAssertNoThrow(try delete.execute())

@@ -22,123 +22,153 @@ import XCTest
 import WCDBSwift
 
 class ColumnConstraintBindingTests: BaseTestCase {
-    
+
     class BaselineTestObject: TableCodable {
-        let variable: Int = 0  
+        let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
-    
+
     class PrimaryTestObject: TableCodable {
-        let variable: Int = 0   
+        let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PrimaryTestObject
             case variable = "primaryVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(isPrimary: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(isPrimary: true)]
             }
         }
     }
 
     class OrderedPrimaryTestObject: TableCodable {
-        let variable: Int = 0        
-        required init() {} 
+        let variable: Int = 0
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OrderedPrimaryTestObject
             case variable = "orderedPrimaryVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(isPrimary: true, orderBy: .Ascending)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending)]
             }
         }
     }
 
     class AutoIncrementPrimaryTestObject: TableCodable {
-        let variable: Int = 0       
-        required init() {} 
+        let variable: Int = 0
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoIncrementPrimaryTestObject
             case variable = "autoIncrementPrimaryVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
             }
         }
     }
     class ConflictPrimaryTestObject: TableCodable {
-        let variable: Int = 0     
+        let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConflictPrimaryTestObject
             case variable = "conflictPrimaryVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(isPrimary: true, onConflict: .Replace)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(isPrimary: true, onConflict: .replace)]
             }
         }
     }
 
     class NotNullTestObject: TableCodable {
-        let variable: Int = 0      
-        required init() {}   
+        let variable: Int = 0
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = NotNullTestObject
             case variable = "notNullVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(isNotNull: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(isNotNull: true)]
             }
         }
     }
 
     class UniqueTestObject: TableCodable {
-        let variable: Int = 0     
-        required init() {}    
+        let variable: Int = 0
+        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable = "uniqueVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(isUnique: true)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(isUnique: true)]
             }
         }
     }
 
     class DefaultValueTestObject: TableCodable {
-        let variable: Int = 0         
+        let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultValueTestObject
             case variable = "defaultValueVariable"
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
-                return [.variable:ColumnConstraintBinding(defaultTo: 1)]
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(defaultTo: 1)]
             }
         }
     }
-    
+
     func testColumnConstraintBinding() {
-        
-        ORMColumnConstraintBindingAssertEqual(BaselineTestObject.self, "CREATE TABLE IF NOT EXISTS BaselineTestObject(variable INTEGER)")
-        
-        ORMColumnConstraintBindingAssertEqual(PrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS PrimaryTestObject(primaryVariable INTEGER PRIMARY KEY)")
-        
-        ORMColumnConstraintBindingAssertEqual(OrderedPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS OrderedPrimaryTestObject(orderedPrimaryVariable INTEGER PRIMARY KEY ASC)")
-        
-        ORMColumnConstraintBindingAssertEqual(AutoIncrementPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS AutoIncrementPrimaryTestObject(autoIncrementPrimaryVariable INTEGER PRIMARY KEY AUTOINCREMENT)")
-        
-        ORMColumnConstraintBindingAssertEqual(ConflictPrimaryTestObject.self, "CREATE TABLE IF NOT EXISTS ConflictPrimaryTestObject(conflictPrimaryVariable INTEGER PRIMARY KEY ON CONFLICT REPLACE)")
-        
-        ORMColumnConstraintBindingAssertEqual(NotNullTestObject.self, "CREATE TABLE IF NOT EXISTS NotNullTestObject(notNullVariable INTEGER NOT NULL)")
-        
-        ORMColumnConstraintBindingAssertEqual(UniqueTestObject.self, "CREATE TABLE IF NOT EXISTS UniqueTestObject(uniqueVariable INTEGER UNIQUE)")
-        
-        ORMColumnConstraintBindingAssertEqual(DefaultValueTestObject.self, "CREATE TABLE IF NOT EXISTS DefaultValueTestObject(defaultValueVariable INTEGER DEFAULT 1)")
+
+        ORMColumnConstraintBindingAssertEqual(
+            BaselineTestObject.self,
+            "CREATE TABLE IF NOT EXISTS BaselineTestObject(variable INTEGER)"
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            PrimaryTestObject.self,
+            "CREATE TABLE IF NOT EXISTS PrimaryTestObject(primaryVariable INTEGER PRIMARY KEY)"
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            OrderedPrimaryTestObject.self,
+            "CREATE TABLE IF NOT EXISTS OrderedPrimaryTestObject(orderedPrimaryVariable INTEGER PRIMARY KEY ASC)"
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            AutoIncrementPrimaryTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS AutoIncrementPrimaryTestObject\
+            (autoIncrementPrimaryVariable INTEGER PRIMARY KEY AUTOINCREMENT)
+            """
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            ConflictPrimaryTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS ConflictPrimaryTestObject\
+            (conflictPrimaryVariable INTEGER PRIMARY KEY ON CONFLICT REPLACE)
+            """
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            NotNullTestObject.self,
+            "CREATE TABLE IF NOT EXISTS NotNullTestObject(notNullVariable INTEGER NOT NULL)"
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            UniqueTestObject.self,
+            "CREATE TABLE IF NOT EXISTS UniqueTestObject(uniqueVariable INTEGER UNIQUE)"
+        )
+
+        ORMColumnConstraintBindingAssertEqual(
+            DefaultValueTestObject.self,
+            "CREATE TABLE IF NOT EXISTS DefaultValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
+        )
     }
 }

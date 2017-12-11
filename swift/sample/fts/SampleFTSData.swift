@@ -22,17 +22,16 @@ import Foundation
 import WCDBSwift
 
 class SampleFTSData: TableCodable {
-    var name: String? = nil
-    var content: String? = nil
+    var name: String?
+    var content: String?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleFTSData    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
+        typealias Root = SampleFTSData
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
         case name
         case content
-        static var __virtualTableBinding: VirtualTableBinding? {
+        static var virtualTableBinding: VirtualTableBinding? {
             return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
         }
     }
     required init() {}
 }
-

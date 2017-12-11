@@ -20,23 +20,23 @@
 
 import Foundation
 
-public class StatementAlterTable : Statement {
+public class StatementAlterTable: Statement {
     public init() {
-        super.init(with: .AlterTable)
+        super.init(with: .alterTable)
     }
-    
+
     @discardableResult
     public func alter(table: String) -> StatementAlterTable {
         description.append("ALTER TABLE \(table)")
         return self
     }
-    
+
     @discardableResult
     public func rename(to newTable: String) -> StatementAlterTable {
         description.append(" RENAME TO \(newTable)")
         return self
     }
-    
+
     @discardableResult
     public func addColumn(with columnDef: ColumnDef) -> StatementAlterTable {
         description.append(" ADD COLUMN \(columnDef.description)")

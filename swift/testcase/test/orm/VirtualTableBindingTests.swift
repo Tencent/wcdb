@@ -24,19 +24,27 @@ import WCDBSwift
 class VirtualTableBindingTests: BaseTestCase {
 
     class BaselineTestObject: TableCodable {
-        let variable: Int = 0 
+        let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
-            static let __objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var __virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(with: .fts3, and: ModuleArgument(left: "left", right: "right"), ModuleArgument(with: .WCDB))
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var virtualTableBinding: VirtualTableBinding? {
+                return VirtualTableBinding(with: .fts3,
+                                           and: ModuleArgument(left: "left", right: "right"),
+                                               ModuleArgument(with: .WCDB))
             }
         }
     }
 
     func testVirtualBinding() {
-        ORMVirtualTableBindingAssertEqual(BaselineTestObject.self, "CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3(variable INTEGER, left=right, tokenize=WCDB)")
+        ORMVirtualTableBindingAssertEqual(
+            BaselineTestObject.self,
+            """
+            CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3\
+            (variable INTEGER, left=right, tokenize=WCDB)
+            """
+        )
     }
 }

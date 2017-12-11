@@ -21,7 +21,10 @@
 import XCTest
 import WCDBSwift
 
-func XCTAssertEqual(_ expression1: @autoclosure () -> String, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func XCTAssertEqual(_ expression1: @autoclosure () -> String,
+                    _ expression2: @autoclosure () -> String,
+                    file: StaticString = #file,
+                    line: UInt = #line) {
     let description1 = expression1()
     let description2 = expression2()
     XCTAssertEqual(description1, description2, {
@@ -29,50 +32,79 @@ func XCTAssertEqual(_ expression1: @autoclosure () -> String, _ expression2: @au
     }(), file: file, line: line)
 }
 
-func WINQAssertEqual<DescribableObject>(_ expression1: @autoclosure () -> DescribableObject, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) where DescribableObject : Describable {
+func WINQAssertEqual<DescribableObject>(_ expression1: @autoclosure () -> DescribableObject,
+                                        _ expression2: @autoclosure () -> String,
+                                        file: StaticString = #file,
+                                        line: UInt = #line) where DescribableObject: Describable {
     XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
 }
 
-func WINQAssertEqual<StringConvertibleObject>(_ expression1: @autoclosure () -> StringConvertibleObject, _ expression2: @autoclosure () -> String, _ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) where StringConvertibleObject : CustomStringConvertible {
+func WINQAssertEqual<StringObject>(
+    _ expression1: @autoclosure () -> StringObject,
+    _ expression2: @autoclosure () -> String,
+    _ message: @autoclosure () -> String = "",
+    file: StaticString = #file,
+    line: UInt = #line) where StringObject: CustomStringConvertible {
     XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
 }
 
-func ORMColumnConstraintBindingAssertEqual<TableCodableObject: TableCodable>(_ expression1: @autoclosure () -> TableCodableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func ORMColumnConstraintBindingAssertEqual<TableCodableObject: TableCodable>(
+    _ expression1: @autoclosure () -> TableCodableObject.Type,
+    _ expression2: @autoclosure () -> String,
+    file: StaticString = #file,
+    line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
-    let description1 = type.CodingKeys.__objectRelationalMapping.generateCreateTableStatement(named: className).description
+    let orm = type.CodingKeys.objectRelationalMapping
+    let description1 = orm.generateCreateTableStatement(named: className).description
     let description2 = expression2()
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-func ORMIndexBindingAssertEqual<TableCodableObject: TableCodable>(_ expression1: @autoclosure () -> TableCodableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func ORMIndexBindingAssertEqual<TableCodableObject: TableCodable>(
+    _ expression1: @autoclosure () -> TableCodableObject.Type,
+    _ expression2: @autoclosure () -> String,
+    file: StaticString = #file,
+    line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
-    let description1 = type.CodingKeys.__objectRelationalMapping.generateCreateIndexStatements(onTable: className)![0].description
+    let orm = type.CodingKeys.objectRelationalMapping
+    let description1 = orm.generateCreateIndexStatements(onTable: className)![0].description
     let description2 = expression2()
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-func ORMVirtualTableBindingAssertEqual<TableCodableObject: TableCodable>(_ expression1: @autoclosure () -> TableCodableObject.Type, _ expression2: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+func ORMVirtualTableBindingAssertEqual<TableCodableObject: TableCodable>(
+    _ expression1: @autoclosure () -> TableCodableObject.Type,
+    _ expression2: @autoclosure () -> String,
+    file: StaticString = #file,
+    line: UInt = #line) {
     let type = expression1()
     let className = String(describing: type)
-    let description1 = type.CodingKeys.__objectRelationalMapping.generateCreateVirtualTableStatement(named: className).description
+    let orm = type.CodingKeys.objectRelationalMapping
+    let description1 = orm.generateCreateVirtualTableStatement(named: className).description
     let description2 = expression2()
     XCTAssertEqual(description1, description2, file: file, line: line)
 }
 
-func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line, whenFailed failedValue: @autoclosure () -> T) -> T {
+func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
+                                  file: StaticString = #file,
+                                  line: UInt = #line,
+                                  whenFailed failedValue: @autoclosure () -> T) -> T {
     do {
         return try expression()
-    }catch let error as WCDBSwift.Error {
+    } catch let error as WCDBSwift.Error {
         XCTFail(error.description)
-    }catch {
+    } catch {
         XCTFail(error.localizedDescription)
     }
     return failedValue()
 }
 
-func WCDBAssertNoThrowReturned<T: OptionalRepresentable>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line) -> T {
+func WCDBAssertNoThrowReturned<T: OptionalRepresentable>(
+    _ expression: @autoclosure () throws -> T,
+    file: StaticString = #file,
+    line: UInt = #line) -> T {
     return WCDBAssertNoThrowReturned(expression, file: file, line: line, whenFailed: T.`nil`)
 }
 
@@ -85,7 +117,9 @@ extension Array: ArrayRepresentable {
     typealias ElementType = Element
 }
 
-func WCDBAssertNoThrowReturned<T: ArrayRepresentable>(_ expression: @autoclosure () throws -> T, file: StaticString = #file, line: UInt = #line) -> T {
+func WCDBAssertNoThrowReturned<T: ArrayRepresentable>(
+    _ expression: @autoclosure () throws -> T,
+    file: StaticString = #file,
+    line: UInt = #line) -> T {
     return WCDBAssertNoThrowReturned(expression, file: file, line: line, whenFailed: T())
 }
-

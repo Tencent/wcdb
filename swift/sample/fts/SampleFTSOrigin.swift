@@ -22,18 +22,18 @@ import Foundation
 import WCDBSwift
 
 class SampleFTSOrigin: TableCodable {
-    var localID: Int? = nil
-    var name: String? = nil
-    var content: String? = nil
+    var localID: Int?
+    var name: String?
+    var content: String?
     enum CodingKeys: String, CodingTableKey {
-        typealias Root = SampleFTSOrigin    
-        static let __objectRelationalMapping = TableBinding(CodingKeys.self)    
-        case localID    
-        case name    
-        case content     
-        static var __columnConstraintBindings: [CodingKeys:ColumnConstraintBinding]? {
+        typealias Root = SampleFTSOrigin
+        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        case localID
+        case name
+        case content
+        static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
             return [
-                .localID:ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)
+                .localID: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)
             ]
         }
     }
@@ -42,4 +42,3 @@ class SampleFTSOrigin: TableCodable {
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }
-

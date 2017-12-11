@@ -22,18 +22,17 @@ import Foundation
 
 class Config {
     static let `default` = Config()
-    
+
     let valueLength: Int = 100
     let randomSeed: Int = 0
-    
+
     let readCount: Int
     let writeCount: Int
     let batchWriteCount: Int
 
     let tableCount: Int
     let syncWriteCount: Int
-        
-    
+
     private init() {
 //        #if WCDB_IOS
 //            readCount = 1000000
@@ -46,7 +45,7 @@ class Config {
             readCount = 500000
             writeCount = 50000
             batchWriteCount = 500000
-            
+
             tableCount = 50000
             syncWriteCount = 500
 //        #else
