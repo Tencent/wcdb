@@ -73,7 +73,7 @@ class TableTests: BaseTestCase {
             case variable
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __indexBindings: [IndexBinding.Subfix:IndexBinding]? {
-                return ["_index":IndexBinding(indexesBy: Properties.variable)]
+                return ["_index":IndexBinding(indexesBy: variable)]
             }
         }
     }
@@ -101,7 +101,7 @@ class TableTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return ["ConstraintObjectConstraint":MultiUniqueBinding(indexesBy: Properties.variable1, Properties.variable2)]
+                return ["ConstraintObjectConstraint":MultiUniqueBinding(indexesBy: variable1, variable2)]
             }
         }
     }

@@ -34,7 +34,7 @@ class TableConstraintBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiPrimaryBinding(indexesBy: Properties.variable1, Properties.variable2)]
+                return [constraintName:MultiPrimaryBinding(indexesBy: variable1, variable2)]
             }
         }
     }
@@ -50,7 +50,7 @@ class TableConstraintBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiPrimaryBinding(indexesBy: Properties.variable1, Properties.variable2, onConflict: .Replace)]
+                return [constraintName:MultiPrimaryBinding(indexesBy: variable1, variable2, onConflict: .Replace)]
             }
         }
     }
@@ -66,7 +66,7 @@ class TableConstraintBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiPrimaryBinding(indexesBy: Properties.variable1, Properties.variable2, check: Properties.variable1 > 1)]
+                return [constraintName:MultiPrimaryBinding(indexesBy: variable1, variable2, check: variable1 > 1)]
             }
         }
     }
@@ -90,7 +90,7 @@ class TableConstraintBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiUniqueBinding(indexesBy: Properties.variable1, Properties.variable2)]
+                return [constraintName:MultiUniqueBinding(indexesBy: variable1, variable2)]
             }
         }
     }
@@ -106,7 +106,7 @@ class TableConstraintBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiUniqueBinding(indexesBy: Properties.variable1, Properties.variable2, onConflict: .Replace)]
+                return [constraintName:MultiUniqueBinding(indexesBy: variable1, variable2, onConflict: .Replace)]
             }
         }
     }
@@ -122,7 +122,7 @@ class TableConstraintBindingTests: BaseTestCase {
             case variable2
             static let __objectRelationalMapping = TableBinding(CodingKeys.self)
             static var __tableConstraintBindings: [TableConstraintBinding.Name:TableConstraintBinding]? {
-                return [constraintName:MultiUniqueBinding(indexesBy: Properties.variable1, Properties.variable2, check: Properties.variable1 > 1)]
+                return [constraintName:MultiUniqueBinding(indexesBy: variable1, variable2, check: variable1 > 1)]
             }
         }
     }

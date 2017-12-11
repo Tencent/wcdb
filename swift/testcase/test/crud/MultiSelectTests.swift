@@ -142,7 +142,7 @@ class MultiSelectTests: CRUDTestCase {
     
     func testSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.allMultiObjects(), whenFailed: [[String:TableDecodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
@@ -155,7 +155,7 @@ class MultiSelectTests: CRUDTestCase {
     
     func testOrderedSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.order(by: (CRUDObject.Properties.variable1).in(table: CRUDObject.name).asOrder(by: .Descending)).allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.order(by: (CRUDObject.Properties.variable1).in(table: CRUDObject.name).asOrder(by: .Descending)).allMultiObjects(), whenFailed: [[String:TableDecodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
@@ -164,7 +164,7 @@ class MultiSelectTests: CRUDTestCase {
     
     func testLimitedSelect() {
         //When
-        let results = WCDBAssertNoThrowReturned(try multiSelect.limit(1).allMultiObjects(), whenFailed: [[String:TableCodableBase]]())
+        let results = WCDBAssertNoThrowReturned(try multiSelect.limit(1).allMultiObjects(), whenFailed: [[String:TableDecodableBase]]())
         let baseResults = results as? [[String:CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
