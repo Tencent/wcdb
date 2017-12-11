@@ -20,12 +20,14 @@
 
 import Foundation
 
+//FIXME: Find a better way to get variable type and remove this
+public protocol CanBeInitialized {
+    init()
+}
+
 public protocol TableCodableBase {}
 
-public protocol TableEncodableBase: Encodable, TableCodableBase {
-    //FIXME: Find a better way to get variable type and remove this
-    init()
-} 
+public protocol TableEncodableBase: Encodable, TableCodableBase, CanBeInitialized {} 
 
 public protocol TableEncodable: TableEncodableBase where CodingKeys.Root == Self {
     associatedtype CodingKeys: CodingTableKey

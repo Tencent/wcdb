@@ -58,6 +58,9 @@ extension ColumnDecodable {
     public static var columnType: ColumnType {
         return FundamentalType.columnType
     }
+    public var columnType: ColumnType {
+        return FundamentalType.columnType
+    }
     public init?(with value: FundamentalColumnType) {
         guard let typedValue = value as? FundamentalType else {
             return nil
@@ -69,6 +72,9 @@ extension ColumnDecodable {
 public protocol ColumnCodable: ColumnEncodable, ColumnDecodable {}
 extension ColumnCodable {
     public static var columnType: ColumnType {
+        return FundamentalType.columnType
+    }
+    public var columnType: ColumnType {
         return FundamentalType.columnType
     }
 }

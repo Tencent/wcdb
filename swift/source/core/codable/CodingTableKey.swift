@@ -21,7 +21,6 @@
 import Foundation
 
 public protocol CodingTableKeyBase: CodingKey {
-    static var root: TableCodableBase.Type {get}
     var rootType: TableCodableBase.Type {get}
 }
 
@@ -39,9 +38,6 @@ public protocol CodingTableKey: CodingTableKeyBase, Hashable, PropertyConvertibl
 }
 
 extension CodingTableKey {
-    public static var root: TableCodableBase.Type {
-        return Root.self
-    }
     public var rootType: TableCodableBase.Type {
         return Root.self
     }
