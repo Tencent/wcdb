@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementRelease: Statement {
-    public init() {
-        super.init(with: .release)
+public final class StatementRelease: Statement {
+    public override var statementType: Statement.StatementType {
+        return .release
     }
 
     @discardableResult

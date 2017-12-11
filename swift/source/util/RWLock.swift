@@ -20,7 +20,7 @@
 
 import Foundation
 
-class RWLock {
+final class RWLock {
     var mutex = pthread_mutex_t()
     var cond = pthread_cond_t()
     var reader = 0

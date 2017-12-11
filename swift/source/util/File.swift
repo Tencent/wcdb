@@ -20,7 +20,7 @@
 
 import Foundation
 
-class File {
+final class File {
     static func remove(files: String...) throws {
         try File.remove(files: files)
     }

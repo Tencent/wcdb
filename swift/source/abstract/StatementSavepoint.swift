@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementSavepoint: Statement {
-    public init() {
-        super.init(with: .savepoint)
+public final class StatementSavepoint: Statement {
+    public override var statementType: Statement.StatementType {
+        return .savepoint
     }
 
     @discardableResult

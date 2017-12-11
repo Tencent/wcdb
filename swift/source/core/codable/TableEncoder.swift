@@ -20,8 +20,8 @@
 
 import Foundation
 
-class TableEncoder: Encoder {
-    private class KeyedEncodingTableContainer<CodingTableKeyType: CodingKey>: KeyedEncodingContainerProtocol {
+final class TableEncoder: Encoder {
+    private final class KeyedEncodingTableContainer<CodingTableKeyType: CodingKey>: KeyedEncodingContainerProtocol {
         typealias Key = CodingTableKeyType
 
         let codingPath: [CodingKey] = []

@@ -20,17 +20,19 @@
 
 import Foundation
 
-public class ModuleArgument: Describable {
+public final class ModuleArgument: Describable {
+    public private(set) var description: String
+
     public init(with tableConstraint: TableConstraint) {
-        super.init(tableConstraint.description)
+        description = tableConstraint.description
     }
 
     public init(with columnDef: ColumnDef) {
-        super.init(columnDef.description)
+        description = columnDef.description
     }
 
     public init(left: String, right: String) {
-        super.init("\(left)=\(right)")
+        description = "\(left)=\(right)"
     }
 
     public convenience init(with tokenize: Tokenize) {

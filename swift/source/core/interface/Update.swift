@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Update: CoreRepresentable {
+public final class Update: CoreRepresentable {
     var core: Core
     private let statement = StatementUpdate()
     private let keys: [CodingTableKeyBase]

@@ -20,11 +20,11 @@
 
 import Foundation
 
-public class AppleTokenizerInfo: TokenizerInfoBase {
+public final class AppleTokenizerInfo: TokenizerInfoBase {
     public required init(withArgc argc: Int32, andArgv argv: UnsafePointer<UnsafePointer<Int8>?>?) {}
 }
 
-public class AppleCursorInfo: CursorInfoBase {
+public final class AppleCursorInfo: CursorInfoBase {
     let input: String
     let tokenizer: CFStringTokenizer
     var offset: Int32 = 0
@@ -87,7 +87,7 @@ public class AppleCursorInfo: CursorInfoBase {
     }
 }
 
-public class AppleModule: Module {
+public final class AppleModule: Module {
     public typealias TokenizerInfo = AppleTokenizerInfo
     public typealias CursorInfo = AppleCursorInfo
     public static let name = "Apple"

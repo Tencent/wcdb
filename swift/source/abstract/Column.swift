@@ -20,21 +20,18 @@
 
 import Foundation
 
-public class Column: Describable {
+public final class Column: Describable {
+    public private(set) var description: String
 
     public static let any: Column = Column(named: "*")
     public static let rowid: Column = Column(named: "rowid")
 
     public init(named name: String) {
-        super.init(name)
-    }
-
-    public var name: String {
-        return description
+        description = name
     }
 
     public func `in`(table: String) -> Column {
-        return Column(named: table + "." + self.name)
+        return Column(named: "\(table).\(description)")
     }
 }
 

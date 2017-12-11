@@ -30,17 +30,18 @@ public protocol PropertyConvertible: ColumnConvertible, PropertyRedirectable {
 
 public typealias PropertyOperable = PropertyConvertible & ExpressionOperable
 
-public class Property: Describable {
+public final class Property: Describable {
+    public private(set) var description: String
     public private(set) var codingTableKey: CodingTableKeyBase
 
     public init(named name: String, with codingTableKey: CodingTableKeyBase) {
         self.codingTableKey = codingTableKey
-        super.init(name)
+        self.description = name
     }
 
     public init(with codingTableKey: CodingTableKeyBase) {
         self.codingTableKey = codingTableKey
-        super.init(codingTableKey.stringValue)
+        self.description = codingTableKey.stringValue
     }
 
     public var name: String {

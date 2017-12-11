@@ -22,7 +22,7 @@ import Foundation
 
 public typealias Tag = Int
 
-public class Handle {
+public final class Handle {
     private var handle: SQLite3?
 
     public let path: String

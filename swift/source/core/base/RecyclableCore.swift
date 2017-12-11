@@ -22,7 +22,7 @@ import Foundation
 
 typealias RecyclableHandlePool = Recyclable<HandlePool>
 
-class RecyclableHandleStatement: Recyclable<HandleStatement> {
+final class RecyclableHandleStatement: Recyclable<HandleStatement> {
     private let recyclableHandle: RecyclableHandle
 
     init(recyclableHandle: RecyclableHandle,

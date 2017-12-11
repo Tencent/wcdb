@@ -20,10 +20,4 @@
 
 import Foundation
 
-public class Describable: CustomStringConvertible {
-    public internal(set) var description: String
-
-    init(_ description: String) {
-        self.description = description
-    }
-}
+public typealias Describable = CustomStringConvertible

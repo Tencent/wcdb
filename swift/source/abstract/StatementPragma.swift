@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementPragma: Statement {
-    public init() {
-        super.init(with: .pragma)
+public final class StatementPragma: Statement {
+    public override var statementType: Statement.StatementType {
+        return .pragma
     }
 
     @discardableResult

@@ -19,7 +19,7 @@
  */
 
 import Foundation
-public class HandleStatement {
+public final class HandleStatement {
     private var stmt: SQLite3Statement?
 
     private let handle: Handle

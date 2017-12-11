@@ -28,7 +28,6 @@
 		230209901FBED533000D69B6 /* HandlePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209691FBED533000D69B6 /* HandlePool.swift */; };
 		230209921FBED533000D69B6 /* RecyclableCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096B1FBED533000D69B6 /* RecyclableCore.swift */; };
 		230209931FBED533000D69B6 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096C1FBED533000D69B6 /* Transaction.swift */; };
-		230209941FBED533000D69B6 /* AnyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096E1FBED533000D69B6 /* AnyBinding.swift */; };
 		230209951FBED533000D69B6 /* ColumnConstraintBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302096F1FBED533000D69B6 /* ColumnConstraintBinding.swift */; };
 		230209961FBED533000D69B6 /* TableConstraintBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209701FBED533000D69B6 /* TableConstraintBinding.swift */; };
 		230209971FBED533000D69B6 /* IndexBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209711FBED533000D69B6 /* IndexBinding.swift */; };
@@ -176,7 +175,6 @@
 		230209691FBED533000D69B6 /* HandlePool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlePool.swift; sourceTree = "<group>"; };
 		2302096B1FBED533000D69B6 /* RecyclableCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecyclableCore.swift; sourceTree = "<group>"; };
 		2302096C1FBED533000D69B6 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
-		2302096E1FBED533000D69B6 /* AnyBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyBinding.swift; sourceTree = "<group>"; };
 		2302096F1FBED533000D69B6 /* ColumnConstraintBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnConstraintBinding.swift; sourceTree = "<group>"; };
 		230209701FBED533000D69B6 /* TableConstraintBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableConstraintBinding.swift; sourceTree = "<group>"; };
 		230209711FBED533000D69B6 /* IndexBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexBinding.swift; sourceTree = "<group>"; };
@@ -337,7 +335,6 @@
 			isa = PBXGroup;
 			children = (
 				231BC02A1FC29A3B00011C69 /* Property.swift */,
-				2302096E1FBED533000D69B6 /* AnyBinding.swift */,
 				2302096F1FBED533000D69B6 /* ColumnConstraintBinding.swift */,
 				230209701FBED533000D69B6 /* TableConstraintBinding.swift */,
 				230209711FBED533000D69B6 /* IndexBinding.swift */,
@@ -577,11 +574,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 238D0B0B1FAB1F4300BC2659 /* Build configuration list for PBXNativeTarget "WCDB.swift" */;
 			buildPhases = (
+				23A6BC021FDE39D700ECA068 /* Swiftlint */,
 				238D0AFE1FAB1F4300BC2659 /* Sources */,
 				238D0AFF1FAB1F4300BC2659 /* Frameworks */,
 				238D0B001FAB1F4300BC2659 /* Headers */,
 				238D0B011FAB1F4300BC2659 /* Resources */,
-				23A6BC021FDE39D700ECA068 /* Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -685,7 +682,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\n#    swiftlint --path ../tools/xctemplate \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint autocorrect --path ../tools/xctemplate\n    swiftlint\n#    swiftlint --path ../tools/xctemplate \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -709,7 +706,6 @@
 				2310C60B1FCC23520030F3D3 /* Declare.swift in Sources */,
 				230209971FBED533000D69B6 /* IndexBinding.swift in Sources */,
 				230209A61FBED533000D69B6 /* Insert.swift in Sources */,
-				230209941FBED533000D69B6 /* AnyBinding.swift in Sources */,
 				23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */,
 				23E9D3161FC7CE9F00F55299 /* sqliterk_column.c in Sources */,
 				230209C21FBEE431000D69B6 /* Optional.swift in Sources */,

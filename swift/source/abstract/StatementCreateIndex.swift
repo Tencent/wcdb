@@ -20,9 +20,9 @@
 
 import Foundation
 
-public class StatementCreateIndex: Statement {
-    public init() {
-        super.init(with: .createIndex)
+public final class StatementCreateIndex: Statement {
+    public override var statementType: Statement.StatementType {
+        return .createIndex
     }
 
     @discardableResult

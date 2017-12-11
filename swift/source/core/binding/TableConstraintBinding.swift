@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class TableConstraintBinding: AnyBinding {
+public class TableConstraintBinding {
     public typealias Name = String
 
     let conflict: Conflict?
@@ -39,7 +39,6 @@ public class TableConstraintBinding: AnyBinding {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
         self.conflict = conflict
         self.condition = condition
-        super.init(with: .tableConstraint)
     }
 
     func generateConstraint(withName name: String) -> TableConstraint {
@@ -47,7 +46,7 @@ public class TableConstraintBinding: AnyBinding {
     }
 }
 
-public class MultiPrimaryBinding: TableConstraintBinding {
+public final class MultiPrimaryBinding: TableConstraintBinding {
     override func generateConstraint(withName name: String) -> TableConstraint {
         var tableConstraint = TableConstraint(named: name).makePrimary(indexesBy: columnIndexes)
         if conflict != nil {
@@ -60,7 +59,7 @@ public class MultiPrimaryBinding: TableConstraintBinding {
     }
 }
 
-public class MultiUniqueBinding: TableConstraintBinding {
+public final class MultiUniqueBinding: TableConstraintBinding {
     override func generateConstraint(withName name: String) -> TableConstraint {
         var tableConstraint = TableConstraint(named: name).makeUnique(indexesBy: columnIndexes)
         if conflict != nil {

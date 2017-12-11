@@ -20,33 +20,35 @@
 
 import Foundation
 public final class LiteralValue: Describable {
+    public private(set) var description: String
+
     public init(_ value: Int32) {
-        super.init(String(value))
+        description = String(value)
     }
 
     public init(_ value: Int64) {
-        super.init(String(value))
+        description = String(value)
     }
 
     public init(_ value: Bool) {
-        super.init(String(value))
+        description = String(value)
     }
 
     public init(_ value: Double) {
-        super.init(String(value))
+        description = String(value)
     }
 
-    public override init(_ value: String) {
-        super.init("'\(value.replacingOccurrences(of: "'", with: "''"))'")
+    public init(_ value: String) {
+        description = "'\(value.replacingOccurrences(of: "'", with: "''"))'"
     }
 
     public init(_ value: Data) {
         let string = String(data: value, encoding: .utf8) ?? ""
-        super.init("'\(string.replacingOccurrences(of: "'", with: "''"))'")
+        description = "'\(string.replacingOccurrences(of: "'", with: "''"))'"
     }
 
     public init(_ value: Void?) {
-        super.init("NULL")
+        description = "NULL"
     }
 
     public convenience init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {

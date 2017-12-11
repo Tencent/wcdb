@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class HandlePool {
+public final class HandlePool {
     typealias Wrap = (handlePool: HandlePool, reference: Int)
 
     private static let spin = Spin()

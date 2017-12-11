@@ -20,7 +20,7 @@
 
 import Foundation
 
-class ConcurrentList<Value> {
+final class ConcurrentList<Value> {
     var values: [Value] = []
     let capacityCap: Int
     let spin = Spin()

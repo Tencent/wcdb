@@ -20,27 +20,22 @@
 
 import Foundation
 
-class Lock {
-    func lock() {
-        Error.abort("")
-    }
-
-    func unlock() {
-        Error.abort("")
-    }
+protocol Lock {
+    func lock()
+    func unlock()
 }
 
-class UnfairLock: Lock {
+final class UnfairLock: Lock {
     var unfairLock = os_unfair_lock_s()
 
-    override func lock() {
+    func lock() {
         guard #available(iOS 10.0, macOS 10.12, *) else {
             Error.abort("")
         }
         os_unfair_lock_lock(&unfairLock)
     }
 
-    override func unlock() {
+    func unlock() {
         guard #available(iOS 10.0, macOS 10.12, *) else {
             Error.abort("")
         }
@@ -48,10 +43,10 @@ class UnfairLock: Lock {
     }
 }
 
-class Mutex: Lock {
+final class Mutex: Lock {
     var mutex = pthread_mutex_t()
 
-    override init() {
+    init() {
         pthread_mutex_init(&mutex, nil)
     }
 
@@ -59,19 +54,19 @@ class Mutex: Lock {
         pthread_mutex_destroy(&mutex)
     }
 
-    override func lock() {
+    func lock() {
         pthread_mutex_lock(&mutex)
     }
 
-    override func unlock() {
+    func unlock() {
         pthread_mutex_unlock(&mutex)
     }
 }
 
-class RecursiveMutex: Lock {
+final class RecursiveMutex: Lock {
     var mutex = pthread_mutex_t()
 
-    override init() {
+    init() {
         var attr = pthread_mutexattr_t()
         pthread_mutexattr_init(&attr)
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE)
@@ -82,20 +77,20 @@ class RecursiveMutex: Lock {
         pthread_mutex_destroy(&mutex)
     }
 
-    override func lock() {
+    func lock() {
         pthread_mutex_lock(&mutex)
     }
 
-    override func unlock() {
+    func unlock() {
         pthread_mutex_unlock(&mutex)
     }
 }
 
-class Spin: Lock {
+final class Spin: Lock {
     let unfair: UnfairLock?
     let mutex: Mutex?
 
-    override init() {
+    init() {
         if #available(iOS 10.0, macOS 10.12, *) {
             mutex = nil
             unfair = UnfairLock()
@@ -105,7 +100,7 @@ class Spin: Lock {
         }
     }
 
-    override func lock() {
+    func lock() {
         if #available(iOS 10.0, macOS 10.12, *) {
             unfair!.lock()
         } else {
@@ -113,7 +108,7 @@ class Spin: Lock {
         }
     }
 
-    override func unlock() {
+    func unlock() {
         if #available(iOS 10.0, macOS 10.12, *) {
             unfair!.unlock()
         } else {
@@ -122,11 +117,11 @@ class Spin: Lock {
     }
 }
 
-class ConditionLock: Lock {
+final class ConditionLock: Lock {
     var mutex = pthread_mutex_t()
     var cond = pthread_cond_t()
 
-    override init() {
+    init() {
         pthread_mutex_init(&mutex, nil)
         pthread_cond_init(&cond, nil)
     }
@@ -136,11 +131,11 @@ class ConditionLock: Lock {
         pthread_mutex_destroy(&mutex)
     }
 
-    override func lock() {
+    func lock() {
         pthread_mutex_lock(&mutex)
     }
 
-    override func unlock() {
+    func unlock() {
         pthread_mutex_unlock(&mutex)
     }
 

@@ -19,7 +19,7 @@
  */
 
 import Foundation
-public class Insert: CoreRepresentable {
+public final class Insert: CoreRepresentable {
     let core: Core
     private var properties: [PropertyConvertible]?
     private let name: String

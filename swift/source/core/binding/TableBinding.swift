@@ -52,7 +52,7 @@ public class TableBindingBase {
     }
 }
 
-public class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase {
+public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase {
     private let properties: [CodingTableKeyType: Property]
     private let type: CodingTableKeyType.Type
     let allKeys: [CodingTableKeyType] = {

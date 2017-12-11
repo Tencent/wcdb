@@ -20,13 +20,21 @@
 
 import Foundation
 
-public class ColumnIndex: Describable {
+public final class ColumnIndex: Describable {
+    public private(set) var description: String
+
     public init(with columnConvertible: ColumnConvertible, orderBy term: OrderTerm? = nil) {
-        super.init("\(columnConvertible.asColumn().name)\( term != nil ? " \(term!.description)" : "")")
+        description = columnConvertible.asColumn().description
+        if let wrappedTerm = term {
+            description.append(" \(wrappedTerm.description)")
+        }
     }
 
     public init(with expressionConvertible: ExpressionConvertible, orderBy term: OrderTerm? = nil) {
-        super.init("\(expressionConvertible.asExpression().description)\( term != nil ? " \(term!.description)" : "")")
+        description = expressionConvertible.asExpression().description
+        if let wrappedTerm = term {
+            description = " \(wrappedTerm.description)"
+        }
     }
 }
 

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class RowSelect: SelectBase {
+public final class RowSelect: SelectBase {
     init(with core: Core,
          results columnResultConvertibleList: [ColumnResultConvertible],
          tables: [String],

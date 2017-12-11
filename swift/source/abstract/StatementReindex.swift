@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementReindex: Statement {
-    public init() {
-        super.init(with: .reindex)
+public final class StatementReindex: Statement {
+    public override var statementType: Statement.StatementType {
+        return .reindex
     }
 
     @discardableResult

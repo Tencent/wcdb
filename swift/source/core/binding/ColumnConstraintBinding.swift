@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class ColumnConstraintBinding: AnyBinding {
+public final class ColumnConstraintBinding {
     let isPrimary: Bool
     let isAutoIncrement: Bool
     let defaultValue: ColumnDef.DefaultType?
@@ -42,7 +42,6 @@ public class ColumnConstraintBinding: AnyBinding {
         self.defaultValue = defaultValue
         self.term = term
         self.conflict = conflict
-        super.init(with: .columnConstraint)
     }
 
     public convenience init<ColumnEncodableType: ColumnEncodable>(

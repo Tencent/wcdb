@@ -20,7 +20,7 @@
 
 import Foundation
 
-public enum ColumnType: CustomStringConvertible {
+public enum ColumnType: Describable {
     case integer32
     case integer64
     case text

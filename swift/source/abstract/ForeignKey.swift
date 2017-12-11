@@ -20,9 +20,11 @@
 
 import Foundation
 
-public class ForeignKey: Describable {
+public final class ForeignKey: Describable {
+    public private(set) var description: String
+
     public init(withForeignTable table: String, andColumnNames columnNames: [String]) {
-        super.init("REFERENCES \(table)")
+        description = "REFERENCES \(table)"
         if !columnNames.isEmpty {
             description.append("(\(columnNames.joined(separator: ", ")))")
         }
@@ -32,7 +34,7 @@ public class ForeignKey: Describable {
         self.init(withForeignTable: table, andColumnNames: columnNames)
     }
 
-    public enum Action: CustomStringConvertible {
+    public enum Action: Describable {
         case setNull
         case setDefault
         case cascade
@@ -73,7 +75,7 @@ public class ForeignKey: Describable {
         return self
     }
 
-    public enum Deferrable: CustomStringConvertible {
+    public enum Deferrable: Describable {
         case deferred
         case immediate
 

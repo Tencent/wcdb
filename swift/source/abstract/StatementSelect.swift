@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementSelect: Statement {
-    public init() {
-        super.init(with: .select)
+public final class StatementSelect: Statement {
+    public override var statementType: Statement.StatementType {
+        return .select
     }
 
     @discardableResult

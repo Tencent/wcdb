@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementVacuum: Statement {
-    public init() {
-        super.init(with: .vacuum)
+public final class StatementVacuum: Statement {
+    public override var statementType: Statement.StatementType {
+        return .vacuum
     }
 
     @discardableResult

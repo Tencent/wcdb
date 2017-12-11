@@ -20,7 +20,7 @@
 
 import Foundation
 
-class Tracer {
+final class Tracer {
     typealias SQLTracer = (String) -> Void // SQL
     private var sqlTracer: SQLTracer? = nil {
         didSet {

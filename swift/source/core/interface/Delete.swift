@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Delete: CoreRepresentable {
+public final class Delete: CoreRepresentable {
     var core: Core
     private let statement = StatementDelete()
     public var changes: Int = 0

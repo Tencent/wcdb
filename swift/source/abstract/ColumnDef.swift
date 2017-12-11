@@ -20,9 +20,11 @@
 
 import Foundation
 
-public class ColumnDef: Describable {
+public final class ColumnDef: Describable {
+    public private(set) var description: String
+
     public init(with columnConvertible: ColumnConvertible, and optionalType: ColumnType? = nil) {
-        super.init(columnConvertible.asColumn().name)
+        description = columnConvertible.asColumn().description
         if let type = optionalType {
             description.append(" \(type.description)")
         }
@@ -45,7 +47,7 @@ public class ColumnDef: Describable {
         return self
     }
 
-    public enum DefaultType: CustomStringConvertible {
+    public enum DefaultType: Describable {
         case null
         case int32(Int32)
         case int64(Int64)

@@ -19,7 +19,7 @@
  */
 
 import Foundation
-public class IndexBinding: AnyBinding {
+public final class IndexBinding {
     public typealias Subfix = String
 
     let columnIndexes: [ColumnIndex]
@@ -28,7 +28,6 @@ public class IndexBinding: AnyBinding {
     public init(isUnique: Bool = false, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
         self.isUnique = isUnique
-        super.init(with: .index)
     }
 
     public convenience init(isUnique: Bool = false,

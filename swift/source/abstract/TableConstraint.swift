@@ -19,9 +19,11 @@
  */
 
 import Foundation
-public class TableConstraint: Describable {
+public final class TableConstraint: Describable {
+    public private(set) var description: String
+
     public init(named name: String) {
-        super.init("CONSTRAINT \(name)")
+        description = "CONSTRAINT \(name)"
     }
 
     @discardableResult

@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementAttach: Statement {
-    public init() {
-        super.init(with: .attach)
+public final class StatementAttach: Statement {
+    public override var statementType: Statement.StatementType {
+        return .attach
     }
 
     @discardableResult

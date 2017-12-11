@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementUpdate: Statement {
-    public init() {
-        super.init(with: .update)
+public final class StatementUpdate: Statement {
+    public override var statementType: Statement.StatementType {
+        return .update
     }
 
     @discardableResult

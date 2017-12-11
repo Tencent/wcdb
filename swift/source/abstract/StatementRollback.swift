@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementRollback: Statement {
-    public init() {
-        super.init(with: .rollback)
+public final class StatementRollback: Statement {
+    public override var statementType: Statement.StatementType {
+        return .rollback
     }
 
     public func rollback(toSavepoint optionalName: String? = nil) -> StatementRollback {

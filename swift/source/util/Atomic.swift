@@ -19,7 +19,7 @@
  */
 
 import Foundation
-class Atomic<Value> {
+final class Atomic<Value> {
     var raw: Value
     let spin = Spin()
 

@@ -20,8 +20,8 @@
 
 import Foundation
 
-class TableDecoder: Decoder {
-    private class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> : KeyedDecodingContainerProtocol {
+final class TableDecoder: Decoder {
+    private final class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> : KeyedDecodingContainerProtocol {
         typealias Key = CodingTableKeyType
 
         let codingPath: [CodingKey] = []

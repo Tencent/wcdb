@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementCreateVirtualTable: Statement {
-    public init() {
-        super.init(with: .createVirtualTable)
+public final class StatementCreateVirtualTable: Statement {
+    public override var statementType: Statement.StatementType {
+        return .createVirtualTable
     }
 
     @discardableResult

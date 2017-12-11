@@ -19,20 +19,31 @@
  */
 
 import Foundation
-public class StatementTransaction: Statement {
-    public enum TransactionType {
+public final class StatementTransaction: Statement {
+    public override var statementType: Statement.StatementType {
+        return .transaction
+    }
+
+    public enum TransactionType: Describable {
         case begin
         case commit
         case rollback
+
+        public var description: String {
+            switch self {
+            case .begin:
+                return "BEGIN"
+            case .commit:
+                return "COMMIT"
+            case .rollback:
+                return "ROLLBACK"
+            }
+        }
     }
 
     public private(set) var transactionType: TransactionType?
 
-    public init() {
-        super.init(with: .transaction)
-    }
-
-    public enum Mode: CustomStringConvertible {
+    public enum Mode: Describable {
         case defered
         case immediate
         case exclusive
@@ -51,8 +62,8 @@ public class StatementTransaction: Statement {
 
     @discardableResult
     public func begin(_ mode: Mode? = nil) -> StatementTransaction {
-        self.transactionType = .begin
-        description.append("BEGIN")
+        transactionType = .begin
+        description.append(transactionType!.description)
         if mode != nil {
             description.append(" \(mode!.description)")
         }
@@ -61,15 +72,15 @@ public class StatementTransaction: Statement {
 
     @discardableResult
     public func commit() -> StatementTransaction {
-        self.transactionType = .commit
-        description.append("COMMIT")
+        transactionType = .commit
+        description.append(transactionType!.description)
         return self
     }
 
     @discardableResult
     public func rollback() -> StatementTransaction {
-        self.transactionType = .rollback
-        description.append("ROLLBACK")
+        transactionType = .rollback
+        description.append(transactionType!.description)
         return self
     }
 }

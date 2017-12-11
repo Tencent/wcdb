@@ -20,9 +20,11 @@
 
 import Foundation
 
-public class Pragma: Describable {
+public final class Pragma: Describable {
+    public private(set) var description: String
+
     fileprivate init(named name: String) {
-        super.init(name)
+        description = name
     }
 
     public static let applicationId = Pragma(named: "application_id")

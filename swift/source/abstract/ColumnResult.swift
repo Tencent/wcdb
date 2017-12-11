@@ -20,9 +20,11 @@
 
 import Foundation
 
-public class ColumnResult: Describable {
+public final class ColumnResult: Describable {
+    public private(set) var description: String
+
     public init(with expressionConvertible: ExpressionConvertible) {
-        super.init(expressionConvertible.asExpression().description)
+        description = expressionConvertible.asExpression().description
     }
 
     @discardableResult

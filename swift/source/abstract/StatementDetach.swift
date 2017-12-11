@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementDetach: Statement {
-    public init() {
-        super.init(with: .detach)
+public final class StatementDetach: Statement {
+    public override var statementType: Statement.StatementType {
+        return .detach
     }
 
     @discardableResult

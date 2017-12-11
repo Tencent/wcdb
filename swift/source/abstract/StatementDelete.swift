@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementDelete: Statement {
-    public init() {
-        super.init(with: .delete)
+public final class StatementDelete: Statement {
+    public override var statementType: Statement.StatementType {
+        return .delete
     }
 
     @discardableResult

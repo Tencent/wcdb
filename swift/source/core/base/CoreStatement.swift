@@ -19,7 +19,7 @@
  */
 
 import Foundation
-public class CoreStatement: CoreRepresentable {
+public final class CoreStatement: CoreRepresentable {
     let core: Core
     let recyclableHandleStatement: RecyclableHandleStatement
 

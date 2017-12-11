@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Select: SelectBase {
+public final class Select: SelectBase {
     private let keys: [CodingTableKeyBase]
 
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {

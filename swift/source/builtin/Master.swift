@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Master: TableCodable, CustomDebugStringConvertible {
+public final class Master: TableCodable, CustomDebugStringConvertible {
     public static let tableName: String = "sqlite_master"
 
     public var type: String?

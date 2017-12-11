@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementCreateTable: Statement {
-    public init() {
-        super.init(with: .createTable)
+public final class StatementCreateTable: Statement {
+    public override var statementType: Statement.StatementType {
+        return .createTable
     }
 
     @discardableResult

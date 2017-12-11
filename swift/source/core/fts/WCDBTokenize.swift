@@ -20,11 +20,11 @@
 
 import Foundation
 
-public class WCDBTokenizerInfo: TokenizerInfoBase {
+public final class WCDBTokenizerInfo: TokenizerInfoBase {
     public required init(withArgc argc: Int32, andArgv argv: UnsafePointer<UnsafePointer<Int8>?>?) {}
 }
 
-public class WCDBCursorInfo: CursorInfoBase {
+public final class WCDBCursorInfo: CursorInfoBase {
     enum TokenType: UInt {
         case basicMultilingualPlaneLetter = 0x00000001
         case basicMultilingualPlaneDigit = 0x00000002
@@ -303,7 +303,7 @@ public class WCDBCursorInfo: CursorInfoBase {
     }
 }
 
-public class WCDBModule: Module {
+public final class WCDBModule: Module {
     public typealias TokenizerInfo = WCDBTokenizerInfo
     public typealias CursorInfo = WCDBCursorInfo
 

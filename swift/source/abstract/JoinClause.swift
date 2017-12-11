@@ -19,8 +19,10 @@
  */
 
 import Foundation
-public class JoinClause: Describable {
-    public enum JoinClauseType: CustomStringConvertible {
+public final class JoinClause: Describable {
+    public private(set) var description: String
+
+    public enum JoinClauseType: Describable {
         case left
         case leftOuter
         case inner
@@ -40,11 +42,11 @@ public class JoinClause: Describable {
     }
 
     public init() {
-        super.init("")
+        description = ""
     }
 
     public init(withTable table: String) {
-        super.init(table)
+        description = table
     }
 
     @discardableResult

@@ -20,7 +20,7 @@
 
 import Foundation
 
-class ThreadLocal<Value> {
+final class ThreadLocal<Value> {
     private final class Wrapper: RawRepresentable {
         typealias RawValue = Value
         var rawValue: RawValue

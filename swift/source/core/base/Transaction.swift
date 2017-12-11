@@ -19,7 +19,7 @@
  */
 
 import Foundation
-public class Transaction {
+public final class Transaction {
     private let recyclableHandlePool: RecyclableHandlePool
     private let recyclableHandle: RecyclableHandle
     public private(set) var isInTransaction: Bool = false

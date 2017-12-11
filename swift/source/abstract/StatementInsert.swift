@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementInsert: Statement {
-    public init() {
-        super.init(with: .insert)
+public final class StatementInsert: Statement {
+    public override var statementType: Statement.StatementType {
+        return .insert
     }
 
     @discardableResult

@@ -20,8 +20,8 @@
 
 import Foundation
 
-class ColumnTypeEncoder: Encoder {
-    private class KeyedEncodingTypedContainer<CodingsKey: CodingKey>: KeyedEncodingContainerProtocol {
+final class ColumnTypeEncoder: Encoder {
+    private final class KeyedEncodingTypedContainer<CodingsKey: CodingKey>: KeyedEncodingContainerProtocol {
         typealias Key = CodingsKey
 
         let encoder: ColumnTypeEncoder

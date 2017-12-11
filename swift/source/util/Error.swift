@@ -74,7 +74,7 @@ public final class ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringL
     }
 }
 
-public class Error: Swift.Error, CustomStringConvertible {
+public final class Error: Swift.Error, CustomStringConvertible {
     public enum Key: Int, CustomStringConvertible {
         case tag = 1
         case operation = 2

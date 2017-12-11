@@ -23,7 +23,7 @@ import Foundation
 import UIKit
 #endif //WCDB_IOS
 
-public class Database {
+public final class Database {
     private let recyclableHandlePool: RecyclableHandlePool
 
     public convenience init(withPath path: String) {

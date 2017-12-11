@@ -20,9 +20,9 @@
 
 import Foundation
 
-public class StatementAlterTable: Statement {
-    public init() {
-        super.init(with: .alterTable)
+public final class StatementAlterTable: Statement {
+    public override var statementType: Statement.StatementType {
+        return .alterTable
     }
 
     @discardableResult

@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementDropTable: Statement {
-    public init() {
-        super.init(with: .dropTable)
+public final class StatementDropTable: Statement {
+    public override var statementType: Statement.StatementType {
+        return .dropTable
     }
 
     public func drop(table: String, ifExists: Bool = true) -> StatementDropTable {

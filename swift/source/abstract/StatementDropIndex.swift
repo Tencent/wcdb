@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementDropIndex: Statement {
-    public init() {
-        super.init(with: .dropIndex)
+public final class StatementDropIndex: Statement {
+    public override var statementType: Statement.StatementType {
+        return .dropIndex
     }
 
     @discardableResult

@@ -20,7 +20,7 @@
 
 import Foundation
 
-class TimedQueue<Key: Hashable> {
+final class TimedQueue<Key: Hashable> {
     typealias Time = SteadyClock.AbsoluteTime
     typealias Element = (Key, SteadyClock)
     typealias List = [Element]

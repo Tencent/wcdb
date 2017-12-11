@@ -20,7 +20,7 @@
 
 import Foundation
 
-public enum Conflict: CustomStringConvertible {
+public enum Conflict: Describable {
     case rollback
     case abort
     case fail

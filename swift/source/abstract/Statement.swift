@@ -21,6 +21,10 @@
 import Foundation
 
 public class Statement: Describable {
+    public internal(set) var description: String = ""
+
+    public init() {}
+
     public enum StatementType {
         case alterTable
         case createIndex
@@ -44,10 +48,7 @@ public class Statement: Describable {
         case reindex
     }
 
-    public let statementType: StatementType
-
-    public init(with statementType: StatementType) {
-        self.statementType = statementType
-        super.init("")
+    public var statementType: StatementType {
+        Error.abort("")
     }
 }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public enum OrderTerm: CustomStringConvertible {
+public enum OrderTerm: Describable {
     case ascending
     case descending
 

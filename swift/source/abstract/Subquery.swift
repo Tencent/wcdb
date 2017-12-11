@@ -19,17 +19,19 @@
  */
 
 import Foundation
-public class Subquery: Describable {
+public final class Subquery: Describable {
+    public private(set) var description: String
+
     public init(with joinClause: JoinClause) {
-        super.init("(\(joinClause.description))")
+        description = "(\(joinClause.description))"
     }
 
     public init(with statementSelect: StatementSelect) {
-        super.init("(\(statementSelect.description))")
+        description = "(\(statementSelect.description))"
     }
 
     public init(withTable table: String) {
-        super.init(table)
+        description = table
     }
 
     @discardableResult

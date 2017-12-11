@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class MultiSelect: SelectBase {
+public final class MultiSelect: SelectBase {
     private let keys: [CodingTableKeyBase]
 
     init(with core: Core,

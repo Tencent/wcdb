@@ -32,7 +32,7 @@ public class TableBase {
     }
 }
 
-public class Table<Root: TableCodable>: TableBase {
+public final class Table<Root: TableCodable>: TableBase {
     public let `class`: Root.Type
 
     init(withDatabase database: Database, named name: String) {

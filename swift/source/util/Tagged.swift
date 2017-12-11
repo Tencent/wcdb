@@ -20,7 +20,7 @@
 
 import Foundation
 
-class Counter {
+final class Counter {
     static let counter = Atomic<Int>(0)
 
     static func step() -> Int {
@@ -28,7 +28,7 @@ class Counter {
     }
 }
 
-class Tagged<Value>: Equatable {
+final class Tagged<Value>: Equatable {
     let identifier: Int
     let value: Value
 

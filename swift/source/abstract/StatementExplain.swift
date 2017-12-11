@@ -19,9 +19,9 @@
  */
 
 import Foundation
-public class StatementExplain: Statement {
-    public init() {
-        super.init(with: .explain)
+public final class StatementExplain: Statement {
+    public override var statementType: Statement.StatementType {
+        return .explain
     }
 
     @discardableResult

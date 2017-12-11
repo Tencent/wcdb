@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Sequence: TableCodable, CustomDebugStringConvertible {
+public final class Sequence: TableCodable, CustomDebugStringConvertible {
     public static let tableName: String = "sqlite_sequence"
 
     public var name: String?
