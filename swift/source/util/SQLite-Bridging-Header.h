@@ -22,11 +22,11 @@
 #define SQLite_Bridging_h
 
 #ifdef WCDB_COCOAPODS
-#import "sqlite3.h"
 #import "fts3_tokenizer.h"
+#import "sqlite3.h"
 #else //WCDB_COCOAPODS
-#import <sqlcipher/sqlite3.h>
 #import <sqlcipher/fts3_tokenizer.h>
+#import <sqlcipher/sqlite3.h>
 #endif //WCDB_COCOAPODS
 
 struct Tokenizer {
@@ -43,16 +43,16 @@ typedef struct Cursor Cursor;
 
 typedef struct sqlite3_stmt sqlite3_stmt;
 
-int sqlite3_bind_text_transient(sqlite3_stmt*,int,const char*,int);
+int sqlite3_bind_text_transient(sqlite3_stmt *, int, const char *, int);
 
-int sqlite3_bind_blob_transient(sqlite3_stmt*, int, const void*, int n);
+int sqlite3_bind_blob_transient(sqlite3_stmt *, int, const void *, int n);
 
 int sqlite3_config_multithread(void);
 
 int sqlite3_config_memstatus(int);
 
-typedef void(*sqlite3_global_log)(void*,int,const char*);
+typedef void (*sqlite3_global_log)(void *, int, const char *);
 
-int sqlite3_config_log(sqlite3_global_log, void*);
+int sqlite3_config_log(sqlite3_global_log, void *);
 
 #endif /* SQLite_Bridging_h */

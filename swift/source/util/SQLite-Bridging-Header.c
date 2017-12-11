@@ -19,14 +19,18 @@
  */
 
 #include <SQLite-Bridging-Header.h>
+#ifdef WCDB_COCOAPODS
+#include "sqlite3.h"
+#else //WCDB_COCOAPODS
 #include <sqlcipher/sqlite3.h>
+#endif //WCDB_COCOAPODS
 
-int sqlite3_bind_text_transient(sqlite3_stmt* a, int b, const char* c, int d)
+int sqlite3_bind_text_transient(sqlite3_stmt *a, int b, const char *c, int d)
 {
     return sqlite3_bind_text(a, b, c, d, SQLITE_TRANSIENT);
 }
 
-int sqlite3_bind_blob_transient(sqlite3_stmt* a, int b, const void* c, int n)
+int sqlite3_bind_blob_transient(sqlite3_stmt *a, int b, const void *c, int n)
 {
     return sqlite3_bind_blob(a, b, c, n, SQLITE_TRANSIENT);
 }
@@ -41,8 +45,7 @@ int sqlite3_config_memstatus(int a)
     return sqlite3_config(SQLITE_CONFIG_MEMSTATUS, a);
 }
 
-int sqlite3_config_log(sqlite3_global_log a, void* b)
+int sqlite3_config_log(sqlite3_global_log a, void *b)
 {
     return sqlite3_config(SQLITE_CONFIG_LOG, a, b);
 }
-
