@@ -129,15 +129,14 @@ class MultiSelectTests: CRUDTestCase {
 
         XCTAssertNoThrow(try database.insert(objects: preInsertedMultiSelectObjects, intoTable: MultiSelectObject.name))
 
-        let properties = [
-            (CRUDObject.Properties.variable1).in(table: CRUDObject.name),
-            (CRUDObject.Properties.variable2).in(table: CRUDObject.name),
-            (MultiSelectObject.Properties.variable1).in(table: MultiSelectObject.name),
-            (MultiSelectObject.Properties.variable2).in(table: MultiSelectObject.name)
-        ]
         let tables = [CRUDObject.name, MultiSelectObject.name]
         let optionalMultiSelect = WCDBAssertNoThrowReturned(
-            try database.prepareMultiSelect(on: properties, fromTables: tables),
+            try database.prepareMultiSelect(on:
+                CRUDObject.Properties.variable1.in(table: CRUDObject.name),
+                CRUDObject.Properties.variable2.in(table: CRUDObject.name),
+                MultiSelectObject.Properties.variable1.in(table: MultiSelectObject.name),
+                MultiSelectObject.Properties.variable2.in(table: MultiSelectObject.name),
+                                            fromTables: tables),
             whenFailed: nil)
         XCTAssertNotNil(optionalMultiSelect)
         let property1 = CRUDObject.Properties.variable1.in(table: CRUDObject.name)

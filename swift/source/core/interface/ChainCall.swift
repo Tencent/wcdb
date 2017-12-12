@@ -45,12 +45,12 @@ extension InsertChainCallInterface where Self: Core {
 
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible...,
                               intoTable table: String) throws -> Insert {
-        return try Insert(with: self, named: table, on: propertyConvertibleList, isReplace: false)
+        return try prepareInsert(on: propertyConvertibleList, intoTable: table)
     }
 
     public func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...,
                                        intoTable table: String) throws -> Insert {
-        return try Insert(with: self, named: table, on: propertyConvertibleList, isReplace: true)
+        return try prepareInsertOrReplace(on: propertyConvertibleList, intoTable: table)
     }
 
     public func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
@@ -81,7 +81,7 @@ public protocol UpdateChainCallInterface {
 
 extension UpdateChainCallInterface where Self: Core {
     public func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) throws -> Update {
-        return try Update(with: self, on: propertyConvertibleList, andTable: table)
+        return try prepareUpdate(table: table, on: propertyConvertibleList)
     }
 
     public func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) throws -> Update {
@@ -108,10 +108,10 @@ extension RowSelectChainCallInterface where Self: Core {
     public func prepareRowSelect(on columnResultConvertibleList: ColumnResultConvertible...,
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return try RowSelect(with: self,
-                             results: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
-                             tables: tables,
-                             isDistinct: isDistinct)
+        return try prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
+            [Column.any] : columnResultConvertibleList,
+                                    fromTables: tables,
+                                    isDistinct: isDistinct)
     }
 
     public func prepareRowSelect(on columnResultConvertibleList: [ColumnResultConvertible],
@@ -123,10 +123,10 @@ extension RowSelectChainCallInterface where Self: Core {
     public func prepareRowSelect(on columnResultConvertibleList: ColumnResultConvertible...,
                                  fromTable table: String,
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return try RowSelect(with: self,
-                             results: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
-                             tables: [table],
-                             isDistinct: isDistinct)
+        return try prepareRowSelect(on: columnResultConvertibleList.isEmpty ?
+            [Column.any] : columnResultConvertibleList,
+                                    fromTable: table,
+                                    isDistinct: isDistinct)
     }
 
     public func prepareRowSelect(on columnResultConvertibleList: [ColumnResultConvertible],
@@ -161,7 +161,9 @@ extension SelectChainCallInterface where Self: Core {
     public func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
                               fromTable table: String,
                               isDistinct: Bool = false) throws -> Select {
-        return try Select(with: self, on: propertyConvertibleList, table: table, isDistinct: isDistinct)
+        return try prepareSelect(on: propertyConvertibleList,
+                                 fromTable: table,
+                                 isDistinct: isDistinct)
     }
 
     public func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
@@ -181,7 +183,7 @@ public protocol MultiSelectChainCallInterface {
 extension MultiSelectChainCallInterface where Self: Core {
     public func prepareMultiSelect(on propertyConvertibleList: PropertyConvertible...,
                                    fromTables tables: [String]) throws -> MultiSelect {
-        return try MultiSelect(with: self, on: propertyConvertibleList, tables: tables)
+        return try prepareMultiSelect(on: propertyConvertibleList, fromTables: tables)
     }
 
     public func prepareMultiSelect(on propertyConvertibleList: [PropertyConvertible],

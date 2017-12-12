@@ -145,4 +145,65 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(Int(results[1].int64Value), preInsertedObjects[1].variable1)
     }
 
+    func testRowSelectMultiTables() {
+        //Give
+        let table = CRUDObject.name
+        let table2 = "\(CRUDObject.name)_2"
+        XCTAssertNoThrow(try database.create(table: table2, of: CRUDObject.self))
+
+        let object1 = CRUDObject()
+        object1.variable1 = 1
+        object1.variable2 = "object3"
+        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: table2))
+
+        let column1Table1 = CRUDObject.Properties.variable1.in(table: table)
+        let column1Table2 = CRUDObject.Properties.variable1.in(table: table2)
+        let column2Table1 = CRUDObject.Properties.variable2.in(table: table)
+        let column2Table2 = CRUDObject.Properties.variable2.in(table: table2)
+        //When
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try database.prepareRowSelect(on: column2Table1, column2Table2,
+                                          fromTables: [table, table2])
+                .where(column1Table1 == column1Table2),
+            whenFailed: nil
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        let rowSelect = optionalRowSelect!
+        let rows = WCDBAssertNoThrowReturned(try rowSelect.allRows())
+        //Then
+        XCTAssertEqual(rows.count, 1)
+        XCTAssertEqual(rows[row: 0, column: 0].stringValue, "object1")
+        XCTAssertEqual(rows[row: 0, column: 1].stringValue, "object3")
+    }
+
+    func testRowSelectAllMultiTables() {
+        //Give
+        let table = CRUDObject.name
+        let table2 = "\(CRUDObject.name)_2"
+        XCTAssertNoThrow(try database.create(table: table2, of: CRUDObject.self))
+
+        let object1 = CRUDObject()
+        object1.variable1 = 1
+        object1.variable2 = "object3"
+        XCTAssertNoThrow(try database.insert(objects: object1, intoTable: table2))
+
+        let column1Table1 = CRUDObject.Properties.variable1.in(table: table)
+        let column1Table2 = CRUDObject.Properties.variable1.in(table: table2)
+        //When
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try database.prepareRowSelect(fromTables: [table, table2])
+                .where(column1Table1 == column1Table2),
+            whenFailed: nil
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        let rowSelect = optionalRowSelect!
+        let rows = WCDBAssertNoThrowReturned(try rowSelect.allRows())
+        //Then
+        XCTAssertEqual(rows.count, 1)
+        XCTAssertEqual(Int(rows[row: 0, column: 0].int32Value), 1)
+        XCTAssertEqual(rows[row: 0, column: 1].stringValue, "object1")
+        XCTAssertEqual(Int(rows[row: 0, column: 2].int32Value), 1)
+        XCTAssertEqual(rows[row: 0, column: 3].stringValue, "object3")
+    }
+
 }
