@@ -67,7 +67,7 @@ class SelectInterfaceTests: CRUDTestCase {
         XCTAssertEqual(results[0], preInsertedObjects.sorted()[1])
     }
 
-    func testHalfSelect() {
+    func testPartialSelect() {
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(
             try database.getObjects(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name),
             whenFailed: [CRUDObject]()
@@ -154,7 +154,7 @@ class SelectInterfaceTests: CRUDTestCase {
         XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[1].variable2)
     }
 
-    func testHalfRowSelect() {
+    func testPartialRowSelect() {
         //When
         let results: FundamentalRowXColumn = WCDBAssertNoThrowReturned(
             try database.getRows(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name)

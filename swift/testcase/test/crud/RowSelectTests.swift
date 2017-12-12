@@ -94,7 +94,7 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[1].variable2)
     }
 
-    func testHalfRowSelect() {
+    func testPartialRowSelect() {
         //Give
         let optionalRowSelect = WCDBAssertNoThrowReturned(
             try database.prepareRowSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name),

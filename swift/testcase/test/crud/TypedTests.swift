@@ -79,13 +79,14 @@ class TypedTests: CRUDTestCase {
         var uint16: UInt16 = 0
         var uint32: UInt32 = 0
         var uint64: UInt64 = 0
-        var string: String? = ""
+        var string: String = ""
         var float: Float = 0
         var double: Double = 0
-        var data: Data? = Data()
-        var jsonCodable: TypedJSONCodableObject? = TypedJSONCodableObject()
-        var nsCodable: TypedNSCodableObject? = TypedNSCodableObject()
-        var codable: TypedCodableObject? = TypedCodableObject.variable
+        var data: Data = Data()
+        var jsonCodable: TypedJSONCodableObject = TypedJSONCodableObject()
+        var nsCodable: TypedNSCodableObject = TypedNSCodableObject()
+        var codable: TypedCodableObject = TypedCodableObject.variable
+        var bool: Bool = false
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedTestObject
@@ -106,6 +107,7 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case nsCodable
             case codable
+            case bool
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
@@ -130,7 +132,7 @@ class TypedTests: CRUDTestCase {
                 string = String(Array(repeating: "0", count: 1000))
                 float = 0.123456789123456789123456789123456789123456789
                 double = Double.pi
-                data = string!.data(using: .ascii)!
+                data = string.data(using: .ascii)!
                 jsonCodable = {
                     let object = TypedJSONCodableObject()
                     object.variable = Int.max
@@ -142,6 +144,7 @@ class TypedTests: CRUDTestCase {
                     return object
                 }()
                 codable = .variable
+                bool = true
             case .lowerBoundary:
                 int = Int.min
                 int8 = Int8.min
@@ -168,6 +171,7 @@ class TypedTests: CRUDTestCase {
                     return object
                 }()
                 codable = .variable
+                bool = false
             }
         }
 
@@ -189,6 +193,7 @@ class TypedTests: CRUDTestCase {
                 && lhs.jsonCodable == rhs.jsonCodable
                 && lhs.codable == rhs.codable
                 && lhs.nsCodable == rhs.nsCodable
+                && lhs.bool == rhs.bool
         }
         var debugDescription: String {
             return """
@@ -204,11 +209,12 @@ class TypedTests: CRUDTestCase {
             uint64: \(uint64)
             float: \(float)
             double: \(double)
-            string: \(string ?? "")
+            string: \(string)
             data: \(String(describing: data))
             jsonCodable: \(String(describing: jsonCodable))
             nsCodable: \(String(describing: nsCodable))
             codable: \(String(describing: codable))
+            bool: \(String(describing: bool))
             """
         }
     }
@@ -239,6 +245,434 @@ class TypedTests: CRUDTestCase {
         //Then
         XCTAssertNotNil(selected)
         XCTAssertEqual(selected!, object)
+    }
+
+    func testPartial() {
+        //Give
+        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
+        let object = TypedTestObject(with: .lowerBoundary)
+        XCTAssertNoThrow(try database.insert(objects: object, intoTable: TypedTestObject.name))
+        let table = WCDBAssertNoThrowReturned(try database.getTable(named: TypedTestObject.name,
+                                                                    of: TypedTestObject.self))
+        XCTAssertNotNil(table)
+        let wrappedTable = table!
+        //Then
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.codable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.bool]))
+        XCTAssertThrowsError(try wrappedTable.getObject(on: [
+            TypedTestObject.Properties.int,
+            TypedTestObject.Properties.int8,
+            TypedTestObject.Properties.int16,
+            TypedTestObject.Properties.int32,
+            TypedTestObject.Properties.int64,
+            TypedTestObject.Properties.uint,
+            TypedTestObject.Properties.uint8,
+            TypedTestObject.Properties.uint16,
+            TypedTestObject.Properties.uint32,
+            TypedTestObject.Properties.uint64,
+            TypedTestObject.Properties.string,
+            TypedTestObject.Properties.float,
+            TypedTestObject.Properties.double,
+            TypedTestObject.Properties.data,
+            TypedTestObject.Properties.jsonCodable,
+            TypedTestObject.Properties.nsCodable,
+            TypedTestObject.Properties.codable]))
+    }
+
+    class TypedNonOverflowTestObject: TableCodable, Named, Equatable, CustomDebugStringConvertible {
+        var int: Int = 0
+        var int8: Int8 = 0
+        var int16: Int16 = 0
+        var int32: Int32 = 0
+        var int64: Int64 = 0
+        var uint: UInt = 0
+        var uint8: UInt8 = 0
+        var uint16: UInt16 = 0
+        var uint32: UInt32 = 0
+        var uint64: UInt64 = 0
+        var string: String? = ""
+        var float: Float = 0
+        var double: Double = 0
+        var data: Data? = Data()
+        var jsonCodable: TypedJSONCodableObject? = TypedJSONCodableObject()
+        var nsCodable: TypedNSCodableObject? = TypedNSCodableObject()
+        var codable: TypedCodableObject? = TypedCodableObject.variable
+        var bool: Bool? = false
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = TypedNonOverflowTestObject
+            case int
+            case int8
+            case int16
+            case int32
+            case int64
+            case uint
+            case uint8
+            case uint16
+            case uint32
+            case uint64
+            case string
+            case float
+            case double
+            case data
+            case jsonCodable
+            case nsCodable
+            case codable
+            case bool
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+
+        enum TestType {
+            case upperBoundary
+            case lowerBoundary
+        }
+
+        static func == (lhs: TypedNonOverflowTestObject, rhs: TypedNonOverflowTestObject) -> Bool {
+            return lhs.int == rhs.int
+                && lhs.int8 == rhs.int8
+                && lhs.int16 == rhs.int16
+                && lhs.int32 == rhs.int32
+                && lhs.int64 == rhs.int64
+                && lhs.uint == rhs.uint
+                && lhs.uint8 == rhs.uint8
+                && lhs.uint16 == rhs.uint16
+                && lhs.uint32 == rhs.uint32
+                && lhs.uint64 == rhs.uint64
+                && lhs.string == rhs.string
+                && lhs.data == rhs.data
+                && lhs.float == rhs.float
+                && lhs.double == rhs.double
+                && lhs.jsonCodable == rhs.jsonCodable
+                && lhs.codable == rhs.codable
+                && lhs.nsCodable == rhs.nsCodable
+                && lhs.bool == rhs.bool
+        }
+        var debugDescription: String {
+            return """
+            int: \(int)
+            int8: \(int8)
+            int16: \(int16)
+            int32: \(int32)
+            int64: \(int64)
+            uint: \(uint)
+            uint8: \(uint8)
+            uint16: \(uint16)
+            uint32: \(uint32)
+            uint64: \(uint64)
+            float: \(float)
+            double: \(double)
+            string: \(string ?? "")
+            data: \(String(describing: data))
+            jsonCodable: \(String(describing: jsonCodable))
+            nsCodable: \(String(describing: nsCodable))
+            codable: \(String(describing: codable))
+            bool: \(String(describing: bool))
+            """
+        }
     }
 
     class TypedOverflowTestObject: TableCodable, CustomDebugStringConvertible {
@@ -297,12 +731,13 @@ class TypedTests: CRUDTestCase {
 
     func testOverflowed() {
         //Give
-        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
+        XCTAssertNoThrow(try database.create(table: TypedNonOverflowTestObject.name,
+                                             of: TypedNonOverflowTestObject.self))
         let overflow = TypedOverflowTestObject()
-        XCTAssertNoThrow(try database.insert(objects: overflow, intoTable: TypedTestObject.name))
+        XCTAssertNoThrow(try database.insert(objects: overflow, intoTable: TypedNonOverflowTestObject.name))
         //When
-        let selected: TypedTestObject? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: TypedTestObject.name)
+        let selected: TypedNonOverflowTestObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: TypedNonOverflowTestObject.name)
         )
         //Then
         XCTAssertNotNil(selected)
@@ -339,6 +774,7 @@ class TypedTests: CRUDTestCase {
         var jsonCodable: TypedJSONCodableObject?
         var nsCodable: TypedNSCodableObject?
         var codable: TypedCodableObject?
+        var bool: Bool?
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OptionalTypedTestObject
@@ -359,12 +795,14 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case nsCodable
             case codable
+            case bool
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
         enum TestType {
             case null
             case zero
+            case normal
         }
 
         init(with testType: TestType) {
@@ -387,6 +825,7 @@ class TypedTests: CRUDTestCase {
                 jsonCodable = nil
                 nsCodable = nil
                 codable = nil
+                bool = nil
             case .zero:
                 int = 0
                 int8 = 0
@@ -413,6 +852,34 @@ class TypedTests: CRUDTestCase {
                     return object
                 }()
                 codable = .variable
+                bool = false
+            case .normal:
+                int = 1
+                int8 = 2
+                int16 = 3
+                int32 = 4
+                int64 = 5
+                uint = 6
+                uint8 = 7
+                uint16 = 8
+                uint32 = 9
+                uint64 = 10
+                string = "11"
+                float = 12.13
+                double = 14.15
+                data = "16".data(using: .ascii)
+                jsonCodable = {
+                    let object = TypedJSONCodableObject()
+                    object.variable = 17
+                    return object
+                }()
+                nsCodable = {
+                    var object = TypedNSCodableObject()
+                    object.variable = 018
+                    return object
+                }()
+                codable = .variable
+                bool = true
             }
         }
 
@@ -434,6 +901,7 @@ class TypedTests: CRUDTestCase {
                 && lhs.jsonCodable == rhs.jsonCodable
                 && lhs.codable == rhs.codable
                 && lhs.nsCodable == rhs.nsCodable
+                && lhs.bool == rhs.bool
         }
         var debugDescription: String {
             return """
@@ -454,6 +922,7 @@ class TypedTests: CRUDTestCase {
             jsonCodable: \(String(describing: jsonCodable))
             nsCodable: \(String(describing: nsCodable))
             codable: \(String(describing: codable))
+            bool: \(String(describing: bool))
             """
         }
     }
@@ -485,4 +954,67 @@ class TypedTests: CRUDTestCase {
         XCTAssertNotNil(selected)
         XCTAssertEqual(selected!, object)
     }
+
+    func testPartialNil() {
+        //Give
+        XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
+        let object = OptionalTypedTestObject(with: .normal)
+        XCTAssertNoThrow(try database.insert(objects: object, intoTable: OptionalTypedTestObject.name))
+        let table = WCDBAssertNoThrowReturned(try database.getTable(named: OptionalTypedTestObject.name,
+                                                                    of: OptionalTypedTestObject.self))
+        XCTAssertNotNil(table)
+        let wrappedTable = table!
+        //Then
+        do {
+            do {
+                let result = try wrappedTable.getObject(on: OptionalTypedTestObject.Properties.int)
+                XCTAssertNotNil(object)
+                let wrappedResult = result!
+                XCTAssertEqual(wrappedResult.int, object.int)
+                XCTAssertNil(wrappedResult.int8)
+                XCTAssertNil(wrappedResult.int16)
+                XCTAssertNil(wrappedResult.int32)
+                XCTAssertNil(wrappedResult.int64)
+                XCTAssertNil(wrappedResult.uint)
+                XCTAssertNil(wrappedResult.uint8)
+                XCTAssertNil(wrappedResult.uint16)
+                XCTAssertNil(wrappedResult.uint32)
+                XCTAssertNil(wrappedResult.uint64)
+                XCTAssertNil(wrappedResult.string)
+                XCTAssertNil(wrappedResult.float)
+                XCTAssertNil(wrappedResult.double)
+                XCTAssertNil(wrappedResult.data)
+                XCTAssertNil(wrappedResult.jsonCodable)
+                XCTAssertNil(wrappedResult.nsCodable)
+                XCTAssertNil(wrappedResult.codable)
+                XCTAssertNil(wrappedResult.bool)
+            }
+            do {
+                let result = try wrappedTable.getObject(on: OptionalTypedTestObject.Properties.int8)
+                XCTAssertNotNil(object)
+                let wrappedResult = result!
+                XCTAssertEqual(wrappedResult.int8, object.int8)
+                XCTAssertNil(wrappedResult.int)
+                XCTAssertNil(wrappedResult.int16)
+                XCTAssertNil(wrappedResult.int32)
+                XCTAssertNil(wrappedResult.int64)
+                XCTAssertNil(wrappedResult.uint)
+                XCTAssertNil(wrappedResult.uint8)
+                XCTAssertNil(wrappedResult.uint16)
+                XCTAssertNil(wrappedResult.uint32)
+                XCTAssertNil(wrappedResult.uint64)
+                XCTAssertNil(wrappedResult.string)
+                XCTAssertNil(wrappedResult.float)
+                XCTAssertNil(wrappedResult.double)
+                XCTAssertNil(wrappedResult.data)
+                XCTAssertNil(wrappedResult.jsonCodable)
+                XCTAssertNil(wrappedResult.nsCodable)
+                XCTAssertNil(wrappedResult.codable)
+                XCTAssertNil(wrappedResult.bool)
+            }
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
 }

@@ -63,7 +63,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? false
         }
@@ -73,7 +74,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
@@ -83,7 +85,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
@@ -93,7 +96,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
@@ -103,7 +107,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
@@ -135,7 +140,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }
@@ -145,7 +151,8 @@ final class TableDecoder: Decoder {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
-                                       code: .misuse, message: "")
+                                       code: .misuse,
+                                       message: "")
             }
             return coreStatement.value(atIndex: index) ?? 0
         }

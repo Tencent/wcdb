@@ -75,7 +75,7 @@ class InsertInterfaceTests: CRUDTestCase {
         XCTAssertEqual(result!.variable2, self.name)
     }
 
-    func testHalfInsert() {
+    func testPartialInsert() {
         //Give
         let object = CRUDObject()
         object.variable1 = preInsertedObjects.count + 1

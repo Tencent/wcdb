@@ -82,7 +82,7 @@ class SelectTests: CRUDTestCase {
         XCTAssertEqual(results[0], preInsertedObjects.sorted()[1])
     }
 
-    func testHalfSelect() {
+    func testPartialSelect() {
         let optionalSelect = WCDBAssertNoThrowReturned(
             try database.prepareSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name),
             whenFailed: nil
