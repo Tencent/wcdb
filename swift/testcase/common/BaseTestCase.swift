@@ -40,6 +40,8 @@ class BaseTestCase: XCTestCase, Named {
         return url
     }()
 
+    lazy var recommendTag: Tag = recommendedPath.hashValue
+
     let fileManager = FileManager.default
 
     override func setUp() {

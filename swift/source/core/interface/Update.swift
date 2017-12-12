@@ -25,6 +25,12 @@ public final class Update: CoreRepresentable {
     private let statement = StatementUpdate()
     private let keys: [CodingTableKeyBase]
     public var changes: Int = Int.max
+    public var tag: Tag? {
+        return core.tag
+    }
+    public var path: String {
+        return core.path
+    }
 
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
         guard propertyConvertibleList.count > 0 else {

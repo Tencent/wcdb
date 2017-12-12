@@ -24,6 +24,12 @@ public class SelectBase: CoreRepresentable {
     var core: Core
     let statement: StatementSelect = StatementSelect()
     private var optionalCoreStatement: CoreStatement?
+    public var tag: Tag? {
+        return core.tag
+    }
+    public var path: String {
+        return core.path
+    }
 
     init(with core: Core) {
         self.core = core

@@ -36,6 +36,11 @@ class SelectTests: CRUDTestCase {
         select = optionalSelect!
     }
 
+    func testBase() {
+        XCTAssertEqual(select.tag, database.tag)
+        XCTAssertEqual(select.path, database.path)
+    }
+
     func testSelect() {
         let results: [CRUDObject] = WCDBAssertNoThrowReturned(try select.allObjects(), whenFailed: [CRUDObject]())
         XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())

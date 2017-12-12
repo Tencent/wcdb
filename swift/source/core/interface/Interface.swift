@@ -400,7 +400,7 @@ extension RowSelectInterface where Self: Core {
                             where: condition,
                             orderBy: orderList,
                             limit: 1,
-                            offset: offset).first?.first) ?? nil
+                            offset: offset).first?.first) ?? FundamentalValue(nil)
     }
 
     public func getDistinctValue(on result: ColumnResultConvertible,
@@ -409,7 +409,7 @@ extension RowSelectInterface where Self: Core {
                                  orderBy orderList: [OrderBy]? = nil,
                                  limit: Limit? = nil,
                                  offset: Offset? = nil) throws -> FundamentalValue {
-        return (try getDistinctColumn(on: result, fromTable: table).first) ?? nil
+        return (try getDistinctColumn(on: result, fromTable: table).first) ?? FundamentalValue(nil)
     }
 }
 

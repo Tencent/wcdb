@@ -21,25 +21,7 @@
 import XCTest
 import WCDBSwift
 
-class InsertTests: CRUDTestCase {
-
-    var insert: Insert!
-
-    override func setUp() {
-        super.setUp()
-
-        let optionalInsert = WCDBAssertNoThrowReturned(
-            try database.prepareInsert(of: CRUDObject.self, intoTable: CRUDObject.name),
-            whenFailed: nil
-        )
-        XCTAssertNotNil(optionalInsert)
-        insert = optionalInsert!
-    }
-
-    func testBase() {
-        XCTAssertEqual(insert.tag, database.tag)
-        XCTAssertEqual(insert.path, database.path)
-    }
+class InsertInterfaceTests: CRUDTestCase {
 
     func testInsert() {
         //Give
@@ -47,7 +29,7 @@ class InsertTests: CRUDTestCase {
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try insert.execute(with: object))
+        XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         //Then
         let condition = CRUDObject.Properties.variable1 == object.variable1!
         let result: CRUDObject? = WCDBAssertNoThrowReturned(
@@ -64,10 +46,10 @@ class InsertTests: CRUDTestCase {
         object.isAutoIncrement = true
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try insert.execute(with: object))
+        XCTAssertNoThrow(try database.insert(objects: object, intoTable: CRUDObject.name))
         //Then
-        let condition = CRUDObject.Properties.variable1 == expectedRowID
         XCTAssertEqual(object.lastInsertedRowID, Int64(expectedRowID))
+        let condition = CRUDObject.Properties.variable1 == expectedRowID
         let result: CRUDObject? = WCDBAssertNoThrowReturned(
             try database.getObject(fromTable: CRUDObject.name, where: condition)
         )
@@ -82,14 +64,8 @@ class InsertTests: CRUDTestCase {
         let expectedReplacedRowID = 1
         object.variable1 = expectedReplacedRowID
         object.variable2 = self.name
-        let optionalInsert = WCDBAssertNoThrowReturned(
-            try database.prepareInsertOrReplace(of: CRUDObject.self, intoTable: CRUDObject.name),
-            whenFailed: nil
-        )
-        XCTAssertNotNil(optionalInsert)
-        insert = optionalInsert!
         //When
-        XCTAssertNoThrow(try insert.execute(with: object))
+        XCTAssertNoThrow(try database.insertOrReplace(objects: object, intoTable: CRUDObject.name))
         //Then
         let condition = CRUDObject.Properties.variable1 == expectedReplacedRowID
         let result: CRUDObject? = WCDBAssertNoThrowReturned(
@@ -104,20 +80,57 @@ class InsertTests: CRUDTestCase {
         let object = CRUDObject()
         object.variable1 = preInsertedObjects.count + 1
         object.variable2 = self.name
-        let optionalInsert = WCDBAssertNoThrowReturned(
-            try database.prepareInsertOrReplace(on: CRUDObject.Properties.variable1, intoTable: CRUDObject.name),
-            whenFailed: nil
-        )
-        XCTAssertNotNil(optionalInsert)
-        let insert = optionalInsert!
         //When
-        XCTAssertNoThrow(try insert.execute(with: object))
+        XCTAssertNoThrow(try database.insert(objects: object,
+                                             on: [CRUDObject.Properties.variable1],
+                                             intoTable: CRUDObject.name))
         //Then
-        let condition = CRUDObject.Properties.variable1 == object.variable1!
         let result: CRUDObject? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: CRUDObject.name, where: condition)
+            try database.getObject(fromTable: CRUDObject.name,
+                                   where: CRUDObject.Properties.variable1 == object.variable1!)
         )
         XCTAssertNotNil(result)
         XCTAssertNil(result!.variable2)
     }
+
+    func testTableInsert() {
+        //Give
+        let object = CRUDObject()
+        object.variable1 = preInsertedObjects.count + 1
+        object.variable2 = self.name
+        let table = WCDBAssertNoThrowReturned(
+            try database.getTable(named: CRUDObject.name, of: CRUDObject.self)
+        )
+        XCTAssertNotNil(table)
+        //When
+        XCTAssertNoThrow(try table!.insert(objects: object))
+        //Then
+        let result = WCDBAssertNoThrowReturned(
+            try table!.getObject(where: CRUDObject.Properties.variable1 == object.variable1!)
+        )
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result!, object)
+    }
+
+    func testTableInsertOrReplace() {
+        //Give
+        let object = CRUDObject()
+        let expectedReplacedRowID = 1
+        object.variable1 = expectedReplacedRowID
+        object.variable2 = self.name
+        let table = WCDBAssertNoThrowReturned(
+            try database.getTable(named: CRUDObject.name, of: CRUDObject.self)
+        )
+        XCTAssertNotNil(table)
+        //When
+        XCTAssertNoThrow(try table!.insertOrReplace(objects: object))
+        //Then
+        let condition = CRUDObject.Properties.variable1 == expectedReplacedRowID
+        let result: CRUDObject? = WCDBAssertNoThrowReturned(
+            try table!.getObject(where: condition)
+        )
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result!.variable2, self.name)
+    }
+
 }

@@ -22,6 +22,12 @@ import Foundation
 public final class CoreStatement: CoreRepresentable {
     let core: Core
     let recyclableHandleStatement: RecyclableHandleStatement
+    public var tag: Tag? {
+        return core.tag
+    }
+    public var path: String {
+        return core.path
+    }
 
     init(with core: Core, and recyclableHandleStatement: RecyclableHandleStatement) {
         self.core = core

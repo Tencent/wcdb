@@ -11,6 +11,14 @@
 		2310C6021FCBB5EA0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		2310C6031FCBB5EB0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		2310C6041FCBB5EB0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
+		2345C0E51FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */; };
+		2345C0E61FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */; };
+		2345C0EA1FDFCE1000C1434E /* SelectInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */; };
+		2345C0EB1FDFCE1000C1434E /* SelectInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */; };
+		2345C0ED1FDFD2D000C1434E /* InsertInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */; };
+		2345C0EE1FDFD2D000C1434E /* InsertInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */; };
+		2345C0F01FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */; };
+		2345C0F11FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */; };
 		235169B31FCEE28E00B465DD /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169B21FCEE28E00B465DD /* Convenience.swift */; };
 		235169B41FCEE30B00B465DD /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169B21FCEE28E00B465DD /* Convenience.swift */; };
 		235169B51FCEE30C00B465DD /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169B21FCEE28E00B465DD /* Convenience.swift */; };
@@ -52,7 +60,6 @@
 		23516A7A1FCEE7CF00B465DD /* SubqueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A391FCEE7CF00B465DD /* SubqueryTests.swift */; };
 		23516A7B1FCEE7CF00B465DD /* TableConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A3A1FCEE7CF00B465DD /* TableConstraintTests.swift */; };
 		23516A7C1FCEE7D500B465DD /* AdvanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169FD1FCEE7CF00B465DD /* AdvanceTests.swift */; };
-		23516A7D1FCEE7D500B465DD /* ConvenieceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169FE1FCEE7CF00B465DD /* ConvenieceTests.swift */; };
 		23516A7E1FCEE7D500B465DD /* CRUDObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169FF1FCEE7CF00B465DD /* CRUDObject.swift */; };
 		23516A7F1FCEE7D500B465DD /* CRUDTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A001FCEE7CF00B465DD /* CRUDTestCase.swift */; };
 		23516A801FCEE7D500B465DD /* DeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A011FCEE7CF00B465DD /* DeleteTests.swift */; };
@@ -128,7 +135,6 @@
 		23516C241FD033DB00B465DD /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		23516C251FD033DB00B465DD /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169B21FCEE28E00B465DD /* Convenience.swift */; };
 		23516C261FD033F000B465DD /* AdvanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169FD1FCEE7CF00B465DD /* AdvanceTests.swift */; };
-		23516C271FD033F000B465DD /* ConvenieceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169FE1FCEE7CF00B465DD /* ConvenieceTests.swift */; };
 		23516C281FD033F000B465DD /* CRUDObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235169FF1FCEE7CF00B465DD /* CRUDObject.swift */; };
 		23516C291FD033F000B465DD /* CRUDTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A001FCEE7CF00B465DD /* CRUDTestCase.swift */; };
 		23516C2A1FD033F000B465DD /* DeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23516A011FCEE7CF00B465DD /* DeleteTests.swift */; };
@@ -283,10 +289,13 @@
 
 /* Begin PBXFileReference section */
 		2310C5FB1FCBB5D40030F3D3 /* Assert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
+		2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInterfaceTests.swift; sourceTree = "<group>"; };
+		2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectInterfaceTests.swift; sourceTree = "<group>"; };
+		2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertInterfaceTests.swift; sourceTree = "<group>"; };
+		2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteInterfaceTests.swift; sourceTree = "<group>"; };
 		235169B21FCEE28E00B465DD /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		235169EE1FCEE65F00B465DD /* BaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
 		235169FD1FCEE7CF00B465DD /* AdvanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvanceTests.swift; sourceTree = "<group>"; };
-		235169FE1FCEE7CF00B465DD /* ConvenieceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvenieceTests.swift; sourceTree = "<group>"; };
 		235169FF1FCEE7CF00B465DD /* CRUDObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRUDObject.swift; sourceTree = "<group>"; };
 		23516A001FCEE7CF00B465DD /* CRUDTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRUDTestCase.swift; sourceTree = "<group>"; };
 		23516A011FCEE7CF00B465DD /* DeleteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteTests.swift; sourceTree = "<group>"; };
@@ -478,7 +487,6 @@
 			children = (
 				23C8DFFF1FD7FB1700DAE97D /* TypedTests.swift */,
 				235169FD1FCEE7CF00B465DD /* AdvanceTests.swift */,
-				235169FE1FCEE7CF00B465DD /* ConvenieceTests.swift */,
 				235169FF1FCEE7CF00B465DD /* CRUDObject.swift */,
 				23516A001FCEE7CF00B465DD /* CRUDTestCase.swift */,
 				23516A011FCEE7CF00B465DD /* DeleteTests.swift */,
@@ -489,6 +497,10 @@
 				23516A061FCEE7CF00B465DD /* TableTests.swift */,
 				23516A071FCEE7CF00B465DD /* TransactionTests.swift */,
 				23516A081FCEE7CF00B465DD /* UpdateTests.swift */,
+				2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */,
+				2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */,
+				2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */,
+				2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */,
 			);
 			path = crud;
 			sourceTree = "<group>";
@@ -1080,11 +1092,13 @@
 				23516C2E1FD033F000B465DD /* SelectTests.swift in Sources */,
 				23516C541FD0340100B465DD /* StatementDetachTests.swift in Sources */,
 				23516C281FD033F000B465DD /* CRUDObject.swift in Sources */,
+				2345C0E51FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */,
 				23516C491FD0340100B465DD /* JoinClauseTests.swift in Sources */,
 				23516C311FD033F000B465DD /* UpdateTests.swift in Sources */,
 				23516C511FD0340100B465DD /* StatementCreateTableTests.swift in Sources */,
 				23516C5F1FD0340100B465DD /* StatementTransactionTests.swift in Sources */,
 				23516C601FD0340100B465DD /* StatementUpdateTests.swift in Sources */,
+				2345C0ED1FDFD2D000C1434E /* InsertInterfaceTests.swift in Sources */,
 				23516C521FD0340100B465DD /* StatementCreateVirtualTableTests.swift in Sources */,
 				23516C3C1FD033F900B465DD /* RepairTests.swift in Sources */,
 				23516C4A1FD0340100B465DD /* LiteralValueTests.swift in Sources */,
@@ -1093,8 +1107,10 @@
 				23516C5E1FD0340100B465DD /* StatementSelectTests.swift in Sources */,
 				23516C5A1FD0340100B465DD /* StatementReindexTests.swift in Sources */,
 				23516C341FD033F400B465DD /* IndexBindingTests.swift in Sources */,
+				2345C0F01FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */,
 				23516C611FD0340100B465DD /* StatementVacuumTests.swift in Sources */,
 				23516C2D1FD033F000B465DD /* RowSelectTests.swift in Sources */,
+				2345C0EA1FDFCE1000C1434E /* SelectInterfaceTests.swift in Sources */,
 				23516C4D1FD0340100B465DD /* OrderTests.swift in Sources */,
 				23516C5C1FD0340100B465DD /* StatementRollbackTests.swift in Sources */,
 				23516C2B1FD033F000B465DD /* InsertTests.swift in Sources */,
@@ -1114,7 +1130,6 @@
 				23516C561FD0340100B465DD /* StatementDropTableTests.swift in Sources */,
 				23516C301FD033F000B465DD /* TransactionTests.swift in Sources */,
 				23516C421FD0340100B465DD /* ColumnIndexTests.swift in Sources */,
-				23516C271FD033F000B465DD /* ConvenieceTests.swift in Sources */,
 				23516C481FD0340100B465DD /* ForeignKeyTests.swift in Sources */,
 				23516C651FD0340500B465DD /* Assert.swift in Sources */,
 				23516C261FD033F000B465DD /* AdvanceTests.swift in Sources */,
@@ -1182,16 +1197,19 @@
 				235169B51FCEE30C00B465DD /* Convenience.swift in Sources */,
 				2310C6031FCBB5EB0030F3D3 /* Assert.swift in Sources */,
 				23516A871FCEE7D500B465DD /* UpdateTests.swift in Sources */,
+				2345C0EB1FDFCE1000C1434E /* SelectInterfaceTests.swift in Sources */,
 				23516A851FCEE7D500B465DD /* TableTests.swift in Sources */,
 				23C8E0011FD7FB2E00DAE97D /* TypedTests.swift in Sources */,
-				23516A7D1FCEE7D500B465DD /* ConvenieceTests.swift in Sources */,
 				23516A861FCEE7D500B465DD /* TransactionTests.swift in Sources */,
 				23516A7E1FCEE7D500B465DD /* CRUDObject.swift in Sources */,
 				23516A951FCEE7FE00B465DD /* BaseTestCase.swift in Sources */,
 				23516A821FCEE7D500B465DD /* MultiSelectTests.swift in Sources */,
 				23516A811FCEE7D500B465DD /* InsertTests.swift in Sources */,
 				23516A7C1FCEE7D500B465DD /* AdvanceTests.swift in Sources */,
+				2345C0E61FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */,
 				23516A801FCEE7D500B465DD /* DeleteTests.swift in Sources */,
+				2345C0EE1FDFD2D000C1434E /* InsertInterfaceTests.swift in Sources */,
+				2345C0F11FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */,
 				23516A831FCEE7D500B465DD /* RowSelectTests.swift in Sources */,
 				23516A7F1FCEE7D500B465DD /* CRUDTestCase.swift in Sources */,
 				23516A841FCEE7D500B465DD /* SelectTests.swift in Sources */,

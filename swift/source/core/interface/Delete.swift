@@ -24,6 +24,12 @@ public final class Delete: CoreRepresentable {
     var core: Core
     private let statement = StatementDelete()
     public var changes: Int = 0
+    public var tag: Tag? {
+        return core.tag
+    }
+    public var path: String {
+        return core.path
+    }
 
     init(with core: Core, andTableName tableName: String) throws {
         guard tableName.count > 0 else {

@@ -20,7 +20,16 @@
 
 import Foundation
 
-public class TableBase {
+public class TableBase: CoreRepresentable {
+    var core: Core {
+        return database
+    }
+    public var tag: Tag? {
+        return core.tag
+    }
+    public var path: String {
+        return core.path
+    }
     let database: Database
     public let name: String
     let base: Any.Type

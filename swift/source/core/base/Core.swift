@@ -43,12 +43,3 @@ protocol CoreRepresentable {
     var tag: Tag? {get}
     var path: String {get}
 }
-
-extension CoreRepresentable {
-    public var tag: Tag? {
-        return core.tag
-    }
-    public var path: String {
-        return core.path
-    }
-}

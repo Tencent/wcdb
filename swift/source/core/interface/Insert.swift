@@ -24,6 +24,12 @@ public final class Insert: CoreRepresentable {
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
+    public var tag: Tag? {
+        return core.tag
+    }
+    public var path: String {
+        return core.path
+    }
 
     init(with core: Core,
          named name: String,

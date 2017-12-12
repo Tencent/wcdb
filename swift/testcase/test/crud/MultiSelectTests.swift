@@ -145,6 +145,11 @@ class MultiSelectTests: CRUDTestCase {
         multiSelect = optionalMultiSelect!.where(property1 == property2)
     }
 
+    func testBase() {
+        XCTAssertEqual(multiSelect.tag, database.tag)
+        XCTAssertEqual(multiSelect.path, database.path)
+    }
+
     func testSelect() {
         //When
         let results = WCDBAssertNoThrowReturned(

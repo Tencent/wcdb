@@ -27,6 +27,7 @@ class TableTests: BaseTestCase {
     override func setUp() {
         super.setUp()
         database = Database(withFileURL: self.recommendedPath)
+        database.tag = recommendTag
     }
 
     class BaselineObject: TableCodable, Named {
@@ -333,5 +334,7 @@ class TableTests: BaseTestCase {
         //Then
         table = WCDBAssertNoThrowReturned(try database.getTable(named: tableName))
         XCTAssertNotNil(table)
+        XCTAssertEqual(table!.tag, database.tag)
+        XCTAssertEqual(table!.path, database.path)
     }
 }

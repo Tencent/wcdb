@@ -62,7 +62,7 @@ public final class RowSelect: SelectBase {
             let value: Data = coreStatement.value(atIndex: index)  ?? Data()
             return FundamentalValue(value)
         case .null:
-            return nil
+            return FundamentalValue(nil)
         }
     }
 

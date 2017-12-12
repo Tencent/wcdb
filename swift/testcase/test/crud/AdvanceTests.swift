@@ -116,6 +116,45 @@ class AdvanceTests: CRUDTestCase {
         }
     }
 
+    func testFundamentalValue() {
+        //Give
+        let statement = StatementSelect().select(1, "2", 3.0).from(CRUDObject.name)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        XCTAssertNotNil(optionalCoreStatement)
+        let coreStatement = optionalCoreStatement!
+
+        //When
+        XCTAssertNoThrow(try coreStatement.step())
+        //Then
+        let int32FundamentalValue = coreStatement.value(atIndex: 0)
+        XCTAssertEqual(int32FundamentalValue.int32Value, 1)
+        XCTAssertEqual(int32FundamentalValue.int64Value, 1)
+        XCTAssertEqual(int32FundamentalValue.stringValue, "1")
+        XCTAssertEqual(int32FundamentalValue.dataValue, "1".data(using: .ascii)!)
+        XCTAssertEqual(int32FundamentalValue.doubleValue, 1.0)
+
+        let stringFundamentalValue = coreStatement.value(atIndex: 1)
+        XCTAssertEqual(stringFundamentalValue.int32Value, 2)
+        XCTAssertEqual(stringFundamentalValue.int64Value, 2)
+        XCTAssertEqual(stringFundamentalValue.stringValue, "2")
+        XCTAssertEqual(stringFundamentalValue.dataValue, "2".data(using: .ascii)!)
+        XCTAssertEqual(stringFundamentalValue.doubleValue, 2.0)
+
+        let doubleFundamentalValue = coreStatement.value(atIndex: 2)
+        XCTAssertEqual(doubleFundamentalValue.int32Value, 3)
+        XCTAssertEqual(doubleFundamentalValue.int64Value, 3)
+        XCTAssertEqual(doubleFundamentalValue.stringValue, "3.0")
+        XCTAssertEqual(doubleFundamentalValue.dataValue, "3.0".data(using: .ascii)!)
+        XCTAssertEqual(doubleFundamentalValue.doubleValue, 3.0)
+
+        let nullFundamentalValue = coreStatement.value(atIndex: 3)
+        XCTAssertEqual(nullFundamentalValue.int32Value, 0)
+        XCTAssertEqual(nullFundamentalValue.int64Value, 0)
+        XCTAssertEqual(nullFundamentalValue.stringValue, "")
+        XCTAssertEqual(nullFundamentalValue.dataValue, Data())
+        XCTAssertEqual(nullFundamentalValue.doubleValue, 0)
+    }
+
     func testCipher() {
         //Give
         database.close {

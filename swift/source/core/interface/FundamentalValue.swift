@@ -133,7 +133,7 @@ public struct FundamentalValue {
         case .float:
             fallthrough
         case .text:
-            guard let stringValue = base as? String, let dataValue = stringValue.data(using: .utf8) else {
+            guard let dataValue = stringValue.data(using: .utf8) else {
                 return Data()
             }
             return dataValue
@@ -141,47 +141,6 @@ public struct FundamentalValue {
             return (base as? Data) ?? Data()
         default:
             return Data()
-        }
-    }
-}
-
-extension FundamentalValue: ExpressibleByNilLiteral {
-    public init(nilLiteral: ()) {
-        self.init(nil)
-    }
-}
-
-extension FundamentalValue: ExpressibleByIntegerLiteral {
-    public init(integerLiteral value: Int) {
-        self.init(value)
-    }
-}
-
-extension FundamentalValue: ExpressibleByBooleanLiteral {
-    public init(booleanLiteral value: Bool) {
-        self.init(value)
-    }
-}
-
-extension FundamentalValue: ExpressibleByFloatLiteral {
-    public init(floatLiteral value: Double) {
-        self.init(value)
-    }
-}
-
-extension FundamentalValue: ExpressibleByStringLiteral {
-    public init(stringLiteral value: String) {
-        self.init(value)
-    }
-}
-
-extension FundamentalValue: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        switch type {
-        case .null:
-            return "NULL"
-        default:
-            return stringValue
         }
     }
 }
