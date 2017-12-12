@@ -31,7 +31,7 @@ class VirtualTableBindingTests: BaseTestCase {
             case variable
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
             static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(withModule: "FTS3",
+                return VirtualTableBinding(withModule: "fts3",
                                            and: [ModuleArgument(left: "left", right: "right"),
                                                  ModuleArgument(with: .WCDB)])
             }
