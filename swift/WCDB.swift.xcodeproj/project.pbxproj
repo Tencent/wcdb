@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		2349FC211FDF86F9005230E8 /* Swiftlint */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 2349FC251FDF86F9005230E8 /* Build configuration list for PBXAggregateTarget "Swiftlint" */;
+			buildPhases = (
+				2349FC261FDF870A005230E8 /* Swiftlint */,
+			);
+			dependencies = (
+			);
+			name = Swiftlint;
+			productName = Swiftlint;
+		};
 		23A1FF731FB08C780023527D /* Install file template */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install file template" */;
@@ -144,6 +155,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2349FC271FDF871F005230E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 238D0AFA1FAB1F4300BC2659 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2349FC211FDF86F9005230E8;
+			remoteInfo = Swiftlint;
+		};
 		23A1FF6D1FB084570023527D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A1FF691FB084570023527D /* sqlcipher.xcodeproj */;
@@ -574,7 +592,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 238D0B0B1FAB1F4300BC2659 /* Build configuration list for PBXNativeTarget "WCDB.swift" */;
 			buildPhases = (
-				23A6BC021FDE39D700ECA068 /* Swiftlint */,
 				238D0AFE1FAB1F4300BC2659 /* Sources */,
 				238D0AFF1FAB1F4300BC2659 /* Frameworks */,
 				238D0B001FAB1F4300BC2659 /* Headers */,
@@ -583,6 +600,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2349FC281FDF871F005230E8 /* PBXTargetDependency */,
 				23A1FF791FB08CC50023527D /* PBXTargetDependency */,
 				23A1FF701FB0845E0023527D /* PBXTargetDependency */,
 			);
@@ -600,6 +618,10 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = sanhuazhang;
 				TargetAttributes = {
+					2349FC211FDF86F9005230E8 = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
 					238D0B021FAB1F4300BC2659 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 0900;
@@ -631,6 +653,7 @@
 			targets = (
 				238D0B021FAB1F4300BC2659 /* WCDB.swift */,
 				23A1FF731FB08C780023527D /* Install file template */,
+				2349FC211FDF86F9005230E8 /* Swiftlint */,
 			);
 		};
 /* End PBXProject section */
@@ -656,6 +679,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2349FC261FDF870A005230E8 /* Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Swiftlint;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint autocorrect --path ../tools/xctemplate\n    swiftlint\n#    swiftlint --path ../tools/xctemplate \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		23A1FF771FB08C820023527D /* Install file template */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -669,20 +706,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd ${PROJECT_DIR}/../tools/xctemplate\nmake || true";
-		};
-		23A6BC021FDE39D700ECA068 /* Swiftlint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Swiftlint;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint autocorrect --path ../tools/xctemplate\n    swiftlint\n#    swiftlint --path ../tools/xctemplate \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -804,6 +827,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2349FC281FDF871F005230E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2349FC211FDF86F9005230E8 /* Swiftlint */;
+			targetProxy = 2349FC271FDF871F005230E8 /* PBXContainerItemProxy */;
+		};
 		23A1FF701FB0845E0023527D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = sqlcipher;
@@ -817,6 +845,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2349FC221FDF86F9005230E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2349FC231FDF86F9005230E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		238D0B091FAB1F4300BC2659 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1040,6 +1084,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2349FC251FDF86F9005230E8 /* Build configuration list for PBXAggregateTarget "Swiftlint" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2349FC221FDF86F9005230E8 /* Debug */,
+				2349FC231FDF86F9005230E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		238D0AFD1FAB1F4300BC2659 /* Build configuration list for PBXProject "WCDB.swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
