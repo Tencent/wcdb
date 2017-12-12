@@ -78,7 +78,7 @@ public class SelectBase: CoreRepresentable {
 
     @discardableResult
     public func limit(_ expressionConvertibleLimit: Limit, offset expressionConvertibleOffset: Offset) -> Self {
-        statement.limit(expressionConvertibleOffset, offset: expressionConvertibleOffset)
+        statement.limit(expressionConvertibleLimit, offset: expressionConvertibleOffset)
         return self
     }
 
