@@ -25,13 +25,6 @@ public final class RowSelect: SelectBase {
          results columnResultConvertibleList: [ColumnResultConvertible],
          tables: [String],
          isDistinct: Bool) throws {
-        guard columnResultConvertibleList.count > 0 else {
-            throw Error.reportInterface(tag: core.tag,
-                                        path: core.path,
-                                        operation: .select,
-                                        code: .misuse,
-                                        message: "Selecting nothing from \(tables) is invalid")
-        }
         guard tables.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,

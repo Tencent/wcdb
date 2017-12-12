@@ -28,7 +28,7 @@ class StatementTransactionTests: BaseTestCase {
 
         WINQAssertEqual(StatementTransaction().begin(), "BEGIN")
 
-        WINQAssertEqual(StatementTransaction().begin(.defered), "BEGIN DEFERED")
+        WINQAssertEqual(StatementTransaction().begin(.deferred), "BEGIN DEFERRED")
 
         WINQAssertEqual(StatementTransaction().begin(.immediate), "BEGIN IMMEDIATE")
 

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public final class Master: TableCodable, CustomDebugStringConvertible {
+public struct Master: TableCodable {
     public static let tableName: String = "sqlite_master"
 
     public var type: String?
@@ -41,15 +41,5 @@ public final class Master: TableCodable, CustomDebugStringConvertible {
         public static let objectRelationalMapping = TableBinding(Master.CodingKeys.self)
     }
 
-    public required init() {}
-
-    public var debugDescription: String {
-        var debugDescription = ""
-        debugDescription.append("type:\(type ?? "")")
-        debugDescription.append(", name:\(name ?? "")")
-        debugDescription.append(", tableName:\(tableName ?? "")")
-        debugDescription.append(", rootpage:\(rootpage ?? Int.min)")
-        debugDescription.append(", sql:\(sql ?? "")")
-        return debugDescription
-    }
+    public init() {}
 }

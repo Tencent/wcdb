@@ -21,24 +21,30 @@
 import Foundation
 
 public final class HandlePool {
-    typealias Wrap = (handlePool: HandlePool, reference: Int)
+    class Wrap {
+        let handlePool: HandlePool
+        var reference: Int = 1
+        init(_ handlePool: HandlePool) {
+            self.handlePool = handlePool
+        }
+    }
 
     private static let spin = Spin()
     private static var pools: [String: Wrap] = [:]
 
     static func getPool(withPath path: String, defaultConfigs: Configs) -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
-        var handlePool: HandlePool?
+        var handlePool: HandlePool!
         if var wrap = pools[path] {
             handlePool = wrap.handlePool
             wrap.reference += 1
         } else {
             handlePool = HandlePool(withPath: path, defaultConfigs: defaultConfigs)
-            pools[path] = (handlePool!, 1)
+            pools[path] = Wrap(handlePool)
         }
-        return Recyclable(handlePool!, onRecycled: {
+        return Recyclable(handlePool, onRecycled: {
             spin.lock(); defer { spin.unlock() }
-            var wrap = pools[path]!
+            let wrap = pools[path]!
             wrap.reference -= 1
             if wrap.reference == 0 {
                 pools.removeValue(forKey: path)
@@ -65,7 +71,7 @@ public final class HandlePool {
         wrap.reference += 1
         return Recyclable(wrap.handlePool, onRecycled: {
             spin.lock(); defer { spin.unlock() }
-            var wrap = pools[path]!
+            let wrap = pools[path]!
             wrap.reference -= 1
             if wrap.reference == 0 {
                 pools.removeValue(forKey: path)

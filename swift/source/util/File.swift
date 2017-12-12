@@ -21,10 +21,6 @@
 import Foundation
 
 final class File {
-    static func remove(files: String...) throws {
-        try File.remove(files: files)
-    }
-
     static func remove(files: [String]) throws {
         let fileManager = FileManager.default
         try files.forEach { (file) in
@@ -39,10 +35,6 @@ final class File {
                                              message: error.localizedDescription)
             }
         }
-    }
-
-    static func getSize(ofFiles files: String...) throws -> UInt64 {
-        return try getSize(ofFiles: files)
     }
 
     static func getSize(ofFiles files: [String]) throws -> UInt64 {

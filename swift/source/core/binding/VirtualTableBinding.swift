@@ -38,6 +38,6 @@ public struct VirtualTableBinding {
     }
 
     public init(with module: FTSModule, and arguments: ModuleArgument...) {
-        self.init(withModule: module.name, and: arguments)
+        self.init(with: module, and: arguments)
     }
 }

@@ -125,22 +125,22 @@ class ColumnConstraintBindingTests: BaseTestCase {
 
     func testColumnConstraintBinding() {
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             BaselineTestObject.self,
             "CREATE TABLE IF NOT EXISTS BaselineTestObject(variable INTEGER)"
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             PrimaryTestObject.self,
             "CREATE TABLE IF NOT EXISTS PrimaryTestObject(primaryVariable INTEGER PRIMARY KEY)"
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             OrderedPrimaryTestObject.self,
             "CREATE TABLE IF NOT EXISTS OrderedPrimaryTestObject(orderedPrimaryVariable INTEGER PRIMARY KEY ASC)"
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             AutoIncrementPrimaryTestObject.self,
             """
             CREATE TABLE IF NOT EXISTS AutoIncrementPrimaryTestObject\
@@ -148,7 +148,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
             """
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             ConflictPrimaryTestObject.self,
             """
             CREATE TABLE IF NOT EXISTS ConflictPrimaryTestObject\
@@ -156,17 +156,17 @@ class ColumnConstraintBindingTests: BaseTestCase {
             """
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             NotNullTestObject.self,
             "CREATE TABLE IF NOT EXISTS NotNullTestObject(notNullVariable INTEGER NOT NULL)"
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             UniqueTestObject.self,
             "CREATE TABLE IF NOT EXISTS UniqueTestObject(uniqueVariable INTEGER UNIQUE)"
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             DefaultValueTestObject.self,
             "CREATE TABLE IF NOT EXISTS DefaultValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
         )

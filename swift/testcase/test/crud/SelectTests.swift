@@ -127,4 +127,21 @@ class SelectTests: CRUDTestCase {
         }
         XCTAssertEqual(results.sorted(), preInsertedObjects.sorted())
     }
+
+    class WrongObject: TableCodable {
+        var variable1: Int? = 0
+        var variable2: String? = ""
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = WrongObject
+            case variable1
+            case variable2
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
+    func testSelectWrong() {
+        XCTAssertThrowsError(try select.allObjects(of: WrongObject.self))
+        XCTAssertThrowsError(try select.nextObject(of: WrongObject.self))
+    }
 }

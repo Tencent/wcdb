@@ -20,55 +20,11 @@
 
 import Foundation
 
-public class TableBindingBase {
-    let allProperties: [Property]
-
-    init(with properties: [Property]) {
-        allProperties = properties
-    }
-
-    func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
-        Error.abort("")
-    }
-
-    public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
-        Error.abort("")
-    }
-
-    public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
-        Error.abort("")
-    }
-
-    public func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
-        Error.abort("")
-    }
-
-    func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
-        Error.abort("")
-    }
-
-    func getPrimaryKey() -> CodingTableKeyBase? {
-        Error.abort("")
-    }
-}
-
-public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindingBase {
+public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     private let properties: [CodingTableKeyType: Property]
+    let allProperties: [Property]
     private let type: CodingTableKeyType.Type
-    let allKeys: [CodingTableKeyType] = {
-        var i = 0
-        var allKeys: [CodingTableKeyType] = []
-        while true {
-            guard let key = (withUnsafePointer(to: &i) {
-                return $0.withMemoryRebound(to: CodingTableKeyType?.self, capacity: 1, { return $0.pointee })
-            }) else {
-                break
-            }
-            allKeys.append(key)
-            i += 1
-        }
-        return allKeys
-    }()
+    let allKeys: [CodingTableKeyType]
 
     private lazy var columnTypes: [String: ColumnType] = {
         guard let tableEncodableType = CodingTableKeyType.Root.self as? TableEncodableBase.Type else {
@@ -111,17 +67,32 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
         self.type = type
         var allProperties: [Property] = []
         var properties: [CodingTableKeyType: Property] = [:]
+        var allKeys: [CodingTableKeyType] = []
+
+        var i = 0
+        while true {
+            guard let key = (withUnsafePointer(to: &i) {
+                return $0.withMemoryRebound(to: CodingTableKeyType?.self, capacity: 1, { return $0.pointee })
+            }) else {
+                break
+            }
+            allKeys.append(key)
+            i += 1
+        }
+
         for key in allKeys {
             let property = Property(with: key)
             properties[key] = property
             allProperties.append(property)
         }
+
+        self.allKeys = allKeys
         self.properties = properties
-        super.init(with: allProperties)
+        self.allProperties = allProperties
     }
 
     typealias TypedCodingTableKeyType = CodingTableKeyType
-    override func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
+    func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
         guard let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType else {
             Error.abort("")
         }
@@ -131,7 +102,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
         return typedProperty
     }
 
-    override func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
+    func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
         guard let codingTableKey = key as? CodingTableKeyType else {
             Error.abort("")
         }
@@ -145,7 +116,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
         return columnDef
     }
 
-    public override func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
+    public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
         guard let virtualTableBinding = self.virtualTableBinding else {
             Error.abort("Virtual table binding is not defined")
         }
@@ -161,21 +132,21 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
                    arguments: arguments)
     }
 
-    public override func generateCreateTableStatement(named table: String) -> StatementCreateTable {
+    public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
         let tableConstraints = tableConstraintBindings?.map { $0.value.generateConstraint(withName: $0.key) }
         return StatementCreateTable().create(table: table,
                                              with: allColumnDef,
                                              and: tableConstraints)
     }
 
-    public override func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
+    public func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
         guard let indexBindings = self.indexBindings else {
             return nil
         }
         return indexBindings.map { $0.value.generateCreateIndexStatement(onTable: table, withIndexSubfix: $0.key)}
     }
 
-    override func getPrimaryKey() -> CodingTableKeyBase? {
+    func getPrimaryKey() -> CodingTableKeyBase? {
         return primaryKey
     }
 }

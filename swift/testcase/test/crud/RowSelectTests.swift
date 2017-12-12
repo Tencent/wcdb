@@ -206,4 +206,8 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(rows[row: 0, column: 3].stringValue, "object3")
     }
 
+    func testRowSelectFailed() {
+        XCTAssertThrowsError(try database.prepareRowSelect(fromTables: []))
+    }
+
 }

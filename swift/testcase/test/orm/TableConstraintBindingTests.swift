@@ -56,7 +56,7 @@ class TableConstraintBindingTests: BaseTestCase {
     }
 
     func testMultiPrimaryBinding() {
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             BaselineMultiPrimaryTestObject.self,
             """
             CREATE TABLE IF NOT EXISTS BaselineMultiPrimaryTestObject\
@@ -65,7 +65,7 @@ class TableConstraintBindingTests: BaseTestCase {
             """
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             MultiPrimaryConflictTestObject.self,
             """
             CREATE TABLE IF NOT EXISTS MultiPrimaryConflictTestObject\
@@ -109,7 +109,7 @@ class TableConstraintBindingTests: BaseTestCase {
         }
     }
     func testMultiUniqueBinding() {
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             BaselineMultiUniqueTestObject.self,
             """
             CREATE TABLE IF NOT EXISTS BaselineMultiUniqueTestObject\
@@ -120,7 +120,7 @@ class TableConstraintBindingTests: BaseTestCase {
             """
         )
 
-        ORMColumnConstraintBindingAssertEqual(
+        ORMConstraintBindingAssertEqual(
             MultiUniqueConflictTestObject.self,
             """
             CREATE TABLE IF NOT EXISTS MultiUniqueConflictTestObject\
@@ -130,4 +130,64 @@ class TableConstraintBindingTests: BaseTestCase {
             """
         )
     }
+
+    class CheckTestObject: TableCodable, Named {
+        let variable1: Int = 0
+        let variable2: Int = 0
+        required init() {}
+        static let constraintName = CheckTestObject.name + "Constraint"
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = CheckTestObject
+            case variable1
+            case variable2
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [constraintName: CheckBinding(check: variable1 > 1)]
+            }
+        }
+    }
+    func testCheckBinding() {
+        ORMConstraintBindingAssertEqual(
+            CheckTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS CheckTestObject\
+            (variable1 INTEGER, \
+            variable2 INTEGER, \
+            CONSTRAINT CheckTestObjectConstraint \
+            CHECK(variable1 > 1))
+            """
+        )
+    }
+
+    class ForeignKeyTestObject: TableCodable, Named {
+        let variable1: Int = 0
+        let variable2: Int = 0
+        required init() {}
+        static let constraintName = ForeignKeyTestObject.name + "Constraint"
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = ForeignKeyTestObject
+            case variable1
+            case variable2
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                let foreignKey = ForeignKey(withForeignTable: ForeignKeyTestObject.name,
+                                            and: variable2)
+                return [constraintName: ForeignKeyBinding(variable1,
+                                                          foreignKey: foreignKey)]
+            }
+        }
+    }
+    func testForeignKeyBinding() {
+        ORMConstraintBindingAssertEqual(
+            ForeignKeyTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS ForeignKeyTestObject\
+            (variable1 INTEGER, \
+            variable2 INTEGER, \
+            CONSTRAINT ForeignKeyTestObjectConstraint \
+            FOREIGN KEY(variable1) REFERENCES ForeignKeyTestObject(variable2))
+            """
+        )
+    }
+
 }

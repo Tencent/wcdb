@@ -23,7 +23,7 @@ import WCDBSwift
 
 class VirtualTableBindingTests: BaseTestCase {
 
-    class BaselineTestObject: TableCodable {
+    class BaselineTestObject: TableCodable, Named {
         let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
@@ -32,8 +32,11 @@ class VirtualTableBindingTests: BaseTestCase {
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
             static var virtualTableBinding: VirtualTableBinding? {
                 return VirtualTableBinding(withModule: "fts3",
-                                           and: [ModuleArgument(left: "left", right: "right"),
-                                                 ModuleArgument(with: .WCDB)])
+                                           and: ModuleArgument(left: "left", right: "right"),
+                                                ModuleArgument(with: .WCDB))
+            }
+            static var tableConstraintBindings: [TableConstraintBinding.Name: TableConstraintBinding]? {
+                return [BaselineTestObject.name+"Constraint": MultiPrimaryBinding(indexesBy: variable)]
             }
         }
     }
@@ -43,7 +46,7 @@ class VirtualTableBindingTests: BaseTestCase {
             BaselineTestObject.self,
             """
             CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3\
-            (variable INTEGER, left=right, tokenize=WCDB)
+            (variable INTEGER, CONSTRAINT BaselineTestObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)
             """
         )
     }

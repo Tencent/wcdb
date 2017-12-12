@@ -57,6 +57,15 @@ class TableTests: BaseTestCase {
     func testCreateTable() {
         //Give
         let tableName = BaselineObject.name
+        var expected = Master()
+        expected.sql = """
+        CREATE TABLE \(tableName)\
+        (anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, \
+        anInt64 INTEGER, \
+        aString TEXT, \
+        aData BLOB, \
+        aDouble REAL)
+        """
         //When
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         //Then
@@ -67,14 +76,7 @@ class TableTests: BaseTestCase {
         let object = optionalObject!
         XCTAssertEqual(
             object.sql!,
-            """
-            CREATE TABLE \(tableName)\
-            (anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, \
-            anInt64 INTEGER, \
-            aString TEXT, \
-            aData BLOB, \
-            aDouble REAL)
-            """
+            expected.sql
         )
     }
 

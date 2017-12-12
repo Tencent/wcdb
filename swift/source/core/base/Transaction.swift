@@ -56,12 +56,7 @@ extension Transaction: Core {
     }
 
     public var tag: Tag? {
-        get {
-            return handlePool.tag
-        }
-        set {
-            handlePool.tag = newValue
-        }
+        return handlePool.tag
     }
 
     public func prepare(_ statement: Statement) throws -> CoreStatement {
@@ -109,7 +104,7 @@ extension Transaction: Core {
         try begin(.immediate)
     }
 
-    func begin(_ mode: StatementTransaction.Mode) throws {
+    public func begin(_ mode: StatementTransaction.Mode) throws {
         mutex.lock(); defer { mutex.unlock() }
         try handle.exec(mode == .immediate ?
             CommonStatement.beginTransactionImmediate :
@@ -166,7 +161,6 @@ extension Transaction: Core {
             try run(transaction: embeddedTransaction)
         }
     }
-
 }
 
 extension Transaction: InsertChainCallInterface {}

@@ -381,7 +381,7 @@ extension Database: Core {
         try begin(.immediate)
     }
 
-    func begin(_ mode: StatementTransaction.Mode) throws {
+    public func begin(_ mode: StatementTransaction.Mode) throws {
         let recyclableHandle = try flowOut()
         let statement = mode == .immediate ?
             CommonStatement.beginTransactionImmediate :
@@ -480,7 +480,7 @@ extension Database {
                 let file = path.lastPathComponent
                 let newPaths = directory.stringByAppending(pathComponent: file)
                 if File.isExists(atPath: newPaths) {
-                    try File.remove(files: newPaths)
+                    try File.remove(files: [newPaths])
                 }
                 try File.hardlink(atPath: path, toPath: newPaths)
                 recovers.append(newPaths)

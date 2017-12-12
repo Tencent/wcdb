@@ -47,14 +47,14 @@ public final class StatementTransaction: Statement {
     public private(set) var transactionType: TransactionType?
 
     public enum Mode: Describable {
-        case defered
+        case deferred
         case immediate
         case exclusive
 
         public var description: String {
             switch self {
-            case .defered:
-                return "DEFERED"
+            case .deferred:
+                return "DEFERRED"
             case .immediate:
                 return "IMMEDIATE"
             case .exclusive:

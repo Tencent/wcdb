@@ -11,6 +11,8 @@
 		2310C6021FCBB5EA0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		2310C6031FCBB5EB0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		2310C6041FCBB5EB0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
+		233CED761FDFF5FD00A3B143 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */; };
+		233CED771FDFF5FD00A3B143 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */; };
 		2345C0E51FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */; };
 		2345C0E61FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */; };
 		2345C0EA1FDFCE1000C1434E /* SelectInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */; };
@@ -289,6 +291,7 @@
 
 /* Begin PBXFileReference section */
 		2310C5FB1FCBB5D40030F3D3 /* Assert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
+		233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInterfaceTests.swift; sourceTree = "<group>"; };
 		2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectInterfaceTests.swift; sourceTree = "<group>"; };
 		2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertInterfaceTests.swift; sourceTree = "<group>"; };
@@ -501,6 +504,7 @@
 				2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */,
 				2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */,
 				2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */,
+				233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */,
 			);
 			path = crud;
 			sourceTree = "<group>";
@@ -1113,6 +1117,7 @@
 				2345C0EA1FDFCE1000C1434E /* SelectInterfaceTests.swift in Sources */,
 				23516C4D1FD0340100B465DD /* OrderTests.swift in Sources */,
 				23516C5C1FD0340100B465DD /* StatementRollbackTests.swift in Sources */,
+				233CED761FDFF5FD00A3B143 /* DatabaseTests.swift in Sources */,
 				23516C2B1FD033F000B465DD /* InsertTests.swift in Sources */,
 				23516C5B1FD0340100B465DD /* StatementReleaseTests.swift in Sources */,
 				23516C551FD0340100B465DD /* StatementDropIndexTests.swift in Sources */,
@@ -1212,6 +1217,7 @@
 				2345C0F11FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */,
 				23516A831FCEE7D500B465DD /* RowSelectTests.swift in Sources */,
 				23516A7F1FCEE7D500B465DD /* CRUDTestCase.swift in Sources */,
+				233CED771FDFF5FD00A3B143 /* DatabaseTests.swift in Sources */,
 				23516A841FCEE7D500B465DD /* SelectTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
