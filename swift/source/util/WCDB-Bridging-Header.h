@@ -19,8 +19,8 @@
  */
 
 #ifdef WCDB_COCOAPODS
-#import <SQLite-Bridging-Header.h>
-#import <SQLiteRepairKit.h>
+#import <WCDB/SQLite-Bridging-Header.h>
+#import <WCDB/SQLiteRepairKit.h>
 #else //WCDB_COCOAPODS
 #import <WCDBSwift/SQLite-Bridging-Header.h>
 #import <sqliterk/SQLiteRepairKit.h>
