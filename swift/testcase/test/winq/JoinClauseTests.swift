@@ -24,10 +24,15 @@ import WCDBSwift
 class JoinClauseTests: BaseTestCase {
 
     func generateJoinClause() -> JoinClause {
-        return JoinClause(withTable: "testJoinClauseTable")
+        return JoinClause(with: "testJoinClauseTable")
     }
 
     func testJoinClause() {
+        WINQAssertEqual(
+            generateJoinClause().asTableOrSubquery(),
+            "(testJoinClauseTable)"
+        )
+
         WINQAssertEqual(
             generateJoinClause().join("testJoinClauseTable2", with: .left),
             "testJoinClauseTable LEFT JOIN testJoinClauseTable2"

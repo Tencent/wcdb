@@ -46,7 +46,7 @@ public final class HandlePool {
         })
     }
 
-    static func getPool(with tag: Tag) -> RecyclableHandlePool? {
+    static func getPool(with tag: Tag) throws -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
         var path: String!
         guard var wrap = (pools.first { (arg) -> Bool in
@@ -56,7 +56,11 @@ public final class HandlePool {
             path = arg.key
             return true
         })?.value else {
-            return nil
+            throw Error.reportCore(tag: tag,
+                                   path: "",
+                                   operation: .getPool,
+                                   code: .misuse,
+                                   message: "")
         }
         wrap.reference += 1
         return Recyclable(wrap.handlePool, onRecycled: {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		233032581FB9437F00101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032451FB9437F00101373 /* SQLiteRepairKit.h */; };
+		233032581FB9437F00101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032451FB9437F00101373 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233032591FB9437F00101373 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 233032461FB9437F00101373 /* sqliterk.c */; };
 		2330325A1FB9437F00101373 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032471FB9437F00101373 /* sqliterk.h */; };
 		2330325B1FB9437F00101373 /* sqliterk_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 233032481FB9437F00101373 /* sqliterk_api.c */; };
@@ -330,6 +330,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					SQLITE_HAS_CODEC,
+					WCDB_BUILTIN_SQLCIPHER,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -343,9 +345,11 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALID_ARCHS = "arm64 armv7 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -386,6 +390,10 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					WCDB_BUILTIN_SQLCIPHER,
+					SQLITE_HAS_CODEC,
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -397,9 +405,11 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALID_ARCHS = "arm64 armv7 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};

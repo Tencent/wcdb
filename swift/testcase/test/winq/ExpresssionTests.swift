@@ -35,6 +35,9 @@ class ExpresssionTests: BaseTestCase {
 
         let nilExpression: Expression = nil
         WINQAssertEqual(nilExpression, "NULL")
+
+        let boolExpression: Expression = false
+        WINQAssertEqual(boolExpression, "0")
     }
 
     func testOperable() {

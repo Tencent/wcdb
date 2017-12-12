@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementDetachTests: BaseTestCase {
 
     func testStatementDetach() {
+        XCTAssertEqual(StatementDetach().statementType, StatementType.detach)
+
         WINQAssertEqual(StatementDetach().detach(schema: "testSchema"), "DETACH testSchema")
     }
 }

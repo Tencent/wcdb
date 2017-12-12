@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementSavepointTests: BaseTestCase {
 
     func testStatementSavepoint() {
+        XCTAssertEqual(StatementSavepoint().statementType, StatementType.savepoint)
+
         WINQAssertEqual(StatementSavepoint().savepoint("savepoint1"), "SAVEPOINT savepoint1")
     }
 }

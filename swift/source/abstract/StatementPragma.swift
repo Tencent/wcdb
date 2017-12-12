@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementPragma: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .pragma
     }
+
+    public init() {}
 
     @discardableResult
     public func pragma(_ pragma: Pragma) -> StatementPragma {

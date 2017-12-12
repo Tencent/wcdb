@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementReindexTests: BaseTestCase {
 
     func testStatementReindex() {
+        XCTAssertEqual(StatementReindex().statementType, StatementType.reindex)
+
         WINQAssertEqual(StatementReindex().reindex("tableOrIndex"), "REINDEX tableOrIndex")
     }
 }

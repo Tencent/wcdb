@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementDropIndex: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .dropIndex
     }
+
+    public init() {}
 
     @discardableResult
     public func drop(index: String, ifExists: Bool = true) -> StatementDropIndex {

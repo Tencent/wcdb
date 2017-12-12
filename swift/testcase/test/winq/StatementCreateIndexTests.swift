@@ -34,6 +34,8 @@ class StatementCreateIndexTests: BaseTestCase {
         let table1 = "table1"
 
         //Then
+        XCTAssertEqual(StatementCreateIndex().statementType, StatementType.createIndex)
+
         WINQAssertEqual(
             StatementCreateIndex().create(index: indexName1).on(table: table1, indexesBy: index1, index2),
             "CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)"

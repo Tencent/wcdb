@@ -111,19 +111,21 @@ extension Transaction: Core {
 
     func begin(_ mode: StatementTransaction.Mode) throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(mode == .immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode))
+        try handle.exec(mode == .immediate ?
+            CommonStatement.beginTransactionImmediate :
+            StatementTransaction().begin(mode))
         isInTransaction = true
     }
 
     public func commit() throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(.commitTransaction)
+        try handle.exec(CommonStatement.commitTransaction)
         isInTransaction = false
     }
 
     public func rollback() throws {
         mutex.lock(); defer { mutex.unlock() }
-        try handle.exec(.rollbackTransaction)
+        try handle.exec(CommonStatement.rollbackTransaction)
         isInTransaction = false
     }
 

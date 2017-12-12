@@ -24,7 +24,9 @@ import WCDBSwift
 class ForeignKeyTests: BaseTestCase {
 
     func generateForeignKey() -> ForeignKey {
-        return ForeignKey(withForeignTable: "testForeignKeyTable", andColumnNames: "column1", "column2")
+        let column1 = Column(named: "column1")
+        let column2 = Column(named: "column2")
+        return ForeignKey(withForeignTable: "testForeignKeyTable", and: column1, column2)
     }
 
     func testForeignKey() {
@@ -61,6 +63,11 @@ class ForeignKeyTests: BaseTestCase {
         WINQAssertEqual(
             generateForeignKey().notDeferrable(.immediate),
             "REFERENCES testForeignKeyTable(column1, column2) NOT DEFERRABLE INITIALLY IMMEDIATE"
+        )
+
+        WINQAssertEqual(
+            generateForeignKey().match(name: "test"),
+            "REFERENCES testForeignKeyTable(column1, column2) MATCH test"
         )
     }
 }

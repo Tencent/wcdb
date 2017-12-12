@@ -41,12 +41,8 @@ public final class JoinClause: Describable {
         }
     }
 
-    public init() {
-        description = ""
-    }
-
-    public init(withTable table: String) {
-        description = table
+    public init(with subqueryConvertible: TableOrSubqueryConvertible) {
+        description = subqueryConvertible.asTableOrSubquery().description
     }
 
     @discardableResult

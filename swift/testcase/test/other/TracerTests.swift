@@ -62,11 +62,12 @@ class TracerTests: BaseTestCase {
 
     func testTraceError() {
         //Give
+        let tableName = "nonexistentTable"
         let expectedTag = 1234
         let expectedErrorCode = 1
-        let expectedErrorMessage = "no such table: \(WCDBSwift.Sequence.tableName)"
+        let expectedErrorMessage = "no such table: \(tableName)"
         let expectedOperation = 3
-        let expectedSQL = "SELECT * FROM sqlite_sequence"
+        let expectedSQL = "SELECT * FROM \(tableName)"
 
         //Then
         var `catch` = false
@@ -102,7 +103,7 @@ class TracerTests: BaseTestCase {
 
         //When
         XCTAssertThrowsError(
-            try database.getRows(on: WCDBSwift.Sequence.Properties.any, fromTable: WCDBSwift.Sequence.tableName)
+            try database.getRows(on: Column.any, fromTable: tableName)
         )
 
         XCTAssertTrue(`catch`)

@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementSelect: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .select
     }
+
+    public init() {}
 
     @discardableResult
     public func select(distinct: Bool = false,

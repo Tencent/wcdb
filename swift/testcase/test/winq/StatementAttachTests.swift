@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementAttachTests: BaseTestCase {
 
     func testStatementAttachTests() {
+        XCTAssertEqual(StatementAttach().statementType, StatementType.attach)
+
         WINQAssertEqual(StatementAttach().attach("attach1", asSchema: "schema1"), "ATTACH 'attach1' AS schema1")
     }
 }

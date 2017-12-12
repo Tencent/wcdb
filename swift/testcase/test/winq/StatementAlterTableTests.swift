@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementAlterTableTests: BaseTestCase {
 
     func testStatementAlterTable() {
+        XCTAssertEqual(StatementAlterTable().statementType, StatementType.alterTable)
+
         WINQAssertEqual(
             StatementAlterTable().alter(table: "table1").rename(to: "table2"),
             "ALTER TABLE table1 RENAME TO table2"

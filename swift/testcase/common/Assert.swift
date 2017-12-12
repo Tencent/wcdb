@@ -32,20 +32,13 @@ func XCTAssertEqual(_ expression1: @autoclosure () -> String,
     }(), file: file, line: line)
 }
 
-func WINQAssertEqual<DescribableObject>(_ expression1: @autoclosure () -> DescribableObject,
-                                        _ expression2: @autoclosure () -> String,
-                                        file: StaticString = #file,
-                                        line: UInt = #line) where DescribableObject: Describable {
-    XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
-}
-
-func WINQAssertEqual<StringObject>(
-    _ expression1: @autoclosure () -> StringObject,
-    _ expression2: @autoclosure () -> String,
-    _ message: @autoclosure () -> String = "",
+func WINQAssertEqual<DescribableObject1, DescribableObject2>(
+    _ expression1: @autoclosure () -> DescribableObject1,
+    _ expression2: @autoclosure () -> DescribableObject2,
     file: StaticString = #file,
-    line: UInt = #line) where StringObject: CustomStringConvertible {
-    XCTAssertEqual(expression1().description, expression2(), file: file, line: line)
+    line: UInt = #line)
+    where DescribableObject1: CustomStringConvertible, DescribableObject2: CustomStringConvertible {
+    XCTAssertEqual(expression1().description, expression2().description, file: file, line: line)
 }
 
 func ORMColumnConstraintBindingAssertEqual<TableCodableObject: TableCodable>(

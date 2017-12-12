@@ -21,9 +21,12 @@
 import Foundation
 
 public final class StatementCreateIndex: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .createIndex
     }
+
+    public init() {}
 
     @discardableResult
     public func create(index: String, isUnique: Bool = false, ifNotExists: Bool = true) -> StatementCreateIndex {

@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementVacuumTests: BaseTestCase {
 
     func testStatementVacuum() {
+        XCTAssertEqual(StatementVacuum().statementType, StatementType.vacuum)
+
         WINQAssertEqual(StatementVacuum().vacuum(schema: "testSchema"), "VACUUM testSchema")
     }
 }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public struct ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct ErrorValue {
     public enum ErrorValueType {
         case int
         case string
@@ -36,14 +36,6 @@ public struct ErrorValue: ExpressibleByIntegerLiteral, ExpressibleByStringLitera
     public init(_ value: Int) {
         self.value = value
         self.type = .int
-    }
-
-    public init(integerLiteral value: Int) {
-        self.init(value)
-    }
-
-    public init(stringLiteral value: String) {
-        self.init(value)
     }
 
     public var intValue: Int {
@@ -166,6 +158,7 @@ public final class Error: Swift.Error, CustomStringConvertible {
             case tokenize = 8
             case encode = 9
             case decode = 10
+            case getPool = 11
         }
 
         public enum SystemCallOperation: Int {

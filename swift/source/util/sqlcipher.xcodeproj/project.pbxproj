@@ -883,7 +883,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "-Wno-shorten-64-to-32";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.sqlcipher;
 				PRODUCT_NAME = sqlcipher;
@@ -910,7 +910,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "-Wno-shorten-64-to-32";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.sqlcipher;
 				PRODUCT_NAME = sqlcipher;

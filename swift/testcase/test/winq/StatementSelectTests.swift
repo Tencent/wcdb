@@ -31,6 +31,8 @@ class StatementSelectTests: BaseTestCase {
         let table1 = "table1"
         let table2 = "table2"
 
+        XCTAssertEqual(StatementSelect().statementType, StatementType.select)
+
         WINQAssertEqual(StatementSelect().select(column1).from(table1), "SELECT column1 FROM table1")
 
         WINQAssertEqual(
@@ -71,6 +73,21 @@ class StatementSelectTests: BaseTestCase {
         WINQAssertEqual(
             StatementSelect().select(column1).from(table1).limit(1, offset: 3),
             "SELECT column1 FROM table1 LIMIT 1 OFFSET 3"
+        )
+
+        WINQAssertEqual(
+            StatementSelect().select(column1).from(table1).group(by: column1),
+            "SELECT column1 FROM table1 GROUP BY column1"
+        )
+
+        WINQAssertEqual(
+            StatementSelect().select(column1).from(table1).group(by: [column1, column2]).having(column1>1),
+            "SELECT column1 FROM table1 GROUP BY column1, column2 HAVING (column1 > 1)"
+        )
+
+        WINQAssertEqual(
+            StatementSelect().select(column1).from(table1).asTableOrSubquery(),
+            "(SELECT column1 FROM table1)"
         )
     }
 }

@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementReindex: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .reindex
     }
+
+    public init() {}
 
     @discardableResult
     public func reindex(_ name: String) -> StatementReindex {

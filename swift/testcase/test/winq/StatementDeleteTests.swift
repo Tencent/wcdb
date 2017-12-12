@@ -34,6 +34,8 @@ class StatementDeleteTests: BaseTestCase {
         let column2 = Column(named: "column2")
 
         //Then
+        XCTAssertEqual(StatementDelete().statementType, StatementType.delete)
+
         WINQAssertEqual(generateStatementDelete().`where`(column1 > 1), "DELETE FROM table1 WHERE (column1 > 1)")
 
         WINQAssertEqual(

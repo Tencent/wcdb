@@ -66,6 +66,7 @@
 		231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */; };
 		231BC0311FC2CDCA00011C69 /* SteadyClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC0301FC2CDCA00011C69 /* SteadyClock.swift */; };
 		233032B21FB947F100101373 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
+		2349FC341FDF8BDE005230E8 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2349FC301FDF8B14005230E8 /* sqliterk.framework */; };
 		235619C31FD69B250085C86B /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235619C21FD69B250085C86B /* FundamentalValue.swift */; };
 		237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C01FD50140003BBA5F /* TableEncoder.swift */; };
 		237931C31FD52C75003BBA5F /* TableDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C21FD52C75003BBA5F /* TableDecoder.swift */; };
@@ -128,26 +129,6 @@
 		23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A1FF6E1FB084570023527D /* sqlcipher.framework */; };
 		23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8E0031FD8184300DAE97D /* CodableType.swift */; };
 		23E737C41FB1601C00EEBC3D /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C31FB1601C00EEBC3D /* Master.swift */; };
-		23E737C61FB1602800EEBC3D /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C51FB1602800EEBC3D /* Sequence.swift */; };
-		23E9D3101FC7CE9F00F55299 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D2FD1FC7CE9F00F55299 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23E9D3111FC7CE9F00F55299 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D2FE1FC7CE9F00F55299 /* sqliterk.c */; };
-		23E9D3121FC7CE9F00F55299 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D2FF1FC7CE9F00F55299 /* sqliterk.h */; };
-		23E9D3131FC7CE9F00F55299 /* sqliterk_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3001FC7CE9F00F55299 /* sqliterk_api.c */; };
-		23E9D3141FC7CE9F00F55299 /* sqliterk_btree.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3011FC7CE9F00F55299 /* sqliterk_btree.c */; };
-		23E9D3151FC7CE9F00F55299 /* sqliterk_btree.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D3021FC7CE9F00F55299 /* sqliterk_btree.h */; };
-		23E9D3161FC7CE9F00F55299 /* sqliterk_column.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3031FC7CE9F00F55299 /* sqliterk_column.c */; };
-		23E9D3171FC7CE9F00F55299 /* sqliterk_column.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D3041FC7CE9F00F55299 /* sqliterk_column.h */; };
-		23E9D3181FC7CE9F00F55299 /* sqliterk_crypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3051FC7CE9F00F55299 /* sqliterk_crypto.c */; };
-		23E9D3191FC7CE9F00F55299 /* sqliterk_crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D3061FC7CE9F00F55299 /* sqliterk_crypto.h */; };
-		23E9D31A1FC7CE9F00F55299 /* sqliterk_os.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3071FC7CE9F00F55299 /* sqliterk_os.c */; };
-		23E9D31B1FC7CE9F00F55299 /* sqliterk_os.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D3081FC7CE9F00F55299 /* sqliterk_os.h */; };
-		23E9D31C1FC7CE9F00F55299 /* sqliterk_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D3091FC7CE9F00F55299 /* sqliterk_output.cpp */; };
-		23E9D31D1FC7CE9F00F55299 /* sqliterk_pager.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D30A1FC7CE9F00F55299 /* sqliterk_pager.c */; };
-		23E9D31E1FC7CE9F00F55299 /* sqliterk_pager.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D30B1FC7CE9F00F55299 /* sqliterk_pager.h */; };
-		23E9D31F1FC7CE9F00F55299 /* sqliterk_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D30C1FC7CE9F00F55299 /* sqliterk_util.c */; };
-		23E9D3201FC7CE9F00F55299 /* sqliterk_util.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D30D1FC7CE9F00F55299 /* sqliterk_util.h */; };
-		23E9D3211FC7CE9F00F55299 /* sqliterk_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E9D30E1FC7CE9F00F55299 /* sqliterk_values.c */; };
-		23E9D3221FC7CE9F00F55299 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E9D30F1FC7CE9F00F55299 /* sqliterk_values.h */; };
 		23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0011FC3C5CB005DE71C /* Tracer.swift */; };
 		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
 		23E9E0071FC3D80B005DE71C /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0061FC3D80B005DE71C /* Table.swift */; };
@@ -161,6 +142,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2349FC211FDF86F9005230E8;
 			remoteInfo = Swiftlint;
+		};
+		2349FC2F1FDF8B14005230E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 233032391FB9435700101373;
+			remoteInfo = sqliterk;
+		};
+		2349FC311FDF8B20005230E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 233032381FB9435700101373;
+			remoteInfo = sqliterk;
 		};
 		23A1FF6D1FB084570023527D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -220,6 +215,7 @@
 		231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedQueue.swift; sourceTree = "<group>"; };
 		231BC0301FC2CDCA00011C69 /* SteadyClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyClock.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
 		235619C21FD69B250085C86B /* FundamentalValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
 		237931C01FD50140003BBA5F /* TableEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableEncoder.swift; sourceTree = "<group>"; };
 		237931C21FD52C75003BBA5F /* TableDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableDecoder.swift; sourceTree = "<group>"; };
@@ -284,26 +280,6 @@
 		23A1FF691FB084570023527D /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		23C8E0031FD8184300DAE97D /* CodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableType.swift; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
-		23E737C51FB1602800EEBC3D /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
-		23E9D2FD1FC7CE9F00F55299 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
-		23E9D2FE1FC7CE9F00F55299 /* sqliterk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk.c; sourceTree = "<group>"; };
-		23E9D2FF1FC7CE9F00F55299 /* sqliterk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk.h; sourceTree = "<group>"; };
-		23E9D3001FC7CE9F00F55299 /* sqliterk_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_api.c; sourceTree = "<group>"; };
-		23E9D3011FC7CE9F00F55299 /* sqliterk_btree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_btree.c; sourceTree = "<group>"; };
-		23E9D3021FC7CE9F00F55299 /* sqliterk_btree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_btree.h; sourceTree = "<group>"; };
-		23E9D3031FC7CE9F00F55299 /* sqliterk_column.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_column.c; sourceTree = "<group>"; };
-		23E9D3041FC7CE9F00F55299 /* sqliterk_column.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_column.h; sourceTree = "<group>"; };
-		23E9D3051FC7CE9F00F55299 /* sqliterk_crypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_crypto.c; sourceTree = "<group>"; };
-		23E9D3061FC7CE9F00F55299 /* sqliterk_crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_crypto.h; sourceTree = "<group>"; };
-		23E9D3071FC7CE9F00F55299 /* sqliterk_os.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_os.c; sourceTree = "<group>"; };
-		23E9D3081FC7CE9F00F55299 /* sqliterk_os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_os.h; sourceTree = "<group>"; };
-		23E9D3091FC7CE9F00F55299 /* sqliterk_output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqliterk_output.cpp; sourceTree = "<group>"; };
-		23E9D30A1FC7CE9F00F55299 /* sqliterk_pager.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_pager.c; sourceTree = "<group>"; };
-		23E9D30B1FC7CE9F00F55299 /* sqliterk_pager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_pager.h; sourceTree = "<group>"; };
-		23E9D30C1FC7CE9F00F55299 /* sqliterk_util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_util.c; sourceTree = "<group>"; };
-		23E9D30D1FC7CE9F00F55299 /* sqliterk_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_util.h; sourceTree = "<group>"; };
-		23E9D30E1FC7CE9F00F55299 /* sqliterk_values.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_values.c; sourceTree = "<group>"; };
-		23E9D30F1FC7CE9F00F55299 /* sqliterk_values.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_values.h; sourceTree = "<group>"; };
 		23E9E0011FC3C5CB005DE71C /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
 		23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SQLite-Bridging.swift"; sourceTree = "<group>"; };
 		23E9E0061FC3D80B005DE71C /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
@@ -317,6 +293,7 @@
 			files = (
 				233032B21FB947F100101373 /* libz.tbd in Frameworks */,
 				23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */,
+				2349FC341FDF8BDE005230E8 /* sqliterk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +382,14 @@
 			path = codable;
 			sourceTree = "<group>";
 		};
+		2349FC2B1FDF8B14005230E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2349FC301FDF8B14005230E8 /* sqliterk.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		23794DAC1FAB206E001E79DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +401,7 @@
 		238D0AF91FAB1F4300BC2659 = {
 			isa = PBXGroup;
 			children = (
+				2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */,
 				23A1FF691FB084570023527D /* sqlcipher.xcodeproj */,
 				238D0B0F1FAB1F7E00BC2659 /* Info.plist */,
 				238D0B111FAB1F7E00BC2659 /* source */,
@@ -435,7 +421,6 @@
 		238D0B111FAB1F7E00BC2659 /* source */ = {
 			isa = PBXGroup;
 			children = (
-				23E9D2FC1FC7CE9F00F55299 /* repair */,
 				238D0B121FAB1F7E00BC2659 /* abstract */,
 				230209621FBED533000D69B6 /* core */,
 				238D0B3B1FAB1F7E00BC2659 /* builtin */,
@@ -498,7 +483,6 @@
 			isa = PBXGroup;
 			children = (
 				23E737C31FB1601C00EEBC3D /* Master.swift */,
-				23E737C51FB1602800EEBC3D /* Sequence.swift */,
 				230680191FD13B8500EAD5C4 /* CommonStatement.swift */,
 				23C8E0031FD8184300DAE97D /* CodableType.swift */,
 			);
@@ -537,33 +521,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		23E9D2FC1FC7CE9F00F55299 /* repair */ = {
-			isa = PBXGroup;
-			children = (
-				23E9D2FD1FC7CE9F00F55299 /* SQLiteRepairKit.h */,
-				23E9D2FE1FC7CE9F00F55299 /* sqliterk.c */,
-				23E9D2FF1FC7CE9F00F55299 /* sqliterk.h */,
-				23E9D3001FC7CE9F00F55299 /* sqliterk_api.c */,
-				23E9D3011FC7CE9F00F55299 /* sqliterk_btree.c */,
-				23E9D3021FC7CE9F00F55299 /* sqliterk_btree.h */,
-				23E9D3031FC7CE9F00F55299 /* sqliterk_column.c */,
-				23E9D3041FC7CE9F00F55299 /* sqliterk_column.h */,
-				23E9D3051FC7CE9F00F55299 /* sqliterk_crypto.c */,
-				23E9D3061FC7CE9F00F55299 /* sqliterk_crypto.h */,
-				23E9D3071FC7CE9F00F55299 /* sqliterk_os.c */,
-				23E9D3081FC7CE9F00F55299 /* sqliterk_os.h */,
-				23E9D3091FC7CE9F00F55299 /* sqliterk_output.cpp */,
-				23E9D30A1FC7CE9F00F55299 /* sqliterk_pager.c */,
-				23E9D30B1FC7CE9F00F55299 /* sqliterk_pager.h */,
-				23E9D30C1FC7CE9F00F55299 /* sqliterk_util.c */,
-				23E9D30D1FC7CE9F00F55299 /* sqliterk_util.h */,
-				23E9D30E1FC7CE9F00F55299 /* sqliterk_values.c */,
-				23E9D30F1FC7CE9F00F55299 /* sqliterk_values.h */,
-			);
-			name = repair;
-			path = ../../repair;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -571,17 +528,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23E9D3101FC7CE9F00F55299 /* SQLiteRepairKit.h in Headers */,
-				23E9D3201FC7CE9F00F55299 /* sqliterk_util.h in Headers */,
 				238D0BCD1FAB1F7E00BC2659 /* SQLite-Bridging-Header.h in Headers */,
 				23794DB41FAB23AD001E79DE /* WCDB-Bridging-Header.h in Headers */,
-				23E9D31B1FC7CE9F00F55299 /* sqliterk_os.h in Headers */,
-				23E9D3171FC7CE9F00F55299 /* sqliterk_column.h in Headers */,
-				23E9D3151FC7CE9F00F55299 /* sqliterk_btree.h in Headers */,
-				23E9D3121FC7CE9F00F55299 /* sqliterk.h in Headers */,
-				23E9D31E1FC7CE9F00F55299 /* sqliterk_pager.h in Headers */,
-				23E9D3221FC7CE9F00F55299 /* sqliterk_values.h in Headers */,
-				23E9D3191FC7CE9F00F55299 /* sqliterk_crypto.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +551,7 @@
 				2349FC281FDF871F005230E8 /* PBXTargetDependency */,
 				23A1FF791FB08CC50023527D /* PBXTargetDependency */,
 				23A1FF701FB0845E0023527D /* PBXTargetDependency */,
+				2349FC321FDF8B20005230E8 /* PBXTargetDependency */,
 			);
 			name = WCDB.swift;
 			productName = WCDB;
@@ -648,6 +597,10 @@
 					ProductGroup = 23A1FF6A1FB084570023527D /* Products */;
 					ProjectRef = 23A1FF691FB084570023527D /* sqlcipher.xcodeproj */;
 				},
+				{
+					ProductGroup = 2349FC2B1FDF8B14005230E8 /* Products */;
+					ProjectRef = 2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -659,6 +612,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		2349FC301FDF8B14005230E8 /* sqliterk.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = sqliterk.framework;
+			remoteRef = 2349FC2F1FDF8B14005230E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		23A1FF6E1FB084570023527D /* sqlcipher.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -714,11 +674,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23E9D31D1FC7CE9F00F55299 /* sqliterk_pager.c in Sources */,
 				238D0B8C1FAB1F7E00BC2659 /* StatementCreateTable.swift in Sources */,
 				238D0B891FAB1F7E00BC2659 /* StatementAlterTable.swift in Sources */,
 				230209AA1FBED533000D69B6 /* Select.swift in Sources */,
-				23E9D31A1FC7CE9F00F55299 /* sqliterk_os.c in Sources */,
 				231BC02B1FC29A3C00011C69 /* Property.swift in Sources */,
 				238D0B841FAB1F7E00BC2659 /* ModuleArgument.swift in Sources */,
 				238D0BC51FAB1F7E00BC2659 /* Atomic.swift in Sources */,
@@ -730,14 +688,12 @@
 				230209971FBED533000D69B6 /* IndexBinding.swift in Sources */,
 				230209A61FBED533000D69B6 /* Insert.swift in Sources */,
 				23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */,
-				23E9D3161FC7CE9F00F55299 /* sqliterk_column.c in Sources */,
 				230209C21FBEE431000D69B6 /* Optional.swift in Sources */,
 				230470CE1FD8E87F009CFCE3 /* ColumnTypeEncoder.swift in Sources */,
 				23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */,
 				2302099A1FBED533000D69B6 /* TableBinding.swift in Sources */,
 				238D0B8D1FAB1F7E00BC2659 /* StatementCreateVirtualTable.swift in Sources */,
 				237931C81FD538F8003BBA5F /* ColumnCodable.swift in Sources */,
-				23E9D31F1FC7CE9F00F55299 /* sqliterk_util.c in Sources */,
 				230209921FBED533000D69B6 /* RecyclableCore.swift in Sources */,
 				230209A91FBED533000D69B6 /* RowSelect.swift in Sources */,
 				23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */,
@@ -752,8 +708,6 @@
 				238D0B9C1FAB1F7E00BC2659 /* StatementVacuum.swift in Sources */,
 				238D0B941FAB1F7E00BC2659 /* StatementPragma.swift in Sources */,
 				2302098E1FBED533000D69B6 /* Database.swift in Sources */,
-				23E9D3111FC7CE9F00F55299 /* sqliterk.c in Sources */,
-				23E9D3131FC7CE9F00F55299 /* sqliterk_api.c in Sources */,
 				230209C01FBEE3CC000D69B6 /* Convenience.swift in Sources */,
 				238D0B851FAB1F7E00BC2659 /* Order.swift in Sources */,
 				231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */,
@@ -783,15 +737,12 @@
 				230209A71FBED533000D69B6 /* Interface.swift in Sources */,
 				230209AC1FBED533000D69B6 /* Update.swift in Sources */,
 				238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */,
-				23E9D3181FC7CE9F00F55299 /* sqliterk_crypto.c in Sources */,
 				238D0B911FAB1F7E00BC2659 /* StatementDropTable.swift in Sources */,
 				238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */,
 				238D0B9D1FAB1F7E00BC2659 /* Subquery.swift in Sources */,
 				23E9E0071FC3D80B005DE71C /* Table.swift in Sources */,
-				23E9D3141FC7CE9F00F55299 /* sqliterk_btree.c in Sources */,
 				230209961FBED533000D69B6 /* TableConstraintBinding.swift in Sources */,
 				238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c in Sources */,
-				23E737C61FB1602800EEBC3D /* Sequence.swift in Sources */,
 				238D0BC81FAB1F7E00BC2659 /* File.swift in Sources */,
 				238D0B981FAB1F7E00BC2659 /* StatementSavepoint.swift in Sources */,
 				238D0B7D1FAB1F7E00BC2659 /* Describable.swift in Sources */,
@@ -804,7 +755,6 @@
 				238D0B881FAB1F7E00BC2659 /* Statement.swift in Sources */,
 				230209951FBED533000D69B6 /* ColumnConstraintBinding.swift in Sources */,
 				238D0B7F1FAB1F7E00BC2659 /* ForeignKey.swift in Sources */,
-				23E9D3211FC7CE9F00F55299 /* sqliterk_values.c in Sources */,
 				238D0B8F1FAB1F7E00BC2659 /* StatementDetach.swift in Sources */,
 				238D0B7A1FAB1F7E00BC2659 /* ColumnResult.swift in Sources */,
 				237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */,
@@ -812,7 +762,6 @@
 				238D0BCB1FAB1F7E00BC2659 /* RWLock.swift in Sources */,
 				238D0B811FAB1F7E00BC2659 /* HandleStatement.swift in Sources */,
 				238D0B921FAB1F7E00BC2659 /* StatementExplain.swift in Sources */,
-				23E9D31C1FC7CE9F00F55299 /* sqliterk_output.cpp in Sources */,
 				23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */,
 				238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */,
 				230686DC1FAC0E5B0005EE8B /* Convertible.swift in Sources */,
@@ -831,6 +780,11 @@
 			isa = PBXTargetDependency;
 			target = 2349FC211FDF86F9005230E8 /* Swiftlint */;
 			targetProxy = 2349FC271FDF871F005230E8 /* PBXContainerItemProxy */;
+		};
+		2349FC321FDF8B20005230E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqliterk;
+			targetProxy = 2349FC311FDF8B20005230E8 /* PBXContainerItemProxy */;
 		};
 		23A1FF701FB0845E0023527D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

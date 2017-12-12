@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementRollback: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .rollback
     }
+
+    public init() {}
 
     public func rollback(toSavepoint optionalName: String? = nil) -> StatementRollback {
         description.append("ROLLBACK")

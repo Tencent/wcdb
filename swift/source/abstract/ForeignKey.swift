@@ -23,15 +23,15 @@ import Foundation
 public final class ForeignKey: Describable {
     public private(set) var description: String
 
-    public init(withForeignTable table: String, andColumnNames columnNames: [String]) {
+    public init(withForeignTable table: String, and columnConvertibleList: [ColumnConvertible]) {
         description = "REFERENCES \(table)"
-        if !columnNames.isEmpty {
-            description.append("(\(columnNames.joined(separator: ", ")))")
+        if !columnConvertibleList.isEmpty {
+            description.append("(\(columnConvertibleList.joined(separateBy: ", ")))")
         }
     }
 
-    public convenience init(withForeignTable table: String, andColumnNames columnNames: String...) {
-        self.init(withForeignTable: table, andColumnNames: columnNames)
+    public convenience init(withForeignTable table: String, and columnConvertibleList: ColumnConvertible...) {
+        self.init(withForeignTable: table, and: columnConvertibleList)
     }
 
     public enum Action: Describable {

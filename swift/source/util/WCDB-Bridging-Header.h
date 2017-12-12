@@ -23,5 +23,5 @@
 #import <SQLiteRepairKit.h>
 #else //WCDB_COCOAPODS
 #import <WCDBSwift/SQLite-Bridging-Header.h>
-#import <WCDBSwift/SQLiteRepairKit.h>
+#import <sqliterk/SQLiteRepairKit.h>
 #endif //WCDB_COCOAPODS

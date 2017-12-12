@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementAttach: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .attach
     }
+
+    public init() {}
 
     @discardableResult
     public func attach(_ expressionConvertible: ExpressionConvertible, asSchema schema: String) -> StatementAttach {

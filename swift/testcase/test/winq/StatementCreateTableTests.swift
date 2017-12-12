@@ -40,6 +40,8 @@ class StatementCreateTableTests: BaseTestCase {
         let statementSelect = StatementSelect().select(column1).from(table1)
 
         //Then
+        XCTAssertEqual(StatementCreateTable().statementType, StatementType.createTable)
+
         WINQAssertEqual(
             StatementCreateTable().create(table: table1, with: def1, def2),
             "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT)"

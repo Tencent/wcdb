@@ -33,7 +33,7 @@ public struct ColumnIndex: Describable {
     public init(with expressionConvertible: ExpressionConvertible, orderBy term: OrderTerm? = nil) {
         description = expressionConvertible.asExpression().description
         if let wrappedTerm = term {
-            description = " \(wrappedTerm.description)"
+            description.append(" \(wrappedTerm.description)")
         }
     }
 }

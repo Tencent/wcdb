@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementCreateVirtualTable: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .createVirtualTable
     }
+
+    public init() {}
 
     @discardableResult
     public func create(virtualTable table: String, ifNotExists: Bool = true) -> StatementCreateVirtualTable {

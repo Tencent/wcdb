@@ -30,6 +30,8 @@ class StatementUpdateTests: BaseTestCase {
         let column2 = Column(named: "column2")
 
         //Then
+        XCTAssertEqual(StatementUpdate().statementType, StatementType.update)
+
         WINQAssertEqual(
             StatementUpdate().update(table: table1).set((column1, 1)),
             "UPDATE table1 SET column1=1"

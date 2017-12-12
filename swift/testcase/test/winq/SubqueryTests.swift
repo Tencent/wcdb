@@ -26,11 +26,13 @@ class SubqueryTests: BaseTestCase {
     func testSubquery() {
         //Give
         let table1 = "table1"
-        let joinClause = JoinClause(withTable: table1)
+        let joinClause = JoinClause(with: table1)
         let statementSelect = StatementSelect().select(1).from(table1)
         let alias1 = "alias1"
 
         //Then
+        WINQAssertEqual(Subquery(with: joinClause).asTableOrSubquery(), "(table1)")
+
         WINQAssertEqual(Subquery(with: joinClause), "(table1)")
 
         WINQAssertEqual(Subquery(with: statementSelect), "(SELECT 1 FROM table1)")

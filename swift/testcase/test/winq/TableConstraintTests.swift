@@ -33,6 +33,7 @@ class TableConstraintTests: BaseTestCase {
         let column1 = Column(named: "column1")
         let index1 = column1.asIndex()
         let index2 = Column(named: "column2").asIndex()
+        let foreignKey1 = ForeignKey(withForeignTable: "testTable", and: column1)
 
         WINQAssertEqual(
             generateTableConstraint().makePrimary(indexesBy: index1, index2),
@@ -52,6 +53,16 @@ class TableConstraintTests: BaseTestCase {
         WINQAssertEqual(
             generateTableConstraint().check(column1 > 1),
             "CONSTRAINT table1 CHECK(column1 > 1)"
+        )
+
+        WINQAssertEqual(
+            generateTableConstraint().makeForeignKey(column1, foreignKey: foreignKey1),
+            "CONSTRAINT table1 FOREIGN KEY(column1) REFERENCES testTable(column1)"
+        )
+
+        WINQAssertEqual(
+            generateTableConstraint().makeForeignKey([column1], foreignKey: foreignKey1),
+            "CONSTRAINT table1 FOREIGN KEY(column1) REFERENCES testTable(column1)"
         )
     }
 }

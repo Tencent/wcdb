@@ -31,6 +31,8 @@ class StatementInsertTests: BaseTestCase {
         let table1 = "table1"
 
         //Then
+        XCTAssertEqual(StatementInsert().statementType, StatementType.insert)
+
         WINQAssertEqual(
             StatementInsert().insert(intoTable: table1).values(1, "value"),
             "INSERT INTO table1 VALUES(1, 'value')"

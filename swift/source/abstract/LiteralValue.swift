@@ -31,7 +31,7 @@ public struct LiteralValue: Describable {
     }
 
     public init(_ value: Bool) {
-        description = String(value)
+        description = String(value ? 1 : 0)
     }
 
     public init(_ value: Double) {
@@ -55,36 +55,31 @@ public struct LiteralValue: Describable {
         if let value = columnEncodableValue.archivedFundamentalValue() {
             switch ColumnEncodableType.columnType {
             case .integer32:
-                if let int32Value = value as? Int32 {
-                    self.init(int32Value)
-                } else {
-                    self.init(nil)
+                guard let int32Value = value as? Int32 else {
+                    Error.abort("")
                 }
+                self.init(int32Value)
             case .integer64:
-                if let int64Value = value as? Int64 {
-                    self.init(int64Value)
-                } else {
-                    self.init(nil)
+                guard let int64Value = value as? Int64 else {
+                    Error.abort("")
                 }
+                self.init(int64Value)
             case .float:
-                if let doubleValue = value as? Double {
-                    self.init(doubleValue)
-                } else {
-                    self.init(nil)
+                guard let doubleValue = value as? Double else {
+                    Error.abort("")
                 }
+                self.init(doubleValue)
             case .text:
-                if let stringValue = value as? String {
-                    self.init(stringValue)
-                } else {
-                    self.init(nil)
+                guard let stringValue = value as? String else {
+                    Error.abort("")
                 }
+                self.init(stringValue)
             case .BLOB:
-                if let dataValue = value as? Data {
-                    self.init(dataValue)
-                } else {
-                    self.init(nil)
+                guard let dataValue = value as? Data else {
+                    Error.abort("")
                 }
-            default:
+                self.init(dataValue)
+            case .null:
                 self.init(nil)
             }
         } else {

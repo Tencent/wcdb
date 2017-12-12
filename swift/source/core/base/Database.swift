@@ -53,8 +53,8 @@ public final class Database {
                                                        defaultConfigs: Database.defaultConfigs)
     }
 
-    public init(with tag: Tag) {
-        self.recyclableHandlePool = HandlePool.getPool(with: tag)!
+    public init(with tag: Tag) throws {
+        try self.recyclableHandlePool = HandlePool.getPool(with: tag)
     }
 
     private var handlePool: HandlePool {
@@ -172,7 +172,7 @@ extension Database {
                        orderBy: DefaultConfigOrder.cipher.rawValue),
         Configs.Config(named: DefaultConfigOrder.basic.description, with: { (handle: Handle) throws in
             guard !handle.isReadonly else {
-                let handleStatement = try handle.prepare(.getJournalMode)
+                let handleStatement = try handle.prepare(CommonStatement.getJournalMode)
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
@@ -185,34 +185,34 @@ extension Database {
             //Locking Mode
             do {
                 //Get Locking Mode
-                let handleStatement = try handle.prepare(.getLockingMode)
+                let handleStatement = try handle.prepare(CommonStatement.getLockingMode)
                 try handleStatement.step()
                 let lockingMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
                 //Set Locking Mode
                 if lockingMode.caseInsensitiveCompare("NORMAL") != ComparisonResult.orderedSame {
-                    try handle.exec(.enableLockingModeNormal)
+                    try handle.exec(CommonStatement.enableLockingModeNormal)
                 }
             }
             //Synchronous
             do {
-                try handle.exec(.enableSynchronousNormal)
+                try handle.exec(CommonStatement.enableSynchronousNormal)
             }
             //Journal Mode
             do {
                 //Get Journal Mode
-                let handleStatement = try handle.prepare(.getJournalMode)
+                let handleStatement = try handle.prepare(CommonStatement.getJournalMode)
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
                 //Set Journal Mode
                 if journalMode.caseInsensitiveCompare("WAL") != ComparisonResult.orderedSame {
-                    try handle.exec(.enableJournalModeWAL)
+                    try handle.exec(CommonStatement.enableJournalModeWAL)
                 }
             }
             //Fullfsync
             do {
-                try handle.exec(.enableFullfsync)
+                try handle.exec(CommonStatement.enableFullfsync)
             }
         }, orderBy: DefaultConfigOrder.basic.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.synchronous.description,
@@ -225,7 +225,7 @@ extension Database {
                 Database.checkpointThread.async {
                     while true {
                         Database.timedQueue.wait(untilExpired: {
-                            try? Database(withPath: $0).exec(.checkpoint)
+                            try? Database(withPath: $0).exec(CommonStatement.checkpoint)
                         })
                     }
                 }
@@ -278,7 +278,7 @@ extension Database {
     public func setSynchronous(isFull: Bool) {
         if isFull {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
-                try handle.exec(.enableSynchronousFull)
+                try handle.exec(CommonStatement.enableSynchronousFull)
             })
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
             })
@@ -308,7 +308,7 @@ extension Database {
         handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
             try tokenizes.forEach({ (tokenize) in
                 let module = tokenize.module
-                let handleStatement = try handle.prepare(.fts3Tokenizer)
+                let handleStatement = try handle.prepare(CommonStatement.fts3Tokenizer)
                 handleStatement.bind(module.name, toIndex: 1)
                 handleStatement.bind(module.address, toIndex: 2)
                 try handleStatement.step()
@@ -383,21 +383,23 @@ extension Database: Core {
 
     func begin(_ mode: StatementTransaction.Mode) throws {
         let recyclableHandle = try flowOut()
-        let statement = mode == .immediate ? .beginTransactionImmediate : StatementTransaction().begin(mode)
+        let statement = mode == .immediate ?
+            CommonStatement.beginTransactionImmediate :
+            StatementTransaction().begin(mode)
         try recyclableHandle.raw.handle.exec(statement)
         Database.threadedHandles.value[path] = recyclableHandle
     }
 
     public func commit() throws {
         let recyclableHandle = try flowOut()
-        try recyclableHandle.raw.handle.exec(.commitTransaction)
+        try recyclableHandle.raw.handle.exec(CommonStatement.commitTransaction)
         Database.threadedHandles.value.removeValue(forKey: path)
     }
 
     public func rollback() throws {
         let recyclableHandle = try flowOut()
         Database.threadedHandles.value.removeValue(forKey: path)
-        try recyclableHandle.raw.handle.exec(.rollbackTransaction)
+        try recyclableHandle.raw.handle.exec(CommonStatement.rollbackTransaction)
     }
 
     public func run(transaction: TransactionClosure) throws {

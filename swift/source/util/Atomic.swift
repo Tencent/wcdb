@@ -28,24 +28,13 @@ final class Atomic<Value> {
     }
 
     var value: Value {
-        get {
-            spin.lock(); defer { spin.unlock() }
-            return raw
-        }
-        set {
-            spin.lock(); defer { spin.unlock() }
-            raw = newValue
-        }
+        spin.lock(); defer { spin.unlock() }
+        return raw
     }
 
     func withValue(_ closure: (Value) -> Value) {
         spin.lock(); defer { spin.unlock() }
         raw = closure(raw)
-    }
-
-    func withValue(_ closure: (inout Value) -> Void) {
-        spin.lock(); defer { spin.unlock() }
-        closure(&raw)
     }
 
     func assign(_ newValue: Value) {
@@ -87,14 +76,8 @@ extension Atomic where Value: Comparable {
     static func < (left: Atomic, right: Value) -> Bool {
         return left.value < right
     }
-    static func <= (left: Atomic, right: Value) -> Bool {
-        return left.value <= right
-    }
     static func > (left: Atomic, right: Value) -> Bool {
         return left.value > right
-    }
-    static func >= (left: Atomic, right: Value) -> Bool {
-        return left.value >= right
     }
 }
 

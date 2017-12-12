@@ -26,6 +26,8 @@ class StatementDropIndexTests: BaseTestCase {
     func testStatementDropIndex() {
         let index1 = "index1"
 
+        XCTAssertEqual(StatementDropIndex().statementType, StatementType.dropIndex)
+
         WINQAssertEqual(StatementDropIndex().drop(index: index1), "DROP INDEX IF EXISTS index1")
 
         WINQAssertEqual(StatementDropIndex().drop(index: index1, ifExists: false), "DROP INDEX index1")

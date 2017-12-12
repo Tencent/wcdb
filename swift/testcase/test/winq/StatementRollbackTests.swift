@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementRollbackTests: BaseTestCase {
 
     func testStatementRollback() {
+        XCTAssertEqual(StatementRollback().statementType, StatementType.rollback)
+
         WINQAssertEqual(StatementRollback().rollback(), "ROLLBACK")
 
         WINQAssertEqual(StatementRollback().rollback(toSavepoint: "savepoint1"), "ROLLBACK TO savepoint1")

@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementInsert: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .insert
     }
+
+    public init() {}
 
     @discardableResult
     public func insert(intoTable table: String,

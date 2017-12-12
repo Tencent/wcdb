@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementTransactionTests: BaseTestCase {
 
     func testStatementTransaction() {
+        XCTAssertEqual(StatementTransaction().statementType, StatementType.transaction)
+
         WINQAssertEqual(StatementTransaction().begin(), "BEGIN")
 
         WINQAssertEqual(StatementTransaction().begin(.defered), "BEGIN DEFERED")

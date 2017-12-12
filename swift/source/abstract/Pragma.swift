@@ -106,8 +106,4 @@ public struct Pragma: Describable {
     public static let walAutocheckpoint = Pragma(named: "wal_autocheckpoint")
     public static let walCheckpoint = Pragma(named: "wal_checkpoint")
     public static let writableSchema = Pragma(named: "writable_schema")
-
-    public var name: String {
-        return description
-    }
 }

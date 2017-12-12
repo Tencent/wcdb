@@ -24,6 +24,8 @@ import WCDBSwift
 class StatementReleaseTests: BaseTestCase {
 
     func testStatementRelease() {
+        XCTAssertEqual(StatementRelease().statementType, StatementType.release)
+
         WINQAssertEqual(StatementRelease().release(savepoint: "savepoint1"), "RELEASE savepoint1")
     }
 }

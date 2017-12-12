@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementTransaction: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .transaction
     }
+
+    public init() {}
 
     public enum TransactionType: Describable {
         case begin

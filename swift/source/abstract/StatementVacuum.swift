@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementVacuum: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .vacuum
     }
+
+    public init() {}
 
     @discardableResult
     public func vacuum(schema: String) -> StatementVacuum {

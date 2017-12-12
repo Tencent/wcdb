@@ -20,35 +20,29 @@
 
 import Foundation
 
-public class Statement: Describable {
-    public internal(set) var description: String = ""
+public enum StatementType {
+    case alterTable
+    case createIndex
+    case createTable
+    case delete
+    case dropIndex
+    case dropTable
+    case insert
+    case pragma
+    case select
+    case transaction
+    case update
+    case createVirtualTable
+    case attach
+    case detach
+    case explain
+    case savepoint
+    case release
+    case rollback
+    case vacuum
+    case reindex
+}
 
-    public init() {}
-
-    public enum StatementType {
-        case alterTable
-        case createIndex
-        case createTable
-        case delete
-        case dropIndex
-        case dropTable
-        case insert
-        case pragma
-        case select
-        case transaction
-        case update
-        case createVirtualTable
-        case attach
-        case detach
-        case explain
-        case savepoint
-        case release
-        case rollback
-        case vacuum
-        case reindex
-    }
-
-    public var statementType: StatementType {
-        Error.abort("")
-    }
+public protocol Statement: Describable {
+    var statementType: StatementType {get}
 }

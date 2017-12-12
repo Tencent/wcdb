@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementRelease: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .release
     }
+
+    public init() {}
 
     @discardableResult
     public func release(savepoint name: String) -> StatementRelease {

@@ -23,7 +23,14 @@ import WCDBSwift
 
 class ColumnResultTests: BaseTestCase {
 
-    func testAs() {
-        WINQAssertEqual(ColumnResult(with: 1).`as`("testColumnResult"), "1 AS testColumnResult")
+    func generateColumnResult() -> ColumnResult {
+        let column1 = Column(named: "column1")
+        return ColumnResult(with: column1)
+    }
+
+    func testColumnResult() {
+        WINQAssertEqual(generateColumnResult().`as`("testColumnResult"), "column1 AS testColumnResult")
+
+        WINQAssertEqual(generateColumnResult().asColumnResult(), "column1")
     }
 }

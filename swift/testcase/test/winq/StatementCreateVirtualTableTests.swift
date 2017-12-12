@@ -33,6 +33,8 @@ class StatementCreateVirtualTableTests: BaseTestCase {
         let virtualTable1 = "virtualTable1"
 
         //Then
+        XCTAssertEqual(StatementCreateVirtualTable().statementType, StatementType.createVirtualTable)
+
         WINQAssertEqual(
             StatementCreateVirtualTable()
                 .create(virtualTable: virtualTable1)

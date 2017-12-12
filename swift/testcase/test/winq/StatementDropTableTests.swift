@@ -26,6 +26,8 @@ class StatementDropTableTests: BaseTestCase {
     func testStatementDropTable() {
         let table1 = "table1"
 
+        XCTAssertEqual(StatementDropTable().statementType, StatementType.dropTable)
+
         WINQAssertEqual(StatementDropTable().drop(table: table1), "DROP TABLE IF EXISTS table1")
 
         WINQAssertEqual(StatementDropTable().drop(table: table1, ifExists: false), "DROP TABLE table1")

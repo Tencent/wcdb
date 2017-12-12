@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementUpdate: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .update
     }
+
+    public init() {}
 
     @discardableResult
     public func update(table: String, onConflict conflict: Conflict? = nil) -> StatementUpdate {

@@ -20,9 +20,12 @@
 
 import Foundation
 public final class StatementDropTable: Statement {
-    public override var statementType: Statement.StatementType {
+    public private(set) var description: String = ""
+    public var statementType: StatementType {
         return .dropTable
     }
+
+    public init() {}
 
     public func drop(table: String, ifExists: Bool = true) -> StatementDropTable {
         description.append("DROP TABLE ")

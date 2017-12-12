@@ -65,7 +65,7 @@ class ColumnDefTests: BaseTestCase {
 
         WINQAssertEqual(
             generateColumnDef().makeDefault(to: .bool(false)),
-            "testColumnDef INTEGER DEFAULT false"
+            "testColumnDef INTEGER DEFAULT 0"
         )
 
         WINQAssertEqual(
