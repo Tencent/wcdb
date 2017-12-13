@@ -54,8 +54,30 @@ class AdvanceCRUDTests: CRUDTestCase {
         }
     }
 
-    class EncodableObject: TableEncodable {
+    struct EncodableColumn: ColumnEncodable {
+        func archivedValue() -> Int64? {
+            return Int64(variable1)
+        }
+
+        typealias FundamentalType = Int64
+
         var variable1: Int = 0
+    }
+
+    struct DecodableColumn: ColumnDecodable {
+        init?(with value: Int64) {
+            variable1 = Int(truncatingIfNeeded: value)
+        }
+
+        init() {}
+
+        typealias FundamentalType = Int64
+
+        var variable1: Int = 0
+    }
+
+    class EncodableObject: TableEncodable {
+        var variable1: EncodableColumn = EncodableColumn()
 
         required init() {}
 
@@ -67,7 +89,7 @@ class AdvanceCRUDTests: CRUDTestCase {
     }
 
     class DecodableObject: TableDecodable {
-        var variable1: Int? = 0
+        var variable1: DecodableColumn = DecodableColumn()
 
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DecodableObject
@@ -82,7 +104,6 @@ class AdvanceCRUDTests: CRUDTestCase {
                                              of: EncodableObject.self))
 
         let object = EncodableObject()
-        object.variable1 = 1
         XCTAssertNoThrow(try database.insert(objects: object,
                                              intoTable: tableName))
 
@@ -90,7 +111,6 @@ class AdvanceCRUDTests: CRUDTestCase {
             try database.getObject(fromTable: tableName)
         )
         XCTAssertNotNil(decodableObject)
-        XCTAssertEqual(decodableObject!.variable1, object.variable1)
+        XCTAssertEqual(decodableObject!.variable1.variable1, object.variable1.variable1)
     }
-
 }
