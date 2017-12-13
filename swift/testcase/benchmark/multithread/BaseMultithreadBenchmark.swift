@@ -21,6 +21,13 @@
 import XCTest
 
 class BaseMultithreadBenchmark: BaseBenchmark {
-    let group = DispatchGroup()
-    let queue = DispatchQueue(label: BaseMultithreadBenchmark.name)
+
+    var group: DispatchGroup!
+    var queue: DispatchQueue!
+
+    override func setUp() {
+        super.setUp()
+        group = DispatchGroup()
+        queue = DispatchQueue(label: BaseMultithreadBenchmark.name, attributes: .concurrent)
+    }
 }
