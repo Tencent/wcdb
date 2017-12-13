@@ -19,6 +19,7 @@
  */
 
 import XCTest
+import WCDBSwift
 
 class AdvanceCRUDTests: CRUDTestCase {
 
@@ -52,4 +53,44 @@ class AdvanceCRUDTests: CRUDTestCase {
             XCTAssertEqual(typedWalSize!, expectedSize)
         }
     }
+
+    class EncodableObject: TableEncodable {
+        var variable1: Int = 0
+
+        required init() {}
+
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = EncodableObject
+            case variable1
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
+    class DecodableObject: TableDecodable {
+        var variable1: Int? = 0
+
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = DecodableObject
+            case variable1
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
+    func testPartialCodable() {
+        let tableName = "testPartialCodable"
+        XCTAssertNoThrow(try database.create(table: tableName,
+                                             of: EncodableObject.self))
+
+        let object = EncodableObject()
+        object.variable1 = 1
+        XCTAssertNoThrow(try database.insert(objects: object,
+                                             intoTable: tableName))
+
+        let decodableObject: DecodableObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(fromTable: tableName)
+        )
+        XCTAssertNotNil(decodableObject)
+        XCTAssertEqual(decodableObject!.variable1, object.variable1)
+    }
+
 }
