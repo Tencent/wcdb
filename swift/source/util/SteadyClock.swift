@@ -23,7 +23,7 @@ import Foundation
 struct SteadyClock {
     typealias AbsoluteTime = CFAbsoluteTime
 
-    var absoluteTime: AbsoluteTime
+    private var absoluteTime: AbsoluteTime
 
     init() {
         self.absoluteTime = CFAbsoluteTimeGetCurrent()
@@ -41,25 +41,11 @@ struct SteadyClock {
         return SteadyClock(with: steadyClock.absoluteTime + timeInterval)
     }
 
-    static func - (steadyClock: SteadyClock, timeInterval: AbsoluteTime) -> SteadyClock {
-        return SteadyClock(with: steadyClock.absoluteTime - timeInterval)
-    }
-
-    static func timeIntervalSince(_ other: SteadyClock) -> AbsoluteTime {
-        return SteadyClock.now().timeIntervalSince(other)
+    static func > (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
+        return lhs.absoluteTime < rhs.absoluteTime
     }
 
     static func now() -> SteadyClock {
         return SteadyClock()
-    }
-}
-
-extension SteadyClock: Comparable {
-    static func < (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
-        return lhs.absoluteTime < rhs.absoluteTime
-    }
-
-    static func == (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
-        return lhs.absoluteTime == rhs.absoluteTime
     }
 }

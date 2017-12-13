@@ -22,7 +22,7 @@ import Foundation
 
 final class TimedQueue<Key: Hashable> {
     typealias Time = SteadyClock.AbsoluteTime
-    typealias Element = (Key, SteadyClock)
+    typealias Element = (key: Key, clock: SteadyClock)
     typealias List = [Element]
     typealias Map = [Key: List.Index]
 
@@ -72,9 +72,9 @@ final class TimedQueue<Key: Hashable> {
             do {
                 conditionLock.lock(); defer { conditionLock.unlock() }
                 element = list.first!
-                if now > element.1 {
+                if now > element.clock {
                     list.removeFirst()
-                    map.removeValue(forKey: element.0)
+                    map.removeValue(forKey: element.key)
                     get = true
                 }
             }
