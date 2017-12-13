@@ -109,11 +109,10 @@ public final class Handle {
         let rc = sqlite3_exec(handle, statement.description, nil, nil, nil)
         let result = rc == SQLITE_OK
         if let tracer = self.tracer {
-            if  statement.statementType == .transaction {
-                guard let statementTransaction = statement as? StatementTransaction else {
-                    Error.abort("")
-                }
-                switch statementTransaction.transactionType! {
+            if  statement.statementType == .transaction,
+                let statementTransaction = statement as? StatementTransaction,
+                let transactionType = statementTransaction.transactionType {
+                switch transactionType {
                 case .begin:
                     if result {
                         tracer.shouldAggregation = true

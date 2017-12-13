@@ -24,13 +24,6 @@ public final class Select: SelectBase {
     private let keys: [CodingTableKeyBase]
 
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {
-        guard propertyConvertibleList.count > 0 else {
-            throw Error.reportInterface(tag: core.tag,
-                                        path: core.path,
-                                        operation: .select,
-                                        code: .misuse,
-                                        message: "Selecting nothing from \(table) is invalid")
-        }
         //TODO: Use generic to check all coding table keys conform to same root type
         keys = propertyConvertibleList.asCodingTableKeys()
         super.init(with: core)

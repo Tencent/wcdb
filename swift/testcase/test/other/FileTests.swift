@@ -37,7 +37,41 @@ class FileTests: BaseTestCase {
         XCTAssertEqual(database.paths.sorted(), expertedPaths.sorted())
     }
 
+    func testURLs() {
+        //Give
+        let url = self.recommendedPath
+        let path = url.path
+        let expertedURLs = [url,
+                            URL(fileURLWithPath: path+"-wal"),
+                            URL(fileURLWithPath: path+"-shm"),
+                            URL(fileURLWithPath: path+"-journal"),
+                            URL(fileURLWithPath: path+"-backup")]
+        //Then
+        func sorter(left: URL, right: URL) -> Bool {
+            return left.path < right.path
+        }
+        XCTAssertEqual(database.urls.sorted(by: sorter), expertedURLs.sorted(by: sorter))
+    }
+
     func testRemoveFiles() {
+        //Give
+        for path in database.paths {
+            if fileManager.fileExists(atPath: path) {
+                XCTAssertNoThrow(try fileManager.removeItem(atPath: path))
+            }
+            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil))
+        }
+        //When
+        database.close {
+            XCTAssertNoThrow(try self.database.removeFiles())
+        }
+        //Then
+        for path in database.paths {
+            XCTAssertFalse(fileManager.fileExists(atPath: path))
+        }
+    }
+
+    func testUnsafeRemoveFiles() {
         //Give
         for path in database.paths {
             if fileManager.fileExists(atPath: path) {
@@ -103,4 +137,22 @@ class FileTests: BaseTestCase {
             XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
         }
     }
+
+    func testUnsafeGetFilesSize() {
+        //Give
+        let data = "testGetFilesSize".data(using: .ascii)!
+        let expectedFilesSize = data.count * database.paths.count
+        for path in database.paths {
+            if fileManager.fileExists(atPath: path) {
+                XCTAssertNoThrow(try fileManager.removeItem(atPath: path))
+            }
+            XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: data, attributes: nil))
+        }
+        //Then
+        database.close {
+            let filesSize = WCDBAssertNoThrowReturned(try self.database.getFilesSize()) ?? 0
+            XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
+        }
+    }
+
 }

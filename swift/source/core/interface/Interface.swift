@@ -321,13 +321,12 @@ extension RowSelectInterface where Self: Core {
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> FundamentalRow? {
-        return try getRows(
+        return try getRow(
             on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
-            limit: 1,
-            offset: offset).first
+            offset: offset)
     }
 
     public func getRow(on columnResultConvertibleList: [ColumnResultConvertible],
@@ -504,12 +503,11 @@ extension SelectInterface where Self: Core {
         where condition: Condition? = nil,
         orderBy orderList: [OrderBy]? = nil,
         offset: Offset? = nil) throws -> Object? {
-        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
-                              fromTable: table,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: 1,
-                              offset: offset).first
+        return try getObject(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
+                             fromTable: table,
+                             where: condition,
+                             orderBy: orderList,
+                             offset: offset)
     }
 }
 

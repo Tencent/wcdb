@@ -87,6 +87,7 @@ class TypedTests: CRUDTestCase {
         var nsCodable: TypedNSCodableObject = TypedNSCodableObject()
         var codable: TypedCodableObject = TypedCodableObject.variable
         var bool: Bool = false
+        var date: Date = Date()
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedTestObject
@@ -108,6 +109,7 @@ class TypedTests: CRUDTestCase {
             case nsCodable
             case codable
             case bool
+            case date
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
@@ -145,6 +147,7 @@ class TypedTests: CRUDTestCase {
                 }()
                 codable = .variable
                 bool = true
+                date = Date.distantFuture
             case .lowerBoundary:
                 int = Int.min
                 int8 = Int8.min
@@ -172,6 +175,7 @@ class TypedTests: CRUDTestCase {
                 }()
                 codable = .variable
                 bool = false
+                date = Date.distantPast
             }
         }
 
@@ -194,6 +198,7 @@ class TypedTests: CRUDTestCase {
                 && lhs.codable == rhs.codable
                 && lhs.nsCodable == rhs.nsCodable
                 && lhs.bool == rhs.bool
+                && lhs.date == rhs.date
         }
         var debugDescription: String {
             return """
@@ -215,6 +220,7 @@ class TypedTests: CRUDTestCase {
             nsCodable: \(String(describing: nsCodable))
             codable: \(String(describing: codable))
             bool: \(String(describing: bool))
+            date: \(String(describing: date))
             """
         }
     }

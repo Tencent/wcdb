@@ -80,6 +80,31 @@ class TableTests: BaseTestCase {
         )
     }
 
+    class SkipColumnObject: TableCodable, Named {
+        var anInt32: Int32 = -1
+
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = SkipColumnObject
+            case anInt32
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.anInt32: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
+            }
+        }
+
+        var isAutoIncrement: Bool = false
+        var lastInsertedRowID: Int64 = 0
+    }
+
+    func testCreateTableSkipColumns() {
+        //Give
+        let tableName = BaselineObject.name
+        XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
+        //Then
+        XCTAssertNoThrow(try database.create(table: tableName, of: SkipColumnObject.self))
+    }
+
     class IndexObject: TableCodable, Named {
         var variable: Int32 = 0
         required init() {}

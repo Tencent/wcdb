@@ -95,6 +95,35 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[1].variable2)
     }
 
+    func testGroupByRowSelect() {
+        //Give
+        let preInsertedObjects: [CRUDObject] = {
+            let object1 = CRUDObject()
+            object1.variable1 = 3
+            object1.variable2 = "object1"
+            let object2 = CRUDObject()
+            object2.variable1 = 4
+            object2.variable2 = "object2"
+            return [object1, object2]
+        }()
+        XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: CRUDObject.name))
+
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try database.prepareRowSelect(on: Column.any.count(),
+                                          fromTable: CRUDObject.name),
+            whenFailed: nil
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
+        rowSelect.group(by: CRUDObject.Properties.variable2).having(CRUDObject.Properties.variable1 > 0)
+        //When
+        let results: FundamentalColumn = WCDBAssertNoThrowReturned(try rowSelect.allValues())
+        //Then
+        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(results[0].int32Value, 2)
+        XCTAssertEqual(results[1].int32Value, 2)
+    }
+
     func testPartialRowSelect() {
         //Give
         let optionalRowSelect = WCDBAssertNoThrowReturned(
@@ -210,5 +239,21 @@ class RowSelectTests: CRUDTestCase {
     func testRowSelectFailed() {
         XCTAssertThrowsError(try database.prepareRowSelect(fromTables: []))
     }
+    func testRowSelectType() {
+        //Give
+        let optionalRowSelect = WCDBAssertNoThrowReturned(
+            try database.prepareRowSelect(on: 1, 2.0, "3", fromTable: CRUDObject.name),
+            whenFailed: nil
+        )
+        XCTAssertNotNil(optionalRowSelect)
+        rowSelect = optionalRowSelect!
 
+        //When
+        let results: FundamentalRow? = WCDBAssertNoThrowReturned(try rowSelect.nextRow())
+        XCTAssertNotNil(results)
+        //Then
+        XCTAssertEqual(results![0].int32Value, 1)
+        XCTAssertEqual(results![1].doubleValue, 2.0)
+        XCTAssertEqual(results![2].stringValue, "3")
+    }
 }

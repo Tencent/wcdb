@@ -147,4 +147,13 @@ class InsertTests: CRUDTestCase {
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.variable2, self.name)
     }
+
+    func testInsertEmpty() {
+        XCTAssertNoThrow(try insert.execute(with: [CRUDObject]()))
+    }
+
+    func testInsertFailed() {
+        XCTAssertThrowsError(try database.prepareInsert(of: CRUDObject.self, intoTable: ""))
+    }
+
 }

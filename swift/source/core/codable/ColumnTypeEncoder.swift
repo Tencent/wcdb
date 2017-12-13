@@ -117,10 +117,6 @@ final class ColumnTypeEncoder: Encoder {
             Error.abort("")
         }
 
-        func encodeConditional<T>(_ object: T, forKey key: Key) throws where T: AnyObject, T: Encodable {
-            try encode(object, forKey: key)
-        }
-
         func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
             encoder.results[key.stringValue] = .integer32
         }

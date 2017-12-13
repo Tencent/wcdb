@@ -85,7 +85,7 @@ class SelectTests: CRUDTestCase {
 
     func testPartialSelect() {
         let optionalSelect = WCDBAssertNoThrowReturned(
-            try database.prepareSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name),
+            try database.prepareSelect(on: CRUDObject.Properties.variable2.asProperty(), fromTable: CRUDObject.name),
             whenFailed: nil
         )
         XCTAssertNotNil(optionalSelect)
@@ -141,8 +141,18 @@ class SelectTests: CRUDTestCase {
         }
     }
 
-    func testSelectWrong() {
+    func testSelectWrongObject() {
         XCTAssertThrowsError(try select.allObjects(of: WrongObject.self))
         XCTAssertThrowsError(try select.nextObject(of: WrongObject.self))
+    }
+
+    func testSelectFailed() {
+        let optionalSelect = WCDBAssertNoThrowReturned(
+            try database.prepareSelect(of: CRUDObject.self, fromTable: "nonexistentTable"),
+            whenFailed: nil
+        )
+        XCTAssertNotNil(optionalSelect)
+        select = optionalSelect!
+        XCTAssertThrowsError(try select.nextObject())
     }
 }

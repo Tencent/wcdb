@@ -59,6 +59,13 @@ class DatabaseTests: BaseTestCase {
         XCTAssertFalse(database.canOpen)
     }
 
+    func testFailedToOpenDatabase() {
+        let path = self.recommendedPath
+        XCTAssertNoThrow(try fileManager.createDirectory(at: path, withIntermediateDirectories: true, attributes: nil))
+        let database = Database(withFileURL: path)
+        XCTAssertFalse(database.canOpen)
+    }
+
     func testPurgeFreeHandles() {
         //Give
         let database: Database = Database(withFileURL: self.recommendedPath)

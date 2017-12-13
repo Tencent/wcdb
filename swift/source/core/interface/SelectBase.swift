@@ -36,7 +36,7 @@ public class SelectBase: CoreRepresentable {
     }
 
     deinit {
-        try? optionalCoreStatement?.finalize()
+        try? finalize()
     }
 
     func lazyCoreStatement() throws -> CoreStatement {

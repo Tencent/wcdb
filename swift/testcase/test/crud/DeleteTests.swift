@@ -88,10 +88,23 @@ class DeleteTests: CRUDTestCase {
         XCTAssertEqual(results[0], preInsertedObjects[0])
     }
 
+    func testLimitedFromToDelete() {
+        //When
+        XCTAssertNoThrow(try delete.limit(from: 1, to: 2).execute())
+        //Then
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
+        XCTAssertEqual(results.count, 1)
+        XCTAssertEqual(results[0], preInsertedObjects[0])
+    }
+
     func testDeleteChanges() {
         //When
         XCTAssertNoThrow(try delete.execute())
         //Then
         XCTAssertEqual(delete.changes, preInsertedObjects.count)
+    }
+
+    func testDeleteFailed() {
+        XCTAssertThrowsError(try database.prepareDelete(fromTable: ""))
     }
 }

@@ -58,19 +58,11 @@ extension Array where Element==ColumnResultConvertible {
     func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asColumnResult().description }, separateBy: separator)
     }
-
-    func asColumnResults() -> [ColumnResult] {
-        return map { $0.asColumnResult() }
-    }
 }
 
 extension Array where Element==ExpressionConvertible {
     func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asExpression().description }, separateBy: separator)
-    }
-
-    func asExpressions() -> [Expression] {
-        return map { $0.asExpression() }
     }
 }
 
@@ -78,29 +70,17 @@ extension Array where Element==ColumnConvertible {
     func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asColumn().description }, separateBy: separator)
     }
-
-    func asColumns() -> [Column] {
-        return map { $0.asColumn() }
-    }
 }
 
 extension Array where Element==TableOrSubqueryConvertible {
     func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asTableOrSubquery().description }, separateBy: separator)
     }
-
-    func asTableOrSubqueryList() -> [Subquery] {
-        return map { $0.asTableOrSubquery() }
-    }
 }
 
 extension Array where Element==OrderConvertible {
     func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asOrder().description }, separateBy: separator)
-    }
-
-    func asOrders() -> [Order] {
-        return map { $0.asOrder() }
     }
 }
 
@@ -115,15 +95,6 @@ extension Array where Element==ColumnIndexConvertible {
 }
 
 extension Array where Element==PropertyConvertible {
-    func asProperties() -> [Property] {
-        return map { $0.asProperty() }
-    }
-    func asCodingTableKeys() -> [CodingTableKeyBase] {
-        return map { $0.codingTableKey }
-    }
-}
-
-extension Array where Element: PropertyConvertible {
     func asCodingTableKeys() -> [CodingTableKeyBase] {
         return map { $0.codingTableKey }
     }
@@ -168,10 +139,6 @@ extension String {
 
     var cString: UnsafePointer<Int8>? {
         return UnsafePointer<Int8>((self as NSString).utf8String)
-    }
-
-    func substring(with cfRange: CFRange) -> String {
-        return String(self[range(from: cfRange.location, to: cfRange.location+cfRange.length)])
     }
 
     init?(bytes: UnsafeRawPointer, count: Int, encoding: String.Encoding) {

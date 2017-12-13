@@ -69,6 +69,18 @@ class TransactionTests: CRUDTestCase {
         XCTAssertEqual(results.count, 0)
     }
 
+    func testControllableTransactionFailedWithDatabase() {
+        //Give
+        let object = CRUDObject()
+        object.variable1 = 3
+        object.variable2 = self.name
+        //When
+        XCTAssertThrowsError(try database.run(controlableTransaction: {
+            try database.insert(objects: object, intoTable: "nonexistentTable")
+            return true
+        }))
+    }
+
     func testRunTransactionWithDatabase() {
         //Give
         let object = CRUDObject()
@@ -85,6 +97,17 @@ class TransactionTests: CRUDTestCase {
         )
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results[0].variable2, self.name)
+    }
+
+    func testRunTransactionFailedWithDatabase() {
+        //Give
+        let object = CRUDObject()
+        object.variable1 = 3
+        object.variable2 = self.name
+        //When
+        XCTAssertThrowsError(try database.run(transaction: {
+            try database.insert(objects: object, intoTable: "nonexistentTable")
+        }))
     }
 
     func testRollbackControllableTransactionWithDatabase() {

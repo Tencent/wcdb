@@ -101,12 +101,6 @@ final class TableEncoder: Encoder {
             generalEncode(value, forKey: key)
         }
 
-        func encodeConditional<Object>(_ object: Object,
-                                       forKey key: Key) throws
-            where Object: AnyObject, Object: Encodable {
-            try encode(object, forKey: key)
-        }
-
         func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
             guard let encodableColumnValue = value as? ColumnEncodableBase else {
                 Error.abort("")

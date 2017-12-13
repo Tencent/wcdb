@@ -155,6 +155,22 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(nullFundamentalValue.doubleValue, 0)
     }
 
+    func testStepFailed() {
+        //Give
+        let bindingParameters = Array(repeating: Expression.bindingParameter, count: 2)
+        let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindingParameters)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        XCTAssertNotNil(optionalCoreStatement)
+        let coreStatement = optionalCoreStatement!
+
+        let expectedVariable2 = "object3"
+        //When
+        coreStatement.bind(nil, toIndex: 1)
+        coreStatement.bind(expectedVariable2, toIndex: 2)
+        XCTAssertNoThrow(try coreStatement.step())
+        XCTAssertThrowsError(try coreStatement.step())
+    }
+
     func testCipher() {
         //Give
         database.close {
@@ -262,6 +278,16 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertTrue(tested)
     }
 
+    func testConfigFailed() {
+        //Give
+        database.close()
+        database.setConfig(named: "testConfigFailed", with: { (handle) throws in
+            try handle.exec(StatementSelect().select(Column.any).from("nonexistentTable"))
+        })
+        //When
+        XCTAssertFalse(database.canOpen)
+    }
+
     func testRedirect() {
         let property = CRUDObject.Properties.any.count().as(CRUDObject.Properties.variable1)
         let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(
@@ -270,6 +296,16 @@ class AdvanceTests: CRUDTestCase {
         )
         XCTAssertNotNil(optionalObject)
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects.count)
+    }
+
+    func testRedirectCodingKey() {
+        let property = CRUDObject.Properties.variable1.as(CRUDObject.Properties.variable1)
+        let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(
+            try database.getObject(on: property, fromTable: CRUDObject.name),
+            whenFailed: nil
+        )
+        XCTAssertNotNil(optionalObject)
+        XCTAssertEqual(optionalObject!.variable1, preInsertedObjects[0].variable1)
     }
 
     class AppleFTSObject: CRUDObjectBase, TableCodable {

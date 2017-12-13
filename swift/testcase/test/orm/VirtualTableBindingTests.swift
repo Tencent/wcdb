@@ -40,14 +40,4 @@ class VirtualTableBindingTests: BaseTestCase {
             }
         }
     }
-
-    func testVirtualBinding() {
-        ORMVirtualTableBindingAssertEqual(
-            BaselineTestObject.self,
-            """
-            CREATE VIRTUAL TABLE IF NOT EXISTS BaselineTestObject USING fts3\
-            (variable INTEGER, CONSTRAINT BaselineTestObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)
-            """
-        )
-    }
 }

@@ -544,4 +544,44 @@ class SelectInterfaceTests: CRUDTestCase {
         XCTAssertNotNil(result)
         XCTAssertEqual(result!, preInsertedObjects[0])
     }
+
+    func testSelectEmpty() {
+        let tableName = CRUDObject.name
+        //Give
+        XCTAssertNoThrow(try database.delete(fromTable: tableName))
+        //Then
+        do {
+            let row = try database.getRow(on: Column.any, fromTable: tableName)
+            XCTAssertNil(row)
+
+            let distinctValue = try database.getDistinctValue(on: Column.any, fromTable: tableName)
+            XCTAssertEqual(distinctValue.type, .null)
+
+            let value = try database.getValue(on: Column.any, fromTable: tableName)
+            XCTAssertEqual(value.type, .null)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testTableSelectEmpty() {
+        //Give
+        XCTAssertNoThrow(try database.delete(fromTable: CRUDObject.name))
+        let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
+        XCTAssertNotNil(table)
+        let wrappedTable = table!
+        //Then
+        do {
+            let row = try wrappedTable.getRow(on: Column.any)
+            XCTAssertNil(row)
+
+            let distinctValue = try wrappedTable.getDistinctValue(on: Column.any)
+            XCTAssertEqual(distinctValue.type, .null)
+
+            let value = try wrappedTable.getValue(on: Column.any)
+            XCTAssertEqual(value.type, .null)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
 }

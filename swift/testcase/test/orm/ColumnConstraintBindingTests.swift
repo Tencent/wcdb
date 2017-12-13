@@ -110,15 +110,67 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
-    class DefaultValueTestObject: TableCodable {
+    class DefaultInt32ValueTestObject: TableCodable {
         let variable: Int = 0
         required init() {}
         enum CodingKeys: String, CodingTableKey {
-            typealias Root = DefaultValueTestObject
+            typealias Root = DefaultInt32ValueTestObject
             case variable = "defaultValueVariable"
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
             static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable: ColumnConstraintBinding(defaultTo: 1)]
+                return [.variable: ColumnConstraintBinding(defaultTo: Int32(1))]
+            }
+        }
+    }
+
+    class DefaultInt64ValueTestObject: TableCodable {
+        let variable: Int = 0
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = DefaultInt64ValueTestObject
+            case variable = "defaultValueVariable"
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(defaultTo: Int64(1))]
+            }
+        }
+    }
+
+    class DefaultFloatValueTestObject: TableCodable {
+        let variable: Int = 0
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = DefaultFloatValueTestObject
+            case variable = "defaultValueVariable"
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(defaultTo: Double(1.0))]
+            }
+        }
+    }
+
+    class DefaultTextValueTestObject: TableCodable {
+        let variable: Int = 0
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = DefaultTextValueTestObject
+            case variable = "defaultValueVariable"
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(defaultTo: "defaultString")]
+            }
+        }
+    }
+
+    class DefaultBLOBValueTestObject: TableCodable {
+        let variable: Int = 0
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = DefaultBLOBValueTestObject
+            case variable = "defaultValueVariable"
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
+                return [.variable: ColumnConstraintBinding(defaultTo: "defaultData".data(using: .ascii)!)]
             }
         }
     }
@@ -167,8 +219,31 @@ class ColumnConstraintBindingTests: BaseTestCase {
         )
 
         ORMConstraintBindingAssertEqual(
-            DefaultValueTestObject.self,
-            "CREATE TABLE IF NOT EXISTS DefaultValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
+            DefaultInt32ValueTestObject.self,
+            "CREATE TABLE IF NOT EXISTS DefaultInt32ValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
+        )
+
+        ORMConstraintBindingAssertEqual(
+            DefaultInt64ValueTestObject.self,
+            "CREATE TABLE IF NOT EXISTS DefaultInt64ValueTestObject(defaultValueVariable INTEGER DEFAULT 1)"
+        )
+
+        ORMConstraintBindingAssertEqual(
+            DefaultFloatValueTestObject.self,
+            "CREATE TABLE IF NOT EXISTS DefaultFloatValueTestObject(defaultValueVariable INTEGER DEFAULT 1.0)"
+        )
+
+        ORMConstraintBindingAssertEqual(
+            DefaultTextValueTestObject.self,
+            """
+            CREATE TABLE IF NOT EXISTS DefaultTextValueTestObject\
+            (defaultValueVariable INTEGER DEFAULT 'defaultString')
+            """
+        )
+
+        ORMConstraintBindingAssertEqual(
+            DefaultBLOBValueTestObject.self,
+            "CREATE TABLE IF NOT EXISTS DefaultBLOBValueTestObject(defaultValueVariable INTEGER DEFAULT 'defaultData')"
         )
     }
 }

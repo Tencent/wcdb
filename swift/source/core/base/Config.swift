@@ -98,15 +98,8 @@ public struct Configs {
 
     func invoke(handle: Handle) throws {
         let configs = self.configs
-        do {
-            try configs.forEach({ (config) in
-                guard config.callback != nil else {
-                    return
-                }
-                try config.callback!.value(handle)
-            })
-        } catch let error {
-            throw error
+        for config in configs {
+            try config.callback?.value(handle)
         }
     }
 

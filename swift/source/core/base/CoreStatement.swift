@@ -59,7 +59,11 @@ public final class CoreStatement: CoreRepresentable {
     public func bind<TableEncodableType: TableEncodable>(
         _ propertyConvertibleList: [PropertyConvertible],
         of object: TableEncodableType) throws {
-        let encoder = TableEncoder(propertyConvertibleList.asCodingTableKeys(), on: self)
+        var indexedCodingTableKeys: [String: Int] = [:]
+        for (index, propertyConvertible) in propertyConvertibleList.enumerated() {
+            indexedCodingTableKeys[propertyConvertible.codingTableKey.stringValue] = index
+        }
+        let encoder = TableEncoder(indexedCodingTableKeys, on: self)
         try encoder.bind(object)
     }
 
@@ -200,7 +204,7 @@ public final class CoreStatement: CoreRepresentable {
         guard let index = index(byName: name) else {
             return .null
         }
-        return handleStatement.columnType(atIndex: index)
+        return columnType(atIndex: index)
     }
 
     public func columnCount() -> Int {

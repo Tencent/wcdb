@@ -26,6 +26,7 @@ class TracerTests: BaseTestCase {
     func reset() {
         Database.globalTrace(ofPerformance: nil)
         Database.globalTrace(ofSQL: nil)
+        Database.globalTrace(ofError: nil)
         Database.resetGlobalTraceOfError()
     }
 
@@ -63,7 +64,7 @@ class TracerTests: BaseTestCase {
     func testTraceError() {
         //Give
         let tableName = "nonexistentTable"
-        let expectedTag = 1234
+        let expectedTag = self.recommendTag
         let expectedErrorCode = 1
         let expectedErrorMessage = "no such table: \(tableName)"
         let expectedOperation = 3
@@ -123,10 +124,10 @@ class TracerTests: BaseTestCase {
         var isAutoIncrement: Bool = false
     }
 
-    func testTracePerformance() {
+    func testGlobalTracePerformanceCommit() {
         //Give
         let tableName = TracerObject.name
-        let expectedTag = 12352345
+        let expectedTag = self.recommendTag
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
 
         //Then
@@ -153,6 +154,82 @@ class TracerTests: BaseTestCase {
         template.isAutoIncrement = true
         let objects = [TracerObject](repeating: template, count: 1000000)
         XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
+        XCTAssertNoThrow(database.close())
+
+        XCTAssertTrue(`catch`)
+    }
+
+    func testTracePerformanceCommit() {
+        //Give
+        let tableName = TracerObject.name
+        let expectedTag = self.recommendTag
+        let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
+
+        //Give
+        let database = Database(withFileURL: self.recommendedPath)
+        database.close {
+            XCTAssertNoThrow(try database.removeFiles())
+        }
+        database.tag = expectedTag
+
+        //Then
+        var `catch` = false
+        database.trace { (tag, sqls, cost) in
+            if tag != nil && tag! == expectedTag && sqls.contains(where: { (arg) -> Bool in
+                return arg.key == expectedSQL
+            }) {
+                XCTAssertGreaterThan(cost, 0)
+                `catch` = true
+            }
+        }
+
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: TracerObject.self))
+        let template = TracerObject()
+        template.isAutoIncrement = true
+        let objects = [TracerObject](repeating: template, count: 1000000)
+        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
+        XCTAssertNoThrow(database.close())
+
+        XCTAssertTrue(`catch`)
+    }
+
+    func testTraceRollback() {
+        //Give
+        let tableName = TracerObject.name
+        let expectedTag = self.recommendTag
+        let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
+        let expectedRollback = "ROLLBACK"
+
+        //Then
+        var `catch` = false
+        Database.globalTrace { (tag, sqls, _) in
+            if tag != nil && tag! == expectedTag && sqls.contains(where: { (arg) -> Bool in
+                return arg.key == expectedSQL
+            }) {
+                XCTAssertTrue(sqls.contains(where: { (arg) -> Bool in
+                    return arg.key == expectedRollback
+                }))
+                `catch` = true
+            }
+        }
+
+        //Give
+        let database = Database(withFileURL: self.recommendedPath)
+        database.close {
+            XCTAssertNoThrow(try database.removeFiles())
+        }
+        database.tag = expectedTag
+
+        //When
+        XCTAssertNoThrow(try database.create(table: tableName, of: TracerObject.self))
+        let template = TracerObject()
+        template.isAutoIncrement = true
+        let objects = [TracerObject](repeating: template, count: 1000000)
+        XCTAssertNoThrow(try database.run { () -> Bool in
+            try database.insert(objects: objects, intoTable: tableName)
+            return false
+        })
         XCTAssertNoThrow(database.close())
 
         XCTAssertTrue(`catch`)
