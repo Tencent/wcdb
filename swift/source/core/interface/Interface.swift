@@ -21,26 +21,26 @@
 import Foundation
 
 public protocol InsertInterface {
-    func insert<Object: TableCodable>(
+    func insert<Object: TableEncodable>(
         objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
-    func insert<Object: TableCodable>(
+    func insert<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
-    func insertOrReplace<Object: TableCodable>(
+    func insertOrReplace<Object: TableEncodable>(
         objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
-    func insertOrReplace<Object: TableCodable>(
+    func insertOrReplace<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 }
 
 extension InsertInterface where Self: Core {
-    public func insert<Object: TableCodable>(
+    public func insert<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
@@ -48,7 +48,7 @@ extension InsertInterface where Self: Core {
         return try insert.execute(with: objects)
     }
 
-    public func insertOrReplace<Object: TableCodable>(
+    public func insertOrReplace<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
@@ -56,14 +56,14 @@ extension InsertInterface where Self: Core {
         return try insert.execute(with: objects)
     }
 
-    public func insert<Object: TableCodable>(
+    public func insert<Object: TableEncodable>(
         objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         return try insert(objects: objects, on: propertyConvertibleList, intoTable: table)
     }
 
-    public func insertOrReplace<Object: TableCodable>(
+    public func insertOrReplace<Object: TableEncodable>(
         objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
@@ -72,7 +72,7 @@ extension InsertInterface where Self: Core {
 }
 
 public protocol UpdateInterface {
-    func update<Object: TableCodable>(
+    func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: PropertyConvertible...,
         with object: Object,
@@ -81,7 +81,7 @@ public protocol UpdateInterface {
         limit: Limit?,
         offset: Offset?) throws
 
-    func update<Object: TableCodable>(
+    func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: [PropertyConvertible],
         with object: Object,
@@ -108,7 +108,7 @@ public protocol UpdateInterface {
 }
 
 extension UpdateInterface where Self: Core {
-    public func update<Object: TableCodable>(
+    public func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: [PropertyConvertible],
         with object: Object,
@@ -133,7 +133,7 @@ extension UpdateInterface where Self: Core {
         return try update.execute(with: object)
     }
 
-    public func update<Object: TableCodable>(
+    public func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: PropertyConvertible...,
         with object: Object,
@@ -414,14 +414,14 @@ extension RowSelectInterface where Self: Core {
 
 public protocol SelectInterface {
     //TODO: Add generic property convertible to fit the type
-    func getObjects<Object: TableCodable>(
+    func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
         where condition: Condition?,
         orderBy orderList: [OrderBy]?,
         limit: Limit?,
         offset: Offset?) throws -> [Object]
-    func getObjects<Object: TableCodable>(
+    func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: PropertyConvertible...,
         fromTable table: String,
         where condition: Condition?,
@@ -429,13 +429,13 @@ public protocol SelectInterface {
         limit: Limit?,
         offset: Offset?) throws -> [Object]
 
-    func getObject<Object: TableCodable>(
+    func getObject<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
         where condition: Condition?,
         orderBy orderList: [OrderBy]?,
         offset: Offset?) throws -> Object?
-    func getObject<Object: TableCodable>(
+    func getObject<Object: TableDecodable>(
         on propertyConvertibleList: PropertyConvertible...,
         fromTable table: String,
         where condition: Condition?,
@@ -444,7 +444,7 @@ public protocol SelectInterface {
 }
 
 extension SelectInterface where Self: Core {
-    public func getObjects<Object: TableCodable>(
+    public func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
         where condition: Condition? = nil,
@@ -468,7 +468,7 @@ extension SelectInterface where Self: Core {
         return try select.allObjects()
     }
 
-    public func getObjects<Object: TableCodable>(
+    public func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: PropertyConvertible...,
         fromTable table: String,
         where condition: Condition? = nil,
@@ -483,7 +483,7 @@ extension SelectInterface where Self: Core {
                               offset: offset)
     }
 
-    public func getObject<Object: TableCodable>(
+    public func getObject<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
         where condition: Condition? = nil,
@@ -497,7 +497,7 @@ extension SelectInterface where Self: Core {
                               offset: offset).first
     }
 
-    public func getObject<Object: TableCodable>(
+    public func getObject<Object: TableDecodable>(
         on propertyConvertibleList: PropertyConvertible...,
         fromTable table: String,
         where condition: Condition? = nil,

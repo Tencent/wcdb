@@ -21,7 +21,7 @@
 import Foundation
 
 public protocol InsertTableInterface {
-    associatedtype Object: TableCodable
+    associatedtype Object: TableEncodable
 
     func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]?) throws
     func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]?) throws
@@ -50,7 +50,7 @@ extension InsertTableInterface where Self: TableBase {
 }
 
 public protocol UpdateTableInterface {
-    associatedtype Object: TableCodable
+    associatedtype Object: TableEncodable
 
     func update(on propertyConvertibleList: PropertyConvertible...,
                 with object: Object,
@@ -351,7 +351,7 @@ extension RowSelectTableInterface where Self: TableBase {
 }
 
 public protocol SelectTableInterface {
-    associatedtype Object: TableCodable
+    associatedtype Object: TableDecodable
 
     //TODO: Add generic property convertible to fit the type
     func getObjects(on propertyConvertibleList: [PropertyConvertible],
