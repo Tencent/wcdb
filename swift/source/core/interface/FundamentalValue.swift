@@ -158,17 +158,4 @@ extension Array where Element==[FundamentalValue] {
     public subscript(row row: Array.Index) -> FundamentalColumn {
         return self[row]
     }
-
-    public typealias FundamentalIteration = (
-        _ row: Array.Index,
-        _ column: Array<FundamentalValue>.Index,
-        _ value: FundamentalValue) throws -> Void
-
-    public func forEach(_ body: FundamentalIteration) rethrows {
-        for (rowIndex, row) in self.enumerated() {
-            for (columnIndex, value) in row.enumerated() {
-                try body(rowIndex, columnIndex, value)
-            }
-        }
-    }
 }

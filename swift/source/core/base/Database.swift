@@ -30,24 +30,20 @@ public final class Database {
         self.init(withFileURL: URL(fileURLWithPath: path))
     }
 
-    #if WCDB_IOS
-    private static let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "WCDB-PurgeFreeHandle")
-
-    private static let once: Void = {
-        _ = NotificationCenter.default.addObserver(forName: .UIApplicationDidReceiveMemoryWarning,
-                                                   object: nil,
-                                                   queue: nil,
-                                                   using: { (_) in
-                                                    Database.purgeFreeHandleQueue.async {
-                                                        Database.purgeFreeHandlesInAllDatabase()
-                                                    }
-        })
-    }()
-    #endif //WCDB_IOS
-
     public init(withFileURL url: URL) {
         #if WCDB_IOS
-        Database.once
+            DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
+                let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "com.Tencent.WCDB.swift.purge")
+                _ = NotificationCenter.default.addObserver(
+                    forName: .UIApplicationDidReceiveMemoryWarning,
+                    object: nil,
+                    queue: nil,
+                    using: { (_) in
+                        purgeFreeHandleQueue.async {
+                            Database.purgeFreeHandlesInAllDatabase()
+                        }
+                    })
+            })
         #endif //WCDB_IOS            
         self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path,
                                                        defaultConfigs: Database.defaultConfigs)
@@ -79,9 +75,17 @@ public final class Database {
         return !handlePool.isDrained
     }
 
+    public var isBlockaded: Bool {
+        return handlePool.isBlockaded
+    }
+
     public typealias OnClosed = HandlePool.OnDrained
-    public func close(onClosed: OnClosed? = nil) rethrows {
-        handlePool.drain(onDrained: onClosed)
+    public func close(onClosed: OnClosed) rethrows {
+        try handlePool.drain(onDrained: onClosed)
+    }
+
+    public func close() {
+        handlePool.drain()
     }
 
     public func blockade() {
@@ -90,10 +94,6 @@ public final class Database {
 
     public func unblockade() {
         handlePool.unblockade()
-    }
-
-    public var isBlockaded: Bool {
-        return handlePool.isBlockaded
     }
 
     public func purgeFreeHandles() {
@@ -150,7 +150,6 @@ extension Database {
     }
 
     private static let timedQueue = TimedQueue<String>(withDelay: 2)
-    private static let checkpointThread = DispatchQueue(label: "WCDB-"+DefaultConfigOrder.checkpoint.description)
 
     private static let defaultConfigs: Configs = Configs(
         Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
@@ -222,13 +221,16 @@ extension Database {
                 guard pages > 1000 else {
                     return
                 }
-                Database.checkpointThread.async {
-                    while true {
-                        Database.timedQueue.wait(untilExpired: {
-                            try? Database(withPath: $0).exec(CommonStatement.checkpoint)
-                        })
+                DispatchQueue.once(name: "com.Tencent.WCDB.swift.checkpoint", {
+                    DispatchQueue(label: "com.Tencent.WCDB.swift.checkpoint").async {
+                        while true {
+                            Database.timedQueue.wait(untilExpired: {
+                                try? Database(withPath: $0).exec(CommonStatement.checkpoint)
+                            })
+                        }
                     }
-                }
+                })
+                Database.timedQueue.reQueue(with: handle.path)
             })
         }, orderBy: DefaultConfigOrder.checkpoint.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.tokenize.description,

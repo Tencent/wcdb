@@ -26,7 +26,7 @@ protocol Lock {
 }
 
 final class UnfairLock: Lock {
-    var unfairLock = os_unfair_lock_s()
+    private var unfairLock = os_unfair_lock_s()
 
     func lock() {
         guard #available(iOS 10.0, macOS 10.12, *) else {
@@ -44,7 +44,7 @@ final class UnfairLock: Lock {
 }
 
 final class Mutex: Lock {
-    var mutex = pthread_mutex_t()
+    private var mutex = pthread_mutex_t()
 
     init() {
         pthread_mutex_init(&mutex, nil)
@@ -64,7 +64,7 @@ final class Mutex: Lock {
 }
 
 final class RecursiveMutex: Lock {
-    var mutex = pthread_mutex_t()
+    private var mutex = pthread_mutex_t()
 
     init() {
         var attr = pthread_mutexattr_t()
@@ -87,8 +87,8 @@ final class RecursiveMutex: Lock {
 }
 
 final class Spin: Lock {
-    let unfair: UnfairLock?
-    let mutex: Mutex?
+    private let unfair: UnfairLock?
+    private let mutex: Mutex?
 
     init() {
         if #available(iOS 10.0, macOS 10.12, *) {
@@ -118,8 +118,8 @@ final class Spin: Lock {
 }
 
 final class ConditionLock: Lock {
-    var mutex = pthread_mutex_t()
-    var cond = pthread_cond_t()
+    private var mutex = pthread_mutex_t()
+    private var cond = pthread_cond_t()
 
     init() {
         pthread_mutex_init(&mutex, nil)
@@ -149,5 +149,19 @@ final class ConditionLock: Lock {
 
     func broadcast() {
         pthread_cond_broadcast(&cond)
+    }
+}
+
+extension DispatchQueue {
+    static private let spin = Spin()
+    static private var tracker: Set<String> = []
+
+    static func once(name: String, _ block: () -> Void) {
+        spin.lock(); defer { spin.unlock() }
+        guard !tracker.contains(name) else {
+            return
+        }
+        block()
+        tracker.insert(name)
     }
 }

@@ -55,7 +55,7 @@ final class TimedQueue<Key: Hashable> {
         }
     }
 
-    func wait(untilExpired onExpired: (Key) -> Void, forever: Bool = false) {
+    func wait(untilExpired onExpired: (Key) -> Void, forever: Bool = true) {
         do {
             conditionLock.lock(); defer { conditionLock.unlock() }
             while list.isEmpty {

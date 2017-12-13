@@ -175,13 +175,17 @@ public final class HandlePool {
 
     public typealias OnDrained = () throws -> Void
 
-    func drain(onDrained: OnDrained?) rethrows {
+    func drain(onDrained: OnDrained) rethrows {
         blockade(); defer { unblockade() }
         let size = handles.clear()
         aliveHandleCount -= size
-        if onDrained != nil {
-            try onDrained!()
-        }
+        try onDrained()
+    }
+
+    func drain() {
+        blockade(); defer { unblockade() }
+        let size = handles.clear()
+        aliveHandleCount -= size
     }
 
     func purgeFreeHandles() {

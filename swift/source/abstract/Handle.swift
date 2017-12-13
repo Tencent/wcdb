@@ -42,22 +42,20 @@ public final class Handle {
     private var tracer: Tracer?
 
     init(withPath path: String) {
-        _ = Handle.once
+        DispatchQueue.once(name: "com.tencent.wcdb.handle") {
+            sqlite3_config_multithread()
+            sqlite3_config_memstatus(Int32(truncating: false))
+            sqlite3_config_log({ (_, code, message) in
+                let msg = (message != nil) ? String(cString: message!) : ""
+                Error.reportSQLiteGlobal(code: Int(code), message: msg)
+            }, nil)
+        }
         self.path = path
     }
 
     deinit {
         try? close()
     }
-
-    private static let once: Void = {
-        sqlite3_config_multithread()
-        sqlite3_config_memstatus(Int32(truncating: false))
-        sqlite3_config_log({ (_, code, message) in
-            let msg = (message != nil) ? String(cString: message!) : ""
-            Error.reportSQLiteGlobal(code: Int(code), message: msg)
-        }, nil)
-    }()
 
     func open() throws {
         let directory = URL(fileURLWithPath: path).deletingLastPathComponent().path
