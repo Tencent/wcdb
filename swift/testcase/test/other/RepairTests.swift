@@ -115,9 +115,9 @@ class RepairTests: BaseTestCase {
         }
         //When
         let recovered = Database(withPath: database.path+".recovered")
-        database.close {
-            XCTAssertNoThrow(try recovered.recover(fromPath: self.database.path, withPageSize: self.pageSize))
-        }
+        XCTAssertNoThrow(try database.close {
+            try recovered.recover(fromPath: self.database.path, withPageSize: self.pageSize)
+        })
         //Then
         do {
             let results: [RepairObject] = WCDBAssertNoThrowReturned(
@@ -135,23 +135,21 @@ class RepairTests: BaseTestCase {
         XCTAssertNoThrow(try database.backup(withKey: backupCipher))
         //When
         let recovered = Database(withPath: database.path+".recovered")
-        database.close {
-            XCTAssertThrowsError(try recovered.recover(fromPath: self.database.path,
-                                                       withPageSize: self.pageSize,
-                                                       backupKey: fakeBackupCipher)
-            )
-        }
+        XCTAssertThrowsError(try database.close {
+            try recovered.recover(fromPath: self.database.path,
+                                  withPageSize: self.pageSize,
+                                  backupKey: fakeBackupCipher)
+        })
         //Then
         do {
             XCTAssertThrowsError(try recovered.getObjects(fromTable: RepairObject.name) as [RepairObject])
         }
         //When
-        database.close {
-            XCTAssertNoThrow(try recovered.recover(fromPath: self.database.path,
-                                                   withPageSize: self.pageSize,
-                                                   backupKey: backupCipher)
-            )
-        }
+        XCTAssertNoThrow(try database.close {
+            try recovered.recover(fromPath: self.database.path,
+                                  withPageSize: self.pageSize,
+                                  backupKey: backupCipher)
+        })
         //Then
         do {
             let results: [RepairObject] = WCDBAssertNoThrowReturned(
@@ -166,9 +164,9 @@ class RepairTests: BaseTestCase {
         //Give
         let databaseCipher = "databaseCipher".data(using: .ascii)!
         let fakeDatabaseCipher = "fakeDatabaseCipher".data(using: .ascii)!
-        database.close {
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
         database.setCipher(key: databaseCipher)
 
         do {
@@ -196,12 +194,11 @@ class RepairTests: BaseTestCase {
         XCTAssertNoThrow(try database.backup())
         //When
         let recovered = Database(withPath: database.path+".recovered")
-        database.close {
-            XCTAssertNoThrow(try recovered.recover(fromPath: self.database.path,
-                                                   withPageSize: self.pageSize,
-                                                   databaseKey: fakeDatabaseCipher)
-            )
-        }
+        XCTAssertNoThrow(try database.close {
+            try recovered.recover(fromPath: self.database.path,
+                                  withPageSize: self.pageSize,
+                                  databaseKey: fakeDatabaseCipher)
+        })
         //Then
         do {
             let results = WCDBAssertNoThrowReturned(
@@ -211,12 +208,11 @@ class RepairTests: BaseTestCase {
             XCTAssertNotEqual(results.sorted(), preInsertedObjects.sorted())
         }
         //When
-        database.close {
-            XCTAssertNoThrow(try recovered.recover(fromPath: self.database.path,
-                                                   withPageSize: self.pageSize,
-                                                   databaseKey: databaseCipher)
-            )
-        }
+        XCTAssertNoThrow(try database.close {
+            try recovered.recover(fromPath: self.database.path,
+                                  withPageSize: self.pageSize,
+                                  databaseKey: databaseCipher)
+        })
         //Then
         do {
             let results: [RepairObject] = WCDBAssertNoThrowReturned(

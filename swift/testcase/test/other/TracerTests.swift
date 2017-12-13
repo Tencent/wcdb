@@ -143,9 +143,9 @@ class TracerTests: BaseTestCase {
 
         //Give
         let database = Database(withFileURL: self.recommendedPath)
-        database.close {
-            XCTAssertNoThrow(try database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try database.removeFiles()
+        })
         database.tag = expectedTag
 
         //When
@@ -167,9 +167,9 @@ class TracerTests: BaseTestCase {
 
         //Give
         let database = Database(withFileURL: self.recommendedPath)
-        database.close {
+        XCTAssertNoThrow(try database.close {
             XCTAssertNoThrow(try database.removeFiles())
-        }
+        })
         database.tag = expectedTag
 
         //Then
@@ -216,9 +216,9 @@ class TracerTests: BaseTestCase {
 
         //Give
         let database = Database(withFileURL: self.recommendedPath)
-        database.close {
-            XCTAssertNoThrow(try database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try database.removeFiles()
+        })
         database.tag = expectedTag
 
         //When

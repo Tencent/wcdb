@@ -173,9 +173,9 @@ class AdvanceTests: CRUDTestCase {
 
     func testCipher() {
         //Give
-        database.close {
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
         let password = "password".data(using: .ascii)!
         let wrongPassword = "wrongPassword".data(using: .ascii)!
         //When
@@ -333,9 +333,9 @@ class AdvanceTests: CRUDTestCase {
     }
     func testFTSWithAppleTokenize() {
         //Give
-        database.close {
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
         database.setTokenizes(.Apple)
         XCTAssertNoThrow(try database.create(virtualTable: AppleFTSObject.name, of: AppleFTSObject.self))
 
@@ -456,9 +456,9 @@ class AdvanceTests: CRUDTestCase {
     }
     func testFTSWithWCDBTokenize() {
         //Give
-        database.close {
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
         database.setTokenizes(.WCDB)
         XCTAssertNoThrow(try database.create(virtualTable: WCDBFTSObject.name, of: WCDBFTSObject.self))
 

@@ -11,6 +11,8 @@
 		2310C6021FCBB5EA0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		2310C6031FCBB5EB0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
 		2310C6041FCBB5EB0030F3D3 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310C5FB1FCBB5D40030F3D3 /* Assert.swift */; };
+		2321D2641FE11407004AAD0D /* AdvanceCRUDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2321D2631FE11407004AAD0D /* AdvanceCRUDTests.swift */; };
+		2321D2651FE11407004AAD0D /* AdvanceCRUDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2321D2631FE11407004AAD0D /* AdvanceCRUDTests.swift */; };
 		233CED761FDFF5FD00A3B143 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */; };
 		233CED771FDFF5FD00A3B143 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */; };
 		2345C0E51FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */; };
@@ -291,6 +293,7 @@
 
 /* Begin PBXFileReference section */
 		2310C5FB1FCBB5D40030F3D3 /* Assert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
+		2321D2631FE11407004AAD0D /* AdvanceCRUDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceCRUDTests.swift; sourceTree = "<group>"; };
 		233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		2345C0E41FDFCD3B00C1434E /* UpdateInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInterfaceTests.swift; sourceTree = "<group>"; };
 		2345C0E91FDFCE1000C1434E /* SelectInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectInterfaceTests.swift; sourceTree = "<group>"; };
@@ -505,6 +508,7 @@
 				2345C0EC1FDFD2D000C1434E /* InsertInterfaceTests.swift */,
 				2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */,
 				233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */,
+				2321D2631FE11407004AAD0D /* AdvanceCRUDTests.swift */,
 			);
 			path = crud;
 			sourceTree = "<group>";
@@ -1127,6 +1131,7 @@
 				23516C4B1FD0340100B465DD /* ModuleArgumentTests.swift in Sources */,
 				23516C3A1FD033F400B465DD /* VirtualTableBindingTests.swift in Sources */,
 				23516C4F1FD0340100B465DD /* StatementAttachTests.swift in Sources */,
+				2321D2641FE11407004AAD0D /* AdvanceCRUDTests.swift in Sources */,
 				23516C621FD0340100B465DD /* SubqueryTests.swift in Sources */,
 				23516C441FD0340100B465DD /* ColumnTests.swift in Sources */,
 				23516C2C1FD033F000B465DD /* MultiSelectTests.swift in Sources */,
@@ -1214,6 +1219,7 @@
 				2345C0E61FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */,
 				23516A801FCEE7D500B465DD /* DeleteTests.swift in Sources */,
 				2345C0EE1FDFD2D000C1434E /* InsertInterfaceTests.swift in Sources */,
+				2321D2651FE11407004AAD0D /* AdvanceCRUDTests.swift in Sources */,
 				2345C0F11FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */,
 				23516A831FCEE7D500B465DD /* RowSelectTests.swift in Sources */,
 				23516A7F1FCEE7D500B465DD /* CRUDTestCase.swift in Sources */,
