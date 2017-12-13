@@ -2701,7 +2701,7 @@
 					"-framework",
 					UIKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.WCDB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2737,7 +2737,7 @@
 					"-framework",
 					UIKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.WCDB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
