@@ -207,6 +207,8 @@
 		23B996F41FDAB5A300B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
 		23B996F71FDAB5A800B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
 		23B996FA1FDAB5AE00B0AF2E /* WCDBSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23B996D91FDAB52200B0AF2E /* WCDBSwift.framework */; };
+		23C78C111FE1502C00E64D75 /* MultithreadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C78C101FE1502C00E64D75 /* MultithreadTests.swift */; };
+		23C78C121FE1502C00E64D75 /* MultithreadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C78C101FE1502C00E64D75 /* MultithreadTests.swift */; };
 		23C8E0001FD7FB1800DAE97D /* TypedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8DFFF1FD7FB1700DAE97D /* TypedTests.swift */; };
 		23C8E0011FD7FB2E00DAE97D /* TypedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8DFFF1FD7FB1700DAE97D /* TypedTests.swift */; };
 /* End PBXBuildFile section */
@@ -376,6 +378,7 @@
 		23516BE01FD033A900B465DD /* All Testcases.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Testcases.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23516C121FD033B700B465DD /* All Benchmarks.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Benchmarks.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23B996D31FDAB52200B0AF2E /* WCDB.swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.swift.xcodeproj; path = ../WCDB.swift.xcodeproj; sourceTree = "<group>"; };
+		23C78C101FE1502C00E64D75 /* MultithreadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultithreadTests.swift; sourceTree = "<group>"; };
 		23C8DFFF1FD7FB1700DAE97D /* TypedTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypedTests.swift; sourceTree = "<group>"; };
 		23D365671FC59CD7004B8390 /* ORMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E680B31FC6DBF400C54686 /* CRUDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRUDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -509,6 +512,7 @@
 				2345C0EF1FDFD2D900C1434E /* DeleteInterfaceTests.swift */,
 				233CED751FDFF5FD00A3B143 /* DatabaseTests.swift */,
 				2321D2631FE11407004AAD0D /* AdvanceCRUDTests.swift */,
+				23C78C101FE1502C00E64D75 /* MultithreadTests.swift */,
 			);
 			path = crud;
 			sourceTree = "<group>";
@@ -1102,6 +1106,7 @@
 				23516C281FD033F000B465DD /* CRUDObject.swift in Sources */,
 				2345C0E51FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */,
 				23516C491FD0340100B465DD /* JoinClauseTests.swift in Sources */,
+				23C78C111FE1502C00E64D75 /* MultithreadTests.swift in Sources */,
 				23516C311FD033F000B465DD /* UpdateTests.swift in Sources */,
 				23516C511FD0340100B465DD /* StatementCreateTableTests.swift in Sources */,
 				23516C5F1FD0340100B465DD /* StatementTransactionTests.swift in Sources */,
@@ -1219,6 +1224,7 @@
 				2345C0E61FDFCD3B00C1434E /* UpdateInterfaceTests.swift in Sources */,
 				23516A801FCEE7D500B465DD /* DeleteTests.swift in Sources */,
 				2345C0EE1FDFD2D000C1434E /* InsertInterfaceTests.swift in Sources */,
+				23C78C121FE1502C00E64D75 /* MultithreadTests.swift in Sources */,
 				2321D2651FE11407004AAD0D /* AdvanceCRUDTests.swift in Sources */,
 				2345C0F11FDFD2D900C1434E /* DeleteInterfaceTests.swift in Sources */,
 				23516A831FCEE7D500B465DD /* RowSelectTests.swift in Sources */,
