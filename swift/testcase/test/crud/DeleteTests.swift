@@ -37,6 +37,7 @@ class DeleteTests: CRUDTestCase {
     }
 
     func testBase() {
+        XCTAssertNotNil(delete.tag)
         XCTAssertEqual(delete.tag, database.tag)
         XCTAssertEqual(delete.path, database.path)
     }

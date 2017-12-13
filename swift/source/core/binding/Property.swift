@@ -55,7 +55,8 @@ extension Property: PropertyOperable {
     }
 
     public func `in`(table: String) -> Property {
-        return Property(named: asColumn().in(table: table).description, with: codingTableKey)
+        let column: Column = self.in(table: table)
+        return Property(named: column.description, with: codingTableKey)
     }
 
     public func asColumn() -> Column {

@@ -145,6 +145,7 @@ class MultiSelectTests: CRUDTestCase {
     }
 
     func testBase() {
+        XCTAssertNotNil(multiSelect.tag)
         XCTAssertEqual(multiSelect.tag, database.tag)
         XCTAssertEqual(multiSelect.path, database.path)
     }
@@ -213,5 +214,20 @@ class MultiSelectTests: CRUDTestCase {
         }
         //Then
         XCTAssertTrue(results.sorted() == preInsertedMultiObjects.sorted())
+    }
+
+    func testMultiSelectFailed() {
+        XCTAssertThrowsError(
+            try database.prepareMultiSelect(on: [], fromTables: [CRUDObject.name, MultiSelectObject.name])
+        )
+
+        XCTAssertThrowsError(
+            try database.prepareMultiSelect(on:
+            CRUDObject.Properties.variable1.in(table: CRUDObject.name),
+            CRUDObject.Properties.variable2.in(table: CRUDObject.name),
+            MultiSelectObject.Properties.variable1.in(table: MultiSelectObject.name),
+            MultiSelectObject.Properties.variable2.in(table: MultiSelectObject.name),
+                                        fromTables: [])
+        )
     }
 }

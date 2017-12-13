@@ -33,14 +33,13 @@ public protocol TableEncodable: TableEncodableBase where CodingKeys.Root == Self
     associatedtype CodingKeys: CodingTableKey
     typealias Properties = CodingKeys
 
-    var isAutoIncrement: Bool {get set}
+    var isAutoIncrement: Bool {get}
     var lastInsertedRowID: Int64 {get set}
 }
 
 extension TableEncodable {
     public var isAutoIncrement: Bool {
-        get { return false }
-        set { }
+        return false
     }
 
     public var lastInsertedRowID: Int64 {

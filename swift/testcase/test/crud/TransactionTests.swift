@@ -23,12 +23,13 @@ import WCDBSwift
 
 class TransactionTests: CRUDTestCase {
 
-    func testTransaction() {
+    func testBase() {
         //When
         let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //Then
+        XCTAssertNotNil(transaction.tag)
         XCTAssertEqual(transaction.tag, database.tag)
         XCTAssertEqual(transaction.path, database.path)
     }

@@ -176,7 +176,7 @@ public final class HandlePool {
     public typealias OnDrained = () throws -> Void
 
     func drain(onDrained: OnDrained?) rethrows {
-        rwlock.lockWrite(); defer { rwlock.unlockWrite() }
+        blockade(); defer { unblockade() }
         let size = handles.clear()
         aliveHandleCount -= size
         if onDrained != nil {

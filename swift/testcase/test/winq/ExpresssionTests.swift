@@ -46,6 +46,11 @@ class ExpresssionTests: BaseTestCase {
         let right: Expression = "right"
 
         //Then
+        WINQAssertEqual(!left, "(NOT left)")
+        WINQAssertEqual(+left, "(left)")
+        WINQAssertEqual(-left, "(-left)")
+        WINQAssertEqual(~left, "(~left)")
+
         WINQAssertEqual((left || right), "(left OR 'right')")
 
         WINQAssertEqual((left && right), "(left AND 'right')")
@@ -177,7 +182,7 @@ class ExpresssionTests: BaseTestCase {
 
         WINQAssertEqual(left.round(), "ROUND(left)")
 
-        WINQAssertEqual(Expression.`case`(left, [(when: 1, then: 2)], else: 3), "CASE left WHEN 1 THEN 2 ELSE 3 END")
+        WINQAssertEqual(Expression.`case`(left, (when: 1, then: 2), else: 3), "CASE left WHEN 1 THEN 2 ELSE 3 END")
 
         WINQAssertEqual(left.matchinfo(), "MATCHINFO(left)")
 

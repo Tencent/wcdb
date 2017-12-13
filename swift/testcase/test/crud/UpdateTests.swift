@@ -36,6 +36,12 @@ class UpdateTests: CRUDTestCase {
         update = optionalUpdate!
     }
 
+    func testBase() {
+        XCTAssertNotNil(update.tag)
+        XCTAssertEqual(update.tag, database.tag)
+        XCTAssertEqual(update.path, database.path)
+    }
+
     func testUpdate() {
         //Give
         let object = CRUDObject()
@@ -108,6 +114,18 @@ class UpdateTests: CRUDTestCase {
         XCTAssertEqual(results[1].variable2, self.name)
     }
 
+    func testLimitFromToUpdate() {
+        //Give
+        let object = CRUDObject()
+        object.variable2 = self.name
+        //When
+        XCTAssertNoThrow(try update.limit(from: 1, to: 2).execute(with: object))
+        //Then
+        let results: [CRUDObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: CRUDObject.name))
+        XCTAssertEqual(results[0], preInsertedObjects[0])
+        XCTAssertEqual(results[1].variable2, self.name)
+    }
+
     func testUpdateChanges() {
         //Give
         let object = CRUDObject()
@@ -118,4 +136,9 @@ class UpdateTests: CRUDTestCase {
         XCTAssertEqual(update.changes, preInsertedObjects.count)
     }
 
+    func testUpdateFailed() {
+        XCTAssertThrowsError(try database.prepareUpdate(table: "", on: CRUDObject.Properties.variable2))
+        XCTAssertThrowsError(try database.prepareUpdate(table: CRUDObject.name, on: []))
+
+    }
 }

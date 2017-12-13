@@ -220,6 +220,48 @@ class AdvanceTests: CRUDTestCase {
         }
     }
 
+    func testOrderedConfig() {
+        //Then
+        do {
+            let optionalCoreStatement = WCDBAssertNoThrowReturned(
+                try database.prepare(StatementPragma().pragma(.secureDelete)),
+                whenFailed: nil
+            )
+            XCTAssertNotNil(optionalCoreStatement)
+            let coreStatement = optionalCoreStatement!
+            XCTAssertNoThrow(try coreStatement.step())
+            let isSecureDelete: Int32? = coreStatement.value(atIndex: 0)
+            XCTAssertNotNil(isSecureDelete)
+            XCTAssertEqual(isSecureDelete!, 0)
+            XCTAssertNoThrow(try coreStatement.finalize())
+        }
+        //Give
+        database.close()
+        database.setConfig(named: "SecureDelete", with: { (handle) throws in
+            let statement = StatementPragma().pragma(.secureDelete, to: true)
+            try handle.exec(statement)
+        }, orderBy: -2)
+        var tested = false
+        database.setConfig(named: "test") { (handle) throws in
+            tested = true
+            //Then
+            do {
+                let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(
+                    try handle.prepare(StatementPragma().pragma(.secureDelete))
+                )
+                XCTAssertNotNil(handleStatement)
+                let wrappedHandleStatement = handleStatement!
+                XCTAssertNoThrow(try wrappedHandleStatement.step())
+                let isSecureDelete: Int32 = wrappedHandleStatement.columnValue(atIndex: 0)
+                XCTAssertEqual(isSecureDelete, 1)
+                XCTAssertNoThrow(try wrappedHandleStatement.finalize())
+            }
+        }
+        //When
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(tested)
+    }
+
     func testRedirect() {
         let property = CRUDObject.Properties.any.count().as(CRUDObject.Properties.variable1)
         let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(

@@ -247,7 +247,7 @@ public protocol ExpressionOperable: ExpressionConvertible {
 
 extension ExpressionOperable {
     private static func operate(prefix: String, operand: ExpressionConvertible) -> Expression {
-        return Expression(withRaw: "(\(prefix) \(operand.asExpression().description))")
+        return Expression(withRaw: "(\(prefix)\(operand.asExpression().description))")
     }
     private static func operate(title: String, infix: String?, operands: [ExpressionConvertible]) -> Expression {
         return Expression(withRaw: "\(title)(\(infix != nil ? infix!+" " : "")\(operands.joined()))")
@@ -276,7 +276,7 @@ extension ExpressionOperable {
 
     //Unary
     public prefix static func ! (operand: Self) -> Expression {
-        return operate(prefix: "NOT", operand: operand)
+        return operate(prefix: "NOT ", operand: operand)
     }
     public prefix static func + (operand: Self) -> Expression {
         return operate(prefix: "", operand: operand)
@@ -538,17 +538,17 @@ extension ExpressionOperable {
         return Self.operate(one: self, operator1: "NOT BETWEEN", two: begin, operator2: "AND", three: end)
     }
     public static func exists(_ statementSelect: StatementSelect) -> Expression {
-        return Self.operate(prefix: "EXISTS", operand: statementSelect)
+        return Self.operate(prefix: "EXISTS ", operand: statementSelect)
     }
     public static func notExists(_ statementSelect: StatementSelect) -> Expression {
-        return Self.operate(prefix: "NOT EXISTS", operand: statementSelect)
+        return Self.operate(prefix: "NOT EXISTS ", operand: statementSelect)
     }
 
     public func `in`(_ statementSelect: StatementSelect) -> Expression {
-        return Self.operate(prefix: "IN", operand: statementSelect)
+        return Self.operate(prefix: "IN ", operand: statementSelect)
     }
     public func notIn(_ statementSelect: StatementSelect) -> Expression {
-        return Self.operate(prefix: "NOT IN", operand: statementSelect)
+        return Self.operate(prefix: "NOT IN ", operand: statementSelect)
     }
     public func `in`(_ expressionConvertibleList: ExpressionConvertible...) -> Expression {
         return self.`in`(expressionConvertibleList)

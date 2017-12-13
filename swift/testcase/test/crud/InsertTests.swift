@@ -37,6 +37,7 @@ class InsertTests: CRUDTestCase {
     }
 
     func testBase() {
+        XCTAssertNotNil(insert.tag)
         XCTAssertEqual(insert.tag, database.tag)
         XCTAssertEqual(insert.path, database.path)
     }

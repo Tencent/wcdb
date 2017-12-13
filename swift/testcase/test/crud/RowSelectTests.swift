@@ -37,6 +37,7 @@ class RowSelectTests: CRUDTestCase {
     }
 
     func testBase() {
+        XCTAssertNotNil(rowSelect.tag)
         XCTAssertEqual(rowSelect.tag, database.tag)
         XCTAssertEqual(rowSelect.path, database.path)
     }

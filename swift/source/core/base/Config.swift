@@ -122,6 +122,6 @@ extension Configs: Equatable {
     }
 
     public static func != (lhs: Configs, rhs: Configs) -> Bool {
-        return lhs.configs != rhs.configs
+        return !(lhs == rhs)
     }
 }

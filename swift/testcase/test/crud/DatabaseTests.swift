@@ -24,14 +24,31 @@ import WCDBSwift
 class DatabaseTests: BaseTestCase {
 
     func testTag() {
-        let database: Database = Database(withFileURL: self.recommendedPath)
-        database.tag = self.recommendTag
-        let taggedDatabase: Database? = WCDBAssertNoThrowReturned(try Database(with: self.recommendTag))
+        //Give
+        let tag = self.recommendTag
+        let path: String = self.recommendedPath.path
+        var taggedDatabase: Database? = nil
+        do {
+            let database: Database = Database(withPath: path)
+            database.tag = tag
+            taggedDatabase = WCDBAssertNoThrowReturned(try Database(with: tag))
+        }
         XCTAssertNotNil(taggedDatabase)
-        XCTAssertEqual(taggedDatabase!.path, database.path)
+        XCTAssertEqual(taggedDatabase!.tag, tag)
+        XCTAssertEqual(taggedDatabase!.path, path)
 
         //Non-existent tag
-        XCTAssertThrowsError(try Database(with: self.recommendTag - 1))
+        XCTAssertThrowsError(try Database(with: tag - 1))
+    }
+
+    func testMultiDatabase() {
+        //Give
+        let path: String = self.recommendedPath.path
+        let database: Database = Database(withPath: path)
+        let database2: Database = Database(withPath: path)
+        database.tag = self.recommendTag
+        XCTAssertNotNil(database2.tag)
+        XCTAssertEqual(database2.tag, database.tag)
     }
 
     func testFailedToCreateDirectory() {
@@ -40,5 +57,23 @@ class DatabaseTests: BaseTestCase {
         let path = URL(fileURLWithPath: blocks.path).appendingPathComponent("newPath")
         let database = Database(withFileURL: path)
         XCTAssertFalse(database.canOpen)
+    }
+
+    func testPurgeFreeHandles() {
+        //Give
+        let database: Database = Database(withFileURL: self.recommendedPath)
+        //When
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(database.isOpened)
+        database.purgeFreeHandles()
+        //Then
+        XCTAssertFalse(database.isOpened)
+
+        //When
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(database.isOpened)
+        Database.purgeFreeHandlesInAllDatabase()
+        //Then
+        XCTAssertFalse(database.isOpened)
     }
 }
