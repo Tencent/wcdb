@@ -70,7 +70,7 @@ public final class CoreStatement: CoreRepresentable {
     public func bind(_ value: ColumnEncodableBase?, toIndex index: Int) {
         if let wrappedValue = value {
             let fundamentalValue = wrappedValue.archivedFundamentalValue()
-            switch wrappedValue.columnType {
+            switch type(of: wrappedValue).columnType {
             case .integer32:
                 let int32Value = (fundamentalValue as? Int32) ?? 0
                 handleStatement.bind(int32Value, toIndex: index)

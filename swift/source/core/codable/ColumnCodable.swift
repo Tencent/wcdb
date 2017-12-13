@@ -22,7 +22,6 @@ import Foundation
 
 public protocol ColumnCodableBase {
     static var columnType: ColumnType {get}
-    var columnType: ColumnType {get}
 }
 
 public protocol ColumnEncodableBase: Encodable, ColumnCodableBase {
@@ -34,9 +33,6 @@ public protocol ColumnEncodable: ColumnEncodableBase, LiteralValueConvertible {
 }
 extension ColumnEncodable {
     public static var columnType: ColumnType {
-        return FundamentalType.columnType
-    }
-    public var columnType: ColumnType {
         return FundamentalType.columnType
     }
     public func archivedFundamentalValue() -> FundamentalColumnType? {
@@ -56,9 +52,6 @@ public protocol ColumnDecodable: ColumnDecodableBase {
 }
 extension ColumnDecodable {
     public static var columnType: ColumnType {
-        return FundamentalType.columnType
-    }
-    public var columnType: ColumnType {
         return FundamentalType.columnType
     }
     public init?(with value: FundamentalColumnType) {
