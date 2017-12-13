@@ -21,19 +21,18 @@
 import Foundation
 
 final class TimedQueue<Key: Hashable> {
-    typealias Time = SteadyClock.AbsoluteTime
     typealias Element = (key: Key, clock: SteadyClock)
     typealias List = [Element]
     typealias Map = [Key: List.Index]
 
-    let delay: Time
+    let delay: TimeInterval
 
     let conditionLock = ConditionLock()
 
     var list: List = []
     var map: Map = [:]
 
-    init(withDelay delay: Time) {
+    init(withDelay delay: TimeInterval) {
         self.delay = delay
     }
 
@@ -79,9 +78,9 @@ final class TimedQueue<Key: Hashable> {
                 }
             }
             if get {
-                onExpired(element.0)
+                onExpired(element.key)
             } else {
-                sleep(UInt32(element.1.timeIntervalSince(now)))
+                sleep(UInt32(element.clock.timeIntervalSince(now)))
             }
         }
     }

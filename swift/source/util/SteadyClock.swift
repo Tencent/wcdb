@@ -21,28 +21,26 @@
 import Foundation
 
 struct SteadyClock {
-    typealias AbsoluteTime = CFAbsoluteTime
-
-    private var absoluteTime: AbsoluteTime
+    private var time: TimeInterval //monotonic
 
     init() {
-        self.absoluteTime = CFAbsoluteTimeGetCurrent()
+        time = ProcessInfo.processInfo.systemUptime
     }
 
-    private init(with absoluteTime: AbsoluteTime) {
-        self.absoluteTime = absoluteTime
+    private init(with time: TimeInterval) {
+        self.time = time
     }
 
-    func timeIntervalSince(_ other: SteadyClock) -> AbsoluteTime {
-        return absoluteTime - other.absoluteTime
+    func timeIntervalSince(_ other: SteadyClock) -> TimeInterval {
+        return time - other.time
     }
 
-    static func + (steadyClock: SteadyClock, timeInterval: AbsoluteTime) -> SteadyClock {
-        return SteadyClock(with: steadyClock.absoluteTime + timeInterval)
+    static func + (steadyClock: SteadyClock, timeInterval: TimeInterval) -> SteadyClock {
+        return SteadyClock(with: steadyClock.time + timeInterval)
     }
 
     static func > (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
-        return lhs.absoluteTime < rhs.absoluteTime
+        return lhs.time < rhs.time
     }
 
     static func now() -> SteadyClock {
