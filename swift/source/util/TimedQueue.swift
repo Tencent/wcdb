@@ -54,34 +54,27 @@ final class TimedQueue<Key: Hashable> {
         }
     }
 
-    func wait(untilExpired onExpired: (Key) -> Void, forever: Bool = true) {
-        do {
-            conditionLock.lock(); defer { conditionLock.unlock() }
-            while list.isEmpty {
-                guard forever else {
-                    return
-                }
-                conditionLock.wait()
-            }
-        }
-        var get = false
-        while !get {
-            var element: Element!
-            let now = SteadyClock.now()
+    func wait(untilExpired onExpired: (Key) -> Void) {
+        while true {
+            var key: Key!
             do {
                 conditionLock.lock(); defer { conditionLock.unlock() }
-                element = list.first!
-                if now > element.clock {
-                    list.removeFirst()
-                    map.removeValue(forKey: element.key)
-                    get = true
+                guard let element = list.first else {
+                    conditionLock.wait()
+                    continue
                 }
+                let now = SteadyClock.now()
+                let interval = now - element.clock
+                guard interval <= 0 else {
+                    conditionLock.wait(timeout: interval)
+                    continue
+                }
+                key = element.key
+                list.removeFirst()
+                map.removeValue(forKey: key)
             }
-            if get {
-                onExpired(element.key)
-            } else {
-                sleep(UInt32(element.clock.timeIntervalSince(now)))
-            }
+            onExpired(key)
+            break
         }
     }
 }

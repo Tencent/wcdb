@@ -31,16 +31,12 @@ struct SteadyClock {
         self.time = time
     }
 
-    func timeIntervalSince(_ other: SteadyClock) -> TimeInterval {
-        return time - other.time
+    static func - (lhs: SteadyClock, rhs: SteadyClock) -> TimeInterval {
+        return lhs.time - rhs.time
     }
 
     static func + (steadyClock: SteadyClock, timeInterval: TimeInterval) -> SteadyClock {
         return SteadyClock(with: steadyClock.time + timeInterval)
-    }
-
-    static func > (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
-        return lhs.time < rhs.time
     }
 
     static func now() -> SteadyClock {

@@ -143,6 +143,13 @@ final class ConditionLock: Lock {
         pthread_cond_wait(&cond, &mutex)
     }
 
+    func wait(timeout: TimeInterval) {
+        var ts = timespec()
+        ts.tv_sec = Int(timeout)
+        ts.tv_nsec = Int((timeout - TimeInterval(ts.tv_sec)) * 1000000000)
+        pthread_cond_timedwait(&cond, &mutex, &ts)
+    }
+
     func signal() {
         pthread_cond_signal(&cond)
     }
