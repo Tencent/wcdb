@@ -24,19 +24,19 @@ import Foundation
 public struct FundamentalValue {
     let base: FundamentalColumnType?
 
-    init(_ _: Void? = nil) {
+    public init(_ _: Void? = nil) {
         base = nil
     }
 
-    init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
+    public init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
         base = columnEncodableValue.archivedValue()
     }
 
     public var type: ColumnType {
-        guard base != nil else {
+        guard let base = self.base else {
             return .null
         }
-        return Swift.type(of: base!).columnType
+        return Swift.type(of: base).columnType
     }
 
     public var int32Value: Int32 {
