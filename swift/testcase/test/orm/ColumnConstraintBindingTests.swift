@@ -175,6 +175,24 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
 
+    func testProperty() {
+        XCTAssertEqual(BaselineTestObject.Properties.variable.asProperty().codingTableKey.stringValue,
+                       BaselineTestObject.Properties.variable.stringValue)
+
+        XCTAssertEqual(BaselineTestObject.Properties.variable.asProperty().description,
+                       BaselineTestObject.Properties.variable.asProperty().asProperty().description)
+
+        XCTAssertEqual(BaselineTestObject.Properties.variable.asProperty().codingTableKey.stringValue,
+                       BaselineTestObject.Properties.variable.asProperty().asProperty().codingTableKey.stringValue)
+    }
+
+    func testCantSetLastInsertedRowID() {
+        var object = BaselineTestObject()
+        //Can't set
+        object.lastInsertedRowID = Int64.max
+        XCTAssertEqual(object.lastInsertedRowID, Int64.min)
+    }
+
     func testColumnConstraintBinding() {
 
         ORMConstraintBindingAssertEqual(

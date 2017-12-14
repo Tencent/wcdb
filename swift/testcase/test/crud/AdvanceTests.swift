@@ -51,6 +51,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(coreStatement.columnType(atIndex: 1), ColumnType.text)
         XCTAssertEqual(coreStatement.columnType(byName: "variable1"), ColumnType.integer64)
         XCTAssertEqual(coreStatement.columnType(byName: "variable2"), ColumnType.text)
+        XCTAssertEqual(coreStatement.columnType(byName: "nonexistent"), ColumnType.null)
 
         do {
             let variable1: Int32? = coreStatement.value(atIndex: 0)
@@ -118,6 +119,81 @@ class AdvanceTests: CRUDTestCase {
             )
             XCTAssertNotNil(result)
             XCTAssertEqual(result!, expectedObject)
+        }
+    }
+
+    class CoreStatementTypedObject: TableCodable, Named {
+        var int32: Int32 = 1
+        var int64: Int64 = 2
+        var double: Double = 3.0
+        var string: String = "4"
+        var data: Data = "5".data(using: .ascii)!
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = CoreStatementTypedObject
+            case int32
+            case int64
+            case double
+            case string
+            case data
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
+    func testCoreStatementType() {
+        let tableName = CoreStatementTypedObject.name
+
+        XCTAssertNoThrow(try database.create(table: tableName, of: CoreStatementTypedObject.self))
+        XCTAssertNoThrow(try database.insert(objects: CoreStatementTypedObject(), intoTable: tableName))
+
+        let statement = StatementSelect().select(Column.any).from(tableName)
+        let coreStatement: CoreStatement? = WCDBAssertNoThrowReturned(try database.prepare(statement))
+        XCTAssertNotNil(coreStatement)
+        let wrappedCoreStatement = coreStatement!
+        XCTAssertNoThrow(try wrappedCoreStatement.step())
+
+        do {
+            let v1: Int32? = wrappedCoreStatement.value(atIndex: 0)
+            XCTAssertNotNil(v1)
+            XCTAssertEqual(v1!, 1)
+
+            let v2: Int64? = wrappedCoreStatement.value(atIndex: 1)
+            XCTAssertNotNil(v2)
+            XCTAssertEqual(v2!, 2)
+
+            let v3: Double? = wrappedCoreStatement.value(atIndex: 2)
+            XCTAssertNotNil(v3)
+            XCTAssertEqual(v3!, 3.0)
+
+            let v4: String? = wrappedCoreStatement.value(atIndex: 3)
+            XCTAssertNotNil(v4)
+            XCTAssertEqual(v4!, "4")
+
+            let v5: Data? = wrappedCoreStatement.value(atIndex: 4)
+            XCTAssertNotNil(v5)
+            XCTAssertEqual(v5!, "5".data(using: .ascii)!)
+
+            let v6: Data? = wrappedCoreStatement.value(atIndex: 5)
+            XCTAssertNil(v6)
+        }
+        do {
+            let v1: FundamentalValue = wrappedCoreStatement.value(atIndex: 0)
+            XCTAssertEqual(v1.int32Value, 1)
+
+            let v2: FundamentalValue = wrappedCoreStatement.value(atIndex: 1)
+            XCTAssertEqual(v2.int64Value, 2)
+
+            let v3: FundamentalValue = wrappedCoreStatement.value(atIndex: 2)
+            XCTAssertEqual(v3.doubleValue, 3.0)
+
+            let v4: FundamentalValue = wrappedCoreStatement.value(atIndex: 3)
+            XCTAssertEqual(v4.stringValue, "4")
+
+            let v5: FundamentalValue = wrappedCoreStatement.value(atIndex: 4)
+            XCTAssertEqual(v5.dataValue, "5".data(using: .ascii)!)
+
+            let v6: FundamentalValue = wrappedCoreStatement.value(atIndex: 5)
+            XCTAssertEqual(v6.type, .null)
         }
     }
 
@@ -193,6 +269,11 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertThrowsError(try coreStatement.step())
     }
 
+    func testExecFailed() {
+        let statement = StatementSelect().select(Column.any).from("nonexistentTable")
+        XCTAssertThrowsError(try database.exec(statement))
+    }
+
     func testCipher() {
         //Give
         XCTAssertNoThrow(try database.close {
@@ -217,6 +298,17 @@ class AdvanceTests: CRUDTestCase {
         let exists = WCDBAssertNoThrowReturned(try database.isTableExists(CRUDObject.name), whenFailed: nil)
         XCTAssertNotNil(exists)
         XCTAssertTrue(exists!)
+    }
+
+    func testCipherFailed() {
+        //Give
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+            })
+        let emptyPassword = Data()
+        //When
+        database.setCipher(key: emptyPassword)
+        XCTAssertFalse(database.canOpen)
     }
 
     func testConfig() {
@@ -334,36 +426,53 @@ class AdvanceTests: CRUDTestCase {
         let synchronousStatement = StatementPragma().pragma(.synchronous)
         database.close()
 
-        var preTested = false
-        database.setConfig(named: "preTest") { (handle) in
+        var testBeforeSynchronousEnable = false
+        database.setConfig(named: "test") { (handle) in
             //Then
             let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(try handle.prepare(synchronousStatement))
             XCTAssertNotNil(handleStatement)
             XCTAssertNoThrow(try handleStatement!.step())
             let synchronous: Int32 = handleStatement!.columnValue(atIndex: 0)
             XCTAssertEqual(synchronous, 1)
-            preTested = true
+            testBeforeSynchronousEnable = true
         }
 
         XCTAssertTrue(database.canOpen)
-        XCTAssertTrue(preTested)
+        XCTAssertTrue(testBeforeSynchronousEnable)
 
         database.close()
         database.setSynchronous(isFull: true)
 
-        var postTested = false
-        database.setConfig(named: "preTest") { (handle) in
+        var testAfterSynchronousEnable = false
+        database.setConfig(named: "test") { (handle) in
             //Then
             let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(try handle.prepare(synchronousStatement))
             XCTAssertNotNil(handleStatement)
             XCTAssertNoThrow(try handleStatement!.step())
             let synchronous: Int32 = handleStatement!.columnValue(atIndex: 0)
             XCTAssertEqual(synchronous, 2)
-            postTested = true
+            testAfterSynchronousEnable = true
         }
 
         XCTAssertTrue(database.canOpen)
-        XCTAssertTrue(postTested)
+        XCTAssertTrue(testAfterSynchronousEnable)
+
+        database.close()
+        database.setSynchronous(isFull: false)
+
+        var testAfterSynchronousDisable = false
+        database.setConfig(named: "test") { (handle) in
+            //Then
+            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(try handle.prepare(synchronousStatement))
+            XCTAssertNotNil(handleStatement)
+            XCTAssertNoThrow(try handleStatement!.step())
+            let synchronous: Int32 = handleStatement!.columnValue(atIndex: 0)
+            XCTAssertEqual(synchronous, 1)
+            testAfterSynchronousDisable = true
+        }
+
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(testAfterSynchronousDisable)
     }
 
     func testConfigFailed() {
