@@ -67,7 +67,4 @@ extension ColumnCodable {
     public static var columnType: ColumnType {
         return FundamentalType.columnType
     }
-    public var columnType: ColumnType {
-        return FundamentalType.columnType
-    }
 }

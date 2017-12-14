@@ -220,9 +220,6 @@ extension ColumnJSONCodable {
     public static var columnType: ColumnType {
         return .BLOB
     }
-    public var columnType: ColumnType {
-        return .BLOB
-    }
 }
 
 //NSCodable
@@ -253,9 +250,6 @@ public protocol ColumnNSCodable: ColumnNSEncodable, ColumnNSDecodable {}
 extension ColumnNSCodable {
     public typealias FundamentalType = Data
     public static var columnType: ColumnType {
-        return .BLOB
-    }
-    public var columnType: ColumnType {
         return .BLOB
     }
 }

@@ -48,13 +48,9 @@ public enum ColumnType: Describable {
 
 public protocol FundamentalColumnType {
     static var columnType: ColumnType {get}
-    var columnType: ColumnType {get}
 }
 extension Int32: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .integer32
-    }
-    public var columnType: ColumnType {
         return .integer32
     }
 }
@@ -63,16 +59,10 @@ extension Int64: FundamentalColumnType {
     public static var columnType: ColumnType {
         return .integer64
     }
-    public var columnType: ColumnType {
-        return .integer64
-    }
 }
 
 extension Double: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .float
-    }
-    public var columnType: ColumnType {
         return .float
     }
 }
@@ -81,16 +71,10 @@ extension String: FundamentalColumnType {
     public static var columnType: ColumnType {
         return .text
     }
-    public var columnType: ColumnType {
-        return .text
-    }
 }
 
 extension Data: FundamentalColumnType {
     public static var columnType: ColumnType {
-        return .BLOB
-    }
-    public var columnType: ColumnType {
         return .BLOB
     }
 }
