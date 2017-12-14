@@ -281,23 +281,89 @@ class AdvanceTests: CRUDTestCase {
         }, orderBy: -2)
         var tested = false
         database.setConfig(named: "test") { (handle) throws in
+
+            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(
+                try handle.prepare(StatementPragma().pragma(.secureDelete))
+            )
+            XCTAssertNotNil(handleStatement)
+            let wrappedHandleStatement = handleStatement!
+            XCTAssertNoThrow(try wrappedHandleStatement.step())
+            let isSecureDelete: Int32 = wrappedHandleStatement.columnValue(atIndex: 0)
+            XCTAssertEqual(isSecureDelete, 1)
+            XCTAssertNoThrow(try wrappedHandleStatement.finalize())
+
             tested = true
-            //Then
-            do {
-                let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(
-                    try handle.prepare(StatementPragma().pragma(.secureDelete))
-                )
-                XCTAssertNotNil(handleStatement)
-                let wrappedHandleStatement = handleStatement!
-                XCTAssertNoThrow(try wrappedHandleStatement.step())
-                let isSecureDelete: Int32 = wrappedHandleStatement.columnValue(atIndex: 0)
-                XCTAssertEqual(isSecureDelete, 1)
-                XCTAssertNoThrow(try wrappedHandleStatement.finalize())
-            }
         }
         //When
         XCTAssertTrue(database.canOpen)
         XCTAssertTrue(tested)
+    }
+
+    func testConfigChangeOrder() {
+        //Give
+        database.close()
+        database.setConfig(named: "SecureDelete", with: { (_) throws in
+            XCTFail("should not reach")
+        }, orderBy: 0)
+        var tested = false
+        database.setConfig(named: "test", with: { (handle) throws in
+            //Then
+            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(
+                try handle.prepare(StatementPragma().pragma(.secureDelete))
+            )
+            XCTAssertNotNil(handleStatement)
+            let wrappedHandleStatement = handleStatement!
+            XCTAssertNoThrow(try wrappedHandleStatement.step())
+            let isSecureDelete: Int32 = wrappedHandleStatement.columnValue(atIndex: 0)
+            XCTAssertEqual(isSecureDelete, 0)
+            XCTAssertNoThrow(try wrappedHandleStatement.finalize())
+
+            tested = true
+        }, orderBy: 10)
+        database.setConfig(named: "SecureDelete", with: { (handle) throws in
+            let statement = StatementPragma().pragma(.secureDelete, to: true)
+            try handle.exec(statement)
+        }, orderBy: 100)
+        //When
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(tested)
+    }
+
+    func testSynchronousConfig() {
+        //Give
+        let synchronousStatement = StatementPragma().pragma(.synchronous)
+        database.close()
+
+        var preTested = false
+        database.setConfig(named: "preTest") { (handle) in
+            //Then
+            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(try handle.prepare(synchronousStatement))
+            XCTAssertNotNil(handleStatement)
+            XCTAssertNoThrow(try handleStatement!.step())
+            let synchronous: Int32 = handleStatement!.columnValue(atIndex: 0)
+            XCTAssertEqual(synchronous, 1)
+            preTested = true
+        }
+
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(preTested)
+
+        database.close()
+        database.setSynchronous(isFull: true)
+
+        var postTested = false
+        database.setConfig(named: "preTest") { (handle) in
+            //Then
+            let handleStatement: HandleStatement? = WCDBAssertNoThrowReturned(try handle.prepare(synchronousStatement))
+            XCTAssertNotNil(handleStatement)
+            XCTAssertNoThrow(try handleStatement!.step())
+            let synchronous: Int32 = handleStatement!.columnValue(atIndex: 0)
+            XCTAssertEqual(synchronous, 2)
+            postTested = true
+        }
+
+        XCTAssertTrue(database.canOpen)
+        XCTAssertTrue(postTested)
     }
 
     func testConfigFailed() {
