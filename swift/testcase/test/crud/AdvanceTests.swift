@@ -45,9 +45,12 @@ class AdvanceTests: CRUDTestCase {
 
         XCTAssertEqual(coreStatement.index(byName: "variable1"), 0)
         XCTAssertEqual(coreStatement.index(byName: "variable2"), 1)
+        XCTAssertNil(coreStatement.index(byName: "nonexistent"))
 
         XCTAssertEqual(coreStatement.columnType(atIndex: 0), ColumnType.integer64)
         XCTAssertEqual(coreStatement.columnType(atIndex: 1), ColumnType.text)
+        XCTAssertEqual(coreStatement.columnType(byName: "variable1"), ColumnType.integer64)
+        XCTAssertEqual(coreStatement.columnType(byName: "variable2"), ColumnType.text)
 
         do {
             let variable1: Int32? = coreStatement.value(atIndex: 0)
@@ -65,6 +68,8 @@ class AdvanceTests: CRUDTestCase {
             let variable2: String? = coreStatement.value(byName: "variable2")
             XCTAssertNotNil(variable2)
             XCTAssertEqual(variable2!, expectedVariable2)
+            let nonexistent: Int32? = coreStatement.value(byName: "nonexistent")
+            XCTAssertNil(nonexistent)
         }
 
         XCTAssertNoThrow(try coreStatement.finalize())
@@ -92,7 +97,7 @@ class AdvanceTests: CRUDTestCase {
         let expectedObject = CRUDObject()
         expectedObject.variable1 = 4
         expectedObject.variable2 = "object4"
-        XCTAssertNoThrow(try coreStatement.bind(CRUDObject.Properties.variable1, of: expectedObject, toIndex: 1))
+        XCTAssertNoThrow(try coreStatement.bind([CRUDObject.Properties.variable1], of: expectedObject))
         XCTAssertNoThrow(try coreStatement.bind(CRUDObject.Properties.variable2, of: expectedObject, toIndex: 2))
         XCTAssertNoThrow(try coreStatement.step())
 

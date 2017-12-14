@@ -69,6 +69,8 @@ class TracerTests: BaseTestCase {
         let expectedErrorMessage = "no such table: \(tableName)"
         let expectedOperation = 3
         let expectedSQL = "SELECT * FROM \(tableName)"
+        let expectedPath = self.recommendedPath
+        let expectedExtendedErrorCode = 1
 
         //Then
         var `catch` = false
@@ -93,13 +95,29 @@ class TracerTests: BaseTestCase {
                 XCTAssertNotNil(sql)
                 XCTAssertEqual(sql!, expectedSQL)
 
+                let path = error.path
+                XCTAssertNotNil(path)
+                XCTAssertEqual(path!, expectedPath.path)
+
+                let extendedCode = error.extendedCode
+                XCTAssertNotNil(extendedCode)
+                XCTAssertEqual(extendedCode!, expectedExtendedErrorCode)
+
+                let wrongStringType = error.infos[.tag]?.stringValue
+                XCTAssertNotNil(wrongStringType)
+                XCTAssertEqual(wrongStringType, String(expectedTag))
+
+                let wrongIntType = error.infos[.path]?.intValue
+                XCTAssertNotNil(wrongIntType)
+                XCTAssertEqual(wrongIntType!, 0)
+
                 `catch` = true
             }
             print(error)
         }
 
         //Give
-        let database = Database(withFileURL: self.recommendedPath)
+        let database = Database(withFileURL: expectedPath)
         database.tag = expectedTag
 
         //When
