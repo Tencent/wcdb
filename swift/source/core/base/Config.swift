@@ -107,6 +107,14 @@ public struct Configs {
 
 extension Configs: Equatable {
     public static func == (lhs: Configs, rhs: Configs) -> Bool {
-        return lhs.configs == rhs.configs
+        guard lhs.configs.count == rhs.configs.count else {
+            return false
+        }
+        for i in 0..<lhs.configs.count {
+            guard lhs.configs[i] == rhs.configs[i] else {
+                return false
+            }
+        }
+        return true
     }
 }
