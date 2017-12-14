@@ -136,10 +136,6 @@ public final class Handle {
         }
     }
 
-    public var lastInsertedRowID: Int64 {
-        return sqlite3_last_insert_rowid(handle)
-    }
-
     public var changes: Int {
         return Int(sqlite3_changes(handle))
     }
@@ -252,12 +248,6 @@ extension Handle {
 
 extension Handle {
     public static let subfixs: [String] = ["", "-wal", "-journal", "-shm", Handle.backupSubfix]
-
-    public var paths: [String] {
-        return Handle.subfixs.map({ (subfix) -> String in
-            return path+subfix
-        })
-    }
 }
 
 extension Handle {
@@ -285,12 +275,7 @@ extension Handle {
 
 //Commit hook
 extension Handle {
-    func register(onCommitted optionalOnCommitted: CommittedHook?) {
-        guard let onCommitted = optionalOnCommitted else {
-            committedHookInfo = nil
-            sqlite3_wal_hook(handle, nil, nil)
-            return
-        }
+    func register(onCommitted: @escaping CommittedHook) {
         committedHookInfo = CommittedHookInfo(onCommitted: onCommitted, handle: self)
         sqlite3_wal_hook(handle, { (pointer, _, _, pages) -> Int32 in
             let committedHookInfo = pointer!.assumingMemoryBound(to: CommittedHookInfo.self).pointee
