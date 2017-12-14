@@ -199,20 +199,12 @@ public protocol ExpressionOperable: ExpressionConvertible {
     func isNot(_ operand: ExpressionConvertible) -> Expression
     func between(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression
     func notBetween(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression
-    static func exists(_ statementSelect: StatementSelect) -> Expression
-    static func notExists(_ statementSelect: StatementSelect) -> Expression
     func `in`(_ statementSelect: StatementSelect) -> Expression
     func notIn(_ statementSelect: StatementSelect) -> Expression
     func `in`(_ expressionConvertibleList: ExpressionConvertible...) -> Expression
     func notIn(_ expressionConvertibleList: ExpressionConvertible...) -> Expression
     func `in`(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression
     func notIn(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression
-    static func combine(_ expressionConvertibleList: ExpressionConvertible...) -> Expression
-    static func combine(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression
-
-    //Function
-    static func function(named name: String, _ expressions: ExpressionConvertible..., isDistinct: Bool) -> Expression
-    static func function(named name: String, _ expressions: [ExpressionConvertible], isDistinct: Bool) -> Expression
 
     //aggregate functions
     func avg(isDistinct: Bool) -> Expression
@@ -232,13 +224,6 @@ public protocol ExpressionOperable: ExpressionConvertible {
     func upper(isDistinct: Bool) -> Expression
     func round(isDistinct: Bool) -> Expression
 
-    static func `case`(_ `case`: ExpressionConvertible,
-                       _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)...,
-                       `else`: ExpressionConvertible) -> Expression
-    static func `case`(_ `case`: ExpressionConvertible,
-                       _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)],
-                       `else`: ExpressionConvertible) -> Expression
-
     //FTS3
     func matchinfo() -> Expression
     func offsets() -> Expression
@@ -246,27 +231,27 @@ public protocol ExpressionOperable: ExpressionConvertible {
 }
 
 extension ExpressionOperable {
-    private static func operate(prefix: String, operand: ExpressionConvertible) -> Expression {
+    static func operate(prefix: String, operand: ExpressionConvertible) -> Expression {
         return Expression(withRaw: "(\(prefix)\(operand.asExpression().description))")
     }
-    private static func operate(title: String, infix: String?, operands: [ExpressionConvertible]) -> Expression {
+    static func operate(title: String, infix: String?, operands: [ExpressionConvertible]) -> Expression {
         return Expression(withRaw: "\(title)(\(infix != nil ? infix!+" " : "")\(operands.joined()))")
     }
-    private static func operate(operand: ExpressionConvertible, postfix: String) -> Expression {
+    static func operate(operand: ExpressionConvertible, postfix: String) -> Expression {
         return Expression(withRaw: "(\(operand.asExpression().description) \(postfix))")
     }
-    private static func operate(left: ExpressionConvertible,
-                                `operator`: String,
-                                right: ExpressionConvertible) -> Expression {
+    static func operate(left: ExpressionConvertible,
+                        `operator`: String,
+                        right: ExpressionConvertible) -> Expression {
         let leftDescription = left.asExpression().description
         let rightDescription = right.asExpression().description
         return Expression(withRaw: "(\(leftDescription) \(`operator`) \(rightDescription))")
     }
-    private static func operate(one: ExpressionConvertible,
-                                operator1: String,
-                                two: ExpressionConvertible,
-                                operator2: String,
-                                three: ExpressionConvertible) -> Expression {
+    static func operate(one: ExpressionConvertible,
+                        operator1: String,
+                        two: ExpressionConvertible,
+                        operator2: String,
+                        three: ExpressionConvertible) -> Expression {
         let oneDescription = one.asExpression().description
         let twoDescription = two.asExpression().description
         let threeDescription = three.asExpression().description
@@ -537,12 +522,6 @@ extension ExpressionOperable {
     public func notBetween(_ begin: ExpressionConvertible, _ end: ExpressionConvertible) -> Expression {
         return Self.operate(one: self, operator1: "NOT BETWEEN", two: begin, operator2: "AND", three: end)
     }
-    public static func exists(_ statementSelect: StatementSelect) -> Expression {
-        return Self.operate(prefix: "EXISTS ", operand: statementSelect)
-    }
-    public static func notExists(_ statementSelect: StatementSelect) -> Expression {
-        return Self.operate(prefix: "NOT EXISTS ", operand: statementSelect)
-    }
 
     public func `in`(_ statementSelect: StatementSelect) -> Expression {
         return Self.operate(prefix: "IN ", operand: statementSelect)
@@ -561,25 +540,6 @@ extension ExpressionOperable {
     }
     public func notIn(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression {
         return Self.operate(operand: self, postfix: "NOT IN(\(expressionConvertibleList.joined()))")
-    }
-
-    public static func combine(_ expressionConvertibleList: ExpressionConvertible...) -> Expression {
-        return combine(expressionConvertibleList)
-    }
-    public static func combine(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression {
-        return Expression(withRaw: "(\(expressionConvertibleList.joined()))")
-    }
-
-    //Function
-    public static func function(named name: String,
-                                _ expressions: ExpressionConvertible...,
-                                isDistinct: Bool = false) -> Expression {
-        return function(named: name, expressions, isDistinct: isDistinct)
-    }
-    public static func function(named name: String,
-                                _ expressions: [ExpressionConvertible],
-                                isDistinct: Bool = false) -> Expression {
-        return Expression.operate(title: name, infix: isDistinct ? "DISTINCT" : nil, operands: expressions)
     }
 
     //aggregate functions
@@ -625,20 +585,6 @@ extension ExpressionOperable {
     }
     public func round(isDistinct: Bool = false) -> Expression {
         return Expression.function(named: "ROUND", self, isDistinct: isDistinct)
-    }
-
-    public static func `case`(_ expressionConvertible: ExpressionConvertible,
-                              _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)...,
-                              `else`: ExpressionConvertible) -> Expression {
-        return `case`(expressionConvertible.asExpression(), flows, else: `else`.asExpression())
-    }
-    public static func `case`(_ `case`: ExpressionConvertible,
-                              _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)],
-                              `else`: ExpressionConvertible) -> Expression {
-        var descrption = "CASE \(`case`.asExpression().description) "
-        descrption.append(flows.joined({ "WHEN \($0.when) THEN \($0.then) " }))
-        descrption.append("ELSE \(`else`.asExpression().description) END")
-        return Expression(withRaw: descrption)
     }
 
     //FTS3

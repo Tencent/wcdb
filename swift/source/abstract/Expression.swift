@@ -69,6 +69,46 @@ extension Expression: ExpressibleByStringLiteral {
 }
 
 extension Expression: ExpressionOperable {
+    public static func exists(_ statementSelect: StatementSelect) -> Expression {
+        return Expression.operate(prefix: "EXISTS ", operand: statementSelect)
+    }
+    public static func notExists(_ statementSelect: StatementSelect) -> Expression {
+        return Expression.operate(prefix: "NOT EXISTS ", operand: statementSelect)
+    }
+
+    public static func combine(_ expressionConvertibleList: ExpressionConvertible...) -> Expression {
+        return combine(expressionConvertibleList)
+    }
+    public static func combine(_ expressionConvertibleList: [ExpressionConvertible]) -> Expression {
+        return Expression(withRaw: "(\(expressionConvertibleList.joined()))")
+    }
+
+    //Function
+    public static func function(named name: String,
+                                _ expressions: ExpressionConvertible...,
+                                isDistinct: Bool = false) -> Expression {
+        return function(named: name, expressions, isDistinct: isDistinct)
+    }
+    public static func function(named name: String,
+                                _ expressions: [ExpressionConvertible],
+                                isDistinct: Bool = false) -> Expression {
+        return Expression.operate(title: name, infix: isDistinct ? "DISTINCT" : nil, operands: expressions)
+    }
+
+    public static func `case`(_ expressionConvertible: ExpressionConvertible,
+                              _ flows: (when: ExpressionConvertible, then: ExpressionConvertible)...,
+                              `else`: ExpressionConvertible) -> Expression {
+        return `case`(expressionConvertible.asExpression(), flows, else: `else`.asExpression())
+    }
+    public static func `case`(_ `case`: ExpressionConvertible,
+                              _ flows: [(when: ExpressionConvertible, then: ExpressionConvertible)],
+                              `else`: ExpressionConvertible) -> Expression {
+        var descrption = "CASE \(`case`.asExpression().description) "
+        descrption.append(flows.joined({ "WHEN \($0.when) THEN \($0.then) " }))
+        descrption.append("ELSE \(`else`.asExpression().description) END")
+        return Expression(withRaw: descrption)
+    }
+
     public func asExpression() -> Expression {
         return self
     }
