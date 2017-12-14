@@ -38,22 +38,17 @@ class ColumnTypeTests: BaseTestCase {
 
         let int32: Int32 = 1
         XCTAssertEqual(Int32.columnType, .integer32)
-        XCTAssertEqual(int32.columnType, .integer32)
 
         let int64: Int64 = 1
         XCTAssertEqual(Int64.columnType, .integer64)
-        XCTAssertEqual(int64.columnType, .integer64)
 
         let double: Double = 1
         XCTAssertEqual(Double.columnType, .float)
-        XCTAssertEqual(double.columnType, .float)
 
         let string: String = "1"
         XCTAssertEqual(String.columnType, .text)
-        XCTAssertEqual(string.columnType, .text)
 
         let data: Data = Data()
         XCTAssertEqual(Data.columnType, .BLOB)
-        XCTAssertEqual(data.columnType, .BLOB)
     }
 }

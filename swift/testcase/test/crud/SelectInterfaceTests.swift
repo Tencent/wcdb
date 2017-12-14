@@ -150,8 +150,9 @@ class SelectInterfaceTests: CRUDTestCase {
         )
         //Then
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(Int(results[row: 0, column: 0].int64Value), preInsertedObjects[1].variable1)
-        XCTAssertEqual(results[row: 0, column: 1].stringValue, preInsertedObjects[1].variable2)
+        let row = results[row: 0]
+        XCTAssertEqual(Int(row[0].int64Value), preInsertedObjects[1].variable1)
+        XCTAssertEqual(row[1].stringValue, preInsertedObjects[1].variable2)
     }
 
     func testPartialRowSelect() {

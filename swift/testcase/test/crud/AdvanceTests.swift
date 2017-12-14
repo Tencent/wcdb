@@ -123,41 +123,58 @@ class AdvanceTests: CRUDTestCase {
 
     func testFundamentalValue() {
         //Give
-        let statement = StatementSelect().select(1, "2", 3.0).from(CRUDObject.name)
-        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
-        XCTAssertNotNil(optionalCoreStatement)
-        let coreStatement = optionalCoreStatement!
-
-        //When
-        XCTAssertNoThrow(try coreStatement.step())
-        //Then
-        let int32FundamentalValue = coreStatement.value(atIndex: 0)
+        let int32Value: Int32 = 1
+        let int32FundamentalValue = FundamentalValue(int32Value)
         XCTAssertEqual(int32FundamentalValue.int32Value, 1)
         XCTAssertEqual(int32FundamentalValue.int64Value, 1)
+        XCTAssertEqual(int32FundamentalValue.doubleValue, 1.0)
         XCTAssertEqual(int32FundamentalValue.stringValue, "1")
         XCTAssertEqual(int32FundamentalValue.dataValue, "1".data(using: .ascii)!)
-        XCTAssertEqual(int32FundamentalValue.doubleValue, 1.0)
+        XCTAssertEqual(int32FundamentalValue.type, .integer32)
 
-        let stringFundamentalValue = coreStatement.value(atIndex: 1)
-        XCTAssertEqual(stringFundamentalValue.int32Value, 2)
-        XCTAssertEqual(stringFundamentalValue.int64Value, 2)
-        XCTAssertEqual(stringFundamentalValue.stringValue, "2")
-        XCTAssertEqual(stringFundamentalValue.dataValue, "2".data(using: .ascii)!)
-        XCTAssertEqual(stringFundamentalValue.doubleValue, 2.0)
+        let int64Value: Int64 = 2
+        let int64FundamentalValue = FundamentalValue(int64Value)
+        XCTAssertEqual(int64FundamentalValue.int32Value, 2)
+        XCTAssertEqual(int64FundamentalValue.int64Value, 2)
+        XCTAssertEqual(int64FundamentalValue.doubleValue, 2.0)
+        XCTAssertEqual(int64FundamentalValue.stringValue, "2")
+        XCTAssertEqual(int64FundamentalValue.dataValue, "2".data(using: .ascii)!)
+        XCTAssertEqual(int64FundamentalValue.type, .integer64)
 
-        let doubleFundamentalValue = coreStatement.value(atIndex: 2)
+        let doubleValue: Double = 3.0
+        let doubleFundamentalValue = FundamentalValue(doubleValue)
         XCTAssertEqual(doubleFundamentalValue.int32Value, 3)
         XCTAssertEqual(doubleFundamentalValue.int64Value, 3)
+        XCTAssertEqual(doubleFundamentalValue.doubleValue, 3.0)
         XCTAssertEqual(doubleFundamentalValue.stringValue, "3.0")
         XCTAssertEqual(doubleFundamentalValue.dataValue, "3.0".data(using: .ascii)!)
-        XCTAssertEqual(doubleFundamentalValue.doubleValue, 3.0)
+        XCTAssertEqual(doubleFundamentalValue.type, .float)
 
-        let nullFundamentalValue = coreStatement.value(atIndex: 3)
+        let stringValue: String = "4"
+        let stringFundamentalValue = FundamentalValue(stringValue)
+        XCTAssertEqual(stringFundamentalValue.int32Value, 4)
+        XCTAssertEqual(stringFundamentalValue.int64Value, 4)
+        XCTAssertEqual(stringFundamentalValue.doubleValue, 4.0)
+        XCTAssertEqual(stringFundamentalValue.stringValue, "4")
+        XCTAssertEqual(stringFundamentalValue.dataValue, "4".data(using: .ascii)!)
+        XCTAssertEqual(stringFundamentalValue.type, .text)
+
+        let dataValue: Data = "5".data(using: .ascii)!
+        let dataFundamentalValue = FundamentalValue(dataValue)
+        XCTAssertEqual(dataFundamentalValue.int32Value, 0)
+        XCTAssertEqual(dataFundamentalValue.int64Value, 0)
+        XCTAssertEqual(dataFundamentalValue.doubleValue, 0)
+        XCTAssertEqual(dataFundamentalValue.stringValue, "5")
+        XCTAssertEqual(dataFundamentalValue.dataValue, "5".data(using: .ascii)!)
+        XCTAssertEqual(dataFundamentalValue.type, .BLOB)
+
+        let nullFundamentalValue = FundamentalValue(nil)
         XCTAssertEqual(nullFundamentalValue.int32Value, 0)
         XCTAssertEqual(nullFundamentalValue.int64Value, 0)
-        XCTAssertEqual(nullFundamentalValue.stringValue, "")
-        XCTAssertEqual(nullFundamentalValue.dataValue, Data())
         XCTAssertEqual(nullFundamentalValue.doubleValue, 0)
+        XCTAssertEqual(nullFundamentalValue.stringValue, "")
+        XCTAssertEqual(nullFundamentalValue.dataValue, "".data(using: .ascii)!)
+        XCTAssertEqual(nullFundamentalValue.type, .null)
     }
 
     func testStepFailed() {

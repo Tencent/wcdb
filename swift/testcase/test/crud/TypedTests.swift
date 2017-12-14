@@ -1023,4 +1023,72 @@ class TypedTests: CRUDTestCase {
         }
     }
 
+    class TypedNoMatchJSONCodableObject: ColumnJSONCodable {
+        var noMatchVariable: Int = 1
+    }
+
+    class TypedMatchTable: TableCodable {
+        var variable1 = TypedJSONCodableObject()
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = TypedMatchTable
+            case variable1
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
+    class TypedNoMatchTable: TableCodable {
+        var variable1 = TypedNoMatchJSONCodableObject()
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = TypedNoMatchTable
+            case variable1
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
+    func testNoMatchJSONCodableObject() {
+        //Give
+        let tableName = "testNoMatchJSONCodableObject"
+        XCTAssertNoThrow(try database.create(table: tableName, of: TypedMatchTable.self))
+
+        let typedMatchTable = TypedMatchTable()
+        typedMatchTable.variable1 = TypedJSONCodableObject()
+        typedMatchTable.variable1.variable = 1
+        XCTAssertNoThrow(try database.insert(objects: typedMatchTable, intoTable: tableName))
+
+        var `catch` = false
+        do {
+            let _: TypedNoMatchTable? = try database.getObject(fromTable: tableName)
+            XCTFail("should not reach")
+        } catch {
+            `catch` = true
+        }
+        XCTAssertTrue(`catch`)
+    }
+
+    func testEmptyJSONCodableObject() {
+        //Give
+        let tableName = "testEmptyJSONCodableObject"
+        XCTAssertNoThrow(try database.create(table: tableName, of: TypedMatchTable.self))
+
+        let statementInsert = StatementInsert().insert(intoTable: tableName,
+                                                       with: TypedMatchTable.Properties.variable1)
+                                               .values(Expression.bindingParameter)
+        let coreStatement = try? database.prepare(statementInsert)
+        XCTAssertNotNil(coreStatement)
+        let wrappedCoreStatement = coreStatement!
+        wrappedCoreStatement.bind("", toIndex: 1)
+        XCTAssertNoThrow(try wrappedCoreStatement.step())
+        XCTAssertNoThrow(try wrappedCoreStatement.finalize())
+
+        var `catch` = false
+        do {
+            let _: TypedMatchTable? = try database.getObject(fromTable: tableName)
+            XCTFail("should not reach")
+        } catch {
+            `catch` = true
+        }
+        XCTAssertTrue(`catch`)
+    }
 }
