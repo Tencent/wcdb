@@ -486,7 +486,7 @@
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/sanhuazhang/Developer/GitCode/WCDB/sqlcipher;
+			buildWorkingDirectory = "$(SRCROOT)/../../../sqlcipher";
 			dependencies = (
 			);
 			name = preprocess;
