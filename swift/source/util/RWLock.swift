@@ -53,15 +53,6 @@ final class RWLock {
         }
     }
 
-    func tryLockRead() -> Bool {
-        pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
-        if writer>0||pending>0 {
-            return false
-        }
-        reader += 1
-        return true
-    }
-
     func lockWrite() {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         pending += 1
@@ -78,22 +69,13 @@ final class RWLock {
         pthread_cond_broadcast(&cond)
     }
 
-    func tryLockWrite() -> Bool {
-        pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
-        if writer>0||reader>0 {
-            return false
-        }
-        writer += 1
-        return true
-    }
-
     var isWriting: Bool {
         pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
         return writer>0
     }
 
-    var isReading: Bool {
-        pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
-        return reader>0
-    }
+//    var isReading: Bool {
+//        pthread_mutex_lock(&mutex); defer { pthread_mutex_unlock(&mutex) }
+//        return reader>0
+//    }
 }

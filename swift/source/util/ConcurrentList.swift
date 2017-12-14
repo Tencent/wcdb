@@ -53,13 +53,13 @@ final class ConcurrentList<Value> {
         return count
     }
 
-    var isEmpty: Bool {
-        spin.lock(); defer { spin.unlock() }
-        return values.isEmpty
-    }
+//    var isEmpty: Bool {
+//        spin.lock(); defer { spin.unlock() }
+//        return values.isEmpty
+//    }
 
-    var count: Int {
-        spin.lock(); defer { spin.unlock() }
-        return values.count
-    }
+//    var count: Int {
+//        spin.lock(); defer { spin.unlock() }
+//        return values.count
+//    }
 }
