@@ -19,7 +19,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2017 sanhuazhang. All rights reserved.</string>
+	<string>Copyright © 2017年 Tencent. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>
