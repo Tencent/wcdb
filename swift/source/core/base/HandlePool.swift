@@ -113,8 +113,8 @@ public final class HandlePool {
         }
     }
 
-    static private let maxConcurrency = 64
-    static let maxHardwareConcurrency = ProcessInfo.processInfo.processorCount
+    static private let maxConcurrency = max(maxHardwareConcurrency, 64)
+    static private let maxHardwareConcurrency = ProcessInfo.processInfo.processorCount
 
     func flowOut() throws -> RecyclableHandle {
         var unlock = true
