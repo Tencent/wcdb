@@ -31,6 +31,10 @@ public final class Database {
     }
 
     public init(withFileURL url: URL) {
+        #if swift(>=4.0)
+        #else
+            Error.abort("")
+        #endif
         #if WCDB_IOS
             DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
                 let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "com.Tencent.WCDB.swift.purge")
