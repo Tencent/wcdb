@@ -49,10 +49,6 @@ public struct Configs {
         public static func == (lhs: Config, rhs: Config) -> Bool {
             return lhs.name == rhs.name && lhs.callback == rhs.callback && lhs.order == rhs.order
         }
-
-        public static func != (lhs: Config, rhs: Config) -> Bool {
-            return !(lhs==rhs)
-        }
     }
 
     private var configs: [Config] = []
@@ -112,9 +108,5 @@ public struct Configs {
 extension Configs: Equatable {
     public static func == (lhs: Configs, rhs: Configs) -> Bool {
         return lhs.configs == rhs.configs
-    }
-
-    public static func != (lhs: Configs, rhs: Configs) -> Bool {
-        return !(lhs == rhs)
     }
 }
