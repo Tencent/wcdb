@@ -38,6 +38,10 @@ class ExpresssionTests: BaseTestCase {
 
         let boolExpression: Expression = false
         WINQAssertEqual(boolExpression, "0")
+
+        let columnExpression: Expression = Column(named: "testColumn").asExpression()
+        WINQAssertEqual(columnExpression.asColumnResult(), "testColumn")
+        WINQAssertEqual(columnExpression.asOrder(by: .descending), "testColumn DESC")
     }
 
     class OperableObject: TableCodable {

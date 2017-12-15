@@ -80,9 +80,7 @@ class FileTests: BaseTestCase {
             XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: nil, attributes: nil))
         }
         //When
-        XCTAssertNoThrow(try database.close {
-            try self.database.removeFiles()
-        })
+        XCTAssertNoThrow(try self.database.removeFiles())
         //Then
         for path in database.paths {
             XCTAssertFalse(fileManager.fileExists(atPath: path))
@@ -149,10 +147,7 @@ class FileTests: BaseTestCase {
             XCTAssertNoThrow(fileManager.createFile(atPath: path, contents: data, attributes: nil))
         }
         //Then
-        XCTAssertNoThrow(try database.close {
-            let filesSize = WCDBAssertNoThrowReturned(try self.database.getFilesSize()) ?? 0
-            XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
-        })
+        let filesSize = WCDBAssertNoThrowReturned(try self.database.getFilesSize()) ?? 0
+        XCTAssertEqual(filesSize, UInt64(expectedFilesSize))
     }
-
 }

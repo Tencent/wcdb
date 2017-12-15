@@ -188,13 +188,6 @@ extension ExpressionCanBeOperated {
         left: Self, right: ExpressionOperableType) -> Expression {
         return operate(left: left, operator: "!=", right: right)
     }
-
-    public func asColumnResult() -> ColumnResult {
-        return ColumnResult(with: asExpression())
-    }
-    public func asOrder(by term: OrderTerm?) -> Order {
-        return Order(with: asExpression(), by: term)
-    }
 }
 
 public protocol ExpressionOperable: ExpressionCanBeOperated {

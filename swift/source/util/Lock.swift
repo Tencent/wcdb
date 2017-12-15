@@ -137,10 +137,6 @@ final class ConditionLock: Lockable {
     func signal() {
         pthread_cond_signal(&cond)
     }
-
-    func broadcast() {
-        pthread_cond_broadcast(&cond)
-    }
 }
 
 extension DispatchQueue {

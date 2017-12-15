@@ -41,12 +41,14 @@ public struct ErrorValue {
     public var intValue: Int {
         switch type {
         case .int:
-            return (value as? Int) ?? 0
+            let value = self.value as? Int
+            Error.assert(value != nil, message: "")
+            return value!
         case .string:
-            guard let stringValue = value as? String, let intValue = Int(stringValue) else {
-                return 0
-            }
-            return intValue
+            let stringValue = value as? String
+            Error.assert(stringValue != nil, message: "")
+            let intValue = Int(stringValue!)
+            return intValue ?? 0
         }
     }
 
