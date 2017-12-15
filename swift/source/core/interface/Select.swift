@@ -44,7 +44,7 @@ public final class Select: SelectBase {
 
     public func nextObject() throws -> Any? {
         let rootType = keys[0].rootType as? TableDecodableBase.Type
-        Error.assert(rootType != nil, message: "")
+        Error.assert(rootType != nil, message: "\(keys[0].rootType) must conform to TableDecodable protocol.")
         guard try next() else {
             return nil
         }
@@ -53,7 +53,7 @@ public final class Select: SelectBase {
 
     public func allObjects() throws -> [Any] {
         let rootType = keys[0].rootType as? TableDecodableBase.Type
-        Error.assert(rootType != nil, message: "")
+        Error.assert(rootType != nil, message: "\(keys[0].rootType) must conform to TableDecodable protocol.")
         var objects: [Any] = []
         while try next() {
             objects.append(try extract(from: keys, of: rootType!))
@@ -63,7 +63,7 @@ public final class Select: SelectBase {
 
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
         let keys = self.keys as? [Object.CodingKeys]
-        Error.assert(keys != nil, message: "")
+        Error.assert(keys != nil, message: "Properties must belong to \(Object.self).CodingKeys.")
         guard try next() else {
             return nil
         }
@@ -72,7 +72,7 @@ public final class Select: SelectBase {
 
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
         let keys = self.keys as? [Object.CodingKeys]
-        Error.assert(keys != nil, message: "")
+        Error.assert(keys != nil, message: "Properties must belong to \(Object.self).CodingKeys.")
         var objects: [Object] = []
         while try next() {
             objects.append(try extract(from: keys!))

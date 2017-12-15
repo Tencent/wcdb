@@ -44,11 +44,11 @@ final class TableEncoder: Encoder {
         }
 
         func superEncoder() -> Swift.Encoder {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder(forKey key: Key) -> Swift.Encoder {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodePrimaryKeyIfPresent(forKey key: Key, atIndex index: Int) -> Bool {
@@ -103,7 +103,7 @@ final class TableEncoder: Encoder {
 
         func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
             let encodableColumnValue = value as? ColumnEncodableBase
-            Error.assert(encodableColumnValue != nil, message: "")
+            Error.assert(encodableColumnValue != nil, message: "[\(key)] must conform to ColumnEncodable protocol.")
             generalEncode(encodableColumnValue!, forKey: key)
         }
 
@@ -202,18 +202,19 @@ final class TableEncoder: Encoder {
         func encodeIfPresent<Object>(_ value: Object?,
                                      forKey key: Key) throws
             where Object: Encodable {
-            Error.assert(Object.self is ColumnEncodableBase.Type, message: "")
+            Error.assert(Object.self is ColumnEncodableBase.Type,
+                         message: "[\(key)] must conform to ColumnEncodable protocol.")
             generalEncode(value as? ColumnEncodableBase, forKey: key)
         }
 
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
                                         forKey key: Key) -> KeyedEncodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
@@ -225,15 +226,16 @@ final class TableEncoder: Encoder {
     private var primaryKey: CodingTableKeyBase?
 
     func singleValueContainer() -> SingleValueEncodingContainer {
-        Error.abort("")
+        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        Error.abort("")
+        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
     }
 
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
-        Error.assert(Key.self is CodingTableKeyBase.Type, message: "")
+        Error.assert(Key.self is CodingTableKeyBase.Type,
+                     message: "[\(Key.self)] must conform to CodingTableKey protocol.")
         let container = KeyedEncodingTableContainer(with: indexedCodingTableKeys,
                                                     on: coreStatement,
                                                     and: primaryKey,

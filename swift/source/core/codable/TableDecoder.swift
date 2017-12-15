@@ -56,99 +56,99 @@ final class TableDecoder: Decoder {
 
         func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? false
         }
 
         func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int64.Type, forKey key: Key) throws -> Int64 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: String.Type, forKey key: Key) throws -> String {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             return coreStatement.value(atIndex: index!) ?? ""
         }
 
         func decode<Object>(_ type: Object.Type, forKey key: Key) throws -> Object where Object: Decodable {
             let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "")
+            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
             let decodableType = Object.self as? ColumnDecodableBase.Type
-            Error.assert(decodableType != nil, message: "")
+            Error.assert(decodableType != nil, message: "[\(key)] must conform to ColumnDecodable protocol.")
             guard let object = coreStatement.value(atIndex: index!, of: decodableType!) as? Object else {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,
                                        code: .misuse,
-                                       message: "")
+                                       message: "If [\(key)] would be decoded as nil, please make it optional.")
             }
             return object
         }
@@ -257,26 +257,26 @@ final class TableDecoder: Decoder {
                 return nil
             }
             let decodableType = Object.self as? ColumnDecodableBase.Type
-            Error.assert(decodableType != nil, message: "")
+            Error.assert(decodableType != nil, message: "[\(key)] must conform to ColumnDecodable protocol.")
             return coreStatement.value(atIndex: index, of: decodableType!) as? Object
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
                                         forKey key: Key) throws -> KeyedDecodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superDecoder() throws -> Swift.Decoder {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superDecoder(forKey key: Key) throws -> Swift.Decoder {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
@@ -300,7 +300,8 @@ final class TableDecoder: Decoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
-        Error.assert(Key.self is CodingTableKeyBase.Type, message: "")
+        Error.assert(Key.self is CodingTableKeyBase.Type,
+                     message: "[\(Key.self)] must conform to CodingTableKey protocol.")
         let container = KeyedDecodingTableContainer(with: indexedCodingTableKeys,
                                                     on: coreStatement,
                                                     and: Key.self)
@@ -308,10 +309,10 @@ final class TableDecoder: Decoder {
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
-        Error.abort("")
+        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
     }
 
     func singleValueContainer() throws -> SingleValueDecodingContainer {
-        Error.abort("")
+        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
     }
 }

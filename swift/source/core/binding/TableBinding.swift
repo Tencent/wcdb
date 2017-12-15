@@ -28,7 +28,8 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
 
     private lazy var columnTypes: [String: ColumnType] = {
         let tableEncodableType = CodingTableKeyType.Root.self as? TableEncodableBase.Type
-        Error.assert(tableEncodableType != nil, message: "")
+        Error.assert(tableEncodableType != nil,
+                     message: "[\(CodingTableKeyType.Root.self)] must conform to TableEncodable protocol.")
         return ColumnTypeEncoder.getColumnTypes(of: tableEncodableType!)
     }()
 
@@ -53,7 +54,8 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
             return nil
         }
         guard filtered.count == 1 else {
-            Error.assert(filtered.count == 0, message: "")
+            Error.assert(filtered.count == 0,
+                         message: "Only one primary key is supported. Use MultiPrimaryBinding instead")
             return nil
         }
         return filtered.first!.key
@@ -90,17 +92,20 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     typealias TypedCodingTableKeyType = CodingTableKeyType
     func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
         let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType
-        Error.assert(typedCodingTableKey != nil, message: "")
+        Error.assert(typedCodingTableKey != nil,
+                     message: "[\(codingTableKey)] must conform to CodingTableKey protocol.")
         let typedProperty = properties[typedCodingTableKey!]
-        Error.assert(typedProperty != nil, message: "")
+        Error.assert(typedProperty != nil,
+                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
         return typedProperty!
     }
 
     func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
         let codingTableKey = key as? CodingTableKeyType
-        Error.assert(codingTableKey != nil, message: "")
+        Error.assert(codingTableKey != nil, message: "[\(key)] must conform to CodingTableKey protocol.")
         let columnType = columnTypes[codingTableKey!.stringValue]
-        Error.assert(columnType != nil, message: "")
+        Error.assert(columnType != nil,
+                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
         var columnDef = ColumnDef(with: codingTableKey!, and: columnType!)
         if let index = columnConstraintBindings?.index(forKey: codingTableKey!) {
             columnDef = columnConstraintBindings![index].value.generateColumnDef(with: columnDef)

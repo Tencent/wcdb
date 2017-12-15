@@ -33,7 +33,7 @@ public final class Database {
     public init(withFileURL url: URL) {
         #if swift(>=4.0)
         #else
-            Error.abort("")
+            Error.abort("Swift 4.0 is required.")
         #endif
         #if WCDB_IOS
             DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
@@ -291,7 +291,8 @@ extension Database {
             })
             let checkpointConfig = Database.defaultConfigs.config(
                 by: DefaultConfigOrder.checkpoint.description)
-            Error.assert(checkpointConfig != nil, message: "")
+            Error.assert(checkpointConfig != nil,
+                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description,
                                  with: checkpointConfig!)
         }

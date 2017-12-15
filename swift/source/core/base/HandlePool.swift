@@ -66,7 +66,7 @@ public final class HandlePool {
                                    path: "",
                                    operation: .getPool,
                                    code: .misuse,
-                                   message: "")
+                                   message: "Database with tag: \(tag) is not exists.")
         }
         wrap.reference += 1
         return Recyclable(wrap.handlePool, onRecycled: {

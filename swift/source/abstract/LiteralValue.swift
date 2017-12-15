@@ -56,23 +56,23 @@ public struct LiteralValue: Describable {
             switch ColumnEncodableType.columnType {
             case .integer32:
                 let int32Value = value as? Int32
-                Error.assert(int32Value != nil, message: "")
+                Error.assert(int32Value != nil, message: "Conversion error. Please report an issue to us.")
                 self.init(int32Value!)
             case .integer64:
                 let int64Value = value as? Int64
-                Error.assert(int64Value != nil, message: "")
+                Error.assert(int64Value != nil, message: "Conversion error. Please report an issue to us.")
                 self.init(int64Value!)
             case .float:
                 let doubleValue = value as? Double
-                Error.assert(doubleValue != nil, message: "")
+                Error.assert(doubleValue != nil, message: "Conversion error. Please report an issue to us.")
                 self.init(doubleValue!)
             case .text:
                 let stringValue = value as? String
-                Error.assert(stringValue != nil, message: "")
+                Error.assert(stringValue != nil, message: "Conversion error. Please report an issue to us.")
                 self.init(stringValue!)
             case .BLOB:
                 let dataValue = value as? Data
-                Error.assert(dataValue != nil, message: "")
+                Error.assert(dataValue != nil, message: "Conversion error. Please report an issue to us.")
                 self.init(dataValue!)
             case .null:
                 self.init(nil)

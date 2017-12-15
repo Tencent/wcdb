@@ -32,11 +32,11 @@ final class ColumnTypeEncoder: Encoder {
         }
 
         func superEncoder() -> Swift.Encoder {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder(forKey key: Key) -> Swift.Encoder {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodeNil(forKey key: Key) throws {
@@ -110,11 +110,11 @@ final class ColumnTypeEncoder: Encoder {
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
                                         forKey key: Key) -> KeyedEncodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-            Error.abort("")
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
@@ -188,11 +188,11 @@ final class ColumnTypeEncoder: Encoder {
     private var results: [String: ColumnType] = [:]
 
     func singleValueContainer() -> SingleValueEncodingContainer {
-        Error.abort("")
+        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        Error.abort("")
+        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
     }
 
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
@@ -202,7 +202,8 @@ final class ColumnTypeEncoder: Encoder {
     static func getColumnTypes(of type: TableEncodableBase.Type) -> [String: ColumnType] {
         let encoder = ColumnTypeEncoder()
         let dummy = type.init()
-        Error.assert(((try? dummy.encode(to: encoder)) != nil), message: "")
+        Error.assert(((try? dummy.encode(to: encoder)) != nil),
+                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
         return encoder.results
     }
 }

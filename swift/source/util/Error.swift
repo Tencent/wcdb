@@ -42,11 +42,13 @@ public struct ErrorValue {
         switch type {
         case .int:
             let value = self.value as? Int
-            Error.assert(value != nil, message: "")
+            Error.assert(value != nil,
+                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
             return value!
         case .string:
             let stringValue = value as? String
-            Error.assert(stringValue != nil, message: "")
+            Error.assert(stringValue != nil,
+                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
             let intValue = Int(stringValue!)
             return intValue ?? 0
         }
@@ -55,15 +57,15 @@ public struct ErrorValue {
     public var stringValue: String {
         switch type {
         case .int:
-            guard let intValue = value as? Int else {
-                return ""
-            }
-            return String(intValue)
+            let value = self.value as? Int
+            Error.assert(value != nil,
+                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
+            return String(value!)
         case .string:
-            guard let stringValue = value as? String else {
-                return ""
-            }
-            return stringValue
+            let value = self.value as? String
+            Error.assert(value != nil,
+                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
+            return value!
         }
     }
 }
@@ -418,14 +420,15 @@ public final class Error: Swift.Error, CustomStringConvertible {
                                 Error.Key.operation: ErrorValue(operation.rawValue)])
     }
 
-    static func abort(_ message: String) -> Never {
+    static func abort(_ message: @autoclosure () -> String) -> Never {
+        let description = message()
         Error.report(type: .abort,
                      code: .global(.abort),
-                     infos: [Error.Key.message: ErrorValue(message)])
-        fatalError(message)
+                     infos: [Error.Key.message: ErrorValue(description)])
+        fatalError(description)
     }
 
-    static func assert(_ condition: Bool, message: String) {
+    static func assert(_ condition: Bool, message: @autoclosure () -> String) {
         guard condition else {
             abort(message)
         }
