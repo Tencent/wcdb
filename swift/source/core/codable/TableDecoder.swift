@@ -336,10 +336,9 @@ final class TableDecoder: Decoder {
             guard let index = columnIndex(by: key) else {
                 return nil
             }
-            guard let decodableType = Object.self as? ColumnDecodableBase.Type else {
-                Error.abort("")
-            }
-            return coreStatement.value(atIndex: index, of: decodableType) as? Object
+            let decodableType = Object.self as? ColumnDecodableBase.Type
+            Error.assert(decodableType != nil, message: "")
+            return coreStatement.value(atIndex: index, of: decodableType!) as? Object
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
@@ -381,9 +380,7 @@ final class TableDecoder: Decoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
-        guard Key.self is CodingTableKeyBase.Type else {
-            Error.abort("")
-        }
+        Error.assert(Key.self is CodingTableKeyBase.Type, message: "")
         let container = KeyedDecodingTableContainer(with: indexedCodingTableKeys,
                                                     on: coreStatement,
                                                     and: Key.self)

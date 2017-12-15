@@ -423,6 +423,12 @@ public final class Error: Swift.Error, CustomStringConvertible {
         fatalError(message)
     }
 
+    static func assert(_ condition: Bool, message: String) {
+        guard condition else {
+            abort(message)
+        }
+    }
+
     static func warning(_ message: String) {
         Error.report(type: .warning,
                      code: .global(.warning),

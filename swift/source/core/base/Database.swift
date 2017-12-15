@@ -179,10 +179,8 @@ extension Database {
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
-                if journalMode.caseInsensitiveCompare("WAL") == ComparisonResult.orderedSame {
-                    //See also: http://www.sqlite.org/wal.html#readonly
-                    Error.abort("It is not possible to open read-only WAL databases.")
-                }
+                Error.assert(journalMode.caseInsensitiveCompare("WAL") == ComparisonResult.orderedSame,
+                             message: "It is not possible to open read-only WAL databases.")
                 return
             }
             //Locking Mode
@@ -291,12 +289,11 @@ extension Database {
         } else {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
             })
-            guard let checkpointConfig = Database.defaultConfigs.config(
-                by: DefaultConfigOrder.checkpoint.description) else {
-                Error.abort("")
-            }
+            let checkpointConfig = Database.defaultConfigs.config(
+                by: DefaultConfigOrder.checkpoint.description)
+            Error.assert(checkpointConfig != nil, message: "")
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description,
-                                 with: checkpointConfig)
+                                 with: checkpointConfig!)
         }
     }
 

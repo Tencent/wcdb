@@ -27,10 +27,9 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     let allKeys: [CodingTableKeyType]
 
     private lazy var columnTypes: [String: ColumnType] = {
-        guard let tableEncodableType = CodingTableKeyType.Root.self as? TableEncodableBase.Type else {
-            Error.abort("")
-        }
-        return ColumnTypeEncoder.getColumnTypes(of: tableEncodableType)
+        let tableEncodableType = CodingTableKeyType.Root.self as? TableEncodableBase.Type
+        Error.assert(tableEncodableType != nil, message: "")
+        return ColumnTypeEncoder.getColumnTypes(of: tableEncodableType!)
     }()
 
     private lazy var allColumnDef: [ColumnDef] = allKeys.map { (key) -> ColumnDef in
@@ -54,11 +53,8 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
             return nil
         }
         guard filtered.count == 1 else {
-            if filtered.count == 0 {
-                return nil
-            } else {
-                Error.abort("")
-            }
+            Error.assert(filtered.count == 0, message: "")
+            return nil
         }
         return filtered.first!.key
     }()
@@ -93,42 +89,36 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
 
     typealias TypedCodingTableKeyType = CodingTableKeyType
     func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
-        guard let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType else {
-            Error.abort("")
-        }
-        guard let typedProperty = properties[typedCodingTableKey] else {
-            Error.abort("")
-        }
-        return typedProperty
+        let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType
+        Error.assert(typedCodingTableKey != nil, message: "")
+        let typedProperty = properties[typedCodingTableKey!]
+        Error.assert(typedProperty != nil, message: "")
+        return typedProperty!
     }
 
     func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
-        guard let codingTableKey = key as? CodingTableKeyType else {
-            Error.abort("")
-        }
-        guard let columnType = columnTypes[codingTableKey.stringValue] else {
-            Error.abort("")
-        }
-        var columnDef = ColumnDef(with: codingTableKey, and: columnType)
-        if let index = columnConstraintBindings?.index(forKey: codingTableKey) {
+        let codingTableKey = key as? CodingTableKeyType
+        Error.assert(codingTableKey != nil, message: "")
+        let columnType = columnTypes[codingTableKey!.stringValue]
+        Error.assert(columnType != nil, message: "")
+        var columnDef = ColumnDef(with: codingTableKey!, and: columnType!)
+        if let index = columnConstraintBindings?.index(forKey: codingTableKey!) {
             columnDef = columnConstraintBindings![index].value.generateColumnDef(with: columnDef)
         }
         return columnDef
     }
 
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
-        guard let virtualTableBinding = self.virtualTableBinding else {
-            Error.abort("Virtual table binding is not defined")
-        }
+        Error.assert(virtualTableBinding != nil, message: "Virtual table binding is not defined")
         let columnModuleArguments = allColumnDef.map { ModuleArgument(with: $0) }
         let tableCostraintArguments = tableConstraintBindings?.map { (tableConstraintBinding) -> ModuleArgument in
             let key = tableConstraintBinding.key
             return ModuleArgument(with: tableConstraintBinding.value.generateConstraint(withName: key))
         } ?? []
-        let arguments = columnModuleArguments + tableCostraintArguments + virtualTableBinding.arguments
+        let arguments = columnModuleArguments + tableCostraintArguments + virtualTableBinding!.arguments
         return StatementCreateVirtualTable()
             .create(virtualTable: table)
-            .using(module: virtualTableBinding.module,
+            .using(module: virtualTableBinding!.module,
                    arguments: arguments)
     }
 

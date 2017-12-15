@@ -202,11 +202,7 @@ final class ColumnTypeEncoder: Encoder {
     static func getColumnTypes(of type: TableEncodableBase.Type) -> [String: ColumnType] {
         let encoder = ColumnTypeEncoder()
         let dummy = type.init()
-        do {
-            try dummy.encode(to: encoder)
-        } catch {
-            Error.abort("")
-        }
+        Error.assert(((try? dummy.encode(to: encoder)) != nil), message: "")
         return encoder.results
     }
 }

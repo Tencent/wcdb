@@ -55,30 +55,25 @@ public struct LiteralValue: Describable {
         if let value = columnEncodableValue.archivedFundamentalValue() {
             switch ColumnEncodableType.columnType {
             case .integer32:
-                guard let int32Value = value as? Int32 else {
-                    Error.abort("")
-                }
-                self.init(int32Value)
+                let int32Value = value as? Int32
+                Error.assert(int32Value != nil, message: "")
+                self.init(int32Value!)
             case .integer64:
-                guard let int64Value = value as? Int64 else {
-                    Error.abort("")
-                }
-                self.init(int64Value)
+                let int64Value = value as? Int64
+                Error.assert(int64Value != nil, message: "")
+                self.init(int64Value!)
             case .float:
-                guard let doubleValue = value as? Double else {
-                    Error.abort("")
-                }
-                self.init(doubleValue)
+                let doubleValue = value as? Double
+                Error.assert(doubleValue != nil, message: "")
+                self.init(doubleValue!)
             case .text:
-                guard let stringValue = value as? String else {
-                    Error.abort("")
-                }
-                self.init(stringValue)
+                let stringValue = value as? String
+                Error.assert(stringValue != nil, message: "")
+                self.init(stringValue!)
             case .BLOB:
-                guard let dataValue = value as? Data else {
-                    Error.abort("")
-                }
-                self.init(dataValue)
+                let dataValue = value as? Data
+                Error.assert(dataValue != nil, message: "")
+                self.init(dataValue!)
             case .null:
                 self.init(nil)
             }

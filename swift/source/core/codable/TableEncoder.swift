@@ -102,10 +102,9 @@ final class TableEncoder: Encoder {
         }
 
         func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
-            guard let encodableColumnValue = value as? ColumnEncodableBase else {
-                Error.abort("")
-            }
-            generalEncode(encodableColumnValue, forKey: key)
+            let encodableColumnValue = value as? ColumnEncodableBase
+            Error.assert(encodableColumnValue != nil, message: "")
+            generalEncode(encodableColumnValue!, forKey: key)
         }
 
         func encode(_ value: Int8, forKey key: Key) throws {
@@ -203,9 +202,7 @@ final class TableEncoder: Encoder {
         func encodeIfPresent<Object>(_ value: Object?,
                                      forKey key: Key) throws
             where Object: Encodable {
-            guard Object.self is ColumnEncodableBase.Type else {
-                Error.abort("")
-            }
+            Error.assert(Object.self is ColumnEncodableBase.Type, message: "")
             generalEncode(value as? ColumnEncodableBase, forKey: key)
         }
 
@@ -236,9 +233,7 @@ final class TableEncoder: Encoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
-        guard Key.self is CodingTableKeyBase.Type else {
-            Error.abort("")
-        }
+        Error.assert(Key.self is CodingTableKeyBase.Type, message: "")
         let container = KeyedEncodingTableContainer(with: indexedCodingTableKeys,
                                                     on: coreStatement,
                                                     and: primaryKey,

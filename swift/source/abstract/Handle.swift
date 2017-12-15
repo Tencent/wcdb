@@ -85,9 +85,8 @@ public final class Handle {
     }
 
     public func prepare(_ statement: Statement) throws -> HandleStatement {
-        guard statement.statementType != .transaction else {
-            Error.abort("[prepare] a transaction is not allowed, use [exec] instead")
-        }
+        Error.assert(statement.statementType != .transaction,
+                     message: "[prepare] a transaction is not allowed, use [exec] instead")
         var stmt: OpaquePointer? = nil
         let rc = sqlite3_prepare(handle, statement.description, -1, &stmt, nil)
         guard rc==SQLITE_OK else {

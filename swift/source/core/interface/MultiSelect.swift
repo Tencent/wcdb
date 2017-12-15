@@ -43,9 +43,7 @@ public final class MultiSelect: SelectBase {
         }
         self.keys = propertyConvertibleList.map({ (propertyConvertible) -> CodingTableKeyBase in
             let codingTableKey = propertyConvertible.codingTableKey
-            guard codingTableKey.rootType is TableDecodableBase.Type else {
-                Error.abort("")
-            }
+            Error.assert(codingTableKey.rootType is TableDecodableBase.Type, message: "")
             return codingTableKey
         })
 
@@ -65,17 +63,15 @@ public final class MultiSelect: SelectBase {
     }
     private lazy var generators: [String: Generator] = {
         var mappedKeys: [String: TypedIndexedKeys] = [:]
-        guard let coreStatement = try? lazyCoreStatement() else {
-            Error.abort("")
-        }
+        let coreStatement = try? lazyCoreStatement()
+        Error.assert(coreStatement != nil, message: "")
         for (index, key) in keys.enumerated() {
-            let tableName = coreStatement.columnTableName(atIndex: index)
+            let tableName = coreStatement!.columnTableName(atIndex: index)
             var typedIndexedKeys: TypedIndexedKeys! = mappedKeys[tableName]
             if typedIndexedKeys == nil {
-                guard let tableDecodableType = key.rootType as? TableDecodableBase.Type else {
-                    Error.abort("")
-                }
-                typedIndexedKeys = TypedIndexedKeys(tableDecodableType, key: key.stringValue, index: index)
+                let tableDecodableType = key.rootType as? TableDecodableBase.Type
+                Error.assert(tableDecodableType != nil, message: "")
+                typedIndexedKeys = TypedIndexedKeys(tableDecodableType!, key: key.stringValue, index: index)
             } else {
                 typedIndexedKeys.indexedKeys[key.stringValue] = index
             }
@@ -83,7 +79,7 @@ public final class MultiSelect: SelectBase {
         }
         var generators: [String: Generator] = [:]
         for (tableName, typedIndexedKey) in mappedKeys {
-            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: coreStatement)
+            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: coreStatement!)
             let type = typedIndexedKey.type
             let generator = { () throws -> TableDecodableBase in
                 return try type.init(from: decoder)
