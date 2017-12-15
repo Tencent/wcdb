@@ -40,154 +40,267 @@ class ExpresssionTests: BaseTestCase {
         WINQAssertEqual(boolExpression, "0")
     }
 
+    class OperableObject: TableCodable {
+        var left: Int = 0
+        var right: String = ""
+        required init() {}
+        enum CodingKeys: String, CodingTableKey {
+            typealias Root = OperableObject
+            case left
+            case right
+            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        }
+    }
+
     func testOperable() {
         //Give
-        let left: Expression = Column(named: "left").asExpression()
-        let right: Expression = "right"
+        let left = OperableObject.Properties.left
+        let right = OperableObject.Properties.right
 
         //Then
-        WINQAssertEqual(!left, "(NOT left)")
-        WINQAssertEqual(+left, "(left)")
-        WINQAssertEqual(-left, "(-left)")
-        WINQAssertEqual(~left, "(~left)")
+        WINQExpressionAssertEqual(!left, "(NOT left)")
+        WINQExpressionAssertEqual(+left, "(left)")
+        WINQExpressionAssertEqual(-left, "(-left)")
+        WINQExpressionAssertEqual(~left, "(~left)")
 
-        WINQAssertEqual((left || right), "(left OR 'right')")
+        WINQExpressionAssertEqual(left.concat(right), "(left || right)")
 
-        WINQAssertEqual((left && right), "(left AND 'right')")
+        WINQExpressionAssertEqual(left.substr(start: 1, length: 2), "SUBSTR(left, 1, 2)")
 
-        WINQAssertEqual((left * right), "(left * 'right')")
+        WINQExpressionAssertEqual(left.like(right), "(left LIKE right)")
 
-        WINQAssertEqual((left / right), "(left / 'right')")
+        WINQExpressionAssertEqual(left.glob(right), "(left GLOB right)")
 
-        WINQAssertEqual((left % right), "(left % 'right')")
+        WINQExpressionAssertEqual(left.match(right), "(left MATCH right)")
 
-        WINQAssertEqual((left + right), "(left + 'right')")
+        WINQExpressionAssertEqual(left.regexp(right), "(left REGEXP right)")
 
-        WINQAssertEqual((left - right), "(left - 'right')")
+        WINQExpressionAssertEqual(left.notLike(right), "(left NOT LIKE right)")
 
-        WINQAssertEqual((left << right), "(left << 'right')")
+        WINQExpressionAssertEqual(left.notGlob(right), "(left NOT GLOB right)")
 
-        WINQAssertEqual((left >> right), "(left >> 'right')")
+        WINQExpressionAssertEqual(left.notMatch(right), "(left NOT MATCH right)")
 
-        WINQAssertEqual((left & right), "(left & 'right')")
+        WINQExpressionAssertEqual(left.notRegexp(right), "(left NOT REGEXP right)")
 
-        WINQAssertEqual((left | right), "(left | 'right')")
+        WINQExpressionAssertEqual(left.like(right, escape: 2), "(left LIKE right ESCAPE 2)")
 
-        WINQAssertEqual((left < right), "(left < 'right')")
+        WINQExpressionAssertEqual(left.glob(right, escape: 2), "(left GLOB right ESCAPE 2)")
 
-        WINQAssertEqual((left <= right), "(left <= 'right')")
+        WINQExpressionAssertEqual(left.match(right, escape: 2), "(left MATCH right ESCAPE 2)")
 
-        WINQAssertEqual((left > right), "(left > 'right')")
+        WINQExpressionAssertEqual(left.regexp(right, escape: 2), "(left REGEXP right ESCAPE 2)")
 
-        WINQAssertEqual((left >= right), "(left >= 'right')")
+        WINQExpressionAssertEqual(left.notLike(right, escape: 2), "(left NOT LIKE right ESCAPE 2)")
 
-        WINQAssertEqual((left == right), "(left = 'right')")
+        WINQExpressionAssertEqual(left.notGlob(right, escape: 2), "(left NOT GLOB right ESCAPE 2)")
 
-        WINQAssertEqual((left != right), "(left != 'right')")
+        WINQExpressionAssertEqual(left.notMatch(right, escape: 2), "(left NOT MATCH right ESCAPE 2)")
 
-        WINQAssertEqual(left.concat(right), "(left || 'right')")
+        WINQExpressionAssertEqual(left.notRegexp(right, escape: 2), "(left NOT REGEXP right ESCAPE 2)")
 
-        WINQAssertEqual(left.substr(start: 1, length: 2), "SUBSTR(left, 1, 2)")
+        WINQExpressionAssertEqual(left.isNull(), "(left ISNULL)")
 
-        WINQAssertEqual(left.like(right), "(left LIKE 'right')")
+        WINQExpressionAssertEqual(left.isNotNull(), "(left NOTNULL)")
 
-        WINQAssertEqual(left.glob(right), "(left GLOB 'right')")
+        WINQExpressionAssertEqual(left.`is`(right), "(left IS right)")
 
-        WINQAssertEqual(left.match(right), "(left MATCH 'right')")
+        WINQExpressionAssertEqual(left.isNot(right), "(left IS NOT right)")
 
-        WINQAssertEqual(left.regexp(right), "(left REGEXP 'right')")
+        WINQExpressionAssertEqual(left.between(2, 10), "(left BETWEEN 2 AND 10)")
 
-        WINQAssertEqual(left.notLike(right), "(left NOT LIKE 'right')")
-
-        WINQAssertEqual(left.notGlob(right), "(left NOT GLOB 'right')")
-
-        WINQAssertEqual(left.notMatch(right), "(left NOT MATCH 'right')")
-
-        WINQAssertEqual(left.notRegexp(right), "(left NOT REGEXP 'right')")
-
-        WINQAssertEqual(left.like(right, escape: 2), "(left LIKE 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.glob(right, escape: 2), "(left GLOB 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.match(right, escape: 2), "(left MATCH 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.regexp(right, escape: 2), "(left REGEXP 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.notLike(right, escape: 2), "(left NOT LIKE 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.notGlob(right, escape: 2), "(left NOT GLOB 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.notMatch(right, escape: 2), "(left NOT MATCH 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.notRegexp(right, escape: 2), "(left NOT REGEXP 'right' ESCAPE 2)")
-
-        WINQAssertEqual(left.isNull(), "(left ISNULL)")
-
-        WINQAssertEqual(left.isNotNull(), "(left NOTNULL)")
-
-        WINQAssertEqual(left.`is`(right), "(left IS 'right')")
-
-        WINQAssertEqual(left.isNot(right), "(left IS NOT 'right')")
-
-        WINQAssertEqual(left.between(2, 10), "(left BETWEEN 2 AND 10)")
-
-        WINQAssertEqual(left.notBetween(2, 10), "(left NOT BETWEEN 2 AND 10)")
+        WINQExpressionAssertEqual(left.notBetween(2, 10), "(left NOT BETWEEN 2 AND 10)")
 
         let statementSelect = StatementSelect().select(left).from("testExpressionTable")
 
-        WINQAssertEqual(Expression.exists(statementSelect), "(EXISTS SELECT left FROM testExpressionTable)")
-
-        WINQAssertEqual(Expression.notExists(statementSelect), "(NOT EXISTS SELECT left FROM testExpressionTable)")
-
-        WINQAssertEqual(left.`in`(statementSelect), "(IN SELECT left FROM testExpressionTable)")
-
-        WINQAssertEqual(left.notIn(statementSelect), "(NOT IN SELECT left FROM testExpressionTable)")
-
-        WINQAssertEqual(left.`in`(right), "(left IN('right'))")
-
-        WINQAssertEqual(left.notIn(right), "(left NOT IN('right'))")
-
-        WINQAssertEqual(Expression.combine(left, right), "(left, 'right')")
-
-        WINQAssertEqual(
-            Expression.function(named: "testFunction", left, right, isDistinct: true),
-            "testFunction(DISTINCT left, 'right')"
+        WINQExpressionAssertEqual(
+            Expression.exists(statementSelect),
+            "(EXISTS SELECT left FROM testExpressionTable)"
         )
 
-        WINQAssertEqual(left.avg(), "AVG(left)")
+        WINQExpressionAssertEqual(
+            Expression.notExists(statementSelect),
+            "(NOT EXISTS SELECT left FROM testExpressionTable)"
+        )
 
-        WINQAssertEqual(left.count(isDistinct: true), "COUNT(DISTINCT left)")
+        WINQExpressionAssertEqual(left.`in`(statementSelect), "(IN SELECT left FROM testExpressionTable)")
 
-        WINQAssertEqual(left.groupConcat(), "GROUP_CONCAT(left)")
+        WINQExpressionAssertEqual(left.notIn(statementSelect), "(NOT IN SELECT left FROM testExpressionTable)")
 
-        WINQAssertEqual(left.groupConcat(isDistinct: true, separateBy: "-"), "GROUP_CONCAT(DISTINCT left, '-')")
+        WINQExpressionAssertEqual(left.`in`(right), "(left IN(right))")
 
-        WINQAssertEqual(left.max(), "MAX(left)")
+        WINQExpressionAssertEqual(left.notIn(right), "(left NOT IN(right))")
 
-        WINQAssertEqual(left.min(), "MIN(left)")
+        WINQExpressionAssertEqual(Expression.combine(left, right), "(left, right)")
 
-        WINQAssertEqual(left.sum(), "SUM(left)")
+        WINQExpressionAssertEqual(
+            Expression.function(named: "testFunction", left, right, isDistinct: true),
+            "testFunction(DISTINCT left, right)"
+        )
 
-        WINQAssertEqual(left.total(), "TOTAL(left)")
+        WINQExpressionAssertEqual(left.avg(), "AVG(left)")
 
-        WINQAssertEqual(left.abs(), "ABS(left)")
+        WINQExpressionAssertEqual(left.count(isDistinct: true), "COUNT(DISTINCT left)")
 
-        WINQAssertEqual(left.hex(), "HEX(left)")
+        WINQExpressionAssertEqual(left.groupConcat(), "GROUP_CONCAT(left)")
 
-        WINQAssertEqual(left.length(), "LENGTH(left)")
+        WINQExpressionAssertEqual(
+            left.groupConcat(isDistinct: true, separateBy: "-"),
+            "GROUP_CONCAT(DISTINCT left, '-')"
+        )
 
-        WINQAssertEqual(left.lower(), "LOWER(left)")
+        WINQExpressionAssertEqual(left.max(), "MAX(left)")
 
-        WINQAssertEqual(left.upper(), "UPPER(left)")
+        WINQExpressionAssertEqual(left.min(), "MIN(left)")
 
-        WINQAssertEqual(left.round(), "ROUND(left)")
+        WINQExpressionAssertEqual(left.sum(), "SUM(left)")
 
-        WINQAssertEqual(Expression.`case`(left, (when: 1, then: 2), else: 3), "CASE left WHEN 1 THEN 2 ELSE 3 END")
+        WINQExpressionAssertEqual(left.total(), "TOTAL(left)")
 
-        WINQAssertEqual(left.matchinfo(), "MATCHINFO(left)")
+        WINQExpressionAssertEqual(left.abs(), "ABS(left)")
 
-        WINQAssertEqual(left.offsets(), "OFFSETS(left)")
+        WINQExpressionAssertEqual(left.hex(), "HEX(left)")
 
-        WINQAssertEqual(left.snippet(), "SNIPPET(left)")
+        WINQExpressionAssertEqual(left.length(), "LENGTH(left)")
+
+        WINQExpressionAssertEqual(left.lower(), "LOWER(left)")
+
+        WINQExpressionAssertEqual(left.upper(), "UPPER(left)")
+
+        WINQExpressionAssertEqual(left.round(), "ROUND(left)")
+
+        WINQExpressionAssertEqual(
+            Expression.`case`(left, (when: 1, then: 2), else: 3),
+            "CASE left WHEN 1 THEN 2 ELSE 3 END"
+        )
+
+        WINQExpressionAssertEqual(left.matchinfo(), "MATCHINFO(left)")
+
+        WINQExpressionAssertEqual(left.offsets(), "OFFSETS(left)")
+
+        WINQExpressionAssertEqual(left.snippet(), "SNIPPET(left)")
+    }
+
+    func testOperableXOperable() {
+        //Give
+        let left = OperableObject.Properties.left
+        let right = OperableObject.Properties.right
+
+        //Then
+        WINQExpressionAssertEqual((left || right), "(left OR right)")
+
+        WINQExpressionAssertEqual((left && right), "(left AND right)")
+
+        WINQExpressionAssertEqual((left * right), "(left * right)")
+
+        WINQExpressionAssertEqual((left / right), "(left / right)")
+
+        WINQExpressionAssertEqual((left % right), "(left % right)")
+
+        WINQExpressionAssertEqual((left + right), "(left + right)")
+
+        WINQExpressionAssertEqual((left - right), "(left - right)")
+
+        WINQExpressionAssertEqual((left << right), "(left << right)")
+
+        WINQExpressionAssertEqual((left >> right), "(left >> right)")
+
+        WINQExpressionAssertEqual((left & right), "(left & right)")
+
+        WINQExpressionAssertEqual((left | right), "(left | right)")
+
+        WINQExpressionAssertEqual((left < right), "(left < right)")
+
+        WINQExpressionAssertEqual((left <= right), "(left <= right)")
+
+        WINQExpressionAssertEqual((left > right), "(left > right)")
+
+        WINQExpressionAssertEqual((left >= right), "(left >= right)")
+
+        WINQExpressionAssertEqual((left == right), "(left = right)")
+
+        WINQExpressionAssertEqual((left != right), "(left != right)")
+    }
+
+    func testOperableXCanBeOperated() {
+        //Give
+        let left = OperableObject.Properties.left
+        let right = 1
+
+        //Then
+        WINQExpressionAssertEqual((left || right), "(left OR 1)")
+
+        WINQExpressionAssertEqual((left && right), "(left AND 1)")
+
+        WINQExpressionAssertEqual((left * right), "(left * 1)")
+
+        WINQExpressionAssertEqual((left / right), "(left / 1)")
+
+        WINQExpressionAssertEqual((left % right), "(left % 1)")
+
+        WINQExpressionAssertEqual((left + right), "(left + 1)")
+
+        WINQExpressionAssertEqual((left - right), "(left - 1)")
+
+        WINQExpressionAssertEqual((left << right), "(left << 1)")
+
+        WINQExpressionAssertEqual((left >> right), "(left >> 1)")
+
+        WINQExpressionAssertEqual((left & right), "(left & 1)")
+
+        WINQExpressionAssertEqual((left | right), "(left | 1)")
+
+        WINQExpressionAssertEqual((left < right), "(left < 1)")
+
+        WINQExpressionAssertEqual((left <= right), "(left <= 1)")
+
+        WINQExpressionAssertEqual((left > right), "(left > 1)")
+
+        WINQExpressionAssertEqual((left >= right), "(left >= 1)")
+
+        WINQExpressionAssertEqual((left == right), "(left = 1)")
+
+        WINQExpressionAssertEqual((left != right), "(left != 1)")
+    }
+
+    func testCanBeOperatedXOperable() {
+        //Give
+        let left = 1
+        let right = OperableObject.Properties.right
+
+        //Then
+        WINQExpressionAssertEqual((left || right), "(1 OR right)")
+
+        WINQExpressionAssertEqual((left && right), "(1 AND right)")
+
+        WINQExpressionAssertEqual((left * right), "(1 * right)")
+
+        WINQExpressionAssertEqual((left / right), "(1 / right)")
+
+        WINQExpressionAssertEqual((left % right), "(1 % right)")
+
+        WINQExpressionAssertEqual((left + right), "(1 + right)")
+
+        WINQExpressionAssertEqual((left - right), "(1 - right)")
+
+        WINQExpressionAssertEqual((left << right), "(1 << right)")
+
+        WINQExpressionAssertEqual((left >> right), "(1 >> right)")
+
+        WINQExpressionAssertEqual((left & right), "(1 & right)")
+
+        WINQExpressionAssertEqual((left | right), "(1 | right)")
+
+        WINQExpressionAssertEqual((left < right), "(1 < right)")
+
+        WINQExpressionAssertEqual((left <= right), "(1 <= right)")
+
+        WINQExpressionAssertEqual((left > right), "(1 > right)")
+
+        WINQExpressionAssertEqual((left >= right), "(1 >= right)")
+
+        WINQExpressionAssertEqual((left == right), "(1 = right)")
+
+        WINQExpressionAssertEqual((left != right), "(1 != right)")
     }
 }

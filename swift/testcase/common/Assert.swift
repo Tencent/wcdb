@@ -41,6 +41,14 @@ func WINQAssertEqual<DescribableObject1, DescribableObject2>(
     XCTAssertEqual(expression1().description, expression2().description, file: file, line: line)
 }
 
+func WINQExpressionAssertEqual(
+    _ expression: @autoclosure () -> Expression,
+    _ description: @autoclosure () -> String,
+    file: StaticString = #file,
+    line: UInt = #line) {
+    XCTAssertEqual(expression().description, description(), file: file, line: line)
+}
+
 func ORMConstraintBindingAssertEqual<TableCodableObject: TableCodable>(
     _ expression1: @autoclosure () -> TableCodableObject.Type,
     _ expression2: @autoclosure () -> String,
