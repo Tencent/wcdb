@@ -25,15 +25,15 @@ public struct ErrorValue {
         case int
         case string
     }
-    private var value: Any
-    public var type: ErrorValueType
+    private let value: Any
+    public let type: ErrorValueType
 
-    public init(_ value: String) {
+    init(_ value: String) {
         self.value = value
         self.type = .string
     }
 
-    public init(_ value: Int) {
+    init(_ value: Int) {
         self.value = value
         self.type = .int
     }
