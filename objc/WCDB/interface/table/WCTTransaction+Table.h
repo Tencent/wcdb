@@ -64,7 +64,7 @@
 - (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList;
 
 /**
- Check whether tabel exists
+ Check whether table exists
  
  @param tableName The name of the table to be checked.
  @return YES if table exists. NO if table does not exist or an error occurs.

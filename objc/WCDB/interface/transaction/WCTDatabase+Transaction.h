@@ -69,7 +69,7 @@
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call beginTransaction , commitTransaction , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @warning You should call beginTransaction, commitTransaction, rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
  @see WCTTransaction
  @return YES only if no error occurs.
  */

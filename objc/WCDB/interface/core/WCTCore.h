@@ -41,7 +41,7 @@
 - (WCTTag)tag;
 
 /**
- @brief The path of th database
+ @brief The path of the database
 
  @return path
  */
