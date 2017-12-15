@@ -27,7 +27,7 @@ public protocol ColumnCodableBase {
 public protocol ColumnEncodableBase: Encodable, ColumnCodableBase {
     func archivedFundamentalValue() -> FundamentalColumnType?
 }
-public protocol ColumnEncodable: ColumnEncodableBase, LiteralValueConvertible {
+public protocol ColumnEncodable: ColumnEncodableBase, LiteralValueConvertible, ExpressionCanBeOperated {
     associatedtype FundamentalType: FundamentalColumnType
     func archivedValue() -> FundamentalType?
 }
