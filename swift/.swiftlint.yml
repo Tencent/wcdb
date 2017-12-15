@@ -7,3 +7,4 @@ disabled_rules:
   - function_body_length
   - type_body_length
   - nesting
+  - generic_type_name
