@@ -20,13 +20,21 @@
 
 import Foundation
 
+/// Chain call for deleting
 public final class Delete: CoreRepresentable {
     var core: Core
     private let statement = StatementDelete()
-    public var changes: Int = 0
+
+    /// The number of changed rows in the most recent call.
+    /// It should be called after executing successfully
+    public var changes: Int?
+
+    /// The tag of the related database.
     public var tag: Tag? {
         return core.tag
     }
+
+    /// The path of the related database.
     public var path: String {
         return core.path
     }
@@ -43,41 +51,72 @@ public final class Delete: CoreRepresentable {
         self.core = core
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter condition: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func `where`(_ condition: Condition) -> Delete {
         statement.where(condition)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter orderList: Expression convertible list
+    /// - Returns: self
     @discardableResult
     public func order(by orderList: OrderBy...) -> Delete {
         return order(by: orderList)
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter orderList: Expression convertible list
+    /// - Returns: self
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Delete {
         statement.order(by: orderList)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameters:
+    ///   - begin: Expression convertible
+    ///   - end: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func limit(from begin: Limit, to end: Limit) -> Delete {
         statement.limit(from: begin, to: end)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter limit: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func limit(_ limit: Limit) -> Delete {
         statement.limit(limit)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameters:
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func limit(_ limit: Limit, offset: Offset) -> Delete {
         statement.limit(limit, offset: offset)
         return self
     }
 
+    /// Execute the delete chain call.
+    ///
+    /// - Throws: Error
     public func execute() throws {
         let coreStatement = try core.prepare(statement)
         try coreStatement.step()

@@ -19,14 +19,20 @@
  */
 
 import Foundation
+
+/// Chain call for inserting
 public final class Insert: CoreRepresentable {
     let core: Core
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
+
+    /// The tag of the related database.
     public var tag: Tag? {
         return core.tag
     }
+
+    /// The path of the related database.
     public var path: String {
         return core.path
     }
@@ -54,10 +60,24 @@ public final class Insert: CoreRepresentable {
                 onConflict: isReplace ? Conflict.replace : nil)
         .values(Array(repeating: Expression.bindingParameter, count: properties!.count))
 
+    /// Execute the insert chain call with objects.
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameter objects: Object to be inserted
+    /// - Throws: Error
     public func execute<Object: TableEncodable>(with objects: Object...) throws {
         try execute(with: objects)
     }
 
+    /// Execute the insert chain call with objects.
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameter objects: Object to be inserted
+    /// - Throws: Error
     public func execute<Object: TableEncodable>(with objects: [Object]) throws {
         guard objects.count > 0 else {
             Error.warning("Inserting with an empty/nil object")

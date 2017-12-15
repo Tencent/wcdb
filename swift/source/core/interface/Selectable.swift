@@ -20,39 +20,45 @@
 
 import Foundation
 
-public class SelectBase: CoreRepresentable {
-    var core: Core
-    let statement: StatementSelect = StatementSelect()
-    private var optionalCoreStatement: CoreStatement?
-    public var tag: Tag? {
-        return core.tag
-    }
-    public var path: String {
-        return core.path
-    }
+protocol Selectable: CoreRepresentable {
+    var statement: StatementSelect {get}
 
-    init(with core: Core) {
-        self.core = core
-    }
+    func lazyCoreStatement() throws -> CoreStatement
 
-    deinit {
-        try? finalize()
-    }
+    func finalize() throws
 
-    func lazyCoreStatement() throws -> CoreStatement {
-        if optionalCoreStatement == nil {
-            optionalCoreStatement = try core.prepare(statement)
-        }
-        return optionalCoreStatement!
-    }
+    @discardableResult
+    func `where`(_ condition: Condition) -> Self
 
-    private func finalize() throws {
-        if let coreStatement = optionalCoreStatement {
-            try coreStatement.finalize()
-            optionalCoreStatement = nil
-        }
-    }
+    @discardableResult
+    func order(by orderConvertibleList: OrderBy...) -> Self
 
+    @discardableResult
+    func order(by orderConvertibleList: [OrderBy]) -> Self
+
+    @discardableResult
+    func limit(from expressionConvertibleFrom: Limit, to expressionConvertibleTo: Limit) -> Self
+
+    @discardableResult
+    func limit(_ expressionConvertibleLimit: Limit) -> Self
+
+    @discardableResult
+    func limit(_ expressionConvertibleLimit: Limit, offset expressionConvertibleOffset: Offset) -> Self
+
+    @discardableResult
+    func group(by expressionConvertibleGroupList: GroupBy...) -> Self
+
+    @discardableResult
+    func group(by expressionConvertibleGroupList: [GroupBy]) -> Self
+
+    @discardableResult
+    func having(_ expressionConvertibleHaving: Having) -> Self
+
+    @discardableResult
+    func next() throws -> Bool
+}
+
+extension Selectable {
     @discardableResult
     public func `where`(_ condition: Condition) -> Self {
         statement.where(condition)
@@ -109,7 +115,7 @@ public class SelectBase: CoreRepresentable {
     @discardableResult
     public func next() throws -> Bool {
         do {
-            return try self.lazyCoreStatement().step()
+            return try lazyCoreStatement().step()
         } catch let error {
             try? finalize()
             throw error

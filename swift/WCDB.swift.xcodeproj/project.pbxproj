@@ -53,7 +53,7 @@
 		230209A81FBED533000D69B6 /* MultiSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209861FBED533000D69B6 /* MultiSelect.swift */; };
 		230209A91FBED533000D69B6 /* RowSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209871FBED533000D69B6 /* RowSelect.swift */; };
 		230209AA1FBED533000D69B6 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209881FBED533000D69B6 /* Select.swift */; };
-		230209AB1FBED533000D69B6 /* SelectBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209891FBED533000D69B6 /* SelectBase.swift */; };
+		230209AB1FBED533000D69B6 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209891FBED533000D69B6 /* Selectable.swift */; };
 		230209AC1FBED533000D69B6 /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302098A1FBED533000D69B6 /* Update.swift */; };
 		230209C01FBEE3CC000D69B6 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209BF1FBEE3CC000D69B6 /* Convenience.swift */; };
 		230209C21FBEE431000D69B6 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209C11FBEE431000D69B6 /* Optional.swift */; };
@@ -203,7 +203,7 @@
 		230209861FBED533000D69B6 /* MultiSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiSelect.swift; sourceTree = "<group>"; };
 		230209871FBED533000D69B6 /* RowSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowSelect.swift; sourceTree = "<group>"; };
 		230209881FBED533000D69B6 /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Select.swift; sourceTree = "<group>"; };
-		230209891FBED533000D69B6 /* SelectBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBase.swift; sourceTree = "<group>"; };
+		230209891FBED533000D69B6 /* Selectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
 		2302098A1FBED533000D69B6 /* Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
 		230209BF1FBEE3CC000D69B6 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		230209C11FBEE431000D69B6 /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
@@ -361,7 +361,7 @@
 				230209861FBED533000D69B6 /* MultiSelect.swift */,
 				230209871FBED533000D69B6 /* RowSelect.swift */,
 				230209881FBED533000D69B6 /* Select.swift */,
-				230209891FBED533000D69B6 /* SelectBase.swift */,
+				230209891FBED533000D69B6 /* Selectable.swift */,
 				2302098A1FBED533000D69B6 /* Update.swift */,
 				23E9E0061FC3D80B005DE71C /* Table.swift */,
 				23E9E0081FC3D810005DE71C /* TableInterface.swift */,
@@ -735,7 +735,7 @@
 				238D0B8E1FAB1F7E00BC2659 /* StatementDelete.swift in Sources */,
 				238D0B821FAB1F7E00BC2659 /* JoinClause.swift in Sources */,
 				238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */,
-				230209AB1FBED533000D69B6 /* SelectBase.swift in Sources */,
+				230209AB1FBED533000D69B6 /* Selectable.swift in Sources */,
 				2302098C1FBED533000D69B6 /* Core.swift in Sources */,
 				230209A71FBED533000D69B6 /* Interface.swift in Sources */,
 				230209AC1FBED533000D69B6 /* Update.swift in Sources */,

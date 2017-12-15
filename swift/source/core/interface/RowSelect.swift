@@ -20,7 +20,22 @@
 
 import Foundation
 
-public final class RowSelect: SelectBase {
+/// Chain call for row-selecting
+public final class RowSelect: Selectable {
+    var core: Core
+    let statement: StatementSelect
+    var optionalCoreStatement: CoreStatement?
+
+    /// The tag of the related database.
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database.
+    public var path: String {
+        return core.path
+    }
+
     init(with core: Core,
          results columnResultConvertibleList: [ColumnResultConvertible],
          tables: [String],
@@ -32,8 +47,26 @@ public final class RowSelect: SelectBase {
                                         code: .misuse,
                                         message: "Empty table")
         }
-        super.init(with: core)
-        statement.select(distinct: isDistinct, columnResultConvertibleList).from(tables)
+        statement = StatementSelect().select(distinct: isDistinct, columnResultConvertibleList).from(tables)
+        self.core = core
+    }
+
+    deinit {
+        try? finalize()
+    }
+
+    func finalize() throws {
+        if let coreStatement = optionalCoreStatement {
+            try coreStatement.finalize()
+            optionalCoreStatement = nil
+        }
+    }
+
+    func lazyCoreStatement() throws -> CoreStatement {
+        if optionalCoreStatement == nil {
+            optionalCoreStatement = try core.prepare(statement)
+        }
+        return optionalCoreStatement!
     }
 
     private func extract(atIndex index: Int) throws -> FundamentalValue {
@@ -68,6 +101,17 @@ public final class RowSelect: SelectBase {
         return row
     }
 
+    /// Get next selected row. You can do an iteration using it.
+    ///
+    ///     while let row = try rowSelect.nextRow() {
+    ///         print(row[0].int32Value)
+    ///         print(row[1].int64Value)
+    ///         print(row[2].doubleValue)
+    ///         print(row[3].stringValue)
+    ///     }
+    ///
+    /// - Returns: Array with `FundamentalValue`. Nil means the end of iteration.
+    /// - Throws: `Error`
     public func nextRow() throws -> FundamentalRow? {
         guard try next() else {
             return nil
@@ -75,6 +119,10 @@ public final class RowSelect: SelectBase {
         return try extract()
     }
 
+    /// Get all selected row.
+    ///
+    /// - Returns: Array with `Array<FundamentalValue>`
+    /// - Throws: `Error`
     public func allRows() throws -> FundamentalRowXColumn {
         var rows: [[FundamentalValue]] = []
         while try next() {
@@ -83,6 +131,14 @@ public final class RowSelect: SelectBase {
         return rows
     }
 
+    /// Get next selected value. You can do an iteration using it.
+    ///
+    ///     while let value = try nextValue() {
+    ///         print(value.int32Value)
+    ///     }
+    ///
+    /// - Returns: `FundamentalValue`. Nil means the end of iteration.
+    /// - Throws: `Error`
     public func nextValue() throws -> FundamentalValue? {
         guard try next() else {
             return nil
@@ -90,6 +146,10 @@ public final class RowSelect: SelectBase {
         return try extract(atIndex: 0)
     }
 
+    /// Get all selected values.
+    ///
+    /// - Returns: Array with `FundamentalValue`.
+    /// - Throws: `Error`
     public func allValues() throws -> FundamentalColumn {
         var values: [FundamentalValue] = []
         while try next() {

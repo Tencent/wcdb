@@ -23,7 +23,7 @@ import Foundation
 /// ChainCall interface for inserting
 public protocol InsertChainCallInterface {
 
-    /// Prepare `ChainCall` for inserting of `TableEncodable` object
+    /// Prepare chain call for inserting of `TableEncodable` object
     ///
     /// - Parameters:
     ///   - cls: Type of table codable object
@@ -32,7 +32,7 @@ public protocol InsertChainCallInterface {
     /// - Throws: `Error`
     func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
-    /// Prepare `ChainCall` for inserting or replacing of `TableEncodable` object
+    /// Prepare chain call for inserting or replacing of `TableEncodable` object
     ///
     /// - Parameters:
     ///   - cls: Type of table codable object
@@ -41,7 +41,7 @@ public protocol InsertChainCallInterface {
     /// - Throws: `Error`
     func prepareInsertOrReplace<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
 
-    /// Prepare `ChainCall` for inserting on specific properties
+    /// Prepare chain call for inserting on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list 
@@ -50,7 +50,7 @@ public protocol InsertChainCallInterface {
     /// - Throws: `Error`
     func prepareInsert(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) throws -> Insert
 
-    /// Prepare `ChainCall` for inserting or replacing on specific properties
+    /// Prepare chain call for inserting or replacing on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -60,7 +60,7 @@ public protocol InsertChainCallInterface {
     func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...,
                                 intoTable table: String) throws -> Insert
 
-    /// Prepare `ChainCall` for inserting on specific properties
+    /// Prepare chain call for inserting on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -70,7 +70,7 @@ public protocol InsertChainCallInterface {
     func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
                        intoTable table: String) throws -> Insert
 
-    /// Prepare `ChainCall` for inserting or replacing on specific properties
+    /// Prepare chain call for inserting or replacing on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -116,7 +116,7 @@ extension InsertChainCallInterface where Self: Core {
 /// ChainCall interface for deleting
 public protocol DeleteChainCallInterface {
 
-    /// Prepare `ChainCall` for deleting on specific properties
+    /// Prepare chain call for deleting on specific properties
     ///
     /// - Parameter table: Table name
     /// - Returns: `Delete`
@@ -133,7 +133,7 @@ extension DeleteChainCallInterface where Self: Core {
 /// ChainCall interface for updating
 public protocol UpdateChainCallInterface {
 
-    /// Prepare `ChainCall` for updating on specific properties
+    /// Prepare chain call for updating on specific properties
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -142,7 +142,7 @@ public protocol UpdateChainCallInterface {
     /// - Throws: `Error`
     func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) throws -> Update
 
-    /// Prepare `ChainCall` for updating on specific properties
+    /// Prepare chain call for updating on specific properties
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -165,7 +165,7 @@ extension UpdateChainCallInterface where Self: Core {
 /// ChainCall interface for row-selecting
 public protocol RowSelectChainCallInterface {
 
-    /// Prepare `ChainCall` for row-selecting on specific column results
+    /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
     ///   - columnResultConvertibleList: `ColumnResult` list
@@ -177,7 +177,7 @@ public protocol RowSelectChainCallInterface {
                           fromTables tables: [String],
                           isDistinct: Bool) throws -> RowSelect
 
-    /// Prepare `ChainCall` for row-selecting on specific column results
+    /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
     ///   - columnResultConvertibleList: `ColumnResult` list
@@ -189,7 +189,7 @@ public protocol RowSelectChainCallInterface {
                           fromTables tables: [String],
                           isDistinct: Bool) throws -> RowSelect
 
-    /// Prepare `ChainCall` for row-selecting on specific column results
+    /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
     ///   - columnResultConvertibleList: `ColumnResult` list
@@ -201,7 +201,7 @@ public protocol RowSelectChainCallInterface {
                           fromTable table: String,
                           isDistinct: Bool) throws -> RowSelect
 
-    /// Prepare `ChainCall` for row-selecting on specific column results
+    /// Prepare chain call for row-selecting on specific column results
     ///
     /// - Parameters:
     ///   - columnResultConvertibleList: `ColumnResult` list
@@ -252,7 +252,7 @@ extension RowSelectChainCallInterface where Self: Core {
 /// ChainCall interface for selecting
 public protocol SelectChainCallInterface {
 
-    /// Prepare `ChainCall` for selecting of `TableDecodable` object
+    /// Prepare chain call for selecting of `TableDecodable` object
     ///
     /// - Parameters:
     ///   - cls: Type of table decodable object
@@ -264,7 +264,7 @@ public protocol SelectChainCallInterface {
                                              fromTable table: String,
                                              isDistinct: Bool) throws -> Select
 
-    /// Prepare `ChainCall` for selecting on specific properties
+    /// Prepare chain call for selecting on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -276,7 +276,7 @@ public protocol SelectChainCallInterface {
                        fromTable table: String,
                        isDistinct: Bool) throws -> Select
 
-    /// Prepare `ChainCall` for selecting on specific properties
+    /// Prepare chain call for selecting on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -314,7 +314,7 @@ extension SelectChainCallInterface where Self: Core {
 /// ChainCall interface for multi-selecting
 public protocol MultiSelectChainCallInterface {
 
-    /// Prepare `ChainCall` for multi-selecting on specific properties
+    /// Prepare chain call for multi-selecting on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
@@ -324,7 +324,7 @@ public protocol MultiSelectChainCallInterface {
     func prepareMultiSelect(on propertyConvertibleList: PropertyConvertible...,
                             fromTables tables: [String]) throws -> MultiSelect
 
-    /// Prepare `ChainCall` for multi-selecting on specific properties
+    /// Prepare chain call for multi-selecting on specific properties
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list

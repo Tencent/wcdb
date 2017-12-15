@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class TableBase: CoreRepresentable {
+public final class Table<Root: TableCodable>: CoreRepresentable {
     var core: Core {
         return database
     }
@@ -32,28 +32,317 @@ public class TableBase: CoreRepresentable {
     }
     let database: Database
     public let name: String
-    let base: Any.Type
+    public let rootType: Root.Type
 
-    init(withDatabase database: Database, named name: String, base: Any.Type) {
+    init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) {
         self.database = database
+        self.rootType = type
         self.name = name
-        self.base = base
     }
 }
 
-public final class Table<Root: TableCodable>: TableBase {
-    public let `class`: Root.Type
-
-    init(withDatabase database: Database, named name: String) {
-        self.`class` = Root.self
-        super.init(withDatabase: database, named: name, base: self.`class`)
-    }
-}
-
-extension Table: InsertTableInterface,
-                 DeleteTableInterface,
-                 UpdateTableInterface,
-                 SelectTableInterface,
-                 RowSelectTableInterface {
+extension Table {
     public typealias Object = Root
+}
+
+extension Table: InsertTableInterface {
+    public func insert(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+        let insert = try Insert(with: self.database, named: self.name, on: propertyConvertibleList, isReplace: false)
+        return try insert.execute(with: objects)
+    }
+
+    public func insertOrReplace(objects: [Object], on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+        let insert = try Insert(with: self.database, named: self.name, on: propertyConvertibleList, isReplace: true)
+        return try insert.execute(with: objects)
+    }
+
+    public func insert(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+        return try insert(objects: objects, on: propertyConvertibleList)
+    }
+
+    public func insertOrReplace(objects: Object..., on propertyConvertibleList: [PropertyConvertible]? = nil) throws {
+        return try insertOrReplace(objects: objects, on: propertyConvertibleList)
+    }
+}
+
+extension Table: UpdateTableInterface {
+    public func update(on propertyConvertibleList: [PropertyConvertible],
+                       with object: Object,
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        let update = try Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
+        if condition != nil {
+            update.where(condition!)
+        }
+        if orderList != nil {
+            update.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                update.limit(limit!, offset: offset!)
+            } else {
+                update.limit(limit!)
+            }
+        }
+        return try update.execute(with: object)
+    }
+
+    public func update(on propertyConvertibleList: PropertyConvertible...,
+                       with object: Object,
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        return try update(on: propertyConvertibleList,
+                          with: object,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+
+    public func update(on propertyConvertibleList: PropertyConvertible...,
+                       with row: [ColumnEncodableBase],
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        return try update(on: propertyConvertibleList,
+                          with: row,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+
+    public func update(on propertyConvertibleList: [PropertyConvertible],
+                       with row: [ColumnEncodableBase],
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        let update = try Update(with: self.database, on: propertyConvertibleList, andTable: self.name)
+        if condition != nil {
+            update.where(condition!)
+        }
+        if orderList != nil {
+            update.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                update.limit(limit!, offset: offset!)
+            } else {
+                update.limit(limit!)
+            }
+        }
+        return try update.execute(with: row)
+    }
+}
+
+extension Table: DeleteTableInterface {
+    public func delete(where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        let delete = try Delete(with: self.database, andTableName: self.name)
+        if condition != nil {
+            delete.where(condition!)
+        }
+        if orderList != nil {
+            delete.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                delete.limit(limit!, offset: offset!)
+            } else {
+                delete.limit(limit!)
+            }
+        }
+        return try delete.execute()
+    }
+}
+
+extension Table: SelectTableInterface {
+    public func getObjects(on propertyConvertibleList: [PropertyConvertible],
+                           where condition: Condition? = nil,
+                           orderBy orderList: [OrderBy]? = nil,
+                           limit: Limit? = nil,
+                           offset: Offset? = nil) throws -> [Object] {
+        let select = try Select(with: self.database, on: propertyConvertibleList, table: self.name, isDistinct: false)
+        if condition != nil {
+            select.where(condition!)
+        }
+        if orderList != nil {
+            select.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                select.limit(limit!, offset: offset!)
+            } else {
+                select.limit(limit!)
+            }
+        }
+        return try select.allObjects()
+    }
+
+    public func getObjects(on propertyConvertibleList: PropertyConvertible...,
+                           where condition: Condition? = nil,
+                           orderBy orderList: [OrderBy]? = nil,
+                           limit: Limit? = nil,
+                           offset: Offset? = nil) throws -> [Object] {
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
+                              where: condition,
+                              orderBy: orderList,
+                              limit: limit,
+                              offset: offset)
+    }
+
+    public func getObject(on propertyConvertibleList: [PropertyConvertible],
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          offset: Offset? = nil) throws -> Object? {
+        return try getObjects(on: propertyConvertibleList,
+                              where: condition,
+                              orderBy: orderList,
+                              limit: 1,
+                              offset: offset).first
+    }
+
+    public func getObject(on propertyConvertibleList: PropertyConvertible...,
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          offset: Offset? = nil) throws -> Object? {
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
+                              where: condition,
+                              orderBy: orderList,
+                              limit: 1,
+                              offset: offset).first
+    }
+}
+
+extension Table: RowSelectTableInterface {
+    public func getRows(on columnResultConvertibleList: [ColumnResultConvertible],
+                        where condition: Condition? = nil,
+                        orderBy orderList: [OrderBy]? = nil,
+                        limit: Limit? = nil,
+                        offset: Offset? = nil) throws -> FundamentalRowXColumn {
+        let rowSelect = try RowSelect(with: self.database,
+                                      results: columnResultConvertibleList,
+                                      tables: [self.name],
+                                      isDistinct: false)
+        if condition != nil {
+            rowSelect.where(condition!)
+        }
+        if orderList != nil {
+            rowSelect.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                rowSelect.limit(limit!, offset: offset!)
+            } else {
+                rowSelect.limit(limit!)
+            }
+        }
+        return try rowSelect.allRows()
+    }
+
+    public func getRows(on columnResultConvertibleList: ColumnResultConvertible...,
+                        where condition: Condition? = nil,
+                        orderBy orderList: [OrderBy]? = nil,
+                        limit: Limit? = nil,
+                        offset: Offset? = nil) throws -> FundamentalRowXColumn {
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+                           where: condition,
+                           orderBy: orderList,
+                           limit: limit,
+                           offset: offset)
+    }
+
+    public func getRow(on columnResultConvertibleList: ColumnResultConvertible...,
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       offset: Offset? = nil) throws -> FundamentalRow? {
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+                           where: condition,
+                           orderBy: orderList,
+                           limit: 1,
+                           offset: offset).first
+    }
+
+    public func getRow(on columnResultConvertibleList: [ColumnResultConvertible],
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       offset: Offset? = nil) throws -> FundamentalRow? {
+        return try getRows(on: columnResultConvertibleList,
+                           where: condition,
+                           orderBy: orderList,
+                           limit: 1,
+                           offset: offset).first
+    }
+
+    public func getColumn(on result: ColumnResultConvertible,
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          limit: Limit? = nil,
+                          offset: Offset? = nil) throws -> FundamentalColumn {
+        let rowSelect = try RowSelect(with: self.database, results: [result], tables: [self.name], isDistinct: false)
+        if condition != nil {
+            rowSelect.where(condition!)
+        }
+        if orderList != nil {
+            rowSelect.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                rowSelect.limit(limit!, offset: offset!)
+            } else {
+                rowSelect.limit(limit!)
+            }
+        }
+        return try rowSelect.allValues()
+    }
+
+    public func getDistinctColumn(on result: ColumnResultConvertible,
+                                  where condition: Condition? = nil,
+                                  orderBy orderList: [OrderBy]? = nil,
+                                  limit: Limit? = nil,
+                                  offset: Offset? = nil) throws -> FundamentalColumn {
+        let rowSelect = try RowSelect(with: self.database, results: [result], tables: [self.name], isDistinct: true)
+        if condition != nil {
+            rowSelect.where(condition!)
+        }
+        if orderList != nil {
+            rowSelect.order(by: orderList!)
+        }
+        if limit != nil {
+            if offset != nil {
+                rowSelect.limit(limit!, offset: offset!)
+            } else {
+                rowSelect.limit(limit!)
+            }
+        }
+        return try rowSelect.allValues()
+    }
+
+    public func getValue(on result: ColumnResultConvertible,
+                         where condition: Condition? = nil,
+                         orderBy orderList: [OrderBy]? = nil,
+                         limit: Limit? = nil,
+                         offset: Offset? = nil) throws -> FundamentalValue {
+        return (try getRows(on: result,
+                            where: condition,
+                            orderBy: orderList,
+                            limit: 1,
+                            offset: offset).first?.first) ?? FundamentalValue(nil)
+    }
+
+    public func getDistinctValue(on result: ColumnResultConvertible,
+                                 where condition: Condition? = nil,
+                                 orderBy orderList: [OrderBy]? = nil,
+                                 limit: Limit? = nil,
+                                 offset: Offset? = nil) throws -> FundamentalValue {
+        return (try getDistinctColumn(on: result).first) ?? FundamentalValue(nil)
+    }
 }

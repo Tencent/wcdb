@@ -20,14 +20,22 @@
 
 import Foundation
 
+/// The chain call for updating
 public final class Update: CoreRepresentable {
     var core: Core
     private let statement = StatementUpdate()
     private let keys: [CodingTableKeyBase]
-    public var changes: Int = Int.max
+
+    /// The number of changed rows in the most recent call.
+    /// It should be called after executing successfully
+    public var changes: Int?
+
+    /// The tag of the related database.
     public var tag: Tag? {
         return core.tag
     }
+
+    /// The path of the related database.
     public var path: String {
         return core.path
     }
@@ -56,42 +64,74 @@ public final class Update: CoreRepresentable {
         })
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter condition: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func `where`(_ condition: Condition) -> Update {
         statement.where(condition)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter orderList: Expression convertible list
+    /// - Returns: self
     @discardableResult
     public func order(by orderList: OrderBy...) -> Update {
         statement.order(by: orderList)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter orderList: Expression convertible list
+    /// - Returns: self
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Update {
         statement.order(by: orderList)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameters:
+    ///   - begin: Expression convertible
+    ///   - end: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func limit(from begin: Limit, to end: Limit) -> Update {
         statement.limit(from: begin, to: end)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter limit: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func limit(_ limit: Limit) -> Update {
         statement.limit(limit)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameters:
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: self
     @discardableResult
     public func limit(_ limit: Limit, offset: Offset) -> Update {
         statement.limit(limit, offset: offset)
         return self
     }
 
+    /// Execute the update chain call with object.
+    ///
+    /// - Parameter object: Table encodable object
+    /// - Throws: `Error`
     public func execute<Object: TableEncodable>(with object: Object) throws {
         let coreStatement = try core.prepare(statement)
         let encoder = TableEncoder(keys, on: coreStatement)
@@ -100,6 +140,10 @@ public final class Update: CoreRepresentable {
         changes = coreStatement.changes
     }
 
+    /// Execute the update chain call with row.
+    ///
+    /// - Parameter row: Column encodable row
+    /// - Throws: `Error`
     public func execute(with row: [ColumnEncodableBase?]) throws {
         let coreStatement = try core.prepare(statement)
         for (index, value) in row.enumerated() {

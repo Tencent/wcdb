@@ -20,7 +20,22 @@
 
 import Foundation
 
-public final class MultiSelect: SelectBase {
+/// Chain call for multi-selecting
+public final class MultiSelect: Selectable {
+    var core: Core
+    let statement: StatementSelect
+    var optionalCoreStatement: CoreStatement?
+
+    /// The tag of the related database.
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database.
+    public var path: String {
+        return core.path
+    }
+
     private let keys: [CodingTableKeyBase]
 
     init(with core: Core,
@@ -48,8 +63,26 @@ public final class MultiSelect: SelectBase {
             return codingTableKey
         })
 
-        super.init(with: core)
-        statement.select(distinct: isDistinct, propertyConvertibleList).from(tables)
+        statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)
+        self.core = core
+    }
+
+    deinit {
+        try? finalize()
+    }
+
+    func finalize() throws {
+        if let coreStatement = optionalCoreStatement {
+            try coreStatement.finalize()
+            optionalCoreStatement = nil
+        }
+    }
+
+    func lazyCoreStatement() throws -> CoreStatement {
+        if optionalCoreStatement == nil {
+            optionalCoreStatement = try core.prepare(statement)
+        }
+        return optionalCoreStatement!
     }
 
     private typealias Generator = () throws -> TableDecodableBase
@@ -100,6 +133,16 @@ public final class MultiSelect: SelectBase {
         return multiObject
     }
 
+    /// Get next selected object. You can do an iteration using it.
+    ///
+    ///     while let multiObject = try self.nextMultiObject() {
+    ///         let object1 = multiObject[tableName1]
+    ///         let object2 = multiObject[tableName2]
+    ///         //...
+    ///     }
+    ///
+    /// - Returns: Mapping from table name to object. Nil means the end of iteration.
+    /// - Throws: `Error`
     public func nextMultiObject() throws -> [String: TableDecodableBase]? {
         guard try next() else {
             return nil
@@ -107,6 +150,10 @@ public final class MultiSelect: SelectBase {
         return try extractMultiObject()
     }
 
+    /// Get all selected objects.
+    ///
+    /// - Returns: Array contained mapping from table name to object.
+    /// - Throws: `Error`
     public func allMultiObjects() throws -> [[String: TableDecodableBase]] {
         var multiObjects: [[String: TableDecodableBase]] = []
         while try next() {
