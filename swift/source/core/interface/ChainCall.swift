@@ -20,24 +20,73 @@
 
 import Foundation
 
+/// ChainCall interface for inserting
 public protocol InsertChainCallInterface {
-    func prepareInsert<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
-    func prepareInsertOrReplace<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
+
+    /// Prepare `ChainCall` for inserting of `TableEncodable` object
+    ///
+    /// - Parameters:
+    ///   - cls: Type of table codable object
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    /// - Throws: `Error`
+    func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
+
+    /// Prepare `ChainCall` for inserting or replacing of `TableEncodable` object
+    ///
+    /// - Parameters:
+    ///   - cls: Type of table codable object
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    /// - Throws: `Error`
+    func prepareInsertOrReplace<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert
+
+    /// Prepare `ChainCall` for inserting on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list 
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    /// - Throws: `Error`
     func prepareInsert(on propertyConvertibleList: PropertyConvertible..., intoTable table: String) throws -> Insert
+
+    /// Prepare `ChainCall` for inserting or replacing on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    /// - Throws: `Error`
     func prepareInsertOrReplace(on propertyConvertibleList: PropertyConvertible...,
                                 intoTable table: String) throws -> Insert
+
+    /// Prepare `ChainCall` for inserting on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    /// - Throws: `Error`
     func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
                        intoTable table: String) throws -> Insert
+
+    /// Prepare `ChainCall` for inserting or replacing on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Returns: `Insert`
+    /// - Throws: `Error`
     func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible],
                                 intoTable table: String) throws -> Insert
 }
 
 extension InsertChainCallInterface where Self: Core {
-    public func prepareInsert<Root: TableCodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
+    public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
         return try Insert(with: self, named: table, on: cls.Properties.all, isReplace: false)
     }
 
-    public func prepareInsertOrReplace<Root: TableCodable>(
+    public func prepareInsertOrReplace<Root: TableEncodable>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
         return try Insert(with: self, named: table, on: cls.Properties.all, isReplace: true)
@@ -64,7 +113,14 @@ extension InsertChainCallInterface where Self: Core {
     }
 }
 
+/// ChainCall interface for deleting
 public protocol DeleteChainCallInterface {
+
+    /// Prepare `ChainCall` for deleting on specific properties
+    ///
+    /// - Parameter table: Table name
+    /// - Returns: `Delete`
+    /// - Throws: `Error`
     func prepareDelete(fromTable table: String) throws -> Delete
 }
 
@@ -74,8 +130,25 @@ extension DeleteChainCallInterface where Self: Core {
     }
 }
 
+/// ChainCall interface for updating
 public protocol UpdateChainCallInterface {
+
+    /// Prepare `ChainCall` for updating on specific properties
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    /// - Returns: `Update`
+    /// - Throws: `Error`
     func prepareUpdate(table: String, on propertyConvertibleList: PropertyConvertible...) throws -> Update
+
+    /// Prepare `ChainCall` for updating on specific properties
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    /// - Returns: `Update`
+    /// - Throws: `Error`
     func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) throws -> Update
 }
 
@@ -89,16 +162,53 @@ extension UpdateChainCallInterface where Self: Core {
     }
 }
 
+/// ChainCall interface for row-selecting
 public protocol RowSelectChainCallInterface {
+
+    /// Prepare `ChainCall` for row-selecting on specific column results
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - tables: Table name list
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `RowSelect`
+    /// - Throws: `Error`
     func prepareRowSelect(on columnResultConvertibleList: ColumnResultConvertible...,
                           fromTables tables: [String],
                           isDistinct: Bool) throws -> RowSelect
+
+    /// Prepare `ChainCall` for row-selecting on specific column results
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - tables: Table name list
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `RowSelect`
+    /// - Throws: `Error`
     func prepareRowSelect(on columnResultConvertibleList: [ColumnResultConvertible],
                           fromTables tables: [String],
                           isDistinct: Bool) throws -> RowSelect
+
+    /// Prepare `ChainCall` for row-selecting on specific column results
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - tables: Table name
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `RowSelect`
+    /// - Throws: `Error`
     func prepareRowSelect(on columnResultConvertibleList: ColumnResultConvertible...,
                           fromTable table: String,
                           isDistinct: Bool) throws -> RowSelect
+
+    /// Prepare `ChainCall` for row-selecting on specific column results
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: `ColumnResult` list
+    ///   - tables: Table name
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `RowSelect`
+    /// - Throws: `Error`
     func prepareRowSelect(on columnResultConvertibleList: [ColumnResultConvertible],
                           fromTable table: String,
                           isDistinct: Bool) throws -> RowSelect
@@ -139,22 +249,50 @@ extension RowSelectChainCallInterface where Self: Core {
     }
 }
 
+/// ChainCall interface for selecting
 public protocol SelectChainCallInterface {
-    func prepareSelect<Root: TableCodable>(of cls: Root.Type,
-                                           fromTable table: String,
-                                           isDistinct: Bool) throws -> Select
+
+    /// Prepare `ChainCall` for selecting of `TableDecodable` object
+    ///
+    /// - Parameters:
+    ///   - cls: Type of table decodable object
+    ///   - table: Table name
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `Select`
+    /// - Throws: `Error`
+    func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
+                                             fromTable table: String,
+                                             isDistinct: Bool) throws -> Select
+
+    /// Prepare `ChainCall` for selecting on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `Select`
+    /// - Throws: `Error`
     func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
                        fromTable table: String,
                        isDistinct: Bool) throws -> Select
+
+    /// Prepare `ChainCall` for selecting on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    ///   - isDistinct: Is distinct or not
+    /// - Returns: `Select`
+    /// - Throws: `Error`
     func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
                        fromTable table: String,
                        isDistinct: Bool) throws -> Select
 }
 
 extension SelectChainCallInterface where Self: Core {
-    public func prepareSelect<Root: TableCodable>(of cls: Root.Type,
-                                                  fromTable table: String,
-                                                  isDistinct: Bool = false) throws -> Select {
+    public func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
+                                                    fromTable table: String,
+                                                    isDistinct: Bool = false) throws -> Select {
         return try Select(with: self, on: cls.Properties.all, table: table, isDistinct: isDistinct)
     }
 
@@ -173,9 +311,26 @@ extension SelectChainCallInterface where Self: Core {
     }
 }
 
+/// ChainCall interface for multi-selecting
 public protocol MultiSelectChainCallInterface {
+
+    /// Prepare `ChainCall` for multi-selecting on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - tables: Table name list
+    /// - Returns: `MultiSelect`
+    /// - Throws: `Error`
     func prepareMultiSelect(on propertyConvertibleList: PropertyConvertible...,
                             fromTables tables: [String]) throws -> MultiSelect
+
+    /// Prepare `ChainCall` for multi-selecting on specific properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - tables: Table name list
+    /// - Returns: `MultiSelect`
+    /// - Throws: `Error`
     func prepareMultiSelect(on propertyConvertibleList: [PropertyConvertible],
                             fromTables tables: [String]) throws -> MultiSelect
 }

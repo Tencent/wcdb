@@ -19,9 +19,12 @@
  */
 
 import Foundation
+
+/// Thread-safe Transaction object
 public final class Transaction {
     private let recyclableHandlePool: RecyclableHandlePool
     private let recyclableHandle: RecyclableHandle
+    /// Check whether is already in transaction.
     public private(set) var isInTransaction: Bool = false
     private var mutex: RecursiveMutex = RecursiveMutex()
 
@@ -44,6 +47,8 @@ public final class Transaction {
         return recyclableHandlePool.raw
     }
 
+    /// The number of changed rows in the most recent call.  
+    /// It should be called after executing successfully
     public var changes: Int {
         mutex.lock(); defer { mutex.unlock() }
         return handle.changes
@@ -51,14 +56,22 @@ public final class Transaction {
 }
 
 extension Transaction: Core {
+    /// The path of the related database. 
     public var path: String {
         return handlePool.path
     }
 
+    /// The tag of the related database. 
     public var tag: Tag? {
         return handlePool.tag
     }
 
+    /// Prepare a specific sql.  
+    /// Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer
+    ///
+    /// - Parameter statement: WINQ statement
+    /// - Returns: CoreStatement
+    /// - Throws: `Error`
     public func prepare(_ statement: Statement) throws -> CoreStatement {
         mutex.lock(); defer { mutex.unlock() }
         Error.assert(statement.statementType != .transaction,
@@ -69,6 +82,11 @@ extension Transaction: Core {
         return CoreStatement(with: self, and: recyclableHandleStatement)
     }
 
+    /// Exec a specific sql.  
+    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
+    ///
+    /// - Parameter statement: WINQ statement
+    /// - Throws: `Error`
     public func exec(_ statement: Statement) throws {
         mutex.lock(); defer { mutex.unlock() }
         Error.assert(statement.statementType != .transaction,
@@ -76,6 +94,11 @@ extension Transaction: Core {
         try handle.exec(statement)
     }
 
+    /// Check whether table exists
+    ///
+    /// - Parameter table: The name of the table to be checked.
+    /// - Returns: True if table exists. False if table does not exist.
+    /// - Throws: `Error`
     public func isTableExists(_ table: String) throws -> Bool {
         mutex.lock(); defer { mutex.unlock() }
         let select = StatementSelect().select(1).from(table).limit(0)
@@ -90,10 +113,17 @@ extension Transaction: Core {
 
     }
 
+    /// This interface is equivalent `begin(.immediate)`
+    ///
+    /// - Throws: `Error`
     public func begin() throws {
         try begin(.immediate)
     }
 
+    /// Separate interface of `run(transaction:)`  
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// To do a cross-thread transaction, use `getTransaction`.
+    /// - Throws: `Error`
     public func begin(_ mode: StatementTransaction.Mode) throws {
         mutex.lock(); defer { mutex.unlock() }
         try handle.exec(mode == .immediate ?
@@ -102,18 +132,34 @@ extension Transaction: Core {
         isInTransaction = true
     }
 
+    /// Separate interface of `run(transaction:)`  
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
+    /// To do a cross-thread transaction, use `getTransaction`.
+    /// - Throws: `Error`
     public func commit() throws {
         mutex.lock(); defer { mutex.unlock() }
         try handle.exec(CommonStatement.commitTransaction)
         isInTransaction = false
     }
 
+    /// Separate interface of run(transaction:)
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// To do a cross-thread transaction, use `getTransaction`.
+    /// - Throws: `Error`
     public func rollback() throws {
         mutex.lock(); defer { mutex.unlock() }
         try handle.exec(CommonStatement.rollbackTransaction)
         isInTransaction = false
     }
 
+    /// Run a transaction in closure
+    ///
+    ///     try transaction.run(transaction: { () throws -> Void in 
+    ///         try transaction.insert(objects: objects, intoTable: table)
+    ///     })
+    ///
+    /// - Parameter transaction: Operation inside transaction
+    /// - Throws: `Error`
     public func run(transaction: TransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         try begin()
@@ -126,6 +172,15 @@ extension Transaction: Core {
         }
     }
 
+    /// Run a controlable transaction in closure
+    ///
+    ///     try transaction.run(controlableTransaction: { () throws -> Bool in 
+    ///         try transaction.insert(objects: objects, intoTable: table)
+    ///         return true // return true to commit transaction and return false to rollback transaction.
+    ///     })
+    ///
+    /// - Parameter controlableTransaction: Operation inside transaction
+    /// - Throws: `Error`
     public func run(controlableTransaction: ControlableTransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         try begin()
@@ -143,6 +198,16 @@ extension Transaction: Core {
         }
     }
 
+    /// Run a embedded transaction in closure  
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    ///     try transaction.run(embeddedTransaction: { () throws -> Void in 
+    ///         try transaction.insert(objects: objects, intoTable: table)
+    ///     })
+    ///
+    /// - Parameter embeddedTransaction: Operation inside transaction
+    /// - Throws: `Error`
     public func run(embeddedTransaction: TransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         if isInTransaction {

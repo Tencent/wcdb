@@ -75,7 +75,7 @@ public final class Database {
     /// which is also called as lazy initialization.  
     ///
     /// - Parameter tag: An existing tag.
-    /// - Throws: Error while tag is not exists
+    /// - Throws: `Error` while tag is not exists
     public init(with tag: Tag) throws {
         try self.recyclableHandlePool = HandlePool.getPool(with: tag)
     }
@@ -497,7 +497,7 @@ extension Database {
     /// Generation a `Transaction` object to do a transaction.
     ///
     /// - Returns: Transaction
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func getTransaction() throws -> Transaction {
         let handle = try flowOut()
         return Transaction(with: recyclableHandlePool, and: handle)
@@ -536,7 +536,7 @@ extension Database: Core {
     ///
     /// - Parameter statement: WINQ statement
     /// - Returns: CoreStatement
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func prepare(_ statement: Statement) throws -> CoreStatement {
         let recyclableHandle = try flowOut()
         let handleStatement = try recyclableHandle.raw.handle.prepare(statement)
@@ -550,7 +550,7 @@ extension Database: Core {
     /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
     ///
     /// - Parameter statement: WINQ statement
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func exec(_ statement: Statement) throws {
         let recyclableHandle = try flowOut()
         try recyclableHandle.raw.handle.exec(statement)
@@ -559,8 +559,8 @@ extension Database: Core {
     /// Check whether table exists
     ///
     /// - Parameter table: The name of the table to be checked.
-    /// - Returns: YES if table exists. NO if table does not exist.
-    /// - Throws: Error
+    /// - Returns: True if table exists. False if table does not exist.
+    /// - Throws: `Error`
     public func isTableExists(_ table: String) throws -> Bool {
         let handle = try flowOut()
         let select = StatementSelect().select(1).from(table).limit(0)
@@ -578,9 +578,9 @@ extension Database: Core {
     ///
     /// - Parameters:
     ///   - name: The name of the table.
-    ///   - type: a class conform to TableCodable protocol.
-    /// - Returns: nil for a non-existent table.
-    /// - Throws: Error
+    ///   - type: A class conform to TableCodable protocol.
+    /// - Returns: Nil for a non-existent table.
+    /// - Throws: `Error`
     public func getTable<Root: TableCodable>(
         named name: String,
         of type: Root.Type = Root.self) throws -> Table<Root>? {
@@ -592,7 +592,7 @@ extension Database: Core {
 
     /// This interface is equivalent `begin(.immediate)`
     ///
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func begin() throws {
         try begin(.immediate)
     }
@@ -600,7 +600,7 @@ extension Database: Core {
     /// Separate interface of `run(transaction:)`  
     /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
     /// To do a cross-thread transaction, use `getTransaction`.
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func begin(_ mode: StatementTransaction.Mode) throws {
         let recyclableHandle = try flowOut()
         let statement = mode == .immediate ?
@@ -613,7 +613,7 @@ extension Database: Core {
     /// Separate interface of `run(transaction:)`  
     /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
     /// To do a cross-thread transaction, use `getTransaction`.
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func commit() throws {
         let recyclableHandle = try flowOut()
         try recyclableHandle.raw.handle.exec(CommonStatement.commitTransaction)
@@ -623,7 +623,7 @@ extension Database: Core {
     /// Separate interface of run(transaction:)
     /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
     /// To do a cross-thread transaction, use `getTransaction`.
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func rollback() throws {
         let recyclableHandle = try flowOut()
         Database.threadedHandles.value.removeValue(forKey: path)
@@ -637,7 +637,7 @@ extension Database: Core {
     ///     })
     ///
     /// - Parameter transaction: Operation inside transaction
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func run(transaction: TransactionClosure) throws {
         try begin(.immediate)
         do {
@@ -657,7 +657,7 @@ extension Database: Core {
     ///     })
     ///
     /// - Parameter controlableTransaction: Operation inside transaction
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func run(controlableTransaction: ControlableTransactionClosure) throws {
         try begin(.immediate)
         var shouldRollback = true
@@ -680,8 +680,12 @@ extension Database: Core {
     /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
     /// otherwise it will be executed within the existing transaction.
     ///
+    ///     try database.run(embeddedTransaction: { () throws -> Void in 
+    ///         try database.insert(objects: objects, intoTable: table)
+    ///     })
+    ///
     /// - Parameter embeddedTransaction: Operation inside transaction
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func run(embeddedTransaction: TransactionClosure) throws {
         if Database.threadedHandles.value[path] != nil {
             return try embeddedTransaction()
@@ -714,7 +718,7 @@ extension Database {
     /// Remove all database-related files.  
     /// You should call it on a closed database. Otherwise you will get a warning.
     ///
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func removeFiles() throws {
         if !isBlockaded || isOpened {
             Error.warning("Removing files on an opened database may cause unknown results")
@@ -727,7 +731,7 @@ extension Database {
     /// - Parameters:
     ///   - directory: destination
     ///   - extraFiles: extraFiles
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: String...) throws {
         try moveFiles(toDirectory: directory, withExtraFiles: extraFiles)
     }
@@ -738,7 +742,7 @@ extension Database {
     /// - Parameters:
     ///   - directory: destination
     ///   - extraFiles: extraFiles
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func moveFiles(toDirectory directory: String, withExtraFiles extraFiles: [String]) throws {
         try File.createDirectoryWithIntermediateDirectories(atPath: directory)
         var recovers: [String] = []
@@ -767,7 +771,7 @@ extension Database {
     /// You should call it on a closed database. Otherwise you will get a warning.
     ///
     /// - Returns: The sum of files size in bytes.
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func getFilesSize() throws -> UInt64 {
         if !isBlockaded || isOpened {
             Error.warning("Getting files size on an opened database may get incorrect results")
@@ -783,7 +787,7 @@ extension Database {
     /// you should call this periodically.
     ///
     /// - Parameter key: The cipher key for backup. Nil for non-encrypted.
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func backup(withKey key: Data? = nil) throws {
         let handle = try flowOut()
         try handle.raw.handle.backup(withKey: key)
@@ -798,7 +802,7 @@ extension Database {
     ///               Also, you can call "PRAGMA page_size" to check the current value while database is not corrupted.
     ///   - databaseKey: The cipher key for corrupeted database
     ///   - backupKey: The cipher key for backup
-    /// - Throws: Error
+    /// - Throws: `Error`
     public func recover(fromPath source: String,
                         withPageSize pageSize: Int32,
                         databaseKey: Data? = nil,
@@ -811,6 +815,7 @@ extension Database {
     }
 }
 
+// MARK: - Test1112
 extension Database: InsertChainCallInterface {}
 extension Database: UpdateChainCallInterface {}
 extension Database: DeleteChainCallInterface {}
