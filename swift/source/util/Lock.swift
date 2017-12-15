@@ -20,30 +20,25 @@
 
 import Foundation
 
-protocol Lock {
+protocol Lockable {
     func lock()
     func unlock()
 }
 
-final class UnfairLock: Lock {
+@available(iOS 10.0, OSX 10.12, *)
+final class UnfairLock: Lockable {
     private var unfairLock = os_unfair_lock_s()
 
     func lock() {
-        guard #available(iOS 10.0, macOS 10.12, *) else {
-            Error.abort("")
-        }
         os_unfair_lock_lock(&unfairLock)
     }
 
     func unlock() {
-        guard #available(iOS 10.0, macOS 10.12, *) else {
-            Error.abort("")
-        }
         os_unfair_lock_unlock(&unfairLock)
     }
 }
 
-final class Mutex: Lock {
+final class Mutex: Lockable {
     private var mutex = pthread_mutex_t()
 
     init() {
@@ -63,7 +58,7 @@ final class Mutex: Lock {
     }
 }
 
-final class RecursiveMutex: Lock {
+final class RecursiveMutex: Lockable {
     private var mutex = pthread_mutex_t()
 
     init() {
@@ -86,38 +81,27 @@ final class RecursiveMutex: Lock {
     }
 }
 
-final class Spin: Lock {
-    private let unfair: UnfairLock?
-    private let mutex: Mutex?
+final class Spin: Lockable {
+    private let locker: Lockable
 
     init() {
         if #available(iOS 10.0, macOS 10.12, *) {
-            mutex = nil
-            unfair = UnfairLock()
+            locker = UnfairLock()
         } else {
-            mutex = Mutex()
-            unfair = nil
+            locker = Mutex()
         }
     }
 
     func lock() {
-        if #available(iOS 10.0, macOS 10.12, *) {
-            unfair!.lock()
-        } else {
-            mutex!.lock()
-        }
+        locker.lock()
     }
 
     func unlock() {
-        if #available(iOS 10.0, macOS 10.12, *) {
-            unfair!.unlock()
-        } else {
-            mutex!.unlock()
-        }
+        locker.unlock()
     }
 }
 
-final class ConditionLock: Lock {
+final class ConditionLock: Lockable {
     private var mutex = pthread_mutex_t()
     private var cond = pthread_cond_t()
 
