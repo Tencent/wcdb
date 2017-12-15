@@ -294,8 +294,8 @@ extension Database {
     private static let defaultConfigs: Configs = Configs(
         Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
             #if WCDB_IOS
-                try handle.paths.forEach {
-                    try File.addFirstUserAuthenticationFileProtection(atPath: $0)
+                try Handle.subfixs.forEach {
+                    try File.addFirstUserAuthenticationFileProtection(atPath: handle.path+$0)
                 }
             #endif //WCDB_IOS
         }, orderBy: DefaultConfigOrder.fileProtection.rawValue),
