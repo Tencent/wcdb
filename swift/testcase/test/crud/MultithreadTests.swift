@@ -77,7 +77,7 @@ class MultithreadTests: CRUDTestCase {
             group.wait()
         }
         //Then
-        XCTAssertLessThanOrEqual(readReadCost, (singleReadCost * 2) * 0.6)
+        XCTAssertLessThanOrEqual(readReadCost, (singleReadCost * 2) * 0.8)
     }
 
     func testMultithreadReadWrite() {
@@ -110,7 +110,7 @@ class MultithreadTests: CRUDTestCase {
         }
 
         //Then
-        XCTAssertLessThanOrEqual(readWriteCost, singleReadCost * 0.9 + singleWriteCost * 0.6)
+        XCTAssertLessThanOrEqual(readWriteCost, (singleReadCost + singleWriteCost) * 0.8)
     }
 
     func testMultithreadWriteWrite() {
@@ -136,8 +136,8 @@ class MultithreadTests: CRUDTestCase {
             group.wait()
         }
         //Then
-        XCTAssertLessThanOrEqual(writeWriteCost, (singleWriteCost * 2) * 1.1)
-        XCTAssertGreaterThanOrEqual(writeWriteCost, (singleWriteCost * 2) * 0.9)
+        XCTAssertLessThanOrEqual(writeWriteCost, (singleWriteCost * 2) * 1.2)
+        XCTAssertGreaterThanOrEqual(writeWriteCost, (singleWriteCost * 2) * 0.8)
     }
 
     final class ConditionLock {
