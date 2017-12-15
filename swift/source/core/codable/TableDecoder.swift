@@ -49,181 +49,101 @@ final class TableDecoder: Decoder {
         //Decode
         func decodeNil(forKey key: Key) throws -> Bool {
             guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
+                return false
             }
             return coreStatement.value(atIndex: index) ?? false
         }
 
         func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? false
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? false
         }
 
         func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Int64.Type, forKey key: Key) throws -> Int64 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? 0
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? 0
         }
 
         func decode(_ type: String.Type, forKey key: Key) throws -> String {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            return coreStatement.value(atIndex: index) ?? ""
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            return coreStatement.value(atIndex: index!) ?? ""
         }
 
         func decode<Object>(_ type: Object.Type, forKey key: Key) throws -> Object where Object: Decodable {
-            guard let index = columnIndex(by: key) else {
-                throw Error.reportCore(tag: coreStatement.tag,
-                                       path: coreStatement.path,
-                                       operation: .encode,
-                                       code: .misuse,
-                                       message: "")
-            }
-            guard let decodableType = Object.self as? ColumnDecodableBase.Type else {
-                Error.abort("")
-            }
-            guard let object = coreStatement.value(atIndex: index, of: decodableType) as? Object else {
+            let index = columnIndex(by: key)
+            Error.assert(index != nil, message: "")
+            let decodableType = Object.self as? ColumnDecodableBase.Type
+            Error.assert(decodableType != nil, message: "")
+            guard let object = coreStatement.value(atIndex: index!, of: decodableType!) as? Object else {
                 throw Error.reportCore(tag: coreStatement.tag,
                                        path: coreStatement.path,
                                        operation: .encode,

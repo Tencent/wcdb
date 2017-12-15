@@ -43,59 +43,39 @@ public final class Select: SelectBase {
     }
 
     public func nextObject() throws -> Any? {
-        guard let rootType = keys[0].rootType as? TableDecodableBase.Type else {
-            throw Error.reportInterface(tag: tag,
-                                        path: path,
-                                        operation: .select,
-                                        code: .misuse,
-                                        message: "")
-        }
+        let rootType = keys[0].rootType as? TableDecodableBase.Type
+        Error.assert(rootType != nil, message: "")
         guard try next() else {
             return nil
         }
-        return try extract(from: keys, of: rootType)
+        return try extract(from: keys, of: rootType!)
     }
 
     public func allObjects() throws -> [Any] {
-        guard let rootType = keys[0].rootType as? TableDecodableBase.Type else {
-            throw Error.reportInterface(tag: tag,
-                                        path: path,
-                                        operation: .select,
-                                        code: .misuse,
-                                        message: "")
-        }
+        let rootType = keys[0].rootType as? TableDecodableBase.Type
+        Error.assert(rootType != nil, message: "")
         var objects: [Any] = []
         while try next() {
-            objects.append(try extract(from: keys, of: rootType))
+            objects.append(try extract(from: keys, of: rootType!))
         }
         return objects
     }
 
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
-        guard let keys = self.keys as? [Object.CodingKeys] else {
-            throw Error.reportInterface(tag: tag,
-                                        path: path,
-                                        operation: .select,
-                                        code: .misuse,
-                                        message: "")
-        }
+        let keys = self.keys as? [Object.CodingKeys]
+        Error.assert(keys != nil, message: "")
         guard try next() else {
             return nil
         }
-        return try extract(from: keys)
+        return try extract(from: keys!)
     }
 
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
-        guard let keys = self.keys as? [Object.CodingKeys] else {
-            throw Error.reportInterface(tag: tag,
-                                        path: path,
-                                        operation: .select,
-                                        code: .misuse,
-                                        message: "")
-        }
+        let keys = self.keys as? [Object.CodingKeys]
+        Error.assert(keys != nil, message: "")
         var objects: [Object] = []
         while try next() {
-            objects.append(try extract(from: keys))
+            objects.append(try extract(from: keys!))
         }
         return objects
     }

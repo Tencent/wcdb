@@ -61,13 +61,8 @@ extension Transaction: Core {
 
     public func prepare(_ statement: Statement) throws -> CoreStatement {
         mutex.lock(); defer { mutex.unlock() }
-        guard statement.statementType != .transaction else {
-            throw Error.reportCore(tag: tag,
-                                   path: path,
-                                   operation: .prepare,
-                                   code: .misuse,
-                                   message: "Using [begin], [commit], [rollback] method to do a transaction")
-        }
+        Error.assert(statement.statementType != .transaction,
+                     message: "Using [begin], [commit], [rollback] method to do a transaction")
         let handleStatement = try handle.prepare(statement)
         let recyclableHandleStatement = RecyclableHandleStatement(recyclableHandle: recyclableHandle,
                                                                   handleStatement: handleStatement)
@@ -76,13 +71,8 @@ extension Transaction: Core {
 
     public func exec(_ statement: Statement) throws {
         mutex.lock(); defer { mutex.unlock() }
-        guard statement.statementType != .transaction else {
-            throw Error.reportCore(tag: tag,
-                                   path: path,
-                                   operation: .prepare,
-                                   code: .misuse,
-                                   message: "Using [begin], [commit], [rollback] method to do a transaction")
-        }
+        Error.assert(statement.statementType != .transaction,
+                     message: "Using [begin], [commit], [rollback] method to do a transaction")
         try handle.exec(statement)
     }
 
