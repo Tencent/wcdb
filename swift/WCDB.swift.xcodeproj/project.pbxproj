@@ -68,6 +68,7 @@
 		233032B21FB947F100101373 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
 		2349FC341FDF8BDE005230E8 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2349FC301FDF8B14005230E8 /* sqliterk.framework */; };
 		235619C31FD69B250085C86B /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235619C21FD69B250085C86B /* FundamentalValue.swift */; };
+		235A2C481FE3763800B74208 /* Operable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235A2C471FE3763800B74208 /* Operable.swift */; };
 		237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C01FD50140003BBA5F /* TableEncoder.swift */; };
 		237931C31FD52C75003BBA5F /* TableDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C21FD52C75003BBA5F /* TableDecoder.swift */; };
 		237931C51FD52CB4003BBA5F /* TableCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C41FD52CB4003BBA5F /* TableCodable.swift */; };
@@ -217,6 +218,7 @@
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
 		235619C21FD69B250085C86B /* FundamentalValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
+		235A2C471FE3763800B74208 /* Operable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operable.swift; sourceTree = "<group>"; };
 		237931C01FD50140003BBA5F /* TableEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableEncoder.swift; sourceTree = "<group>"; };
 		237931C21FD52C75003BBA5F /* TableDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableDecoder.swift; sourceTree = "<group>"; };
 		237931C41FD52CB4003BBA5F /* TableCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCodable.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 			children = (
 				23A00CD81FBAF82B000180A8 /* Tokenize.swift */,
 				230686DB1FAC0E5B0005EE8B /* Convertible.swift */,
+				235A2C471FE3763800B74208 /* Operable.swift */,
 				238D0B131FAB1F7E00BC2659 /* Column.swift */,
 				238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */,
 				238D0B151FAB1F7E00BC2659 /* ColumnIndex.swift */,
@@ -755,6 +758,7 @@
 				238D0B881FAB1F7E00BC2659 /* Statement.swift in Sources */,
 				230209951FBED533000D69B6 /* ColumnConstraintBinding.swift in Sources */,
 				238D0B7F1FAB1F7E00BC2659 /* ForeignKey.swift in Sources */,
+				235A2C481FE3763800B74208 /* Operable.swift in Sources */,
 				238D0B8F1FAB1F7E00BC2659 /* StatementDetach.swift in Sources */,
 				238D0B7A1FAB1F7E00BC2659 /* ColumnResult.swift in Sources */,
 				237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */,
