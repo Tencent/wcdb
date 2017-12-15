@@ -141,11 +141,6 @@ class SelectTests: CRUDTestCase {
         }
     }
 
-    func testSelectWrongObject() {
-        XCTAssertThrowsError(try select.allObjects(of: WrongObject.self))
-        XCTAssertThrowsError(try select.nextObject(of: WrongObject.self))
-    }
-
     func testSelectFailed() {
         let optionalSelect = WCDBAssertNoThrowReturned(
             try database.prepareSelect(of: CRUDObject.self, fromTable: "nonexistentTable"),

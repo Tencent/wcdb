@@ -365,15 +365,6 @@ class TransactionTests: CRUDTestCase {
         XCTAssertEqual(journalMode.lowercased(), "wal")
     }
 
-    func testPrepareFailedWithTransaction() {
-        //Give
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
-        XCTAssertNotNil(optionalTransaction)
-        let transaction = optionalTransaction!
-        //When
-        XCTAssertThrowsError(try transaction.prepare(StatementTransaction().begin()))
-    }
-
     func testExecWithTransaction() {
         //Give
         let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
@@ -387,15 +378,6 @@ class TransactionTests: CRUDTestCase {
             whenFailed: [CRUDObject]()
         )
         XCTAssertEqual(results.count, 0)
-    }
-
-    func testExecFailedWithTransaction() {
-        //Give
-        let optionalTransaction = WCDBAssertNoThrowReturned(try database.getTransaction(), whenFailed: nil)
-        XCTAssertNotNil(optionalTransaction)
-        let transaction = optionalTransaction!
-        //When
-        XCTAssertThrowsError(try transaction.exec(StatementTransaction().begin()))
     }
 
     func testIsTableExistsWithTransaction() {
