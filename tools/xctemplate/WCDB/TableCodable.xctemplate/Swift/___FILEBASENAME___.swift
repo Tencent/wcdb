@@ -1,7 +1,7 @@
 //___FILEHEADER___
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 class ___VARIABLE_productName___: WCDB.TableCodable {
     //Your own properties

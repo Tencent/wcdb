@@ -19,7 +19,7 @@ Pod::Spec.new do |wcdb|
   wcdb.tvos.deployment_target = "9.0"
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.source_files  = "swift/source/**/*.swift", "swift/source/**/**/*.swift", "swift/source/util/*.{h,c}", "repair"
-  wcdb.module_name = "WCDB"
+  wcdb.module_name = "WCDBSwift"
   wcdb.libraries = "z"
   wcdb.requires_arc = true
   wcdb.prepare_command = "git submodule update --init sqlcipher; \
