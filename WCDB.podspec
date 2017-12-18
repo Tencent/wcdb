@@ -25,7 +25,7 @@ Pod::Spec.new do |wcdb|
   wcdb.libraries = "z", "c++"
   wcdb.requires_arc = true
   wcdb.prepare_command = "git submodule update --init sqlcipher; \
-                          cd tools/xctemplate; make; cd ../..; \
+                          cd tools/templates; sh install.sh; cd ../..; \
                           cd sqlcipher; make -f Makefile.preprocessed; cd ..; \
                           cp sqlcipher/ext/fts3/fts3_tokenizer.h sqlcipher/"
   wcdb.xcconfig = {

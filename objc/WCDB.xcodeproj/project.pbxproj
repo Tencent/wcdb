@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		2349FC171FDF8648005230E8 /* Install file template */ = {
+		2349FC171FDF8648005230E8 /* Install templates */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 2349FC1B1FDF8648005230E8 /* Build configuration list for PBXAggregateTarget "Install file template" */;
+			buildConfigurationList = 2349FC1B1FDF8648005230E8 /* Build configuration list for PBXAggregateTarget "Install templates" */;
 			buildPhases = (
-				2349FC1C1FDF864B005230E8 /* Install file template */,
+				2349FC1C1FDF864B005230E8 /* Install templates */,
 			);
 			dependencies = (
 			);
-			name = "Install file template";
+			name = "Install templates";
 			productName = "Install file template";
 		};
 /* End PBXAggregateTarget section */
@@ -2259,7 +2259,7 @@
 				239326601E836D7300D677CC /* WCDB */,
 				23DE40A81EF7707900227551 /* WCDB iOS Static */,
 				23D5CCFC1EB8616D00A5B8F9 /* Sample */,
-				2349FC171FDF8648005230E8 /* Install file template */,
+				2349FC171FDF8648005230E8 /* Install templates */,
 			);
 		};
 /* End PBXProject section */
@@ -2292,19 +2292,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2349FC1C1FDF864B005230E8 /* Install file template */ = {
+		2349FC1C1FDF864B005230E8 /* Install templates */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Install file template";
+			name = "Install templates";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/../tools/xctemplate\nmake || true";
+			shellScript = "cd ${PROJECT_DIR}/../tools/templates\nsh install.sh || true";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2631,12 +2631,12 @@
 /* Begin PBXTargetDependency section */
 		2349FC1E1FDF8665005230E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2349FC171FDF8648005230E8 /* Install file template */;
+			target = 2349FC171FDF8648005230E8 /* Install templates */;
 			targetProxy = 2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */;
 		};
 		2349FC201FDF866A005230E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2349FC171FDF8648005230E8 /* Install file template */;
+			target = 2349FC171FDF8648005230E8 /* Install templates */;
 			targetProxy = 2349FC1F1FDF866A005230E8 /* PBXContainerItemProxy */;
 		};
 		2393266C1E836EAB00D677CC /* PBXTargetDependency */ = {
@@ -2974,7 +2974,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2349FC1B1FDF8648005230E8 /* Build configuration list for PBXAggregateTarget "Install file template" */ = {
+		2349FC1B1FDF8648005230E8 /* Build configuration list for PBXAggregateTarget "Install templates" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2349FC181FDF8648005230E8 /* Debug */,

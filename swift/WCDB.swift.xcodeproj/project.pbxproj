@@ -18,15 +18,15 @@
 			name = Swiftlint;
 			productName = Swiftlint;
 		};
-		23A1FF731FB08C780023527D /* Install file template */ = {
+		23A1FF731FB08C780023527D /* Install templates */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install file template" */;
+			buildConfigurationList = 23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install templates" */;
 			buildPhases = (
-				23A1FF771FB08C820023527D /* Install file template */,
+				23A1FF771FB08C820023527D /* Install templates */,
 			);
 			dependencies = (
 			);
-			name = "Install file template";
+			name = "Install templates";
 			productName = "Install file template";
 		};
 /* End PBXAggregateTarget section */
@@ -608,7 +608,7 @@
 			projectRoot = "";
 			targets = (
 				238D0B021FAB1F4300BC2659 /* WCDB.swift */,
-				23A1FF731FB08C780023527D /* Install file template */,
+				23A1FF731FB08C780023527D /* Install templates */,
 				2349FC211FDF86F9005230E8 /* Swiftlint */,
 			);
 		};
@@ -654,21 +654,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint autocorrect --path ../tools/xctemplate\n    swiftlint\n#    swiftlint --path ../tools/xctemplate \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint autocorrect --path ../tools/templates/xctemplates\n    swiftlint\n#    swiftlint --path ../tools/templates/xctemplates \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		23A1FF771FB08C820023527D /* Install file template */ = {
+		23A1FF771FB08C820023527D /* Install templates */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Install file template";
+			name = "Install templates";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/../tools/xctemplate\nmake || true";
+			shellScript = "cd ${PROJECT_DIR}/../tools/templates\nsh install.sh || true";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -797,7 +797,7 @@
 		};
 		23A1FF791FB08CC50023527D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 23A1FF731FB08C780023527D /* Install file template */;
+			target = 23A1FF731FB08C780023527D /* Install templates */;
 			targetProxy = 23A1FF781FB08CC50023527D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1073,7 +1073,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install file template" */ = {
+		23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install templates" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23A1FF751FB08C780023527D /* Debug */,
