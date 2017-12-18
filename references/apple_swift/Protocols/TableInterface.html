@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TableInterface Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/TableInterface" class="dashAnchor"></a>
+    <a title="TableInterface Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">WCDBSwift Docs</a> (52% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tencent/wcdb"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2FTencent%2Fdocsets%2FWCDBSwift%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">WCDBSwift Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        TableInterface Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/CoreStatement.html">CoreStatement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Database.html">Database</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Delete.html">Delete</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Insert.html">Insert</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MultiSelect.html">MultiSelect</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RowSelect.html">RowSelect</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Table.html">Table</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Transaction.html">Transaction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Update.html">Update</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums.html#/s:9WCDBSwift8DatabaseC18DefaultConfigOrderO">DefaultConfigOrder</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Instance Methods.html">Instance Methods</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC6backupy10Foundation4DataVSg7withKey_tKF">backup(withKey:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC5beginyyKF">begin()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC5beginyAA20StatementTransactionC4ModeOKF">begin(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC6commityyKF">commit()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC4execyAA9Statement_pKF">exec(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC12getFilesSizes6UInt64VyKF">getFilesSize()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC8getTableAA0D0CyxGSgSS5named_xm2oftKAA0D9DecodableRzAA0D9EncodableRzlF">getTable(named:of:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC14getTransactionAA0D0CyKF">getTransaction()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC13isTableExistsSbSSKF">isTableExists(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC9moveFilesySS11toDirectory_SaySSG09withExtraD0dtKF">moveFiles(toDirectory:withExtraFiles:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC9moveFilesySS11toDirectory_SaySSG09withExtraD0tKF">moveFiles(toDirectory:withExtraFiles:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC7prepareAA13CoreStatementCAA0E0_pKF">prepare(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC7recoverySS8fromPath_s5Int32V12withPageSize10Foundation4DataVSg11databaseKeyAL06backupM0tKF">recover(fromPath:withPageSize:databaseKey:backupKey:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC11removeFilesyyKF">removeFiles()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC8rollbackyyKF">rollback()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC3runySbyKc22controlableTransaction_tKF">run(controlableTransaction:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC3runyyyKc19embeddedTransaction_tKF">run(embeddedTransaction:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC3runyyyKc11transaction_tKF">run(transaction:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC9setCiphery10Foundation4DataVSg3key_Si8pageSizetF">setCipher(key:pageSize:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC9setConfigySS5named_yAA6HandleCKc4withtF">setConfig(named:with:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC9setConfigySS5named_yAA6HandleCKc4withSi7orderBytF">setConfig(named:with:orderBy:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC14setSynchronousySb6isFull_tF">setSynchronous(isFull:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC12setTokenizesySayAA8TokenizeVGF">setTokenizes(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC12setTokenizesySayAA8TokenizeVGd_tF">setTokenizes(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Methods.html#/s:9WCDBSwift8DatabaseC5traceyySiSg_s10DictionaryVySSSiGs5Int64Vtc11performance_tF">trace(performance:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Instance Variables.html">Instance Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Instance Variables.html#/s:9WCDBSwift8DatabaseC4pathSSv">path</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Variables.html#/s:9WCDBSwift8DatabaseC5pathsSaySSGv">paths</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Variables.html#/s:9WCDBSwift8DatabaseC3tagSiSgv">tag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Instance Variables.html#/s:9WCDBSwift8DatabaseC4urlsSay10Foundation3URLVGv">urls</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/DeleteChainCallInterface.html">DeleteChainCallInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DeleteInterface.html">DeleteInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/InsertChainCallInterface.html">InsertChainCallInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/InsertInterface.html">InsertInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MultiSelectChainCallInterface.html">MultiSelectChainCallInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RowSelectChainCallInterface.html">RowSelectChainCallInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RowSelectInterface.html">RowSelectInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SelectChainCallInterface.html">SelectChainCallInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SelectInterface.html">SelectInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TableInterface.html">TableInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UpdateChainCallInterface.html">UpdateChainCallInterface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UpdateInterface.html">UpdateInterface</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Static Methods.html">Static Methods</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Static Methods.html#/s:9WCDBSwift8DatabaseC11globalTraceyyAA5ErrorCc02ofE0_tFZ">globalTrace(ofError:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Static Methods.html#/s:9WCDBSwift8DatabaseC11globalTraceyySiSg_s10DictionaryVySSSiGs5Int64Vtc13ofPerformance_tFZ">globalTrace(ofPerformance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Static Methods.html#/s:9WCDBSwift8DatabaseC11globalTraceyySSc5ofSQL_tFZ">globalTrace(ofSQL:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Static Methods.html#/s:9WCDBSwift8DatabaseC23resetGlobalTraceOfErroryyFZ">resetGlobalTraceOfError()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Static Variables.html">Static Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Static Variables.html#/s:9WCDBSwift8DatabaseC7subfixsSaySSGvZ">subfixs</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>TableInterface</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TableInterface</span></code></pre>
+
+                </div>
+              </div>
+            <p>Convenient interface for table related operation</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP6createySS5table_qd__m2oftKAA0B9EncodableRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/create(table:of:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP6createySS5table_qd__m2oftKAA0B9EncodableRd__lF">create(table:of:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create table, related indexes and constraints with specific type</p>
+
+<p>Note that it will create defined indexes automatically.
+The name of index is <code>&quot;\(tableName)\(indexSubfixName)&quot;</code> while <code>indexSubfixName</code> is defined by <code>IndexBinding</code>. 
+BUT, it will not drop the undefined indexes. You should drop it manually.</p>
+
+<p>Note that it will add the newly defined column automatically.
+AND, it will skip the undefined column. It can be very developer-friendly while upgrading your database column.</p>
+
+<p>Note that it will run embedded transaction<br>
+The embedded transaction means that it will run a transaction if it&rsquo;s not in other transaction,
+otherwise it will be executed within the existing transaction.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="n">create</span><span class="o">&lt;</span><span class="kt">Root</span><span class="p">:</span> <span class="kt">TableEncodable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">table</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">of</span> <span class="nv">rootType</span><span class="p">:</span> <span class="kt">Root</span><span class="o">.</span><span class="k">Type</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rootType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Type of table encodable object</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP6createySS07virtualB0_qd__m2oftKAA0B9EncodableRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/create(virtualTable:of:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP6createySS07virtualB0_qd__m2oftKAA0B9EncodableRd__lF">create(virtualTable:of:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create virtual table and constraints with specific type</p>
+
+<p>Note that it will run embedded transaction<br>
+The embedded transaction means that it will run a transaction if it&rsquo;s not in other transaction,
+otherwise it will be executed within the existing transaction.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="n">create</span><span class="o">&lt;</span><span class="kt">Root</span><span class="p">:</span> <span class="kt">TableEncodable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">virtualTable</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">of</span> <span class="nv">rootType</span><span class="p">:</span> <span class="kt">Root</span><span class="o">.</span><span class="k">Type</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rootType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Type of table encodable object</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP6createySS5table_SayAA9ColumnDefCG4withSayAA0B10ConstraintCGSg3andtKF"></a>
+                    <a name="//apple_ref/swift/Method/create(table:with:and:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP6createySS5table_SayAA9ColumnDefCG4withSayAA0B10ConstraintCGSg3andtKF">create(table:with:and:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create table manually</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">table</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">columnDefList</span><span class="p">:</span> <span class="p">[</span><span class="kt">ColumnDef</span><span class="p">],</span> <span class="n">and</span> <span class="nv">constraintList</span><span class="p">:</span> <span class="p">[</span><span class="kt">TableConstraint</span><span class="p">]?)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnDefList</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ column definition list</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>constraintList</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ constraint list.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP6createySS5table_SayAA9ColumnDefCG4withdSayAA0B10ConstraintCGSg3andtKF"></a>
+                    <a name="//apple_ref/swift/Method/create(table:with:and:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP6createySS5table_SayAA9ColumnDefCG4withdSayAA0B10ConstraintCGSg3andtKF">create(table:with:and:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create table manually</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">table</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">columnDefList</span><span class="p">:</span> <span class="kt">ColumnDef</span><span class="o">...</span><span class="p">,</span> <span class="n">and</span> <span class="nv">constraintList</span><span class="p">:</span> <span class="p">[</span><span class="kt">TableConstraint</span><span class="p">]?)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnDefList</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ column definition list</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>constraintList</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ constraint list.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP9addColumnyAA0E3DefC4with_SS03forB0tKF"></a>
+                    <a name="//apple_ref/swift/Method/addColumn(with:forTable:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP9addColumnyAA0E3DefC4with_SS03forB0tKF">addColumn(with:forTable:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create new column</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addColumn</span><span class="p">(</span><span class="n">with</span> <span class="nv">columnDef</span><span class="p">:</span> <span class="kt">ColumnDef</span><span class="p">,</span> <span class="n">forTable</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnDef</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ column definition</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>table</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP4dropySS5table_tKF"></a>
+                    <a name="//apple_ref/swift/Method/drop(table:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP4dropySS5table_tKF">drop(table:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Drop table</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Erro</code>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">drop</span><span class="p">(</span><span class="n">table</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP6createySS5index_SayAA22ColumnIndexConvertible_pG4withSS03forB0tKF"></a>
+                    <a name="//apple_ref/swift/Method/create(index:with:forTable:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP6createySS5index_SayAA22ColumnIndexConvertible_pG4withSS03forB0tKF">create(index:with:forTable:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create index manually</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">index</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Index name</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnIndexConvertibleList</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ column index list</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>table</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP6createySS5index_SayAA22ColumnIndexConvertible_pG4withdSS03forB0tKF"></a>
+                    <a name="//apple_ref/swift/Method/create(index:with:forTable:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP6createySS5index_SayAA22ColumnIndexConvertible_pG4withdSS03forB0tKF">create(index:with:forTable:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create index manually</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">index</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Index name</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnIndexConvertibleList</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>WINQ column index list</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>table</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Table name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9WCDBSwift14TableInterfaceP4dropySS5index_tKF"></a>
+                    <a name="//apple_ref/swift/Method/drop(index:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9WCDBSwift14TableInterfaceP4dropySS5index_tKF">drop(index:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Drop index</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>Error</code>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">drop</span><span class="p">(</span><span class="n">index</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Index name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>Copyright © 2017 Tencent. All rights reserved.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

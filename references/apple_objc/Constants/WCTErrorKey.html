@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>WCTErrorKey Constants Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">WCDB </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Tencent</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">WCTErrorKey Constants Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Declared in</th>
+	<td>WCTError.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+
+                    
+                    <h3 class="subsubtitle method-title">WCTErrorKey</h3>
+                    
+					
+					<div class="section section-overview">
+                        <p>More information can be obtained with following keys.</p>
+					</div>
+					
+					
+                    <div class="section">
+                        <!-- display enum values -->
+                        
+                        <h4 class="method-subtitle">Definition</h4>
+                        <code>typedef NS_ENUM(int, WCTErrorKey ) {<br>
+                            
+                            &nbsp;&nbsp; <a href="">WCTErrorKeyTag</a> = ( WCTErrorKey ) : : Error : : Key : : Tag,<br>
+                            
+                            &nbsp;&nbsp; <a href="">WCTErrorKeyOperation</a> = ( WCTErrorKey ) : : Error : : Key : : Operation,<br>
+                            
+                            &nbsp;&nbsp; <a href="">WCTErrorKeyExtendedCode</a> = ( WCTErrorKey ) : : Error : : Key : : ExtendedCode,<br>
+                            
+                            &nbsp;&nbsp; <a href="">WCTErrorKeyMessage</a> = ( WCTErrorKey ) : : Error : : Key : : Message,<br>
+                            
+                            &nbsp;&nbsp; <a href="">WCTErrorKeySQL</a> = ( WCTErrorKey ) : : Error : : Key : :,<br>
+                            
+                            &nbsp;&nbsp; <a href="">WCTErrorKeyPath</a> = ( WCTErrorKey ) : : Error : : Key : : Path,<br>
+                            
+                            };</code>
+                    
+                    </div>
+                    
+                    <div class="section section-methods">
+                        <h4 class="method-subtitle">Constants</h4>
+                        <dl class="termdef">
+                            
+                            <dt><a name="" title="WCTErrorKeyTag"></a><code>WCTErrorKeyTag</code></dt>
+<dd>
+
+
+<p>Tag of database</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">WCTError.h</code>.
+	</p>
+	
+</dd>
+                            
+                            <dt><a name="" title="WCTErrorKeyOperation"></a><code>WCTErrorKeyOperation</code></dt>
+<dd>
+
+
+<p>The operation that is being performed when an error occurs. For further information, see [Error::CoreOperation] in [error.hpp].</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">WCTError.h</code>.
+	</p>
+	
+</dd>
+                            
+                            <dt><a name="" title="WCTErrorKeyExtendedCode"></a><code>WCTErrorKeyExtendedCode</code></dt>
+<dd>
+
+
+<p>Extended code for sqlite. You can check it at <a href="http://www.sqlite.org/rescode.html">http://www.sqlite.org/rescode.html</a> .</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">WCTError.h</code>.
+	</p>
+	
+</dd>
+                            
+                            <dt><a name="" title="WCTErrorKeyMessage"></a><code>WCTErrorKeyMessage</code></dt>
+<dd>
+
+
+<p>Text message that helps you debug it.</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">WCTError.h</code>.
+	</p>
+	
+</dd>
+                            
+                            <dt><a name="" title="WCTErrorKeySQL"></a><code>WCTErrorKeySQL</code></dt>
+<dd>
+
+
+<p>The SQL is being executed when an error occurs.</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">WCTError.h</code>.
+	</p>
+	
+</dd>
+                            
+                            <dt><a name="" title="WCTErrorKeyPath"></a><code>WCTErrorKeyPath</code></dt>
+<dd>
+
+
+<p>The file path that is being manipulated when an error occurs.</p>
+
+
+
+
+
+    
+	<p>
+		Declared In <code class="declared-in-ref">WCTError.h</code>.
+	</p>
+	
+</dd>
+                            
+                        </dl>
+                    </div>
+                    
+
+                    
+                    
+
+                    
+
+                    
+                    <div class="method-subsection declared-in-section">
+                        <h4 class="method-subtitle">Declared In</h4>
+                        <p><code class="declared-in-ref">WCTError.h</code></p>
+                    </div>
+                    
+                    
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-12-18</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

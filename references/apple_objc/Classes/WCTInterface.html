@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>WCTInterface Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">WCDB </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Tencent</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/exec:">- exec:</option>
+		
+		<option value="//api/name/prepare:">- prepare:</option>
+		
+		<option value="//api/name/prepare:withError:">- prepare:withError:</option>
+		
+		<option value="//api/name/prepareDeleteFromTable:">- prepareDeleteFromTable:</option>
+		
+		<option value="//api/name/prepareInsertObjectsOfClass:into:">- prepareInsertObjectsOfClass:into:</option>
+		
+		<option value="//api/name/prepareInsertObjectsOnProperties:into:">- prepareInsertObjectsOnProperties:into:</option>
+		
+		<option value="//api/name/prepareInsertOrReplaceObjectsOfClass:into:">- prepareInsertOrReplaceObjectsOfClass:into:</option>
+		
+		<option value="//api/name/prepareInsertOrReplaceObjectsOnProperties:into:">- prepareInsertOrReplaceObjectsOnProperties:into:</option>
+		
+		<option value="//api/name/prepareSelectMultiObjectsOnResults:fromTables:">- prepareSelectMultiObjectsOnResults:fromTables:</option>
+		
+		<option value="//api/name/prepareSelectObjectsOfClass:fromTable:">- prepareSelectObjectsOfClass:fromTable:</option>
+		
+		<option value="//api/name/prepareSelectObjectsOnResults:fromTable:">- prepareSelectObjectsOnResults:fromTable:</option>
+		
+		<option value="//api/name/prepareSelectRowsOnResults:fromTable:">- prepareSelectRowsOnResults:fromTable:</option>
+		
+		<option value="//api/name/prepareSelectRowsOnResults:fromTables:">- prepareSelectRowsOnResults:fromTables:</option>
+		
+		<option value="//api/name/prepareUpdateTable:onProperties:">- prepareUpdateTable:onProperties:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">WCTInterface Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td><a href="../Classes/WCTCore.html">WCTCore</a> : NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>WCTInterface.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Thread-safe</p>
+
+<p>WCTInterface(Convenient) category contains the combination of common operations on SQL.
+Although it&rsquo;s all glue code here, it works and it can bring you convenience. It&rsquo;s fairly straightforward so that no comment here.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="ChainCall Methods" name="task_ChainCall Methods"></a>
+						<h2 class="task-title">ChainCall Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/prepareInsertObjectsOfClass:into:" title="prepareInsertObjectsOfClass:into:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareInsertObjectsOfClass:into:">&ndash;&nbsp;prepareInsertObjectsOfClass:into:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTInsert.html">WCTInsert</a> to do an insertion.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTInsert *)prepareInsertObjectsOfClass:(Class)<em>cls</em> into:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cls</code></th>
+						<td><p>The class of the object to be inserted.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do an insertion.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTInsert.html">WCTInsert</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareInsertOrReplaceObjectsOfClass:into:" title="prepareInsertOrReplaceObjectsOfClass:into:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareInsertOrReplaceObjectsOfClass:into:">&ndash;&nbsp;prepareInsertOrReplaceObjectsOfClass:into:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTInsert.html">WCTInsert</a> to do an insertion or replacement.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTInsert *)prepareInsertOrReplaceObjectsOfClass:(Class)<em>cls</em> into:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cls</code></th>
+						<td><p>The class of the object to be inserted.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do an insertion.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTInsert.html">WCTInsert</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareInsertObjectsOnProperties:into:" title="prepareInsertObjectsOnProperties:into:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareInsertObjectsOnProperties:into:">&ndash;&nbsp;prepareInsertObjectsOnProperties:into:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTInsert.html">WCTInsert</a> to do a partial insertion.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &amp;)<em>propertyList</em> into:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>propertyList</code></th>
+						<td><p>The specific properties to be inserted.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do an insertion.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTInsert.html">WCTInsert</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareInsertOrReplaceObjectsOnProperties:into:" title="prepareInsertOrReplaceObjectsOnProperties:into:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareInsertOrReplaceObjectsOnProperties:into:">&ndash;&nbsp;prepareInsertOrReplaceObjectsOnProperties:into:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTInsert.html">WCTInsert</a> to do a partial insertion or replacement.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &amp;)<em>propertyList</em> into:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>propertyList</code></th>
+						<td><p>The specific properties to be inserted.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do an insertion.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTInsert.html">WCTInsert</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareDeleteFromTable:" title="prepareDeleteFromTable:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareDeleteFromTable:">&ndash;&nbsp;prepareDeleteFromTable:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTDelete.html">WCTDelete</a> to do a deletion.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTDelete *)prepareDeleteFromTable:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do a deletion.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTDelete.html">WCTDelete</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareUpdateTable:onProperties:" title="prepareUpdateTable:onProperties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareUpdateTable:onProperties:">&ndash;&nbsp;prepareUpdateTable:onProperties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTUpdate.html">WCTUpdate</a> to do an update.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTUpdate *)prepareUpdateTable:(NSString *)<em>tableName</em> onProperties:(const WCTPropertyList &amp;)<em>propertyList</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do an update.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>propertyList</code></th>
+						<td><p>The specific properties to be updated.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTUpdate.html">WCTUpdate</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareSelectObjectsOfClass:fromTable:" title="prepareSelectObjectsOfClass:fromTable:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareSelectObjectsOfClass:fromTable:">&ndash;&nbsp;prepareSelectObjectsOfClass:fromTable:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTSelect.html">WCTSelect</a> to do an object selection.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTSelect *)prepareSelectObjectsOfClass:(Class)<em>cls</em> fromTable:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>cls</code></th>
+						<td><p>The class of the object to be selected.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do a selection.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTSelect.html">WCTSelect</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareSelectObjectsOnResults:fromTable:" title="prepareSelectObjectsOnResults:fromTable:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareSelectObjectsOnResults:fromTable:">&ndash;&nbsp;prepareSelectObjectsOnResults:fromTable:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTSelect.html">WCTSelect</a> to do an object selection on the specific results.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &amp;)<em>resultList</em> fromTable:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>resultList</code></th>
+						<td><p>The column results to be selected.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do a selection.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTSelect.html">WCTSelect</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareSelectRowsOnResults:fromTable:" title="prepareSelectRowsOnResults:fromTable:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareSelectRowsOnResults:fromTable:">&ndash;&nbsp;prepareSelectRowsOnResults:fromTable:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTRowSelect.html">WCTRowSelect</a> to do a row selection on the specific results.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &amp;)<em>resultList</em> fromTable:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>resultList</code></th>
+						<td><p>The column results to be selected.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableName</code></th>
+						<td><p>The name of the table to be used to do a selection.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTRowSelect.html">WCTRowSelect</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareSelectRowsOnResults:fromTables:" title="prepareSelectRowsOnResults:fromTables:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareSelectRowsOnResults:fromTables:">&ndash;&nbsp;prepareSelectRowsOnResults:fromTables:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTRowSelect.html">WCTRowSelect</a> to do a row selection on the specific results.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &amp;)<em>resultList</em> fromTables:(NSArray&lt;NSString*&gt; *)<em>tableNames</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>resultList</code></th>
+						<td><p>The column results to be selected.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableNames</code></th>
+						<td><p>The name of the table to be used to do a selection.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTRowSelect.html">WCTRowSelect</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareSelectMultiObjectsOnResults:fromTables:" title="prepareSelectMultiObjectsOnResults:fromTables:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareSelectMultiObjectsOnResults:fromTables:">&ndash;&nbsp;prepareSelectMultiObjectsOnResults:fromTables:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Generate a <a href="../Classes/WCTMultiSelect.html">WCTMultiSelect</a> to do a cross table selection on the specific results.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTMultiSelect *)prepareSelectMultiObjectsOnResults:(const WCTResultList &amp;)<em>resultList</em> fromTables:(NSArray&lt;NSString*&gt; *)<em>tableNames</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>resultList</code></th>
+						<td><p>The column results to be selected.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>tableNames</code></th>
+						<td><p>The name of the table to be used to do a selection.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTMultiSelect.html">WCTMultiSelect</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+ChainCall.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Core Methods" name="task_Core Methods"></a>
+						<h2 class="task-title">Core Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/exec:" title="exec:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/exec:">&ndash;&nbsp;exec:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Exec a specific sql.
+        Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)exec:(const WCDB : : Statement &amp;)<em>statement</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>statement</code></th>
+						<td><p>WINQ statement</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES if it is successfully executed</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepare:" title="prepare:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepare:">&ndash;&nbsp;prepare:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This interface is equivalent to [interface prepare:statement withError:nil];</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTStatement *)prepare:(const WCDB : : Statement &amp;)<em>statement</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>statement</code></th>
+						<td><p>WINQ statement</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTStatement.html">WCTStatement</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="../Classes/WCTStatement.html">WCTStatement</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepare:withError:" title="prepare:withError:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepare:withError:">&ndash;&nbsp;prepare:withError:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Prepare a specific sql.
+Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (WCTStatement *)prepare:(const WCDB : : Statement &amp;)<em>statement</em> withError:(WCTError **)<em>error</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>statement</code></th>
+						<td><p>WINQ statement</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/WCTStatement.html">WCTStatement</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="../Classes/WCTStatement.html">WCTStatement</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">WCTInterface+Core.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2017 Tencent. All rights reserved. Updated: 2017-12-18</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

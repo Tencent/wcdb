@@ -1,0 +1,1657 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Column.swift",
+      "line": null,
+      "symbol": "Column",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Column.swift",
+      "line": 23,
+      "symbol": "Column",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnDef.swift",
+      "line": 23,
+      "symbol": "ColumnDef",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnIndex.swift",
+      "line": null,
+      "symbol": "ColumnIndex",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnIndex.swift",
+      "line": 23,
+      "symbol": "ColumnIndex",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnResult.swift",
+      "line": null,
+      "symbol": "ColumnResult",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnResult.swift",
+      "line": 23,
+      "symbol": "ColumnResult",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 23,
+      "symbol": "ColumnType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 49,
+      "symbol": "FundamentalColumnType",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 53,
+      "symbol": "Int32.columnType",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 59,
+      "symbol": "Int64.columnType",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 65,
+      "symbol": "Double.columnType",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 71,
+      "symbol": "String.columnType",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ColumnType.swift",
+      "line": 77,
+      "symbol": "Data.columnType",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Conflict.swift",
+      "line": 23,
+      "symbol": "Conflict",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": null,
+      "symbol": "ColumnConvertible",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": null,
+      "symbol": "ExpressionConvertible",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": null,
+      "symbol": "LiteralValueConvertible",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": null,
+      "symbol": "SpecificColumnIndexConvertible",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": null,
+      "symbol": "SpecificOrderConvertible",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 23,
+      "symbol": "OrderConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 27,
+      "symbol": "SpecificOrderConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 37,
+      "symbol": "SpecificColumnDefConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 41,
+      "symbol": "ColumnIndexConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 45,
+      "symbol": "SpecificColumnIndexConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 55,
+      "symbol": "ColumnResultConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 59,
+      "symbol": "TableOrSubqueryConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 63,
+      "symbol": "ExpressionConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 76,
+      "symbol": "ColumnConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Convertible.swift",
+      "line": 99,
+      "symbol": "LiteralValueConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": null,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": null,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": null,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": null,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": null,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": null,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Expression.swift",
+      "line": 23,
+      "symbol": "Expression",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ForeignKey.swift",
+      "line": 23,
+      "symbol": "ForeignKey",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Handle.swift",
+      "line": null,
+      "symbol": "Handle",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Handle.swift",
+      "line": null,
+      "symbol": "Handle",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Handle.swift",
+      "line": null,
+      "symbol": "Handle",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Handle.swift",
+      "line": 25,
+      "symbol": "Handle",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/HandleStatement.swift",
+      "line": 22,
+      "symbol": "HandleStatement",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/JoinClause.swift",
+      "line": null,
+      "symbol": "JoinClause",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/JoinClause.swift",
+      "line": 22,
+      "symbol": "JoinClause",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": null,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": null,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": null,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": null,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": null,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": null,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/LiteralValue.swift",
+      "line": 22,
+      "symbol": "LiteralValue",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/ModuleArgument.swift",
+      "line": 23,
+      "symbol": "ModuleArgument",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Operable.swift",
+      "line": null,
+      "symbol": "ExpressionCanBeOperated",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Operable.swift",
+      "line": null,
+      "symbol": "ExpressionOperable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Operable.swift",
+      "line": 53,
+      "symbol": "ExpressionCanBeOperated",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Operable.swift",
+      "line": 193,
+      "symbol": "ExpressionOperable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Order.swift",
+      "line": null,
+      "symbol": "Order",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Order.swift",
+      "line": 23,
+      "symbol": "Order",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/OrderTerm.swift",
+      "line": 23,
+      "symbol": "OrderTerm",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Pragma.swift",
+      "line": 23,
+      "symbol": "Pragma",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Statement.swift",
+      "line": 23,
+      "symbol": "StatementType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Statement.swift",
+      "line": 46,
+      "symbol": "Statement",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementAlterTable.swift",
+      "line": 23,
+      "symbol": "StatementAlterTable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementAttach.swift",
+      "line": 22,
+      "symbol": "StatementAttach",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementCreateIndex.swift",
+      "line": 23,
+      "symbol": "StatementCreateIndex",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementCreateTable.swift",
+      "line": 22,
+      "symbol": "StatementCreateTable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementCreateVirtualTable.swift",
+      "line": 22,
+      "symbol": "StatementCreateVirtualTable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementDelete.swift",
+      "line": 22,
+      "symbol": "StatementDelete",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementDetach.swift",
+      "line": 22,
+      "symbol": "StatementDetach",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementDropIndex.swift",
+      "line": 22,
+      "symbol": "StatementDropIndex",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementDropTable.swift",
+      "line": 22,
+      "symbol": "StatementDropTable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementExplain.swift",
+      "line": 22,
+      "symbol": "StatementExplain",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementInsert.swift",
+      "line": 22,
+      "symbol": "StatementInsert",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementPragma.swift",
+      "line": 22,
+      "symbol": "StatementPragma",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementReindex.swift",
+      "line": 22,
+      "symbol": "StatementReindex",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementRelease.swift",
+      "line": 22,
+      "symbol": "StatementRelease",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementRollback.swift",
+      "line": 22,
+      "symbol": "StatementRollback",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementSavepoint.swift",
+      "line": 22,
+      "symbol": "StatementSavepoint",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementSelect.swift",
+      "line": null,
+      "symbol": "StatementSelect",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementSelect.swift",
+      "line": 22,
+      "symbol": "StatementSelect",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementTransaction.swift",
+      "line": 22,
+      "symbol": "StatementTransaction",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementUpdate.swift",
+      "line": 22,
+      "symbol": "StatementUpdate",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/StatementVacuum.swift",
+      "line": 22,
+      "symbol": "StatementVacuum",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Subquery.swift",
+      "line": null,
+      "symbol": "Subquery",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Subquery.swift",
+      "line": 22,
+      "symbol": "Subquery",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Subquery.swift",
+      "line": 51,
+      "symbol": "String.asTableOrSubquery()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/TableConstraint.swift",
+      "line": 22,
+      "symbol": "TableConstraint",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": null,
+      "symbol": "FTSModule",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": null,
+      "symbol": "Module",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": null,
+      "symbol": "Tokenize",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": null,
+      "symbol": "Tokenize",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": 23,
+      "symbol": "TokenizerInfoBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": 27,
+      "symbol": "CursorInfoBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": 38,
+      "symbol": "ModuleBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": 66,
+      "symbol": "Module",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": 162,
+      "symbol": "Tokenize",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/abstract/Tokenize.swift",
+      "line": 166,
+      "symbol": "FTSModule",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": null,
+      "symbol": "ColumnJSONCodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": null,
+      "symbol": "ColumnJSONDecodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": null,
+      "symbol": "ColumnJSONEncodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": null,
+      "symbol": "ColumnNSCodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": null,
+      "symbol": "ColumnNSDecodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": null,
+      "symbol": "ColumnNSEncodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 37,
+      "symbol": "Int8.FundamentalType",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 38,
+      "symbol": "Int8.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 41,
+      "symbol": "Int8.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 48,
+      "symbol": "Int16.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 51,
+      "symbol": "Int16.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 58,
+      "symbol": "Int32.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 61,
+      "symbol": "Int32.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 68,
+      "symbol": "Int64.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 71,
+      "symbol": "Int64.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 78,
+      "symbol": "Int.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 81,
+      "symbol": "Int.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 88,
+      "symbol": "UInt8.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 91,
+      "symbol": "UInt8.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 98,
+      "symbol": "UInt16.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 101,
+      "symbol": "UInt16.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 108,
+      "symbol": "UInt32.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 111,
+      "symbol": "UInt32.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 118,
+      "symbol": "UInt64.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 121,
+      "symbol": "UInt64.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 128,
+      "symbol": "UInt.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 131,
+      "symbol": "UInt.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 138,
+      "symbol": "Bool.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 141,
+      "symbol": "Bool.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 148,
+      "symbol": "Float.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 151,
+      "symbol": "Float.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 158,
+      "symbol": "Double.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 161,
+      "symbol": "Double.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 168,
+      "symbol": "String.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 171,
+      "symbol": "String.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 178,
+      "symbol": "Data.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 181,
+      "symbol": "Data.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 188,
+      "symbol": "Date.init(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 191,
+      "symbol": "Date.archivedValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 197,
+      "symbol": "ColumnJSONEncodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 204,
+      "symbol": "ColumnJSONDecodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 217,
+      "symbol": "ColumnJSONCodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 226,
+      "symbol": "ColumnNSEncodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 233,
+      "symbol": "ColumnNSDecodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/CodableType.swift",
+      "line": 249,
+      "symbol": "ColumnNSCodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/builtin/Master.swift",
+      "line": 23,
+      "symbol": "Master",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/base/Config.swift",
+      "line": null,
+      "symbol": "Configs",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/base/Config.swift",
+      "line": 24,
+      "symbol": "Configs",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/base/Core.swift",
+      "line": 23,
+      "symbol": "Core",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/base/HandlePool.swift",
+      "line": 23,
+      "symbol": "HandlePool",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/ColumnConstraintBinding.swift",
+      "line": 23,
+      "symbol": "ColumnConstraintBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/IndexBinding.swift",
+      "line": 22,
+      "symbol": "IndexBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/Property.swift",
+      "line": null,
+      "symbol": "Property",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/Property.swift",
+      "line": 23,
+      "symbol": "PropertyConvertible",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/Property.swift",
+      "line": 33,
+      "symbol": "Property",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/Redirectable.swift",
+      "line": null,
+      "symbol": "PropertyRedirectable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/Redirectable.swift",
+      "line": 23,
+      "symbol": "PropertyRedirectable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/TableBinding.swift",
+      "line": 23,
+      "symbol": "TableBinding",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/TableConstraintBinding.swift",
+      "line": 23,
+      "symbol": "TableConstraintBinding",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/TableConstraintBinding.swift",
+      "line": 28,
+      "symbol": "MultiPrimaryBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/TableConstraintBinding.swift",
+      "line": 52,
+      "symbol": "MultiUniqueBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/TableConstraintBinding.swift",
+      "line": 76,
+      "symbol": "CheckBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/TableConstraintBinding.swift",
+      "line": 88,
+      "symbol": "ForeignKeyBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/binding/VirtualTableBinding.swift",
+      "line": 23,
+      "symbol": "VirtualTableBinding",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/CodingTableKey.swift",
+      "line": null,
+      "symbol": "CodingTableKey",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/CodingTableKey.swift",
+      "line": null,
+      "symbol": "CodingTableKey",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/CodingTableKey.swift",
+      "line": null,
+      "symbol": "CodingTableKey",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/CodingTableKey.swift",
+      "line": null,
+      "symbol": "CodingTableKey",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/CodingTableKey.swift",
+      "line": 23,
+      "symbol": "CodingTableKeyBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/CodingTableKey.swift",
+      "line": 27,
+      "symbol": "CodingTableKey",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": null,
+      "symbol": "ColumnCodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": null,
+      "symbol": "ColumnDecodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": null,
+      "symbol": "ColumnEncodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": 23,
+      "symbol": "ColumnCodableBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": 27,
+      "symbol": "ColumnEncodableBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": 30,
+      "symbol": "ColumnEncodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": 46,
+      "symbol": "ColumnDecodableBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": 49,
+      "symbol": "ColumnDecodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/ColumnCodable.swift",
+      "line": 65,
+      "symbol": "ColumnCodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": null,
+      "symbol": "TableEncodable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": 24,
+      "symbol": "CanBeInitialized",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": 28,
+      "symbol": "TableCodableBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": 30,
+      "symbol": "TableEncodableBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": 32,
+      "symbol": "TableEncodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": 51,
+      "symbol": "TableDecodableBase",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/codable/TableCodable.swift",
+      "line": 53,
+      "symbol": "TableDecodable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/fts/AppleTokenize.swift",
+      "line": 23,
+      "symbol": "AppleTokenizerInfo",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/fts/AppleTokenize.swift",
+      "line": 27,
+      "symbol": "AppleCursorInfo",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/fts/AppleTokenize.swift",
+      "line": 90,
+      "symbol": "AppleModule",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/fts/WCDBTokenize.swift",
+      "line": 23,
+      "symbol": "WCDBTokenizerInfo",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/fts/WCDBTokenize.swift",
+      "line": 27,
+      "symbol": "WCDBCursorInfo",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/fts/WCDBTokenize.swift",
+      "line": 306,
+      "symbol": "WCDBModule",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 95,
+      "symbol": "InsertChainCallInterface.prepareInsert(on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 100,
+      "symbol": "InsertChainCallInterface.prepareInsertOrReplace(on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 105,
+      "symbol": "InsertChainCallInterface.prepareInsert(on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 110,
+      "symbol": "InsertChainCallInterface.prepareInsertOrReplace(on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 156,
+      "symbol": "UpdateChainCallInterface.prepareUpdate(table:on:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 160,
+      "symbol": "UpdateChainCallInterface.prepareUpdate(table:on:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 218,
+      "symbol": "RowSelectChainCallInterface.prepareRowSelect(on:fromTables:isDistinct:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 227,
+      "symbol": "RowSelectChainCallInterface.prepareRowSelect(on:fromTables:isDistinct:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 233,
+      "symbol": "RowSelectChainCallInterface.prepareRowSelect(on:fromTable:isDistinct:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 242,
+      "symbol": "RowSelectChainCallInterface.prepareRowSelect(on:fromTable:isDistinct:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 299,
+      "symbol": "SelectChainCallInterface.prepareSelect(on:fromTable:isDistinct:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 307,
+      "symbol": "SelectChainCallInterface.prepareSelect(on:fromTable:isDistinct:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 339,
+      "symbol": "MultiSelectChainCallInterface.prepareMultiSelect(on:fromTables:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/ChainCall.swift",
+      "line": 344,
+      "symbol": "MultiSelectChainCallInterface.prepareMultiSelect(on:fromTables:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/FundamentalValue.swift",
+      "line": 24,
+      "symbol": "FundamentalValue",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 94,
+      "symbol": "InsertInterface.insert(objects:on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 102,
+      "symbol": "InsertInterface.insertOrReplace(objects:on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 110,
+      "symbol": "InsertInterface.insert(objects:on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 117,
+      "symbol": "InsertInterface.insertOrReplace(objects:on:intoTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 208,
+      "symbol": "UpdateInterface.update(table:on:with:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 233,
+      "symbol": "UpdateInterface.update(table:on:with:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 250,
+      "symbol": "UpdateInterface.update(table:on:with:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 266,
+      "symbol": "UpdateInterface.update(table:on:with:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 476,
+      "symbol": "RowSelectInterface.getRows(on:fromTable:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 502,
+      "symbol": "RowSelectInterface.getRows(on:fromTable:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 517,
+      "symbol": "RowSelectInterface.getRow(on:fromTable:where:orderBy:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 530,
+      "symbol": "RowSelectInterface.getRow(on:fromTable:where:orderBy:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 691,
+      "symbol": "SelectInterface.getObjects(on:fromTable:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 715,
+      "symbol": "SelectInterface.getObjects(on:fromTable:where:orderBy:limit:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 730,
+      "symbol": "SelectInterface.getObject(on:fromTable:where:orderBy:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 744,
+      "symbol": "SelectInterface.getObject(on:fromTable:where:orderBy:offset:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 893,
+      "symbol": "TableInterface.create(table:with:and:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 899,
+      "symbol": "TableInterface.create(table:with:and:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 913,
+      "symbol": "TableInterface.create(index:with:forTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Interface.swift",
+      "line": 919,
+      "symbol": "TableInterface.create(index:with:forTable:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Select.swift",
+      "line": 23,
+      "symbol": "Select",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/Selectable.swift",
+      "line": null,
+      "symbol": "Selectable",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/TableInterface.swift",
+      "line": 23,
+      "symbol": "InsertTableInterface",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/TableInterface.swift",
+      "line": 32,
+      "symbol": "UpdateTableInterface",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/TableInterface.swift",
+      "line": 61,
+      "symbol": "DeleteTableInterface",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/TableInterface.swift",
+      "line": 65,
+      "symbol": "RowSelectTableInterface",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/core/interface/TableInterface.swift",
+      "line": 109,
+      "symbol": "SelectTableInterface",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/util/Error.swift",
+      "line": 23,
+      "symbol": "ErrorValue",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/util/Error.swift",
+      "line": 73,
+      "symbol": "Error",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/util/Optional.swift",
+      "line": 23,
+      "symbol": "OptionalRepresentable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sanhuazhang/Developer/Github/wcdb/swift/source/util/Optional.swift",
+      "line": 30,
+      "symbol": "Optional.nil",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/sanhuazhang/Developer/Github/wcdb/swift"
+}
