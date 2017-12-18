@@ -293,7 +293,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     }
 
     private void setPageSize() {
-        if (!mConfiguration.isInMemoryDb() && !mIsReadOnlyConnection) {
+        if (!mConfiguration.isInMemoryDb()) {
             String pragmaCmd;
             long newValue;
 
