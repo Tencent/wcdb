@@ -107,7 +107,7 @@ func sample_core_main(baseDirectory: String) {
         let resultList = [property1, property2]
 
         //Join clause
-        let joinClause = JoinClause(withTable: "message")
+        let joinClause = JoinClause(with: "message")
             .join("message_ext", with: .leftOuter)
             .on(localID1 == localID2)
 

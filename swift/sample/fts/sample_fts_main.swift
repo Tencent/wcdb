@@ -74,9 +74,13 @@ func sample_fts_main(baseDirectory: String) {
     let tableNameFTS = classNameFTS
 
     let databaseFTS = Database(withPath: pathFTS)
-    databaseFTS.close(onClosed: {
-        try databaseFTS.removeFiles()
-    })
+    do {
+        try databaseFTS.close(onClosed: {
+            try databaseFTS.removeFiles()
+        })
+    } catch {
+        print("close database error: \(error)")
+    }
 
     databaseFTS.setTokenizes(.WCDB)
 
@@ -119,7 +123,7 @@ func sample_fts_main(baseDirectory: String) {
         let tableProperty = Column(named: tableNameFTS)
         let row: FundamentalRow = (try databaseFTS.getRow(on: tableProperty.snippet(), tableProperty.offsets(),
                                                           fromTable: tableNameFTS,
-                                                          where: tableProperty.match("12*")))!
+                                                          where: tableProperty.match("12*")))
 
         print("Snippet: \(String(describing: row[0])) Offset: \(String(describing: row[1]))")
     } catch let error {

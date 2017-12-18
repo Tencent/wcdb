@@ -97,7 +97,7 @@ func sample_repair_main(baseDirectory: String) {
         recover.close(onClosed: {
             try? recover.removeFiles()
         })
-        database.close(onClosed: {
+        try database.close(onClosed: {
             try recover.recover(fromPath: path,
                                 withPageSize: pageSize,
                                 databaseKey: databaseCipher,
