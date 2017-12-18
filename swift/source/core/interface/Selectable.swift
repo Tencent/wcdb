@@ -59,6 +59,10 @@ protocol Selectable: CoreRepresentable {
 }
 
 extension Selectable {
+    /// WINQ interface
+    ///
+    /// - Parameter condition: Expression convertible
+    /// - Returns: `self`
     @discardableResult
     public func `where`(_ condition: Condition) -> Self {
         statement.where(condition)

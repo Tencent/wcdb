@@ -61,7 +61,8 @@ public final class Insert: CoreRepresentable {
         .values(Array(repeating: Expression.bindingParameter, count: properties!.count))
 
     /// Execute the insert chain call with objects.
-    /// Note that it will run embedded transaction while objects.count>1.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.  
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -72,7 +73,8 @@ public final class Insert: CoreRepresentable {
     }
 
     /// Execute the insert chain call with objects.
-    /// Note that it will run embedded transaction while objects.count>1.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.  
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///

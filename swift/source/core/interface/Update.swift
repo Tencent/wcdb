@@ -67,7 +67,7 @@ public final class Update: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter condition: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func `where`(_ condition: Condition) -> Update {
         statement.where(condition)
@@ -77,7 +77,7 @@ public final class Update: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter orderList: Expression convertible list
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func order(by orderList: OrderBy...) -> Update {
         statement.order(by: orderList)
@@ -87,7 +87,7 @@ public final class Update: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter orderList: Expression convertible list
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Update {
         statement.order(by: orderList)
@@ -99,7 +99,7 @@ public final class Update: CoreRepresentable {
     /// - Parameters:
     ///   - begin: Expression convertible
     ///   - end: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func limit(from begin: Limit, to end: Limit) -> Update {
         statement.limit(from: begin, to: end)
@@ -109,7 +109,7 @@ public final class Update: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter limit: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func limit(_ limit: Limit) -> Update {
         statement.limit(limit)
@@ -121,7 +121,7 @@ public final class Update: CoreRepresentable {
     /// - Parameters:
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func limit(_ limit: Limit, offset: Offset) -> Update {
         statement.limit(limit, offset: offset)

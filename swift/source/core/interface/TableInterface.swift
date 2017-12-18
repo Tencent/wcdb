@@ -77,11 +77,11 @@ public protocol RowSelectTableInterface {
     func getRow(on columnResultConvertibleList: ColumnResultConvertible...,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
-                offset: Offset?) throws -> FundamentalRow?
+                offset: Offset?) throws -> FundamentalRow
     func getRow(on columnResultConvertibleList: [ColumnResultConvertible],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
-                offset: Offset?) throws -> FundamentalRow?
+                offset: Offset?) throws -> FundamentalRow
 
     func getColumn(on result: ColumnResultConvertible,
                    where condition: Condition?,

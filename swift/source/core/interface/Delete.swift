@@ -54,7 +54,7 @@ public final class Delete: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter condition: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func `where`(_ condition: Condition) -> Delete {
         statement.where(condition)
@@ -64,7 +64,7 @@ public final class Delete: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter orderList: Expression convertible list
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func order(by orderList: OrderBy...) -> Delete {
         return order(by: orderList)
@@ -73,7 +73,7 @@ public final class Delete: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter orderList: Expression convertible list
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Delete {
         statement.order(by: orderList)
@@ -85,7 +85,7 @@ public final class Delete: CoreRepresentable {
     /// - Parameters:
     ///   - begin: Expression convertible
     ///   - end: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func limit(from begin: Limit, to end: Limit) -> Delete {
         statement.limit(from: begin, to: end)
@@ -95,7 +95,7 @@ public final class Delete: CoreRepresentable {
     /// WINQ interface for SQL
     ///
     /// - Parameter limit: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func limit(_ limit: Limit) -> Delete {
         statement.limit(limit)
@@ -107,7 +107,7 @@ public final class Delete: CoreRepresentable {
     /// - Parameters:
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
-    /// - Returns: self
+    /// - Returns: `self`
     @discardableResult
     public func limit(_ limit: Limit, offset: Offset) -> Delete {
         statement.limit(limit, offset: offset)
