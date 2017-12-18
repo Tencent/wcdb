@@ -251,6 +251,7 @@ class RowSelectTests: CRUDTestCase {
         //When
         let results: FundamentalRow? = WCDBAssertNoThrowReturned(try rowSelect.nextRow())
         XCTAssertNotNil(results)
+        XCTAssertEqual(results!.count, 3)
         //Then
         XCTAssertEqual(results![0].int32Value, 1)
         XCTAssertEqual(results![1].doubleValue, 2.0)

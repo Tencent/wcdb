@@ -168,13 +168,13 @@ class SelectInterfaceTests: CRUDTestCase {
 
     func testRowSelectOne() {
         //When
-        let results: FundamentalRow? = WCDBAssertNoThrowReturned(
+        let results: FundamentalRow = WCDBAssertNoThrowReturned(
             try database.getRow(fromTable: CRUDObject.name)
         )
         //Then
-        XCTAssertNotNil(results)
-        XCTAssertEqual(Int(results![0].int64Value), preInsertedObjects[0].variable1)
-        XCTAssertEqual(results![1].stringValue, preInsertedObjects[0].variable2)
+        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(Int(results[0].int64Value), preInsertedObjects[0].variable1)
+        XCTAssertEqual(results[1].stringValue, preInsertedObjects[0].variable2)
     }
 
     func testRowSelectColumn() {
@@ -354,13 +354,13 @@ class SelectInterfaceTests: CRUDTestCase {
         let table: Table<CRUDObject>? = WCDBAssertNoThrowReturned(try database.getTable(named: CRUDObject.name))
         XCTAssertNotNil(table)
         //When
-        let results: FundamentalRow? = WCDBAssertNoThrowReturned(
+        let results: FundamentalRow = WCDBAssertNoThrowReturned(
             try table!.getRow()
         )
         //Then
-        XCTAssertNotNil(results)
-        XCTAssertEqual(Int(results![0].int64Value), preInsertedObjects[0].variable1)
-        XCTAssertEqual(results![1].stringValue, preInsertedObjects[0].variable2)
+        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(Int(results[0].int64Value), preInsertedObjects[0].variable1)
+        XCTAssertEqual(results[1].stringValue, preInsertedObjects[0].variable2)
     }
 
     func testTableRowSelectColumn() {
@@ -553,7 +553,7 @@ class SelectInterfaceTests: CRUDTestCase {
         //Then
         do {
             let row = try database.getRow(on: Column.any, fromTable: tableName)
-            XCTAssertNil(row)
+            XCTAssertEqual(row.count, 0)
 
             let distinctValue = try database.getDistinctValue(on: Column.any, fromTable: tableName)
             XCTAssertEqual(distinctValue.type, .null)
@@ -574,7 +574,7 @@ class SelectInterfaceTests: CRUDTestCase {
         //Then
         do {
             let row = try wrappedTable.getRow(on: Column.any)
-            XCTAssertNil(row)
+            XCTAssertEqual(row.count, 0)
 
             let distinctValue = try wrappedTable.getDistinctValue(on: Column.any)
             XCTAssertEqual(distinctValue.type, .null)
