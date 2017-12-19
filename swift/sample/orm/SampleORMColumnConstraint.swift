@@ -33,9 +33,9 @@ class SampleORMColumnConstraint: TableCodable {
         case notNullProperty
         static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
             return [
-                .primaryProperty: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true),
-                .uniqueProperty: ColumnConstraintBinding(isNotNull: true),
-                .notNullProperty: ColumnConstraintBinding(isUnique: true)
+                primaryProperty: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true),
+                uniqueProperty: ColumnConstraintBinding(isNotNull: true),
+                notNullProperty: ColumnConstraintBinding(isUnique: true)
             ]
         }
     }
