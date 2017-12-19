@@ -33,7 +33,8 @@ public struct ColumnConstraintBinding {
                 orderBy term: OrderTerm? = nil,
                 isAutoIncrement: Bool = false,
                 onConflict conflict: Conflict? = nil,
-                isNotNull: Bool = false, isUnique: Bool = false,
+                isNotNull: Bool = false,
+                isUnique: Bool = false,
                 defaultTo defaultValue: ColumnDef.DefaultType? = nil) {
         self.isPrimary = isPrimary
         self.isAutoIncrement = isAutoIncrement
