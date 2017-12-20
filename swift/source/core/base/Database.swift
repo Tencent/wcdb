@@ -804,7 +804,7 @@ extension Database {
     ///   - backupKey: The cipher key for backup
     /// - Throws: `Error`
     public func recover(fromPath source: String,
-                        withPageSize pageSize: Int32,
+                        withPageSize pageSize: Int32 = 4096,
                         databaseKey: Data? = nil,
                         backupKey: Data? = nil) throws {
         let handle = try flowOut()
@@ -815,7 +815,6 @@ extension Database {
     }
 }
 
-// MARK: - Test1112
 extension Database: InsertChainCallInterface {}
 extension Database: UpdateChainCallInterface {}
 extension Database: DeleteChainCallInterface {}
