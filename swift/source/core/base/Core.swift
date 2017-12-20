@@ -34,7 +34,7 @@ public protocol Core {
     typealias TransactionClosure = () throws -> Void
     typealias ControlableTransactionClosure = () throws -> Bool
     func run(transaction: TransactionClosure) throws
-    func run(controlableTransaction: ControlableTransactionClosure) throws
+    func run(controllableTransaction: ControlableTransactionClosure) throws
     func run(embeddedTransaction: TransactionClosure) throws
 }
 

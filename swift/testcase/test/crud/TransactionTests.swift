@@ -75,7 +75,7 @@ class TransactionTests: CRUDTestCase {
         object.variable1 = 3
         object.variable2 = self.name
         //When
-        XCTAssertThrowsError(try database.run(controlableTransaction: {
+        XCTAssertThrowsError(try database.run(controllableTransaction: {
             try database.insert(objects: object, intoTable: "nonexistentTable")
             return true
         }))
@@ -116,7 +116,7 @@ class TransactionTests: CRUDTestCase {
         object.variable1 = 3
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.run(controlableTransaction: {
+        XCTAssertNoThrow(try database.run(controllableTransaction: {
             try database.insert(objects: object, intoTable: CRUDObject.name)
             return false
         }))
@@ -134,7 +134,7 @@ class TransactionTests: CRUDTestCase {
         object.variable1 = 3
         object.variable2 = self.name
         //When
-        XCTAssertNoThrow(try database.run(controlableTransaction: {
+        XCTAssertNoThrow(try database.run(controllableTransaction: {
             try database.insert(objects: object, intoTable: CRUDObject.name)
             return true
         }))
@@ -275,7 +275,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
-        XCTAssertNoThrow(try transaction.run(controlableTransaction: {
+        XCTAssertNoThrow(try transaction.run(controllableTransaction: {
             try transaction.insert(objects: object, intoTable: CRUDObject.name)
             return false
         }))
@@ -296,7 +296,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
-        XCTAssertThrowsError(try transaction.run(controlableTransaction: {
+        XCTAssertThrowsError(try transaction.run(controllableTransaction: {
             try transaction.insert(objects: object, intoTable: "nonexistentTable")
             return true
         }))
@@ -311,7 +311,7 @@ class TransactionTests: CRUDTestCase {
         XCTAssertNotNil(optionalTransaction)
         let transaction = optionalTransaction!
         //When
-        XCTAssertNoThrow(try transaction.run(controlableTransaction: {
+        XCTAssertNoThrow(try transaction.run(controllableTransaction: {
             try transaction.insert(objects: object, intoTable: CRUDObject.name)
             return true
         }))

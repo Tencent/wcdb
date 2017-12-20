@@ -72,14 +72,14 @@ class DatabaseTests: BaseTestCase {
         //When
         XCTAssertTrue(database.canOpen)
         XCTAssertTrue(database.isOpened)
-        database.purgeFreeHandles()
+        database.purge()
         //Then
         XCTAssertFalse(database.isOpened)
 
         //When
         XCTAssertTrue(database.canOpen)
         XCTAssertTrue(database.isOpened)
-        Database.purgeFreeHandlesInAllDatabase()
+        Database.purge()
         //Then
         XCTAssertFalse(database.isOpened)
     }

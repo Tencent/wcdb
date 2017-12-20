@@ -172,20 +172,20 @@ extension Transaction: Core {
         }
     }
 
-    /// Run a controlable transaction in closure
+    /// Run a controllable transaction in closure
     ///
-    ///     try transaction.run(controlableTransaction: { () throws -> Bool in 
+    ///     try transaction.run(controllableTransaction: { () throws -> Bool in 
     ///         try transaction.insert(objects: objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
     ///
-    /// - Parameter controlableTransaction: Operation inside transaction
+    /// - Parameter controllableTransaction: Operation inside transaction
     /// - Throws: `Error`
-    public func run(controlableTransaction: ControlableTransactionClosure) throws {
+    public func run(controllableTransaction: ControlableTransactionClosure) throws {
         mutex.lock(); defer { mutex.unlock() }
         try begin()
         do {
-            if try controlableTransaction() {
+            if try controllableTransaction() {
                 try commit()
             } else {
                 try rollback()

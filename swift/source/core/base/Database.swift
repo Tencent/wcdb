@@ -59,7 +59,7 @@ public final class Database {
                     queue: nil,
                     using: { (_) in
                         purgeFreeHandleQueue.async {
-                            Database.purgeFreeHandlesInAllDatabase()
+                            Database.purge()
                         }
                     })
             })
@@ -167,18 +167,18 @@ public final class Database {
         handlePool.unblockade()
     }
 
-    /// Purge all free handles of this database.  
+    /// Purge all unused memory of this database.  
     /// WCDB will cache and reuse some sqlite handles to improve performance.   
     /// The max count of free sqlite handles is same
     /// as the number of concurrent threads supported by the hardware implementation.  
     /// You can call it to save some memory.
-    public func purgeFreeHandles() {
+    public func purge() {
         handlePool.purgeFreeHandles()
     }
 
-    /// Purge all free handles of all databases.  
+    /// Purge all unused memory of all databases.  
     /// Note that WCDB will call this interface automatically while it receives memory warning on iOS.
-    public static func purgeFreeHandlesInAllDatabase() {
+    public static func purge() {
         HandlePool.purgeFreeHandlesInAllPool()
     }
 }
@@ -649,20 +649,20 @@ extension Database: Core {
         }
     }
 
-    /// Run a controlable transaction in closure
+    /// Run a controllable transaction in closure
     ///
-    ///     try database.run(controlableTransaction: { () throws -> Bool in 
+    ///     try database.run(controllableTransaction: { () throws -> Bool in 
     ///         try database.insert(objects: objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
     ///
-    /// - Parameter controlableTransaction: Operation inside transaction
+    /// - Parameter controllableTransaction: Operation inside transaction
     /// - Throws: `Error`
-    public func run(controlableTransaction: ControlableTransactionClosure) throws {
+    public func run(controllableTransaction: ControlableTransactionClosure) throws {
         try begin(.immediate)
         var shouldRollback = true
         do {
-            if try controlableTransaction() {
+            if try controllableTransaction() {
                 try commit()
             } else {
                 shouldRollback = false
