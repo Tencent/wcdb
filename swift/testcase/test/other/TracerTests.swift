@@ -177,41 +177,6 @@ class TracerTests: BaseTestCase {
         XCTAssertTrue(`catch`)
     }
 
-    func testTracePerformanceCommit() {
-        //Give
-        let tableName = TracerObject.name
-        let expectedTag = self.recommendTag
-        let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?)"
-
-        //Give
-        let database = Database(withFileURL: self.recommendedPath)
-        XCTAssertNoThrow(try database.close {
-            XCTAssertNoThrow(try database.removeFiles())
-        })
-        database.tag = expectedTag
-
-        //Then
-        var `catch` = false
-        database.trace { (tag, sqls, cost) in
-            if tag != nil && tag! == expectedTag && sqls.contains(where: { (arg) -> Bool in
-                return arg.key == expectedSQL
-            }) {
-                XCTAssertGreaterThan(cost, 0)
-                `catch` = true
-            }
-        }
-
-        //When
-        XCTAssertNoThrow(try database.create(table: tableName, of: TracerObject.self))
-        let template = TracerObject()
-        template.isAutoIncrement = true
-        let objects = [TracerObject](repeating: template, count: 1000000)
-        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: tableName))
-        XCTAssertNoThrow(database.close())
-
-        XCTAssertTrue(`catch`)
-    }
-
     func testTraceRollback() {
         //Give
         let tableName = TracerObject.name

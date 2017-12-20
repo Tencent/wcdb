@@ -458,16 +458,6 @@ extension Database {
         }
     }
 
-    /// You can register a tracer to monitor the performance of all SQLs in this database.  
-    /// The database tracer will recover the global tracer for specifiy database.
-    ///
-    /// - Parameter performanceTracer: trace.
-    public func trace(performance performanceTracer: @escaping PerformanceTracer) {
-        handlePool.setConfig(named: DefaultConfigOrder.trace.description) { (handle) in
-            handle.trace(performance: performanceTracer)
-        }
-    }
-
     /// This interface is equivalent to `database.setTokenizes(tokenizes)`
     ///
     /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named `.WCDB` or `.Apple`
