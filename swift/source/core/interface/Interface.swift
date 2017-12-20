@@ -367,7 +367,7 @@ public protocol RowSelectInterface {
                  fromTable table: String,
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
-                 limit: Limit?, 
+                 limit: Limit?,
                  offset: Offset?) throws -> FundamentalRowXColumn
 
     /// Get row by specific selecting
