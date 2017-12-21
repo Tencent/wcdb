@@ -23,7 +23,7 @@ import Foundation
 public struct Expression: Describable {
     public private(set) var description: String
 
-    public static let bindingParameter = Expression(withRaw: "?")
+    public static let bindParameter = Expression(withRaw: "?")
 
     public init(with columnConvertible: ColumnConvertible) {
         description = columnConvertible.asColumn().description

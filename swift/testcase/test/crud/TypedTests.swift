@@ -738,7 +738,7 @@ class TypedTests: CRUDTestCase {
 
         let statementInsert = StatementInsert().insert(intoTable: tableName,
                                                        with: TypedMatchTable.Properties.variable1)
-                                               .values(Expression.bindingParameter)
+                                               .values(Expression.bindParameter)
         let coreStatement = try? database.prepare(statementInsert)
         XCTAssertNotNil(coreStatement)
         let wrappedCoreStatement = coreStatement!

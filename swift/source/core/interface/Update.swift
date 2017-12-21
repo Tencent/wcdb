@@ -60,7 +60,7 @@ public final class Update: CoreRepresentable {
         self.statement
             .update(table: table)
             .set(propertyConvertibleList.map { (propertyConvertible) -> StatementUpdate.ValueType in
-            return (propertyConvertible, Expression.bindingParameter)
+            return (propertyConvertible, Expression.bindParameter)
         })
     }
 

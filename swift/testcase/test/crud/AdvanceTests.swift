@@ -78,8 +78,8 @@ class AdvanceTests: CRUDTestCase {
 
     func testCoreStatementWrite() {
         //Give
-        let bindingParameters = Array(repeating: Expression.bindingParameter, count: 2)
-        let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindingParameters)
+        let bindParameters = Array(repeating: Expression.bindParameter, count: 2)
+        let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindParameters)
         let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
@@ -255,8 +255,8 @@ class AdvanceTests: CRUDTestCase {
 
     func testStepFailed() {
         //Give
-        let bindingParameters = Array(repeating: Expression.bindingParameter, count: 2)
-        let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindingParameters)
+        let bindParameters = Array(repeating: Expression.bindParameter, count: 2)
+        let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindParameters)
         let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!

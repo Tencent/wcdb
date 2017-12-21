@@ -36,7 +36,7 @@ final class CommonStatement {
 
     public static let fts3Tokenizer = StatementSelect()
         .select(Expression.function(named: "fts3_tokenizer",
-                                    Array(repeating: Expression.bindingParameter, count: 2))
+                                    Array(repeating: Expression.bindParameter, count: 2))
     )
 
     public static let beginTransactionImmediate = StatementTransaction().begin(.immediate)

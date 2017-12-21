@@ -58,7 +58,7 @@ public final class Insert: CoreRepresentable {
         .insert(intoTable: name,
                 with: properties!,
                 onConflict: isReplace ? Conflict.replace : nil)
-        .values(Array(repeating: Expression.bindingParameter, count: properties!.count))
+        .values(Array(repeating: Expression.bindParameter, count: properties!.count))
 
     /// Execute the insert chain call with objects.
     ///
