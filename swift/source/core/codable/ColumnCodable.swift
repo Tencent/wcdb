@@ -20,6 +20,7 @@
 
 import Foundation
 
+// Base
 public protocol ColumnCodableBase {
     static var columnType: ColumnType {get}
 }
@@ -27,6 +28,11 @@ public protocol ColumnCodableBase {
 public protocol ColumnEncodableBase: Encodable, ColumnCodableBase {
     func archivedFundamentalValue() -> FundamentalColumnType?
 }
+public protocol ColumnDecodableBase: Decodable, ColumnCodableBase {
+    init?(with value: FundamentalColumnType)
+}
+
+// Column 
 public protocol ColumnEncodable: ColumnEncodableBase, LiteralValueConvertible, ExpressionCanBeOperated {
     associatedtype FundamentalType: FundamentalColumnType
     func archivedValue() -> FundamentalType?
@@ -43,9 +49,6 @@ extension ColumnEncodable {
     }
 }
 
-public protocol ColumnDecodableBase: Decodable, ColumnCodableBase {
-    init?(with value: FundamentalColumnType)
-}
 public protocol ColumnDecodable: ColumnDecodableBase {
     associatedtype FundamentalType: FundamentalColumnType
     init?(with value: FundamentalType)
@@ -66,5 +69,43 @@ public protocol ColumnCodable: ColumnEncodable, ColumnDecodable {}
 extension ColumnCodable {
     public static var columnType: ColumnType {
         return FundamentalType.columnType
+    }
+}
+
+// Collection
+public protocol CollectionColumnEncodable: ColumnEncodableBase {
+    func archivedValue() -> Data?
+}
+extension CollectionColumnEncodable {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public func archivedFundamentalValue() -> FundamentalColumnType? {
+        return archivedValue()
+    }
+    public func asLiteralValue() -> LiteralValue {
+        return LiteralValue(self)
+    }
+}
+
+public protocol CollectionColumnDecodable: ColumnDecodableBase {
+    init?(with value: Data)
+}
+extension CollectionColumnDecodable {
+    public static var columnType: ColumnType {
+        return .BLOB
+    }
+    public init?(with value: FundamentalColumnType) {
+        guard let typedValue = value as? Data else {
+            return nil
+        }
+        self.init(with: typedValue)
+    }
+}
+
+public protocol CollectionColumnCodable: CollectionColumnEncodable, CollectionColumnDecodable {}
+extension CollectionColumnCodable {
+    public static var columnType: ColumnType {
+        return .BLOB
     }
 }

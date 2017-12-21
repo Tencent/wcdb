@@ -45,7 +45,7 @@ public struct ColumnConstraintBinding {
         self.conflict = conflict
     }
 
-    public init<ColumnEncodableType: ColumnEncodable>(
+    public init<ColumnEncodableType: ColumnEncodableBase>(
         isPrimary: Bool = false,
         orderBy term: OrderTerm? = nil,
         isAutoIncrement: Bool = false,
@@ -54,7 +54,7 @@ public struct ColumnConstraintBinding {
         isUnique: Bool = false,
         defaultTo defaultEncodableValue: ColumnEncodableType) {
         var defaultValue: ColumnDef.DefaultType!
-        let value = defaultEncodableValue.archivedValue()
+        let value = defaultEncodableValue.archivedFundamentalValue()
         switch ColumnEncodableType.columnType {
         case .integer32:
             defaultValue = .int32((value as? Int32) ?? 0)

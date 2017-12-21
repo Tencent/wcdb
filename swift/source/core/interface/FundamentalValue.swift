@@ -28,8 +28,8 @@ public struct FundamentalValue {
         base = nil
     }
 
-    public init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
-        base = columnEncodableValue.archivedValue()
+    public init<ColumnEncodableType: ColumnEncodableBase>(_ columnEncodableValue: ColumnEncodableType) {
+        base = columnEncodableValue.archivedFundamentalValue()
     }
 
     public var type: ColumnType {

@@ -88,6 +88,9 @@ class TypedTests: CRUDTestCase {
         var codable: TypedCodableObject = TypedCodableObject.variable
         var bool: Bool = false
         var date: Date = Date()
+        var array: [Int] = []
+        var dictionary: [Int: String] = [:]
+        var set: Set<String> = []
         required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedTestObject
@@ -110,6 +113,9 @@ class TypedTests: CRUDTestCase {
             case codable
             case bool
             case date
+            case array
+            case dictionary
+            case set = "db_set"
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
@@ -148,6 +154,11 @@ class TypedTests: CRUDTestCase {
                 codable = .variable
                 bool = true
                 date = Date.distantFuture
+                for i in 0..<10000 {
+                    array.append(i)
+                    dictionary[i] = "\(i)"
+                    set.insert("\(i)")
+                }
             case .lowerBoundary:
                 int = Int.min
                 int8 = Int8.min
@@ -176,6 +187,9 @@ class TypedTests: CRUDTestCase {
                 codable = .variable
                 bool = false
                 date = Date.distantPast
+                array.removeAll()
+                dictionary.removeAll()
+                set.removeAll()
             }
         }
 
@@ -199,6 +213,9 @@ class TypedTests: CRUDTestCase {
                 && lhs.nsCodable == rhs.nsCodable
                 && lhs.bool == rhs.bool
                 && lhs.date == rhs.date
+                && lhs.array == rhs.array
+                && lhs.dictionary == rhs.dictionary
+                && lhs.set == rhs.set
         }
         var debugDescription: String {
             return """
@@ -221,6 +238,9 @@ class TypedTests: CRUDTestCase {
             codable: \(String(describing: codable))
             bool: \(String(describing: bool))
             date: \(String(describing: date))
+            array: \(String(describing: array))
+            dictionary: \(String(describing: dictionary))
+            set: \(String(describing: set))
             """
         }
     }

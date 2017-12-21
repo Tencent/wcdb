@@ -23,12 +23,16 @@ import Foundation
 /*
  * Builtin codable implementation
  *
- * Bool, Int, Int8, Int16, Int32, Int64, UInt, UInt8, UInt16, UInt32, UInt64, Float, Double, NSNumber 
- * String
- * Data
- * Date
- * 
- * TODO: Array, Dictionary, Set, URL 
+ * .integer32:
+ *      Bool, Int, Int8, Int16, Int32, UInt, UInt8, UInt16, UInt32  
+ * .integer64:
+ *      Int64, UInt64, Date
+ * .float:
+ *      Float, Double
+ * .text:
+ *      String, URL
+ * .BLOB:
+ *      Data, Array, Dictionary, Set
  *
  */
 
@@ -190,6 +194,52 @@ extension Date: ColumnCodable {
     }
     public func archivedValue() -> Int64? {
         return Int64(timeIntervalSince1970)
+    }
+}
+
+extension URL: ColumnCodable {
+    public typealias FundamentalType = String
+    public init?(with value: String) {
+        self.init(string: value)
+    }
+    public func archivedValue() -> String? {
+        return self.absoluteString
+    }
+}
+
+extension Array: CollectionColumnCodable {
+    public init?(with value: Data) {
+        guard let decodable = try? JSONDecoder().decode(Array.self, from: value) else {
+            return nil
+        }
+        self = decodable
+    }
+    public func archivedValue() -> Data? {
+        return try? JSONEncoder().encode(self)
+    }
+}
+
+extension Dictionary: CollectionColumnCodable {
+    public init?(with value: Data) {
+        guard let decodable = try? JSONDecoder().decode(Dictionary.self, from: value) else {
+            return nil
+        }
+        self = decodable
+    }
+    public func archivedValue() -> Data? {
+        return try? JSONEncoder().encode(self)
+    }
+}
+
+extension Set: CollectionColumnCodable {
+    public init?(with value: Data) {
+        guard let decodable = try? JSONDecoder().decode(Set.self, from: value) else {
+            return nil
+        }
+        self = decodable
+    }
+    public func archivedValue() -> Data? {
+        return try? JSONEncoder().encode(self)
     }
 }
 

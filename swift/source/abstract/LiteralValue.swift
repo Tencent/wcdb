@@ -51,7 +51,7 @@ public struct LiteralValue: Describable {
         description = "NULL"
     }
 
-    public init<ColumnEncodableType: ColumnEncodable>(_ columnEncodableValue: ColumnEncodableType) {
+    public init<ColumnEncodableType: ColumnEncodableBase>(_ columnEncodableValue: ColumnEncodableType) {
         if let value = columnEncodableValue.archivedFundamentalValue() {
             switch ColumnEncodableType.columnType {
             case .integer32:
