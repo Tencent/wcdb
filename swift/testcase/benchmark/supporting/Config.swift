@@ -42,9 +42,9 @@ class Config {
 //            tableCount = 30000
 //            syncWriteCount = 2000
 //        #elseif WCDB_OSX
-            readCount = 500000
-            writeCount = 50000
-            batchWriteCount = 500000
+            readCount = 1000000
+            writeCount = 100000
+            batchWriteCount = 1000000
 
             tableCount = 50000
             syncWriteCount = 500
