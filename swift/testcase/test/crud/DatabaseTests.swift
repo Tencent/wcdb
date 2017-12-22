@@ -31,14 +31,14 @@ class DatabaseTests: BaseTestCase {
         do {
             let database: Database = Database(withPath: path)
             database.tag = tag
-            taggedDatabase = WCDBAssertNoThrowReturned(try Database(with: tag))
+            taggedDatabase = WCDBAssertNoThrowReturned(try Database(withExistingTag: tag))
         }
         XCTAssertNotNil(taggedDatabase)
         XCTAssertEqual(taggedDatabase!.tag, tag)
         XCTAssertEqual(taggedDatabase!.path, path)
 
         //Non-existent tag
-        XCTAssertThrowsError(try Database(with: tag - 1))
+        XCTAssertThrowsError(try Database(withExistingTag: tag - 1))
     }
 
     func testMultiDatabase() {
