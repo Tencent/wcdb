@@ -271,35 +271,3 @@ extension ColumnJSONCodable {
         return .BLOB
     }
 }
-
-//NSCodable
-public protocol ColumnNSEncodable: ColumnEncodable where FundamentalType == Data {}
-extension ColumnNSEncodable {
-    public func archivedValue() -> FundamentalType? {
-        return NSKeyedArchiver.archivedData(withRootObject: self)
-    }
-}
-
-public protocol ColumnNSDecodable: ColumnDecodable where FundamentalType == Data {}
-extension ColumnNSDecodable {
-    public init?(with value: FundamentalType) {
-        guard value.count > 0 else {
-            return nil
-        }
-        guard let object = NSKeyedUnarchiver.unarchiveObject(with: value) else {
-            return nil
-        }
-        guard let typedObject = object as? Self else {
-            return nil
-        }
-        self = typedObject
-    }
-}
-
-public protocol ColumnNSCodable: ColumnNSEncodable, ColumnNSDecodable {}
-extension ColumnNSCodable {
-    public typealias FundamentalType = Data
-    public static var columnType: ColumnType {
-        return .BLOB
-    }
-}

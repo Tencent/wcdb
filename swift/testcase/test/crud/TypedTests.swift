@@ -35,18 +35,6 @@ class TypedTests: CRUDTestCase {
         }
     }
 
-    struct TypedNSCodableObject: ColumnJSONCodable, Equatable, CustomDebugStringConvertible {
-        static func == (lhs: TypedNSCodableObject, rhs: TypedNSCodableObject) -> Bool {
-            return lhs.variable == rhs.variable
-        }
-
-        var variable: Int = 1
-
-        var debugDescription: String {
-            return "\(variable)"
-        }
-    }
-
     enum TypedCodableObject: Int, ColumnCodable, Equatable, CustomDebugStringConvertible {
         case variable = 0
 
@@ -84,7 +72,6 @@ class TypedTests: CRUDTestCase {
         var double: Double = 0
         var data: Data = Data()
         var jsonCodable: TypedJSONCodableObject = TypedJSONCodableObject()
-        var nsCodable: TypedNSCodableObject = TypedNSCodableObject()
         var codable: TypedCodableObject = TypedCodableObject.variable
         var bool: Bool = false
         var date: Date = Date()
@@ -109,7 +96,6 @@ class TypedTests: CRUDTestCase {
             case double
             case data
             case jsonCodable
-            case nsCodable
             case codable
             case bool
             case date
@@ -146,11 +132,6 @@ class TypedTests: CRUDTestCase {
                     object.variable = Int.max
                     return object
                 }()
-                nsCodable = {
-                    var object = TypedNSCodableObject()
-                    object.variable = Int.max
-                    return object
-                }()
                 codable = .variable
                 bool = true
                 date = Date.distantFuture
@@ -176,11 +157,6 @@ class TypedTests: CRUDTestCase {
                 data = Data()
                 jsonCodable = {
                     let object = TypedJSONCodableObject()
-                    object.variable = Int.min
-                    return object
-                }()
-                nsCodable = {
-                    var object = TypedNSCodableObject()
                     object.variable = Int.min
                     return object
                 }()
@@ -210,7 +186,6 @@ class TypedTests: CRUDTestCase {
                 && lhs.double == rhs.double
                 && lhs.jsonCodable == rhs.jsonCodable
                 && lhs.codable == rhs.codable
-                && lhs.nsCodable == rhs.nsCodable
                 && lhs.bool == rhs.bool
                 && lhs.date == rhs.date
                 && lhs.array == rhs.array
@@ -234,7 +209,6 @@ class TypedTests: CRUDTestCase {
             string: \(string)
             data: \(String(describing: data))
             jsonCodable: \(String(describing: jsonCodable))
-            nsCodable: \(String(describing: nsCodable))
             codable: \(String(describing: codable))
             bool: \(String(describing: bool))
             date: \(String(describing: date))
@@ -289,7 +263,6 @@ class TypedTests: CRUDTestCase {
         var double: Double = 0
         var data: Data? = Data()
         var jsonCodable: TypedJSONCodableObject? = TypedJSONCodableObject()
-        var nsCodable: TypedNSCodableObject? = TypedNSCodableObject()
         var codable: TypedCodableObject? = TypedCodableObject.variable
         var bool: Bool? = false
         required init() {}
@@ -310,7 +283,6 @@ class TypedTests: CRUDTestCase {
             case double
             case data
             case jsonCodable
-            case nsCodable
             case codable
             case bool
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
@@ -338,7 +310,6 @@ class TypedTests: CRUDTestCase {
                 && lhs.double == rhs.double
                 && lhs.jsonCodable == rhs.jsonCodable
                 && lhs.codable == rhs.codable
-                && lhs.nsCodable == rhs.nsCodable
                 && lhs.bool == rhs.bool
         }
         var debugDescription: String {
@@ -358,7 +329,6 @@ class TypedTests: CRUDTestCase {
             string: \(string ?? "")
             data: \(String(describing: data))
             jsonCodable: \(String(describing: jsonCodable))
-            nsCodable: \(String(describing: nsCodable))
             codable: \(String(describing: codable))
             bool: \(String(describing: bool))
             """
@@ -462,7 +432,6 @@ class TypedTests: CRUDTestCase {
         var double: Double?
         var data: Data?
         var jsonCodable: TypedJSONCodableObject?
-        var nsCodable: TypedNSCodableObject?
         var codable: TypedCodableObject?
         var bool: Bool?
         required init() {}
@@ -483,7 +452,6 @@ class TypedTests: CRUDTestCase {
             case double
             case data
             case jsonCodable
-            case nsCodable
             case codable
             case bool
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
@@ -513,7 +481,6 @@ class TypedTests: CRUDTestCase {
                 double = nil
                 data = nil
                 jsonCodable = nil
-                nsCodable = nil
                 codable = nil
                 bool = nil
             case .zero:
@@ -533,11 +500,6 @@ class TypedTests: CRUDTestCase {
                 data = Data()
                 jsonCodable = {
                     let object = TypedJSONCodableObject()
-                    object.variable = 0
-                    return object
-                }()
-                nsCodable = {
-                    var object = TypedNSCodableObject()
                     object.variable = 0
                     return object
                 }()
@@ -563,11 +525,6 @@ class TypedTests: CRUDTestCase {
                     object.variable = 17
                     return object
                 }()
-                nsCodable = {
-                    var object = TypedNSCodableObject()
-                    object.variable = 018
-                    return object
-                }()
                 codable = .variable
                 bool = true
             }
@@ -590,7 +547,6 @@ class TypedTests: CRUDTestCase {
                 && lhs.double == rhs.double
                 && lhs.jsonCodable == rhs.jsonCodable
                 && lhs.codable == rhs.codable
-                && lhs.nsCodable == rhs.nsCodable
                 && lhs.bool == rhs.bool
         }
         var debugDescription: String {
@@ -610,7 +566,6 @@ class TypedTests: CRUDTestCase {
             string: \(String(describing: string))
             data: \(String(describing: data))
             jsonCodable: \(String(describing: jsonCodable))
-            nsCodable: \(String(describing: nsCodable))
             codable: \(String(describing: codable))
             bool: \(String(describing: bool))
             """
@@ -675,7 +630,6 @@ class TypedTests: CRUDTestCase {
                 XCTAssertNil(wrappedResult.double)
                 XCTAssertNil(wrappedResult.data)
                 XCTAssertNil(wrappedResult.jsonCodable)
-                XCTAssertNil(wrappedResult.nsCodable)
                 XCTAssertNil(wrappedResult.codable)
                 XCTAssertNil(wrappedResult.bool)
             }
@@ -698,7 +652,6 @@ class TypedTests: CRUDTestCase {
                 XCTAssertNil(wrappedResult.double)
                 XCTAssertNil(wrappedResult.data)
                 XCTAssertNil(wrappedResult.jsonCodable)
-                XCTAssertNil(wrappedResult.nsCodable)
                 XCTAssertNil(wrappedResult.codable)
                 XCTAssertNil(wrappedResult.bool)
             }
