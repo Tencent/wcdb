@@ -70,9 +70,9 @@ class BaseBenchmark: BaseTestCase {
     }
 
     func tearDownDatabase() {
-        database.close {
-            XCTAssertNoThrow(try self.database.removeFiles())
-        }
+        XCTAssertNoThrow(try database.close {
+            try self.database.removeFiles()
+        })
     }
 
     func measure(onSetUp setUpBlock: () -> Swift.Void,
