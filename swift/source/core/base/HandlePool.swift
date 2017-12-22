@@ -23,7 +23,7 @@ import Foundation
 public final class HandlePool {
     class Wrap {
         let handlePool: HandlePool
-        var reference: Int = 1
+        var reference: Int = 0
         init(_ handlePool: HandlePool) {
             self.handlePool = handlePool
         }
@@ -34,40 +34,45 @@ public final class HandlePool {
 
     static func getPool(withPath path: String, defaultConfigs: Configs) -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
-        var handlePool: HandlePool!
-        if var wrap = pools[path] {
-            handlePool = wrap.handlePool
-            wrap.reference += 1
-        } else {
-            handlePool = HandlePool(withPath: path, defaultConfigs: defaultConfigs)
+        var index = pools.index(forKey: path)
+        if index == nil {
+            let handlePool = HandlePool(withPath: path, defaultConfigs: defaultConfigs)
             pools[path] = Wrap(handlePool)
+            index = pools.index(forKey: path)
         }
-        return Recyclable(handlePool, onRecycled: {
-            spin.lock(); defer { spin.unlock() }
-            let wrap = pools[path]!
-            wrap.reference -= 1
-            if wrap.reference == 0 {
-                pools.removeValue(forKey: path)
-            }
-        })
+        return getExistingPool(atIndex: index!)
     }
 
-    static func getPool(with tag: Tag) throws -> RecyclableHandlePool {
+    static func getExistingPool(with tag: Tag) throws -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
-        var path: String!
-        guard var wrap = (pools.first { (arg) -> Bool in
-            guard arg.value.handlePool.tag == tag else {
-                return false
-            }
-            path = arg.key
-            return true
-        })?.value else {
+        guard let index = pools.index(where: { (arg) -> Bool in
+            return arg.value.handlePool.tag == tag
+        }) else {
             throw Error.reportCore(tag: tag,
                                    path: "",
                                    operation: .getPool,
                                    code: .misuse,
                                    message: "Database with tag: \(tag) is not exists.")
         }
+        return getExistingPool(atIndex: index)
+    }
+
+    static func getExistingPool(withPath path: String) throws -> RecyclableHandlePool {
+        spin.lock(); defer { spin.unlock() }
+        guard let index = pools.index(forKey: path) else {
+            throw Error.reportCore(tag: nil,
+                                   path: path,
+                                   operation: .getPool,
+                                   code: .misuse,
+                                   message: "Database at path: \(path) is not exists.")
+        }
+        return getExistingPool(atIndex: index)
+    }
+
+    private static func getExistingPool(atIndex index: Dictionary<String, Wrap>.Index) -> RecyclableHandlePool {
+        let node = pools[index]
+        let path = node.key
+        var wrap = node.value
         wrap.reference += 1
         return Recyclable(wrap.handlePool, onRecycled: {
             spin.lock(); defer { spin.unlock() }

@@ -27,9 +27,14 @@ class Recyclable<Value> {
 
     let raw: Value
 
-    init(_ raw: Value, onRecycled: OnRecycled? = nil) {
+    init(_ raw: Value, onRecycled: @escaping OnRecycled) {
         self.raw = raw
         self.onRecycled = onRecycled
+    }
+
+    init(_ raw: Value) {
+        self.raw = raw
+        self.onRecycled = nil
     }
 
     deinit {

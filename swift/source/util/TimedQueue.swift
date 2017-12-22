@@ -36,6 +36,16 @@ final class TimedQueue<Key: Hashable> {
         self.delay = delay
     }
 
+    func remove(with key: Key) {
+        conditionLock.lock(); defer { conditionLock.unlock() }
+
+        guard let index = map.index(forKey: key) else {
+            return
+        }
+        list.remove(at: map[index].value)
+        map.remove(at: index)
+    }
+
     func reQueue(with key: Key) {
         conditionLock.lock(); defer { conditionLock.unlock() }
 
@@ -46,7 +56,6 @@ final class TimedQueue<Key: Hashable> {
             map.remove(at: index)
         }
 
-        //delay
         list.append((key, SteadyClock.now()+delay))
         map[key] = list.startIndex
         if signal {
@@ -64,9 +73,8 @@ final class TimedQueue<Key: Hashable> {
                     continue
                 }
                 let now = SteadyClock.now()
-                let interval = now - element.clock
-                guard interval <= 0 else {
-                    conditionLock.wait(timeout: interval)
+                guard now >= element.clock else {
+                    conditionLock.wait(timeout: element.clock - now)
                     continue
                 }
                 key = element.key

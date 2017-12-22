@@ -128,6 +128,9 @@ final class ConditionLock: Lockable {
     }
 
     func wait(timeout: TimeInterval) {
+        guard timeout > 0 else {
+            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        }
         var ts = timespec()
         ts.tv_sec = Int(timeout)
         ts.tv_nsec = Int((timeout - TimeInterval(ts.tv_sec)) * 1000000000)

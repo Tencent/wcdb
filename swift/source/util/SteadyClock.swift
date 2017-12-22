@@ -31,6 +31,10 @@ struct SteadyClock {
         self.time = time
     }
 
+    static func >= (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
+        return lhs.time >= rhs.time
+    }
+
     static func - (lhs: SteadyClock, rhs: SteadyClock) -> TimeInterval {
         return lhs.time - rhs.time
     }

@@ -76,8 +76,12 @@ public final class Database {
     ///
     /// - Parameter tag: An existing tag.
     /// - Throws: `Error` while tag is not exists
-    public init(with tag: Tag) throws {
-        try self.recyclableHandlePool = HandlePool.getPool(with: tag)
+    public init(withExistingTag tag: Tag) throws {
+        try self.recyclableHandlePool = HandlePool.getExistingPool(with: tag)
+    }
+
+    init(withExistingPath path: String) throws {
+        try self.recyclableHandlePool = HandlePool.getExistingPool(withPath: path)
     }
 
     private var handlePool: HandlePool {
@@ -363,7 +367,7 @@ extension Database {
                     DispatchQueue(label: "com.Tencent.WCDB.swift.checkpoint").async {
                         while true {
                             Database.timedQueue.wait(untilExpired: {
-                                try? Database(withPath: $0).exec(CommonStatement.checkpoint)
+                                try? Database(withExistingPath: $0).exec(CommonStatement.checkpoint)
                             })
                         }
                     }
