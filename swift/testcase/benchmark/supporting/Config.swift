@@ -34,22 +34,11 @@ class Config {
     let syncWriteCount: Int
 
     private init() {
-//        #if WCDB_IOS
-//            readCount = 1000000
-//            writeCount = 10000
-//            batchWriteCount = 300000
-//            
-//            tableCount = 30000
-//            syncWriteCount = 2000
-//        #elseif WCDB_OSX
-            readCount = 1000000
-            writeCount = 100000
-            batchWriteCount = 1000000
+        batchWriteCount = 1000000
+        readCount = 2000000
+        writeCount = 100000
 
-            tableCount = 50000
-            syncWriteCount = 500
-//        #else
-//            fatalError()
-//        #endif
+        tableCount = 50000
+        syncWriteCount = 500
     }
 }
