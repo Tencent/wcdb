@@ -131,10 +131,12 @@ final class ConditionLock: Lockable {
         guard timeout > 0 else {
             Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
-        var ts = timespec()
-        ts.tv_sec = Int(timeout)
-        ts.tv_nsec = Int((timeout - TimeInterval(ts.tv_sec)) * 1000000000)
-        pthread_cond_timedwait(&cond, &mutex, &ts)
+
+        let integerPart = Int(timeout.nextDown)
+        let fractionalPart = timeout - Double(integerPart)
+        var ts = timespec(tv_sec: integerPart, tv_nsec: Int(fractionalPart * 1000000000))
+
+        pthread_cond_timedwait_relative_np(&cond, &mutex, &ts)
     }
 
     func signal() {
