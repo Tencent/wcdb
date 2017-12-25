@@ -27,12 +27,12 @@ public class Core: CoreRepresentable {
     }
 
     /// The tag of the related database.
-    var tag: Tag? {
+    public var tag: Tag? {
         return handlePool.tag
     }
 
     /// The path of the related database.
-    var path: String {
+    public var path: String {
         return handlePool.path
     }
 

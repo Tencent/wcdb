@@ -38,23 +38,18 @@ public final class RowSelect: Selectable {
     }
 
     private func extract(atIndex index: Int) throws -> FundamentalValue {
-        let coreStatement = try self.lazyCoreStatement()
-        switch coreStatement.columnType(atIndex: index) {
+        let handleStatement = try self.lazyHandleStatement()
+        switch handleStatement.columnType(atIndex: index) {
         case .integer32:
-            let value: Int32 = coreStatement.value(atIndex: index) ?? 0
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            let value: Int64 = coreStatement.value(atIndex: index) ?? 0
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            let value: Double = coreStatement.value(atIndex: index)  ?? 0
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Double.self))
         case .text:
-            let value: String = coreStatement.value(atIndex: index)  ?? ""
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            let value: Data = coreStatement.value(atIndex: index)  ?? Data()
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Data.self))
         case .null:
             return FundamentalValue(nil)
         }
@@ -62,8 +57,8 @@ public final class RowSelect: Selectable {
 
     private func extract() throws -> FundamentalRow {
         var row: FundamentalRow = []
-        let coreStatement = try self.lazyCoreStatement()
-        for index in 0..<coreStatement.columnCount() {
+        let handleStatement = try self.lazyHandleStatement()
+        for index in 0..<handleStatement.columnCount() {
             row.append(try extract(atIndex: index))
         }
         return row

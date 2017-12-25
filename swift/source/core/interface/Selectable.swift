@@ -22,7 +22,7 @@ import Foundation
 
 public class Selectable: CoreContainer {
     var core: Core
-    var optionalCoreStatement: CoreStatement?
+    var optionalRecyclableHandleStatement: RecyclableHandleStatement?
     var statement: StatementSelect
 
     init(with core: Core, statement: StatementSelect) {
@@ -35,24 +35,24 @@ public class Selectable: CoreContainer {
     }
 
     func finalize() throws {
-        if let coreStatement = optionalCoreStatement {
-            try coreStatement.finalize()
-            optionalCoreStatement = nil
+        if let recyclableHandleStatement = optionalRecyclableHandleStatement {
+            try recyclableHandleStatement.raw.finalize()
+            optionalRecyclableHandleStatement = nil
         }
     }
 
-    func lazyCoreStatement() throws -> CoreStatement {
-        if optionalCoreStatement == nil {
-            optionalCoreStatement = try core.prepare(statement)
+    func lazyHandleStatement() throws -> HandleStatement {
+        if optionalRecyclableHandleStatement == nil {
+            optionalRecyclableHandleStatement = try core.prepare(statement)
         }
-        return optionalCoreStatement!
+        return optionalRecyclableHandleStatement!.raw
     }
 
     //Since `next()` may throw errors, it can't conform to `Sequence` protocol to fit a `for in` loop.
     @discardableResult
     public func next() throws -> Bool {
         do {
-            return try lazyCoreStatement().step()
+            return try lazyHandleStatement().step()
         } catch let error {
             try? finalize()
             throw error

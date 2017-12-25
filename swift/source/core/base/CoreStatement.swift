@@ -103,20 +103,15 @@ public final class CoreStatement: CoreContainer {
         }
         switch type.columnType {
         case .integer32:
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            return type.init(with: value)
+            return type.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            let value: Int64 = handleStatement.columnValue(atIndex: index)
-            return type.init(with: value)
+            return type.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            let value: Double = handleStatement.columnValue(atIndex: index)
-            return type.init(with: value)
+            return type.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
         case .text:
-            let value: String = handleStatement.columnValue(atIndex: index)
-            return type.init(with: value)
+            return type.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            let value: Data = handleStatement.columnValue(atIndex: index)
-            return type.init(with: value)
+            return type.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
         default: break
         }
         return nil
@@ -137,20 +132,15 @@ public final class CoreStatement: CoreContainer {
         var result: ColumnDecodableType? = nil
         switch ColumnDecodableType.columnType {
         case .integer32:
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            result = ColumnDecodableType.init(with: value)
+            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            let value: Int64 = handleStatement.columnValue(atIndex: index)
-            result = ColumnDecodableType.init(with: value)
+            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            let value: Double = handleStatement.columnValue(atIndex: index)
-            result = ColumnDecodableType.init(with: value)
+            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
         case .text:
-            let value: String = handleStatement.columnValue(atIndex: index)
-            result = ColumnDecodableType.init(with: value)
+            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            let value: Data = handleStatement.columnValue(atIndex: index)
-            result = ColumnDecodableType.init(with: value)
+            result = ColumnDecodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
         default: break
         }
         return result
@@ -163,20 +153,15 @@ public final class CoreStatement: CoreContainer {
     public func value(atIndex index: Int) -> FundamentalValue {
         switch handleStatement.columnType(atIndex: index) {
         case .integer32:
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int32.self))
         case .integer64:
-            let value: Int64 = handleStatement.columnValue(atIndex: index)
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Int64.self))
         case .float:
-            let value: Double = handleStatement.columnValue(atIndex: index)
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Double.self))
         case .text:
-            let value: String = handleStatement.columnValue(atIndex: index)
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: String.self))
         case .BLOB:
-            let value: Data = handleStatement.columnValue(atIndex: index)
-            return FundamentalValue(value)
+            return FundamentalValue(handleStatement.columnValue(atIndex: index, of: Data.self))
         case .null:
             return FundamentalValue(nil)
         }

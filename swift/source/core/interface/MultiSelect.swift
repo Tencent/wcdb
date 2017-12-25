@@ -65,11 +65,11 @@ public final class MultiSelect: Selectable {
     }
     private lazy var generators: [String: Generator] = {
         var mappedKeys: [String: TypedIndexedKeys] = [:]
-        let coreStatement = try? lazyCoreStatement()
-        Error.assert(coreStatement != nil,
+        let handleStatement = try? lazyHandleStatement()
+        Error.assert(handleStatement != nil,
                      message: "It should not be failed. If you think it's a bug, please report an issue to us.")
         for (index, key) in keys.enumerated() {
-            let tableName = coreStatement!.columnTableName(atIndex: index)
+            let tableName = handleStatement!.columnTableName(atIndex: index)
             var typedIndexedKeys: TypedIndexedKeys! = mappedKeys[tableName]
             if typedIndexedKeys == nil {
                 let tableDecodableType = key.rootType as? TableDecodableBase.Type
@@ -83,7 +83,7 @@ public final class MultiSelect: Selectable {
         }
         var generators: [String: Generator] = [:]
         for (tableName, typedIndexedKey) in mappedKeys {
-            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: coreStatement!)
+            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: handleStatement!)
             let type = typedIndexedKey.type
             let generator = { () throws -> TableDecodableBase in
                 return try type.init(from: decoder)

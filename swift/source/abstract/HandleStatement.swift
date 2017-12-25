@@ -24,6 +24,14 @@ public final class HandleStatement {
 
     private let handle: Handle
 
+    public var path: String {
+        return handle.path
+    }
+
+    public var tag: Tag? {
+        return handle.tag
+    }
+
     init(with stmt: SQLite3Statement, and handle: Handle) {
         self.stmt = stmt
         self.handle = handle
@@ -114,26 +122,26 @@ public final class HandleStatement {
         }
     }
 
-    public func columnValue(atIndex index: Int) -> Int32 {
+    public func columnValue(atIndex index: Int, of type: Int32.Type = Int32.self) -> Int32 {
         return sqlite3_column_int(stmt, Int32(index))
     }
 
-    public func columnValue(atIndex index: Int) -> Int64 {
+    public func columnValue(atIndex index: Int, of type: Int64.Type = Int64.self) -> Int64 {
         return sqlite3_column_int64(stmt, Int32(index))
     }
 
-    public func columnValue(atIndex index: Int) -> Double {
+    public func columnValue(atIndex index: Int, of type: Double.Type = Double.self) -> Double {
         return sqlite3_column_double(stmt, Int32(index))
     }
 
-    public func columnValue(atIndex index: Int) -> String {
+    public func columnValue(atIndex index: Int, of type: String.Type = String.self) -> String {
         guard let cString = sqlite3_column_text(stmt, Int32(index)) else {
             return ""
         }
         return String(cString: cString)
     }
 
-    public func columnValue(atIndex index: Int) -> Data {
+    public func columnValue(atIndex index: Int, of type: Data.Type = Data.self) -> Data {
         guard let bytes = sqlite3_column_blob(stmt, Int32(index)) else {
             return Data()
         }
