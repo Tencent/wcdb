@@ -88,7 +88,7 @@ public final class Handle {
         Error.assert(statement.statementType != .transaction,
                      message: "[prepare] a transaction is not allowed, use [exec] instead")
         var stmt: OpaquePointer? = nil
-        let rc = sqlite3_prepare(handle, statement.description, -1, &stmt, nil)
+        let rc = sqlite3_prepare_v2(handle, statement.description, -1, &stmt, nil)
         guard rc==SQLITE_OK else {
             throw Error.reportSQLite(tag: tag,
                                      path: path,
