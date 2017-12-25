@@ -897,10 +897,10 @@ public final class SQLiteSession {
 
     /*package*/ void releasePreparedStatement(SQLiteConnection.PreparedStatement statement) {
         // acquirePreparedStatement keeps connection as well, so we are responsible to release it.
-        if (mConnection != null)
+        if (mConnection != null) {
             mConnection.releasePreparedStatement(statement);
-
-        releaseConnection();
+            releaseConnection();
+        }
     }
 
     private void throwIfNoTransaction() {

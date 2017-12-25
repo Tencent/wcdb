@@ -1123,8 +1123,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     }
 
     private void applyBlockGuardPolicy(PreparedStatement statement) {
-        if (!mConfiguration.isInMemoryDb()) {
-        }
+        // do nothing
     }
 
     /**
@@ -1541,8 +1540,10 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
             synchronized (mOperations) {
                 Operation operation = getOperationLocked(cookie);
-                result = endOperationDeferLogLocked(operation);
+                if (operation == null)
+                    return false;
 
+                result = endOperationDeferLogLocked(operation);
                 sql = operation.mSql;
                 kind = operation.mKind;
                 type = operation.mType;
@@ -1557,7 +1558,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         public void logOperation(int cookie, String detail) {
             synchronized (mOperations) {
                 final Operation operation = getOperationLocked(cookie);
-                logOperationLocked(operation, detail);
+                if (operation != null)
+                    logOperationLocked(operation, detail);
             }
         }
 

@@ -915,8 +915,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
             throw new IllegalArgumentException("file must not be null");
         }
 
-        boolean deleted = false;
-        deleted |= file.delete();
+        boolean deleted = file.delete();
         deleted |= new File(file.getPath() + "-journal").delete();
         deleted |= new File(file.getPath() + "-shm").delete();
         deleted |= new File(file.getPath() + "-wal").delete();
@@ -930,8 +929,12 @@ public final class SQLiteDatabase extends SQLiteClosable {
                     return candidate.getName().startsWith(prefix);
                 }
             };
-            for (File masterJournal : dir.listFiles(filter)) {
-                deleted |= masterJournal.delete();
+
+            File[] masterJournals = dir.listFiles(filter);
+            if (masterJournals != null) {
+                for (File masterJournal : masterJournals) {
+                    deleted |= masterJournal.delete();
+                }
             }
         }
         return deleted;
@@ -2506,10 +2509,10 @@ public final class SQLiteDatabase extends SQLiteClosable {
                 SQLiteStatement prog = null;
                 try {
                     prog = compileStatement("PRAGMA " + p.first + ".integrity_check(1);");
-                    String rslt = prog.simpleQueryForString();
-                    if (!rslt.equalsIgnoreCase("ok")) {
+                    String result = prog.simpleQueryForString();
+                    if (!DatabaseUtils.objectEquals(result, "ok")) {
                         // integrity_checker failed on main or attached databases
-                        Log.e(TAG, "PRAGMA integrity_check on " + p.second + " returned: " + rslt);
+                        Log.e(TAG, "PRAGMA integrity_check on " + p.second + " returned: " + result);
                         return false;
                     }
                 } finally {

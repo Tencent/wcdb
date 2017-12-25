@@ -246,6 +246,10 @@ public abstract class SQLiteProgram extends SQLiteClosable {
         if (mBoundSession == null && mPreparedStatement == null)
             return;
 
+        if (mBoundSession == null || mPreparedStatement == null) {
+            throw new IllegalStateException("Internal state error.");
+        }
+
         if (mBoundSession != mDatabase.getThreadSession()) {
             throw new IllegalStateException("SQLiteProgram has bound to another thread.");
         }
