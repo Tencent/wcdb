@@ -42,11 +42,12 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
     jfieldID fidHmacEnabled;
     jfieldID fidPageSize;
     jstring cipherStr;
-    const char *cipher;
     int cipher_len;
 
     if (!cipherSpec) {
         result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf));
+        if (!result) return NULL;
+
         memset(result, 0, sizeof(sqliterk_cipher_conf));
         result->use_hmac = -1;
         return result;
@@ -70,22 +71,26 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
     if (!fidPageSize)
         goto bail;
 
-    cipher = NULL;
     cipher_len = 0;
     cipherStr = (jstring) env->GetObjectField(cipherSpec, fidCipher);
     if (cipherStr) {
         cipher_len = env->GetStringUTFLength(cipherStr) + 1;
-        cipher = env->GetStringUTFChars(cipherStr, NULL);
     }
-
     result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf) +
                                              cipher_len);
-    if (cipher) {
+    if (!result) return NULL;
+    memset(result, 0, sizeof(sqliterk_cipher_conf) + cipher_len);
+
+    if (cipherStr) {
+        const char *cipher = env->GetStringUTFChars(cipherStr, NULL);
+        if (!cipher) goto bail;
+
         result->cipher_name = (const char *) &result[1];
         strlcpy((char *) result->cipher_name, cipher, cipher_len + 1);
         env->ReleaseStringUTFChars(cipherStr, cipher);
-    } else
+    } else {
         result->cipher_name = NULL;
+    }
 
     result->page_size = env->GetIntField(cipherSpec, fidPageSize);
     result->kdf_iter = env->GetIntField(cipherSpec, fidKdfIteration);
@@ -129,6 +134,8 @@ static JNICALL jlong nativeInit(JNIEnv *env,
 
         conf->kdf_salt = (unsigned char *) alloca(16);
         env->GetByteArrayRegion(saltArr, 0, 16, (jbyte *) conf->kdf_salt);
+    } else {
+        conf->kdf_salt = NULL;
     }
 
     const char *path = env->GetStringUTFChars(pathStr, NULL);
