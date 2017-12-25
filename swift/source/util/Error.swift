@@ -41,31 +41,18 @@ public struct ErrorValue {
     public var intValue: Int {
         switch type {
         case .int:
-            let value = self.value as? Int
-            Error.assert(value != nil,
-                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
-            return value!
+            return value as! Int
         case .string:
-            let stringValue = value as? String
-            Error.assert(stringValue != nil,
-                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
-            let intValue = Int(stringValue!)
-            return intValue ?? 0
+            return Int(value as! String) ?? 0
         }
     }
 
     public var stringValue: String {
         switch type {
         case .int:
-            let value = self.value as? Int
-            Error.assert(value != nil,
-                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
-            return String(value!)
+            return String(value as! Int)
         case .string:
-            let value = self.value as? String
-            Error.assert(value != nil,
-                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
-            return value!
+            return value as! String
         }
     }
 }

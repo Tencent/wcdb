@@ -21,7 +21,7 @@
 import Foundation
 
 /// The chain call for updating
-public final class Update: CoreRepresentable {
+public final class Update: CoreContainer {
     var core: Core
     private let statement = StatementUpdate()
     private let keys: [CodingTableKeyBase]
@@ -29,16 +29,6 @@ public final class Update: CoreRepresentable {
     /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully
     public var changes: Int?
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return core.path
-    }
 
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
         guard propertyConvertibleList.count > 0 else {
@@ -76,7 +66,7 @@ public final class Update: CoreRepresentable {
 
     /// WINQ interface for SQL
     ///
-    /// - Parameter orderList: Expression convertible list
+    /// - Parameter orderList: Order convertible list
     /// - Returns: `self`
     @discardableResult
     public func order(by orderList: OrderBy...) -> Update {
@@ -86,7 +76,7 @@ public final class Update: CoreRepresentable {
 
     /// WINQ interface for SQL
     ///
-    /// - Parameter orderList: Expression convertible list
+    /// - Parameter orderList: Order convertible list
     /// - Returns: `self`
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Update {
@@ -133,11 +123,12 @@ public final class Update: CoreRepresentable {
     /// - Parameter object: Table encodable object
     /// - Throws: `Error`
     public func execute<Object: TableEncodable>(with object: Object) throws {
-        let coreStatement = try core.prepare(statement)
-        let encoder = TableEncoder(keys, on: coreStatement)
+        let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
+        let handleStatement = recyclableHandleStatement.raw
+        let encoder = TableEncoder<Object>(keys, on: recyclableHandleStatement)
         try encoder.bind(object)
-        try coreStatement.step()
-        changes = coreStatement.changes
+        try handleStatement.step()
+        changes = handleStatement.changes
     }
 
     /// Execute the update chain call with row.
@@ -145,12 +136,26 @@ public final class Update: CoreRepresentable {
     /// - Parameter row: Column encodable row
     /// - Throws: `Error`
     public func execute(with row: [ColumnEncodableBase?]) throws {
-        let coreStatement = try core.prepare(statement)
+        let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
+        let handleStatement = recyclableHandleStatement.raw
         for (index, value) in row.enumerated() {
             let bindingIndex = index + 1
-            coreStatement.bind(value, toIndex: bindingIndex)
+            handleStatement.bind(value?.archivedFundamentalValue(), toIndex: bindingIndex)
         }
-        try coreStatement.step()
-        changes = coreStatement.changes
+        try handleStatement.step()
+        changes = handleStatement.changes
+    }
+}
+
+extension Update: CoreRepresentable {
+
+    /// The tag of the related database.
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database.
+    public var path: String {
+        return core.path
     }
 }

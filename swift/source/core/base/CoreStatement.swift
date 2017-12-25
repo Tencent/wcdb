@@ -21,19 +21,9 @@
 import Foundation
 
 /// CoreStatement for preparing or executing WINQ sql.
-public final class CoreStatement: CoreRepresentable {
+public final class CoreStatement: CoreContainer {
     let core: Core
     let recyclableHandleStatement: RecyclableHandleStatement
-
-    /// The tag of the related database. 
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database. 
-    public var path: String {
-        return core.path
-    }
 
     init(with core: Core, and recyclableHandleStatement: RecyclableHandleStatement) {
         self.core = core
@@ -71,7 +61,7 @@ public final class CoreStatement: CoreRepresentable {
         for args in indexedPropertyConvertibleList {
             indexedCodingTableKeys[args.0.codingTableKey.stringValue] = args.toIndex
         }
-        let encoder = TableEncoder(indexedCodingTableKeys, on: self)
+        let encoder = TableEncoder<TableEncodableType>(indexedCodingTableKeys, on: recyclableHandleStatement)
         try encoder.bind(object)
     }
 
@@ -88,7 +78,7 @@ public final class CoreStatement: CoreRepresentable {
         for (index, propertyConvertible) in propertyConvertibleList.enumerated() {
             indexedCodingTableKeys[propertyConvertible.codingTableKey.stringValue] = index
         }
-        let encoder = TableEncoder(indexedCodingTableKeys, on: self)
+        let encoder = TableEncoder<TableEncodableType>(indexedCodingTableKeys, on: recyclableHandleStatement)
         try encoder.bind(object)
     }
 
@@ -98,30 +88,7 @@ public final class CoreStatement: CoreRepresentable {
     ///   - value: Column encodable object
     ///   - index: Begin with 1
     public func bind(_ value: ColumnEncodableBase?, toIndex index: Int) {
-        if let wrappedValue = value {
-            let fundamentalValue = wrappedValue.archivedFundamentalValue()
-            switch type(of: wrappedValue).columnType {
-            case .integer32:
-                let int32Value = (fundamentalValue as? Int32) ?? 0
-                handleStatement.bind(int32Value, toIndex: index)
-            case .integer64:
-                let int64Value = (fundamentalValue as? Int64) ?? 0
-                handleStatement.bind(int64Value, toIndex: index)
-            case .text:
-                let stringValue = (fundamentalValue as? String) ?? ""
-                handleStatement.bind(stringValue, toIndex: index)
-            case .float:
-                let doubleValue = (fundamentalValue as? Double) ?? 0
-                handleStatement.bind(doubleValue, toIndex: index)
-            case .BLOB:
-                let dataValue = (fundamentalValue as? Data) ?? Data()
-                handleStatement.bind(dataValue, toIndex: index)
-            case .null:
-                handleStatement.bind(nil, toIndex: index)
-            }
-        } else {
-            handleStatement.bind(nil, toIndex: index)
-        }
+        handleStatement.bind(value?.archivedFundamentalValue(), toIndex: index)
     }
 
     /// The wrapper of `sqlite3_column_*` for getting column decodable value.
@@ -317,5 +284,18 @@ public final class CoreStatement: CoreRepresentable {
     /// The row id of most recent insertion.
     public var lastInsertedRowID: Int64 {
         return handleStatement.lastInsertedRowID
+    }
+}
+
+extension CoreStatement {
+
+    /// The tag of the related database. 
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database. 
+    public var path: String {
+        return core.path
     }
 }

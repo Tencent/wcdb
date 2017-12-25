@@ -132,7 +132,7 @@ public protocol UpdateInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -152,7 +152,7 @@ public protocol UpdateInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -172,7 +172,7 @@ public protocol UpdateInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -191,7 +191,7 @@ public protocol UpdateInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -296,7 +296,7 @@ public protocol DeleteInterface {
     /// - Parameters:
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -340,7 +340,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
@@ -358,7 +358,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
@@ -376,7 +376,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRow`
     /// - Throws: `Error`
@@ -392,7 +392,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRow`
     /// - Throws: `Error`
@@ -408,7 +408,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalColumn`
@@ -426,7 +426,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalColumn`
@@ -444,7 +444,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalValue`
     /// - Throws: `Error`
@@ -461,7 +461,7 @@ public protocol RowSelectInterface {
     ///   - columnResultConvertible: WINQ column result
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalValue`
     /// - Throws: `Error`
@@ -621,7 +621,7 @@ public protocol SelectInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
@@ -640,7 +640,7 @@ public protocol SelectInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
@@ -659,7 +659,7 @@ public protocol SelectInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
     /// - Throws: `Error`
@@ -676,7 +676,7 @@ public protocol SelectInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - table: Table name
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - condition: Expression convertible
     /// - Returns: Table decodable objects
     /// - Throws: `Error`
@@ -859,9 +859,11 @@ extension TableInterface where Self: Core {
             if try isTableExists(name) {
                 var columnNames: [String] = []
                 do {
-                    let coreStatement = try prepare(StatementPragma().pragma(.tableInfo, to: name))
-                    while try coreStatement.step() {
-                        let columnName: String = coreStatement.value(atIndex: 1) ?? ""
+                    let statementPragma = StatementPragma().pragma(.tableInfo, to: name)
+                    let recyclableHandleStatement: RecyclableHandleStatement = try prepare(statementPragma)
+                    let handleStatement = recyclableHandleStatement.raw
+                    while try handleStatement.step() {
+                        let columnName: String = handleStatement.columnValue(atIndex: 1)
                         columnNames.append(columnName)
                     }
                 }

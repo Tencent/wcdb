@@ -90,8 +90,28 @@ public final class HandleStatement {
         })
     }
 
-    public func bind(_ value: Void?, toIndex index: Int) {
-        sqlite3_bind_null(stmt, Int32(index))
+    public func bind(_ value: FundamentalColumnType?, toIndex index: Int) {
+        if let wrapped = value {
+            switch wrapped.columnType {
+            case .integer32:
+                sqlite3_bind_int(stmt, Int32(index), wrapped as! Int32)
+            case .integer64:
+                sqlite3_bind_int64(stmt, Int32(index), wrapped as! Int64)
+            case .float:
+                sqlite3_bind_double(stmt, Int32(index), wrapped as! Double)
+            case .text:
+                sqlite3_bind_text_transient(stmt, Int32(index), wrapped as! String, -1)
+            case .BLOB:
+                let data = wrapped as! Data
+                data.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Void in
+                    sqlite3_bind_blob_transient(stmt, Int32(index), bytes, Int32(data.count))
+                })
+            case .null:
+                sqlite3_bind_null(stmt, Int32(index))
+            }
+        } else {
+            sqlite3_bind_null(stmt, Int32(index))
+        }
     }
 
     public func columnValue(atIndex index: Int) -> Int32 {

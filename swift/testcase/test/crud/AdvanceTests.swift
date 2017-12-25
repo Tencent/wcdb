@@ -704,7 +704,7 @@ class AdvanceTests: CRUDTestCase {
         //Chinese
         do {
             //When
-            let condition = WCDBFTSObject.Properties.variable2.match("中文")
+            let condition = WCDBFTSObject.Properties.variable2.match("中文*")
             let objects = WCDBAssertNoThrowReturned(
                 try database.getObjects(fromTable: WCDBFTSObject.name, where: condition),
                 whenFailed: [WCDBFTSObject]()

@@ -21,21 +21,11 @@
 import Foundation
 
 /// Chain call for inserting
-public final class Insert: CoreRepresentable {
+public final class Insert: CoreContainer {
     let core: Core
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return core.path
-    }
 
     init(with core: Core,
          named name: String,
@@ -88,17 +78,30 @@ public final class Insert: CoreRepresentable {
         let orm = Object.CodingKeys.objectRelationalMapping
         func doInsertObject() throws {
             properties = properties ?? Object.Properties.all
-            let coreStatement = try core.prepare(statement)
-            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: coreStatement)
+            let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
+            let handleStatement = recyclableHandleStatement.raw
+            let encoder = TableEncoder<Object>(properties!.asCodingTableKeys(), on: recyclableHandleStatement)
             for var object in objects {
                 try encoder.bind(object, isReplace: isReplace)
-                try coreStatement.step()
+                try handleStatement.step()
                 if !isReplace && object.isAutoIncrement {
-                    object.lastInsertedRowID = coreStatement.lastInsertedRowID
+                    object.lastInsertedRowID = handleStatement.lastInsertedRowID
                 }
-                try coreStatement.reset()
+                try handleStatement.reset()
             }
         }
         return objects.count == 1 ? try doInsertObject() : try core.run(embeddedTransaction: doInsertObject )
+    }
+}
+
+extension Insert: CoreRepresentable {
+    /// The tag of the related database.
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database.
+    public var path: String {
+        return core.path
     }
 }

@@ -22,20 +22,6 @@ import Foundation
 
 /// Chain call for multi-selecting
 public final class MultiSelect: Selectable {
-    var core: Core
-    let statement: StatementSelect
-    var optionalCoreStatement: CoreStatement?
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return core.path
-    }
-
     private let keys: [CodingTableKeyBase]
 
     init(with core: Core,
@@ -63,26 +49,8 @@ public final class MultiSelect: Selectable {
             return codingTableKey
         })
 
-        statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)
-        self.core = core
-    }
-
-    deinit {
-        try? finalize()
-    }
-
-    func finalize() throws {
-        if let coreStatement = optionalCoreStatement {
-            try coreStatement.finalize()
-            optionalCoreStatement = nil
-        }
-    }
-
-    func lazyCoreStatement() throws -> CoreStatement {
-        if optionalCoreStatement == nil {
-            optionalCoreStatement = try core.prepare(statement)
-        }
-        return optionalCoreStatement!
+        let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)
+        super.init(with: core, statement: statement)
     }
 
     private typealias Generator = () throws -> TableDecodableBase

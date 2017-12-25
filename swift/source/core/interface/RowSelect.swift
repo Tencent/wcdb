@@ -22,20 +22,6 @@ import Foundation
 
 /// Chain call for row-selecting
 public final class RowSelect: Selectable {
-    var core: Core
-    let statement: StatementSelect
-    var optionalCoreStatement: CoreStatement?
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return core.path
-    }
-
     init(with core: Core,
          results columnResultConvertibleList: [ColumnResultConvertible],
          tables: [String],
@@ -47,26 +33,8 @@ public final class RowSelect: Selectable {
                                         code: .misuse,
                                         message: "Empty table")
         }
-        statement = StatementSelect().select(distinct: isDistinct, columnResultConvertibleList).from(tables)
-        self.core = core
-    }
-
-    deinit {
-        try? finalize()
-    }
-
-    func finalize() throws {
-        if let coreStatement = optionalCoreStatement {
-            try coreStatement.finalize()
-            optionalCoreStatement = nil
-        }
-    }
-
-    func lazyCoreStatement() throws -> CoreStatement {
-        if optionalCoreStatement == nil {
-            optionalCoreStatement = try core.prepare(statement)
-        }
-        return optionalCoreStatement!
+        let statement = StatementSelect().select(distinct: isDistinct, columnResultConvertibleList).from(tables)
+        super.init(with: core, statement: statement)
     }
 
     private func extract(atIndex index: Int) throws -> FundamentalValue {

@@ -20,45 +20,45 @@
 
 import Foundation
 
-protocol Selectable: CoreRepresentable {
-    var statement: StatementSelect {get}
+public class Selectable: CoreContainer {
+    var core: Core
+    var optionalCoreStatement: CoreStatement?
+    var statement: StatementSelect
 
-    func lazyCoreStatement() throws -> CoreStatement
+    init(with core: Core, statement: StatementSelect) {
+        self.statement = statement
+        self.core = core
+    }
 
-    func finalize() throws
+    deinit {
+        try? finalize()
+    }
 
+    func finalize() throws {
+        if let coreStatement = optionalCoreStatement {
+            try coreStatement.finalize()
+            optionalCoreStatement = nil
+        }
+    }
+
+    func lazyCoreStatement() throws -> CoreStatement {
+        if optionalCoreStatement == nil {
+            optionalCoreStatement = try core.prepare(statement)
+        }
+        return optionalCoreStatement!
+    }
+
+    //Since `next()` may throw errors, it can't conform to `Sequence` protocol to fit a `for in` loop.
     @discardableResult
-    func `where`(_ condition: Condition) -> Self
+    public func next() throws -> Bool {
+        do {
+            return try lazyCoreStatement().step()
+        } catch let error {
+            try? finalize()
+            throw error
+        }
+    }
 
-    @discardableResult
-    func order(by orderConvertibleList: OrderBy...) -> Self
-
-    @discardableResult
-    func order(by orderConvertibleList: [OrderBy]) -> Self
-
-    @discardableResult
-    func limit(from expressionConvertibleFrom: Limit, to expressionConvertibleTo: Limit) -> Self
-
-    @discardableResult
-    func limit(_ expressionConvertibleLimit: Limit) -> Self
-
-    @discardableResult
-    func limit(_ expressionConvertibleLimit: Limit, offset expressionConvertibleOffset: Offset) -> Self
-
-    @discardableResult
-    func group(by expressionConvertibleGroupList: GroupBy...) -> Self
-
-    @discardableResult
-    func group(by expressionConvertibleGroupList: [GroupBy]) -> Self
-
-    @discardableResult
-    func having(_ expressionConvertibleHaving: Having) -> Self
-
-    @discardableResult
-    func next() throws -> Bool
-}
-
-extension Selectable {
     /// WINQ interface
     ///
     /// - Parameter condition: Expression convertible
@@ -69,20 +69,34 @@ extension Selectable {
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter orderList: Order convertible list
+    /// - Returns: `self`
     @discardableResult
     public func order(by orderConvertibleList: OrderBy...) -> Self {
         return order(by: orderConvertibleList)
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameter orderList: Order convertible list
+    /// - Returns: `self`
     @discardableResult
     public func order(by orderConvertibleList: [OrderBy]) -> Self {
         statement.order(by: orderConvertibleList)
         return self
     }
 
+    /// WINQ interface for SQL
+    ///
+    /// - Parameters:
+    ///   - begin: Expression convertible
+    ///   - end: Expression convertible
+    /// - Returns: `self`
     @discardableResult
-    public func limit(from expressionConvertibleFrom: Limit, to expressionConvertibleTo: Limit) -> Self {
-        statement.limit(from: expressionConvertibleFrom, to: expressionConvertibleTo)
+    public func limit(from begin: Limit, to end: Limit) -> Self {
+        statement.limit(from: begin, to: end)
         return self
     }
 
@@ -114,15 +128,16 @@ extension Selectable {
         statement.having(expressionConvertibleHaving)
         return self
     }
+}
 
-    //Since `next()` may throw errors, it can't conform to `Sequence` protocol to fit a `for in` loop.
-    @discardableResult
-    public func next() throws -> Bool {
-        do {
-            return try lazyCoreStatement().step()
-        } catch let error {
-            try? finalize()
-            throw error
-        }
+extension Selectable: CoreRepresentable {
+    /// The tag of the related database.
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database.
+    public var path: String {
+        return core.path
     }
 }

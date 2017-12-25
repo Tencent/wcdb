@@ -264,19 +264,19 @@ final class TableDecoder: Decoder {
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
                                         forKey key: Key) throws -> KeyedDecodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superDecoder() throws -> Swift.Decoder {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superDecoder(forKey key: Key) throws -> Swift.Decoder {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
@@ -309,10 +309,10 @@ final class TableDecoder: Decoder {
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
-        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func singleValueContainer() throws -> SingleValueDecodingContainer {
-        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 }

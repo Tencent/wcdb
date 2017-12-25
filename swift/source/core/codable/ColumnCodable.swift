@@ -58,10 +58,7 @@ extension ColumnDecodable {
         return FundamentalType.columnType
     }
     public init?(with value: FundamentalColumnType) {
-        guard let typedValue = value as? FundamentalType else {
-            return nil
-        }
-        self.init(with: typedValue)
+        self.init(with: value as! FundamentalType)
     }
 }
 
@@ -96,10 +93,7 @@ extension CollectionColumnDecodable {
         return .BLOB
     }
     public init?(with value: FundamentalColumnType) {
-        guard let typedValue = value as? Data else {
-            return nil
-        }
-        self.init(with: typedValue)
+        self.init(with: value as! Data)
     }
 }
 

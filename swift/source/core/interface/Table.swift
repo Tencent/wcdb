@@ -21,19 +21,9 @@
 import Foundation
 
 /// Convenient table interface
-public final class Table<Root: TableCodable>: CoreRepresentable {
+public final class Table<Root: TableCodable>: CoreContainer {
     var core: Core {
         return database
-    }
-
-    /// The tag of the related database. 
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database. 
-    public var path: String {
-        return core.path
     }
 
     let database: Database
@@ -52,8 +42,18 @@ public final class Table<Root: TableCodable>: CoreRepresentable {
     }
 }
 
-extension Table {
+extension Table: CoreRepresentable {
     public typealias Object = Root
+
+    /// The tag of the related database. 
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database. 
+    public var path: String {
+        return core.path
+    }
 }
 
 extension Table: InsertTableInterface {
@@ -127,7 +127,7 @@ extension Table: UpdateTableInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -160,7 +160,7 @@ extension Table: UpdateTableInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -184,7 +184,7 @@ extension Table: UpdateTableInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -208,7 +208,7 @@ extension Table: UpdateTableInterface {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - object: Table encodable object
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -242,7 +242,7 @@ extension Table: DeleteTableInterface {
     ///
     /// - Parameters:
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
@@ -275,7 +275,7 @@ extension Table: SelectTableInterface {
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
@@ -307,7 +307,7 @@ extension Table: SelectTableInterface {
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
@@ -329,7 +329,7 @@ extension Table: SelectTableInterface {
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
     /// - Throws: `Error`
@@ -349,7 +349,7 @@ extension Table: SelectTableInterface {
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
     /// - Throws: `Error`
@@ -372,7 +372,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
@@ -407,7 +407,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
@@ -429,7 +429,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
     /// - Throws: `Error`
@@ -449,7 +449,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertibleList: WINQ column result list
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
     /// - Throws: `Error`
@@ -469,7 +469,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertible: WINQ column result
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalColumn`
@@ -501,7 +501,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertible: WINQ column result
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalColumn`
@@ -533,7 +533,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertible: WINQ column result
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalValue`
     /// - Throws: `Error`
@@ -554,7 +554,7 @@ extension Table: RowSelectTableInterface {
     /// - Parameters:
     ///   - columnResultConvertible: WINQ column result
     ///   - condition: Expression convertible
-    ///   - orderList: Expression convertible list
+    ///   - orderList: Order convertible list
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalValue`
     /// - Throws: `Error`

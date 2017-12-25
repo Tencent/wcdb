@@ -20,23 +20,22 @@
 
 import Foundation
 
-final class TableEncoder: Encoder {
-    private final class KeyedEncodingTableContainer<CodingTableKeyType: CodingKey>: KeyedEncodingContainerProtocol {
-        typealias Key = CodingTableKeyType
+final class TableEncoder<TableEncodableType: TableEncodable>: Encoder {
+    private final class KeyedEncodingTableContainer: KeyedEncodingContainerProtocol {
+        typealias Key = TableEncodableType.CodingKeys
 
         let codingPath: [CodingKey] = []
 
-        let coreStatement: CoreStatement
+        let recyclableHandleStatement: RecyclableHandleStatement
         let indexedCodingTableKeys: [String: Int]
-        let primaryKey: CodingTableKeyBase?
+        let handleStatement: HandleStatement
+        var primaryKey: CodingTableKeyBase?
 
         init(with indexedCodingTableKeys: [String: Int],
-             on coreStatement: CoreStatement,
-             and primaryKey: CodingTableKeyBase?,
-             keyType: CodingTableKeyType.Type) {
+             on recyclableHandleStatement: RecyclableHandleStatement) {
             self.indexedCodingTableKeys = indexedCodingTableKeys
-            self.coreStatement = coreStatement
-            self.primaryKey = primaryKey
+            self.recyclableHandleStatement = recyclableHandleStatement
+            self.handleStatement = recyclableHandleStatement.raw
         }
 
         func bindingIndex(by codingTableKey: Key) -> Int? {
@@ -44,18 +43,18 @@ final class TableEncoder: Encoder {
         }
 
         func superEncoder() -> Swift.Encoder {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder(forKey key: Key) -> Swift.Encoder {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodePrimaryKeyIfPresent(forKey key: Key, atIndex index: Int) -> Bool {
             guard key.stringValue == primaryKey?.stringValue else {
                 return false
             }
-            coreStatement.bind(nil, toIndex: index)
+            handleStatement.bind(nil, toIndex: index)
             return true
         }
 
@@ -64,7 +63,7 @@ final class TableEncoder: Encoder {
                 return
             }
             if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
+                handleStatement.bind(value?.archivedFundamentalValue(), toIndex: bindingIndex)
             }
         }
 
@@ -73,7 +72,7 @@ final class TableEncoder: Encoder {
                 return
             }
             if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                coreStatement.bind(value, toIndex: bindingIndex)
+                handleStatement.bind(value.archivedFundamentalValue(), toIndex: bindingIndex)
             }
         }
 
@@ -210,57 +209,50 @@ final class TableEncoder: Encoder {
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
                                         forKey key: Key) -> KeyedEncodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
     let codingPath: [CodingKey] = []
     let userInfo: [CodingUserInfoKey: Any] = [:]
 
-    private let coreStatement: CoreStatement
-    private let indexedCodingTableKeys: [String: Int]
-    private var primaryKey: CodingTableKeyBase?
-
     func singleValueContainer() -> SingleValueEncodingContainer {
-        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
-        Error.assert(Key.self is CodingTableKeyBase.Type,
-                     message: "[\(Key.self)] must conform to CodingTableKey protocol.")
-        let container = KeyedEncodingTableContainer(with: indexedCodingTableKeys,
-                                                    on: coreStatement,
-                                                    and: primaryKey,
-                                                    keyType: Key.self)
-        return KeyedEncodingContainer(container)
+        return KeyedEncodingContainer(container) as! KeyedEncodingContainer<Key>
     }
 
-    convenience init(_ codingTableKeys: [CodingTableKeyBase], on coreStatement: CoreStatement) {
+    private let container: KeyedEncodingTableContainer
+
+    convenience init(_ codingTableKeys: [CodingTableKeyBase],
+                     on recyclableHandleStatement: RecyclableHandleStatement) {
         var indexedCodingTableKeys: [String: Int] = [:]
         for (index, codingTableKey) in codingTableKeys.enumerated() {
             indexedCodingTableKeys[codingTableKey.stringValue] = index + 1
         }
-        self.init(indexedCodingTableKeys, on: coreStatement)
+        self.init(indexedCodingTableKeys, on: recyclableHandleStatement)
     }
 
-    init(_ indexedCodingTableKeys: [String: Int], on coreStatement: CoreStatement) {
-        self.indexedCodingTableKeys = indexedCodingTableKeys
-        self.coreStatement = coreStatement
+    init(_ indexedCodingTableKeys: [String: Int], on recyclableHandleStatement: RecyclableHandleStatement) {
+        container = KeyedEncodingTableContainer(with: indexedCodingTableKeys, on: recyclableHandleStatement)
     }
 
-    func bind<TableEncodableType: TableEncodable>(_ object: TableEncodableType, isReplace: Bool = false) throws {
+    func bind(_ object: TableEncodableType, isReplace: Bool = false) throws {
         if !isReplace && object.isAutoIncrement {
-            primaryKey = TableEncodableType.CodingKeys.objectRelationalMapping.getPrimaryKey()
+            container.primaryKey = TableEncodableType.CodingKeys.objectRelationalMapping.getPrimaryKey()
+        } else {
+            container.primaryKey = nil
         }
         try object.encode(to: self)
-        primaryKey = nil
     }
 }

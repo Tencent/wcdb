@@ -21,23 +21,13 @@
 import Foundation
 
 /// Chain call for deleting
-public final class Delete: CoreRepresentable {
+public final class Delete: CoreContainer {
     var core: Core
     private let statement = StatementDelete()
 
     /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully
     public var changes: Int?
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return core.path
-    }
 
     init(with core: Core, andTableName tableName: String) throws {
         guard tableName.count > 0 else {
@@ -63,7 +53,7 @@ public final class Delete: CoreRepresentable {
 
     /// WINQ interface for SQL
     ///
-    /// - Parameter orderList: Expression convertible list
+    /// - Parameter orderList: Order convertible list
     /// - Returns: `self`
     @discardableResult
     public func order(by orderList: OrderBy...) -> Delete {
@@ -72,7 +62,7 @@ public final class Delete: CoreRepresentable {
 
     /// WINQ interface for SQL
     ///
-    /// - Parameter orderList: Expression convertible list
+    /// - Parameter orderList: Order convertible list
     /// - Returns: `self`
     @discardableResult
     public func order(by orderList: [OrderBy]) -> Delete {
@@ -118,8 +108,22 @@ public final class Delete: CoreRepresentable {
     ///
     /// - Throws: Error
     public func execute() throws {
-        let coreStatement = try core.prepare(statement)
-        try coreStatement.step()
-        changes = coreStatement.changes
+        let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
+        let handleStatement = recyclableHandleStatement.raw
+        try handleStatement.step()
+        changes = handleStatement.changes
+    }
+}
+
+extension Delete: CoreRepresentable {
+
+    /// The tag of the related database.
+    public var tag: Tag? {
+        return core.tag
+    }
+
+    /// The path of the related database.
+    public var path: String {
+        return core.path
     }
 }

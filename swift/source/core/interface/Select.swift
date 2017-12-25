@@ -21,20 +21,6 @@
 import Foundation
 
 public final class Select: Selectable {
-    var core: Core
-    let statement: StatementSelect
-    var optionalCoreStatement: CoreStatement?
-
-    /// The tag of the related database.
-    public var tag: Tag? {
-        return core.tag
-    }
-
-    /// The path of the related database.
-    public var path: String {
-        return core.path
-    }
-
     private let keys: [CodingTableKeyBase]
 
     lazy var decoder = TableDecoder(keys, on: optionalCoreStatement!)
@@ -42,26 +28,8 @@ public final class Select: Selectable {
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {
         //TODO: Use generic to check all coding table keys conform to same root type
         keys = propertyConvertibleList.asCodingTableKeys()
-        statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(table)
-        self.core = core
-    }
-
-    deinit {
-        try? finalize()
-    }
-
-    func finalize() throws {
-        if let coreStatement = optionalCoreStatement {
-            try coreStatement.finalize()
-            optionalCoreStatement = nil
-        }
-    }
-
-    func lazyCoreStatement() throws -> CoreStatement {
-        if optionalCoreStatement == nil {
-            optionalCoreStatement = try core.prepare(statement)
-        }
-        return optionalCoreStatement!
+        let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(table)
+        super.init(with: core, statement: statement)
     }
 
     /// Get next selected object according to the `CodingTableKey`. You can do an iteration using it.

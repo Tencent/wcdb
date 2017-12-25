@@ -654,7 +654,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint autocorrect --path ../tools/templates/xctemplates\n    swiftlint\n#    swiftlint --path ../tools/templates/xctemplates \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\n#    swiftlint --path ../tools/templates/xctemplates \nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		23A1FF771FB08C820023527D /* Install templates */ = {
 			isa = PBXShellScriptBuildPhase;

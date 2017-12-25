@@ -42,16 +42,13 @@ public struct FundamentalValue {
     public var int32Value: Int32 {
         switch type {
         case .integer32:
-            return (base as? Int32) ?? 0
+            return base as! Int32
         case .integer64:
-            let int64Value = (base as? Int64) ?? 0
-            return Int32(truncatingIfNeeded: int64Value)
+            return Int32(truncatingIfNeeded: base as! Int64)
         case .float:
-            let doubleValue = (base as? Double) ?? 0
-            return Int32(doubleValue)
+            return Int32(base as! Double)
         case .text:
-            let stringValue = (base as? String) ?? ""
-            return Int32(stringValue) ?? 0
+            return Int32(base as! String) ?? 0
         default:
             return 0
         }
@@ -60,16 +57,13 @@ public struct FundamentalValue {
     public var int64Value: Int64 {
         switch type {
         case .integer32:
-            let int32Value = (base as? Int32) ?? 0
-            return Int64(int32Value)
+            return Int64(base as! Int32)
         case .integer64:
-            return (base as? Int64) ?? 0
+            return base as! Int64
         case .float:
-            let doubleValue = (base as? Double) ?? 0
-            return Int64(doubleValue)
+            return Int64(base as! Double)
         case .text:
-            let stringValue = (base as? String) ?? ""
-            return Int64(stringValue) ?? 0
+            return Int64(base as! String) ?? 0
         default:
             return 0
         }
@@ -78,27 +72,15 @@ public struct FundamentalValue {
     public var stringValue: String {
         switch type {
         case .integer32:
-            guard let int32Value = (base as? Int32) else {
-                return ""
-            }
-            return "\(int32Value)"
+            return "\(base as! Int32)"
         case .integer64:
-            guard let int64Value = (base as? Int64) else {
-                return ""
-            }
-            return "\(int64Value)"
+            return "\(base as! Int64)"
         case .float:
-            guard let doubleValue = (base as? Double) else {
-                return ""
-            }
-            return "\(doubleValue)"
+            return "\(base as! Double)"
         case .text:
-            return (base as? String) ?? ""
+            return base as! String
         case .BLOB:
-            guard let dataValue = (base as? Data), let stringValue = String(data: dataValue, encoding: .utf8) else {
-                return ""
-            }
-            return stringValue
+            return String(data: base as! Data, encoding: .utf8) ?? ""
         default:
             return ""
         }
@@ -107,18 +89,13 @@ public struct FundamentalValue {
     public var doubleValue: Double {
         switch type {
         case .integer32:
-            let int32Value = (base as? Int32) ?? 0
-            return Double(int32Value)
+            return Double(base as! Int32)
         case .integer64:
-            let int64Value = (base as? Int64) ?? 0
-            return Double(int64Value)
+            return Double(base as! Int64)
         case .float:
-            return (base as? Double) ?? 0
+            return base as! Double
         case .text:
-            guard let stringValue = base as? String else {
-                return 0
-            }
-            return Double(stringValue) ?? 0
+            return Double(base as! String) ?? 0
         default:
             return 0
         }
@@ -133,10 +110,7 @@ public struct FundamentalValue {
         case .float:
             fallthrough
         case .text:
-            guard let dataValue = stringValue.data(using: .utf8) else {
-                return Data()
-            }
-            return dataValue
+            return stringValue.data(using: .utf8) ?? Data()
         case .BLOB:
             return (base as? Data) ?? Data()
         default:

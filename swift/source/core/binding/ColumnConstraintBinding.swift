@@ -57,15 +57,15 @@ public struct ColumnConstraintBinding {
         let value = defaultEncodableValue.archivedFundamentalValue()
         switch ColumnEncodableType.columnType {
         case .integer32:
-            defaultValue = .int32((value as? Int32) ?? 0)
+            defaultValue = .int32(value as! Int32)
         case .integer64:
-            defaultValue = .int64((value as? Int64) ?? 0)
+            defaultValue = .int64(value as! Int64)
         case .text:
-            defaultValue = .text((value as? String) ?? "")
+            defaultValue = .text(value as! String)
         case .float:
-            defaultValue = .float((value as? Double) ?? 0)
+            defaultValue = .float(value as! Double)
         case .BLOB:
-            defaultValue = .BLOB((value as? Data) ?? Data())
+            defaultValue = .BLOB(value as! Data)
         case .null:
             defaultValue = .null
         }

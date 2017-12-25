@@ -24,8 +24,7 @@ import UIKit
 #endif //WCDB_IOS
 
 /// Thread-safe Database object
-public final class Database {
-    private let recyclableHandlePool: RecyclableHandlePool
+public final class Database: Core {
 
     /// Init a database from path.  
     /// Note that all database objects with same path share the same core.
@@ -63,9 +62,9 @@ public final class Database {
                         }
                     })
             })
-        #endif //WCDB_IOS            
-        self.recyclableHandlePool = HandlePool.getPool(withPath: url.standardizedFileURL.path,
-                                                       defaultConfigs: Database.defaultConfigs)
+        #endif //WCDB_IOS     
+        super.init(with: HandlePool.getPool(withPath: url.standardizedFileURL.path,
+                                            defaultConfigs: Database.defaultConfigs))
     }
 
     /// Init a database from existing tag.  
@@ -77,15 +76,31 @@ public final class Database {
     /// - Parameter tag: An existing tag.
     /// - Throws: `Error` while tag is not exists
     public init(withExistingTag tag: Tag) throws {
-        try self.recyclableHandlePool = HandlePool.getExistingPool(with: tag)
+        super.init(with: try HandlePool.getExistingPool(with: tag))
     }
 
     init(withExistingPath path: String) throws {
-        try self.recyclableHandlePool = HandlePool.getExistingPool(withPath: path)
+        super.init(with: try HandlePool.getExistingPool(withPath: path))
     }
 
-    private var handlePool: HandlePool {
-        return recyclableHandlePool.raw
+    /// The tag of the database. Default to nil.  
+    /// You should set it on a database and can get it from all kind of Core objects, 
+    /// including `Database`, `Table`, `Transaction`, `Select`, `RowSelect`, `MultiSelect`, `Insert`, `Delete`, 
+    /// `Update` and so on.   
+    /// Note that core objects with same path share this tag, even they are not the same object.
+    ///
+    ///     let database1 = Database(withPath: path)
+    ///     let database2 = Database(withPath: path)
+    ///     database1.tag = 1
+    ///     print("Tag: \(database2.tag!)") // print 1
+    ///
+    public override var tag: Tag? {
+        get {
+            return handlePool.tag
+        }
+        set {
+            handlePool.tag = newValue
+        }
     }
 
     private static var threadedHandles = ThreadLocal<[String: RecyclableHandle]>(defaultTo: [:])
@@ -184,6 +199,70 @@ public final class Database {
     /// Note that WCDB will call this interface automatically while it receives memory warning on iOS.
     public static func purge() {
         HandlePool.purgeFreeHandlesInAllPool()
+    }
+
+    override func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
+        let recyclableHandle = try flowOut()
+        return try prepare(statement, in: recyclableHandle)
+    }
+
+    /// Exec a specific sql.  
+    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
+    ///
+    /// - Parameter statement: WINQ statement
+    /// - Throws: `Error`
+    public override func exec(_ statement: Statement) throws {
+        try exec(statement, in: flowOut())
+    }
+
+    /// Separate interface of `run(transaction:)`  
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// To do a cross-thread transaction, use `getTransaction`.
+    /// - Throws: `Error`
+    public override func begin(_ mode: StatementTransaction.Mode = .immediate) throws {
+        let statement = mode == .immediate ?
+            CommonStatement.beginTransactionImmediate :
+            StatementTransaction().begin(mode)
+        let recyableHandlePool = try flowOut()
+        try recyableHandlePool.raw.handle.exec(statement)
+        Database.threadedHandles.value[path] = recyableHandlePool
+    }
+
+    /// Separate interface of `run(transaction:)`  
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
+    /// To do a cross-thread transaction, use `getTransaction`.
+    /// - Throws: `Error`
+    public override func commit() throws {
+        let recyableHandlePool = try flowOut()
+        try recyableHandlePool.raw.handle.exec(CommonStatement.commitTransaction)
+        Database.threadedHandles.value.removeValue(forKey: path)
+    }
+
+    /// Separate interface of run(transaction:)
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// To do a cross-thread transaction, use `getTransaction`.
+    /// - Throws: `Error`
+    public override func rollback() throws {
+        Database.threadedHandles.value.removeValue(forKey: path)
+        let recyableHandlePool = try flowOut()
+        try recyableHandlePool.raw.handle.exec(CommonStatement.rollbackTransaction)
+    }
+
+    /// Run a embedded transaction in closure  
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    ///     try database.run(embeddedTransaction: { () throws -> Void in 
+    ///         try database.insert(objects: objects, intoTable: table)
+    ///     })
+    ///
+    /// - Parameter embeddedTransaction: Operation inside transaction
+    /// - Throws: `Error`
+    public override func run(embeddedTransaction: TransactionClosure) throws {
+        if Database.threadedHandles.value[path] != nil {
+            return try embeddedTransaction()
+        }
+        return try run(transaction: embeddedTransaction)
     }
 }
 
@@ -486,88 +565,19 @@ extension Database {
     }
 }
 
-//Basic
+//Transaction
 extension Database {
     /// Generation a `Transaction` object to do a transaction.
     ///
     /// - Returns: Transaction
     /// - Throws: `Error`
     public func getTransaction() throws -> Transaction {
-        let handle = try flowOut()
-        return Transaction(with: recyclableHandlePool, and: handle)
+        return Transaction(with: recyclableHandlePool, and: try flowOut())
     }
 }
 
-//Core
-extension Database: Core {
-    /// The path of the database
-    public var path: String {
-        return handlePool.path
-    }
-
-    /// The tag of the database. Default to nil.  
-    /// You should set it on a database and can get it from all kind of Core objects, 
-    /// including `Database`, `Table`, `Transaction`, `Select`, `RowSelect`, `MultiSelect`, `Insert`, `Delete`, 
-    /// `Update` and so on.   
-    /// Note that core objects with same path share this tag, even they are not the same object.
-    ///
-    ///     let database1 = Database(withPath: path)
-    ///     let database2 = Database(withPath: path)
-    ///     database1.tag = 1
-    ///     print("Tag: \(database2.tag!)") // print 1
-    ///
-    public var tag: Tag? {
-        get {
-            return handlePool.tag
-        }
-        set {
-            handlePool.tag = newValue
-        }
-    }
-
-    /// Prepare a specific sql.  
-    /// Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer
-    ///
-    /// - Parameter statement: WINQ statement
-    /// - Returns: CoreStatement
-    /// - Throws: `Error`
-    public func prepare(_ statement: Statement) throws -> CoreStatement {
-        let recyclableHandle = try flowOut()
-        let handleStatement = try recyclableHandle.raw.handle.prepare(statement)
-        let recyclableHandleStatement = RecyclableHandleStatement(recyclableHandle: recyclableHandle,
-                                                                  handleStatement: handleStatement)
-        return CoreStatement(with: self,
-                             and: recyclableHandleStatement)
-    }
-
-    /// Exec a specific sql.  
-    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
-    ///
-    /// - Parameter statement: WINQ statement
-    /// - Throws: `Error`
-    public func exec(_ statement: Statement) throws {
-        let recyclableHandle = try flowOut()
-        try recyclableHandle.raw.handle.exec(statement)
-    }
-
-    /// Check whether table exists
-    ///
-    /// - Parameter table: The name of the table to be checked.
-    /// - Returns: True if table exists. False if table does not exist.
-    /// - Throws: `Error`
-    public func isTableExists(_ table: String) throws -> Bool {
-        let handle = try flowOut()
-        let select = StatementSelect().select(1).from(table).limit(0)
-        Error.threadedSlient.value = true
-        let handleStatement = try? handle.raw.handle.prepare(select)
-        Error.threadedSlient.value = false
-        guard handleStatement != nil else {
-            return false
-        }
-        try handleStatement!.step()
-        return true
-    }
-
+//Table
+extension Database {
     /// Get a wrapper from an existing table.
     ///
     /// - Parameters:
@@ -582,109 +592,6 @@ extension Database: Core {
             return nil
         }
         return Table<Root>(withDatabase: self, named: name)
-    }
-
-    /// This interface is equivalent `begin(.immediate)`
-    ///
-    /// - Throws: `Error`
-    public func begin() throws {
-        try begin(.immediate)
-    }
-
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
-    /// To do a cross-thread transaction, use `getTransaction`.
-    /// - Throws: `Error`
-    public func begin(_ mode: StatementTransaction.Mode) throws {
-        let recyclableHandle = try flowOut()
-        let statement = mode == .immediate ?
-            CommonStatement.beginTransactionImmediate :
-            StatementTransaction().begin(mode)
-        try recyclableHandle.raw.handle.exec(statement)
-        Database.threadedHandles.value[path] = recyclableHandle
-    }
-
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
-    /// To do a cross-thread transaction, use `getTransaction`.
-    /// - Throws: `Error`
-    public func commit() throws {
-        let recyclableHandle = try flowOut()
-        try recyclableHandle.raw.handle.exec(CommonStatement.commitTransaction)
-        Database.threadedHandles.value.removeValue(forKey: path)
-    }
-
-    /// Separate interface of run(transaction:)
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
-    /// To do a cross-thread transaction, use `getTransaction`.
-    /// - Throws: `Error`
-    public func rollback() throws {
-        let recyclableHandle = try flowOut()
-        Database.threadedHandles.value.removeValue(forKey: path)
-        try recyclableHandle.raw.handle.exec(CommonStatement.rollbackTransaction)
-    }
-
-    /// Run a transaction in closure
-    ///
-    ///     try database.run(transaction: { () throws -> Void in 
-    ///         try database.insert(objects: objects, intoTable: table)
-    ///     })
-    ///
-    /// - Parameter transaction: Operation inside transaction
-    /// - Throws: `Error`
-    public func run(transaction: TransactionClosure) throws {
-        try begin(.immediate)
-        do {
-            try transaction()
-            try commit()
-        } catch let error {
-            try? rollback()
-            throw error
-        }
-    }
-
-    /// Run a controllable transaction in closure
-    ///
-    ///     try database.run(controllableTransaction: { () throws -> Bool in 
-    ///         try database.insert(objects: objects, intoTable: table)
-    ///         return true // return true to commit transaction and return false to rollback transaction.
-    ///     })
-    ///
-    /// - Parameter controllableTransaction: Operation inside transaction
-    /// - Throws: `Error`
-    public func run(controllableTransaction: ControlableTransactionClosure) throws {
-        try begin(.immediate)
-        var shouldRollback = true
-        do {
-            if try controllableTransaction() {
-                try commit()
-            } else {
-                shouldRollback = false
-                try rollback()
-            }
-        } catch let error {
-            if shouldRollback {
-                try? rollback()
-            }
-            throw error
-        }
-    }
-
-    /// Run a embedded transaction in closure  
-    /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
-    /// otherwise it will be executed within the existing transaction.
-    ///
-    ///     try database.run(embeddedTransaction: { () throws -> Void in 
-    ///         try database.insert(objects: objects, intoTable: table)
-    ///     })
-    ///
-    /// - Parameter embeddedTransaction: Operation inside transaction
-    /// - Throws: `Error`
-    public func run(embeddedTransaction: TransactionClosure) throws {
-        if Database.threadedHandles.value[path] != nil {
-            return try embeddedTransaction()
-        }
-        return try run(transaction: embeddedTransaction)
     }
 }
 

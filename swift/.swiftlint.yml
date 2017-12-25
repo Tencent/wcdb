@@ -8,3 +8,4 @@ disabled_rules:
   - type_body_length
   - nesting
   - generic_type_name
+  - force_cast

@@ -32,11 +32,11 @@ final class ColumnTypeEncoder: Encoder {
         }
 
         func superEncoder() -> Swift.Encoder {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder(forKey key: Key) -> Swift.Encoder {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodeNil(forKey key: Key) throws {
@@ -110,11 +110,11 @@ final class ColumnTypeEncoder: Encoder {
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
                                         forKey key: Key) -> KeyedEncodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-            Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
@@ -188,11 +188,11 @@ final class ColumnTypeEncoder: Encoder {
     private var results: [String: ColumnType] = [:]
 
     func singleValueContainer() -> SingleValueEncodingContainer {
-        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        Error.abort("It should be called. If you think it's a bug, please report an issue to us.")
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
