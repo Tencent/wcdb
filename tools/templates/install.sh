@@ -5,10 +5,15 @@ install_xctemplates() {
     templates=~/Library/Developer/Xcode/Templates
     file_templates=~/Library/Developer/Xcode/Templates/File\ Templates
     source_templates=`pwd`/xctemplates/
+    old_templates=~/Library/Developer/Xcode/Templates/File\ Templates/WCDB
 
     if [ -f $templates ] ;
     then
         rm $templates
+    fi;
+    if [ -h "$old_templates" ] ;
+    then
+        rm "$old_templates"
     fi;
     mkdir -p "$file_templates"
     cp -R $source_templates "$file_templates"
