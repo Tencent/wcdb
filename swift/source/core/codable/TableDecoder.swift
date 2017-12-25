@@ -21,7 +21,14 @@
 import Foundation
 
 final class TableDecoder: Decoder {
-    private final class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> : KeyedDecodingContainerProtocol {
+    private class KeyedDecodingTableContainerBase {
+        var keyType: CodingKey.Type
+        init(with keyType: CodingKey.Type) {
+            self.keyType = keyType
+        }
+    }
+    private final class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> 
+        : KeyedDecodingTableContainerBase, KeyedDecodingContainerProtocol {
         typealias Key = CodingTableKeyType
 
         let codingPath: [CodingKey] = []
@@ -32,6 +39,7 @@ final class TableDecoder: Decoder {
         init(with indexedCodingTableKeys: [String: Int], on handleStatement: HandleStatement, and keyType: Key.Type) {
             self.indexedCodingTableKeys = indexedCodingTableKeys
             self.handleStatement = handleStatement
+            super.init(with: keyType)
         }
 
         func columnIndex(by key: Key) -> Int? {
@@ -374,6 +382,7 @@ final class TableDecoder: Decoder {
 
     private let handleStatement: HandleStatement
     private let indexedCodingTableKeys: [String: Int]
+    private var container: KeyedDecodingTableContainerBase?
 
     convenience init(_ codingTableKeys: [CodingTableKeyBase], on handleStatement: HandleStatement) {
         var indexedCodingTableKeys: [String: Int] = [:]
@@ -391,10 +400,15 @@ final class TableDecoder: Decoder {
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
         Error.assert(Key.self is CodingTableKeyBase.Type,
                      message: "[\(Key.self)] must conform to CodingTableKey protocol.")
-        let container = KeyedDecodingTableContainer(with: indexedCodingTableKeys,
+        if container == nil {
+            container = KeyedDecodingTableContainer(with: indexedCodingTableKeys,
                                                     on: handleStatement,
                                                     and: Key.self)
-        return KeyedDecodingContainer(container)
+        }
+        guard let requestedContainer = container as? KeyedDecodingTableContainer<Key> else {
+            Error.abort("It should not be failed. If you think it's a bug, please report an issue to us.")
+        }
+        return KeyedDecodingContainer(requestedContainer)
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
