@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <SQLite-Bridging-Header.h>
+#include <SQLite-Bridging.h>
 #ifdef WCDB_COCOAPODS
 #include "sqlite3.h"
 #else //WCDB_COCOAPODS

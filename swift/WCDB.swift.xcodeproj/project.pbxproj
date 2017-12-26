@@ -74,7 +74,7 @@
 		237931C51FD52CB4003BBA5F /* TableCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C41FD52CB4003BBA5F /* TableCodable.swift */; };
 		237931C81FD538F8003BBA5F /* ColumnCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C71FD538F8003BBA5F /* ColumnCodable.swift */; };
 		237931CB1FD547CC003BBA5F /* CodingTableKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931CA1FD547CC003BBA5F /* CodingTableKey.swift */; };
-		23794DB41FAB23AD001E79DE /* WCDB-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23794DB41FAB23AD001E79DE /* WCDB-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 23794DB31FAB23AD001E79DE /* WCDB-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B131FAB1F7E00BC2659 /* Column.swift */; };
 		238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */; };
 		238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B151FAB1F7E00BC2659 /* ColumnIndex.swift */; };
@@ -122,8 +122,8 @@
 		238D0BC91FAB1F7E00BC2659 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B6C1FAB1F7E00BC2659 /* Lock.swift */; };
 		238D0BCA1FAB1F7E00BC2659 /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B6D1FAB1F7E00BC2659 /* Recyclable.swift */; };
 		238D0BCB1FAB1F7E00BC2659 /* RWLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B6E1FAB1F7E00BC2659 /* RWLock.swift */; };
-		238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c */; };
-		238D0BCD1FAB1F7E00BC2659 /* SQLite-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 238D0B701FAB1F7E00BC2659 /* SQLite-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging.c in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging.c */; };
+		238D0BCD1FAB1F7E00BC2659 /* SQLite-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 238D0B701FAB1F7E00BC2659 /* SQLite-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B711FAB1F7E00BC2659 /* Tagged.swift */; };
 		238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */; };
 		23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* Tokenize.swift */; };
@@ -224,7 +224,7 @@
 		237931C41FD52CB4003BBA5F /* TableCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCodable.swift; sourceTree = "<group>"; };
 		237931C71FD538F8003BBA5F /* ColumnCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnCodable.swift; sourceTree = "<group>"; };
 		237931CA1FD547CC003BBA5F /* CodingTableKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingTableKey.swift; sourceTree = "<group>"; };
-		23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Bridging-Header.h"; sourceTree = "<group>"; };
+		23794DB31FAB23AD001E79DE /* WCDB-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCDB-Bridging.h"; sourceTree = "<group>"; };
 		238D0B031FAB1F4300BC2659 /* WCDBSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDBSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		238D0B0F1FAB1F7E00BC2659 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		238D0B131FAB1F7E00BC2659 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
@@ -274,8 +274,8 @@
 		238D0B6C1FAB1F7E00BC2659 /* Lock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
 		238D0B6D1FAB1F7E00BC2659 /* Recyclable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recyclable.swift; sourceTree = "<group>"; };
 		238D0B6E1FAB1F7E00BC2659 /* RWLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RWLock.swift; sourceTree = "<group>"; };
-		238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "SQLite-Bridging-Header.c"; sourceTree = "<group>"; };
-		238D0B701FAB1F7E00BC2659 /* SQLite-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLite-Bridging-Header.h"; sourceTree = "<group>"; };
+		238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "SQLite-Bridging.c"; sourceTree = "<group>"; };
+		238D0B701FAB1F7E00BC2659 /* SQLite-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLite-Bridging.h"; sourceTree = "<group>"; };
 		238D0B711FAB1F7E00BC2659 /* Tagged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tagged.swift; sourceTree = "<group>"; };
 		238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
 		23A00CD81FBAF82B000180A8 /* Tokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenize.swift; sourceTree = "<group>"; };
@@ -496,7 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				230209C11FBEE431000D69B6 /* Optional.swift */,
-				23794DB31FAB23AD001E79DE /* WCDB-Bridging-Header.h */,
+				23794DB31FAB23AD001E79DE /* WCDB-Bridging.h */,
 				238D0B681FAB1F7E00BC2659 /* Atomic.swift */,
 				238D0B691FAB1F7E00BC2659 /* ConcurrentList.swift */,
 				238D0B6A1FAB1F7E00BC2659 /* Error.swift */,
@@ -504,8 +504,8 @@
 				238D0B6C1FAB1F7E00BC2659 /* Lock.swift */,
 				238D0B6D1FAB1F7E00BC2659 /* Recyclable.swift */,
 				238D0B6E1FAB1F7E00BC2659 /* RWLock.swift */,
-				238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c */,
-				238D0B701FAB1F7E00BC2659 /* SQLite-Bridging-Header.h */,
+				238D0B6F1FAB1F7E00BC2659 /* SQLite-Bridging.c */,
+				238D0B701FAB1F7E00BC2659 /* SQLite-Bridging.h */,
 				23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */,
 				238D0B711FAB1F7E00BC2659 /* Tagged.swift */,
 				238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */,
@@ -531,8 +531,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238D0BCD1FAB1F7E00BC2659 /* SQLite-Bridging-Header.h in Headers */,
-				23794DB41FAB23AD001E79DE /* WCDB-Bridging-Header.h in Headers */,
+				238D0BCD1FAB1F7E00BC2659 /* SQLite-Bridging.h in Headers */,
+				23794DB41FAB23AD001E79DE /* WCDB-Bridging.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,7 +745,7 @@
 				238D0B9D1FAB1F7E00BC2659 /* Subquery.swift in Sources */,
 				23E9E0071FC3D80B005DE71C /* Table.swift in Sources */,
 				230209961FBED533000D69B6 /* TableConstraintBinding.swift in Sources */,
-				238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging-Header.c in Sources */,
+				238D0BCC1FAB1F7E00BC2659 /* SQLite-Bridging.c in Sources */,
 				238D0BC81FAB1F7E00BC2659 /* File.swift in Sources */,
 				238D0B981FAB1F7E00BC2659 /* StatementSavepoint.swift in Sources */,
 				238D0B7D1FAB1F7E00BC2659 /* Describable.swift in Sources */,
@@ -997,7 +997,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.swift;
 				PRODUCT_NAME = WCDBSwift;
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
@@ -1022,7 +1022,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.swift;
 				PRODUCT_NAME = WCDBSwift;
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

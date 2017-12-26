@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
+#import <WCDBSwift/SQLite-Bridging.h>
+
 #ifdef WCDB_COCOAPODS
-#import <WCDB/SQLite-Bridging-Header.h>
-#import <WCDB/SQLiteRepairKit.h>
+#import <WCDBSwift/SQLiteRepairKit.h>
 #else //WCDB_COCOAPODS
-#import <WCDBSwift/SQLite-Bridging-Header.h>
 #import <sqliterk/SQLiteRepairKit.h>
 #endif //WCDB_COCOAPODS
