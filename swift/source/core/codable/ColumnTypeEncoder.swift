@@ -21,22 +21,27 @@
 import Foundation
 
 final class ColumnTypeEncoder: Encoder {
-    private final class KeyedEncodingTypedContainer<CodingsKey: CodingKey>: KeyedEncodingContainerProtocol {
-        typealias Key = CodingsKey
+
+    private var results: [String: ColumnType] = [:]
+
+    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
+        return KeyedEncodingContainer(KeyedEncodingTypedContainer(encoder: self))
+    }
+
+    static func getColumnTypes(of type: TableEncodableBase.Type) -> [String: ColumnType] {
+        let encoder = ColumnTypeEncoder()
+        // It should not be failed. If you think it's a bug, please report an issue to us.
+        try? type.init().encode(to: encoder)
+        return encoder.results
+    }
+
+    private final class KeyedEncodingTypedContainer<CodingKeys: CodingKey>: KeyedEncodingContainerProtocol {
+        typealias Key = CodingKeys
 
         let encoder: ColumnTypeEncoder
-        let codingPath: [CodingKey] = []
 
         init(encoder: ColumnTypeEncoder) {
             self.encoder = encoder
-        }
-
-        func superEncoder() -> Swift.Encoder {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
-        }
-
-        func superEncoder(forKey key: Key) -> Swift.Encoder {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func encodeNil(forKey key: Key) throws {
@@ -180,12 +185,26 @@ final class ColumnTypeEncoder: Encoder {
                 encoder.results[key.stringValue] = .BLOB
             }
         }
+
+        var codingPath: [CodingKey] {
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        }
+
+        func superEncoder() -> Swift.Encoder {
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        }
+
+        func superEncoder(forKey key: Key) -> Swift.Encoder {
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        }
     }
 
-    let codingPath: [CodingKey] = []
-    let userInfo: [CodingUserInfoKey: Any] = [:]
-
-    private var results: [String: ColumnType] = [:]
+    var codingPath: [CodingKey] {
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+    }
+    var userInfo: [CodingUserInfoKey: Any] {
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+    }
 
     func singleValueContainer() -> SingleValueEncodingContainer {
         Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
@@ -193,17 +212,5 @@ final class ColumnTypeEncoder: Encoder {
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
         Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
-    }
-
-    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
-        return KeyedEncodingContainer(KeyedEncodingTypedContainer(encoder: self))
-    }
-
-    static func getColumnTypes(of type: TableEncodableBase.Type) -> [String: ColumnType] {
-        let encoder = ColumnTypeEncoder()
-        let dummy = type.init()
-        Error.assert(((try? dummy.encode(to: encoder)) != nil),
-                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
-        return encoder.results
     }
 }

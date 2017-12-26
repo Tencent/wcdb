@@ -21,7 +21,7 @@
 import Foundation
 
 /// Convenient interface for inserting
-public protocol InsertInterface {
+public protocol InsertInterface: class {
 
     /// Execute inserting with `TableEncodable` object on specific(or all) properties
     ///
@@ -123,7 +123,7 @@ extension InsertInterface where Self: Core {
 }
 
 /// Convenient interface for updating
-public protocol UpdateInterface {
+public protocol UpdateInterface: class {
 
     /// Execute updating with `TableEncodable` object on specific(or all) properties. 
     ///
@@ -289,7 +289,7 @@ extension UpdateInterface where Self: Core {
 }
 
 /// Convenient interface for deleting
-public protocol DeleteInterface {
+public protocol DeleteInterface: class {
 
     /// Execute deleting 
     ///
@@ -332,7 +332,7 @@ extension DeleteInterface where Self: Core {
 }
 
 /// Convenient interface for row selecting
-public protocol RowSelectInterface {
+public protocol RowSelectInterface: class {
 
     /// Get rows by specific selecting
     ///
@@ -612,7 +612,7 @@ extension RowSelectInterface where Self: Core {
 }
 
 /// Convenient interface for selecting
-public protocol SelectInterface {
+public protocol SelectInterface: class {
     //TODO: Add generic property convertible to fit the type
 
     /// Get objects on specific(or all) properties
@@ -757,7 +757,7 @@ extension SelectInterface where Self: Core {
 }
 
 /// Convenient interface for table related operation
-public protocol TableInterface {
+public protocol TableInterface: class {
     /// Create table, related indexes and constraints with specific type
     ///
     /// Note that it will create defined indexes automatically.

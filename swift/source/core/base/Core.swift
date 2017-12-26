@@ -154,11 +154,11 @@ public class Core: CoreRepresentable {
     }
 }
 
-protocol CoreContainer {
+protocol CoreContainer: class {
     var core: Core {get}
 }
 
-protocol CoreRepresentable {
+protocol CoreRepresentable: class {
     var tag: Tag? {get}
     var path: String {get}
 }

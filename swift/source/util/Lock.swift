@@ -20,7 +20,7 @@
 
 import Foundation
 
-protocol Lockable {
+protocol Lockable: class {
     func lock()
     func unlock()
 }
