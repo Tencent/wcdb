@@ -57,10 +57,10 @@ public final class MultiSelect: Selectable {
 
     struct TypedIndexedKeys {
         let type: TableDecodableBase.Type
-        var indexedKeys: [String: Int]
+        var indexedKeys: TableDecoder.HashedKey
         init(_ type: TableDecodableBase.Type, key: String, index: Int) {
             self.type = type
-            self.indexedKeys = [key: index]
+            self.indexedKeys = [key.hashValue: index]
         }
     }
     private lazy var generators: [String: Generator] = {
@@ -77,13 +77,13 @@ public final class MultiSelect: Selectable {
                              message: "\(key.rootType) must conform to TableDecodable protocol.")
                 typedIndexedKeys = TypedIndexedKeys(tableDecodableType!, key: key.stringValue, index: index)
             } else {
-                typedIndexedKeys.indexedKeys[key.stringValue] = index
+                typedIndexedKeys.indexedKeys[key.stringValue.hashValue] = index
             }
             mappedKeys[tableName] = typedIndexedKeys
         }
         var generators: [String: Generator] = [:]
         for (tableName, typedIndexedKey) in mappedKeys {
-            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: handleStatement!)
+            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: optionalRecyclableHandleStatement!)
             let type = typedIndexedKey.type
             let generator = { () throws -> TableDecodableBase in
                 return try type.init(from: decoder)

@@ -21,151 +21,161 @@
 import Foundation
 
 final class TableDecoder: Decoder {
-    private class KeyedDecodingTableContainerBase {
-        var keyType: CodingKey.Type
-        init(with keyType: CodingKey.Type) {
-            self.keyType = keyType
-        }
-    }
-    private final class KeyedDecodingTableContainer<CodingTableKeyType: CodingKey> 
-        : KeyedDecodingTableContainerBase, KeyedDecodingContainerProtocol {
-        typealias Key = CodingTableKeyType
 
-        let codingPath: [CodingKey] = []
+    private let recyclableHandleStatement: RecyclableHandleStatement
+
+    typealias HashedKey = [Int: Int] // hash value -> index
+    private let hashedKeys: HashedKey
+
+    private var container: Any?
+
+    init(_ codingTableKeys: [CodingTableKeyBase], on recyclableHandleStatement: RecyclableHandleStatement) {
+        var hashedKeys: HashedKey = [:]
+        for (index, key) in codingTableKeys.enumerated() {
+            hashedKeys[key.stringValue.hashValue] = index
+        }
+        self.hashedKeys = hashedKeys
+        self.recyclableHandleStatement = recyclableHandleStatement
+    }
+
+    init(_ hashedKeys: HashedKey, on recyclableHandleStatement: RecyclableHandleStatement) {
+        self.hashedKeys = hashedKeys
+        self.recyclableHandleStatement = recyclableHandleStatement
+    }
+
+    func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
+        Error.assert(Key.self is CodingTableKeyBase.Type,
+                     message: "[\(Key.self)] must conform to CodingTableKey protocol.")
+        if container == nil {
+            container = KeyedDecodingContainer(KeyedDecodingTableContainer<Key>(with: hashedKeys,
+                                                                                on: recyclableHandleStatement.raw))
+        }
+        // It should not be failed. If you think it's a bug, please report an issue to us.
+        return container as! KeyedDecodingContainer<Key>
+    }
+
+    private final class KeyedDecodingTableContainer<CodingKeys: CodingKey> : KeyedDecodingContainerProtocol {
+        typealias Key = CodingKeys
 
         let handleStatement: HandleStatement
-        let indexedCodingTableKeys: [String: Int]
 
-        init(with indexedCodingTableKeys: [String: Int], on handleStatement: HandleStatement, and keyType: Key.Type) {
-            self.indexedCodingTableKeys = indexedCodingTableKeys
+        let hashedKeys: HashedKey
+
+        init(with hashedKeys: HashedKey, on handleStatement: HandleStatement) {
             self.handleStatement = handleStatement
-            super.init(with: keyType)
+            self.hashedKeys = hashedKeys
         }
 
-        func columnIndex(by key: Key) -> Int? {
-            return indexedCodingTableKeys[key.stringValue]
+        func columnIndex(by key: Key) -> Int {
+            guard let index = hashedKeys[key.stringValue.hashValue] else {
+                Error.abort("If [\(key)] would not be decoded, please make it optional.")
+            }
+            return index
         }
 
-        var allKeys: [Key] {
-            return []
+        func columnIndexIfPresent(by key: Key) -> Int? {
+            return hashedKeys[key.stringValue.hashValue]
         }
 
         func contains(_ key: Key) -> Bool {
-            return columnIndex(by: key) != nil
+            return true
         }
 
         //Decode
         func decodeNil(forKey key: Key) throws -> Bool {
-            guard let index = columnIndex(by: key) else {
-                return false
-            }
+            let index: Int = columnIndex(by: key)
             return handleStatement.columnValue(atIndex: index, of: Int32.self) != 0
         }
 
         func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return handleStatement.columnValue(atIndex: index!, of: Int32.self) != 0
+            let index: Int = columnIndex(by: key)
+            return handleStatement.columnValue(atIndex: index, of: Int32.self) != 0
         }
 
         func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return Int(truncatingIfNeeded: handleStatement.columnValue(atIndex: index!, of: Int64.self))
+            let index: Int = columnIndex(by: key)
+            return Int(truncatingIfNeeded: handleStatement.columnValue(atIndex: index, of: Int64.self))
         }
 
         func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return Int8(handleStatement.columnValue(atIndex: index!, of: Int32.self))
+            let index: Int = columnIndex(by: key)
+            return Int8(handleStatement.columnValue(atIndex: index, of: Int32.self))
         }
 
         func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return Int16(handleStatement.columnValue(atIndex: index!, of: Int32.self))
+            let index: Int = columnIndex(by: key)
+            return Int16(handleStatement.columnValue(atIndex: index, of: Int32.self))
         }
 
         func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            return handleStatement.columnValue(atIndex: index)
         }
 
         func decode(_ type: Int64.Type, forKey key: Key) throws -> Int64 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            return handleStatement.columnValue(atIndex: index)
         }
 
         func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            let value: Int64 = handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            let value: Int64 = handleStatement.columnValue(atIndex: index)
             return UInt(truncatingIfNeeded: UInt64(bitPattern: value))
         }
 
         func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            let value: Int32 = handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            let value: Int32 = handleStatement.columnValue(atIndex: index)
             return UInt8(truncatingIfNeeded: UInt32(bitPattern: value))
         }
 
         func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            let value: Int32 = handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            let value: Int32 = handleStatement.columnValue(atIndex: index)
             return UInt16(truncatingIfNeeded: UInt32(bitPattern: value))
         }
 
         func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return UInt32(bitPattern: handleStatement.columnValue(atIndex: index!, of: Int32.self))
+            let index: Int = columnIndex(by: key)
+            return UInt32(bitPattern: handleStatement.columnValue(atIndex: index, of: Int32.self))
         }
 
         func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return UInt64(bitPattern: handleStatement.columnValue(atIndex: index!, of: Int64.self))
+            let index: Int = columnIndex(by: key)
+            return UInt64(bitPattern: handleStatement.columnValue(atIndex: index, of: Int64.self))
         }
 
         func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return Float(handleStatement.columnValue(atIndex: index!, of: Double.self))
+            let index: Int = columnIndex(by: key)
+            return Float(handleStatement.columnValue(atIndex: index, of: Double.self))
         }
 
         func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            return handleStatement.columnValue(atIndex: index)
         }
 
         func decode(_ type: String.Type, forKey key: Key) throws -> String {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            return handleStatement.columnValue(atIndex: index!)
+            let index: Int = columnIndex(by: key)
+            return handleStatement.columnValue(atIndex: index)
         }
 
         func decode<Object>(_ type: Object.Type, forKey key: Key) throws -> Object where Object: Decodable {
-            let index = columnIndex(by: key)
-            Error.assert(index != nil, message: "If [\(key)] would not be decoded, please make it optional.")
-            let decodableType = Object.self as? ColumnDecodableBase.Type
-            Error.assert(decodableType != nil, message: "[\(key)] must conform to ColumnDecodable protocol.")
+            let index: Int = columnIndex(by: key)
+            //`key` must conform to ColumnDecodable protocol.
+            let decodableType = Object.self as! ColumnDecodableBase.Type
             var decoded: ColumnDecodableBase? = nil
-            switch decodableType!.columnType {
+            switch decodableType.columnType {
             case .integer32:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index!, of: Int32.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
             case .integer64:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index!, of: Int64.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
             case .float:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index!, of: Double.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
             case .text:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index!, of: String.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
             case .BLOB:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index!, of: Data.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
             default:
                 Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
             }
@@ -176,186 +186,145 @@ final class TableDecoder: Decoder {
                                        code: .misuse,
                                        message: "If [\(key)] would be decoded as nil, please make it optional.")
             }
-            guard let object = wrappedDecoded as? Object else {
-                Error.abort("It should not be failed. If you think it's a bug, please report an issue to us.")
-            }
-            return object
+            //It should not be failed. If you think it's a bug, please report an issue to us.
+            return wrappedDecoded as! Object
         }
 
         //Decode if present
         func decodeIfPresent(_ type: Bool.Type, forKey key: Key) throws -> Bool? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                 return nil
             }
             return handleStatement.columnValue(atIndex: index, of: Int32.self) != 0
         }
 
         func decodeIfPresent(_ type: Int.Type, forKey key: Key) throws -> Int? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return Int(truncatingIfNeeded: handleStatement.columnValue(atIndex: index, of: Int64.self))
         }
 
         func decodeIfPresent(_ type: Int8.Type, forKey key: Key) throws -> Int8? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return Int8(handleStatement.columnValue(atIndex: index, of: Int32.self))
         }
 
         func decodeIfPresent(_ type: Int16.Type, forKey key: Key) throws -> Int16? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return Int16(handleStatement.columnValue(atIndex: index, of: Int32.self))
         }
 
         func decodeIfPresent(_ type: Int32.Type, forKey key: Key) throws -> Int32? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return handleStatement.columnValue(atIndex: index)
         }
 
         func decodeIfPresent(_ type: Int64.Type, forKey key: Key) throws -> Int64? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return handleStatement.columnValue(atIndex: index)
         }
 
         func decodeIfPresent(_ type: UInt.Type, forKey key: Key) throws -> UInt? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return UInt(truncatingIfNeeded: UInt64(bitPattern: handleStatement.columnValue(atIndex: index)))
         }
 
         func decodeIfPresent(_ type: UInt8.Type, forKey key: Key) throws -> UInt8? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             let value: Int32 = handleStatement.columnValue(atIndex: index)
             return UInt8(truncatingIfNeeded: UInt32(bitPattern: value))
         }
 
         func decodeIfPresent(_ type: UInt16.Type, forKey key: Key) throws -> UInt16? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             let value: Int32 = handleStatement.columnValue(atIndex: index)
             return UInt16(truncatingIfNeeded: UInt32(bitPattern: value))
         }
 
         func decodeIfPresent(_ type: UInt32.Type, forKey key: Key) throws -> UInt32? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return UInt32(bitPattern: handleStatement.columnValue(atIndex: index, of: Int32.self))
         }
 
         func decodeIfPresent(_ type: UInt64.Type, forKey key: Key) throws -> UInt64? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return UInt64(bitPattern: handleStatement.columnValue(atIndex: index, of: Int64.self))
         }
 
         func decodeIfPresent(_ type: Float.Type, forKey key: Key) throws -> Float? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return Float(handleStatement.columnValue(atIndex: index, of: Double.self))
         }
 
         func decodeIfPresent(_ type: Double.Type, forKey key: Key) throws -> Double? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return handleStatement.columnValue(atIndex: index)
         }
 
         func decodeIfPresent(_ type: String.Type, forKey key: Key) throws -> String? {
-            guard let index = columnIndex(by: key) else {
-                return nil
-            }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
             return handleStatement.columnValue(atIndex: index)
         }
 
         func decodeIfPresent<Object>(_ type: Object.Type, forKey key: Key) throws -> Object? where Object: Decodable {
-            guard let index = columnIndex(by: key) else {
-                return nil
+            guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
+                    return nil
             }
-            guard handleStatement.columnType(atIndex: index) != .null else {
-                return nil
-            }
-            let decodableType = Object.self as? ColumnDecodableBase.Type
-            Error.assert(decodableType != nil, message: "[\(key)] must conform to ColumnDecodable protocol.")
+            //`key` must conform to ColumnDecodable protocol.
+            let decodableType = Object.self as! ColumnDecodableBase.Type
             var decoded: ColumnDecodableBase? = nil
-            switch decodableType!.columnType {
+            switch decodableType.columnType {
             case .integer32:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int32.self))
             case .integer64:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Int64.self))
             case .float:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Double.self))
             case .text:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: String.self))
             case .BLOB:
-                decoded = decodableType!.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
+                decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
             default:
                 Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
             }
             guard let wrappedDecoded = decoded else {
                 return nil
             }
-            guard let object = wrappedDecoded as? Object else {
-                Error.abort("It should not be failed. If you think it's a bug, please report an issue to us.")
-            }
-            return object
+            //It should not be failed. If you think it's a bug, please report an issue to us.
+            return (wrappedDecoded as! Object)
+        }
+
+        var codingPath: [CodingKey] {
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        }
+
+        var allKeys: [Key] {
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
@@ -377,38 +346,12 @@ final class TableDecoder: Decoder {
         }
     }
 
-    let codingPath: [CodingKey] = []
-    let userInfo: [CodingUserInfoKey: Any] = [:]
-
-    private let handleStatement: HandleStatement
-    private let indexedCodingTableKeys: [String: Int]
-    private var container: KeyedDecodingTableContainerBase?
-
-    convenience init(_ codingTableKeys: [CodingTableKeyBase], on handleStatement: HandleStatement) {
-        var indexedCodingTableKeys: [String: Int] = [:]
-        for (index, codingTableKey) in codingTableKeys.enumerated() {
-            indexedCodingTableKeys[codingTableKey.stringValue] = index
-        }
-        self.init(indexedCodingTableKeys, on: handleStatement)
+    var codingPath: [CodingKey] {
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
-    init(_ indexedCodingTableKeys: [String: Int], on handleStatement: HandleStatement) {
-        self.indexedCodingTableKeys = indexedCodingTableKeys
-        self.handleStatement = handleStatement
-    }
-
-    func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
-        Error.assert(Key.self is CodingTableKeyBase.Type,
-                     message: "[\(Key.self)] must conform to CodingTableKey protocol.")
-        if container == nil {
-            container = KeyedDecodingTableContainer(with: indexedCodingTableKeys,
-                                                    on: handleStatement,
-                                                    and: Key.self)
-        }
-        guard let requestedContainer = container as? KeyedDecodingTableContainer<Key> else {
-            Error.abort("It should not be failed. If you think it's a bug, please report an issue to us.")
-        }
-        return KeyedDecodingContainer(requestedContainer)
+    var userInfo: [CodingUserInfoKey: Any] {
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {

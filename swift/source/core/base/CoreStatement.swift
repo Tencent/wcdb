@@ -57,12 +57,12 @@ public final class CoreStatement: CoreContainer {
     public func bind<TableEncodableType: TableEncodable>(
         _ indexedPropertyConvertibleList: [(_: PropertyConvertible, toIndex: Int)],
         of object: TableEncodableType) throws {
-        var indexedCodingTableKeys: [String: Int] = [:]
+        var hashedKeys: TableEncoder.HashedKey = [:]
         for args in indexedPropertyConvertibleList {
-            indexedCodingTableKeys[args.0.codingTableKey.stringValue] = args.toIndex
+            hashedKeys[args.0.codingTableKey.stringValue.hashValue] = args.toIndex
         }
-        let encoder = TableEncoder<TableEncodableType>(indexedCodingTableKeys, on: recyclableHandleStatement)
-        try encoder.bind(object)
+        let encoder = TableEncoder(hashedKeys, on: recyclableHandleStatement)
+        try object.encode(to: encoder)
     }
 
     /// The wrapper of `sqlite3_bind_*` for binding properties of object.
@@ -74,12 +74,12 @@ public final class CoreStatement: CoreContainer {
     public func bind<TableEncodableType: TableEncodable>(
         _ propertyConvertibleList: [PropertyConvertible],
         of object: TableEncodableType) throws {
-        var indexedCodingTableKeys: [String: Int] = [:]
+        var hashedKeys: TableEncoder.HashedKey = [:]
         for (index, propertyConvertible) in propertyConvertibleList.enumerated() {
-            indexedCodingTableKeys[propertyConvertible.codingTableKey.stringValue] = index
+            hashedKeys[propertyConvertible.codingTableKey.stringValue.hashValue] = index
         }
-        let encoder = TableEncoder<TableEncodableType>(indexedCodingTableKeys, on: recyclableHandleStatement)
-        try encoder.bind(object)
+        let encoder = TableEncoder(hashedKeys, on: recyclableHandleStatement)
+        try object.encode(to: encoder)
     }
 
     /// The wrapper of `sqlite3_bind_*` for binding column encodable object.

@@ -80,9 +80,13 @@ public final class Insert: CoreContainer {
             properties = properties ?? Object.Properties.all
             let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
             let handleStatement = recyclableHandleStatement.raw
-            let encoder = TableEncoder<Object>(properties!.asCodingTableKeys(), on: recyclableHandleStatement)
+            let encoder = TableEncoder(properties!.asCodingTableKeys(), on: recyclableHandleStatement)
+            if !isReplace {
+                encoder.primaryKeyHash = orm.getPrimaryKey()?.stringValue.hashValue
+            }
             for var object in objects {
-                try encoder.bind(object, isReplace: isReplace)
+                encoder.isPrimaryKeyEncoded = !object.isAutoIncrement
+                try object.encode(to: encoder)
                 try handleStatement.step()
                 if !isReplace && object.isAutoIncrement {
                     object.lastInsertedRowID = handleStatement.lastInsertedRowID

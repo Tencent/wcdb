@@ -23,7 +23,7 @@ import Foundation
 public final class Select: Selectable {
     private let keys: [CodingTableKeyBase]
 
-    lazy var decoder = TableDecoder(keys, on: optionalRecyclableHandleStatement!.raw)
+    lazy var decoder = TableDecoder(keys, on: optionalRecyclableHandleStatement!)
 
     init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {
         //TODO: Use generic to check all coding table keys conform to same root type

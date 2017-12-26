@@ -20,26 +20,436 @@
 
 import Foundation
 
-final class TableEncoder<TableEncodableType: TableEncodable>: Encoder {
-    private final class KeyedEncodingTableContainer: KeyedEncodingContainerProtocol {
-        typealias Key = TableEncodableType.CodingKeys
+final class TableEncoder: Encoder {
 
-        let codingPath: [CodingKey] = []
+    private var container: Any?
+    private var keyedPrimaryKeyEncodableTableContainer: KeyedPrimaryKeyEncodableTableContainer?
 
-        let recyclableHandleStatement: RecyclableHandleStatement
-        let indexedCodingTableKeys: [String: Int]
+    private let recyclableHandleStatement: RecyclableHandleStatement
+
+    typealias HashedKey = [Int: Int] // hash value -> index
+    private let hashedKeys: HashedKey
+
+    var primaryKeyHash: Int?
+    var isPrimaryKeyEncoded = true
+
+    init(_ codingTableKeys: [CodingTableKeyBase],
+         on recyclableHandleStatement: RecyclableHandleStatement) {
+        var hashedKeys: HashedKey = [:]
+        for (index, key) in codingTableKeys.enumerated() {
+            hashedKeys[key.stringValue.hashValue] = index + 1
+        }
+        self.hashedKeys = hashedKeys
+        self.recyclableHandleStatement = recyclableHandleStatement
+    }
+
+    init(_ hashedKeys: HashedKey, on recyclableHandleStatement: RecyclableHandleStatement) {
+        self.hashedKeys = hashedKeys
+        self.recyclableHandleStatement = recyclableHandleStatement
+    }
+
+    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
+        if container == nil {
+            let keyedContainer = KeyedEncodingTableContainer<Key>(with: hashedKeys,
+                                                                  on: recyclableHandleStatement.raw)
+            keyedPrimaryKeyEncodableTableContainer = keyedContainer
+            container = KeyedEncodingContainer(keyedContainer)
+        }
+        if isPrimaryKeyEncoded {
+            keyedPrimaryKeyEncodableTableContainer?.primaryKeyHash = nil
+        } else {
+            keyedPrimaryKeyEncodableTableContainer?.primaryKeyHash = primaryKeyHash
+        }
+        return container as! KeyedEncodingContainer<Key>
+    }
+
+    private class KeyedPrimaryKeyEncodableTableContainer {
+        var primaryKeyHash: Int?
+    }
+
+    private final class KeyedEncodingTableContainer<CodingKeys: CodingKey>
+        : KeyedPrimaryKeyEncodableTableContainer, KeyedEncodingContainerProtocol {
+        typealias Key = CodingKeys
+
         let handleStatement: HandleStatement
-        var primaryKey: CodingTableKeyBase?
+        let hashedKeys: HashedKey
 
-        init(with indexedCodingTableKeys: [String: Int],
-             on recyclableHandleStatement: RecyclableHandleStatement) {
-            self.indexedCodingTableKeys = indexedCodingTableKeys
-            self.recyclableHandleStatement = recyclableHandleStatement
-            self.handleStatement = recyclableHandleStatement.raw
+        init(with hashedKeys: HashedKey,
+             on handleStatement: HandleStatement) {
+            self.hashedKeys = hashedKeys
+            self.handleStatement = handleStatement
+            super.init()
         }
 
-        func bindingIndex(by codingTableKey: Key) -> Int? {
-            return indexedCodingTableKeys[codingTableKey.stringValue]
+        func bindIndex(by hashValue: Int) -> Int? {
+            return hashedKeys[hashValue]
+        }
+
+        func encodeNil(forKey key: Key) throws {
+            guard let index = bindIndex(by: key.stringValue.hashValue) else {
+                return
+            }
+            handleStatement.bind(nil, toIndex: index)
+        }
+
+        func encode(_ value: Int, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int64(value), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: Bool, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                let int32Value: Int32 = value ? 1 : 0
+                handleStatement.bind(int32Value, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: Float, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            handleStatement.bind(Double(value), toIndex: index)
+        }
+
+        func encode(_ value: Double, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            handleStatement.bind(value, toIndex: index)
+        }
+
+        func encode(_ value: String, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            handleStatement.bind(value, toIndex: index)
+        }
+
+        func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
+            //`key` must conform to ColumnEncodable protocol.
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                let encodableColumnValue = value as! ColumnEncodableBase
+                handleStatement.bind(encodableColumnValue.archivedFundamentalValue(), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: Int8, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int32(value), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: Int16, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int32(value), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: Int32, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(value, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: Int64, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(value, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: UInt, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int64(bitPattern: UInt64(value)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: UInt8, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int32(bitPattern: UInt32(value)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: UInt16, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int32(bitPattern: UInt32(value)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: UInt32, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int32(bitPattern: value), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encode(_ value: UInt64, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if hashValue != primaryKeyHash {
+                handleStatement.bind(Int64(bitPattern: value), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                let int32Value: Int32 = value! ? 1 : 0
+                handleStatement.bind(int32Value, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Int?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int64(value!), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Int8?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int32(value!), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Int16?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int32(value!), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Int32?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(value!, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Int64?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(value!, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: UInt?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int64(bitPattern: UInt64(value!)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: UInt8?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int32(bitPattern: UInt32(value!)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: UInt16?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int32(bitPattern: UInt32(value!)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: UInt32?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int32(bitPattern: value!), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: UInt64?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                handleStatement.bind(Int64(bitPattern: UInt64(value!)), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Float?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if let wrappedValue = value {
+                handleStatement.bind(Double(wrappedValue), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: Double?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent(_ value: String?, forKey key: Key) throws {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue, toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        func encodeIfPresent<Object>(_ value: Object?,
+                                     forKey key: Key) throws
+            where Object: Encodable {
+            let hashValue = key.stringValue.hashValue
+            guard let index = bindIndex(by: hashValue) else {
+                return
+            }
+            if (primaryKeyHash == nil || hashValue != primaryKeyHash!) && value != nil {
+                //`key` must conform to ColumnEncodable protocol.
+                let encodableColumnValue = value! as! ColumnEncodableBase
+                handleStatement.bind(encodableColumnValue.archivedFundamentalValue(), toIndex: index)
+            } else {
+                handleStatement.bind(nil, toIndex: index)
+            }
+        }
+
+        var codingPath: [CodingKey] {
+            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder() -> Swift.Encoder {
@@ -48,162 +458,6 @@ final class TableEncoder<TableEncodableType: TableEncodable>: Encoder {
 
         func superEncoder(forKey key: Key) -> Swift.Encoder {
             Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
-        }
-
-        func encodePrimaryKeyIfPresent(forKey key: Key, atIndex index: Int) -> Bool {
-            guard key.stringValue == primaryKey?.stringValue else {
-                return false
-            }
-            handleStatement.bind(nil, toIndex: index)
-            return true
-        }
-
-        public func generalEncode(_ value: ColumnEncodableBase?, forKey key: Key) {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                handleStatement.bind(value?.archivedFundamentalValue(), toIndex: bindingIndex)
-            }
-        }
-
-        public func generalEncode(_ value: ColumnEncodableBase, forKey key: Key) {
-            guard let bindingIndex = bindingIndex(by: key) else {
-                return
-            }
-            if !encodePrimaryKeyIfPresent(forKey: key, atIndex: bindingIndex) {
-                handleStatement.bind(value.archivedFundamentalValue(), toIndex: bindingIndex)
-            }
-        }
-
-        func encodeNil(forKey key: Key) throws {
-            generalEncode(nil, forKey: key)
-        }
-
-        func encode(_ value: Int, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: Bool, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: Float, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: Double, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: String, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode<Object>(_ value: Object, forKey key: Key) throws where Object: Encodable {
-            let encodableColumnValue = value as? ColumnEncodableBase
-            Error.assert(encodableColumnValue != nil, message: "[\(key)] must conform to ColumnEncodable protocol.")
-            generalEncode(encodableColumnValue!, forKey: key)
-        }
-
-        func encode(_ value: Int8, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: Int16, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: Int32, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: Int64, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: UInt, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: UInt8, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: UInt16, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: UInt32, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encode(_ value: UInt64, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Int?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Int8?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Int16?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Int32?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Int64?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: UInt?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: UInt8?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: UInt16?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: UInt32?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: UInt64?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Float?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: Double?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent(_ value: String?, forKey key: Key) throws {
-            generalEncode(value, forKey: key)
-        }
-
-        func encodeIfPresent<Object>(_ value: Object?,
-                                     forKey key: Key) throws
-            where Object: Encodable {
-            Error.assert(Object.self is ColumnEncodableBase.Type,
-                         message: "[\(key)] must conform to ColumnEncodable protocol.")
-            generalEncode(value as? ColumnEncodableBase, forKey: key)
         }
 
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
@@ -217,8 +471,13 @@ final class TableEncoder<TableEncodableType: TableEncodable>: Encoder {
         }
     }
 
-    let codingPath: [CodingKey] = []
-    let userInfo: [CodingUserInfoKey: Any] = [:]
+    var codingPath: [CodingKey] {
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+    }
+
+    var userInfo: [CodingUserInfoKey: Any] {
+        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+    }
 
     func singleValueContainer() -> SingleValueEncodingContainer {
         Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
@@ -226,33 +485,5 @@ final class TableEncoder<TableEncodableType: TableEncodable>: Encoder {
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
         Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
-    }
-
-    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
-        return KeyedEncodingContainer(container) as! KeyedEncodingContainer<Key>
-    }
-
-    private let container: KeyedEncodingTableContainer
-
-    convenience init(_ codingTableKeys: [CodingTableKeyBase],
-                     on recyclableHandleStatement: RecyclableHandleStatement) {
-        var indexedCodingTableKeys: [String: Int] = [:]
-        for (index, codingTableKey) in codingTableKeys.enumerated() {
-            indexedCodingTableKeys[codingTableKey.stringValue] = index + 1
-        }
-        self.init(indexedCodingTableKeys, on: recyclableHandleStatement)
-    }
-
-    init(_ indexedCodingTableKeys: [String: Int], on recyclableHandleStatement: RecyclableHandleStatement) {
-        container = KeyedEncodingTableContainer(with: indexedCodingTableKeys, on: recyclableHandleStatement)
-    }
-
-    func bind(_ object: TableEncodableType, isReplace: Bool = false) throws {
-        if !isReplace && object.isAutoIncrement {
-            container.primaryKey = TableEncodableType.CodingKeys.objectRelationalMapping.getPrimaryKey()
-        } else {
-            container.primaryKey = nil
-        }
-        try object.encode(to: self)
     }
 }

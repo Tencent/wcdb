@@ -125,8 +125,8 @@ public final class Update: CoreContainer {
     public func execute<Object: TableEncodable>(with object: Object) throws {
         let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
         let handleStatement = recyclableHandleStatement.raw
-        let encoder = TableEncoder<Object>(keys, on: recyclableHandleStatement)
-        try encoder.bind(object)
+        let encoder = TableEncoder(keys, on: recyclableHandleStatement)
+        try object.encode(to: encoder)
         try handleStatement.step()
         changes = handleStatement.changes
     }
