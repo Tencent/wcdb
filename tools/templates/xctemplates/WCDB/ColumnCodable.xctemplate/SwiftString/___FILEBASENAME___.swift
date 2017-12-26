@@ -3,7 +3,7 @@
 import Foundation
 import WCDBSwift
 
-class ___VARIABLE_productName___: WCDB.ColumnCodable {
+class ___VARIABLE_productName___: WCDBSwift.ColumnCodable {
     typealias FundamentalType = String
 
     required init?(with value: String) {

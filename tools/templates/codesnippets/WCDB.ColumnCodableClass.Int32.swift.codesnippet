@@ -9,7 +9,7 @@
 		<string>All</string>
 	</array>
 	<key>IDECodeSnippetContents</key>
-	<string>class &lt;#Class name#&gt;: WCDB.ColumnCodable {
+	<string>class &lt;#Class name#&gt;: WCDBSwift.ColumnCodable {
     typealias FundamentalType = Int32
     
     required init?(with value: Int32) {

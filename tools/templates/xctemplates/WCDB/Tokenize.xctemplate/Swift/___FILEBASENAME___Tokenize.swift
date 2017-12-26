@@ -1,7 +1,7 @@
 //___FILEHEADER___
 
 import Foundation
-import WCDB
+import WCDBSwift
 
 public class ___VARIABLE_productName___TokenizerInfo: TokenizerInfoBase {
     /* <#Your Tokenizer Info#> */

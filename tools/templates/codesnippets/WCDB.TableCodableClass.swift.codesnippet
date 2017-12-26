@@ -9,7 +9,7 @@
 		<string>All</string>
 	</array>
 	<key>IDECodeSnippetContents</key>
-	<string>class &lt;#Class name#&gt;: WCDB.TableCodable {
+	<string>class &lt;#Class name#&gt;: WCDBSwift.TableCodable {
     //Your own properties
     let variable1: Int = 0
     var variable2: String? // Optional if it would be nil in some WCDB selection
