@@ -84,11 +84,13 @@ public final class Insert: CoreContainer {
             if !isReplace {
                 encoder.primaryKeyHash = orm.getPrimaryKey()?.stringValue.hashValue
             }
+
             for var object in objects {
-                encoder.isPrimaryKeyEncoded = !object.isAutoIncrement
+                let isAutoIncrement = object.isAutoIncrement
+                encoder.isPrimaryKeyEncoded = !isAutoIncrement
                 try object.encode(to: encoder)
                 try handleStatement.step()
-                if !isReplace && object.isAutoIncrement {
+                if !isReplace && isAutoIncrement {
                     object.lastInsertedRowID = handleStatement.lastInsertedRowID
                 }
                 try handleStatement.reset()

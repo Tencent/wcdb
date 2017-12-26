@@ -64,7 +64,7 @@ final class TableEncoder: Encoder {
     }
 
     private class KeyedPrimaryKeyEncodableTableContainer {
-        var primaryKeyHash: Int?
+        final var primaryKeyHash: Int?
     }
 
     private final class KeyedEncodingTableContainer<CodingKeys: CodingKey>

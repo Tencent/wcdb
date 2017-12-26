@@ -21,8 +21,8 @@
 import Foundation
 
 public class Core: CoreRepresentable {
-    let recyclableHandlePool: RecyclableHandlePool
-    var handlePool: HandlePool {
+    final let recyclableHandlePool: RecyclableHandlePool
+    final var handlePool: HandlePool {
         return recyclableHandlePool.raw
     }
 
@@ -32,7 +32,7 @@ public class Core: CoreRepresentable {
     }
 
     /// The path of the related database.
-    public var path: String {
+    final public var path: String {
         return handlePool.path
     }
 
@@ -40,14 +40,15 @@ public class Core: CoreRepresentable {
         self.recyclableHandlePool = recyclableHandlePool
     }
 
-    func prepare(_ statement: Statement, in recyclableHandle: RecyclableHandle) throws -> RecyclableHandleStatement {
+    final func prepare(_ statement: Statement,
+                       in recyclableHandle: RecyclableHandle) throws -> RecyclableHandleStatement {
         Error.assert(statement.statementType != .transaction,
                      message: "Using [begin], [commit], [rollback] or [Exec] method to do a transaction")
         let handleStatement = try recyclableHandle.raw.handle.prepare(statement)
         return RecyclableHandleStatement(recyclableHandle: recyclableHandle, handleStatement: handleStatement)
     }
 
-    func exec(_ statement: Statement, in recyclableHandle: RecyclableHandle) throws {
+    final func exec(_ statement: Statement, in recyclableHandle: RecyclableHandle) throws {
         Error.assert(statement.statementType != .transaction,
                      message: "Using [begin], [commit], [rollback] method to do a transaction")
         return try recyclableHandle.raw.handle.exec(statement)

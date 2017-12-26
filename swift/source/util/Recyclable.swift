@@ -23,9 +23,9 @@ import Foundation
 //TODO: Refactor
 class Recyclable<Value> {
     typealias OnRecycled = () -> Void
-    let onRecycled: OnRecycled?
+    final let onRecycled: OnRecycled?
 
-    let raw: Value
+    final let raw: Value
 
     init(_ raw: Value, onRecycled: @escaping OnRecycled) {
         self.raw = raw
