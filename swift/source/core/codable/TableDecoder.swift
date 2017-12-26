@@ -44,8 +44,6 @@ final class TableDecoder: Decoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
-        Error.assert(Key.self is CodingTableKeyBase.Type,
-                     message: "[\(Key.self)] must conform to CodingTableKey protocol.")
         if container == nil {
             container = KeyedDecodingContainer(KeyedDecodingTableContainer<Key>(with: hashedKeys,
                                                                                 on: recyclableHandleStatement.raw))
