@@ -22,6 +22,7 @@ install_xctemplates() {
 install_codesnippets() {
     source_codesnippets=`pwd`/codesnippets/*.codesnippet
     codesnippets=~/Library/Developer/Xcode/UserData/CodeSnippets/
+    mkdir -p $codesnippets
     cp $source_codesnippets $codesnippets
 }
 
