@@ -656,6 +656,86 @@ class TypedTests: CRUDTestCase {
         }
     }
 
+    func testPartialInsert() {
+        //Give
+        XCTAssertNoThrow(try database.create(table: TypedTestObject.name, of: TypedTestObject.self))
+        let object = TypedTestObject(with: .lowerBoundary)
+        XCTAssertNoThrow(try database.insert(objects: object,
+                                             on: [TypedTestObject.Properties.int],
+                                             intoTable: TypedTestObject.name))
+        let table = WCDBAssertNoThrowReturned(try database.getTable(named: TypedTestObject.name,
+                                                                    of: OptionalTypedTestObject.self))
+        XCTAssertNotNil(table)
+        let wrappedTable = table!
+        //Then
+        do {
+            do {
+                let result = try wrappedTable.getObject()
+                XCTAssertNotNil(object)
+                let wrappedResult = result!
+                XCTAssertEqual(wrappedResult.int, object.int)
+                XCTAssertNil(wrappedResult.int8)
+                XCTAssertNil(wrappedResult.int16)
+                XCTAssertNil(wrappedResult.int32)
+                XCTAssertNil(wrappedResult.int64)
+                XCTAssertNil(wrappedResult.uint)
+                XCTAssertNil(wrappedResult.uint8)
+                XCTAssertNil(wrappedResult.uint16)
+                XCTAssertNil(wrappedResult.uint32)
+                XCTAssertNil(wrappedResult.uint64)
+                XCTAssertNil(wrappedResult.string)
+                XCTAssertNil(wrappedResult.float)
+                XCTAssertNil(wrappedResult.double)
+                XCTAssertNil(wrappedResult.data)
+                XCTAssertNil(wrappedResult.jsonCodable)
+                XCTAssertNil(wrappedResult.codable)
+                XCTAssertNil(wrappedResult.bool)
+            }
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testPartialInsertOptional() {
+        //Give
+        XCTAssertNoThrow(try database.create(table: OptionalTypedTestObject.name, of: OptionalTypedTestObject.self))
+        let object = OptionalTypedTestObject(with: .normal)
+        XCTAssertNoThrow(try database.insert(objects: object,
+                                             on: [OptionalTypedTestObject.Properties.int],
+                                             intoTable: OptionalTypedTestObject.name))
+        let table = WCDBAssertNoThrowReturned(try database.getTable(named: OptionalTypedTestObject.name,
+                                                                    of: OptionalTypedTestObject.self))
+        XCTAssertNotNil(table)
+        let wrappedTable = table!
+        //Then
+        do {
+            do {
+                let result = try wrappedTable.getObject()
+                XCTAssertNotNil(object)
+                let wrappedResult = result!
+                XCTAssertEqual(wrappedResult.int, object.int)
+                XCTAssertNil(wrappedResult.int8)
+                XCTAssertNil(wrappedResult.int16)
+                XCTAssertNil(wrappedResult.int32)
+                XCTAssertNil(wrappedResult.int64)
+                XCTAssertNil(wrappedResult.uint)
+                XCTAssertNil(wrappedResult.uint8)
+                XCTAssertNil(wrappedResult.uint16)
+                XCTAssertNil(wrappedResult.uint32)
+                XCTAssertNil(wrappedResult.uint64)
+                XCTAssertNil(wrappedResult.string)
+                XCTAssertNil(wrappedResult.float)
+                XCTAssertNil(wrappedResult.double)
+                XCTAssertNil(wrappedResult.data)
+                XCTAssertNil(wrappedResult.jsonCodable)
+                XCTAssertNil(wrappedResult.codable)
+                XCTAssertNil(wrappedResult.bool)
+            }
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
     class TypedNoMatchJSONCodableObject: ColumnJSONCodable {
         var noMatchVariable: Int = 1
     }

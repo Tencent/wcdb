@@ -22,7 +22,7 @@ import XCTest
 import WCDBSwift
 
 class AdvanceTests: CRUDTestCase {
-    
+
     func testCoreStatement() {
         let statement = StatementSelect().select(Column.any).from(Master.tableName)
         let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
