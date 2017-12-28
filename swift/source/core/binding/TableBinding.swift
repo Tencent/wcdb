@@ -52,8 +52,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
             return nil
         }
         guard filtered.count == 1 else {
-            Error.assert(filtered.count == 0,
-                         message: "Only one primary key is supported. Use MultiPrimaryBinding instead")
+            assert(filtered.count == 0, "Only one primary key is supported. Use MultiPrimaryBinding instead")
             return nil
         }
         return filtered.first!.key
@@ -89,20 +88,17 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     typealias TypedCodingTableKeyType = CodingTableKeyType
     func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
         let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType
-        Error.assert(typedCodingTableKey != nil,
-                     message: "[\(codingTableKey)] must conform to CodingTableKey protocol.")
+        assert(typedCodingTableKey != nil, "[\(codingTableKey)] must conform to CodingTableKey protocol.")
         let typedProperty = properties[typedCodingTableKey!]
-        Error.assert(typedProperty != nil,
-                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
+        assert(typedProperty != nil, "It should not be failed. If you think it's a bug, please report an issue to us.")
         return typedProperty!
     }
 
     func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
         let codingTableKey = key as? CodingTableKeyType
-        Error.assert(codingTableKey != nil, message: "[\(key)] must conform to CodingTableKey protocol.")
+        assert(codingTableKey != nil, "[\(key)] must conform to CodingTableKey protocol.")
         let columnType = columnTypes[codingTableKey!.stringValue]
-        Error.assert(columnType != nil,
-                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
+        assert(columnType != nil, "It should not be failed. If you think it's a bug, please report an issue to us.")
         var columnDef = ColumnDef(with: codingTableKey!, and: columnType!)
         if let index = columnConstraintBindings?.index(forKey: codingTableKey!) {
             columnDef = columnConstraintBindings![index].value.generateColumnDef(with: columnDef)
@@ -111,7 +107,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     }
 
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
-        Error.assert(virtualTableBinding != nil, message: "Virtual table binding is not defined")
+        assert(virtualTableBinding != nil, "Virtual table binding is not defined")
         let columnModuleArguments = allColumnDef.map { ModuleArgument(with: $0) }
         let tableCostraintArguments = tableConstraintBindings?.map { (tableConstraintBinding) -> ModuleArgument in
             let key = tableConstraintBinding.key

@@ -65,10 +65,9 @@ final class TableDecoder: Decoder {
         }
 
         func columnIndex(by key: Key) -> Int {
-            guard let index = hashedKeys[key.stringValue.hashValue] else {
-                Error.abort("If [\(key)] would not be decoded, please make it optional.")
-            }
-            return index
+            let index = hashedKeys[key.stringValue.hashValue]
+            assert(index != nil, "If [\(key)] would not be decoded, please make it optional.")
+            return index!
         }
 
         func columnIndexIfPresent(by key: Key) -> Int? {
@@ -175,7 +174,7 @@ final class TableDecoder: Decoder {
             case .BLOB:
                 decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
             default:
-                Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+                fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
             }
             guard let wrappedDecoded = decoded else {
                 throw Error.reportCore(tag: handleStatement.tag,
@@ -308,7 +307,7 @@ final class TableDecoder: Decoder {
             case .BLOB:
                 decoded = decodableType.init(with: handleStatement.columnValue(atIndex: index, of: Data.self))
             default:
-                Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+                fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
             }
             guard let wrappedDecoded = decoded else {
                 return nil
@@ -318,45 +317,45 @@ final class TableDecoder: Decoder {
         }
 
         var codingPath: [CodingKey] {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         var allKeys: [Key] {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
                                         forKey key: Key) throws -> KeyedDecodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superDecoder() throws -> Swift.Decoder {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superDecoder(forKey key: Key) throws -> Swift.Decoder {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
     var codingPath: [CodingKey] {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     var userInfo: [CodingUserInfoKey: Any] {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func singleValueContainer() throws -> SingleValueDecodingContainer {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 }

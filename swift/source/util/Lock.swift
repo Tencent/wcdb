@@ -129,7 +129,7 @@ final class ConditionLock: Lockable {
 
     func wait(timeout: TimeInterval) {
         guard timeout > 0 else {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            return
         }
 
         let integerPart = Int(timeout.nextDown)

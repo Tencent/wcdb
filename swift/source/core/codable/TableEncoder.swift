@@ -449,41 +449,41 @@ final class TableEncoder: Encoder {
         }
 
         var codingPath: [CodingKey] {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder() -> Swift.Encoder {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func superEncoder(forKey key: Key) -> Swift.Encoder {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
                                         forKey key: Key) -> KeyedEncodingContainer<NestedKey>
             where NestedKey: CodingKey {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-            Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+            fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
         }
     }
 
     var codingPath: [CodingKey] {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     var userInfo: [CodingUserInfoKey: Any] {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func singleValueContainer() -> SingleValueEncodingContainer {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 }

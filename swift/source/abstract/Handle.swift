@@ -85,8 +85,7 @@ public final class Handle {
     }
 
     public func prepare(_ statement: Statement) throws -> HandleStatement {
-        Error.assert(statement.statementType != .transaction,
-                     message: "[prepare] a transaction is not allowed, use [exec] instead")
+        assert(statement.statementType != .transaction, "[prepare] a transaction is not allowed, use [exec] instead")
         var stmt: OpaquePointer? = nil
         let rc = sqlite3_prepare_v2(handle, statement.description, -1, &stmt, nil)
         guard rc==SQLITE_OK else {
@@ -161,7 +160,7 @@ extension Handle {
                 )
             }
         #else
-            Error.abort("[sqlite3_key] is not supported for current config")
+            fatalError("[sqlite3_key] is not supported for current config")
         #endif
     }
 }

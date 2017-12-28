@@ -47,7 +47,7 @@ public final class Database: Core {
     public init(withFileURL url: URL) {
         #if swift(>=4.0)
         #else
-            Error.abort("Swift 4.0 is required.")
+            Error.fatalError("Swift 4.0 is required.")
         #endif
         #if WCDB_IOS
             DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
@@ -398,8 +398,8 @@ extension Database {
                 try handleStatement.step()
                 let journalMode: String = handleStatement.columnValue(atIndex: 0)
                 try handleStatement.finalize()
-                Error.assert(journalMode.caseInsensitiveCompare("WAL") == ComparisonResult.orderedSame,
-                             message: "It is not possible to open read-only WAL databases.")
+                assert(journalMode.caseInsensitiveCompare("WAL") == ComparisonResult.orderedSame,
+                       "It is not possible to open read-only WAL databases.")
                 return
             }
             //Locking Mode
@@ -534,8 +534,8 @@ extension Database {
             })
             let checkpointConfig = Database.defaultConfigs.config(
                 by: DefaultConfigOrder.checkpoint.description)
-            Error.assert(checkpointConfig != nil,
-                         message: "It should not be failed. If you think it's a bug, please report an issue to us.")
+            assert(checkpointConfig != nil,
+                   "It should not be failed. If you think it's a bug, please report an issue to us.")
             handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description,
                                  with: checkpointConfig!)
         }

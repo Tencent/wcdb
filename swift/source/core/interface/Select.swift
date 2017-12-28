@@ -38,7 +38,7 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func nextObject() throws -> Any? {
         let rootType = keys[0].rootType as? TableDecodableBase.Type
-        Error.assert(rootType != nil, message: "\(keys[0].rootType) must conform to TableDecodable protocol.")
+        assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
         guard try next() else {
             return nil
         }
@@ -51,7 +51,7 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func allObjects() throws -> [Any] {
         let rootType = keys[0].rootType as? TableDecodableBase.Type
-        Error.assert(rootType != nil, message: "\(keys[0].rootType) must conform to TableDecodable protocol.")
+        assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
         var objects: [Any] = []
         while try next() {
             objects.append(try rootType!.init(from: decoder))
@@ -65,7 +65,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable object. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
-        Error.assert(keys is [Object.CodingKeys], message: "Properties must belong to \(Object.self).CodingKeys.")
+        assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
         guard try next() else {
             return nil
         }
@@ -78,7 +78,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable objects.
     /// - Throws: `Error`
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
-        Error.assert(keys is [Object.CodingKeys], message: "Properties must belong to \(Object.self).CodingKeys.")
+        assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
         var objects: [Object] = []
         while try next() {
             objects.append(try Object.init(from: decoder))

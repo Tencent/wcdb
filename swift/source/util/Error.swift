@@ -89,7 +89,6 @@ public final class Error: Swift.Error, CustomStringConvertible {
         case systemCall = 2
         case core = 3
         case interface = 4
-        case abort = 5
         case warning = 6
         case sqliteGlobal = 7
         case repair = 8
@@ -104,8 +103,6 @@ public final class Error: Swift.Error, CustomStringConvertible {
                 return "Core"
             case .interface:
                 return "Interface"
-            case .abort:
-                return "Abort"
             case .warning:
                 return "Warning"
             case .sqliteGlobal:
@@ -405,20 +402,6 @@ public final class Error: Swift.Error, CustomStringConvertible {
                             infos: [
                                 Error.Key.path: ErrorValue(path),
                                 Error.Key.operation: ErrorValue(operation.rawValue)])
-    }
-
-    static func abort(_ message: @autoclosure () -> String) -> Never {
-        let description = message()
-        Error.report(type: .abort,
-                     code: .global(.abort),
-                     infos: [Error.Key.message: ErrorValue(description)])
-        fatalError(description)
-    }
-
-    static func assert(_ condition: Bool, message: @autoclosure () -> String) {
-        guard condition else {
-            abort(message)
-        }
     }
 
     static func warning(_ message: String) {

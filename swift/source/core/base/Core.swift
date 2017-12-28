@@ -42,24 +42,24 @@ public class Core: CoreRepresentable {
 
     final func prepare(_ statement: Statement,
                        in recyclableHandle: RecyclableHandle) throws -> RecyclableHandleStatement {
-        Error.assert(statement.statementType != .transaction,
-                     message: "Using [begin], [commit], [rollback] or [Exec] method to do a transaction")
+        assert(statement.statementType != .transaction,
+               "Using [begin], [commit], [rollback] or [Exec] method to do a transaction")
         let handleStatement = try recyclableHandle.raw.handle.prepare(statement)
         return RecyclableHandleStatement(recyclableHandle: recyclableHandle, handleStatement: handleStatement)
     }
 
     final func exec(_ statement: Statement, in recyclableHandle: RecyclableHandle) throws {
-        Error.assert(statement.statementType != .transaction,
-                     message: "Using [begin], [commit], [rollback] method to do a transaction")
+        assert(statement.statementType != .transaction,
+               "Using [begin], [commit], [rollback] method to do a transaction")
         return try recyclableHandle.raw.handle.exec(statement)
     }
 
     func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func exec(_ statement: Statement) throws {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     /// Prepare a specific sql.  
@@ -88,15 +88,15 @@ public class Core: CoreRepresentable {
     }
 
     func begin(_ mode: StatementTransaction.Mode = .immediate) throws {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func commit() throws {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     func rollback() throws {
-        Error.abort("It should not be called. If you think it's a bug, please report an issue to us.")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
     public typealias TransactionClosure = () throws -> Void
@@ -150,7 +150,7 @@ public class Core: CoreRepresentable {
     }
 
     func run(embeddedTransaction: TransactionClosure) throws {
-        Error.abort("")
+        fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 }
 

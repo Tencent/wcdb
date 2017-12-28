@@ -44,8 +44,8 @@ public final class MultiSelect: Selectable {
         }
         self.keys = propertyConvertibleList.map({ (propertyConvertible) -> CodingTableKeyBase in
             let codingTableKey = propertyConvertible.codingTableKey
-            Error.assert(codingTableKey.rootType is TableDecodableBase.Type,
-                         message: "\(codingTableKey.rootType) must conform to TableDecodable protocol.")
+            assert(codingTableKey.rootType is TableDecodableBase.Type,
+                   "\(codingTableKey.rootType) must conform to TableDecodable protocol.")
             return codingTableKey
         })
 
@@ -66,15 +66,15 @@ public final class MultiSelect: Selectable {
     private lazy var generators: [String: Generator] = {
         var mappedKeys: [String: TypedIndexedKeys] = [:]
         let handleStatement = try? lazyHandleStatement()
-        Error.assert(handleStatement != nil,
-                     message: "It should not be failed. If you think it's a bug, please report an issue to us.")
+        assert(handleStatement != nil,
+               "It should not be failed. If you think it's a bug, please report an issue to us.")
         for (index, key) in keys.enumerated() {
             let tableName = handleStatement!.columnTableName(atIndex: index)
             var typedIndexedKeys: TypedIndexedKeys! = mappedKeys[tableName]
             if typedIndexedKeys == nil {
                 let tableDecodableType = key.rootType as? TableDecodableBase.Type
-                Error.assert(tableDecodableType != nil,
-                             message: "\(key.rootType) must conform to TableDecodable protocol.")
+                assert(tableDecodableType != nil,
+                       "\(key.rootType) must conform to TableDecodable protocol.")
                 typedIndexedKeys = TypedIndexedKeys(tableDecodableType!, key: key.stringValue, index: index)
             } else {
                 typedIndexedKeys.indexedKeys[key.stringValue.hashValue] = index
