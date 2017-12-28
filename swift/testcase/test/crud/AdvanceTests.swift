@@ -22,6 +22,16 @@ import XCTest
 import WCDBSwift
 
 class AdvanceTests: CRUDTestCase {
+    
+    func testCoreStatement() {
+        let statement = StatementSelect().select(Column.any).from(Master.tableName)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        XCTAssertNotNil(optionalCoreStatement)
+        let coreStatement = optionalCoreStatement!
+        XCTAssertNotNil(coreStatement.tag)
+        XCTAssertEqual(coreStatement.tag, database.tag)
+        XCTAssertEqual(coreStatement.path, database.path)
+    }
 
     func testCoreStatementRead() {
         //Give
