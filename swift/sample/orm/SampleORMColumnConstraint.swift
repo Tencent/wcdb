@@ -39,7 +39,6 @@ class SampleORMColumnConstraint: TableCodable {
             ]
         }
     }
-    required init() {}
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }

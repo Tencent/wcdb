@@ -31,5 +31,4 @@ class SampleTable: TableCodable {
         case intValue
         case stringValue
     }
-    required init() {}
 }

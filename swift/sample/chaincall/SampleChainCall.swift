@@ -30,5 +30,4 @@ class SampleChainCall: TableCodable {
         case intValue
         case stringValue
     }
-    required init() {}
 }

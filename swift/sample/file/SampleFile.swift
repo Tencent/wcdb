@@ -24,7 +24,6 @@ import WCDBSwift
 class SampleFile: TableCodable {
     var intValue: Int?
 
-    required init() {}
     enum CodingKeys: String, CodingTableKey {
         typealias Root = SampleFile
         static let objectRelationalMapping = TableBinding(CodingKeys.self)

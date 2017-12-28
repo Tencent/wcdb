@@ -54,5 +54,4 @@ class SampleORM: TableCodable {
             ]
         }
     }
-    required init() {}
 }

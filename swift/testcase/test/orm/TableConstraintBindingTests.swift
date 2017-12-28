@@ -24,9 +24,8 @@ import WCDBSwift
 class TableConstraintBindingTests: BaseTestCase {
 
     class BaselineMultiPrimaryTestObject: TableCodable, Named {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         static let constraintName = BaselineMultiPrimaryTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiPrimaryTestObject
@@ -40,9 +39,8 @@ class TableConstraintBindingTests: BaseTestCase {
     }
 
     class MultiPrimaryConflictTestObject: TableCodable, Named {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         static let constraintName = MultiPrimaryConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiPrimaryConflictTestObject
@@ -77,9 +75,8 @@ class TableConstraintBindingTests: BaseTestCase {
     }
 
     class BaselineMultiUniqueTestObject: TableCodable, Named {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         static let constraintName = BaselineMultiUniqueTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineMultiUniqueTestObject
@@ -93,9 +90,8 @@ class TableConstraintBindingTests: BaseTestCase {
     }
 
     class MultiUniqueConflictTestObject: TableCodable, Named {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         static let constraintName = MultiUniqueConflictTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiUniqueConflictTestObject
@@ -132,9 +128,8 @@ class TableConstraintBindingTests: BaseTestCase {
     }
 
     class CheckTestObject: TableCodable, Named {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         static let constraintName = CheckTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = CheckTestObject
@@ -160,9 +155,8 @@ class TableConstraintBindingTests: BaseTestCase {
     }
 
     class ForeignKeyTestObject: TableCodable, Named {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         static let constraintName = ForeignKeyTestObject.name + "Constraint"
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ForeignKeyTestObject

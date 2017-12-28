@@ -128,7 +128,6 @@ class AdvanceTests: CRUDTestCase {
         var double: Double = 3.0
         var string: String = "4"
         var data: Data = "5".data(using: .ascii)!
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = CoreStatementTypedObject
             case int32

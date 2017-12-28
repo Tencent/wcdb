@@ -78,7 +78,6 @@ class TypedTests: CRUDTestCase {
         var array: [Int] = []
         var dictionary: [Int: String] = [:]
         var set: Set<String> = []
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedTestObject
             case int
@@ -265,7 +264,6 @@ class TypedTests: CRUDTestCase {
         var jsonCodable: TypedJSONCodableObject? = TypedJSONCodableObject()
         var codable: TypedCodableObject? = TypedCodableObject.variable
         var bool: Bool? = false
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedNonOverflowTestObject
             case int
@@ -348,7 +346,6 @@ class TypedTests: CRUDTestCase {
         var int64Variable9: Int64 = Int64.max
         var doubleVariable0: Double = Double.pi
         var doubleVariable1: Double = Double.pi
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedOverflowTestObject
             case int64Variable0 = "int"
@@ -434,7 +431,6 @@ class TypedTests: CRUDTestCase {
         var jsonCodable: TypedJSONCodableObject?
         var codable: TypedCodableObject?
         var bool: Bool?
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OptionalTypedTestObject
             case int
@@ -666,7 +662,6 @@ class TypedTests: CRUDTestCase {
 
     class TypedMatchTable: TableCodable {
         var variable1 = TypedJSONCodableObject()
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedMatchTable
             case variable1
@@ -676,7 +671,6 @@ class TypedTests: CRUDTestCase {
 
     class TypedNoMatchTable: TableCodable {
         var variable1 = TypedNoMatchJSONCodableObject()
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedNoMatchTable
             case variable1

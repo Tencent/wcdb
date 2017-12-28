@@ -47,7 +47,6 @@ class ExpresssionTests: BaseTestCase {
     class OperableObject: TableCodable {
         var left: Int = 0
         var right: String = ""
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OperableObject
             case left

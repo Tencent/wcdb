@@ -30,5 +30,4 @@ class SampleCore: TableCodable {
         case localID
         case content
     }
-    required init() {}
 }

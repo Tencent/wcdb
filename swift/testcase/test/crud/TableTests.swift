@@ -37,7 +37,6 @@ class TableTests: BaseTestCase {
         var aData: Data = "data".data(using: .ascii)!
         var aDouble: Double = 0.001
 
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineObject
             case anInt32
@@ -83,7 +82,6 @@ class TableTests: BaseTestCase {
     class SkipColumnObject: TableCodable, Named {
         var anInt32: Int32 = -1
 
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = SkipColumnObject
             case anInt32
@@ -107,7 +105,6 @@ class TableTests: BaseTestCase {
 
     class IndexObject: TableCodable, Named {
         var variable: Int32 = 0
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = IndexObject
             case variable
@@ -136,7 +133,6 @@ class TableTests: BaseTestCase {
         var variable1: Int32 = 0
         var variable2: Int32 = 0
 
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConstraintObject
             case variable1
@@ -172,7 +168,6 @@ class TableTests: BaseTestCase {
         var variable1: Int32 = 0
         var variable2: Int32 = 0
 
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = VirtualTableObject
             case variable1
@@ -212,7 +207,6 @@ class TableTests: BaseTestCase {
         var aDouble: Double = 0.001
         var newColumn: Int = 0
 
-        required init() {}
         var isAutoIncrement: Bool = false
         var lastInsertedRowID: Int64 = 0
         enum CodingKeys: String, CodingTableKey {

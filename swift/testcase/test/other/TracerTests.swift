@@ -138,7 +138,6 @@ class TracerTests: BaseTestCase {
                 return [.variable: ColumnConstraintBinding(isPrimary: true, orderBy: .ascending, isAutoIncrement: true)]
             }
         }
-        required init() {}
         var isAutoIncrement: Bool = false
     }
 

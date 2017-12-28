@@ -33,5 +33,4 @@ class SampleFTSData: TableCodable {
             return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .WCDB))
         }
     }
-    required init() {}
 }

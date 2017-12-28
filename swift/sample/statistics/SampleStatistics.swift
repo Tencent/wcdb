@@ -29,5 +29,4 @@ class SampleStatistics: TableCodable {
 
         case intValue
     }
-    required init() {}
 }

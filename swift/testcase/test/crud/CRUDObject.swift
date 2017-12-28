@@ -26,7 +26,6 @@ class CRUDObjectBase: Named, Hashable, Comparable, CustomDebugStringConvertible 
         fatalError()
     }
 
-    required init() {}
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 

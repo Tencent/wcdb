@@ -29,5 +29,4 @@ class SampleAdvanceMulti: TableCodable {
 
         case intValue
     }
-    required init() {}
 }

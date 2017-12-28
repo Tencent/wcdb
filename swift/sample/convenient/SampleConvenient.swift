@@ -33,7 +33,6 @@ class SampleConvenient: TableCodable {
             return [.intValue: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
         }
     }
-    required init() {}
     var isAutoIncrement: Bool = false
     var lastInsertedRowID: Int64 = 0
 }

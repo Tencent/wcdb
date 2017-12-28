@@ -40,5 +40,4 @@ class SampleORMIndex: TableCodable {
             ]
         }
     }
-    required init() {}
 }

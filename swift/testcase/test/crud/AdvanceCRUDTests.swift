@@ -78,9 +78,6 @@ class AdvanceCRUDTests: CRUDTestCase {
 
     class EncodableObject: TableEncodable {
         var variable1: EncodableColumn = EncodableColumn()
-
-        required init() {}
-
         enum CodingKeys: String, CodingTableKey {
             typealias Root = EncodableObject
             case variable1
@@ -101,7 +98,7 @@ class AdvanceCRUDTests: CRUDTestCase {
     func testPartialCodable() {
         let tableName = "testPartialCodable"
         XCTAssertNoThrow(try database.create(table: tableName,
-                                             of: EncodableObject.self))
+                                             of: DecodableObject.self))
 
         let object = EncodableObject()
         XCTAssertNoThrow(try database.insert(objects: object,

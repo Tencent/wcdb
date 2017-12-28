@@ -24,8 +24,7 @@ import WCDBSwift
 class ColumnConstraintBindingTests: BaseTestCase {
 
     class BaselineTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
@@ -34,8 +33,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class PrimaryTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PrimaryTestObject
             case variable = "primaryVariable"
@@ -47,8 +45,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class OrderedPrimaryTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = OrderedPrimaryTestObject
             case variable = "orderedPrimaryVariable"
@@ -60,8 +57,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class AutoIncrementPrimaryTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = AutoIncrementPrimaryTestObject
             case variable = "autoIncrementPrimaryVariable"
@@ -72,8 +68,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
         }
     }
     class ConflictPrimaryTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = ConflictPrimaryTestObject
             case variable = "conflictPrimaryVariable"
@@ -85,8 +80,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class NotNullTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = NotNullTestObject
             case variable = "notNullVariable"
@@ -98,8 +92,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class UniqueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable = "uniqueVariable"
@@ -111,8 +104,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultInt32ValueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultInt32ValueTestObject
             case variable = "defaultValueVariable"
@@ -124,8 +116,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultInt64ValueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultInt64ValueTestObject
             case variable = "defaultValueVariable"
@@ -137,8 +128,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultFloatValueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultFloatValueTestObject
             case variable = "defaultValueVariable"
@@ -150,8 +140,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultTextValueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultTextValueTestObject
             case variable = "defaultValueVariable"
@@ -163,8 +152,7 @@ class ColumnConstraintBindingTests: BaseTestCase {
     }
 
     class DefaultBLOBValueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DefaultBLOBValueTestObject
             case variable = "defaultValueVariable"

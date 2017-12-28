@@ -132,7 +132,6 @@ class SelectTests: CRUDTestCase {
     class WrongObject: TableCodable {
         var variable1: Int? = 0
         var variable2: String? = ""
-        required init() {}
         enum CodingKeys: String, CodingTableKey {
             typealias Root = WrongObject
             case variable1

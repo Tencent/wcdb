@@ -30,7 +30,6 @@ class BenchmarkObject: TableCodable, Named {
         case value
         static let objectRelationalMapping = TableBinding(CodingKeys.self)
     }
-    required init() {}
     init(withKey key: Int, and data: Data) {
         self.key = key
         self.value = data

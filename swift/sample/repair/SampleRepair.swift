@@ -31,5 +31,4 @@ class SampleRepair: TableCodable {
         case identifier
         case content
     }
-    required init() {}
 }

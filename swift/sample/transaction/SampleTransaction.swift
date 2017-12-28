@@ -31,5 +31,4 @@ class SampleTransaction: TableCodable {
             return [.intValue: ColumnConstraintBinding(isPrimary: true, isAutoIncrement: true)]
         }
     }
-    required init() {}
 }

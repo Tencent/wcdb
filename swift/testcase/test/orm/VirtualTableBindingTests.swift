@@ -24,8 +24,7 @@ import WCDBSwift
 class VirtualTableBindingTests: BaseTestCase {
 
     class BaselineTestObject: TableCodable, Named {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable

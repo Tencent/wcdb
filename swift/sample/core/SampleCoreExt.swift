@@ -30,5 +30,4 @@ class SampleCoreExt: TableCodable {
         case localID
         case createTime
     }
-    required init() {}
 }

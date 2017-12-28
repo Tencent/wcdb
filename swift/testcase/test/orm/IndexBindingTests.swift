@@ -24,8 +24,7 @@ import WCDBSwift
 class IndexBindingTests: BaseTestCase {
 
     class BaselineTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
@@ -37,8 +36,7 @@ class IndexBindingTests: BaseTestCase {
     }
 
     class UniqueTestObject: TableCodable {
-        let variable: Int = 0
-        required init() {}
+        var variable: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable
@@ -50,9 +48,8 @@ class IndexBindingTests: BaseTestCase {
     }
 
     class MultiIndexesTestObject: TableCodable {
-        let variable1: Int = 0
-        let variable2: Int = 0
-        required init() {}
+        var variable1: Int = 0
+        var variable2: Int = 0
         enum CodingKeys: String, CodingTableKey {
             typealias Root = MultiIndexesTestObject
             case variable1
