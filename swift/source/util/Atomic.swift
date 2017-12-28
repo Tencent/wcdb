@@ -86,3 +86,9 @@ extension Atomic where Value: OptionalRepresentable {
         self.init(Value.`nil`)
     }
 }
+
+extension Atomic: CustomStringConvertible {
+    var description: String {
+        return "\(value)"
+    }
+}
