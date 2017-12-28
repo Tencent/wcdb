@@ -21,7 +21,7 @@
 import Foundation
 
 final class ConcurrentList<Value> {
-    var values: [Value] = []
+    var values: ContiguousArray<Value> = []
     let capacityCap: Int
     let spin = Spin()
 
@@ -52,14 +52,4 @@ final class ConcurrentList<Value> {
         values.removeAll()
         return count
     }
-
-//    var isEmpty: Bool {
-//        spin.lock(); defer { spin.unlock() }
-//        return values.isEmpty
-//    }
-
-//    var count: Int {
-//        spin.lock(); defer { spin.unlock() }
-//        return values.count
-//    }
 }

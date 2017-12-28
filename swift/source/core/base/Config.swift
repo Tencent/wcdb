@@ -51,18 +51,15 @@ public struct Configs {
         }
     }
 
-    private var configs: [Config] = []
+    private var configs = ContiguousArray<Config>()
 
-    init(_ configs: Config...) {
-        self.init(configs)
-    }
-    init(_ configs: [Config]) {
+    init(_ configs: ContiguousArray<Config>) {
         self.configs = configs
     }
 
     mutating func setConfig(named name: String, with callback: @escaping Callback, orderBy order: Order) {
         var inserted: Bool = false
-        var newConfigs: [Config] = configs.reduce(into: []) { (result, config) in
+        var newConfigs: ContiguousArray<Config> = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
             if !inserted && order < config.order {
                 result.append(Config(named: name, with: callback, orderBy: order))
                 inserted = true
@@ -78,7 +75,7 @@ public struct Configs {
 
     mutating func setConfig(named name: String, with callback: @escaping Callback) {
         var inserted: Bool = false
-        var newConfigs: [Config] = configs.reduce(into: []) { (result, config) in
+        var newConfigs: ContiguousArray<Config> = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
             if name != config.name {
                 result.append(config)
             } else {

@@ -22,7 +22,7 @@ import Foundation
 
 final class TimedQueue<Key: Hashable> {
     typealias Element = (key: Key, clock: SteadyClock)
-    typealias List = [Element]
+    typealias List = ContiguousArray<Element>
     typealias Map = [Key: List.Index]
 
     let delay: TimeInterval

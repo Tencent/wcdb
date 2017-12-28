@@ -374,7 +374,7 @@ extension Database {
 
     private static let timedQueue = TimedQueue<String>(withDelay: 2)
 
-    private static let defaultConfigs: Configs = Configs(
+    private static let defaultConfigs: Configs = Configs(ContiguousArray<Configs.Config>(arrayLiteral:
         Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
             #if WCDB_IOS
                 try Handle.subfixs.forEach {
@@ -456,7 +456,7 @@ extension Database {
         }, orderBy: DefaultConfigOrder.checkpoint.rawValue),
         Configs.Config(emptyConfigNamed: DefaultConfigOrder.tokenize.description,
                        orderBy: DefaultConfigOrder.tokenize.rawValue)
-    )
+    ))
 
     /// Default config order
     public enum DefaultConfigOrder: Int, CustomStringConvertible {
