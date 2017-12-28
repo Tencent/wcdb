@@ -21,8 +21,8 @@
 import Foundation
 
 /// Chain call for inserting
-public final class Insert: CoreContainer {
-    let core: Core
+public final class Insert {
+    private let core: Core
     private var properties: [PropertyConvertible]?
     private let name: String
     private let isReplace: Bool

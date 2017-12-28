@@ -21,8 +21,8 @@
 import Foundation
 
 /// Chain call for deleting
-public final class Delete: CoreContainer {
-    var core: Core
+public final class Delete {
+    private var core: Core
     private let statement = StatementDelete()
 
     /// The number of changed rows in the most recent call.

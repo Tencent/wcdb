@@ -55,22 +55,22 @@ final class TableDecoder: Decoder {
     private final class KeyedDecodingTableContainer<CodingKeys: CodingKey> : KeyedDecodingContainerProtocol {
         typealias Key = CodingKeys
 
-        let handleStatement: HandleStatement
+        private let handleStatement: HandleStatement
 
-        let hashedKeys: HashedKey
+        private let hashedKeys: HashedKey
 
         init(with hashedKeys: HashedKey, on handleStatement: HandleStatement) {
             self.handleStatement = handleStatement
             self.hashedKeys = hashedKeys
         }
 
-        func columnIndex(by key: Key) -> Int {
+        private func columnIndex(by key: Key) -> Int {
             let index = hashedKeys[key.stringValue.hashValue]
             assert(index != nil, "If [\(key)] would not be decoded, please make it optional.")
             return index!
         }
 
-        func columnIndexIfPresent(by key: Key) -> Int? {
+        private func columnIndexIfPresent(by key: Key) -> Int? {
             return hashedKeys[key.stringValue.hashValue]
         }
 

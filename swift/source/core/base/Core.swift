@@ -32,7 +32,7 @@ public class Core: CoreRepresentable {
     }
 
     /// The path of the related database.
-    final public var path: String {
+    public final var path: String {
         return handlePool.path
     }
 
@@ -152,10 +152,6 @@ public class Core: CoreRepresentable {
     func run(embeddedTransaction: TransactionClosure) throws {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
-}
-
-protocol CoreContainer: class {
-    var core: Core {get}
 }
 
 protocol CoreRepresentable: class {

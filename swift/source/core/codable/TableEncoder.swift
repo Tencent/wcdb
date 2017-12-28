@@ -71,8 +71,8 @@ final class TableEncoder: Encoder {
         : KeyedPrimaryKeyEncodableTableContainer, KeyedEncodingContainerProtocol {
         typealias Key = CodingKeys
 
-        let handleStatement: HandleStatement
-        let hashedKeys: HashedKey
+        private let handleStatement: HandleStatement
+        private let hashedKeys: HashedKey
 
         init(with hashedKeys: HashedKey,
              on handleStatement: HandleStatement) {
@@ -81,7 +81,7 @@ final class TableEncoder: Encoder {
             super.init()
         }
 
-        func bindIndex(by hashValue: Int) -> Int? {
+        private func bindIndex(by hashValue: Int) -> Int? {
             return hashedKeys[hashValue]
         }
 

@@ -21,7 +21,7 @@
 import Foundation
 
 public final class HandlePool {
-    class Wrap {
+    private class Wrap {
         let handlePool: HandlePool
         var reference: Int = 0
         init(_ handlePool: HandlePool) {
@@ -110,7 +110,7 @@ public final class HandlePool {
         }
     }
 
-    func invoke(handleWrap: inout HandleWrap) throws {
+    private func invoke(handleWrap: inout HandleWrap) throws {
         let newConfigs = self.configs
         if newConfigs != handleWrap.configs {
             try newConfigs.invoke(handle: handleWrap.handle)
@@ -149,7 +149,7 @@ public final class HandlePool {
         })
     }
 
-    func flowBack(_ handleWrap: HandleWrap) {
+    private func flowBack(_ handleWrap: HandleWrap) {
         let inserted = handles.pushBack(handleWrap)
         rwlock.unlockRead()
         if !inserted {
@@ -157,7 +157,7 @@ public final class HandlePool {
         }
     }
 
-    func generate() throws -> HandleWrap {
+    private func generate() throws -> HandleWrap {
         let handle = Handle(withPath: path)
         handle.tag = tag
         let configs = self.configs
@@ -210,7 +210,7 @@ public final class HandlePool {
         configs.setConfig(named: name, with: callback)
     }
 
-    static func purgeFreeHandlesInAllPool() {
+    static func purgeFreeHandlesInAllPools() {
         let handlePools: [HandlePool]!
         do {
             spin.lock(); defer { spin.unlock() }

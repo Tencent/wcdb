@@ -22,7 +22,7 @@ import Foundation
 
 // nullable, Int32, Int64, Double, String, Data
 public struct FundamentalValue {
-    let base: FundamentalColumnType?
+    private let base: FundamentalColumnType?
 
     public init(_ _: Void? = nil) {
         base = nil

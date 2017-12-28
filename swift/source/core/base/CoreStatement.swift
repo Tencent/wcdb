@@ -21,9 +21,9 @@
 import Foundation
 
 /// CoreStatement for preparing or executing WINQ sql.
-public final class CoreStatement: CoreContainer {
-    let core: Core
-    let recyclableHandleStatement: RecyclableHandleStatement
+public final class CoreStatement {
+    private let core: Core
+    private let recyclableHandleStatement: RecyclableHandleStatement
 
     init(with core: Core, and recyclableHandleStatement: RecyclableHandleStatement) {
         self.core = core

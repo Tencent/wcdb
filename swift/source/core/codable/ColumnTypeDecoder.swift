@@ -38,21 +38,24 @@ final class ColumnTypeDecoder: Decoder {
 
         typealias Key = CodingKeys
 
-        let decoder: ColumnTypeDecoder
+        private let decoder: ColumnTypeDecoder
 
-        struct SizedPointer {
-            let pointer: UnsafeMutableRawPointer
-            let size: Int
-            init(withSize size: Int) {
-                self.size = size
-                self.pointer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: size)
+        private struct SizedPointer {
+            private let pointer: UnsafeMutableRawPointer
+            private let size: Int
+            init<T>(of type: T.Type = T.self) {
+                size = MemoryLayout<T>.size
+                pointer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: size)
+            }
+            func deallocate() {
+                pointer.deallocate(bytes: size, alignedTo: size)
             }
             func getPointee<T>(of type: T.Type = T.self) -> T {
                 return pointer.assumingMemoryBound(to: type).pointee
             }
         }
 
-        var sizedPointers: ContiguousArray<SizedPointer>
+        private var sizedPointers: ContiguousArray<SizedPointer>
 
         init(with decoder: ColumnTypeDecoder) {
             self.decoder = decoder
@@ -61,8 +64,7 @@ final class ColumnTypeDecoder: Decoder {
 
         deinit {
             for sizedPointer in sizedPointers {
-                let size = sizedPointer.size
-                sizedPointer.pointer.deallocate(bytes: size, alignedTo: size)
+                sizedPointer.deallocate()
             }
         }
 
@@ -150,8 +152,7 @@ final class ColumnTypeDecoder: Decoder {
             let columnDecodableType = type as! ColumnDecodableBase.Type
             decoder.results[key.stringValue] = columnDecodableType.columnType
 
-            let size = MemoryLayout<T>.size
-            let sizedPointer = SizedPointer(withSize: size)
+            let sizedPointer = SizedPointer(of: T.self)
             sizedPointers.append(sizedPointer)
             return sizedPointer.getPointee()
         }

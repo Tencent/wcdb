@@ -20,10 +20,10 @@
 
 import Foundation
 
-public class Selectable: CoreContainer {
-    var core: Core
-    var optionalRecyclableHandleStatement: RecyclableHandleStatement?
-    var statement: StatementSelect
+public class Selectable {
+    private final var core: Core
+    final var optionalRecyclableHandleStatement: RecyclableHandleStatement?
+    final var statement: StatementSelect
 
     init(with core: Core, statement: StatementSelect) {
         self.statement = statement
@@ -34,14 +34,14 @@ public class Selectable: CoreContainer {
         try? finalize()
     }
 
-    func finalize() throws {
+    final func finalize() throws {
         if let recyclableHandleStatement = optionalRecyclableHandleStatement {
             try recyclableHandleStatement.raw.finalize()
             optionalRecyclableHandleStatement = nil
         }
     }
 
-    func lazyHandleStatement() throws -> HandleStatement {
+    final func lazyHandleStatement() throws -> HandleStatement {
         if optionalRecyclableHandleStatement == nil {
             optionalRecyclableHandleStatement = try core.prepare(statement)
         }
@@ -50,7 +50,7 @@ public class Selectable: CoreContainer {
 
     //Since `next()` may throw errors, it can't conform to `Sequence` protocol to fit a `for in` loop.
     @discardableResult
-    public func next() throws -> Bool {
+    public final func next() throws -> Bool {
         do {
             return try lazyHandleStatement().step()
         } catch let error {
@@ -64,7 +64,7 @@ public class Selectable: CoreContainer {
     /// - Parameter condition: Expression convertible
     /// - Returns: `self`
     @discardableResult
-    public func `where`(_ condition: Condition) -> Self {
+    public final func `where`(_ condition: Condition) -> Self {
         statement.where(condition)
         return self
     }
@@ -74,7 +74,7 @@ public class Selectable: CoreContainer {
     /// - Parameter orderList: Order convertible list
     /// - Returns: `self`
     @discardableResult
-    public func order(by orderConvertibleList: OrderBy...) -> Self {
+    public final func order(by orderConvertibleList: OrderBy...) -> Self {
         return order(by: orderConvertibleList)
     }
 
@@ -83,7 +83,7 @@ public class Selectable: CoreContainer {
     /// - Parameter orderList: Order convertible list
     /// - Returns: `self`
     @discardableResult
-    public func order(by orderConvertibleList: [OrderBy]) -> Self {
+    public final func order(by orderConvertibleList: [OrderBy]) -> Self {
         statement.order(by: orderConvertibleList)
         return self
     }
@@ -95,36 +95,36 @@ public class Selectable: CoreContainer {
     ///   - end: Expression convertible
     /// - Returns: `self`
     @discardableResult
-    public func limit(from begin: Limit, to end: Limit) -> Self {
+    public final func limit(from begin: Limit, to end: Limit) -> Self {
         statement.limit(from: begin, to: end)
         return self
     }
 
     @discardableResult
-    public func limit(_ expressionConvertibleLimit: Limit) -> Self {
+    public final func limit(_ expressionConvertibleLimit: Limit) -> Self {
         statement.limit(expressionConvertibleLimit)
         return self
     }
 
     @discardableResult
-    public func limit(_ expressionConvertibleLimit: Limit, offset expressionConvertibleOffset: Offset) -> Self {
+    public final func limit(_ expressionConvertibleLimit: Limit, offset expressionConvertibleOffset: Offset) -> Self {
         statement.limit(expressionConvertibleLimit, offset: expressionConvertibleOffset)
         return self
     }
 
     @discardableResult
-    public func group(by expressionConvertibleGroupList: GroupBy...) -> Self {
+    public final func group(by expressionConvertibleGroupList: GroupBy...) -> Self {
         return group(by: expressionConvertibleGroupList)
     }
 
     @discardableResult
-    public func group(by expressionConvertibleGroupList: [GroupBy]) -> Self {
+    public final func group(by expressionConvertibleGroupList: [GroupBy]) -> Self {
         statement.group(by: expressionConvertibleGroupList)
         return self
     }
 
     @discardableResult
-    public func having(_ expressionConvertibleHaving: Having) -> Self {
+    public final func having(_ expressionConvertibleHaving: Having) -> Self {
         statement.having(expressionConvertibleHaving)
         return self
     }
@@ -132,12 +132,12 @@ public class Selectable: CoreContainer {
 
 extension Selectable: CoreRepresentable {
     /// The tag of the related database.
-    public var tag: Tag? {
+    public final var tag: Tag? {
         return core.tag
     }
 
     /// The path of the related database.
-    public var path: String {
+    public final var path: String {
         return core.path
     }
 }

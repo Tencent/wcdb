@@ -21,12 +21,8 @@
 import Foundation
 
 /// Convenient table interface
-public final class Table<Root: TableCodable>: CoreContainer {
-    var core: Core {
-        return database
-    }
-
-    let database: Database
+public final class Table<Root: TableCodable> {
+    private let database: Database
 
     /// Table name
     public let name: String
@@ -47,12 +43,12 @@ extension Table: CoreRepresentable {
 
     /// The tag of the related database. 
     public var tag: Tag? {
-        return core.tag
+        return database.tag
     }
 
     /// The path of the related database. 
     public var path: String {
-        return core.path
+        return database.path
     }
 }
 

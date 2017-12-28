@@ -21,8 +21,8 @@
 import Foundation
 
 /// The chain call for updating
-public final class Update: CoreContainer {
-    var core: Core
+public final class Update {
+    private var core: Core
     private let statement = StatementUpdate()
     private let keys: [CodingTableKeyBase]
 

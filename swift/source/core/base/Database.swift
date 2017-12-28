@@ -198,7 +198,7 @@ public final class Database: Core {
     /// Purge all unused memory of all databases.  
     /// Note that WCDB will call this interface automatically while it receives memory warning on iOS.
     public static func purge() {
-        HandlePool.purgeFreeHandlesInAllPool()
+        HandlePool.purgeFreeHandlesInAllPools()
     }
 
     override func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
