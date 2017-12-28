@@ -25,7 +25,7 @@ public final class WCDBTokenizerInfo: TokenizerInfoBase {
 }
 
 public final class WCDBCursorInfo: CursorInfoBase {
-    enum TokenType: UInt {
+    private enum TokenType: UInt {
         case basicMultilingualPlaneLetter = 0x00000001
         case basicMultilingualPlaneDigit = 0x00000002
         case basicMultilingualPlaneSymbol = 0x00000003
@@ -33,17 +33,17 @@ public final class WCDBCursorInfo: CursorInfoBase {
         case auxiliaryPlaneOther = 0xFFFFFFFF
     }
 
-    let input: UnsafePointer<Int8>!
-    let inputLength: Int32
+    private let input: UnsafePointer<Int8>!
+    private let inputLength: Int32
 
-    var position: Int32 = 0
-    var startOffset: Int32 = 0
-    var endOffset: Int32 = 0
+    private var position: Int32 = 0
+    private var startOffset: Int32 = 0
+    private var endOffset: Int32 = 0
 
-    var cursor: Int32 = 0
-    var cursorTokenType: TokenType?
-    var cursorTokenLength: Int32 = 0
-    lazy var symbolCharacterSet: CFCharacterSet? = {
+    private var cursor: Int32 = 0
+    private var cursorTokenType: TokenType?
+    private var cursorTokenLength: Int32 = 0
+    private lazy var symbolCharacterSet: CFCharacterSet? = {
         var characterSet = CFCharacterSetCreateMutable(kCFAllocatorDefault)
         CFCharacterSetUnion(characterSet, CFCharacterSetGetPredefined(CFCharacterSetPredefinedSet.control))
         CFCharacterSetUnion(characterSet, CFCharacterSetGetPredefined(CFCharacterSetPredefinedSet.whitespaceAndNewline))
@@ -54,15 +54,15 @@ public final class WCDBCursorInfo: CursorInfoBase {
         return characterSet
     }()
 
-    var lemmaBuffer: [UInt8] = []
-    var lemmaBufferLength: Int32 = 0 //>0 lemma is not empty
+    private var lemmaBuffer: [UInt8] = []
+    private var lemmaBufferLength: Int32 = 0 //>0 lemma is not empty
 
-    var subTokensLengthArray: [UInt8] = []
-    var subTokensCursor: Int32 = 0
-    var subTokensDoubleChar: Bool = false
+    private var subTokensLengthArray: [UInt8] = []
+    private var subTokensCursor: Int32 = 0
+    private var subTokensDoubleChar: Bool = false
 
-    var buffer: [UInt8] = []
-    var bufferLength: Int32 = 0
+    private var buffer: [UInt8] = []
+    private var bufferLength: Int32 = 0
 
     public required init(withInput pInput: UnsafePointer<Int8>?, count: Int32, tokenizerInfo: TokenizerInfoBase) {
         input = pInput

@@ -25,11 +25,11 @@ public final class AppleTokenizerInfo: TokenizerInfoBase {
 }
 
 public final class AppleCursorInfo: CursorInfoBase {
-    let input: String
-    let tokenizer: CFStringTokenizer
-    var offset: Int32 = 0
-    var position: Int32 = 0
-    var buffer: [UInt8] = []
+    private let input: String
+    private let tokenizer: CFStringTokenizer
+    private var offset: Int32 = 0
+    private var position: Int32 = 0
+    private var buffer: [UInt8] = []
 
     public required init(withInput pInput: UnsafePointer<Int8>?,
                          count: Int32,
