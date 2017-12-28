@@ -663,8 +663,10 @@ class TypedTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object,
                                              on: [TypedTestObject.Properties.int],
                                              intoTable: TypedTestObject.name))
-        let table = WCDBAssertNoThrowReturned(try database.getTable(named: TypedTestObject.name,
-                                                                    of: OptionalTypedTestObject.self))
+        let table = WCDBAssertNoThrowReturned(
+            try database.getTable(named: TypedTestObject.name,
+                                  of: OptionalTypedTestObject.self)
+        )
         XCTAssertNotNil(table)
         let wrappedTable = table!
         //Then
@@ -703,8 +705,10 @@ class TypedTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: object,
                                              on: [OptionalTypedTestObject.Properties.int],
                                              intoTable: OptionalTypedTestObject.name))
-        let table = WCDBAssertNoThrowReturned(try database.getTable(named: OptionalTypedTestObject.name,
-                                                                    of: OptionalTypedTestObject.self))
+        let table = WCDBAssertNoThrowReturned(
+            try database.getTable(named: OptionalTypedTestObject.name,
+                                  of: OptionalTypedTestObject.self)
+        )
         XCTAssertNotNil(table)
         let wrappedTable = table!
         //Then
