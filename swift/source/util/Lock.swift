@@ -128,10 +128,6 @@ final class ConditionLock: Lockable {
     }
 
     func wait(timeout: TimeInterval) {
-        guard timeout > 0 else {
-            return
-        }
-
         let integerPart = Int(timeout.nextDown)
         let fractionalPart = timeout - Double(integerPart)
         var ts = timespec(tv_sec: integerPart, tv_nsec: Int(fractionalPart * 1000000000))

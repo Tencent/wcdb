@@ -26,13 +26,6 @@ final class RecyclableHandleStatement: Recyclable<HandleStatement> {
     private let recyclableHandle: RecyclableHandle
 
     init(recyclableHandle: RecyclableHandle,
-         handleStatement: HandleStatement,
-         onRecycled: @escaping RecyclableHandleStatement.OnRecycled) {
-        self.recyclableHandle = recyclableHandle
-        super.init(handleStatement, onRecycled: onRecycled)
-    }
-
-    init(recyclableHandle: RecyclableHandle,
          handleStatement: HandleStatement) {
         self.recyclableHandle = recyclableHandle
         super.init(handleStatement)

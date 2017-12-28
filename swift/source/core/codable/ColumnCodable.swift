@@ -80,9 +80,6 @@ extension CollectionColumnEncodable {
     public func archivedFundamentalValue() -> FundamentalColumnType? {
         return archivedValue()
     }
-    public func asLiteralValue() -> LiteralValue {
-        return LiteralValue(self)
-    }
 }
 
 public protocol CollectionColumnDecodable: ColumnDecodableBase {
