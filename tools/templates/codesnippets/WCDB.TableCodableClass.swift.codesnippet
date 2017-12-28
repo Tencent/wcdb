@@ -15,12 +15,7 @@
     var variable2: String? // Optional if it would be nil in some WCDB selection
     var variable3: Double? // Optional if it would be nil in some WCDB selection
     let unbound: Date? = nil
-    
-    //It must can be initialized
-    required init() {
-        &lt;#required init#&gt;
-    }
-    
+        
     enum CodingKeys: String, CodingTableKey {
         typealias Root = &lt;#Class name#&gt;
         

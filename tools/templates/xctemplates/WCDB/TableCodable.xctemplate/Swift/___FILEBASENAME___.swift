@@ -10,11 +10,6 @@ class ___VARIABLE_productName___: WCDB.TableCodable {
     var variable3: Double? // Optional if it would be nil in some WCDB selection
     let unbound: Date? = nil
 
-    //It must can be initialized
-    required init() {
-        <#required init#>
-    }
-
     enum CodingKeys: String, CodingTableKey {
         typealias Root = ___VARIABLE_productName___
 
