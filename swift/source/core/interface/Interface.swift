@@ -775,7 +775,7 @@ public protocol TableInterface: class {
     ///   - name: Table name.
     ///   - rootType: Type of table encodable object
     /// - Throws: `Error`
-    func create<Root: TableEncodable>(table name: String, of rootType: Root.Type) throws
+    func create<Root: TableDecodable>(table name: String, of rootType: Root.Type) throws
 
     /// Create virtual table and constraints with specific type
     ///
@@ -787,7 +787,7 @@ public protocol TableInterface: class {
     ///   - name: Table name.
     ///   - rootType: Type of table encodable object
     /// - Throws: `Error`
-    func create<Root: TableEncodable>(virtualTable name: String, of rootType: Root.Type) throws
+    func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws
 
     /// Create table manually
     ///
@@ -851,7 +851,7 @@ public protocol TableInterface: class {
 }
 
 extension TableInterface where Self: Core {
-    public func create<Root: TableEncodable>(
+    public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {
         try run(embeddedTransaction: {
@@ -887,7 +887,7 @@ extension TableInterface where Self: Core {
         })
     }
 
-    public func create<Root: TableEncodable>(virtualTable name: String, of rootType: Root.Type) throws {
+    public func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws {
         try run(transaction: {
             try exec(rootType.CodingKeys.objectRelationalMapping.generateCreateVirtualTableStatement(named: name))
         })

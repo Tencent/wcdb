@@ -23,14 +23,12 @@ import Foundation
 public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     private let properties: [CodingTableKeyType: Property]
     let allProperties: [Property]
-    private let type: CodingTableKeyType.Type
     let allKeys: [CodingTableKeyType]
 
     private lazy var columnTypes: [String: ColumnType] = {
-        let tableEncodableType = CodingTableKeyType.Root.self as? TableEncodableBase.Type
-        Error.assert(tableEncodableType != nil,
-                     message: "[\(CodingTableKeyType.Root.self)] must conform to TableEncodable protocol.")
-        return ColumnTypeEncoder.getColumnTypes(of: tableEncodableType!)
+        // CodingTableKeyType.Root must conform to TableEncodable protocol.
+        let tableDecodableType = CodingTableKeyType.Root.self as! TableDecodableBase.Type
+        return ColumnTypeDecoder.types(of: tableDecodableType)
     }()
 
     private lazy var allColumnDef: [ColumnDef] = allKeys.map { (key) -> ColumnDef in
@@ -38,14 +36,14 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     }
 
     private typealias ColumnConstraintBindingMap = [CodingTableKeyType: ColumnConstraintBinding]
-    private lazy var columnConstraintBindings: ColumnConstraintBindingMap? = type.columnConstraintBindings
+    private lazy var columnConstraintBindings: ColumnConstraintBindingMap? = CodingTableKeyType.columnConstraintBindings
 
     private typealias IndexBindingMap = [IndexBinding.Subfix: IndexBinding]
-    private lazy var indexBindings: IndexBindingMap? = type.indexBindings
+    private lazy var indexBindings: IndexBindingMap? = CodingTableKeyType.indexBindings
 
     private typealias TableConstraintBindingMap = [TableConstraintBinding.Name: TableConstraintBinding]
-    private lazy var tableConstraintBindings: TableConstraintBindingMap? = type.tableConstraintBindings
-    private lazy var virtualTableBinding: VirtualTableBinding? = type.virtualTableBinding
+    private lazy var tableConstraintBindings: TableConstraintBindingMap? = CodingTableKeyType.tableConstraintBindings
+    private lazy var virtualTableBinding: VirtualTableBinding? = CodingTableKeyType.virtualTableBinding
 
     private lazy var primaryKey: CodingTableKeyType? = {
         guard let filtered = columnConstraintBindings?.filter({ (args) -> Bool in
@@ -62,7 +60,6 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     }()
 
     public init(_ type: CodingTableKeyType.Type) {
-        self.type = type
         var allProperties: [Property] = []
         var properties: [CodingTableKeyType: Property] = [:]
         var allKeys: [CodingTableKeyType] = []
