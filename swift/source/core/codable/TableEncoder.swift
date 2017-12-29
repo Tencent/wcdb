@@ -108,22 +108,21 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int64(value), toIndex: index)
+            handleStatement.bind(value.toInt64(), toIndex: index)
         }
 
         func encode(_ value: Bool, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            let int32Value: Int32 = value ? 1 : 0
-            handleStatement.bind(int32Value, toIndex: index)
+            handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
         func encode(_ value: Float, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Double(value), toIndex: index)
+            handleStatement.bind(value.toDouble(), toIndex: index)
         }
 
         func encode(_ value: Double, forKey key: Key) throws {
@@ -153,14 +152,14 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int32(value), toIndex: index)
+            handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
         func encode(_ value: Int16, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int32(value), toIndex: index)
+            handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
         func encode(_ value: Int32, forKey key: Key) throws {
@@ -181,44 +180,43 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int64(bitPattern: UInt64(value)), toIndex: index)
+            handleStatement.bind(value.toInt64(), toIndex: index)
         }
 
         func encode(_ value: UInt8, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int32(bitPattern: UInt32(value)), toIndex: index)
+            handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
         func encode(_ value: UInt16, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int32(bitPattern: UInt32(value)), toIndex: index)
+            handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
         func encode(_ value: UInt32, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int32(bitPattern: value), toIndex: index)
+            handleStatement.bind(value.toInt32(), toIndex: index)
         }
 
         func encode(_ value: UInt64, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            handleStatement.bind(Int64(bitPattern: value), toIndex: index)
+            handleStatement.bind(value.toInt64(), toIndex: index)
         }
 
         func encodeIfPresent(_ value: Bool?, forKey key: Key) throws {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                let int32Value: Int32 = value! ? 1 : 0
-                handleStatement.bind(int32Value, toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt32(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -228,8 +226,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int64(value!), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt64(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -239,8 +237,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int32(value!), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt32(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -250,8 +248,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int32(value!), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt32(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -261,8 +259,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue, toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -272,8 +270,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(value!, toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue, toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -283,8 +281,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int64(bitPattern: UInt64(value!)), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt64(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -294,8 +292,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int32(bitPattern: UInt32(value!)), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt32(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -305,8 +303,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int32(bitPattern: UInt32(value!)), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt32(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -316,8 +314,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int32(bitPattern: value!), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt32(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -327,8 +325,8 @@ final class TableEncoder: Encoder {
             guard let index = bindPrimaryKeyOrReturnIndex(forKey: key) else {
                 return
             }
-            if value != nil {
-                handleStatement.bind(Int64(bitPattern: UInt64(value!)), toIndex: index)
+            if let wrappedValue = value {
+                handleStatement.bind(wrappedValue.toInt64(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }
@@ -339,7 +337,7 @@ final class TableEncoder: Encoder {
                 return
             }
             if let wrappedValue = value {
-                handleStatement.bind(Double(wrappedValue), toIndex: index)
+                handleStatement.bind(wrappedValue.toDouble(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }

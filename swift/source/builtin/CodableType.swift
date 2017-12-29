@@ -40,20 +40,20 @@ import Foundation
 extension Int8: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
-        self = Int8(truncatingIfNeeded: value)
+        self = value.toInt8()
     }
     public func archivedValue() -> Int32? {
-        return Int32(self)
+        return self.toInt32()
     }
 }
 
 extension Int16: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
-        self = Int16(truncatingIfNeeded: value)
+        self = value.toInt16()
     }
     public func archivedValue() -> Int32? {
-        return Int32(self)
+        return self.toInt32()
     }
 }
 
@@ -80,80 +80,80 @@ extension Int64: ColumnCodable {
 extension Int: ColumnCodable {
     public typealias FundamentalType = Int64
     public init?(with value: Int64) {
-        self = Int(truncatingIfNeeded: value)
+        self = value.toInt()
     }
     public func archivedValue() -> Int64? {
-        return Int64(self)
+        return self.toInt64()
     }
 }
 
 extension UInt8: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
-        self = UInt8(truncatingIfNeeded: UInt32(bitPattern: value))
+        self = value.toUInt8()
     }
     public func archivedValue() -> Int32? {
-        return Int32(bitPattern: UInt32(self))
+        return self.toInt32()
     }
 }
 
 extension UInt16: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
-        self = UInt16(truncatingIfNeeded: UInt32(bitPattern: value))
+        self = value.toUInt16()
     }
     public func archivedValue() -> Int32? {
-        return Int32(bitPattern: UInt32(self))
+        return self.toInt32()
     }
 }
 
 extension UInt32: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
-        self = UInt32(bitPattern: value)
+        self = value.toUInt32()
     }
     public func archivedValue() -> Int32? {
-        return Int32(bitPattern: self)
+        return self.toInt32()
     }
 }
 
 extension UInt64: ColumnCodable {
     public typealias FundamentalType = Int64
     public init?(with value: Int64) {
-        self = UInt64(bitPattern: value)
+        self = value.toUInt64()
     }
     public func archivedValue() -> Int64? {
-        return Int64(bitPattern: self)
+        return self.toInt64()
     }
 }
 
 extension UInt: ColumnCodable {
     public typealias FundamentalType = Int64
     public init?(with value: Int64) {
-        self = UInt(truncatingIfNeeded: UInt64(bitPattern: value))
+        self = value.toUInt()
     }
     public func archivedValue() -> Int64? {
-        return Int64(bitPattern: UInt64(self))
+        return self.toInt64()
     }
 }
 
 extension Bool: ColumnCodable {
     public typealias FundamentalType = Int32
     public init?(with value: Int32) {
-        self = (value != 0)
+        self = value.toBool()
     }
     public func archivedValue() -> Int32? {
-        return self ? 1 : 0
+        return self.toInt32()
     }
 }
 
 extension Float: ColumnCodable {
     public typealias FundamentalType = Double
     public init?(with value: Double) {
-        self = Float(value)
+        self = value.toFloat()
     }
     public func archivedValue() -> Double? {
-        return Double(self)
+        return self.toDouble()
     }
 }
 

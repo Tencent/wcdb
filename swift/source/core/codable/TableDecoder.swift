@@ -81,27 +81,27 @@ final class TableDecoder: Decoder {
         //Decode
         func decodeNil(forKey key: Key) throws -> Bool {
             let index: Int = columnIndex(by: key)
-            return handleStatement.columnValue(atIndex: index, of: Int32.self) != 0
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toBool()
         }
 
         func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
             let index: Int = columnIndex(by: key)
-            return handleStatement.columnValue(atIndex: index, of: Int32.self) != 0
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toBool()
         }
 
         func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
             let index: Int = columnIndex(by: key)
-            return Int(truncatingIfNeeded: handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return handleStatement.columnValue(atIndex: index, of: Int64.self).toInt()
         }
 
         func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
             let index: Int = columnIndex(by: key)
-            return Int8(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toInt8()
         }
 
         func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
             let index: Int = columnIndex(by: key)
-            return Int16(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toInt16()
         }
 
         func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
@@ -116,35 +116,32 @@ final class TableDecoder: Decoder {
 
         func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
             let index: Int = columnIndex(by: key)
-            let value: Int64 = handleStatement.columnValue(atIndex: index)
-            return UInt(truncatingIfNeeded: UInt64(bitPattern: value))
+            return handleStatement.columnValue(atIndex: index, of: Int64.self).toUInt()
         }
 
         func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
             let index: Int = columnIndex(by: key)
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            return UInt8(truncatingIfNeeded: UInt32(bitPattern: value))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toUInt8()
         }
 
         func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
             let index: Int = columnIndex(by: key)
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            return UInt16(truncatingIfNeeded: UInt32(bitPattern: value))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toUInt16()
         }
 
         func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
             let index: Int = columnIndex(by: key)
-            return UInt32(bitPattern: handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toUInt32()
         }
 
         func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
             let index: Int = columnIndex(by: key)
-            return UInt64(bitPattern: handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return handleStatement.columnValue(atIndex: index, of: Int64.self).toUInt64()
         }
 
         func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
             let index: Int = columnIndex(by: key)
-            return Float(handleStatement.columnValue(atIndex: index, of: Double.self))
+            return handleStatement.columnValue(atIndex: index, of: Double.self).toFloat()
         }
 
         func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
@@ -192,28 +189,28 @@ final class TableDecoder: Decoder {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                 return nil
             }
-            return handleStatement.columnValue(atIndex: index, of: Int32.self) != 0
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toBool()
         }
 
         func decodeIfPresent(_ type: Int.Type, forKey key: Key) throws -> Int? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return Int(truncatingIfNeeded: handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return handleStatement.columnValue(atIndex: index, of: Int64.self).toInt()
         }
 
         func decodeIfPresent(_ type: Int8.Type, forKey key: Key) throws -> Int8? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return Int8(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toInt8()
         }
 
         func decodeIfPresent(_ type: Int16.Type, forKey key: Key) throws -> Int16? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return Int16(handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toInt16()
         }
 
         func decodeIfPresent(_ type: Int32.Type, forKey key: Key) throws -> Int32? {
@@ -234,44 +231,42 @@ final class TableDecoder: Decoder {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return UInt(truncatingIfNeeded: UInt64(bitPattern: handleStatement.columnValue(atIndex: index)))
+            return handleStatement.columnValue(atIndex: index, of: Int64.self).toUInt()
         }
 
         func decodeIfPresent(_ type: UInt8.Type, forKey key: Key) throws -> UInt8? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            return UInt8(truncatingIfNeeded: UInt32(bitPattern: value))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toUInt8()
         }
 
         func decodeIfPresent(_ type: UInt16.Type, forKey key: Key) throws -> UInt16? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            let value: Int32 = handleStatement.columnValue(atIndex: index)
-            return UInt16(truncatingIfNeeded: UInt32(bitPattern: value))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toUInt16()
         }
 
         func decodeIfPresent(_ type: UInt32.Type, forKey key: Key) throws -> UInt32? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return UInt32(bitPattern: handleStatement.columnValue(atIndex: index, of: Int32.self))
+            return handleStatement.columnValue(atIndex: index, of: Int32.self).toUInt32()
         }
 
         func decodeIfPresent(_ type: UInt64.Type, forKey key: Key) throws -> UInt64? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return UInt64(bitPattern: handleStatement.columnValue(atIndex: index, of: Int64.self))
+            return handleStatement.columnValue(atIndex: index, of: Int64.self).toUInt64()
         }
 
         func decodeIfPresent(_ type: Float.Type, forKey key: Key) throws -> Float? {
             guard let index = columnIndexIfPresent(by: key), handleStatement.columnType(atIndex: index) != .null else {
                     return nil
             }
-            return Float(handleStatement.columnValue(atIndex: index, of: Double.self))
+            return handleStatement.columnValue(atIndex: index, of: Double.self).toFloat()
         }
 
         func decodeIfPresent(_ type: Double.Type, forKey key: Key) throws -> Double? {

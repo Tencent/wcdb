@@ -153,3 +153,102 @@ extension String {
         return range(from: location, to: location + length)
     }
 }
+
+extension Bool {
+    @inline(__always) func toInt32() -> Int32 {
+        return self ? 1 : 0
+    }
+}
+
+extension Int {
+    @inline(__always) func toInt64() -> Int64 {
+        return Int64(self)
+    }
+}
+
+extension Int8 {
+    @inline(__always) func toInt32() -> Int32 {
+        return Int32(self)
+    }
+}
+
+extension Int16 {
+    @inline(__always) func toInt32() -> Int32 {
+        return Int32(self)
+    }
+}
+
+extension Int32 {
+    @inline(__always) func toBool() -> Bool {
+        return self != 0
+    }
+    @inline(__always) func toInt8() -> Int8 {
+        return Int8(truncatingIfNeeded: self)
+    }
+    @inline(__always) func toInt16() -> Int16 {
+        return Int16(truncatingIfNeeded: self)
+    }
+    @inline(__always) func toUInt8() -> UInt8 {
+        return UInt8(bitPattern: Int8(truncatingIfNeeded: self))
+    }
+    @inline(__always) func toUInt16() -> UInt16 {
+        return UInt16(bitPattern: Int16(truncatingIfNeeded: self))
+    }
+    @inline(__always) func toUInt32() -> UInt32 {
+        return UInt32(bitPattern: self)
+    }
+}
+
+extension Int64 {
+    @inline(__always) func toInt() -> Int {
+        return Int(truncatingIfNeeded: self)
+    }
+    @inline(__always) func toUInt() -> UInt {
+        return UInt(bitPattern: Int(truncatingIfNeeded: self))
+    }
+    @inline(__always) func toUInt64() -> UInt64 {
+        return UInt64(bitPattern: self)
+    }
+}
+
+extension UInt {
+    @inline(__always) func toInt64() -> Int64 {
+        return Int64(bitPattern: UInt64(self))
+    }
+}
+
+extension UInt8 {
+    @inline(__always) func toInt32() -> Int32 {
+        return Int32(bitPattern: UInt32(self))
+    }
+}
+
+extension UInt16 {
+    @inline(__always) func toInt32() -> Int32 {
+        return Int32(bitPattern: UInt32(self))
+    }
+}
+
+extension UInt32 {
+    @inline(__always) func toInt32() -> Int32 {
+        return Int32(bitPattern: self)
+    }
+}
+
+extension UInt64 {
+    @inline(__always) func toInt64() -> Int64 {
+        return Int64(bitPattern: self)
+    }
+}
+
+extension Float {
+    @inline(__always) func toDouble() -> Double {
+        return Double(self)
+    }
+}
+
+extension Double {
+    @inline(__always) func toFloat() -> Float {
+        return Float(self)
+    }
+}
