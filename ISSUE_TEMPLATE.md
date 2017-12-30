@@ -7,7 +7,7 @@
 > Please **remove all grey hint text before submitting**.
 >
 
-## 对应的 WCDB 语言 ( The language of WCDB )
+### 对应的 WCDB 语言 ( The language of WCDB )
 
 > 如：Objective、Swift 或 Java
 >
@@ -17,7 +17,7 @@
 
 
 
-## WCDB 的版本号 ( The version of WCDB )
+### WCDB 的版本号 ( The version of WCDB )
 
 > 如：v1.0.5
 >
@@ -27,7 +27,7 @@
 
 
 
-## WCDB 的平台 ( The platform of WCDB )
+### WCDB 的平台 ( The platform of WCDB )
 
 > 如：iOS、macOS 或 Android 
 >
@@ -37,7 +37,7 @@
 
 
 
-## WCDB 的安装方式 ( The installation of WCDB )
+### WCDB 的安装方式 ( The installation of WCDB )
 
 > 如 Cocoapods、Carthage、Maven、AAR Package 或 Git clone
 >
@@ -47,7 +47,7 @@
 
 
 
-## 遇到的问题 ( What's the issue? )
+### 遇到的问题 ( What's the issue? )
 
 > 如果是错误信息，请**贴上相关的报错信息或截图**。
 >
