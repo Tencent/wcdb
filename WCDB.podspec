@@ -2,7 +2,7 @@
 # pod trunk push WCDB.podspec --verbose --skip-import-validation
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
-  wcdb.version      = "1.0.5"
+  wcdb.version      = "1.0.6"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Objective-C. (If you want to use WCDB from Objective-C, see the "WCDBSwift" pod.)
