@@ -24,7 +24,7 @@ import WCDBSwift
 func sample_orm_main(baseDirectory: String) {
     print("Sample-ORM Begin")
 
-    func printSchemas<TableEncodableType: TableEncodable>(of type: TableEncodableType.Type) {
+    func printSchemas<TableDecodableType: TableDecodable>(of type: TableDecodableType.Type) {
         let className = String(describing: type)
         let filename = className
         let tableName = className
