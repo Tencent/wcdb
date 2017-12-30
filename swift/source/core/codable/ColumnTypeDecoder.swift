@@ -46,6 +46,7 @@ final class ColumnTypeDecoder: Decoder {
             init<T>(of type: T.Type = T.self) {
                 size = MemoryLayout<T>.size
                 pointer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: size)
+                memset(pointer, 0, size)
             }
             func deallocate() {
                 pointer.deallocate(bytes: size, alignedTo: size)
