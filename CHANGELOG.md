@@ -15,6 +15,12 @@ It's the first release for WCDB Swift, which contains exactly the same features 
 
 For further information, please check tutorial on wiki.
 
+#### Android
+
+* Migrate to gradle plugin 3.0.0, target API 26, and minimal API 14.
+* Support NDK r16, change default toolchain to clang.
+* Various bug fixes.
+
 ## v1.0.5
 
 #### iOS/macOS
