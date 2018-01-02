@@ -1,13 +1,30 @@
+## v1.0.6
+
+#### iOS/macOS
+
+It's the first release for WCDB Swift, which contains exactly the same features as the ObjC version, including:
+
+* Object-Relational-Mapping based on Swift 4.0 `Codable` protocol
+* WCDB Integrated Language Query
+* Multithreading safety and concurrency
+* Encryption based on SQLCipher
+* Protection for SQL injection
+* Full text search
+* Corruption recovery
+* ...
+
+For further information, please check tutorial on wiki.
+
 ## v1.0.5
 
-#### iOS
+#### iOS/macOS
 
 * Builtin full-text search support for ORM.
-  ```objc
-  WCTProperty *tableProperty = WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
+```objc
+WCTProperty *tableProperty = WCTSampleFTSData.PropertyNamed(tableNameFTS).match("Eng*")];
 
-  [databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:tableProperty.match("Eng*")];
-  ```
+[databaseFTS getObjectsOfClass:WCTSampleFTSData.class fromTable:tableNameFTS where:tableProperty.match("Eng*")];
+```
 * Support read-only databases.
 * Some minor bug fixes and code refactor.
 
@@ -29,7 +46,7 @@ db.setAsyncCheckpointEnabled(true);
 * Add `sqliterk_cancel` function to cancel ongoing output operations.
 * Add corresponding Java interface to cancel operations on Android.
 
-#### iOS
+#### iOS/macOS
 
 * Builtin `WCTColumnCoding` supports all `id<NSCoding>` objects now.
 * Compatible with iOS 11.
@@ -85,7 +102,7 @@ signal.cancel();
 
 * Fix INTEGER PRIMARY KEY columns not properly recovered.
 
-#### iOS
+#### iOS/macOS
 
 * Add `WCTColumnCoding` support for all `WCTValue`. Developers can use `id<WCTColumnCoding>` objects for WINQ and all interfaces.
 ```objc
@@ -117,7 +134,7 @@ NSDate *now = [NSDate date];
 
 ## v1.0.2
 
-#### iOS
+#### iOS/macOS
 
 * Performance optimization and benchmark. See Wiki page for details.
 * Change builtin `NSData` or `NSMutableData` column coding to raw data format. To be compatible with earlier versions, call `[WCTCompatible sharedCompatible].builtinNSDataColumnCodingCompatibleEnabled = YES`.
@@ -133,7 +150,7 @@ NSDate *now = [NSDate date];
 
 ## v1.0.1
 
-#### iOS
+#### iOS/macOS
 
 * Add CocoaPods support.
 * Add iOS 7 and macOS 10.9 support. Apps using WCDB can target iOS 7 now.
