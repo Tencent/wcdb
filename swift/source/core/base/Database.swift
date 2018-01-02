@@ -372,7 +372,9 @@ extension Database {
         Error.resetReporter()
     }
 
-    private static let timedQueue = TimedQueue<String>(withDelay: 2)
+    private static let subthreadCheckpointDelay: TimeInterval = 2
+    private static let subthreadCheckpointPages: Int = 1000
+    private static let timedQueue = TimedQueue<String>(withDelay: subthreadCheckpointDelay)
 
     private static let defaultConfigs: Configs = Configs(ContiguousArray<Configs.Config>(arrayLiteral:
         Configs.Config(named: DefaultConfigOrder.fileProtection.description, with: { (handle: Handle) throws in
@@ -439,7 +441,7 @@ extension Database {
                        orderBy: DefaultConfigOrder.synchronous.rawValue),
         Configs.Config(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
             handle.register(onCommitted: { (handle, pages, _) in
-                guard pages > 1000 else {
+                guard pages > subthreadCheckpointPages else {
                     return
                 }
                 DispatchQueue.once(name: "com.Tencent.WCDB.swift.checkpoint", {
