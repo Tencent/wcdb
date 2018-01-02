@@ -25,7 +25,7 @@ protocol Lockable: class {
     func unlock()
 }
 
-@available(iOS 10.0, OSX 10.12, *)
+@available(iOS 10.0, OSX 10.12, watchOS 3.0, tvOS 10.0, *)
 final class UnfairLock: Lockable {
     private var unfairLock = os_unfair_lock_s()
 
@@ -85,7 +85,7 @@ final class Spin: Lockable {
     private let locker: Lockable
 
     init() {
-        if #available(iOS 10.0, macOS 10.12, *) {
+        if #available(iOS 10.0, macOS 10.12, watchOS 3.0, tvOS 10.0, *) {
             locker = UnfairLock()
         } else {
             locker = Mutex()
