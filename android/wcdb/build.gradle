@@ -17,7 +17,12 @@ android {
                 abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 arguments '-j2'
 
-                def hasBuildInfo = false;
+                if (rootProject.hasProperty("USE_GCC")) {
+                    if (rootProject.USE_GCC == '1')
+                        arguments.add('USE_GCC=1')
+                }
+
+                def hasBuildInfo = false
                 if (rootProject.hasProperty("WX_BUILD_REVISION"))
                     hasBuildInfo = arguments.add('WX_BUILD_REVISION=\'' + rootProject.WX_BUILD_REVISION + '\'')
                 if (rootProject.hasProperty("WX_BUILD_BRANCH"))
