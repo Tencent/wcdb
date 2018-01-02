@@ -22,13 +22,13 @@
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
-#endif // TARGET_OS_IPHONE
+#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
 @implementation WCTDatabase
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 + (void)load
 {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -45,6 +45,6 @@
                                       });
                                     }];
 }
-#endif // TARGET_OS_IPHONE
+#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
 @end
