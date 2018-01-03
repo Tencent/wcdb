@@ -32,9 +32,12 @@ Pod::Spec.new do |wcdb|
     "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) WCDB_BUILTIN_SQLCIPHER WCDB_COCOAPODS",
     "HEADER_SEARCH_PATHS" => "$(inherited) ${PODS_ROOT}/WCDBSwift",
     "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(inherited) $(SDKROOT)/usr/lib/system",
-    "OTHER_SWIFT_FLAGS" => "-D WCDB_HAS_CODEC",
-    "OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" => "-D WCDB_HAS_CODEC -D WCDB_IOS",
-    "OTHER_SWIFT_FLAGS[sdk=iphoneos*]" => "-D WCDB_HAS_CODEC -D WCDB_IOS",
+    "OTHER_SWIFT_FLAGS[config=Release]" => "-D WCDB_HAS_CODEC",
+    "OTHER_SWIFT_FLAGS[config=Release][sdk=iphonesimulator*]" => "-D WCDB_HAS_CODEC -D WCDB_IOS",
+    "OTHER_SWIFT_FLAGS[config=Release][sdk=iphoneos*]" => "-D WCDB_HAS_CODEC -D WCDB_IOS",
+    "OTHER_SWIFT_FLAGS[config=Debug]" => "-D WCDB_HAS_CODEC -D DEBUG",
+    "OTHER_SWIFT_FLAGS[config=Debug][sdk=iphonesimulator*]" => "-D WCDB_HAS_CODEC -D WCDB_IOS -D DEBUG",
+    "OTHER_SWIFT_FLAGS[config=Debug][sdk=iphoneos*]" => "-D WCDB_HAS_CODEC -D WCDB_IOS -D DEBUG",
     "SWIFT_VERSION" => "4.0",
   }
 
