@@ -93,7 +93,8 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
             assert(keys.count == 0,
                    """
                    The following keys: \(keys) can't be decoded. \
-                   Try to change their definition from `let` to `var` or report an issue to us.
+                   1. Try to change their definition from `let` to `var` or report an issue to us. \
+                   2. Try to rename the `static` variable with same name.
                    """)
         }
         #endif
