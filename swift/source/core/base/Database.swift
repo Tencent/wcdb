@@ -545,14 +545,14 @@ extension Database {
 
     /// This interface is equivalent to `database.setTokenizes(tokenizes)`
     ///
-    /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named `.WCDB` or `.Apple`
+    /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named `.WCDB`
     public func setTokenizes(_ tokenizes: Tokenize...) {
         setTokenizes(tokenizes)
     }
 
     /// Setup multiple tokenizers with names for current database.
     ///
-    /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named .WCDB or .Apple
+    /// - Parameter tokenizes: registed tokenizeName. You can use builtin tokenizer named .WCDB
     public func setTokenizes(_ tokenizes: [Tokenize]) {
         handlePool.setConfig(named: DefaultConfigOrder.tokenize.description) { (handle: Handle) throws in
             try tokenizes.forEach({ (tokenize) in
