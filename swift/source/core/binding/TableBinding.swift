@@ -83,6 +83,20 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         self.allKeys = allKeys
         self.properties = properties
         self.allProperties = allProperties
+
+        #if DEBUG
+        if let tableDecodableType = CodingTableKeyType.Root.self as? TableDecodableBase.Type {
+            let types = ColumnTypeDecoder.types(of: tableDecodableType)
+            let keys = allKeys.filter({ (key) -> Bool in
+                return types.index(forKey: key.stringValue) == nil
+            })
+            assert(keys.count == 0,
+                   """
+                   The following keys: \(keys) can't be decoded. \
+                   Try to change their definition from `let` to `var` or report an issue to us.
+                   """)
+        }
+        #endif
     }
 
     typealias TypedCodingTableKeyType = CodingTableKeyType
