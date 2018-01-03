@@ -42,10 +42,3 @@
 
 
 
-
-
-
-
-- [ ]  I've read and understood the [wiki](https://github.com/Tencent/wcdb/wiki).
-
-
