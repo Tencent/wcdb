@@ -69,7 +69,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: BaselineObject.self))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -122,7 +122,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: IndexObject.self))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==indexName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==indexName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -150,7 +150,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: ConstraintObject.self))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -186,7 +186,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(virtualTable: tableName, of: VirtualTableObject.self))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -230,7 +230,7 @@ class TableTests: BaseTestCase {
         //Then
         XCTAssertNoThrow(try database.create(table: tableName, of: AutoFitBaseLineObject.self))
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -256,7 +256,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.drop(table: tableName))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNil(optionalObject)
     }
@@ -270,7 +270,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.drop(index: indexName))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==indexName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==indexName)
         )
         XCTAssertNil(optionalObject)
     }
@@ -285,7 +285,7 @@ class TableTests: BaseTestCase {
         //When
         XCTAssertNoThrow(try database.create(table: tableName, with: def1, def2, and: [tableConstraint]))
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -308,7 +308,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.addColumn(with: def, forTable: tableName))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==tableName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==tableName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!
@@ -337,7 +337,7 @@ class TableTests: BaseTestCase {
         XCTAssertNoThrow(try database.create(index: indexName, with: index1, index2, forTable: tableName))
         //Then
         let optionalObject: Master? = WCDBAssertNoThrowReturned(
-            try database.getObject(fromTable: Master.tableName, where: Master.Properties.name==indexName)
+            try database.getObject(fromTable: Master.builtinTableName, where: Master.Properties.name==indexName)
         )
         XCTAssertNotNil(optionalObject)
         let object = optionalObject!

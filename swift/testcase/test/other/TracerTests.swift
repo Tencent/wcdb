@@ -56,7 +56,7 @@ class TracerTests: BaseTestCase {
         let database = Database(withFileURL: self.recommendedPath)
 
         //When
-        XCTAssertNoThrow(try database.getRows(on: Master.Properties.any, fromTable: Master.tableName))
+        XCTAssertNoThrow(try database.getRows(on: Master.Properties.any, fromTable: Master.builtinTableName))
 
         XCTAssertTrue(pass)
     }

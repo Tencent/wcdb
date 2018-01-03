@@ -21,7 +21,7 @@
 import Foundation
 
 public struct Master: TableCodable {
-    public static let tableName: String = "sqlite_master"
+    public static let builtinTableName: String = "sqlite_master"
 
     public var type: String?
     public var name: String?
