@@ -1,8 +1,3 @@
-> Please fill out this template when filing an issue.
->
-> Please **remove all grey hint text before submitting**.
->
-
 ### The language of WCDB
 
 > e.g. Objective-C, Swift or Java 
@@ -51,11 +46,6 @@
 
 
 
-
-
-
-
-
-
-
 - [ ]  I've read and understood the [wiki](https://github.com/Tencent/wcdb/wiki).
+
+
