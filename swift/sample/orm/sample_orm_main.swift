@@ -43,7 +43,7 @@ func sample_orm_main(baseDirectory: String) {
 
         do {
             let schemas: [Master] = try database.getObjects(on: Master.Properties.name, Master.Properties.sql,
-                                                            fromTable: Master.tableName)
+                                                            fromTable: Master.builtinTableName)
             schemas.forEach({ (table) in
                 print("SQL of \(table.name ?? ""): \(table.sql ?? "" )")
             })

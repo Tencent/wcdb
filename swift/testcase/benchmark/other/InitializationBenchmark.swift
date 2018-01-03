@@ -35,7 +35,7 @@ class InitializationBenchmark: BaseBenchmark {
         }, for: {
             XCTAssertTrue(database.canOpen)
         }, checkCorrectness: {
-            let results = try? database.getValue(on: Column.any.count(), fromTable: Master.tableName)
+            let results = try? database.getValue(on: Column.any.count(), fromTable: Master.builtinTableName)
             XCTAssertEqual(Int(results?.int32Value ?? 0), config.tableCount)
         })
     }

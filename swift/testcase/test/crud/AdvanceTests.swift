@@ -24,7 +24,7 @@ import WCDBSwift
 class AdvanceTests: CRUDTestCase {
 
     func testCoreStatement() {
-        let statement = StatementSelect().select(Column.any).from(Master.tableName)
+        let statement = StatementSelect().select(Column.any).from(Master.builtinTableName)
         let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
