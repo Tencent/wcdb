@@ -629,7 +629,7 @@ extension Database {
         try File.remove(files: paths)
     }
 
-    /// This interface is equivalent `moveFiles(toDirectory:withExtraFiles:)`
+    /// This interface is equivalent to `moveFiles(toDirectory:withExtraFiles:)`
     ///
     /// - Parameters:
     ///   - directory: destination
