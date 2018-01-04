@@ -20,23 +20,23 @@
 
 import Foundation
 
-final class TimedQueue<Key: Hashable> {
-    typealias Element = (key: Key, clock: SteadyClock)
-    typealias List = ContiguousArray<Element>
-    typealias Map = [Key: List.Index]
+internal final class TimedQueue<Key: Hashable> {
+    private typealias Element = (key: Key, clock: SteadyClock)
+    private typealias List = ContiguousArray<Element>
+    private typealias Map = [Key: List.Index]
 
-    let delay: TimeInterval
+    private let delay: TimeInterval
 
-    let conditionLock = ConditionLock()
+    private let conditionLock = ConditionLock()
 
-    var list: List = []
-    var map: Map = [:]
+    private var list: List = []
+    private var map: Map = [:]
 
-    init(withDelay delay: TimeInterval) {
+    internal init(withDelay delay: TimeInterval) {
         self.delay = delay
     }
 
-    func remove(with key: Key) {
+    internal func remove(with key: Key) {
         conditionLock.lock(); defer { conditionLock.unlock() }
 
         guard let index = map.index(forKey: key) else {
@@ -46,7 +46,7 @@ final class TimedQueue<Key: Hashable> {
         map.remove(at: index)
     }
 
-    func reQueue(with key: Key) {
+    internal func reQueue(with key: Key) {
         conditionLock.lock(); defer { conditionLock.unlock() }
 
         let signal = list.isEmpty
@@ -63,7 +63,7 @@ final class TimedQueue<Key: Hashable> {
         }
     }
 
-    func wait(untilExpired onExpired: (Key) -> Void) {
+    internal func wait(untilExpired onExpired: (Key) -> Void) {
         while true {
             var key: Key!
             do {

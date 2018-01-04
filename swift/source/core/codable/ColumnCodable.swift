@@ -37,7 +37,7 @@ public protocol ColumnEncodable: ColumnEncodableBase, LiteralValueConvertible, E
     associatedtype FundamentalType: FundamentalColumnType
     func archivedValue() -> FundamentalType?
 }
-extension ColumnEncodable {
+public extension ColumnEncodable {
     public static var columnType: ColumnType {
         return FundamentalType.columnType
     }
@@ -53,7 +53,7 @@ public protocol ColumnDecodable: ColumnDecodableBase {
     associatedtype FundamentalType: FundamentalColumnType
     init?(with value: FundamentalType)
 }
-extension ColumnDecodable {
+public extension ColumnDecodable {
     public static var columnType: ColumnType {
         return FundamentalType.columnType
     }
@@ -63,7 +63,7 @@ extension ColumnDecodable {
 }
 
 public protocol ColumnCodable: ColumnEncodable, ColumnDecodable {}
-extension ColumnCodable {
+public extension ColumnCodable {
     public static var columnType: ColumnType {
         return FundamentalType.columnType
     }
@@ -73,7 +73,7 @@ extension ColumnCodable {
 public protocol CollectionColumnEncodable: ColumnEncodableBase {
     func archivedValue() -> Data?
 }
-extension CollectionColumnEncodable {
+public extension CollectionColumnEncodable {
     public static var columnType: ColumnType {
         return .BLOB
     }
@@ -85,7 +85,7 @@ extension CollectionColumnEncodable {
 public protocol CollectionColumnDecodable: ColumnDecodableBase {
     init?(with value: Data)
 }
-extension CollectionColumnDecodable {
+public extension CollectionColumnDecodable {
     public static var columnType: ColumnType {
         return .BLOB
     }
@@ -95,7 +95,7 @@ extension CollectionColumnDecodable {
 }
 
 public protocol CollectionColumnCodable: CollectionColumnEncodable, CollectionColumnDecodable {}
-extension CollectionColumnCodable {
+public extension CollectionColumnCodable {
     public static var columnType: ColumnType {
         return .BLOB
     }

@@ -25,7 +25,10 @@ public final class Select: Selectable {
 
     private lazy var decoder = TableDecoder(keys, on: optionalRecyclableHandleStatement!)
 
-    init(with core: Core, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) throws {
+    internal init(with core: Core,
+                  on propertyConvertibleList: [PropertyConvertible],
+                  table: String,
+                  isDistinct: Bool) throws {
         //TODO: Use generic to check all coding table keys conform to same root type
         keys = propertyConvertibleList.asCodingTableKeys()
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(table)

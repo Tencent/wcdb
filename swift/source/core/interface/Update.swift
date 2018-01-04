@@ -30,7 +30,7 @@ public final class Update {
     /// It should be called after executing successfully
     public var changes: Int?
 
-    init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
+    internal init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
         guard propertyConvertibleList.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,

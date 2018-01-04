@@ -20,28 +20,28 @@
 
 import Foundation
 
-extension ExpressionConvertible {
-    static func operate(prefix: String, operand: ExpressionConvertible) -> Expression {
+internal extension ExpressionConvertible {
+    internal static func operate(prefix: String, operand: ExpressionConvertible) -> Expression {
         return Expression(withRaw: "(\(prefix)\(operand.asExpression().description))")
     }
-    static func operate(title: String, infix: String?, operands: [ExpressionConvertible]) -> Expression {
+    internal static func operate(title: String, infix: String?, operands: [ExpressionConvertible]) -> Expression {
         return Expression(withRaw: "\(title)(\(infix != nil ? infix!+" " : "")\(operands.joined()))")
     }
-    static func operate(operand: ExpressionConvertible, postfix: String) -> Expression {
+    internal static func operate(operand: ExpressionConvertible, postfix: String) -> Expression {
         return Expression(withRaw: "(\(operand.asExpression().description) \(postfix))")
     }
-    static func operate(left: ExpressionConvertible,
-                        `operator`: String,
-                        right: ExpressionConvertible) -> Expression {
+    internal static func operate(left: ExpressionConvertible,
+                                 `operator`: String,
+                                 right: ExpressionConvertible) -> Expression {
         let leftDescription = left.asExpression().description
         let rightDescription = right.asExpression().description
         return Expression(withRaw: "(\(leftDescription) \(`operator`) \(rightDescription))")
     }
-    static func operate(one: ExpressionConvertible,
-                        operator1: String,
-                        two: ExpressionConvertible,
-                        operator2: String,
-                        three: ExpressionConvertible) -> Expression {
+    internal static func operate(one: ExpressionConvertible,
+                                 operator1: String,
+                                 two: ExpressionConvertible,
+                                 operator2: String,
+                                 three: ExpressionConvertible) -> Expression {
         let oneDescription = one.asExpression().description
         let twoDescription = two.asExpression().description
         let threeDescription = three.asExpression().description
@@ -103,7 +103,7 @@ public protocol ExpressionCanBeOperated: ExpressionConvertible {
         left: Self, right: ExpressionOperableType) -> Expression
 }
 
-extension ExpressionCanBeOperated {
+public extension ExpressionCanBeOperated {
     public static func || <ExpressionOperableType: ExpressionOperable>(
         left: Self, right: ExpressionOperableType) -> Expression {
         return Expression.operate(left: left, operator: "OR", right: right)
@@ -315,7 +315,7 @@ public protocol ExpressionOperable: ExpressionCanBeOperated {
     func snippet() -> Expression
 }
 
-extension ExpressionOperable {
+public extension ExpressionOperable {
     //Unary
     public prefix static func ! (operand: Self) -> Expression {
         return operate(prefix: "NOT ", operand: operand)

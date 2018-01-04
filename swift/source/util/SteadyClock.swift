@@ -20,10 +20,10 @@
 
 import Foundation
 
-struct SteadyClock {
+internal struct SteadyClock {
     private var time: TimeInterval //monotonic
 
-    init() {
+    internal init() {
         time = ProcessInfo.processInfo.systemUptime
     }
 
@@ -31,19 +31,19 @@ struct SteadyClock {
         self.time = time
     }
 
-    static func >= (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
+    internal static func >= (lhs: SteadyClock, rhs: SteadyClock) -> Bool {
         return lhs.time >= rhs.time
     }
 
-    static func - (lhs: SteadyClock, rhs: SteadyClock) -> TimeInterval {
+    internal static func - (lhs: SteadyClock, rhs: SteadyClock) -> TimeInterval {
         return lhs.time - rhs.time
     }
 
-    static func + (steadyClock: SteadyClock, timeInterval: TimeInterval) -> SteadyClock {
+    internal static func + (steadyClock: SteadyClock, timeInterval: TimeInterval) -> SteadyClock {
         return SteadyClock(with: steadyClock.time + timeInterval)
     }
 
-    static func now() -> SteadyClock {
+    internal static func now() -> SteadyClock {
         return SteadyClock()
     }
 }

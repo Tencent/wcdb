@@ -20,7 +20,7 @@
 
 import Foundation
 
-final class CommonStatement {
+public final class CommonStatement {
     public static let enableFullfsync = StatementPragma().pragma(.fullfsync, to: true)
 
     public static let getJournalMode = StatementPragma().pragma(.journalMode)

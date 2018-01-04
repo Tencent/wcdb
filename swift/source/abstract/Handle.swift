@@ -32,7 +32,7 @@ public final class Handle {
         }
     }
 
-    typealias CommittedHook = (Handle, Int, Void?) -> Void
+    internal typealias CommittedHook = (Handle, Int, Void?) -> Void
     private struct CommittedHookInfo {
         var onCommitted: CommittedHook
         weak var handle: Handle?
@@ -41,7 +41,7 @@ public final class Handle {
 
     private var tracer: Tracer?
 
-    init(withPath path: String) {
+    internal init(withPath path: String) {
         DispatchQueue.once(name: "com.tencent.wcdb.handle") {
             sqlite3_config_multithread()
             sqlite3_config_memstatus(Int32(truncating: false))
@@ -57,7 +57,7 @@ public final class Handle {
         try? close()
     }
 
-    func open() throws {
+    internal func open() throws {
         let directory = URL(fileURLWithPath: path).deletingLastPathComponent().path
         try File.createDirectoryWithIntermediateDirectories(atPath: directory)
         let rc = sqlite3_open(path, &handle)
@@ -71,7 +71,7 @@ public final class Handle {
         }
     }
 
-    func close() throws {
+    internal func close() throws {
         let rc = sqlite3_close(handle)
         guard rc == SQLITE_OK else {
             throw Error.reportSQLite(tag: tag,
@@ -144,7 +144,7 @@ public final class Handle {
 }
 
 //Cipher
-extension Handle {
+public extension Handle {
     public func setCipher(key: Data) throws {
         #if WCDB_HAS_CODEC
             let rc = key.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Int32 in
@@ -166,7 +166,7 @@ extension Handle {
 }
 
 //Repair
-extension Handle {
+public extension Handle {
     public static let backupSubfix = "-backup"
 
     public var backupPath: String {
@@ -244,27 +244,27 @@ extension Handle {
     }
 }
 
-extension Handle {
+public extension Handle {
     public static let subfixs: [String] = ["", "-wal", "-journal", "-shm", Handle.backupSubfix]
 }
 
-extension Handle {
+public extension Handle {
     public typealias SQLTracer = (String) -> Void
 
-    func lazyTracer() -> Tracer? {
+    private func lazyTracer() -> Tracer? {
         if tracer == nil && handle != nil {
             tracer = Tracer(with: handle!)
         }
         return tracer
     }
 
-    func trace(sql sqlTracer: @escaping SQLTracer) {
+    internal func trace(sql sqlTracer: @escaping SQLTracer) {
         lazyTracer()?.trace(sql: sqlTracer)
     }
 
     public typealias PerformanceTracer = (Tag?, [String: Int], Int64) -> Void // Tag?, (SQL, count), cost
 
-    func trace(performance performanceTracer: @escaping PerformanceTracer) {
+    internal func trace(performance performanceTracer: @escaping PerformanceTracer) {
         lazyTracer()?.track(performance: { (sqls, cost, userInfo) in
             performanceTracer(userInfo as? Tag, sqls, cost)
         })
@@ -272,8 +272,8 @@ extension Handle {
 }
 
 //Commit hook
-extension Handle {
-    func register(onCommitted: @escaping CommittedHook) {
+internal extension Handle {
+    internal func register(onCommitted: @escaping CommittedHook) {
         committedHookInfo = CommittedHookInfo(onCommitted: onCommitted, handle: self)
         sqlite3_wal_hook(handle, { (pointer, _, _, pages) -> Int32 in
             let committedHookInfo = pointer!.assumingMemoryBound(to: CommittedHookInfo.self).pointee

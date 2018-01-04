@@ -32,7 +32,7 @@ public final class HandlePool {
     private static let spin = Spin()
     private static var pools: [String: Wrap] = [:]
 
-    static func getPool(withPath path: String, defaultConfigs: Configs) -> RecyclableHandlePool {
+    internal static func getPool(withPath path: String, defaultConfigs: Configs) -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
         var index = pools.index(forKey: path)
         if index == nil {
@@ -43,7 +43,7 @@ public final class HandlePool {
         return getExistingPool(atIndex: index!)
     }
 
-    static func getExistingPool(with tag: Tag) throws -> RecyclableHandlePool {
+    internal static func getExistingPool(with tag: Tag) throws -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
         guard let index = pools.index(where: { (arg) -> Bool in
             return arg.value.handlePool.tag == tag
@@ -57,7 +57,7 @@ public final class HandlePool {
         return getExistingPool(atIndex: index)
     }
 
-    static func getExistingPool(withPath path: String) throws -> RecyclableHandlePool {
+    internal static func getExistingPool(withPath path: String) throws -> RecyclableHandlePool {
         spin.lock(); defer { spin.unlock() }
         guard let index = pools.index(forKey: path) else {
             throw Error.reportCore(tag: nil,
@@ -84,11 +84,11 @@ public final class HandlePool {
         })
     }
 
-    typealias HandleWrap = (handle: Handle, configs: Configs)
+    internal typealias HandleWrap = (handle: Handle, configs: Configs)
     private let handles = ConcurrentList<HandleWrap>(withCapacityCap: maxHardwareConcurrency)
 
-    var tag: Tag?
-    let path: String
+    internal var tag: Tag?
+    internal let path: String
     private let rwlock = RWLock()
     private let aliveHandleCount = Atomic<Int>(0)
     private var configs: Configs
@@ -98,11 +98,11 @@ public final class HandlePool {
         self.configs = defaultConfigs
     }
 
-    var isDrained: Bool {
+    internal var isDrained: Bool {
         return aliveHandleCount == 0
     }
 
-    func fillOne() throws {
+    internal func fillOne() throws {
         rwlock.lockRead(); defer { rwlock.unlockRead() }
         let handle = try generate()
         if handles.pushBack(handle) {
@@ -118,10 +118,10 @@ public final class HandlePool {
         }
     }
 
-    static private let maxConcurrency = max(maxHardwareConcurrency, 64)
-    static private let maxHardwareConcurrency = ProcessInfo.processInfo.processorCount
+    private static let maxConcurrency = max(maxHardwareConcurrency, 64)
+    private static let maxHardwareConcurrency = ProcessInfo.processInfo.processorCount
 
-    func flowOut() throws -> RecyclableHandle {
+    internal func flowOut() throws -> RecyclableHandle {
         var unlock = true
         rwlock.lockRead(); defer {  if unlock { rwlock.unlockRead() } }
         var handleWrap = handles.popBack()
@@ -166,34 +166,34 @@ public final class HandlePool {
         return HandleWrap(handle: handle, configs: configs)
     }
 
-    func blockade() {
+    internal func blockade() {
         rwlock.lockWrite()
     }
 
-    func unblockade() {
+    internal func unblockade() {
         rwlock.unlockWrite()
     }
 
-    var isBlockaded: Bool {
+    internal var isBlockaded: Bool {
         return rwlock.isWriting
     }
 
     public typealias OnDrained = () throws -> Void
 
-    func drain(onDrained: OnDrained) rethrows {
+    internal func drain(onDrained: OnDrained) rethrows {
         blockade(); defer { unblockade() }
         let size = handles.clear()
         aliveHandleCount -= size
         try onDrained()
     }
 
-    func drain() {
+    internal func drain() {
         blockade(); defer { unblockade() }
         let size = handles.clear()
         aliveHandleCount -= size
     }
 
-    func purgeFreeHandles() {
+    internal func purgeFreeHandles() {
         rwlock.lockRead(); defer { rwlock.unlockRead() }
         let size = handles.clear()
         aliveHandleCount -= size
@@ -202,15 +202,15 @@ public final class HandlePool {
     public typealias Config = Configs.Callback
     public typealias ConfigOrder = Configs.Order
 
-    func setConfig(named name: String, with callback: @escaping Config, orderBy order: ConfigOrder) {
+    internal func setConfig(named name: String, with callback: @escaping Config, orderBy order: ConfigOrder) {
         configs.setConfig(named: name, with: callback, orderBy: order)
     }
 
-    func setConfig(named name: String, with callback: @escaping Config) {
+    internal func setConfig(named name: String, with callback: @escaping Config) {
         configs.setConfig(named: name, with: callback)
     }
 
-    static func purgeFreeHandlesInAllPools() {
+    internal static func purgeFreeHandlesInAllPools() {
         let handlePools: ContiguousArray<HandlePool>!
         do {
             spin.lock(); defer { spin.unlock() }

@@ -22,8 +22,8 @@ import Foundation
 
 public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     private let properties: [CodingTableKeyType: Property]
-    let allProperties: [Property]
-    let allKeys: ContiguousArray<CodingTableKeyType>
+    internal let allProperties: [Property]
+    internal let allKeys: ContiguousArray<CodingTableKeyType>
 
     private lazy var columnTypes: [String: ColumnType] = {
         // CodingTableKeyType.Root must conform to TableEncodable protocol.
@@ -100,8 +100,8 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         #endif
     }
 
-    typealias TypedCodingTableKeyType = CodingTableKeyType
-    func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
+    internal typealias TypedCodingTableKeyType = CodingTableKeyType
+    internal func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
         let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType
         assert(typedCodingTableKey != nil, "[\(codingTableKey)] must conform to CodingTableKey protocol.")
         let typedProperty = properties[typedCodingTableKey!]
@@ -109,7 +109,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         return typedProperty!
     }
 
-    func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
+    internal func generateColumnDef(with key: CodingTableKeyBase) -> ColumnDef {
         let codingTableKey = key as? CodingTableKeyType
         assert(codingTableKey != nil, "[\(key)] must conform to CodingTableKey protocol.")
         let columnType = columnTypes[codingTableKey!.stringValue]
@@ -149,7 +149,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         return indexBindings.map { $0.value.generateCreateIndexStatement(onTable: table, withIndexSubfix: $0.key)}
     }
 
-    func getPrimaryKey() -> CodingTableKeyBase? {
+    public func getPrimaryKey() -> CodingTableKeyBase? {
         return primaryKey
     }
 }

@@ -20,8 +20,8 @@
 
 import Foundation
 
-final class File {
-    static func remove(files: [String]) throws {
+internal final class File {
+    internal static func remove(files: [String]) throws {
         let fileManager = FileManager.default
         try files.forEach { (file) in
             do {
@@ -37,7 +37,7 @@ final class File {
         }
     }
 
-    static func getSize(ofFiles files: [String]) throws -> UInt64 {
+    internal static func getSize(ofFiles files: [String]) throws -> UInt64 {
         let fileManager = FileManager.default
         return try files.reduce(into: 0, { (filesSize, file) in
             do {
@@ -51,11 +51,11 @@ final class File {
         })
     }
 
-    static func isExists(atPath path: String) -> Bool {
+    internal static func isExists(atPath path: String) -> Bool {
         return FileManager.default.fileExists(atPath: path)
     }
 
-    static func hardlink(atPath source: String, toPath destination: String) throws {
+    internal static func hardlink(atPath source: String, toPath destination: String) throws {
         do {
             try FileManager.default.linkItem(atPath: source, toPath: destination)
         } catch let error as NSError {
@@ -66,7 +66,7 @@ final class File {
         }
     }
 
-    static func createDirectoryWithIntermediateDirectories(atPath path: String) throws {
+    internal static func createDirectoryWithIntermediateDirectories(atPath path: String) throws {
         do {
             try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         } catch let error as NSError {
@@ -78,7 +78,7 @@ final class File {
     }
 
 #if WCDB_IOS
-    static func addFirstUserAuthenticationFileProtection(atPath path: String) throws {
+    internal static func addFirstUserAuthenticationFileProtection(atPath path: String) throws {
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: path) else {
             return

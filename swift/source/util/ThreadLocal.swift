@@ -20,7 +20,7 @@
 
 import Foundation
 
-final class ThreadLocal<Value> {
+internal final class ThreadLocal<Value> {
     private final class Wrapper: RawRepresentable {
         typealias RawValue = Value
         var rawValue: RawValue
@@ -32,7 +32,7 @@ final class ThreadLocal<Value> {
     private var key = pthread_key_t()
     private let defaultValue: Value
 
-    init(defaultTo defaultValue: Value) {
+    internal init(defaultTo defaultValue: Value) {
         self.defaultValue = defaultValue
         pthread_key_create(&key, {
             Unmanaged<AnyObject>.fromOpaque($0).release()
@@ -43,7 +43,7 @@ final class ThreadLocal<Value> {
         pthread_key_delete(key)
     }
 
-    var value: Value {
+    internal var value: Value {
         get {
             guard let pointer = pthread_getspecific(key) else {
                 return defaultValue

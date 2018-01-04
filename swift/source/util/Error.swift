@@ -28,12 +28,12 @@ public struct ErrorValue {
     private let value: Any
     public let type: ErrorValueType
 
-    init(_ value: String) {
+    internal init(_ value: String) {
         self.value = value
         self.type = .string
     }
 
-    init(_ value: Int) {
+    internal init(_ value: Int) {
         self.value = value
         self.type = .int
     }
@@ -271,10 +271,10 @@ public final class Error: Swift.Error, CustomStringConvertible {
         return "Code:\(code), Type:\(type.description), \(infos.joined({ "\($0.description):\($1.stringValue)" }))"
     }
 
-    static let threadedSlient = ThreadLocal<Bool>(defaultTo: false)
+    internal static let threadedSlient = ThreadLocal<Bool>(defaultTo: false)
 
     public typealias Reporter = (Error) -> Void
-    static private let defaultReporter: Reporter = {
+    private static let defaultReporter: Reporter = {
         switch $0.type {
         case .sqliteGlobal:
             debugPrint("[WCDB][DEBUG] \($0.description)")
@@ -284,15 +284,15 @@ public final class Error: Swift.Error, CustomStringConvertible {
             print("[WCDB][ERROR] \($0.description)")
         }
     }
-    static private let reporter: Atomic<Reporter?> = Atomic(defaultReporter)
+    private static let reporter: Atomic<Reporter?> = Atomic(defaultReporter)
 
-    static public func setReporter(_ reporter: @escaping Reporter) {
+    public static func setReporter(_ reporter: @escaping Reporter) {
         Error.reporter.assign(reporter)
     }
-    static public func setReporter(_: Void?) {
+    public static func setReporter(_: Void?) {
         Error.reporter.assign(nil)
     }
-    static public func resetReporter() {
+    public static func resetReporter() {
         Error.reporter.assign(defaultReporter)
     }
 
@@ -304,22 +304,22 @@ public final class Error: Swift.Error, CustomStringConvertible {
     }
 
     @discardableResult
-    static func report(type: ErrorType,
-                       code: Error.Code,
-                       infos: Error.Infos) -> Error {
+    internal static func report(type: ErrorType,
+                                code: Error.Code,
+                                infos: Error.Infos) -> Error {
         let error = Error(type: type, code: code, infos: infos)
         error.report()
         return error
     }
 
     @discardableResult
-    static func reportSQLite(tag: Tag?,
-                             path: String,
-                             operation: Error.Operation.HandleOperation,
-                             extendedError: Int32? = nil,
-                             sql: String? = nil,
-                             code: Int32,
-                             message: String) -> Error {
+    internal static func reportSQLite(tag: Tag?,
+                                      path: String,
+                                      operation: Error.Operation.HandleOperation,
+                                      extendedError: Int32? = nil,
+                                      sql: String? = nil,
+                                      code: Int32,
+                                      message: String) -> Error {
         var infos = [
             Error.Key.operation: ErrorValue(operation.rawValue),
             Error.Key.message: ErrorValue(message),
@@ -339,10 +339,10 @@ public final class Error: Swift.Error, CustomStringConvertible {
     }
 
     @discardableResult
-    static func reportCore(tag: Tag?,
-                           path: String,
-                           operation: Error.Operation.CoreOperation,
-                           code: Error.Code.CoreCode, message: String) -> Error {
+    internal static func reportCore(tag: Tag?,
+                                    path: String,
+                                    operation: Error.Operation.CoreOperation,
+                                    code: Error.Code.CoreCode, message: String) -> Error {
         var infos = [
             Error.Key.operation: ErrorValue(operation.rawValue),
             Error.Key.message: ErrorValue(message),
@@ -356,10 +356,10 @@ public final class Error: Swift.Error, CustomStringConvertible {
     }
 
     @discardableResult
-    static func reportInterface(tag: Tag?,
-                                path: String,
-                                operation: Error.Operation.InterfaceOperation,
-                                code: Error.Code.InterfaceCode, message: String) -> Error {
+    internal static func reportInterface(tag: Tag?,
+                                         path: String,
+                                         operation: Error.Operation.InterfaceOperation,
+                                         code: Error.Code.InterfaceCode, message: String) -> Error {
         var infos = [
             Error.Key.operation: ErrorValue(operation.rawValue),
             Error.Key.message: ErrorValue(message),
@@ -373,10 +373,10 @@ public final class Error: Swift.Error, CustomStringConvertible {
     }
 
     @discardableResult
-    static func reportSystemCall(operation: Error.Operation.SystemCallOperation,
-                                 path: String,
-                                 errno: Int,
-                                 message: String) -> Error {
+    internal static func reportSystemCall(operation: Error.Operation.SystemCallOperation,
+                                          path: String,
+                                          errno: Int,
+                                          message: String) -> Error {
         return Error.report(type: .systemCall, code: .systemCall(errno), infos: [
             Error.Key.operation: ErrorValue(operation.rawValue),
             Error.Key.message: ErrorValue(message),
@@ -385,8 +385,8 @@ public final class Error: Swift.Error, CustomStringConvertible {
     }
 
     @discardableResult
-    static func reportSQLiteGlobal(code: Int,
-                                   message: String) -> Error {
+    internal static func reportSQLiteGlobal(code: Int,
+                                            message: String) -> Error {
         return Error.report(type: .sqliteGlobal,
                             code: .sqliteGlobal(code),
                             infos: [Error.Key.message: ErrorValue(message)]
@@ -394,9 +394,9 @@ public final class Error: Swift.Error, CustomStringConvertible {
     }
 
     @discardableResult
-    static func reportRepair(path: String,
-                             operation: Error.Operation.RepairOperation,
-                             code: Int) -> Error {
+    internal static func reportRepair(path: String,
+                                      operation: Error.Operation.RepairOperation,
+                                      code: Int) -> Error {
         return Error.report(type: .repair,
                             code: .repair(code),
                             infos: [
@@ -404,7 +404,7 @@ public final class Error: Swift.Error, CustomStringConvertible {
                                 Error.Key.operation: ErrorValue(operation.rawValue)])
     }
 
-    static func warning(_ message: String) {
+    internal static func warning(_ message: String) {
         Error.report(type: .warning,
                      code: .global(.warning),
                      infos: [Error.Key.message: ErrorValue(message)])

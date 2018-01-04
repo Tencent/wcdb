@@ -20,28 +20,28 @@
 
 import Foundation
 
-final class Tracer {
-    typealias SQLTracer = (String) -> Void // SQL
+internal final class Tracer {
+    internal typealias SQLTracer = (String) -> Void // SQL
     private var sqlTracer: SQLTracer? = nil {
         didSet {
             setup()
         }
     }
 
-    typealias PerformanceTracer = ([String: Int], Int64, Any?) -> Void // (SQL, count), cost, userInfo
+    internal typealias PerformanceTracer = ([String: Int], Int64, Any?) -> Void // (SQL, count), cost, userInfo
     private var performanceTracer: PerformanceTracer? = nil {
         didSet {
             setup()
         }
     }
-    var shouldAggregation = false
+    internal var shouldAggregation = false
     private var footprint: [String: Int] = [:]
     private var cost: Int64 = 0
 
     private let handle: SQLite3
-    var userInfo: Any?
+    internal var userInfo: Any?
 
-    init(with handle: SQLite3) {
+    internal init(with handle: SQLite3) {
         self.handle = handle
     }
 
@@ -49,7 +49,7 @@ final class Tracer {
         reportPerformance()
     }
 
-    struct TraceType: OptionSet {
+    private struct TraceType: OptionSet {
         let rawValue: UInt32
 
         static let stmt = TraceType(rawValue: UInt32(SQLITE_TRACE_STMT))
@@ -125,11 +125,11 @@ final class Tracer {
         self.cost = cost
     }
 
-    func trace(sql sqlTracer: @escaping SQLTracer) {
+    internal func trace(sql sqlTracer: @escaping SQLTracer) {
         self.sqlTracer = sqlTracer
     }
 
-    func track(performance performanceTracer: @escaping PerformanceTracer) {
+    internal func track(performance performanceTracer: @escaping PerformanceTracer) {
         self.performanceTracer = performanceTracer
     }
 }

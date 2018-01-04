@@ -20,5 +20,5 @@
 
 import Foundation
 
-typealias SQLite3 = OpaquePointer
-typealias SQLite3Statement = OpaquePointer
+internal typealias SQLite3 = OpaquePointer
+internal typealias SQLite3Statement = OpaquePointer

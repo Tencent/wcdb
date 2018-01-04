@@ -32,7 +32,7 @@ public final class HandleStatement {
         return handle.tag
     }
 
-    init(with stmt: SQLite3Statement, and handle: Handle) {
+    internal init(with stmt: SQLite3Statement, and handle: Handle) {
         self.stmt = stmt
         self.handle = handle
     }

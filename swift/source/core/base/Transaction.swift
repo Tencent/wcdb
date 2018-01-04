@@ -27,7 +27,7 @@ public final class Transaction: Core {
     public private(set) var isInTransaction: Bool = false
     private var mutex: RecursiveMutex = RecursiveMutex()
 
-    init(with recyclableHandlePool: RecyclableHandlePool, and recyclableHandle: RecyclableHandle) {
+    internal init(with recyclableHandlePool: RecyclableHandlePool, and recyclableHandle: RecyclableHandle) {
         self.recyclableHandle = recyclableHandle
         super.init(with: recyclableHandlePool)
     }
@@ -42,7 +42,7 @@ public final class Transaction: Core {
         return recyclableHandle.raw.handle
     }
 
-    override func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
+    internal override func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
         mutex.lock(); defer { mutex.unlock() }
         return try prepare(statement, in: recyclableHandle)
     }

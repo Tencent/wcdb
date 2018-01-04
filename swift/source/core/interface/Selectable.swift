@@ -25,7 +25,7 @@ public class Selectable {
     final var optionalRecyclableHandleStatement: RecyclableHandleStatement?
     final var statement: StatementSelect
 
-    init(with core: Core, statement: StatementSelect) {
+    internal init(with core: Core, statement: StatementSelect) {
         self.statement = statement
         self.core = core
     }
@@ -34,14 +34,14 @@ public class Selectable {
         try? finalize()
     }
 
-    final func finalize() throws {
+    internal final func finalize() throws {
         if let recyclableHandleStatement = optionalRecyclableHandleStatement {
             try recyclableHandleStatement.raw.finalize()
             optionalRecyclableHandleStatement = nil
         }
     }
 
-    final func lazyHandleStatement() throws -> HandleStatement {
+    internal final func lazyHandleStatement() throws -> HandleStatement {
         if optionalRecyclableHandleStatement == nil {
             optionalRecyclableHandleStatement = try core.prepare(statement)
         }

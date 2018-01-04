@@ -25,7 +25,7 @@ public final class CoreStatement {
     private let core: Core
     private let recyclableHandleStatement: RecyclableHandleStatement
 
-    init(with core: Core, and recyclableHandleStatement: RecyclableHandleStatement) {
+    internal init(with core: Core, and recyclableHandleStatement: RecyclableHandleStatement) {
         self.core = core
         self.recyclableHandleStatement = recyclableHandleStatement
     }
@@ -272,7 +272,7 @@ public final class CoreStatement {
     }
 }
 
-extension CoreStatement {
+public extension CoreStatement {
 
     /// The tag of the related database. 
     public var tag: Tag? {

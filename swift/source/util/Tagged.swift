@@ -20,24 +20,24 @@
 
 import Foundation
 
-final class Counter {
-    static let counter = Atomic<Int>(0)
+internal final class Counter {
+    private static let counter = Atomic<Int>(0)
 
-    static func step() -> Int {
+    internal static func step() -> Int {
         return ++counter
     }
 }
 
-final class Tagged<Value>: Equatable {
-    let identifier: Int
-    let value: Value
+internal final class Tagged<Value>: Equatable {
+    private let identifier: Int
+    internal let value: Value
 
-    init(_ value: Value) {
+    internal init(_ value: Value) {
         self.value = value
         self.identifier = Counter.step()
     }
 
-    static func == (lhs: Tagged, rhs: Tagged) -> Bool {
+    internal static func == (lhs: Tagged, rhs: Tagged) -> Bool {
         return lhs.identifier == rhs.identifier
     }
 }

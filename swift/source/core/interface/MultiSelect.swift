@@ -24,10 +24,10 @@ import Foundation
 public final class MultiSelect: Selectable {
     private let keys: ContiguousArray<CodingTableKeyBase>
 
-    init(with core: Core,
-         on propertyConvertibleList: [PropertyConvertible],
-         tables: [String],
-         isDistinct: Bool = false) throws {
+    internal init(with core: Core,
+                  on propertyConvertibleList: [PropertyConvertible],
+                  tables: [String],
+                  isDistinct: Bool = false) throws {
         guard propertyConvertibleList.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
@@ -56,7 +56,7 @@ public final class MultiSelect: Selectable {
 
     private typealias Generator = () throws -> TableDecodableBase
 
-    struct TypedIndexedKeys {
+    private struct TypedIndexedKeys {
         let type: TableDecodableBase.Type
         var indexedKeys: TableDecoder.HashedKey
         init(_ type: TableDecodableBase.Type, key: String, index: Int) {

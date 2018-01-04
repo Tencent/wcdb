@@ -28,7 +28,7 @@ public protocol SpecificOrderConvertible: OrderConvertible {
     func asOrder(by term: OrderTerm?) -> Order
 }
 
-extension SpecificOrderConvertible {
+public extension SpecificOrderConvertible {
     public func asOrder() -> Order {
         return asOrder(by: nil)
     }
@@ -78,7 +78,7 @@ public protocol ColumnConvertible: ExpressionConvertible, SpecificColumnIndexCon
     func `in`(table: String) -> Column
 }
 
-extension ColumnConvertible {
+public extension ColumnConvertible {
     public func asExpression() -> Expression {
         return Expression(with: self)
     }
@@ -100,7 +100,7 @@ public protocol LiteralValueConvertible: ExpressionConvertible {
     func asLiteralValue() -> LiteralValue
 }
 
-extension LiteralValueConvertible {
+public extension LiteralValueConvertible {
     public func asExpression() -> Expression {
         return Expression(with: self)
     }

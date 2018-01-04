@@ -26,8 +26,8 @@ public protocol TableConstraintBinding {
 }
 
 public struct MultiPrimaryBinding: TableConstraintBinding {
-    let conflict: Conflict?
-    let columnIndexConvertibleList: [ColumnIndexConvertible]
+    public let conflict: Conflict?
+    public let columnIndexConvertibleList: [ColumnIndexConvertible]
 
     public init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...,
                 onConflict conflict: Conflict? = nil) {
@@ -50,8 +50,8 @@ public struct MultiPrimaryBinding: TableConstraintBinding {
 }
 
 public struct MultiUniqueBinding: TableConstraintBinding {
-    let conflict: Conflict?
-    let columnIndexConvertibleList: [ColumnIndexConvertible]
+    public let conflict: Conflict?
+    public let columnIndexConvertibleList: [ColumnIndexConvertible]
 
     public init(indexesBy columnIndexConvertibleList: ColumnIndexConvertible...,
                 onConflict conflict: Conflict? = nil) {
@@ -74,7 +74,7 @@ public struct MultiUniqueBinding: TableConstraintBinding {
 }
 
 public struct CheckBinding: TableConstraintBinding {
-    let condition: Expression
+    public let condition: Expression
 
     public init(check condition: Expression) {
         self.condition = condition
@@ -86,8 +86,8 @@ public struct CheckBinding: TableConstraintBinding {
 }
 
 public struct ForeignKeyBinding: TableConstraintBinding {
-    let columnConvertibleList: [ColumnConvertible]
-    let foreignKey: ForeignKey
+    public let columnConvertibleList: [ColumnConvertible]
+    public let foreignKey: ForeignKey
 
     public init(_ columnConvertibleList: ColumnConvertible..., foreignKey: ForeignKey) {
         self.init(columnConvertibleList, foreignKey: foreignKey)

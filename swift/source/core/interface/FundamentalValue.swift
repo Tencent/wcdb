@@ -124,7 +124,7 @@ public typealias FundamentalRow = [FundamentalValue]
 
 public typealias FundamentalRowXColumn = [FundamentalRow]
 
-extension Array where Element==[FundamentalValue] {
+public extension Array where Element==[FundamentalValue] {
     public subscript(row row: Array.Index, column column: Array<FundamentalValue>.Index) -> FundamentalValue {
         return self[row][column]
     }

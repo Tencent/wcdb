@@ -21,18 +21,18 @@
 import Foundation
 
 //TODO: Refactor
-class Recyclable<Value> {
-    typealias OnRecycled = () -> Void
-    let onRecycled: OnRecycled?
+internal class Recyclable<Value> {
+    internal typealias OnRecycled = () -> Void
+    internal let onRecycled: OnRecycled?
 
-    final let raw: Value
+    internal final let raw: Value
 
-    init(_ raw: Value, onRecycled: @escaping OnRecycled) {
+    internal init(_ raw: Value, onRecycled: @escaping OnRecycled) {
         self.raw = raw
         self.onRecycled = onRecycled
     }
 
-    init(_ raw: Value) {
+    internal init(_ raw: Value) {
         self.raw = raw
         self.onRecycled = nil
     }

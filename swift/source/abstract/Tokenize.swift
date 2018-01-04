@@ -69,7 +69,7 @@ public protocol Module: ModuleBase {
     associatedtype CursorInfo: CursorInfoBase
 }
 
-extension Module {
+public extension Module {
     public static func create(argc: Int32,
                               argv: UnsafePointer<UnsafePointer<Int8>?>?,
                               ppTokenizer: UnsafeMutablePointer<UnsafeMutablePointer<sqlite3_tokenizer>?>?) -> Int32 {
@@ -160,7 +160,7 @@ extension Module {
 }
 
 public struct Tokenize {
-    let module: ModuleBase.Type
+    internal let module: ModuleBase.Type
 }
 
 public struct FTSModule {

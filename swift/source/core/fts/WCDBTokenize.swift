@@ -69,7 +69,7 @@ public final class WCDBCursorInfo: CursorInfoBase {
         inputLength = count
     }
 
-    func cursorStep() -> Int32 {
+    internal func cursorStep() -> Int32 {
         guard cursor + cursorTokenLength < inputLength else {
             cursor = inputLength
             cursorTokenType = nil
@@ -80,7 +80,7 @@ public final class WCDBCursorInfo: CursorInfoBase {
         return cursorSetup()
     }
 
-    func cursorSetup() -> Int32 {
+    internal func cursorSetup() -> Int32 {
         var rc = SQLITE_OK
         let first = UInt8(bitPattern: input.advanced(by: Int(cursor)).pointee)
         switch first {
@@ -137,7 +137,7 @@ public final class WCDBCursorInfo: CursorInfoBase {
         return SQLITE_OK
     }
 
-    func isSymbol(unicodeChar: UInt16, result: inout Bool) -> Int32 {
+    internal func isSymbol(unicodeChar: UInt16, result: inout Bool) -> Int32 {
         guard let symbolCharacterSet = self.symbolCharacterSet else {
             return SQLITE_NOMEM
         }
@@ -145,8 +145,8 @@ public final class WCDBCursorInfo: CursorInfoBase {
         return SQLITE_OK
     }
 
-    static let orthography = NSOrthography(dominantScript: "Latin", languageMap: [ "Latn": ["en"]])
-    func lemmatization(input: UnsafePointer<Int8>, inputLength: Int32) -> Int32 {
+    internal static let orthography = NSOrthography(dominantScript: "Latin", languageMap: [ "Latn": ["en"]])
+    internal func lemmatization(input: UnsafePointer<Int8>, inputLength: Int32) -> Int32 {
         if inputLength > buffer.count {
             buffer.expand(toNewSize: Int(inputLength))
         }
@@ -183,7 +183,7 @@ public final class WCDBCursorInfo: CursorInfoBase {
         return SQLITE_OK
     }
 
-    func subTokensStep() {
+    internal func subTokensStep() {
         self.startOffset = self.subTokensCursor
         self.bufferLength = Int32(self.subTokensLengthArray[0])
         if self.subTokensDoubleChar {
@@ -339,6 +339,6 @@ public final class WCDBModule: Module {
     }()
 }
 
-extension Tokenize {
+public extension Tokenize {
     public static let WCDB = Tokenize(module: WCDBModule.self)
 }

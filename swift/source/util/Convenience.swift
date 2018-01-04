@@ -20,8 +20,8 @@
 
 import Foundation
 
-extension Array {
-    func joined(_ map: (Element) -> String, separateBy separator: String = ", ") -> String {
+internal extension Array {
+    internal func joined(_ map: (Element) -> String, separateBy separator: String = ", ") -> String {
         var flag = false
         return reduce(into: "") { (output, element) in
             if flag {
@@ -34,8 +34,8 @@ extension Array {
     }
 }
 
-extension Array where Element: StringProtocol {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element: StringProtocol {
+    internal func joined(separateBy separator: String = ", ") -> String {
         var flag = false
         return reduce(into: "") { (output, element) in
             if flag {
@@ -48,76 +48,76 @@ extension Array where Element: StringProtocol {
     }
 }
 
-extension Array where Element: Describable {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element: Describable {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.description }, separateBy: separator)
     }
 }
 
-extension Array where Element==ColumnResultConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element==ColumnResultConvertible {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asColumnResult().description }, separateBy: separator)
     }
 }
 
-extension Array where Element==ExpressionConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element==ExpressionConvertible {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asExpression().description }, separateBy: separator)
     }
 }
 
-extension Array where Element==ColumnConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element==ColumnConvertible {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asColumn().description }, separateBy: separator)
     }
 }
 
-extension Array where Element==TableOrSubqueryConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element==TableOrSubqueryConvertible {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asTableOrSubquery().description }, separateBy: separator)
     }
 }
 
-extension Array where Element==OrderConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element==OrderConvertible {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asOrder().description }, separateBy: separator)
     }
 }
 
-extension Array where Element==ColumnIndexConvertible {
-    func joined(separateBy separator: String = ", ") -> String {
+internal extension Array where Element==ColumnIndexConvertible {
+    internal func joined(separateBy separator: String = ", ") -> String {
         return joined({ $0.asIndex().description }, separateBy: separator)
     }
 
-    func asIndexes() -> [ColumnIndex] {
+    internal func asIndexes() -> [ColumnIndex] {
         return map { $0.asIndex() }
     }
 }
 
-extension Array where Element==PropertyConvertible {
-    func asCodingTableKeys() -> ContiguousArray<CodingTableKeyBase> {
+internal extension Array where Element==PropertyConvertible {
+    internal func asCodingTableKeys() -> ContiguousArray<CodingTableKeyBase> {
         return reduce(into: ContiguousArray<CodingTableKeyBase>()) { (result, element) in
             result.append(element.codingTableKey)
         }
     }
 }
 
-extension Array {
-    mutating func expand(toNewSize newSize: IndexDistance, fillWith value: Iterator.Element) {
+internal extension Array {
+    internal mutating func expand(toNewSize newSize: IndexDistance, fillWith value: Iterator.Element) {
         if count < newSize {
             append(contentsOf: repeatElement(value, count: count.distance(to: newSize)))
         }
     }
 }
 
-extension Array where Iterator.Element: FixedWidthInteger {
-    mutating func expand(toNewSize newSize: IndexDistance) {
+internal extension Array where Iterator.Element: FixedWidthInteger {
+    internal mutating func expand(toNewSize newSize: IndexDistance) {
         expand(toNewSize: newSize, fillWith: 0)
     }
 }
 
-extension Dictionary {
-    func joined(_ map: (Key, Value) -> String, separateBy separator: String = "," ) -> String {
+internal extension Dictionary {
+    internal func joined(_ map: (Key, Value) -> String, separateBy separator: String = "," ) -> String {
         var flag = false
         return reduce(into: "", { (output, arg) in
             if flag {
@@ -130,127 +130,127 @@ extension Dictionary {
     }
 }
 
-extension String {
-    var lastPathComponent: String {
+internal extension String {
+    internal var lastPathComponent: String {
         return URL(fileURLWithPath: self).lastPathComponent
     }
 
-    func stringByAppending(pathComponent: String) -> String {
+    internal func stringByAppending(pathComponent: String) -> String {
         return URL(fileURLWithPath: self).appendingPathComponent(pathComponent).path
     }
 
-    var cString: UnsafePointer<Int8>? {
+    internal var cString: UnsafePointer<Int8>? {
         return UnsafePointer<Int8>((self as NSString).utf8String)
     }
 
-    init?(bytes: UnsafeRawPointer, count: Int, encoding: String.Encoding) {
+    internal init?(bytes: UnsafeRawPointer, count: Int, encoding: String.Encoding) {
         self.init(data: Data(bytes: bytes, count: count), encoding: encoding)
     }
 
-    func range(from begin: Int, to end: Int) -> Range<String.Index> {
+    internal func range(from begin: Int, to end: Int) -> Range<String.Index> {
         return index(startIndex, offsetBy: begin)..<index(startIndex, offsetBy: end)
     }
 
-    func range(location: Int, length: Int) -> Range<String.Index> {
+    internal func range(location: Int, length: Int) -> Range<String.Index> {
         return range(from: location, to: location + length)
     }
 }
 
-extension Bool {
-    @inline(__always) func toInt32() -> Int32 {
+internal extension Bool {
+    @inline(__always) internal func toInt32() -> Int32 {
         return self ? 1 : 0
     }
 }
 
-extension Int {
-    @inline(__always) func toInt64() -> Int64 {
+internal extension Int {
+    @inline(__always) internal func toInt64() -> Int64 {
         return Int64(self)
     }
 }
 
-extension Int8 {
-    @inline(__always) func toInt32() -> Int32 {
+internal extension Int8 {
+    @inline(__always) internal func toInt32() -> Int32 {
         return Int32(self)
     }
 }
 
-extension Int16 {
-    @inline(__always) func toInt32() -> Int32 {
+internal extension Int16 {
+    @inline(__always) internal func toInt32() -> Int32 {
         return Int32(self)
     }
 }
 
-extension Int32 {
-    @inline(__always) func toBool() -> Bool {
+internal extension Int32 {
+    @inline(__always) internal func toBool() -> Bool {
         return self != 0
     }
-    @inline(__always) func toInt8() -> Int8 {
+    @inline(__always) internal func toInt8() -> Int8 {
         return Int8(truncatingIfNeeded: self)
     }
-    @inline(__always) func toInt16() -> Int16 {
+    @inline(__always) internal func toInt16() -> Int16 {
         return Int16(truncatingIfNeeded: self)
     }
-    @inline(__always) func toUInt8() -> UInt8 {
+    @inline(__always) internal func toUInt8() -> UInt8 {
         return UInt8(bitPattern: Int8(truncatingIfNeeded: self))
     }
-    @inline(__always) func toUInt16() -> UInt16 {
+    @inline(__always) internal func toUInt16() -> UInt16 {
         return UInt16(bitPattern: Int16(truncatingIfNeeded: self))
     }
-    @inline(__always) func toUInt32() -> UInt32 {
+    @inline(__always) internal func toUInt32() -> UInt32 {
         return UInt32(bitPattern: self)
     }
 }
 
-extension Int64 {
-    @inline(__always) func toInt() -> Int {
+internal extension Int64 {
+    @inline(__always) internal func toInt() -> Int {
         return Int(truncatingIfNeeded: self)
     }
-    @inline(__always) func toUInt() -> UInt {
+    @inline(__always) internal func toUInt() -> UInt {
         return UInt(bitPattern: Int(truncatingIfNeeded: self))
     }
-    @inline(__always) func toUInt64() -> UInt64 {
+    @inline(__always) internal func toUInt64() -> UInt64 {
         return UInt64(bitPattern: self)
     }
 }
 
-extension UInt {
-    @inline(__always) func toInt64() -> Int64 {
+internal extension UInt {
+    @inline(__always) internal func toInt64() -> Int64 {
         return Int64(bitPattern: UInt64(self))
     }
 }
 
-extension UInt8 {
-    @inline(__always) func toInt32() -> Int32 {
+internal extension UInt8 {
+    @inline(__always) internal func toInt32() -> Int32 {
         return Int32(bitPattern: UInt32(self))
     }
 }
 
-extension UInt16 {
-    @inline(__always) func toInt32() -> Int32 {
+internal extension UInt16 {
+    @inline(__always) internal func toInt32() -> Int32 {
         return Int32(bitPattern: UInt32(self))
     }
 }
 
-extension UInt32 {
-    @inline(__always) func toInt32() -> Int32 {
+internal extension UInt32 {
+    @inline(__always) internal func toInt32() -> Int32 {
         return Int32(bitPattern: self)
     }
 }
 
-extension UInt64 {
-    @inline(__always) func toInt64() -> Int64 {
+internal extension UInt64 {
+    @inline(__always) internal func toInt64() -> Int64 {
         return Int64(bitPattern: self)
     }
 }
 
-extension Float {
-    @inline(__always) func toDouble() -> Double {
+internal extension Float {
+    @inline(__always) internal func toDouble() -> Double {
         return Double(self)
     }
 }
 
-extension Double {
-    @inline(__always) func toFloat() -> Float {
+internal extension Double {
+    @inline(__always) internal func toFloat() -> Float {
         return Float(self)
     }
 }

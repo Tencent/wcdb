@@ -50,6 +50,7 @@ public protocol FundamentalColumnType {
     static var columnType: ColumnType {get}
     var columnType: ColumnType {get}
 }
+
 extension Int32: FundamentalColumnType {
     public static var columnType: ColumnType {
         return .integer32

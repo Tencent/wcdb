@@ -90,7 +90,7 @@ public protocol InsertInterface: class {
         intoTable table: String) throws
 }
 
-extension InsertInterface where Self: Core {
+public extension InsertInterface where Self: Core {
     public func insert<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
@@ -204,7 +204,7 @@ public protocol UpdateInterface: class {
                 offset: Offset?) throws
 }
 
-extension UpdateInterface where Self: Core {
+public extension UpdateInterface where Self: Core {
     public func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: [PropertyConvertible],
@@ -307,7 +307,7 @@ public protocol DeleteInterface: class {
                 offset: Offset?) throws
 }
 
-extension DeleteInterface where Self: Core {
+public extension DeleteInterface where Self: Core {
     public func delete(fromTable table: String,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
@@ -473,7 +473,7 @@ public protocol RowSelectInterface: class {
                           offset: Offset?) throws -> FundamentalValue
 }
 
-extension RowSelectInterface where Self: Core {
+public extension RowSelectInterface where Self: Core {
     public func getRows(on columnResultConvertibleList: [ColumnResultConvertible],
                         fromTable table: String,
                         where condition: Condition? = nil,
@@ -688,7 +688,7 @@ public protocol SelectInterface: class {
         offset: Offset?) throws -> Object?
 }
 
-extension SelectInterface where Self: Core {
+public extension SelectInterface where Self: Core {
     public func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
@@ -850,7 +850,7 @@ public protocol TableInterface: class {
     func drop(index name: String) throws
 }
 
-extension TableInterface where Self: Core {
+public extension TableInterface where Self: Core {
     public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {

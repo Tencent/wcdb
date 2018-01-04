@@ -27,10 +27,10 @@ public final class Insert {
     private let name: String
     private let isReplace: Bool
 
-    init(with core: Core,
-         named name: String,
-         on propertyConvertibleList: [PropertyConvertible]?,
-         isReplace: Bool = false) throws {
+    internal init(with core: Core,
+                  named name: String,
+                  on propertyConvertibleList: [PropertyConvertible]?,
+                  isReplace: Bool = false) throws {
         guard name.count > 0 else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,

@@ -21,13 +21,13 @@
 import Foundation
 
 public struct ColumnConstraintBinding {
-    let isPrimary: Bool
-    let isAutoIncrement: Bool
-    let defaultValue: ColumnDef.DefaultType?
-    let conflict: Conflict?
-    let isNotNull: Bool
-    let isUnique: Bool
-    let term: OrderTerm?
+    public let isPrimary: Bool
+    public let isAutoIncrement: Bool
+    public let defaultValue: ColumnDef.DefaultType?
+    public let conflict: Conflict?
+    public let isNotNull: Bool
+    public let isUnique: Bool
+    public let term: OrderTerm?
 
     public init(isPrimary: Bool = false,
                 orderBy term: OrderTerm? = nil,
@@ -78,7 +78,7 @@ public struct ColumnConstraintBinding {
                   defaultTo: defaultValue)
     }
 
-    func generateColumnDef(with rawColumnDef: ColumnDef) -> ColumnDef {
+    internal func generateColumnDef(with rawColumnDef: ColumnDef) -> ColumnDef {
         let columnDef = rawColumnDef
         if isPrimary {
             columnDef.makePrimary(orderBy: term, isAutoIncrement: isAutoIncrement, onConflict: conflict)

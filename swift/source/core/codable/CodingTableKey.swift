@@ -40,13 +40,13 @@ public protocol CodingTableKey: CodingTableKeyBase,
     static var virtualTableBinding: VirtualTableBinding? {get}
 }
 
-extension CodingTableKey {
+public extension CodingTableKey {
     public var rootType: TableCodableBase.Type {
         return Root.self
     }
 }
 
-extension CodingTableKey {
+public extension CodingTableKey {
     public static var all: [Property] {
         return objectRelationalMapping.allProperties
     }
@@ -55,7 +55,7 @@ extension CodingTableKey {
     }
 }
 
-extension CodingTableKey {
+public extension CodingTableKey {
     public static var columnConstraintBindings: [Self: ColumnConstraintBinding]? {
         return nil
     }
@@ -73,7 +73,7 @@ extension CodingTableKey {
     }
 }
 
-extension CodingTableKey {
+public extension CodingTableKey {
     public var codingTableKey: CodingTableKeyBase {
         return self
     }

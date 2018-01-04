@@ -79,7 +79,7 @@ public final class Database: Core {
         super.init(with: try HandlePool.getExistingPool(with: tag))
     }
 
-    init(withExistingPath path: String) throws {
+    internal init(withExistingPath path: String) throws {
         super.init(with: try HandlePool.getExistingPool(withPath: path))
     }
 
@@ -267,7 +267,7 @@ public final class Database: Core {
 }
 
 //Config
-extension Database {
+public extension Database {
 
     /// Set cipher key for a database.   
     /// For an encrypted database, you must call it before all other operation.  
@@ -294,8 +294,8 @@ extension Database {
     public typealias PerformanceTracer = Handle.PerformanceTracer
     public typealias SQLTracer = Handle.SQLTracer
 
-    static private var performanceTracer = Atomic<PerformanceTracer?>()
-    static private var sqlTracer = Atomic<SQLTracer?>()
+    private static var performanceTracer = Atomic<PerformanceTracer?>()
+    private static var sqlTracer = Atomic<SQLTracer?>()
 
     /// You can register a tracer to monitor the performance of all SQLs.  
     /// It returns  
@@ -568,7 +568,7 @@ extension Database {
 }
 
 //Transaction
-extension Database {
+public extension Database {
     /// Generation a `Transaction` object to do a transaction.
     ///
     /// - Returns: Transaction
@@ -579,7 +579,7 @@ extension Database {
 }
 
 //Table
-extension Database {
+public extension Database {
     /// Get a wrapper from an existing table.
     ///
     /// - Parameters:
@@ -598,7 +598,7 @@ extension Database {
 }
 
 //File
-extension Database {
+public extension Database {
     /// Subfix of paths to all database-related files.
     public static var subfixs: [String] {
         return Handle.subfixs
@@ -684,7 +684,7 @@ extension Database {
 }
 
 //Repair
-extension Database {
+public extension Database {
     /// Backup metadata to recover.  
     /// Since metadata will be changed while a table or an index is created or dropped, 
     /// you should call this periodically.

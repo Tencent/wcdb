@@ -32,7 +32,7 @@ public protocol TableEncodable: TableEncodableBase where CodingKeys.Root == Self
     var lastInsertedRowID: Int64 {get set}
 }
 
-extension TableEncodable {
+public extension TableEncodable {
     public var isAutoIncrement: Bool {
         return false
     }

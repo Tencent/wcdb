@@ -20,16 +20,16 @@
 
 import Foundation
 
-typealias RecyclableHandlePool = Recyclable<HandlePool>
+internal typealias RecyclableHandlePool = Recyclable<HandlePool>
 
-final class RecyclableHandleStatement: Recyclable<HandleStatement> {
+internal final class RecyclableHandleStatement: Recyclable<HandleStatement> {
     private let recyclableHandle: RecyclableHandle
 
-    init(recyclableHandle: RecyclableHandle,
-         handleStatement: HandleStatement) {
+    internal init(recyclableHandle: RecyclableHandle,
+                  handleStatement: HandleStatement) {
         self.recyclableHandle = recyclableHandle
         super.init(handleStatement)
     }
 }
 
-typealias RecyclableHandle = Recyclable<HandlePool.HandleWrap>
+internal typealias RecyclableHandle = Recyclable<HandlePool.HandleWrap>

@@ -21,8 +21,8 @@
 import Foundation
 
 public class Core: CoreRepresentable {
-    final let recyclableHandlePool: RecyclableHandlePool
-    final var handlePool: HandlePool {
+    internal final let recyclableHandlePool: RecyclableHandlePool
+    internal final var handlePool: HandlePool {
         return recyclableHandlePool.raw
     }
 
@@ -36,29 +36,29 @@ public class Core: CoreRepresentable {
         return handlePool.path
     }
 
-    init(with recyclableHandlePool: RecyclableHandlePool) {
+    internal init(with recyclableHandlePool: RecyclableHandlePool) {
         self.recyclableHandlePool = recyclableHandlePool
     }
 
-    final func prepare(_ statement: Statement,
-                       in recyclableHandle: RecyclableHandle) throws -> RecyclableHandleStatement {
+    internal final func prepare(_ statement: Statement,
+                                in recyclableHandle: RecyclableHandle) throws -> RecyclableHandleStatement {
         assert(statement.statementType != .transaction,
                "Using [begin], [commit], [rollback] or [Exec] method to do a transaction")
         let handleStatement = try recyclableHandle.raw.handle.prepare(statement)
         return RecyclableHandleStatement(recyclableHandle: recyclableHandle, handleStatement: handleStatement)
     }
 
-    final func exec(_ statement: Statement, in recyclableHandle: RecyclableHandle) throws {
+    internal final func exec(_ statement: Statement, in recyclableHandle: RecyclableHandle) throws {
         assert(statement.statementType != .transaction,
                "Using [begin], [commit], [rollback] method to do a transaction")
         return try recyclableHandle.raw.handle.exec(statement)
     }
 
-    func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
+    internal func prepare(_ statement: Statement) throws -> RecyclableHandleStatement {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
-    func exec(_ statement: Statement) throws {
+    internal func exec(_ statement: Statement) throws {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
@@ -149,12 +149,12 @@ public class Core: CoreRepresentable {
         }
     }
 
-    func run(embeddedTransaction: TransactionClosure) throws {
+    internal func run(embeddedTransaction: TransactionClosure) throws {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 }
 
-protocol CoreRepresentable: class {
+internal protocol CoreRepresentable: class {
     var tag: Tag? {get}
     var path: String {get}
 }

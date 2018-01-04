@@ -53,11 +53,11 @@ public struct Configs {
 
     private var configs = ContiguousArray<Config>()
 
-    init(_ configs: ContiguousArray<Config>) {
+    internal init(_ configs: ContiguousArray<Config>) {
         self.configs = configs
     }
 
-    mutating func setConfig(named name: String, with callback: @escaping Callback, orderBy order: Order) {
+    internal mutating func setConfig(named name: String, with callback: @escaping Callback, orderBy order: Order) {
         var inserted: Bool = false
         var newConfigs: ContiguousArray<Config> = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
             if !inserted && order < config.order {
@@ -73,7 +73,7 @@ public struct Configs {
         configs = newConfigs
     }
 
-    mutating func setConfig(named name: String, with callback: @escaping Callback) {
+    internal mutating func setConfig(named name: String, with callback: @escaping Callback) {
         var inserted: Bool = false
         var newConfigs: ContiguousArray<Config> = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
             if name != config.name {
@@ -89,14 +89,14 @@ public struct Configs {
         configs = newConfigs
     }
 
-    func invoke(handle: Handle) throws {
+    internal func invoke(handle: Handle) throws {
         let configs = self.configs
         for config in configs {
             try config.callback?.value(handle)
         }
     }
 
-    func config(by name: String) -> Callback? {
+    internal func config(by name: String) -> Callback? {
         let configs = self.configs
         return configs.first { $0.name == name }?.callback?.value
     }

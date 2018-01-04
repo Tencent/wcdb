@@ -22,8 +22,8 @@ import Foundation
 public struct IndexBinding {
     public typealias Subfix = String
 
-    let columnIndexes: [ColumnIndex]
-    let isUnique: Bool
+    public let columnIndexes: [ColumnIndex]
+    public let isUnique: Bool
 
     public init(isUnique: Bool = false, indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) {
         self.columnIndexes = columnIndexConvertibleList.asIndexes()
@@ -35,8 +35,8 @@ public struct IndexBinding {
         self.init(isUnique: isUnique, indexesBy: columnIndexConvertibleList)
     }
 
-    func generateCreateIndexStatement(onTable tableName: String,
-                                      withIndexSubfix indexSubfix: String) -> StatementCreateIndex {
+    internal func generateCreateIndexStatement(onTable tableName: String,
+                                               withIndexSubfix indexSubfix: String) -> StatementCreateIndex {
         return StatementCreateIndex()
             .create(index: tableName+indexSubfix,
                     isUnique: isUnique,
