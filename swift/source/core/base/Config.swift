@@ -51,15 +51,15 @@ public struct Configs {
         }
     }
 
-    private var configs = ContiguousArray<Config>()
+    private var configs: ContiguousArray<Config>
 
     internal init(_ configs: ContiguousArray<Config>) {
         self.configs = configs
     }
 
     internal mutating func setConfig(named name: String, with callback: @escaping Callback, orderBy order: Order) {
-        var inserted: Bool = false
-        var newConfigs: ContiguousArray<Config> = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
+        var inserted = false
+        var newConfigs = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
             if !inserted && order < config.order {
                 result.append(Config(named: name, with: callback, orderBy: order))
                 inserted = true
@@ -74,19 +74,12 @@ public struct Configs {
     }
 
     internal mutating func setConfig(named name: String, with callback: @escaping Callback) {
-        var inserted: Bool = false
-        var newConfigs: ContiguousArray<Config> = configs.reduce(into: ContiguousArray<Config>()) { (result, config) in
-            if name != config.name {
-                result.append(config)
-            } else {
-                result.append(Config(named: name, with: callback, orderBy: config.order))
-                inserted = true
-            }
+        if let targetIndex = configs.index(where: { $0.name == name }) {
+            let config = configs[targetIndex]
+            configs[targetIndex] = Config(named: name, with: callback, orderBy: config.order)
+        } else {
+            configs.append(Config(named: name, with: callback, orderBy: .max))
         }
-        if !inserted {
-            newConfigs.append(Config(named: name, with: callback, orderBy: Order.max))
-        }
-        configs = newConfigs
     }
 
     internal func invoke(handle: Handle) throws {
@@ -104,14 +97,6 @@ public struct Configs {
 
 extension Configs: Equatable {
     public static func == (lhs: Configs, rhs: Configs) -> Bool {
-        guard lhs.configs.count == rhs.configs.count else {
-            return false
-        }
-        for i in 0..<lhs.configs.count {
-            guard lhs.configs[i] == rhs.configs[i] else {
-                return false
-            }
-        }
-        return true
+        return lhs.configs.elementsEqual(rhs.configs)
     }
 }
