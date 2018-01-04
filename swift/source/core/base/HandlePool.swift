@@ -211,7 +211,7 @@ public final class HandlePool {
     }
 
     static func purgeFreeHandlesInAllPools() {
-        let handlePools: [HandlePool]!
+        let handlePools: ContiguousArray<HandlePool>!
         do {
             spin.lock(); defer { spin.unlock() }
             handlePools = pools.values.reduce(into: []) { $0.append($1.handlePool) }

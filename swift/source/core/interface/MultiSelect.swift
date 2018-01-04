@@ -22,7 +22,7 @@ import Foundation
 
 /// Chain call for multi-selecting
 public final class MultiSelect: Selectable {
-    private let keys: [CodingTableKeyBase]
+    private let keys: ContiguousArray<CodingTableKeyBase>
 
     init(with core: Core,
          on propertyConvertibleList: [PropertyConvertible],
@@ -42,11 +42,12 @@ public final class MultiSelect: Selectable {
                                         code: .misuse,
                                         message: "Empty table")
         }
-        self.keys = propertyConvertibleList.map({ (propertyConvertible) -> CodingTableKeyBase in
+        self.keys = propertyConvertibleList.reduce(
+                into: ContiguousArray<CodingTableKeyBase>(), { (result, propertyConvertible) in
             let codingTableKey = propertyConvertible.codingTableKey
             assert(codingTableKey.rootType is TableDecodableBase.Type,
                    "\(codingTableKey.rootType) must conform to TableDecodable protocol.")
-            return codingTableKey
+            result.append(codingTableKey)
         })
 
         let statement = StatementSelect().select(distinct: isDistinct, propertyConvertibleList).from(tables)

@@ -57,7 +57,7 @@ public final class WCDBCursorInfo: CursorInfoBase {
     private var lemmaBuffer: [UInt8] = []
     private var lemmaBufferLength: Int32 = 0 //>0 lemma is not empty
 
-    private var subTokensLengthArray: [UInt8] = []
+    private var subTokensLengthArray: ContiguousArray<UInt8> = []
     private var subTokensCursor: Int32 = 0
     private var subTokensDoubleChar: Bool = false
 

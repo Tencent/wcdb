@@ -29,7 +29,8 @@ final class TableDecoder: Decoder {
 
     private var container: Any?
 
-    init(_ codingTableKeys: [CodingTableKeyBase], on recyclableHandleStatement: RecyclableHandleStatement) {
+    init(_ codingTableKeys: ContiguousArray<CodingTableKeyBase>,
+         on recyclableHandleStatement: RecyclableHandleStatement) {
         var hashedKeys: HashedKey = [:]
         for (index, key) in codingTableKeys.enumerated() {
             hashedKeys[key.stringValue.hashValue] = index

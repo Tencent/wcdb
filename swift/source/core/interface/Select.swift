@@ -21,7 +21,7 @@
 import Foundation
 
 public final class Select: Selectable {
-    private let keys: [CodingTableKeyBase]
+    private let keys: ContiguousArray<CodingTableKeyBase>
 
     private lazy var decoder = TableDecoder(keys, on: optionalRecyclableHandleStatement!)
 
@@ -65,7 +65,6 @@ public final class Select: Selectable {
     /// - Returns: Table decodable object. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
-        assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
         guard try next() else {
             return nil
         }
@@ -78,7 +77,6 @@ public final class Select: Selectable {
     /// - Returns: Table decodable objects.
     /// - Throws: `Error`
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
-        assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
         var objects: [Object] = []
         while try next() {
             objects.append(try Object.init(from: decoder))

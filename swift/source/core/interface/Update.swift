@@ -24,7 +24,7 @@ import Foundation
 public final class Update {
     private var core: Core
     private let statement = StatementUpdate()
-    private let keys: [CodingTableKeyBase]
+    private let keys: ContiguousArray<CodingTableKeyBase>
 
     /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully

@@ -95,8 +95,10 @@ extension Array where Element==ColumnIndexConvertible {
 }
 
 extension Array where Element==PropertyConvertible {
-    func asCodingTableKeys() -> [CodingTableKeyBase] {
-        return map { $0.codingTableKey }
+    func asCodingTableKeys() -> ContiguousArray<CodingTableKeyBase> {
+        return reduce(into: ContiguousArray<CodingTableKeyBase>()) { (result, element) in
+            result.append(element.codingTableKey)
+        }
     }
 }
 

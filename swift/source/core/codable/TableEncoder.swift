@@ -33,7 +33,7 @@ final class TableEncoder: Encoder {
     var primaryKeyHash: Int?
     var isPrimaryKeyEncoded = true
 
-    init(_ codingTableKeys: [CodingTableKeyBase],
+    init(_ codingTableKeys: ContiguousArray<CodingTableKeyBase>,
          on recyclableHandleStatement: RecyclableHandleStatement) {
         var hashedKeys: HashedKey = [:]
         for (index, key) in codingTableKeys.enumerated() {
