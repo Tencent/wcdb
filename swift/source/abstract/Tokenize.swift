@@ -144,18 +144,18 @@ public extension Module {
                             piStartOffset: UnsafeMutablePointer<Int32>?,
                             piEndOffset: UnsafeMutablePointer<Int32>?,
                             piPosition: UnsafeMutablePointer<Int32>?) -> Int32 {
-        if let cursorRawPointer = UnsafeMutableRawPointer(optionalCursorPointer) {
-            let cursorPointer = cursorRawPointer.assumingMemoryBound(to: Cursor.self)
-            let cursorInfoPointer = Unmanaged<CursorInfo>.fromOpaque(cursorPointer.pointee.info)
-
-            let rc = cursorInfoPointer.takeUnretainedValue().step(pToken: &ppToken!.pointee,
-                                                                  count: &pnBytes!.pointee,
-                                                                  startOffset: &piStartOffset!.pointee,
-                                                                  endOffset: &piEndOffset!.pointee,
-                                                                  position: &piPosition!.pointee)
-            return rc
+        guard let cursorRawPointer = UnsafeMutableRawPointer(optionalCursorPointer) else {
+            return SQLITE_NOMEM
         }
-        return SQLITE_NOMEM
+        let cursorPointer = cursorRawPointer.assumingMemoryBound(to: Cursor.self)
+        let cursorInfoPointer = Unmanaged<CursorInfo>.fromOpaque(cursorPointer.pointee.info)
+
+        let rc = cursorInfoPointer.takeUnretainedValue().step(pToken: &ppToken!.pointee,
+                                                              count: &pnBytes!.pointee,
+                                                              startOffset: &piStartOffset!.pointee,
+                                                              endOffset: &piEndOffset!.pointee,
+                                                              position: &piPosition!.pointee)
+        return rc
     }
 }
 
