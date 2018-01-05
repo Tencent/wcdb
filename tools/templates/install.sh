@@ -1,4 +1,4 @@
-#!/usr/make
+#!/bin/bash
 
 #xctemplate
 install_xctemplates() {
@@ -22,6 +22,14 @@ install_xctemplates() {
 install_codesnippets() {
     source_codesnippets=`pwd`/codesnippets/*.codesnippet
     codesnippets=~/Library/Developer/Xcode/UserData/CodeSnippets/
+    if [ -h $codesnippets ] ;
+    then
+        rm $codesnippets
+    fi
+    if [ -f $codesnippets ] ;
+    then
+        rm $codesnippets
+    fi
     mkdir -p $codesnippets
     cp $source_codesnippets $codesnippets
 }
