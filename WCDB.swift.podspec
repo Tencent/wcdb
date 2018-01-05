@@ -23,7 +23,7 @@ Pod::Spec.new do |wcdb|
   wcdb.libraries = "z"
   wcdb.requires_arc = true
   wcdb.prepare_command = "git submodule update --init sqlcipher; \
-                          cd tools/templates; sh install.sh; cd ../..; \
+                          cd tools/templates; sh install.sh || true; cd ../..; \
                           cd sqlcipher; make -f Makefile.preprocessed; cd ..; \
                           cp sqlcipher/ext/fts3/fts3_tokenizer.h sqlcipher/"
   wcdb.pod_target_xcconfig = { 'SWIFT_WHOLE_MODULE_OPTIMIZATION' => 'YES',
