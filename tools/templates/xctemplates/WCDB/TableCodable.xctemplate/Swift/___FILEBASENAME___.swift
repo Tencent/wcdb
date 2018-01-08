@@ -3,7 +3,7 @@
 import Foundation
 import WCDBSwift
 
-class ___VARIABLE_productName___: WCDB.TableCodable {
+class ___VARIABLE_productName___: WCDBSwift.TableCodable {
     //Your own properties
     let variable1: Int = 0
     var variable2: String? // Optional if it would be nil in some WCDB selection
