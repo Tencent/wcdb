@@ -4,4 +4,7 @@
    <FileRef
       location = "group:WCDB.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:sample/sample.xcodeproj">
+   </FileRef>
 </Workspace>
