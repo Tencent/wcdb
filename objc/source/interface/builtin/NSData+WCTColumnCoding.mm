@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTCompatible.h>
 
 @interface NSData (WCTColumnCoding) <WCTColumnCoding>
 @end
