@@ -110,14 +110,14 @@
     _database->close(callback);
 }
 
-- (void)purgeFreeHandles
+- (void)purge
 {
-    _database->purgeFreeHandles();
+    _database->purge();
 }
 
-+ (void)PurgeFreeHandlesInAllDatabases
++ (void)PurgeInAllDatabases
 {
-    WCDB::Database::PurgeFreeHandlesInAllDatabases();
+    WCDB::Database::PurgeInAllDatabases();
 }
 
 - (BOOL)isBlockaded

@@ -48,8 +48,8 @@ public:
     void unblockade();
     bool isBlockaded();
 
-    void purgeFreeHandles();
-    static void PurgeFreeHandlesInAllDatabases();
+    void purge();
+    static void PurgeInAllDatabases();
 
     //config
     enum class ConfigOrder : Configs::Order {

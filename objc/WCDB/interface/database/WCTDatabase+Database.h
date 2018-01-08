@@ -136,18 +136,18 @@ typedef void (^WCTCloseBlock)(void);
 - (BOOL)isBlockaded;
 
 /**
- @brief Purge all free handles of this database.
+ @brief Purge all free memory of this database.
         WCDB will cache and reuse some sqlite handles to improve performance. 
         The max count of free sqlite handles is same as the number of concurrent threads supported by the hardware implementation.
         You can call it to save some memory.
  */
-- (void)purgeFreeHandles;
+- (void)purge;
 
 /**
- @brief Purge all free handles of all databases.
+ @brief Purge all free memory of all databases.
         Note that WCDB will call this interface automatically while it receives memory warning on iOS.
- @see purgeFreeHandles
+ @see purge
  */
-+ (void)PurgeFreeHandlesInAllDatabases;
++ (void)PurgeInAllDatabases;
 
 @end

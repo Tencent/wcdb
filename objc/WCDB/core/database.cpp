@@ -67,12 +67,12 @@ bool Database::isOpened() const
     return !m_pool->isDrained();
 }
 
-void Database::purgeFreeHandles()
+void Database::purge()
 {
     m_pool->purgeFreeHandles();
 }
 
-void Database::PurgeFreeHandlesInAllDatabases()
+void Database::PurgeInAllDatabases()
 {
     HandlePool::PurgeFreeHandlesInAllPool();
 }
