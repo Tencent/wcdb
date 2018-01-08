@@ -20,7 +20,7 @@
 
 #include <WCDB/File.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/SQLiteRepairKit.h>
+#include <sqliterk/SQLiteRepairKit.h>
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>
