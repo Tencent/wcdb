@@ -20,7 +20,7 @@
 
 #include <WCDB/column.hpp>
 #include <WCDB/column_index.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 
 namespace WCDB {
 
@@ -33,7 +33,7 @@ ColumnIndex::ColumnIndex(const Column &column, OrderTerm term)
     }
 }
 
-ColumnIndex::ColumnIndex(const Expr &expr, OrderTerm term)
+ColumnIndex::ColumnIndex(const Expression &expr, OrderTerm term)
     : Describable(expr.getDescription())
 {
     if (term != OrderTerm::NotSet) {

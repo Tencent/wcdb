@@ -52,8 +52,8 @@ public:
         return *this;
     }
 
-    template <typename T = Expr>
-    typename std::enable_if<std::is_base_of<Expr, T>::value,
+    template <typename T = Expression>
+    typename std::enable_if<std::is_base_of<Expression, T>::value,
                             StatementInsert &>::type
     values(const std::list<const T> &exprList)
     {

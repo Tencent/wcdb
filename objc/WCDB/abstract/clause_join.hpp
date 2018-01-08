@@ -40,7 +40,7 @@ public:
     JoinClause &join(const Subquery &subquery,
                      JoinClause::Type type = JoinClause::Type::NotSet,
                      bool isNatural = false);
-    JoinClause &on(const Expr &expr);
+    JoinClause &on(const Expression &expr);
 
     template <typename T = Column>
     typename std::enable_if<std::is_base_of<Column, T>::value,

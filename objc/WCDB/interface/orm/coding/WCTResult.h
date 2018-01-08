@@ -19,13 +19,13 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTPropertyBase.h>
 
 class WCTResult : public WCDB::ColumnResult, public WCTPropertyBase {
 public:
-    WCTResult(const WCTExpr &expr);
+    WCTResult(const WCTExpression &expr);
     WCTResult(const WCTProperty &property);
     WCTResult &as(const WCTProperty &property);
 
@@ -47,7 +47,7 @@ public:
     {
     }
 
-    WCTResultList(std::initializer_list<const WCTExpr> il);
+    WCTResultList(std::initializer_list<const WCTExpression> il);
     WCTResultList(std::initializer_list<const WCTProperty> il);
 
     WCTResultList(const WCTPropertyList &propertyList);

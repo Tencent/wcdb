@@ -61,7 +61,7 @@
                          .insert(tableName.UTF8String,
                                  _propertyList,
                                  _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
+                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expression::BindParameter));
     }
     return self;
 }
@@ -93,7 +93,7 @@
                          .insert(tableName.UTF8String,
                                  _propertyList,
                                  _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
+                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expression::BindParameter));
     }
     return self;
 }

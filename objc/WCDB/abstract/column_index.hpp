@@ -30,7 +30,7 @@ namespace WCDB {
 class ColumnIndex : public Describable {
 public:
     ColumnIndex(const Column &column, OrderTerm term = OrderTerm::NotSet);
-    ColumnIndex(const Expr &expr, OrderTerm term = OrderTerm::NotSet);
+    ColumnIndex(const Expression &expr, OrderTerm term = OrderTerm::NotSet);
 
     operator ColumnIndexList() const;
 };

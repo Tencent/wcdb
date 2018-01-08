@@ -30,7 +30,7 @@
 #include <WCDB/column_result.hpp>
 #include <WCDB/column_type.hpp>
 #include <WCDB/constraint_table.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/literal_value.hpp>
 #include <WCDB/module_argument.hpp>
 #include <WCDB/order.hpp>

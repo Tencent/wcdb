@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/column_index.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/statement_create_index.hpp>
 
 namespace WCDB {
@@ -40,7 +40,7 @@ StatementCreateIndex &StatementCreateIndex::create(const std::string &index,
     return *this;
 }
 
-StatementCreateIndex &StatementCreateIndex::where(const Expr &expr)
+StatementCreateIndex &StatementCreateIndex::where(const Expression &expr)
 {
     if (!expr.isEmpty()) {
         m_description.append(" WHERE " + expr.getDescription());

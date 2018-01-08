@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/column.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/handle.hpp>
 #include <WCDB/statement_insert.hpp>
 

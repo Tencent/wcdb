@@ -41,7 +41,7 @@ public:
         m_description.append(")");
         return *this;
     }
-    StatementCreateIndex &where(const Expr &expr);
+    StatementCreateIndex &where(const Expression &expr);
 
     virtual Statement::Type getStatementType() const override;
 };

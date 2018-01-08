@@ -20,7 +20,7 @@
 
 #include <WCDB/column_index.hpp>
 #include <WCDB/constraint_table.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 
 namespace WCDB {
 
@@ -47,7 +47,7 @@ TableConstraint &TableConstraint::onConflict(Conflict conflict)
     return *this;
 }
 
-TableConstraint &TableConstraint::makeCheck(const Expr &expr)
+TableConstraint &TableConstraint::makeCheck(const Expression &expr)
 {
     m_description.append(" CHECK (" + expr.getDescription() + ")");
     return *this;

@@ -20,11 +20,11 @@
 
 #include <WCDB/column.hpp>
 #include <WCDB/column_result.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 
 namespace WCDB {
 
-ColumnResult::ColumnResult(const Expr &expr)
+ColumnResult::ColumnResult(const Expression &expr)
     : Describable(expr.getDescription())
 {
 }

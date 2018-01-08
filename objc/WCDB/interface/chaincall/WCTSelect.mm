@@ -23,7 +23,7 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelect+Private.h>
 #import <WCDB/WCTSelect.h>

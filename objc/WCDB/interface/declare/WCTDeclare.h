@@ -66,14 +66,14 @@ typedef std::unordered_map<std::string,
 #pragma mark - ORM - Coding
 @protocol WCTTableCoding;
 @protocol WCTColumnCoding;
-class WCTExpr;
+class WCTExpression;
 class WCTExprList;
 class WCTAnyProperty;
 class WCTProperty;
 class WCTPropertyList;
 class WCTResult;
 class WCTResultList;
-typedef WCTExpr WCTCondition;
+typedef WCTExpression WCTCondition;
 typedef NS_ENUM(int, WCTOrderTerm) {
     WCTOrderedAscending = (WCTOrderTerm) WCDB::OrderTerm::ASC,
     WCTOrderedDescending = (WCTOrderTerm) WCDB::OrderTerm::DESC,
@@ -81,11 +81,11 @@ typedef NS_ENUM(int, WCTOrderTerm) {
 };
 typedef WCDB::Order WCTOrderBy;
 typedef WCDB::OrderList WCTOrderByList;
-typedef WCTExpr WCTLimit;
-typedef WCTExpr WCTOffset;
-typedef WCTExpr WCTGroupBy;
+typedef WCTExpression WCTLimit;
+typedef WCTExpression WCTOffset;
+typedef WCTExpression WCTGroupBy;
 typedef WCTExprList WCTGroupByList;
-typedef WCTExpr WCTHaving;
+typedef WCTExpression WCTHaving;
 typedef WCDB::ColumnIndex WCTIndex;
 typedef WCDB::ColumnIndexList WCTIndexList;
 typedef WCDB::ColumnDef WCTColumnDef;

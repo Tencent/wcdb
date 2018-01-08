@@ -69,7 +69,8 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
     bool result = false;
     if (handle) {
         Error::setThreadedSlient(true);
-        static const ColumnResultList resultList = {ColumnResult(Expr(1))};
+        static const ColumnResultList resultList = {
+            ColumnResult(Expression(1))};
         StatementSelect select =
             StatementSelect().select(resultList).from(tableName).limit(0);
         std::shared_ptr<StatementHandle> statementHandle =

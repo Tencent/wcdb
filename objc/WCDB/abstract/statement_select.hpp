@@ -52,7 +52,7 @@ public:
 
     StatementSelect &from(const JoinClause &joinClause);
     StatementSelect &from(const std::string &tableName);
-    StatementSelect &where(const Expr &where);
+    StatementSelect &where(const Expression &where);
 
     template <typename T = Order>
     typename std::enable_if<std::is_base_of<Order, T>::value,
@@ -66,14 +66,14 @@ public:
         return *this;
     }
 
-    StatementSelect &limit(const Expr &from, const Expr &to);
-    StatementSelect &limit(const Expr &limit);
+    StatementSelect &limit(const Expression &from, const Expression &to);
+    StatementSelect &limit(const Expression &limit);
     StatementSelect &
-    offset(const Expr &
+    offset(const Expression &
                offset); //limit(from, to) is same as limit(to-from).offset(from)
 
-    template <typename T = Expr>
-    typename std::enable_if<std::is_base_of<Expr, T>::value,
+    template <typename T = Expression>
+    typename std::enable_if<std::is_base_of<Expression, T>::value,
                             StatementSelect &>::type
     groupBy(const std::list<const T> &groupList)
     {
@@ -84,7 +84,7 @@ public:
         return *this;
     }
 
-    StatementSelect &having(const Expr &having);
+    StatementSelect &having(const Expression &having);
 
     virtual Statement::Type getStatementType() const override;
 

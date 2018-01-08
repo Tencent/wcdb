@@ -19,7 +19,7 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/abstract.h>
 #import <string>
 
@@ -77,9 +77,9 @@ public:
         WCTConstraintBindingCheck;
     WCTConstraintCheckBinding(const std::string &name);
 
-    void makeCheck(const WCTExpr &expr);
+    void makeCheck(const WCTExpression &expr);
     virtual WCDB::TableConstraint generateConstraint() const override;
 
 protected:
-    WCTExpr m_check;
+    WCTExpression m_check;
 };

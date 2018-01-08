@@ -20,7 +20,7 @@
 
 #include <WCDB/column.hpp>
 #include <WCDB/column_def.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 
 namespace WCDB {
 
@@ -90,7 +90,7 @@ ColumnDef &ColumnDef::makeDefault(
     return *this;
 }
 
-ColumnDef &ColumnDef::makeDefault(const Expr &expr)
+ColumnDef &ColumnDef::makeDefault(const Expression &expr)
 {
     m_description.append(" DEFAULT " + expr.getDescription());
     return *this;

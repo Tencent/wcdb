@@ -21,7 +21,7 @@
 #include <WCDB/clause_join.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/column_result.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/handle.hpp>
 #include <WCDB/order.hpp>
 #include <WCDB/statement_select.hpp>
@@ -29,8 +29,9 @@
 
 namespace WCDB {
 
-StatementSelect StatementSelect::Fts3Tokenizer = StatementSelect().select(
-    {Expr::Function("fts3_tokenizer", ExprList(2, WCDB::Expr::BindParameter))});
+StatementSelect StatementSelect::Fts3Tokenizer =
+    StatementSelect().select({Expression::Function(
+        "fts3_tokenizer", ExprList(2, WCDB::Expression::BindParameter))});
 
 StatementSelect &StatementSelect::from(const JoinClause &joinClause)
 {
@@ -44,7 +45,7 @@ StatementSelect &StatementSelect::from(const std::string &tableName)
     return *this;
 }
 
-StatementSelect &StatementSelect::where(const Expr &where)
+StatementSelect &StatementSelect::where(const Expression &where)
 {
     if (!where.isEmpty()) {
         m_description.append(" WHERE " + where.getDescription());
@@ -52,7 +53,8 @@ StatementSelect &StatementSelect::where(const Expr &where)
     return *this;
 }
 
-StatementSelect &StatementSelect::limit(const Expr &from, const Expr &to)
+StatementSelect &StatementSelect::limit(const Expression &from,
+                                        const Expression &to)
 {
     if (!from.isEmpty()) {
         m_description.append(" LIMIT " + from.getDescription());
@@ -63,7 +65,7 @@ StatementSelect &StatementSelect::limit(const Expr &from, const Expr &to)
     return *this;
 }
 
-StatementSelect &StatementSelect::limit(const Expr &limit)
+StatementSelect &StatementSelect::limit(const Expression &limit)
 {
     if (!limit.isEmpty()) {
         m_description.append(" LIMIT " + limit.getDescription());
@@ -71,7 +73,7 @@ StatementSelect &StatementSelect::limit(const Expr &limit)
     return *this;
 }
 
-StatementSelect &StatementSelect::offset(const Expr &offset)
+StatementSelect &StatementSelect::offset(const Expression &offset)
 {
     if (!offset.isEmpty()) {
         m_description.append(" OFFSET " + offset.getDescription());
@@ -79,7 +81,7 @@ StatementSelect &StatementSelect::offset(const Expr &offset)
     return *this;
 }
 
-StatementSelect &StatementSelect::having(const Expr &having)
+StatementSelect &StatementSelect::having(const Expression &having)
 {
     if (!having.isEmpty()) {
         m_description.append(" HAVING " + having.getDescription());

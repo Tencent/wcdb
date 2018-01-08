@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/statement_attach.hpp>
 
 namespace WCDB {
@@ -28,13 +28,13 @@ Statement::Type StatementAttach::getStatementType() const
     return Statement::Type::Attach;
 }
 
-StatementAttach &StatementAttach::attach(const Expr &expr)
+StatementAttach &StatementAttach::attach(const Expression &expr)
 {
     m_description.append("ATTACH " + expr.getDescription());
     return *this;
 }
 
-StatementAttach &StatementAttach::attach(const Expr &expr,
+StatementAttach &StatementAttach::attach(const Expression &expr,
                                          const std::string &database)
 {
     m_description.append("ATTACH " + database + " " + expr.getDescription());

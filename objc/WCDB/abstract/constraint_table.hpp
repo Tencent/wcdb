@@ -56,7 +56,7 @@ public:
 
     TableConstraint &onConflict(Conflict conflict);
 
-    TableConstraint &makeCheck(const Expr &expr);
+    TableConstraint &makeCheck(const Expression &expr);
 };
 
 } //namespace WCDB

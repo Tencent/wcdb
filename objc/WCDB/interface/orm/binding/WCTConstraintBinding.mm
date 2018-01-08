@@ -73,7 +73,7 @@ WCTConstraintCheckBinding::WCTConstraintCheckBinding(const std::string &name)
 {
 }
 
-void WCTConstraintCheckBinding::makeCheck(const WCTExpr &expr)
+void WCTConstraintCheckBinding::makeCheck(const WCTExpression &expr)
 {
     m_check = expr;
 }

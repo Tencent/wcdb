@@ -27,8 +27,9 @@ namespace WCDB {
 
 class StatementAttach : public Statement {
 public:
-    StatementAttach &attach(const Expr &expr);
-    StatementAttach &attach(const Expr &expr, const std::string &database);
+    StatementAttach &attach(const Expression &expr);
+    StatementAttach &attach(const Expression &expr,
+                            const std::string &database);
 
     StatementAttach &as(const std::string &schema);
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/order.hpp>
 #include <WCDB/statement_delete.hpp>
 
@@ -30,7 +30,7 @@ StatementDelete &StatementDelete::deleteFrom(const std::string &table)
     return *this;
 }
 
-StatementDelete &StatementDelete::where(const Expr &where)
+StatementDelete &StatementDelete::where(const Expression &where)
 {
     if (!where.isEmpty()) {
         m_description.append(" WHERE " + where.getDescription());
@@ -38,7 +38,8 @@ StatementDelete &StatementDelete::where(const Expr &where)
     return *this;
 }
 
-StatementDelete &StatementDelete::limit(const Expr &from, const Expr &to)
+StatementDelete &StatementDelete::limit(const Expression &from,
+                                        const Expression &to)
 {
     if (!from.isEmpty()) {
         m_description.append(" LIMIT " + from.getDescription());
@@ -49,7 +50,7 @@ StatementDelete &StatementDelete::limit(const Expr &from, const Expr &to)
     return *this;
 }
 
-StatementDelete &StatementDelete::limit(const Expr &limit)
+StatementDelete &StatementDelete::limit(const Expression &limit)
 {
     if (!limit.isEmpty()) {
         m_description.append(" LIMIT " + limit.getDescription());
@@ -57,7 +58,7 @@ StatementDelete &StatementDelete::limit(const Expr &limit)
     return *this;
 }
 
-StatementDelete &StatementDelete::offset(const Expr &offset)
+StatementDelete &StatementDelete::offset(const Expression &offset)
 {
     if (!offset.isEmpty()) {
         m_description.append(" OFFSET " + offset.getDescription());

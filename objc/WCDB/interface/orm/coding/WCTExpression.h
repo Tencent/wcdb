@@ -22,59 +22,40 @@
 #import <WCDB/WCTPropertyBase.h>
 #import <WCDB/abstract.h>
 
-typedef WCTProperty (^WCTPropertyNamed)(NSString *);
-
-class WCTProperty : public WCDB::Column, public WCTPropertyBase {
+class WCTExpression : public WCDB::Expression, public WCTPropertyBase {
 public:
-    WCTProperty(const char *name = "");
-    WCTProperty(NSString *name = @"");
-    WCTProperty(const char *name,
-                Class cls,
-                const std::shared_ptr<WCTColumnBinding> &columnBinding);
+    WCTExpression();
+    WCTExpression(const WCTProperty &column);
 
-    //distinct
+    WCTExpression(WCTValue *value);
+
+    WCTExpression(WCTSelectBase *select);
+
+    template <typename T>
+    WCTExpression(
+        const T &value,
+        typename std::enable_if<std::is_arithmetic<T>::value ||
+                                std::is_enum<T>::value>::type * = nullptr)
+        : Expression(value), WCTPropertyBase(nil, nullptr)
+    {
+    }
+
+    WCTExpression(const char *value);
+
+    WCTExpression(const std::nullptr_t &);
+
+    WCTExpression(
+        const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::CType
+            &value,
+        int size);
+
+    WCTResult as(const WCTProperty &property);
+
     WCTResultList distinct() const;
-
-    //table
-    WCTProperty inTable(NSString *table) const;
 
     //order
     WCTOrderBy order(WCTOrderTerm term = WCTOrderedNotSet) const;
 
-    //index
-    WCTIndex index(WCTOrderTerm term = WCTOrderedNotSet) const;
-
-    //aggregate functions
-    WCTExpression avg(bool distinct = false) const;
-    WCTExpression count(bool distinct = false) const;
-    WCTExpression groupConcat(bool distinct = false) const;
-    WCTExpression groupConcat(NSString *seperator, bool distinct = false) const;
-    WCTExpression max(bool distinct = false) const;
-    WCTExpression min(bool distinct = false) const;
-    WCTExpression sum(bool distinct = false) const;
-    WCTExpression total(bool distinct = false) const;
-
-    //core functions
-    WCTExpression abs(bool distinct = false) const;
-    WCTExpression hex(bool distinct = false) const;
-    WCTExpression length(bool distinct = false) const;
-    WCTExpression lower(bool distinct = false) const;
-    WCTExpression upper(bool distinct = false) const;
-    WCTExpression round(bool distinct = false) const;
-
-    //FTS3
-    //See http://www.sqlite.org/fts3.html#snippet for further information
-    WCTExpression matchinfo() const;
-    WCTExpression offsets() const;
-    WCTExpression snippet() const;
-
-    //def
-    WCTColumnDef def(WCTColumnType type,
-                     bool isPrimary = false,
-                     WCTOrderTerm term = WCTOrderedNotSet,
-                     bool autoIncrement = false) const;
-
-    //condition
     //unary
     WCTExpression operator!() const;
     WCTExpression operator+() const;
@@ -107,12 +88,12 @@ public:
 
     WCTExpression in(const WCTExprList &exprList) const;
     WCTExpression notIn(const WCTExprList &exprList) const;
+    WCTExpression in(NSArray<WCTValue *> *valueList) const;
+    WCTExpression notIn(NSArray<WCTValue *> *valueList) const;
     WCTExpression
     in(const WCDB::StatementSelectList &statementSelectList) const;
     WCTExpression
     notIn(const WCDB::StatementSelectList &statementSelectList) const;
-    WCTExpression in(NSArray<WCTValue *> *valueList) const;
-    WCTExpression notIn(NSArray<WCTValue *> *valueList) const;
     WCTExpression in(NSString *table) const;
     WCTExpression notIn(NSString *table) const;
     WCTExpression between(const WCTExpression &left,
@@ -151,21 +132,62 @@ public:
     WCTExpression is(const WCTExpression &operand) const;
     WCTExpression isNot(const WCTExpression &operand) const;
 
+    //aggregate functions
+    WCTExpression avg(bool distinct = false) const;
+    WCTExpression count(bool distinct = false) const;
+    WCTExpression groupConcat(bool distinct = false) const;
+    WCTExpression groupConcat(NSString *seperator, bool distinct = false) const;
+    WCTExpression max(bool distinct = false) const;
+    WCTExpression min(bool distinct = false) const;
+    WCTExpression sum(bool distinct = false) const;
+    WCTExpression total(bool distinct = false) const;
+
+    //core functions
+    WCTExpression abs(bool distinct = false) const;
+    WCTExpression hex(bool distinct = false) const;
+    WCTExpression length(bool distinct = false) const;
+    WCTExpression lower(bool distinct = false) const;
+    WCTExpression upper(bool distinct = false) const;
+    WCTExpression round(bool distinct = false) const;
+
+    //FTS3
+    WCTExpression matchinfo() const;
+    WCTExpression offsets() const;
+    WCTExpression snippet() const;
+
+    /**
+     @brief Call other function
+     
+         //substr(columnName, 1, 2)
+         WCTExprList exprList = {columnName, 1, 2};
+         WCTExpression substrExpr = WCTExpression::Function(@"substr", exprList);
+     
+     @param function function name
+     @param exprList param list
+     @return WCTExpression
+     */
+    static WCTExpression Function(NSString *function,
+                                  const WCTExprList &exprList);
+
+    static WCTExpression
+    Case(const WCTExpression &case_,
+         const std::list<std::pair<WCTExpression, WCTExpression>> &when,
+         const std::list<WCTExpression> &else_);
+
+    WCTExpression(const WCDB::Expression &expr);
+    WCTExpression(const WCDB::Expression &expr,
+                  const WCTPropertyBase &propertyBase);
+
     NSString *getDescription() const;
 
-    static WCTPropertyNamed PropertyNamed;
-
 protected:
-    WCTProperty(const WCDB::Column &column,
-                Class cls,
-                const std::shared_ptr<WCTColumnBinding> &columnBinding);
+    Class m_cls;
+    WCDB::LiteralValue literalValue(WCTValue *value);
 };
 
-class WCTPropertyList : public std::list<const WCTProperty> {
+class WCTExprList : public std::list<const WCTExpression> {
 public:
-    WCTPropertyList();
-    WCTPropertyList(const WCTProperty &property);
-    WCTPropertyList(std::initializer_list<const WCTProperty> il);
-
-    WCTPropertyList inTable(NSString *tableName) const;
+    WCTExprList();
+    WCTExprList(const WCTExpression &expr);
+    WCTExprList(std::initializer_list<const WCTExpression> il);
 };

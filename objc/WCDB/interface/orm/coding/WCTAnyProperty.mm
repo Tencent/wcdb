@@ -19,7 +19,7 @@
  */
 
 #import <WCDB/WCTAnyProperty.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 
 WCTAnyProperty::WCTAnyProperty()
     : WCDB::Column(WCDB::Column::Any)
@@ -44,44 +44,44 @@ WCTAnyProperty WCTAnyProperty::inTable(NSString *tableName) const
     return WCTAnyProperty(WCDB::Column::inTable(tableName.UTF8String), m_cls);
 }
 
-WCTExpr WCTAnyProperty::avg(bool distinct) const
+WCTExpression WCTAnyProperty::avg(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).avg(distinct);
+    return WCTExpression(WCDB::Expression(*this)).avg(distinct);
 }
 
-WCTExpr WCTAnyProperty::count(bool distinct) const
+WCTExpression WCTAnyProperty::count(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).count(distinct);
+    return WCTExpression(WCDB::Expression(*this)).count(distinct);
 }
 
-WCTExpr WCTAnyProperty::groupConcat(bool distinct) const
+WCTExpression WCTAnyProperty::groupConcat(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).groupConcat(distinct);
+    return WCTExpression(WCDB::Expression(*this)).groupConcat(distinct);
 }
 
-WCTExpr WCTAnyProperty::groupConcat(NSString *seperator, bool distinct) const
+WCTExpression WCTAnyProperty::groupConcat(NSString *seperator, bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).groupConcat(seperator, distinct);
+    return WCTExpression(WCDB::Expression(*this)).groupConcat(seperator, distinct);
 }
 
-WCTExpr WCTAnyProperty::max(bool distinct) const
+WCTExpression WCTAnyProperty::max(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).max(distinct);
+    return WCTExpression(WCDB::Expression(*this)).max(distinct);
 }
 
-WCTExpr WCTAnyProperty::min(bool distinct) const
+WCTExpression WCTAnyProperty::min(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).min(distinct);
+    return WCTExpression(WCDB::Expression(*this)).min(distinct);
 }
 
-WCTExpr WCTAnyProperty::sum(bool distinct) const
+WCTExpression WCTAnyProperty::sum(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).sum(distinct);
+    return WCTExpression(WCDB::Expression(*this)).sum(distinct);
 }
 
-WCTExpr WCTAnyProperty::total(bool distinct) const
+WCTExpression WCTAnyProperty::total(bool distinct) const
 {
-    return WCTExpr(WCDB::Expr(*this)).total(distinct);
+    return WCTExpression(WCDB::Expression(*this)).total(distinct);
 }
 
 Class WCTAnyProperty::getClass() const

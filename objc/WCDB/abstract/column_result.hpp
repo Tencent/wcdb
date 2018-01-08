@@ -28,7 +28,7 @@ namespace WCDB {
 
 class ColumnResult : public Describable {
 public:
-    ColumnResult(const Expr &expr);
+    ColumnResult(const Expression &expr);
     ColumnResult &as(const std::string &name);
     static ColumnResult Any();
     static ColumnResult Any(const std::string &tableName);

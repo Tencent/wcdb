@@ -22,7 +22,7 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTInsert+Private.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTInterface+Convenient.h>

@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
 
-WCTResult::WCTResult(const WCTExpr &expr)
+WCTResult::WCTResult(const WCTExpression &expr)
     : WCDB::ColumnResult(expr)
     , WCTPropertyBase(expr)
 {
@@ -69,7 +69,7 @@ WCTResultList::WCTResultList(const WCTExprList &exprList)
 {
 }
 
-WCTResultList::WCTResultList(std::initializer_list<const WCTExpr> il)
+WCTResultList::WCTResultList(std::initializer_list<const WCTExpression> il)
     : std::list<const WCTResult>(il.begin(), il.end())
     , m_distinct(false)
 {

@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/column.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/handle.hpp>
 #include <WCDB/order.hpp>
 #include <WCDB/statement_update.hpp>
@@ -39,7 +39,7 @@ StatementUpdate &StatementUpdate::update(const std::string &table,
     return *this;
 }
 
-StatementUpdate &StatementUpdate::where(const Expr &where)
+StatementUpdate &StatementUpdate::where(const Expression &where)
 {
     if (!where.isEmpty()) {
         m_description.append(" WHERE " + where.getDescription());
@@ -47,7 +47,8 @@ StatementUpdate &StatementUpdate::where(const Expr &where)
     return *this;
 }
 
-StatementUpdate &StatementUpdate::limit(const Expr &from, const Expr &to)
+StatementUpdate &StatementUpdate::limit(const Expression &from,
+                                        const Expression &to)
 {
     if (!from.isEmpty()) {
         m_description.append(" LIMIT " + from.getDescription());
@@ -58,7 +59,7 @@ StatementUpdate &StatementUpdate::limit(const Expr &from, const Expr &to)
     return *this;
 }
 
-StatementUpdate &StatementUpdate::limit(const Expr &limit)
+StatementUpdate &StatementUpdate::limit(const Expression &limit)
 {
     if (!limit.isEmpty()) {
         m_description.append(" LIMIT " + limit.getDescription());
@@ -66,7 +67,7 @@ StatementUpdate &StatementUpdate::limit(const Expr &limit)
     return *this;
 }
 
-StatementUpdate &StatementUpdate::offset(const Expr &offset)
+StatementUpdate &StatementUpdate::offset(const Expression &offset)
 {
     if (!offset.isEmpty()) {
         m_description.append(" OFFSET " + offset.getDescription());

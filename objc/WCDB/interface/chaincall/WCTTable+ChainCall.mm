@@ -21,7 +21,7 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTInsert+Private.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTMultiSelect+Private.h>

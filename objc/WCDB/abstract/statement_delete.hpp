@@ -28,7 +28,7 @@ namespace WCDB {
 class StatementDelete : public Statement {
 public:
     StatementDelete &deleteFrom(const std::string &table);
-    StatementDelete &where(const Expr &where);
+    StatementDelete &where(const Expression &where);
     //StatementDeleteLimited
     template <typename T = Order>
     typename std::enable_if<std::is_base_of<Order, T>::value,
@@ -41,9 +41,9 @@ public:
         }
         return *this;
     }
-    StatementDelete &limit(const Expr &from, const Expr &to);
-    StatementDelete &limit(const Expr &expr);
-    StatementDelete &offset(const Expr &expr);
+    StatementDelete &limit(const Expression &from, const Expression &to);
+    StatementDelete &limit(const Expression &expr);
+    StatementDelete &offset(const Expression &expr);
 
     virtual Statement::Type getStatementType() const override;
 };

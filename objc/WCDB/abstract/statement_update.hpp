@@ -32,7 +32,7 @@ public:
                             Conflict conflict = Conflict::NotSet);
     template <typename T, typename U>
     typename std::enable_if<std::is_base_of<Column, T>::value &&
-                                std::is_base_of<Expr, U>::value,
+                                std::is_base_of<Expression, U>::value,
                             StatementUpdate &>::type
     set(const std::list<const std::pair<const T, const U>> &valueList)
     {
@@ -50,7 +50,7 @@ public:
         return *this;
     }
 
-    StatementUpdate &where(const Expr &where);
+    StatementUpdate &where(const Expression &where);
     //StatementUpdateLimited
     template <typename T = Order>
     typename std::enable_if<std::is_base_of<Order, T>::value,
@@ -63,9 +63,9 @@ public:
         }
         return *this;
     }
-    StatementUpdate &limit(const Expr &from, const Expr &to);
-    StatementUpdate &limit(const Expr &limit);
-    StatementUpdate &offset(const Expr &offset);
+    StatementUpdate &limit(const Expression &from, const Expression &to);
+    StatementUpdate &limit(const Expression &limit);
+    StatementUpdate &offset(const Expression &offset);
 
     virtual Statement::Type getStatementType() const override;
 

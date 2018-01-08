@@ -19,532 +19,546 @@
  */
 
 #include <WCDB/column.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/statement_select.hpp>
 
 namespace WCDB {
 
-const Expr Expr::BindParameter = Expr(Column("?"));
+const Expression Expression::BindParameter = Expression(Column("?"));
 
-Expr::Expr(const LiteralValue &value) : Describable(value)
+Expression::Expression(const LiteralValue &value) : Describable(value)
 {
 }
 
-Expr::Expr(const char *value) : Describable(LiteralValue(value))
+Expression::Expression(const char *value) : Describable(LiteralValue(value))
 {
 }
 
-Expr::Expr(const std::string &value) : Describable(LiteralValue(value))
+Expression::Expression(const std::string &value)
+    : Describable(LiteralValue(value))
 {
 }
 
-Expr::Expr(const std::nullptr_t &value) : Describable(LiteralValue(value))
+Expression::Expression(const std::nullptr_t &value)
+    : Describable(LiteralValue(value))
 {
 }
 
-Expr::Expr(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
-           int size)
+Expression::Expression(
+    const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size)
     : WCDB::Describable(LiteralValue(value, size))
 {
 }
 
-Expr::Expr() : Describable("")
+Expression::Expression() : Describable("")
 {
 }
 
-Expr::Expr(const Column &column) : Describable(column.getName())
+Expression::Expression(const Column &column) : Describable(column.getName())
 {
 }
 
-Expr::operator ExprList() const
+Expression::operator ExprList() const
 {
     return {*this};
 }
 
-Expr Expr::operator!() const
+Expression Expression::operator!() const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("NOT (" + m_description + ")");
     return expr;
 }
 
-Expr Expr::operator+() const
+Expression Expression::operator+() const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + ")");
     return expr;
 }
 
-Expr Expr::operator-() const
+Expression Expression::operator-() const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("-(" + m_description + ")");
     return expr;
 }
 
-Expr Expr::operator~() const
+Expression Expression::operator~() const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("~(" + m_description + ")");
     return expr;
 }
 
-Expr Expr::operator||(const Expr &operand) const
+Expression Expression::operator||(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " OR " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator&&(const Expr &operand) const
+Expression Expression::operator&&(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " AND " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator*(const Expr &operand) const
+Expression Expression::operator*(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "*" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator/(const Expr &operand) const
+Expression Expression::operator/(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "/" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator%(const Expr &operand) const
+Expression Expression::operator%(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "%" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator+(const Expr &operand) const
+Expression Expression::operator+(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "+" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator-(const Expr &operand) const
+Expression Expression::operator-(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "-" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator<<(const Expr &operand) const
+Expression Expression::operator<<(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "<<" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator>>(const Expr &operand) const
+Expression Expression::operator>>(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + ">>" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator&(const Expr &operand) const
+Expression Expression::operator&(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "&" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator|(const Expr &operand) const
+Expression Expression::operator|(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "|" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator<(const Expr &operand) const
+Expression Expression::operator<(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "<" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator<=(const Expr &operand) const
+Expression Expression::operator<=(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description +
                               "<=" + operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator>(const Expr &operand) const
+Expression Expression::operator>(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + ">" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator>=(const Expr &operand) const
+Expression Expression::operator>=(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description +
                               ">=" + operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator==(const Expr &operand) const
+Expression Expression::operator==(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "=" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::operator!=(const Expr &operand) const
+Expression Expression::operator!=(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description +
                               "!=" + operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::concat(const Expr &operand) const
+Expression Expression::concat(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + "||" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::substr(const Expr &start, const Expr &length) const
+Expression Expression::substr(const Expression &start,
+                              const Expression &length) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("SUBSTR(" + m_description + "," +
                               start.m_description + "," + length.m_description +
                               ")");
     return expr;
 }
 
-Expr Expr::like(const Expr &operand) const
+Expression Expression::like(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " LIKE " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::glob(const Expr &operand) const
+Expression Expression::glob(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " GLOB " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::match(const Expr &operand) const
+Expression Expression::match(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " MATCH " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::regexp(const Expr &operand) const
+Expression Expression::regexp(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " REGEXP" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::notLike(const Expr &operand) const
+Expression Expression::notLike(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT LIKE " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::notGlob(const Expr &operand) const
+Expression Expression::notGlob(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT GLOB " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::notMatch(const Expr &operand) const
+Expression Expression::notMatch(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT MATCH " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::notRegexp(const Expr &operand) const
+Expression Expression::notRegexp(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT REGEXP" +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::like(const Expr &operand, const Expr &escape) const
+Expression Expression::like(const Expression &operand,
+                            const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " LIKE" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::glob(const Expr &operand, const Expr &escape) const
+Expression Expression::glob(const Expression &operand,
+                            const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " GLOB" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::match(const Expr &operand, const Expr &escape) const
+Expression Expression::match(const Expression &operand,
+                             const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " MATCH" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::regexp(const Expr &operand, const Expr &escape) const
+Expression Expression::regexp(const Expression &operand,
+                              const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " REGEXP" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::notLike(const Expr &operand, const Expr &escape) const
+Expression Expression::notLike(const Expression &operand,
+                               const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT LIKE" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::notGlob(const Expr &operand, const Expr &escape) const
+Expression Expression::notGlob(const Expression &operand,
+                               const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT GLOB" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::notMatch(const Expr &operand, const Expr &escape) const
+Expression Expression::notMatch(const Expression &operand,
+                                const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT MATCH" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::notRegexp(const Expr &operand, const Expr &escape) const
+Expression Expression::notRegexp(const Expression &operand,
+                                 const Expression &escape) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT REGEXP" +
                               operand.m_description + " ESCAPE " +
                               escape.getDescription() + ")");
     return expr;
 }
 
-Expr Expr::isNull() const
+Expression Expression::isNull() const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " ISNULL" + ")");
     return expr;
 }
 
-Expr Expr::isNotNull() const
+Expression Expression::isNotNull() const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOTNULL" + ")");
     return expr;
 }
 
-Expr Expr::is(const Expr &operand) const
+Expression Expression::is(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " IS " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::isNot(const Expr &operand) const
+Expression Expression::isNot(const Expression &operand) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " IS NOT " +
                               operand.m_description + ")");
     return expr;
 }
 
-Expr Expr::between(const Expr &left, const Expr &right) const
+Expression Expression::between(const Expression &left,
+                               const Expression &right) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " BETWEEN " +
                               left.m_description + " AND " +
                               right.m_description + ")");
     return expr;
 }
 
-Expr Expr::notBetween(const Expr &left, const Expr &right) const
+Expression Expression::notBetween(const Expression &left,
+                                  const Expression &right) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT BETWEEN " +
                               left.m_description + " AND " +
                               right.m_description + ")");
     return expr;
 }
 
-Expr::Expr(const StatementSelect &selectStatement)
+Expression::Expression(const StatementSelect &selectStatement)
     : Describable(selectStatement)
 {
 }
 
-Expr Expr::Exists(const StatementSelect &selectStatement)
+Expression Expression::Exists(const StatementSelect &selectStatement)
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("EXISTS(" + selectStatement.getDescription() +
                               ")");
     return expr;
 }
 
-Expr Expr::NotExists(const StatementSelect &selectStatement)
+Expression Expression::NotExists(const StatementSelect &selectStatement)
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("NOT EXISTS(" + selectStatement.getDescription() +
                               ")");
     return expr;
 }
 
-Expr Expr::in(const std::string &table) const
+Expression Expression::in(const std::string &table) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " IN " + table + ")");
     return expr;
 }
 
-Expr Expr::notIn(const std::string &table) const
+Expression Expression::notIn(const std::string &table) const
 {
-    Expr expr;
+    Expression expr;
     expr.m_description.append("(" + m_description + " NOT IN " + table + ")");
     return expr;
 }
 
-Expr Expr::avg(bool distinct) const
+Expression Expression::avg(bool distinct) const
 {
-    return Expr::Function("AVG", {*this}, distinct);
+    return Expression::Function("AVG", {*this}, distinct);
 }
 
-Expr Expr::count(bool distinct) const
+Expression Expression::count(bool distinct) const
 {
-    return Expr::Function("COUNT", {*this}, distinct);
+    return Expression::Function("COUNT", {*this}, distinct);
 }
 
-Expr Expr::groupConcat(bool distinct) const
+Expression Expression::groupConcat(bool distinct) const
 {
-    return Expr::Function("GROUP_CONCAT", {*this}, distinct);
+    return Expression::Function("GROUP_CONCAT", {*this}, distinct);
 }
 
-Expr Expr::groupConcat(const std::string &seperator, bool distinct) const
+Expression Expression::groupConcat(const std::string &seperator,
+                                   bool distinct) const
 {
-    return Expr::Function("GROUP_CONCAT", ExprList({*this, seperator}),
-                          distinct);
+    return Expression::Function("GROUP_CONCAT", ExprList({*this, seperator}),
+                                distinct);
 }
 
-Expr Expr::max(bool distinct) const
+Expression Expression::max(bool distinct) const
 {
-    return Expr::Function("MAX", {*this}, distinct);
+    return Expression::Function("MAX", {*this}, distinct);
 }
 
-Expr Expr::min(bool distinct) const
+Expression Expression::min(bool distinct) const
 {
-    return Expr::Function("MIN", {*this}, distinct);
+    return Expression::Function("MIN", {*this}, distinct);
 }
 
-Expr Expr::sum(bool distinct) const
+Expression Expression::sum(bool distinct) const
 {
-    return Expr::Function("SUM", {*this}, distinct);
+    return Expression::Function("SUM", {*this}, distinct);
 }
 
-Expr Expr::total(bool distinct) const
+Expression Expression::total(bool distinct) const
 {
-    return Expr::Function("TOTAL", {*this}, distinct);
+    return Expression::Function("TOTAL", {*this}, distinct);
 }
 
-Expr Expr::abs(bool distinct) const
+Expression Expression::abs(bool distinct) const
 {
-    return Expr::Function("ABS", {*this}, distinct);
+    return Expression::Function("ABS", {*this}, distinct);
 }
 
-Expr Expr::hex(bool distinct) const
+Expression Expression::hex(bool distinct) const
 {
-    return Expr::Function("HEX", {*this}, distinct);
+    return Expression::Function("HEX", {*this}, distinct);
 }
 
-Expr Expr::length(bool distinct) const
+Expression Expression::length(bool distinct) const
 {
-    return Expr::Function("LENGTH", {*this}, distinct);
+    return Expression::Function("LENGTH", {*this}, distinct);
 }
 
-Expr Expr::lower(bool distinct) const
+Expression Expression::lower(bool distinct) const
 {
-    return Expr::Function("LOWER", {*this}, distinct);
+    return Expression::Function("LOWER", {*this}, distinct);
 }
 
-Expr Expr::upper(bool distinct) const
+Expression Expression::upper(bool distinct) const
 {
-    return Expr::Function("UPPER", {*this}, distinct);
+    return Expression::Function("UPPER", {*this}, distinct);
 }
 
-Expr Expr::round(bool distinct) const
+Expression Expression::round(bool distinct) const
 {
-    return Expr::Function("ROUND", {*this}, distinct);
+    return Expression::Function("ROUND", {*this}, distinct);
 }
 
-Expr Expr::matchinfo() const
+Expression Expression::matchinfo() const
 {
-    return Expr::Function("MATCHINFO", {*this});
+    return Expression::Function("MATCHINFO", {*this});
 }
 
-Expr Expr::offsets() const
+Expression Expression::offsets() const
 {
-    return Expr::Function("OFFSETS", {*this});
+    return Expression::Function("OFFSETS", {*this});
 }
 
-Expr Expr::snippet() const
+Expression Expression::snippet() const
 {
-    return Expr::Function("SNIPPET", {*this});
+    return Expression::Function("SNIPPET", {*this});
 }
 
 } //namespace WCDB

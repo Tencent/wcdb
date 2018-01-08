@@ -21,7 +21,7 @@
 #include <WCDB/clause_join.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/declare.hpp>
-#include <WCDB/expr.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/subquery.hpp>
 
 namespace WCDB {
@@ -55,7 +55,7 @@ JoinClause &JoinClause::join(const Subquery &subquery,
     return *this;
 }
 
-JoinClause &JoinClause::on(const Expr &expr)
+JoinClause &JoinClause::on(const Expression &expr)
 {
     m_description.append(" ON " + expr.getDescription());
     return *this;

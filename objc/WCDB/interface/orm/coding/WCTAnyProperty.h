@@ -31,14 +31,14 @@ public:
     WCTAnyProperty inTable(NSString *tableName) const;
 
     //function
-    WCTExpr avg(bool distinct = false) const;
-    WCTExpr count(bool distinct = false) const;
-    WCTExpr groupConcat(bool distinct = false) const;
-    WCTExpr groupConcat(NSString *seperator, bool distinct = false) const;
-    WCTExpr max(bool distinct = false) const;
-    WCTExpr min(bool distinct = false) const;
-    WCTExpr sum(bool distinct = false) const;
-    WCTExpr total(bool distinct = false) const;
+    WCTExpression avg(bool distinct = false) const;
+    WCTExpression count(bool distinct = false) const;
+    WCTExpression groupConcat(bool distinct = false) const;
+    WCTExpression groupConcat(NSString *seperator, bool distinct = false) const;
+    WCTExpression max(bool distinct = false) const;
+    WCTExpression min(bool distinct = false) const;
+    WCTExpression sum(bool distinct = false) const;
+    WCTExpression total(bool distinct = false) const;
 
     Class getClass() const;
 

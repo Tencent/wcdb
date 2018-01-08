@@ -24,7 +24,7 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
 #import <WCDB/handle_statement.hpp>
@@ -63,7 +63,7 @@
         for (const WCTProperty &property : propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (columnBinding) {
-                updateValueList.push_back({property, WCTExpr::BindParameter});
+                updateValueList.push_back({property, WCTExpression::BindParameter});
             } else {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),

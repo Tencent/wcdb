@@ -54,7 +54,7 @@
 #import <WCDB/WCTTable.h>
 
 #import <WCDB/WCTAnyProperty.h>
-#import <WCDB/WCTExpr.h>
+#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResult.h>
