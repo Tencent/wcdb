@@ -1619,7 +1619,9 @@
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphonesos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VALID_ARCHS = "i386 x86_64 arm64";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALID_ARCHS = "armv7 x86_64 arm64";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -1688,7 +1690,9 @@
 				"OTHER_SWIFT_FLAGS[sdk=macosx*]" = "-D DEBUG -D WCDB_OSX";
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphonesos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				VALID_ARCHS = "i386 x86_64 arm64";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALID_ARCHS = "armv7 x86_64 arm64";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
