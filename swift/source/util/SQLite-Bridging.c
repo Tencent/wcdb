@@ -22,7 +22,7 @@
 #ifdef WCDB_COCOAPODS
 #include "sqlite3.h"
 #else //WCDB_COCOAPODS
-#include <sqlcipher/sqlite3.h>
+#include <sqlcipher.swift/sqlite3.h>
 #endif //WCDB_COCOAPODS
 
 int sqlite3_bind_text_transient(sqlite3_stmt *a, int b, const char *c, int d)
