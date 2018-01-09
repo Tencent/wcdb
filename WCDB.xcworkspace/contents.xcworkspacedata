@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:swift/source/util/sqlcipher.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:swift/source/util/sqliterk.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:objc/WCDB.xcodeproj">
    </FileRef>
    <FileRef
