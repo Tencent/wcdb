@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "233032381FB9435700101373"
-               BuildableName = "sqliterk_swift.framework"
+               BuildableName = "sqliterk.swift.framework"
                BlueprintName = "sqliterk.swift"
                ReferencedContainer = "container:sqliterk.swift.xcodeproj">
             </BuildableReference>
@@ -48,7 +48,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "233032381FB9435700101373"
-            BuildableName = "sqliterk_swift.framework"
+            BuildableName = "sqliterk.swift.framework"
             BlueprintName = "sqliterk.swift"
             ReferencedContainer = "container:sqliterk.swift.xcodeproj">
          </BuildableReference>
@@ -66,7 +66,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "233032381FB9435700101373"
-            BuildableName = "sqliterk_swift.framework"
+            BuildableName = "sqliterk.swift.framework"
             BlueprintName = "sqliterk.swift"
             ReferencedContainer = "container:sqliterk.swift.xcodeproj">
          </BuildableReference>
