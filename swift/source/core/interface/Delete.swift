@@ -30,7 +30,7 @@ public final class Delete {
     public var changes: Int?
 
     internal init(with core: Core, andTableName tableName: String) throws {
-        guard tableName.count > 0 else {
+        guard !tableName.isEmpty else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .delete,

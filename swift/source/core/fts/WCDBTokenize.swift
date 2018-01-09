@@ -171,7 +171,7 @@ public final class WCDBCursorInfo: CursorInfoBase {
                                         stop = true
         })
         guard let lemma = optionalLemma,
-            lemma.count > 0,
+            !lemma.isEmpty,
             lemma.caseInsensitiveCompare(string) != ComparisonResult.orderedSame else {
             return SQLITE_OK
         }

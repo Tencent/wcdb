@@ -28,14 +28,14 @@ public final class MultiSelect: Selectable {
                   on propertyConvertibleList: [PropertyConvertible],
                   tables: [String],
                   isDistinct: Bool = false) throws {
-        guard propertyConvertibleList.count > 0 else {
+        guard !propertyConvertibleList.isEmpty else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .select,
                                         code: .misuse,
                                         message: "Selecting nothing from \(tables) is invalid")
         }
-        guard tables.count > 0 else {
+        guard !tables.isEmpty else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .select,
