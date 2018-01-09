@@ -7,4 +7,10 @@
    <FileRef
       location = "group:swift/WCDB.swift.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:swift/source/util/sqlcipher.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:swift/source/util/sqliterk.xcodeproj">
+   </FileRef>
 </Workspace>
