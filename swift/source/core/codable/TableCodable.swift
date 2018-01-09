@@ -38,7 +38,7 @@ public extension TableEncodable {
     }
 
     public var lastInsertedRowID: Int64 {
-        get { return Int64.min }
+        get { fatalError("You should define your own `lastInsertedRowID` before using it.") }
         set { }
     }
 }
