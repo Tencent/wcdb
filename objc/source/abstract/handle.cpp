@@ -20,13 +20,13 @@
 
 #include <WCDB/File.hpp>
 #include <WCDB/Path.hpp>
-#include <sqliterk/SQLiteRepairKit.h>
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_transaction.hpp>
 #include <sqlcipher/sqlite3.h>
+#include <sqliterk/SQLiteRepairKit.h>
 
 namespace WCDB {
 

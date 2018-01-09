@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#include <sqliterk/SQLiteRepairKit.h>
 #include <WCDB/database.hpp>
 #include <WCDB/path.hpp>
 #include <WCDB/utility.hpp>
+#include <sqliterk/SQLiteRepairKit.h>
 
 namespace WCDB {
 

@@ -1,0 +1,784 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		23698A8D2004613600C0291C /* WTCBaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* WTCBaseTestCase.mm */; };
+		23698A932004656300C0291C /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
+		23698B1920047BE000C0291C /* WTCStatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF620047BDD00C0291C /* WTCStatementAttachTests.mm */; };
+		23698B1A20047BE000C0291C /* WTCModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF720047BDD00C0291C /* WTCModuleArgumentTests.mm */; };
+		23698B1B20047BE000C0291C /* WTCStatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF820047BDD00C0291C /* WTCStatementDeleteTests.mm */; };
+		23698B1C20047BE000C0291C /* WTCForeignKeyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF920047BDD00C0291C /* WTCForeignKeyTests.mm */; };
+		23698B1D20047BE000C0291C /* WTCLiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFA20047BDD00C0291C /* WTCLiteralValueTests.mm */; };
+		23698B1E20047BE000C0291C /* WTCColumnResultTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFB20047BDD00C0291C /* WTCColumnResultTests.mm */; };
+		23698B1F20047BE000C0291C /* WTCStatementTransactionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFC20047BDD00C0291C /* WTCStatementTransactionTests.mm */; };
+		23698B2020047BE000C0291C /* WTCStatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFD20047BDD00C0291C /* WTCStatementReleaseTests.mm */; };
+		23698B2120047BE000C0291C /* WTCStatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFE20047BDD00C0291C /* WTCStatementInsertTests.mm */; };
+		23698B2220047BE000C0291C /* WTCStatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFF20047BDD00C0291C /* WTCStatementReindexTests.mm */; };
+		23698B2320047BE000C0291C /* WTCStatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0020047BDD00C0291C /* WTCStatementDropIndexTests.mm */; };
+		23698B2420047BE000C0291C /* WTCStatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0120047BDD00C0291C /* WTCStatementDropTableTests.mm */; };
+		23698B2520047BE000C0291C /* WTCSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0220047BDD00C0291C /* WTCSubqueryTests.mm */; };
+		23698B2620047BE000C0291C /* WTCStatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0320047BDD00C0291C /* WTCStatementCreateIndexTests.mm */; };
+		23698B2720047BE000C0291C /* WTCColumnDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */; };
+		23698B2820047BE000C0291C /* WTCStatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0520047BDE00C0291C /* WTCStatementDetachTests.mm */; };
+		23698B2920047BE000C0291C /* WTCStatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0620047BDE00C0291C /* WTCStatementUpdateTests.mm */; };
+		23698B2A20047BE000C0291C /* WTCColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0720047BDE00C0291C /* WTCColumnTypeTests.mm */; };
+		23698B2B20047BE000C0291C /* WTCJoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0820047BDE00C0291C /* WTCJoinClauseTests.mm */; };
+		23698B2C20047BE000C0291C /* WTCExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0920047BDE00C0291C /* WTCExpressionTests.mm */; };
+		23698B2D20047BE000C0291C /* WTCColumnIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0A20047BDE00C0291C /* WTCColumnIndexTests.mm */; };
+		23698B2E20047BE000C0291C /* WTCStatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0B20047BDE00C0291C /* WTCStatementPragmaTests.mm */; };
+		23698B2F20047BE000C0291C /* WTCColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0C20047BDE00C0291C /* WTCColumnTests.mm */; };
+		23698B3020047BE000C0291C /* WTCStatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0D20047BDE00C0291C /* WTCStatementCreateVirtualTableTests.mm */; };
+		23698B3120047BE000C0291C /* WTCStatementExplainTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0E20047BDE00C0291C /* WTCStatementExplainTests.mm */; };
+		23698B3220047BE000C0291C /* WTCStatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0F20047BDE00C0291C /* WTCStatementSelectTests.mm */; };
+		23698B3320047BE000C0291C /* WTCOrderTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1020047BDF00C0291C /* WTCOrderTermTests.mm */; };
+		23698B3420047BE000C0291C /* WTCOrderTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1120047BDF00C0291C /* WTCOrderTests.mm */; };
+		23698B3520047BE000C0291C /* WTCStatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1220047BDF00C0291C /* WTCStatementSavepointTests.mm */; };
+		23698B3620047BE000C0291C /* WTCStatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1320047BDF00C0291C /* WTCStatementVacuumTests.mm */; };
+		23698B3720047BE000C0291C /* WTCTableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1420047BDF00C0291C /* WTCTableConstraintTests.mm */; };
+		23698B3820047BE000C0291C /* WTCStatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1520047BDF00C0291C /* WTCStatementAlterTableTests.mm */; };
+		23698B3920047BE000C0291C /* WTCStatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1620047BDF00C0291C /* WTCStatementCreateTableTests.mm */; };
+		23698B3A20047BE000C0291C /* WTCStatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1720047BDF00C0291C /* WTCStatementRollbackTests.mm */; };
+		23698B3B20047BE000C0291C /* WTCConflictTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1820047BDF00C0291C /* WTCConflictTests.mm */; };
+		23698B4020047E1A00C0291C /* WTCStatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0120047BDD00C0291C /* WTCStatementDropTableTests.mm */; };
+		23698B4120047E1A00C0291C /* WTCStatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFD20047BDD00C0291C /* WTCStatementReleaseTests.mm */; };
+		23698B4220047E1A00C0291C /* WTCStatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0D20047BDE00C0291C /* WTCStatementCreateVirtualTableTests.mm */; };
+		23698B4320047E1A00C0291C /* WTCModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF720047BDD00C0291C /* WTCModuleArgumentTests.mm */; };
+		23698B4420047E1A00C0291C /* WTCStatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0320047BDD00C0291C /* WTCStatementCreateIndexTests.mm */; };
+		23698B4520047E1A00C0291C /* WTCStatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0620047BDE00C0291C /* WTCStatementUpdateTests.mm */; };
+		23698B4620047E1A00C0291C /* WTCStatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1720047BDF00C0291C /* WTCStatementRollbackTests.mm */; };
+		23698B4720047E1A00C0291C /* WTCColumnResultTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFB20047BDD00C0291C /* WTCColumnResultTests.mm */; };
+		23698B4820047E1A00C0291C /* WTCStatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0020047BDD00C0291C /* WTCStatementDropIndexTests.mm */; };
+		23698B4920047E1A00C0291C /* WTCColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0C20047BDE00C0291C /* WTCColumnTests.mm */; };
+		23698B4A20047E1A00C0291C /* WTCOrderTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1120047BDF00C0291C /* WTCOrderTests.mm */; };
+		23698B4B20047E1A00C0291C /* WTCStatementExplainTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0E20047BDE00C0291C /* WTCStatementExplainTests.mm */; };
+		23698B4C20047E1A00C0291C /* WTCStatementTransactionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFC20047BDD00C0291C /* WTCStatementTransactionTests.mm */; };
+		23698B4D20047E1A00C0291C /* WTCStatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFE20047BDD00C0291C /* WTCStatementInsertTests.mm */; };
+		23698B4E20047E1A00C0291C /* WTCColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0720047BDE00C0291C /* WTCColumnTypeTests.mm */; };
+		23698B4F20047E1A00C0291C /* WTCJoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0820047BDE00C0291C /* WTCJoinClauseTests.mm */; };
+		23698B5020047E1A00C0291C /* WTCStatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1520047BDF00C0291C /* WTCStatementAlterTableTests.mm */; };
+		23698B5120047E1A00C0291C /* WTCSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0220047BDD00C0291C /* WTCSubqueryTests.mm */; };
+		23698B5220047E1A00C0291C /* WTCColumnDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */; };
+		23698B5320047E1A00C0291C /* WTCStatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1620047BDF00C0291C /* WTCStatementCreateTableTests.mm */; };
+		23698B5420047E1A00C0291C /* WTCStatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF620047BDD00C0291C /* WTCStatementAttachTests.mm */; };
+		23698B5520047E1A00C0291C /* WTCStatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0F20047BDE00C0291C /* WTCStatementSelectTests.mm */; };
+		23698B5620047E1A00C0291C /* WTCStatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFF20047BDD00C0291C /* WTCStatementReindexTests.mm */; };
+		23698B5720047E1A00C0291C /* WTCStatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF820047BDD00C0291C /* WTCStatementDeleteTests.mm */; };
+		23698B5820047E1A00C0291C /* WTCStatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0520047BDE00C0291C /* WTCStatementDetachTests.mm */; };
+		23698B5920047E1A00C0291C /* WTCStatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1320047BDF00C0291C /* WTCStatementVacuumTests.mm */; };
+		23698B5A20047E1A00C0291C /* WTCExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0920047BDE00C0291C /* WTCExpressionTests.mm */; };
+		23698B5B20047E1A00C0291C /* WTCStatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1220047BDF00C0291C /* WTCStatementSavepointTests.mm */; };
+		23698B5C20047E1A00C0291C /* WTCLiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AFA20047BDD00C0291C /* WTCLiteralValueTests.mm */; };
+		23698B5D20047E1A00C0291C /* WTCConflictTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1820047BDF00C0291C /* WTCConflictTests.mm */; };
+		23698B5E20047E1A00C0291C /* WTCBaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* WTCBaseTestCase.mm */; };
+		23698B5F20047E1A00C0291C /* WTCOrderTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1020047BDF00C0291C /* WTCOrderTermTests.mm */; };
+		23698B6020047E1A00C0291C /* WTCColumnIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0A20047BDE00C0291C /* WTCColumnIndexTests.mm */; };
+		23698B6120047E1A00C0291C /* WTCForeignKeyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF920047BDD00C0291C /* WTCForeignKeyTests.mm */; };
+		23698B6220047E1A00C0291C /* WTCStatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0B20047BDE00C0291C /* WTCStatementPragmaTests.mm */; };
+		23698B6320047E1A00C0291C /* WTCTableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B1420047BDF00C0291C /* WTCTableConstraintTests.mm */; };
+		23698B6520047E1A00C0291C /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
+		23698B7220047E8700C0291C /* WTCBaseBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B7120047E8700C0291C /* WTCBaseBenchmark.mm */; };
+		23698B7620047EE300C0291C /* WTCRandomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 23698B7520047EE300C0291C /* WTCRandomData.m */; };
+		23698BB72004AC2C00C0291C /* WTCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 23698BB62004AC2C00C0291C /* WTCConfig.m */; };
+		23698BBB2004ACE100C0291C /* WTCBenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698BBA2004ACE100C0291C /* WTCBenchmarkObject.mm */; };
+		23698BBD2004AD2500C0291C /* WTCBaselineReadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698BBC2004AD2500C0291C /* WTCBaselineReadBenchmark.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		23698A8020045F4A00C0291C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 239326611E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		23698A912004656000C0291C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		23698B3E20047E1A00C0291C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		23698A6320045EF100C0291C /* All Testcases.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Testcases.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23698A7820045F4A00C0291C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
+		23698A8C2004613600C0291C /* WTCBaseTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaseTestCase.mm; sourceTree = "<group>"; };
+		23698A8E2004619800C0291C /* WTCBaseTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCBaseTestCase.h; sourceTree = "<group>"; };
+		23698AAF20046BE600C0291C /* WTCAssert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCAssert.h; sourceTree = "<group>"; };
+		23698AF620047BDD00C0291C /* WTCStatementAttachTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementAttachTests.mm; sourceTree = "<group>"; };
+		23698AF720047BDD00C0291C /* WTCModuleArgumentTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCModuleArgumentTests.mm; sourceTree = "<group>"; };
+		23698AF820047BDD00C0291C /* WTCStatementDeleteTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementDeleteTests.mm; sourceTree = "<group>"; };
+		23698AF920047BDD00C0291C /* WTCForeignKeyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCForeignKeyTests.mm; sourceTree = "<group>"; };
+		23698AFA20047BDD00C0291C /* WTCLiteralValueTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCLiteralValueTests.mm; sourceTree = "<group>"; };
+		23698AFB20047BDD00C0291C /* WTCColumnResultTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnResultTests.mm; sourceTree = "<group>"; };
+		23698AFC20047BDD00C0291C /* WTCStatementTransactionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementTransactionTests.mm; sourceTree = "<group>"; };
+		23698AFD20047BDD00C0291C /* WTCStatementReleaseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementReleaseTests.mm; sourceTree = "<group>"; };
+		23698AFE20047BDD00C0291C /* WTCStatementInsertTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementInsertTests.mm; sourceTree = "<group>"; };
+		23698AFF20047BDD00C0291C /* WTCStatementReindexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementReindexTests.mm; sourceTree = "<group>"; };
+		23698B0020047BDD00C0291C /* WTCStatementDropIndexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementDropIndexTests.mm; sourceTree = "<group>"; };
+		23698B0120047BDD00C0291C /* WTCStatementDropTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementDropTableTests.mm; sourceTree = "<group>"; };
+		23698B0220047BDD00C0291C /* WTCSubqueryTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSubqueryTests.mm; sourceTree = "<group>"; };
+		23698B0320047BDD00C0291C /* WTCStatementCreateIndexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementCreateIndexTests.mm; sourceTree = "<group>"; };
+		23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnDefTests.mm; sourceTree = "<group>"; };
+		23698B0520047BDE00C0291C /* WTCStatementDetachTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementDetachTests.mm; sourceTree = "<group>"; };
+		23698B0620047BDE00C0291C /* WTCStatementUpdateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementUpdateTests.mm; sourceTree = "<group>"; };
+		23698B0720047BDE00C0291C /* WTCColumnTypeTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnTypeTests.mm; sourceTree = "<group>"; };
+		23698B0820047BDE00C0291C /* WTCJoinClauseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCJoinClauseTests.mm; sourceTree = "<group>"; };
+		23698B0920047BDE00C0291C /* WTCExpressionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCExpressionTests.mm; sourceTree = "<group>"; };
+		23698B0A20047BDE00C0291C /* WTCColumnIndexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnIndexTests.mm; sourceTree = "<group>"; };
+		23698B0B20047BDE00C0291C /* WTCStatementPragmaTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementPragmaTests.mm; sourceTree = "<group>"; };
+		23698B0C20047BDE00C0291C /* WTCColumnTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnTests.mm; sourceTree = "<group>"; };
+		23698B0D20047BDE00C0291C /* WTCStatementCreateVirtualTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementCreateVirtualTableTests.mm; sourceTree = "<group>"; };
+		23698B0E20047BDE00C0291C /* WTCStatementExplainTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementExplainTests.mm; sourceTree = "<group>"; };
+		23698B0F20047BDE00C0291C /* WTCStatementSelectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementSelectTests.mm; sourceTree = "<group>"; };
+		23698B1020047BDF00C0291C /* WTCOrderTermTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCOrderTermTests.mm; sourceTree = "<group>"; };
+		23698B1120047BDF00C0291C /* WTCOrderTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCOrderTests.mm; sourceTree = "<group>"; };
+		23698B1220047BDF00C0291C /* WTCStatementSavepointTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementSavepointTests.mm; sourceTree = "<group>"; };
+		23698B1320047BDF00C0291C /* WTCStatementVacuumTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementVacuumTests.mm; sourceTree = "<group>"; };
+		23698B1420047BDF00C0291C /* WTCTableConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCTableConstraintTests.mm; sourceTree = "<group>"; };
+		23698B1520047BDF00C0291C /* WTCStatementAlterTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementAlterTableTests.mm; sourceTree = "<group>"; };
+		23698B1620047BDF00C0291C /* WTCStatementCreateTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementCreateTableTests.mm; sourceTree = "<group>"; };
+		23698B1720047BDF00C0291C /* WTCStatementRollbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementRollbackTests.mm; sourceTree = "<group>"; };
+		23698B1820047BDF00C0291C /* WTCConflictTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCConflictTests.mm; sourceTree = "<group>"; };
+		23698B6A20047E1A00C0291C /* All Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Benchmark.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23698B7120047E8700C0291C /* WTCBaseBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaseBenchmark.mm; sourceTree = "<group>"; };
+		23698B7320047EA500C0291C /* WTCBaseBenchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCBaseBenchmark.h; sourceTree = "<group>"; };
+		23698B7420047EE300C0291C /* WTCRandomData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCRandomData.h; sourceTree = "<group>"; };
+		23698B7520047EE300C0291C /* WTCRandomData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WTCRandomData.m; sourceTree = "<group>"; };
+		23698BB52004AC2C00C0291C /* WTCConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCConfig.h; sourceTree = "<group>"; };
+		23698BB62004AC2C00C0291C /* WTCConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WTCConfig.m; sourceTree = "<group>"; };
+		23698BB82004ACE100C0291C /* WTCBenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WTCBenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23698BB92004ACE100C0291C /* WTCBenchmarkObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCBenchmarkObject.h; sourceTree = "<group>"; };
+		23698BBA2004ACE100C0291C /* WTCBenchmarkObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBenchmarkObject.mm; sourceTree = "<group>"; };
+		23698BBC2004AD2500C0291C /* WTCBaselineReadBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaselineReadBenchmark.mm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		23698A6020045EF100C0291C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23698A932004656300C0291C /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23698B6420047E1A00C0291C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23698B6520047E1A00C0291C /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		23698A4220045EF100C0291C = {
+			isa = PBXGroup;
+			children = (
+				23698A7820045F4A00C0291C /* WCDB.xcodeproj */,
+				23698A7720045F4300C0291C /* benchmark */,
+				23698A7620045F4300C0291C /* test */,
+				23698A8B2004612A00C0291C /* common */,
+				23698A4C20045EF100C0291C /* Products */,
+				23698A8420045F5600C0291C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		23698A4C20045EF100C0291C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23698A6320045EF100C0291C /* All Testcases.xctest */,
+				23698B6A20047E1A00C0291C /* All Benchmark.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		23698A7620045F4300C0291C /* test */ = {
+			isa = PBXGroup;
+			children = (
+				23698A88200460FA00C0291C /* winq */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		23698A7720045F4300C0291C /* benchmark */ = {
+			isa = PBXGroup;
+			children = (
+				23698B6E20047E6400C0291C /* baseline */,
+				23698B7020047E6400C0291C /* cipher */,
+				23698B6D20047E6400C0291C /* multithread */,
+				23698B6F20047E6400C0291C /* other */,
+				23698B6C20047E6400C0291C /* supporting */,
+			);
+			path = benchmark;
+			sourceTree = "<group>";
+		};
+		23698A7920045F4A00C0291C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23698A8120045F4A00C0291C /* WCDB.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		23698A8420045F5600C0291C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		23698A88200460FA00C0291C /* winq */ = {
+			isa = PBXGroup;
+			children = (
+				23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */,
+				23698B0A20047BDE00C0291C /* WTCColumnIndexTests.mm */,
+				23698AFB20047BDD00C0291C /* WTCColumnResultTests.mm */,
+				23698B0C20047BDE00C0291C /* WTCColumnTests.mm */,
+				23698B0720047BDE00C0291C /* WTCColumnTypeTests.mm */,
+				23698B1820047BDF00C0291C /* WTCConflictTests.mm */,
+				23698B0920047BDE00C0291C /* WTCExpressionTests.mm */,
+				23698AF920047BDD00C0291C /* WTCForeignKeyTests.mm */,
+				23698B0820047BDE00C0291C /* WTCJoinClauseTests.mm */,
+				23698AFA20047BDD00C0291C /* WTCLiteralValueTests.mm */,
+				23698AF720047BDD00C0291C /* WTCModuleArgumentTests.mm */,
+				23698B1020047BDF00C0291C /* WTCOrderTermTests.mm */,
+				23698B1120047BDF00C0291C /* WTCOrderTests.mm */,
+				23698B1520047BDF00C0291C /* WTCStatementAlterTableTests.mm */,
+				23698AF620047BDD00C0291C /* WTCStatementAttachTests.mm */,
+				23698B0320047BDD00C0291C /* WTCStatementCreateIndexTests.mm */,
+				23698B1620047BDF00C0291C /* WTCStatementCreateTableTests.mm */,
+				23698B0D20047BDE00C0291C /* WTCStatementCreateVirtualTableTests.mm */,
+				23698AF820047BDD00C0291C /* WTCStatementDeleteTests.mm */,
+				23698B0520047BDE00C0291C /* WTCStatementDetachTests.mm */,
+				23698B0020047BDD00C0291C /* WTCStatementDropIndexTests.mm */,
+				23698B0120047BDD00C0291C /* WTCStatementDropTableTests.mm */,
+				23698B0E20047BDE00C0291C /* WTCStatementExplainTests.mm */,
+				23698AFE20047BDD00C0291C /* WTCStatementInsertTests.mm */,
+				23698B0B20047BDE00C0291C /* WTCStatementPragmaTests.mm */,
+				23698AFF20047BDD00C0291C /* WTCStatementReindexTests.mm */,
+				23698AFD20047BDD00C0291C /* WTCStatementReleaseTests.mm */,
+				23698B1720047BDF00C0291C /* WTCStatementRollbackTests.mm */,
+				23698B1220047BDF00C0291C /* WTCStatementSavepointTests.mm */,
+				23698B0F20047BDE00C0291C /* WTCStatementSelectTests.mm */,
+				23698AFC20047BDD00C0291C /* WTCStatementTransactionTests.mm */,
+				23698B0620047BDE00C0291C /* WTCStatementUpdateTests.mm */,
+				23698B1320047BDF00C0291C /* WTCStatementVacuumTests.mm */,
+				23698B0220047BDD00C0291C /* WTCSubqueryTests.mm */,
+				23698B1420047BDF00C0291C /* WTCTableConstraintTests.mm */,
+			);
+			path = winq;
+			sourceTree = "<group>";
+		};
+		23698A8B2004612A00C0291C /* common */ = {
+			isa = PBXGroup;
+			children = (
+				23698A8C2004613600C0291C /* WTCBaseTestCase.mm */,
+				23698A8E2004619800C0291C /* WTCBaseTestCase.h */,
+				23698AAF20046BE600C0291C /* WTCAssert.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		23698B6C20047E6400C0291C /* supporting */ = {
+			isa = PBXGroup;
+			children = (
+				23698B7120047E8700C0291C /* WTCBaseBenchmark.mm */,
+				23698B7320047EA500C0291C /* WTCBaseBenchmark.h */,
+				23698B7420047EE300C0291C /* WTCRandomData.h */,
+				23698B7520047EE300C0291C /* WTCRandomData.m */,
+				23698BB52004AC2C00C0291C /* WTCConfig.h */,
+				23698BB62004AC2C00C0291C /* WTCConfig.m */,
+				23698BB82004ACE100C0291C /* WTCBenchmarkObject+WCTTableCoding.h */,
+				23698BB92004ACE100C0291C /* WTCBenchmarkObject.h */,
+				23698BBA2004ACE100C0291C /* WTCBenchmarkObject.mm */,
+			);
+			path = supporting;
+			sourceTree = "<group>";
+		};
+		23698B6D20047E6400C0291C /* multithread */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = multithread;
+			sourceTree = "<group>";
+		};
+		23698B6E20047E6400C0291C /* baseline */ = {
+			isa = PBXGroup;
+			children = (
+				23698BBC2004AD2500C0291C /* WTCBaselineReadBenchmark.mm */,
+			);
+			path = baseline;
+			sourceTree = "<group>";
+		};
+		23698B6F20047E6400C0291C /* other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = other;
+			sourceTree = "<group>";
+		};
+		23698B7020047E6400C0291C /* cipher */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = cipher;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		23698A6220045EF100C0291C /* All Testcases */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23698A6F20045EF100C0291C /* Build configuration list for PBXNativeTarget "All Testcases" */;
+			buildPhases = (
+				23698A5F20045EF100C0291C /* Sources */,
+				23698A6020045EF100C0291C /* Frameworks */,
+				23698A6120045EF100C0291C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23698A922004656000C0291C /* PBXTargetDependency */,
+			);
+			name = "All Testcases";
+			productName = testcaseTests;
+			productReference = 23698A6320045EF100C0291C /* All Testcases.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		23698B3C20047E1A00C0291C /* All Benchmark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23698B6720047E1A00C0291C /* Build configuration list for PBXNativeTarget "All Benchmark" */;
+			buildPhases = (
+				23698B3F20047E1A00C0291C /* Sources */,
+				23698B6420047E1A00C0291C /* Frameworks */,
+				23698B6620047E1A00C0291C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23698B3D20047E1A00C0291C /* PBXTargetDependency */,
+			);
+			name = "All Benchmark";
+			productName = testcaseTests;
+			productReference = 23698B6A20047E1A00C0291C /* All Benchmark.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		23698A4320045EF100C0291C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = tencent;
+				TargetAttributes = {
+					23698A6220045EF100C0291C = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 23698A4A20045EF100C0291C;
+					};
+					23698B3C20047E1A00C0291C = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 23698A4620045EF100C0291C /* Build configuration list for PBXProject "testcase" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 23698A4220045EF100C0291C;
+			productRefGroup = 23698A4C20045EF100C0291C /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 23698A7920045F4A00C0291C /* Products */;
+					ProjectRef = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				23698A6220045EF100C0291C /* All Testcases */,
+				23698B3C20047E1A00C0291C /* All Benchmark */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		23698A8120045F4A00C0291C /* WCDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WCDB.framework;
+			remoteRef = 23698A8020045F4A00C0291C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		23698A6120045EF100C0291C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23698B6620047E1A00C0291C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		23698A5F20045EF100C0291C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23698B2420047BE000C0291C /* WTCStatementDropTableTests.mm in Sources */,
+				23698B2020047BE000C0291C /* WTCStatementReleaseTests.mm in Sources */,
+				23698B3020047BE000C0291C /* WTCStatementCreateVirtualTableTests.mm in Sources */,
+				23698B1A20047BE000C0291C /* WTCModuleArgumentTests.mm in Sources */,
+				23698B2620047BE000C0291C /* WTCStatementCreateIndexTests.mm in Sources */,
+				23698B2920047BE000C0291C /* WTCStatementUpdateTests.mm in Sources */,
+				23698B3A20047BE000C0291C /* WTCStatementRollbackTests.mm in Sources */,
+				23698B1E20047BE000C0291C /* WTCColumnResultTests.mm in Sources */,
+				23698B2320047BE000C0291C /* WTCStatementDropIndexTests.mm in Sources */,
+				23698B2F20047BE000C0291C /* WTCColumnTests.mm in Sources */,
+				23698B3420047BE000C0291C /* WTCOrderTests.mm in Sources */,
+				23698B3120047BE000C0291C /* WTCStatementExplainTests.mm in Sources */,
+				23698B1F20047BE000C0291C /* WTCStatementTransactionTests.mm in Sources */,
+				23698B2120047BE000C0291C /* WTCStatementInsertTests.mm in Sources */,
+				23698B2A20047BE000C0291C /* WTCColumnTypeTests.mm in Sources */,
+				23698B2B20047BE000C0291C /* WTCJoinClauseTests.mm in Sources */,
+				23698B3820047BE000C0291C /* WTCStatementAlterTableTests.mm in Sources */,
+				23698B2520047BE000C0291C /* WTCSubqueryTests.mm in Sources */,
+				23698B2720047BE000C0291C /* WTCColumnDefTests.mm in Sources */,
+				23698B3920047BE000C0291C /* WTCStatementCreateTableTests.mm in Sources */,
+				23698B1920047BE000C0291C /* WTCStatementAttachTests.mm in Sources */,
+				23698B3220047BE000C0291C /* WTCStatementSelectTests.mm in Sources */,
+				23698B2220047BE000C0291C /* WTCStatementReindexTests.mm in Sources */,
+				23698B1B20047BE000C0291C /* WTCStatementDeleteTests.mm in Sources */,
+				23698B2820047BE000C0291C /* WTCStatementDetachTests.mm in Sources */,
+				23698B3620047BE000C0291C /* WTCStatementVacuumTests.mm in Sources */,
+				23698B2C20047BE000C0291C /* WTCExpressionTests.mm in Sources */,
+				23698B3520047BE000C0291C /* WTCStatementSavepointTests.mm in Sources */,
+				23698B1D20047BE000C0291C /* WTCLiteralValueTests.mm in Sources */,
+				23698B3B20047BE000C0291C /* WTCConflictTests.mm in Sources */,
+				23698A8D2004613600C0291C /* WTCBaseTestCase.mm in Sources */,
+				23698B3320047BE000C0291C /* WTCOrderTermTests.mm in Sources */,
+				23698B2D20047BE000C0291C /* WTCColumnIndexTests.mm in Sources */,
+				23698B1C20047BE000C0291C /* WTCForeignKeyTests.mm in Sources */,
+				23698B2E20047BE000C0291C /* WTCStatementPragmaTests.mm in Sources */,
+				23698B3720047BE000C0291C /* WTCTableConstraintTests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23698B3F20047E1A00C0291C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23698B4020047E1A00C0291C /* WTCStatementDropTableTests.mm in Sources */,
+				23698BB72004AC2C00C0291C /* WTCConfig.m in Sources */,
+				23698B4120047E1A00C0291C /* WTCStatementReleaseTests.mm in Sources */,
+				23698B4220047E1A00C0291C /* WTCStatementCreateVirtualTableTests.mm in Sources */,
+				23698B4320047E1A00C0291C /* WTCModuleArgumentTests.mm in Sources */,
+				23698B4420047E1A00C0291C /* WTCStatementCreateIndexTests.mm in Sources */,
+				23698B4520047E1A00C0291C /* WTCStatementUpdateTests.mm in Sources */,
+				23698B4620047E1A00C0291C /* WTCStatementRollbackTests.mm in Sources */,
+				23698B4720047E1A00C0291C /* WTCColumnResultTests.mm in Sources */,
+				23698B4820047E1A00C0291C /* WTCStatementDropIndexTests.mm in Sources */,
+				23698B4920047E1A00C0291C /* WTCColumnTests.mm in Sources */,
+				23698B4A20047E1A00C0291C /* WTCOrderTests.mm in Sources */,
+				23698B4B20047E1A00C0291C /* WTCStatementExplainTests.mm in Sources */,
+				23698B4C20047E1A00C0291C /* WTCStatementTransactionTests.mm in Sources */,
+				23698B4D20047E1A00C0291C /* WTCStatementInsertTests.mm in Sources */,
+				23698B7620047EE300C0291C /* WTCRandomData.m in Sources */,
+				23698B4E20047E1A00C0291C /* WTCColumnTypeTests.mm in Sources */,
+				23698B4F20047E1A00C0291C /* WTCJoinClauseTests.mm in Sources */,
+				23698B5020047E1A00C0291C /* WTCStatementAlterTableTests.mm in Sources */,
+				23698B5120047E1A00C0291C /* WTCSubqueryTests.mm in Sources */,
+				23698B5220047E1A00C0291C /* WTCColumnDefTests.mm in Sources */,
+				23698B5320047E1A00C0291C /* WTCStatementCreateTableTests.mm in Sources */,
+				23698B5420047E1A00C0291C /* WTCStatementAttachTests.mm in Sources */,
+				23698B5520047E1A00C0291C /* WTCStatementSelectTests.mm in Sources */,
+				23698B5620047E1A00C0291C /* WTCStatementReindexTests.mm in Sources */,
+				23698B7220047E8700C0291C /* WTCBaseBenchmark.mm in Sources */,
+				23698BBD2004AD2500C0291C /* WTCBaselineReadBenchmark.mm in Sources */,
+				23698B5720047E1A00C0291C /* WTCStatementDeleteTests.mm in Sources */,
+				23698B5820047E1A00C0291C /* WTCStatementDetachTests.mm in Sources */,
+				23698BBB2004ACE100C0291C /* WTCBenchmarkObject.mm in Sources */,
+				23698B5920047E1A00C0291C /* WTCStatementVacuumTests.mm in Sources */,
+				23698B5A20047E1A00C0291C /* WTCExpressionTests.mm in Sources */,
+				23698B5B20047E1A00C0291C /* WTCStatementSavepointTests.mm in Sources */,
+				23698B5C20047E1A00C0291C /* WTCLiteralValueTests.mm in Sources */,
+				23698B5D20047E1A00C0291C /* WTCConflictTests.mm in Sources */,
+				23698B5E20047E1A00C0291C /* WTCBaseTestCase.mm in Sources */,
+				23698B5F20047E1A00C0291C /* WTCOrderTermTests.mm in Sources */,
+				23698B6020047E1A00C0291C /* WTCColumnIndexTests.mm in Sources */,
+				23698B6120047E1A00C0291C /* WTCForeignKeyTests.mm in Sources */,
+				23698B6220047E1A00C0291C /* WTCStatementPragmaTests.mm in Sources */,
+				23698B6320047E1A00C0291C /* WTCTableConstraintTests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		23698A922004656000C0291C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WCDB;
+			targetProxy = 23698A912004656000C0291C /* PBXContainerItemProxy */;
+		};
+		23698B3D20047E1A00C0291C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WCDB;
+			targetProxy = 23698B3E20047E1A00C0291C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		23698A6A20045EF100C0291C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"ARCHS[sdk=iphoneos*]" = (
+					"$(ARCHS_STANDARD)",
+					arm64,
+					armv7,
+				);
+				"ARCHS[sdk=iphonesimulator*]" = (
+					"$(ARCHS_STANDARD)",
+					arm64,
+					armv7,
+				);
+				"ARCHS[sdk=macosx*]" = (
+					"$(ARCHS_STANDARD)",
+					x86_64,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALID_ARCHS = "x86_64 arm64 armv7";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		23698A6B20045EF100C0291C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"ARCHS[sdk=iphoneos*]" = (
+					"$(ARCHS_STANDARD)",
+					arm64,
+					armv7,
+				);
+				"ARCHS[sdk=iphonesimulator*]" = (
+					"$(ARCHS_STANDARD)",
+					arm64,
+					armv7,
+				);
+				"ARCHS[sdk=macosx*]" = (
+					"$(ARCHS_STANDARD)",
+					x86_64,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALID_ARCHS = "x86_64 arm64 armv7";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		23698A7020045EF100C0291C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		23698A7120045EF100C0291C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		23698B6820047E1A00C0291C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		23698B6920047E1A00C0291C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		23698A4620045EF100C0291C /* Build configuration list for PBXProject "testcase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23698A6A20045EF100C0291C /* Debug */,
+				23698A6B20045EF100C0291C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23698A6F20045EF100C0291C /* Build configuration list for PBXNativeTarget "All Testcases" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23698A7020045EF100C0291C /* Debug */,
+				23698A7120045EF100C0291C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23698B6720047E1A00C0291C /* Build configuration list for PBXNativeTarget "All Benchmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23698B6820047E1A00C0291C /* Debug */,
+				23698B6920047E1A00C0291C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 23698A4320045EF100C0291C /* Project object */;
+}
