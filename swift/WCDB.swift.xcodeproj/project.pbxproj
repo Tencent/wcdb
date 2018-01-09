@@ -66,7 +66,6 @@
 		231BC02F1FC2CC6E00011C69 /* TimedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */; };
 		231BC0311FC2CDCA00011C69 /* SteadyClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231BC0301FC2CDCA00011C69 /* SteadyClock.swift */; };
 		233032B21FB947F100101373 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
-		2349FC341FDF8BDE005230E8 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2349FC301FDF8B14005230E8 /* sqliterk.framework */; };
 		235619C31FD69B250085C86B /* FundamentalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235619C21FD69B250085C86B /* FundamentalValue.swift */; };
 		235A2C481FE3763800B74208 /* Operable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235A2C471FE3763800B74208 /* Operable.swift */; };
 		237931C11FD50140003BBA5F /* TableEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C01FD50140003BBA5F /* TableEncoder.swift */; };
@@ -75,6 +74,8 @@
 		237931C81FD538F8003BBA5F /* ColumnCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931C71FD538F8003BBA5F /* ColumnCodable.swift */; };
 		237931CB1FD547CC003BBA5F /* CodingTableKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931CA1FD547CC003BBA5F /* CodingTableKey.swift */; };
 		23794DB41FAB23AD001E79DE /* WCDB-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 23794DB31FAB23AD001E79DE /* WCDB-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		238102232004DE720041B41F /* sqlcipher.swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2381021B2004DD790041B41F /* sqlcipher.swift.framework */; };
+		238102242004DE720041B41F /* sqliterk_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238102202004DD790041B41F /* sqliterk_swift.framework */; };
 		238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B131FAB1F7E00BC2659 /* Column.swift */; };
 		238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */; };
 		238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B151FAB1F7E00BC2659 /* ColumnIndex.swift */; };
@@ -127,7 +128,6 @@
 		238D0BCE1FAB1F7E00BC2659 /* Tagged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B711FAB1F7E00BC2659 /* Tagged.swift */; };
 		238D0BCF1FAB1F7E00BC2659 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */; };
 		23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* Tokenize.swift */; };
-		23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A1FF6E1FB084570023527D /* sqlcipher.framework */; };
 		23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8E0031FD8184300DAE97D /* CodableType.swift */; };
 		23E737C41FB1601C00EEBC3D /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C31FB1601C00EEBC3D /* Master.swift */; };
 		23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0011FC3C5CB005DE71C /* Tracer.swift */; };
@@ -144,33 +144,33 @@
 			remoteGlobalIDString = 2349FC211FDF86F9005230E8;
 			remoteInfo = Swiftlint;
 		};
-		2349FC2F1FDF8B14005230E8 /* PBXContainerItemProxy */ = {
+		2381021A2004DD790041B41F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 233032391FB9435700101373;
-			remoteInfo = sqliterk;
-		};
-		2349FC311FDF8B20005230E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 233032381FB9435700101373;
-			remoteInfo = sqliterk;
-		};
-		23A1FF6D1FB084570023527D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23A1FF691FB084570023527D /* sqlcipher.xcodeproj */;
+			containerPortal = 23A1FF691FB084570023527D /* sqlcipher.swift.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 239325C81E836A7700D677CC;
-			remoteInfo = sqlcipher;
+			remoteInfo = sqlcipher.swift;
 		};
-		23A1FF6F1FB0845E0023527D /* PBXContainerItemProxy */ = {
+		2381021F2004DD790041B41F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 23A1FF691FB084570023527D /* sqlcipher.xcodeproj */;
+			containerPortal = 2349FC2A1FDF8B14005230E8 /* sqliterk.swift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 233032391FB9435700101373;
+			remoteInfo = sqliterk.swift;
+		};
+		238102252004DE8B0041B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2349FC2A1FDF8B14005230E8 /* sqliterk.swift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 233032381FB9435700101373;
+			remoteInfo = sqliterk.swift;
+		};
+		238102272004DE8B0041B41F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A1FF691FB084570023527D /* sqlcipher.swift.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 239325C71E836A7700D677CC;
-			remoteInfo = sqlcipher;
+			remoteInfo = sqlcipher.swift;
 		};
 		23A1FF781FB08CC50023527D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -216,7 +216,7 @@
 		231BC02E1FC2CC6E00011C69 /* TimedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedQueue.swift; sourceTree = "<group>"; };
 		231BC0301FC2CDCA00011C69 /* SteadyClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyClock.swift; sourceTree = "<group>"; };
 		2330322D1FB9420000101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
+		2349FC2A1FDF8B14005230E8 /* sqliterk.swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.swift.xcodeproj; path = source/util/sqliterk.swift.xcodeproj; sourceTree = "<group>"; };
 		235619C21FD69B250085C86B /* FundamentalValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
 		235A2C471FE3763800B74208 /* Operable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operable.swift; sourceTree = "<group>"; };
 		237931C01FD50140003BBA5F /* TableEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableEncoder.swift; sourceTree = "<group>"; };
@@ -279,7 +279,7 @@
 		238D0B711FAB1F7E00BC2659 /* Tagged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tagged.swift; sourceTree = "<group>"; };
 		238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
 		23A00CD81FBAF82B000180A8 /* Tokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenize.swift; sourceTree = "<group>"; };
-		23A1FF691FB084570023527D /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
+		23A1FF691FB084570023527D /* sqlcipher.swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.swift.xcodeproj; path = source/util/sqlcipher.swift.xcodeproj; sourceTree = "<group>"; };
 		23C8E0031FD8184300DAE97D /* CodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableType.swift; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		23E9E0011FC3C5CB005DE71C /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
@@ -293,9 +293,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				238102232004DE720041B41F /* sqlcipher.swift.framework in Frameworks */,
+				238102242004DE720041B41F /* sqliterk_swift.framework in Frameworks */,
 				233032B21FB947F100101373 /* libz.tbd in Frameworks */,
-				23A1FF711FB0846C0023527D /* sqlcipher.framework in Frameworks */,
-				2349FC341FDF8BDE005230E8 /* sqliterk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,14 +384,6 @@
 			path = codable;
 			sourceTree = "<group>";
 		};
-		2349FC2B1FDF8B14005230E8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2349FC301FDF8B14005230E8 /* sqliterk.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		23794DAC1FAB206E001E79DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,11 +392,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		238102162004DD790041B41F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2381021B2004DD790041B41F /* sqlcipher.swift.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2381021C2004DD790041B41F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				238102202004DD790041B41F /* sqliterk_swift.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		238D0AF91FAB1F4300BC2659 = {
 			isa = PBXGroup;
 			children = (
-				2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */,
-				23A1FF691FB084570023527D /* sqlcipher.xcodeproj */,
+				2349FC2A1FDF8B14005230E8 /* sqliterk.swift.xcodeproj */,
+				23A1FF691FB084570023527D /* sqlcipher.swift.xcodeproj */,
 				238D0B0F1FAB1F7E00BC2659 /* Info.plist */,
 				238D0B111FAB1F7E00BC2659 /* source */,
 				238D0B041FAB1F4300BC2659 /* Products */,
@@ -516,14 +524,6 @@
 			path = util;
 			sourceTree = "<group>";
 		};
-		23A1FF6A1FB084570023527D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				23A1FF6E1FB084570023527D /* sqlcipher.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -551,10 +551,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				238102262004DE8B0041B41F /* PBXTargetDependency */,
+				238102282004DE8B0041B41F /* PBXTargetDependency */,
 				2349FC281FDF871F005230E8 /* PBXTargetDependency */,
 				23A1FF791FB08CC50023527D /* PBXTargetDependency */,
-				23A1FF701FB0845E0023527D /* PBXTargetDependency */,
-				2349FC321FDF8B20005230E8 /* PBXTargetDependency */,
 			);
 			name = WCDB.swift;
 			productName = WCDB;
@@ -597,12 +597,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 23A1FF6A1FB084570023527D /* Products */;
-					ProjectRef = 23A1FF691FB084570023527D /* sqlcipher.xcodeproj */;
+					ProductGroup = 238102162004DD790041B41F /* Products */;
+					ProjectRef = 23A1FF691FB084570023527D /* sqlcipher.swift.xcodeproj */;
 				},
 				{
-					ProductGroup = 2349FC2B1FDF8B14005230E8 /* Products */;
-					ProjectRef = 2349FC2A1FDF8B14005230E8 /* sqliterk.xcodeproj */;
+					ProductGroup = 2381021C2004DD790041B41F /* Products */;
+					ProjectRef = 2349FC2A1FDF8B14005230E8 /* sqliterk.swift.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -615,18 +615,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2349FC301FDF8B14005230E8 /* sqliterk.framework */ = {
+		2381021B2004DD790041B41F /* sqlcipher.swift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = sqliterk.framework;
-			remoteRef = 2349FC2F1FDF8B14005230E8 /* PBXContainerItemProxy */;
+			path = sqlcipher.swift.framework;
+			remoteRef = 2381021A2004DD790041B41F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		23A1FF6E1FB084570023527D /* sqlcipher.framework */ = {
+		238102202004DD790041B41F /* sqliterk_swift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = sqlcipher.framework;
-			remoteRef = 23A1FF6D1FB084570023527D /* PBXContainerItemProxy */;
+			path = sqliterk_swift.framework;
+			remoteRef = 2381021F2004DD790041B41F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -785,15 +785,15 @@
 			target = 2349FC211FDF86F9005230E8 /* Swiftlint */;
 			targetProxy = 2349FC271FDF871F005230E8 /* PBXContainerItemProxy */;
 		};
-		2349FC321FDF8B20005230E8 /* PBXTargetDependency */ = {
+		238102262004DE8B0041B41F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = sqliterk;
-			targetProxy = 2349FC311FDF8B20005230E8 /* PBXContainerItemProxy */;
+			name = sqliterk.swift;
+			targetProxy = 238102252004DE8B0041B41F /* PBXContainerItemProxy */;
 		};
-		23A1FF701FB0845E0023527D /* PBXTargetDependency */ = {
+		238102282004DE8B0041B41F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = sqlcipher;
-			targetProxy = 23A1FF6F1FB0845E0023527D /* PBXContainerItemProxy */;
+			name = sqlcipher.swift;
+			targetProxy = 238102272004DE8B0041B41F /* PBXContainerItemProxy */;
 		};
 		23A1FF791FB08CC50023527D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

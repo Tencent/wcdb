@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "239325C71E836A7700D677CC"
-               BuildableName = "sqlcipher.framework"
-               BlueprintName = "sqlcipher"
-               ReferencedContainer = "container:sqlcipher.xcodeproj">
+               BlueprintIdentifier = "233032381FB9435700101373"
+               BuildableName = "sqliterk_swift.framework"
+               BlueprintName = "sqliterk.swift"
+               ReferencedContainer = "container:sqliterk.swift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,10 +47,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "239325C71E836A7700D677CC"
-            BuildableName = "sqlcipher.framework"
-            BlueprintName = "sqlcipher"
-            ReferencedContainer = "container:sqlcipher.xcodeproj">
+            BlueprintIdentifier = "233032381FB9435700101373"
+            BuildableName = "sqliterk_swift.framework"
+            BlueprintName = "sqliterk.swift"
+            ReferencedContainer = "container:sqliterk.swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,10 +65,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "239325C71E836A7700D677CC"
-            BuildableName = "sqlcipher.framework"
-            BlueprintName = "sqlcipher"
-            ReferencedContainer = "container:sqlcipher.xcodeproj">
+            BlueprintIdentifier = "233032381FB9435700101373"
+            BuildableName = "sqliterk_swift.framework"
+            BlueprintName = "sqliterk.swift"
+            ReferencedContainer = "container:sqliterk.swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
