@@ -883,7 +883,6 @@
 				INFOPLIST_FILE = "$(SRCROOT)/../../../sqlcipher/macosx/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "-Wno-shorten-64-to-32";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.sqlcipher;
 				PRODUCT_NAME = sqlcipher;
@@ -906,7 +905,6 @@
 				INFOPLIST_FILE = "$(SRCROOT)/../../../sqlcipher/macosx/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "-Wno-shorten-64-to-32";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.sqlcipher;
 				PRODUCT_NAME = sqlcipher;
