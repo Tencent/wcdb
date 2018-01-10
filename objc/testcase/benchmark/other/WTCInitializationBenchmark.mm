@@ -29,7 +29,7 @@
 - (void)setUp
 {
     [super setUp];
-    
+
     [self setUpWithPreCreateTable:self.config.tableCount];
 }
 

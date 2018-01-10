@@ -39,11 +39,11 @@
 
     [self mesasure:^{
         [self tearDownDatabase];
-        
+
         [self setUpWithPreCreateTable];
-        
+
         [self tearDownDatabaseCache];
-        
+
         [self setUpDatabaseCache];
     } for:^{
         for (WTCBenchmarkObject *object in self.objects) {

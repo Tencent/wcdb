@@ -29,7 +29,7 @@
 - (void)setUp
 {
     [super setUp];
-    
+
     [self.database setCipherKey:[@"cipher" dataUsingEncoding:NSASCIIStringEncoding]];
 
     [self setUpWithPreCreateTable];

@@ -31,7 +31,7 @@
     [super setUp];
 
     [self.database setCipherKey:[@"cipher" dataUsingEncoding:NSASCIIStringEncoding]];
-    
+
     [self setUpWithPreCreateObject:self.config.writeCount];
 }
 
@@ -41,11 +41,11 @@
 
     [self mesasure:^{
         [self tearDownDatabase];
-        
+
         [self setUpWithPreCreateTable];
-        
+
         [self tearDownDatabaseCache];
-        
+
         [self setUpDatabaseCache];
     } for:^{
         for (WTCBenchmarkObject *object in self.objects) {

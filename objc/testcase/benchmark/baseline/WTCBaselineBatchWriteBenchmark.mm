@@ -41,9 +41,9 @@
         [self tearDownDatabase];
 
         [self setUpWithPreCreateTable];
-        
+
         [self tearDownDatabaseCache];
-        
+
         [self setUpDatabaseCache];
     } for:^{
         XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);

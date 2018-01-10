@@ -29,28 +29,28 @@
 - (void)setUp
 {
     [super setUp];
-    
+
     [self setUpWithPreCreateObject:self.config.batchWriteCount];
 }
 
 - (void)testMultithreadWriteWrite
 {
     __block NSString *tableName = [self getTableName];
-    
+
     [self mesasure:^{
         [self tearDownDatabase];
-        
+
         [self setUpWithPreCreateTable];
-        
+
         [self tearDownDatabaseCache];
-        
+
         [self setUpDatabaseCache];
     } for:^{
         dispatch_group_async(self.group, self.queue, ^{
-            XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);
+          XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);
         });
         dispatch_group_async(self.group, self.queue, ^{
-            XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);
+          XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);
         });
         dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
     } checkCorrectness:^{
