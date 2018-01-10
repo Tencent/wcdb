@@ -213,11 +213,16 @@ const Configs Database::defaultConfigs(
                          while (true) {
                              s_timedQueue.waitUntilExpired(
                                  [](const std::string &path) {
-                                     Database database(path);
-                                     WCDB::Error innerError;
-                                     database.exec(StatementPragma().pragma(
-                                                       Pragma::WalCheckpoint),
-                                                   innerError);
+                                     Database database(
+                                         path,
+                                         true); // Get Existing Database Only
+                                     if (database.getType() != CoreType::None) {
+                                         WCDB::Error innerError;
+                                         database.exec(
+                                             StatementPragma().pragma(
+                                                 Pragma::WalCheckpoint),
+                                             innerError);
+                                     }
                                  });
                          }
                      });

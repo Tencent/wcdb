@@ -25,14 +25,16 @@
 
 namespace WCDB {
 
-Database::Database(const std::string &thePath)
-    : CoreBase(HandlePool::GetPool(thePath, Database::defaultConfigs),
+Database::Database(const std::string &thePath, bool existingOnly)
+    : CoreBase(!existingOnly
+                   ? HandlePool::GetPool(thePath, Database::defaultConfigs)
+                   : HandlePool::GetExistingPool(thePath),
                CoreType::Database)
 {
 }
 
 Database::Database(Tag tag)
-    : CoreBase(HandlePool::GetPool(tag), CoreType::Database)
+    : CoreBase(HandlePool::GetExistingPool(tag), CoreType::Database)
 {
 }
 

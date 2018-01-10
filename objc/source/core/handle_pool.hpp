@@ -40,7 +40,9 @@ class HandlePool {
 public:
     static RecyclableHandlePool GetPool(const std::string &path,
                                         const Configs &defaultConfigs);
-    static RecyclableHandlePool GetPool(Tag tag);
+    static RecyclableHandlePool GetExistingPool(Tag tag);
+    static RecyclableHandlePool GetExistingPool(const std::string &path);
+
     static void PurgeFreeHandlesInAllPool();
 
 protected:

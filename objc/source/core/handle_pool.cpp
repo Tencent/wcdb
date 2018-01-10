@@ -55,7 +55,7 @@ RecyclableHandlePool HandlePool::GetPool(const std::string &path,
     });
 }
 
-RecyclableHandlePool HandlePool::GetPool(Tag tag)
+RecyclableHandlePool HandlePool::GetExistingPool(Tag tag)
 {
     std::lock_guard<std::mutex> lockGuard(s_mutex);
     if (tag != InvalidTag) {
@@ -71,6 +71,25 @@ RecyclableHandlePool HandlePool::GetPool(Tag tag)
                         }
                     });
             }
+        }
+    }
+    return RecyclableHandlePool(nullptr, nullptr);
+}
+
+RecyclableHandlePool HandlePool::GetExistingPool(const std::string &path)
+{
+    std::lock_guard<std::mutex> lockGuard(s_mutex);
+    for (auto iter : s_pools) {
+        if (iter.second.first->path == path) {
+            ++iter.second.second;
+            return RecyclableHandlePool(
+                iter.second.first, [](std::shared_ptr<HandlePool> &pool) {
+                    std::lock_guard<std::mutex> lockGuard(s_mutex);
+                    const auto &iter = s_pools.find(pool->path);
+                    if (--iter->second.second == 0) {
+                        s_pools.erase(iter);
+                    }
+                });
         }
     }
     return RecyclableHandlePool(nullptr, nullptr);

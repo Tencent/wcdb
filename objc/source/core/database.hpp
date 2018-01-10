@@ -36,7 +36,9 @@ class Transaction;
 class Database : public CoreBase {
 public:
     Database() = delete;
-    Database(const std::string &path);
+
+    Database(const std::string &path, bool existingOnly = false);
+
     Database(Tag tag);
 
     //basic
