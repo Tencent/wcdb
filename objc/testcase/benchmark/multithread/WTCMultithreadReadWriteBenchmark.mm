@@ -57,6 +57,7 @@
         dispatch_group_async(self.group, self.queue, ^{
             XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);
         });
+        dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
     } checkCorrectness:^{
         XCTAssertEqual(results.count, self.config.readCount);
         NSNumber *count = [self.database getOneValueOnResult:WTCBenchmarkObject.AnyProperty.count() fromTable:tableName];

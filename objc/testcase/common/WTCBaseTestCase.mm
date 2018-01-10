@@ -24,7 +24,7 @@
 
 + (NSString *)className
 {
-    return NSStringFromClass(WTCBaseTestCase.class);
+    return NSStringFromClass(self.class);
 }
 
 + (NSString *)baseDirectory
