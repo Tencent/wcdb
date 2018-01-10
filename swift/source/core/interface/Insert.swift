@@ -31,7 +31,7 @@ public final class Insert {
                   named name: String,
                   on propertyConvertibleList: [PropertyConvertible]?,
                   isReplace: Bool = false) throws {
-        guard name.count > 0 else {
+        guard !name.isEmpty else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .insert,
@@ -71,7 +71,7 @@ public final class Insert {
     /// - Parameter objects: Object to be inserted
     /// - Throws: Error
     public func execute<Object: TableEncodable>(with objects: [Object]) throws {
-        guard objects.count > 0 else {
+        guard !objects.isEmpty else {
             Error.warning("Inserting with an empty/nil object")
             return
         }

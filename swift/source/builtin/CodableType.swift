@@ -254,7 +254,7 @@ extension ColumnJSONEncodable {
 public protocol ColumnJSONDecodable: ColumnDecodable where FundamentalType == Data {}
 extension ColumnJSONDecodable {
     public init?(with value: FundamentalType) {
-        guard value.count > 0 else {
+        guard !value.isEmpty else {
             return nil
         }
         guard let object = try? JSONDecoder().decode(Self.self, from: value) else {

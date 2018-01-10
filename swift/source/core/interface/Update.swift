@@ -31,14 +31,14 @@ public final class Update {
     public var changes: Int?
 
     internal init(with core: Core, on propertyConvertibleList: [PropertyConvertible], andTable table: String) throws {
-        guard propertyConvertibleList.count > 0 else {
+        guard !propertyConvertibleList.isEmpty else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .update,
                                         code: .misuse,
                                         message: "Updating \(table) with empty property")
         }
-        guard table.count > 0 else {
+        guard !table.isEmpty else {
             throw Error.reportInterface(tag: core.tag,
                                         path: core.path,
                                         operation: .update,
