@@ -66,10 +66,10 @@ public protocol ExpressionConvertible: ColumnResultConvertible, SpecificOrderCon
 
 extension ExpressionConvertible {
     public func asColumnResult() -> ColumnResult {
-        return ColumnResult(with: asExpression())
+        return ColumnResult(with: self)
     }
     public func asOrder(by term: OrderTerm?) -> Order {
-        return Order(with: asExpression(), by: term)
+        return Order(with: self, by: term)
     }
 }
 
