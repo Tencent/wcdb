@@ -68,7 +68,7 @@ public:
         return *this;
     }
 
-    ~Recyclable() { release(); }
+    virtual ~Recyclable() { release(); }
 
     constexpr T operator->() const { return m_value; }
 
