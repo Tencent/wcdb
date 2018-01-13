@@ -40,8 +40,8 @@ public class SQLiteAsyncCheckpointer implements SQLiteCheckpointListener, Handle
     private int mLastSyncMode;
     private final HashSet<Pair<SQLiteDatabase, String>> mPendingCheckpoints;
 
-    private static final int DEFAULT_THRESHOLD = 0;
-    private static final int DEFAULT_BLOCKING_THRESHOLD = 100;
+    private static final int DEFAULT_THRESHOLD = 100;
+    private static final int DEFAULT_BLOCKING_THRESHOLD = 300;
 
 
     public SQLiteAsyncCheckpointer() {
