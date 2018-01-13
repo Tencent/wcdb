@@ -13,5 +13,5 @@
 -keep interface com.tencent.wcdb.support.Log$* { *; }
 
 # Keep methods used as callbacks from JNI code
--keep class com.tencent.wcdb.repair.RepairKit { int onProgress(String, int, long); }
--keep class com.tencent.wcdb.database.SQLiteConnection { void notifyCheckpoint(String, int); }
+-keep class com.tencent.wcdb.repair.RepairKit { int onProgress(java.lang.String, int, long); }
+-keep class com.tencent.wcdb.database.SQLiteConnection { void notifyCheckpoint(java.lang.String, int); }
