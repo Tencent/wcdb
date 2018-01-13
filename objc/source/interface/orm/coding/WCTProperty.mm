@@ -38,6 +38,12 @@ WCTProperty::WCTProperty(NSString *name)
 {
 }
 
+WCTProperty::WCTProperty(NSString *name, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
+: WCDB::Column(name ? name.UTF8String : "")
+, WCTPropertyBase(cls, columnBinding)
+{
+}
+
 WCTProperty::WCTProperty(const char *name, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
     : WCDB::Column(name)
     , WCTPropertyBase(cls, columnBinding)

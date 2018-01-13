@@ -31,6 +31,9 @@ public:
     WCTProperty(const char *name,
                 Class cls,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
+    WCTProperty(NSString *name,
+                Class cls,
+                const std::shared_ptr<WCTColumnBinding> &columnBinding);
 
     //distinct
     WCTResultList distinct() const;
