@@ -19,8 +19,11 @@
  */
 
 #include <WCDB/statement.hpp>
+#include <WCDB/expression.hpp>
 
 namespace WCDB {
+    
+StatementSelect Statement::FTS3Tokenizer = StatementSelect().select({Expression::Function("fts3_tokenizer", {Expression::BindParameter Expression::BindParameter}));
 
 Statement::Statement() : Describable("")
 {

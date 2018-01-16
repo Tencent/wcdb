@@ -27,11 +27,6 @@
 
 namespace WCDB {
 
-    //TODO
-//StatementSelect StatementSelect::Fts3Tokenizer =
-//    StatementSelect().select({Expression::Function(
-//        "fts3_tokenizer", ExprList(2, WCDB::Expression::BindParameter))});
-
 StatementSelect &StatementSelect::select(const ColumnResult &columnResult, bool distinct)
 {
     m_description.append("SELECT ");

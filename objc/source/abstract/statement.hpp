@@ -28,6 +28,8 @@ namespace WCDB {
 
 class Statement : public Describable {
 public:
+    static const StatementSelect FTS3Tokenizer;
+    
     enum class Type : int {
         None = 0,
         AlterTable,
