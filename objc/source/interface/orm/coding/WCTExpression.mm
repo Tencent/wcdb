@@ -56,7 +56,7 @@ WCTExpression::WCTExpression(const std::nullptr_t &value)
 {
 }
 
-WCTExpression::WCTExpression(const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::CType &value, int size)
+WCTExpression::WCTExpression(const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::UnderlyingType &value, int size)
     : WCDB::Expression(value, size)
     , WCTPropertyBase(nil, nullptr)
 {

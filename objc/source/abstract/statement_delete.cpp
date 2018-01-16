@@ -19,8 +19,9 @@
  */
 
 #include <WCDB/expression.hpp>
-#include <WCDB/order.hpp>
 #include <WCDB/statement_delete.hpp>
+#include <WCDB/order.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
@@ -30,21 +31,35 @@ StatementDelete &StatementDelete::deleteFrom(const std::string &table)
     return *this;
 }
 
-StatementDelete &StatementDelete::where(const Expression &where)
+StatementDelete &StatementDelete::where(const Expression &condition)
 {
-    if (!where.isEmpty()) {
-        m_description.append(" WHERE " + where.getDescription());
+    if (!condition.isEmpty()) {
+        m_description.append(" WHERE " + condition.getDescription());
     }
     return *this;
 }
-
+    
+StatementDelete &StatementDelete::orderBy(const std::list<const Order> &orderList)
+{
+    if (!orderList.empty()) {
+        m_description.append(" ORDER BY " + stringByJoiningList(orderList));
+    }
+    return *this;
+}
+    
+StatementDelete &StatementDelete::orderBy(const Order &order)
+{
+    m_description.append(" ORDER BY " + order.getDescription());
+    return *this;
+}
+    
 StatementDelete &StatementDelete::limit(const Expression &from,
                                         const Expression &to)
 {
     if (!from.isEmpty()) {
         m_description.append(" LIMIT " + from.getDescription());
         if (!to.isEmpty()) {
-            m_description.append("," + to.getDescription());
+            m_description.append(", " + to.getDescription());
         }
     }
     return *this;

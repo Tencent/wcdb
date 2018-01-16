@@ -22,14 +22,13 @@
 #define statement_attach_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class StatementAttach : public Statement {
 public:
-    StatementAttach &attach(const Expression &expr);
-    StatementAttach &attach(const Expression &expr,
-                            const std::string &database);
+    StatementAttach &attach(const Expression &expression);
 
     StatementAttach &as(const std::string &schema);
 

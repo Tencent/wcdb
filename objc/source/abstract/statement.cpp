@@ -18,16 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/handle.hpp>
 #include <WCDB/statement.hpp>
 
 namespace WCDB {
 
 Statement::Statement() : Describable("")
-{
-}
-
-Statement::~Statement()
 {
 }
 

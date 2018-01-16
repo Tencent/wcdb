@@ -28,16 +28,9 @@ Statement::Type StatementAttach::getStatementType() const
     return Statement::Type::Attach;
 }
 
-StatementAttach &StatementAttach::attach(const Expression &expr)
+StatementAttach &StatementAttach::attach(const Expression &expression)
 {
-    m_description.append("ATTACH " + expr.getDescription());
-    return *this;
-}
-
-StatementAttach &StatementAttach::attach(const Expression &expr,
-                                         const std::string &database)
-{
-    m_description.append("ATTACH " + database + " " + expr.getDescription());
+    m_description.append("ATTACH " + expression.getDescription());
     return *this;
 }
 

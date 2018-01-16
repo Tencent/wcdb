@@ -18,10 +18,11 @@
  * limitations under the License.
  */
 
+#include <WCDB/literal_value.hpp>
+#include <WCDB/statement_insert.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/expression.hpp>
-#include <WCDB/handle.hpp>
-#include <WCDB/statement_insert.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
@@ -36,7 +37,46 @@ StatementInsert &StatementInsert::insert(const std::string &table,
     m_description.append(" INTO " + table);
     return *this;
 }
+    
+StatementInsert &StatementInsert::insert(const std::string &table, const std::list<const Column> &columnList, Conflict conflict)
+{
+    m_description.append("INSERT");
+    if (conflict != Conflict::NotSet) {
+        m_description.append(" OR ");
+        m_description.append(ConflictName(conflict));
+    }
+    m_description.append(" INTO " + table);
+    if (!columnList.empty()) {
+        m_description.append("(" + stringByJoiningList(columnList) + ")");
+    }
+    return *this;
+}
 
+StatementInsert &StatementInsert::insert(const std::string &table, const Column &column, Conflict conflict)
+{
+    m_description.append("INSERT");
+    if (conflict != Conflict::NotSet) {
+        m_description.append(" OR ");
+        m_description.append(ConflictName(conflict));
+    }
+    m_description.append(" INTO " + table + "(" + column.getDescription() + ")");
+    return *this;
+}
+    
+StatementInsert &StatementInsert::values(const std::list<const Expression> &expressionList)
+{
+    if (!expressionList.empty()) {
+        m_description.append(" VALUES(" + stringByJoiningList(expressionList) + ")");
+    }
+    return *this;
+}
+    
+StatementInsert &StatementInsert::values(const Expression &expression)
+{
+    m_description.append(" VALUES(" + expression.getDescription() + ")");
+    return *this;
+}
+    
 Statement::Type StatementInsert::getStatementType() const
 {
     return Statement::Type::Insert;

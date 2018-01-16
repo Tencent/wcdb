@@ -29,30 +29,20 @@ using namespace WCDB;
 
 @implementation WTCColumnIndexTests
 
-- (void)setUp
+- (void)testColumnIndex
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    Column column1 = Column("column1");
+    Expression expression1 = column1.abs();
+    
+    //Then
+    WINQAssertEqual(ColumnIndex(column1), @"column1");
+    
+    WINQAssertEqual(ColumnIndex(column1, OrderTerm::ASC), @"column1 ASC");
+    
+    WINQAssertEqual(ColumnIndex(expression1), @"ABS(column1)");
+    
+    WINQAssertEqual(ColumnIndex(expression1, OrderTerm::ASC), @"ABS(column1) ASC");
 }
 
 @end

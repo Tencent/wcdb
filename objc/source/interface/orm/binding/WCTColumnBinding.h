@@ -77,7 +77,7 @@ public:
 
     template <typename T>
     typename std::enable_if<ColumnIsCppType<T>::value, void>::type
-    makeDefault(const typename WCDB::ColumnInfo<T>::CType &defaultValue)
+    makeDefault(const typename WCDB::ColumnInfo<T>::UnderlyingType &defaultValue)
     {
         m_columnDef.makeDefault(defaultValue);
     }

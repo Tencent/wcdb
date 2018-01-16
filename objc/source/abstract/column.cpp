@@ -19,40 +19,28 @@
  */
 
 #include <WCDB/column.hpp>
+#include <WCDB/expression.hpp>
 
 namespace WCDB {
 
 const Column Column::Rowid("rowid");
 const Column Column::Any("*");
 
-Column::Column() : Describable("")
-{
-}
-
-Column::Column(const char *name) : Describable(name)
-{
-}
-
 Column::Column(const std::string &name) : Describable(name)
 {
 }
 
-const std::string &Column::getName() const
-{
-    return m_description;
-}
-
 Column Column::inTable(const std::string &table) const
 {
-    return Column(table + "." + getName());
+    return Column(table + "." + getDescription());
 }
-
-bool Column::operator==(const Column &column) const
+    
+Expression Column::asExpression() const 
 {
-    return getDescription() == column.getDescription();
+    return ExpressionConvertible<Column>::asExpression(*this);
 }
 
-Column::operator ColumnList() const
+Column::operator std::list<const Column>() const
 {
     return {*this};
 }

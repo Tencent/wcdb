@@ -21,7 +21,7 @@
 #ifndef pragma_hpp
 #define pragma_hpp
 
-#include <WCDB/describable.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
@@ -106,9 +106,6 @@ public:
     static const Pragma WalAutocheckpoint;
     static const Pragma WalCheckpoint;
     static const Pragma WritableSchema;
-
-    const std::string &getName() const;
-
 protected:
     Pragma(const char *name);
 };

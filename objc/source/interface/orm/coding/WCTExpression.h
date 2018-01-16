@@ -45,7 +45,7 @@ public:
     WCTExpression(const std::nullptr_t &);
 
     WCTExpression(
-        const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::CType
+        const typename WCDB::ColumnTypeInfo<WCDB::ColumnType::BLOB>::UnderlyingType
             &value,
         int size);
 

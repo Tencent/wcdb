@@ -106,9 +106,4 @@ Pragma::Pragma(const char *name) : Describable(name)
 {
 }
 
-const std::string &Pragma::getName() const
-{
-    return m_description;
-}
-
 } //namespace WCDB

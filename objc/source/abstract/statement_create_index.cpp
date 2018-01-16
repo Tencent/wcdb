@@ -18,9 +18,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/column_index.hpp>
 #include <WCDB/expression.hpp>
 #include <WCDB/statement_create_index.hpp>
+#include <WCDB/column_index.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
@@ -39,11 +40,23 @@ StatementCreateIndex &StatementCreateIndex::create(const std::string &index,
     m_description.append(index);
     return *this;
 }
-
-StatementCreateIndex &StatementCreateIndex::where(const Expression &expr)
+    
+StatementCreateIndex &StatementCreateIndex::on(const std::string &table, const std::list<const ColumnIndex> &indexList)
 {
-    if (!expr.isEmpty()) {
-        m_description.append(" WHERE " + expr.getDescription());
+    m_description.append(" ON " + table + "(" + stringByJoiningList(indexList) + ")");
+    return *this;
+}
+    
+StatementCreateIndex &StatementCreateIndex::on(const std::string &table, const ColumnIndex &index)
+{
+    m_description.append(" ON " + table + "(" + index.getDescription() + ")");
+    return *this;
+}
+
+StatementCreateIndex &StatementCreateIndex::where(const Expression &expression)
+{
+    if (!expression.isEmpty()) {
+        m_description.append(" WHERE " + expression.getDescription());
     }
     return *this;
 }

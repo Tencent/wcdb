@@ -29,30 +29,39 @@ using namespace WCDB;
 
 @implementation WTCLiteralValueTests
 
-- (void)setUp
+- (void)testLiteralValue
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    LiteralValue boolLiteralValue = false;
+    WINQAssertEqual(boolLiteralValue, @"0");
+    
+    LiteralValue intLiteralValue = 1;
+    WINQAssertEqual(intLiteralValue, @"1");
+    
+    LiteralValue floatLiteralValue = 0.1;
+    WINQAssertEqual(floatLiteralValue, @"0.100000");
+    
+    LiteralValue stringLiteralValue = "test";
+    WINQAssertEqual(stringLiteralValue, @"'test'");
+    
+    LiteralValue nullLiteralValue = nil;
+    WINQAssertEqual(nullLiteralValue, @"NULL");
+    
+    WINQAssertEqual(LiteralValue(true), @"1");
+    
+    WINQAssertEqual(LiteralValue(1), @"1");
+    
+    int64_t int64 = 17626545782784;
+    WINQAssertEqual(LiteralValue(int64), @"17626545782784");
+    
+    WINQAssertEqual(LiteralValue(0.1), @"0.100000");
+    
+    WINQAssertEqual(LiteralValue("test"), @"'test'");
+    
+    std::string str = "test";
+    std::vector<unsigned char> data(str.begin(), str.end());
+    WINQAssertEqual(LiteralValue(data), @"'test'");
+    
+    WINQAssertEqual(LiteralValue(nullptr), @"NULL");
 }
 
 @end

@@ -21,39 +21,30 @@
 #ifndef column_def_hpp
 #define column_def_hpp
 
-#include <WCDB/column.hpp>
-#include <WCDB/column_type.hpp>
 #include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
-#include <WCDB/foreign_key.hpp>
-#include <WCDB/order_term.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class ColumnDef : public Describable {
 public:
-    ColumnDef(const Column &column, ColumnType type);
+    
+    template <typename T>
+    ColumnDef(const T &t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
+    : Describable(ColumnConvertible<T>::asColumnn(t).getDescription()){
+    }
+    
+    template <typename T>
+    ColumnDef(const T &t, ColumnType columnType, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
+    : Describable(ColumnConvertible<T>::asColumn(t).getDescription() + " " + ColumnTypeName(columnType)){
+    }
 
     ColumnDef &makePrimary(OrderTerm term = OrderTerm::NotSet,
                            bool autoIncrement = false,
                            Conflict conflict = Conflict::NotSet);
 
     ColumnDef &makeDefault(const Expression &expr);
-
-    template <typename T>
-    typename std::enable_if<std::is_arithmetic<T>::value, ColumnDef &>::type
-    makeDefault(const T &value)
-    {
-        m_description.append(" DEFAULT " + std::to_string(value));
-        return *this;
-    }
-
-    ColumnDef &makeDefault(const char *value);
-
-    ColumnDef &makeDefault(const std::string &value);
-
-    ColumnDef &makeDefault(const std::nullptr_t &value);
-
+    
     enum class DefaultType {
         CurrentTime,
         CurrentDate,
@@ -61,10 +52,6 @@ public:
     };
 
     ColumnDef &makeDefault(DefaultType defaultType);
-
-    ColumnDef &
-    makeDefault(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
-                int size);
 
     ColumnDef &makeNotNull();
 

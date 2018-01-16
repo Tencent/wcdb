@@ -22,28 +22,35 @@
 #define statement_delete_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class StatementDelete : public Statement {
 public:
     StatementDelete &deleteFrom(const std::string &table);
-    StatementDelete &where(const Expression &where);
-    //StatementDeleteLimited
-    template <typename T = Order>
-    typename std::enable_if<std::is_base_of<Order, T>::value,
-                            StatementDelete &>::type
+    
+    StatementDelete &where(const Expression &condition);
+    
+    template <typename T>
+    typename std::enable_if<OrderConvertible<T>::value,
+    StatementDelete &>::type
     orderBy(const std::list<const T> &orderList)
     {
         if (!orderList.empty()) {
-            m_description.append(" ORDER BY ");
-            joinDescribableList(orderList);
+            m_description.append(" ORDER BY " + stringByJoiningList(orderList));
         }
         return *this;
     }
+
+    StatementDelete &orderBy(const std::list<const Order> &orderList);
+
+    StatementDelete &orderBy(const Order &order);
+
     StatementDelete &limit(const Expression &from, const Expression &to);
-    StatementDelete &limit(const Expression &expr);
-    StatementDelete &offset(const Expression &expr);
+    
+    StatementDelete &limit(const Expression &expression);
+    StatementDelete &offset(const Expression &expression);
 
     virtual Statement::Type getStatementType() const override;
 };

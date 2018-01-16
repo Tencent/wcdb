@@ -29,30 +29,15 @@ using namespace WCDB;
 
 @implementation WTCStatementDropTableTests
 
-- (void)setUp
+- (void)testStatementDropTable
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    std::string table1 = "table1";
+    
+    XCTAssertEqual(StatementDropTable().getStatementType(), Statement::Type::DropTable);
+    
+    WINQAssertEqual(StatementDropTable().drop(table1), @"DROP TABLE IF EXISTS table1");
+    
+    WINQAssertEqual(StatementDropTable().drop(table1, false), @"DROP TABLE table1");
 }
 
 @end

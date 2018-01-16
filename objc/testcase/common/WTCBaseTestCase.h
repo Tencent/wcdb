@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+#import <WCDB/abstract.h>
 #import <XCTest/XCTest.h>
 
 @interface WTCBaseTestCase : XCTestCase
@@ -30,7 +30,7 @@
 
 @property(readonly) NSString *recommendedPath;
 
-@property(readonly) WCTTag recommendTag;
+//@property(readonly) WCTTag recommendTag;
 
 @property(readonly) NSFileManager *fileManager;
 

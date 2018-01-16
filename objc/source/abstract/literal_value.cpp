@@ -19,57 +19,19 @@
  */
 
 #include <WCDB/literal_value.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
-LiteralValue::LiteralValue(const char *value)
-    : Describable(value ? LiteralString(value) : "")
+std::string LiteralValue::stringByAntiInjecting(const char *origin)
 {
+    return origin ? "'" + stringByReplacingOccurrencesOfString(origin, "'", "''") + "'" : "";
 }
-
-LiteralValue::LiteralValue(const std::string &value)
-    : Describable(LiteralString(value))
+    
+std::string LiteralValue::stringByAntiInjecting(const std::vector<unsigned char> &origin)
 {
+    std::string str(origin.begin(), origin.end());
+    return "'" + stringByReplacingOccurrencesOfString(str, "'", "''") + "'";
 }
-
-LiteralValue::LiteralValue(const std::nullptr_t &value) : Describable("NULL")
-{
-}
-
-LiteralValue::LiteralValue(
-    const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size)
-    : Describable("'" + std::string((const char *) value, size) + "'")
-{
-}
-
-std::string LiteralValue::stringByReplacingOccurrencesOfString(
-    const std::string &origin,
-    const std::string &target,
-    const std::string &replacement)
-{
-    bool replace = false;
-    size_t last = 0;
-    size_t found = 0;
-    std::string output;
-    while ((found = origin.find(target, last)) != std::string::npos) {
-        if (!replace) {
-            replace = true;
-            output.clear();
-        }
-        std::string sub = origin.substr(last, found - last);
-        output += sub;
-        output += replacement;
-        last = found + target.length();
-    }
-    if (replace) {
-        output += origin.substr(last, -1);
-    }
-    return replace ? output : origin;
-}
-
-std::string LiteralValue::LiteralString(const std::string &value)
-{
-    return "'" + stringByReplacingOccurrencesOfString(value, "'", "''") + "'";
-}
-
+    
 } // namespace WCDB

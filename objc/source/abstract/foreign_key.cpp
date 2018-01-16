@@ -19,18 +19,27 @@
  */
 
 #include <WCDB/foreign_key.hpp>
+#include <WCDB/column.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
-
+    
 ForeignKey::ForeignKey(const std::string &foreignTableName,
-                       const std::list<const std::string> &columnNames)
-    : Describable("REFERENCES " + foreignTableName)
-{
-    if (!columnNames.empty()) {
-        m_description.append(" (");
-        joinDescribableList(columnNames);
-        m_description.append(")");
+           const std::list<const Column> &columnList)
+: Describable("REFERENCES " + foreignTableName) {
+    if (!columnList.empty()) {
+        m_description.append("(" + stringByJoiningList(columnList) + ")");
     }
+}
+
+ForeignKey::ForeignKey(const std::string &foreignTableName)
+    : Describable("REFERENCES " + foreignTableName) {
+}
+    
+ForeignKey::ForeignKey(const std::string &foreignTableName,
+           const Column &column)
+: Describable("REFERENCES " + foreignTableName + "(" + column.getDescription() + ")")
+{
 }
 
 std::string ForeignKey::actionName(Action action)

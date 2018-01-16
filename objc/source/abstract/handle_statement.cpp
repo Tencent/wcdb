@@ -79,34 +79,34 @@ StatementHandle::~StatementHandle()
 }
 
 void StatementHandle::bindInteger32(
-    const ColumnTypeInfo<ColumnType::Integer32>::CType &value, int index)
+    const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value, int index)
 {
     sqlite3_bind_int((sqlite3_stmt *) m_stmt, index, value);
 }
 
 void StatementHandle::bindInteger64(
-    const ColumnTypeInfo<ColumnType::Integer64>::CType &value, int index)
+    const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value, int index)
 {
     sqlite3_bind_int64((sqlite3_stmt *) m_stmt, index, value);
 }
 
 void StatementHandle::bindDouble(
-    const ColumnTypeInfo<ColumnType::Float>::CType &value, int index)
+    const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value, int index)
 {
     sqlite3_bind_double((sqlite3_stmt *) m_stmt, index, value);
 }
 
 void StatementHandle::bindText(
-    const ColumnTypeInfo<ColumnType::Text>::CType &value, int index)
+    const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value, int index)
 {
     sqlite3_bind_text((sqlite3_stmt *) m_stmt, index, value, -1,
                       SQLITE_TRANSIENT);
 }
 
 void StatementHandle::bindBLOB(
-    const ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size, int index)
+    const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
 {
-    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value, size,
+    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.data(), (int)value.size(),
                       SQLITE_TRANSIENT);
 }
 
@@ -115,38 +115,37 @@ void StatementHandle::bindNull(int index)
     sqlite3_bind_null((sqlite3_stmt *) m_stmt, index);
 }
 
-ColumnTypeInfo<ColumnType::Integer32>::CType
+ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
 StatementHandle::getInteger32(int index)
 {
-    return (typename ColumnTypeInfo<ColumnType::Integer32>::CType)
+    return (typename ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType)
         sqlite3_column_int((sqlite3_stmt *) m_stmt, index);
 }
 
-ColumnTypeInfo<ColumnType::Integer64>::CType
+ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
 StatementHandle::getInteger64(int index)
 {
-    return (typename ColumnTypeInfo<ColumnType::Integer64>::CType)
+    return (typename ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType)
         sqlite3_column_int64((sqlite3_stmt *) m_stmt, index);
 }
 
-ColumnTypeInfo<ColumnType::Float>::CType StatementHandle::getDouble(int index)
+ColumnTypeInfo<ColumnType::Float>::UnderlyingType StatementHandle::getDouble(int index)
 {
-    return (typename ColumnTypeInfo<ColumnType::Float>::CType)
+    return (typename ColumnTypeInfo<ColumnType::Float>::UnderlyingType)
         sqlite3_column_double((sqlite3_stmt *) m_stmt, index);
 }
 
-ColumnTypeInfo<ColumnType::Text>::CType StatementHandle::getText(int index)
+ColumnTypeInfo<ColumnType::Text>::UnderlyingType StatementHandle::getText(int index)
 {
-    return (typename ColumnTypeInfo<ColumnType::Text>::CType)
+    return (typename ColumnTypeInfo<ColumnType::Text>::UnderlyingType)
         sqlite3_column_text((sqlite3_stmt *) m_stmt, index);
 }
 
-ColumnTypeInfo<ColumnType::BLOB>::CType StatementHandle::getBLOB(int index,
-                                                                 int &size)
+ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType StatementHandle::getBLOB(int index)
 {
-    size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
-    return (typename ColumnTypeInfo<ColumnType::BLOB>::CType)
-        sqlite3_column_blob((sqlite3_stmt *) m_stmt, index);
+    int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
+    const unsigned char* data = (const unsigned char*)sqlite3_column_blob((sqlite3_stmt *) m_stmt, index);
+    return ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType(data, data + size);
 }
 
 int StatementHandle::getColumnCount()

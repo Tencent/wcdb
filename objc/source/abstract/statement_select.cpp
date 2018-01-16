@@ -18,48 +18,81 @@
  * limitations under the License.
  */
 
-#include <WCDB/clause_join.hpp>
-#include <WCDB/column.hpp>
-#include <WCDB/column_result.hpp>
 #include <WCDB/expression.hpp>
-#include <WCDB/handle.hpp>
-#include <WCDB/order.hpp>
 #include <WCDB/statement_select.hpp>
+#include <WCDB/column_result.hpp>
 #include <WCDB/subquery.hpp>
+#include <WCDB/order.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
-StatementSelect StatementSelect::Fts3Tokenizer =
-    StatementSelect().select({Expression::Function(
-        "fts3_tokenizer", ExprList(2, WCDB::Expression::BindParameter))});
+    //TODO
+//StatementSelect StatementSelect::Fts3Tokenizer =
+//    StatementSelect().select({Expression::Function(
+//        "fts3_tokenizer", ExprList(2, WCDB::Expression::BindParameter))});
 
-StatementSelect &StatementSelect::from(const JoinClause &joinClause)
+StatementSelect &StatementSelect::select(const ColumnResult &columnResult, bool distinct)
 {
-    m_description.append(" FROM " + joinClause.getDescription());
+    m_description.append("SELECT ");
+    if (distinct) {
+        m_description.append("DISTINCT ");
+    }
+    m_description.append(columnResult.getDescription());
+    return *this;
+}
+    
+StatementSelect &StatementSelect::select(const std::list<const ColumnResult> &columnResultList, bool distinct)
+{
+    m_description.append("SELECT ");
+    if (distinct) {
+        m_description.append("DISTINCT ");
+    }
+    m_description.append(stringByJoiningList(columnResultList));
+    return *this;
+}
+    
+StatementSelect &StatementSelect::from(const std::list<const Subquery> &subqueryList)
+{
+    m_description.append(" FROM " + stringByJoiningList(subqueryList));
+    return *this;
+}
+    
+StatementSelect &StatementSelect::from(const Subquery &subquery)
+{
+    m_description.append(" FROM " + subquery.getDescription());
     return *this;
 }
 
-StatementSelect &StatementSelect::from(const std::string &tableName)
+StatementSelect &StatementSelect::where(const Expression &condition)
 {
-    m_description.append(" FROM " + tableName);
-    return *this;
-}
-
-StatementSelect &StatementSelect::where(const Expression &where)
-{
-    if (!where.isEmpty()) {
-        m_description.append(" WHERE " + where.getDescription());
+    if (!condition.isEmpty()) {
+        m_description.append(" WHERE " + condition.getDescription());
     }
     return *this;
 }
 
+StatementSelect &StatementSelect::orderBy(const std::list<const Order> &orderList)
+{
+    if (!orderList.empty()) {
+        m_description.append(" ORDER BY " + stringByJoiningList(orderList));
+    }
+    return *this;
+}
+    
+StatementSelect &StatementSelect::orderBy(const Order &order)
+{
+    m_description.append(" ORDER BY " + order.getDescription());
+    return *this;
+}
+    
 StatementSelect &StatementSelect::limit(const Expression &from,
                                         const Expression &to)
 {
     if (!from.isEmpty()) {
         m_description.append(" LIMIT " + from.getDescription());
         if (!to.isEmpty()) {
-            m_description.append("," + to.getDescription());
+            m_description.append(", " + to.getDescription());
         }
     }
     return *this;
@@ -81,6 +114,20 @@ StatementSelect &StatementSelect::offset(const Expression &offset)
     return *this;
 }
 
+StatementSelect &StatementSelect::groupBy(const std::list<const Expression> &groupList)
+{
+    if (!groupList.empty()) {
+        m_description.append(" GROUP BY " + stringByJoiningList(groupList));
+    }
+    return *this;
+}
+    
+StatementSelect &StatementSelect::groupBy(const Expression &group)
+{
+    m_description.append(" GROUP BY " + group.getDescription());
+    return *this;
+}
+    
 StatementSelect &StatementSelect::having(const Expression &having)
 {
     if (!having.isEmpty()) {

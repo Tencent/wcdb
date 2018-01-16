@@ -35,15 +35,10 @@ const std::string &Describable::getDescription() const
 {
     return m_description;
 }
-
+    
 bool Describable::isEmpty() const
 {
     return m_description.empty();
-}
-
-Describable::operator const std::string &() const
-{
-    return m_description;
 }
 
 } //namespace WCDB

@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/pragma.hpp>
+#include <WCDB/literal_value.hpp>
 #include <WCDB/statement_pragma.hpp>
 
 namespace WCDB {
@@ -29,19 +30,8 @@ StatementPragma &StatementPragma::pragma(const Pragma &pragma)
     return *this;
 }
 
-StatementPragma &StatementPragma::pragma(const Pragma &pragma,
-                                         const char *value)
-{
-    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
-                         LiteralValue(value).getDescription());
-    return *this;
-}
-
-StatementPragma &StatementPragma::pragma(const Pragma &pragma,
-                                         const std::string &value)
-{
-    m_description.append("PRAGMA " + pragma.getDescription() + "=" +
-                         LiteralValue(value).getDescription());
+StatementPragma &StatementPragma::pragma(const Pragma &pragma, const LiteralValue& value) {
+    m_description.append("PRAGMA " + pragma.getDescription() + "=" + value.getDescription());
     return *this;
 }
 

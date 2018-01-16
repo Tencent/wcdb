@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
+#include <WCDB/order.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/expression.hpp>
-#include <WCDB/handle.hpp>
-#include <WCDB/order.hpp>
 #include <WCDB/statement_update.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
@@ -38,12 +38,47 @@ StatementUpdate &StatementUpdate::update(const std::string &table,
     m_description.append(table);
     return *this;
 }
-
-StatementUpdate &StatementUpdate::where(const Expression &where)
+    
+StatementUpdate &StatementUpdate::set(const std::list<const std::pair<const Column, const Expression>> &valueList)
 {
-    if (!where.isEmpty()) {
-        m_description.append(" WHERE " + where.getDescription());
+    m_description.append(" SET ");
+    bool flag = false;
+    for (const auto &value : valueList) {
+        if (flag) {
+            m_description.append(", ");
+        } else {
+            flag = true;
+        }
+        m_description.append(value.first.getDescription() + "=" + value.second.getDescription());
     }
+    return *this;
+}
+    
+StatementUpdate &StatementUpdate::set(const std::pair<const Column, const Expression> &value)
+{
+    m_description.append(" SET " + value.first.getDescription() + "=" + value.second.getDescription());
+    return *this;
+}
+
+StatementUpdate &StatementUpdate::where(const Expression &condition)
+{
+    if (!condition.isEmpty()) {
+        m_description.append(" WHERE " + condition.getDescription());
+    }
+    return *this;
+}
+    
+StatementUpdate &StatementUpdate::orderBy(const std::list<const Order> &orderList)
+{
+    if (!orderList.empty()) {
+        m_description.append(" ORDER BY " + stringByJoiningList(orderList));
+    }
+    return *this;
+}
+    
+StatementUpdate &StatementUpdate::orderBy(const Order &order)
+{
+    m_description.append(" ORDER BY " + order.getDescription());
     return *this;
 }
 
@@ -53,7 +88,7 @@ StatementUpdate &StatementUpdate::limit(const Expression &from,
     if (!from.isEmpty()) {
         m_description.append(" LIMIT " + from.getDescription());
         if (!to.isEmpty()) {
-            m_description.append("," + to.getDescription());
+            m_description.append(", " + to.getDescription());
         }
     }
     return *this;

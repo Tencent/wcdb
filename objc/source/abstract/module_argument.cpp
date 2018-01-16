@@ -19,7 +19,8 @@
  */
 
 #include <WCDB/column_def.hpp>
-#include <WCDB/constraint_table.hpp>
+#include <WCDB/foreign_key.hpp>
+#include <WCDB/table_constraint.hpp>
 #include <WCDB/module_argument.hpp>
 
 namespace WCDB {
@@ -38,6 +39,12 @@ ModuleArgument::ModuleArgument(const std::string &left,
                                const std::string &right)
     : Describable(left + "=" + right)
 {
+}
+
+    
+ModuleArgument ModuleArgument::Tokenize(const std::string &name)
+{
+    return ModuleArgument("tokenize", name);
 }
 
 } //namespace WCDB

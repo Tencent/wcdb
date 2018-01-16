@@ -21,13 +21,16 @@
 #ifndef declare_hpp
 #define declare_hpp
 
-#include <WCDB/conflict.hpp>
 #include <atomic>
 #include <cassert>
 #include <functional>
 #include <list>
 #include <string>
 #include <utility>
+#include <WCDB/conflict.hpp>
+#include <WCDB/column_type.hpp>
+#include <WCDB/order_term.hpp>
+#include <WCDB/describable.hpp>
 
 namespace WCDB {
 
@@ -37,11 +40,13 @@ class ColumnIndex;
 class ColumnResult;
 class Describable;
 class Expression;
+class ForeignKey;
 class JoinClause;
 class Order;
 class Pragma;
 class StatementHandle;
 class Handle;
+class LiteralValue;
 class ModuleArgument;
 class Statement;
 class StatementAlterTable;
@@ -59,18 +64,19 @@ class StatementCreateVirtualTable;
 class Subquery;
 class TableConstraint;
 
-typedef std::list<const Column> ColumnList;
-typedef std::list<const ColumnDef> ColumnDefList;
-typedef std::list<const ColumnIndex> ColumnIndexList;
-typedef std::list<const ColumnResult> ColumnResultList;
-typedef std::list<const Expression> ExprList;
-typedef std::list<const Order> OrderList;
-typedef std::list<const StatementSelect> StatementSelectList;
-typedef std::list<const Subquery> SubqueryList;
-typedef std::list<const TableConstraint> TableConstraintList;
-typedef std::pair<const Column, const Expression> UpdateValue;
-typedef std::list<const UpdateValue> UpdateValueList;
-typedef std::list<const ModuleArgument> ModuleArgumentList;
+//TODO
+//typedef std::list<const Column> ColumnList;
+//typedef std::list<const ColumnDef> ColumnDefList;
+//typedef std::list<const ColumnIndex> ColumnIndexList;
+//typedef std::list<const ColumnResult> ColumnResultList;
+//typedef std::list<const Expression> ExprList;
+//typedef std::list<const Order> OrderList;
+//typedef std::list<const StatementSelect> StatementSelectList;
+//typedef std::list<const Subquery> SubqueryList;
+//typedef std::list<const TableConstraint> TableConstraintList;
+//typedef std::pair<const Column, const Expression> UpdateValue;
+//typedef std::list<const UpdateValue> UpdateValueList;
+//typedef std::list<const ModuleArgument> ModuleArgumentList;
 
 }; //namespace WCDB
 

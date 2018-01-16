@@ -21,8 +21,8 @@
 #ifndef statement_create_table_hpp
 #define statement_create_table_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
@@ -33,46 +33,10 @@ public:
                                  bool ifNotExists = true);
     StatementCreateTable &as(const StatementSelect &statementSelect);
 
-    template <typename T = ColumnDef>
-    typename std::enable_if<std::is_base_of<ColumnDef, T>::value,
-                            StatementCreateTable &>::type
-    create(const std::string &table,
-           const std::list<const T> &columnDefList,
-           bool ifNotExists = true)
-    {
-        m_description.append("CREATE TABLE ");
-        if (ifNotExists) {
-            m_description.append("IF NOT EXISTS ");
-        }
-        m_description.append(table + "(");
-        joinDescribableList(columnDefList);
-        m_description.append(")");
-        return *this;
-    }
+    StatementCreateTable &create(const std::string &table, const std::list<const ColumnDef> &columnDefList, bool ifNotExists = true);
 
-    template <typename T, typename U>
-    typename std::enable_if<std::is_base_of<ColumnDef, T>::value &&
-                                std::is_base_of<TableConstraint, U>::value,
-                            StatementCreateTable &>::type
-    create(const std::string &table,
-           const std::list<const T> &columnDefList,
-           const std::list<const U> &tableConstraintList,
-           bool ifNotExists = true)
-    {
-        m_description.append("CREATE TABLE ");
-        if (ifNotExists) {
-            m_description.append("IF NOT EXISTS ");
-        }
-        m_description.append(table + "(");
-        joinDescribableList(columnDefList);
-        if (!tableConstraintList.empty()) {
-            m_description.append(" ,");
-            joinDescribableList(tableConstraintList);
-        }
-        m_description.append(")");
-        return *this;
-    }
-
+    StatementCreateTable &create(const std::string &table, const std::list<const ColumnDef> &columnDefList, const std::list<const TableConstraint> &tableConstraintList, bool ifNotExists = true);
+    
     virtual Statement::Type getStatementType() const override;
 };
 

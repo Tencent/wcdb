@@ -29,30 +29,29 @@ using namespace WCDB;
 
 @implementation WTCTableConstraintTests
 
-- (void)setUp
+
+- (TableConstraint)generateTableConstraint
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    return TableConstraint("table1");
 }
 
-- (void)tearDown
+- (void)testTableConstraint
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    Column column1("column1");
+    ColumnIndex index1(column1);
+    ColumnIndex index2 = ColumnIndex(Column("column2"));
+    ForeignKey foreignKey1("testTable", column1);
+    
+    WINQAssertEqual([self generateTableConstraint].makePrimary({index1, index2}), @"CONSTRAINT table1 PRIMARY KEY(column1, column2)");
+    
+    WINQAssertEqual([self generateTableConstraint].makeUnique({index1, index2}), @"CONSTRAINT table1 UNIQUE(column1, column2)");
+    
+    WINQAssertEqual([self generateTableConstraint].onConflict(Conflict::Fail), @"CONSTRAINT table1 ON CONFLICT FAIL");
+    
+    WINQAssertEqual([self generateTableConstraint].check(column1 > 1), @"CONSTRAINT table1 CHECK(column1 > 1)");
+    
+    WINQAssertEqual([self generateTableConstraint].makeForeignKey(column1, foreignKey1), @"CONSTRAINT table1 FOREIGN KEY(column1) REFERENCES testTable(column1)");
 }
 
 @end

@@ -38,7 +38,7 @@ protected:
         WCTCppAccessor<(WCTColumnType) WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
-    using CType = typename CppAccessor::CType;
+    using UnderlyingType = typename CppAccessor::UnderlyingType;
     using PropertyGetter = typename RuntimeAccessor::Getter;
     using PropertySetter = typename RuntimeAccessor::Setter;
     using ValueGetter = typename CppAccessor::Getter;
@@ -87,7 +87,7 @@ public:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
-    using CType = typename CppAccessor::CType;
+    using UnderlyingType = typename CppAccessor::UnderlyingType;
     using SizeType = typename CppAccessor::SizeType;
     using PropertyGetter = typename RuntimeAccessor::Getter;
     using PropertySetter = typename RuntimeAccessor::Setter;

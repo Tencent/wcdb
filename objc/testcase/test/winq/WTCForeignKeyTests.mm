@@ -29,30 +29,38 @@ using namespace WCDB;
 
 @implementation WTCForeignKeyTests
 
-- (void)setUp
+- (ForeignKey)generateForeignKey
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    Column column1("column1");
+    Column column2("column2");
+    return ForeignKey("testForeignKeyTable", {column1, column2});
 }
 
-- (void)tearDown
+- (void)testForeignKey
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    WINQAssertEqual([self generateForeignKey].onDelete(ForeignKey::Action::SetNull),
+                    @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE SET NULL");
+    
+    WINQAssertEqual([self generateForeignKey].onUpdate(ForeignKey::Action::SetDefault),
+                    @"REFERENCES testForeignKeyTable(column1, column2) ON UPDATE SET DEFAULT");
+    
+    WINQAssertEqual([self generateForeignKey].onDelete(ForeignKey::Action::Cascade),
+                    @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE CASCADE");
+    
+    WINQAssertEqual([self generateForeignKey].onUpdate(ForeignKey::Action::Restrict),
+                    @"REFERENCES testForeignKeyTable(column1, column2) ON UPDATE RESTRICT");
+    
+    WINQAssertEqual([self generateForeignKey].onDelete(ForeignKey::Action::NoAction),
+                    @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE NO ACTION");
+    
+    WINQAssertEqual([self generateForeignKey].deferrable(ForeignKey::Deferrable::Deferred),
+                    @"REFERENCES testForeignKeyTable(column1, column2) DEFERRABLE INITIALLY DEFERRED");
+    
+    WINQAssertEqual([self generateForeignKey].notDeferrable(ForeignKey::Deferrable::Immediate),
+                    @"REFERENCES testForeignKeyTable(column1, column2) NOT DEFERRABLE INITIALLY IMMEDIATE");
+    
+    WINQAssertEqual([self generateForeignKey].match("test"),
+                    @"REFERENCES testForeignKeyTable(column1, column2) MATCH test");
 }
 
 @end

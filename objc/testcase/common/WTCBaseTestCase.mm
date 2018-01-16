@@ -43,10 +43,10 @@
     return [self.recommendedDirectory stringByAppendingPathComponent:hash];
 }
 
-- (WCTTag)recommendTag
-{
-    return (int) self.recommendedPath.hash;
-}
+//- (WCTTag)recommendTag
+//{
+//    return (int) self.recommendedPath.hash;
+//}
 
 - (NSFileManager *)fileManager
 {

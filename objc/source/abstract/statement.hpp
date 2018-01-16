@@ -21,7 +21,8 @@
 #ifndef statement_hpp
 #define statement_hpp
 
-#include <WCDB/describable.hpp>
+#include <WCDB/declare.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
@@ -51,7 +52,6 @@ public:
         Reindex,
     };
     Statement();
-    virtual ~Statement();
     virtual Statement::Type getStatementType() const = 0;
 };
 

@@ -29,30 +29,38 @@ using namespace WCDB;
 
 @implementation WTCStatementSelectTests
 
-- (void)setUp
+- (void)testStatementSelect
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    Column column1("column1");
+    Column column2("column2");
+    
+    std::string table1 = "table1";
+    std::string table2 = "table2";
+    
+    XCTAssertEqual(StatementSelect().getStatementType(), Statement::Type::Select);
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1), @"SELECT column1 FROM table1");
+    
+    WINQAssertEqual(StatementSelect().select({column1, column2}).from(table1), @"SELECT column1, column2 FROM table1");
+    
+    WINQAssertEqual(StatementSelect().select({column1, column2}, true).from(table1), @"SELECT DISTINCT column1, column2 FROM table1");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from({table1, table2}), @"SELECT column1 FROM table1, table2");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).where(column1 > 1), @"SELECT column1 FROM table1 WHERE (column1 > 1)");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).orderBy({column1, column2}), @"SELECT column1 FROM table1 ORDER BY column1, column2");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).limit(1), @"SELECT column1 FROM table1 LIMIT 1");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).limit(1, 2), @"SELECT column1 FROM table1 LIMIT 1, 2");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).limit(1).offset(3), @"SELECT column1 FROM table1 LIMIT 1 OFFSET 3");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).groupBy(column1), @"SELECT column1 FROM table1 GROUP BY column1");
+    
+    WINQAssertEqual(StatementSelect().select(column1).from(table1).groupBy({column1, column2}).having(column1 > 1), @"SELECT column1 FROM table1 GROUP BY column1, column2 HAVING (column1 > 1)");
 }
 
 @end

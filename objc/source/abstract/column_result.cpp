@@ -18,35 +18,19 @@
  * limitations under the License.
  */
 
-#include <WCDB/column.hpp>
 #include <WCDB/column_result.hpp>
-#include <WCDB/expression.hpp>
 
 namespace WCDB {
-
-ColumnResult::ColumnResult(const Expression &expr)
-    : Describable(expr.getDescription())
-{
-}
-
-ColumnResult::ColumnResult() : Describable("")
-{
-}
-
-ColumnResult ColumnResult::Any()
-{
-    return ColumnResult(Column::Any);
-}
-
-ColumnResult ColumnResult::Any(const std::string &tableName)
-{
-    return ColumnResult(tableName + ".*");
-}
 
 ColumnResult &ColumnResult::as(const std::string &name)
 {
     m_description.append(" AS " + name);
     return *this;
+}
+    
+ColumnResult::operator std::list<const ColumnResult>() const
+{
+    return {*this};
 }
 
 } //namespace WCDB

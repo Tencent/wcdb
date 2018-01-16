@@ -18,39 +18,37 @@
  * limitations under the License.
  */
 
+#include <WCDB/utility.hpp>
+#include <WCDB/column.hpp>
 #include <WCDB/column_index.hpp>
-#include <WCDB/constraint_table.hpp>
+#include <WCDB/column_def.hpp>
+#include <WCDB/foreign_key.hpp>
+#include <WCDB/table_constraint.hpp>
+#include <WCDB/module_argument.hpp>
 #include <WCDB/expression.hpp>
 
 namespace WCDB {
 
-TableConstraint::TableConstraint() : Describable("")
+std::string stringByReplacingOccurrencesOfString(const std::string &origin, const std::string &target, const std::string &replacement)
 {
-}
-
-TableConstraint::TableConstraint(const char *name)
-    : Describable(std::string("CONSTRAINT ") + name)
-{
-}
-
-TableConstraint::TableConstraint(const std::string &name)
-    : Describable("CONSTRAINT " + name)
-{
-}
-
-TableConstraint &TableConstraint::onConflict(Conflict conflict)
-{
-    if (conflict != WCDB::Conflict::NotSet) {
-        m_description.append(" ON CONFLICT ");
-        m_description.append(ConflictName(conflict));
+    bool replace = false;
+    size_t last = 0;
+    size_t found = 0;
+    std::string output;
+    while ((found = origin.find(target, last)) != std::string::npos) {
+        if (!replace) {
+            replace = true;
+            output.clear();
+        }
+        std::string sub = origin.substr(last, found - last);
+        output += sub;
+        output += replacement;
+        last = found + target.length();
     }
-    return *this;
+    if (replace) {
+        output += origin.substr(last, -1);
+    }
+    return replace ? output : origin;
 }
-
-TableConstraint &TableConstraint::makeCheck(const Expression &expr)
-{
-    m_description.append(" CHECK (" + expr.getDescription() + ")");
-    return *this;
-}
-
+    
 } //namespace WCDB

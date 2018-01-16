@@ -41,35 +41,35 @@ public:
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isInteger32, void>::type
-    bind(const typename ColumnTypeInfo<T>::CType &value, int index)
+    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int index)
     {
         bindInteger32(value, index);
     };
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isInteger64, void>::type
-    bind(const typename ColumnTypeInfo<T>::CType &value, int index)
+    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int index)
     {
         bindInteger64(value, index);
     };
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isFloat, void>::type
-    bind(const typename ColumnTypeInfo<T>::CType &value, int index)
+    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int index)
     {
         bindDouble(value, index);
     };
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isText, void>::type
-    bind(const typename ColumnTypeInfo<T>::CType &value, int index)
+    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int index)
     {
         bindText(value, index);
     };
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isBLOB, void>::type
-    bind(const typename ColumnTypeInfo<T>::CType &value, int size, int index)
+    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int size, int index)
     {
         bindBLOB(value, size, index);
     };
@@ -84,7 +84,7 @@ public:
     //get value, index begin with 0
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isInteger32,
-                            typename ColumnTypeInfo<T>::CType>::type
+                            typename ColumnTypeInfo<T>::UnderlyingType>::type
     getValue(int index)
     {
         return getInteger32(index);
@@ -92,7 +92,7 @@ public:
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isInteger64,
-                            typename ColumnTypeInfo<T>::CType>::type
+                            typename ColumnTypeInfo<T>::UnderlyingType>::type
     getValue(int index)
     {
         return getInteger64(index);
@@ -100,7 +100,7 @@ public:
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isFloat,
-                            typename ColumnTypeInfo<T>::CType>::type
+                            typename ColumnTypeInfo<T>::UnderlyingType>::type
     getValue(int index)
     {
         return getDouble(index);
@@ -108,7 +108,7 @@ public:
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isText,
-                            typename ColumnTypeInfo<T>::CType>::type
+                            typename ColumnTypeInfo<T>::UnderlyingType>::type
     getValue(int index)
     {
         return getText(index);
@@ -116,10 +116,10 @@ public:
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isBLOB,
-                            typename ColumnTypeInfo<T>::CType>::type
-    getValue(int index, int &size)
+                            typename ColumnTypeInfo<T>::UnderlyingType>::type
+    getValue(int index)
     {
-        return getBLOB(index, size);
+        return getBLOB(index);
     }
 
     ColumnType getType(int index);
@@ -138,25 +138,24 @@ public:
 
 protected:
     void
-    bindInteger32(const ColumnTypeInfo<ColumnType::Integer32>::CType &value,
+    bindInteger32(const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
                   int index);
     void
-    bindInteger64(const ColumnTypeInfo<ColumnType::Integer64>::CType &value,
+    bindInteger64(const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
                   int index);
-    void bindDouble(const ColumnTypeInfo<ColumnType::Float>::CType &value,
+    void bindDouble(const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value,
                     int index);
-    void bindText(const ColumnTypeInfo<ColumnType::Text>::CType &value,
+    void bindText(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value,
                   int index);
-    void bindBLOB(const ColumnTypeInfo<ColumnType::BLOB>::CType &value,
-                  int size,
+    void bindBLOB(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value,
                   int index);
     void bindNull(int index);
 
-    ColumnTypeInfo<ColumnType::Integer32>::CType getInteger32(int index);
-    ColumnTypeInfo<ColumnType::Integer64>::CType getInteger64(int index);
-    ColumnTypeInfo<ColumnType::Float>::CType getDouble(int index);
-    ColumnTypeInfo<ColumnType::Text>::CType getText(int index);
-    ColumnTypeInfo<ColumnType::BLOB>::CType getBLOB(int index, int &size);
+    ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType getInteger32(int index);
+    ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType getInteger64(int index);
+    ColumnTypeInfo<ColumnType::Float>::UnderlyingType getDouble(int index);
+    ColumnTypeInfo<ColumnType::Text>::UnderlyingType getText(int index);
+    ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType getBLOB(int index);
 
     StatementHandle(void *stmt, const Handle &handle);
     const StatementHandle &operator=(const StatementHandle &other) = delete;

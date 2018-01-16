@@ -21,8 +21,8 @@
 #ifndef statement_create_virtual_table_hpp
 #define statement_create_virtual_table_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
@@ -33,21 +33,8 @@ public:
 
     StatementCreateVirtualTable &usingModule(const std::string &moduleName);
 
-    template <typename T = ModuleArgument>
-    typename std::enable_if<std::is_base_of<ModuleArgument, T>::value,
-                            StatementCreateVirtualTable &>::type
-    usingModule(const std::string &moduleName,
-                const std::list<T> &moduleArgumentList)
-    {
-        m_description.append(" USING " + moduleName);
-        if (!moduleArgumentList.empty()) {
-            m_description.append("(");
-            joinDescribableList(moduleArgumentList);
-            m_description.append(")");
-        }
-        return *this;
-    }
-
+    StatementCreateVirtualTable &usingModule(const std::string &moduleName, const std::list<const ModuleArgument> &moduleArgumentList);
+    
     virtual Statement::Type getStatementType() const override;
 };
 
