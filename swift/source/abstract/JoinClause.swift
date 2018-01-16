@@ -66,7 +66,7 @@ public final class JoinClause: Describable {
     }
 
     @discardableResult
-    public func natureJoin(_ subqueryConvertible: TableOrSubqueryConvertible,
+    public func naturalJoin(_ subqueryConvertible: TableOrSubqueryConvertible,
                            with type: JoinClauseType? = nil) -> JoinClause {
         return self.join(subqueryConvertible, with: type, isNatural: true)
     }
