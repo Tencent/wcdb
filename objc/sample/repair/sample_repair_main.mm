@@ -49,7 +49,7 @@ void sample_repair_main(NSString *baseDirectory)
             [database insertObject:object
                               into:tableName];
         }
-        NSLog(@"The count of objects before: %lu", [database getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
+        NSLog(@"The count of objects before: %lu", [database getObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
 
     //backup
@@ -85,7 +85,7 @@ void sample_repair_main(NSString *baseDirectory)
           fclose(file);
         }];
 
-        NSLog(@"The count of objects corrupted: %lu", [database getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
+        NSLog(@"The count of objects corrupted: %lu", [database getObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
 
     //repair
@@ -99,7 +99,7 @@ void sample_repair_main(NSString *baseDirectory)
         [database close:^{
           [recover recoverFromPath:path withPageSize:pageSize backupCipher:backupCipher databaseCipher:databaseCipher];
         }];
-        NSLog(@"The count of objects repaired: %lu", [recover getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
+        NSLog(@"The count of objects repaired: %lu", [recover getObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
     NSLog(@"Sample-repair End");
 }

@@ -49,7 +49,7 @@ void sample_orm_main(NSString *baseDirectory)
         BOOL ret = [database createTableAndIndexesOfName:tableName withClass:cls];
         assert(ret);
 
-        NSArray *schemas = [database getAllObjectsOnResults:{WCTMaster.name, WCTMaster.sql} fromTable:WCTMaster.TableName];
+        NSArray *schemas = [database getObjectsOnResults:{WCTMaster.name, WCTMaster.sql} fromTable:WCTMaster.TableName];
         for (WCTMaster *table : schemas) {
             NSLog(@"SQL Of %@: %@", table.name, table.sql);
         }

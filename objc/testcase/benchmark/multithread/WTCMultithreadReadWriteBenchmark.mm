@@ -52,7 +52,7 @@
         [self setUpDatabaseCache];
     } for:^{
         dispatch_group_async(self.group, self.queue, ^{
-          results = [self.database getAllObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
+          results = [self.database getObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
         });
         dispatch_group_async(self.group, self.queue, ^{
           XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);

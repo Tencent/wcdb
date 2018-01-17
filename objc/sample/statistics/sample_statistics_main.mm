@@ -72,7 +72,7 @@ void sample_statistics_main(NSString *baseDirectory)
         [database insertObjects:objects into:tableName];
 
         [database runTransaction:^BOOL {
-          NSArray *results = [database getAllObjectsOfClass:WCTSampleStatistics.class
+          NSArray *results = [database getObjectsOfClass:WCTSampleStatistics.class
                                                   fromTable:tableName];
           for (WCTSampleStatistics *object in results) {
               object.intValue = -object.intValue;

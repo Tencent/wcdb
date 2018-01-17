@@ -89,7 +89,7 @@ void sample_core_main(NSString *baseDirectory)
     //SELECT message.content, message_ext.createTime FROM message LEFT OUTER JOIN message_ext ON message.localID=message_ext.localID
     {
         //Column result list
-        WCTResultList resultList = { WCTSampleCore.content.inTable(@"message"),
+        WCDB::ColumnResultList resultList = { WCTSampleCore.content.inTable(@"message"),
                                      WCTSampleCoreExt.createTime.inTable(@"message_ext") };
 
         //Join clause

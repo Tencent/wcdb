@@ -120,7 +120,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select Objects
     {
-        NSArray<WCTSampleConvenient *> *objects = [database getAllObjectsOfClass:WCTSampleConvenient.class
+        NSArray<WCTSampleConvenient *> *objects = [database getObjectsOfClass:WCTSampleConvenient.class
                                                                        fromTable:tableName];
     }
     //Select Objects with condition/order/offset/limit
@@ -133,7 +133,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select Part of Objects
     {
-        NSArray<WCTSampleConvenient *> *objects = [database getAllObjectsOnResults:WCTSampleConvenient.stringValue
+        NSArray<WCTSampleConvenient *> *objects = [database getObjectsOnResults:WCTSampleConvenient.stringValue
                                                                          fromTable:tableName];
     }
     //Select column
@@ -168,7 +168,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select distinct aggregation
     {
-        NSArray *objects = [database getAllObjectsOnResults:WCTSampleConvenient.stringValue.count(true)
+        NSArray *objects = [database getObjectsOnResults:WCTSampleConvenient.stringValue.count(true)
                                                   fromTable:tableName];
     }
     //Select distinct result

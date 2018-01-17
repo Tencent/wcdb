@@ -49,7 +49,7 @@
 
         [self setUpDatabaseCache];
     } for:^{
-        results = [self.database getAllObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
+        results = [self.database getObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
     } checkCorrectness:^{
         XCTAssertEqual(results.count, self.config.readCount);
     }];

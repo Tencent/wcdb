@@ -50,10 +50,10 @@
         [self setUpDatabaseCache];
     } for:^{
         dispatch_group_async(self.group, self.queue, ^{
-          results1 = [self.database getAllObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
+          results1 = [self.database getObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
         });
         dispatch_group_async(self.group, self.queue, ^{
-          results2 = [self.database getAllObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
+          results2 = [self.database getObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
         });
         dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
     } checkCorrectness:^{

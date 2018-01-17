@@ -77,7 +77,7 @@ void sample_fts_main(NSString *baseDirectory)
 
     //Build Full-Text-Search Index
     {
-        NSArray<WCTSampleFTSOrigin *> *objects = [databaseOrigin getAllObjectsOfClass:WCTSampleFTSOrigin.class fromTable:tableNameOrigin];
+        NSArray<WCTSampleFTSOrigin *> *objects = [databaseOrigin getObjectsOfClass:WCTSampleFTSOrigin.class fromTable:tableNameOrigin];
         NSMutableArray *ftsDataArray = [[NSMutableArray alloc] init];
         for (WCTSampleFTSOrigin *object in objects) {
             WCTSampleFTSData *ftsData = [[WCTSampleFTSData alloc] init];
