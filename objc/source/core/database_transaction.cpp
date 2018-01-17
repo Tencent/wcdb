@@ -88,15 +88,16 @@ bool Database::rollback(Error &error)
     return result;
 }
 
-bool Database::runEmbeddedTransaction(TransactionBlock transaction,
+void Database::runEmbeddedTransaction(TransactionBlock transaction,
                                       Error &error)
 {
     std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
         s_threadedHandle.get();
     if (threadedHandle->find(getPath()) != threadedHandle->end()) {
-        return transaction(error);
+        transaction(error);
+    }else {
+        runTransaction(transaction, error);
     }
-    return runTransaction(transaction, nullptr, error);
 }
 
 } //namespace WCDB

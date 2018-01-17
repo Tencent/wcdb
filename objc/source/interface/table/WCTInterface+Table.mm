@@ -38,7 +38,7 @@
                                      &error);
         return NO;
     }
-    return _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) -> bool {
+    _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
         WCDB::Error innerError;
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
         bool isTableExists = _core->isTableExists(tableName.UTF8String, innerError);
@@ -49,8 +49,8 @@
                 WCDB::RecyclableStatement statementHandle = _core->prepare(WCDB::StatementPragma()
                                                                                .pragma(WCDB::Pragma::TableInfo, tableName.UTF8String),
                                                                            error);
-                if (!statementHandle) {
-                    return NO;
+                if (!error.isOK()) {
+                    return;
                 }
                 while (statementHandle->step()) {
                     columnNameList.push_back(statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(1));
@@ -58,7 +58,7 @@
 
                 if (!statementHandle->isOK()) {
                     error = statementHandle->getError();
-                    return NO;
+                    return;
                 }
             }
             //Check whether the column names exists
@@ -77,12 +77,12 @@
                                      .alter(tableName.UTF8String)
                                      .addColumn(iter.second->getColumnDef()),
                                  error)) {
-                    return NO;
+                    return ;
                 }
             }
         } else {
             if (!_core->exec(binding->generateCreateTableStatement(tableName.UTF8String), error)) {
-                return NO;
+                return ;
             }
         }
         const std::shared_ptr<WCTIndexBindingMap> &indexBindingMap = binding->getIndexBindingMap();
@@ -91,9 +91,8 @@
                 _core->exec(indexBinding.second->generateCreateIndexStatement(tableName.UTF8String), innerError);
             }
         }
-        return YES;
-    },
-                                         error);
+    }, error);
+    return error.isOK();
 }
 
 - (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class)cls andError:(WCDB::Error &)error
@@ -107,11 +106,11 @@
                                      &error);
         return NO;
     }
-    return _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) -> bool {
+    _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
-        return _core->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String), error);
-    },
-                                         error);
+        _core->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String), error);
+    }, error);
+    return error.isOK();
 }
 
 - (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andError:(WCDB::Error &)error

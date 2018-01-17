@@ -23,6 +23,7 @@
 #import <WCDB/WCTTransaction.h>
 #import <WCDB/database.hpp>
 #import <WCDB/transaction.hpp>
+#import <WCDB/WCTError+Private.h>
 
 @implementation WCTTransaction
 
@@ -76,31 +77,59 @@
     }
 }
 
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
+- (void)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
 {
-    return [self runTransaction:inTransaction event:nil];
+    WCDB::Error error;
+    _transaction->runTransaction([inTransaction](WCDB::Error &) {
+        @autoreleasepool {
+            inTransaction();
+        }
+    }, error);
+    if (pError) {
+        *pError = [WCTError errorWithWCDBError:error];
+    }
 }
 
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError
 {
-    @synchronized(self)
-    {
-        WCDB::Database::TransactionEvent event = nullptr;
-        if (onTransactionStateChanged) {
-            event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType) {
-                onTransactionStateChanged((WCTTransactionEvent) eventType);
-            };
+    WCDB::Error error;
+    BOOL result = _transaction->runControllableTransaction([inTransaction](WCDB::Error &) -> bool {
+        @autoreleasepool {
+            return inTransaction();
         }
-        WCDB::Error innerError;
-        BOOL result = _transaction->runTransaction([inTransaction](WCDB::Error &) -> bool {
-            @autoreleasepool {
-                return inTransaction();
-            }
-        },
-                                                   event, innerError);
-        _changes = _transaction->getChanges();
-        return result;
+    }, error);
+    if (pError) {
+        *pError = [WCTError errorWithWCDBError:error];
     }
+    return result;
+}
+
+- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
+{
+    WCDB::Error error;
+    _transaction->runEmbeddedTransaction([inTransaction](WCDB::Error &) {
+        @autoreleasepool {
+            inTransaction();
+        }
+    }, error);
+    if (pError) {
+        *pError = [WCTError errorWithWCDBError:error];
+    }
+}
+
+- (void)runTransaction:(WCTTransactionBlock)inTransaction
+{
+    [self runTransaction:inTransaction withError:nil];
+}
+
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction
+{
+    return [self runControllableTransaction:inTransaction withError:nil];
+}
+
+- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction
+{
+    [self runEmbeddedTransaction:inTransaction withError:nil];
 }
 
 - (int)changes

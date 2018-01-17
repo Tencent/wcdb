@@ -153,10 +153,10 @@
     if (objects.count == 1) {
         return [self doInsertObjects:objects withError:_error];
     }
-    return _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) -> bool {
-        return [self doInsertObjects:objects withError:error];
-    },
-                                         _error);
+    _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) {
+        [self doInsertObjects:objects withError:error];
+    }, _error);
+    return _error.isOK();
 }
 
 @end

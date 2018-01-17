@@ -89,16 +89,9 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
     return result;
 }
 
-bool CoreBase::runTransaction(TransactionBlock transaction,
-                              TransactionEvent event,
-                              Error &error)
+bool CoreBase::runControllableTransaction(ControllableTransactionBlock transaction, Error &error)
 {
-#define TRANSATION_EVENT(eventType)                                            \
-    if (event) {                                                               \
-        event(eventType);                                                      \
-    }
     if (!begin(StatementTransaction::Mode::Immediate, error)) {
-        TRANSATION_EVENT(TransactionEventType::BeginFailed);
         return false;
     }
     if (transaction(error)) {
@@ -106,14 +99,28 @@ bool CoreBase::runTransaction(TransactionBlock transaction,
         if (commit(error)) {
             return true;
         }
-        TRANSATION_EVENT(TransactionEventType::CommitFailed);
     }
-    TRANSATION_EVENT(TransactionEventType::Rollback);
-    Error
-        rollBackError; //Rollback errors do not need to be passed to the outside
-    if (!rollback(rollBackError)) {
-        TRANSATION_EVENT(TransactionEventType::RollbackFailed);
+    //Rollback errors do not need to be passed to the outside
+    Error rollBackError; 
+    rollback(rollBackError);
+    return false;
+}
+
+bool CoreBase::runTransaction(TransactionBlock transaction,
+                              Error &error)
+{
+    if (!begin(StatementTransaction::Mode::Immediate, error)) {
+        return false;
     }
+    transaction(error);
+    if (error.isOK()) {
+        if (commit(error)) {
+            return true;
+        }
+    }
+    //Rollback errors do not need to be passed to the outside
+    Error rollBackError; 
+    rollback(rollBackError);
     return false;
 }
 

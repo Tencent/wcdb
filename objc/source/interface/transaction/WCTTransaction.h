@@ -45,14 +45,14 @@ typedef NS_ENUM(int, WCTTransactionEvent) {
 };
 
 /**
- Transaction block
+ Controllable Transaction block
  */
-typedef BOOL (^WCTTransactionBlock)();
+typedef BOOL (^WCTControllableTransactionBlock)();
 
 /**
- Transaction event block
+ Transaction block
  */
-typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
+typedef void (^WCTTransactionBlock)();
 
 /**
  Transaction
@@ -80,41 +80,68 @@ typedef void (^WCTTransactionEventBlock)(WCTTransactionEvent event);
 /**
  @brief Run a transaction in block.
  
-     BOOL committed = [transaction runTransaction:^BOOL(){
-     BOOL result = [transaction insertObject:object into:tableName];
-        return result;//return YES to commit transaction and return NO to rollback transaction.
-     } event:^(WCTTransactionEvent event) {
-        switch (event) {
-            case WCTTransactionEventBeginFailed:
-                //...
-                break;
-            case WCTTransactionEventCommitFailed:
-                //...
-                break;
-            case WCTTransactionEventRollback:
-                //...
-                break;
-            case WCTTransactionEventRollbackFailed:
-                //...
-                break;
-        };
-     }];
+     [transaction runTransaction:^void(){
+         [transaction insertObject:object into:tableName];
+     }, withError: &error];
+     if (error.isOK) {
+         // do sth
+     }
 
  @param inTransaction Operation inside transaction.
- @param onTransactionStateChanged State changed event.
- @return YES only if transaction is committed.
  @see WCTTransactionBlock
- @see WCTTransactionEventBlock
  */
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged;
+- (void)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
 
 /**
- @brief This interface is equivalent to [transaction runTransaction:transaction event:nil];
+ @brief Run a controllable transaction in block.
+ 
+     BOOL committed = [transaction runControllableTransaction:^BOOL(){
+         return [transaction insertObject:object into:tableName];
+     }, withError: &error];
+     if (committed) {
+         // do sth
+     }
+ 
  @param inTransaction Operation inside transaction.
- @see runTransaction:event:
- @return YES only if transaction is committed.
+ @see WCTControllableTransactionBlock
  */
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError;
+
+/**
+ @brief Run an embedded transaction in block.
+ 
+     [transaction runEmbeddedTransaction:^void(){
+         [transaction insertObject:object into:tableName];
+     }, withError: &error];
+     if (error.isOK) {
+         // do sth
+     }
+ 
+ @param inTransaction Operation inside transaction.
+ @see WCTTransactionBlock
+ */
+- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+
+/**
+ @brief This interface is equivalent to [transaction runTransaction:transaction withError:nil];
+ @param inTransaction Operation inside transaction.
+ @see WCTTransactionBlock
+ */
+- (void)runTransaction:(WCTTransactionBlock)inTransaction;
+
+/**
+ @brief This interface is equivalent to [transaction runControllableTransaction:transaction withError:nil];
+ @param inTransaction Operation inside transaction.
+ @see WCTControllableTransactionBlock
+ */
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction;
+
+/**
+ @brief This interface is equivalent to [transaction runEmbeddedTransaction:transaction withError:nil];
+ @param inTransaction Operation inside transaction.
+ @see WCTTransactionBlock
+ */
+- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction;
 
 /**
  @brief It should be called after executing successfully
