@@ -192,6 +192,7 @@
 - (void)finalize
 {
     _statementHandle->finalize();
+    _statementHandle = nullptr;
 }
 
 @end
