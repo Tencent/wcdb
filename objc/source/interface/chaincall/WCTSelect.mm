@@ -31,7 +31,7 @@
 
 @implementation WCTSelect {
     WCTPropertyList _propertyList;
-    Class _cls;
+    Class _class;
 }
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
@@ -57,6 +57,7 @@
         }
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement.select(_propertyList, isDistinct).from(tableName.UTF8String);
+        _class = _propertyList.front().getColumnBinding()->getClass();
     }
     return self;
 }
@@ -68,7 +69,7 @@
         WCTObject *object = nil;
         int index = 0;
         while ([self next]) {
-            object = [[_cls alloc] init];
+            object = [[_class alloc] init];
             index = 0;
             for (const WCTProperty &property : _propertyList) {
                 if ([self extractPropertyToObject:object
@@ -89,7 +90,7 @@
 - (id /* WCTObject* */)nextObject
 {
     if ([self lazyPrepare] && [self next]) {
-        WCTObject *object = [[_cls alloc] init];
+        WCTObject *object = [[_class alloc] init];
         int index = 0;
         for (const WCTProperty &property : _propertyList) {
             if ([self extractPropertyToObject:object

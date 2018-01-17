@@ -28,7 +28,7 @@
 {
     if (self = [super initWithCore:core]) {
         _tableName = tableName;
-        _cls = cls;
+        _class = cls;
     }
     return self;
 }
