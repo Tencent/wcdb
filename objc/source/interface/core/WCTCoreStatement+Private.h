@@ -20,10 +20,10 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTStatement.h>
+#import <WCDB/WCTCoreStatement.h>
 #import <WCDB/core_base.hpp>
 
-@interface WCTStatement () {
+@interface WCTCoreStatement () {
     WCDB::RecyclableStatement _statementHandle;
 }
 

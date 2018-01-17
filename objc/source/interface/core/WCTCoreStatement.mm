@@ -21,12 +21,12 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTStatement+Private.h>
-#import <WCDB/WCTStatement.h>
+#import <WCDB/WCTCoreStatement+Private.h>
+#import <WCDB/WCTCoreStatement.h>
 #import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
 
-@implementation WCTStatement
+@implementation WCTCoreStatement
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle
 {

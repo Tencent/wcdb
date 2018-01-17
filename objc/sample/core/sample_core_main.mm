@@ -46,7 +46,7 @@ void sample_core_main(NSString *baseDirectory)
 
     //get value from unwrapped SQL
     {
-        WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
+        WCTCoreStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
         if (statement && [statement step]) {
             NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
         }
@@ -75,7 +75,7 @@ void sample_core_main(NSString *baseDirectory)
         //Combine table name and column def list into create table statement
         WCDB::StatementCreateTable statementCreate = WCDB::StatementCreateTable().create("message", columnDefList);
 
-        WCTStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];
+        WCTCoreStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];
         if (statementExplain && [statementExplain step]) {
             for (int i = 0; i < [statementExplain getColumnCount]; ++i) {
                 NSString *columnName = [statementExplain getColumnNameAtIndex:i];
@@ -97,7 +97,7 @@ void sample_core_main(NSString *baseDirectory)
 
         WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause);
         WCTError *error;
-        WCTStatement *statement = [database prepare:statementSelect withError:&error];
+        WCTCoreStatement *statement = [database prepare:statementSelect withError:&error];
         if (statement) {
             while ([statement step]) {
                 for (int i = 0; i < [statement getColumnCount]; ++i) {

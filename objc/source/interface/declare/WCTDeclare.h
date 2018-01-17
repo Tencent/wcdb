@@ -101,7 +101,7 @@ typedef NS_ENUM(int, WCTDefaultType) {
 };
 
 #pragma mark - StatementHandle
-@class WCTStatement;
+@class WCTCoreStatement;
 typedef NSObject<WCTTableCoding> WCTObject;
 typedef NSDictionary<NSString *, WCTObject *>
     WCTMultiObject;        //table name -> object

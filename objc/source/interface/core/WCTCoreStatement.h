@@ -27,7 +27,7 @@
  
  This class is a wrapper for sqlite3_stmt.
  */
-@interface WCTStatement : WCTCore
+@interface WCTCoreStatement : WCTCore
 
 /**
  @brief More detailed error messages.

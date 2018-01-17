@@ -66,7 +66,7 @@ void sample_repair_main(NSString *baseDirectory)
     //Since page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. You have no need to get the page size like this. Instead, you can hardcode it.
     {
         @autoreleasepool {
-            WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
+            WCTCoreStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
             [statement step];
             NSNumber *value = (NSNumber *) [statement getValueAtIndex:0];
             pageSize = value.intValue;

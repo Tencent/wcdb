@@ -50,7 +50,7 @@
 #import <WCDB/WCTDatabase+RepairKit.h>
 
 #import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTStatement.h>
+#import <WCDB/WCTCoreStatement.h>
 #import <WCDB/WCTTable.h>
 
 #import <WCDB/WCTORM.h>

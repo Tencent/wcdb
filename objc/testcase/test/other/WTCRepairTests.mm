@@ -50,7 +50,7 @@
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
     
     WCDB::StatementPragma pragma = WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize);
-    WCTStatement * coreStatement = [_database prepare:pragma];
+    WCTCoreStatement * coreStatement = [_database prepare:pragma];
     XCTAssertNotNil(coreStatement);
     XCTAssertTrue([coreStatement step]);
     _pageSize = ((NSNumber*)[coreStatement getValueAtIndex:0]).intValue;
