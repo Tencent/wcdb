@@ -20,13 +20,13 @@
 
 #import "Convenience.h"
 
-@implementation NSArray(Sort)
+@implementation NSString(Sortable)
 
-- (NSArray<NSString*>*)sorted
++ (NSComparator)Comparator
 {
-    return [self sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+    return ^NSComparisonResult(NSString* obj1, NSString* obj2) {
         return [obj1 compare:obj2];
-    }];
+    };
 }
 
 @end

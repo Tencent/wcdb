@@ -21,13 +21,11 @@
 #import "WTCBaseTestCase.h"
 #import "Convenience.h"
 
-using namespace WCDB;
-
-@interface FileTests : WTCBaseTestCase
+@interface WTCFileTests : WTCBaseTestCase
 @property(nonatomic, readonly) WCTDatabase *database;
 @end
 
-@implementation FileTests 
+@implementation WTCFileTests 
 
 - (void)setUp {
     [super setUp];
@@ -39,7 +37,9 @@ using namespace WCDB;
     NSString *path = self.recommendedPath;
     NSArray<NSString*>* expectedPaths = @[path, [path stringByAppendingString:@"-wal"], [path stringByAppendingString:@"-shm"], [path stringByAppendingString:@"-journal"], [path stringByAppendingString:@"-backup"]];
     //Then
-    XCTAssertTrue([self.database.paths.sorted isEqualToArray:expectedPaths.sorted]);
+    NSArray<NSString*>* sortedPaths = [self.database.paths sortedArrayUsingComparator:NSString.Comparator];
+    NSArray<NSString*>* sortedExpectedPaths = [expectedPaths sortedArrayUsingComparator:NSString.Comparator];    
+    XCTAssertTrue([sortedPaths isEqualToArray:sortedExpectedPaths]);
 }
 
 - (void)testRemoveFiles {

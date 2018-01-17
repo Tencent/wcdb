@@ -18,26 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTDatabase+RepairKit.h>
+#import "WTCRepairObject.h"
+#import <WCDB/WCDB.h>
 
-@implementation WCTDatabase (RepairKit)
+@interface WTCRepairObject (WCTTableCoding) <WCTTableCoding>
 
-- (BOOL)backupWithCipher:(NSData *)key
-{
-    WCDB::Error wcdbError;
-    return _database->backup(key.bytes, (unsigned int) key.length, wcdbError);
-}
-
-- (BOOL)backup
-{
-    return [self backupWithCipher:nil];
-}
-
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize backupCipher:(NSData *)backupCipher databaseCipher:(NSData *)databaseCipher
-{
-    WCDB::Error wcdbError;
-    return _database->recoverFromPath(corruptedDBPath.UTF8String, pageSize, backupCipher.bytes, (unsigned int) backupCipher.length, databaseCipher.bytes, (unsigned int) databaseCipher.length, wcdbError);
-}
+WCDB_PROPERTY(variable1)
+WCDB_PROPERTY(variable2)
 
 @end

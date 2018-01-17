@@ -18,26 +18,34 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTDatabase+RepairKit.h>
+#import "WTCRepairObject+WCTTableCoding.h"
+#import "WTCRepairObject.h"
+#import <WCDB/WCDB.h>
 
-@implementation WCTDatabase (RepairKit)
+@implementation WTCRepairObject
 
-- (BOOL)backupWithCipher:(NSData *)key
+WCDB_IMPLEMENTATION(WTCRepairObject)
+WCDB_SYNTHESIZE(WTCRepairObject, variable1)
+WCDB_SYNTHESIZE(WTCRepairObject, variable2)
+
++ (NSString*)Name
 {
-    WCDB::Error wcdbError;
-    return _database->backup(key.bytes, (unsigned int) key.length, wcdbError);
+    return NSStringFromClass(self);
 }
 
-- (BOOL)backup
++ (NSComparator)Comparator
 {
-    return [self backupWithCipher:nil];
+    return ^NSComparisonResult(WTCRepairObject* obj1, WTCRepairObject* obj2) {
+        if (obj1.variable1 == obj2.variable1) {
+            return NSOrderedSame;
+        }
+        return [obj1.variable2 compare:obj2.variable2];
+    };
 }
 
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize backupCipher:(NSData *)backupCipher databaseCipher:(NSData *)databaseCipher
+- (BOOL)isEqual:(WTCRepairObject*)object
 {
-    WCDB::Error wcdbError;
-    return _database->recoverFromPath(corruptedDBPath.UTF8String, pageSize, backupCipher.bytes, (unsigned int) backupCipher.length, databaseCipher.bytes, (unsigned int) databaseCipher.length, wcdbError);
+    return self.variable1 == object.variable1 && [self.variable2 isEqualToString:object.variable2];
 }
 
 @end

@@ -32,6 +32,12 @@
 - (BOOL)backupWithCipher:(NSData *)key;
 
 /**
+ @brief This interface is equivalent to [database backupWithCipher:nil];
+ @return YES only if it's successfully backed up
+ */
+- (BOOL)backup;
+
+/**
  @brief Recover data from a corruped db. You'd better to recover a closed database. A new repair kit is developing at https://github.com/Tencent/wcdb/tree/new-repair
  
      WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];

@@ -20,8 +20,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray(Sort)
+#pragma mark - WTCNamed
+@protocol WTCNamed
++ (NSString*)Name;
+@end
 
-- (NSArray<NSString *> *)sorted;
+#pragma mark - WTCSortable
+@protocol WTCSortable
++ (NSComparator)Comparator;
+@end
 
+#pragma mark - NSString
+@interface NSString(Sortable)<WTCSortable>
 @end
