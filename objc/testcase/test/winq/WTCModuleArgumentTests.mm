@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCModuleArgumentTests : WTCBaseTestCase
 
 @end
@@ -31,13 +29,13 @@ using namespace WCDB;
 
 - (void)testModuleArgument
 {
-    WINQAssertEqual(ModuleArgument("left", "right"), @"left=right");
+    WINQAssertEqual(WCDB::ModuleArgument("left", "right"), @"left=right");
     
-    WINQAssertEqual(ModuleArgument(ColumnDef(Column("column1"), ColumnType::Integer32)), @"column1 INTEGER");
+    WINQAssertEqual(WCDB::ModuleArgument(WCDB::ColumnDef(WCDB::Column("column1"), WCDB::ColumnType::Integer32)), @"column1 INTEGER");
     
-    WINQAssertEqual(ModuleArgument(TableConstraint("constraint1")), @"CONSTRAINT constraint1");
+    WINQAssertEqual(WCDB::ModuleArgument(WCDB::TableConstraint("constraint1")), @"CONSTRAINT constraint1");
     
-    WINQAssertEqual(ModuleArgument::Tokenize("WCDB"), @"tokenize=WCDB");
+    WINQAssertEqual(WCDB::ModuleArgument::Tokenize("WCDB"), @"tokenize=WCDB");
 }
 
 @end

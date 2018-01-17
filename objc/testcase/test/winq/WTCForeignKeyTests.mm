@@ -21,42 +21,40 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCForeignKeyTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCForeignKeyTests
 
-- (ForeignKey)generateForeignKey
+- (WCDB::ForeignKey)generateForeignKey
 {
-    Column column1("column1");
-    Column column2("column2");
-    return ForeignKey("testForeignKeyTable", {column1, column2});
+    WCDB::Column column1("column1");
+    WCDB::Column column2("column2");
+    return WCDB::ForeignKey("testForeignKeyTable", {column1, column2});
 }
 
 - (void)testForeignKey
 {
-    WINQAssertEqual([self generateForeignKey].onDelete(ForeignKey::Action::SetNull),
+    WINQAssertEqual([self generateForeignKey].onDelete(WCDB::ForeignKey::Action::SetNull),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE SET NULL");
     
-    WINQAssertEqual([self generateForeignKey].onUpdate(ForeignKey::Action::SetDefault),
+    WINQAssertEqual([self generateForeignKey].onUpdate(WCDB::ForeignKey::Action::SetDefault),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON UPDATE SET DEFAULT");
     
-    WINQAssertEqual([self generateForeignKey].onDelete(ForeignKey::Action::Cascade),
+    WINQAssertEqual([self generateForeignKey].onDelete(WCDB::ForeignKey::Action::Cascade),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE CASCADE");
     
-    WINQAssertEqual([self generateForeignKey].onUpdate(ForeignKey::Action::Restrict),
+    WINQAssertEqual([self generateForeignKey].onUpdate(WCDB::ForeignKey::Action::Restrict),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON UPDATE RESTRICT");
     
-    WINQAssertEqual([self generateForeignKey].onDelete(ForeignKey::Action::NoAction),
+    WINQAssertEqual([self generateForeignKey].onDelete(WCDB::ForeignKey::Action::NoAction),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE NO ACTION");
     
-    WINQAssertEqual([self generateForeignKey].deferrable(ForeignKey::Deferrable::Deferred),
+    WINQAssertEqual([self generateForeignKey].deferrable(WCDB::ForeignKey::Deferrable::Deferred),
                     @"REFERENCES testForeignKeyTable(column1, column2) DEFERRABLE INITIALLY DEFERRED");
     
-    WINQAssertEqual([self generateForeignKey].notDeferrable(ForeignKey::Deferrable::Immediate),
+    WINQAssertEqual([self generateForeignKey].notDeferrable(WCDB::ForeignKey::Deferrable::Immediate),
                     @"REFERENCES testForeignKeyTable(column1, column2) NOT DEFERRABLE INITIALLY IMMEDIATE");
     
     WINQAssertEqual([self generateForeignKey].match("test"),

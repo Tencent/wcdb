@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementRollbackTests : WTCBaseTestCase
 
 @end
@@ -31,11 +29,11 @@ using namespace WCDB;
 
 - (void)testStatementRollback
 {
-    XCTAssertEqual(StatementRollback().getStatementType(), Statement::Type::Rollback);
+    XCTAssertEqual(WCDB::StatementRollback().getStatementType(), WCDB::Statement::Type::Rollback);
     
-    WINQAssertEqual(StatementRollback().rollback(), @"ROLLBACK");
+    WINQAssertEqual(WCDB::StatementRollback().rollback(), @"ROLLBACK");
     
-    WINQAssertEqual(StatementRollback().rollback("savepoint1"), @"ROLLBACK TO savepoint1");
+    WINQAssertEqual(WCDB::StatementRollback().rollback("savepoint1"), @"ROLLBACK TO savepoint1");
 }
 
 @end

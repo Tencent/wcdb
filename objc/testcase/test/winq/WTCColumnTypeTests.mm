@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCColumnTypeTests : WTCBaseTestCase
 
 @end
@@ -31,17 +29,17 @@ using namespace WCDB;
 
 - (void)testColumnType
 {
-    WTCAssertEqual(ColumnTypeName(ColumnType::Integer32), @"INTEGER");
+    WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Integer32), @"INTEGER");
     
-    WTCAssertEqual(ColumnTypeName(ColumnType::Integer64), @"INTEGER");
+    WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Integer64), @"INTEGER");
     
-    WTCAssertEqual(ColumnTypeName(ColumnType::Float), @"REAL");
+    WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Float), @"REAL");
     
-    WTCAssertEqual(ColumnTypeName(ColumnType::Text), @"TEXT");
+    WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Text), @"TEXT");
     
-    WTCAssertEqual(ColumnTypeName(ColumnType::BLOB), @"BLOB");
+    WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::BLOB), @"BLOB");
     
-    WTCAssertEqual(ColumnTypeName(ColumnType::Null), @"NULL");
+    WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Null), @"NULL");
 }
 
 @end

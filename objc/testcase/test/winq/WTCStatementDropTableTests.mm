@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementDropTableTests : WTCBaseTestCase
 
 @end
@@ -33,11 +31,11 @@ using namespace WCDB;
 {
     std::string table1 = "table1";
     
-    XCTAssertEqual(StatementDropTable().getStatementType(), Statement::Type::DropTable);
+    XCTAssertEqual(WCDB::StatementDropTable().getStatementType(), WCDB::Statement::Type::DropTable);
     
-    WINQAssertEqual(StatementDropTable().drop(table1), @"DROP TABLE IF EXISTS table1");
+    WINQAssertEqual(WCDB::StatementDropTable().drop(table1), @"DROP TABLE IF EXISTS table1");
     
-    WINQAssertEqual(StatementDropTable().drop(table1, false), @"DROP TABLE table1");
+    WINQAssertEqual(WCDB::StatementDropTable().drop(table1, false), @"DROP TABLE table1");
 }
 
 @end

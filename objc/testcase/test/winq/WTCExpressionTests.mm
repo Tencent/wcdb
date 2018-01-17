@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCExpressionTests : WTCBaseTestCase
 
 @end
@@ -31,30 +29,30 @@ using namespace WCDB;
 
 - (void)testExpression
 {
-    Expression integerExpression = 1;
+    WCDB::Expression integerExpression = 1;
     WINQAssertEqual(integerExpression, @"1");
     
-    Expression floatExpression = 1.0;
+    WCDB::Expression floatExpression = 1.0;
     WINQAssertEqual(floatExpression, @"1.000000");
     
-    Expression stringExpression = "1";
+    WCDB::Expression stringExpression = "1";
     WINQAssertEqual(stringExpression, @"'1'");
     
-    Expression nilExpression = nil;
+    WCDB::Expression nilExpression = nil;
     WINQAssertEqual(nilExpression, @"NULL");
     
-    Expression boolExpression = false;
+    WCDB::Expression boolExpression = false;
     WINQAssertEqual(boolExpression, @"0");
     
-    Expression columnExpression = Expression(Column("testColumn"));
+    WCDB::Expression columnExpression = WCDB::Expression(WCDB::Column("testColumn"));
     WINQAssertEqual(columnExpression, @"testColumn");
 }
 
 - (void)testOperable
 {
     //Give
-    Column left("left");
-    Column right("right");
+    WCDB::Column left("left");
+    WCDB::Column right("right");
     
     //Then
     WINQAssertEqual(!left, @"(NOT left)");
@@ -110,11 +108,11 @@ using namespace WCDB;
     
     WINQAssertEqual(left.notBetween(2, 10), @"(left NOT BETWEEN 2 AND 10)");
     
-    StatementSelect statementSelect = StatementSelect().select(left).from("testExpressionTable");
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(left).from("testExpressionTable");
     
-    WINQAssertEqual(Expression::Exists(statementSelect), @"(EXISTS SELECT left FROM testExpressionTable)");
+    WINQAssertEqual(WCDB::Expression::Exists(statementSelect), @"(EXISTS SELECT left FROM testExpressionTable)");
     
-    WINQAssertEqual(Expression::NotExists(statementSelect), @"(NOT EXISTS SELECT left FROM testExpressionTable)");
+    WINQAssertEqual(WCDB::Expression::NotExists(statementSelect), @"(NOT EXISTS SELECT left FROM testExpressionTable)");
     
     WINQAssertEqual(left.in(statementSelect), @"(IN SELECT left FROM testExpressionTable)");
     
@@ -124,9 +122,9 @@ using namespace WCDB;
     
     WINQAssertEqual(left.notIn(right), @"(left NOT IN(right))");
     
-    WINQAssertEqual(Expression::Combine({left, right}), @"(left, right)");
+    WINQAssertEqual(WCDB::Expression::Combine({left, right}), @"(left, right)");
     
-    WINQAssertEqual(Expression::Function("testFunction", {left, right}, true), @"testFunction(DISTINCT left, right)");
+    WINQAssertEqual(WCDB::Expression::Function("testFunction", {left, right}, true), @"testFunction(DISTINCT left, right)");
     
     WINQAssertEqual(left.avg(), @"AVG(left)");
     
@@ -156,7 +154,7 @@ using namespace WCDB;
     
     WINQAssertEqual(left.round(), @"ROUND(left)");
     
-    WINQAssertEqual(Expression::Case(left).when(1).then(2).else_(3), @"CASE left WHEN 1 THEN 2 ELSE 3 END");
+    WINQAssertEqual(WCDB::Expression::Case(left).when(1).then(2).else_(3), @"CASE left WHEN 1 THEN 2 ELSE 3 END");
     
     WINQAssertEqual(left.matchinfo(), @"MATCHINFO(left)");
     

@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCOrderTermTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testOrderTerm
 {
-    WTCAssertEqual(OrderTermName(OrderTerm::ASC), @"ASC");
+    WTCAssertEqual(OrderTermName(WCDB::OrderTerm::ASC), @"ASC");
     
-    WTCAssertEqual(OrderTermName(OrderTerm::DESC), @"DESC");
+    WTCAssertEqual(OrderTermName(WCDB::OrderTerm::DESC), @"DESC");
 }
 
 @end

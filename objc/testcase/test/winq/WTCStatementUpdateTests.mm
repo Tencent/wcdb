@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementUpdateTests : WTCBaseTestCase
 
 @end
@@ -33,29 +31,29 @@ using namespace WCDB;
 {
     //Give
     std::string table1 = "table1";
-    Column column1("column1");
-    Column column2("column2");
+    WCDB::Column column1("column1");
+    WCDB::Column column2("column2");
     
     //Then
-    XCTAssertEqual(StatementUpdate().getStatementType(), Statement::Type::Update);
+    XCTAssertEqual(WCDB::StatementUpdate().getStatementType(), WCDB::Statement::Type::Update);
     
-    std::pair<const Column, const int> p = {column1, 1};
-    StatementUpdate u = StatementUpdate().update(table1).set(p);
-    WINQAssertEqual(StatementUpdate().update(table1).set(p), @"UPDATE table1 SET column1=1");
+    std::pair<const WCDB::Column, const int> p = {column1, 1};
+    WCDB::StatementUpdate u = WCDB::StatementUpdate().update(table1).set(p);
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set(p), @"UPDATE table1 SET column1=1");
     
-    WINQAssertEqual(StatementUpdate().update(table1, Conflict::Replace).set({{column1, 1}, {column2, "test"}}), @"UPDATE OR REPLACE table1 SET column1=1, column2='test'");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1, WCDB::Conflict::Replace).set({{column1, 1}, {column2, "test"}}), @"UPDATE OR REPLACE table1 SET column1=1, column2='test'");
     
-    WINQAssertEqual(StatementUpdate().update(table1).set({{column1, 1}, {column2, "test"}}), @"UPDATE table1 SET column1=1, column2='test'");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({{column1, 1}, {column2, "test"}}), @"UPDATE table1 SET column1=1, column2='test'");
     
-    WINQAssertEqual(StatementUpdate().update(table1).set({column1, 1}).where(column1 > 1), @"UPDATE table1 SET column1=1 WHERE (column1 > 1)");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).where(column1 > 1), @"UPDATE table1 SET column1=1 WHERE (column1 > 1)");
     
-    WINQAssertEqual(StatementUpdate().update(table1).set({column1, 1}).orderBy({column1, column2}), @"UPDATE table1 SET column1=1 ORDER BY column1, column2");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).orderBy({column1, column2}), @"UPDATE table1 SET column1=1 ORDER BY column1, column2");
     
-    WINQAssertEqual(StatementUpdate().update(table1).set({column1, 1}).limit(1), @"UPDATE table1 SET column1=1 LIMIT 1");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).limit(1), @"UPDATE table1 SET column1=1 LIMIT 1");
     
-    WINQAssertEqual(StatementUpdate().update(table1).set({column1, 1}).limit( 1, 2), @"UPDATE table1 SET column1=1 LIMIT 1, 2");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).limit( 1, 2), @"UPDATE table1 SET column1=1 LIMIT 1, 2");
     
-    WINQAssertEqual(StatementUpdate().update(table1).set({column1, 1}).limit(1).offset(3), @"UPDATE table1 SET column1=1 LIMIT 1 OFFSET 3");
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).limit(1).offset(3), @"UPDATE table1 SET column1=1 LIMIT 1 OFFSET 3");
 }
 
 @end

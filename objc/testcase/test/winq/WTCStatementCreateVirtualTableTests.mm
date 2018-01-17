@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementCreateVirtualTableTests : WTCBaseTestCase
 
 @end
@@ -32,19 +30,19 @@ using namespace WCDB;
 - (void)testStatementCreateVirtualTable
 {
     //Give
-    ModuleArgument moduleArgument1("left", "right");
-    ModuleArgument moduleArgument2 = ModuleArgument::Tokenize("WCDB");
+    WCDB::ModuleArgument moduleArgument1("left", "right");
+    WCDB::ModuleArgument moduleArgument2 = WCDB::ModuleArgument::Tokenize("WCDB");
     
     std::string module1 = "module1";
     
     std::string virtualTable1 = "virtualTable1";
     
     //Then
-    XCTAssertEqual(StatementCreateVirtualTable().getStatementType(), Statement::Type::CreateVirtualTable);
+    XCTAssertEqual(WCDB::StatementCreateVirtualTable().getStatementType(), WCDB::Statement::Type::CreateVirtualTable);
     
-    WINQAssertEqual(StatementCreateVirtualTable().create(virtualTable1).usingModule(module1, {moduleArgument1, moduleArgument2}), @"CREATE VIRTUAL TABLE IF NOT EXISTS virtualTable1 USING module1(left=right, tokenize=WCDB)");
+    WINQAssertEqual(WCDB::StatementCreateVirtualTable().create(virtualTable1).usingModule(module1, {moduleArgument1, moduleArgument2}), @"CREATE VIRTUAL TABLE IF NOT EXISTS virtualTable1 USING module1(left=right, tokenize=WCDB)");
     
-    WINQAssertEqual(StatementCreateVirtualTable().create(virtualTable1, false).usingModule(module1, {moduleArgument1, moduleArgument2}), @"CREATE VIRTUAL TABLE virtualTable1 USING module1(left=right, tokenize=WCDB)");
+    WINQAssertEqual(WCDB::StatementCreateVirtualTable().create(virtualTable1, false).usingModule(module1, {moduleArgument1, moduleArgument2}), @"CREATE VIRTUAL TABLE virtualTable1 USING module1(left=right, tokenize=WCDB)");
 }
 
 @end

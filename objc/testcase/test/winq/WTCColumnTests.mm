@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCColumnTests : WTCBaseTestCase
 
 @end
@@ -31,13 +29,13 @@ using namespace WCDB;
 
 - (void)testColumn
 {
-    WINQAssertEqual(Column::Any, @"*");
+    WINQAssertEqual(WCDB::Column::Any, @"*");
     
-    WINQAssertEqual(Column::Rowid, @"rowid");
+    WINQAssertEqual(WCDB::Column::Rowid, @"rowid");
     
-    WINQAssertEqual(Column("testColumn"), @"testColumn");
+    WINQAssertEqual(WCDB::Column("testColumn"), @"testColumn");
     
-    WINQAssertEqual(Column("testColumn").inTable("TestTable"), @"TestTable.testColumn");
+    WINQAssertEqual(WCDB::Column("testColumn").inTable("TestTable"), @"TestTable.testColumn");
 }
 
 @end

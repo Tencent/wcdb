@@ -21,28 +21,26 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementDeleteTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementDeleteTests
 
-- (StatementDelete)generateStatementDelete
+- (WCDB::StatementDelete)generateStatementDelete
 {
     std::string table1 = "table1";
-    return StatementDelete().deleteFrom(table1);
+    return WCDB::StatementDelete().deleteFrom(table1);
 }
 
 - (void)testStatementDelete
 {
     //Give
-    Column column1("column1");
-    Column column2("column2");
+    WCDB::Column column1("column1");
+    WCDB::Column column2("column2");
     
     //Then
-    XCTAssertEqual(StatementDelete().getStatementType(), Statement::Type::Delete);
+    XCTAssertEqual(WCDB::StatementDelete().getStatementType(), WCDB::Statement::Type::Delete);
     
     WINQAssertEqual([self generateStatementDelete].where(column1 > 1), @"DELETE FROM table1 WHERE (column1 > 1)");
     

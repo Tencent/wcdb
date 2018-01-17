@@ -21,17 +21,15 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCColumnResultTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCColumnResultTests
 
-- (ColumnResult)generateColumnResult
+- (WCDB::ColumnResult)generateColumnResult
 {
-    return ColumnResult(Column("column1"));
+    return WCDB::ColumnResult(WCDB::Column("column1"));
 }
 
 - (void)testColumnResult

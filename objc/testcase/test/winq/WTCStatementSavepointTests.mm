@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementSavepointTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testStatementSavepoint
 {
-    XCTAssertEqual(StatementSavepoint().getStatementType(), Statement::Type::Savepoint);
+    XCTAssertEqual(WCDB::StatementSavepoint().getStatementType(), WCDB::Statement::Type::Savepoint);
     
-    WINQAssertEqual(StatementSavepoint().savepoint("savepoint1"), @"SAVEPOINT savepoint1");
+    WINQAssertEqual(WCDB::StatementSavepoint().savepoint("savepoint1"), @"SAVEPOINT savepoint1");
 }
 
 @end

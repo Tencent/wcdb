@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementAttachTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testStatementAttachTests
 {
-    XCTAssertEqual(StatementAttach().getStatementType(), Statement::Type::Attach);
+    XCTAssertEqual(WCDB::StatementAttach().getStatementType(), WCDB::Statement::Type::Attach);
     
-    WINQAssertEqual(StatementAttach().attach("attach1").as("schema1"), @"ATTACH 'attach1' AS schema1");
+    WINQAssertEqual(WCDB::StatementAttach().attach("attach1").as("schema1"), @"ATTACH 'attach1' AS schema1");
 }
 
 @end

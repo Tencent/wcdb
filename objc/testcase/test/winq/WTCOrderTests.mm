@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCOrderTests : WTCBaseTestCase
 
 @end
@@ -32,12 +30,12 @@ using namespace WCDB;
 - (void)testOrder
 {
     //Give
-    Column column1 = Column("column1");
+    WCDB::Column column1 = WCDB::Column("column1");
     
     //Then
-    WINQAssertEqual(Order(column1), @"column1");
+    WINQAssertEqual(WCDB::Order(column1), @"column1");
     
-    WINQAssertEqual(Order(column1, OrderTerm::ASC), @"column1 ASC");
+    WINQAssertEqual(WCDB::Order(column1, WCDB::OrderTerm::ASC), @"column1 ASC");
 }
 
 @end

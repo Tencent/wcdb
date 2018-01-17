@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCSubqueryTests : WTCBaseTestCase
 
 @end
@@ -33,18 +31,18 @@ using namespace WCDB;
 {
     //Give
     std::string table1 = "table1";
-    JoinClause joinClause(table1);
-    StatementSelect statementSelect = StatementSelect().select(1).from(table1);
+    WCDB::JoinClause joinClause(table1);
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(1).from(table1);
     std::string alias1 = "alias1";
     
     //Then
-    WINQAssertEqual(Subquery(joinClause), @"(table1)");
+    WINQAssertEqual(WCDB::Subquery(joinClause), @"(table1)");
     
-    WINQAssertEqual(Subquery(statementSelect), @"(SELECT 1 FROM table1)");
+    WINQAssertEqual(WCDB::Subquery(statementSelect), @"(SELECT 1 FROM table1)");
     
-    WINQAssertEqual(Subquery(table1), @"table1");
+    WINQAssertEqual(WCDB::Subquery(table1), @"table1");
     
-    WINQAssertEqual(Subquery(table1).as(alias1), @"table1 AS alias1");
+    WINQAssertEqual(WCDB::Subquery(table1).as(alias1), @"table1 AS alias1");
 }
 
 @end

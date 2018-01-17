@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementDropIndexTests : WTCBaseTestCase
 
 @end
@@ -33,11 +31,11 @@ using namespace WCDB;
 {
     std::string index1 = "index1";
     
-    XCTAssertEqual(StatementDropIndex().getStatementType(), Statement::Type::DropIndex);
+    XCTAssertEqual(WCDB::StatementDropIndex().getStatementType(), WCDB::Statement::Type::DropIndex);
     
-    WINQAssertEqual(StatementDropIndex().drop(index1), @"DROP INDEX IF EXISTS index1");
+    WINQAssertEqual(WCDB::StatementDropIndex().drop(index1), @"DROP INDEX IF EXISTS index1");
     
-    WINQAssertEqual(StatementDropIndex().drop(index1, false), @"DROP INDEX index1");
+    WINQAssertEqual(WCDB::StatementDropIndex().drop(index1, false), @"DROP INDEX index1");
 }
 
 @end

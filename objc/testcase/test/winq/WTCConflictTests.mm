@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCConflictTests : WTCBaseTestCase
 
 @end
@@ -31,15 +29,15 @@ using namespace WCDB;
 
 - (void)testConflict
 {
-    WTCAssertEqual(ConflictName(Conflict::Rollback), @"ROLLBACK");
+    WTCAssertEqual(ConflictName(WCDB::Conflict::Rollback), @"ROLLBACK");
     
-    WTCAssertEqual(ConflictName(Conflict::Abort), @"ABORT");
+    WTCAssertEqual(ConflictName(WCDB::Conflict::Abort), @"ABORT");
     
-    WTCAssertEqual(ConflictName(Conflict::Fail), @"FAIL");
+    WTCAssertEqual(ConflictName(WCDB::Conflict::Fail), @"FAIL");
     
-    WTCAssertEqual(ConflictName(Conflict::Ignore), @"IGNORE");
+    WTCAssertEqual(ConflictName(WCDB::Conflict::Ignore), @"IGNORE");
     
-    WTCAssertEqual(ConflictName(Conflict::Replace), @"REPLACE");
+    WTCAssertEqual(ConflictName(WCDB::Conflict::Replace), @"REPLACE");
 }
 
 @end

@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementReleaseTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testStatementRelease
 {
-    XCTAssertEqual(StatementRelease().getStatementType(), Statement::Type::Release);
+    XCTAssertEqual(WCDB::StatementRelease().getStatementType(), WCDB::Statement::Type::Release);
     
-    WINQAssertEqual(StatementRelease().release("savepoint1"), @"RELEASE savepoint1");
+    WINQAssertEqual(WCDB::StatementRelease().release("savepoint1"), @"RELEASE savepoint1");
 }
 
 @end

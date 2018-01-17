@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCColumnIndexTests : WTCBaseTestCase
 
 @end
@@ -32,17 +30,17 @@ using namespace WCDB;
 - (void)testColumnIndex
 {
     //Give
-    Column column1 = Column("column1");
-    Expression expression1 = column1.abs();
+    WCDB::Column column1 = WCDB::Column("column1");
+    WCDB::Expression expression1 = column1.abs();
     
     //Then
-    WINQAssertEqual(ColumnIndex(column1), @"column1");
+    WINQAssertEqual(WCDB::ColumnIndex(column1), @"column1");
     
-    WINQAssertEqual(ColumnIndex(column1, OrderTerm::ASC), @"column1 ASC");
+    WINQAssertEqual(WCDB::ColumnIndex(column1, WCDB::OrderTerm::ASC), @"column1 ASC");
     
-    WINQAssertEqual(ColumnIndex(expression1), @"ABS(column1)");
+    WINQAssertEqual(WCDB::ColumnIndex(expression1), @"ABS(column1)");
     
-    WINQAssertEqual(ColumnIndex(expression1, OrderTerm::ASC), @"ABS(column1) ASC");
+    WINQAssertEqual(WCDB::ColumnIndex(expression1, WCDB::OrderTerm::ASC), @"ABS(column1) ASC");
 }
 
 @end

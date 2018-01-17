@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCTableConstraintTests : WTCBaseTestCase
 
 @end
@@ -30,24 +28,24 @@ using namespace WCDB;
 @implementation WTCTableConstraintTests
 
 
-- (TableConstraint)generateTableConstraint
+- (WCDB::TableConstraint)generateTableConstraint
 {
-    return TableConstraint("table1");
+    return WCDB::TableConstraint("table1");
 }
 
 - (void)testTableConstraint
 {
     //Give
-    Column column1("column1");
-    ColumnIndex index1(column1);
-    ColumnIndex index2 = ColumnIndex(Column("column2"));
-    ForeignKey foreignKey1("testTable", column1);
+    WCDB::Column column1("column1");
+    WCDB::ColumnIndex index1(column1);
+    WCDB::ColumnIndex index2 = WCDB::ColumnIndex(WCDB::Column("column2"));
+    WCDB::ForeignKey foreignKey1("testTable", column1);
     
     WINQAssertEqual([self generateTableConstraint].makePrimary({index1, index2}), @"CONSTRAINT table1 PRIMARY KEY(column1, column2)");
     
     WINQAssertEqual([self generateTableConstraint].makeUnique({index1, index2}), @"CONSTRAINT table1 UNIQUE(column1, column2)");
     
-    WINQAssertEqual([self generateTableConstraint].onConflict(Conflict::Fail), @"CONSTRAINT table1 ON CONFLICT FAIL");
+    WINQAssertEqual([self generateTableConstraint].onConflict(WCDB::Conflict::Fail), @"CONSTRAINT table1 ON CONFLICT FAIL");
     
     WINQAssertEqual([self generateTableConstraint].check(column1 > 1), @"CONSTRAINT table1 CHECK(column1 > 1)");
     

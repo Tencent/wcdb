@@ -21,32 +21,30 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCJoinClauseTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCJoinClauseTests
 
-- (JoinClause)generateJoinClause
+- (WCDB::JoinClause)generateJoinClause
 {
-    return JoinClause("testJoinClauseTable");
+    return WCDB::JoinClause("testJoinClauseTable");
 }
 
 - (void)testJoinClause
 {
-    WINQAssertEqual([self generateJoinClause].join("testJoinClauseTable2", JoinClause::Type::Left), @"testJoinClauseTable LEFT JOIN testJoinClauseTable2");
+    WINQAssertEqual([self generateJoinClause].join("testJoinClauseTable2", WCDB::JoinClause::Type::Left), @"testJoinClauseTable LEFT JOIN testJoinClauseTable2");
     
-    WINQAssertEqual([self generateJoinClause].naturalJoin("testJoinClauseTable2", JoinClause::Type::LeftOuter), @"testJoinClauseTable NATURAL LEFT OUTER JOIN testJoinClauseTable2");
+    WINQAssertEqual([self generateJoinClause].naturalJoin("testJoinClauseTable2", WCDB::JoinClause::Type::LeftOuter), @"testJoinClauseTable NATURAL LEFT OUTER JOIN testJoinClauseTable2");
     
-    WINQAssertEqual([self generateJoinClause].join("testJoinClauseTable2", JoinClause::Type::Inner), @"testJoinClauseTable INNER JOIN testJoinClauseTable2");
+    WINQAssertEqual([self generateJoinClause].join("testJoinClauseTable2", WCDB::JoinClause::Type::Inner), @"testJoinClauseTable INNER JOIN testJoinClauseTable2");
     
-    WINQAssertEqual([self generateJoinClause].naturalJoin("testJoinClauseTable2", JoinClause::Type::Cross), @"testJoinClauseTable NATURAL CROSS JOIN testJoinClauseTable2");
+    WINQAssertEqual([self generateJoinClause].naturalJoin("testJoinClauseTable2", WCDB::JoinClause::Type::Cross), @"testJoinClauseTable NATURAL CROSS JOIN testJoinClauseTable2");
     
     WINQAssertEqual([self generateJoinClause].on(1), @"testJoinClauseTable ON 1");
     
-    WINQAssertEqual([self generateJoinClause].usingColumns({Column("testColumn1"), Column("testColumn2")}), @"testJoinClauseTable USING testColumn1, testColumn2");
+    WINQAssertEqual([self generateJoinClause].usingColumns({WCDB::Column("testColumn1"), WCDB::Column("testColumn2")}), @"testJoinClauseTable USING testColumn1, testColumn2");
 }
 
 @end

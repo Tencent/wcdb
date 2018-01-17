@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementVacuumTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testStatementVacuum
 {
-    XCTAssertEqual(StatementVacuum().getStatementType(), Statement::Type::Vacuum);
+    XCTAssertEqual(WCDB::StatementVacuum().getStatementType(), WCDB::Statement::Type::Vacuum);
     
-    WINQAssertEqual(StatementVacuum().vacuum("testSchema"), @"VACUUM testSchema");
+    WINQAssertEqual(WCDB::StatementVacuum().vacuum("testSchema"), @"VACUUM testSchema");
 }
 
 @end

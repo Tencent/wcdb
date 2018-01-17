@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementExplainTests : WTCBaseTestCase
 
 @end
@@ -31,13 +29,13 @@ using namespace WCDB;
 
 - (void)testStatementExplain
 {
-    StatementSelect statement = StatementSelect().select(1).from("table1");
+    WCDB::StatementSelect statement = WCDB::StatementSelect().select(1).from("table1");
     
-    XCTAssertEqual(StatementExplain().getStatementType(), Statement::Type::Explain);
+    XCTAssertEqual(WCDB::StatementExplain().getStatementType(), WCDB::Statement::Type::Explain);
     
-    WINQAssertEqual(StatementExplain().explain(statement), @"EXPLAIN SELECT 1 FROM table1");
+    WINQAssertEqual(WCDB::StatementExplain().explain(statement), @"EXPLAIN SELECT 1 FROM table1");
     
-    WINQAssertEqual(StatementExplain().explainQueryPlan(statement), @"EXPLAIN QUERY PLAN SELECT 1 FROM table1");
+    WINQAssertEqual(WCDB::StatementExplain().explainQueryPlan(statement), @"EXPLAIN QUERY PLAN SELECT 1 FROM table1");
 }
 
 @end

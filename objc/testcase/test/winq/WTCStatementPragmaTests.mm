@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementPragmaTests : WTCBaseTestCase
 
 @end
@@ -31,11 +29,11 @@ using namespace WCDB;
 
 - (void)testStatementPragma
 {
-    XCTAssertEqual(StatementPragma().getStatementType(), Statement::Type::Pragma);
+    XCTAssertEqual(WCDB::StatementPragma().getStatementType(), WCDB::Statement::Type::Pragma);
     
-    WINQAssertEqual(StatementPragma().pragma(Pragma::PageSize), @"PRAGMA page_size");
+    WINQAssertEqual(WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize), @"PRAGMA page_size");
     
-    WINQAssertEqual(StatementPragma().pragma(Pragma::SecureDelete, true), @"PRAGMA secure_delete=1");
+    WINQAssertEqual(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, true), @"PRAGMA secure_delete=1");
 }
 
 @end

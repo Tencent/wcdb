@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementReindexTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testStatementReindex
 {
-    XCTAssertEqual(StatementReindex().getStatementType(), Statement::Type::Reindex);
+    XCTAssertEqual(WCDB::StatementReindex().getStatementType(), WCDB::Statement::Type::Reindex);
     
-    WINQAssertEqual(StatementReindex().reindex("tableOrIndex"), @"REINDEX tableOrIndex");
+    WINQAssertEqual(WCDB::StatementReindex().reindex("tableOrIndex"), @"REINDEX tableOrIndex");
 }
 
 @end

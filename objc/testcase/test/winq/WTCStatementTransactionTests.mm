@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementTransactionTests : WTCBaseTestCase
 
 @end
@@ -31,16 +29,16 @@ using namespace WCDB;
 
 - (void)testStatementTransaction
 {
-    XCTAssertEqual(StatementTransaction().getStatementType(), Statement::Type::Transaction);
-    WINQAssertEqual(StatementTransaction().begin(StatementTransaction::Mode::Deferred), @"BEGIN DEFERRED");
+    XCTAssertEqual(WCDB::StatementTransaction().getStatementType(), WCDB::Statement::Type::Transaction);
+    WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Deferred), @"BEGIN DEFERRED");
     
-    WINQAssertEqual(StatementTransaction().begin(StatementTransaction::Mode::Immediate), @"BEGIN IMMEDIATE");
+    WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Immediate), @"BEGIN IMMEDIATE");
     
-    WINQAssertEqual(StatementTransaction().begin(StatementTransaction::Mode::Exclusive), @"BEGIN EXCLUSIVE");
+    WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Exclusive), @"BEGIN EXCLUSIVE");
     
-    WINQAssertEqual(StatementTransaction().commit(), @"COMMIT");
+    WINQAssertEqual(WCDB::StatementTransaction().commit(), @"COMMIT");
     
-    WINQAssertEqual(StatementTransaction().rollback(), @"ROLLBACK");
+    WINQAssertEqual(WCDB::StatementTransaction().rollback(), @"ROLLBACK");
 }
 
 @end

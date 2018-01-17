@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCLiteralValueTests : WTCBaseTestCase
 
 @end
@@ -31,37 +29,37 @@ using namespace WCDB;
 
 - (void)testLiteralValue
 {
-    LiteralValue boolLiteralValue = false;
+    WCDB::LiteralValue boolLiteralValue = false;
     WINQAssertEqual(boolLiteralValue, @"0");
     
-    LiteralValue intLiteralValue = 1;
+    WCDB::LiteralValue intLiteralValue = 1;
     WINQAssertEqual(intLiteralValue, @"1");
     
-    LiteralValue floatLiteralValue = 0.1;
+    WCDB::LiteralValue floatLiteralValue = 0.1;
     WINQAssertEqual(floatLiteralValue, @"0.100000");
     
-    LiteralValue stringLiteralValue = "test";
+    WCDB::LiteralValue stringLiteralValue = "test";
     WINQAssertEqual(stringLiteralValue, @"'test'");
     
-    LiteralValue nullLiteralValue = nil;
+    WCDB::LiteralValue nullLiteralValue = nil;
     WINQAssertEqual(nullLiteralValue, @"NULL");
     
-    WINQAssertEqual(LiteralValue(true), @"1");
+    WINQAssertEqual(WCDB::LiteralValue(true), @"1");
     
-    WINQAssertEqual(LiteralValue(1), @"1");
+    WINQAssertEqual(WCDB::LiteralValue(1), @"1");
     
     int64_t int64 = 17626545782784;
-    WINQAssertEqual(LiteralValue(int64), @"17626545782784");
+    WINQAssertEqual(WCDB::LiteralValue(int64), @"17626545782784");
     
-    WINQAssertEqual(LiteralValue(0.1), @"0.100000");
+    WINQAssertEqual(WCDB::LiteralValue(0.1), @"0.100000");
     
-    WINQAssertEqual(LiteralValue("test"), @"'test'");
+    WINQAssertEqual(WCDB::LiteralValue("test"), @"'test'");
     
     std::string str = "test";
     std::vector<unsigned char> data(str.begin(), str.end());
-    WINQAssertEqual(LiteralValue(data), @"'test'");
+    WINQAssertEqual(WCDB::LiteralValue(data), @"'test'");
     
-    WINQAssertEqual(LiteralValue(nullptr), @"NULL");
+    WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
 }
 
 @end

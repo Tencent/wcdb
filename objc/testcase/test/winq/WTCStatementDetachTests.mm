@@ -21,8 +21,6 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementDetachTests : WTCBaseTestCase
 
 @end
@@ -31,9 +29,9 @@ using namespace WCDB;
 
 - (void)testStatementDetach
 {
-    XCTAssertEqual(StatementDetach().getStatementType(), Statement::Type::Detach);
+    XCTAssertEqual(WCDB::StatementDetach().getStatementType(), WCDB::Statement::Type::Detach);
     
-    WINQAssertEqual(StatementDetach().detach("testSchema"), @"DETACH testSchema");
+    WINQAssertEqual(WCDB::StatementDetach().detach("testSchema"), @"DETACH testSchema");
 }
 
 @end
