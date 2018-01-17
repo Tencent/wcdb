@@ -99,8 +99,6 @@ public:
     StatementSelect &having(const Expression &having);
 
     virtual Statement::Type getStatementType() const override;
-
-    static StatementSelect Fts3Tokenizer;
 };
 
 } //namespace WCDB

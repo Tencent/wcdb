@@ -21,14 +21,12 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTInsert+Private.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTInterface+ChainCall.h>
 #import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelect+Private.h>
@@ -70,27 +68,52 @@
 
 - (WCTSelect *)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString *)tableName
 {
-    return [[WCTSelect alloc] initWithCore:_core andResults:[cls AllProperties] fromTable:tableName];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
+- (WCTSelect *)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
 {
-    return [[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:tableName];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:isDistinct];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:tableName];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTables:tableNames];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:isDistinct];
 }
 
-- (WCTMultiSelect *)prepareSelectMultiObjectsOnResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName
 {
-    return [[WCTMultiSelect alloc] initWithCore:_core andResults:resultList fromTables:tableNames];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO];
+}
+
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:isDistinct];
+}
+
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableNames isDistinct:NO];
+}
+
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableNames isDistinct:isDistinct];
+}
+
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames
+{
+    return [[WCTMultiSelect alloc] initWithCore:_core andPropertyList:propertyList fromTables:tableNames isDistinct:NO];
+}
+
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
+{
+    return [[WCTMultiSelect alloc] initWithCore:_core andPropertyList:propertyList fromTables:tableNames isDistinct:isDistinct];
 }
 
 @end

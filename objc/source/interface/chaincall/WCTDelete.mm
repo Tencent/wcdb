@@ -21,7 +21,6 @@
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDelete.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/handle_statement.hpp>
 
 @implementation WCTDelete {
@@ -46,25 +45,25 @@
     return self;
 }
 
-- (instancetype)where:(const WCTCondition &)expr
+- (instancetype)where:(const WCDB::Expression &)expr
 {
     _statement.where(expr);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList &)orderList
+- (instancetype)orderBy:(const WCDB::OrderList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit &)limit
+- (instancetype)limit:(const WCDB::Expression &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset &)offset
+- (instancetype)offset:(const WCDB::Expression &)offset
 {
     _statement.offset(offset);
     return self;

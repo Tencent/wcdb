@@ -26,6 +26,7 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
+#import <WCDB/WCTBinding.h>
 
 @implementation WCTChainCall
 
@@ -37,7 +38,7 @@
                                      _core->getPath(),
                                      WCDB::Error::InterfaceOperation::ChainCall,
                                      WCDB::Error::InterfaceCode::ORM,
-                                     [NSString stringWithFormat:@"Binding an unknown column named [%s]", property.getName().c_str()].UTF8String,
+                                     [NSString stringWithFormat:@"Binding an unknown column named [%s]", property.getDescription().c_str()].UTF8String,
                                      &error);
         return NO;
     }
@@ -66,11 +67,8 @@
                                                                                   index);
                 } break;
                 case WCTColumnTypeBinary: {
-                    int size = 0;
                     WCTCppAccessor<WCTColumnTypeBinary> *blobAccessor = (WCTCppAccessor<WCTColumnTypeBinary> *) accessor.get();
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(blobAccessor->getValue(object, size),
-                                                                                  size,
-                                                                                  index);
+                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(blobAccessor->getValue(object), index);
                 } break;
                 default:
                     WCDB::Error::ReportInterface(_core->getTag(),
@@ -108,7 +106,9 @@
                 }
                 case WCTColumnTypeBinary: {
                     NSData *data = objcAccessor->getObject(object);
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
+                    const unsigned char* raw = (const unsigned char*)data.bytes;
+                    std::vector<unsigned char> vector(raw, raw + data.length);
+                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
                     break;
                 }
                 default:
@@ -161,10 +161,12 @@
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
+            const unsigned char* raw = (const unsigned char*)data.bytes;
+            std::vector<unsigned char> vector(raw, raw + data.length);
+            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
         } break;
         case WCTValueTypeNil:
-            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
             break;
         default:
             WCDB::Error::ReportInterface(_core->getTag(),

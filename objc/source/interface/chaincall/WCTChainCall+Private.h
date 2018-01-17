@@ -22,6 +22,7 @@
 #import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/ticker.hpp>
+#import <WCDB/WCTProperty.h>
 
 @interface WCTChainCall () {
 @protected

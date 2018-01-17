@@ -27,7 +27,7 @@
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
         static const WCTProperty s_property(                                   \
-            columnName, className.class,                                       \
+            columnName,                                                        \
             __WCDB_BINDING(className)                                          \
                 .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
                     className, propertyName)>(WCDB_STRINGIFY(propertyName),    \

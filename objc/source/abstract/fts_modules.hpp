@@ -24,6 +24,7 @@
 #include <WCDB/spin.hpp>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace WCDB {
 
@@ -35,7 +36,8 @@ public:
 
     void addModule(const std::string &name,
                    const std::shared_ptr<void> &module);
-    const void *getAddress(const std::string &name) const;
+    
+    std::vector<unsigned char> getAddress(const std::string &name) const;
 
 protected:
     std::unordered_map<std::string, std::shared_ptr<void>> m_modules;

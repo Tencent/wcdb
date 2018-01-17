@@ -69,9 +69,9 @@ public:
 
     template <ColumnType T>
     typename std::enable_if<ColumnTypeInfo<T>::isBLOB, void>::type
-    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int size, int index)
+    bind(const typename ColumnTypeInfo<T>::UnderlyingType &value, int index)
     {
-        bindBLOB(value, size, index);
+        bindBLOB(value, index);
     };
 
     template <ColumnType T>

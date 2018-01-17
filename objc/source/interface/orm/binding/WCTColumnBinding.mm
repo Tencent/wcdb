@@ -33,7 +33,7 @@ bool WCTColumnBinding::isAutoIncrement() const
     return m_isAutoIncrement;
 }
 
-const WCTColumnDef WCTColumnBinding::getColumnDef() const
+const WCDB::ColumnDef WCTColumnBinding::getColumnDef() const
 {
     return m_columnDef;
 }
@@ -80,7 +80,9 @@ void WCTColumnBinding::makeDefaultObjC(WCTValue *defaultValue)
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) defaultValue;
-            m_columnDef.makeDefault(data.bytes, (int) data.length);
+            const unsigned char* raw = (unsigned char*)data.bytes; 
+            std::vector<unsigned char> vector(raw, raw + data.length);
+            m_columnDef.makeDefault(vector);
         } break;
         case WCTValueTypeNil:
             m_columnDef.makeDefault(nullptr);
@@ -89,4 +91,9 @@ void WCTColumnBinding::makeDefaultObjC(WCTValue *defaultValue)
             WCDB::Error::Abort([NSString stringWithFormat:@"Setting default value for %s with unknown column type %d", columnName.c_str(), (int) accessor->getColumnType()].UTF8String);
             break;
     }
+}
+
+Class WCTColumnBinding::getClass() const
+{
+    return m_class;
 }

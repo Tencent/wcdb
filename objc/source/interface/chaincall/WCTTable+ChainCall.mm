@@ -21,13 +21,11 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTInsert+Private.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelect+Private.h>
@@ -71,17 +69,27 @@
 
 - (WCTSelect *)prepareSelectObjects
 {
-    return [[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:[_cls AllProperties] fromTable:_tableName isDistinct:NO];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList
 {
-    return [[WCTSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:_tableName isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andResults:resultList fromTable:_tableName];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:_tableName isDistinct:isDistinct];
+}
+
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[_tableName] isDistinct:NO];
+}
+
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList isDistinct:(BOOL)isDistinct
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[_tableName] isDistinct:isDistinct];
 }
 
 @end

@@ -24,7 +24,6 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
 #import <WCDB/handle_statement.hpp>
@@ -63,7 +62,7 @@
         for (const WCTProperty &property : propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (columnBinding) {
-                updateValueList.push_back({property, WCTExpression::BindParameter});
+                updateValueList.push_back({WCDB::Column(property.getDescription()), WCDB::Expression::BindParameter});
             } else {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),
@@ -78,25 +77,25 @@
     return self;
 }
 
-- (instancetype)where:(const WCTCondition &)condition
+- (instancetype)where:(const WCDB::Expression &)condition
 {
     _statement.where(condition);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList &)orderList
+- (instancetype)orderBy:(const WCDB::OrderList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit &)limit
+- (instancetype)limit:(const WCDB::Expression &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset &)offset
+- (instancetype)offset:(const WCDB::Expression &)offset
 {
     _statement.offset(offset);
     return self;

@@ -329,17 +329,13 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
         Database::defaultTokenizeConfigName,
         [tokenizeNames](std::shared_ptr<Handle> &handle, Error &error) -> bool {
             for (const std::string &tokenizeName : tokenizeNames) {
-                const void *address =
+                std::vector<unsigned char> address =
                     FTS::Modules::SharedModules()->getAddress(tokenizeName);
-
-                if (!address) {
-                    Error::Abort("Tokenize name is not registered");
-                }
 
                 //Tokenize
                 {
                     std::shared_ptr<StatementHandle> statementHandle =
-                        handle->prepare(StatementSelect::Fts3Tokenizer);
+                        handle->prepare(Statement::FTS3Tokenizer);
                     if (!statementHandle) {
                         error = handle->getError();
                         return false;
@@ -347,7 +343,7 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
                     statementHandle->bind<WCDB::ColumnType::Text>(
                         tokenizeName.c_str(), 1);
                     statementHandle->bind<WCDB::ColumnType::BLOB>(
-                        &address, sizeof(address), 2);
+                        address, 2);
                     statementHandle->step();
                     if (!statementHandle->isOK()) {
                         error = statementHandle->getError();

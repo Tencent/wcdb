@@ -13,7 +13,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUExpression WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -28,7 +28,6 @@ namespace WCDB {
     
 class Operator {
 protected:
-    template <typename T, typename Enable>
     friend class Operable;
     friend class Expression;
     
@@ -44,254 +43,97 @@ protected:
     static Expression operateWithComplexOperator(const Expression& one, const std::string &op1, const Expression& two, const std::string& op2, const Expression &three);
 };
 
-template <typename T, typename Enable = void>
-class Operable{};
-
-template <typename T>
-class Operable<T, typename std::enable_if<ExpressionConvertible<T>::value>::type>
+class Operable
 {
 public:
-    T operator !() const;
-    T operator +() const;
-    T operator -() const;
-    T operator ~() const;
+    Expression operator !() const;
+    Expression operator +() const;
+    Expression operator -() const;
+    Expression operator ~() const;
     
-    T operator ||(const Expression& operand) const;
-    T operator &&(const Expression& operand) const;
-    T operator *(const Expression& operand) const;
-    T operator /(const Expression& operand) const;
-    T operator %(const Expression& operand) const;
-    T operator +(const Expression& operand) const;
-    T operator -(const Expression& operand) const;
-    T operator <<(const Expression& operand) const;
-    T operator >>(const Expression& operand) const;
-    T operator &(const Expression& operand) const;
-    T operator |(const Expression& operand) const;
-    T operator <(const Expression& operand) const;
-    T operator <=(const Expression& operand) const;
-    T operator >(const Expression& operand) const;
-    T operator >=(const Expression& operand) const;
-    T operator ==(const Expression& operand) const;
-    T operator !=(const Expression& operand) const;
+    Expression operator ||(const Expression& operand) const;
+    Expression operator &&(const Expression& operand) const;
+    Expression operator *(const Expression& operand) const;
+    Expression operator /(const Expression& operand) const;
+    Expression operator %(const Expression& operand) const;
+    Expression operator +(const Expression& operand) const;
+    Expression operator -(const Expression& operand) const;
+    Expression operator <<(const Expression& operand) const;
+    Expression operator >>(const Expression& operand) const;
+    Expression operator &(const Expression& operand) const;
+    Expression operator |(const Expression& operand) const;
+    Expression operator <(const Expression& operand) const;
+    Expression operator <=(const Expression& operand) const;
+    Expression operator >(const Expression& operand) const;
+    Expression operator >=(const Expression& operand) const;
+    Expression operator ==(const Expression& operand) const;
+    Expression operator !=(const Expression& operand) const;
     
-    T concat(const Expression& operand) const;
-    T substr(const Expression& start, const Expression& length) const;
+    Expression concat(const Expression& operand) const;
+    Expression substr(const Expression& start, const Expression& length) const;
     
-    T like(const Expression& operand) const ;
-    T glob(const Expression& operand) const ;
-    T match(const Expression& operand) const ;
-    T regexp(const Expression& operand) const ;
-    T notLike(const Expression& operand) const ;
-    T notGlob(const Expression& operand) const ;
-    T notMatch(const Expression& operand) const ;
-    T notRegexp(const Expression& operand) const ;
+    Expression like(const Expression& operand) const ;
+    Expression glob(const Expression& operand) const ;
+    Expression match(const Expression& operand) const ;
+    Expression regexp(const Expression& operand) const ;
+    Expression notLike(const Expression& operand) const ;
+    Expression notGlob(const Expression& operand) const ;
+    Expression notMatch(const Expression& operand) const ;
+    Expression notRegexp(const Expression& operand) const ;
     
-    T like(const Expression& operand, const Expression& escape) const;
-    T glob(const Expression& operand, const Expression& escape) const ;
-    T match(const Expression& operand, const Expression& escape) const;
-    T regexp(const Expression& operand, const Expression& escape) const;
-    T notLike(const Expression& operand, const Expression& escape) const;
-    T notGlob(const Expression& operand, const Expression& escape) const;
-    T notMatch(const Expression& operand, const Expression& escape) const;
-    T notRegexp(const Expression& operand, const Expression& escape) const;
+    Expression like(const Expression& operand, const Expression& escape) const;
+    Expression glob(const Expression& operand, const Expression& escape) const ;
+    Expression match(const Expression& operand, const Expression& escape) const;
+    Expression regexp(const Expression& operand, const Expression& escape) const;
+    Expression notLike(const Expression& operand, const Expression& escape) const;
+    Expression notGlob(const Expression& operand, const Expression& escape) const;
+    Expression notMatch(const Expression& operand, const Expression& escape) const;
+    Expression notRegexp(const Expression& operand, const Expression& escape) const;
     
-    T isNull() const;
-    T isNotNull() const;
-    T is(const Expression& operand) const;
-    T isNot(const Expression& operand) const;
-    T between(const Expression& begin, const Expression& end) const;
-    T notBetween(const Expression& begin, const Expression& end) const;
+    Expression isNull() const;
+    Expression isNotNull() const;
+    Expression is(const Expression& operand) const;
+    Expression isNot(const Expression& operand) const;
+    Expression between(const Expression& begin, const Expression& end) const;
+    Expression notBetween(const Expression& begin, const Expression& end) const;
     
-    T in(const StatementSelect& statementSelect) const;
-    T notIn(const StatementSelect&  statementSelect) const;
-    template <typename U>
-    typename std::enable_if<ExpressionConvertible<U>::value, T>::type in(const std::list<const U> &list) const;
-    template <typename U>
-    typename std::enable_if<ExpressionConvertible<U>::value, T>::type notIn(const std::list<const U> &list) const;
-    T in(const std::list<const Expression> &list) const;
-    T notIn(const std::list<const Expression> &list) const;
-    T in(const Expression &expression) const;
-    T notIn(const Expression &expression) const;
+    Expression in(const StatementSelect& statementSelect) const;
+    Expression notIn(const StatementSelect&  statementSelect) const;
+    template <typename T>
+    typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type in(const std::list<const T> &list) const;
+    template <typename T>
+    typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type notIn(const std::list<const T> &list) const;
+    Expression in(const std::list<const Expression> &list) const;
+    Expression notIn(const std::list<const Expression> &list) const;
+    Expression in(const Expression &expression) const;
+    Expression notIn(const Expression &expression) const;
     
     //aggregate functions
-    T avg(bool isDistinct = false) const;
-    T count(bool isDistinct = false) const;
-    T groupConcat(bool isDistinct = false) const;
-    T groupConcat(bool isDistinct, const std::string& seperator) const ;
-    T max(bool isDistinct = false) const;
-    T min(bool isDistinct = false) const;
-    T sum(bool isDistinct = false) const;
-    T total(bool isDistinct = false) const;
+    Expression avg(bool isDistinct = false) const;
+    Expression count(bool isDistinct = false) const;
+    Expression groupConcat(bool isDistinct = false) const;
+    Expression groupConcat(bool isDistinct, const std::string& seperator) const ;
+    Expression max(bool isDistinct = false) const;
+    Expression min(bool isDistinct = false) const;
+    Expression sum(bool isDistinct = false) const;
+    Expression total(bool isDistinct = false) const;
     
     //core functions
-    T abs(bool isDistinct = false) const;
-    T hex(bool isDistinct = false) const;
-    T length(bool isDistinct = false) const;
-    T lower(bool isDistinct = false) const;
-    T upper(bool isDistinct = false) const;
-    T round(bool isDistinct = false) const;
+    Expression abs(bool isDistinct = false) const;
+    Expression hex(bool isDistinct = false) const;
+    Expression length(bool isDistinct = false) const;
+    Expression lower(bool isDistinct = false) const;
+    Expression upper(bool isDistinct = false) const;
+    Expression round(bool isDistinct = false) const;
     
     //FTS3
-    T matchinfo() const;
-    T offsets() const;
-    T snippet() const;
+    Expression matchinfo() const;
+    Expression offsets() const;
+    Expression snippet() const;
 protected:
-    virtual T asExpression() const = 0;
-};
-
-template <>
-Expression Operable<Expression>::operator !() const;
-template <>
-Expression Operable<Expression>::operator +() const;
-template <>
-Expression Operable<Expression>::operator -() const;
-template <>
-Expression Operable<Expression>::operator ~() const;
-
-template <>
-Expression Operable<Expression>::operator ||(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator &&(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator *(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator /(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator %(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator +(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator -(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator <<(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator >>(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator &(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator |(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator <(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator <=(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator >(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator >=(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator ==(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::operator !=(const Expression& operand) const;
-
-template <>
-Expression Operable<Expression>::concat(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::substr(const Expression& start, const Expression& length) const;
-template <>
-Expression Operable<Expression>::like(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::glob(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::match(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::regexp(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::notLike(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::notGlob(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::notMatch(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::notRegexp(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::like(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::glob(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::match(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::regexp(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::notLike(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::notGlob(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::notMatch(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::notRegexp(const Expression& operand, const Expression& escape) const;
-template <>
-Expression Operable<Expression>::isNull() const;
-template <>
-Expression Operable<Expression>::isNotNull() const;
-template <>
-Expression Operable<Expression>::is(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::isNot(const Expression& operand) const;
-template <>
-Expression Operable<Expression>::between(const Expression& begin, const Expression& end) const;
-template <>
-Expression Operable<Expression>::notBetween(const Expression& begin, const Expression& end) const;
-template <>
-Expression Operable<Expression>::in(const StatementSelect& statementSelect) const;
-template <>
-Expression Operable<Expression>::notIn(const StatementSelect&  statementSelect) const;
-    
-template <>
-template <typename U>
-typename std::enable_if<ExpressionConvertible<U>::value, Expression>::type Operable<Expression>::in(const std::list<const U> &list) const {
-    return Operator::operateWithPostfix(*this, "IN(" + stringByJoiningList(list) + ")");
-}
-    
-template <>
-template <typename U>
-typename std::enable_if<ExpressionConvertible<U>::value, Expression>::type Operable<Expression>::notIn(const std::list<const U> &list) const {
-    return Operator::operateWithPostfix(*this, "NOT IN(" + stringByJoiningList(list) + ")");
-}
-    
-template <>
-Expression Operable<Expression>::in(const std::list<const Expression> &list) const;
-template <>
-Expression Operable<Expression>::notIn(const std::list<const Expression> &list) const;
-template <>
-Expression Operable<Expression>::in(const Expression &expression) const;
-template <>
-Expression Operable<Expression>::notIn(const Expression &expression) const;
-    
-template <>
-Expression Operable<Expression>::avg(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::count(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::groupConcat(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::groupConcat(bool isDistinct, const std::string& seperator) const;
-template <>
-Expression Operable<Expression>::max(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::min(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::sum(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::total(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::abs(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::hex(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::length(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::lower(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::upper(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::round(bool isDistinct) const;
-template <>
-Expression Operable<Expression>::matchinfo() const;
-template <>
-Expression Operable<Expression>::offsets() const;
-template <>
-Expression Operable<Expression>::snippet() const;
-    
+    virtual Expression asExpression() const = 0;
+};    
+   
 } //namespace WCDB
 
 #endif /* operable_hpp */

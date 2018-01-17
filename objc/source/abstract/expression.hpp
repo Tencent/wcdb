@@ -27,7 +27,7 @@
 
 namespace WCDB {
     
-class Expression : public Describable, public Operable<Expression> {
+class Expression : public Describable, public Operable {
 public:
     operator std::list<const Expression>() const;
     

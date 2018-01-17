@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/WCTConstraintBinding.h>
+#import <WCDB/WCTConstraintBinding.h>
+#import <WCDB/error.hpp>
 
 WCTConstraintBindingBase::WCTConstraintBindingBase(const std::string &n, WCTConstraintBindingType t)
     : name(n)
@@ -32,7 +33,7 @@ WCTConstraintPrimaryKeyBinding::WCTConstraintPrimaryKeyBinding(const std::string
 {
 }
 
-void WCTConstraintPrimaryKeyBinding::addPrimaryKey(const WCTIndex &index)
+void WCTConstraintPrimaryKeyBinding::addPrimaryKey(const WCDB::ColumnIndex &index)
 {
     m_primaryKeyList.push_back(index);
 }
@@ -53,7 +54,7 @@ WCTConstraintUniqueBinding::WCTConstraintUniqueBinding(const std::string &name)
 {
 }
 
-void WCTConstraintUniqueBinding::addUnique(const WCTIndex &index)
+void WCTConstraintUniqueBinding::addUnique(const WCDB::ColumnIndex &index)
 {
     m_uniqueList.push_back(index);
 }
@@ -73,12 +74,16 @@ WCTConstraintCheckBinding::WCTConstraintCheckBinding(const std::string &name)
 {
 }
 
-void WCTConstraintCheckBinding::makeCheck(const WCTExpression &expr)
+void WCTConstraintCheckBinding::makeCheck(const WCDB::Expression &expression)
 {
-    m_check = expr;
+    m_check.reset(new WCDB::Expression(expression));
 }
 
 WCDB::TableConstraint WCTConstraintCheckBinding::generateConstraint() const
 {
-    return WCDB::TableConstraint(name).makeCheck(m_check);
+    if (m_check==nullptr) {
+        //TODO
+        WCDB::Error::Abort("");
+    }
+    return WCDB::TableConstraint(name).check(*m_check.get());
 }

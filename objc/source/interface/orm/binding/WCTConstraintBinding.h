@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/abstract.h>
 #import <string>
 
@@ -45,14 +44,14 @@ public:
         WCTConstraintBindingPrimaryKey;
     WCTConstraintPrimaryKeyBinding(const std::string &name);
 
-    void addPrimaryKey(const WCTIndex &index);
+    void addPrimaryKey(const WCDB::ColumnIndex &index);
     void setConflict(WCTConflict conflict);
 
     virtual WCDB::TableConstraint generateConstraint() const override;
 
 protected:
     WCTConflict m_conflict;
-    WCTIndexList m_primaryKeyList;
+    WCDB::ColumnIndexList m_primaryKeyList;
 };
 
 class WCTConstraintUniqueBinding : public WCTConstraintBindingBase {
@@ -61,14 +60,14 @@ public:
         WCTConstraintBindingUnique;
     WCTConstraintUniqueBinding(const std::string &name);
 
-    void addUnique(const WCTIndex &index);
+    void addUnique(const WCDB::ColumnIndex &index);
     void setConflict(WCTConflict conflict);
 
     virtual WCDB::TableConstraint generateConstraint() const override;
 
 protected:
     WCTConflict m_conflict;
-    WCTIndexList m_uniqueList;
+    WCDB::ColumnIndexList m_uniqueList;
 };
 
 class WCTConstraintCheckBinding : public WCTConstraintBindingBase {
@@ -77,9 +76,9 @@ public:
         WCTConstraintBindingCheck;
     WCTConstraintCheckBinding(const std::string &name);
 
-    void makeCheck(const WCTExpression &expr);
+    void makeCheck(const WCDB::Expression &expression);
     virtual WCDB::TableConstraint generateConstraint() const override;
 
 protected:
-    WCTExpression m_check;
+    std::shared_ptr<WCDB::Expression> m_check;
 };

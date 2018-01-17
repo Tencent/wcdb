@@ -13,23 +13,28 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUExpression WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
-#include <WCDB/statement.hpp>
-#include <WCDB/expression.hpp>
-#include <WCDB/statement_select.hpp>
-#include <WCDB/column_result.hpp>
-#include <WCDB/convertible_impl.hpp>
+#ifndef operable_hpp
+#define operable_hpp
+
+#include <WCDB/operable.hpp>
 
 namespace WCDB {
     
-const StatementSelect Statement::FTS3Tokenizer = StatementSelect().select(Expression::Function("fts3_tokenizer", {Expression::BindParameter, Expression::BindParameter}));
-
-Statement::Statement() : Describable("")
-{
+template <typename T>
+typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type Operable::in(const std::list<const T> &list) const {
+    return Operator::operateWithPostfix(asExpression(), "IN(" + stringByJoiningList(list) + ")");
 }
 
+template <typename T>
+typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type Operable::notIn(const std::list<const T> &list) const {
+    return Operator::operateWithPostfix(asExpression(), "NOT IN(" + stringByJoiningList(list) + ")");
+}
+    
 } //namespace WCDB
+
+#endif /* operable_hpp */

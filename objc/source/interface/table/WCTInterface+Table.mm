@@ -114,14 +114,14 @@
                                          error);
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andError:(WCDB::Error &)error
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementCreateTable()
                            .create(tableName.UTF8String, columnDefList),
                        error);
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andConstraintList:(const WCTTableConstraintList &)constraintList andError:(WCDB::Error &)error
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList andError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementCreateTable()
                            .create(tableName.UTF8String, columnDefList, constraintList),
@@ -146,7 +146,7 @@
                        error);
 }
 
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCTIndexList &)indexList forTable:(NSString *)tableName andError:(WCDB::Error &)error
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName andError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementCreateIndex()
                            .create(indexName.UTF8String)

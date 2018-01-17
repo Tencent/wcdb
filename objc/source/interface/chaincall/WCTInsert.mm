@@ -61,7 +61,7 @@
                          .insert(tableName.UTF8String,
                                  _propertyList,
                                  _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expression::BindParameter));
+                         .values(WCDB::ExpressionList(_propertyList.size(), WCDB::Expression::BindParameter));
     }
     return self;
 }
@@ -93,7 +93,7 @@
                          .insert(tableName.UTF8String,
                                  _propertyList,
                                  _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expression::BindParameter));
+                         .values(WCDB::ExpressionList(_propertyList.size(), WCDB::Expression::BindParameter));
     }
     return self;
 }
@@ -111,7 +111,7 @@
         for (const WCTProperty &property : _propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
             } else {
                 if (![self bindProperty:property
                                  ofObject:object

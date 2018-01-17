@@ -31,450 +31,406 @@
 #pragma mark - Get Object
 - (id /* WCTObject* */)getOneObject;
 
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition;
+- (id /* WCTObject* */)getOneObjectWhere:(const WCDB::Expression &)condition;
 
-- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order;
+- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOffset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectOffset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                 orderBy:(const WCDB::OrderList &)order;
+- (id /* WCTObject* */)getOneObjectWhere:(const WCDB::Expression &)condition
+                                 orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                  offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectWhere:(const WCDB::Expression &)condition
+                                  offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)order
-                                    offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectOrderBy:(const WCDB::OrderList &)orderList
+                                    offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
-                                 orderBy:(const WCDB::OrderList &)order
-                                  offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectWhere:(const WCDB::Expression &)condition
+                                 orderBy:(const WCDB::OrderList &)orderList
+                                  offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Part Of Object
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                       where:(const WCDB::Expression &)condition;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                     orderBy:(const WCDB::OrderList &)order;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                     orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                      offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                      offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                     orderBy:(const WCDB::OrderList &)order;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                       where:(const WCDB::Expression &)condition
+                                     orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                      offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                       where:(const WCDB::Expression &)condition
+                                      offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                     orderBy:(const WCDB::OrderList &)order
-                                      offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                     orderBy:(const WCDB::OrderList &)orderList
+                                      offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOnResults:(const WCTResultList &)resultList
-                                       where:(const WCTCondition &)condition
-                                     orderBy:(const WCDB::OrderList &)order
-                                      offset:(const WCTOffset &)offset;
+- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+                                       where:(const WCDB::Expression &)condition
+                                     orderBy:(const WCDB::OrderList &)orderList
+                                      offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Row
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                            where:(const WCTCondition &)condition;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                            where:(const WCDB::Expression &)condition;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                          orderBy:(const WCTOrderByList &)orderList;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                          orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                           offset:(const WCTOffset &)offset;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                           offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                            where:(const WCTCondition &)condition
-                          orderBy:(const WCTOrderByList &)orderList;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                            where:(const WCDB::Expression &)condition
+                          orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                            where:(const WCTCondition &)condition
-                           offset:(const WCTOffset &)offset;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                            where:(const WCDB::Expression &)condition
+                           offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                          orderBy:(const WCTOrderByList &)orderList
-                           offset:(const WCTOffset &)offset;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                          orderBy:(const WCDB::OrderList &)orderList
+                           offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCTResultList &)resultList
-                            where:(const WCTCondition &)condition
-                          orderBy:(const WCTOrderByList &)orderList
-                           offset:(const WCTOffset &)offset;
+- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+                            where:(const WCDB::Expression &)condition
+                          orderBy:(const WCDB::OrderList &)orderList
+                           offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Column
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                               orderBy:(const WCTOrderByList &)orderList;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                               orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                               orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                                 limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                                 limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                               orderBy:(const WCTOrderByList &)orderList
-                                 limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                               orderBy:(const WCDB::OrderList &)orderList
+                                 limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                               orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                               orderBy:(const WCDB::OrderList &)orderList
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 limit:(const WCTLimit &)limit
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 limit:(const WCDB::Expression &)limit
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList
-                                 limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                               orderBy:(const WCDB::OrderList &)orderList
+                                 limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                               orderBy:(const WCDB::OrderList &)orderList
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                                 limit:(const WCTLimit &)limit
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                                 limit:(const WCDB::Expression &)limit
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                               orderBy:(const WCTOrderByList &)orderList
-                                 limit:(const WCTLimit &)limit
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                               orderBy:(const WCDB::OrderList &)orderList
+                                 limit:(const WCDB::Expression &)limit
+                                offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                                 where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList
-                                 limit:(const WCTLimit &)limit
-                                offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+                                 where:(const WCDB::Expression &)condition
+                               orderBy:(const WCDB::OrderList &)orderList
+                                 limit:(const WCDB::Expression &)limit
+                                offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Distinct Column
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                       orderBy:(const WCTOrderByList &)orderList;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                       orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                         limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                       orderBy:(const WCTOrderByList &)orderList
-                                         limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                       orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         limit:(const WCTLimit &)limit
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList
-                                         limit:(const WCTLimit &)limit;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                         limit:(const WCTLimit &)limit
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                       orderBy:(const WCTOrderByList &)orderList
-                                         limit:(const WCTLimit &)limit
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                         where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList
-                                         limit:(const WCTLimit &)limit
-                                        offset:(const WCTOffset &)offset;
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Value
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                    where:(const WCTCondition &)condition;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                    where:(const WCDB::Expression &)condition;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                  orderBy:(const WCTOrderByList &)orderList;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                  orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                   offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                   offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                    where:(const WCTCondition &)condition
-                                  orderBy:(const WCTOrderByList &)orderList;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                    where:(const WCDB::Expression &)condition
+                                  orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                    where:(const WCTCondition &)condition
-                                   offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                    where:(const WCDB::Expression &)condition
+                                   offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                  orderBy:(const WCTOrderByList &)orderList
-                                   offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                  orderBy:(const WCDB::OrderList &)orderList
+                                   offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
-                                    where:(const WCTCondition &)condition
-                                  orderBy:(const WCTOrderByList &)orderList
-                                   offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+                                    where:(const WCDB::Expression &)condition
+                                  orderBy:(const WCDB::OrderList &)orderList
+                                   offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Distinct Value
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                            where:(const WCTCondition &)condition;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                            where:(const WCDB::Expression &)condition;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                          orderBy:(const WCTOrderByList &)orderList;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                          orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                           offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                           offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                            where:(const WCTCondition &)condition
-                                          orderBy:(const WCTOrderByList &)orderList;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                            where:(const WCDB::Expression &)condition
+                                          orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                            where:(const WCTCondition &)condition
-                                           offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                            where:(const WCDB::Expression &)condition
+                                           offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                          orderBy:(const WCTOrderByList &)orderList
-                                           offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                          orderBy:(const WCDB::OrderList &)orderList
+                                           offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCTResult &)result
-                                            where:(const WCTCondition &)condition
-                                          orderBy:(const WCTOrderByList &)orderList
-                                           offset:(const WCTOffset &)offset;
+- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+                                            where:(const WCDB::Expression &)condition
+                                          orderBy:(const WCDB::OrderList &)orderList
+                                           offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Objects
-- (NSArray /* <WCTObject*> */ *)getAllObjects;
+- (NSArray /* <WCTObject*> */ *)getObjects;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition;
+- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCDB::Expression &)condition;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)order;
+- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)orderList;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOffset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCDB::Expression &)condition
+                                        orderBy:(const WCDB::OrderList &)orderList;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                        orderBy:(const WCDB::OrderList &)order;
+- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCDB::Expression &)condition
+                                          limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                          limit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)orderList
+                                            limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                         offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCDB::Expression &)limit
+                                         offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)order
-                                            limit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCDB::Expression &)condition
+                                        orderBy:(const WCDB::OrderList &)orderList
+                                          limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)order
-                                           offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCDB::Expression &)condition
+                                          limit:(const WCDB::Expression &)limit
+                                         offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsLimit:(const WCTLimit &)limit
-                                         offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)orderList
+                                            limit:(const WCDB::Expression &)limit
+                                           offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                        orderBy:(const WCDB::OrderList &)order
-                                          limit:(const WCTLimit &)limit;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                        orderBy:(const WCDB::OrderList &)order
-                                         offset:(const WCTOffset &)offset;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                          limit:(const WCTLimit &)limit
-                                         offset:(const WCTOffset &)offset;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderList &)order
-                                            limit:(const WCTLimit &)limit
-                                           offset:(const WCTOffset &)offset;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCTCondition &)condition
-                                        orderBy:(const WCDB::OrderList &)order
-                                          limit:(const WCTLimit &)limit
-                                         offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsWhere:(const WCDB::Expression &)condition
+                                        orderBy:(const WCDB::OrderList &)orderList
+                                          limit:(const WCDB::Expression &)limit
+                                         offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Part Of Objects
-- (NSArray /* <WCTObject*> */ *)getAllObjectsOnResults:(const WCTResultList &)resultList;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              where:(const WCDB::Expression &)condition;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                            orderBy:(const WCDB::OrderList &)order;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                            orderBy:(const WCDB::OrderList &)orderList;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              limit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                             offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              where:(const WCDB::Expression &)condition
+                                            orderBy:(const WCDB::OrderList &)orderList;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                            orderBy:(const WCDB::OrderList &)order;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              where:(const WCDB::Expression &)condition
+                                              limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                              limit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                            orderBy:(const WCDB::OrderList &)orderList
+                                              limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                             offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              limit:(const WCDB::Expression &)limit
+                                             offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                            orderBy:(const WCDB::OrderList &)order
-                                              limit:(const WCTLimit &)limit;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              where:(const WCDB::Expression &)condition
+                                            orderBy:(const WCDB::OrderList &)orderList
+                                              limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                            orderBy:(const WCDB::OrderList &)order
-                                             offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              where:(const WCDB::Expression &)condition
+                                              limit:(const WCDB::Expression &)limit
+                                             offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              limit:(const WCTLimit &)limit
-                                             offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                            orderBy:(const WCDB::OrderList &)orderList
+                                              limit:(const WCDB::Expression &)limit
+                                             offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                            orderBy:(const WCDB::OrderList &)order
-                                              limit:(const WCTLimit &)limit;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                            orderBy:(const WCDB::OrderList &)order
-                                             offset:(const WCTOffset &)offset;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                              limit:(const WCTLimit &)limit
-                                             offset:(const WCTOffset &)offset;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                            orderBy:(const WCDB::OrderList &)order
-                                              limit:(const WCTLimit &)limit
-                                             offset:(const WCTOffset &)offset;
-
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
-                                              where:(const WCTCondition &)condition
-                                            orderBy:(const WCDB::OrderList &)order
-                                              limit:(const WCTLimit &)limit
-                                             offset:(const WCTOffset &)offset;
+- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
+                                              where:(const WCDB::Expression &)condition
+                                            orderBy:(const WCDB::OrderList &)orderList
+                                              limit:(const WCDB::Expression &)limit
+                                             offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getAllRowsOnResults:(const WCTResultList &)resultList;
+- (WCTColumnsXRows *)getAllRowsOnResults:(const WCDB::ColumnResultList &)resultList;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                where:(const WCDB::Expression &)condition;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                              orderBy:(const WCTOrderByList &)orderList;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                              orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                limit:(const WCTLimit &)limit;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                               offset:(const WCTOffset &)offset;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                where:(const WCDB::Expression &)condition
+                              orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                              orderBy:(const WCTOrderByList &)orderList;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                where:(const WCDB::Expression &)condition
+                                limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                                limit:(const WCTLimit &)limit;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                              orderBy:(const WCDB::OrderList &)orderList
+                                limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                               offset:(const WCTOffset &)offset;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                limit:(const WCDB::Expression &)limit
+                               offset:(const WCDB::Expression &)offset;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                              orderBy:(const WCTOrderByList &)orderList
-                                limit:(const WCTLimit &)limit;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                where:(const WCDB::Expression &)condition
+                              orderBy:(const WCDB::OrderList &)orderList
+                                limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                              orderBy:(const WCTOrderByList &)orderList
-                               offset:(const WCTOffset &)offset;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                where:(const WCDB::Expression &)condition
+                                limit:(const WCDB::Expression &)limit
+                               offset:(const WCDB::Expression &)offset;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                limit:(const WCTLimit &)limit
-                               offset:(const WCTOffset &)offset;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                              orderBy:(const WCDB::OrderList &)orderList
+                                limit:(const WCDB::Expression &)limit
+                               offset:(const WCDB::Expression &)offset;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                              orderBy:(const WCTOrderByList &)orderList
-                                limit:(const WCTLimit &)limit;
-
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                              orderBy:(const WCTOrderByList &)orderList
-                               offset:(const WCTOffset &)offset;
-
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                                limit:(const WCTLimit &)limit
-                               offset:(const WCTOffset &)offset;
-
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                              orderBy:(const WCTOrderByList &)orderList
-                                limit:(const WCTLimit &)limit
-                               offset:(const WCTOffset &)offset;
-
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
-                                where:(const WCTCondition &)condition
-                              orderBy:(const WCTOrderByList &)orderList
-                                limit:(const WCTLimit &)limit
-                               offset:(const WCTOffset &)offset;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
+                                where:(const WCDB::Expression &)condition
+                              orderBy:(const WCDB::OrderList &)orderList
+                                limit:(const WCDB::Expression &)limit
+                               offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Insert
 - (BOOL)insertObject:(WCTObject *)object;
@@ -499,80 +455,60 @@
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition;
+                         where:(const WCDB::Expression &)condition;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                       orderBy:(const WCTOrderByList &)orderList;
+                       orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         limit:(const WCTLimit &)limit;
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                        offset:(const WCTOffset &)offset;
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList;
+                         where:(const WCDB::Expression &)condition
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                         limit:(const WCTLimit &)limit;
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                        offset:(const WCTOffset &)offset;
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit;
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                       orderBy:(const WCTOrderByList &)orderList
-                        offset:(const WCTOffset &)offset;
+                         where:(const WCDB::Expression &)condition
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                     withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                    withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList
-                        offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                    withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                    withObject:(WCTObject *)object
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                    withObject:(WCTObject *)object
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Property With Object
 - (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
@@ -580,80 +516,60 @@
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition;
+                       where:(const WCDB::Expression &)condition;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                     orderBy:(const WCTOrderByList &)orderList;
+                     orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       limit:(const WCTLimit &)limit;
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                      offset:(const WCTOffset &)offset;
+                       where:(const WCDB::Expression &)condition
+                     orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList;
+                       where:(const WCDB::Expression &)condition
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                       limit:(const WCTLimit &)limit;
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                      offset:(const WCTOffset &)offset;
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit;
+                       where:(const WCDB::Expression &)condition
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                     orderBy:(const WCTOrderByList &)orderList
-                      offset:(const WCTOffset &)offset;
+                       where:(const WCDB::Expression &)condition
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                  withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                  withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                  withObject:(WCTObject *)object
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                  withObject:(WCTObject *)object
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
+                       where:(const WCDB::Expression &)condition
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Properties With Row
 - (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
@@ -661,80 +577,60 @@
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition;
+                         where:(const WCDB::Expression &)condition;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                       orderBy:(const WCTOrderByList &)orderList;
+                       orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         limit:(const WCTLimit &)limit;
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                        offset:(const WCTOffset &)offset;
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList;
+                         where:(const WCDB::Expression &)condition
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                         limit:(const WCTLimit &)limit;
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                        offset:(const WCTOffset &)offset;
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit;
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                       orderBy:(const WCTOrderByList &)orderList
-                        offset:(const WCTOffset &)offset;
+                         where:(const WCDB::Expression &)condition
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                       withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList
-                        offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                       withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                       withRow:(WCTOneRow *)row
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
-                       withRow:(WCTOneRow *)row
-                         where:(const WCTCondition &)condition
-                       orderBy:(const WCTOrderByList &)orderList
-                         limit:(const WCTLimit &)limit
-                        offset:(const WCTOffset &)offset;
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList
+                         limit:(const WCDB::Expression &)limit
+                        offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Property With Value
 - (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
@@ -742,129 +638,99 @@
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition;
+                       where:(const WCDB::Expression &)condition;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                     orderBy:(const WCTOrderByList &)orderList;
+                     orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       limit:(const WCTLimit &)limit;
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                      offset:(const WCTOffset &)offset;
+                       where:(const WCDB::Expression &)condition
+                     orderBy:(const WCDB::OrderList &)orderList;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList;
+                       where:(const WCDB::Expression &)condition
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                       limit:(const WCTLimit &)limit;
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                      offset:(const WCTOffset &)offset;
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit;
+                       where:(const WCDB::Expression &)condition
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                     orderBy:(const WCTOrderByList &)orderList
-                      offset:(const WCTOffset &)offset;
+                       where:(const WCDB::Expression &)condition
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTValue *)value
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTValue *)value
-                       where:(const WCTCondition &)condition
-                     orderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
+                       where:(const WCDB::Expression &)condition
+                     orderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Delete
 - (BOOL)deleteAllObjects;
 
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition;
+- (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition;
 
-- (BOOL)deleteObjectsOrderBy:(const WCTOrderByList &)orderList;
+- (BOOL)deleteObjectsOrderBy:(const WCDB::OrderList &)orderList;
 
-- (BOOL)deleteObjectsLimit:(const WCTLimit &)limit;
+- (BOOL)deleteObjectsLimit:(const WCDB::Expression &)limit;
 
-- (BOOL)deleteObjectsOffset:(const WCTOffset &)offset;
+- (BOOL)deleteObjectsOffset:(const WCDB::Expression &)offset;
 
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                   orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
+                   orderBy:(const WCDB::OrderList &)orderList;
 
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                     limit:(const WCTLimit &)limit;
+- (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
+                     limit:(const WCDB::Expression &)limit;
 
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                    offset:(const WCTOffset &)offset;
+- (BOOL)deleteObjectsOrderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit;
 
-- (BOOL)deleteObjectsOrderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit;
+- (BOOL)deleteObjectsLimit:(const WCDB::Expression &)limit
+                    offset:(const WCDB::Expression &)offset;
 
-- (BOOL)deleteObjectsOrderBy:(const WCTOrderByList &)orderList
-                      offset:(const WCTOffset &)offset;
+- (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
+                   orderBy:(const WCDB::OrderList &)orderList
+                     limit:(const WCDB::Expression &)limit;
 
-- (BOOL)deleteObjectsLimit:(const WCTLimit &)limit
-                    offset:(const WCTOffset &)offset;
+- (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
+                     limit:(const WCDB::Expression &)limit
+                    offset:(const WCDB::Expression &)offset;
 
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                   orderBy:(const WCTOrderByList &)orderList
-                     limit:(const WCTLimit &)limit;
+- (BOOL)deleteObjectsOrderBy:(const WCDB::OrderList &)orderList
+                       limit:(const WCDB::Expression &)limit
+                      offset:(const WCDB::Expression &)offset;
 
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                   orderBy:(const WCTOrderByList &)orderList
-                    offset:(const WCTOffset &)offset;
-
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                     limit:(const WCTLimit &)limit
-                    offset:(const WCTOffset &)offset;
-
-- (BOOL)deleteObjectsOrderBy:(const WCTOrderByList &)orderList
-                       limit:(const WCTLimit &)limit
-                      offset:(const WCTOffset &)offset;
-
-- (BOOL)deleteObjectsWhere:(const WCTCondition &)condition
-                   orderBy:(const WCTOrderByList &)orderList
-                     limit:(const WCTLimit &)limit
-                    offset:(const WCTOffset &)offset;
+- (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
+                   orderBy:(const WCDB::OrderList &)orderList
+                     limit:(const WCDB::Expression &)limit
+                    offset:(const WCDB::Expression &)offset;
 
 @end

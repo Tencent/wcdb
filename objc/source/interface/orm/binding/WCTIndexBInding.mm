@@ -26,7 +26,7 @@ WCTIndexBinding::WCTIndexBinding(const std::string &ins)
 {
 }
 
-void WCTIndexBinding::addIndex(const WCTIndex &index)
+void WCTIndexBinding::addIndex(const WCDB::ColumnIndex &index)
 {
     m_indexes.push_back(index);
 }
@@ -36,27 +36,27 @@ void WCTIndexBinding::setUnique(bool unique)
     m_unique = unique;
 }
 
-void WCTIndexBinding::setCondition(const WCTCondition &condition)
+void WCTIndexBinding::setCondition(const WCDB::Expression &condition)
 {
-    m_condition = condition;
+    m_condition.reset(new WCDB::Expression(condition));
 }
 
-const WCTIndexList &WCTIndexBinding::getIndexes() const
+const WCDB::ColumnIndexList &WCTIndexBinding::getIndexes() const
 {
     return m_indexes;
 }
 
-const WCTCondition &WCTIndexBinding::getCondition() const
+const WCDB::Expression &WCTIndexBinding::getCondition() const
 {
-    return m_condition;
+    return *m_condition.get();
 }
 
 WCDB::StatementCreateIndex WCTIndexBinding::generateCreateIndexStatement(const std::string &tableName) const
 {
     std::string indexName = tableName + indexNameSubfix;
     WCDB::StatementCreateIndex statementCreateIndex = WCDB::StatementCreateIndex().create(indexName, m_unique).on(tableName, m_indexes);
-    if (!m_condition.isEmpty()) {
-        statementCreateIndex.where(m_condition);
+    if (m_condition!=nullptr) {
+        statementCreateIndex.where(*m_condition.get());
     }
     return statementCreateIndex;
 }

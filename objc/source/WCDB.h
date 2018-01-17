@@ -53,11 +53,8 @@
 #import <WCDB/WCTStatement.h>
 #import <WCDB/WCTTable.h>
 
-#import <WCDB/WCTAnyProperty.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResult.h>
 
 #import <WCDB/WCTInterface+Convenient.h>
 #import <WCDB/WCTTable+Convenient.h>

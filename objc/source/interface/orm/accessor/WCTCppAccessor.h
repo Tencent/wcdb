@@ -35,8 +35,8 @@ template <WCTColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {
 public:
     using UnderlyingType = typename WCDB::ColumnTypeInfo<(WCDB::ColumnType) t>::UnderlyingType;
-    using Setter = void (^)(InstanceType, CType);
-    using Getter = CType (^)(InstanceType);
+    using Setter = void (^)(InstanceType, UnderlyingType);
+    using Getter = UnderlyingType (^)(InstanceType);
 
     WCTCppAccessor(Getter getter, Setter setter)
         : getValue(getter), setValue(setter)
@@ -59,12 +59,10 @@ public:
 template <>
 class WCTCppAccessor<WCTColumnTypeBinary> : public WCTBaseAccessor {
 public:
-    using SizeType = typename WCDB::ColumnTypeInfo<(
-        WCDB::ColumnType) WCTColumnTypeBinary>::SizeType;
     using UnderlyingType = typename WCDB::ColumnTypeInfo<(
         WCDB::ColumnType) WCTColumnTypeBinary>::UnderlyingType;
-    using Setter = void (^)(InstanceType, CType, SizeType);
-    using Getter = CType (^)(InstanceType, SizeType);
+    using Setter = void (^)(InstanceType, UnderlyingType);
+    using Getter = UnderlyingType (^)(InstanceType);
 
     WCTCppAccessor(Getter getter, Setter setter)
         : getValue(getter), setValue(setter)

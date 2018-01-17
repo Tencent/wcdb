@@ -20,7 +20,6 @@
 
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
@@ -28,15 +27,10 @@
 
 @implementation WCTRowSelect
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
-{
-    return [self initWithCore:core andResults:resultList fromTables:@[ tableName ]];
-}
-
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andColumnResultList:(const WCDB::ColumnResultList &)columnResultList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        if (resultList.size() == 0) {
+        if (columnResultList.empty()) {
             WCDB::Error::ReportInterface(_core->getTag(),
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
@@ -58,7 +52,7 @@
         for (NSString *tableName in tableNames) {
             subqueryList.push_back(tableName.UTF8String);
         }
-        _statement.select(resultList, resultList.isDistinct()).from(subqueryList);
+        _statement.select(columnResultList, isDistinct).from(subqueryList);
     }
     return self;
 }

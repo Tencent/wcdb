@@ -66,32 +66,13 @@ typedef std::unordered_map<std::string,
 #pragma mark - ORM - Coding
 @protocol WCTTableCoding;
 @protocol WCTColumnCoding;
-class WCTExpression;
-class WCTExprList;
-class WCTAnyProperty;
-class WCTProperty;
-class WCTPropertyList;
-class WCTResult;
-class WCTResultList;
-typedef WCTExpression WCTCondition;
+
 typedef NS_ENUM(int, WCTOrderTerm) {
     WCTOrderedAscending = (WCTOrderTerm) WCDB::OrderTerm::ASC,
     WCTOrderedDescending = (WCTOrderTerm) WCDB::OrderTerm::DESC,
     WCTOrderedNotSet = (WCTOrderTerm) WCDB::OrderTerm::NotSet,
 };
-typedef WCDB::Order WCTOrderBy;
-typedef WCDB::OrderList WCTOrderByList;
-typedef WCTExpression WCTLimit;
-typedef WCTExpression WCTOffset;
-typedef WCTExpression WCTGroupBy;
-typedef WCTExprList WCTGroupByList;
-typedef WCTExpression WCTHaving;
-typedef WCDB::ColumnIndex WCTIndex;
-typedef WCDB::ColumnIndexList WCTIndexList;
-typedef WCDB::ColumnDef WCTColumnDef;
-typedef WCDB::ColumnDefList WCTColumnDefList;
-typedef WCDB::TableConstraint WCTTableConstraint;
-typedef WCDB::TableConstraintList WCTTableConstraintList;
+
 typedef NS_ENUM(int, WCTConflict) {
     WCTConflictNotSet = (WCTConflict) WCDB::Conflict::NotSet,
     WCTConflictRollback = (WCTConflict) WCDB::Conflict::Rollback,
@@ -100,14 +81,16 @@ typedef NS_ENUM(int, WCTConflict) {
     WCTConflictIgnore = (WCTConflict) WCDB::Conflict::Ignore,
     WCTConflictReplace = (WCTConflict) WCDB::Conflict::Replace,
 };
+
 typedef NS_ENUM(int, WCTColumnType) {
     WCTColumnTypeInteger32 = (WCTColumnType) WCDB::ColumnType::Integer32,
     WCTColumnTypeInteger64 = (WCTColumnType) WCDB::ColumnType::Integer64,
     WCTColumnTypeDouble = (WCTColumnType) WCDB::ColumnType::Float,
     WCTColumnTypeString = (WCTColumnType) WCDB::ColumnType::Text,
     WCTColumnTypeBinary = (WCTColumnType) WCDB::ColumnType::BLOB,
-    WCTColumnTypeNil = (WCTColumnType) WCDB::ColumnType::Null,
+    WCTColumnTypeNull = (WCTColumnType) WCDB::ColumnType::Null,
 };
+
 typedef NS_ENUM(int, WCTDefaultType) {
     WCTDefaultTypeCurrentTime = (WCTDefaultType)
         WCDB::ColumnDef::DefaultType::CurrentTime,

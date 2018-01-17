@@ -40,13 +40,7 @@
     +(const WCTPropertyList &) AllProperties                                   \
     {                                                                          \
         return __WCDB_PROPERTIES(className);                                   \
-    }                                                                          \
-    +(const WCTAnyProperty &) AnyProperty                                      \
-    {                                                                          \
-        static const WCTAnyProperty s_anyProperty(className.class);            \
-        return s_anyProperty;                                                  \
-    }                                                                          \
-    +(WCTPropertyNamed) PropertyNamed { return WCTProperty::PropertyNamed; }
+    }                                                                          
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)

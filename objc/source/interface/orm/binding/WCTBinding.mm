@@ -46,7 +46,7 @@ void WCTBinding::_addColumnBinding(const std::string &columnName, const std::sha
 
 std::shared_ptr<WCTColumnBinding> WCTBinding::getColumnBinding(const WCTProperty &property) const
 {
-    auto iter = m_columnBindingMap.find(property.getName());
+    auto iter = m_columnBindingMap.find(property.getDescription());
     return iter != m_columnBindingMap.end() ? iter->second : nullptr;
 }
 

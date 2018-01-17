@@ -81,11 +81,19 @@
 
 /**
  Generate a WCTSelect to do an object selection on the specific results.
-
- @param resultList The column results to be selected.
+ 
+ @param propertyList The column results to be selected.
  @return WCTSelect
  */
-- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList;
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList;
+
+/**
+ Generate a WCTSelect to do an object selection on the specific results.
+ 
+ @param propertyList The column results to be selected.
+ @return WCTSelect
+ */
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList isDistinct:(BOOL)isDistinct;
 
 /**
  Generate a WCTRowSelect to do a row selection on the specific results.
@@ -93,6 +101,14 @@
  @param resultList The column results to be selected.
  @return WCTRowSelect
  */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList;
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList;
+
+/**
+ Generate a WCTRowSelect to do a row selection on the specific results.
+ 
+ @param resultList The column results to be selected.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList isDistinct:(BOOL)isDistinct;
 
 @end

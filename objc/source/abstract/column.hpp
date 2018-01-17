@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class Column : public Describable, public Operable<Expression> {
+class Column : public Describable, public Operable {
 public:
     static const Column Any;
     static const Column Rowid;

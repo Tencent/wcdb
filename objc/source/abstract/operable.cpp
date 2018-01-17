@@ -55,291 +55,223 @@ Expression Operator::operateWithComplexOperator(const Expression& one, const std
     return Expression("(" + one.getDescription() + " " + op1 + " " + two.getDescription() + " " + op2 + " " + three.getDescription() + ")", nullptr);
 }
 
-template <>
-Expression Operable<Expression>::operator !() const
+Expression Operable::operator !() const
 {
     return Operator::operateWithPrefix("NOT ", asExpression());
 }
-template <>
-Expression Operable<Expression>::operator +() const
+Expression Operable::operator +() const
 {
     return Operator::operateWithPrefix("", asExpression());
 }
-template <>
-Expression Operable<Expression>::operator -() const
+Expression Operable::operator -() const
 {
     return Operator::operateWithPrefix("-", asExpression());
 }
-template <>
-Expression Operable<Expression>::operator ~() const
+Expression Operable::operator ~() const
 {
     return Operator::operateWithPrefix("~", asExpression());
 }
-template <>
-Expression Operable<Expression>::operator ||(const Expression& operand) const
+Expression Operable::operator ||(const Expression& operand) const
 {
     return Operator::operateWithOperator(asExpression(), "OR", operand);
 }
-template <>
-Expression Operable<Expression>::operator &&(const Expression& operand) const
+Expression Operable::operator &&(const Expression& operand) const
 {
     return Operator::operateWithOperator(asExpression(), "AND", operand);
 }
-template <>
-Expression Operable<Expression>::operator *(const Expression& operand) const {
+Expression Operable::operator *(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "*", operand);
 }
-template <>
-Expression Operable<Expression>::operator /(const Expression& operand) const {
+Expression Operable::operator /(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "/", operand);
 }
-template <>
-Expression Operable<Expression>::operator %(const Expression& operand) const {
+Expression Operable::operator %(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "%", operand);
 }
-template <>
-Expression Operable<Expression>::operator +(const Expression& operand) const {
+Expression Operable::operator +(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "+", operand);
 }
-template <>
-Expression Operable<Expression>::operator -(const Expression& operand) const {
+Expression Operable::operator -(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "-", operand);
 }
-template <>
-Expression Operable<Expression>::operator <<(const Expression& operand) const {
+Expression Operable::operator <<(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "<<", operand);
 }
-template <>
-Expression Operable<Expression>::operator >>(const Expression& operand) const {
+Expression Operable::operator >>(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), ">>", operand);
 }
-template <>
-Expression Operable<Expression>::operator &(const Expression& operand) const {
+Expression Operable::operator &(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "&", operand);
 }
-template <>
-Expression Operable<Expression>::operator |(const Expression& operand) const {
+Expression Operable::operator |(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "|", operand);
 }
-template <>
-Expression Operable<Expression>::operator <(const Expression& operand) const {
+Expression Operable::operator <(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "<", operand);
 }
-template <>
-Expression Operable<Expression>::operator <=(const Expression& operand) const {
+Expression Operable::operator <=(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "<=", operand);
 }
-template <>
-Expression Operable<Expression>::operator >(const Expression& operand) const {
+Expression Operable::operator >(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), ">", operand);
 }
-template <>
-Expression Operable<Expression>::operator >=(const Expression& operand) const {
+Expression Operable::operator >=(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), ">=", operand);
 }
-template <>
-Expression Operable<Expression>::operator ==(const Expression& operand) const {
+Expression Operable::operator ==(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "=", operand);
 }
-template <>
-Expression Operable<Expression>::operator !=(const Expression& operand) const {
+Expression Operable::operator !=(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "!=", operand);
 }
-template <>
-Expression Operable<Expression>::concat(const Expression& operand) const {
+Expression Operable::concat(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "||", operand);
 }
-template <>
-Expression Operable<Expression>::substr(const Expression& start, const Expression& length) const {
+Expression Operable::substr(const Expression& start, const Expression& length) const {
     return Operator::operateWithRaw("SUBSTR(" + Expression(asExpression()).getDescription() + ", " + start.getDescription() + ", " + length.getDescription() + ")");
 }
-template <>
-Expression Operable<Expression>::like(const Expression& operand) const {
+Expression Operable::like(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "LIKE", operand);
 }
-template <>
-Expression Operable<Expression>::glob(const Expression& operand) const {
+Expression Operable::glob(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "GLOB", operand);
 }
-template <>
-Expression Operable<Expression>::match(const Expression& operand) const {
+Expression Operable::match(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "MATCH", operand);
 }
-template <>
-Expression Operable<Expression>::regexp(const Expression& operand) const {
+Expression Operable::regexp(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "REGEXP", operand);
 }
-template <>
-Expression Operable<Expression>::notLike(const Expression& operand) const {
+Expression Operable::notLike(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "NOT LIKE", operand);
 }
-template <>
-Expression Operable<Expression>::notGlob(const Expression& operand) const {
+Expression Operable::notGlob(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "NOT GLOB", operand);
 }
-template <>
-Expression Operable<Expression>::notMatch(const Expression& operand) const {
+Expression Operable::notMatch(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "NOT MATCH", operand);
 }
-template <>
-Expression Operable<Expression>::notRegexp(const Expression& operand) const {
+Expression Operable::notRegexp(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "NOT REGEXP", operand);
 }
-template <>
-Expression Operable<Expression>::like(const Expression& operand, const Expression& escape) const {
+Expression Operable::like(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "LIKE", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::glob(const Expression& operand, const Expression& escape) const {
+Expression Operable::glob(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "GLOB", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::match(const Expression& operand, const Expression& escape) const {
+Expression Operable::match(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "MATCH", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::regexp(const Expression& operand, const Expression& escape) const {
+Expression Operable::regexp(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "REGEXP", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::notLike(const Expression& operand, const Expression& escape) const {
+Expression Operable::notLike(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "NOT LIKE", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::notGlob(const Expression& operand, const Expression& escape) const {
+Expression Operable::notGlob(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "NOT GLOB", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::notMatch(const Expression& operand, const Expression& escape) const {
+Expression Operable::notMatch(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "NOT MATCH", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::notRegexp(const Expression& operand, const Expression& escape) const {
+Expression Operable::notRegexp(const Expression& operand, const Expression& escape) const {
     return Operator::operateWithComplexOperator(asExpression(), "NOT REGEXP", operand, "ESCAPE", escape);
 }
-template <>
-Expression Operable<Expression>::isNull() const {
+Expression Operable::isNull() const {
     return Operator::operateWithPostfix(asExpression(), "ISNULL");
 }
-template <>
-Expression Operable<Expression>::isNotNull() const {
+Expression Operable::isNotNull() const {
     return Operator::operateWithPostfix(asExpression(), "NOTNULL");
 }
-template <>
-Expression Operable<Expression>::is(const Expression& operand) const {
+Expression Operable::is(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "IS", operand);
 }
-template <>
-Expression Operable<Expression>::isNot(const Expression& operand) const {
+Expression Operable::isNot(const Expression& operand) const {
     return Operator::operateWithOperator(asExpression(), "IS NOT", operand);
 }
-template <>
-Expression Operable<Expression>::between(const Expression& begin, const Expression& end) const {
+Expression Operable::between(const Expression& begin, const Expression& end) const {
     return Operator::operateWithComplexOperator(asExpression(), "BETWEEN", begin, "AND", end);
 }
-template <>
-Expression Operable<Expression>::notBetween(const Expression& begin, const Expression& end) const {
+Expression Operable::notBetween(const Expression& begin, const Expression& end) const {
     return Operator::operateWithComplexOperator(asExpression(), "NOT BETWEEN", begin, "AND", end);
 }
-template <>
-Expression Operable<Expression>::in(const StatementSelect& statementSelect) const {
+Expression Operable::in(const StatementSelect& statementSelect) const {
     return Operator::operateWithPrefix("IN ", statementSelect);
 }
-template <>
-Expression Operable<Expression>::notIn(const StatementSelect&  statementSelect) const {
+Expression Operable::notIn(const StatementSelect&  statementSelect) const {
     return Operator::operateWithPrefix("NOT IN ", statementSelect);
 }
     
-template <>
-Expression Operable<Expression>::in(const std::list<const Expression> &list) const
+Expression Operable::in(const std::list<const Expression> &list) const
 {
     return Operator::operateWithPostfix(asExpression(), "IN(" + stringByJoiningList(list) + ")");
 }
     
-template <>
-Expression Operable<Expression>::notIn(const std::list<const Expression> &list) const
+Expression Operable::notIn(const std::list<const Expression> &list) const
 {
     return Operator::operateWithPostfix(asExpression(), "NOT IN(" + stringByJoiningList(list) + ")");
 }
     
-template <>
-Expression Operable<Expression>::in(const Expression &expression) const
+Expression Operable::in(const Expression &expression) const
 {
     return Operator::operateWithPostfix(asExpression(), "IN(" + expression.getDescription() + ")");
 }
     
-template <>
-Expression Operable<Expression>::notIn(const Expression &expression) const
+Expression Operable::notIn(const Expression &expression) const
 {
     return Operator::operateWithPostfix(asExpression(), "NOT IN(" + expression.getDescription() + ")");
 }
 
-template <>
-Expression Operable<Expression>::avg(bool isDistinct) const {
+Expression Operable::avg(bool isDistinct) const {
     return Expression::Function("AVG", asExpression(), isDistinct);;
 }
-template <>
-Expression Operable<Expression>::count(bool isDistinct) const {
+Expression Operable::count(bool isDistinct) const {
     return Expression::Function("COUNT", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::groupConcat(bool isDistinct) const {
+Expression Operable::groupConcat(bool isDistinct) const {
     return Expression::Function("GROUP_CONCAT", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::groupConcat(bool isDistinct, const std::string& seperator) const {
+Expression Operable::groupConcat(bool isDistinct, const std::string& seperator) const {
     return Expression::Function("GROUP_CONCAT", {asExpression(), seperator}, isDistinct);
 }
-template <>
-Expression Operable<Expression>::max(bool isDistinct) const {
+Expression Operable::max(bool isDistinct) const {
     return Expression::Function("MAX", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::min(bool isDistinct) const {
+Expression Operable::min(bool isDistinct) const {
     return Expression::Function("MIN", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::sum(bool isDistinct) const {
+Expression Operable::sum(bool isDistinct) const {
     return Expression::Function("SUM", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::total(bool isDistinct) const {
+Expression Operable::total(bool isDistinct) const {
     return Expression::Function("TOTAL", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::abs(bool isDistinct) const {
+Expression Operable::abs(bool isDistinct) const {
     return Expression::Function("ABS", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::hex(bool isDistinct) const {
+Expression Operable::hex(bool isDistinct) const {
     return Expression::Function("HEX", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::length(bool isDistinct) const {
+Expression Operable::length(bool isDistinct) const {
     return Expression::Function("LENGTH", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::lower(bool isDistinct) const {
+Expression Operable::lower(bool isDistinct) const {
     return Expression::Function("LOWER", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::upper(bool isDistinct) const {
+Expression Operable::upper(bool isDistinct) const {
     return Expression::Function("UPPER", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::round(bool isDistinct) const {
+Expression Operable::round(bool isDistinct) const {
     return Expression::Function("ROUND", asExpression(), isDistinct);
 }
-template <>
-Expression Operable<Expression>::matchinfo() const {
+Expression Operable::matchinfo() const {
     return Expression::Function("MATCHINFO", asExpression());
 }
-template <>
-Expression Operable<Expression>::offsets() const {
+Expression Operable::offsets() const {
     return Expression::Function("OFFSETS", asExpression());
 }
-template <>
-Expression Operable<Expression>::snippet() const {
+Expression Operable::snippet() const {
     return Expression::Function("SNIPPET", asExpression());
 }
     

@@ -71,10 +71,12 @@
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(data.bytes, (int) data.length, index);
+            const unsigned char* raw = (const unsigned char*)data.bytes;
+            std::vector<unsigned char> vector(raw, raw + data.length);
+            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
         } break;
         case WCTValueTypeNil:
-            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
             break;
         default:
             WCDB::Error::Abort(([NSString stringWithFormat:@"Binding statement with unknown type %@", NSStringFromClass(value.class)].UTF8String));
@@ -111,11 +113,10 @@
             value = string ? [NSString stringWithUTF8String:string] : nil;
         } break;
         case WCTColumnTypeBinary: {
-            int size = 0;
-            const void *data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index, size);
-            value = data ? [NSData dataWithBytes:data length:size] : nil;
+            std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index);
+            value = [NSData dataWithBytes:data.data() length:data.size()];
         } break;
-        case WCTColumnTypeNil: {
+        case WCTColumnTypeNull: {
             value = nil;
         } break;
         default:
@@ -168,7 +169,7 @@
     if (index != INT_MAX) {
         return [self getTypeAtIndex:index];
     }
-    return WCTColumnTypeNil;
+    return WCTColumnTypeNull;
 }
 
 - (int)getColumnCount
