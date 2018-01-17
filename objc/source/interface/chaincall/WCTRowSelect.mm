@@ -59,7 +59,6 @@
 
 - (WCTColumnsXRows *)allRows
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *allRows = [NSMutableArray array];
         NSMutableArray *row = nil;
@@ -78,7 +77,6 @@
 
 - (WCTOneRow *)nextRow
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         NSMutableArray *row = [NSMutableArray array];
         if ([self extractValueToRow:row]) {
@@ -90,7 +88,6 @@
 
 - (WCTOneColumn *)allValues
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *allValues = [NSMutableArray array];
         WCTValue *value = nil;
@@ -108,7 +105,6 @@
 
 - (WCTValue *)nextValue
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         return [self extractValue];
     }

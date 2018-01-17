@@ -182,8 +182,6 @@
 		23A747D020039698003CECFA /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A747C420039675003CECFA /* sqlcipher.framework */; };
 		23A747D120039698003CECFA /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A747CB20039675003CECFA /* sqliterk.framework */; };
 		23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+Database.h */; };
-		23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */; };
-		23B4F0561ECD8E0B00D45BB1 /* ticker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */; };
 		23C623821EE12D22009D55D3 /* thread_local.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C623801EE12D22009D55D3 /* thread_local.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D920712009B534000634CB /* statement_drop_table.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D920172009B529000634CB /* statement_drop_table.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D920732009B534000634CB /* statement_update.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D920182009B529000634CB /* statement_update.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -486,8 +484,6 @@
 		23A747BE20039675003CECFA /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		23A747C520039675003CECFA /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
 		23B31B331EB97B480092EA80 /* WCTTable+Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Database.h"; sourceTree = "<group>"; };
-		23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ticker.cpp; sourceTree = "<group>"; };
-		23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ticker.hpp; sourceTree = "<group>"; };
 		23C623801EE12D22009D55D3 /* thread_local.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = thread_local.hpp; sourceTree = "<group>"; };
 		23D920172009B529000634CB /* statement_drop_table.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = statement_drop_table.hpp; sourceTree = "<group>"; };
 		23D920182009B529000634CB /* statement_update.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = statement_update.hpp; sourceTree = "<group>"; };
@@ -993,8 +989,6 @@
 				2349F6B71EA0D6680021EFA7 /* spin.hpp */,
 				2349F6B91EA0D6680021EFA7 /* utility.hpp */,
 				23D92141200A3DCE000634CB /* utility.cpp */,
-				23B4F0531ECD8E0B00D45BB1 /* ticker.cpp */,
-				23B4F0541ECD8E0B00D45BB1 /* ticker.hpp */,
 				23C623801EE12D22009D55D3 /* thread_local.hpp */,
 				231039151F03E13600BC3FCC /* timed_queue.hpp */,
 			);
@@ -1114,7 +1108,6 @@
 				23D920FF2009B534000634CB /* statement_delete.hpp in Headers */,
 				23D920DD2009B534000634CB /* statement_vacuum.hpp in Headers */,
 				23D9208B2009B534000634CB /* fts_modules.hpp in Headers */,
-				23B4F0561ECD8E0B00D45BB1 /* ticker.hpp in Headers */,
 				2349F77A1EA0D6680021EFA7 /* WCTTransaction.h in Headers */,
 				2349F71A1EA0D6680021EFA7 /* WCTSequence.h in Headers */,
 				23D920CF2009B534000634CB /* pragma.hpp in Headers */,
@@ -1418,7 +1411,6 @@
 				231316591F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */,
 				23D920EF2009B534000634CB /* statement_create_table.cpp in Sources */,
 				2349F7761EA0D6680021EFA7 /* WCTTransaction+Table.mm in Sources */,
-				23B4F0551ECD8E0B00D45BB1 /* ticker.cpp in Sources */,
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
 				23D920832009B534000634CB /* operable.cpp in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,

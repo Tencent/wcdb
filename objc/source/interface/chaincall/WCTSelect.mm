@@ -63,7 +63,6 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjects
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *objects = [[NSMutableArray alloc] init];
         WCTObject *object = nil;
@@ -89,7 +88,6 @@
 
 - (id /* WCTObject* */)nextObject
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         WCTObject *object = [[_cls alloc] init];
         int index = 0;

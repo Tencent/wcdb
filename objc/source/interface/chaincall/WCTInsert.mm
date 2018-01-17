@@ -142,7 +142,6 @@
 
 - (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }

@@ -64,7 +64,6 @@
 
 - (WCTMultiObject *)nextMultiObject
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         NSMutableDictionary *multiObject = [[NSMutableDictionary alloc] init];
         int index = 0;
@@ -104,7 +103,6 @@
 
 - (NSArray<WCTMultiObject *> *)allMultiObjects
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *allMultiObjects = [[NSMutableArray alloc] init];
         NSMutableDictionary *multiObject = nil;

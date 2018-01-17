@@ -24,21 +24,6 @@
 @interface WCTChainCall (Statistics)
 
 /**
- @brief After enabling, you can call the [cost] interface to get time consuming.
- @warning You should call it before calling all other interface, otherwise [cost] will return an inaccurate result.
- @see cost 
- @param enabled enabled
- */
-- (void)setStatisticsEnabled:(BOOL)enabled;
-
-/**
- @brief The time consuming. You can call it to profile the performance.
- @see setStatisticsEnabled:
- @return Time in seconds
- */
-- (double)cost;
-
-/**
  @brief More detailed error messages.
  @return nil or error.isOK==YES if no error occurs.
  */

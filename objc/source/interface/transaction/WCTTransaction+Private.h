@@ -20,13 +20,11 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTTransaction.h>
-#import <WCDB/ticker.hpp>
 #import <WCDB/transaction.hpp>
 
 @interface WCTTransaction () {
     WCDB::Error _error;
     WCDB::Transaction *_transaction;
-    std::shared_ptr<WCDB::Ticker> _ticker;
     int _changes;
 }
 

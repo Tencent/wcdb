@@ -103,7 +103,6 @@
 
 - (BOOL)executeWithObject:(WCTObject *)object
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }
@@ -145,7 +144,6 @@
 
 - (BOOL)executeWithRow:(WCTOneRow *)row
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }

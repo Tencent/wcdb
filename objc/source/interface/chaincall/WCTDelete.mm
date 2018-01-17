@@ -71,7 +71,6 @@
 
 - (BOOL)execute
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
     if (!statementHandle) {
         return NO;

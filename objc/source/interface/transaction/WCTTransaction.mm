@@ -44,11 +44,7 @@
 {
     @synchronized(self)
     {
-        BOOL result = _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
-        if (result && _ticker) {
-            _ticker->tick();
-        }
-        return result;
+        return _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
     }
 }
 
@@ -57,9 +53,6 @@
     @synchronized(self)
     {
         BOOL result = _transaction->commit(_error);
-        if (result && _ticker) {
-            _ticker->pause();
-        }
         _changes = _transaction->getChanges();
         return result;
     }
@@ -69,11 +62,7 @@
 {
     @synchronized(self)
     {
-        BOOL result = _transaction->rollback(_error);
-        if (_ticker) {
-            _ticker->pause();
-        }
-        return result;
+        return _transaction->rollback(_error);
     }
 }
 
