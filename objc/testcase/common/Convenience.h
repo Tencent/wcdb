@@ -19,21 +19,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
 
-@interface WTCBaseTestCase : XCTestCase
+@interface NSArray(Sort)
 
-@property(class, readonly) NSString *baseDirectory;
-
-@property(readonly) NSString *recommendedDirectory;
-
-@property(readonly) NSString *recommendedPath;
-
-//@property(readonly) WCTTag recommendTag;
-
-@property(readonly) NSFileManager *fileManager;
-
-@property(class, readonly) NSString *className;
+- (NSArray<NSString *> *)sorted;
 
 @end

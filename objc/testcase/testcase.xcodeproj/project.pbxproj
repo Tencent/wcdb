@@ -61,6 +61,8 @@
 		23DD428D20050F4D00330946 /* WTCMultithreadReadWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428620050EDD00330946 /* WTCMultithreadReadWriteBenchmark.mm */; };
 		23DD428E20050F4D00330946 /* WTCMultithreadWriteWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428420050EDD00330946 /* WTCMultithreadWriteWriteBenchmark.mm */; };
 		23DD428F20050F4D00330946 /* WTCMultithreadReadReadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428320050EDD00330946 /* WTCMultithreadReadReadBenchmark.mm */; };
+		23E58B56200F559200E0CECE /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B55200F559200E0CECE /* FileTests.mm */; };
+		23E58B59200F577400E0CECE /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +152,9 @@
 		23DD428520050EDD00330946 /* WTCBaseMultithreadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaseMultithreadBenchmark.mm; sourceTree = "<group>"; };
 		23DD428620050EDD00330946 /* WTCMultithreadReadWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCMultithreadReadWriteBenchmark.mm; sourceTree = "<group>"; };
 		23DD428B20050F2300330946 /* WTCBaseMultithreadBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WTCBaseMultithreadBenchmark.h; sourceTree = "<group>"; };
+		23E58B55200F559200E0CECE /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
+		23E58B57200F577400E0CECE /* Convenience.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Convenience.h; sourceTree = "<group>"; };
+		23E58B58200F577400E0CECE /* Convenience.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Convenience.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +201,9 @@
 		23698A7620045F4300C0291C /* test */ = {
 			isa = PBXGroup;
 			children = (
+				23E58B53200F557500E0CECE /* crud */,
+				23E58B54200F557500E0CECE /* orm */,
+				23E58B51200F557400E0CECE /* other */,
 				23698A88200460FA00C0291C /* winq */,
 			);
 			path = test;
@@ -276,6 +284,8 @@
 				23698A8C2004613600C0291C /* WTCBaseTestCase.mm */,
 				23698A8E2004619800C0291C /* WTCBaseTestCase.h */,
 				23698AAF20046BE600C0291C /* WTCAssert.h */,
+				23E58B57200F577400E0CECE /* Convenience.h */,
+				23E58B58200F577400E0CECE /* Convenience.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -334,6 +344,28 @@
 				2329F3DA20050CC500E22C76 /* WTCCipherWriteBenchmark.mm */,
 			);
 			path = cipher;
+			sourceTree = "<group>";
+		};
+		23E58B51200F557400E0CECE /* other */ = {
+			isa = PBXGroup;
+			children = (
+				23E58B55200F559200E0CECE /* FileTests.mm */,
+			);
+			path = other;
+			sourceTree = "<group>";
+		};
+		23E58B53200F557500E0CECE /* crud */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = crud;
+			sourceTree = "<group>";
+		};
+		23E58B54200F557500E0CECE /* orm */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = orm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -457,6 +489,7 @@
 				23698B1A20047BE000C0291C /* WTCModuleArgumentTests.mm in Sources */,
 				23698B2620047BE000C0291C /* WTCStatementCreateIndexTests.mm in Sources */,
 				23698B2920047BE000C0291C /* WTCStatementUpdateTests.mm in Sources */,
+				23E58B59200F577400E0CECE /* Convenience.m in Sources */,
 				23698B3A20047BE000C0291C /* WTCStatementRollbackTests.mm in Sources */,
 				23698B1E20047BE000C0291C /* WTCColumnResultTests.mm in Sources */,
 				23698B2320047BE000C0291C /* WTCStatementDropIndexTests.mm in Sources */,
@@ -466,6 +499,7 @@
 				23698B1F20047BE000C0291C /* WTCStatementTransactionTests.mm in Sources */,
 				23698B2120047BE000C0291C /* WTCStatementInsertTests.mm in Sources */,
 				23698B2A20047BE000C0291C /* WTCColumnTypeTests.mm in Sources */,
+				23E58B56200F559200E0CECE /* FileTests.mm in Sources */,
 				23698B2B20047BE000C0291C /* WTCJoinClauseTests.mm in Sources */,
 				23698B3820047BE000C0291C /* WTCStatementAlterTableTests.mm in Sources */,
 				23698B2520047BE000C0291C /* WTCSubqueryTests.mm in Sources */,

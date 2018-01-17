@@ -18,22 +18,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
+#import "Convenience.h"
 
-@interface WTCBaseTestCase : XCTestCase
+@implementation NSArray(Sort)
 
-@property(class, readonly) NSString *baseDirectory;
-
-@property(readonly) NSString *recommendedDirectory;
-
-@property(readonly) NSString *recommendedPath;
-
-//@property(readonly) WCTTag recommendTag;
-
-@property(readonly) NSFileManager *fileManager;
-
-@property(class, readonly) NSString *className;
+- (NSArray<NSString*>*)sorted
+{
+    return [self sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+        return [obj1 compare:obj2];
+    }];
+}
 
 @end
