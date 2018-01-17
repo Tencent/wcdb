@@ -43,7 +43,7 @@ std::vector<unsigned char> Modules::getAddress(const std::string &name) const
 {
     SpinLockGuard<Spin> lockGuard(m_spin);
     auto iter = m_modules.find(name);
-    if (iter != m_modules.end()) {
+    if (iter == m_modules.end()) {
         WCDB::Error::Abort("Tokenize name is not registered");
     }
     unsigned char* address = (unsigned char*)iter->second.get();
