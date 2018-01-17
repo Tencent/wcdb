@@ -59,7 +59,7 @@
     return result;
 }
 
-- (NSArray<NSString *> *)getPaths
+- (NSArray<NSString *> *)paths
 {
     NSMutableArray *paths = [NSMutableArray array];
     for (const auto &path : _database->getPaths()) {
