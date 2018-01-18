@@ -43,7 +43,7 @@
     return [self.recommendedDirectory stringByAppendingPathComponent:hash];
 }
 
-- (WCTTag)recommendTag
+- (WCTTag)recommendedTag
 {
     return (int) self.recommendedPath.hash;
 }
