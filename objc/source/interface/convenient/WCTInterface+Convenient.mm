@@ -817,7 +817,7 @@
 }
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getAllRowsOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
                                fromTable:(NSString *)tableName
 {
     return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] allRows];
@@ -983,7 +983,7 @@
 }
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                 onProperties:(const WCTPropertyList &)propertyList
                   withObject:(WCTObject *)object
 {
@@ -1092,7 +1092,7 @@
 }
 
 #pragma mark - Update Property With Object
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                   onProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object
 {
@@ -1201,7 +1201,7 @@
 }
 
 #pragma mark - Update Properties With Row
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                 onProperties:(const WCTPropertyList &)propertyList
                      withRow:(WCTOneRow *)row
 {
@@ -1310,7 +1310,7 @@
 }
 
 #pragma mark - Update Property With Value
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                   onProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value
 {

@@ -685,7 +685,7 @@
 }
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getAllRowsOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
 {
     return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[_tableName] isDistinct:NO] allRows];
 }
@@ -835,7 +835,7 @@
 }
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withObject:(WCTObject *)object
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] executeWithObject:object];
@@ -932,7 +932,7 @@
 }
 
 #pragma mark - Update Property With Object
-- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                      withObject:(WCTObject *)object
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] executeWithObject:object];
@@ -1029,7 +1029,7 @@
 }
 
 #pragma mark - Update Properties With Row
-- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                           withRow:(WCTOneRow *)row
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName] executeWithRow:row];
@@ -1126,7 +1126,7 @@
 }
 
 #pragma mark - Update Properties With Value
-- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                       withValue:(WCTValue *)value
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:_tableName] executeWithRow:@[ value ]];

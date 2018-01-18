@@ -498,7 +498,7 @@
                                              offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getAllRowsOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
                                fromTable:(NSString *)tableName;
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -588,7 +588,7 @@
                           into:(NSString *)tableName;
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                 onProperties:(const WCTPropertyList &)propertyList
                   withObject:(WCTObject *)object;
 
@@ -661,7 +661,7 @@
                    offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Property With Object
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                   onProperty:(const WCTProperty &)property
                   withObject:(WCTObject *)object;
 
@@ -734,7 +734,7 @@
                    offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Properties With Row
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                 onProperties:(const WCTPropertyList &)propertyList
                      withRow:(WCTOneRow *)row;
 
@@ -807,7 +807,7 @@
                    offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Property With Value
-- (BOOL)updateAllRowsInTable:(NSString *)tableName
+- (BOOL)updateRowsInTable:(NSString *)tableName
                   onProperty:(const WCTProperty &)property
                    withValue:(WCTValue *)value;
 

@@ -384,7 +384,7 @@
                                              offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getAllRowsOnResults:(const WCDB::ColumnResultList &)resultList;
+- (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList;
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
                                 where:(const WCDB::Expression &)condition;
@@ -450,7 +450,7 @@
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects onProperties:(const WCTPropertyList &)propertyList;
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                        withObject:(WCTObject *)object;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
@@ -511,7 +511,7 @@
                         offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Property With Object
-- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                      withObject:(WCTObject *)object;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
@@ -572,7 +572,7 @@
                       offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Properties With Row
-- (BOOL)updateAllRowsOnProperties:(const WCTPropertyList &)propertyList
+- (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
                           withRow:(WCTOneRow *)row;
 
 - (BOOL)updateRowsOnProperties:(const WCTPropertyList &)propertyList
@@ -633,7 +633,7 @@
                         offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Update Property With Value
-- (BOOL)updateAllRowsOnProperty:(const WCTProperty &)property
+- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                       withValue:(WCTValue *)value;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
