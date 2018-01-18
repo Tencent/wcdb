@@ -42,6 +42,21 @@ const std::shared_ptr<WCTColumnBinding>& Property::getColumnBinding() const
 {
     return m_columnBinding;
 }
+    
+Column Property::asColumn() const
+{
+    return Column(*this);
+}
+    
+ColumnIndex Property::asIndex() const
+{
+    return ColumnIndex(asColumn());
+}    
+    
+ColumnIndex Property::asIndex(WCTOrderTerm term) const
+{
+    return ColumnIndex(asColumn(), (WCDB::OrderTerm)term);
+}
         
 Expression Property::asExpression() const
 {

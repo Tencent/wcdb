@@ -132,6 +132,12 @@
 #define WCDB_CHECK(className, constraintName, check)                           \
     __WCDB_CHECK_IMP(className, constraintName, check)
 
+#define WCDB_FOREIGN_KEY_COLUMN(className, constraintName, column)             \
+    __WCDB_FOREIGN_KEY_COLUMN_IMP(className, constraintName, column)
+
+#define WCDB_FOREIGN_KEY(className, constraintName, foreignKey)                \
+    __WCDB_FOREIGN_KEY_IMP(className, constraintName, foreignKey)
+
 //Index
 #define WCDB_INDEX(className, indexSubfixName, propertyName)                   \
     __WCDB_INDEX_IMP(className, indexSubfixName, propertyName,                 \

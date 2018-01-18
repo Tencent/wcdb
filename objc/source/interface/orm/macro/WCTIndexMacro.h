@@ -22,7 +22,7 @@
                          unique)                                               \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
         binding->getOrCreateIndexBinding(indexSubfixName)                      \
-            ->addIndex(className.propertyName.index(order));                   \
+            ->addIndex(className.propertyName.asIndex(order));                 \
         WCDB_IF(unique, binding->getOrCreateIndexBinding(indexSubfixName)      \
                             ->setUnique(true);)                                \
         return nullptr;                                                        \

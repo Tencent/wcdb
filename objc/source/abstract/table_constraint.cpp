@@ -72,7 +72,7 @@ TableConstraint &TableConstraint::check(const Expression &expression)
 }
 
 TableConstraint &TableConstraint::makeForeignKey(const std::list<const Column> &list, const ForeignKey &foreignKey) {
-    m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + " " + foreignKey.getDescription() + ")");
+    m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + ") " + foreignKey.getDescription());
     return *this;
 }
     

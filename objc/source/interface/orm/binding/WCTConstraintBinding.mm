@@ -82,8 +82,29 @@ void WCTConstraintCheckBinding::makeCheck(const WCDB::Expression &expression)
 WCDB::TableConstraint WCTConstraintCheckBinding::generateConstraint() const
 {
     if (m_check==nullptr) {
-        //TODO
-        WCDB::Error::Abort("");
+        WCDB::Error::Abort(("You must set the checking expression for TableConstraint" + name).c_str());
     }
     return WCDB::TableConstraint(name).check(*m_check.get());
+}
+
+WCTConstraintForeignKeyBinding::WCTConstraintForeignKeyBinding(const std::string &name)
+: WCTConstraintBindingBase(name, WCTConstraintForeignKeyBinding::type)
+{    
+}
+
+void WCTConstraintForeignKeyBinding::addColumn(const WCDB::Column &column)
+{
+    m_columnList.push_back(column);
+}
+void WCTConstraintForeignKeyBinding::setForeignKey(const WCDB::ForeignKey& foreignKey)
+{
+    m_foreignKey.reset(new WCDB::ForeignKey(foreignKey));
+}
+
+WCDB::TableConstraint WCTConstraintForeignKeyBinding::generateConstraint() const 
+{
+    if (m_foreignKey==nullptr) {
+        WCDB::Error::Abort(("You must setup the foreign key for TableConstraint " + name).c_str());
+    }
+    return WCDB::TableConstraint(name).makeForeignKey(m_columnList, *m_foreignKey.get());
 }

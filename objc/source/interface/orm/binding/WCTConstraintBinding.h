@@ -26,6 +26,7 @@ typedef NS_ENUM(int, WCTConstraintBindingType) {
     WCTConstraintBindingPrimaryKey,
     WCTConstraintBindingUnique,
     WCTConstraintBindingCheck,
+    WCTConstraintBindingForeignKey,
 };
 
 class WCTConstraintBindingBase {
@@ -82,3 +83,19 @@ public:
 protected:
     std::shared_ptr<WCDB::Expression> m_check;
 };
+
+class WCTConstraintForeignKeyBinding : public WCTConstraintBindingBase {
+public:
+    static constexpr const WCTConstraintBindingType type =
+    WCTConstraintBindingForeignKey;
+    WCTConstraintForeignKeyBinding(const std::string &name);
+    
+    void addColumn(const WCDB::Column &column);
+    void setForeignKey(const WCDB::ForeignKey& foreignKey);
+    virtual WCDB::TableConstraint generateConstraint() const override;
+    
+protected:
+    std::shared_ptr<WCDB::ForeignKey> m_foreignKey;
+    WCDB::ColumnList m_columnList;
+};
+

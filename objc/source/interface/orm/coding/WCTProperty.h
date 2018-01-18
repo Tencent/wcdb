@@ -35,6 +35,10 @@ public:
 
     const std::shared_ptr<WCTColumnBinding>& getColumnBinding() const;
     
+    Column asColumn() const;
+    ColumnIndex asIndex() const;
+    ColumnIndex asIndex(WCTOrderTerm term) const;
+    
     virtual Expression asExpression() const override; 
 protected:    
     std::shared_ptr<WCTColumnBinding> m_columnBinding;
@@ -95,160 +99,6 @@ struct SpecificColumnDefConvertible<Property> : public std::true_type
 public:
     static ColumnDef asDef(const Property &property, ColumnType columnType);
 };
-
-//TODO
-//template <>
-//Property Operable<Property>::operator !() const;
-//template <>
-//Property Operable<Property>::operator +() const;
-//template <>
-//Property Operable<Property>::operator -() const;
-//template <>
-//Property Operable<Property>::operator ~() const;
-//
-//template <>
-//Property Operable<Property>::operator ||(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator &&(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator *(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator /(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator %(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator +(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator -(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator <<(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator >>(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator &(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator |(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator <(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator <=(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator >(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator >=(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator ==(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::operator !=(const Expression& operand) const;
-//
-//template <>
-//Property Operable<Property>::concat(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::substr(const Expression& start, const Expression& length) const;
-//template <>
-//Property Operable<Property>::like(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::glob(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::match(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::regexp(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::notLike(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::notGlob(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::notMatch(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::notRegexp(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::like(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::glob(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::match(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::regexp(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::notLike(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::notGlob(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::notMatch(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::notRegexp(const Expression& operand, const Expression& escape) const;
-//template <>
-//Property Operable<Property>::isNull() const;
-//template <>
-//Property Operable<Property>::isNotNull() const;
-//template <>
-//Property Operable<Property>::is(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::isNot(const Expression& operand) const;
-//template <>
-//Property Operable<Property>::between(const Expression& begin, const Expression& end) const;
-//template <>
-//Property Operable<Property>::notBetween(const Expression& begin, const Expression& end) const;
-//template <>
-//Property Operable<Property>::in(const StatementSelect& statementSelect) const;
-//template <>
-//Property Operable<Property>::notIn(const StatementSelect&  statementSelect) const;
-//
-//template <>
-//template <typename U>
-//typename std::enable_if<ExpressionConvertible<U>::value, Expression>::type Operable<Expression>::in(const std::list<const U> &list) const {
-//    return Property(ExpressionConvertible<Property>::asExpression(*this)) Operator::operateWithPostfix(*this, "IN(" + stringByJoiningList(list) + ")");
-//}
-//
-//template <>
-//template <typename U>
-//typename std::enable_if<ExpressionConvertible<U>::value, Expression>::type Operable<Expression>::notIn(const std::list<const U> &list) const {
-//    return Operator::operateWithPostfix(*this, "NOT IN(" + stringByJoiningList(list) + ")");
-//}
-//    
-//template <>
-//Property Operable<Property>::in(const std::list<const Expression> &list) const;
-//template <>
-//Property Operable<Property>::notIn(const std::list<const Expression> &list) const;
-//template <>
-//Property Operable<Property>::in(const Expression &expression) const;
-//template <>
-//Property Operable<Property>::notIn(const Expression &expression) const;
-//
-//template <>
-//Property Operable<Property>::avg(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::count(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::groupConcat(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::groupConcat(bool isDistinct, const std::string& seperator) const;
-//template <>
-//Property Operable<Property>::max(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::min(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::sum(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::total(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::abs(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::hex(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::length(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::lower(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::upper(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::round(bool isDistinct) const;
-//template <>
-//Property Operable<Property>::matchinfo() const;
-//template <>
-//Property Operable<Property>::offsets() const;
-//template <>
-//Property Operable<Property>::snippet() const;
     
 } //namespace WCDB
 

@@ -32,6 +32,11 @@ public:
     static const Column Any;
     static const Column Rowid;
     
+    template <typename T>
+    Column(const T& t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr) 
+    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){        
+    }
+    
     Column(const std::string &name);
     
     Column inTable(const std::string &table) const;

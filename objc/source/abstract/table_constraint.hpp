@@ -60,7 +60,7 @@ public:
     
     template <typename T>
     typename std::enable_if<ColumnConvertible<T>::value, TableConstraint &>::type makeForeignKey(const std::list<const T> &list, const ForeignKey &foreignKey) {
-        m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + " " + foreignKey.getDescription() + ")");
+        m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + ") " + foreignKey.getDescription());
         return *this;
     }
     
