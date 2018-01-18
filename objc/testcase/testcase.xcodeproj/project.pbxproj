@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		233FDC3820103C3F003EC196 /* WTCTracerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233FDC3720103C3F003EC196 /* WTCTracerTests.mm */; };
+		233FDC6320105549003EC196 /* WTCTracerObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233FDC6220105549003EC196 /* WTCTracerObject.mm */; };
 		23698A8D2004613600C0291C /* WTCBaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* WTCBaseTestCase.mm */; };
 		23698A932004656300C0291C /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23698B1920047BE000C0291C /* WTCStatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698AF620047BDD00C0291C /* WTCStatementAttachTests.mm */; };
@@ -96,6 +98,10 @@
 		2329F3D620050A3600E22C76 /* WTCBaselineWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaselineWriteBenchmark.mm; sourceTree = "<group>"; };
 		2329F3D920050CC500E22C76 /* WTCCipherReadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCipherReadBenchmark.mm; sourceTree = "<group>"; };
 		2329F3DA20050CC500E22C76 /* WTCCipherWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCipherWriteBenchmark.mm; sourceTree = "<group>"; };
+		233FDC3720103C3F003EC196 /* WTCTracerTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCTracerTests.mm; sourceTree = "<group>"; };
+		233FDC6020105549003EC196 /* WTCTracerObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WTCTracerObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		233FDC6120105549003EC196 /* WTCTracerObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCTracerObject.h; sourceTree = "<group>"; };
+		233FDC6220105549003EC196 /* WTCTracerObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCTracerObject.mm; sourceTree = "<group>"; };
 		23698A6320045EF100C0291C /* All Testcases.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Testcases.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23698A7820045F4A00C0291C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		23698A8C2004613600C0291C /* WTCBaseTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaseTestCase.mm; sourceTree = "<group>"; };
@@ -360,6 +366,10 @@
 				23E58B5C200F6DEE00E0CECE /* WTCRepairObject+WCTTableCoding.h */,
 				23E58B5D200F6DEE00E0CECE /* WTCRepairObject.h */,
 				23E58B5E200F6DEE00E0CECE /* WTCRepairObject.mm */,
+				233FDC3720103C3F003EC196 /* WTCTracerTests.mm */,
+				233FDC6020105549003EC196 /* WTCTracerObject+WCTTableCoding.h */,
+				233FDC6120105549003EC196 /* WTCTracerObject.h */,
+				233FDC6220105549003EC196 /* WTCTracerObject.mm */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -496,6 +506,7 @@
 				23698B2420047BE000C0291C /* WTCStatementDropTableTests.mm in Sources */,
 				23698B2020047BE000C0291C /* WTCStatementReleaseTests.mm in Sources */,
 				23698B3020047BE000C0291C /* WTCStatementCreateVirtualTableTests.mm in Sources */,
+				233FDC3820103C3F003EC196 /* WTCTracerTests.mm in Sources */,
 				23698B1A20047BE000C0291C /* WTCModuleArgumentTests.mm in Sources */,
 				23698B2620047BE000C0291C /* WTCStatementCreateIndexTests.mm in Sources */,
 				23698B2920047BE000C0291C /* WTCStatementUpdateTests.mm in Sources */,
@@ -510,6 +521,7 @@
 				23698B3120047BE000C0291C /* WTCStatementExplainTests.mm in Sources */,
 				23698B1F20047BE000C0291C /* WTCStatementTransactionTests.mm in Sources */,
 				23698B2120047BE000C0291C /* WTCStatementInsertTests.mm in Sources */,
+				233FDC6320105549003EC196 /* WTCTracerObject.mm in Sources */,
 				23698B2A20047BE000C0291C /* WTCColumnTypeTests.mm in Sources */,
 				23E58B56200F559200E0CECE /* WTCFileTests.mm in Sources */,
 				23698B2B20047BE000C0291C /* WTCJoinClauseTests.mm in Sources */,

@@ -27,6 +27,8 @@
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
+		233FDC4120104772003EC196 /* optional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233FDC3F20104772003EC196 /* optional.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		233FDC4420104C82003EC196 /* optional_impl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233FDC4320104C82003EC196 /* optional_impl.hpp */; };
 		2349F6F91EA0D6680021EFA7 /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6161EA0D6680021EFA7 /* config.cpp */; };
 		2349F6FA1EA0D6680021EFA7 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6171EA0D6680021EFA7 /* config.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F6FC1EA0D6680021EFA7 /* core_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6191EA0D6680021EFA7 /* core_base.cpp */; };
@@ -328,6 +330,8 @@
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
+		233FDC3F20104772003EC196 /* optional.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = optional.hpp; sourceTree = "<group>"; };
+		233FDC4320104C82003EC196 /* optional_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = optional_impl.hpp; sourceTree = "<group>"; };
 		2349F6161EA0D6680021EFA7 /* config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = config.cpp; sourceTree = "<group>"; };
 		2349F6171EA0D6680021EFA7 /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		2349F6191EA0D6680021EFA7 /* core_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = core_base.cpp; sourceTree = "<group>"; };
@@ -991,6 +995,8 @@
 				23D92141200A3DCE000634CB /* utility.cpp */,
 				23C623801EE12D22009D55D3 /* thread_local.hpp */,
 				231039151F03E13600BC3FCC /* timed_queue.hpp */,
+				233FDC3F20104772003EC196 /* optional.hpp */,
+				233FDC4320104C82003EC196 /* optional_impl.hpp */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -1119,6 +1125,7 @@
 				2349F7291EA0D6680021EFA7 /* WCTRowSelect.h in Headers */,
 				23D921092009B534000634CB /* statement_savepoint.hpp in Headers */,
 				2349F7201EA0D6680021EFA7 /* WCTDelete.h in Headers */,
+				233FDC4420104C82003EC196 /* optional_impl.hpp in Headers */,
 				23C623821EE12D22009D55D3 /* thread_local.hpp in Headers */,
 				23D920772009B534000634CB /* declare.hpp in Headers */,
 				2349F75F1EA0D6680021EFA7 /* WCTColumnBinding.h in Headers */,
@@ -1183,6 +1190,7 @@
 				23D921152009B534000634CB /* operable.hpp in Headers */,
 				2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */,
 				2349F7521EA0D6680021EFA7 /* WCTTable.h in Headers */,
+				233FDC4120104772003EC196 /* optional.hpp in Headers */,
 				2349F7611EA0D6680021EFA7 /* WCTConstraintBinding.h in Headers */,
 				2349F7771EA0D6680021EFA7 /* WCTDatabase+Transaction.h in Headers */,
 				2349F73D1EA0D6680021EFA7 /* WCTDatabase+Core.h in Headers */,
