@@ -30,7 +30,7 @@
 
 @property(readonly) NSString *recommendedPath;
 
-//@property(readonly) WCTTag recommendTag;
+@property(readonly) WCTTag recommendTag;
 
 @property(readonly) NSFileManager *fileManager;
 
