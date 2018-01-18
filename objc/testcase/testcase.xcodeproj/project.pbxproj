@@ -83,6 +83,8 @@
 		23DE00C52010C1E000CDF00D /* WTCIndexBaselineIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DE00C42010C1E000CDF00D /* WTCIndexBaselineIndexObject.mm */; };
 		23DE00C92010C1EA00CDF00D /* WTCIndexUniqueIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DE00C82010C1EA00CDF00D /* WTCIndexUniqueIndexObject.mm */; };
 		23DE00CD2010C1F500CDF00D /* WTCIndexMultiIndexesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DE00CC2010C1F500CDF00D /* WTCIndexMultiIndexesObject.mm */; };
+		23DE00D12010C41300CDF00D /* WTCVirtualTableBaselineObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DE00D02010C41300CDF00D /* WTCVirtualTableBaselineObject.mm */; };
+		23DE00D32010C48D00CDF00D /* WTCVirtualTableBindingTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DE00D22010C48D00CDF00D /* WTCVirtualTableBindingTests.mm */; };
 		23E58B56200F559200E0CECE /* WTCFileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B55200F559200E0CECE /* WTCFileTests.mm */; };
 		23E58B59200F577400E0CECE /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
 		23E58B5B200F6D8300E0CECE /* WTCRepairTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B5A200F6D8300E0CECE /* WTCRepairTests.mm */; };
@@ -234,6 +236,10 @@
 		23DE00CA2010C1F500CDF00D /* WTCIndexMultiIndexesObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WTCIndexMultiIndexesObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23DE00CB2010C1F500CDF00D /* WTCIndexMultiIndexesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCIndexMultiIndexesObject.h; sourceTree = "<group>"; };
 		23DE00CC2010C1F500CDF00D /* WTCIndexMultiIndexesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCIndexMultiIndexesObject.mm; sourceTree = "<group>"; };
+		23DE00CE2010C41300CDF00D /* WTCVirtualTableBaselineObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WTCVirtualTableBaselineObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23DE00CF2010C41300CDF00D /* WTCVirtualTableBaselineObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCVirtualTableBaselineObject.h; sourceTree = "<group>"; };
+		23DE00D02010C41300CDF00D /* WTCVirtualTableBaselineObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCVirtualTableBaselineObject.mm; sourceTree = "<group>"; };
+		23DE00D22010C48D00CDF00D /* WTCVirtualTableBindingTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCVirtualTableBindingTests.mm; sourceTree = "<group>"; };
 		23E58B55200F559200E0CECE /* WTCFileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCFileTests.mm; sourceTree = "<group>"; };
 		23E58B57200F577400E0CECE /* Convenience.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Convenience.h; sourceTree = "<group>"; };
 		23E58B58200F577400E0CECE /* Convenience.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Convenience.m; sourceTree = "<group>"; };
@@ -282,6 +288,9 @@
 		233FDC9F2010841A003EC196 /* virtual_table */ = {
 			isa = PBXGroup;
 			children = (
+				23DE00CE2010C41300CDF00D /* WTCVirtualTableBaselineObject+WCTTableCoding.h */,
+				23DE00CF2010C41300CDF00D /* WTCVirtualTableBaselineObject.h */,
+				23DE00D02010C41300CDF00D /* WTCVirtualTableBaselineObject.mm */,
 			);
 			path = virtual_table;
 			sourceTree = "<group>";
@@ -540,6 +549,7 @@
 				233FDC9B201083D7003EC196 /* WTCColumnConstraintBindingTests.mm */,
 				23DE00A32010971200CDF00D /* WTCTableConstraintBindingTests.mm */,
 				23DE00BE2010A6FC00CDF00D /* WTCIndexConstraintBindingTests.mm */,
+				23DE00D22010C48D00CDF00D /* WTCVirtualTableBindingTests.mm */,
 				233FDCA02010841A003EC196 /* column_constraint */,
 				233FDC9E20108419003EC196 /* index */,
 				233FDCA12010841A003EC196 /* table_constraint */,
@@ -666,6 +676,7 @@
 				23698B2420047BE000C0291C /* WTCStatementDropTableTests.mm in Sources */,
 				23698B2020047BE000C0291C /* WTCStatementReleaseTests.mm in Sources */,
 				23698B3020047BE000C0291C /* WTCStatementCreateVirtualTableTests.mm in Sources */,
+				23DE00D32010C48D00CDF00D /* WTCVirtualTableBindingTests.mm in Sources */,
 				233FDCA92010844E003EC196 /* WTCColumnConstraintPrimaryKeyObject.mm in Sources */,
 				233FDC3820103C3F003EC196 /* WTCTracerTests.mm in Sources */,
 				23698B1A20047BE000C0291C /* WTCModuleArgumentTests.mm in Sources */,
@@ -694,6 +705,7 @@
 				23698B2A20047BE000C0291C /* WTCColumnTypeTests.mm in Sources */,
 				23E58B56200F559200E0CECE /* WTCFileTests.mm in Sources */,
 				23698B2B20047BE000C0291C /* WTCJoinClauseTests.mm in Sources */,
+				23DE00D12010C41300CDF00D /* WTCVirtualTableBaselineObject.mm in Sources */,
 				23698B3820047BE000C0291C /* WTCStatementAlterTableTests.mm in Sources */,
 				23698B2520047BE000C0291C /* WTCSubqueryTests.mm in Sources */,
 				23DE00B12010981B00CDF00D /* WTCTableConstraintBaselineMultiUniqueObject.mm in Sources */,
