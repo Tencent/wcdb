@@ -21,6 +21,7 @@
 #include <WCDB/error.hpp>
 #include <stdlib.h>
 #include <string>
+#include <WCDB/optional_impl.hpp>
 
 namespace WCDB {
 
@@ -107,6 +108,60 @@ Error::Type Error::getType() const
 int Error::getCode() const
 {
     return m_code;
+}
+    
+Optional<Tag> Error::getTag() const
+{
+    auto iter = m_infos.find(Error::Key::Tag);
+    if (iter!=m_infos.end()) {
+        return iter->second.getIntValue();
+    }
+    return {};
+}
+    
+Optional<int> Error::getOperationValue() const
+{
+    auto iter = m_infos.find(Error::Key::Operation);
+    if (iter!=m_infos.end()) {
+        return iter->second.getIntValue();
+    }
+    return {};
+}
+
+Optional<int> Error::getExtendedCode() const
+{
+    auto iter = m_infos.find(Error::Key::ExtendedCode);
+    if (iter!=m_infos.end()) {
+        return iter->second.getIntValue();
+    }
+    return {};
+}
+
+Optional<std::string> Error::getMessage() const
+{
+    auto iter = m_infos.find(Error::Key::Message);
+    if (iter!=m_infos.end()) {
+        return iter->second.getStringValue();
+    }
+    return {};
+}
+    
+Optional<std::string> Error::getSQL() const
+{
+    auto iter = m_infos.find(Error::Key::SQL);
+    if (iter!=m_infos.end()) {
+        return iter->second.getStringValue();
+    }
+    return {};
+}
+
+Optional<std::string> Error::getPath() const
+{
+    auto iter = m_infos.find(Error::Key::Path);
+    if (iter!=m_infos.end()) {
+        return iter->second.getStringValue();
+    }
+    return {};
 }
 
 const Error::Infos &Error::getInfos() const

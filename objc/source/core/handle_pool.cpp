@@ -40,59 +40,55 @@ RecyclableHandlePool HandlePool::GetPool(const std::string &path,
     auto iter = s_pools.find(path);
     if (iter == s_pools.end()) {
         pool.reset(new HandlePool(path, defaultConfigs));
-        s_pools.insert({path, {pool, 1}});
-    } else {
-        pool = iter->second.first;
-        ++iter->second.second;
-    }
-    //Can I store iter of unordered_map for later use?
-    return RecyclableHandlePool(pool, [](std::shared_ptr<HandlePool> &pool) {
-        std::lock_guard<std::mutex> lockGuard(s_mutex);
-        const auto &iter = s_pools.find(pool->path);
-        if (--iter->second.second == 0) {
-            s_pools.erase(iter);
-        }
-    });
+        iter = s_pools.insert({path, {pool, 0}}).first;
+    } 
+    return HandlePool::GetExistingPool(iter);
 }
 
 RecyclableHandlePool HandlePool::GetExistingPool(Tag tag)
 {
     std::lock_guard<std::mutex> lockGuard(s_mutex);
+    auto iter = s_pools.end();
     if (tag != InvalidTag) {
-        for (auto iter : s_pools) {
-            if (iter.second.first->tag == tag) {
-                ++iter.second.second;
-                return RecyclableHandlePool(
-                    iter.second.first, [](std::shared_ptr<HandlePool> &pool) {
-                        std::lock_guard<std::mutex> lockGuard(s_mutex);
-                        const auto &iter = s_pools.find(pool->path);
-                        if (--iter->second.second == 0) {
-                            s_pools.erase(iter);
-                        }
-                    });
+        for (iter = s_pools.begin(); iter != s_pools.end(); ++iter) {
+            if (iter->second.first->tag == tag) {
+                break;
             }
         }
     }
-    return RecyclableHandlePool(nullptr, nullptr);
+    return HandlePool::GetExistingPool(iter);
 }
 
 RecyclableHandlePool HandlePool::GetExistingPool(const std::string &path)
 {
     std::lock_guard<std::mutex> lockGuard(s_mutex);
-    for (auto iter : s_pools) {
-        if (iter.second.first->path == path) {
-            ++iter.second.second;
-            return RecyclableHandlePool(
-                iter.second.first, [](std::shared_ptr<HandlePool> &pool) {
-                    std::lock_guard<std::mutex> lockGuard(s_mutex);
-                    const auto &iter = s_pools.find(pool->path);
-                    if (--iter->second.second == 0) {
-                        s_pools.erase(iter);
-                    }
-                });
+    auto iter = s_pools.begin();
+    for (; iter != s_pools.end(); ++iter) {
+        if (iter->second.first->path == path) {
+            break;
         }
     }
-    return RecyclableHandlePool(nullptr, nullptr);
+    return HandlePool::GetExistingPool(iter);
+}
+        
+RecyclableHandlePool HandlePool::GetExistingPool(const std::unordered_map<std::string,
+                                            std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
+{
+    if (iter==s_pools.end()) {
+        return RecyclableHandlePool(nullptr, nullptr);
+    }
+    ++iter->second.second;
+    const std::string path = iter->second.first->path;
+    return RecyclableHandlePool(iter->second.first, [path]() {
+        std::lock_guard<std::mutex> lockGuard(s_mutex);
+        const auto &iter = s_pools.find(path);
+        if (iter==s_pools.end()) {
+            Error::Abort("It should not be failed. If you think it's a bug, please report an issue to us.");
+        }        
+        if (--iter->second.second == 0) {
+            s_pools.erase(iter);
+        }
+    });
 }
 
 void HandlePool::PurgeFreeHandlesInAllPool()
@@ -188,7 +184,7 @@ RecyclableHandle HandlePool::flowOut(Error &error)
         handleWrap->handle->setTag(tag.load());
         if (invoke(handleWrap, error)) {
             return RecyclableHandle(
-                handleWrap, [this](std::shared_ptr<HandleWrap> &handleWrap) {
+                handleWrap, [handleWrap, this]() {
                     flowBack(handleWrap);
                 });
         }
