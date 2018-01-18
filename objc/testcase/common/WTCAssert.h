@@ -28,7 +28,7 @@
     XCTAssertTrue(                                                             \
         [(expression)                                                          \
             isEqualToString:@((describable).getDescription().c_str())],        \
-        @"different from %@ for %@",                                                       \
+        @"different from `%@` for `%@`",                                                       \
         [@((describable).getDescription().c_str())                             \
             commonPrefixWithString:(expression) options                        \
                                   :NSCaseInsensitiveSearch], @((describable).getDescription().c_str()))
