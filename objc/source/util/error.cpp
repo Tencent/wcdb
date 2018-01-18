@@ -61,8 +61,32 @@ ErrorValue::Type ErrorValue::getType() const
 {
     return m_type;
 }
-
-std::shared_ptr<Error::ReportMethod> Error::s_reportMethod;
+    
+Error::ReportMethod Error::s_builtinErrorReport([](const Error &error) {
+    switch (error.getType()) {
+        case Error::Type::SQLiteGlobal:
+#if DEBUG
+            printf("[WCDB][DEBUG]%s\n",
+                   error.description().c_str());
+#endif
+            break;
+        case Error::Type::Warning:
+            printf("[WCDB][WARNING]%s\n",
+                   error.description().c_str());
+            break;
+        default:
+            printf("[WCDB][ERROR]%s\n",
+                   error.description().c_str());
+#if DEBUG
+            if (error.getType() == Error::Type::Abort) {
+                abort();
+            }
+#endif
+            break;
+    }
+});
+    
+std::shared_ptr<Error::ReportMethod> Error::s_reportMethod(new ReportMethod(Error::s_builtinErrorReport));
 
 ThreadLocal<bool> Error::s_slient(false);
 
@@ -105,33 +129,10 @@ void Error::reset()
 void Error::report() const
 {
     if (!*s_slient.get()) {
-        if (!s_reportMethod) {
-            s_reportMethod.reset(
-                (new Error::ReportMethod([](const Error &error) {
-                    switch (error.getType()) {
-                        case Error::Type::SQLiteGlobal:
-#if DEBUG
-                            printf("[WCDB][DEBUG]%s\n",
-                                   error.description().c_str());
-#endif
-                            break;
-                        case Error::Type::Warning:
-                            printf("[WCDB][WARNING]%s\n",
-                                   error.description().c_str());
-                            break;
-                        default:
-                            printf("[WCDB][ERROR]%s\n",
-                                   error.description().c_str());
-#if DEBUG
-                            if (error.getType() == Error::Type::Abort) {
-                                abort();
-                            }
-#endif
-                            break;
-                    }
-                })));
+        std::shared_ptr<Error::ReportMethod> report = s_reportMethod;
+        if (report!=nullptr) {
+            (*report.get())(*this);
         }
-        (*s_reportMethod)(*this);
     }
 }
 
@@ -219,6 +220,11 @@ std::string Error::description() const
 void Error::SetReportMethod(const ReportMethod &reportMethod)
 {
     s_reportMethod.reset(new ReportMethod(reportMethod));
+}
+    
+void Error::ResetReportMethod()
+{
+    s_reportMethod.reset(new ReportMethod(s_builtinErrorReport));
 }
 
 void Error::Report(Error::Type type,

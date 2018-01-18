@@ -154,6 +154,7 @@ public:
     static const char *GetTypeName(Type type);
 
     static void SetReportMethod(const ReportMethod &reportMethod);
+    static void ResetReportMethod();
 
     static void Report(Error::Type type,
                        int code,
@@ -215,7 +216,8 @@ protected:
     Error::Type m_type;
     Error::Infos m_infos;
 
-    static std::shared_ptr<Error::ReportMethod> s_reportMethod;
+    static std::shared_ptr<ReportMethod> s_reportMethod;
+    static ReportMethod s_builtinErrorReport;
     static ThreadLocal<bool> s_slient;
 };
 

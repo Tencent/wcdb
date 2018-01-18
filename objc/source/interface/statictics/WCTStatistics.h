@@ -93,4 +93,9 @@ typedef void (^WCTSQLTrace)(NSString *);
  */
 + (void)SetGlobalSQLTrace:(WCTSQLTrace)trace;
 
+/**
+ @brief Reset to builtin error reporter. 
+ */
++ (void)ResetGlobalErrorReport;
+
 @end

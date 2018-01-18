@@ -64,4 +64,9 @@
     }
 }
 
++ (void)ResetGlobalErrorReport
+{
+    WCDB::Error::ResetReportMethod();
+}
+
 @end
