@@ -92,14 +92,14 @@ void sample_convenient_main(NSString *baseDirectory)
     {
         WCTSampleConvenient *object = [[WCTSampleConvenient alloc] init];
         object.stringValue = @"Update by object";
-        [database updateAllRowsInTable:tableName
+        [database updateRowsInTable:tableName
                           onProperties:WCTSampleConvenient.stringValue
                             withObject:object];
     }
     //Update by value
     {
         NSArray *row = [NSArray arrayWithObject:@"Update by value"];
-        [database updateAllRowsInTable:tableName
+        [database updateRowsInTable:tableName
                           onProperties:WCTSampleConvenient.stringValue
                                withRow:row];
     }
