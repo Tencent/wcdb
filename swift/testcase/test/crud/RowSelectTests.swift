@@ -109,7 +109,7 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: CRUDObject.name))
 
         let optionalRowSelect = WCDBAssertNoThrowReturned(
-            try database.prepareRowSelect(on: Column.any.count(),
+            try database.prepareRowSelect(on: Column.all.count(),
                                           fromTable: CRUDObject.name),
             whenFailed: nil
         )

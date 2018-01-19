@@ -507,7 +507,7 @@ public extension RowSelectInterface where Self: Core {
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> FundamentalRowXColumn {
         return try getRows(
-            on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+            on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
@@ -521,7 +521,7 @@ public extension RowSelectInterface where Self: Core {
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> FundamentalRow {
         return try getRow(
-            on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+            on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,

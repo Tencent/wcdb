@@ -23,7 +23,7 @@ import Foundation
 public struct Column: Describable {
     public private(set) var description: String
 
-    public static let any: Column = Column(named: "*")
+    public static let all: Column = Column(named: "*")
     public static let rowid: Column = Column(named: "rowid")
 
     public init(named name: String) {

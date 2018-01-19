@@ -56,7 +56,7 @@ func sample_advance_main(baseDirectory: String) {
 
     //Using [as] to redirect selection
     do {
-        let property = SampleAdvance.Properties.any.as(SampleAdvance.Properties.intValue)
+        let property = SampleAdvance.Properties.allColumns.as(SampleAdvance.Properties.intValue)
         let object: SampleAdvance = (try database.getObject(on: property, fromTable: tableName))!
         print("Count: \(object.intValue!)")
     } catch let error {

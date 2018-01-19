@@ -24,7 +24,7 @@ import WCDBSwift
 class AdvanceTests: CRUDTestCase {
 
     func testCoreStatement() {
-        let statement = StatementSelect().select(Column.any).from(Master.builtinTableName)
+        let statement = StatementSelect().select(Column.all).from(Master.builtinTableName)
         let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
@@ -35,7 +35,7 @@ class AdvanceTests: CRUDTestCase {
 
     func testCoreStatementRead() {
         //Give
-        let statement = StatementSelect().select(Column.any).from(CRUDObject.name)
+        let statement = StatementSelect().select(Column.all).from(CRUDObject.name)
         let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
@@ -155,7 +155,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: CoreStatementTypedObject.self))
         XCTAssertNoThrow(try database.insert(objects: CoreStatementTypedObject(), intoTable: tableName))
 
-        let statement = StatementSelect().select(Column.any).from(tableName)
+        let statement = StatementSelect().select(Column.all).from(tableName)
         let coreStatement: CoreStatement? = WCDBAssertNoThrowReturned(try database.prepare(statement))
         XCTAssertNotNil(coreStatement)
         let wrappedCoreStatement = coreStatement!
@@ -279,7 +279,7 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testExecFailed() {
-        let statement = StatementSelect().select(Column.any).from("nonexistentTable")
+        let statement = StatementSelect().select(Column.all).from("nonexistentTable")
         XCTAssertThrowsError(try database.exec(statement))
     }
 
@@ -488,14 +488,14 @@ class AdvanceTests: CRUDTestCase {
         //Give
         database.close()
         database.setConfig(named: "testConfigFailed", with: { (handle) throws in
-            try handle.exec(StatementSelect().select(Column.any).from("nonexistentTable"))
+            try handle.exec(StatementSelect().select(Column.all).from("nonexistentTable"))
         })
         //When
         XCTAssertFalse(database.canOpen)
     }
 
     func testRedirect() {
-        let property = CRUDObject.Properties.any.count().as(CRUDObject.Properties.variable1)
+        let property = CRUDObject.Properties.allColumns.count().as(CRUDObject.Properties.variable1)
         let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(
             try database.getObject(on: property, fromTable: CRUDObject.name),
             whenFailed: nil

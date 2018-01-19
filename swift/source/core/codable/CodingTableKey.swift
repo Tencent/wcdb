@@ -31,7 +31,7 @@ public protocol CodingTableKey: CodingTableKeyBase,
     associatedtype Root: TableCodableBase
 
     static var all: [Property] {get}
-    static var any: Column {get}
+    static var allColumns: Column {get}
 
     static var objectRelationalMapping: TableBinding<Self> {get}
     static var columnConstraintBindings: [Self: ColumnConstraintBinding]? {get}
@@ -50,8 +50,8 @@ public extension CodingTableKey {
     public static var all: [Property] {
         return objectRelationalMapping.allProperties
     }
-    public static var any: Column {
-        return Column.any
+    public static var allColumns: Column {
+        return Column.all
     }
 }
 

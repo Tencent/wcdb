@@ -552,13 +552,13 @@ class SelectInterfaceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.delete(fromTable: tableName))
         //Then
         do {
-            let row = try database.getRow(on: Column.any, fromTable: tableName)
+            let row = try database.getRow(on: Column.all, fromTable: tableName)
             XCTAssertEqual(row.count, 0)
 
-            let distinctValue = try database.getDistinctValue(on: Column.any, fromTable: tableName)
+            let distinctValue = try database.getDistinctValue(on: Column.all, fromTable: tableName)
             XCTAssertEqual(distinctValue.type, .null)
 
-            let value = try database.getValue(on: Column.any, fromTable: tableName)
+            let value = try database.getValue(on: Column.all, fromTable: tableName)
             XCTAssertEqual(value.type, .null)
         } catch let error {
             XCTFail(error.localizedDescription)
@@ -573,13 +573,13 @@ class SelectInterfaceTests: CRUDTestCase {
         let wrappedTable = table!
         //Then
         do {
-            let row = try wrappedTable.getRow(on: Column.any)
+            let row = try wrappedTable.getRow(on: Column.all)
             XCTAssertEqual(row.count, 0)
 
-            let distinctValue = try wrappedTable.getDistinctValue(on: Column.any)
+            let distinctValue = try wrappedTable.getDistinctValue(on: Column.all)
             XCTAssertEqual(distinctValue.type, .null)
 
-            let value = try wrappedTable.getValue(on: Column.any)
+            let value = try wrappedTable.getValue(on: Column.all)
             XCTAssertEqual(value.type, .null)
         } catch let error {
             XCTFail(error.localizedDescription)
