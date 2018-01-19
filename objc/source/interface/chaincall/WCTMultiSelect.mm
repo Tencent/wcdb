@@ -34,24 +34,6 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andPropertyList:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        if (propertyList.empty()) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableNames].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableNames.count == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Empty table".UTF8String,
-                                         &_error);
-            return self;
-        }
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         WCDB::SubqueryList subqueryList;
         for (NSString *tableName in tableNames) {

@@ -86,6 +86,11 @@
     return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:isDistinct];
 }
 
+- (WCTRowSelect *)prepareSelectRowsFromTable:(NSString *)tableName
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::Any} fromTables:tableName?@[tableName]:@[] isDistinct:NO];
+}
+
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName
 {
     return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO];
@@ -94,6 +99,11 @@
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
 {
     return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:isDistinct];
+}
+
+- (WCTRowSelect *)prepareSelectRowsFromTables:(NSArray<NSString *> *)tableNames
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::Any} fromTables:tableNames isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames

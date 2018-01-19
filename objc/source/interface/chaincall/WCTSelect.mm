@@ -37,24 +37,6 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        if (propertyList.empty()) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@", tableName].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Nil table name".UTF8String,
-                                         &_error);
-            return self;
-        }
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement.select(_propertyList, isDistinct).from(tableName.UTF8String);
         _class = _propertyList.front().getColumnBinding()->getClass();

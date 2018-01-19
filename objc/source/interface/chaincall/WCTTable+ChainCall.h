@@ -95,6 +95,14 @@
  */
 - (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList isDistinct:(BOOL)isDistinct;
 
+
+/**
+ Generate a WCTRowSelect to do a row selection on the specific results.
+ 
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRows;
+
 /**
  Generate a WCTRowSelect to do a row selection on the specific results.
 

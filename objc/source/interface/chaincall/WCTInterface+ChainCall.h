@@ -107,6 +107,13 @@
 
 /**
  @brief Generate a WCTRowSelect to do a row selection on the specific results.
+ @param tableName The name of the table to be used to do a selection.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsFromTable:(NSString *)tableName;
+
+/**
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
  @param resultList The column results to be selected.
  @param tableName The name of the table to be used to do a selection.
  @return WCTRowSelect
@@ -121,6 +128,13 @@
  @return WCTRowSelect
  */
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct;
+
+/**
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
+ @param tableNames The name of the table to be used to do a selection.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsFromTables:(NSArray<NSString *> *)tableNames;
 
 /**
  @brief Generate a WCTRowSelect to do a row selection on the specific results.

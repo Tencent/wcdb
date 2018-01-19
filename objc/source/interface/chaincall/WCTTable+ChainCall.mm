@@ -82,6 +82,11 @@
     return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:_tableName isDistinct:isDistinct];
 }
 
+- (WCTRowSelect *)prepareSelectRows
+{
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::Any} fromTables:@[_tableName] isDistinct:NO];
+}
+
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList
 {
     return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[_tableName] isDistinct:NO];

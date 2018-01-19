@@ -36,24 +36,6 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
 {
     if (self = [super initWithCore:core]) {
-        if (propertyList.size() == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Inserting nothing into %@", tableName].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Table name should be large than 0"].UTF8String,
-                                         &_error);
-            return self;
-        }
         _replace = replace;
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
@@ -72,7 +54,7 @@
         return NO;
     }
     int index;
-    BOOL fillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
+    BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
     for (WCTObject *object in objects) {
         index = 1;
         for (const WCTProperty &property : _propertyList) {
@@ -95,7 +77,7 @@
             error = statementHandle->getError();
             return NO;
         }
-        if (fillLastInsertedRowID) {
+        if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
             object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
         }
         statementHandle->reset();
