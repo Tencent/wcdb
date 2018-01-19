@@ -72,7 +72,7 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
         static const ColumnResultList resultList = {
             ColumnResult(Expression(1))};
         StatementSelect select =
-            StatementSelect().select(resultList).from(tableName).limit(0);
+        StatementSelect().select(resultList).from(tableName).limit(0);
         std::shared_ptr<StatementHandle> statementHandle =
             handle->prepare(select);
         Error::setThreadedSlient(false);
@@ -93,12 +93,12 @@ bool CoreBase::runTransaction(TransactionBlock transaction,
                               TransactionEvent event,
                               Error &error)
 {
-#define TRANSATION_EVENT(eventType)                                            \
+#define TRANSACTION_EVENT(eventType)                                            \
     if (event) {                                                               \
         event(eventType);                                                      \
     }
     if (!begin(StatementTransaction::Mode::Immediate, error)) {
-        TRANSATION_EVENT(TransactionEventType::BeginFailed);
+        TRANSACTION_EVENT(TransactionEventType::BeginFailed);
         return false;
     }
     if (transaction(error)) {
@@ -106,13 +106,13 @@ bool CoreBase::runTransaction(TransactionBlock transaction,
         if (commit(error)) {
             return true;
         }
-        TRANSATION_EVENT(TransactionEventType::CommitFailed);
+        TRANSACTION_EVENT(TransactionEventType::CommitFailed);
     }
-    TRANSATION_EVENT(TransactionEventType::Rollback);
+    TRANSACTION_EVENT(TransactionEventType::Rollback);
     Error
         rollBackError; //Rollback errors do not need to be passed to the outside
     if (!rollback(rollBackError)) {
-        TRANSATION_EVENT(TransactionEventType::RollbackFailed);
+        TRANSACTION_EVENT(TransactionEventType::RollbackFailed);
     }
     return false;
 }

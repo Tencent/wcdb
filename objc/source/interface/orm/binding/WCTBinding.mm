@@ -33,9 +33,7 @@ WCTBinding::WCTBinding(Class cls)
     , m_constraintBindingList(nullptr)
     , m_virtualTableArgumentList(nullptr)
 {
-    if (![m_cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        class_addProtocol(m_cls, @protocol(WCTTableCoding));
-    }
+    class_addProtocol(m_cls, @protocol(WCTTableCoding));
 }
 
 void WCTBinding::_addColumnBinding(const std::string &columnName, const std::shared_ptr<WCTColumnBinding> &columnBinding)
