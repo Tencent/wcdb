@@ -33,39 +33,6 @@
     BOOL _replace;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andClass:(Class)cls andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
-{
-    if (self = [super initWithCore:core]) {
-        if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::ORM,
-                                         [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Nil table name".UTF8String,
-                                         &_error);
-            return self;
-        }
-        _replace = replace;
-        const WCTPropertyList &propertyList = [cls AllProperties];
-        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
-        _statement = WCDB::StatementInsert()
-                         .insert(tableName.UTF8String,
-                                 _propertyList,
-                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExpressionList(_propertyList.size(), WCDB::Expression::BindParameter));
-    }
-    return self;
-}
-
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
 {
     if (self = [super initWithCore:core]) {

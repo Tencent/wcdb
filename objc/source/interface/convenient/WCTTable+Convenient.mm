@@ -773,7 +773,7 @@
 - (BOOL)insertObject:(WCTObject *)object
 {
     if (object) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:_class andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
     }
     return NO;
 }
@@ -781,7 +781,7 @@
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects
 {
     if (objects) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:_class andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:NO] executeWithObjects:objects];
     }
     return NO;
 }
@@ -789,7 +789,7 @@
 - (BOOL)insertOrReplaceObject:(WCTObject *)object
 {
     if (object) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:_class andTableName:_tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
     }
     return NO;
 }
@@ -797,7 +797,7 @@
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
 {
     if (objects) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:_class andTableName:_tableName andReplaceFlag:YES] executeWithObjects:objects];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES] executeWithObjects:objects];
     }
     return NO;
 }

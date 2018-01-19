@@ -39,12 +39,12 @@
 
 - (WCTInsert *)prepareInsertObjects
 {
-    return [[WCTInsert alloc] initWithCore:_core andClass:_class andTableName:_tableName andReplaceFlag:NO];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:NO];
 }
 
 - (WCTInsert *)prepareInsertOrReplaceObjects
 {
-    return [[WCTInsert alloc] initWithCore:_core andClass:_class andTableName:_tableName andReplaceFlag:YES];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES];
 }
 
 - (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList

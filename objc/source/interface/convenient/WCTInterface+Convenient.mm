@@ -918,7 +918,7 @@
                 into:(NSString *)tableName
 {
     if (object) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:object.class andTableName:tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[object.class AllProperties] andTableName:tableName andReplaceFlag:NO] executeWithObjects:@[ object ]];
     }
     return NO;
 }
@@ -926,8 +926,8 @@
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects
                  into:(NSString *)tableName
 {
-    if (objects) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:objects.firstObject.class andTableName:tableName andReplaceFlag:NO] executeWithObjects:objects];
+    if (objects.count > 0) {
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[objects.firstObject.class AllProperties] andTableName:tableName andReplaceFlag:NO] executeWithObjects:objects];
     }
     return NO;
 }
@@ -936,7 +936,7 @@
                          into:(NSString *)tableName
 {
     if (object) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:object.class andTableName:tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[object.class AllProperties] andTableName:tableName andReplaceFlag:YES] executeWithObjects:@[ object ]];
     }
     return NO;
 }
@@ -945,7 +945,7 @@
                           into:(NSString *)tableName
 {
     if (objects) {
-        return [[[WCTInsert alloc] initWithCore:_core andClass:objects.firstObject.class andTableName:tableName andReplaceFlag:YES] executeWithObjects:objects];
+        return [[[WCTInsert alloc] initWithCore:_core andProperties:[objects.firstObject.class AllProperties] andTableName:tableName andReplaceFlag:YES] executeWithObjects:objects];
     }
     return NO;
 }

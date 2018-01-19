@@ -38,12 +38,12 @@
 
 - (WCTInsert *)prepareInsertObjectsOfClass:(Class)cls into:(NSString *)tableName
 {
-    return [[WCTInsert alloc] initWithCore:_core andClass:cls andTableName:tableName andReplaceFlag:NO];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:[cls AllProperties] andTableName:tableName andReplaceFlag:NO];
 }
 
 - (WCTInsert *)prepareInsertOrReplaceObjectsOfClass:(Class)cls into:(NSString *)tableName
 {
-    return [[WCTInsert alloc] initWithCore:_core andClass:cls andTableName:tableName andReplaceFlag:YES];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:[cls AllProperties] andTableName:tableName andReplaceFlag:YES];
 }
 
 - (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
