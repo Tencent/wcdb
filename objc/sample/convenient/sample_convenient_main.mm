@@ -178,7 +178,7 @@ void sample_convenient_main(NSString *baseDirectory)
 
     //Delete
     {
-        BOOL ret = [database deleteAllObjectsFromTable:tableName];
+        BOOL ret = [database deleteObjectsFromTable:tableName];
     }
     //Delete with condition/order/offset/limit
     {

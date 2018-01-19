@@ -1419,7 +1419,7 @@
 }
 
 #pragma mark - Delete
-- (BOOL)deleteAllObjectsFromTable:(NSString *)tableName
+- (BOOL)deleteObjectsFromTable:(NSString *)tableName
 {
     return [[[WCTDelete alloc] initWithCore:_core andTableName:tableName] execute];
 }

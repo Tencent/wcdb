@@ -1223,7 +1223,7 @@
 }
 
 #pragma mark - Delete
-- (BOOL)deleteAllObjects
+- (BOOL)deleteObjects
 {
     return [[[WCTDelete alloc] initWithCore:_core andTableName:_tableName] execute];
 }

@@ -880,7 +880,7 @@
                    offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Delete
-- (BOOL)deleteAllObjectsFromTable:(NSString *)tableName;
+- (BOOL)deleteObjectsFromTable:(NSString *)tableName;
 
 - (BOOL)deleteObjectsFromTable:(NSString *)tableName
                          where:(const WCDB::Expression &)condition;

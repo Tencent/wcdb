@@ -694,7 +694,7 @@
                       offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Delete
-- (BOOL)deleteAllObjects;
+- (BOOL)deleteObjects;
 
 - (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition;
 
