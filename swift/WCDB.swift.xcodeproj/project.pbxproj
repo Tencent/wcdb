@@ -74,7 +74,7 @@
 		237931CB1FD547CC003BBA5F /* CodingTableKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237931CA1FD547CC003BBA5F /* CodingTableKey.swift */; };
 		23794DB41FAB23AD001E79DE /* WCDB-Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 23794DB31FAB23AD001E79DE /* WCDB-Bridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238102232004DE720041B41F /* sqlcipher.swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2381021B2004DD790041B41F /* sqlcipher.swift.framework */; };
-		238102242004DE720041B41F /* sqliterk_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238102202004DD790041B41F /* sqliterk_swift.framework */; };
+		238102242004DE720041B41F /* sqliterk.swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238102202004DD790041B41F /* sqliterk.swift.framework */; };
 		238D0B771FAB1F7E00BC2659 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B131FAB1F7E00BC2659 /* Column.swift */; };
 		238D0B781FAB1F7E00BC2659 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B141FAB1F7E00BC2659 /* ColumnDef.swift */; };
 		238D0B791FAB1F7E00BC2659 /* ColumnIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D0B151FAB1F7E00BC2659 /* ColumnIndex.swift */; };
@@ -133,6 +133,8 @@
 		23E9E0051FC3C76F005DE71C /* SQLite-Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0041FC3C76F005DE71C /* SQLite-Bridging.swift */; };
 		23E9E0071FC3D80B005DE71C /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0061FC3D80B005DE71C /* Table.swift */; };
 		23E9E0091FC3D810005DE71C /* TableInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0081FC3D810005DE71C /* TableInterface.swift */; };
+		EBCB68F62005BDAF00D8A633 /* sqliterk.swift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 238102202004DD790041B41F /* sqliterk.swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBCB68F72005BDAF00D8A633 /* sqlcipher.swift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2381021B2004DD790041B41F /* sqlcipher.swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +181,20 @@
 			remoteInfo = "Install file template";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EBCB68F42005BDA800D8A633 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EBCB68F62005BDAF00D8A633 /* sqliterk.swift.framework in CopyFiles */,
+				EBCB68F72005BDAF00D8A633 /* sqlcipher.swift.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		230209641FBED533000D69B6 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -292,7 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				238102232004DE720041B41F /* sqlcipher.swift.framework in Frameworks */,
-				238102242004DE720041B41F /* sqliterk_swift.framework in Frameworks */,
+				238102242004DE720041B41F /* sqliterk.swift.framework in Frameworks */,
 				233032B21FB947F100101373 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,7 +416,7 @@
 		2381021C2004DD790041B41F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				238102202004DD790041B41F /* sqliterk_swift.framework */,
+				238102202004DD790041B41F /* sqliterk.swift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -544,6 +560,7 @@
 				238D0AFF1FAB1F4300BC2659 /* Frameworks */,
 				238D0B001FAB1F4300BC2659 /* Headers */,
 				238D0B011FAB1F4300BC2659 /* Resources */,
+				EBCB68F42005BDA800D8A633 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -619,10 +636,10 @@
 			remoteRef = 2381021A2004DD790041B41F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		238102202004DD790041B41F /* sqliterk_swift.framework */ = {
+		238102202004DD790041B41F /* sqliterk.swift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = sqliterk_swift.framework;
+			path = sqliterk.swift.framework;
 			remoteRef = 2381021F2004DD790041B41F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
