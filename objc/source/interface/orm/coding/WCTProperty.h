@@ -38,6 +38,8 @@ public:
     WCDB::ColumnIndex asIndex(WCTOrderTerm term) const;
     
     virtual WCDB::Expression asExpression() const override; 
+    
+    operator std::list<const WCTProperty>() const;
 protected:    
     std::shared_ptr<WCTColumnBinding> m_columnBinding;
 };

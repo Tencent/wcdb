@@ -61,6 +61,11 @@ WCDB::Expression WCTProperty::asExpression() const
     return WCDB::Expression(*this);
 }
 
+WCTProperty::operator std::list<const WCTProperty>() const
+{
+    return {*this};
+}
+
 namespace WCDB {
     
 Column ColumnConvertible<WCTProperty>::asColumn(const WCTProperty& property)
