@@ -18,29 +18,12 @@
  * limitations under the License.
  */
 
-#import "WTCRepairObject+WCTTableCoding.h"
-#import "WTCRepairObject.h"
+#import "WTCMultiSelectObject.h"
 #import <WCDB/WCDB.h>
 
-@implementation WTCRepairObject
+@interface WTCMultiSelectObject (WCTTableCoding) <WCTTableCoding>
 
-WCDB_IMPLEMENTATION(WTCRepairObject)
-WCDB_SYNTHESIZE(WTCRepairObject, variable1)
-WCDB_SYNTHESIZE(WTCRepairObject, variable2)
-
-+ (NSString*)Name
-{
-    return NSStringFromClass(self);
-}
-
-- (BOOL)isEqual:(NSObject*)object
-{
-    return self.hash == object.hash;
-}
-
-- (NSUInteger)hash
-{
-    return [NSString stringWithFormat:@"%@_%d_%@", NSStringFromClass(WTCRepairObject.class), self.variable1, self.variable2].hash;
-}
+WCDB_PROPERTY(variable1)
+WCDB_PROPERTY(variable2)
 
 @end

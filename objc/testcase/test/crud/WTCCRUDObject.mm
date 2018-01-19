@@ -34,5 +34,15 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCCRUDObject, variable1)
 {
     return NSStringFromClass(self);
 }
-  
+
+- (BOOL)isEqual:(NSObject*)object
+{
+    return self.hash == object.hash;
+}
+
+- (NSUInteger)hash
+{
+    return [NSString stringWithFormat:@"%@_%d_%@", WTCCRUDObject.Name, self.variable1, self.variable2].hash;
+}
+
 @end

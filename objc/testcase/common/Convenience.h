@@ -25,11 +25,13 @@
 + (NSString*)Name;
 @end
 
-#pragma mark - WTCSortable
-@protocol WTCSortable
-+ (NSComparator)Comparator;
+#pragma mark - NSArray
+@interface NSArray(Reverse)
+- (NSArray*)reversed;
+- (NSArray*)sorted;
 @end
 
-#pragma mark - NSString
-@interface NSString(Sortable)<WTCSortable>
+#pragma mark - NSObject
+@interface NSObject(Comparator)
++ (NSComparator)Comparator;
 @end

@@ -20,13 +20,40 @@
 
 #import "Convenience.h"
 
-@implementation NSString(Sortable)
+@implementation NSObject(Comparator)
 
 + (NSComparator)Comparator
 {
-    return ^NSComparisonResult(NSString* obj1, NSString* obj2) {
-        return [obj1 compare:obj2];
+    return ^NSComparisonResult(NSObject* obj1, NSObject* obj2) {
+        NSUInteger hash1 = obj1.hash;
+        NSUInteger hash2 = obj2.hash;
+        if (hash1<hash2) {
+            return NSOrderedAscending;
+        }else if(hash1>hash2) {
+            return NSOrderedDescending;
+        }else {
+            return NSOrderedSame;
+        }
     };
 }
 
+@end
+
+@implementation NSArray(Reverse)
+
+- (NSArray*)sorted
+{
+    return [self sortedArrayUsingComparator:NSObject.Comparator];
+}
+
+- (NSArray*)reversed
+{
+    NSMutableArray* reversedArray = [[NSMutableArray alloc] initWithCapacity:self.count];
+    NSEnumerator* reversedEnum = self.reverseObjectEnumerator;
+    NSObject* object = nil;
+    while (object = [reversedEnum nextObject]) {
+        [reversedArray addObject:object];
+    }
+    return reversedArray;
+}
 @end

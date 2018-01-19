@@ -18,15 +18,17 @@
  * limitations under the License.
  */
 
-#import "WTCRepairObject+WCTTableCoding.h"
-#import "WTCRepairObject.h"
+#import "WTCMultiSelectObject+WCTTableCoding.h"
+#import "WTCMultiSelectObject.h"
 #import <WCDB/WCDB.h>
 
-@implementation WTCRepairObject
+@implementation WTCMultiSelectObject
 
-WCDB_IMPLEMENTATION(WTCRepairObject)
-WCDB_SYNTHESIZE(WTCRepairObject, variable1)
-WCDB_SYNTHESIZE(WTCRepairObject, variable2)
+WCDB_IMPLEMENTATION(WTCMultiSelectObject)
+WCDB_SYNTHESIZE(WTCMultiSelectObject, variable1)
+WCDB_SYNTHESIZE(WTCMultiSelectObject, variable2)
+
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCMultiSelectObject, variable1)
 
 + (NSString*)Name
 {
@@ -40,7 +42,7 @@ WCDB_SYNTHESIZE(WTCRepairObject, variable2)
 
 - (NSUInteger)hash
 {
-    return [NSString stringWithFormat:@"%@_%d_%@", NSStringFromClass(WTCRepairObject.class), self.variable1, self.variable2].hash;
+    return [NSString stringWithFormat:@"%@_%d_%@", NSStringFromClass(WTCMultiSelectObject.class), self.variable1, self.variable2].hash;
 }
 
 @end

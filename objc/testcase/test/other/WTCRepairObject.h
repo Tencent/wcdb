@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import "Convenience.h"
 
-@interface WTCRepairObject : NSObject<WTCNamed, WTCSortable>
+@interface WTCRepairObject : NSObject<WTCNamed>
 
 @property(nonatomic, assign) int variable1;
 @property(nonatomic, retain) NSString *variable2;

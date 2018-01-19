@@ -32,6 +32,15 @@
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
 }
 
+- (void)tearDown
+{
+    [_database close:^{
+        XCTAssertTrue([_database removeFilesWithError:nil]);
+    }];
+    _database = nil;
+    [super tearDown];
+}
+
 - (void)testPaths {
     //Give
     NSString *path = self.recommendedPath;
@@ -39,7 +48,7 @@
     //Then
     NSArray<NSString*>* sortedPaths = [self.database.paths sortedArrayUsingComparator:NSString.Comparator];
     NSArray<NSString*>* sortedExpectedPaths = [expectedPaths sortedArrayUsingComparator:NSString.Comparator];    
-    XCTAssertTrue([sortedPaths isEqualToArray:sortedExpectedPaths]);
+    XCTAssertTrue([sortedPaths isEqual:sortedExpectedPaths]);
 }
 
 - (void)testRemoveFiles {

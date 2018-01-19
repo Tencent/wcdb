@@ -63,6 +63,15 @@
     XCTAssertTrue([_database insertObjects:_preInsertedObjects into:WTCRepairObject.Name]);
 }
 
+- (void)tearDown
+{
+    [_database close:^{
+        XCTAssertTrue([_database removeFilesWithError:nil]);
+    }];
+    _database = nil;
+    [super tearDown];
+}
+
 - (void)corrupt:(WCTDatabase*)database
 {
     [database close:^{
@@ -81,9 +90,7 @@
     //Then
     {
         NSArray<WTCRepairObject*>* results = [self.database getObjectsOfClass:WTCRepairObject.class fromTable:WTCRepairObject.Name];
-        NSArray<WTCRepairObject*>* sortedResults = [results sortedArrayUsingComparator:WTCRepairObject.Comparator];
-        NSArray<WTCRepairObject*>* sortedPreInsertedObjects = [self.preInsertedObjects sortedArrayUsingComparator:WTCRepairObject.Comparator];
-        XCTAssertTrue([sortedResults isEqualToArray:sortedPreInsertedObjects]);
+        XCTAssertTrue([results.sorted isEqual:self.preInsertedObjects.sorted]);
     }
     //When
     [self corrupt:self.database];
@@ -97,9 +104,7 @@
     //Then
     {
         NSArray<WTCRepairObject*>* results = [recovered getObjectsOfClass:WTCRepairObject.class fromTable:WTCRepairObject.Name];
-        NSArray<WTCRepairObject*>* sortedResults = [results sortedArrayUsingComparator:WTCRepairObject.Comparator];
-        NSArray<WTCRepairObject*>* sortedPreInsertedObjects = [self.preInsertedObjects sortedArrayUsingComparator:WTCRepairObject.Comparator];
-        XCTAssertTrue([sortedResults isEqualToArray:sortedPreInsertedObjects]);
+        XCTAssertTrue([results.sorted isEqual:self.preInsertedObjects.sorted]);
     }
 }
 

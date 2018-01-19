@@ -159,10 +159,6 @@ class MultiSelectTests: CRUDTestCase {
         let baseResults = results as? [[String: CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
-        for i in 0..<2 {
-            print(baseResults![i])
-//            print(preInsertedMultiObjects[i])
-        }
         XCTAssertTrue(baseResults!.sorted() == preInsertedMultiObjects.sorted())
     }
 
