@@ -115,7 +115,7 @@ void sample_convenient_main(NSString *baseDirectory)
 
     //Select One Object
     {
-        WCTSampleConvenient *object = [database getOneObjectOfClass:WCTSampleConvenient.class
+        WCTSampleConvenient *object = [database getObjectOfClass:WCTSampleConvenient.class
                                                           fromTable:tableName];
     }
     //Select Objects
@@ -138,7 +138,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select column
     {
-        WCTOneColumn *objects = [database getOneColumnOnResult:WCTSampleConvenient.stringValue
+        WCTOneColumn *objects = [database getColumnOnResult:WCTSampleConvenient.stringValue
                                                      fromTable:tableName];
         for (NSString *string : objects) {
             //do sth
@@ -146,7 +146,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select row
     {
-        WCTOneRow *row = [database getOneRowOnResults:{
+        WCTOneRow *row = [database getRowOnResults:{
                                                           WCTSampleConvenient.intValue,
                                                           WCTSampleConvenient.stringValue}
                                             fromTable:tableName];
@@ -155,12 +155,12 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select one value
     {
-        NSNumber *count = [database getOneValueOnResult:WCTSampleConvenient.AnyProperty.count()
+        NSNumber *count = [database getValueOnResult:WCTSampleConvenient.AnyProperty.count()
                                               fromTable:tableName];
     }
     //Select aggregation
     {
-        WCTOneRow *row = [database getOneRowOnResults:{
+        WCTOneRow *row = [database getRowOnResults:{
                                                           WCTSampleConvenient.intValue.avg(),
                                                           WCTSampleConvenient.stringValue.count(),
                                                       }
@@ -173,7 +173,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select distinct result
     {
-        NSNumber *distinctCount = [database getOneDistinctValueOnResult:WCTSampleConvenient.intValue fromTable:tableName];
+        NSNumber *distinctCount = [database getDistinctValueOnResult:WCTSampleConvenient.intValue fromTable:tableName];
     }
 
     //Delete

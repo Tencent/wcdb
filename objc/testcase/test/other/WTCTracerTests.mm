@@ -62,7 +62,7 @@
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
     
     //When
-    XCTAssertNotNil([database getOneColumnOnResult:WCTMaster.Any fromTable:WCTMaster.TableName]);
+    XCTAssertNotNil([database getColumnOnResult:WCTMaster.Any fromTable:WCTMaster.TableName]);
     
     XCTAssertTrue(pass);
 }
@@ -117,7 +117,7 @@
     database.tag = expectedTag;
     
     //When
-    XCTAssertNil([database getOneColumnOnResult:WCDB::Column::Any fromTable:tableName]);
+    XCTAssertNil([database getColumnOnResult:WCDB::Column::Any fromTable:tableName]);
     
     XCTAssertTrue(didCatch);
 }

@@ -52,7 +52,7 @@
     //When
     XCTAssertTrue([self.insert executeWithObjects:@[object]]);
     //Then
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
     XCTAssertNotNil(result);
     XCTAssertTrue([result isEqual:object]);
 }
@@ -67,7 +67,7 @@
     XCTAssertTrue([self.insert executeWithObjects:@[object]]);
     //Then
     XCTAssertEqual(object.lastInsertedRowID, expectedRowID);
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedRowID];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedRowID];
     XCTAssertNotNil(result);
     XCTAssertEqual(result.variable1, expectedRowID);
     XCTAssertTrue([result.variable2 isEqualToString:object.variable2]);
@@ -84,7 +84,7 @@
     //When
     XCTAssertTrue([self.insert executeWithObjects:@[object]]);
     //Then
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
     XCTAssertNotNil(result);
     XCTAssertTrue([result.variable2 isEqualToString:self.name]);
 }
@@ -99,7 +99,7 @@
     //When
     XCTAssertTrue([self.insert executeWithObjects:@[object]]);
     //Then
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
     XCTAssertNotNil(result);
     XCTAssertNil(result.variable2);
 }
@@ -115,7 +115,7 @@
     //When
     XCTAssertTrue([self.insert executeWithObjects:@[object]]);
     //Then
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
     XCTAssertNotNil(result);
     XCTAssertTrue([result.variable2 isEqualToString:self.name]);
 }

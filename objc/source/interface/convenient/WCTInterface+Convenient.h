@@ -29,191 +29,191 @@
 @interface WCTInterface (Convenient)
 
 #pragma mark - Get Object
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                      where:(const WCDB::Expression &)condition;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                    orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                     offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                      where:(const WCDB::Expression &)condition
                                    orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                      where:(const WCDB::Expression &)condition
                                     offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                    orderBy:(const WCDB::OrderList &)orderList
                                     offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOfClass:(Class)cls
+- (id /* WCTObject* */)getObjectOfClass:(Class)cls
                                  fromTable:(NSString *)tableName
                                      where:(const WCDB::Expression &)condition
                                    orderBy:(const WCDB::OrderList &)orderList
                                     offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Part Of Object
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                        where:(const WCDB::Expression &)condition;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                      orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                       offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                        where:(const WCDB::Expression &)condition
                                      orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                        where:(const WCDB::Expression &)condition
                                       offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                      orderBy:(const WCDB::OrderList &)orderList
                                       offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getOneObjectOnProperties:(const WCTPropertyList &)propertyList
+- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)propertyList
                                    fromTable:(NSString *)tableName
                                        where:(const WCDB::Expression &)condition
                                      orderBy:(const WCDB::OrderList &)orderList
                                       offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Row
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                             where:(const WCDB::Expression &)condition;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                           orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                            offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                             where:(const WCDB::Expression &)condition
                           orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                             where:(const WCDB::Expression &)condition
                            offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                           orderBy:(const WCDB::OrderList &)orderList
                            offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getOneRowOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
                         fromTable:(NSString *)tableName
                             where:(const WCDB::Expression &)condition
                           orderBy:(const WCDB::OrderList &)orderList
                            offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Column
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                  limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                orderBy:(const WCDB::OrderList &)orderList
                                  limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                orderBy:(const WCDB::OrderList &)orderList
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  limit:(const WCDB::Expression &)limit
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                orderBy:(const WCDB::OrderList &)orderList
                                  limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                orderBy:(const WCDB::OrderList &)orderList
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                  limit:(const WCDB::Expression &)limit
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                orderBy:(const WCDB::OrderList &)orderList
                                  limit:(const WCDB::Expression &)limit
                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCDB::Expression &)condition
                                orderBy:(const WCDB::OrderList &)orderList
@@ -221,80 +221,80 @@
                                 offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Distinct Column
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                        orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                        orderBy:(const WCDB::OrderList &)orderList;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                          limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                        orderBy:(const WCDB::OrderList &)orderList
                                          limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                        orderBy:(const WCDB::OrderList &)orderList
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          limit:(const WCDB::Expression &)limit
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                        orderBy:(const WCDB::OrderList &)orderList
                                          limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                        orderBy:(const WCDB::OrderList &)orderList
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                          limit:(const WCDB::Expression &)limit
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                        orderBy:(const WCDB::OrderList &)orderList
                                          limit:(const WCDB::Expression &)limit
                                         offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCDB::ColumnResult &)result
+- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCDB::Expression &)condition
                                        orderBy:(const WCDB::OrderList &)orderList
@@ -302,74 +302,74 @@
                                         offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Value
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                     where:(const WCDB::Expression &)condition;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                   orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                    offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                     where:(const WCDB::Expression &)condition
                                   orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                     where:(const WCDB::Expression &)condition
                                    offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                   orderBy:(const WCDB::OrderList &)orderList
                                    offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
                                 fromTable:(NSString *)tableName
                                     where:(const WCDB::Expression &)condition
                                   orderBy:(const WCDB::OrderList &)orderList
                                    offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Distinct Value
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                             where:(const WCDB::Expression &)condition;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                           orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                            offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                             where:(const WCDB::Expression &)condition
                                           orderBy:(const WCDB::OrderList &)orderList;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                             where:(const WCDB::Expression &)condition
                                            offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                           orderBy:(const WCDB::OrderList &)orderList
                                            offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTValue* */)getOneDistinctValueOnResult:(const WCDB::ColumnResult &)result
+- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
                                         fromTable:(NSString *)tableName
                                             where:(const WCDB::Expression &)condition
                                           orderBy:(const WCDB::OrderList &)orderList

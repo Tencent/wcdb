@@ -63,7 +63,7 @@
     //When
     XCTAssertTrue([[self.update where:WTCCRUDObject.variable1] executeWithObject:object]);
     //Then
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
     XCTAssertNotNil(result);
     XCTAssertTrue([self.name isEqualToString:result.variable2]);
 }
@@ -76,7 +76,7 @@
     //When
     XCTAssertTrue([[[self.update orderBy:WTCCRUDObject.variable1.asOrder(WCTOrderedDescending)] limit:1] executeWithObject:object]);
     //Then
-    WTCCRUDObject* result = [self.database getOneObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 2];
+    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 2];
     XCTAssertNotNil(result);
     XCTAssertTrue([self.name isEqualToString:result.variable2]);
 }
