@@ -24,7 +24,7 @@
 namespace WCDB {
 
 const Column Column::Rowid("rowid");
-const Column Column::Any("*");
+const Column Column::All("*");
 
 Column::Column(const std::string &name) : Describable(name)
 {

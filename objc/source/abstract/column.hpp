@@ -29,7 +29,7 @@ namespace WCDB {
 
 class Column : public Describable, public Operable {
 public:
-    static const Column Any;
+    static const Column All;
     static const Column Rowid;
     
     template <typename T>

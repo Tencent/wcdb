@@ -88,7 +88,7 @@
 
 - (WCTRowSelect *)prepareSelectRowsFromTable:(NSString *)tableName
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::Any} fromTables:tableName?@[tableName]:@[] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:tableName?@[tableName]:@[] isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName
@@ -103,7 +103,7 @@
 
 - (WCTRowSelect *)prepareSelectRowsFromTables:(NSArray<NSString *> *)tableNames
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::Any} fromTables:tableNames isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:tableNames isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames

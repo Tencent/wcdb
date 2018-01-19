@@ -59,7 +59,7 @@ void sample_advance_main(NSString *baseDirectory)
 
     //Using [as] to redirect selection
     {
-        WCTSampleAdvance *object = [database getObjectOnResults:WCTSampleAdvance.AnyProperty.count().as(WCTSampleAdvance.intValue)
+        WCTSampleAdvance *object = [database getObjectOnResults:WCTSampleAdvance.AllColumns.count().as(WCTSampleAdvance.intValue)
                                                          fromTable:tableName];
         NSLog(@"Count %d", object.intValue);
     }

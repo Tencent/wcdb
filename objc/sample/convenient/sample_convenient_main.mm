@@ -155,7 +155,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select one value
     {
-        NSNumber *count = [database getValueOnResult:WCTSampleConvenient.AnyProperty.count()
+        NSNumber *count = [database getValueOnResult:WCTSampleConvenient.AllColumns.count()
                                               fromTable:tableName];
     }
     //Select aggregation

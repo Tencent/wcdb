@@ -84,7 +84,7 @@
 
 - (WCTRowSelect *)prepareSelectRows
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::Any} fromTables:@[_tableName] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:@[_tableName] isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList

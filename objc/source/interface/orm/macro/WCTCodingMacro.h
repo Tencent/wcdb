@@ -41,9 +41,9 @@
     {                                                                          \
         return __WCDB_PROPERTIES(className);                                   \
     }                                                                          \
-    + (const WCDB::Column &)Any                                                \
+    + (const WCDB::Column &)AllColumns                                         \
     {                                                                          \
-        return WCDB::Column::Any;                                              \
+        return WCDB::Column::All;                                              \
     }
 
 //Property - declare column

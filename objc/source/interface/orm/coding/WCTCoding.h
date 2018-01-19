@@ -26,7 +26,7 @@
 @required
 + (const WCTBinding *)objectRelationalMappingForWCDB;
 + (const WCTPropertyList &)AllProperties;
-+ (const WCDB::Column &)Any;
++ (const WCDB::Column &)AllColumns;
 @optional
 @property(nonatomic, assign) long long lastInsertedRowID;
 @property(nonatomic, assign) BOOL isAutoIncrement;

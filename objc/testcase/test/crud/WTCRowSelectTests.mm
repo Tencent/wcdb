@@ -125,7 +125,7 @@
     }
     XCTAssertTrue([self.database insertObjects:preInsertedObjects into:WTCCRUDObject.Name]);
     
-    _rowSelect = [self.database prepareSelectRowsOnResults:{WCDB::Column::Any.count()} fromTable:WTCCRUDObject.Name];
+    _rowSelect = [self.database prepareSelectRowsOnResults:{WCDB::Column::All.count()} fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(_rowSelect);
     [[self.rowSelect groupBy:WTCCRUDObject.variable2] having:WTCCRUDObject.variable1 > 0];
     //When

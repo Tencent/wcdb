@@ -29,7 +29,7 @@
 
 - (void)testColumn
 {
-    WINQAssertEqual(WCDB::Column::Any, @"*");
+    WINQAssertEqual(WCDB::Column::All, @"*");
     
     WINQAssertEqual(WCDB::Column::Rowid, @"rowid");
     
