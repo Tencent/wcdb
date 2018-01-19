@@ -36,10 +36,15 @@ public:
     WCDB::Column asColumn() const;
     WCDB::ColumnIndex asIndex() const;
     WCDB::ColumnIndex asIndex(WCTOrderTerm term) const;
+    WCDB::Order asOrder() const;
+    WCDB::Order asOrder(WCTOrderTerm term) const;
     
     virtual WCDB::Expression asExpression() const override; 
     
     operator std::list<const WCTProperty>() const;
+    operator std::list<const WCDB::Order>() const;
+    operator std::list<const WCDB::ColumnResult>() const;
+    operator std::list<const WCDB::Expression>() const;
 protected:    
     std::shared_ptr<WCTColumnBinding> m_columnBinding;
 };

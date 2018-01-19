@@ -45,6 +45,16 @@ WCDB::Column WCTProperty::asColumn() const
 {
     return WCDB::Column(*this);
 }
+
+WCDB::Order WCTProperty::asOrder() const
+{
+    return WCDB::Order(asColumn());
+}
+
+WCDB::Order WCTProperty::asOrder(WCTOrderTerm term) const
+{
+    return WCDB::Order(asColumn(), (WCDB::OrderTerm)term);
+}
     
 WCDB::ColumnIndex WCTProperty::asIndex() const
 {
@@ -58,12 +68,27 @@ WCDB::ColumnIndex WCTProperty::asIndex(WCTOrderTerm term) const
         
 WCDB::Expression WCTProperty::asExpression() const
 {
-    return WCDB::Expression(*this);
+    return WCDB::Expression(asColumn());
 }
 
 WCTProperty::operator std::list<const WCTProperty>() const
 {
     return {*this};
+}
+
+WCTProperty::operator std::list<const WCDB::Order>() const
+{
+    return {asOrder()};
+}
+
+WCTProperty::operator std::list<const WCDB::ColumnResult>() const
+{
+    return {WCDB::ColumnResult(asColumn())};
+}
+
+WCTProperty::operator std::list<const WCDB::Expression>() const
+{
+    return {asExpression()};
 }
 
 namespace WCDB {
