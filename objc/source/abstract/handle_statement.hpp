@@ -130,7 +130,7 @@ public:
 
     long long getLastInsertedRowID();
 
-    void finalize();
+    bool finalize();
 
     int getChanges();
 

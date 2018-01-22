@@ -121,6 +121,6 @@
 /**
  @brief The wrapper of [sqlite3_finalize].
  */
-- (void)finalize;
+- (BOOL)finalize;
 
 @end

@@ -184,7 +184,7 @@ long long StatementHandle::getLastInsertedRowID()
         sqlite3_db_handle((sqlite3_stmt *) m_stmt));
 }
 
-void StatementHandle::finalize()
+bool StatementHandle::finalize()
 {
     if (m_stmt) {
         sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
@@ -192,13 +192,15 @@ void StatementHandle::finalize()
         m_stmt = nullptr;
         if (rc == SQLITE_OK) {
             m_error.reset();
-            return;
+            return true;
         }
         Error::ReportSQLite(m_handle.getTag(), m_handle.path,
                             Error::HandleOperation::Finalize, rc,
                             sqlite3_extended_errcode(handle),
                             sqlite3_errmsg(handle), &m_error);
+        return false;
     }
+    return true;
 }
 
 } //namespace WCDB

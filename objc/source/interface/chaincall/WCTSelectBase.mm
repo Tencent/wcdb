@@ -96,9 +96,14 @@
     return NO;
 }
 
-- (void)finalize
+- (BOOL)finalize
 {
-    _statementHandle = nullptr;
+    bool result = true;
+    if (_statementHandle) {
+        result = _statementHandle->finalize()
+        _statementHandle = nullptr;
+    }
+    return result;
 }
 
 @end

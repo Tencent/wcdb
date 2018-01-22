@@ -189,10 +189,14 @@
     return tableName ? @(tableName) : nil;
 }
 
-- (void)finalize
+- (BOOL)finalize
 {
-    _statementHandle->finalize();
-    _statementHandle = nullptr;
+    bool result = true;
+    if (_statementHandle) {
+        _statementHandle->finalize();
+        _statementHandle = nullptr;
+    }
+    return result;
 }
 
 @end
