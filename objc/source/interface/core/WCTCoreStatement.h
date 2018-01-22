@@ -56,14 +56,14 @@
  @param index Begin with 0.
  @return The real type of WCTValue depends on the value in database.
  */
-- (WCTValue *)getValueAtIndex:(int)index;
+- (WCTValue *)valueAtIndex:(int)index;
 
 /**
  @brief The wrapper of sqlite3_column_*.
  @param columnName columnName.
  @return The real type of WCTValue depends on the value in database.
  */
-- (WCTValue *)getValueByColumnName:(NSString *)columnName;
+- (WCTValue *)valueByColumnName:(NSString *)columnName;
 
 /**
  @brief The wrapper of sqlite3_step.
@@ -82,41 +82,41 @@
  @param index Begin with 0.
  @return Column type.
  */
-- (WCTColumnType)getTypeAtIndex:(int)index;
+- (WCTColumnType)columnTypeAtIndex:(int)index;
 
 /**
  @brief The wrapper of sqlite3_column_type.
  @param columnName columnName.
  @return Column type.
  */
-- (WCTColumnType)getTypeByColumnName:(NSString *)columnName;
+- (WCTColumnType)columnTypeByName:(NSString *)columnName;
 
 /**
  @brief The wrapper of sqlite3_column_count.
  @return Count of column result.
  */
-- (int)getColumnCount;
+- (int)columnCount;
 
 /**
  @brief The wrapper of sqlite3_column_name.
  @param index Begin with 0.
  @return The description of column result.
  */
-- (NSString *)getColumnNameAtIndex:(int)index;
+- (NSString *)columnNameAtIndex:(int)index;
 
 /**
  @brief Get index by column name.
  @param columnName columnName.
  @return The index of given column name. INT_MAX will be returned if no such column name.
  */
-- (int)getIndexByColumnName:(NSString *)columnName;
+- (int)indexByColumnName:(NSString *)columnName;
 
 /**
  @brief The wrapper of sqlite3_column_table_name.
  @param index Begin with 0
  @return The name of table
  */
-- (NSString *)getTableNameAtIndex:(int)index;
+- (NSString *)tableNameAtIndex:(int)index;
 
 /**
  @brief The wrapper of [sqlite3_finalize].

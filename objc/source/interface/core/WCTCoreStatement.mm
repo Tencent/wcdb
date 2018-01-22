@@ -88,14 +88,14 @@
 
 - (BOOL)bindValue:(WCTValue *)value byColumnName:(NSString *)columnName
 {
-    int index = [self getIndexByColumnName:columnName];
+    int index = [self indexByColumnName:columnName];
     if (index != INT_MAX) {
         return [self bindValue:value toIndex:index];
     }
     return NO;
 }
 
-- (WCTValue *)getValueAtIndex:(int)index
+- (WCTValue *)valueAtIndex:(int)index
 {
     WCTValue *value = nil;
     switch ((WCTColumnType) _statementHandle->getType(index)) {
@@ -125,16 +125,16 @@
     return value;
 }
 
-- (WCTValue *)getValueByColumnName:(NSString *)columnName
+- (WCTValue *)valueByColumnName:(NSString *)columnName
 {
-    int index = [self getIndexByColumnName:columnName];
+    int index = [self indexByColumnName:columnName];
     if (index != INT_MAX) {
-        return [self getValueAtIndex:index];
+        return [self valueAtIndex:index];
     }
     return nil;
 }
 
-- (int)getIndexByColumnName:(NSString *)columnName
+- (int)indexByColumnName:(NSString *)columnName
 {
     if (columnName) {
         const char *rightColumnName = columnName.UTF8String;
@@ -158,32 +158,32 @@
     return _statementHandle->step();
 }
 
-- (WCTColumnType)getTypeAtIndex:(int)index
+- (WCTColumnType)columnTypeAtIndex:(int)index
 {
     return (WCTColumnType) _statementHandle->getType(index);
 }
 
-- (WCTColumnType)getTypeByColumnName:(NSString *)columnName
+- (WCTColumnType)columnTypeByName:(NSString *)columnName
 {
-    int index = [self getIndexByColumnName:columnName];
+    int index = [self indexByColumnName:columnName];
     if (index != INT_MAX) {
-        return [self getTypeAtIndex:index];
+        return [self columnTypeAtIndex:index];
     }
     return WCTColumnTypeNull;
 }
 
-- (int)getColumnCount
+- (int)columnCount
 {
     return _statementHandle->getColumnCount();
 }
 
-- (NSString *)getColumnNameAtIndex:(int)index
+- (NSString *)columnNameAtIndex:(int)index
 {
     const char *columnName = _statementHandle->getColumnName(index);
     return columnName ? @(columnName) : nil;
 }
 
-- (NSString *)getTableNameAtIndex:(int)index
+- (NSString *)tableNameAtIndex:(int)index
 {
     const char *tableName = _statementHandle->getColumnTableName(index);
     return tableName ? @(tableName) : nil;
