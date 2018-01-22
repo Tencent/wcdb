@@ -53,7 +53,7 @@
     WCTCoreStatement * coreStatement = [_database prepare:pragma];
     XCTAssertNotNil(coreStatement);
     XCTAssertTrue([coreStatement step]);
-    _pageSize = ((NSNumber*)[coreStatement getValueAtIndex:0]).intValue;
+    _pageSize = ((NSNumber*)[coreStatement valueAtIndex:0]).intValue;
     [coreStatement finalize];
     XCTAssertEqual(_pageSize >> 1 & _pageSize, 0);
     XCTAssertGreaterThan(_pageSize, 0);

@@ -48,7 +48,7 @@ void sample_core_main(NSString *baseDirectory)
     {
         WCTCoreStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];
         if (statement && [statement step]) {
-            NSLog(@"Cache size %@", [statement getValueAtIndex:0]);
+            NSLog(@"Cache size %@", [statement valueAtIndex:0]);
         }
     }
 
@@ -77,9 +77,9 @@ void sample_core_main(NSString *baseDirectory)
 
         WCTCoreStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];
         if (statementExplain && [statementExplain step]) {
-            for (int i = 0; i < [statementExplain getColumnCount]; ++i) {
-                NSString *columnName = [statementExplain getColumnNameAtIndex:i];
-                WCTValue *value = [statementExplain getValueAtIndex:i];
+            for (int i = 0; i < [statementExplain columnCount]; ++i) {
+                NSString *columnName = [statementExplain columnNameAtIndex:i];
+                WCTValue *value = [statementExplain valueAtIndex:i];
                 NSLog(@"%@:%@", columnName, value);
             }
         }
@@ -100,9 +100,9 @@ void sample_core_main(NSString *baseDirectory)
         WCTCoreStatement *statement = [database prepare:statementSelect withError:&error];
         if (statement) {
             while ([statement step]) {
-                for (int i = 0; i < [statement getColumnCount]; ++i) {
-                    NSString *columnName = [statement getColumnNameAtIndex:i];
-                    WCTValue *value = [statement getValueAtIndex:i];
+                for (int i = 0; i < [statement columnCount]; ++i) {
+                    NSString *columnName = [statement columnNameAtIndex:i];
+                    WCTValue *value = [statement valueAtIndex:i];
                     NSLog(@"%@:%@", columnName, value);
                 }
             }

@@ -68,7 +68,7 @@ void sample_repair_main(NSString *baseDirectory)
         @autoreleasepool {
             WCTCoreStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
             [statement step];
-            NSNumber *value = (NSNumber *) [statement getValueAtIndex:0];
+            NSNumber *value = (NSNumber *) [statement valueAtIndex:0];
             pageSize = value.intValue;
             statement = nil;
         }
