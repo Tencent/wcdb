@@ -90,7 +90,7 @@ typedef void (^WCTTransactionBlock)();
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (void)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
 
 /**
  @brief Run a controllable transaction in block.
@@ -120,14 +120,14 @@ typedef void (^WCTTransactionBlock)();
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
 
 /**
  @brief This interface is equivalent to [transaction runTransaction:transaction withError:nil];
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (void)runTransaction:(WCTTransactionBlock)inTransaction;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 
 /**
  @brief This interface is equivalent to [transaction runControllableTransaction:transaction withError:nil];
@@ -141,7 +141,7 @@ typedef void (^WCTTransactionBlock)();
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction;
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction;
 
 /**
  @brief It should be called after executing successfully

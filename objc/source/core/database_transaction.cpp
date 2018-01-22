@@ -88,7 +88,7 @@ bool Database::rollback(Error &error)
     return result;
 }
 
-void Database::runEmbeddedTransaction(TransactionBlock transaction,
+bool Database::runEmbeddedTransaction(TransactionBlock transaction,
                                       Error &error)
 {
     std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
@@ -98,6 +98,7 @@ void Database::runEmbeddedTransaction(TransactionBlock transaction,
     }else {
         runTransaction(transaction, error);
     }
+    return error.isOK();
 }
 
 } //namespace WCDB

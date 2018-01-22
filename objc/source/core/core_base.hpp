@@ -64,7 +64,7 @@ public:
     virtual bool begin(StatementTransaction::Mode mode, Error &error) = 0;
     virtual bool commit(Error &error) = 0;
     virtual bool rollback(Error &error) = 0;
-    virtual void runEmbeddedTransaction(TransactionBlock transaction,
+    virtual bool runEmbeddedTransaction(TransactionBlock transaction,
                                         Error &error) = 0;
 
 protected:

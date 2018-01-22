@@ -44,7 +44,7 @@ public:
     bool begin(StatementTransaction::Mode mode, Error &error) override;
     bool commit(Error &error) override;
     bool rollback(Error &error) override;
-    void runEmbeddedTransaction(TransactionBlock transaction,
+    bool runEmbeddedTransaction(TransactionBlock transaction,
                                 WCDB::Error &error) override;
 
     int getChanges();

@@ -31,10 +31,10 @@
     return [[WCTTransaction alloc] initWithCore:_core];
 }
 
-- (void)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError
 {
     WCDB::Error error;
-    _database->runTransaction([inTransaction](WCDB::Error &) {
+    bool result = _database->runTransaction([inTransaction](WCDB::Error &) {
         @autoreleasepool {
             inTransaction();
         }
@@ -42,12 +42,13 @@
     if (pError) {
         *pError = [WCTError errorWithWCDBError:error];
     }
+    return result;
 }
 
 - (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError
 {
     WCDB::Error error;
-    BOOL result = _database->runControllableTransaction([inTransaction](WCDB::Error &) -> bool {
+    bool result = _database->runControllableTransaction([inTransaction](WCDB::Error &) -> bool {
         @autoreleasepool {
             return inTransaction();
         }
@@ -58,10 +59,10 @@
     return result;
 }
 
-- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
 {
     WCDB::Error error;
-    _database->runEmbeddedTransaction([inTransaction](WCDB::Error &) {
+    bool result = _database->runEmbeddedTransaction([inTransaction](WCDB::Error &) {
         @autoreleasepool {
             inTransaction();
         }
@@ -69,6 +70,7 @@
     if (pError) {
         *pError = [WCTError errorWithWCDBError:error];
     }
+    return result;
 }
 
 - (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction
@@ -76,29 +78,29 @@
     return [self runControllableTransaction:inTransaction withError:nil];
 }
 
-- (void)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction
 {
-    [self runEmbeddedTransaction:inTransaction withError:nil];
+    return [self runEmbeddedTransaction:inTransaction withError:nil];
 }
 
-- (void)runTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
 {
-    [self runTransaction:inTransaction withError:nil];
+    return [self runTransaction:inTransaction withError:nil];
 }
 
-- (BOOL)beginTransaction
+- (BOOL)begin
 {
     WCDB::Error innerError;
     return _database->begin(WCDB::StatementTransaction::Mode::Immediate, innerError);
 }
 
-- (BOOL)commitTransaction
+- (BOOL)commit
 {
     WCDB::Error innerError;
     return _database->commit(innerError);
 }
 
-- (BOOL)rollbackTransaction
+- (BOOL)rollback
 {
     WCDB::Error innerError;
     return _database->rollback(innerError);
