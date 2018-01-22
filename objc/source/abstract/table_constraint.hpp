@@ -67,6 +67,8 @@ public:
     TableConstraint &makeForeignKey(const std::list<const Column> &list, const ForeignKey &foreignKey);
 
     TableConstraint &makeForeignKey(const Column &column, const ForeignKey &foreignKey);
+    
+    operator std::list<const TableConstraint>() const;
 };
 
 } //namespace WCDB

@@ -81,5 +81,10 @@ TableConstraint &TableConstraint::makeForeignKey(const Column &column, const For
     m_description.append(" FOREIGN KEY(" + column.getDescription() + ") " + foreignKey.getDescription());
     return *this;
 }
-
+    
+TableConstraint::operator std::list<const TableConstraint>() const
+{
+    return {*this};
+}
+    
 } //namespace WCDB
