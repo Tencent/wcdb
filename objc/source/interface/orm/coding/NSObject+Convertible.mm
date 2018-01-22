@@ -20,31 +20,48 @@
 
 #import <WCDB/NSObject+Convertible.h>
 #import <WCDB/WCTCoding.h>
+#import <WCDB/WCTValue.h>
+#import <WCDB/error.hpp>
 
 namespace WCDB {
 
 LiteralValue LiteralValueConvertible<NSObject*>::asLiteralValue(NSObject* const &t)
 {
-    WCTValue* value = [(NSObject<WCTColumnCoding>*)t archivedWCTValue];
-    WCTColumnType columnType = [((NSObject<WCTColumnCoding>*)t).class columnTypeForWCDB];
-    switch (columnType) {
-        case WCTColumnTypeNull:
-            return LiteralValue(nullptr);
-        case WCTColumnTypeInteger32:
-            return LiteralValue(((NSNumber*)value).intValue);
-        case WCTColumnTypeInteger64:
-            return LiteralValue(((NSNumber*)value).longLongValue);
-        case WCTColumnTypeDouble:
-            return LiteralValue(((NSNumber*)value).doubleValue);
-        case WCTColumnTypeString:
-            return LiteralValue(((NSString*)value).UTF8String);
-        case WCTColumnTypeBinary: {
+    WCTValue* value = t;
+    WCTValueType valueType = [value valueType];
+    if (valueType == WCTValueTypeColumnCoding) {
+        value = [(id<WCTColumnCoding>) value archivedWCTValue];
+        valueType = [value valueType];
+    }
+    switch (valueType) {
+        case WCTValueTypeString:
+            return LiteralValue(((NSString *) value).UTF8String);
+        case WCTValueTypeNumber: {
+            NSNumber *number = (NSNumber *) value;
+            if (CFNumberIsFloatType((CFNumberRef) number)) {
+                return LiteralValue(number.doubleValue);
+            } else {
+                if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+                    return LiteralValue(number.intValue);
+                } else {
+                    return LiteralValue(number.longLongValue);
+                }
+            }
+        } break;
+        case WCTValueTypeData: {
             NSData *data = (NSData *) value;
             const unsigned char* raw = (const unsigned char*)data.bytes;
             std::vector<unsigned char> vector(raw, raw + data.length);
             return LiteralValue(vector);
-        }
+        } break;
+        case WCTValueTypeNil:
+            return LiteralValue(nullptr);
+            break;
+        default:
+            WCDB::Error::Abort(([NSString stringWithFormat:@"Converting LiteralValue with unknown type %@", NSStringFromClass(value.class)].UTF8String));
+            break;
     }
+    return LiteralValue("");
 }  
 
 Expression ExpressionConvertible<NSObject*>::asExpression(NSObject* const &t)
