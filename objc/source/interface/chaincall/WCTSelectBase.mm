@@ -100,7 +100,7 @@
 {
     bool result = true;
     if (_statementHandle) {
-        result = _statementHandle->finalize()
+        result = _statementHandle->finalize();
         _statementHandle = nullptr;
     }
     return result;
