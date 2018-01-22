@@ -46,7 +46,8 @@ std::vector<unsigned char> Modules::getAddress(const std::string &name) const
     if (iter == m_modules.end()) {
         WCDB::Error::Abort("Tokenize name is not registered");
     }
-    unsigned char* address = (unsigned char*)iter->second.get();
+    const void* module = iter->second.get();
+    unsigned char* address = (unsigned char*)&module;
     return std::vector<unsigned char>(address, address + sizeof(unsigned char*));
 }
 
