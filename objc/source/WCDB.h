@@ -26,6 +26,7 @@
 #endif
 
 #import <WCDB/abstract.h>
+#import <WCDB/NSObject+Convertible.h>
 
 #import <WCDB/WCTMaster+WCTTableCoding.h>
 #import <WCDB/WCTMaster.h>

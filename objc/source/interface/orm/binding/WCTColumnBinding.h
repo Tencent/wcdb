@@ -71,28 +71,11 @@ public:
 
     void makeUnique();
 
-    template <typename T>
-    typename std::enable_if<ColumnIsObjCType<T>::value, void>::type
-    makeDefault(WCTValue *defaultValue)
-    {
-        makeDefaultObjC(defaultValue);
-    }
+    void makeDefault(const WCDB::Expression defaultValue);
 
-    template <typename T>
-    typename std::enable_if<ColumnIsCppType<T>::value, void>::type
-    makeDefault(const typename WCDB::ColumnInfo<T>::UnderlyingType &defaultValue)
-    {
-        m_columnDef.makeDefault(defaultValue);
-    }
-
-    template <typename T>
-    void makeDefault(WCTDefaultType defaultType)
-    {
-        m_columnDef.makeDefault((WCDB::ColumnDef::DefaultType) defaultType);
-    }
+    void makeDefault(WCTDefaultType defaultType);
 
 protected:
-    void makeDefaultObjC(WCTValue *defaultValue);
     Class m_class;
     bool m_isPrimary;
     bool m_isAutoIncrement;

@@ -44,7 +44,6 @@
     __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
         binding->getColumnBinding(className.propertyName)                      \
-            ->makeDefault<__WCDB_PROPERTY_TYPE(className, propertyName)>(      \
-                defaultValue);                                                 \
+            ->makeDefault(defaultValue);                                       \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
