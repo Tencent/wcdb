@@ -75,7 +75,7 @@
 /**
  @brief The wrapper of sqlite3_reset.
  */
-- (void)reset;
+- (BOOL)reset;
 
 /**
  @brief The wrapper of sqlite3_column_type.
@@ -122,5 +122,9 @@
  @brief The wrapper of [sqlite3_finalize].
  */
 - (BOOL)finalize;
+
+- (long long)lastInsertedRowID;
+
+- (int)changes;
 
 @end

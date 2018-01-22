@@ -28,11 +28,12 @@ StatementHandle::StatementHandle(void *stmt, const Handle &handle)
 {
 }
 
-void StatementHandle::reset()
+bool StatementHandle::reset()
 {
     int rc = sqlite3_reset((sqlite3_stmt *) m_stmt);
     if (rc == SQLITE_OK) {
         m_error.reset();
+        return true;
     } else {
         sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
         Error::ReportSQLite(m_handle.getTag(), m_handle.path,
@@ -40,6 +41,7 @@ void StatementHandle::reset()
                             sqlite3_extended_errcode(handle),
                             sqlite3_errmsg(handle), &m_error);
     }
+    return false;
 }
 
 bool StatementHandle::step()

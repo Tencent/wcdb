@@ -148,9 +148,9 @@
     return INT_MAX;
 }
 
-- (void)reset
+- (BOOL)reset
 {
-    _statementHandle->reset();
+    return _statementHandle->reset();
 }
 
 - (BOOL)step
@@ -197,6 +197,16 @@
         _statementHandle = nullptr;
     }
     return result;
+}
+
+- (long long)lastInsertedRowID
+{
+    return _statementHandle->getLastInsertedRowID();
+}
+
+- (int)changes
+{
+    return _statementHandle->getChanges();
 }
 
 @end
