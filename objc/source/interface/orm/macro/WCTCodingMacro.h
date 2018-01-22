@@ -167,8 +167,14 @@
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(className, left, right)                    \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)
 
-#define WCDB_VIRTUAL_TABLE_TOKENIZE(className, tokenizeName)                   \
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE(className, tokenizeName)          \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", tokenizeName)
+
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)          \
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", WCTTokenizerNameWCDB)
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName)                       \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)
+
+#define WCDB_VIRTUAL_TABLE_MODULE_FTS3(className)                              \
+    __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, WCTModuleNameFTS3)
