@@ -27,9 +27,9 @@
 WCDB_IMPLEMENTATION(WTCVirtualTableBaselineObject)
 WCDB_SYNTHESIZE(WTCVirtualTableBaselineObject, variable)
 
-WCDB_VIRTUAL_TABLE_MODULE(WTCVirtualTableBaselineObject, "fts3")
+WCDB_VIRTUAL_TABLE_MODULE_FTS3(WTCVirtualTableBaselineObject)
 WCDB_VIRTUAL_TABLE_ARGUMENT(WTCVirtualTableBaselineObject, "left", "right")
-WCDB_VIRTUAL_TABLE_TOKENIZE(WTCVirtualTableBaselineObject, "WCDB")
+WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(WTCVirtualTableBaselineObject)
 
 WCDB_MULTI_PRIMARY(WTCVirtualTableBaselineObject, "WTCVirtualTableBaselineObjectConstraint", variable)
   
