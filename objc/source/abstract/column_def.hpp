@@ -31,7 +31,7 @@ public:
     
     template <typename T>
     ColumnDef(const T &t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
-    : Describable(ColumnConvertible<T>::asColumnn(t).getDescription()){
+    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){
     }
     
     template <typename T>
