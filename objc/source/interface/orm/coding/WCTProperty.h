@@ -38,6 +38,8 @@ public:
     WCDB::ColumnIndex asIndex(WCTOrderTerm term) const;
     WCDB::Order asOrder() const;
     WCDB::Order asOrder(WCTOrderTerm term) const;
+    WCDB::ColumnDef asDef() const;
+    WCDB::ColumnDef asDef(WCTColumnType columnType) const;
     
     virtual WCDB::Expression asExpression() const override; 
     

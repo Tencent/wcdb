@@ -71,6 +71,16 @@ WCDB::Expression WCTProperty::asExpression() const
     return WCDB::Expression(asColumn());
 }
 
+WCDB::ColumnDef WCTProperty::asDef() const
+{
+    return WCDB::ColumnDef(asColumn());
+}
+
+WCDB::ColumnDef WCTProperty::asDef(WCTColumnType columnType) const
+{
+    return WCDB::ColumnDef(asColumn(), (WCDB::ColumnType)columnType);
+}
+
 WCTProperty::operator std::list<const WCTProperty>() const
 {
     return {*this};
