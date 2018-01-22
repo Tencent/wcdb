@@ -59,7 +59,7 @@ protected:
 
     RecyclableHandle m_handle;
     bool m_isInTransaction;
-    std::shared_ptr<std::mutex> m_mutex;
+    std::shared_ptr<std::recursive_mutex> m_mutex;
 
     friend class Database;
 };
