@@ -73,7 +73,6 @@ const Configs Database::defaultConfigs(
          [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
 
              if (handle->isReadonly()) {
-#if DEBUG
                  static const StatementPragma s_getJournalMode =
                      StatementPragma().pragma(Pragma::JournalMode);
 
@@ -94,12 +93,11 @@ const Configs Database::defaultConfigs(
                  statementHandle->finalize();
 
                  if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
+                     // See also: http://www.sqlite.org/wal.html#readonly
                      Error::Abort("It is not possible to open read-only WAL "
-                                  "databases. See also: "
-                                  "http://www.sqlite.org/wal.html#readonly");
+                                  "databases.");
                      return false;
                  }
-#endif
                  return true;
              }
 
