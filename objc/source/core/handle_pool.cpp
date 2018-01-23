@@ -22,6 +22,7 @@
 #include <WCDB/handle_pool.hpp>
 #include <thread>
 #include <unordered_map>
+#include <algorithm>
 
 namespace WCDB {
 
@@ -30,7 +31,7 @@ std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
 std::mutex HandlePool::s_mutex;
 const int HandlePool::s_hardwareConcurrency =
     std::thread::hardware_concurrency();
-const int HandlePool::s_maxConcurrency = 64;
+const int HandlePool::s_maxConcurrency = std::max<int>(std::thread::hardware_concurrency(), 64);
 
 RecyclableHandlePool HandlePool::GetPool(const std::string &path,
                                          const Configs &defaultConfigs)
