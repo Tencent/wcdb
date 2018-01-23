@@ -27,6 +27,7 @@
 @property(nonatomic, readonly) WCTDatabase* database;
 @property(nonatomic, readonly) int pageSize;
 @property(nonatomic, readonly) NSArray<WTCRepairObject*>* preInsertedObjects;
+@property(nonatomic, readonly) WCTCoreStatement* coreStatement;
 @end
 
 @implementation WTCRepairTests
@@ -50,21 +51,26 @@
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
     
     WCDB::StatementPragma pragma = WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize);
-    WCTCoreStatement * coreStatement = [_database prepare:pragma];
-    XCTAssertNotNil(coreStatement);
-    XCTAssertTrue([coreStatement step]);
-    _pageSize = ((NSNumber*)[coreStatement valueAtIndex:0]).intValue;
-    [coreStatement finalize];
-    XCTAssertEqual(_pageSize >> 1 & _pageSize, 0);
+    _coreStatement = [self.database prepare:pragma];
+    XCTAssertNotNil(_coreStatement);
+    [self.coreStatement step];
+    XCTAssertNil([self.coreStatement getError]);
+    _pageSize = ((NSNumber*)[self.coreStatement valueAtIndex:0]).intValue;
+    XCTAssertTrue([self.coreStatement finalize]);
+    XCTAssertEqual(self.pageSize >> 1 & self.pageSize, 0);
     XCTAssertGreaterThan(_pageSize, 0);
     
-    XCTAssertTrue([_database createTableAndIndexesOfName:WTCRepairObject.Name withClass:WTCRepairObject.class]);
+    XCTAssertTrue([self.database createTableAndIndexesOfName:WTCRepairObject.Name withClass:WTCRepairObject.class]);
     
-    XCTAssertTrue([_database insertObjects:_preInsertedObjects into:WTCRepairObject.Name]);
+    XCTAssertTrue([self.database insertObjects:_preInsertedObjects into:WTCRepairObject.Name]);
 }
 
 - (void)tearDown
 {
+    if (_coreStatement) {
+        XCTAssertTrue([_coreStatement finalize]);
+        _coreStatement = nil;
+    }
     [_database close:^{
         XCTAssertTrue([_database removeFilesWithError:nil]);
     }];
