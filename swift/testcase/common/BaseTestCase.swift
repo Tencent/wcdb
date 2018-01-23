@@ -40,7 +40,7 @@ class BaseTestCase: XCTestCase, Named {
         return url
     }()
 
-    lazy var recommendTag: Tag = recommendedPath.hashValue
+    lazy var recommendedTag: Tag = recommendedPath.hashValue
 
     let fileManager = FileManager.default
 
