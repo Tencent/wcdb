@@ -26,82 +26,71 @@
 namespace WCDB {
 
 #pragma mark - Converible
-    
+
 template <typename T, typename Enable = void>
-struct OrderConvertible : public std::false_type
-{
+struct OrderConvertible : public std::false_type {
 public:
-    static Order asOrder(const T& t);
-};
-    
-template <typename T, typename Enable = void>
-struct SpecificOrderConvertible : public std::false_type
-{
-public:
-    static Order asOrder(const T& t, OrderTerm term);
-};
-    
-template <typename T, typename Enable = void>
-struct SpecificColumnDefConvertible : public std::false_type
-{
-public:
-    static ColumnDef asDef(const T& t, ColumnType columnType);
+    static Order asOrder(const T &t);
 };
 
 template <typename T, typename Enable = void>
-struct ColumnIndexConvertible : public std::false_type
-{
+struct SpecificOrderConvertible : public std::false_type {
+public:
+    static Order asOrder(const T &t, OrderTerm term);
+};
+
+template <typename T, typename Enable = void>
+struct SpecificColumnDefConvertible : public std::false_type {
+public:
+    static ColumnDef asDef(const T &t, ColumnType columnType);
+};
+
+template <typename T, typename Enable = void>
+struct ColumnIndexConvertible : public std::false_type {
 public:
     static ColumnIndex asIndex(const T &t);
 };
 
 template <typename T, typename Enable = void>
-struct SpecificColumnIndexConvertible : public std::false_type
-{
+struct SpecificColumnIndexConvertible : public std::false_type {
 public:
     static ColumnIndex asIndex(const T &t, OrderTerm term);
 };
 
 template <typename T, typename Enable = void>
-struct ColumnResultConvertible : public std::false_type
-{
+struct ColumnResultConvertible : public std::false_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T, typename Enable = void>
-struct TableOrSubqueryConvertible : public std::false_type
-{
+struct TableOrSubqueryConvertible : public std::false_type {
 public:
     static Subquery asTableOrSubquery(const T &t);
 };
 
 template <typename T, typename Enable = void>
-struct ExpressionConvertible : public std::false_type
-{
+struct ExpressionConvertible : public std::false_type {
 public:
     static Expression asExpression(const T &t);
 };
-    
+
 template <typename T, typename Enable = void>
-struct ColumnConvertible : public std::false_type
-{
+struct ColumnConvertible : public std::false_type {
 public:
     static Column asColumn(const T &t);
 };
-    
+
 template <typename T, typename Enable = void>
-struct LiteralValueConvertible : public std::false_type
-{
+struct LiteralValueConvertible : public std::false_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
 
 #pragma mark - ColumnIndex
-    
+
 template <>
-struct ColumnIndexConvertible<ColumnIndex> : public std::true_type
-{
+struct ColumnIndexConvertible<ColumnIndex> : public std::true_type {
 public:
     static ColumnIndex asIndex(const ColumnIndex &index);
 };
@@ -109,8 +98,7 @@ public:
 #pragma mark - ColumnResult
 
 template <>
-struct ColumnResultConvertible<ColumnResult> : public std::true_type
-{
+struct ColumnResultConvertible<ColumnResult> : public std::true_type {
 public:
     static ColumnResult asColumnResult(const ColumnResult &columnResult);
 };
@@ -118,57 +106,49 @@ public:
 #pragma mark - Column
 
 template <>
-struct ColumnConvertible<Column> : public std::true_type
-{
+struct ColumnConvertible<Column> : public std::true_type {
 public:
     static Column asColumn(const Column &column);
 };
 
 template <>
-struct ExpressionConvertible<Column> : public std::true_type
-{
+struct ExpressionConvertible<Column> : public std::true_type {
 public:
     static Expression asExpression(const Column &column);
 };
 
 template <>
-struct ColumnResultConvertible<Column> : public std::true_type
-{
+struct ColumnResultConvertible<Column> : public std::true_type {
 public:
     static ColumnResult asColumnResult(const Column &column);
 };
 
 template <>
-struct SpecificOrderConvertible<Column> : public std::true_type
-{
+struct SpecificOrderConvertible<Column> : public std::true_type {
 public:
-    static Order asOrder(const Column& column, OrderTerm term);
+    static Order asOrder(const Column &column, OrderTerm term);
 };
 
 template <>
-struct OrderConvertible<Column> : public std::true_type
-{
+struct OrderConvertible<Column> : public std::true_type {
 public:
-    static Order asOrder(const Column& column);
+    static Order asOrder(const Column &column);
 };
 
 template <>
-struct SpecificColumnIndexConvertible<Column> : public std::true_type
-{
+struct SpecificColumnIndexConvertible<Column> : public std::true_type {
 public:
-    static ColumnIndex asIndex(const Column &column, OrderTerm term) ;
+    static ColumnIndex asIndex(const Column &column, OrderTerm term);
 };
 
 template <>
-struct ColumnIndexConvertible<Column> : public std::true_type
-{
+struct ColumnIndexConvertible<Column> : public std::true_type {
 public:
-    static ColumnIndex asIndex(const Column &column) ;
+    static ColumnIndex asIndex(const Column &column);
 };
 
 template <>
-struct SpecificColumnDefConvertible<Column> : public std::true_type
-{
+struct SpecificColumnDefConvertible<Column> : public std::true_type {
 public:
     static ColumnDef asDef(const Column &column, ColumnType columnType);
 };
@@ -176,337 +156,385 @@ public:
 #pragma mark - Expression
 
 template <>
-struct ExpressionConvertible<Expression> : public std::true_type
-{
+struct ExpressionConvertible<Expression> : public std::true_type {
 public:
-    static Expression asExpression(const Expression &expression) ;
+    static Expression asExpression(const Expression &expression);
 };
 
 template <>
-struct ColumnResultConvertible<Expression> : public std::true_type
-{
+struct ColumnResultConvertible<Expression> : public std::true_type {
 public:
-    static ColumnResult asColumnResult(const Expression &expression) ;
+    static ColumnResult asColumnResult(const Expression &expression);
 };
 
 template <>
-struct OrderConvertible<Expression> : public std::true_type
-{
+struct OrderConvertible<Expression> : public std::true_type {
 public:
-    static Order asOrder(const Expression& expression);
+    static Order asOrder(const Expression &expression);
 };
 
 template <>
-struct SpecificOrderConvertible<Expression> : public std::true_type
-{
+struct SpecificOrderConvertible<Expression> : public std::true_type {
 public:
-    static Order asOrder(const Expression& expression, OrderTerm term);
+    static Order asOrder(const Expression &expression, OrderTerm term);
 };
 
 #pragma mark - LiteralValue
 
 template <>
-struct LiteralValueConvertible<LiteralValue> : public std::true_type
-{
+struct LiteralValueConvertible<LiteralValue> : public std::true_type {
 public:
-    static LiteralValue asLiteralValue(const LiteralValue &literalValue) ;
+    static LiteralValue asLiteralValue(const LiteralValue &literalValue);
 };
 
 template <>
-struct ExpressionConvertible<LiteralValue> : public std::true_type
-{
+struct ExpressionConvertible<LiteralValue> : public std::true_type {
 public:
     static Expression asExpression(const LiteralValue &literalValue);
 };
 
 template <>
-struct ColumnResultConvertible<LiteralValue> : public std::true_type
-{
+struct ColumnResultConvertible<LiteralValue> : public std::true_type {
 public:
     static ColumnResult asColumnResult(const LiteralValue &literalValue);
 };
 
 template <>
-struct OrderConvertible<LiteralValue> : public std::true_type
-{
+struct OrderConvertible<LiteralValue> : public std::true_type {
 public:
-    static Order asOrder(const LiteralValue& literalValue);
+    static Order asOrder(const LiteralValue &literalValue);
 };
 
 template <>
-struct SpecificOrderConvertible<LiteralValue> : public std::true_type
-{
+struct SpecificOrderConvertible<LiteralValue> : public std::true_type {
 public:
-    static Order asOrder(const LiteralValue& literalValue, OrderTerm term) ;
+    static Order asOrder(const LiteralValue &literalValue, OrderTerm term);
 };
 
 #pragma mark - StatementSelect
 
 template <>
-struct ExpressionConvertible<StatementSelect> : public std::true_type
-{
+struct ExpressionConvertible<StatementSelect> : public std::true_type {
 public:
     static Expression asExpression(const StatementSelect &statementSelect);
 };
 
 template <>
-struct ColumnResultConvertible<StatementSelect> : public std::true_type
-{
+struct ColumnResultConvertible<StatementSelect> : public std::true_type {
 public:
     static ColumnResult asColumnResult(const StatementSelect &statementSelect);
 };
 
 template <>
-struct OrderConvertible<StatementSelect> : public std::true_type
-{
+struct OrderConvertible<StatementSelect> : public std::true_type {
 public:
-    static Order asOrder(const StatementSelect& statementSelect);
+    static Order asOrder(const StatementSelect &statementSelect);
 };
 
 template <>
-struct SpecificOrderConvertible<StatementSelect> : public std::true_type
-{
+struct SpecificOrderConvertible<StatementSelect> : public std::true_type {
 public:
-    static Order asOrder(const StatementSelect& statementSelect, OrderTerm term) ;
+    static Order asOrder(const StatementSelect &statementSelect,
+                         OrderTerm term);
 };
 
 template <>
-struct TableOrSubqueryConvertible<StatementSelect> : public std::true_type
-{
+struct TableOrSubqueryConvertible<StatementSelect> : public std::true_type {
 public:
-    static Subquery asTableOrSubquery(const StatementSelect &statementSelect) ;
+    static Subquery asTableOrSubquery(const StatementSelect &statementSelect);
 };
 
 #pragma mark - Subquery
 
 template <>
-struct TableOrSubqueryConvertible<Subquery> : public std::true_type
-{
+struct TableOrSubqueryConvertible<Subquery> : public std::true_type {
 public:
-    static Subquery asTableOrSubquery(const Subquery &subquery) ;
+    static Subquery asTableOrSubquery(const Subquery &subquery);
 };
-    
+
 #pragma mark - Null Type
 template <typename T>
-struct LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
-    
+
 template <typename T>
-struct ExpressionConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> : public std::true_type
-{
+struct ExpressionConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>
+    : public std::true_type {
 public:
     static Expression asExpression(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
-    
+
 #pragma mark - Float Type
 template <typename T>
-struct LiteralValueConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
-    
+
 template <typename T>
-struct ExpressionConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> : public std::true_type
-{
+struct ExpressionConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public std::true_type {
 public:
     static Expression asExpression(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
 
 #pragma mark - Integer32 Type
 template <typename T>
-struct LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
 
 template <typename T>
-struct ExpressionConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> : public std::true_type
-{
+struct ExpressionConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public std::true_type {
 public:
     static Expression asExpression(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
 
 #pragma mark - Integer64 Type
 template <typename T>
-struct LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
-    
+
 template <typename T>
-struct ExpressionConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> : public std::true_type
-{
+struct ExpressionConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
 public:
     static Expression asExpression(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
 
 #pragma mark - Text Type
 template <typename T>
-struct LiteralValueConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
-    
+
 template <typename T>
-struct ExpressionConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public std::true_type
-{
+struct ExpressionConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
 public:
     static Expression asExpression(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
 
 template <typename T>
-struct TableOrSubqueryConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> : public std::true_type
-{
+struct TableOrSubqueryConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Subquery asTableOrSubquery(const T &t) ;
+    static Subquery asTableOrSubquery(const T &t);
 };
 
 #pragma mark - BLOB Type
 template <typename T>
-struct LiteralValueConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
-    
+
 template <typename T>
-struct ExpressionConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type> : public std::true_type
-{
+struct ExpressionConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
 public:
     static Expression asExpression(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
 
 } //namespace WCDB

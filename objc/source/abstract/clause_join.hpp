@@ -21,8 +21,8 @@
 #ifndef clause_join_hpp
 #define clause_join_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
@@ -35,28 +35,38 @@ public:
         Inner,
         Cross,
     };
-    
+
     template <typename T>
-    JoinClause(const T& t, typename std::enable_if<TableOrSubqueryConvertible<T>::value, void>::type * = nullptr) : Describable(TableOrSubqueryConvertible<T>::asTableOrSubquery(t).getDescription()) {}
-    
+    JoinClause(const T &t,
+               typename std::enable_if<TableOrSubqueryConvertible<T>::value,
+                                       void>::type * = nullptr)
+        : Describable(TableOrSubqueryConvertible<T>::asTableOrSubquery(t)
+                          .getDescription())
+    {
+    }
+
     JoinClause &join(const Subquery &subquery,
                      JoinClause::Type type = JoinClause::Type::NotSet);
     JoinClause &naturalJoin(const Subquery &subquery,
-                     JoinClause::Type type = JoinClause::Type::NotSet);
-    
+                            JoinClause::Type type = JoinClause::Type::NotSet);
+
     JoinClause &on(const Expression &expression);
-    
+
     JoinClause &usingColumns(const Column &column);
 
     JoinClause &usingColumns(const std::list<const Column> &columnList);
-    
+
     template <typename T>
-    typename std::enable_if<ColumnConvertible<T>::value, JoinClause&>::type usingColumns(const std::list<const T> &columnList) {
+    typename std::enable_if<ColumnConvertible<T>::value, JoinClause &>::type
+    usingColumns(const std::list<const T> &columnList)
+    {
         m_description.append(" USING " + stringByJoiningList(columnList));
         return *this;
     }
+
 protected:
-    JoinClause &join(const Subquery &subquery, JoinClause::Type type, bool isNatural);
+    JoinClause &
+    join(const Subquery &subquery, JoinClause::Type type, bool isNatural);
 };
 
 }; // namespace WCDB

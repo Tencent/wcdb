@@ -30,7 +30,7 @@
 - (void)testStatementDetach
 {
     XCTAssertEqual(WCDB::StatementDetach().getStatementType(), WCDB::Statement::Type::Detach);
-    
+
     WINQAssertEqual(WCDB::StatementDetach().detach("testSchema"), @"DETACH testSchema");
 }
 

@@ -137,22 +137,25 @@ public:
     ~StatementHandle();
 
 protected:
+    void bindInteger32(
+        const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
+        int index);
+    void bindInteger64(
+        const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
+        int index);
     void
-    bindInteger32(const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
-                  int index);
-    void
-    bindInteger64(const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
-                  int index);
-    void bindDouble(const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value,
-                    int index);
+    bindDouble(const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value,
+               int index);
     void bindText(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value,
                   int index);
     void bindBLOB(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value,
                   int index);
     void bindNull(int index);
 
-    ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType getInteger32(int index);
-    ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType getInteger64(int index);
+    ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
+    getInteger32(int index);
+    ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
+    getInteger64(int index);
     ColumnTypeInfo<ColumnType::Float>::UnderlyingType getDouble(int index);
     ColumnTypeInfo<ColumnType::Text>::UnderlyingType getText(int index);
     ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType getBLOB(int index);

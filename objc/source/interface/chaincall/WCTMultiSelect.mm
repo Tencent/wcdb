@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/WCTBinding.h>
-#import <WCDB/WCTProperty.h>
 
 @implementation WCTMultiSelect {
     WCTPropertyList _propertyList;
@@ -54,7 +54,7 @@
         WCTObject *object = nil;
         for (const WCTProperty &property : _propertyList) {
             const char *columnTableName = _statementHandle->getColumnTableName(index);
-            const std::shared_ptr<WCTColumnBinding>& columnBinding = property.getColumnBinding(); 
+            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             cls = columnBinding->getClass();
             if (columnTableName && cls) {
                 tableName = @(columnTableName);
@@ -94,7 +94,7 @@
             index = 0;
             for (const WCTProperty &property : _propertyList) {
                 const char *columnTableName = _statementHandle->getColumnTableName(index);
-                const std::shared_ptr<WCTColumnBinding>& columnBinding = property.getColumnBinding(); 
+                const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
                 Class cls = columnBinding->getClass();
                 if (columnTableName && cls) {
                     NSString *tableName = @(columnTableName);

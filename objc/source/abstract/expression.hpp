@@ -21,66 +21,87 @@
 #ifndef expression_hpp
 #define expression_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 #include <WCDB/operable.hpp>
 
 namespace WCDB {
-    
+
 class Expression : public Describable, public Operable {
 public:
     operator std::list<const Expression>() const;
-    
+
     static const Expression BindParameter;
 
     template <typename T>
-    Expression(const T& t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
-    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){
+    Expression(const T &t,
+               typename std::enable_if<ColumnConvertible<T>::value, void>::type
+                   * = nullptr)
+        : Describable(ColumnConvertible<T>::asColumn(t).getDescription())
+    {
     }
-    
+
     template <typename T>
-    Expression(const T& t, typename std::enable_if<LiteralValueConvertible<T>::value, void>::type * = nullptr)
-    : Describable(LiteralValueConvertible<T>::asLiteralValue(t).getDescription()){
+    Expression(const T &t,
+               typename std::enable_if<LiteralValueConvertible<T>::value,
+                                       void>::type * = nullptr)
+        : Describable(
+              LiteralValueConvertible<T>::asLiteralValue(t).getDescription())
+    {
     }
-    
+
     Expression(const StatementSelect &statementSelect);
-    
+
     static Expression Exists(const StatementSelect &statementSelect);
     static Expression NotExists(const StatementSelect &statementSelect);
-    
+
     template <typename T>
-    static Expression Combine(const std::list<const T> &list, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr) {
+    static Expression Combine(
+        const std::list<const T> &list,
+        typename std::enable_if<ExpressionConvertible<T>::value, void>::type * =
+            nullptr)
+    {
         return Expression("(" + stringByJoiningList(list) + ")", nullptr);
     }
 
     static Expression Combine(const std::list<const Expression> &list);
 
     template <typename T>
-    static Expression Function(const std::string& name, const std::list<const T> &list, bool isDistinct = false, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr) {
-        return Operator::operateWithTitle(name, isDistinct?"DISTINCT":"", list);
-    }
-    
-    static Expression Function(const std::string& name, const std::list<const Expression> &list, bool isDistinct = false);
-    
-    static Expression Function(const std::string& name, const Expression &expression, bool isDistinct = false);
-
-    class CaseExpression: public Describable
+    static Expression Function(
+        const std::string &name,
+        const std::list<const T> &list,
+        bool isDistinct = false,
+        typename std::enable_if<ExpressionConvertible<T>::value, void>::type * =
+            nullptr)
     {
+        return Operator::operateWithTitle(name, isDistinct ? "DISTINCT" : "",
+                                          list);
+    }
+
+    static Expression Function(const std::string &name,
+                               const std::list<const Expression> &list,
+                               bool isDistinct = false);
+
+    static Expression Function(const std::string &name,
+                               const Expression &expression,
+                               bool isDistinct = false);
+
+    class CaseExpression : public Describable {
     public:
         CaseExpression(const Expression &expression);
         CaseExpression &when(const Expression &expression);
         CaseExpression &then(const Expression &expression);
         CaseExpression &else_(const Expression &expression);
     };
-    
+
     static CaseExpression Case(const Expression &expression);
-    
+
 protected:
     friend class Operator;
-    Expression(const std::string &raw, const std::nullptr_t& dummy);
+    Expression(const std::string &raw, const std::nullptr_t &dummy);
     virtual Expression asExpression() const override;
 };
-    
+
 } //namespace WCDB
 
 #endif /* expression_hpp */

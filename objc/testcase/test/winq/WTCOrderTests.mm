@@ -31,10 +31,10 @@
 {
     //Give
     WCDB::Column column1 = WCDB::Column("column1");
-    
+
     //Then
     WINQAssertEqual(WCDB::Order(column1), @"column1");
-    
+
     WINQAssertEqual(WCDB::Order(column1, WCDB::OrderTerm::ASC), @"column1 ASC");
 }
 

@@ -35,14 +35,14 @@
 #include <WCDB/column_index.hpp>
 #include <WCDB/column_result.hpp>
 #include <WCDB/column_type.hpp>
-#include <WCDB/foreign_key.hpp>
-#include <WCDB/table_constraint.hpp>
 #include <WCDB/expression.hpp>
+#include <WCDB/foreign_key.hpp>
 #include <WCDB/literal_value.hpp>
 #include <WCDB/module_argument.hpp>
 #include <WCDB/order.hpp>
 #include <WCDB/pragma.hpp>
 #include <WCDB/subquery.hpp>
+#include <WCDB/table_constraint.hpp>
 
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_alter_table.hpp>

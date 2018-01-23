@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableConstraintBaselineMultiPrimaryObject+WCTTableCoding.h"
 #import "WTCTableConstraintBaselineMultiPrimaryObject.h"
+#import "WTCTableConstraintBaselineMultiPrimaryObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableConstraintBaselineMultiPrimaryObject

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableConstraintObject+WCTTableCoding.h"
 #import "WTCTableConstraintObject.h"
+#import "WTCTableConstraintObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableConstraintObject
@@ -30,8 +30,8 @@ WCDB_SYNTHESIZE(WTCTableConstraintObject, variable2)
 
 WCDB_MULTI_UNIQUE(WTCTableConstraintObject, "WTCTableConstraintObjectConstraint", variable1)
 WCDB_MULTI_UNIQUE(WTCTableConstraintObject, "WTCTableConstraintObjectConstraint", variable2)
-  
-+ (NSString*)Name
+
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }

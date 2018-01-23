@@ -30,7 +30,7 @@
 - (void)testStatementAttachTests
 {
     XCTAssertEqual(WCDB::StatementAttach().getStatementType(), WCDB::Statement::Type::Attach);
-    
+
     WINQAssertEqual(WCDB::StatementAttach().attach("attach1").as("schema1"), @"ATTACH 'attach1' AS schema1");
 }
 

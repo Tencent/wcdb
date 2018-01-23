@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintUniqueObject+WCTTableCoding.h"
 #import "WTCColumnConstraintUniqueObject.h"
+#import "WTCColumnConstraintUniqueObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintUniqueObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCColumnConstraintUniqueObject)
 WCDB_SYNTHESIZE_COLUMN(WTCColumnConstraintUniqueObject, variable, "uniqueVariable")
 
 WCDB_UNIQUE(WTCColumnConstraintUniqueObject, variable)
-  
+
 @end

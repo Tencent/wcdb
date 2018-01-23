@@ -30,9 +30,9 @@
 - (void)testStatementRollback
 {
     XCTAssertEqual(WCDB::StatementRollback().getStatementType(), WCDB::Statement::Type::Rollback);
-    
+
     WINQAssertEqual(WCDB::StatementRollback().rollback(), @"ROLLBACK");
-    
+
     WINQAssertEqual(WCDB::StatementRollback().rollback("savepoint1"), @"ROLLBACK TO savepoint1");
 }
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/statement_create_virtual_table.hpp>
 #include <WCDB/module_argument.hpp>
+#include <WCDB/statement_create_virtual_table.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
@@ -41,12 +41,15 @@ StatementCreateVirtualTable::usingModule(const std::string &moduleName)
     m_description.append(" USING " + moduleName);
     return *this;
 }
-    
-StatementCreateVirtualTable &StatementCreateVirtualTable::usingModule(const std::string &moduleName, const std::list<const ModuleArgument> &moduleArgumentList)
+
+StatementCreateVirtualTable &StatementCreateVirtualTable::usingModule(
+    const std::string &moduleName,
+    const std::list<const ModuleArgument> &moduleArgumentList)
 {
     m_description.append(" USING " + moduleName);
     if (!moduleArgumentList.empty()) {
-        m_description.append("(" + stringByJoiningList(moduleArgumentList) + ")");
+        m_description.append("(" + stringByJoiningList(moduleArgumentList) +
+                             ")");
     }
     return *this;
 }

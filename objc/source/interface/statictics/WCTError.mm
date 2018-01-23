@@ -82,35 +82,34 @@
     return desc;
 }
 
-- (NSNumber*) tag
+- (NSNumber *)tag
 {
     return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Tag))];
 }
 
-- (NSNumber*) operation
+- (NSNumber *)operation
 {
     return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Operation))];
 }
 
-- (NSNumber*) extendedCode
+- (NSNumber *)extendedCode
 {
     return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::ExtendedCode))];
 }
 
-- (NSString*) message
+- (NSString *)message
 {
     return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Message))];
 }
 
-- (NSString*) sql
+- (NSString *)sql
 {
     return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::SQL))];
 }
 
-- (NSString*) path
+- (NSString *)path
 {
     return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Path))];
 }
-
 
 @end

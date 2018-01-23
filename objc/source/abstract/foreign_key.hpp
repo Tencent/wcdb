@@ -21,8 +21,8 @@
 #ifndef foreign_key_hpp
 #define foreign_key_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
@@ -30,8 +30,11 @@ class ForeignKey : public Describable {
 public:
     template <typename T>
     ForeignKey(const std::string &foreignTableName,
-               const std::list<const T> &columnList, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
-    : Describable("REFERENCES " + foreignTableName) {
+               const std::list<const T> &columnList,
+               typename std::enable_if<ColumnConvertible<T>::value, void>::type
+                   * = nullptr)
+        : Describable("REFERENCES " + foreignTableName)
+    {
         if (!columnList.empty) {
             m_description.append("(" + stringByJoiningList(columnList) + ")");
         }
@@ -40,8 +43,7 @@ public:
     ForeignKey(const std::string &foreignTableName,
                const std::list<const Column> &columnList);
 
-    ForeignKey(const std::string &foreignTableName,
-               const Column &column);
+    ForeignKey(const std::string &foreignTableName, const Column &column);
 
     ForeignKey(const std::string &foreignTableName);
 
@@ -54,7 +56,7 @@ public:
     };
     ForeignKey &onDelete(Action action);
     ForeignKey &onUpdate(Action action);
-    
+
     ForeignKey &match(const std::string &name);
 
     enum class Deferrable {

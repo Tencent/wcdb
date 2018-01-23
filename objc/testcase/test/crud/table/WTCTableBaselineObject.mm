@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableBaselineObject+WCTTableCoding.h"
 #import "WTCTableBaselineObject.h"
+#import "WTCTableBaselineObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableBaselineObject
@@ -45,9 +45,9 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCTableBaselineObject, anInt32)
     return self;
 }
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
-  
+
 @end

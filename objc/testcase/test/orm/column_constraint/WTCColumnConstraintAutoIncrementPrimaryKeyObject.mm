@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintAutoIncrementPrimaryKeyObject+WCTTableCoding.h"
 #import "WTCColumnConstraintAutoIncrementPrimaryKeyObject.h"
+#import "WTCColumnConstraintAutoIncrementPrimaryKeyObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintAutoIncrementPrimaryKeyObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCColumnConstraintAutoIncrementPrimaryKeyObject)
 WCDB_SYNTHESIZE_COLUMN(WTCColumnConstraintAutoIncrementPrimaryKeyObject, variable, "autoIncrementPrimaryVariable")
 
 WCDB_PRIMARY_AUTO_INCREMENT(WTCColumnConstraintAutoIncrementPrimaryKeyObject, variable)
-  
+
 @end

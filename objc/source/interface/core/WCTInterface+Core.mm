@@ -19,10 +19,10 @@
  */
 
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTCoreStatement+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTInterface+Core.h>
-#import <WCDB/WCTCoreStatement+Private.h>
 
 @implementation WCTInterface (Core)
 

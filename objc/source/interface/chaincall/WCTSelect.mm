@@ -23,11 +23,11 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTSelect+Private.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/utility.hpp>
-#import <WCDB/WCTProperty.h>
 
 @implementation WCTSelect {
     WCTPropertyList _propertyList;

@@ -34,14 +34,14 @@
     WCDB::JoinClause joinClause(table1);
     WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(1).from(table1);
     std::string alias1 = "alias1";
-    
+
     //Then
     WINQAssertEqual(WCDB::Subquery(joinClause), @"(table1)");
-    
+
     WINQAssertEqual(WCDB::Subquery(statementSelect), @"(SELECT 1 FROM table1)");
-    
+
     WINQAssertEqual(WCDB::Subquery(table1), @"table1");
-    
+
     WINQAssertEqual(WCDB::Subquery(table1).as(alias1), @"table1 AS alias1");
 }
 

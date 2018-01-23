@@ -21,25 +21,30 @@
 #ifndef order_hpp
 #define order_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
 class Order : public Describable {
 public:
     template <typename T>
-    Order(const T &t, OrderTerm term = OrderTerm::NotSet, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr)
-    : Describable(ExpressionConvertible<T>::asExpression(t).getDescription()) {
+    Order(const T &t,
+          OrderTerm term = OrderTerm::NotSet,
+          typename std::enable_if<ExpressionConvertible<T>::value, void>::type
+              * = nullptr)
+        : Describable(
+              ExpressionConvertible<T>::asExpression(t).getDescription())
+    {
         if (term != OrderTerm::NotSet) {
             m_description.append(" ");
             m_description.append(OrderTermName(term));
         }
     }
-    
+
     operator std::list<const Order>() const;
 };
-    
+
 } //namespace WCDB
 
 #endif /* order_hpp */

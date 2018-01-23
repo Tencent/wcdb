@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "Convenience.h"
+#import <Foundation/Foundation.h>
 
-@interface WTCTableBaselineObject : NSObject<WTCNamed>
+@interface WTCTableBaselineObject : NSObject <WTCNamed>
 
 @property(nonatomic, assign) int32_t anInt32;
 @property(nonatomic, assign) int64_t anInt64;
-@property(nonatomic, retain) NSString* aString;
-@property(nonatomic, retain) NSData* aData;
+@property(nonatomic, retain) NSString *aString;
+@property(nonatomic, retain) NSData *aData;
 @property(nonatomic, assign) double aDouble;
 
 @end

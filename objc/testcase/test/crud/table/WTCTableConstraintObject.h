@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "Convenience.h"
+#import <Foundation/Foundation.h>
 
-@interface WTCTableConstraintObject : NSObject<WTCNamed>
+@interface WTCTableConstraintObject : NSObject <WTCNamed>
 
 @property(nonatomic, assign) int variable1;
 @property(nonatomic, assign) int variable2;

@@ -32,16 +32,16 @@
     //Give
     WCDB::Column column1("column1");
     WCDB::Column column2("column2");
-    
+
     std::string table1 = "table1";
-    
+
     //Then
     XCTAssertEqual(WCDB::StatementInsert().getStatementType(), WCDB::Statement::Type::Insert);
-    
+
     WINQAssertEqual(WCDB::StatementInsert().insert(table1).values({1, "value"}), @"INSERT INTO table1 VALUES(1, 'value')");
-    
+
     WINQAssertEqual(WCDB::StatementInsert().insert(table1, {column1, column2}).values({1, "value"}), @"INSERT INTO table1(column1, column2) VALUES(1, 'value')");
-    
+
     WINQAssertEqual(WCDB::StatementInsert().insert(table1, WCDB::Conflict::Replace).values({1, "value"}), @"INSERT OR REPLACE INTO table1 VALUES(1, 'value')");
 }
 

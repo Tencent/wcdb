@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableVirtualTableObject+WCTTableCoding.h"
 #import "WTCTableVirtualTableObject.h"
+#import "WTCTableVirtualTableObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableVirtualTableObject
@@ -30,8 +30,8 @@ WCDB_SYNTHESIZE(WTCTableVirtualTableObject, variable2)
 
 WCDB_VIRTUAL_TABLE_MODULE_FTS3(WTCTableVirtualTableObject)
 WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(WTCTableVirtualTableObject)
-  
-+ (NSString*)Name
+
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }

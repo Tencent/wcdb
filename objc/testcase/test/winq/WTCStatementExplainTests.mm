@@ -30,11 +30,11 @@
 - (void)testStatementExplain
 {
     WCDB::StatementSelect statement = WCDB::StatementSelect().select(1).from("table1");
-    
+
     XCTAssertEqual(WCDB::StatementExplain().getStatementType(), WCDB::Statement::Type::Explain);
-    
+
     WINQAssertEqual(WCDB::StatementExplain().explain(statement), @"EXPLAIN SELECT 1 FROM table1");
-    
+
     WINQAssertEqual(WCDB::StatementExplain().explainQueryPlan(statement), @"EXPLAIN QUERY PLAN SELECT 1 FROM table1");
 }
 

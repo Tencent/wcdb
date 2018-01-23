@@ -21,7 +21,7 @@
 #include <WCDB/order.hpp>
 
 namespace WCDB {
-    
+
 Order::operator std::list<const Order>() const
 {
     return {*this};

@@ -41,10 +41,7 @@
     {                                                                          \
         return __WCDB_PROPERTIES(className);                                   \
     }                                                                          \
-    + (const WCDB::Column &)AllColumns                                         \
-    {                                                                          \
-        return WCDB::Column::All;                                              \
-    }
+    +(const WCDB::Column &) AllColumns { return WCDB::Column::All; }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)
@@ -170,8 +167,9 @@
 #define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE(className, tokenizeName)          \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", tokenizeName)
 
-#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)          \
-    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", WCTTokenizerNameWCDB)
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)                   \
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize",                   \
+                                      WCTTokenizerNameWCDB)
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName)                       \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)

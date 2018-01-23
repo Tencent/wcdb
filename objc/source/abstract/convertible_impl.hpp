@@ -21,197 +21,294 @@
 #ifndef convertible_impl_hpp
 #define convertible_impl_hpp
 
-#include <WCDB/convertible.hpp>
-#include <WCDB/literal_value.hpp>
-#include <WCDB/subquery.hpp>
-#include <WCDB/expression.hpp>
 #include <WCDB/column_result.hpp>
+#include <WCDB/convertible.hpp>
+#include <WCDB/expression.hpp>
+#include <WCDB/literal_value.hpp>
 #include <WCDB/order.hpp>
+#include <WCDB/subquery.hpp>
 
 namespace WCDB {
-    
+
 #pragma mark - Null Type
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue
+LiteralValueConvertible<T,
+                        typename std::enable_if<ColumnIsNullType<T>::value>::
+                            type>::asLiteralValue(const T &t)
 {
     return LiteralValue(t);
 }
-    
+
 template <typename T>
-Expression ExpressionConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>::asExpression(const T &t) {
+Expression
+ExpressionConvertible<T,
+                      typename std::enable_if<ColumnIsNullType<T>::value>::
+                          type>::asExpression(const T &t)
+{
     return Expression(t);
 }
 
 template <typename T>
-    ColumnResult ColumnResultConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult
+ColumnResultConvertible<T,
+                        typename std::enable_if<ColumnIsNullType<T>::value>::
+                            type>::asColumnResult(const T &t)
 {
     return ColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>::asOrder(const T
+                                                                            &t)
 {
     return Order(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>::asOrder(const T& t, OrderTerm term)
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>::
+    asOrder(const T &t, OrderTerm term)
 {
     return Order(t, term);
 }
-    
+
 #pragma mark - Float Type
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue
+LiteralValueConvertible<T,
+                        typename std::enable_if<ColumnIsFloatType<T>::value>::
+                            type>::asLiteralValue(const T &t)
 {
     return LiteralValue(t);
 }
-    
+
 template <typename T>
-Expression ExpressionConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>::asExpression(const T &t) {
+Expression
+ExpressionConvertible<T,
+                      typename std::enable_if<ColumnIsFloatType<T>::value>::
+                          type>::asExpression(const T &t)
+{
     return Expression(t);
 }
 
 template <typename T>
-ColumnResult ColumnResultConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult
+ColumnResultConvertible<T,
+                        typename std::enable_if<ColumnIsFloatType<T>::value>::
+                            type>::asColumnResult(const T &t)
 {
     return ColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>::asOrder(const T
+                                                                             &t)
 {
     return Order(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>::asOrder(const T& t, OrderTerm term)
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>::
+    asOrder(const T &t, OrderTerm term)
 {
     return Order(t, term);
 }
 
 #pragma mark - Integer32 Type
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::
+    asLiteralValue(const T &t)
 {
     return LiteralValue(t);
 }
-    
+
 template <typename T>
-Expression ExpressionConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::asExpression(const T &t) {
+Expression
+ExpressionConvertible<T,
+                      typename std::enable_if<ColumnIsInteger32Type<T>::value>::
+                          type>::asExpression(const T &t)
+{
     return Expression(t);
 }
 
 template <typename T>
-ColumnResult ColumnResultConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::
+    asColumnResult(const T &t)
 {
     return ColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<T,
+                       typename std::enable_if<ColumnIsInteger32Type<
+                           T>::value>::type>::asOrder(const T &t)
 {
     return Order(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::asOrder(const T& t, OrderTerm term)
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>::
+    asOrder(const T &t, OrderTerm term)
 {
     return Order(t, term);
 }
 
 #pragma mark - Integer64 Type
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::
+    asLiteralValue(const T &t)
 {
     return LiteralValue(t);
 }
-    
+
 template <typename T>
-Expression ExpressionConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::asExpression(const T &t) {
+Expression
+ExpressionConvertible<T,
+                      typename std::enable_if<ColumnIsInteger64Type<T>::value>::
+                          type>::asExpression(const T &t)
+{
     return Expression(t);
 }
 
 template <typename T>
-ColumnResult ColumnResultConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult ColumnResultConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::
+    asColumnResult(const T &t)
 {
     return ColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<T,
+                       typename std::enable_if<ColumnIsInteger64Type<
+                           T>::value>::type>::asOrder(const T &t)
 {
     return Order(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::asOrder(const T& t, OrderTerm term)
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>::
+    asOrder(const T &t, OrderTerm term)
 {
     return Order(t, term);
 }
 
 #pragma mark - Text Type
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue
+LiteralValueConvertible<T,
+                        typename std::enable_if<ColumnIsTextType<T>::value>::
+                            type>::asLiteralValue(const T &t)
 {
     return LiteralValue(t);
 }
-    
+
 template <typename T>
-Expression ExpressionConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>::asExpression(const T &t) {
+Expression
+ExpressionConvertible<T,
+                      typename std::enable_if<ColumnIsTextType<T>::value>::
+                          type>::asExpression(const T &t)
+{
     return Expression(t);
 }
 
 template <typename T>
-ColumnResult ColumnResultConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult
+ColumnResultConvertible<T,
+                        typename std::enable_if<ColumnIsTextType<T>::value>::
+                            type>::asColumnResult(const T &t)
 {
     return ColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>::asOrder(const T
+                                                                            &t)
 {
     return Order(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>::asOrder(const T& t, OrderTerm term)
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>::
+    asOrder(const T &t, OrderTerm term)
 {
     return Order(t, term);
 }
-    
+
 template <typename T>
-Subquery TableOrSubqueryConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>::asTableOrSubquery(const T &t)
+Subquery
+TableOrSubqueryConvertible<T,
+                           typename std::enable_if<ColumnIsTextType<T>::value>::
+                               type>::asTableOrSubquery(const T &t)
 {
     return Subquery(ColumnIsTextType<T>::asUnderlyingType(t));
 }
 
 #pragma mark - BLOB Type
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue
+LiteralValueConvertible<T,
+                        typename std::enable_if<ColumnIsBLOBType<T>::value>::
+                            type>::asLiteralValue(const T &t)
 {
     return LiteralValue(t);
 }
-    
+
 template <typename T>
-Expression ExpressionConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::asExpression(const T &t) {
+Expression
+ExpressionConvertible<T,
+                      typename std::enable_if<ColumnIsBLOBType<T>::value>::
+                          type>::asExpression(const T &t)
+{
     return Expression(t);
 }
 
 template <typename T>
-ColumnResult ColumnResultConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult
+ColumnResultConvertible<T,
+                        typename std::enable_if<ColumnIsBLOBType<T>::value>::
+                            type>::asColumnResult(const T &t)
 {
     return ColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::asOrder(const T
+                                                                            &t)
 {
     return Order(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::asOrder(const T& t, OrderTerm term)
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>::
+    asOrder(const T &t, OrderTerm term)
 {
     return Order(t, term);
 }

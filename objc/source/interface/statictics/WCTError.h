@@ -72,17 +72,17 @@ typedef NS_ENUM(int, WCTErrorType) {
 
 @property(nonatomic, readonly) WCTErrorType type;
 
-- (NSNumber*) tag;
+- (NSNumber *)tag;
 
-- (NSNumber*) operation;
+- (NSNumber *)operation;
 
-- (NSNumber*) extendedCode;
+- (NSNumber *)extendedCode;
 
-- (NSString*) message;
+- (NSString *)message;
 
-- (NSString*) sql;
+- (NSString *)sql;
 
-- (NSString*) path;
+- (NSString *)path;
 
 /**
  @brief Convenient interface for checking code==0.

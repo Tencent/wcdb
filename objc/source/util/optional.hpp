@@ -28,36 +28,41 @@ namespace WCDB {
 //Simple optional class
 
 template <typename T>
-class Optional
-{
-    static_assert(!std::is_same<T, std::nullptr_t>::value, "Optional std::nullptr_t is not permitted");
-    static_assert(!std::is_same<T, Optional>::value, "Optional Optional is not permitted");
+class Optional {
+    static_assert(!std::is_same<T, std::nullptr_t>::value,
+                  "Optional std::nullptr_t is not permitted");
+    static_assert(!std::is_same<T, Optional>::value,
+                  "Optional Optional is not permitted");
+
 protected:
     class OptionalStorage {
     public:
-        OptionalStorage(const T& value);
+        OptionalStorage(const T &value);
+
     protected:
         T m_value;
     };
+
 public:
-    Optional(const T& value);    
+    Optional(const T &value);
     Optional();
-    
+
     operator bool() const;
-    
+
     bool isValid() const;
-    
-    const T& operator *() const;
-    
-    T& operator *();
-    
-    const T& value() const;
-    
-    T& value() ;
+
+    const T &operator*() const;
+
+    T &operator*();
+
+    const T &value() const;
+
+    T &value();
+
 protected:
     std::shared_ptr<OptionalStorage> m_storage;
 };
-    
+
 } //namespace WCDB
 
 #endif /* optional_hpp */

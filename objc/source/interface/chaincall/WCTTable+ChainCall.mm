@@ -84,17 +84,17 @@
 
 - (WCTRowSelect *)prepareSelectRows
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:@[_tableName] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:@[ _tableName ] isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[_tableName] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[ _tableName ] isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[_tableName] isDistinct:isDistinct];
+    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[ _tableName ] isDistinct:isDistinct];
 }
 
 @end

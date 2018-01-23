@@ -342,8 +342,7 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
                     }
                     statementHandle->bind<WCDB::ColumnType::Text>(
                         tokenizeName.c_str(), 1);
-                    statementHandle->bind<WCDB::ColumnType::BLOB>(
-                        address, 2);
+                    statementHandle->bind<WCDB::ColumnType::BLOB>(address, 2);
                     statementHandle->step();
                     if (!statementHandle->isOK()) {
                         error = statementHandle->getError();

@@ -36,7 +36,7 @@ public:
 
     void addModule(const std::string &name,
                    const std::shared_ptr<void> &module);
-    
+
     std::vector<unsigned char> getAddress(const std::string &name) const;
 
 protected:

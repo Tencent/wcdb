@@ -23,9 +23,9 @@
 #import <WCDB/WCTInterface.h>
 
 typedef NS_ENUM(int, WCTTransactionMode) {
-    WCTTransactionModeDeferred = (WCTTransactionMode)WCDB::StatementTransaction::Mode::Deferred,
-    WCTTransactionModeImmediate = (WCTTransactionMode)WCDB::StatementTransaction::Mode::Immediate,
-    WCTTransactionModeExclusive = (WCTTransactionMode)WCDB::StatementTransaction::Mode::Exclusive
+    WCTTransactionModeDeferred = (WCTTransactionMode) WCDB::StatementTransaction::Mode::Deferred,
+    WCTTransactionModeImmediate = (WCTTransactionMode) WCDB::StatementTransaction::Mode::Immediate,
+    WCTTransactionModeExclusive = (WCTTransactionMode) WCDB::StatementTransaction::Mode::Exclusive
 };
 
 /**
@@ -80,7 +80,7 @@ typedef void (^WCTTransactionBlock)();
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError;
 
 /**
  @brief Run a controllable transaction in block.
@@ -95,7 +95,7 @@ typedef void (^WCTTransactionBlock)();
  @param inTransaction Operation inside transaction.
  @see WCTControllableTransactionBlock
  */
-- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError **)pError;
 
 /**
  @brief Run an embedded transaction in block.
@@ -110,7 +110,7 @@ typedef void (^WCTTransactionBlock)();
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError;
 
 /**
  @brief This interface is equivalent to [transaction runTransaction:transaction withError:nil];

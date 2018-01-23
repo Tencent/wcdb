@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTCoding.h>
@@ -26,7 +27,6 @@
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/WCTBinding.h>
 
 @implementation WCTChainCall
 
@@ -106,7 +106,7 @@
                 }
                 case WCTColumnTypeBinary: {
                     NSData *data = objcAccessor->getObject(object);
-                    const unsigned char* raw = (const unsigned char*)data.bytes;
+                    const unsigned char *raw = (const unsigned char *) data.bytes;
                     std::vector<unsigned char> vector(raw, raw + data.length);
                     statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
                     break;
@@ -161,7 +161,7 @@
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            const unsigned char* raw = (const unsigned char*)data.bytes;
+            const unsigned char *raw = (const unsigned char *) data.bytes;
             std::vector<unsigned char> vector(raw, raw + data.length);
             statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
         } break;

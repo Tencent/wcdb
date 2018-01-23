@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#import "WTCBaseTestCase.h"
 #import "WTCAssert.h"
-#import "WTCIndexBaselineIndexObject.h"
+#import "WTCBaseTestCase.h"
 #import "WTCIndexBaselineIndexObject+WCTTableCoding.h"
-#import "WTCIndexUniqueIndexObject.h"
-#import "WTCIndexUniqueIndexObject+WCTTableCoding.h"
-#import "WTCIndexMultiIndexesObject.h"
+#import "WTCIndexBaselineIndexObject.h"
 #import "WTCIndexMultiIndexesObject+WCTTableCoding.h"
+#import "WTCIndexMultiIndexesObject.h"
+#import "WTCIndexUniqueIndexObject+WCTTableCoding.h"
+#import "WTCIndexUniqueIndexObject.h"
 
 @interface WTCIndexConstraintBindingTests : WTCBaseTestCase
 
@@ -38,12 +38,12 @@
     return [cls objectRelationalMappingForWCDB]->getIndexBindingMap()->begin()->second->generateCreateIndexStatement(NSStringFromClass(cls).UTF8String);
 }
 
-
-- (void)testIndexBinding {
+- (void)testIndexBinding
+{
     WINQAssertEqual([self generateCreateIndexStatementForClass:WTCIndexBaselineIndexObject.class], @"CREATE INDEX IF NOT EXISTS WTCIndexBaselineIndexObject_index ON WTCIndexBaselineIndexObject(variable)");
-    
+
     WINQAssertEqual([self generateCreateIndexStatementForClass:WTCIndexUniqueIndexObject.class], @"CREATE UNIQUE INDEX IF NOT EXISTS WTCIndexUniqueIndexObject_index ON WTCIndexUniqueIndexObject(variable)");
-    
+
     WINQAssertEqual([self generateCreateIndexStatementForClass:WTCIndexMultiIndexesObject.class], @"CREATE INDEX IF NOT EXISTS WTCIndexMultiIndexesObject_index ON WTCIndexMultiIndexesObject(variable1, variable2)");
 }
 

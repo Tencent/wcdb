@@ -21,7 +21,8 @@
 #import "WTCTableConstraintMultiUniqueConflictObject.h"
 #import <WCDB/WCDB.h>
 
-@interface WTCTableConstraintMultiUniqueConflictObject (WCTTableCoding) <WCTTableCoding>
+@interface WTCTableConstraintMultiUniqueConflictObject (
+    WCTTableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(variable1)
 WCDB_PROPERTY(variable2)

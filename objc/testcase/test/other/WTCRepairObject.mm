@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCRepairObject+WCTTableCoding.h"
 #import "WTCRepairObject.h"
+#import "WTCRepairObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCRepairObject
@@ -28,12 +28,12 @@ WCDB_IMPLEMENTATION(WTCRepairObject)
 WCDB_SYNTHESIZE(WTCRepairObject, variable1)
 WCDB_SYNTHESIZE(WTCRepairObject, variable2)
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
 
-- (BOOL)isEqual:(NSObject*)object
+- (BOOL)isEqual:(NSObject *)object
 {
     return self.hash == object.hash;
 }

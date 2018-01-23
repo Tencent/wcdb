@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintBaselineObject+WCTTableCoding.h"
 #import "WTCColumnConstraintBaselineObject.h"
+#import "WTCColumnConstraintBaselineObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintBaselineObject
 
 WCDB_IMPLEMENTATION(WTCColumnConstraintBaselineObject)
 WCDB_SYNTHESIZE(WTCColumnConstraintBaselineObject, variable)
-  
+
 @end

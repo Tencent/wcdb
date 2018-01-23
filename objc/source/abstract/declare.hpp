@@ -21,16 +21,16 @@
 #ifndef declare_hpp
 #define declare_hpp
 
+#include <WCDB/column_type.hpp>
+#include <WCDB/conflict.hpp>
+#include <WCDB/describable.hpp>
+#include <WCDB/order_term.hpp>
 #include <atomic>
 #include <cassert>
 #include <functional>
 #include <list>
 #include <string>
 #include <utility>
-#include <WCDB/conflict.hpp>
-#include <WCDB/column_type.hpp>
-#include <WCDB/order_term.hpp>
-#include <WCDB/describable.hpp>
 
 namespace WCDB {
 

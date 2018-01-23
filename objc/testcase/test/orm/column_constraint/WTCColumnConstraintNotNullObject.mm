@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintNotNullObject+WCTTableCoding.h"
 #import "WTCColumnConstraintNotNullObject.h"
+#import "WTCColumnConstraintNotNullObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintNotNullObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCColumnConstraintNotNullObject)
 WCDB_SYNTHESIZE_COLUMN(WTCColumnConstraintNotNullObject, variable, "notNullVariable")
 
 WCDB_NOT_NULL(WTCColumnConstraintNotNullObject, variable)
-  
+
 @end

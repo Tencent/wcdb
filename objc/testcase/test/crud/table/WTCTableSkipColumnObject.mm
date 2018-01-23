@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableSkipColumnObject+WCTTableCoding.h"
 #import "WTCTableSkipColumnObject.h"
+#import "WTCTableSkipColumnObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableSkipColumnObject
@@ -37,9 +37,9 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCTableSkipColumnObject, anInt32)
     return self;
 }
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
-  
+
 @end

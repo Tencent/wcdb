@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableConstraintCheckObject+WCTTableCoding.h"
 #import "WTCTableConstraintCheckObject.h"
+#import "WTCTableConstraintCheckObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableConstraintCheckObject
@@ -29,5 +29,5 @@ WCDB_SYNTHESIZE(WTCTableConstraintCheckObject, variable1)
 WCDB_SYNTHESIZE(WTCTableConstraintCheckObject, variable2)
 
 WCDB_CHECK(WTCTableConstraintCheckObject, "WTCTableConstraintCheckObjectConstraint", WTCTableConstraintCheckObject.variable1 > 1)
-  
+
 @end

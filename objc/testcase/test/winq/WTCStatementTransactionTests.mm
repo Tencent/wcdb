@@ -31,13 +31,13 @@
 {
     XCTAssertEqual(WCDB::StatementTransaction().getStatementType(), WCDB::Statement::Type::Transaction);
     WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Deferred), @"BEGIN DEFERRED");
-    
+
     WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Immediate), @"BEGIN IMMEDIATE");
-    
+
     WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Exclusive), @"BEGIN EXCLUSIVE");
-    
+
     WINQAssertEqual(WCDB::StatementTransaction().commit(), @"COMMIT");
-    
+
     WINQAssertEqual(WCDB::StatementTransaction().rollback(), @"ROLLBACK");
 }
 

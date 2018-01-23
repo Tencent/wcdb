@@ -31,34 +31,34 @@
 {
     WCDB::LiteralValue boolLiteralValue = false;
     WINQAssertEqual(boolLiteralValue, @"0");
-    
+
     WCDB::LiteralValue intLiteralValue = 1;
     WINQAssertEqual(intLiteralValue, @"1");
-    
+
     WCDB::LiteralValue floatLiteralValue = 0.1;
     WINQAssertEqual(floatLiteralValue, @"0.100000");
-    
+
     WCDB::LiteralValue stringLiteralValue = "test";
     WINQAssertEqual(stringLiteralValue, @"'test'");
-    
+
     WCDB::LiteralValue nullLiteralValue = nil;
     WINQAssertEqual(nullLiteralValue, @"NULL");
-    
+
     WINQAssertEqual(WCDB::LiteralValue(true), @"1");
-    
+
     WINQAssertEqual(WCDB::LiteralValue(1), @"1");
-    
+
     int64_t int64 = 17626545782784;
     WINQAssertEqual(WCDB::LiteralValue(int64), @"17626545782784");
-    
+
     WINQAssertEqual(WCDB::LiteralValue(0.1), @"0.100000");
-    
+
     WINQAssertEqual(WCDB::LiteralValue("test"), @"'test'");
-    
+
     std::string str = "test";
     std::vector<unsigned char> data(str.begin(), str.end());
     WINQAssertEqual(WCDB::LiteralValue(data), @"'test'");
-    
+
     WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
 }
 

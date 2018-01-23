@@ -18,19 +18,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/utility.hpp>
-#include <WCDB/expression.hpp>
-#include <WCDB/statement_select.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/convertible_impl.hpp>
+#include <WCDB/expression.hpp>
+#include <WCDB/statement_select.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
 #pragma mark - Expression
-    
+
 const Expression Expression::BindParameter(Column("?"));
 
-Expression::Expression(const std::string &raw, const std::nullptr_t& dummy) : Describable(raw)
+Expression::Expression(const std::string &raw, const std::nullptr_t &dummy)
+    : Describable(raw)
 {
 }
 
@@ -53,54 +54,63 @@ Expression::CaseExpression Expression::Case(const Expression &expression)
 {
     return Expression::CaseExpression(expression);
 }
-    
-Expression Expression::Function(const std::string& name, const std::list<const Expression> &list, bool isDistinct)
+
+Expression Expression::Function(const std::string &name,
+                                const std::list<const Expression> &list,
+                                bool isDistinct)
 {
-    return Operator::operateWithTitle(name, isDistinct?"DISTINCT":"", list);
+    return Operator::operateWithTitle(name, isDistinct ? "DISTINCT" : "", list);
 }
-    
-Expression Expression::Function(const std::string& name, const Expression &expression, bool isDistinct)
+
+Expression Expression::Function(const std::string &name,
+                                const Expression &expression,
+                                bool isDistinct)
 {
-    return Operator::operateWithTitle(name, isDistinct?"DISTINCT":"", {expression});
+    return Operator::operateWithTitle(name, isDistinct ? "DISTINCT" : "",
+                                      {expression});
 }
-    
-Expression Expression::Combine(const std::list<const Expression> &list) {
+
+Expression Expression::Combine(const std::list<const Expression> &list)
+{
     return Expression("(" + stringByJoiningList(list) + ")", nullptr);
 }
-    
+
 Expression Expression::asExpression() const
 {
     return *this;
 }
-    
+
 Expression::operator std::list<const Expression>() const
 {
     return {*this};
 }
-    
+
 #pragma mark - CaseExpression
-    
-Expression::CaseExpression &Expression::CaseExpression::when(const Expression &expression)
+
+Expression::CaseExpression &
+Expression::CaseExpression::when(const Expression &expression)
 {
     m_description.append(" WHEN " + expression.getDescription());
     return *this;
 }
-    
-Expression::CaseExpression &Expression::CaseExpression::then(const Expression &expression)
+
+Expression::CaseExpression &
+Expression::CaseExpression::then(const Expression &expression)
 {
     m_description.append(" THEN " + expression.getDescription());
     return *this;
 }
-    
-Expression::CaseExpression &Expression::CaseExpression::else_(const Expression &expression)
+
+Expression::CaseExpression &
+Expression::CaseExpression::else_(const Expression &expression)
 {
     m_description.append(" ELSE " + expression.getDescription() + " END");
     return *this;
 }
-    
+
 Expression::CaseExpression::CaseExpression(const Expression &expression)
     : Describable("CASE " + expression.getDescription())
 {
 }
-    
+
 } //namespace WCDB

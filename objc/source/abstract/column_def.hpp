@@ -21,22 +21,29 @@
 #ifndef column_def_hpp
 #define column_def_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
 class ColumnDef : public Describable {
 public:
-    
     template <typename T>
-    ColumnDef(const T &t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
-    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){
+    ColumnDef(const T &t,
+              typename std::enable_if<ColumnConvertible<T>::value, void>::type
+                  * = nullptr)
+        : Describable(ColumnConvertible<T>::asColumn(t).getDescription())
+    {
     }
-    
+
     template <typename T>
-    ColumnDef(const T &t, ColumnType columnType, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
-    : Describable(ColumnConvertible<T>::asColumn(t).getDescription() + " " + ColumnTypeName(columnType)){
+    ColumnDef(const T &t,
+              ColumnType columnType,
+              typename std::enable_if<ColumnConvertible<T>::value, void>::type
+                  * = nullptr)
+        : Describable(ColumnConvertible<T>::asColumn(t).getDescription() + " " +
+                      ColumnTypeName(columnType))
+    {
     }
 
     ColumnDef &makePrimary(OrderTerm term = OrderTerm::NotSet,
@@ -44,7 +51,7 @@ public:
                            Conflict conflict = Conflict::NotSet);
 
     ColumnDef &makeDefault(const Expression &expr);
-    
+
     enum class DefaultType {
         CurrentTime,
         CurrentDate,

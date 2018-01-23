@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import "Convenience.h"
+#import <Foundation/Foundation.h>
 
-@interface WTCRepairObject : NSObject<WTCNamed>
+@interface WTCRepairObject : NSObject <WTCNamed>
 
 @property(nonatomic, assign) int variable1;
 @property(nonatomic, retain) NSString *variable2;

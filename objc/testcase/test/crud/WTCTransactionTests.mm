@@ -21,8 +21,8 @@
 #import "WTCCRUDTestCase.h"
 
 @interface WTCTransactionTests : WTCCRUDTestCase
-@property(nonatomic, readonly) WCTTransaction* transaction;
-@property(nonatomic, readonly) WCTCoreStatement* coreStatement;
+@property(nonatomic, readonly) WCTTransaction *transaction;
+@property(nonatomic, readonly) WCTCoreStatement *coreStatement;
 @end
 
 @implementation WTCTransactionTests
@@ -37,7 +37,8 @@
     [super tearDown];
 }
 
-- (void)testBase {
+- (void)testBase
+{
     //When
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
@@ -46,9 +47,10 @@
     XCTAssertTrue([self.transaction.path isEqualToString:self.database.path]);
 }
 
-- (void)testCommitTransactionWithDatabase {
+- (void)testCommitTransactionWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //When
@@ -56,14 +58,15 @@
     XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
     XCTAssertTrue([self.database commit]);
     //Then
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testRollbackTransactionWithDatabase {
+- (void)testRollbackTransactionWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //When
@@ -71,97 +74,104 @@
     XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
     XCTAssertTrue([self.database rollback]);
     //Then
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }
 
-- (void)testControllableTransactionFailedWithDatabase {
+- (void)testControllableTransactionFailedWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //Then
-    XCTAssertFalse([self.database runControllableTransaction:^BOOL{
-        return [self.database insertObject:object into:@"nonexistentTable"];
+    XCTAssertFalse([self.database runControllableTransaction:^BOOL {
+      return [self.database insertObject:object into:@"nonexistentTable"];
     }]);
 }
 
-- (void)testRunTransactionWithDatabase {
+- (void)testRunTransactionWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //Then
     XCTAssertTrue([self.database runTransaction:^{
-        XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
+      XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
     }]);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testRunTransactionFailedWithDatabase {
+- (void)testRunTransactionFailedWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //Then
     XCTAssertTrue([self.database runTransaction:^{
-        XCTAssertFalse([self.database insertObject:object into:@"nonexistentTable"]);
+      XCTAssertFalse([self.database insertObject:object into:@"nonexistentTable"]);
     }]);
 }
 
-- (void)testRollbackControllableTransactionWithDatabase {
+- (void)testRollbackControllableTransactionWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //Then
-    XCTAssertFalse([self.database runControllableTransaction:^BOOL{
-        XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
-        return NO;
+    XCTAssertFalse([self.database runControllableTransaction:^BOOL {
+      XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
+      return NO;
     }]);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }
 
-- (void)testCommitControllableTransactionWithDatabase {
+- (void)testCommitControllableTransactionWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //Then
-    XCTAssertTrue([self.database runControllableTransaction:^BOOL{
-        XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
-        return YES;
+    XCTAssertTrue([self.database runControllableTransaction:^BOOL {
+      XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
+      return YES;
     }]);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testRunEmbededTransactionWithDatabase {
+- (void)testRunEmbededTransactionWithDatabase
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     //Then
     XCTAssertTrue([self.database runTransaction:^{
-        XCTAssertTrue([self.database runEmbeddedTransaction:^{
-            XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
-        }]);
+      XCTAssertTrue([self.database runEmbeddedTransaction:^{
+        XCTAssertTrue([self.database insertObject:object into:WTCCRUDObject.Name]);
+      }]);
     }]);
-    
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testCommitTransactionWithTransaction {
+- (void)testCommitTransactionWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
@@ -172,14 +182,15 @@
     XCTAssertTrue([self.transaction commit]);
     //Then
     XCTAssertEqual(self.transaction.changes, 1);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testRollbackTransactionWithTransaction {
+- (void)testRollbackTransactionWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
@@ -189,102 +200,108 @@
     XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
     XCTAssertTrue([self.transaction rollback]);
     //Then
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }
 
-- (void)testControllableTransactionFailedWithTransaction {
+- (void)testControllableTransactionFailedWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
     //Then
-    XCTAssertFalse([self.transaction runControllableTransaction:^BOOL{
-        return [self.transaction insertObject:object into:@"nonexistentTable"];
+    XCTAssertFalse([self.transaction runControllableTransaction:^BOOL {
+      return [self.transaction insertObject:object into:@"nonexistentTable"];
     }]);
 }
 
-- (void)testRunTransactionWithTransaction {
+- (void)testRunTransactionWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
     //Then
     XCTAssertTrue([self.transaction runTransaction:^{
-        XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
+      XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
     }]);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testRunTransactionFailedWithTransaction {
+- (void)testRunTransactionFailedWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
     //Then
     XCTAssertTrue([self.transaction runTransaction:^{
-        XCTAssertFalse([self.transaction insertObject:object into:@"nonexistentTable"]);
+      XCTAssertFalse([self.transaction insertObject:object into:@"nonexistentTable"]);
     }]);
 }
 
-- (void)testRollbackControllableTransactionWithTransaction {
+- (void)testRollbackControllableTransactionWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
     //Then
-    XCTAssertFalse([self.transaction runControllableTransaction:^BOOL{
-        XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
-        return NO;
+    XCTAssertFalse([self.transaction runControllableTransaction:^BOOL {
+      XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
+      return NO;
     }]);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }
 
-- (void)testCommitControllableTransactionWithTransaction {
+- (void)testCommitControllableTransactionWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
     //Then
-    XCTAssertTrue([self.transaction runControllableTransaction:^BOOL{
-        XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
-        return YES;
+    XCTAssertTrue([self.transaction runControllableTransaction:^BOOL {
+      XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
+      return YES;
     }]);
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
 
-- (void)testRunEmbededTransactionWithTransaction {
+- (void)testRunEmbededTransactionWithTransaction
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
     _transaction = [self.database getTransaction];
     XCTAssertNotNil(_transaction);
     //Then
     XCTAssertTrue([self.transaction runTransaction:^{
-        XCTAssertTrue([self.transaction runEmbeddedTransaction:^{
-            XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
-        }]);
+      XCTAssertTrue([self.transaction runEmbeddedTransaction:^{
+        XCTAssertTrue([self.transaction insertObject:object into:WTCCRUDObject.Name]);
+      }]);
     }]);
-    
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
 }
@@ -299,7 +316,7 @@
     XCTAssertNotNil(_coreStatement);
     XCTAssertTrue([self.coreStatement step]);
     //Then
-    NSString* journalMode = (NSString*)[self.coreStatement valueAtIndex:0];
+    NSString *journalMode = (NSString *) [self.coreStatement valueAtIndex:0];
     XCTAssertNotNil(journalMode);
     XCTAssertTrue([journalMode.lowercaseString isEqualToString:@"wal"]);
 }
@@ -312,7 +329,7 @@
     //When
     [self.transaction exec:WCDB::StatementDelete().deleteFrom(WTCCRUDObject.Name.UTF8String)];
     //Then
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }
@@ -325,7 +342,7 @@
     //Then
     bool randomTableExists = [self.transaction isTableExists:@"randomTable"];
     XCTAssertFalse(randomTableExists);
-    
+
     bool crudTableExists = [self.transaction isTableExists:WTCCRUDObject.Name];
     XCTAssertTrue(crudTableExists);
 }
@@ -333,10 +350,10 @@
 - (void)testAutoRollbackTransactionWithTransaction
 {
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable1 = 3;
     object.variable2 = self.name;
-    @autoreleasepool{
+    @autoreleasepool {
         _transaction = [self.database getTransaction];
         XCTAssertNotNil(_transaction);
         //When
@@ -345,7 +362,7 @@
         _transaction = nil;
     }
     //Then
-    NSArray<WTCCRUDObject*> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 3];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }

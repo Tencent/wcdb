@@ -21,8 +21,8 @@
 #ifndef statement_create_table_hpp
 #define statement_create_table_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -33,10 +33,17 @@ public:
                                  bool ifNotExists = true);
     StatementCreateTable &as(const StatementSelect &statementSelect);
 
-    StatementCreateTable &create(const std::string &table, const std::list<const ColumnDef> &columnDefList, bool ifNotExists = true);
+    StatementCreateTable &
+    create(const std::string &table,
+           const std::list<const ColumnDef> &columnDefList,
+           bool ifNotExists = true);
 
-    StatementCreateTable &create(const std::string &table, const std::list<const ColumnDef> &columnDefList, const std::list<const TableConstraint> &tableConstraintList, bool ifNotExists = true);
-    
+    StatementCreateTable &
+    create(const std::string &table,
+           const std::list<const ColumnDef> &columnDefList,
+           const std::list<const TableConstraint> &tableConstraintList,
+           bool ifNotExists = true);
+
     virtual Statement::Type getStatementType() const override;
 };
 

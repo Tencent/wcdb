@@ -21,45 +21,53 @@
 #ifndef optional_impl_hpp
 #define optional_impl_hpp
 
-#include <WCDB/optional.hpp>
 #include <WCDB/error.hpp>
+#include <WCDB/optional.hpp>
 
 namespace WCDB {
 
 template <typename T>
-Optional<T>::OptionalStorage::OptionalStorage(const T& value)
-: m_value(value) {}
+Optional<T>::OptionalStorage::OptionalStorage(const T &value) : m_value(value)
+{
+}
 
 template <typename T>
-Optional<T>::Optional(const T& value)
-: m_storage(new OptionalStorage(value)) {}
+Optional<T>::Optional(const T &value) : m_storage(new OptionalStorage(value))
+{
+}
 
 template <typename T>
-Optional<T>::Optional()
-: m_storage(nullptr) {}
+Optional<T>::Optional() : m_storage(nullptr)
+{
+}
 
 template <typename T>
-Optional<T>::operator bool() const {
+Optional<T>::operator bool() const
+{
     return isValid();
 }
 
 template <typename T>
-bool Optional<T>::isValid() const {
+bool Optional<T>::isValid() const
+{
     return m_storage != nullptr;
 }
 
 template <typename T>
-const T& Optional<T>::operator *() const {
+const T &Optional<T>::operator*() const
+{
     return value();
 }
 
 template <typename T>
-T& Optional<T>::operator *() {
+T &Optional<T>::operator*()
+{
     return value();
 }
 
 template <typename T>
-const T& Optional<T>::value() const {
+const T &Optional<T>::value() const
+{
     if (!isValid()) {
         Error::Abort("Unwrap a disengaged value");
     }
@@ -67,13 +75,14 @@ const T& Optional<T>::value() const {
 }
 
 template <typename T>
-T& Optional<T>::value() {
+T &Optional<T>::value()
+{
     if (!isValid()) {
         Error::Abort("Unwrap a disengaged value");
     }
     return *m_storage.get();
 }
-    
+
 } //namespace WCDB
 
 #endif /* optional_impl_hpp */

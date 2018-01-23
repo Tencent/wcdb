@@ -28,8 +28,9 @@ namespace WCDB {
 class Describable {
 public:
     const std::string &getDescription() const;
-    
+
     bool isEmpty() const;
+
 protected:
     Describable(const std::string &description);
     Describable(const char *description);

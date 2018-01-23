@@ -24,21 +24,21 @@
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
 
-#define WINQAssertEqual(describable, expression)                            \
+#define WINQAssertEqual(describable, expression)                               \
     XCTAssertTrue(                                                             \
         [(expression)                                                          \
             isEqualToString:@((describable).getDescription().c_str())],        \
-        @"different from `%@` for `%@`",                                                       \
+        @"different from `%@` for `%@`",                                       \
         [@((describable).getDescription().c_str())                             \
             commonPrefixWithString:(expression) options                        \
-                                  :NSCaseInsensitiveSearch], @((describable).getDescription().c_str()))
+                                  :NSCaseInsensitiveSearch],                   \
+        @((describable).getDescription().c_str()))
 
-#define WTCAssertEqual(raw, expected)                            \
-    XCTAssertTrue(                                                             \
-        [(expected)                                                          \
-            isEqualToString:@(raw)],        \
-        @"different from %@ for %@",                                                       \
-        [expected commonPrefixWithString:@(raw) options:NSCaseInsensitiveSearch], @(raw))
-
+#define WTCAssertEqual(raw, expected)                                          \
+    XCTAssertTrue([(expected) isEqualToString:@(raw)],                         \
+                  @"different from %@ for %@",                                 \
+                  [expected commonPrefixWithString:@(raw)                      \
+                                           options:NSCaseInsensitiveSearch],   \
+                  @(raw))
 
 #endif /* Assert_h */

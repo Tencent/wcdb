@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCIndexBaselineIndexObject+WCTTableCoding.h"
 #import "WTCIndexBaselineIndexObject.h"
+#import "WTCIndexBaselineIndexObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCIndexBaselineIndexObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCIndexBaselineIndexObject)
 WCDB_SYNTHESIZE(WTCIndexBaselineIndexObject, variable)
 
 WCDB_INDEX(WTCIndexBaselineIndexObject, "_index", variable)
-  
+
 @end

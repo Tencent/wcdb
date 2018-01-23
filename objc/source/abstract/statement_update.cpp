@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/order.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/expression.hpp>
+#include <WCDB/order.hpp>
 #include <WCDB/statement_update.hpp>
 #include <WCDB/utility.hpp>
 
@@ -38,8 +38,9 @@ StatementUpdate &StatementUpdate::update(const std::string &table,
     m_description.append(table);
     return *this;
 }
-    
-StatementUpdate &StatementUpdate::set(const std::list<const std::pair<const Column, const Expression>> &valueList)
+
+StatementUpdate &StatementUpdate::set(
+    const std::list<const std::pair<const Column, const Expression>> &valueList)
 {
     m_description.append(" SET ");
     bool flag = false;
@@ -49,14 +50,17 @@ StatementUpdate &StatementUpdate::set(const std::list<const std::pair<const Colu
         } else {
             flag = true;
         }
-        m_description.append(value.first.getDescription() + "=" + value.second.getDescription());
+        m_description.append(value.first.getDescription() + "=" +
+                             value.second.getDescription());
     }
     return *this;
 }
-    
-StatementUpdate &StatementUpdate::set(const std::pair<const Column, const Expression> &value)
+
+StatementUpdate &
+StatementUpdate::set(const std::pair<const Column, const Expression> &value)
 {
-    m_description.append(" SET " + value.first.getDescription() + "=" + value.second.getDescription());
+    m_description.append(" SET " + value.first.getDescription() + "=" +
+                         value.second.getDescription());
     return *this;
 }
 
@@ -67,15 +71,16 @@ StatementUpdate &StatementUpdate::where(const Expression &condition)
     }
     return *this;
 }
-    
-StatementUpdate &StatementUpdate::orderBy(const std::list<const Order> &orderList)
+
+StatementUpdate &
+StatementUpdate::orderBy(const std::list<const Order> &orderList)
 {
     if (!orderList.empty()) {
         m_description.append(" ORDER BY " + stringByJoiningList(orderList));
     }
     return *this;
 }
-    
+
 StatementUpdate &StatementUpdate::orderBy(const Order &order)
 {
     m_description.append(" ORDER BY " + order.getDescription());

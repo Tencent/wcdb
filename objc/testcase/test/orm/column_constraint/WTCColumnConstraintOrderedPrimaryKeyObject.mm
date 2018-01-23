@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintOrderedPrimaryKeyObject+WCTTableCoding.h"
 #import "WTCColumnConstraintOrderedPrimaryKeyObject.h"
+#import "WTCColumnConstraintOrderedPrimaryKeyObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintOrderedPrimaryKeyObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCColumnConstraintOrderedPrimaryKeyObject)
 WCDB_SYNTHESIZE_COLUMN(WTCColumnConstraintOrderedPrimaryKeyObject, variable, "orderedPrimaryVariable")
 
 WCDB_PRIMARY_ASC(WTCColumnConstraintOrderedPrimaryKeyObject, variable)
-  
+
 @end

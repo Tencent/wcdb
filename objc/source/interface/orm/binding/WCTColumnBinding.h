@@ -35,7 +35,8 @@ public:
         : columnName(cn)
         , accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
         , m_class(cls)
-        , m_columnDef(WCDB::Column(cn), (WCDB::ColumnType) accessor->getColumnType())
+        , m_columnDef(WCDB::Column(cn),
+                      (WCDB::ColumnType) accessor->getColumnType())
         , m_isAutoIncrement(false)
         , m_isPrimary(false)
     {
@@ -51,7 +52,8 @@ public:
         : columnName(cn)
         , accessor(new WCTRuntimeObjCAccessor(cls, pn))
         , m_class(cls)
-        , m_columnDef(WCDB::Column(cn), (WCDB::ColumnType) accessor->getColumnType())
+        , m_columnDef(WCDB::Column(cn),
+                      (WCDB::ColumnType) accessor->getColumnType())
         , m_isAutoIncrement(false)
         , m_isPrimary(false)
     {

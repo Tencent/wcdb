@@ -30,7 +30,7 @@
 - (void)testStatementRelease
 {
     XCTAssertEqual(WCDB::StatementRelease().getStatementType(), WCDB::Statement::Type::Release);
-    
+
     WINQAssertEqual(WCDB::StatementRelease().release("savepoint1"), @"RELEASE savepoint1");
 }
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableConstraintBaselineMultiUniqueObject+WCTTableCoding.h"
 #import "WTCTableConstraintBaselineMultiUniqueObject.h"
+#import "WTCTableConstraintBaselineMultiUniqueObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableConstraintBaselineMultiUniqueObject

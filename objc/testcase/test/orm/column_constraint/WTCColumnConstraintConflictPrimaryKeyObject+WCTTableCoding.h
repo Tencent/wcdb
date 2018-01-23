@@ -21,7 +21,8 @@
 #import "WTCColumnConstraintConflictPrimaryKeyObject.h"
 #import <WCDB/WCDB.h>
 
-@interface WTCColumnConstraintConflictPrimaryKeyObject (WCTTableCoding) <WCTTableCoding>
+@interface WTCColumnConstraintConflictPrimaryKeyObject (
+    WCTTableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(variable)
 

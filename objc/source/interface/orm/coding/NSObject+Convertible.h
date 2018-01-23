@@ -25,99 +25,115 @@ namespace WCDB {
 
 //NSObject
 template <>
-struct LiteralValueConvertible<NSObject*> : public std::true_type
-{
+struct LiteralValueConvertible<NSObject *> : public std::true_type {
 public:
-    static LiteralValue asLiteralValue(NSObject* const &t);
+    static LiteralValue asLiteralValue(NSObject *const &t);
 };
 
 template <>
-struct ExpressionConvertible<NSObject*> : public std::true_type
-{
+struct ExpressionConvertible<NSObject *> : public std::true_type {
 public:
-    static Expression asExpression(NSObject* const &t);
+    static Expression asExpression(NSObject *const &t);
 };
 
 template <>
-struct ColumnResultConvertible<NSObject*> : public std::true_type
-{
+struct ColumnResultConvertible<NSObject *> : public std::true_type {
 public:
-    static ColumnResult asColumnResult(NSObject* const &t);
+    static ColumnResult asColumnResult(NSObject *const &t);
 };
 
 template <>
-struct OrderConvertible<NSObject*> : public std::true_type
-{
+struct OrderConvertible<NSObject *> : public std::true_type {
 public:
-    static Order asOrder(NSObject* const & t);
+    static Order asOrder(NSObject *const &t);
 };
 
 template <>
-struct SpecificOrderConvertible<NSObject*> : public std::true_type
-{
+struct SpecificOrderConvertible<NSObject *> : public std::true_type {
 public:
-    static Order asOrder(NSObject* const & t, OrderTerm term) ;
+    static Order asOrder(NSObject *const &t, OrderTerm term);
 };
-    
+
 //NSObject Subclass
 template <typename T, typename Enable = void>
-struct IsObjCType : std::false_type{};
-    
+struct IsObjCType : std::false_type {
+};
+
 template <typename T>
-struct IsObjCType<T, typename std::enable_if<std::is_convertible<NSObject*, T>::value && std::is_pointer<T>::value>::type> : std::true_type{};
-    
+struct IsObjCType<
+    T,
+    typename std::enable_if<std::is_convertible<NSObject *, T>::value &&
+                            std::is_pointer<T>::value>::type> : std::true_type {
+};
+
 template <typename T>
-    struct LiteralValueConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type> : public std::true_type
-{
+struct LiteralValueConvertible<
+    T,
+    typename std::enable_if<IsObjCType<T>::value>::type>
+    : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T &t);
 };
 
 template <typename T>
-struct ColumnResultConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type> : public std::true_type
-{
+struct ColumnResultConvertible<
+    T,
+    typename std::enable_if<IsObjCType<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnResult asColumnResult(const T &t);
 };
 
 template <typename T>
-struct OrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type> : public std::true_type
-{
+struct OrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t);
+    static Order asOrder(const T &t);
 };
 
 template <typename T>
-struct SpecificOrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type> : public std::true_type
-{
+struct SpecificOrderConvertible<
+    T,
+    typename std::enable_if<IsObjCType<T>::value>::type>
+    : public std::true_type {
 public:
-    static Order asOrder(const T& t, OrderTerm term) ;
+    static Order asOrder(const T &t, OrderTerm term);
 };
-    
-//NSObject Subclass Implementation    
+
+//NSObject Subclass Implementation
 template <typename T>
-LiteralValue LiteralValueConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>::asLiteralValue(const T &t)
+LiteralValue
+LiteralValueConvertible<T,
+                        typename std::enable_if<IsObjCType<T>::value>::type>::
+    asLiteralValue(const T &t)
 {
-    return LiteralValueConvertible<NSObject*>::asLiteralValue(t);
+    return LiteralValueConvertible<NSObject *>::asLiteralValue(t);
 }
 
 template <typename T>
-ColumnResult ColumnResultConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>::asColumnResult(const T &t)
+ColumnResult
+ColumnResultConvertible<T,
+                        typename std::enable_if<IsObjCType<T>::value>::type>::
+    asColumnResult(const T &t)
 {
-    return ColumnResultConvertible<NSObject*>::asColumnResult(t);
+    return ColumnResultConvertible<NSObject *>::asColumnResult(t);
 }
 
 template <typename T>
-Order OrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>::asOrder(const T& t)
+Order OrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>::
+    asOrder(const T &t)
 {
-    return OrderConvertible<NSObject*>::asOrder(t);
+    return OrderConvertible<NSObject *>::asOrder(t);
 }
 
 template <typename T>
-Order SpecificOrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>::asOrder(const T& t, OrderTerm term) 
+Order SpecificOrderConvertible<
+    T,
+    typename std::enable_if<IsObjCType<T>::value>::type>::asOrder(const T &t,
+                                                                  OrderTerm
+                                                                      term)
 {
-    return OrderConvertible<NSObject*>::asOrder(t);
+    return OrderConvertible<NSObject *>::asOrder(t);
 }
 
 } //namespace WCDB
-

@@ -21,36 +21,40 @@
 #import "WTCCRUDTestCase.h"
 
 @interface WTCUpdateTests : WTCCRUDTestCase
-@property(nonatomic, readonly) WCTUpdate* update;
+@property(nonatomic, readonly) WCTUpdate *update;
 @end
 
 @implementation WTCUpdateTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
     _update = [self.database prepareUpdateTable:WTCCRUDObject.Name onProperties:WTCCRUDObject.variable2];
     XCTAssertNotNil(_update);
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     _update = nil;
     [super tearDown];
 }
 
-- (void)testBase {
+- (void)testBase
+{
     XCTAssertEqual(self.update.tag, self.database.tag);
     XCTAssertTrue([self.update.path isEqualToString:self.database.path]);
 }
 
-- (void)testUpdate {
+- (void)testUpdate
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.update executeWithObject:object]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
-    for (WTCCRUDObject* result : results) {
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    for (WTCCRUDObject *result : results) {
         XCTAssertTrue([result.variable2 isEqualToString:self.name]);
     }
 }
@@ -58,12 +62,12 @@
 - (void)testConditionalUpdate
 {
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([[self.update where:WTCCRUDObject.variable1] executeWithObject:object]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
     XCTAssertNotNil(result);
     XCTAssertTrue([self.name isEqualToString:result.variable2]);
 }
@@ -71,12 +75,12 @@
 - (void)testOrderedUpdate
 {
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([[[self.update orderBy:WTCCRUDObject.variable1.asOrder(WCTOrderedDescending)] limit:1] executeWithObject:object]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 2];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 2];
     XCTAssertNotNil(result);
     XCTAssertTrue([self.name isEqualToString:result.variable2]);
 }
@@ -84,12 +88,12 @@
 - (void)testLimitedUpdate
 {
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([[self.update limit:1] executeWithObject:object]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
     XCTAssertTrue([results[1] isEqual:self.preInsertedObjects[1]]);
@@ -98,12 +102,12 @@
 - (void)testOffsetUpdate
 {
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([[[self.update limit:1] offset:1] executeWithObject:object]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertTrue([results[0] isEqual:self.preInsertedObjects[0]]);
     XCTAssertTrue([results[1].variable2 isEqualToString:self.name]);
@@ -112,7 +116,7 @@
 - (void)testUpdateChanges
 {
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.update executeWithObject:object]);
@@ -122,13 +126,13 @@
 
 - (void)testUpdateFailed
 {
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
-    
+
     _update = [self.database prepareUpdateTable:@"" onProperties:WTCCRUDObject.variable2];
     XCTAssertNotNil(_update);
     XCTAssertFalse([self.update executeWithObject:object]);
-    
+
     _update = [self.database prepareUpdateTable:WTCCRUDObject.Name onProperties:{}];
     XCTAssertNotNil(_update);
     XCTAssertFalse([self.update executeWithObject:object]);

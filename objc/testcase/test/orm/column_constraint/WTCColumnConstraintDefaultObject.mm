@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintDefaultObject+WCTTableCoding.h"
 #import "WTCColumnConstraintDefaultObject.h"
+#import "WTCColumnConstraintDefaultObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintDefaultObject
 
 WCDB_IMPLEMENTATION(WTCColumnConstraintDefaultObject)
 WCDB_SYNTHESIZE_COLUMN_DEFAULT(WTCColumnConstraintDefaultObject, variable, "defaultValueVariable", 1)
-  
+
 @end

@@ -19,104 +19,113 @@
  */
 
 #import "WTCCRUDTestCase.h"
-#import "WTCMultiSelectObject.h"
 #import "WTCMultiSelectObject+WCTTableCoding.h"
+#import "WTCMultiSelectObject.h"
 
 @interface WTCMultiSelectTests : WTCCRUDTestCase
-@property(nonatomic, readonly) WCTMultiSelect* multiSelect;
-@property(nonatomic, readonly) NSArray<WTCMultiSelectObject*>* preInsertedMultiSelectObjects;
-@property(nonatomic, readonly) NSArray* preInsertedMultiObjects;
+@property(nonatomic, readonly) WCTMultiSelect *multiSelect;
+@property(nonatomic, readonly) NSArray<WTCMultiSelectObject *> *preInsertedMultiSelectObjects;
+@property(nonatomic, readonly) NSArray *preInsertedMultiObjects;
 @end
 
 @implementation WTCMultiSelectTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
     XCTAssertTrue([self.database createTableAndIndexesOfName:WTCMultiSelectObject.Name withClass:WTCMultiSelectObject.class]);
     {
-        WTCMultiSelectObject* object1 = [[WTCMultiSelectObject alloc] init];
+        WTCMultiSelectObject *object1 = [[WTCMultiSelectObject alloc] init];
         object1.variable1 = 1;
         object1.variable2 = @"multiObject1";
-        WTCMultiSelectObject* object2 = [[WTCMultiSelectObject alloc] init];
+        WTCMultiSelectObject *object2 = [[WTCMultiSelectObject alloc] init];
         object2.variable1 = 2;
-        object2.variable2 = @"multiObject2";        
-        _preInsertedMultiSelectObjects = @[object1, object2];
+        object2.variable2 = @"multiObject2";
+        _preInsertedMultiSelectObjects = @[ object1, object2 ];
     }
     {
         _preInsertedMultiObjects = @[
-          @{
-              WTCCRUDObject.Name:self.preInsertedObjects[0],
-              WTCMultiSelectObject.Name:self.preInsertedMultiSelectObjects[0]
-          },
-          @{
-              WTCCRUDObject.Name:self.preInsertedObjects[1],
-              WTCMultiSelectObject.Name:self.preInsertedMultiSelectObjects[1]
-          }
-          ];
+            @{
+               WTCCRUDObject.Name : self.preInsertedObjects[0],
+               WTCMultiSelectObject.Name : self.preInsertedMultiSelectObjects[0]
+            },
+            @{
+               WTCCRUDObject.Name : self.preInsertedObjects[1],
+               WTCMultiSelectObject.Name : self.preInsertedMultiSelectObjects[1]
+            }
+        ];
     }
     XCTAssertTrue([self.database insertObjects:_preInsertedMultiSelectObjects into:WTCMultiSelectObject.Name]);
-    
+
     WCTProperty property1Table1 = WTCCRUDObject.variable1.inTable(WTCCRUDObject.Name);
     WCTProperty property2Table1 = WTCCRUDObject.variable2.inTable(WTCCRUDObject.Name);
     WCTProperty property1Table2 = WTCMultiSelectObject.variable1.inTable(WTCMultiSelectObject.Name);
     WCTProperty property2Table2 = WTCMultiSelectObject.variable2.inTable(WTCMultiSelectObject.Name);
-    _multiSelect = [[self.database prepareSelectMultiObjectsOnProperties:{property1Table1, property2Table1, property1Table2, property2Table2} fromTables:@[WTCCRUDObject.Name, WTCMultiSelectObject.Name]] where:property1Table1 == property1Table2];
-    XCTAssertNotNil(_multiSelect);    
+    _multiSelect = [[self.database prepareSelectMultiObjectsOnProperties:{property1Table1, property2Table1, property1Table2, property2Table2} fromTables:@[ WTCCRUDObject.Name, WTCMultiSelectObject.Name ]] where:property1Table1 == property1Table2];
+    XCTAssertNotNil(_multiSelect);
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     _multiSelect = nil;
     [super tearDown];
 }
 
-- (void)testBase {
+- (void)testBase
+{
     XCTAssertEqual(self.multiSelect.tag, self.database.tag);
     XCTAssertTrue([self.multiSelect.path isEqualToString:self.database.path]);
 }
 
-- (void)testMultiSelect {
+- (void)testMultiSelect
+{
     //When
-    NSArray* results = self.multiSelect.allMultiObjects;
+    NSArray *results = self.multiSelect.allMultiObjects;
     XCTAssertTrue([results.sorted isEqual:self.preInsertedMultiObjects.sorted]);
 }
 
-- (void)testOrderedSelect {
+- (void)testOrderedSelect
+{
     //When
-    NSArray* results = [self.multiSelect orderBy:WTCCRUDObject.variable1.inTable(WTCCRUDObject.Name).asOrder(WCTOrderedDescending)].allMultiObjects;
+    NSArray *results = [self.multiSelect orderBy:WTCCRUDObject.variable1.inTable(WTCCRUDObject.Name).asOrder(WCTOrderedDescending)].allMultiObjects;
     XCTAssertTrue([results.sorted isEqual:self.preInsertedMultiObjects.sorted.reversed]);
 }
 
-- (void)testLimitedSelect {
+- (void)testLimitedSelect
+{
     //When
-    NSArray* results = [self.multiSelect limit:1].allMultiObjects;
+    NSArray *results = [self.multiSelect limit:1].allMultiObjects;
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results.sorted[0] isEqual:self.preInsertedMultiObjects.sorted[0]]);
 }
 
-- (void)testOffsetSelect {
+- (void)testOffsetSelect
+{
     //When
-    NSArray* results = [[self.multiSelect limit:1] offset:1].allMultiObjects;
+    NSArray *results = [[self.multiSelect limit:1] offset:1].allMultiObjects;
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results.sorted[0] isEqual:self.preInsertedMultiObjects.sorted[1]]);
 }
 
-- (void)testMultiSelectIteration {
+- (void)testMultiSelectIteration
+{
     //When
-    NSMutableArray* results = [[NSMutableArray alloc] init];
-    while (NSObject* object = self.multiSelect.nextMultiObject) {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    while (NSObject *object = self.multiSelect.nextMultiObject) {
         [results addObject:object];
     }
     XCTAssertTrue([results.sorted isEqual:self.preInsertedMultiObjects.sorted]);
 }
 
-- (void)testMultiSelectFailed {
+- (void)testMultiSelectFailed
+{
     WCTProperty property1Table1 = WTCCRUDObject.variable1.inTable(WTCCRUDObject.Name);
     WCTProperty property2Table1 = WTCCRUDObject.variable2.inTable(WTCCRUDObject.Name);
     WCTProperty property1Table2 = WTCMultiSelectObject.variable1.inTable(WTCMultiSelectObject.Name);
     WCTProperty property2Table2 = WTCMultiSelectObject.variable2.inTable(WTCMultiSelectObject.Name);
     _multiSelect = [self.database prepareSelectMultiObjectsOnProperties:{property1Table1, property2Table1, property1Table2, property2Table2} fromTables:@[]];
     XCTAssertNotNil(_multiSelect);
-    
+
     XCTAssertNil(self.multiSelect.allMultiObjects);
 }
 

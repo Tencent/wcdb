@@ -18,16 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/expression.hpp>
-#include <WCDB/statement_select.hpp>
 #include <WCDB/column_result.hpp>
-#include <WCDB/subquery.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/order.hpp>
+#include <WCDB/statement_select.hpp>
+#include <WCDB/subquery.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
 
-StatementSelect &StatementSelect::select(const ColumnResult &columnResult, bool distinct)
+StatementSelect &StatementSelect::select(const ColumnResult &columnResult,
+                                         bool distinct)
 {
     m_description.append("SELECT ");
     if (distinct) {
@@ -36,8 +37,10 @@ StatementSelect &StatementSelect::select(const ColumnResult &columnResult, bool 
     m_description.append(columnResult.getDescription());
     return *this;
 }
-    
-StatementSelect &StatementSelect::select(const std::list<const ColumnResult> &columnResultList, bool distinct)
+
+StatementSelect &
+StatementSelect::select(const std::list<const ColumnResult> &columnResultList,
+                        bool distinct)
 {
     m_description.append("SELECT ");
     if (distinct) {
@@ -46,13 +49,14 @@ StatementSelect &StatementSelect::select(const std::list<const ColumnResult> &co
     m_description.append(stringByJoiningList(columnResultList));
     return *this;
 }
-    
-StatementSelect &StatementSelect::from(const std::list<const Subquery> &subqueryList)
+
+StatementSelect &
+StatementSelect::from(const std::list<const Subquery> &subqueryList)
 {
     m_description.append(" FROM " + stringByJoiningList(subqueryList));
     return *this;
 }
-    
+
 StatementSelect &StatementSelect::from(const Subquery &subquery)
 {
     m_description.append(" FROM " + subquery.getDescription());
@@ -67,20 +71,21 @@ StatementSelect &StatementSelect::where(const Expression &condition)
     return *this;
 }
 
-StatementSelect &StatementSelect::orderBy(const std::list<const Order> &orderList)
+StatementSelect &
+StatementSelect::orderBy(const std::list<const Order> &orderList)
 {
     if (!orderList.empty()) {
         m_description.append(" ORDER BY " + stringByJoiningList(orderList));
     }
     return *this;
 }
-    
+
 StatementSelect &StatementSelect::orderBy(const Order &order)
 {
     m_description.append(" ORDER BY " + order.getDescription());
     return *this;
 }
-    
+
 StatementSelect &StatementSelect::limit(const Expression &from,
                                         const Expression &to)
 {
@@ -109,20 +114,21 @@ StatementSelect &StatementSelect::offset(const Expression &offset)
     return *this;
 }
 
-StatementSelect &StatementSelect::groupBy(const std::list<const Expression> &groupList)
+StatementSelect &
+StatementSelect::groupBy(const std::list<const Expression> &groupList)
 {
     if (!groupList.empty()) {
         m_description.append(" GROUP BY " + stringByJoiningList(groupList));
     }
     return *this;
 }
-    
+
 StatementSelect &StatementSelect::groupBy(const Expression &group)
 {
     m_description.append(" GROUP BY " + group.getDescription());
     return *this;
 }
-    
+
 StatementSelect &StatementSelect::having(const Expression &having)
 {
     if (!having.isEmpty()) {

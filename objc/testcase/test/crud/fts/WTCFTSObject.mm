@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCFTSObject+WCTTableCoding.h"
 #import "WTCFTSObject.h"
+#import "WTCFTSObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCFTSObject
@@ -33,12 +33,12 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCFTSObject, variable1)
 WCDB_VIRTUAL_TABLE_MODULE_FTS3(WTCFTSObject)
 WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(WTCFTSObject)
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
 
-- (BOOL)isEqual:(NSObject*)object
+- (BOOL)isEqual:(NSObject *)object
 {
     return self.hash == object.hash;
 }

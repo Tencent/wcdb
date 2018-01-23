@@ -35,7 +35,7 @@
 - (void)testColumnResult
 {
     WINQAssertEqual([self generateColumnResult].as("testColumnResult"), @"column1 AS testColumnResult");
-    
+
     WINQAssertEqual([self generateColumnResult], @"column1");
 }
 

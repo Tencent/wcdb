@@ -24,17 +24,23 @@
 #include <WCDB/operable.hpp>
 
 namespace WCDB {
-    
+
 template <typename T>
-typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type Operable::in(const std::list<const T> &list) const {
-    return Operator::operateWithPostfix(asExpression(), "IN(" + stringByJoiningList(list) + ")");
+typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type
+Operable::in(const std::list<const T> &list) const
+{
+    return Operator::operateWithPostfix(
+        asExpression(), "IN(" + stringByJoiningList(list) + ")");
 }
 
 template <typename T>
-typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type Operable::notIn(const std::list<const T> &list) const {
-    return Operator::operateWithPostfix(asExpression(), "NOT IN(" + stringByJoiningList(list) + ")");
+typename std::enable_if<ExpressionConvertible<T>::value, Expression>::type
+Operable::notIn(const std::list<const T> &list) const
+{
+    return Operator::operateWithPostfix(
+        asExpression(), "NOT IN(" + stringByJoiningList(list) + ")");
 }
-    
+
 } //namespace WCDB
 
 #endif /* operable_hpp */

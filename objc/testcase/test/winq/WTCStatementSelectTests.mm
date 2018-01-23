@@ -32,32 +32,32 @@
     //Give
     WCDB::Column column1("column1");
     WCDB::Column column2("column2");
-    
+
     std::string table1 = "table1";
     std::string table2 = "table2";
-    
+
     XCTAssertEqual(WCDB::StatementSelect().getStatementType(), WCDB::Statement::Type::Select);
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1), @"SELECT column1 FROM table1");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select({column1, column2}).from(table1), @"SELECT column1, column2 FROM table1");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select({column1, column2}, true).from(table1), @"SELECT DISTINCT column1, column2 FROM table1");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from({table1, table2}), @"SELECT column1 FROM table1, table2");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).where(column1 > 1), @"SELECT column1 FROM table1 WHERE (column1 > 1)");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).orderBy({column1, column2}), @"SELECT column1 FROM table1 ORDER BY column1, column2");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).limit(1), @"SELECT column1 FROM table1 LIMIT 1");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).limit(1, 2), @"SELECT column1 FROM table1 LIMIT 1, 2");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).limit(1).offset(3), @"SELECT column1 FROM table1 LIMIT 1 OFFSET 3");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).groupBy(column1), @"SELECT column1 FROM table1 GROUP BY column1");
-    
+
     WINQAssertEqual(WCDB::StatementSelect().select(column1).from(table1).groupBy({column1, column2}).having(column1 > 1), @"SELECT column1 FROM table1 GROUP BY column1, column2 HAVING (column1 > 1)");
 }
 

@@ -21,8 +21,8 @@
 #ifndef statement_pragma_hpp
 #define statement_pragma_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -30,7 +30,7 @@ class StatementPragma : public Statement {
 public:
     StatementPragma &pragma(const Pragma &pragma);
 
-    StatementPragma &pragma(const Pragma &pragma, const LiteralValue& value);
+    StatementPragma &pragma(const Pragma &pragma, const LiteralValue &value);
 
     virtual Statement::Type getStatementType() const override;
 };

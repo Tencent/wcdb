@@ -21,8 +21,8 @@
 #ifndef statement_insert_hpp
 #define statement_insert_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -49,26 +49,31 @@ public:
         }
         return *this;
     }
-    
-    StatementInsert &insert(const std::string &table, const std::list<const Column> &columnList, Conflict conflict = Conflict::NotSet);
-    
-    StatementInsert &insert(const std::string &table, const Column &column, Conflict conflict = Conflict::NotSet);
-    
+
+    StatementInsert &insert(const std::string &table,
+                            const std::list<const Column> &columnList,
+                            Conflict conflict = Conflict::NotSet);
+
+    StatementInsert &insert(const std::string &table,
+                            const Column &column,
+                            Conflict conflict = Conflict::NotSet);
+
     StatementInsert &values(const std::list<const Expression> &expressionList);
-    
+
     StatementInsert &values(const Expression &expression);
-    
+
     template <typename T>
     typename std::enable_if<ExpressionConvertible<T>::value,
-    StatementInsert &>::type
+                            StatementInsert &>::type
     values(const std::list<const T> &expressionList)
     {
         if (!expressionList.empty()) {
-            m_description.append(" VALUES(" + stringByJoiningList(expressionList) + ")");
+            m_description.append(" VALUES(" +
+                                 stringByJoiningList(expressionList) + ")");
         }
         return *this;
     }
-    
+
     virtual Statement::Type getStatementType() const override;
 };
 

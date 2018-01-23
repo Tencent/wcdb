@@ -21,7 +21,8 @@
 #import "WTCTableConstraintBaselineMultiPrimaryObject.h"
 #import <WCDB/WCDB.h>
 
-@interface WTCTableConstraintBaselineMultiPrimaryObject (WCTTableCoding) <WCTTableCoding>
+@interface WTCTableConstraintBaselineMultiPrimaryObject (
+    WCTTableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(variable1)
 WCDB_PROPERTY(variable2)

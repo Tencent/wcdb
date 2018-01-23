@@ -30,7 +30,7 @@
 - (void)testStatementSavepoint
 {
     XCTAssertEqual(WCDB::StatementSavepoint().getStatementType(), WCDB::Statement::Type::Savepoint);
-    
+
     WINQAssertEqual(WCDB::StatementSavepoint().savepoint("savepoint1"), @"SAVEPOINT savepoint1");
 }
 

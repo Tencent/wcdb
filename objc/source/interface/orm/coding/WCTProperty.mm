@@ -21,8 +21,8 @@
 #import <WCDB/WCTProperty.h>
 
 WCTProperty::WCTProperty(const std::string &name, const std::shared_ptr<WCTColumnBinding> &columnBinding)
-: Describable(name)
-, m_columnBinding(columnBinding)
+    : Describable(name)
+    , m_columnBinding(columnBinding)
 {
 }
 
@@ -31,16 +31,16 @@ WCTProperty WCTProperty::inTable(NSString *tableName) const
     return WCTProperty(WCDB::Column(m_description).inTable(tableName.UTF8String).getDescription(), m_columnBinding);
 }
 
-WCTProperty WCTProperty::inTable(const std::string& tableName) const
+WCTProperty WCTProperty::inTable(const std::string &tableName) const
 {
     return WCTProperty(WCDB::Column(m_description).inTable(tableName).getDescription(), m_columnBinding);
 }
-    
-const std::shared_ptr<WCTColumnBinding>& WCTProperty::getColumnBinding() const
+
+const std::shared_ptr<WCTColumnBinding> &WCTProperty::getColumnBinding() const
 {
     return m_columnBinding;
 }
-    
+
 WCDB::Column WCTProperty::asColumn() const
 {
     return WCDB::Column(*this);
@@ -53,19 +53,19 @@ WCDB::Order WCTProperty::asOrder() const
 
 WCDB::Order WCTProperty::asOrder(WCTOrderTerm term) const
 {
-    return WCDB::Order(asColumn(), (WCDB::OrderTerm)term);
+    return WCDB::Order(asColumn(), (WCDB::OrderTerm) term);
 }
-    
+
 WCDB::ColumnIndex WCTProperty::asIndex() const
 {
     return WCDB::ColumnIndex(asColumn());
-}    
-    
+}
+
 WCDB::ColumnIndex WCTProperty::asIndex(WCTOrderTerm term) const
 {
-    return WCDB::ColumnIndex(asColumn(), (WCDB::OrderTerm)term);
+    return WCDB::ColumnIndex(asColumn(), (WCDB::OrderTerm) term);
 }
-        
+
 WCDB::Expression WCTProperty::asExpression() const
 {
     return WCDB::Expression(asColumn());
@@ -78,7 +78,7 @@ WCDB::ColumnDef WCTProperty::asDef() const
 
 WCDB::ColumnDef WCTProperty::asDef(WCTColumnType columnType) const
 {
-    return WCDB::ColumnDef(asColumn(), (WCDB::ColumnType)columnType);
+    return WCDB::ColumnDef(asColumn(), (WCDB::ColumnType) columnType);
 }
 
 WCTProperty::operator std::list<const WCTProperty>() const
@@ -102,45 +102,45 @@ WCTProperty::operator std::list<const WCDB::Expression>() const
 }
 
 namespace WCDB {
-    
-Column ColumnConvertible<WCTProperty>::asColumn(const WCTProperty& property)
+
+Column ColumnConvertible<WCTProperty>::asColumn(const WCTProperty &property)
 {
     return Column(property.getDescription());
 }
 
-Expression ExpressionConvertible<WCTProperty>::asExpression(const WCTProperty& property)
+Expression ExpressionConvertible<WCTProperty>::asExpression(const WCTProperty &property)
 {
     return Expression(ColumnConvertible<WCTProperty>::asColumn(property));
 }
 
-ColumnResult ColumnResultConvertible<WCTProperty>::asColumnResult(const WCTProperty& property)
+ColumnResult ColumnResultConvertible<WCTProperty>::asColumnResult(const WCTProperty &property)
 {
     return ColumnResult(ColumnConvertible<WCTProperty>::asColumn(property));
 }
 
-Order SpecificOrderConvertible<WCTProperty>::asOrder(const WCTProperty& property, OrderTerm term)
+Order SpecificOrderConvertible<WCTProperty>::asOrder(const WCTProperty &property, OrderTerm term)
 {
     return Order(ExpressionConvertible<WCTProperty>::asExpression(property), term);
 }
 
-Order OrderConvertible<WCTProperty>::asOrder(const WCTProperty& property)
+Order OrderConvertible<WCTProperty>::asOrder(const WCTProperty &property)
 {
     return SpecificOrderConvertible<WCTProperty>::asOrder(property, OrderTerm::NotSet);
 }
 
-ColumnIndex SpecificColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty& property, OrderTerm term)
+ColumnIndex SpecificColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty &property, OrderTerm term)
 {
     return ColumnIndex(ColumnConvertible<WCTProperty>::asColumn(property), term);
 }
 
-ColumnIndex ColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty& property)
+ColumnIndex ColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty &property)
 {
     return SpecificColumnIndexConvertible<WCTProperty>::asIndex(property, OrderTerm::NotSet);
 }
 
-ColumnDef SpecificColumnDefConvertible<WCTProperty>::asDef(const WCTProperty& property, ColumnType propertyType)
+ColumnDef SpecificColumnDefConvertible<WCTProperty>::asDef(const WCTProperty &property, ColumnType propertyType)
 {
     return ColumnDef(ColumnConvertible<WCTProperty>::asColumn(property), propertyType);
 }
-    
+
 } //namespace WCDB

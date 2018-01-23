@@ -30,9 +30,9 @@
 - (void)testStatementAlterTable
 {
     XCTAssertEqual(WCDB::StatementAlterTable().getStatementType(), WCDB::Statement::Type::AlterTable);
-    
-    WINQAssertEqual(WCDB::StatementAlterTable().alter( "table1").rename("table2"), @"ALTER TABLE table1 RENAME TO table2");
-    
+
+    WINQAssertEqual(WCDB::StatementAlterTable().alter("table1").rename("table2"), @"ALTER TABLE table1 RENAME TO table2");
+
     WCDB::Column column("column1");
     WCDB::ColumnDef columnDef(column, WCDB::ColumnType::Float);
     WINQAssertEqual(WCDB::StatementAlterTable().alter("table1").addColumn(columnDef), @"ALTER TABLE table1 ADD COLUMN column1 REAL");

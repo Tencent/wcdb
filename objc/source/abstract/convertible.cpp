@@ -18,27 +18,30 @@
  * limitations under the License.
  */
 
-#include <WCDB/convertible.hpp>
+#include <WCDB/column.hpp>
+#include <WCDB/column_def.hpp>
 #include <WCDB/column_index.hpp>
 #include <WCDB/column_result.hpp>
-#include <WCDB/column.hpp>
-#include <WCDB/order.hpp>
-#include <WCDB/column_def.hpp>
+#include <WCDB/convertible.hpp>
 #include <WCDB/expression.hpp>
 #include <WCDB/literal_value.hpp>
+#include <WCDB/order.hpp>
 #include <WCDB/subquery.hpp>
 
 namespace WCDB {
 
 #pragma mark - ColumnIndex
 
-ColumnIndex ColumnIndexConvertible<ColumnIndex>::asIndex(const ColumnIndex &index) {
+ColumnIndex
+ColumnIndexConvertible<ColumnIndex>::asIndex(const ColumnIndex &index)
+{
     return index;
 }
 
 #pragma mark - ColumnResult
 
-ColumnResult ColumnResultConvertible<ColumnResult>::asColumnResult(const ColumnResult &columnResult)
+ColumnResult ColumnResultConvertible<ColumnResult>::asColumnResult(
+    const ColumnResult &columnResult)
 {
     return columnResult;
 }
@@ -55,117 +58,145 @@ Expression ExpressionConvertible<Column>::asExpression(const Column &column)
     return Expression(column);
 }
 
-ColumnResult ColumnResultConvertible<Column>::asColumnResult(const Column &column)
+ColumnResult
+ColumnResultConvertible<Column>::asColumnResult(const Column &column)
 {
     return ColumnResult(column);
 }
 
-Order SpecificOrderConvertible<Column>::asOrder(const Column& column, OrderTerm term)
+Order SpecificOrderConvertible<Column>::asOrder(const Column &column,
+                                                OrderTerm term)
 {
     return Order(ExpressionConvertible<Column>::asExpression(column), term);
 }
 
-Order OrderConvertible<Column>::asOrder(const Column& column)
+Order OrderConvertible<Column>::asOrder(const Column &column)
 {
     return SpecificOrderConvertible<Column>::asOrder(column, OrderTerm::NotSet);
 }
 
-ColumnIndex SpecificColumnIndexConvertible<Column>::asIndex(const Column &column, OrderTerm term)
+ColumnIndex
+SpecificColumnIndexConvertible<Column>::asIndex(const Column &column,
+                                                OrderTerm term)
 {
     return ColumnIndex(column, term);
 }
 
 ColumnIndex ColumnIndexConvertible<Column>::asIndex(const Column &column)
 {
-    return SpecificColumnIndexConvertible<Column>::asIndex(column, OrderTerm::NotSet);
+    return SpecificColumnIndexConvertible<Column>::asIndex(column,
+                                                           OrderTerm::NotSet);
 }
 
-ColumnDef SpecificColumnDefConvertible<Column>::asDef(const Column &column, ColumnType columnType)
+ColumnDef SpecificColumnDefConvertible<Column>::asDef(const Column &column,
+                                                      ColumnType columnType)
 {
     return ColumnDef(column, columnType);
 }
 
 #pragma mark - Expression
 
-Expression ExpressionConvertible<Expression>::asExpression(const Expression &expression)
+Expression
+ExpressionConvertible<Expression>::asExpression(const Expression &expression)
 {
     return expression;
 }
 
-ColumnResult ColumnResultConvertible<Expression>::asColumnResult(const Expression &expression)
+ColumnResult ColumnResultConvertible<Expression>::asColumnResult(
+    const Expression &expression)
 {
     return ColumnResult(expression);
 }
 
-Order OrderConvertible<Expression>::asOrder(const Expression& expression)
+Order OrderConvertible<Expression>::asOrder(const Expression &expression)
 {
     return Order(expression, OrderTerm::NotSet);
 }
 
-Order SpecificOrderConvertible<Expression>::asOrder(const Expression& expression, OrderTerm term)
+Order SpecificOrderConvertible<Expression>::asOrder(
+    const Expression &expression, OrderTerm term)
 {
     return Order(expression, term);
 }
 
 #pragma mark - LiteralValue
 
-LiteralValue LiteralValueConvertible<LiteralValue>::asLiteralValue(const LiteralValue &literalValue)
+LiteralValue LiteralValueConvertible<LiteralValue>::asLiteralValue(
+    const LiteralValue &literalValue)
 {
     return literalValue;
 }
 
-Expression ExpressionConvertible<LiteralValue>::asExpression(const LiteralValue &literalValue)
+Expression ExpressionConvertible<LiteralValue>::asExpression(
+    const LiteralValue &literalValue)
 {
     return Expression(literalValue);
 }
 
-ColumnResult ColumnResultConvertible<LiteralValue>::asColumnResult(const LiteralValue &literalValue)
+ColumnResult ColumnResultConvertible<LiteralValue>::asColumnResult(
+    const LiteralValue &literalValue)
 {
-    return ColumnResult(ExpressionConvertible<LiteralValue>::asExpression(literalValue));
+    return ColumnResult(
+        ExpressionConvertible<LiteralValue>::asExpression(literalValue));
 }
 
-Order OrderConvertible<LiteralValue>::asOrder(const LiteralValue& literalValue)
+Order OrderConvertible<LiteralValue>::asOrder(const LiteralValue &literalValue)
 {
-    return Order(ExpressionConvertible<LiteralValue>::asExpression(literalValue), OrderTerm::NotSet);
+    return Order(
+        ExpressionConvertible<LiteralValue>::asExpression(literalValue),
+        OrderTerm::NotSet);
 }
 
-Order SpecificOrderConvertible<LiteralValue>::asOrder(const LiteralValue& literalValue, OrderTerm term)
+Order SpecificOrderConvertible<LiteralValue>::asOrder(
+    const LiteralValue &literalValue, OrderTerm term)
 {
-    return Order(ExpressionConvertible<LiteralValue>::asExpression(literalValue), term);
+    return Order(
+        ExpressionConvertible<LiteralValue>::asExpression(literalValue), term);
 }
 
 #pragma mark - StatementSelect
 
-Expression ExpressionConvertible<StatementSelect>::asExpression(const StatementSelect &statementSelect)
+Expression ExpressionConvertible<StatementSelect>::asExpression(
+    const StatementSelect &statementSelect)
 {
     return Expression(statementSelect);
 }
 
-ColumnResult ColumnResultConvertible<StatementSelect>::asColumnResult(const StatementSelect &statementSelect)
+ColumnResult ColumnResultConvertible<StatementSelect>::asColumnResult(
+    const StatementSelect &statementSelect)
 {
-    return ColumnResult(ExpressionConvertible<StatementSelect>::asExpression(statementSelect));
+    return ColumnResult(
+        ExpressionConvertible<StatementSelect>::asExpression(statementSelect));
 }
 
-Order OrderConvertible<StatementSelect>::asOrder(const StatementSelect& statementSelect)
+Order OrderConvertible<StatementSelect>::asOrder(
+    const StatementSelect &statementSelect)
 {
-    return Order(ExpressionConvertible<StatementSelect>::asExpression(statementSelect), OrderTerm::NotSet);
+    return Order(
+        ExpressionConvertible<StatementSelect>::asExpression(statementSelect),
+        OrderTerm::NotSet);
 }
 
-Order SpecificOrderConvertible<StatementSelect>::asOrder(const StatementSelect& statementSelect, OrderTerm term)
+Order SpecificOrderConvertible<StatementSelect>::asOrder(
+    const StatementSelect &statementSelect, OrderTerm term)
 {
-    return Order(ExpressionConvertible<StatementSelect>::asExpression(statementSelect), term);
+    return Order(
+        ExpressionConvertible<StatementSelect>::asExpression(statementSelect),
+        term);
 }
 
-Subquery TableOrSubqueryConvertible<StatementSelect>::asTableOrSubquery(const StatementSelect &statementSelect)
+Subquery TableOrSubqueryConvertible<StatementSelect>::asTableOrSubquery(
+    const StatementSelect &statementSelect)
 {
     return Subquery(statementSelect);
 }
 
 #pragma mark - Subquery
 
-Subquery TableOrSubqueryConvertible<Subquery>::asTableOrSubquery(const Subquery &subquery)
+Subquery TableOrSubqueryConvertible<Subquery>::asTableOrSubquery(
+    const Subquery &subquery)
 {
     return subquery;
 }
-    
+
 } //namespace WCDB

@@ -21,8 +21,8 @@
 #ifndef statement_release_hpp
 #define statement_release_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 

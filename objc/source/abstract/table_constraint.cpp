@@ -19,10 +19,10 @@
  */
 
 #include <WCDB/column.hpp>
+#include <WCDB/column_index.hpp>
+#include <WCDB/expression.hpp>
 #include <WCDB/foreign_key.hpp>
 #include <WCDB/table_constraint.hpp>
-#include <WCDB/expression.hpp>
-#include <WCDB/column_index.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
@@ -31,31 +31,33 @@ TableConstraint::TableConstraint(const std::string &name)
     : Describable("CONSTRAINT " + name)
 {
 }
-        
-TableConstraint &TableConstraint::makePrimary(const std::list<const ColumnIndex> &list)
+
+TableConstraint &
+TableConstraint::makePrimary(const std::list<const ColumnIndex> &list)
 {
     m_description.append(" PRIMARY KEY(" + stringByJoiningList(list) + ")");
     return *this;
 }
-    
+
 TableConstraint &TableConstraint::makePrimary(const ColumnIndex &columnIndex)
 {
     m_description.append(" PRIMARY KEY(" + columnIndex.getDescription() + ")");
     return *this;
 }
-    
-TableConstraint &TableConstraint::makeUnique(const std::list<const ColumnIndex> &list)
+
+TableConstraint &
+TableConstraint::makeUnique(const std::list<const ColumnIndex> &list)
 {
     m_description.append(" UNIQUE(" + stringByJoiningList(list) + ")");
     return *this;
 }
-    
+
 TableConstraint &TableConstraint::makeUnique(const ColumnIndex &columnIndex)
 {
     m_description.append(" UNIQUE(" + columnIndex.getDescription() + ")");
     return *this;
 }
-    
+
 TableConstraint &TableConstraint::onConflict(Conflict conflict)
 {
     if (conflict != WCDB::Conflict::NotSet) {
@@ -71,20 +73,26 @@ TableConstraint &TableConstraint::check(const Expression &expression)
     return *this;
 }
 
-TableConstraint &TableConstraint::makeForeignKey(const std::list<const Column> &list, const ForeignKey &foreignKey) {
-    m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + ") " + foreignKey.getDescription());
-    return *this;
-}
-    
-TableConstraint &TableConstraint::makeForeignKey(const Column &column, const ForeignKey &foreignKey)
+TableConstraint &
+TableConstraint::makeForeignKey(const std::list<const Column> &list,
+                                const ForeignKey &foreignKey)
 {
-    m_description.append(" FOREIGN KEY(" + column.getDescription() + ") " + foreignKey.getDescription());
+    m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + ") " +
+                         foreignKey.getDescription());
     return *this;
 }
-    
+
+TableConstraint &TableConstraint::makeForeignKey(const Column &column,
+                                                 const ForeignKey &foreignKey)
+{
+    m_description.append(" FOREIGN KEY(" + column.getDescription() + ") " +
+                         foreignKey.getDescription());
+    return *this;
+}
+
 TableConstraint::operator std::list<const TableConstraint>() const
 {
     return {*this};
 }
-    
+
 } //namespace WCDB

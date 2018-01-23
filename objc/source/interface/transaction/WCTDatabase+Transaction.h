@@ -42,7 +42,7 @@
 
  @param inTransaction Operation inside transaction.
  */
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError;
 
 /**
  @brief Run a controllable transaction in block.
@@ -57,7 +57,7 @@
  @param inTransaction Operation inside transaction.
  @see WCTControllableTransactionBlock
  */
-- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError **)pError;
 
 /**
  @brief Run an embedded transaction in block.
@@ -72,7 +72,7 @@
  @param inTransaction Operation inside transaction.
  @see WCTTransactionBlock
  */
-- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError;
 
 /**
  @brief This interface is equivalent to [database runControllableTransaction:transaction withError:nil];

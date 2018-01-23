@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableIndexObject+WCTTableCoding.h"
 #import "WTCTableIndexObject.h"
+#import "WTCTableIndexObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableIndexObject
@@ -28,8 +28,8 @@ WCDB_IMPLEMENTATION(WTCTableIndexObject)
 WCDB_SYNTHESIZE(WTCTableIndexObject, variable)
 
 WCDB_INDEX(WTCTableIndexObject, "_index", variable)
-  
-+ (NSString*)Name
+
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }

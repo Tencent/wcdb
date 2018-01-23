@@ -21,8 +21,8 @@
 #ifndef statement_select_hpp
 #define statement_select_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -30,7 +30,7 @@ class StatementSelect : public Statement {
 public:
     template <typename T>
     typename std::enable_if<ColumnResultConvertible<T>::value,
-    StatementSelect &>::type
+                            StatementSelect &>::type
     select(const std::list<const T> &columnResultList, bool distinct = false)
     {
         m_description.append("SELECT ");
@@ -40,14 +40,17 @@ public:
         m_description.append(stringByJoiningList(columnResultList));
         return *this;
     }
-    
-    StatementSelect &select(const std::list<const ColumnResult> &columnResultList, bool distinct = false);
-    
-    StatementSelect &select(const ColumnResult &columnResult, bool distinct = false);
+
+    StatementSelect &
+    select(const std::list<const ColumnResult> &columnResultList,
+           bool distinct = false);
+
+    StatementSelect &select(const ColumnResult &columnResult,
+                            bool distinct = false);
 
     template <typename T>
     typename std::enable_if<TableOrSubqueryConvertible<T>::value,
-    StatementSelect &>::type
+                            StatementSelect &>::type
     from(const std::list<const T> &subqueryList)
     {
         m_description.append(" FROM " + stringByJoiningList(subqueryList));
@@ -55,14 +58,13 @@ public:
     }
 
     StatementSelect &from(const std::list<const Subquery> &subqueryList);
-    
+
     StatementSelect &from(const Subquery &subquery);
-    
+
     StatementSelect &where(const Expression &condition);
 
     template <typename T>
-    typename std::enable_if<OrderConvertible<T>::value,
-    StatementSelect &>::type
+    typename std::enable_if<OrderConvertible<T>::value, StatementSelect &>::type
     orderBy(const std::list<const T> &orderList)
     {
         if (!orderList.empty()) {
@@ -72,18 +74,18 @@ public:
     }
 
     StatementSelect &orderBy(const std::list<const Order> &orderList);
-    
+
     StatementSelect &orderBy(const Order &order);
 
     StatementSelect &limit(const Expression &from, const Expression &to);
     StatementSelect &limit(const Expression &limit);
-    
+
     //limit(from, to) is same as limit(to-from).offset(from)
     StatementSelect &offset(const Expression &offset);
 
     template <typename T>
     typename std::enable_if<ExpressionConvertible<T>::value,
-    StatementSelect &>::type
+                            StatementSelect &>::type
     groupBy(const std::list<const T> &groupList)
     {
         if (!groupList.empty()) {
@@ -93,7 +95,7 @@ public:
     }
 
     StatementSelect &groupBy(const std::list<const Expression> &groupList);
-    
+
     StatementSelect &groupBy(const Expression &group);
 
     StatementSelect &having(const Expression &having);

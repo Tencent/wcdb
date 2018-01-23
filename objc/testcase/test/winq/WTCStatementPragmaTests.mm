@@ -30,9 +30,9 @@
 - (void)testStatementPragma
 {
     XCTAssertEqual(WCDB::StatementPragma().getStatementType(), WCDB::Statement::Type::Pragma);
-    
+
     WINQAssertEqual(WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize), @"PRAGMA page_size");
-    
+
     WINQAssertEqual(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, true), @"PRAGMA secure_delete=1");
 }
 

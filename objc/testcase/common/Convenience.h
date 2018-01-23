@@ -22,16 +22,16 @@
 
 #pragma mark - WTCNamed
 @protocol WTCNamed
-+ (NSString*)Name;
++ (NSString *)Name;
 @end
 
 #pragma mark - NSArray
-@interface NSArray(Reverse)
-- (NSArray*)reversed;
-- (NSArray*)sorted;
+@interface NSArray (Reverse)
+- (NSArray *)reversed;
+- (NSArray *)sorted;
 @end
 
 #pragma mark - NSObject
-@interface NSObject(Comparator)
+@interface NSObject (Comparator)
 + (NSComparator)Comparator;
 @end

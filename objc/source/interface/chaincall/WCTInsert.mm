@@ -103,7 +103,8 @@
     }
     _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) {
         [self doInsertObjects:objects withError:error];
-    }, _error);
+    },
+                                  _error);
     return _error.isOK();
 }
 

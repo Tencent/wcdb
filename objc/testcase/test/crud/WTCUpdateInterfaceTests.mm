@@ -26,64 +26,69 @@
 
 @implementation WTCUpdateInterfaceTests
 
-- (void)testUpdate {
+- (void)testUpdate
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.database updateRowsInTable:WTCCRUDObject.Name onProperties:WTCCRUDObject.variable2 withObject:object]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
     XCTAssertTrue([results[1].variable2 isEqualToString:self.name]);
 }
 
-- (void)testConditionalUpdate {
+- (void)testConditionalUpdate
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.database updateRowsInTable:WTCCRUDObject.Name onProperties:WTCCRUDObject.variable2 withObject:object where:WTCCRUDObject.variable1 == 1]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
     XCTAssertNotNil(result);
     XCTAssertTrue([result.variable2 isEqualToString:self.name]);
 }
 
-- (void)testOrderedUpdate {
+- (void)testOrderedUpdate
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.database updateRowsInTable:WTCCRUDObject.Name onProperties:WTCCRUDObject.variable2 withObject:object orderBy:WTCCRUDObject.variable2.asOrder(WCTOrderedDescending) limit:1]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 2];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 2];
     XCTAssertNotNil(result);
     XCTAssertTrue([result.variable2 isEqualToString:self.name]);
 }
 
-- (void)testLimitedUpdate {
+- (void)testLimitedUpdate
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.database updateRowsInTable:WTCCRUDObject.Name onProperties:WTCCRUDObject.variable2 withObject:object limit:1]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.name]);
     XCTAssertTrue([results[1].variable2 isEqualToString:self.preInsertedObjects[1].variable2]);
 }
 
-- (void)testOffsetUpdate {
+- (void)testOffsetUpdate
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     object.variable2 = self.name;
     //When
     XCTAssertTrue([self.database updateRowsInTable:WTCCRUDObject.Name onProperties:WTCCRUDObject.variable2 withObject:object limit:1 offset:1]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertTrue([results[0].variable2 isEqualToString:self.preInsertedObjects[0].variable2]);
     XCTAssertTrue([results[1].variable2 isEqualToString:self.name]);

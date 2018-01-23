@@ -20,9 +20,9 @@
 
 #include <WCDB/column_def.hpp>
 #include <WCDB/foreign_key.hpp>
-#include <WCDB/table_constraint.hpp>
 #include <WCDB/statement_create_table.hpp>
 #include <WCDB/statement_select.hpp>
+#include <WCDB/table_constraint.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
@@ -44,18 +44,26 @@ StatementCreateTable::as(const StatementSelect &statementSelect)
     m_description.append(" AS " + statementSelect.getDescription());
     return *this;
 }
-    
-StatementCreateTable &StatementCreateTable::create(const std::string &table, const std::list<const ColumnDef> &columnDefList, bool ifNotExists)
+
+StatementCreateTable &
+StatementCreateTable::create(const std::string &table,
+                             const std::list<const ColumnDef> &columnDefList,
+                             bool ifNotExists)
 {
     m_description.append("CREATE TABLE ");
     if (ifNotExists) {
         m_description.append("IF NOT EXISTS ");
     }
-    m_description.append(table + "(" + stringByJoiningList(columnDefList) + ")");
+    m_description.append(table + "(" + stringByJoiningList(columnDefList) +
+                         ")");
     return *this;
 }
-    
-StatementCreateTable &StatementCreateTable::create(const std::string &table, const std::list<const ColumnDef> &columnDefList, const std::list<const TableConstraint> &tableConstraintList, bool ifNotExists)
+
+StatementCreateTable &StatementCreateTable::create(
+    const std::string &table,
+    const std::list<const ColumnDef> &columnDefList,
+    const std::list<const TableConstraint> &tableConstraintList,
+    bool ifNotExists)
 {
     m_description.append("CREATE TABLE ");
     if (ifNotExists) {

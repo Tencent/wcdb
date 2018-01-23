@@ -21,8 +21,8 @@
 #ifndef statement_update_hpp
 #define statement_update_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -30,10 +30,11 @@ class StatementUpdate : public Statement {
 public:
     StatementUpdate &update(const std::string &table,
                             Conflict conflict = Conflict::NotSet);
-    
+
     template <typename T, typename U>
-    typename std::enable_if<ColumnConvertible<T>::value && ExpressionConvertible<U>::value,
-    StatementUpdate &>::type
+    typename std::enable_if<ColumnConvertible<T>::value &&
+                                ExpressionConvertible<U>::value,
+                            StatementUpdate &>::type
     set(const std::list<const std::pair<const T, const U>> &valueList)
     {
         m_description.append(" SET ");
@@ -43,20 +44,27 @@ public:
                 m_description.append(", ");
             } else {
                 flag = true;
-            }            m_description.append(ColumnConvertible<T>::asColumn(value.first).getDescription() + "=" + ExpressionConvertible<T>::asExpression(value.second).getDescription());
+            }
+            m_description.append(
+                ColumnConvertible<T>::asColumn(value.first).getDescription() +
+                "=" +
+                ExpressionConvertible<T>::asExpression(value.second)
+                    .getDescription());
         }
         return *this;
     }
 
-    StatementUpdate &set(const std::list<const std::pair<const Column, const Expression>> &valueList);
-    
-    StatementUpdate &set(const std::pair<const Column, const Expression> &value);
+    StatementUpdate &
+    set(const std::list<const std::pair<const Column, const Expression>>
+            &valueList);
+
+    StatementUpdate &
+    set(const std::pair<const Column, const Expression> &value);
 
     StatementUpdate &where(const Expression &condition);
-    
+
     template <typename T>
-    typename std::enable_if<OrderConvertible<T>::value,
-                            StatementUpdate &>::type
+    typename std::enable_if<OrderConvertible<T>::value, StatementUpdate &>::type
     orderBy(const std::list<const T> &orderList)
     {
         if (!orderList.empty()) {
@@ -64,15 +72,15 @@ public:
         }
         return *this;
     }
-    
+
     StatementUpdate &orderBy(const std::list<const Order> &orderList);
-    
+
     StatementUpdate &orderBy(const Order &order);
-    
+
     StatementUpdate &limit(const Expression &from, const Expression &to);
-    
+
     StatementUpdate &limit(const Expression &limit);
-    
+
     StatementUpdate &offset(const Expression &offset);
 
     virtual Statement::Type getStatementType() const override;

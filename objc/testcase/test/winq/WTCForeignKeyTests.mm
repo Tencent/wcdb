@@ -38,25 +38,25 @@
 {
     WINQAssertEqual([self generateForeignKey].onDelete(WCDB::ForeignKey::Action::SetNull),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE SET NULL");
-    
+
     WINQAssertEqual([self generateForeignKey].onUpdate(WCDB::ForeignKey::Action::SetDefault),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON UPDATE SET DEFAULT");
-    
+
     WINQAssertEqual([self generateForeignKey].onDelete(WCDB::ForeignKey::Action::Cascade),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE CASCADE");
-    
+
     WINQAssertEqual([self generateForeignKey].onUpdate(WCDB::ForeignKey::Action::Restrict),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON UPDATE RESTRICT");
-    
+
     WINQAssertEqual([self generateForeignKey].onDelete(WCDB::ForeignKey::Action::NoAction),
                     @"REFERENCES testForeignKeyTable(column1, column2) ON DELETE NO ACTION");
-    
+
     WINQAssertEqual([self generateForeignKey].deferrable(WCDB::ForeignKey::Deferrable::Deferred),
                     @"REFERENCES testForeignKeyTable(column1, column2) DEFERRABLE INITIALLY DEFERRED");
-    
+
     WINQAssertEqual([self generateForeignKey].notDeferrable(WCDB::ForeignKey::Deferrable::Immediate),
                     @"REFERENCES testForeignKeyTable(column1, column2) NOT DEFERRABLE INITIALLY IMMEDIATE");
-    
+
     WINQAssertEqual([self generateForeignKey].match("test"),
                     @"REFERENCES testForeignKeyTable(column1, column2) MATCH test");
 }

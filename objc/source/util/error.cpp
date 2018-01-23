@@ -19,9 +19,9 @@
  */
 
 #include <WCDB/error.hpp>
+#include <WCDB/optional_impl.hpp>
 #include <stdlib.h>
 #include <string>
-#include <WCDB/optional_impl.hpp>
 
 namespace WCDB {
 
@@ -62,22 +62,19 @@ ErrorValue::Type ErrorValue::getType() const
 {
     return m_type;
 }
-    
+
 Error::ReportMethod Error::s_builtinErrorReport([](const Error &error) {
     switch (error.getType()) {
         case Error::Type::SQLiteGlobal:
 #if DEBUG
-            printf("[WCDB][DEBUG]%s\n",
-                   error.description().c_str());
+            printf("[WCDB][DEBUG]%s\n", error.description().c_str());
 #endif
             break;
         case Error::Type::Warning:
-            printf("[WCDB][WARNING]%s\n",
-                   error.description().c_str());
+            printf("[WCDB][WARNING]%s\n", error.description().c_str());
             break;
         default:
-            printf("[WCDB][ERROR]%s\n",
-                   error.description().c_str());
+            printf("[WCDB][ERROR]%s\n", error.description().c_str());
 #if DEBUG
             if (error.getType() == Error::Type::Abort) {
                 abort();
@@ -86,8 +83,9 @@ Error::ReportMethod Error::s_builtinErrorReport([](const Error &error) {
             break;
     }
 });
-    
-std::shared_ptr<Error::ReportMethod> Error::s_reportMethod(new ReportMethod(Error::s_builtinErrorReport));
+
+std::shared_ptr<Error::ReportMethod>
+    Error::s_reportMethod(new ReportMethod(Error::s_builtinErrorReport));
 
 ThreadLocal<bool> Error::s_slient(false);
 
@@ -109,20 +107,20 @@ int Error::getCode() const
 {
     return m_code;
 }
-    
+
 Optional<Tag> Error::getTag() const
 {
     auto iter = m_infos.find(Error::Key::Tag);
-    if (iter!=m_infos.end()) {
+    if (iter != m_infos.end()) {
         return iter->second.getIntValue();
     }
     return {};
 }
-    
+
 Optional<int> Error::getOperationValue() const
 {
     auto iter = m_infos.find(Error::Key::Operation);
-    if (iter!=m_infos.end()) {
+    if (iter != m_infos.end()) {
         return iter->second.getIntValue();
     }
     return {};
@@ -131,7 +129,7 @@ Optional<int> Error::getOperationValue() const
 Optional<int> Error::getExtendedCode() const
 {
     auto iter = m_infos.find(Error::Key::ExtendedCode);
-    if (iter!=m_infos.end()) {
+    if (iter != m_infos.end()) {
         return iter->second.getIntValue();
     }
     return {};
@@ -140,16 +138,16 @@ Optional<int> Error::getExtendedCode() const
 Optional<std::string> Error::getMessage() const
 {
     auto iter = m_infos.find(Error::Key::Message);
-    if (iter!=m_infos.end()) {
+    if (iter != m_infos.end()) {
         return iter->second.getStringValue();
     }
     return {};
 }
-    
+
 Optional<std::string> Error::getSQL() const
 {
     auto iter = m_infos.find(Error::Key::SQL);
-    if (iter!=m_infos.end()) {
+    if (iter != m_infos.end()) {
         return iter->second.getStringValue();
     }
     return {};
@@ -158,7 +156,7 @@ Optional<std::string> Error::getSQL() const
 Optional<std::string> Error::getPath() const
 {
     auto iter = m_infos.find(Error::Key::Path);
-    if (iter!=m_infos.end()) {
+    if (iter != m_infos.end()) {
         return iter->second.getStringValue();
     }
     return {};
@@ -185,7 +183,7 @@ void Error::report() const
 {
     if (!*s_slient.get()) {
         std::shared_ptr<Error::ReportMethod> report = s_reportMethod;
-        if (report!=nullptr) {
+        if (report != nullptr) {
             (*report.get())(*this);
         }
     }
@@ -276,7 +274,7 @@ void Error::SetReportMethod(const ReportMethod &reportMethod)
 {
     s_reportMethod.reset(new ReportMethod(reportMethod));
 }
-    
+
 void Error::ResetReportMethod()
 {
     s_reportMethod.reset(new ReportMethod(s_builtinErrorReport));

@@ -21,8 +21,8 @@
 #ifndef column_hpp
 #define column_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 #include <WCDB/operable.hpp>
 
 namespace WCDB {
@@ -31,21 +31,24 @@ class Column : public Describable, public Operable {
 public:
     static const Column All;
     static const Column Rowid;
-    
+
     template <typename T>
-    Column(const T& t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr) 
-    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){        
+    Column(const T &t,
+           typename std::enable_if<ColumnConvertible<T>::value, void>::type * =
+               nullptr)
+        : Describable(ColumnConvertible<T>::asColumn(t).getDescription())
+    {
     }
-    
+
     Column(const std::string &name);
-    
+
     Column inTable(const std::string &table) const;
-    
+
     virtual Expression asExpression() const override;
-    
+
     operator std::list<const Column>() const;
 };
-    
+
 } //namespace WCDB
 
 #endif /* column_hpp */

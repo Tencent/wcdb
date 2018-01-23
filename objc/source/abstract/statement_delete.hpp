@@ -21,20 +21,19 @@
 #ifndef statement_delete_hpp
 #define statement_delete_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
 class StatementDelete : public Statement {
 public:
     StatementDelete &deleteFrom(const std::string &table);
-    
+
     StatementDelete &where(const Expression &condition);
-    
+
     template <typename T>
-    typename std::enable_if<OrderConvertible<T>::value,
-    StatementDelete &>::type
+    typename std::enable_if<OrderConvertible<T>::value, StatementDelete &>::type
     orderBy(const std::list<const T> &orderList)
     {
         if (!orderList.empty()) {
@@ -48,7 +47,7 @@ public:
     StatementDelete &orderBy(const Order &order);
 
     StatementDelete &limit(const Expression &from, const Expression &to);
-    
+
     StatementDelete &limit(const Expression &expression);
     StatementDelete &offset(const Expression &expression);
 

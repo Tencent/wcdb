@@ -21,8 +21,8 @@
 #ifndef module_argument_hpp
 #define module_argument_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
@@ -31,7 +31,7 @@ public:
     ModuleArgument(const TableConstraint &tableConstraint);
     ModuleArgument(const ColumnDef &columnDef);
     ModuleArgument(const std::string &left, const std::string &right);
-    
+
     static ModuleArgument Tokenize(const std::string &name);
 };
 

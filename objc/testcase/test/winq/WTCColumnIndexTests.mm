@@ -32,14 +32,14 @@
     //Give
     WCDB::Column column1 = WCDB::Column("column1");
     WCDB::Expression expression1 = column1.abs();
-    
+
     //Then
     WINQAssertEqual(WCDB::ColumnIndex(column1), @"column1");
-    
+
     WINQAssertEqual(WCDB::ColumnIndex(column1, WCDB::OrderTerm::ASC), @"column1 ASC");
-    
+
     WINQAssertEqual(WCDB::ColumnIndex(expression1), @"ABS(column1)");
-    
+
     WINQAssertEqual(WCDB::ColumnIndex(expression1, WCDB::OrderTerm::ASC), @"ABS(column1) ASC");
 }
 

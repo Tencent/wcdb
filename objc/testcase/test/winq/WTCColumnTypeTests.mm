@@ -30,15 +30,15 @@
 - (void)testColumnType
 {
     WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Integer32), @"INTEGER");
-    
+
     WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Integer64), @"INTEGER");
-    
+
     WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Float), @"REAL");
-    
+
     WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Text), @"TEXT");
-    
+
     WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::BLOB), @"BLOB");
-    
+
     WTCAssertEqual(ColumnTypeName(WCDB::ColumnType::Null), @"NULL");
 }
 

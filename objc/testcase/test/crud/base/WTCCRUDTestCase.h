@@ -19,13 +19,13 @@
  */
 
 #import "WTCBaseTestCase.h"
-#import "WTCCRUDObject.h"
 #import "WTCCRUDObject+WCTTableCoding.h"
+#import "WTCCRUDObject.h"
 
 @interface WTCCRUDTestCase : WTCBaseTestCase
 
-@property(nonatomic, readonly) WCTDatabase* database;
+@property(nonatomic, readonly) WCTDatabase *database;
 
-@property(nonatomic, readonly) NSArray<WTCCRUDObject*>* preInsertedObjects;
+@property(nonatomic, readonly) NSArray<WTCCRUDObject *> *preInsertedObjects;
 
 @end

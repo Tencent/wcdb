@@ -21,8 +21,8 @@
 #ifndef statement_savepoint_hpp
 #define statement_savepoint_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 

@@ -27,27 +27,27 @@
     [super setUp];
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
     _database.tag = self.recommendedTag;
-    
-    NSMutableArray<WTCCRUDObject*> *preInsertedObjects = [[NSMutableArray<WTCCRUDObject*> alloc] init];
-    WTCCRUDObject* object1 = [[WTCCRUDObject alloc] init];
+
+    NSMutableArray<WTCCRUDObject *> *preInsertedObjects = [[NSMutableArray<WTCCRUDObject *> alloc] init];
+    WTCCRUDObject *object1 = [[WTCCRUDObject alloc] init];
     object1.variable1 = 1;
     object1.variable2 = @"object1";
     [preInsertedObjects addObject:object1];
-    WTCCRUDObject* object2 = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object2 = [[WTCCRUDObject alloc] init];
     object2.variable1 = 2;
     object2.variable2 = @"object2";
     [preInsertedObjects addObject:object2];
     _preInsertedObjects = preInsertedObjects;
-    
+
     XCTAssertTrue([_database createTableAndIndexesOfName:WTCCRUDObject.Name withClass:WTCCRUDObject.class]);
-    
+
     XCTAssertTrue([_database insertObjects:self.preInsertedObjects into:WTCCRUDObject.Name]);
 }
 
 - (void)tearDown
 {
     [_database close:^{
-        XCTAssertTrue([_database removeFilesWithError:nil]);
+      XCTAssertTrue([_database removeFilesWithError:nil]);
     }];
     _database = nil;
     [super tearDown];

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintConflictPrimaryKeyObject+WCTTableCoding.h"
 #import "WTCColumnConstraintConflictPrimaryKeyObject.h"
+#import "WTCColumnConstraintConflictPrimaryKeyObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintConflictPrimaryKeyObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCColumnConstraintConflictPrimaryKeyObject)
 WCDB_SYNTHESIZE_COLUMN(WTCColumnConstraintConflictPrimaryKeyObject, variable, "conflictPrimaryVariable")
 
 WCDB_PRIMARY_IMP(WTCColumnConstraintConflictPrimaryKeyObject, variable, WCTOrderedNotSet, NO, WCTConflictReplace)
-  
+
 @end

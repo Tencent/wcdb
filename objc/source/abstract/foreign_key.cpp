@@ -18,27 +18,30 @@
  * limitations under the License.
  */
 
-#include <WCDB/foreign_key.hpp>
 #include <WCDB/column.hpp>
+#include <WCDB/foreign_key.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
-    
+
 ForeignKey::ForeignKey(const std::string &foreignTableName,
-           const std::list<const Column> &columnList)
-: Describable("REFERENCES " + foreignTableName) {
+                       const std::list<const Column> &columnList)
+    : Describable("REFERENCES " + foreignTableName)
+{
     if (!columnList.empty()) {
         m_description.append("(" + stringByJoiningList(columnList) + ")");
     }
 }
 
 ForeignKey::ForeignKey(const std::string &foreignTableName)
-    : Describable("REFERENCES " + foreignTableName) {
+    : Describable("REFERENCES " + foreignTableName)
+{
 }
-    
+
 ForeignKey::ForeignKey(const std::string &foreignTableName,
-           const Column &column)
-: Describable("REFERENCES " + foreignTableName + "(" + column.getDescription() + ")")
+                       const Column &column)
+    : Describable("REFERENCES " + foreignTableName + "(" +
+                  column.getDescription() + ")")
 {
 }
 

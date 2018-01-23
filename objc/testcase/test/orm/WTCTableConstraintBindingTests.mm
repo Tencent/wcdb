@@ -18,20 +18,20 @@
  * limitations under the License.
  */
 
-#import "WTCBaseTestCase.h"
 #import "WTCAssert.h"
-#import "WTCTableConstraintBaselineMultiPrimaryObject.h"
+#import "WTCBaseTestCase.h"
 #import "WTCTableConstraintBaselineMultiPrimaryObject+WCTTableCoding.h"
-#import "WTCTableConstraintMultiPrimaryConflictObject.h"
-#import "WTCTableConstraintMultiPrimaryConflictObject+WCTTableCoding.h"
-#import "WTCTableConstraintBaselineMultiUniqueObject.h"
+#import "WTCTableConstraintBaselineMultiPrimaryObject.h"
 #import "WTCTableConstraintBaselineMultiUniqueObject+WCTTableCoding.h"
-#import "WTCTableConstraintMultiUniqueConflictObject.h"
-#import "WTCTableConstraintMultiUniqueConflictObject+WCTTableCoding.h"
-#import "WTCTableConstraintCheckObject.h"
+#import "WTCTableConstraintBaselineMultiUniqueObject.h"
 #import "WTCTableConstraintCheckObject+WCTTableCoding.h"
-#import "WTCTableConstraintForeignKeyObject.h"
+#import "WTCTableConstraintCheckObject.h"
 #import "WTCTableConstraintForeignKeyObject+WCTTableCoding.h"
+#import "WTCTableConstraintForeignKeyObject.h"
+#import "WTCTableConstraintMultiPrimaryConflictObject+WCTTableCoding.h"
+#import "WTCTableConstraintMultiPrimaryConflictObject.h"
+#import "WTCTableConstraintMultiUniqueConflictObject+WCTTableCoding.h"
+#import "WTCTableConstraintMultiUniqueConflictObject.h"
 
 @interface WTCTableConstraintBindingTests : WTCBaseTestCase
 
@@ -47,22 +47,24 @@
 - (void)testMultiPrimaryBinding
 {
     WINQAssertEqual([self generateCreateTableStatementForClass:WTCTableConstraintBaselineMultiPrimaryObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintBaselineMultiPrimaryObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintBaselineMultiPrimaryObjectConstraint PRIMARY KEY(variable1, variable2))");
-    
-    WINQAssertEqual([self generateCreateTableStatementForClass: WTCTableConstraintMultiPrimaryConflictObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintMultiPrimaryConflictObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintMultiPrimaryConflictObjectConstraint PRIMARY KEY(variable1, variable2) ON CONFLICT REPLACE)");
+
+    WINQAssertEqual([self generateCreateTableStatementForClass:WTCTableConstraintMultiPrimaryConflictObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintMultiPrimaryConflictObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintMultiPrimaryConflictObjectConstraint PRIMARY KEY(variable1, variable2) ON CONFLICT REPLACE)");
 }
 
 - (void)testMultiUniqueBinding
 {
     WINQAssertEqual([self generateCreateTableStatementForClass:WTCTableConstraintBaselineMultiUniqueObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintBaselineMultiUniqueObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintBaselineMultiUniqueObjectConstraint UNIQUE(variable1, variable2))");
-    
+
     WINQAssertEqual([self generateCreateTableStatementForClass:WTCTableConstraintMultiUniqueConflictObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintMultiUniqueConflictObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintMultiUniqueConflictObjectConstraint UNIQUE(variable1, variable2) ON CONFLICT REPLACE)");
 }
 
-- (void)testCheckBinding {
+- (void)testCheckBinding
+{
     WINQAssertEqual([self generateCreateTableStatementForClass:WTCTableConstraintCheckObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintCheckObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintCheckObjectConstraint CHECK(variable1 > 1))");
 }
 
-- (void)testForeignKeyBinding {
+- (void)testForeignKeyBinding
+{
     WINQAssertEqual([self generateCreateTableStatementForClass:WTCTableConstraintForeignKeyObject.class], @"CREATE TABLE IF NOT EXISTS WTCTableConstraintForeignKeyObject(variable1 INTEGER, variable2 INTEGER, CONSTRAINT WTCTableConstraintForeignKeyObjectConstraint FOREIGN KEY(variable1) REFERENCES WTCTableConstraintForeignKeyObject(variable2))");
 }
 

@@ -25,13 +25,17 @@ namespace WCDB {
 
 std::string LiteralValue::stringByAntiInjecting(const char *origin)
 {
-    return origin ? "'" + stringByReplacingOccurrencesOfString(origin, "'", "''") + "'" : "";
+    return origin
+               ? "'" + stringByReplacingOccurrencesOfString(origin, "'", "''") +
+                     "'"
+               : "";
 }
-    
-std::string LiteralValue::stringByAntiInjecting(const std::vector<unsigned char> &origin)
+
+std::string
+LiteralValue::stringByAntiInjecting(const std::vector<unsigned char> &origin)
 {
     std::string str(origin.begin(), origin.end());
     return "'" + stringByReplacingOccurrencesOfString(str, "'", "''") + "'";
 }
-    
+
 } // namespace WCDB

@@ -30,11 +30,11 @@
 - (void)testStatementDropIndex
 {
     std::string index1 = "index1";
-    
+
     XCTAssertEqual(WCDB::StatementDropIndex().getStatementType(), WCDB::Statement::Type::DropIndex);
-    
+
     WINQAssertEqual(WCDB::StatementDropIndex().drop(index1), @"DROP INDEX IF EXISTS index1");
-    
+
     WINQAssertEqual(WCDB::StatementDropIndex().drop(index1, false), @"DROP INDEX index1");
 }
 

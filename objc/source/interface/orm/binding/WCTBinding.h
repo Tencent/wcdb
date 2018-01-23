@@ -42,13 +42,13 @@ public:
         _addColumnBinding(columnName, columnBinding);
         return columnBinding;
     }
-    
+
     template <typename T>
     std::shared_ptr<WCTColumnBinding>
-    addColumnBinding(const std::string &propertyName,
-                     NSString *columnName)
+    addColumnBinding(const std::string &propertyName, NSString *columnName)
     {
-        return addColumnBinding<T>(propertyName, columnName ? columnName.UTF8String : "");
+        return addColumnBinding<T>(propertyName,
+                                   columnName ? columnName.UTF8String : "");
     }
 
     std::shared_ptr<WCTColumnBinding>

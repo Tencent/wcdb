@@ -56,8 +56,8 @@ public:
     //Transaction Protocol
     typedef std::function<bool(Error &)> ControllableTransactionBlock;
     bool runControllableTransaction(ControllableTransactionBlock transaction,
-                        Error &error);
-    
+                                    Error &error);
+
     typedef std::function<void(Error &)> TransactionBlock;
     bool runTransaction(TransactionBlock transaction, Error &error);
 

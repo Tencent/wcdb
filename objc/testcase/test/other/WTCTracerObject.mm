@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTracerObject+WCTTableCoding.h"
 #import "WTCTracerObject.h"
+#import "WTCTracerObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTracerObject
@@ -29,9 +29,9 @@ WCDB_SYNTHESIZE(WTCTracerObject, variable)
 
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCTracerObject, variable)
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
-  
+
 @end

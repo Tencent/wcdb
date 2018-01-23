@@ -20,9 +20,9 @@
 
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_pool.hpp>
+#include <algorithm>
 #include <thread>
 #include <unordered_map>
-#include <algorithm>
 
 namespace WCDB {
 
@@ -31,7 +31,8 @@ std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
 std::mutex HandlePool::s_mutex;
 const int HandlePool::s_hardwareConcurrency =
     std::thread::hardware_concurrency();
-const int HandlePool::s_maxConcurrency = std::max<int>(std::thread::hardware_concurrency(), 64);
+const int HandlePool::s_maxConcurrency =
+    std::max<int>(std::thread::hardware_concurrency(), 64);
 
 RecyclableHandlePool HandlePool::GetPool(const std::string &path,
                                          const Configs &defaultConfigs)
@@ -42,7 +43,7 @@ RecyclableHandlePool HandlePool::GetPool(const std::string &path,
     if (iter == s_pools.end()) {
         pool.reset(new HandlePool(path, defaultConfigs));
         iter = s_pools.insert({path, {pool, 0}}).first;
-    } 
+    }
     return HandlePool::GetExistingPool(iter);
 }
 
@@ -71,11 +72,13 @@ RecyclableHandlePool HandlePool::GetExistingPool(const std::string &path)
     }
     return HandlePool::GetExistingPool(iter);
 }
-        
-RecyclableHandlePool HandlePool::GetExistingPool(const std::unordered_map<std::string,
-                                            std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
+
+RecyclableHandlePool HandlePool::GetExistingPool(
+    const std::unordered_map<
+        std::string,
+        std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
 {
-    if (iter==s_pools.end()) {
+    if (iter == s_pools.end()) {
         return RecyclableHandlePool(nullptr, nullptr);
     }
     ++iter->second.second;
@@ -83,9 +86,10 @@ RecyclableHandlePool HandlePool::GetExistingPool(const std::unordered_map<std::s
     return RecyclableHandlePool(iter->second.first, [path]() {
         std::lock_guard<std::mutex> lockGuard(s_mutex);
         const auto &iter = s_pools.find(path);
-        if (iter==s_pools.end()) {
-            Error::Abort("It should not be failed. If you think it's a bug, please report an issue to us.");
-        }        
+        if (iter == s_pools.end()) {
+            Error::Abort("It should not be failed. If you think it's a bug, "
+                         "please report an issue to us.");
+        }
         if (--iter->second.second == 0) {
             s_pools.erase(iter);
         }
@@ -185,9 +189,7 @@ RecyclableHandle HandlePool::flowOut(Error &error)
         handleWrap->handle->setTag(tag.load());
         if (invoke(handleWrap, error)) {
             return RecyclableHandle(
-                handleWrap, [handleWrap, this]() {
-                    flowBack(handleWrap);
-                });
+                handleWrap, [handleWrap, this]() { flowBack(handleWrap); });
         }
     }
 

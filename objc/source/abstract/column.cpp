@@ -34,8 +34,8 @@ Column Column::inTable(const std::string &table) const
 {
     return Column(table + "." + getDescription());
 }
-    
-Expression Column::asExpression() const 
+
+Expression Column::asExpression() const
 {
     return ExpressionConvertible<Column>::asExpression(*this);
 }

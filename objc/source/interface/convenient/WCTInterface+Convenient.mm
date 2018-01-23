@@ -37,61 +37,61 @@
 
 #pragma mark - Get Object
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
+                              fromTable:(NSString *)tableName
 {
     return [[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                     where:(const WCDB::Expression &)condition
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] where:condition] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                   orderBy:(const WCDB::OrderList &)orderList
+                              fromTable:(NSString *)tableName
+                                orderBy:(const WCDB::OrderList &)orderList
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] orderBy:orderList] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                    offset:(const WCDB::Expression &)offset
+                              fromTable:(NSString *)tableName
+                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                     where:(const WCDB::Expression &)condition
-                                   orderBy:(const WCDB::OrderList &)orderList
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                orderBy:(const WCDB::OrderList &)orderList
 {
     return [[[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] where:condition] orderBy:orderList] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                     where:(const WCDB::Expression &)condition
-                                    offset:(const WCDB::Expression &)offset
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] where:condition] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                   orderBy:(const WCDB::OrderList &)orderList
-                                    offset:(const WCDB::Expression &)offset
+                              fromTable:(NSString *)tableName
+                                orderBy:(const WCDB::OrderList &)orderList
+                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] orderBy:orderList] limit:1] offset:offset] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                 fromTable:(NSString *)tableName
-                                     where:(const WCDB::Expression &)condition
-                                   orderBy:(const WCDB::OrderList &)orderList
-                                    offset:(const WCDB::Expression &)offset
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                orderBy:(const WCDB::OrderList &)orderList
+                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] where:condition] orderBy:orderList] limit:1] offset:offset] nextObject];
 }
@@ -159,472 +159,472 @@
 
 #pragma mark - Get One Row
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
+                     fromTable:(NSString *)tableName
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:1] nextRow];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:1] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                            where:(const WCDB::Expression &)condition
+                     fromTable:(NSString *)tableName
+                         where:(const WCDB::Expression &)condition
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:1] nextRow];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:1] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                          orderBy:(const WCDB::OrderList &)orderList
+                     fromTable:(NSString *)tableName
+                       orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:1] nextRow];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:1] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                           offset:(const WCDB::Expression &)offset
+                     fromTable:(NSString *)tableName
+                        offset:(const WCDB::Expression &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:1] offset:offset] nextRow];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:1] offset:offset] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                            where:(const WCDB::Expression &)condition
-                          orderBy:(const WCDB::OrderList &)orderList
+                     fromTable:(NSString *)tableName
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] nextRow];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                            where:(const WCDB::Expression &)condition
-                           offset:(const WCDB::Expression &)offset
+                     fromTable:(NSString *)tableName
+                         where:(const WCDB::Expression &)condition
+                        offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:1] offset:offset] nextRow];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:1] offset:offset] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                          orderBy:(const WCDB::OrderList &)orderList
-                           offset:(const WCDB::Expression &)offset
+                     fromTable:(NSString *)tableName
+                       orderBy:(const WCDB::OrderList &)orderList
+                        offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:1] offset:offset] nextRow];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:1] offset:offset] nextRow];
 }
 
 - (WCTOneRow *)getRowOnResults:(const WCDB::ColumnResultList &)resultList
-                        fromTable:(NSString *)tableName
-                            where:(const WCDB::Expression &)condition
-                          orderBy:(const WCDB::OrderList &)orderList
-                           offset:(const WCDB::Expression &)offset
+                     fromTable:(NSString *)tableName
+                         where:(const WCDB::Expression &)condition
+                       orderBy:(const WCDB::OrderList &)orderList
+                        offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] offset:offset] nextRow];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] offset:offset] nextRow];
 }
 
 #pragma mark - Get One Column
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
+                          fromTable:(NSString *)tableName
 {
-    return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] allValues];
+    return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                               orderBy:(const WCDB::OrderList &)orderList
+                          fromTable:(NSString *)tableName
+                            orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 limit:(const WCDB::Expression &)limit
+                          fromTable:(NSString *)tableName
+                              limit:(const WCDB::Expression &)limit
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:limit] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] offset:offset] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                               orderBy:(const WCDB::OrderList &)orderList
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                            orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                                 limit:(const WCDB::Expression &)limit
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                              limit:(const WCDB::Expression &)limit
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:limit] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                               orderBy:(const WCDB::OrderList &)orderList
-                                 limit:(const WCDB::Expression &)limit
+                          fromTable:(NSString *)tableName
+                            orderBy:(const WCDB::OrderList &)orderList
+                              limit:(const WCDB::Expression &)limit
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:limit] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                               orderBy:(const WCDB::OrderList &)orderList
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                            orderBy:(const WCDB::OrderList &)orderList
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 limit:(const WCDB::Expression &)limit
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                              limit:(const WCDB::Expression &)limit
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:limit] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                               orderBy:(const WCDB::OrderList &)orderList
-                                 limit:(const WCDB::Expression &)limit
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                            orderBy:(const WCDB::OrderList &)orderList
+                              limit:(const WCDB::Expression &)limit
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                               orderBy:(const WCDB::OrderList &)orderList
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                            orderBy:(const WCDB::OrderList &)orderList
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] offset:offset] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                                 limit:(const WCDB::Expression &)limit
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                              limit:(const WCDB::Expression &)limit
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:limit] offset:offset] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                               orderBy:(const WCDB::OrderList &)orderList
-                                 limit:(const WCDB::Expression &)limit
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                            orderBy:(const WCDB::OrderList &)orderList
+                              limit:(const WCDB::Expression &)limit
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:limit] offset:offset] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getColumnOnResult:(const WCDB::ColumnResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCDB::Expression &)condition
-                               orderBy:(const WCDB::OrderList &)orderList
-                                 limit:(const WCDB::Expression &)limit
-                                offset:(const WCDB::Expression &)offset
+                          fromTable:(NSString *)tableName
+                              where:(const WCDB::Expression &)condition
+                            orderBy:(const WCDB::OrderList &)orderList
+                              limit:(const WCDB::Expression &)limit
+                             offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] offset:offset] allValues];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 #pragma mark - Get One Distinct Column
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
+                                  fromTable:(NSString *)tableName
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] allValues];
+    return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                       orderBy:(const WCDB::OrderList &)orderList
+                                  fromTable:(NSString *)tableName
+                                    orderBy:(const WCDB::OrderList &)orderList
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] orderBy:orderList] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] orderBy:orderList] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         limit:(const WCDB::Expression &)limit
+                                  fromTable:(NSString *)tableName
+                                      limit:(const WCDB::Expression &)limit
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] limit:limit] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] offset:offset] allValues];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                       orderBy:(const WCDB::OrderList &)orderList
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                    orderBy:(const WCDB::OrderList &)orderList
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] orderBy:orderList] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] orderBy:orderList] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                         limit:(const WCDB::Expression &)limit
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                      limit:(const WCDB::Expression &)limit
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] limit:limit] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                       orderBy:(const WCDB::OrderList &)orderList
-                                         limit:(const WCDB::Expression &)limit
+                                  fromTable:(NSString *)tableName
+                                    orderBy:(const WCDB::OrderList &)orderList
+                                      limit:(const WCDB::Expression &)limit
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] orderBy:orderList] limit:limit] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] orderBy:orderList] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                       orderBy:(const WCDB::OrderList &)orderList
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                    orderBy:(const WCDB::OrderList &)orderList
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] orderBy:orderList] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] orderBy:orderList] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         limit:(const WCDB::Expression &)limit
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] limit:limit] offset:offset] allValues];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                       orderBy:(const WCDB::OrderList &)orderList
-                                         limit:(const WCDB::Expression &)limit
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                    orderBy:(const WCDB::OrderList &)orderList
+                                      limit:(const WCDB::Expression &)limit
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] orderBy:orderList] limit:limit] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] orderBy:orderList] limit:limit] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                       orderBy:(const WCDB::OrderList &)orderList
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                    orderBy:(const WCDB::OrderList &)orderList
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] orderBy:orderList] offset:offset] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] orderBy:orderList] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                         limit:(const WCDB::Expression &)limit
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] limit:limit] offset:offset] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                       orderBy:(const WCDB::OrderList &)orderList
-                                         limit:(const WCDB::Expression &)limit
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                    orderBy:(const WCDB::OrderList &)orderList
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] orderBy:orderList] limit:limit] offset:offset] allValues];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 - (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ColumnResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCDB::Expression &)condition
-                                       orderBy:(const WCDB::OrderList &)orderList
-                                         limit:(const WCDB::Expression &)limit
-                                        offset:(const WCDB::Expression &)offset
+                                  fromTable:(NSString *)tableName
+                                      where:(const WCDB::Expression &)condition
+                                    orderBy:(const WCDB::OrderList &)orderList
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] orderBy:orderList] limit:limit] offset:offset] allValues];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] orderBy:orderList] limit:limit] offset:offset] allValues];
 }
 
 #pragma mark - Get One Value
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
+                             fromTable:(NSString *)tableName
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:1] nextValue];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                    where:(const WCDB::Expression &)condition
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:1] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                  orderBy:(const WCDB::OrderList &)orderList
+                             fromTable:(NSString *)tableName
+                               orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:1] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                   offset:(const WCDB::Expression &)offset
+                             fromTable:(NSString *)tableName
+                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:1] offset:offset] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                    where:(const WCDB::Expression &)condition
-                                  orderBy:(const WCDB::OrderList &)orderList
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
+                               orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                    where:(const WCDB::Expression &)condition
-                                   offset:(const WCDB::Expression &)offset
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
+                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:1] offset:offset] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                  orderBy:(const WCDB::OrderList &)orderList
-                                   offset:(const WCDB::Expression &)offset
+                             fromTable:(NSString *)tableName
+                               orderBy:(const WCDB::OrderList &)orderList
+                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:1] offset:offset] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ColumnResult &)result
-                                fromTable:(NSString *)tableName
-                                    where:(const WCDB::Expression &)condition
-                                  orderBy:(const WCDB::OrderList &)orderList
-                                   offset:(const WCDB::Expression &)offset
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
+                               orderBy:(const WCDB::OrderList &)orderList
+                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] offset:offset] nextValue];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:result fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 #pragma mark - Get One Distinct Value
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
+                                     fromTable:(NSString *)tableName
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] limit:1] nextValue];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] limit:1] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                          orderBy:(const WCDB::OrderList &)orderList
+                                     fromTable:(NSString *)tableName
+                                       orderBy:(const WCDB::OrderList &)orderList
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] orderBy:orderList] limit:1] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] orderBy:orderList] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                           offset:(const WCDB::Expression &)offset
+                                     fromTable:(NSString *)tableName
+                                        offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] limit:1] offset:offset] nextValue];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                          orderBy:(const WCDB::OrderList &)orderList
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const WCDB::OrderList &)orderList
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] orderBy:orderList] limit:1] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] orderBy:orderList] limit:1] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                           offset:(const WCDB::Expression &)offset
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                        offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] limit:1] offset:offset] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                          orderBy:(const WCDB::OrderList &)orderList
-                                           offset:(const WCDB::Expression &)offset
+                                     fromTable:(NSString *)tableName
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                        offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] orderBy:orderList] limit:1] offset:offset] nextValue];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 - (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ColumnResult &)result
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                          orderBy:(const WCDB::OrderList &)orderList
-                                           offset:(const WCDB::Expression &)offset
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const WCDB::OrderList &)orderList
+                                        offset:(const WCDB::Expression &)offset
 {
     WCDB::ColumnResultList resultList = {result};
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:YES] where:condition] orderBy:orderList] limit:1] offset:offset] nextValue];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:YES] where:condition] orderBy:orderList] limit:1] offset:offset] nextValue];
 }
 
 #pragma mark - Get Objects
 - (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                           fromTable:(NSString *)tableName
+                                        fromTable:(NSString *)tableName
 {
     return [[[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:NO] allObjects];
 }
@@ -727,121 +727,121 @@
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              where:(const WCDB::Expression &)condition
+                                             fromTable:(NSString *)tableName
+                                                 where:(const WCDB::Expression &)condition
 {
     return [[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] where:condition] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                            orderBy:(const WCDB::OrderList &)orderList
+                                             fromTable:(NSString *)tableName
+                                               orderBy:(const WCDB::OrderList &)orderList
 {
     return [[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] orderBy:orderList] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              limit:(const WCDB::Expression &)limit
+                                             fromTable:(NSString *)tableName
+                                                 limit:(const WCDB::Expression &)limit
 {
     return [[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] limit:limit] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              where:(const WCDB::Expression &)condition
-                                            orderBy:(const WCDB::OrderList &)orderList
+                                             fromTable:(NSString *)tableName
+                                                 where:(const WCDB::Expression &)condition
+                                               orderBy:(const WCDB::OrderList &)orderList
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] where:condition] orderBy:orderList] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              where:(const WCDB::Expression &)condition
-                                              limit:(const WCDB::Expression &)limit
+                                             fromTable:(NSString *)tableName
+                                                 where:(const WCDB::Expression &)condition
+                                                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] where:condition] limit:limit] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                            orderBy:(const WCDB::OrderList &)orderList
-                                              limit:(const WCDB::Expression &)limit
+                                             fromTable:(NSString *)tableName
+                                               orderBy:(const WCDB::OrderList &)orderList
+                                                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] orderBy:orderList] limit:limit] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              limit:(const WCDB::Expression &)limit
-                                             offset:(const WCDB::Expression &)offset
+                                             fromTable:(NSString *)tableName
+                                                 limit:(const WCDB::Expression &)limit
+                                                offset:(const WCDB::Expression &)offset
 {
     return [[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] limit:limit] offset:offset] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              where:(const WCDB::Expression &)condition
-                                            orderBy:(const WCDB::OrderList &)orderList
-                                              limit:(const WCDB::Expression &)limit
+                                             fromTable:(NSString *)tableName
+                                                 where:(const WCDB::Expression &)condition
+                                               orderBy:(const WCDB::OrderList &)orderList
+                                                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] where:condition] orderBy:orderList] limit:limit] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              where:(const WCDB::Expression &)condition
-                                              limit:(const WCDB::Expression &)limit
-                                             offset:(const WCDB::Expression &)offset
+                                             fromTable:(NSString *)tableName
+                                                 where:(const WCDB::Expression &)condition
+                                                 limit:(const WCDB::Expression &)limit
+                                                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] where:condition] limit:limit] offset:offset] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                            orderBy:(const WCDB::OrderList &)orderList
-                                              limit:(const WCDB::Expression &)limit
-                                             offset:(const WCDB::Expression &)offset
+                                             fromTable:(NSString *)tableName
+                                               orderBy:(const WCDB::OrderList &)orderList
+                                                 limit:(const WCDB::Expression &)limit
+                                                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] orderBy:orderList] limit:limit] offset:offset] allObjects];
 }
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)propertyList
-                                          fromTable:(NSString *)tableName
-                                              where:(const WCDB::Expression &)condition
-                                            orderBy:(const WCDB::OrderList &)orderList
-                                              limit:(const WCDB::Expression &)limit
-                                             offset:(const WCDB::Expression &)offset
+                                             fromTable:(NSString *)tableName
+                                                 where:(const WCDB::Expression &)condition
+                                               orderBy:(const WCDB::OrderList &)orderList
+                                                 limit:(const WCDB::Expression &)limit
+                                                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO] where:condition] orderBy:orderList] limit:limit] offset:offset] allObjects];
 }
 
 #pragma mark - Get Rows
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
-                               fromTable:(NSString *)tableName
+                            fromTable:(NSString *)tableName
 {
-    return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] allRows];
+    return [[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
                             fromTable:(NSString *)tableName
                                 where:(const WCDB::Expression &)condition
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] allRows];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
                             fromTable:(NSString *)tableName
                               orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] allRows];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
                             fromTable:(NSString *)tableName
                                 limit:(const WCDB::Expression &)limit
 {
-    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:limit] allRows];
+    return [[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:limit] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -849,7 +849,7 @@
                                 where:(const WCDB::Expression &)condition
                               orderBy:(const WCDB::OrderList &)orderList
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] allRows];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -857,7 +857,7 @@
                                 where:(const WCDB::Expression &)condition
                                 limit:(const WCDB::Expression &)limit
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:limit] allRows];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:limit] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -865,7 +865,7 @@
                               orderBy:(const WCDB::OrderList &)orderList
                                 limit:(const WCDB::Expression &)limit
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:limit] allRows];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:limit] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -873,7 +873,7 @@
                                 limit:(const WCDB::Expression &)limit
                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] limit:limit] offset:offset] allRows];
+    return [[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] limit:limit] offset:offset] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -882,7 +882,7 @@
                               orderBy:(const WCDB::OrderList &)orderList
                                 limit:(const WCDB::Expression &)limit
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] allRows];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -891,7 +891,7 @@
                                 limit:(const WCDB::Expression &)limit
                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] limit:limit] offset:offset] allRows];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] limit:limit] offset:offset] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -900,7 +900,7 @@
                                 limit:(const WCDB::Expression &)limit
                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] orderBy:orderList] limit:limit] offset:offset] allRows];
+    return [[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] orderBy:orderList] limit:limit] offset:offset] allRows];
 }
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCDB::ColumnResultList &)resultList
@@ -910,7 +910,7 @@
                                 limit:(const WCDB::Expression &)limit
                                offset:(const WCDB::Expression &)offset
 {
-    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName?@[tableName]:@[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] offset:offset] allRows];
+    return [[[[[[[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO] where:condition] orderBy:orderList] limit:limit] offset:offset] allRows];
 }
 
 #pragma mark - Insert
@@ -984,8 +984,8 @@
 
 #pragma mark - Update Properties With Object
 - (BOOL)updateRowsInTable:(NSString *)tableName
-                onProperties:(const WCTPropertyList &)propertyList
-                  withObject:(WCTObject *)object
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:tableName] executeWithObject:object];
 }
@@ -1093,8 +1093,8 @@
 
 #pragma mark - Update Property With Object
 - (BOOL)updateRowsInTable:(NSString *)tableName
-                  onProperty:(const WCTProperty &)property
-                  withObject:(WCTObject *)object
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:tableName] executeWithObject:object];
 }
@@ -1202,8 +1202,8 @@
 
 #pragma mark - Update Properties With Row
 - (BOOL)updateRowsInTable:(NSString *)tableName
-                onProperties:(const WCTPropertyList &)propertyList
-                     withRow:(WCTOneRow *)row
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:tableName] executeWithRow:row];
 }
@@ -1311,8 +1311,8 @@
 
 #pragma mark - Update Property With Value
 - (BOOL)updateRowsInTable:(NSString *)tableName
-                  onProperty:(const WCTProperty &)property
-                   withValue:(WCTValue *)value
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
 {
     return [[[WCTUpdate alloc] initWithCore:_core andProperties:{property} andTableName:tableName] executeWithRow:@[ value ]];
 }

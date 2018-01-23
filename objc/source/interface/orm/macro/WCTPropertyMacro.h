@@ -27,11 +27,10 @@
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
         static const WCTProperty s_property(                                   \
-            columnName,                                                        \
-            __WCDB_BINDING(className)                                          \
-                .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
-                    className, propertyName)>(WCDB_STRINGIFY(propertyName),    \
-                                              columnName));                    \
+            columnName, __WCDB_BINDING(className)                              \
+                            .addColumnBinding<__WCDB_PROPERTY_TYPE(            \
+                                className, propertyName)>(                     \
+                                WCDB_STRINGIFY(propertyName), columnName));    \
         return s_property;                                                     \
     }                                                                          \
     static const auto UNUSED_UNIQUE_ID = [](WCTPropertyList &propertyList) {   \

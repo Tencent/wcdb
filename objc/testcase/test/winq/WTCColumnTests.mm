@@ -30,11 +30,11 @@
 - (void)testColumn
 {
     WINQAssertEqual(WCDB::Column::All, @"*");
-    
+
     WINQAssertEqual(WCDB::Column::Rowid, @"rowid");
-    
+
     WINQAssertEqual(WCDB::Column("testColumn"), @"testColumn");
-    
+
     WINQAssertEqual(WCDB::Column("testColumn").inTable("TestTable"), @"TestTable.testColumn");
 }
 

@@ -35,7 +35,7 @@ const std::string &Describable::getDescription() const
 {
     return m_description;
 }
-    
+
 bool Describable::isEmpty() const
 {
     return m_description.empty();

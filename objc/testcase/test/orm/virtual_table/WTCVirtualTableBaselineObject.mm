@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCVirtualTableBaselineObject+WCTTableCoding.h"
 #import "WTCVirtualTableBaselineObject.h"
+#import "WTCVirtualTableBaselineObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCVirtualTableBaselineObject
@@ -32,5 +32,5 @@ WCDB_VIRTUAL_TABLE_ARGUMENT(WTCVirtualTableBaselineObject, "left", "right")
 WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(WTCVirtualTableBaselineObject)
 
 WCDB_MULTI_PRIMARY(WTCVirtualTableBaselineObject, "WTCVirtualTableBaselineObjectConstraint", variable)
-  
+
 @end

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/error.hpp>
 #include <WCDB/fts_module.hpp>
 #include <WCDB/fts_modules.hpp>
-#include <WCDB/error.hpp>
 
 namespace WCDB {
 
@@ -46,9 +46,10 @@ std::vector<unsigned char> Modules::getAddress(const std::string &name) const
     if (iter == m_modules.end()) {
         WCDB::Error::Abort("Tokenize name is not registered");
     }
-    const void* module = iter->second.get();
-    unsigned char* address = (unsigned char*)&module;
-    return std::vector<unsigned char>(address, address + sizeof(unsigned char*));
+    const void *module = iter->second.get();
+    unsigned char *address = (unsigned char *) &module;
+    return std::vector<unsigned char>(address,
+                                      address + sizeof(unsigned char *));
 }
 
 } //namespace FTS

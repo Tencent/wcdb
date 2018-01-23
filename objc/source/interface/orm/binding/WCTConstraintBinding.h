@@ -87,15 +87,14 @@ protected:
 class WCTConstraintForeignKeyBinding : public WCTConstraintBindingBase {
 public:
     static constexpr const WCTConstraintBindingType type =
-    WCTConstraintBindingForeignKey;
+        WCTConstraintBindingForeignKey;
     WCTConstraintForeignKeyBinding(const std::string &name);
-    
+
     void addColumn(const WCDB::Column &column);
-    void setForeignKey(const WCDB::ForeignKey& foreignKey);
+    void setForeignKey(const WCDB::ForeignKey &foreignKey);
     virtual WCDB::TableConstraint generateConstraint() const override;
-    
+
 protected:
     std::shared_ptr<WCDB::ForeignKey> m_foreignKey;
     WCDB::ColumnList m_columnList;
 };
-

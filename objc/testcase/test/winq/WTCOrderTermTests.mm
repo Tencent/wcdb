@@ -30,7 +30,7 @@
 - (void)testOrderTerm
 {
     WTCAssertEqual(OrderTermName(WCDB::OrderTerm::ASC), @"ASC");
-    
+
     WTCAssertEqual(OrderTermName(WCDB::OrderTerm::DESC), @"DESC");
 }
 

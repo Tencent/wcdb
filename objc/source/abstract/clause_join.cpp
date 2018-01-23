@@ -19,13 +19,13 @@
  */
 
 #include <WCDB/clause_join.hpp>
+#include <WCDB/column.hpp>
 #include <WCDB/expression.hpp>
 #include <WCDB/subquery.hpp>
-#include <WCDB/column.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
-    
+
 JoinClause &JoinClause::join(const Subquery &subquery,
                              JoinClause::Type type,
                              bool isNatural)
@@ -54,13 +54,14 @@ JoinClause &JoinClause::join(const Subquery &subquery,
     m_description.append(" JOIN " + subquery.getDescription());
     return *this;
 }
-    
+
 JoinClause &JoinClause::join(const Subquery &subquery, JoinClause::Type type)
 {
     return join(subquery, type, false);
 }
 
-JoinClause &JoinClause::naturalJoin(const Subquery &subquery, JoinClause::Type type)
+JoinClause &JoinClause::naturalJoin(const Subquery &subquery,
+                                    JoinClause::Type type)
 {
     return join(subquery, type, true);
 }
@@ -70,17 +71,17 @@ JoinClause &JoinClause::on(const Expression &expression)
     m_description.append(" ON " + expression.getDescription());
     return *this;
 }
-    
+
 JoinClause &JoinClause::usingColumns(const Column &column)
 {
     m_description.append(" USING " + column.getDescription());
     return *this;
 }
-        
+
 JoinClause &JoinClause::usingColumns(const std::list<const Column> &columnList)
 {
     m_description.append(" USING " + stringByJoiningList(columnList));
     return *this;
 }
-    
+
 }; // namespace WCDB

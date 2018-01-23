@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import "WTCBaseTestCase.h"
 #import "WTCAssert.h"
-#import "WTCVirtualTableBaselineObject.h"
+#import "WTCBaseTestCase.h"
 #import "WTCVirtualTableBaselineObject+WCTTableCoding.h"
+#import "WTCVirtualTableBaselineObject.h"
 
 @interface WTCVirtualTableBindingTests : WTCBaseTestCase
 
@@ -34,7 +34,8 @@
     return [cls objectRelationalMappingForWCDB]->generateVirtualCreateTableStatement(NSStringFromClass(cls).UTF8String);
 }
 
-- (void)testVirtualBinding {
+- (void)testVirtualBinding
+{
     WINQAssertEqual([self generateCreateVirtualTableStatementForClass:WTCVirtualTableBaselineObject.class], @"CREATE VIRTUAL TABLE IF NOT EXISTS WTCVirtualTableBaselineObject USING fts3(variable INTEGER, CONSTRAINT WTCVirtualTableBaselineObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)");
 }
 

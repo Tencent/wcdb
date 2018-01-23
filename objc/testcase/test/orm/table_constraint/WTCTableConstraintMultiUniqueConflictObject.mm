@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCTableConstraintMultiUniqueConflictObject+WCTTableCoding.h"
 #import "WTCTableConstraintMultiUniqueConflictObject.h"
+#import "WTCTableConstraintMultiUniqueConflictObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCTableConstraintMultiUniqueConflictObject
@@ -31,5 +31,5 @@ WCDB_SYNTHESIZE(WTCTableConstraintMultiUniqueConflictObject, variable2)
 WCDB_MULTI_UNIQUE(WTCTableConstraintMultiUniqueConflictObject, "WTCTableConstraintMultiUniqueConflictObjectConstraint", variable1)
 WCDB_MULTI_UNIQUE(WTCTableConstraintMultiUniqueConflictObject, "WTCTableConstraintMultiUniqueConflictObjectConstraint", variable2)
 WCDB_MULTI_UNIQUE_CONFLICT(WTCTableConstraintMultiUniqueConflictObject, "WTCTableConstraintMultiUniqueConflictObjectConstraint", WCTConflictReplace)
-  
+
 @end

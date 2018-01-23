@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCColumnConstraintPrimaryKeyObject+WCTTableCoding.h"
 #import "WTCColumnConstraintPrimaryKeyObject.h"
+#import "WTCColumnConstraintPrimaryKeyObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCColumnConstraintPrimaryKeyObject
@@ -28,5 +28,5 @@ WCDB_IMPLEMENTATION(WTCColumnConstraintPrimaryKeyObject)
 WCDB_SYNTHESIZE_COLUMN(WTCColumnConstraintPrimaryKeyObject, variable, "primaryVariable")
 
 WCDB_PRIMARY(WTCColumnConstraintPrimaryKeyObject, variable)
-  
+
 @end

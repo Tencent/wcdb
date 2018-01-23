@@ -21,13 +21,13 @@
 #ifndef error_hpp
 #define error_hpp
 
+#include <WCDB/optional.hpp>
 #include <WCDB/thread_local.hpp>
 #include <WCDB/utility.hpp>
 #include <climits>
 #include <functional>
 #include <map>
 #include <string>
-#include <WCDB/optional.hpp>
 
 namespace WCDB {
 

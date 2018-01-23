@@ -34,7 +34,8 @@ struct ColumnIsCppType<T,
 template <WCTColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {
 public:
-    using UnderlyingType = typename WCDB::ColumnTypeInfo<(WCDB::ColumnType) t>::UnderlyingType;
+    using UnderlyingType =
+        typename WCDB::ColumnTypeInfo<(WCDB::ColumnType) t>::UnderlyingType;
     using Setter = void (^)(InstanceType, UnderlyingType);
     using Getter = UnderlyingType (^)(InstanceType);
 

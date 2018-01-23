@@ -106,6 +106,7 @@ public:
     static const Pragma WalAutocheckpoint;
     static const Pragma WalCheckpoint;
     static const Pragma WritableSchema;
+
 protected:
     Pragma(const char *name);
 };

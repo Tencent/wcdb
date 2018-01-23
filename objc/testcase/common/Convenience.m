@@ -20,37 +20,37 @@
 
 #import "Convenience.h"
 
-@implementation NSObject(Comparator)
+@implementation NSObject (Comparator)
 
 + (NSComparator)Comparator
 {
-    return ^NSComparisonResult(NSObject* obj1, NSObject* obj2) {
-        NSUInteger hash1 = obj1.hash;
-        NSUInteger hash2 = obj2.hash;
-        if (hash1<hash2) {
-            return NSOrderedAscending;
-        }else if(hash1>hash2) {
-            return NSOrderedDescending;
-        }else {
-            return NSOrderedSame;
-        }
+    return ^NSComparisonResult(NSObject *obj1, NSObject *obj2) {
+      NSUInteger hash1 = obj1.hash;
+      NSUInteger hash2 = obj2.hash;
+      if (hash1 < hash2) {
+          return NSOrderedAscending;
+      } else if (hash1 > hash2) {
+          return NSOrderedDescending;
+      } else {
+          return NSOrderedSame;
+      }
     };
 }
 
 @end
 
-@implementation NSArray(Reverse)
+@implementation NSArray (Reverse)
 
-- (NSArray*)sorted
+- (NSArray *)sorted
 {
     return [self sortedArrayUsingComparator:NSObject.Comparator];
 }
 
-- (NSArray*)reversed
+- (NSArray *)reversed
 {
-    NSMutableArray* reversedArray = [[NSMutableArray alloc] initWithCapacity:self.count];
-    NSEnumerator* reversedEnum = self.reverseObjectEnumerator;
-    NSObject* object = nil;
+    NSMutableArray *reversedArray = [[NSMutableArray alloc] initWithCapacity:self.count];
+    NSEnumerator *reversedEnum = self.reverseObjectEnumerator;
+    NSObject *object = nil;
     while (object = [reversedEnum nextObject]) {
         [reversedArray addObject:object];
     }

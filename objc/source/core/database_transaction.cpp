@@ -95,7 +95,7 @@ bool Database::runEmbeddedTransaction(TransactionBlock transaction,
         s_threadedHandle.get();
     if (threadedHandle->find(getPath()) != threadedHandle->end()) {
         transaction(error);
-    }else {
+    } else {
         runTransaction(transaction, error);
     }
     return error.isOK();

@@ -72,7 +72,7 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
         static const ColumnResultList resultList = {
             ColumnResult(Expression(1))};
         StatementSelect select =
-        StatementSelect().select(resultList).from(tableName).limit(0);
+            StatementSelect().select(resultList).from(tableName).limit(0);
         std::shared_ptr<StatementHandle> statementHandle =
             handle->prepare(select);
         Error::setThreadedSlient(false);
@@ -89,7 +89,8 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
     return result;
 }
 
-bool CoreBase::runControllableTransaction(ControllableTransactionBlock transaction, Error &error)
+bool CoreBase::runControllableTransaction(
+    ControllableTransactionBlock transaction, Error &error)
 {
     if (!begin(StatementTransaction::Mode::Immediate, error)) {
         return false;
@@ -101,13 +102,12 @@ bool CoreBase::runControllableTransaction(ControllableTransactionBlock transacti
         }
     }
     //Rollback errors do not need to be passed to the outside
-    Error rollBackError; 
+    Error rollBackError;
     rollback(rollBackError);
     return false;
 }
 
-bool CoreBase::runTransaction(TransactionBlock transaction,
-                              Error &error)
+bool CoreBase::runTransaction(TransactionBlock transaction, Error &error)
 {
     if (!begin(StatementTransaction::Mode::Immediate, error)) {
         return false;
@@ -119,7 +119,7 @@ bool CoreBase::runTransaction(TransactionBlock transaction,
         }
     }
     //Rollback errors do not need to be passed to the outside
-    Error rollBackError; 
+    Error rollBackError;
     rollback(rollBackError);
     return false;
 }

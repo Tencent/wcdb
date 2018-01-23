@@ -30,11 +30,11 @@
 - (void)testModuleArgument
 {
     WINQAssertEqual(WCDB::ModuleArgument("left", "right"), @"left=right");
-    
+
     WINQAssertEqual(WCDB::ModuleArgument(WCDB::ColumnDef(WCDB::Column("column1"), WCDB::ColumnType::Integer32)), @"column1 INTEGER");
-    
+
     WINQAssertEqual(WCDB::ModuleArgument(WCDB::TableConstraint("constraint1")), @"CONSTRAINT constraint1");
-    
+
     WINQAssertEqual(WCDB::ModuleArgument::Tokenize("WCDB"), @"tokenize=WCDB");
 }
 

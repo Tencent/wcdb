@@ -20,9 +20,9 @@
 
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTCoreStatement+Private.h>
 #import <WCDB/WCTCoreStatement.h>
+#import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTValue.h>
 #import <WCDB/handle_statement.hpp>
 
@@ -71,7 +71,7 @@
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            const unsigned char* raw = (const unsigned char*)data.bytes;
+            const unsigned char *raw = (const unsigned char *) data.bytes;
             std::vector<unsigned char> vector(raw, raw + data.length);
             _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
         } break;

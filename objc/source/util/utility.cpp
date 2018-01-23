@@ -18,18 +18,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/utility.hpp>
 #include <WCDB/column.hpp>
-#include <WCDB/column_index.hpp>
 #include <WCDB/column_def.hpp>
-#include <WCDB/foreign_key.hpp>
-#include <WCDB/table_constraint.hpp>
-#include <WCDB/module_argument.hpp>
+#include <WCDB/column_index.hpp>
 #include <WCDB/expression.hpp>
+#include <WCDB/foreign_key.hpp>
+#include <WCDB/module_argument.hpp>
+#include <WCDB/table_constraint.hpp>
+#include <WCDB/utility.hpp>
 
 namespace WCDB {
 
-std::string stringByReplacingOccurrencesOfString(const std::string &origin, const std::string &target, const std::string &replacement)
+std::string stringByReplacingOccurrencesOfString(const std::string &origin,
+                                                 const std::string &target,
+                                                 const std::string &replacement)
 {
     bool replace = false;
     size_t last = 0;
@@ -50,5 +52,5 @@ std::string stringByReplacingOccurrencesOfString(const std::string &origin, cons
     }
     return replace ? output : origin;
 }
-    
+
 } //namespace WCDB

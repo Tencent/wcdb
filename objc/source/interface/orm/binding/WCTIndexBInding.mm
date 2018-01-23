@@ -55,7 +55,7 @@ WCDB::StatementCreateIndex WCTIndexBinding::generateCreateIndexStatement(const s
 {
     std::string indexName = tableName + indexNameSubfix;
     WCDB::StatementCreateIndex statementCreateIndex = WCDB::StatementCreateIndex().create(indexName, m_unique).on(tableName, m_indexes);
-    if (m_condition!=nullptr) {
+    if (m_condition != nullptr) {
         statementCreateIndex.where(*m_condition.get());
     }
     return statementCreateIndex;

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCIndexMultiIndexesObject+WCTTableCoding.h"
 #import "WTCIndexMultiIndexesObject.h"
+#import "WTCIndexMultiIndexesObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCIndexMultiIndexesObject
@@ -30,5 +30,5 @@ WCDB_SYNTHESIZE(WTCIndexMultiIndexesObject, variable2)
 
 WCDB_INDEX(WTCIndexMultiIndexesObject, "_index", variable1)
 WCDB_INDEX(WTCIndexMultiIndexesObject, "_index", variable2)
-  
+
 @end

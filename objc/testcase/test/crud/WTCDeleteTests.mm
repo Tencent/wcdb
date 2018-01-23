@@ -21,51 +21,57 @@
 #import "WTCCRUDTestCase.h"
 
 @interface WTCDeleteTests : WTCCRUDTestCase
-@property(nonatomic, readonly) WCTDelete* delete_;
+@property(nonatomic, readonly) WCTDelete *delete_;
 @end
 
 @implementation WTCDeleteTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
     _delete_ = [self.database prepareDeleteFromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(_delete_);
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     [super tearDown];
     _delete_ = nil;
 }
 
-- (void)testBase {
+- (void)testBase
+{
     XCTAssertEqual(self.delete_.tag, self.database.tag);
     XCTAssertTrue([self.delete_.path isEqualToString:self.database.path]);
 }
 
-- (void)testDelete {
+- (void)testDelete
+{
     //When
     XCTAssertTrue([self.delete_ execute]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 0);
 }
 
-- (void)testConditionalDelete {
+- (void)testConditionalDelete
+{
     //When
     XCTAssertTrue([[self.delete_ where:WTCCRUDObject.variable1 == 2] execute]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0] isEqual:self.preInsertedObjects[0]]);
 }
 
-- (void)testOrderedDelete {
+- (void)testOrderedDelete
+{
     //When
     XCTAssertTrue([[[self.delete_ orderBy:WTCCRUDObject.variable1.asOrder(WCTOrderedDescending)] limit:1] execute]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(results);
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0] isEqual:self.preInsertedObjects[0]]);
@@ -76,7 +82,7 @@
     //When
     XCTAssertTrue([[self.delete_ limit:1] execute]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0] isEqual:self.preInsertedObjects[1]]);
 }
@@ -86,7 +92,7 @@
     //When
     XCTAssertTrue([[[self.delete_ limit:1] offset:1] execute]);
     //Then
-    NSArray<WTCCRUDObject*>* results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
+    NSArray<WTCCRUDObject *> *results = [self.database getObjectsOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name];
     XCTAssertEqual(results.count, 1);
     XCTAssertTrue([results[0] isEqual:self.preInsertedObjects[0]]);
 }

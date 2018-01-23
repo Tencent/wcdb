@@ -21,12 +21,13 @@
 #import "WTCCRUDTestCase.h"
 
 @interface WTCInsertTests : WTCCRUDTestCase
-@property(nonatomic, readonly) WCTInsert* insert;
+@property(nonatomic, readonly) WCTInsert *insert;
 @end
 
-@implementation WTCInsertTests 
+@implementation WTCInsertTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
     _insert = [self.database prepareInsertObjectsOfClass:WTCCRUDObject.class into:WTCCRUDObject.Name];
     XCTAssertNotNil(_insert);
@@ -44,78 +45,83 @@
     XCTAssertTrue([self.insert.path isEqualToString:self.database.path]);
 }
 
-- (void)testInsert {
+- (void)testInsert
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
-    object.variable1 = (int)self.preInsertedObjects.count + 1;
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
+    object.variable1 = (int) self.preInsertedObjects.count + 1;
     object.variable2 = self.name;
     //When
-    XCTAssertTrue([self.insert executeWithObjects:@[object]]);
+    XCTAssertTrue([self.insert executeWithObjects:@[ object ]]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
     XCTAssertNotNil(result);
     XCTAssertTrue([result isEqual:object]);
 }
 
-- (void)testAutoIncrementInsert {
+- (void)testAutoIncrementInsert
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
-    int expectedRowID = (int)self.preInsertedObjects.count + 1;
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
+    int expectedRowID = (int) self.preInsertedObjects.count + 1;
     object.isAutoIncrement = YES;
     object.variable2 = self.name;
     //When
-    XCTAssertTrue([self.insert executeWithObjects:@[object]]);
+    XCTAssertTrue([self.insert executeWithObjects:@[ object ]]);
     //Then
     XCTAssertEqual(object.lastInsertedRowID, expectedRowID);
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedRowID];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedRowID];
     XCTAssertNotNil(result);
     XCTAssertEqual(result.variable1, expectedRowID);
     XCTAssertTrue([result.variable2 isEqualToString:object.variable2]);
 }
 
-- (void)testInsertOrReplace {
+- (void)testInsertOrReplace
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     int expectedReplacedRowID = 1;
     object.variable1 = expectedReplacedRowID;
     object.variable2 = self.name;
     _insert = [self.database prepareInsertOrReplaceObjectsOfClass:WTCCRUDObject.class into:WTCCRUDObject.Name];
     XCTAssertNotNil(_insert);
     //When
-    XCTAssertTrue([self.insert executeWithObjects:@[object]]);
+    XCTAssertTrue([self.insert executeWithObjects:@[ object ]]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
     XCTAssertNotNil(result);
     XCTAssertTrue([result.variable2 isEqualToString:self.name]);
 }
 
-- (void)testPartialInsert {
+- (void)testPartialInsert
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
-    object.variable1 = (int)self.preInsertedObjects.count + 1;
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
+    object.variable1 = (int) self.preInsertedObjects.count + 1;
     object.variable2 = self.name;
     _insert = [self.database prepareInsertObjectsOnProperties:WTCCRUDObject.variable1 into:WTCCRUDObject.Name];
     XCTAssertNotNil(_insert);
     //When
-    XCTAssertTrue([self.insert executeWithObjects:@[object]]);
+    XCTAssertTrue([self.insert executeWithObjects:@[ object ]]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == object.variable1];
     XCTAssertNotNil(result);
     XCTAssertNil(result.variable2);
 }
 
-- (void)testPartialInsertOrReplace {
+- (void)testPartialInsertOrReplace
+{
     //Give
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
     int expectedReplacedRowID = 1;
     object.variable1 = expectedReplacedRowID;
     object.variable2 = self.name;
     _insert = [self.database prepareInsertOrReplaceObjectsOnProperties:{WTCCRUDObject.variable1, WTCCRUDObject.variable2} into:WTCCRUDObject.Name];
     XCTAssertNotNil(_insert);
     //When
-    XCTAssertTrue([self.insert executeWithObjects:@[object]]);
+    XCTAssertTrue([self.insert executeWithObjects:@[ object ]]);
     //Then
-    WTCCRUDObject* result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
+    WTCCRUDObject *result = [self.database getObjectOfClass:WTCCRUDObject.class fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == expectedReplacedRowID];
     XCTAssertNotNil(result);
     XCTAssertTrue([result.variable2 isEqualToString:self.name]);
 }
@@ -128,10 +134,10 @@
 - (void)testInsertFailed
 {
     _insert = [self.database prepareInsertOrReplaceObjectsOfClass:WTCCRUDObject.class into:@""];
-    WTCCRUDObject* object = [[WTCCRUDObject alloc] init];
-    object.variable1 = (int)self.preInsertedObjects.count + 1;
+    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
+    object.variable1 = (int) self.preInsertedObjects.count + 1;
     object.variable2 = self.name;
-    XCTAssertFalse([_insert executeWithObjects:@[object]]);
+    XCTAssertFalse([_insert executeWithObjects:@[ object ]]);
 }
 
 @end

@@ -30,7 +30,7 @@
 - (void)testStatementReindex
 {
     XCTAssertEqual(WCDB::StatementReindex().getStatementType(), WCDB::Statement::Type::Reindex);
-    
+
     WINQAssertEqual(WCDB::StatementReindex().reindex("tableOrIndex"), @"REINDEX tableOrIndex");
 }
 

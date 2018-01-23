@@ -30,13 +30,13 @@
 - (void)testConflict
 {
     WTCAssertEqual(ConflictName(WCDB::Conflict::Rollback), @"ROLLBACK");
-    
+
     WTCAssertEqual(ConflictName(WCDB::Conflict::Abort), @"ABORT");
-    
+
     WTCAssertEqual(ConflictName(WCDB::Conflict::Fail), @"FAIL");
-    
+
     WTCAssertEqual(ConflictName(WCDB::Conflict::Ignore), @"IGNORE");
-    
+
     WTCAssertEqual(ConflictName(WCDB::Conflict::Replace), @"REPLACE");
 }
 

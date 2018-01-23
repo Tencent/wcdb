@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCMultiSelectObject+WCTTableCoding.h"
 #import "WTCMultiSelectObject.h"
+#import "WTCMultiSelectObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCMultiSelectObject
@@ -30,12 +30,12 @@ WCDB_SYNTHESIZE(WTCMultiSelectObject, variable2)
 
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCMultiSelectObject, variable1)
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
 
-- (BOOL)isEqual:(NSObject*)object
+- (BOOL)isEqual:(NSObject *)object
 {
     return self.hash == object.hash;
 }

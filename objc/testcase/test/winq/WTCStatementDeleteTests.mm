@@ -38,20 +38,20 @@
     //Give
     WCDB::Column column1("column1");
     WCDB::Column column2("column2");
-    
+
     //Then
     XCTAssertEqual(WCDB::StatementDelete().getStatementType(), WCDB::Statement::Type::Delete);
-    
+
     WINQAssertEqual([self generateStatementDelete].where(column1 > 1), @"DELETE FROM table1 WHERE (column1 > 1)");
-    
+
     WINQAssertEqual([self generateStatementDelete].orderBy({column1, column2}), @"DELETE FROM table1 ORDER BY column1, column2");
-    
+
     WINQAssertEqual([self generateStatementDelete].limit(1), @"DELETE FROM table1 LIMIT 1");
-    
+
     WINQAssertEqual([self generateStatementDelete].limit(1, 2), @"DELETE FROM table1 LIMIT 1, 2");
-    
+
     WINQAssertEqual([self generateStatementDelete].limit(1).offset(3), @"DELETE FROM table1 LIMIT 1 OFFSET 3");
-    
+
     WINQAssertEqual([self generateStatementDelete].where(column1 > 1).orderBy({column1, column2}).limit(1).offset(2), @"DELETE FROM table1 WHERE (column1 > 1) ORDER BY column1, column2 LIMIT 1 OFFSET 2");
 }
 

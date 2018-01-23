@@ -21,8 +21,8 @@
 #ifndef statement_attach_hpp
 #define statement_attach_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 

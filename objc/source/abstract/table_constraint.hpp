@@ -21,8 +21,8 @@
 #ifndef table_constraint_hpp
 #define table_constraint_hpp
 
-#include <WCDB/declare.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/declare.hpp>
 
 namespace WCDB {
 
@@ -31,19 +31,21 @@ public:
     TableConstraint(const std::string &name);
 
     template <typename T>
-    typename std::enable_if<ColumnIndexConvertible<T>::value, TableConstraint &>::type
+    typename std::enable_if<ColumnIndexConvertible<T>::value,
+                            TableConstraint &>::type
     makePrimary(const std::list<const T> &list)
     {
         m_description.append(" PRIMARY KEY(" + stringByJoiningList(list) + ")");
         return *this;
     }
-    
+
     TableConstraint &makePrimary(const std::list<const ColumnIndex> &list);
-    
+
     TableConstraint &makePrimary(const ColumnIndex &columnIndex);
 
     template <typename T>
-    typename std::enable_if<ColumnIndexConvertible<T>::value, TableConstraint &>::type
+    typename std::enable_if<ColumnIndexConvertible<T>::value,
+                            TableConstraint &>::type
     makeUnique(const std::list<const T> &list)
     {
         m_description.append(" UNIQUE(" + stringByJoiningList(list) + ")");
@@ -51,23 +53,29 @@ public:
     }
 
     TableConstraint &makeUnique(const std::list<const ColumnIndex> &list);
-    
+
     TableConstraint &makeUnique(const ColumnIndex &columnIndex);
-    
+
     TableConstraint &onConflict(Conflict conflict);
 
     TableConstraint &check(const Expression &expression);
-    
+
     template <typename T>
-    typename std::enable_if<ColumnConvertible<T>::value, TableConstraint &>::type makeForeignKey(const std::list<const T> &list, const ForeignKey &foreignKey) {
-        m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) + ") " + foreignKey.getDescription());
+    typename std::enable_if<ColumnConvertible<T>::value,
+                            TableConstraint &>::type
+    makeForeignKey(const std::list<const T> &list, const ForeignKey &foreignKey)
+    {
+        m_description.append(" FOREIGN KEY(" + stringByJoiningList(list) +
+                             ") " + foreignKey.getDescription());
         return *this;
     }
-    
-    TableConstraint &makeForeignKey(const std::list<const Column> &list, const ForeignKey &foreignKey);
 
-    TableConstraint &makeForeignKey(const Column &column, const ForeignKey &foreignKey);
-    
+    TableConstraint &makeForeignKey(const std::list<const Column> &list,
+                                    const ForeignKey &foreignKey);
+
+    TableConstraint &makeForeignKey(const Column &column,
+                                    const ForeignKey &foreignKey);
+
     operator std::list<const TableConstraint>() const;
 };
 

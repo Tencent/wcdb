@@ -21,8 +21,8 @@
 #ifndef statement_alter_table_hpp
 #define statement_alter_table_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 

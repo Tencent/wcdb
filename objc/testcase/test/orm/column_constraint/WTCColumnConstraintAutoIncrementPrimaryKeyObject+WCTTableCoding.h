@@ -21,7 +21,8 @@
 #import "WTCColumnConstraintAutoIncrementPrimaryKeyObject.h"
 #import <WCDB/WCDB.h>
 
-@interface WTCColumnConstraintAutoIncrementPrimaryKeyObject (WCTTableCoding) <WCTTableCoding>
+@interface WTCColumnConstraintAutoIncrementPrimaryKeyObject (
+    WCTTableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(variable)
 

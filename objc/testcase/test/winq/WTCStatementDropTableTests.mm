@@ -30,11 +30,11 @@
 - (void)testStatementDropTable
 {
     std::string table1 = "table1";
-    
+
     XCTAssertEqual(WCDB::StatementDropTable().getStatementType(), WCDB::Statement::Type::DropTable);
-    
+
     WINQAssertEqual(WCDB::StatementDropTable().drop(table1), @"DROP TABLE IF EXISTS table1");
-    
+
     WINQAssertEqual(WCDB::StatementDropTable().drop(table1, false), @"DROP TABLE table1");
 }
 

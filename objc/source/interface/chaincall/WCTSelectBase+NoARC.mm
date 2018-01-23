@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTSelectBase+NoARC.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/handle_statement.hpp>
-#import <WCDB/WCTBinding.h>
 
 #ifndef WCDB_COCOAPODS
 #if __has_feature(objc_arc)

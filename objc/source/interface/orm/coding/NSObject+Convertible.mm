@@ -25,9 +25,9 @@
 
 namespace WCDB {
 
-LiteralValue LiteralValueConvertible<NSObject*>::asLiteralValue(NSObject* const &t)
+LiteralValue LiteralValueConvertible<NSObject *>::asLiteralValue(NSObject *const &t)
 {
-    WCTValue* value = t;
+    WCTValue *value = t;
     WCTValueType valueType = [value valueType];
     if (valueType == WCTValueTypeColumnCoding) {
         value = [(id<WCTColumnCoding>) value archivedWCTValue];
@@ -50,7 +50,7 @@ LiteralValue LiteralValueConvertible<NSObject*>::asLiteralValue(NSObject* const 
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            const unsigned char* raw = (const unsigned char*)data.bytes;
+            const unsigned char *raw = (const unsigned char *) data.bytes;
             std::vector<unsigned char> vector(raw, raw + data.length);
             return LiteralValue(vector);
         } break;
@@ -62,26 +62,26 @@ LiteralValue LiteralValueConvertible<NSObject*>::asLiteralValue(NSObject* const 
             break;
     }
     return LiteralValue("");
-}  
-
-Expression ExpressionConvertible<NSObject*>::asExpression(NSObject* const &t)
-{
-    return Expression(LiteralValueConvertible<NSObject*>::asLiteralValue(t));
 }
 
-ColumnResult ColumnResultConvertible<NSObject*>::asColumnResult(NSObject* const &t)
+Expression ExpressionConvertible<NSObject *>::asExpression(NSObject *const &t)
 {
-    return ColumnResult(ExpressionConvertible<NSObject*>::asExpression(t));
+    return Expression(LiteralValueConvertible<NSObject *>::asLiteralValue(t));
 }
 
-Order OrderConvertible<NSObject*>::asOrder(NSObject* const & t)
+ColumnResult ColumnResultConvertible<NSObject *>::asColumnResult(NSObject *const &t)
 {
-    return Order(ExpressionConvertible<NSObject*>::asExpression(t));
+    return ColumnResult(ExpressionConvertible<NSObject *>::asExpression(t));
 }
 
-Order SpecificOrderConvertible<NSObject*>::asOrder(NSObject* const & t, OrderTerm term) 
+Order OrderConvertible<NSObject *>::asOrder(NSObject *const &t)
 {
-    return Order(ExpressionConvertible<NSObject*>::asExpression(t), term);
+    return Order(ExpressionConvertible<NSObject *>::asExpression(t));
+}
+
+Order SpecificOrderConvertible<NSObject *>::asOrder(NSObject *const &t, OrderTerm term)
+{
+    return Order(ExpressionConvertible<NSObject *>::asExpression(t), term);
 }
 
 } //namespace WCDB

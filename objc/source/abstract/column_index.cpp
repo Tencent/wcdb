@@ -18,13 +18,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/column_index.hpp>
 #include <WCDB/column.hpp>
+#include <WCDB/column_index.hpp>
 
 namespace WCDB {
-    
+
 ColumnIndex::ColumnIndex(const Column &column, OrderTerm term)
-: Describable(column.getDescription()){
+    : Describable(column.getDescription())
+{
     if (term != OrderTerm::NotSet) {
         m_description.append(" ");
         m_description.append(OrderTermName(term));

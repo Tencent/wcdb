@@ -22,17 +22,17 @@
 #import <WCDB/abstract.h>
 
 class WCTColumnBinding;
-   
-class WCTProperty: public WCDB::Describable, public WCDB::Operable
-{
-public:   
-    WCTProperty(const std::string& name, const std::shared_ptr<WCTColumnBinding> &columnBinding);
-    
-    WCTProperty inTable(NSString *tableName) const;
-    WCTProperty inTable(const std::string& tableName) const;
 
-    const std::shared_ptr<WCTColumnBinding>& getColumnBinding() const;
-    
+class WCTProperty : public WCDB::Describable, public WCDB::Operable {
+public:
+    WCTProperty(const std::string &name,
+                const std::shared_ptr<WCTColumnBinding> &columnBinding);
+
+    WCTProperty inTable(NSString *tableName) const;
+    WCTProperty inTable(const std::string &tableName) const;
+
+    const std::shared_ptr<WCTColumnBinding> &getColumnBinding() const;
+
     WCDB::Column asColumn() const;
     WCDB::ColumnIndex asIndex() const;
     WCDB::ColumnIndex asIndex(WCTOrderTerm term) const;
@@ -40,75 +40,68 @@ public:
     WCDB::Order asOrder(WCTOrderTerm term) const;
     WCDB::ColumnDef asDef() const;
     WCDB::ColumnDef asDef(WCTColumnType columnType) const;
-    
-    virtual WCDB::Expression asExpression() const override; 
-    
+
+    virtual WCDB::Expression asExpression() const override;
+
     operator std::list<const WCTProperty>() const;
     operator std::list<const WCDB::Order>() const;
     operator std::list<const WCDB::ColumnResult>() const;
     operator std::list<const WCDB::Expression>() const;
-protected:    
+
+protected:
     std::shared_ptr<WCTColumnBinding> m_columnBinding;
 };
 
 namespace WCDB {
-    
+
 template <>
-struct ColumnConvertible<WCTProperty> : public std::true_type
-{
+struct ColumnConvertible<WCTProperty> : public std::true_type {
 public:
     static Column asColumn(const WCTProperty &property);
 };
 
 template <>
-struct ExpressionConvertible<WCTProperty> : public std::true_type
-{
+struct ExpressionConvertible<WCTProperty> : public std::true_type {
 public:
     static Expression asExpression(const WCTProperty &property);
 };
 
 template <>
-struct ColumnResultConvertible<WCTProperty> : public std::true_type
-{
+struct ColumnResultConvertible<WCTProperty> : public std::true_type {
 public:
     static ColumnResult asColumnResult(const WCTProperty &property);
 };
 
 template <>
-struct SpecificOrderConvertible<WCTProperty> : public std::true_type
-{
+struct SpecificOrderConvertible<WCTProperty> : public std::true_type {
 public:
     static Order asOrder(const WCTProperty &property, OrderTerm term);
 };
 
 template <>
-struct OrderConvertible<WCTProperty> : public std::true_type
-{
+struct OrderConvertible<WCTProperty> : public std::true_type {
 public:
     static Order asOrder(const WCTProperty &property);
 };
 
 template <>
-struct SpecificColumnIndexConvertible<WCTProperty> : public std::true_type
-{
+struct SpecificColumnIndexConvertible<WCTProperty> : public std::true_type {
 public:
-    static ColumnIndex asIndex(const WCTProperty &property, OrderTerm term) ;
+    static ColumnIndex asIndex(const WCTProperty &property, OrderTerm term);
 };
 
 template <>
-struct ColumnIndexConvertible<WCTProperty> : public std::true_type
-{
+struct ColumnIndexConvertible<WCTProperty> : public std::true_type {
 public:
-    static ColumnIndex asIndex(const WCTProperty &property) ;
+    static ColumnIndex asIndex(const WCTProperty &property);
 };
 
 template <>
-struct SpecificColumnDefConvertible<WCTProperty> : public std::true_type
-{
+struct SpecificColumnDefConvertible<WCTProperty> : public std::true_type {
 public:
     static ColumnDef asDef(const WCTProperty &property, ColumnType columnType);
 };
-    
+
 } //namespace WCDB
 
 typedef std::list<const WCTProperty> WCTPropertyList;

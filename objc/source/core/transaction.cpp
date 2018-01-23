@@ -104,7 +104,7 @@ bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());
     if (m_isInTransaction) {
         transaction(error);
-    }else {
+    } else {
         runTransaction(transaction, error);
     }
     return error.isOK();

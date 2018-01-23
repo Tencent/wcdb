@@ -27,7 +27,7 @@ ColumnResult &ColumnResult::as(const std::string &name)
     m_description.append(" AS " + name);
     return *this;
 }
-    
+
 ColumnResult::operator std::list<const ColumnResult>() const
 {
     return {*this};

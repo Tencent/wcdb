@@ -21,8 +21,8 @@
 #ifndef statement_create_index_hpp
 #define statement_create_index_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -37,13 +37,16 @@ public:
                             StatementCreateIndex &>::type
     on(const std::string &table, const std::list<const T> &indexList)
     {
-        m_description.append(" ON " + table + "(" + stringByJoiningList(indexList) + ")");
+        m_description.append(" ON " + table + "(" +
+                             stringByJoiningList(indexList) + ")");
         return *this;
     }
-    
-    StatementCreateIndex &on(const std::string &table, const std::list<const ColumnIndex> &indexList);
 
-    StatementCreateIndex &on(const std::string &table, const ColumnIndex &index);
+    StatementCreateIndex &on(const std::string &table,
+                             const std::list<const ColumnIndex> &indexList);
+
+    StatementCreateIndex &on(const std::string &table,
+                             const ColumnIndex &index);
 
     StatementCreateIndex &where(const Expression &expression);
 

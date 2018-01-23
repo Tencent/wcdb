@@ -21,8 +21,8 @@
 #ifndef statement_create_virtual_table_hpp
 #define statement_create_virtual_table_hpp
 
-#include <WCDB/statement.hpp>
 #include <WCDB/convertible.hpp>
+#include <WCDB/statement.hpp>
 
 namespace WCDB {
 
@@ -33,8 +33,10 @@ public:
 
     StatementCreateVirtualTable &usingModule(const std::string &moduleName);
 
-    StatementCreateVirtualTable &usingModule(const std::string &moduleName, const std::list<const ModuleArgument> &moduleArgumentList);
-    
+    StatementCreateVirtualTable &
+    usingModule(const std::string &moduleName,
+                const std::list<const ModuleArgument> &moduleArgumentList);
+
     virtual Statement::Type getStatementType() const override;
 };
 

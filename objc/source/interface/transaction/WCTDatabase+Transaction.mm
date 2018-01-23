@@ -21,8 +21,8 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Transaction.h>
-#import <WCDB/WCTTransaction.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTTransaction.h>
 
 @implementation WCTDatabase (Transaction)
 
@@ -38,35 +38,38 @@
         @autoreleasepool {
             inTransaction();
         }
-    }, error);
+    },
+                                            error);
     if (pError) {
         *pError = [WCTError errorWithWCDBError:error];
     }
     return result;
 }
 
-- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError **)pError
 {
     WCDB::Error error;
     bool result = _database->runControllableTransaction([inTransaction](WCDB::Error &) -> bool {
         @autoreleasepool {
             return inTransaction();
         }
-    }, error);
+    },
+                                                        error);
     if (pError) {
         *pError = [WCTError errorWithWCDBError:error];
     }
     return result;
 }
 
-- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError
 {
     WCDB::Error error;
     bool result = _database->runEmbeddedTransaction([inTransaction](WCDB::Error &) {
         @autoreleasepool {
             inTransaction();
         }
-    }, error);
+    },
+                                                    error);
     if (pError) {
         *pError = [WCTError errorWithWCDBError:error];
     }
@@ -97,7 +100,7 @@
 - (BOOL)beginWithMode:(WCTTransactionMode)mode
 {
     WCDB::Error innerError;
-    return _database->begin((WCDB::StatementTransaction::Mode)mode, innerError);
+    return _database->begin((WCDB::StatementTransaction::Mode) mode, innerError);
 }
 
 - (BOOL)commit

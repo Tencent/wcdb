@@ -77,12 +77,12 @@
                                      .alter(tableName.UTF8String)
                                      .addColumn(iter.second->getColumnDef()),
                                  error)) {
-                    return ;
+                    return;
                 }
             }
         } else {
             if (!_core->exec(binding->generateCreateTableStatement(tableName.UTF8String), error)) {
-                return ;
+                return;
             }
         }
         const std::shared_ptr<WCTIndexBindingMap> &indexBindingMap = binding->getIndexBindingMap();
@@ -91,7 +91,8 @@
                 _core->exec(indexBinding.second->generateCreateIndexStatement(tableName.UTF8String), innerError);
             }
         }
-    }, error);
+    },
+                                  error);
     return error.isOK();
 }
 
@@ -109,7 +110,8 @@
     _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
         _core->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String), error);
-    }, error);
+    },
+                                  error);
     return error.isOK();
 }
 

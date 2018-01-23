@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "WTCCRUDObject+WCTTableCoding.h"
 #import "WTCCRUDObject.h"
+#import "WTCCRUDObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
 @implementation WTCCRUDObject
@@ -30,12 +30,12 @@ WCDB_SYNTHESIZE(WTCCRUDObject, variable2)
 
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(WTCCRUDObject, variable1)
 
-+ (NSString*)Name
++ (NSString *)Name
 {
     return NSStringFromClass(self);
 }
 
-- (BOOL)isEqual:(NSObject*)object
+- (BOOL)isEqual:(NSObject *)object
 {
     return self.hash == object.hash;
 }

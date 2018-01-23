@@ -27,7 +27,6 @@
 
 @implementation WTCTableConstraintTests
 
-
 - (WCDB::TableConstraint)generateTableConstraint
 {
     return WCDB::TableConstraint("table1");
@@ -40,15 +39,15 @@
     WCDB::ColumnIndex index1(column1);
     WCDB::ColumnIndex index2 = WCDB::ColumnIndex(WCDB::Column("column2"));
     WCDB::ForeignKey foreignKey1("testTable", column1);
-    
+
     WINQAssertEqual([self generateTableConstraint].makePrimary({index1, index2}), @"CONSTRAINT table1 PRIMARY KEY(column1, column2)");
-    
+
     WINQAssertEqual([self generateTableConstraint].makeUnique({index1, index2}), @"CONSTRAINT table1 UNIQUE(column1, column2)");
-    
+
     WINQAssertEqual([self generateTableConstraint].onConflict(WCDB::Conflict::Fail), @"CONSTRAINT table1 ON CONFLICT FAIL");
-    
+
     WINQAssertEqual([self generateTableConstraint].check(column1 > 1), @"CONSTRAINT table1 CHECK(column1 > 1)");
-    
+
     WINQAssertEqual([self generateTableConstraint].makeForeignKey(column1, foreignKey1), @"CONSTRAINT table1 FOREIGN KEY(column1) REFERENCES testTable(column1)");
 }
 

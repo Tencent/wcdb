@@ -98,7 +98,7 @@
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
-#define __WCDB_FOREIGN_KEY_IMP(className, constraintName, foreignKey)   \
+#define __WCDB_FOREIGN_KEY_IMP(className, constraintName, foreignKey)          \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
         binding                                                                \
             ->getOrCreateConstraintBinding<WCTConstraintForeignKeyBinding>(    \
@@ -106,5 +106,3 @@
             ->setForeignKey(foreignKey);                                       \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
-
-
