@@ -35,7 +35,7 @@ void sample_core_main(NSString *baseDirectory)
     }];
 
     //set config
-    [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> handle, WCDB::Error &error) {
+    [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
       return handle->exec(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
     }
                 forName:@"demo"
