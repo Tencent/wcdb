@@ -25,7 +25,6 @@
 @interface WCTTransaction () {
     WCDB::Error _error;
     WCDB::Transaction *_transaction;
-    int _changes;
 }
 
 @end

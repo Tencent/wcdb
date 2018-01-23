@@ -103,6 +103,12 @@
 - (BOOL)begin;
 
 /**
+ @brief Begin this transaction.
+ @return YES only if no error occurs.
+ */
+- (BOOL)beginWithMode:(WCTTransactionMode)mode;
+
+/**
  @brief Separate interface of runTransaction:
  @warning You should call begin , commit , rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
  @see WCTTransaction

@@ -22,26 +22,10 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTInterface.h>
 
-/**
- Trigger of error event in runTransaction:
- */
-typedef NS_ENUM(int, WCTTransactionEvent) {
-    /*
-     * transaction failed with begin
-     */
-    WCTTransactionEventBeginFailed,
-    /*
-     * transaction failed with commit
-     */
-    WCTTransactionEventCommitFailed,
-    /*
-     * transaction rollback. It would be triggered when commiting failed or user returns NO to roll back
-     */
-    WCTTransactionEventRollback,
-    /*
-     * transaction failed with rollback
-     */
-    WCTTransactionEventRollbackFailed,
+typedef NS_ENUM(int, WCTTransactionMode) {
+    WCTTransactionModeDeferred = (WCTTransactionMode)WCDB::StatementTransaction::Mode::Deferred,
+    WCTTransactionModeImmediate = (WCTTransactionMode)WCDB::StatementTransaction::Mode::Immediate,
+    WCTTransactionModeExclusive = (WCTTransactionMode)WCDB::StatementTransaction::Mode::Exclusive
 };
 
 /**
@@ -64,6 +48,12 @@ typedef void (^WCTTransactionBlock)();
  @return YES only if no error occurs.
  */
 - (BOOL)begin;
+
+/**
+ @brief Begin this transaction.
+ @return YES only if no error occurs.
+ */
+- (BOOL)beginWithMode:(WCTTransactionMode)mode;
 
 /**
  @brief Commit this transaction.

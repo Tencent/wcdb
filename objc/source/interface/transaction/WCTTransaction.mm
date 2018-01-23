@@ -42,28 +42,22 @@
 
 - (BOOL)begin
 {
-    @synchronized(self)
-    {
-        return _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
-    }
+    return _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
+}
+
+- (BOOL)beginWithMode:(WCTTransactionMode)mode
+{
+    return _transaction->begin((WCDB::StatementTransaction::Mode)mode, _error);
 }
 
 - (BOOL)commit
 {
-    @synchronized(self)
-    {
-        BOOL result = _transaction->commit(_error);
-        _changes = _transaction->getChanges();
-        return result;
-    }
+    return _transaction->commit(_error);
 }
 
 - (BOOL)rollback
 {
-    @synchronized(self)
-    {
-        return _transaction->rollback(_error);
-    }
+    return _transaction->rollback(_error);
 }
 
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
@@ -125,10 +119,7 @@
 
 - (int)changes
 {
-    @synchronized(self)
-    {
-        return _changes;
-    }
+    return _transaction->getChanges();
 }
 
 @end
