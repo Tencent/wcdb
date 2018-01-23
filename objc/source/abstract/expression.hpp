@@ -18,238 +18,69 @@
  * limitations under the License.
  */
 
-#ifndef expr_hpp
-#define expr_hpp
+#ifndef expression_hpp
+#define expression_hpp
 
-#include <WCDB/column_type.hpp>
 #include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
-#include <WCDB/literal_value.hpp>
+#include <WCDB/convertible.hpp>
+#include <WCDB/operable.hpp>
 
 namespace WCDB {
-
-class Expression : public Describable {
+    
+class Expression : public Describable, public Operable {
 public:
+    operator std::list<const Expression>() const;
+    
     static const Expression BindParameter;
 
-    Expression();
-    Expression(const Column &column);
-
     template <typename T>
-    Expression(
-        const T &value,
-        typename std::enable_if<std::is_arithmetic<T>::value ||
-                                std::is_enum<T>::value>::type * = nullptr)
-        : Describable(LiteralValue(value))
-    {
+    Expression(const T& t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
+    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){
     }
-
-    Expression(const char *value);
-
-    Expression(const std::string &value);
-
-    Expression(const std::nullptr_t &value);
-
-    Expression(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
-               int size);
-
-    operator ExprList() const;
-
-    //unary
-    Expression operator!() const;
-    Expression operator+() const;
-    Expression operator-() const;
-    Expression operator~() const;
-
-    //binary
-    Expression operator||(const Expression &operand) const; //or, not concat
-    Expression operator&&(const Expression &operand) const;
-    Expression operator*(const Expression &operand) const;
-    Expression operator/(const Expression &operand) const;
-    Expression operator%(const Expression &operand) const;
-    Expression operator+(const Expression &operand) const;
-    Expression operator-(const Expression &operand) const;
-    Expression operator<<(const Expression &operand) const;
-    Expression operator>>(const Expression &operand) const;
-    Expression operator&(const Expression &operand) const;
-    Expression operator|(const Expression &operand) const;
-    Expression operator<(const Expression &operand) const;
-    Expression operator<=(const Expression &operand) const;
-    Expression operator>(const Expression &operand) const;
-    Expression operator>=(const Expression &operand) const;
-    Expression operator==(const Expression &operand) const;
-    Expression operator!=(const Expression &operand) const;
-
-    Expression concat(const Expression &operand) const;
-    Expression substr(const Expression &start, const Expression &length) const;
-
-    template <typename T = Expression>
-    typename std::enable_if<std::is_base_of<Expression, T>::value,
-                            Expression>::type
-    in(const std::list<const T> &exprList) const
-    {
-        Expression expr;
-        expr.m_description.append(m_description + " IN(");
-        expr.joinDescribableList(exprList);
-        expr.m_description.append(")");
-        return expr;
+    
+    template <typename T>
+    Expression(const T& t, typename std::enable_if<LiteralValueConvertible<T>::value, void>::type * = nullptr)
+    : Describable(LiteralValueConvertible<T>::asLiteralValue(t).getDescription()){
     }
-
-    template <typename T = Expression>
-    typename std::enable_if<std::is_base_of<Expression, T>::value,
-                            Expression>::type
-    notIn(const std::list<const T> &exprList) const
-    {
-        Expression expr;
-        expr.m_description.append(m_description + " NOT IN(");
-        expr.joinDescribableList(exprList);
-        expr.m_description.append(")");
-        return expr;
-    }
-
-    template <typename T = StatementSelect>
-    typename std::enable_if<std::is_base_of<StatementSelect, T>::value,
-                            Expression>::type
-    in(const std::list<const T> &statementSelectList) const
-    {
-        Expression expr;
-        expr.m_description.append(m_description + " IN(");
-        expr.joinDescribableList(statementSelectList);
-        expr.m_description.append(")");
-        return expr;
-    }
-
-    template <typename T = StatementSelect>
-    typename std::enable_if<std::is_base_of<StatementSelect, T>::value,
-                            Expression>::type
-    notIn(const std::list<const T> &statementSelectList) const
-    {
-        Expression expr;
-        expr.m_description.append(m_description + " NOT IN(");
-        expr.joinDescribableList(statementSelectList);
-        expr.m_description.append(")");
-        return expr;
-    }
-    Expression in(const std::string &table) const;
-    Expression notIn(const std::string &table) const;
-    Expression between(const Expression &left, const Expression &right) const;
-    Expression notBetween(const Expression &left,
-                          const Expression &right) const;
-
-    Expression like(const Expression &operand) const;
-    Expression glob(const Expression &operand) const;
-    Expression match(const Expression &operand) const;
-    Expression regexp(const Expression &operand) const;
-    Expression notLike(const Expression &operand) const;
-    Expression notGlob(const Expression &operand) const;
-    Expression notMatch(const Expression &operand) const;
-    Expression notRegexp(const Expression &operand) const;
-
-    Expression like(const Expression &operand, const Expression &escape) const;
-    Expression glob(const Expression &operand, const Expression &escape) const;
-    Expression match(const Expression &operand, const Expression &escape) const;
-    Expression regexp(const Expression &operand,
-                      const Expression &escape) const;
-    Expression notLike(const Expression &operand,
-                       const Expression &escape) const;
-    Expression notGlob(const Expression &operand,
-                       const Expression &escape) const;
-    Expression notMatch(const Expression &operand,
-                        const Expression &escape) const;
-    Expression notRegexp(const Expression &operand,
-                         const Expression &escape) const;
-
-    Expression isNull() const;
-    Expression isNotNull() const;
-    Expression is(const Expression &operand) const;
-    Expression isNot(const Expression &operand) const;
-
+    
     Expression(const StatementSelect &statementSelect);
+    
     static Expression Exists(const StatementSelect &statementSelect);
     static Expression NotExists(const StatementSelect &statementSelect);
-
-    template <typename T = Expression>
-    static typename std::enable_if<std::is_base_of<Expression, T>::value,
-                                   Expression>::type
-    Combine(const std::list<const T> &exprList)
-    {
-        Expression expr;
-        expr.m_description.append("(");
-        expr.joinDescribableList(exprList);
-        expr.m_description.append(")");
-        return expr;
+    
+    template <typename T>
+    static Expression Combine(const std::list<const T> &list, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr) {
+        return Expression("(" + stringByJoiningList(list) + ")", nullptr);
     }
 
-    //aggregate functions
-    Expression avg(bool distinct = false) const;
-    Expression count(bool distinct = false) const;
-    Expression groupConcat(bool distinct = false) const;
-    Expression groupConcat(const std::string &seperator,
-                           bool distinct = false) const;
-    Expression max(bool distinct = false) const;
-    Expression min(bool distinct = false) const;
-    Expression sum(bool distinct = false) const;
-    Expression total(bool distinct = false) const;
+    static Expression Combine(const std::list<const Expression> &list);
 
-    //core functions
-    Expression abs(bool distinct = false) const;
-    Expression hex(bool distinct = false) const;
-    Expression length(bool distinct = false) const;
-    Expression lower(bool distinct = false) const;
-    Expression upper(bool distinct = false) const;
-    Expression round(bool distinct = false) const;
-
-    template <typename T = Expression>
-    static typename std::enable_if<std::is_base_of<Expression, T>::value,
-                                   Expression>::type
-    Function(const std::string &function,
-             const std::list<const T> &exprList,
-             bool distinct = false)
-    {
-        Expression expr;
-        expr.m_description.append(function + "(");
-        if (distinct) {
-            expr.m_description.append("DISTINCT ");
-        }
-        expr.joinDescribableList(exprList);
-        expr.m_description.append(")");
-        return expr;
+    template <typename T>
+    static Expression Function(const std::string& name, const std::list<const T> &list, bool isDistinct = false, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr) {
+        return Operator::operateWithTitle(name, isDistinct?"DISTINCT":"", list);
     }
+    
+    static Expression Function(const std::string& name, const std::list<const Expression> &list, bool isDistinct = false);
+    
+    static Expression Function(const std::string& name, const Expression &expression, bool isDistinct = false);
 
-    template <typename T = Expression>
-    static typename std::enable_if<std::is_base_of<Expression, T>::value,
-                                   Expression>::type
-    Case(const Expression &case_,
-         const std::list<std::pair<T, T>> &when,
-         const std::list<T> &else_)
+    class CaseExpression: public Describable
     {
-        Expression expr;
-        expr.m_description.append("CASE " + case_.m_description + " ");
-        for (const auto &p : when) {
-            expr.m_description.append("WHEN ");
-            expr.m_description.append(p.first.m_description);
-            expr.m_description.append("THEN ");
-            expr.m_description.append(p.second.m_description);
-            expr.m_description.append(" ");
-        }
-        for (const auto &e : else_) {
-            expr.m_description.append("ELSE ");
-            expr.m_description.append(e.m_description);
-            expr.m_description.append(" ");
-        }
-        expr.m_description.append("END");
-        return expr;
-    }
-
-    //FTS3
-    Expression matchinfo() const;
-    Expression offsets() const;
-    Expression snippet() const;
-
+    public:
+        CaseExpression(const Expression &expression);
+        CaseExpression &when(const Expression &expression);
+        CaseExpression &then(const Expression &expression);
+        CaseExpression &else_(const Expression &expression);
+    };
+    
+    static CaseExpression Case(const Expression &expression);
+    
 protected:
-    Expression(const LiteralValue &value);
+    friend class Operator;
+    Expression(const std::string &raw, const std::nullptr_t& dummy);
+    virtual Expression asExpression() const override;
 };
-
+    
 } //namespace WCDB
 
-#endif /* expr_hpp */
+#endif /* expression_hpp */

@@ -21,38 +21,28 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementCreateVirtualTableTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementCreateVirtualTableTests
 
-- (void)setUp
+- (void)testStatementCreateVirtualTable
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    WCDB::ModuleArgument moduleArgument1("left", "right");
+    WCDB::ModuleArgument moduleArgument2 = WCDB::ModuleArgument::Tokenize("WCDB");
+    
+    std::string module1 = "module1";
+    
+    std::string virtualTable1 = "virtualTable1";
+    
+    //Then
+    XCTAssertEqual(WCDB::StatementCreateVirtualTable().getStatementType(), WCDB::Statement::Type::CreateVirtualTable);
+    
+    WINQAssertEqual(WCDB::StatementCreateVirtualTable().create(virtualTable1).usingModule(module1, {moduleArgument1, moduleArgument2}), @"CREATE VIRTUAL TABLE IF NOT EXISTS virtualTable1 USING module1(left=right, tokenize=WCDB)");
+    
+    WINQAssertEqual(WCDB::StatementCreateVirtualTable().create(virtualTable1, false).usingModule(module1, {moduleArgument1, moduleArgument2}), @"CREATE VIRTUAL TABLE virtualTable1 USING module1(left=right, tokenize=WCDB)");
 }
 
 @end

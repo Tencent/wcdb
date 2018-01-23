@@ -22,14 +22,13 @@
 #define statement_detach_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class StatementDetach : public Statement {
 public:
     StatementDetach &detach(const std::string &schema);
-    StatementDetach &detach(const std::string &schema,
-                            const std::string &database);
 
     virtual Statement::Type getStatementType() const override;
 };

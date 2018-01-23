@@ -27,6 +27,12 @@ Statement::Type StatementRollback::getStatementType() const
     return Statement::Type::Rollback;
 }
 
+StatementRollback &StatementRollback::rollback()
+{
+    m_description.append("ROLLBACK");
+    return *this;
+}
+
 StatementRollback &StatementRollback::rollback(const std::string &savepointName)
 {
     m_description.append("ROLLBACK TO " + savepointName);

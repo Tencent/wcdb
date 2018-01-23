@@ -22,6 +22,7 @@
 #define statement_create_index_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
@@ -31,17 +32,20 @@ public:
                                  bool unique = false,
                                  bool ifNotExists = true);
 
-    template <typename T = ColumnIndex>
-    typename std::enable_if<std::is_base_of<ColumnIndex, T>::value,
+    template <typename T>
+    typename std::enable_if<ColumnIndexConvertible<T>::value,
                             StatementCreateIndex &>::type
     on(const std::string &table, const std::list<const T> &indexList)
     {
-        m_description.append(" ON " + table + "(");
-        joinDescribableList(indexList);
-        m_description.append(")");
+        m_description.append(" ON " + table + "(" + stringByJoiningList(indexList) + ")");
         return *this;
     }
-    StatementCreateIndex &where(const Expression &expr);
+    
+    StatementCreateIndex &on(const std::string &table, const std::list<const ColumnIndex> &indexList);
+
+    StatementCreateIndex &on(const std::string &table, const ColumnIndex &index);
+
+    StatementCreateIndex &where(const Expression &expression);
 
     virtual Statement::Type getStatementType() const override;
 };

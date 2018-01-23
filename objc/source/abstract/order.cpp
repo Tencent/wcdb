@@ -18,36 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/expression.hpp>
 #include <WCDB/order.hpp>
 
 namespace WCDB {
-
-Order::Order(const Expression &expr, OrderTerm term)
-    : Describable(expr.getDescription())
-{
-    if (term != OrderTerm::NotSet) {
-        m_description.append(" ");
-        m_description.append(OrderTermName(term));
-    }
-}
-
-Order::Order(const Expression &expr,
-             const std::string &collation,
-             OrderTerm term)
-    : Describable(expr.getDescription())
-{
-    if (!collation.empty()) {
-        m_description.append(" ");
-        m_description.append(collation);
-    }
-    if (term != OrderTerm::NotSet) {
-        m_description.append(" ");
-        m_description.append(OrderTermName(term));
-    }
-}
-
-Order::operator OrderList() const
+    
+Order::operator std::list<const Order>() const
 {
     return {*this};
 }

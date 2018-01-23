@@ -27,21 +27,12 @@
 @interface WCTSelectBase : WCTChainCall
 
 /**
- WINQ interface for virtual SQL to do a subquery.
-
- @param resultList The column results to be selected
- @param tableNames The names of the table to be used to do a selection
- @return self
- */
-- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames;
-
-/**
  WINQ interface for SQL.
 
  @param condition condition
  @return self
  */
-- (instancetype)where:(const WCTCondition &)condition;
+- (instancetype)where:(const WCDB::Expression &)condition;
 
 /**
  WINQ interface for SQL.
@@ -49,7 +40,7 @@
  @param orderList order list
  @return self
  */
-- (instancetype)orderBy:(const WCTOrderByList &)orderList;
+- (instancetype)orderBy:(const WCDB::OrderList &)orderList;
 
 /**
  WINQ interface for SQL.
@@ -57,7 +48,7 @@
  @param limit limit
  @return self
  */
-- (instancetype)limit:(const WCTLimit &)limit;
+- (instancetype)limit:(const WCDB::Expression &)limit;
 
 /**
  WINQ interface for SQL.
@@ -65,15 +56,15 @@
  @param offset offset
  @return self
  */
-- (instancetype)offset:(const WCTOffset &)offset;
+- (instancetype)offset:(const WCDB::Expression &)offset;
 
 /**
  WINQ interface for SQL.
 
- @param groupByList group by list
+ @param groupList group by list
  @return self
  */
-- (instancetype)groupBy:(const WCTGroupByList &)groupByList;
+- (instancetype)groupBy:(const WCDB::ExpressionList &)groupList;
 
 /**
  WINQ interface for SQL.
@@ -81,6 +72,6 @@
  @param having having
  @return self
  */
-- (instancetype)having:(const WCTHaving &)having;
+- (instancetype)having:(const WCDB::Expression &)having;
 
 @end

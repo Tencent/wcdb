@@ -26,6 +26,7 @@
 #endif
 
 #import <WCDB/abstract.h>
+#import <WCDB/NSObject+Convertible.h>
 
 #import <WCDB/WCTMaster+WCTTableCoding.h>
 #import <WCDB/WCTMaster.h>
@@ -50,14 +51,11 @@
 #import <WCDB/WCTDatabase+RepairKit.h>
 
 #import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTStatement.h>
+#import <WCDB/WCTCoreStatement.h>
 #import <WCDB/WCTTable.h>
 
-#import <WCDB/WCTAnyProperty.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResult.h>
 
 #import <WCDB/WCTInterface+Convenient.h>
 #import <WCDB/WCTTable+Convenient.h>
@@ -74,7 +72,6 @@
 #import <WCDB/WCTStatistics.h>
 #import <WCDB/WCTTransaction+Statistics.h>
 
-#import <WCDB/WCTTokenizer+Apple.h>
 #import <WCDB/WCTTokenizer+WCDB.h>
 
 #endif /* WCDB_h */

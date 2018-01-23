@@ -38,7 +38,7 @@ protected:
         WCTCppAccessor<(WCTColumnType) WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
-    using CType = typename CppAccessor::CType;
+    using UnderlyingType = typename CppAccessor::UnderlyingType;
     using PropertyGetter = typename RuntimeAccessor::Getter;
     using PropertySetter = typename RuntimeAccessor::Setter;
     using ValueGetter = typename CppAccessor::Getter;
@@ -52,12 +52,12 @@ public:
     }
 
 protected:
-    CType convertPropertyTypeToCType(const PropertyType &property)
+    UnderlyingType convertPropertyTypeToCType(const PropertyType &property)
     {
-        return (CType) property;
+        return (UnderlyingType) property;
     }
 
-    PropertyType convertCTypeToPropertyType(CType value)
+    PropertyType convertCTypeToPropertyType(UnderlyingType value)
     {
         return (PropertyType) value;
     }
@@ -71,7 +71,7 @@ protected:
 
     ValueSetter generateValueSetter()
     {
-        return ^(InstanceType instance, CType value) {
+        return ^(InstanceType instance, UnderlyingType value) {
           this->setProperty(instance, convertCTypeToPropertyType(value));
         };
     }
@@ -87,7 +87,7 @@ public:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
-    using CType = typename CppAccessor::CType;
+    using UnderlyingType = typename CppAccessor::UnderlyingType;
     using SizeType = typename CppAccessor::SizeType;
     using PropertyGetter = typename RuntimeAccessor::Getter;
     using PropertySetter = typename RuntimeAccessor::Setter;
@@ -101,8 +101,8 @@ public:
     }
 
     // no default implementation for BLOB
-    //    CType convertPropertyTypeToCType(const PropertyType& property, SizeType& size);
-    //    PropertyType convertCTypeToPropertyType(CType value, SizeType size);
+    //    UnderlyingType convertPropertyTypeToCType(const PropertyType& property, SizeType& size);
+    //    PropertyType convertCTypeToPropertyType(UnderlyingType value, SizeType size);
 
     ValueGetter generateValueGetter()
     {
@@ -113,7 +113,7 @@ public:
 
     ValueSetter generateValueSetter()
     {
-        return ^(InstanceType instance, CType value, SizeType size) {
+        return ^(InstanceType instance, UnderlyingType value, SizeType size) {
           setProperty(instance, convertCTypeToPropertyType(value, size));
         };
     }

@@ -22,6 +22,7 @@
 #define statement_explain_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 

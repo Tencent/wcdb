@@ -22,6 +22,7 @@
 #define statement_drop_index_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 

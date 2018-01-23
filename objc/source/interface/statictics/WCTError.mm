@@ -82,9 +82,35 @@
     return desc;
 }
 
-- (id)infoForKey:(WCTErrorKey)key
+- (NSNumber*) tag
 {
-    return [self.userInfo objectForKey:@(WCDB::Error::GetKeyName((WCDB::Error::Key) key))];
+    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Tag))];
 }
+
+- (NSNumber*) operation
+{
+    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Operation))];
+}
+
+- (NSNumber*) extendedCode
+{
+    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::ExtendedCode))];
+}
+
+- (NSString*) message
+{
+    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Message))];
+}
+
+- (NSString*) sql
+{
+    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::SQL))];
+}
+
+- (NSString*) path
+{
+    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Path))];
+}
+
 
 @end

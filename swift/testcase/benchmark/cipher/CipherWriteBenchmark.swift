@@ -52,7 +52,7 @@ class CipherWriteBenchmark: BaseBenchmark {
                 XCTFail(error.localizedDescription)
             }
         }, checkCorrectness: {
-            let count = try? database.getValue(on: Column.any.count(), fromTable: tableName)
+            let count = try? database.getValue(on: Column.all.count(), fromTable: tableName)
             XCTAssertEqual(Int(count?.int32Value ?? 0), config.writeCount)
         })
     }

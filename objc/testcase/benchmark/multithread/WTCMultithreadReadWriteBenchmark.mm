@@ -52,7 +52,7 @@
         [self setUpDatabaseCache];
     } for:^{
         dispatch_group_async(self.group, self.queue, ^{
-          results = [self.database getAllObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
+          results = [self.database getObjectsOfClass:WTCBenchmarkObject.class fromTable:tableName];
         });
         dispatch_group_async(self.group, self.queue, ^{
           XCTAssertTrue([self.database insertObjects:self.objects into:tableName]);
@@ -60,7 +60,7 @@
         dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
     } checkCorrectness:^{
         XCTAssertEqual(results.count, self.config.readCount);
-        NSNumber *count = [self.database getOneValueOnResult:WTCBenchmarkObject.AnyProperty.count() fromTable:tableName];
+        NSNumber *count = [self.database getValueOnResult:WTCBenchmarkObject.AllColumns.count() fromTable:tableName];
         XCTAssertEqual(count.intValue, self.config.readCount + self.config.batchWriteCount);
     }];
 }

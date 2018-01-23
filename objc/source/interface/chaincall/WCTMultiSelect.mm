@@ -22,88 +22,40 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/handle_statement.hpp>
+#import <WCDB/WCTBinding.h>
+#import <WCDB/WCTProperty.h>
 
 @implementation WCTMultiSelect {
-    WCTResultList _resultList;
+    WCTPropertyList _propertyList;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andPropertyList:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        if (resultList.size() == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableNames].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableNames.count == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Empty table".UTF8String,
-                                         &_error);
-            return self;
-        }
-        _resultList.insert(_resultList.begin(), resultList.begin(), resultList.end());
-        for (const WCTResult &result : _resultList) {
-            Class cls = result.getBindingClass();
-            if (!cls) {
-                WCDB::Error::ReportInterface(_core->getTag(),
-                                             _core->getPath(),
-                                             WCDB::Error::InterfaceOperation::Select,
-                                             WCDB::Error::InterfaceCode::Misuse,
-                                             "This Result does not belong to any class",
-                                             &_error);
-                return self;
-            }
-            if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-                WCDB::Error::ReportInterface(_core->getTag(),
-                                             _core->getPath(),
-                                             WCDB::Error::InterfaceOperation::Select,
-                                             WCDB::Error::InterfaceCode::Misuse,
-                                             [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
-                                             &_error);
-                return self;
-            }
-            if (!result.getColumnBinding()) {
-                WCDB::Error::ReportInterface(_core->getTag(),
-                                             _core->getPath(),
-                                             WCDB::Error::InterfaceOperation::Select,
-                                             WCDB::Error::InterfaceCode::Misuse,
-                                             "This Result does not contain any column binding",
-                                             &_error);
-                return self;
-            }
-        }
-
+        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         WCDB::SubqueryList subqueryList;
         for (NSString *tableName in tableNames) {
             subqueryList.push_back(tableName.UTF8String);
         }
-        _statement.select(_resultList, _resultList.isDistinct()).from(subqueryList);
+        _statement.select(_propertyList, isDistinct).from(subqueryList);
     }
     return self;
 }
 
 - (WCTMultiObject *)nextMultiObject
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         NSMutableDictionary *multiObject = [[NSMutableDictionary alloc] init];
         int index = 0;
         Class cls = nil;
         NSString *tableName = nil;
         WCTObject *object = nil;
-        for (const WCTResult &result : _resultList) {
+        for (const WCTProperty &property : _propertyList) {
             const char *columnTableName = _statementHandle->getColumnTableName(index);
-            cls = result.getBindingClass();
+            const std::shared_ptr<WCTColumnBinding>& columnBinding = property.getColumnBinding(); 
+            cls = columnBinding->getClass();
             if (columnTableName && cls) {
                 tableName = @(columnTableName);
                 object = [multiObject objectForKey:tableName];
@@ -113,7 +65,7 @@
                 }
                 if (![self extractPropertyToObject:object
                                            atIndex:index
-                                 withColumnBinding:result.getColumnBinding()]) {
+                                 withColumnBinding:columnBinding]) {
                     return nil;
                 };
             } else {
@@ -133,7 +85,6 @@
 
 - (NSArray<WCTMultiObject *> *)allMultiObjects
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *allMultiObjects = [[NSMutableArray alloc] init];
         NSMutableDictionary *multiObject = nil;
@@ -141,9 +92,10 @@
         while ([self next]) {
             multiObject = [[NSMutableDictionary alloc] init];
             index = 0;
-            for (const WCTResult &result : _resultList) {
+            for (const WCTProperty &property : _propertyList) {
                 const char *columnTableName = _statementHandle->getColumnTableName(index);
-                Class cls = result.getBindingClass();
+                const std::shared_ptr<WCTColumnBinding>& columnBinding = property.getColumnBinding(); 
+                Class cls = columnBinding->getClass();
                 if (columnTableName && cls) {
                     NSString *tableName = @(columnTableName);
                     WCTObject *object = [multiObject objectForKey:tableName];
@@ -153,7 +105,7 @@
                     }
                     if (![self extractPropertyToObject:object
                                                atIndex:index
-                                     withColumnBinding:result.getColumnBinding()]) {
+                                     withColumnBinding:columnBinding]) {
                         return nil;
                     };
                 } else {

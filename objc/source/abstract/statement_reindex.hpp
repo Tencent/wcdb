@@ -22,6 +22,7 @@
 #define statement_reindex_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 

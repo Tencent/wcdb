@@ -23,13 +23,20 @@
 
 #include <WCDB/describable.hpp>
 
+#include <WCDB/convertible.hpp>
+#include <WCDB/convertible_impl.hpp>
+
+#include <WCDB/operable.hpp>
+#include <WCDB/operable_impl.hpp>
+
 #include <WCDB/clause_join.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/column_def.hpp>
 #include <WCDB/column_index.hpp>
 #include <WCDB/column_result.hpp>
 #include <WCDB/column_type.hpp>
-#include <WCDB/constraint_table.hpp>
+#include <WCDB/foreign_key.hpp>
+#include <WCDB/table_constraint.hpp>
 #include <WCDB/expression.hpp>
 #include <WCDB/literal_value.hpp>
 #include <WCDB/module_argument.hpp>

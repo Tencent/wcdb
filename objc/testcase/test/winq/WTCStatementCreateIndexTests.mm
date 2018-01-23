@@ -21,38 +21,33 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementCreateIndexTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementCreateIndexTests
 
-- (void)setUp
+- (void)testCreateIndex
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    WCDB::Column column1("column1");
+    
+    WCDB::ColumnIndex index1(column1);
+    WCDB::ColumnIndex index2(WCDB::Column("column2"), WCDB::OrderTerm::ASC);
+    
+    std::string indexName1 = "index1";
+    std::string table1 = "table1";
+    
+    //Then
+    XCTAssertEqual(WCDB::StatementCreateIndex().getStatementType(), WCDB::Statement::Type::CreateIndex);
+    
+    WINQAssertEqual(WCDB::StatementCreateIndex().create(indexName1).on(table1, {index1, index2}), @"CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)");
+    
+    WINQAssertEqual(WCDB::StatementCreateIndex().create(indexName1, true).on(table1, {index1, index2}), @"CREATE UNIQUE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC)");
+    
+    WINQAssertEqual(WCDB::StatementCreateIndex().create(indexName1, false, false).on(table1, {index1, index2}), @"CREATE INDEX index1 ON table1(column1, column2 ASC)");
+    
+    WINQAssertEqual(WCDB::StatementCreateIndex().create(indexName1).on(table1, {index1, index2}).where(column1 >= 1), @"CREATE INDEX IF NOT EXISTS index1 ON table1(column1, column2 ASC) WHERE (column1 >= 1)");
 }
 
 @end

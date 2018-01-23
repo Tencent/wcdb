@@ -33,7 +33,7 @@ bool WCTColumnBinding::isAutoIncrement() const
     return m_isAutoIncrement;
 }
 
-const WCTColumnDef WCTColumnBinding::getColumnDef() const
+const WCDB::ColumnDef WCTColumnBinding::getColumnDef() const
 {
     return m_columnDef;
 }
@@ -55,38 +55,17 @@ void WCTColumnBinding::makeUnique()
     m_columnDef.makeUnique();
 }
 
-void WCTColumnBinding::makeDefaultObjC(WCTValue *defaultValue)
+void WCTColumnBinding::makeDefault(const WCDB::Expression defaultValue)
 {
-    WCTValueType valueType = [defaultValue valueType];
-    if (valueType == WCTValueTypeColumnCoding) {
-        defaultValue = [(id<WCTColumnCoding>) defaultValue archivedWCTValue];
-        valueType = [defaultValue valueType];
-    }
-    switch (valueType) {
-        case WCTValueTypeString:
-            m_columnDef.makeDefault(((NSString *) defaultValue).UTF8String);
-            break;
-        case WCTValueTypeNumber: {
-            NSNumber *number = (NSNumber *) defaultValue;
-            if (CFNumberIsFloatType((CFNumberRef) number)) {
-                m_columnDef.makeDefault(number.doubleValue);
-            } else {
-                if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                    m_columnDef.makeDefault(number.intValue);
-                } else {
-                    m_columnDef.makeDefault(number.longLongValue);
-                }
-            }
-        } break;
-        case WCTValueTypeData: {
-            NSData *data = (NSData *) defaultValue;
-            m_columnDef.makeDefault(data.bytes, (int) data.length);
-        } break;
-        case WCTValueTypeNil:
-            m_columnDef.makeDefault(nullptr);
-            break;
-        default:
-            WCDB::Error::Abort([NSString stringWithFormat:@"Setting default value for %s with unknown column type %d", columnName.c_str(), (int) accessor->getColumnType()].UTF8String);
-            break;
-    }
+    m_columnDef.makeDefault(defaultValue);
+}
+
+void WCTColumnBinding::makeDefault(WCTDefaultType defaultType)
+{
+    m_columnDef.makeDefault((WCDB::ColumnDef::DefaultType) defaultType);
+}
+
+Class WCTColumnBinding::getClass() const
+{
+    return m_class;
 }

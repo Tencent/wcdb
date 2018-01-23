@@ -21,37 +21,51 @@
 #ifndef literal_value_hpp
 #define literal_value_hpp
 
-#include <WCDB/column_type.hpp>
-#include <WCDB/describable.hpp>
+#include <WCDB/declare.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class LiteralValue : public Describable {
 public:
     template <typename T>
-    LiteralValue(
-        const T &value,
-        typename std::enable_if<std::is_arithmetic<T>::value ||
-                                std::is_enum<T>::value>::type * = nullptr)
-        : Describable(std::to_string(value))
+    LiteralValue(const T &value, typename std::enable_if<ColumnIsNullType<T>::value, void>::type * = nullptr)
+    : Describable("NULL")
+    {
+    }
+    
+    template <typename T>
+    LiteralValue(const T &value, typename std::enable_if<ColumnIsFloatType<T>::value, void>::type * = nullptr)
+    : Describable(std::to_string(ColumnIsFloatType<T>::asUnderlyingType(value)))
+    {
+    }
+    
+    template <typename T>
+    LiteralValue(const T &value, typename std::enable_if<ColumnIsInteger32Type<T>::value, void>::type * = nullptr)
+    : Describable(std::to_string(ColumnIsInteger32Type<T>::asUnderlyingType(value)))
+    {
+    }
+    
+    template <typename T>
+    LiteralValue(const T &value, typename std::enable_if<ColumnIsInteger64Type<T>::value, void>::type * = nullptr)
+    : Describable(std::to_string(ColumnIsInteger64Type<T>::asUnderlyingType(value)))
     {
     }
 
-    LiteralValue(const char *value);
-    LiteralValue(const std::string &value);
+    template <typename T>
+    LiteralValue(const T &value, typename std::enable_if<ColumnIsTextType<T>::value, void>::type * = nullptr)
+    : Describable(LiteralValue::stringByAntiInjecting(ColumnIsTextType<T>::asUnderlyingType(value)))
+    {
+    }
 
-    LiteralValue(const std::nullptr_t &value);
-
-    LiteralValue(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
-                 int size);
-
+    template <typename T>
+    LiteralValue(const T &value, typename std::enable_if<ColumnIsBLOBType<T>::value, void>::type * = nullptr)
+    : Describable(LiteralValue::stringByAntiInjecting(ColumnIsBLOBType<T>::asUnderlyingType(value)))
+    {
+    }
 protected:
-    static std::string
-    stringByReplacingOccurrencesOfString(const std::string &origin,
-                                         const std::string &target,
-                                         const std::string &replacement);
-
-    static std::string LiteralString(const std::string &value);
+    static std::string stringByAntiInjecting(const char *origin);
+    static std::string stringByAntiInjecting(const std::vector<unsigned char> &origin);
 };
 
 } // namespace WCDB

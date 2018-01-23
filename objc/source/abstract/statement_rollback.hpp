@@ -22,12 +22,14 @@
 #define statement_rollback_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class StatementRollback : public Statement {
 public:
-    StatementRollback &rollback(const std::string &savepointName = "");
+    StatementRollback &rollback();
+    StatementRollback &rollback(const std::string &savepointName);
 
     virtual Statement::Type getStatementType() const override;
 };

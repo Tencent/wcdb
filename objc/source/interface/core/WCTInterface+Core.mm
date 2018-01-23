@@ -22,7 +22,7 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTInterface+Core.h>
-#import <WCDB/WCTStatement+Private.h>
+#import <WCDB/WCTCoreStatement+Private.h>
 
 @implementation WCTInterface (Core)
 
@@ -32,17 +32,17 @@
     return _core->exec(statement, innerError);
 }
 
-- (WCTStatement *)prepare:(const WCDB::Statement &)statement
+- (WCTCoreStatement *)prepare:(const WCDB::Statement &)statement
 {
     return [self prepare:statement withError:nil];
 }
 
-- (WCTStatement *)prepare:(const WCDB::Statement &)statement withError:(WCTError *__autoreleasing *)error
+- (WCTCoreStatement *)prepare:(const WCDB::Statement &)statement withError:(WCTError *__autoreleasing *)error
 {
     WCDB::Error innerError;
     WCDB::RecyclableStatement statementHandle = _core->prepare(statement, innerError);
     if (statementHandle) {
-        return [[WCTStatement alloc] initWithCore:_core andStatementHandle:statementHandle];
+        return [[WCTCoreStatement alloc] initWithCore:_core andStatementHandle:statementHandle];
     }
     if (error) {
         *error = [WCTError errorWithWCDBError:innerError];

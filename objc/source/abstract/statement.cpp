@@ -18,16 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/handle.hpp>
 #include <WCDB/statement.hpp>
+#include <WCDB/expression.hpp>
+#include <WCDB/statement_select.hpp>
+#include <WCDB/column_result.hpp>
+#include <WCDB/convertible_impl.hpp>
 
 namespace WCDB {
+    
+const StatementSelect Statement::FTS3Tokenizer = StatementSelect().select(Expression::Function("fts3_tokenizer", {Expression::BindParameter, Expression::BindParameter}));
 
 Statement::Statement() : Describable("")
-{
-}
-
-Statement::~Statement()
 {
 }
 

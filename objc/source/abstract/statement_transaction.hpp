@@ -22,13 +22,14 @@
 #define statement_transaction_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class StatementTransaction : public Statement {
 public:
     enum class Mode : int {
-        Defered,
+        Deferred,
         Immediate,
         Exclusive,
     };

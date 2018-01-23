@@ -20,7 +20,6 @@
 
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
@@ -28,44 +27,20 @@
 
 @implementation WCTRowSelect
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName
-{
-    return [self initWithCore:core andResults:resultList fromTables:@[ tableName ]];
-}
-
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andColumnResultList:(const WCDB::ColumnResultList &)columnResultList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        if (resultList.size() == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableNames].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableNames.count == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Empty table".UTF8String,
-                                         &_error);
-            return self;
-        }
         WCDB::SubqueryList subqueryList;
         for (NSString *tableName in tableNames) {
             subqueryList.push_back(tableName.UTF8String);
         }
-        _statement.select(resultList, resultList.isDistinct()).from(subqueryList);
+        _statement.select(columnResultList, isDistinct).from(subqueryList);
     }
     return self;
 }
 
 - (WCTColumnsXRows *)allRows
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *allRows = [NSMutableArray array];
         NSMutableArray *row = nil;
@@ -84,7 +59,6 @@
 
 - (WCTOneRow *)nextRow
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         NSMutableArray *row = [NSMutableArray array];
         if ([self extractValueToRow:row]) {
@@ -96,7 +70,6 @@
 
 - (WCTOneColumn *)allValues
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare]) {
         NSMutableArray *allValues = [NSMutableArray array];
         WCTValue *value = nil;
@@ -114,7 +87,6 @@
 
 - (WCTValue *)nextValue
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if ([self lazyPrepare] && [self next]) {
         return [self extractValue];
     }

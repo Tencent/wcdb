@@ -21,55 +21,52 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCColumnDefTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCColumnDefTests
 
-- (ColumnDef)generateColumnDef
+- (WCDB::ColumnDef)generateColumnDef
 {
-    return ColumnDef(Column("testColumnDef"), ColumnType::Integer32);
+    return WCDB::ColumnDef(WCDB::Column("testColumnDef"), WCDB::ColumnType::Integer32);
 }
 
 - (void)testColumnDef
 {
 
-    WTCWINQAssertEqual(self.generateColumnDef.makePrimary(), @"testColumnDef INTEGER PRIMARY KEY");
+    WINQAssertEqual(self.generateColumnDef.makePrimary(), @"testColumnDef INTEGER PRIMARY KEY");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makePrimary(OrderTerm::ASC), @"testColumnDef INTEGER PRIMARY KEY ASC");
+    WINQAssertEqual(self.generateColumnDef.makePrimary(WCDB::OrderTerm::ASC), @"testColumnDef INTEGER PRIMARY KEY ASC");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makePrimary(OrderTerm::NotSet, true), @"testColumnDef INTEGER PRIMARY KEY AUTOINCREMENT");
+    WINQAssertEqual(self.generateColumnDef.makePrimary(WCDB::OrderTerm::NotSet, true), @"testColumnDef INTEGER PRIMARY KEY AUTOINCREMENT");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makePrimary(OrderTerm::NotSet, false, Conflict::Ignore), @"testColumnDef INTEGER PRIMARY KEY ON CONFLICT IGNORE");
+    WINQAssertEqual(self.generateColumnDef.makePrimary(WCDB::OrderTerm::NotSet, false, WCDB::Conflict::Ignore), @"testColumnDef INTEGER PRIMARY KEY ON CONFLICT IGNORE");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(nullptr), @"testColumnDef INTEGER DEFAULT NULL");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(nullptr), @"testColumnDef INTEGER DEFAULT NULL");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(-1), @"testColumnDef INTEGER DEFAULT -1");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(-1), @"testColumnDef INTEGER DEFAULT -1");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(171798691840), @"testColumnDef INTEGER DEFAULT 171798691840");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(171798691840), @"testColumnDef INTEGER DEFAULT 171798691840");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(false), @"testColumnDef INTEGER DEFAULT 0");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(false), @"testColumnDef INTEGER DEFAULT 0");
+    WINQAssertEqual(self.generateColumnDef.makeDefault("SampleText"), @"testColumnDef INTEGER DEFAULT 'SampleText'");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault("SampleText"), @"testColumnDef INTEGER DEFAULT 'SampleText'");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(0.1), @"testColumnDef INTEGER DEFAULT 0.100000");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(0.1), @"testColumnDef INTEGER DEFAULT 0.100000");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(1), @"testColumnDef INTEGER DEFAULT 1");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(1), @"testColumnDef INTEGER DEFAULT 1");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(WCDB::ColumnDef::DefaultType::CurrentDate), @"testColumnDef INTEGER DEFAULT CURRENT_DATE");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(ColumnDef::DefaultType::CurrentDate), @"testColumnDef INTEGER DEFAULT CURRENT_DATE");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(WCDB::ColumnDef::DefaultType::CurrentTime), @"testColumnDef INTEGER DEFAULT CURRENT_TIME");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(ColumnDef::DefaultType::CurrentTime), @"testColumnDef INTEGER DEFAULT CURRENT_TIME");
+    WINQAssertEqual(self.generateColumnDef.makeDefault(WCDB::ColumnDef::DefaultType::CurrentTimestamp), @"testColumnDef INTEGER DEFAULT CURRENT_TIMESTAMP");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeDefault(ColumnDef::DefaultType::CurrentTimestamp), @"testColumnDef INTEGER DEFAULT CURRENT_TIMESTAMP");
+    WINQAssertEqual(self.generateColumnDef.makeNotNull(), @"testColumnDef INTEGER NOT NULL");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeNotNull(), @"testColumnDef INTEGER NOT NULL");
+    WINQAssertEqual(self.generateColumnDef.makeUnique(), @"testColumnDef INTEGER UNIQUE");
 
-    WTCWINQAssertEqual(self.generateColumnDef.makeUnique(), @"testColumnDef INTEGER UNIQUE");
-
-    WTCWINQAssertEqual(self.generateColumnDef.makeForeignKey(ForeignKey("testColumnDefTable")), @"testColumnDef INTEGER REFERENCES testColumnDefTable");
+    WINQAssertEqual(self.generateColumnDef.makeForeignKey(WCDB::ForeignKey("testColumnDefTable")), @"testColumnDef INTEGER REFERENCES testColumnDefTable");
 }
 
 @end

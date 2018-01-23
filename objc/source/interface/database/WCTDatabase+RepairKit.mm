@@ -29,6 +29,11 @@
     return _database->backup(key.bytes, (unsigned int) key.length, wcdbError);
 }
 
+- (BOOL)backup
+{
+    return [self backupWithCipher:nil];
+}
+
 - (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize backupCipher:(NSData *)backupCipher databaseCipher:(NSData *)databaseCipher
 {
     WCDB::Error wcdbError;

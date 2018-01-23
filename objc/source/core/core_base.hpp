@@ -54,17 +54,12 @@ public:
     virtual bool isTableExists(const std::string &tableName, Error &error) = 0;
 
     //Transaction Protocol
-    typedef std::function<bool(Error &)> TransactionBlock;
-    enum class TransactionEventType {
-        BeginFailed = 0,
-        CommitFailed = 1,
-        Rollback = 2,
-        RollbackFailed = 3,
-    };
-    typedef std::function<void(TransactionEventType)> TransactionEvent;
-    bool runTransaction(TransactionBlock transaction,
-                        TransactionEvent event,
+    typedef std::function<bool(Error &)> ControllableTransactionBlock;
+    bool runControllableTransaction(ControllableTransactionBlock transaction,
                         Error &error);
+    
+    typedef std::function<void(Error &)> TransactionBlock;
+    bool runTransaction(TransactionBlock transaction, Error &error);
 
     virtual bool begin(StatementTransaction::Mode mode, Error &error) = 0;
     virtual bool commit(Error &error) = 0;

@@ -39,11 +39,11 @@
 
 - (NSString *)recommendedPath
 {
-    NSString *hash = [NSString stringWithFormat:@"%ld", self.class.className.hash];
+    NSString *hash = [NSString stringWithFormat:@"%lu", self.class.className.hash];
     return [self.recommendedDirectory stringByAppendingPathComponent:hash];
 }
 
-- (WCTTag)recommendTag
+- (WCTTag)recommendedTag
 {
     return (int) self.recommendedPath.hash;
 }

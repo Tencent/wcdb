@@ -21,12 +21,11 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/ticker.hpp>
+#import <WCDB/WCTProperty.h>
 
 @interface WCTChainCall () {
 @protected
     WCDB::Error _error;
-    std::shared_ptr<WCDB::Ticker> _ticker;
 }
 
 - (BOOL)bindProperty:(const WCTProperty &)property ofObject:(WCTObject *)object toStatementHandle:(WCDB::RecyclableStatement &)statementHandle atIndex:(int)index withError:(WCDB::Error &)error;

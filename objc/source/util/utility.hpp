@@ -23,14 +23,9 @@
 
 #include <WCDB/describable.hpp>
 #include <string.h>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
-
-template <typename T>
-std::string GetListDescription(const std::list<T> &t)
-{
-    return Describable::GetListDescription(t);
-}
 
 struct CaseInsensiveComparetor {
     bool operator()(const std::string &lhs, const std::string &rhs) const
@@ -38,6 +33,41 @@ struct CaseInsensiveComparetor {
         return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
     }
 };
+    
+std::string stringByReplacingOccurrencesOfString(const std::string &origin, const std::string &target, const std::string &replacement);
+    
+    
+    template <typename Container, typename T>
+    std::string stringByJoiningList(const Container& container, const std::function<Describable(const T&)>& convertor, const std::string& seperator)
+    {
+        bool flag = false;
+        std::string output;
+        for (const T &t : container) {
+            if (flag) {
+                output.append(seperator);
+            }else {
+                flag = true;
+            }
+            output.append(convertor(t).getDescription());
+        }
+        return output;
+    }
+
+template <typename T>
+typename std::enable_if<std::is_base_of<Describable, T>::value, std::string>::type stringByJoiningList(const std::list<const T>& list, const std::string& seperator = ", ")
+{
+    bool flag = false;
+    std::string output;
+    for (const T &t : list) {
+        if (flag) {
+            output.append(seperator);
+        }else {
+            flag = true;
+        }
+        output.append(t.getDescription());
+    }
+    return output;
+}
 
 } //namespace WCDB
 

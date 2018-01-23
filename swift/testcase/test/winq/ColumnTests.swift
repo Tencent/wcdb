@@ -24,7 +24,7 @@ import WCDBSwift
 class ColumnTests: BaseTestCase {
 
     func testColumn() {
-        WINQAssertEqual(Column.any, "*")
+        WINQAssertEqual(Column.all, "*")
 
         WINQAssertEqual(Column.rowid, "rowid")
 

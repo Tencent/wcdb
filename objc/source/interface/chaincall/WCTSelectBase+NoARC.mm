@@ -20,12 +20,11 @@
 
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTExpression.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+NoARC.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/handle_statement.hpp>
+#import <WCDB/WCTBinding.h>
 
 #ifndef WCDB_COCOAPODS
 #if __has_feature(objc_arc)
@@ -52,11 +51,10 @@
             return string ? [NSString stringWithUTF8String:string] : nil;
         } break;
         case WCTColumnTypeBinary: {
-            int size = 0;
-            const void *data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(0, size);
-            return data ? [NSData dataWithBytes:data length:size] : nil;
+            std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(0);
+            return [NSData dataWithBytes:data.data() length:data.size()];
         } break;
-        case WCTColumnTypeNil: {
+        case WCTColumnTypeNull: {
             return nil;
             break;
         }
@@ -88,14 +86,13 @@
                 break;
             case WCTColumnTypeString: {
                 const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(i);
-                value = string ? [NSString stringWithUTF8String:string] : [NSNull null];
+                value = string ? [NSString stringWithUTF8String:string] : @"";
             } break;
             case WCTColumnTypeBinary: {
-                int size = 0;
-                const void *data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(i, size);
-                value = data ? [NSData dataWithBytes:data length:size] : [NSNull null];
+                std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(i);
+                value = [NSData dataWithBytes:data.data() length:data.size()];
             } break;
-            case WCTColumnTypeNil: {
+            case WCTColumnTypeNull: {
                 value = [NSNull null];
                 break;
             }
@@ -144,10 +141,8 @@
                 } break;
                 case WCTColumnTypeBinary: {
                     WCTCppAccessor<WCTColumnTypeBinary> *blobAccessor = (WCTCppAccessor<WCTColumnTypeBinary> *) accessor.get();
-                    int size = 0;
-                    blobAccessor->setValue(object,
-                                           _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index, size),
-                                           size);
+                    std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index);
+                    blobAccessor->setValue(object, data);
                 } break;
                 default:
                     WCDB::Error::ReportInterface(_core->getTag(),
@@ -178,9 +173,8 @@
                     value = string ? [NSString stringWithUTF8String:string] : nil;
                 } break;
                 case WCTColumnTypeBinary: {
-                    int size = 0;
-                    const void *data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index, size);
-                    value = [NSData dataWithBytes:data length:size];
+                    std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index);
+                    value = [NSData dataWithBytes:data.data() length:data.size()];
                 } break;
                 default:
                     WCDB::Error::ReportInterface(_core->getTag(),

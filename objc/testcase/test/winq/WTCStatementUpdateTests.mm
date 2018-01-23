@@ -21,38 +21,39 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementUpdateTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementUpdateTests
 
-- (void)setUp
+- (void)testStatementUpdate
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    std::string table1 = "table1";
+    WCDB::Column column1("column1");
+    WCDB::Column column2("column2");
+    
+    //Then
+    XCTAssertEqual(WCDB::StatementUpdate().getStatementType(), WCDB::Statement::Type::Update);
+    
+    std::pair<const WCDB::Column, const int> p = {column1, 1};
+    WCDB::StatementUpdate u = WCDB::StatementUpdate().update(table1).set(p);
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set(p), @"UPDATE table1 SET column1=1");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1, WCDB::Conflict::Replace).set({{column1, 1}, {column2, "test"}}), @"UPDATE OR REPLACE table1 SET column1=1, column2='test'");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({{column1, 1}, {column2, "test"}}), @"UPDATE table1 SET column1=1, column2='test'");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).where(column1 > 1), @"UPDATE table1 SET column1=1 WHERE (column1 > 1)");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).orderBy({column1, column2}), @"UPDATE table1 SET column1=1 ORDER BY column1, column2");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).limit(1), @"UPDATE table1 SET column1=1 LIMIT 1");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).limit( 1, 2), @"UPDATE table1 SET column1=1 LIMIT 1, 2");
+    
+    WINQAssertEqual(WCDB::StatementUpdate().update(table1).set({column1, 1}).limit(1).offset(3), @"UPDATE table1 SET column1=1 LIMIT 1 OFFSET 3");
 }
 
 @end

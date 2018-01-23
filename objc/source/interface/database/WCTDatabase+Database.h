@@ -91,7 +91,7 @@ typedef void (^WCTCloseBlock)(void);
             4. unblokade, which unblocks all other opreations.
         You can simply call close: to do all steps above or call these separately.
         Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice. The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
-            1. You should not keep WCDB objects, including WCTInsert, WCTDelete, WCTUpdate, WCTSelect, WCTRowSelect, WCTMultiSelect, WCTStatement, WCTTransaction. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
+            1. You should not keep WCDB objects, including WCTInsert, WCTDelete, WCTUpdate, WCTSelect, WCTRowSelect, WCTMultiSelect, WCTCoreStatement, WCTTransaction. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
             2. WCDB objects may not be out of its' scope.
             3. Further more, those WCDB objects may be kept by NSAutoReleasePool, which is done by ARC automatically. So you should make sure that all WCDB objects in NSAutoReleasePool is drained. 
             The best practice is to call close: in sub-thread and display a loading animation in main thread.

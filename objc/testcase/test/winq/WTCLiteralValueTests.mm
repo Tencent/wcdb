@@ -21,38 +21,45 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCLiteralValueTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCLiteralValueTests
 
-- (void)setUp
+- (void)testLiteralValue
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    WCDB::LiteralValue boolLiteralValue = false;
+    WINQAssertEqual(boolLiteralValue, @"0");
+    
+    WCDB::LiteralValue intLiteralValue = 1;
+    WINQAssertEqual(intLiteralValue, @"1");
+    
+    WCDB::LiteralValue floatLiteralValue = 0.1;
+    WINQAssertEqual(floatLiteralValue, @"0.100000");
+    
+    WCDB::LiteralValue stringLiteralValue = "test";
+    WINQAssertEqual(stringLiteralValue, @"'test'");
+    
+    WCDB::LiteralValue nullLiteralValue = nil;
+    WINQAssertEqual(nullLiteralValue, @"NULL");
+    
+    WINQAssertEqual(WCDB::LiteralValue(true), @"1");
+    
+    WINQAssertEqual(WCDB::LiteralValue(1), @"1");
+    
+    int64_t int64 = 17626545782784;
+    WINQAssertEqual(WCDB::LiteralValue(int64), @"17626545782784");
+    
+    WINQAssertEqual(WCDB::LiteralValue(0.1), @"0.100000");
+    
+    WINQAssertEqual(WCDB::LiteralValue("test"), @"'test'");
+    
+    std::string str = "test";
+    std::vector<unsigned char> data(str.begin(), str.end());
+    WINQAssertEqual(WCDB::LiteralValue(data), @"'test'");
+    
+    WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
 }
 
 @end

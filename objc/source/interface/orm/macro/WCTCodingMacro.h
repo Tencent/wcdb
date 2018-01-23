@@ -41,12 +41,10 @@
     {                                                                          \
         return __WCDB_PROPERTIES(className);                                   \
     }                                                                          \
-    +(const WCTAnyProperty &) AnyProperty                                      \
+    + (const WCDB::Column &)AllColumns                                         \
     {                                                                          \
-        static const WCTAnyProperty s_anyProperty(className.class);            \
-        return s_anyProperty;                                                  \
-    }                                                                          \
-    +(WCTPropertyNamed) PropertyNamed { return WCTProperty::PropertyNamed; }
+        return WCDB::Column::All;                                              \
+    }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)
@@ -134,6 +132,12 @@
 #define WCDB_CHECK(className, constraintName, check)                           \
     __WCDB_CHECK_IMP(className, constraintName, check)
 
+#define WCDB_FOREIGN_KEY_COLUMN(className, constraintName, column)             \
+    __WCDB_FOREIGN_KEY_COLUMN_IMP(className, constraintName, column)
+
+#define WCDB_FOREIGN_KEY(className, constraintName, foreignKey)                \
+    __WCDB_FOREIGN_KEY_IMP(className, constraintName, foreignKey)
+
 //Index
 #define WCDB_INDEX(className, indexSubfixName, propertyName)                   \
     __WCDB_INDEX_IMP(className, indexSubfixName, propertyName,                 \
@@ -163,8 +167,14 @@
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(className, left, right)                    \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)
 
-#define WCDB_VIRTUAL_TABLE_TOKENIZE(className, tokenizeName)                   \
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE(className, tokenizeName)          \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", tokenizeName)
+
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)          \
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", WCTTokenizerNameWCDB)
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName)                       \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)
+
+#define WCDB_VIRTUAL_TABLE_MODULE_FTS3(className)                              \
+    __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, WCTModuleNameFTS3)

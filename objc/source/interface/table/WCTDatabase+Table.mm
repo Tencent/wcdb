@@ -46,13 +46,13 @@
     return [self createVirtualTableOfName:tableName withClass:cls andError:innerError];
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList
 {
     WCDB::Error innerError;
     return [self createTableOfName:tableName withColumnDefList:columnDefList andError:innerError];
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andConstraintList:(const WCTTableConstraintList &)constraintList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList
 {
     WCDB::Error innerError;
     return [self createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:constraintList andError:innerError];
@@ -70,7 +70,7 @@
     return [self dropTableOfName:tableName withError:innerError];
 }
 
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCTIndexList &)indexList forTable:(NSString *)tableName
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName
 {
     WCDB::Error innerError;
     return [self createIndexOfName:indexName withIndexList:indexList forTable:tableName andError:innerError];
@@ -82,7 +82,7 @@
     return [self dropIndexOfName:indexName withError:innerError];
 }
 
-- (BOOL)addColumn:(const WCTColumnDef &)columnDef forTable:(NSString *)tableName
+- (BOOL)addColumn:(const WCDB::ColumnDef &)columnDef forTable:(NSString *)tableName
 {
     WCDB::Error innerError;
     return [self addColumn:columnDef forTable:tableName withError:innerError];

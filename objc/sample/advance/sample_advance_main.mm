@@ -59,7 +59,7 @@ void sample_advance_main(NSString *baseDirectory)
 
     //Using [as] to redirect selection
     {
-        WCTSampleAdvance *object = [database getOneObjectOnResults:WCTSampleAdvance.AnyProperty.count().as(WCTSampleAdvance.intValue)
+        WCTSampleAdvance *object = [database getObjectOnResults:WCTSampleAdvance.AllColumns.count().as(WCTSampleAdvance.intValue)
                                                          fromTable:tableName];
         NSLog(@"Count %d", object.intValue);
     }
@@ -92,7 +92,7 @@ void sample_advance_main(NSString *baseDirectory)
 
     //Column coding
     {
-        WCTSampleAdvance *object = [database getOneObjectOfClass:WCTSampleAdvance.class
+        WCTSampleAdvance *object = [database getObjectOfClass:WCTSampleAdvance.class
                                                        fromTable:tableName];
         float value = object.columnCoding.floatValue;
     }

@@ -18,16 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/column.hpp>
 #include <WCDB/column_def.hpp>
 #include <WCDB/expression.hpp>
+#include <WCDB/foreign_key.hpp>
 
 namespace WCDB {
-
-ColumnDef::ColumnDef(const Column &column, ColumnType type)
-    : Describable(column.getName() + " " + ColumnTypeName(type))
-{
-}
 
 ColumnDef &
 ColumnDef::makePrimary(OrderTerm term, bool autoIncrement, Conflict conflict)
@@ -64,35 +59,9 @@ ColumnDef::makePrimary(OrderTerm term, bool autoIncrement, Conflict conflict)
     return *this;
 }
 
-ColumnDef &ColumnDef::makeDefault(const char *value)
+ColumnDef &ColumnDef::makeDefault(const Expression &expression)
 {
-    m_description.append(" DEFAULT '" + std::string(value) + "'");
-    return *this;
-}
-
-ColumnDef &ColumnDef::makeDefault(const std::string &value)
-{
-    m_description.append(" DEFAULT '" + value + "'");
-    return *this;
-}
-
-ColumnDef &ColumnDef::makeDefault(const std::nullptr_t &value)
-{
-    m_description.append(" DEFAULT NULL");
-    return *this;
-}
-
-ColumnDef &ColumnDef::makeDefault(
-    const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value, int size)
-{
-    m_description.append(" DEFAULT '" +
-                         std::string((const char *) value, size) + "'");
-    return *this;
-}
-
-ColumnDef &ColumnDef::makeDefault(const Expression &expr)
-{
-    m_description.append(" DEFAULT " + expr.getDescription());
+    m_description.append(" DEFAULT " + expression.getDescription());
     return *this;
 }
 

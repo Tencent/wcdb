@@ -22,19 +22,35 @@
 #define column_index_hpp
 
 #include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
-#include <WCDB/order_term.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class ColumnIndex : public Describable {
 public:
+    template <typename T>
+    ColumnIndex(const T &t, OrderTerm term = OrderTerm::NotSet, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr)
+    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){
+        if (term != OrderTerm::NotSet) {
+            m_description.append(" ");
+            m_description.append(OrderTermName(term));
+        }
+    }
+
+    template <typename T>
+    ColumnIndex(const T &t, OrderTerm term = OrderTerm::NotSet, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr)
+    : Describable(ExpressionConvertible<T>::asExpression(t).getDescription()){
+        if (term != OrderTerm::NotSet) {
+            m_description.append(" ");
+            m_description.append(OrderTermName(term));
+        }
+    }
+    
     ColumnIndex(const Column &column, OrderTerm term = OrderTerm::NotSet);
-    ColumnIndex(const Expression &expr, OrderTerm term = OrderTerm::NotSet);
-
-    operator ColumnIndexList() const;
+    
+    operator std::list<const ColumnIndex>() const;
 };
-
+    
 } //namespace WCDB
 
 #endif /* column_index_hpp */

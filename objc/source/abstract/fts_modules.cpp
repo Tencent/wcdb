@@ -20,6 +20,7 @@
 
 #include <WCDB/fts_module.hpp>
 #include <WCDB/fts_modules.hpp>
+#include <WCDB/error.hpp>
 
 namespace WCDB {
 
@@ -38,14 +39,16 @@ void Modules::addModule(const std::string &name,
     m_modules.insert({name, module});
 }
 
-const void *Modules::getAddress(const std::string &name) const
+std::vector<unsigned char> Modules::getAddress(const std::string &name) const
 {
     SpinLockGuard<Spin> lockGuard(m_spin);
     auto iter = m_modules.find(name);
-    if (iter != m_modules.end()) {
-        return iter->second.get();
+    if (iter == m_modules.end()) {
+        WCDB::Error::Abort("Tokenize name is not registered");
     }
-    return nullptr;
+    const void* module = iter->second.get();
+    unsigned char* address = (unsigned char*)&module;
+    return std::vector<unsigned char>(address, address + sizeof(unsigned char*));
 }
 
 } //namespace FTS

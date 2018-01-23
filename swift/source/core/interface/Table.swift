@@ -413,7 +413,7 @@ extension Table: RowSelectTableInterface {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> FundamentalRowXColumn {
-        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: limit,
@@ -433,7 +433,7 @@ extension Table: RowSelectTableInterface {
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> FundamentalRow {
-        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+        return try getRows(on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: 1,

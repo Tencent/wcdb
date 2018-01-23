@@ -27,6 +27,7 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <WCDB/optional.hpp>
 
 namespace WCDB {
 
@@ -143,6 +144,12 @@ public:
 
     Error::Type getType() const;
     int getCode() const;
+    Optional<Tag> getTag() const;
+    Optional<int> getOperationValue() const;
+    Optional<int> getExtendedCode() const;
+    Optional<std::string> getMessage() const;
+    Optional<std::string> getSQL() const;
+    Optional<std::string> getPath() const;
     const Error::Infos &getInfos() const;
     bool isOK() const; //getCode()==0
     void reset();
@@ -154,6 +161,7 @@ public:
     static const char *GetTypeName(Type type);
 
     static void SetReportMethod(const ReportMethod &reportMethod);
+    static void ResetReportMethod();
 
     static void Report(Error::Type type,
                        int code,
@@ -215,7 +223,8 @@ protected:
     Error::Type m_type;
     Error::Infos m_infos;
 
-    static std::shared_ptr<Error::ReportMethod> s_reportMethod;
+    static std::shared_ptr<ReportMethod> s_reportMethod;
+    static ReportMethod s_builtinErrorReport;
     static ThreadLocal<bool> s_slient;
 };
 

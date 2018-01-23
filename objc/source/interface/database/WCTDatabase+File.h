@@ -54,7 +54,7 @@
  @brief Paths to all database-related files.
  @return paths
  */
-- (NSArray<NSString *> *)getPaths;
+- (NSArray<NSString *> *)paths;
 
 /**
  @brief Get the space used by the database files.

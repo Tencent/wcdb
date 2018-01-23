@@ -35,7 +35,7 @@ StatementExplain &StatementExplain::explain(const Statement &statement)
 
 StatementExplain &StatementExplain::explainQueryPlan(const Statement &statement)
 {
-    m_description.append("EXPLAIN QUERY PLAN" + statement.getDescription());
+    m_description.append("EXPLAIN QUERY PLAN " + statement.getDescription());
     return *this;
 }
 

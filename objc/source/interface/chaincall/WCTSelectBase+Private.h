@@ -32,6 +32,6 @@
 
 - (BOOL)lazyPrepare;
 - (BOOL)next;
-- (void)finalize;
+- (BOOL)finalize;
 
 @end

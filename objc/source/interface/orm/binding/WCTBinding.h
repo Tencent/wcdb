@@ -25,6 +25,7 @@
 #import <WCDB/WCTConstraintBinding.h>
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTIndexBinding.h>
+#import <WCDB/WCTProperty.h>
 
 class WCTBinding {
 public:

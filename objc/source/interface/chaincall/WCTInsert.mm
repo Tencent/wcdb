@@ -33,67 +33,16 @@
     BOOL _replace;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andClass:(Class)cls andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
-{
-    if (self = [super initWithCore:core]) {
-        if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::ORM,
-                                         [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Nil table name".UTF8String,
-                                         &_error);
-            return self;
-        }
-        _replace = replace;
-        const WCTPropertyList &propertyList = [cls AllProperties];
-        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
-        _statement = WCDB::StatementInsert()
-                         .insert(tableName.UTF8String,
-                                 _propertyList,
-                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expression::BindParameter));
-    }
-    return self;
-}
-
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
 {
     if (self = [super initWithCore:core]) {
-        if (propertyList.size() == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Inserting nothing into %@", tableName].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Insert,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Table name should be large than 0"].UTF8String,
-                                         &_error);
-            return self;
-        }
         _replace = replace;
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
                          .insert(tableName.UTF8String,
                                  _propertyList,
                                  _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExprList(_propertyList.size(), WCDB::Expression::BindParameter));
+                         .values(WCDB::ExpressionList(_propertyList.size(), WCDB::Expression::BindParameter));
     }
     return self;
 }
@@ -105,13 +54,13 @@
         return NO;
     }
     int index;
-    BOOL fillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
+    BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
     for (WCTObject *object in objects) {
         index = 1;
         for (const WCTProperty &property : _propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
+                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
             } else {
                 if (![self bindProperty:property
                                  ofObject:object
@@ -128,7 +77,7 @@
             error = statementHandle->getError();
             return NO;
         }
-        if (fillLastInsertedRowID) {
+        if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
             object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
         }
         statementHandle->reset();
@@ -142,7 +91,6 @@
 
 - (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }
@@ -153,10 +101,10 @@
     if (objects.count == 1) {
         return [self doInsertObjects:objects withError:_error];
     }
-    return _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) -> bool {
-        return [self doInsertObjects:objects withError:error];
-    },
-                                         _error);
+    _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) {
+        [self doInsertObjects:objects withError:error];
+    }, _error);
+    return _error.isOK();
 }
 
 @end

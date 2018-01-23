@@ -77,7 +77,7 @@ void sample_fts_main(NSString *baseDirectory)
 
     //Build Full-Text-Search Index
     {
-        NSArray<WCTSampleFTSOrigin *> *objects = [databaseOrigin getAllObjectsOfClass:WCTSampleFTSOrigin.class fromTable:tableNameOrigin];
+        NSArray<WCTSampleFTSOrigin *> *objects = [databaseOrigin getObjectsOfClass:WCTSampleFTSOrigin.class fromTable:tableNameOrigin];
         NSMutableArray *ftsDataArray = [[NSMutableArray alloc] init];
         for (WCTSampleFTSOrigin *object in objects) {
             WCTSampleFTSData *ftsData = [[WCTSampleFTSData alloc] init];
@@ -96,7 +96,7 @@ void sample_fts_main(NSString *baseDirectory)
 
     //Full-Text-Search info by `match`
     //See http://www.sqlite.org/fts3.html#snippet for further information
-    WCTOneRow *row = [databaseFTS getOneRowOnResults:{WCTSampleFTSData.PropertyNamed(tableNameFTS).snippet(), WCTSampleFTSData.PropertyNamed(tableNameFTS).offsets()} fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("12*")];
+    WCTOneRow *row = [databaseFTS getRowOnResults:{WCTSampleFTSData.PropertyNamed(tableNameFTS).snippet(), WCTSampleFTSData.PropertyNamed(tableNameFTS).offsets()} fromTable:tableNameFTS where:WCTSampleFTSData.PropertyNamed(tableNameFTS).match("12*")];
     NSLog(@"Snippet: %@ Offsets: %@", row[0], row[1]);
 
     NSLog(@"Sample-fts End");

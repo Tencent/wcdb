@@ -21,7 +21,6 @@
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDelete.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/handle_statement.hpp>
 
 @implementation WCTDelete {
@@ -32,39 +31,30 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Delete,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Nil table name".UTF8String,
-                                         &_error);
-            return self;
-        }
         _statement.deleteFrom(tableName.UTF8String);
     }
     return self;
 }
 
-- (instancetype)where:(const WCTCondition &)expr
+- (instancetype)where:(const WCDB::Expression &)expr
 {
     _statement.where(expr);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList &)orderList
+- (instancetype)orderBy:(const WCDB::OrderList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit &)limit
+- (instancetype)limit:(const WCDB::Expression &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset &)offset
+- (instancetype)offset:(const WCDB::Expression &)offset
 {
     _statement.offset(offset);
     return self;
@@ -72,7 +62,6 @@
 
 - (BOOL)execute
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
     if (!statementHandle) {
         return NO;

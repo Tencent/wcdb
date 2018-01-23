@@ -153,7 +153,7 @@ func sample_convenient_main(baseDirectory: String) {
 
     //Select one value
     do {
-        let count = try database.getValue(on: SampleConvenient.Properties.any.count(), fromTable: tableName)
+        let count = try database.getValue(on: SampleConvenient.Properties.allColumns.count(), fromTable: tableName)
     } catch let error {
         print("select one value error: \(error)")
     }

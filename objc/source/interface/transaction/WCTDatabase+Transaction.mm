@@ -22,6 +22,7 @@
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTTransaction.h>
+#import <WCDB/WCTError+Private.h>
 
 @implementation WCTDatabase (Transaction)
 
@@ -30,41 +31,82 @@
     return [[WCTTransaction alloc] initWithCore:_core];
 }
 
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError
 {
-    return [self runTransaction:inTransaction event:nil];
+    WCDB::Error error;
+    bool result = _database->runTransaction([inTransaction](WCDB::Error &) {
+        @autoreleasepool {
+            inTransaction();
+        }
+    }, error);
+    if (pError) {
+        *pError = [WCTError errorWithWCDBError:error];
+    }
+    return result;
 }
 
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError
 {
-    WCDB::Database::TransactionEvent event = nullptr;
-    if (onTransactionStateChanged) {
-        event = [onTransactionStateChanged](WCDB::Database::TransactionEventType eventType) {
-            onTransactionStateChanged((WCTTransactionEvent) eventType);
-        };
-    }
-    WCDB::Error innerError;
-    return _database->runTransaction([inTransaction](WCDB::Error &) -> bool {
+    WCDB::Error error;
+    bool result = _database->runControllableTransaction([inTransaction](WCDB::Error &) -> bool {
         @autoreleasepool {
             return inTransaction();
         }
-    },
-                                     event, innerError);
+    }, error);
+    if (pError) {
+        *pError = [WCTError errorWithWCDBError:error];
+    }
+    return result;
 }
 
-- (BOOL)beginTransaction
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError
+{
+    WCDB::Error error;
+    bool result = _database->runEmbeddedTransaction([inTransaction](WCDB::Error &) {
+        @autoreleasepool {
+            inTransaction();
+        }
+    }, error);
+    if (pError) {
+        *pError = [WCTError errorWithWCDBError:error];
+    }
+    return result;
+}
+
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction
+{
+    return [self runControllableTransaction:inTransaction withError:nil];
+}
+
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction
+{
+    return [self runEmbeddedTransaction:inTransaction withError:nil];
+}
+
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
+{
+    return [self runTransaction:inTransaction withError:nil];
+}
+
+- (BOOL)begin
 {
     WCDB::Error innerError;
     return _database->begin(WCDB::StatementTransaction::Mode::Immediate, innerError);
 }
 
-- (BOOL)commitTransaction
+- (BOOL)beginWithMode:(WCTTransactionMode)mode
+{
+    WCDB::Error innerError;
+    return _database->begin((WCDB::StatementTransaction::Mode)mode, innerError);
+}
+
+- (BOOL)commit
 {
     WCDB::Error innerError;
     return _database->commit(innerError);
 }
 
-- (BOOL)rollbackTransaction
+- (BOOL)rollback
 {
     WCDB::Error innerError;
     return _database->rollback(innerError);

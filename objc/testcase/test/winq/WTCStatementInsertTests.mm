@@ -21,38 +21,28 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementInsertTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementInsertTests
 
-- (void)setUp
+- (void)testStatementInsert
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    WCDB::Column column1("column1");
+    WCDB::Column column2("column2");
+    
+    std::string table1 = "table1";
+    
+    //Then
+    XCTAssertEqual(WCDB::StatementInsert().getStatementType(), WCDB::Statement::Type::Insert);
+    
+    WINQAssertEqual(WCDB::StatementInsert().insert(table1).values({1, "value"}), @"INSERT INTO table1 VALUES(1, 'value')");
+    
+    WINQAssertEqual(WCDB::StatementInsert().insert(table1, {column1, column2}).values({1, "value"}), @"INSERT INTO table1(column1, column2) VALUES(1, 'value')");
+    
+    WINQAssertEqual(WCDB::StatementInsert().insert(table1, WCDB::Conflict::Replace).values({1, "value"}), @"INSERT OR REPLACE INTO table1 VALUES(1, 'value')");
 }
 
 @end

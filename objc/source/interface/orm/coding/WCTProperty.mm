@@ -18,447 +18,129 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResult.h>
 
-WCTPropertyNamed WCTProperty::PropertyNamed = ^(NSString *propertyName) {
-  return WCTProperty(propertyName);
-};
-
-WCTProperty::WCTProperty(const char *name)
-    : WCDB::Column(name)
-    , WCTPropertyBase(nil, nullptr)
-{
-}
-
-WCTProperty::WCTProperty(NSString *name)
-    : WCDB::Column(name ? name.UTF8String : "")
-    , WCTPropertyBase(nil, nullptr)
-{
-}
-
-WCTProperty::WCTProperty(NSString *name, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
-: WCDB::Column(name ? name.UTF8String : "")
-, WCTPropertyBase(cls, columnBinding)
-{
-}
-
-WCTProperty::WCTProperty(const char *name, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
-    : WCDB::Column(name)
-    , WCTPropertyBase(cls, columnBinding)
-{
-}
-
-WCTProperty::WCTProperty(const WCDB::Column &column, Class cls, const std::shared_ptr<WCTColumnBinding> &columnBinding)
-    : WCDB::Column(column)
-    , WCTPropertyBase(cls, columnBinding)
-{
-}
-
-WCTResultList WCTProperty::distinct() const
-{
-    return WCTResultList(*this).distinct();
-}
-
-WCTProperty WCTProperty::inTable(NSString *table) const
-{
-    return WCTProperty(WCDB::Column::inTable(table.UTF8String), m_cls, m_columnBinding);
-}
-
-WCTOrderBy WCTProperty::order(WCTOrderTerm term) const
-{
-    return WCTOrderBy(*this, (WCDB::OrderTerm) term);
-}
-
-WCTIndex WCTProperty::index(WCTOrderTerm term) const
-{
-    return WCDB::ColumnIndex(*this, (WCDB::OrderTerm) term);
-}
-
-WCTExpression WCTProperty::avg(bool distinct) const
-{
-    return WCTExpression(*this).avg(distinct);
-}
-
-WCTExpression WCTProperty::count(bool distinct) const
-{
-    return WCTExpression(*this).count(distinct);
-}
-
-WCTExpression WCTProperty::groupConcat(bool distinct) const
-{
-    return WCTExpression(*this).groupConcat(distinct);
-}
-
-WCTExpression WCTProperty::groupConcat(NSString *seperator, bool distinct) const
-{
-    return WCTExpression(*this).groupConcat(seperator, distinct);
-}
-
-WCTExpression WCTProperty::max(bool distinct) const
-{
-    return WCTExpression(*this).max(distinct);
-}
-
-WCTExpression WCTProperty::min(bool distinct) const
-{
-    return WCTExpression(*this).min(distinct);
-}
-
-WCTExpression WCTProperty::sum(bool distinct) const
-{
-    return WCTExpression(*this).sum(distinct);
-}
-
-WCTExpression WCTProperty::total(bool distinct) const
-{
-    return WCTExpression(*this).total(distinct);
-}
-
-WCTExpression WCTProperty::abs(bool distinct) const
-{
-    return WCTExpression(*this).abs(distinct);
-}
-
-WCTExpression WCTProperty::hex(bool distinct) const
-{
-    return WCTExpression(*this).hex(distinct);
-}
-
-WCTExpression WCTProperty::length(bool distinct) const
-{
-    return WCTExpression(*this).length(distinct);
-}
-
-WCTExpression WCTProperty::lower(bool distinct) const
-{
-    return WCTExpression(*this).lower(distinct);
-}
-
-WCTExpression WCTProperty::upper(bool distinct) const
-{
-    return WCTExpression(*this).upper(distinct);
-}
-
-WCTExpression WCTProperty::round(bool distinct) const
-{
-    return WCTExpression(*this).round(distinct);
-}
-
-WCTExpression WCTProperty::matchinfo() const
-{
-    return WCTExpression(*this).matchinfo();
-}
-
-WCTExpression WCTProperty::offsets() const
-{
-    return WCTExpression(*this).offsets();
-}
-
-WCTExpression WCTProperty::snippet() const
-{
-    return WCTExpression(*this).snippet();
-}
-
-WCTColumnDef WCTProperty::def(WCTColumnType type, bool isPrimary, WCTOrderTerm term, bool autoIncrement) const
-{
-    WCDB::ColumnDef columnDef(*this, (WCDB::ColumnType) type);
-    if (isPrimary) {
-        columnDef.makePrimary((WCDB::OrderTerm) term, autoIncrement);
-    }
-    return columnDef;
-}
-
-WCTExpression WCTProperty::operator!() const
-{
-    return !WCTExpression(*this);
-}
-
-WCTExpression WCTProperty::operator+() const
-{
-    return +WCTExpression(*this);
-}
-
-WCTExpression WCTProperty::operator-() const
-{
-    return -WCTExpression(*this);
-}
-
-WCTExpression WCTProperty::operator~() const
-{
-    return ~WCTExpression(*this);
-}
-
-WCTExpression WCTProperty::operator||(const WCTExpression &operand) const
+WCTProperty::WCTProperty(const std::string &name, const std::shared_ptr<WCTColumnBinding> &columnBinding)
+: Describable(name)
+, m_columnBinding(columnBinding)
 {
-    return WCTExpression(*this) || operand;
 }
 
-WCTExpression WCTProperty::operator&&(const WCTExpression &operand) const
+WCTProperty WCTProperty::inTable(NSString *tableName) const
 {
-    return WCTExpression(*this) && operand;
+    return WCTProperty(WCDB::Column(m_description).inTable(tableName.UTF8String).getDescription(), m_columnBinding);
 }
 
-WCTExpression WCTProperty::operator*(const WCTExpression &operand) const
+WCTProperty WCTProperty::inTable(const std::string& tableName) const
 {
-    return WCTExpression(*this) * operand;
+    return WCTProperty(WCDB::Column(m_description).inTable(tableName).getDescription(), m_columnBinding);
 }
-
-WCTExpression WCTProperty::operator/(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) / operand;
-}
-
-WCTExpression WCTProperty::operator%(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) % operand;
-}
-
-WCTExpression WCTProperty::operator+(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) + operand;
-}
-
-WCTExpression WCTProperty::operator-(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) - operand;
-}
-
-WCTExpression WCTProperty::operator<<(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) << operand;
-}
-
-WCTExpression WCTProperty::operator>>(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) >> operand;
-}
-
-WCTExpression WCTProperty::operator&(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) & operand;
-}
-
-WCTExpression WCTProperty::operator|(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) | operand;
-}
-
-WCTExpression WCTProperty::operator<(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) < operand;
-}
-
-WCTExpression WCTProperty::operator<=(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) <= operand;
-}
-
-WCTExpression WCTProperty::operator>(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) > operand;
-}
-
-WCTExpression WCTProperty::operator>=(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) >= operand;
-}
-
-WCTExpression WCTProperty::operator==(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) == operand;
-}
-
-WCTExpression WCTProperty::operator!=(const WCTExpression &operand) const
-{
-    return WCTExpression(*this) != operand;
-}
-
-WCTExpression WCTProperty::concat(const WCTExpression &operand) const
-{
-    return WCTExpression(*this).concat(operand);
-}
-
-WCTExpression WCTProperty::substr(const WCTExpression &start, const WCTExpression &length) const
-{
-    return WCTExpression(*this).substr(start, length);
-}
-
-WCTExpression WCTProperty::in(const WCTExprList &exprList) const
-{
-    return WCTExpression(*this).in(exprList);
-}
-
-WCTExpression WCTProperty::notIn(const WCTExprList &exprList) const
-{
-    return WCTExpression(*this).notIn(exprList);
-}
-
-WCTExpression WCTProperty::in(const WCDB::StatementSelectList &statementSelectList) const
-{
-    return WCTExpression(*this).in(statementSelectList);
-}
-
-WCTExpression WCTProperty::notIn(const WCDB::StatementSelectList &statementSelectList) const
-{
-    return WCTExpression(*this).notIn(statementSelectList);
-}
-
-WCTExpression WCTProperty::in(NSString *table) const
-{
-    return WCTExpression(*this).in(table);
-}
-
-WCTExpression WCTProperty::notIn(NSString *table) const
-{
-    return WCTExpression(*this).notIn(table);
-}
-
-WCTExpression WCTProperty::in(NSArray<WCTValue *> *valueList) const
-{
-    return WCTExpression(*this).in(valueList);
-}
-WCTExpression WCTProperty::notIn(NSArray<WCTValue *> *valueList) const
-{
-    return WCTExpression(*this).notIn(valueList);
-}
-
-WCTExpression WCTProperty::between(const WCTExpression &left, const WCTExpression &right) const
-{
-    return WCTExpression(*this).between(left, right);
-}
-
-WCTExpression WCTProperty::notBetween(const WCTExpression &left, const WCTExpression &right) const
-{
-    return WCTExpression(*this).notBetween(left, right);
-}
-
-WCTExpression WCTProperty::like(const WCTExpression &operand) const
-{
-    return WCTExpression(*this).like(operand);
-}
-
-WCTExpression WCTProperty::glob(const WCTExpression &operand) const
-{
-    return WCTExpression(*this).glob(operand);
-}
-
-WCTExpression WCTProperty::match(const WCTExpression &operand) const
-{
-    return WCTExpression(*this).match(operand);
-}
-
-WCTExpression WCTProperty::regexp(const WCTExpression &operand) const
-{
-    return WCTExpression(*this).regexp(operand);
-}
-
-WCTExpression WCTProperty::notLike(const WCTExpression &operand) const
+    
+const std::shared_ptr<WCTColumnBinding>& WCTProperty::getColumnBinding() const
 {
-    return WCTExpression(*this).notLike(operand);
+    return m_columnBinding;
 }
-
-WCTExpression WCTProperty::notGlob(const WCTExpression &operand) const
+    
+WCDB::Column WCTProperty::asColumn() const
 {
-    return WCTExpression(*this).notGlob(operand);
+    return WCDB::Column(*this);
 }
 
-WCTExpression WCTProperty::notMatch(const WCTExpression &operand) const
+WCDB::Order WCTProperty::asOrder() const
 {
-    return WCTExpression(*this).notMatch(operand);
+    return WCDB::Order(asColumn());
 }
 
-WCTExpression WCTProperty::notRegexp(const WCTExpression &operand) const
+WCDB::Order WCTProperty::asOrder(WCTOrderTerm term) const
 {
-    return WCTExpression(*this).notRegexp(operand);
+    return WCDB::Order(asColumn(), (WCDB::OrderTerm)term);
 }
-
-WCTExpression WCTProperty::like(const WCTExpression &operand, const WCTExpression &escape) const
+    
+WCDB::ColumnIndex WCTProperty::asIndex() const
 {
-    return WCTExpression(*this).like(operand, escape);
-}
-
-WCTExpression WCTProperty::glob(const WCTExpression &operand, const WCTExpression &escape) const
+    return WCDB::ColumnIndex(asColumn());
+}    
+    
+WCDB::ColumnIndex WCTProperty::asIndex(WCTOrderTerm term) const
 {
-    return WCTExpression(*this).glob(operand, escape);
+    return WCDB::ColumnIndex(asColumn(), (WCDB::OrderTerm)term);
 }
-
-WCTExpression WCTProperty::match(const WCTExpression &operand, const WCTExpression &escape) const
+        
+WCDB::Expression WCTProperty::asExpression() const
 {
-    return WCTExpression(*this).match(operand, escape);
+    return WCDB::Expression(asColumn());
 }
 
-WCTExpression WCTProperty::regexp(const WCTExpression &operand, const WCTExpression &escape) const
+WCDB::ColumnDef WCTProperty::asDef() const
 {
-    return WCTExpression(*this).regexp(operand, escape);
+    return WCDB::ColumnDef(asColumn());
 }
 
-WCTExpression WCTProperty::notLike(const WCTExpression &operand, const WCTExpression &escape) const
+WCDB::ColumnDef WCTProperty::asDef(WCTColumnType columnType) const
 {
-    return WCTExpression(*this).notLike(operand, escape);
+    return WCDB::ColumnDef(asColumn(), (WCDB::ColumnType)columnType);
 }
 
-WCTExpression WCTProperty::notGlob(const WCTExpression &operand, const WCTExpression &escape) const
+WCTProperty::operator std::list<const WCTProperty>() const
 {
-    return WCTExpression(*this).notGlob(operand, escape);
+    return {*this};
 }
 
-WCTExpression WCTProperty::notMatch(const WCTExpression &operand, const WCTExpression &escape) const
+WCTProperty::operator std::list<const WCDB::Order>() const
 {
-    return WCTExpression(*this).notMatch(operand, escape);
+    return {asOrder()};
 }
 
-WCTExpression WCTProperty::notRegexp(const WCTExpression &operand, const WCTExpression &escape) const
+WCTProperty::operator std::list<const WCDB::ColumnResult>() const
 {
-    return WCTExpression(*this).notRegexp(operand, escape);
+    return {WCDB::ColumnResult(asColumn())};
 }
 
-WCTExpression WCTProperty::isNull() const
+WCTProperty::operator std::list<const WCDB::Expression>() const
 {
-    return WCTExpression(*this).isNull();
+    return {asExpression()};
 }
 
-WCTExpression WCTProperty::isNotNull() const
+namespace WCDB {
+    
+Column ColumnConvertible<WCTProperty>::asColumn(const WCTProperty& property)
 {
-    return WCTExpression(*this).isNotNull();
+    return Column(property.getDescription());
 }
 
-WCTExpression WCTProperty::is(const WCTExpression &operand) const
+Expression ExpressionConvertible<WCTProperty>::asExpression(const WCTProperty& property)
 {
-    return WCTExpression(*this).is(operand);
+    return Expression(ColumnConvertible<WCTProperty>::asColumn(property));
 }
 
-WCTExpression WCTProperty::isNot(const WCTExpression &operand) const
+ColumnResult ColumnResultConvertible<WCTProperty>::asColumnResult(const WCTProperty& property)
 {
-    return WCTExpression(*this).isNot(operand);
+    return ColumnResult(ColumnConvertible<WCTProperty>::asColumn(property));
 }
 
-NSString *WCTProperty::getDescription() const
+Order SpecificOrderConvertible<WCTProperty>::asOrder(const WCTProperty& property, OrderTerm term)
 {
-    return [NSString stringWithUTF8String:WCDB::Column::getDescription().c_str()];
+    return Order(ExpressionConvertible<WCTProperty>::asExpression(property), term);
 }
 
-WCTPropertyList::WCTPropertyList()
-    : std::list<const WCTProperty>()
+Order OrderConvertible<WCTProperty>::asOrder(const WCTProperty& property)
 {
+    return SpecificOrderConvertible<WCTProperty>::asOrder(property, OrderTerm::NotSet);
 }
 
-WCTPropertyList::WCTPropertyList(const WCTProperty &property)
-    : std::list<const WCTProperty>({property})
+ColumnIndex SpecificColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty& property, OrderTerm term)
 {
+    return ColumnIndex(ColumnConvertible<WCTProperty>::asColumn(property), term);
 }
 
-WCTPropertyList::WCTPropertyList(std::initializer_list<const WCTProperty> il)
-    : std::list<const WCTProperty>(il)
+ColumnIndex ColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty& property)
 {
+    return SpecificColumnIndexConvertible<WCTProperty>::asIndex(property, OrderTerm::NotSet);
 }
 
-WCTPropertyList WCTPropertyList::inTable(NSString *tableName) const
+ColumnDef SpecificColumnDefConvertible<WCTProperty>::asDef(const WCTProperty& property, ColumnType propertyType)
 {
-    WCTPropertyList propertyList;
-    for (auto iter : *this) {
-        propertyList.push_back(iter.inTable(tableName));
-    }
-    return propertyList;
+    return ColumnDef(ColumnConvertible<WCTProperty>::asColumn(property), propertyType);
 }
+    
+} //namespace WCDB

@@ -27,7 +27,6 @@
 #import <WCDB/WCTIndexBinding.h>
 
 #import <WCDB/WCTCoding.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
 
 #import <WCDB/WCTCodingMacro.h>

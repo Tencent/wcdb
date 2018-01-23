@@ -23,7 +23,7 @@
 #import <WCDB/WCTTable.h>
 
 @interface WCTTable () {
-    Class _cls;
+    Class _class;
     NSString *_tableName;
 }
 

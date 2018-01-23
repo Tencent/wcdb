@@ -32,21 +32,4 @@
     return [WCTError errorWithWCDBError:_error];
 }
 
-- (void)setStatisticsEnabled:(BOOL)enabled
-{
-    if (!enabled) {
-        _ticker = nullptr;
-    } else if (!_ticker) {
-        _ticker.reset(new WCDB::Ticker);
-    }
-}
-
-- (double)cost
-{
-    if (_ticker) {
-        return _ticker->getElapseTime();
-    }
-    return 0;
-}
-
 @end

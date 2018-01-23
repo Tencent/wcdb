@@ -59,7 +59,7 @@
  @param constraintList The list of constraint.
  @return YES only if no error occurs.
  */
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList andConstraintList:(const WCTTableConstraintList &)constraintList;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList;
 
 /**
  @brief This interface is equivalent to [database createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:{}].
@@ -67,7 +67,7 @@
  @param columnDefList The list of column definition.
  @return YES only if no error occurs.
  */
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCTColumnDefList &)columnDefList;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList;
 
 /**
  @brief Check whether table exists
@@ -90,7 +90,7 @@
  @param tableName The name of index-associated table.
  @return YES only if no error occurs.
  */
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCTIndexList &)indexList forTable:(NSString *)tableName;
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName;
 
 /**
  @brief Drop index if not exists.
@@ -105,6 +105,6 @@
  @param tableName The name of table to do a column addition.
  @return YES only if no error occurs.
  */
-- (BOOL)addColumn:(const WCTColumnDef &)columnDef forTable:(NSString *)tableName;
+- (BOOL)addColumn:(const WCDB::ColumnDef &)columnDef forTable:(NSString *)tableName;
 
 @end

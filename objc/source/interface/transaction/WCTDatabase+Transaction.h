@@ -33,62 +33,95 @@
 /**
  @brief Run a transaction in block.
  
-     BOOL committed = [database runTransaction:^BOOL(){
-        BOOL result = [database insertObject:object into:tableName];
-        return result;//return YES to commit transaction and return NO to rollback transaction.
-     } event:^(WCTTransactionEvent event) {
-        switch (event) {
-            case WCTTransactionEventBeginFailed:
-                //...
-                break;
-            case WCTTransactionEventCommitFailed:
-                //...
-                break;
-            case WCTTransactionEventRollback:
-                //...
-                break;
-            case WCTTransactionEventRollbackFailed:
-                //...
-                break;
-        };
-     }];
+     [database runTransaction:^void(){
+        [database insertObject:object into:tableName];
+     }, withError:&error];
+     if (error.isOK) {
+         //do sth
+     }
 
  @param inTransaction Operation inside transaction.
- @param onTransactionStateChanged State changed event.
- @return YES only if transaction is committed.
  */
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction event:(WCTTransactionEventBlock)onTransactionStateChanged;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
 
 /**
- @brief This interface is equivalent to [database runTransaction:transaction event:nil];
+ @brief Run a controllable transaction in block.
+ 
+     BOOL committed = [database runControllableTransaction:^BOOL(){
+         return [database insertObject:object into:tableName];
+     }, withError: &error];
+     if (committed) {
+         // do sth
+     }
+ 
  @param inTransaction Operation inside transaction.
- @see runTransaction:event:
- @return YES only if transaction is committed.
+ @see WCTControllableTransactionBlock
+ */
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction withError:(WCTError**)pError;
+
+/**
+ @brief Run an embedded transaction in block.
+ 
+     [transaction runEmbeddedTransaction:^void(){
+         [transaction insertObject:object into:tableName];
+     }, withError: &error];
+     if (error.isOK) {
+         // do sth
+     }
+ 
+ @param inTransaction Operation inside transaction.
+ @see WCTTransactionBlock
+ */
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError**)pError;
+
+/**
+ @brief This interface is equivalent to [database runControllableTransaction:transaction withError:nil];
+ @param inTransaction Operation inside transaction.
+ @see WCTControllableTransactionBlock
+ */
+- (BOOL)runControllableTransaction:(WCTControllableTransactionBlock)inTransaction;
+
+/**
+ @brief This interface is equivalent to [database runEmbeddedTransaction:transaction withError:nil];
+ @param inTransaction Operation inside transaction.
+ @see WCTTransactionBlock
+ */
+- (BOOL)runEmbeddedTransaction:(WCTTransactionBlock)inTransaction;
+
+/**
+ @brief This interface is equivalent to [database runTransaction:transaction withError:nil];
+ @param inTransaction Operation inside transaction.
  */
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call beginTransaction, commitTransaction, rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @warning You should call begin, commit, rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
  @see WCTTransaction
  @return YES only if no error occurs.
  */
-- (BOOL)beginTransaction;
+- (BOOL)begin;
+
+/**
+ @brief Begin this transaction.
+ @return YES only if no error occurs.
+ */
+- (BOOL)beginWithMode:(WCTTransactionMode)mode;
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call beginTransaction , commitTransaction , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @warning You should call begin , commit , rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
  @see WCTTransaction
  @return YES only if no error occurs.
  */
-- (BOOL)commitTransaction;
+- (BOOL)commit;
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call beginTransaction , commitTransaction , rollbackTransaction and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
+ @warning You should call begin , commit , rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
  @see WCTTransaction
  @return YES only if no error occurs.
  */
-- (BOOL)rollbackTransaction;
+- (BOOL)rollback;
 
 @end

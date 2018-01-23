@@ -58,15 +58,15 @@ void sample_transaction_main(NSString *baseDirectory)
 
     //Run threaded transaction
     {
-        //[beginTransaction], [commitTransaction], [rollbackTransaction] and all interfaces inside this transaction should run in same thread
-        BOOL ret = [database beginTransaction];
+        //[begin], [commit], [rollback] and all interfaces inside this transaction should run in same thread
+        BOOL ret = [database begin];
         WCTSampleTransaction *object = [[WCTSampleTransaction alloc] init];
         ret = [database insertObject:object
                                 into:tableName];
         if (ret) {
-            ret = [database commitTransaction];
+            ret = [database commit];
         } else {
-            ret = [database rollbackTransaction];
+            ret = [database rollback];
         }
     }
 

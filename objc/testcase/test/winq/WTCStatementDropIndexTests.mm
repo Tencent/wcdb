@@ -21,38 +21,21 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementDropIndexTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementDropIndexTests
 
-- (void)setUp
+- (void)testStatementDropIndex
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    std::string index1 = "index1";
+    
+    XCTAssertEqual(WCDB::StatementDropIndex().getStatementType(), WCDB::Statement::Type::DropIndex);
+    
+    WINQAssertEqual(WCDB::StatementDropIndex().drop(index1), @"DROP INDEX IF EXISTS index1");
+    
+    WINQAssertEqual(WCDB::StatementDropIndex().drop(index1, false), @"DROP INDEX index1");
 }
 
 @end

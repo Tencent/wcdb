@@ -34,7 +34,8 @@ public:
         typename std::enable_if<ColumnIsCppType<T>::value>::type * = nullptr)
         : columnName(cn)
         , accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
-        , m_columnDef(cn, (WCDB::ColumnType) accessor->getColumnType())
+        , m_class(cls)
+        , m_columnDef(WCDB::Column(cn), (WCDB::ColumnType) accessor->getColumnType())
         , m_isAutoIncrement(false)
         , m_isPrimary(false)
     {
@@ -49,17 +50,19 @@ public:
         typename std::enable_if<ColumnIsObjCType<T>::value>::type * = nullptr)
         : columnName(cn)
         , accessor(new WCTRuntimeObjCAccessor(cls, pn))
-        , m_columnDef(cn, (WCDB::ColumnType) accessor->getColumnType())
+        , m_class(cls)
+        , m_columnDef(WCDB::Column(cn), (WCDB::ColumnType) accessor->getColumnType())
         , m_isAutoIncrement(false)
         , m_isPrimary(false)
     {
     }
 
+    Class getClass() const;
     const std::string columnName;
     const std::shared_ptr<WCTBaseAccessor> accessor;
     bool isPrimary() const;
     bool isAutoIncrement() const;
-    const WCTColumnDef getColumnDef() const;
+    const WCDB::ColumnDef getColumnDef() const;
 
     void
     makePrimary(WCTOrderTerm order, bool isAutoIncrement, WCTConflict conflict);
@@ -68,29 +71,13 @@ public:
 
     void makeUnique();
 
-    template <typename T>
-    typename std::enable_if<ColumnIsObjCType<T>::value, void>::type
-    makeDefault(WCTValue *defaultValue)
-    {
-        makeDefaultObjC(defaultValue);
-    }
+    void makeDefault(const WCDB::Expression defaultValue);
 
-    template <typename T>
-    typename std::enable_if<ColumnIsCppType<T>::value, void>::type
-    makeDefault(const typename WCDB::ColumnInfo<T>::CType &defaultValue)
-    {
-        m_columnDef.makeDefault(defaultValue);
-    }
-
-    template <typename T>
-    void makeDefault(WCTDefaultType defaultType)
-    {
-        m_columnDef.makeDefault((WCDB::ColumnDef::DefaultType) defaultType);
-    }
+    void makeDefault(WCTDefaultType defaultType);
 
 protected:
-    void makeDefaultObjC(WCTValue *defaultValue);
+    Class m_class;
     bool m_isPrimary;
     bool m_isAutoIncrement;
-    WCTColumnDef m_columnDef;
+    WCDB::ColumnDef m_columnDef;
 };

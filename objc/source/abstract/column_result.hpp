@@ -22,21 +22,22 @@
 #define column_result_hpp
 
 #include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class ColumnResult : public Describable {
 public:
-    ColumnResult(const Expression &expr);
+    template <typename T>
+    ColumnResult(const T &t, typename std::enable_if<ExpressionConvertible<T>::value, void>::type * = nullptr)
+    : Describable(ExpressionConvertible<T>::asExpression(t).getDescription()) {
+    }
+    
     ColumnResult &as(const std::string &name);
-    static ColumnResult Any();
-    static ColumnResult Any(const std::string &tableName);
-
-protected:
-    ColumnResult();
+    
+    operator std::list<const ColumnResult>() const;
 };
-
+        
 } //namespace WCDB
 
 #endif /* column_result_hpp */

@@ -21,38 +21,21 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementAlterTableTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementAlterTableTests
 
-- (void)setUp
+- (void)testStatementAlterTable
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    XCTAssertEqual(WCDB::StatementAlterTable().getStatementType(), WCDB::Statement::Type::AlterTable);
+    
+    WINQAssertEqual(WCDB::StatementAlterTable().alter( "table1").rename("table2"), @"ALTER TABLE table1 RENAME TO table2");
+    
+    WCDB::Column column("column1");
+    WCDB::ColumnDef columnDef(column, WCDB::ColumnType::Float);
+    WINQAssertEqual(WCDB::StatementAlterTable().alter("table1").addColumn(columnDef), @"ALTER TABLE table1 ADD COLUMN column1 REAL");
 }
 
 @end

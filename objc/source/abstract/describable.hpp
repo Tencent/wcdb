@@ -21,50 +21,16 @@
 #ifndef describable_hpp
 #define describable_hpp
 
-#include <list>
 #include <string>
-#include <type_traits>
 
 namespace WCDB {
 
 class Describable {
 public:
-    template <typename T>
-    static std::string GetListDescription(const std::list<const T> &t)
-    {
-        std::string s;
-        GetDescription(t, s);
-        return s;
-    }
-
     const std::string &getDescription() const;
-
-    template <typename T>
-    void joinDescribableList(const std::list<const T> &list)
-    {
-        GetDescription<T>(list, m_description);
-    }
-
-    explicit operator const std::string &() const;
-
+    
     bool isEmpty() const;
-
 protected:
-    template <typename T>
-    static void GetDescription(const std::list<const T> &list,
-                               std::string &output)
-    {
-        bool flag = false;
-        for (const auto &t : list) {
-            if (flag) {
-                output.append(",");
-            } else {
-                flag = true;
-            }
-            output.append(std::string(t));
-        }
-    }
-
     Describable(const std::string &description);
     Describable(const char *description);
 

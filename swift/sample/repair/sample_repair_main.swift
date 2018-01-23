@@ -47,7 +47,7 @@ func sample_repair_main(baseDirectory: String) {
             object.content = String(i)
             try database.insert(objects: object, intoTable: tableName)
         }
-        let count = (try database.getValue(on: SampleRepair.Properties.any.count(), fromTable: tableName)).int64Value
+        let count = (try database.getValue(on: SampleRepair.Properties.allColumns.count(), fromTable: tableName)).int64Value
         print("The count of objects before: \(count)")
     } catch let error {
         print("prepare error: \(error)")
@@ -84,7 +84,7 @@ func sample_repair_main(baseDirectory: String) {
             fclose(file)
         })
 
-        let value = try? database.getValue(on: SampleRepair.Properties.any.count(), fromTable: tableName)
+        let value = try? database.getValue(on: SampleRepair.Properties.allColumns.count(), fromTable: tableName)
         let count = value?.int64Value ?? 0
         print("The count of objects corrupted: \(count)")
     }
@@ -103,7 +103,7 @@ func sample_repair_main(baseDirectory: String) {
                                 databaseKey: databaseCipher,
                                 backupKey: backupCipher)
         })
-        let count = (try database.getValue(on: SampleRepair.Properties.any.count(), fromTable: tableName)).int64Value
+        let count = (try database.getValue(on: SampleRepair.Properties.allColumns.count(), fromTable: tableName)).int64Value
         print("The count of objects repaired: \(count)")
     } catch let error {
         print("repair error: \(error)")

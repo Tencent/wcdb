@@ -57,36 +57,6 @@ typedef NS_ENUM(int, WCTErrorType) {
 };
 
 /**
- More information can be obtained with following keys.
- */
-typedef NS_ENUM(int, WCTErrorKey) {
-    /**
-     * Tag of database
-     */
-    WCTErrorKeyTag = (WCTErrorKey) WCDB::Error::Key::Tag,
-    /**
-     * The operation that is being performed when an error occurs. For further information, see [Error::CoreOperation] in [error.hpp].
-     */
-    WCTErrorKeyOperation = (WCTErrorKey) WCDB::Error::Key::Operation,
-    /**
-     * Extended code for sqlite. You can check it at http://www.sqlite.org/rescode.html .
-     */
-    WCTErrorKeyExtendedCode = (WCTErrorKey) WCDB::Error::Key::ExtendedCode,
-    /**
-     * Text message that helps you debug it.
-     */
-    WCTErrorKeyMessage = (WCTErrorKey) WCDB::Error::Key::Message,
-    /**
-     * The SQL is being executed when an error occurs.
-     */
-    WCTErrorKeySQL = (WCTErrorKey) WCDB::Error::Key::SQL,
-    /**
-     * The file path that is being manipulated when an error occurs.
-     */
-    WCTErrorKeyPath = (WCTErrorKey) WCDB::Error::Key::Path,
-};
-
-/**
  Detailed error
  */
 @interface WCTError : NSError
@@ -100,22 +70,24 @@ typedef NS_ENUM(int, WCTErrorKey) {
  */
 - (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo;
 
-/**
- @see WCTErrorType
- */
 @property(nonatomic, readonly) WCTErrorType type;
+
+- (NSNumber*) tag;
+
+- (NSNumber*) operation;
+
+- (NSNumber*) extendedCode;
+
+- (NSString*) message;
+
+- (NSString*) sql;
+
+- (NSString*) path;
 
 /**
  @brief Convenient interface for checking code==0.
  @return YES for no error 
  */
 - (BOOL)isOK;
-
-/**
- @see WCTErrorKey
- @param key key
- @return Depending on the key and type, NSString, NSNumber and [nil] may be returned.
- */
-- (id)infoForKey:(WCTErrorKey)key;
 
 @end

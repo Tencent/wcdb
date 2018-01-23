@@ -94,9 +94,11 @@ bool Database::runEmbeddedTransaction(TransactionBlock transaction,
     std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
         s_threadedHandle.get();
     if (threadedHandle->find(getPath()) != threadedHandle->end()) {
-        return transaction(error);
+        transaction(error);
+    }else {
+        runTransaction(transaction, error);
     }
-    return runTransaction(transaction, nullptr, error);
+    return error.isOK();
 }
 
 } //namespace WCDB

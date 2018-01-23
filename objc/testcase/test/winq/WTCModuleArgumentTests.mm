@@ -21,38 +21,21 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCModuleArgumentTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCModuleArgumentTests
 
-- (void)setUp
+- (void)testModuleArgument
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    WINQAssertEqual(WCDB::ModuleArgument("left", "right"), @"left=right");
+    
+    WINQAssertEqual(WCDB::ModuleArgument(WCDB::ColumnDef(WCDB::Column("column1"), WCDB::ColumnType::Integer32)), @"column1 INTEGER");
+    
+    WINQAssertEqual(WCDB::ModuleArgument(WCDB::TableConstraint("constraint1")), @"CONSTRAINT constraint1");
+    
+    WINQAssertEqual(WCDB::ModuleArgument::Tokenize("WCDB"), @"tokenize=WCDB");
 }
 
 @end

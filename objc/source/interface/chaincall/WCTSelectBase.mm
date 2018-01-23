@@ -20,43 +20,11 @@
 
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTExpression.h>
-#import <WCDB/WCTResult.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/handle_statement.hpp>
 
 @implementation WCTSelectBase
-
-- (instancetype)initWithResultList:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
-{
-    if (self = [super init]) {
-        if (resultList.size() == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Selecting nothing from %@ is invalid", tableNames].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableNames.count == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Select,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Empty table".UTF8String,
-                                         &_error);
-            return self;
-        }
-        WCDB::SubqueryList subqueryList;
-        for (NSString *tableName in tableNames) {
-            subqueryList.push_back(tableName.UTF8String);
-        }
-        _statement.select(resultList, resultList.isDistinct()).from(subqueryList);
-    }
-    return self;
-}
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
 {
@@ -79,41 +47,41 @@
     return NO;
 }
 
-- (instancetype)where:(const WCTCondition &)condition
+- (instancetype)where:(const WCDB::Expression &)condition
 {
     _statement.where(condition);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList &)orderList
+- (instancetype)orderBy:(const WCDB::OrderList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit &)limit
+- (instancetype)limit:(const WCDB::Expression &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset &)offset
+- (instancetype)offset:(const WCDB::Expression &)offset
 {
     _statement.offset(offset);
     return self;
 }
 
-- (instancetype)groupBy:(const WCTGroupByList &)groupByList
+- (instancetype)groupBy:(const WCDB::ExpressionList &)groupList
 {
-    WCDB::ExprList exprList;
-    for (const WCTGroupBy &groupBy : groupByList) {
-        exprList.push_back(groupBy);
+    WCDB::ExpressionList expressionList;
+    for (const WCDB::Expression &group : groupList) {
+        expressionList.push_back(group);
     }
-    _statement.groupBy(exprList);
+    _statement.groupBy(expressionList);
     return self;
 }
 
-- (instancetype)having:(const WCTHaving &)having
+- (instancetype)having:(const WCDB::Expression &)having
 {
     _statement.having(having);
     return self;
@@ -128,9 +96,14 @@
     return NO;
 }
 
-- (void)finalize
+- (BOOL)finalize
 {
-    _statementHandle = nullptr;
+    bool result = true;
+    if (_statementHandle) {
+        result = _statementHandle->finalize();
+        _statementHandle = nullptr;
+    }
+    return result;
 }
 
 @end

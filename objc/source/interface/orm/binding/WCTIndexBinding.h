@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/abstract.h>
 
 class WCTIndexBinding {
@@ -27,18 +26,18 @@ public:
     WCTIndexBinding(const std::string &indexNameSubfix);
     const std::string indexNameSubfix;
 
-    void addIndex(const WCTIndex &index);
+    void addIndex(const WCDB::ColumnIndex &index);
     void setUnique(bool unique);
-    void setCondition(const WCTCondition &condition);
+    void setCondition(const WCDB::Expression &condition);
 
-    const WCTIndexList &getIndexes() const;
-    const WCTCondition &getCondition() const;
+    const WCDB::ColumnIndexList &getIndexes() const;
+    const WCDB::Expression &getCondition() const;
 
     WCDB::StatementCreateIndex
     generateCreateIndexStatement(const std::string &tableName) const;
 
 protected:
-    WCTIndexList m_indexes;
-    WCTCondition m_condition;
+    WCDB::ColumnIndexList m_indexes;
+    std::shared_ptr<WCDB::Expression> m_condition;
     bool m_unique;
 };

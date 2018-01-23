@@ -92,14 +92,14 @@ void sample_convenient_main(NSString *baseDirectory)
     {
         WCTSampleConvenient *object = [[WCTSampleConvenient alloc] init];
         object.stringValue = @"Update by object";
-        [database updateAllRowsInTable:tableName
+        [database updateRowsInTable:tableName
                           onProperties:WCTSampleConvenient.stringValue
                             withObject:object];
     }
     //Update by value
     {
         NSArray *row = [NSArray arrayWithObject:@"Update by value"];
-        [database updateAllRowsInTable:tableName
+        [database updateRowsInTable:tableName
                           onProperties:WCTSampleConvenient.stringValue
                                withRow:row];
     }
@@ -115,12 +115,12 @@ void sample_convenient_main(NSString *baseDirectory)
 
     //Select One Object
     {
-        WCTSampleConvenient *object = [database getOneObjectOfClass:WCTSampleConvenient.class
+        WCTSampleConvenient *object = [database getObjectOfClass:WCTSampleConvenient.class
                                                           fromTable:tableName];
     }
     //Select Objects
     {
-        NSArray<WCTSampleConvenient *> *objects = [database getAllObjectsOfClass:WCTSampleConvenient.class
+        NSArray<WCTSampleConvenient *> *objects = [database getObjectsOfClass:WCTSampleConvenient.class
                                                                        fromTable:tableName];
     }
     //Select Objects with condition/order/offset/limit
@@ -133,12 +133,12 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select Part of Objects
     {
-        NSArray<WCTSampleConvenient *> *objects = [database getAllObjectsOnResults:WCTSampleConvenient.stringValue
+        NSArray<WCTSampleConvenient *> *objects = [database getObjectsOnResults:WCTSampleConvenient.stringValue
                                                                          fromTable:tableName];
     }
     //Select column
     {
-        WCTOneColumn *objects = [database getOneColumnOnResult:WCTSampleConvenient.stringValue
+        WCTOneColumn *objects = [database getColumnOnResult:WCTSampleConvenient.stringValue
                                                      fromTable:tableName];
         for (NSString *string : objects) {
             //do sth
@@ -146,7 +146,7 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select row
     {
-        WCTOneRow *row = [database getOneRowOnResults:{
+        WCTOneRow *row = [database getRowOnResults:{
                                                           WCTSampleConvenient.intValue,
                                                           WCTSampleConvenient.stringValue}
                                             fromTable:tableName];
@@ -155,12 +155,12 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select one value
     {
-        NSNumber *count = [database getOneValueOnResult:WCTSampleConvenient.AnyProperty.count()
+        NSNumber *count = [database getValueOnResult:WCTSampleConvenient.AllColumns.count()
                                               fromTable:tableName];
     }
     //Select aggregation
     {
-        WCTOneRow *row = [database getOneRowOnResults:{
+        WCTOneRow *row = [database getRowOnResults:{
                                                           WCTSampleConvenient.intValue.avg(),
                                                           WCTSampleConvenient.stringValue.count(),
                                                       }
@@ -168,17 +168,17 @@ void sample_convenient_main(NSString *baseDirectory)
     }
     //Select distinct aggregation
     {
-        NSArray *objects = [database getAllObjectsOnResults:WCTSampleConvenient.stringValue.count(true)
+        NSArray *objects = [database getObjectsOnResults:WCTSampleConvenient.stringValue.count(true)
                                                   fromTable:tableName];
     }
     //Select distinct result
     {
-        NSNumber *distinctCount = [database getOneDistinctValueOnResult:WCTSampleConvenient.intValue fromTable:tableName];
+        NSNumber *distinctCount = [database getDistinctValueOnResult:WCTSampleConvenient.intValue fromTable:tableName];
     }
 
     //Delete
     {
-        BOOL ret = [database deleteAllObjectsFromTable:tableName];
+        BOOL ret = [database deleteObjectsFromTable:tableName];
     }
     //Delete with condition/order/offset/limit
     {

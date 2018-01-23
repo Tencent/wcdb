@@ -80,12 +80,37 @@
 - (WCTSelect *)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString *)tableName;
 
 /**
+ @brief Generate a WCTSelect to do an object selection.
+ @param cls The class of the object to be selected.
+ @param tableName The name of the table to be used to do a selection.
+ @param isDistinct Whether select distinct or not.
+ @return WCTSelect
+ */
+- (WCTSelect *)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct;
+
+/**
  @brief Generate a WCTSelect to do an object selection on the specific results.
- @param resultList The column results to be selected.
+ @param propertyList The column results to be selected.
  @param tableName The name of the table to be used to do a selection.
  @return WCTSelect
  */
-- (WCTSelect *)prepareSelectObjectsOnResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName;
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName;
+
+/**
+ @brief Generate a WCTSelect to do an object selection on the specific results.
+ @param propertyList The column results to be selected.
+ @param tableName The name of the table to be used to do a selection.
+ @param isDistinct Whether select distinct or not.
+ @return WCTSelect
+ */
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct;
+
+/**
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
+ @param tableName The name of the table to be used to do a selection.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsFromTable:(NSString *)tableName;
 
 /**
  @brief Generate a WCTRowSelect to do a row selection on the specific results.
@@ -93,7 +118,23 @@
  @param tableName The name of the table to be used to do a selection.
  @return WCTRowSelect
  */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList fromTable:(NSString *)tableName;
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName;
+
+/**
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
+ @param resultList The column results to be selected.
+ @param tableName The name of the table to be used to do a selection.
+ @param isDistinct Whether select distinct or not.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct;
+
+/**
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
+ @param tableNames The name of the table to be used to do a selection.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsFromTables:(NSArray<NSString *> *)tableNames;
 
 /**
  @brief Generate a WCTRowSelect to do a row selection on the specific results.
@@ -101,14 +142,31 @@
  @param tableNames The name of the table to be used to do a selection.
  @return WCTRowSelect
  */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames;
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames;
+
+/**
+ @brief Generate a WCTRowSelect to do a row selection on the specific results.
+ @param resultList The column results to be selected.
+ @param tableNames The name of the table to be used to do a selection.
+ @param isDistinct Whether select distinct or not.
+ @return WCTRowSelect
+ */
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct;
 
 /**
  @brief Generate a WCTMultiSelect to do a cross table selection on the specific results.
- @param resultList The column results to be selected.
+ @param propertyList The column results to be selected.
  @param tableNames The name of the table to be used to do a selection.
  @return WCTMultiSelect
  */
-- (WCTMultiSelect *)prepareSelectMultiObjectsOnResults:(const WCTResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames;
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames;
+
+/**
+ @brief Generate a WCTMultiSelect to do a cross table selection on the specific results.
+ @param propertyList The column results to be selected.
+ @param tableNames The name of the table to be used to do a selection.
+ @return WCTMultiSelect
+ */
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct;
 
 @end

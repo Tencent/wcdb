@@ -22,25 +22,30 @@
 #define column_hpp
 
 #include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
+#include <WCDB/convertible.hpp>
+#include <WCDB/operable.hpp>
 
 namespace WCDB {
 
-class Column : public Describable {
+class Column : public Describable, public Operable {
 public:
-    static const Column Any;
+    static const Column All;
     static const Column Rowid;
-    Column();
-    Column(const char *name);
+    
+    template <typename T>
+    Column(const T& t, typename std::enable_if<ColumnConvertible<T>::value, void>::type * = nullptr) 
+    : Describable(ColumnConvertible<T>::asColumn(t).getDescription()){        
+    }
+    
     Column(const std::string &name);
-    const std::string &getName() const;
+    
     Column inTable(const std::string &table) const;
-
-    operator ColumnList() const;
-
-    bool operator==(const Column &column) const;
+    
+    virtual Expression asExpression() const override;
+    
+    operator std::list<const Column>() const;
 };
-
+    
 } //namespace WCDB
 
 #endif /* column_hpp */

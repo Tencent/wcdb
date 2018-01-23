@@ -22,73 +22,83 @@
 #define statement_select_hpp
 
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class StatementSelect : public Statement {
 public:
-    template <typename T = ColumnResult>
-    typename std::enable_if<std::is_base_of<ColumnResult, T>::value,
-                            StatementSelect &>::type
+    template <typename T>
+    typename std::enable_if<ColumnResultConvertible<T>::value,
+    StatementSelect &>::type
     select(const std::list<const T> &columnResultList, bool distinct = false)
     {
         m_description.append("SELECT ");
         if (distinct) {
             m_description.append("DISTINCT ");
         }
-        joinDescribableList(columnResultList);
+        m_description.append(stringByJoiningList(columnResultList));
         return *this;
     }
+    
+    StatementSelect &select(const std::list<const ColumnResult> &columnResultList, bool distinct = false);
+    
+    StatementSelect &select(const ColumnResult &columnResult, bool distinct = false);
 
-    template <typename T = Subquery>
-    typename std::enable_if<std::is_base_of<Subquery, T>::value,
-                            StatementSelect &>::type
+    template <typename T>
+    typename std::enable_if<TableOrSubqueryConvertible<T>::value,
+    StatementSelect &>::type
     from(const std::list<const T> &subqueryList)
     {
-        m_description.append(" FROM ");
-        joinDescribableList(subqueryList);
+        m_description.append(" FROM " + stringByJoiningList(subqueryList));
         return *this;
     }
 
-    StatementSelect &from(const JoinClause &joinClause);
-    StatementSelect &from(const std::string &tableName);
-    StatementSelect &where(const Expression &where);
+    StatementSelect &from(const std::list<const Subquery> &subqueryList);
+    
+    StatementSelect &from(const Subquery &subquery);
+    
+    StatementSelect &where(const Expression &condition);
 
-    template <typename T = Order>
-    typename std::enable_if<std::is_base_of<Order, T>::value,
-                            StatementSelect &>::type
+    template <typename T>
+    typename std::enable_if<OrderConvertible<T>::value,
+    StatementSelect &>::type
     orderBy(const std::list<const T> &orderList)
     {
         if (!orderList.empty()) {
-            m_description.append(" ORDER BY ");
-            joinDescribableList(orderList);
+            m_description.append(" ORDER BY " + stringByJoiningList(orderList));
         }
         return *this;
     }
+
+    StatementSelect &orderBy(const std::list<const Order> &orderList);
+    
+    StatementSelect &orderBy(const Order &order);
 
     StatementSelect &limit(const Expression &from, const Expression &to);
     StatementSelect &limit(const Expression &limit);
-    StatementSelect &
-    offset(const Expression &
-               offset); //limit(from, to) is same as limit(to-from).offset(from)
+    
+    //limit(from, to) is same as limit(to-from).offset(from)
+    StatementSelect &offset(const Expression &offset);
 
-    template <typename T = Expression>
-    typename std::enable_if<std::is_base_of<Expression, T>::value,
-                            StatementSelect &>::type
+    template <typename T>
+    typename std::enable_if<ExpressionConvertible<T>::value,
+    StatementSelect &>::type
     groupBy(const std::list<const T> &groupList)
     {
         if (!groupList.empty()) {
-            m_description.append(" GROUP BY ");
-            joinDescribableList(groupList);
+            m_description.append(" GROUP BY " + stringByJoiningList(groupList));
         }
         return *this;
     }
+
+    StatementSelect &groupBy(const std::list<const Expression> &groupList);
+    
+    StatementSelect &groupBy(const Expression &group);
 
     StatementSelect &having(const Expression &having);
 
     virtual Statement::Type getStatementType() const override;
-
-    static StatementSelect Fts3Tokenizer;
 };
 
 } //namespace WCDB

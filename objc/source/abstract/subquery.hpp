@@ -22,7 +22,7 @@
 #define subquery_hpp
 
 #include <WCDB/declare.hpp>
-#include <WCDB/describable.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
@@ -34,7 +34,8 @@ public:
     Subquery(const StatementSelect &statementSelect);
 
     Subquery &as(const std::string &alias);
-    operator SubqueryList() const;
+    
+    operator std::list<const Subquery>() const;
 };
 
 } //namespace WCDB

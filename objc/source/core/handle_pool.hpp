@@ -44,7 +44,9 @@ public:
     static RecyclableHandlePool GetExistingPool(const std::string &path);
 
     static void PurgeFreeHandlesInAllPool();
-
+protected:
+    static RecyclableHandlePool GetExistingPool(const std::unordered_map<std::string,
+                                                std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
 protected:
     static std::unordered_map<std::string,
                               std::pair<std::shared_ptr<HandlePool>, int>>

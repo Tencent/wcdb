@@ -21,8 +21,8 @@
 #ifndef statement_insert_hpp
 #define statement_insert_hpp
 
-#include <WCDB/conflict.hpp>
 #include <WCDB/statement.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
@@ -31,12 +31,12 @@ public:
     StatementInsert &insert(const std::string &table,
                             Conflict conflict = Conflict::NotSet);
 
-    template <typename T = Column>
-    typename std::enable_if<std::is_base_of<Column, T>::value,
+    template <typename T>
+    typename std::enable_if<ColumnConvertible<T>::value,
                             StatementInsert &>::type
     insert(const std::string &table,
            const std::list<const T> &columnList,
-           Conflict conflict = Conflict::Replace)
+           Conflict conflict = Conflict::NotSet)
     {
         m_description.append("INSERT");
         if (conflict != Conflict::NotSet) {
@@ -45,26 +45,30 @@ public:
         }
         m_description.append(" INTO " + table);
         if (!columnList.empty()) {
-            m_description.append("(");
-            joinDescribableList(columnList);
-            m_description.append(")");
+            m_description.append("(" + stringByJoiningList(columnList) + ")");
         }
         return *this;
     }
-
-    template <typename T = Expression>
-    typename std::enable_if<std::is_base_of<Expression, T>::value,
-                            StatementInsert &>::type
-    values(const std::list<const T> &exprList)
+    
+    StatementInsert &insert(const std::string &table, const std::list<const Column> &columnList, Conflict conflict = Conflict::NotSet);
+    
+    StatementInsert &insert(const std::string &table, const Column &column, Conflict conflict = Conflict::NotSet);
+    
+    StatementInsert &values(const std::list<const Expression> &expressionList);
+    
+    StatementInsert &values(const Expression &expression);
+    
+    template <typename T>
+    typename std::enable_if<ExpressionConvertible<T>::value,
+    StatementInsert &>::type
+    values(const std::list<const T> &expressionList)
     {
-        if (!exprList.empty()) {
-            m_description.append(" VALUES(");
-            joinDescribableList(exprList);
-            m_description.append(")");
+        if (!expressionList.empty()) {
+            m_description.append(" VALUES(" + stringByJoiningList(expressionList) + ")");
         }
         return *this;
     }
-
+    
     virtual Statement::Type getStatementType() const override;
 };
 

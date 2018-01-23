@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/WCTConstraintBinding.h>
+#import <WCDB/WCTConstraintBinding.h>
+#import <WCDB/error.hpp>
 
 WCTConstraintBindingBase::WCTConstraintBindingBase(const std::string &n, WCTConstraintBindingType t)
     : name(n)
@@ -32,7 +33,7 @@ WCTConstraintPrimaryKeyBinding::WCTConstraintPrimaryKeyBinding(const std::string
 {
 }
 
-void WCTConstraintPrimaryKeyBinding::addPrimaryKey(const WCTIndex &index)
+void WCTConstraintPrimaryKeyBinding::addPrimaryKey(const WCDB::ColumnIndex &index)
 {
     m_primaryKeyList.push_back(index);
 }
@@ -53,7 +54,7 @@ WCTConstraintUniqueBinding::WCTConstraintUniqueBinding(const std::string &name)
 {
 }
 
-void WCTConstraintUniqueBinding::addUnique(const WCTIndex &index)
+void WCTConstraintUniqueBinding::addUnique(const WCDB::ColumnIndex &index)
 {
     m_uniqueList.push_back(index);
 }
@@ -73,12 +74,37 @@ WCTConstraintCheckBinding::WCTConstraintCheckBinding(const std::string &name)
 {
 }
 
-void WCTConstraintCheckBinding::makeCheck(const WCTExpression &expr)
+void WCTConstraintCheckBinding::makeCheck(const WCDB::Expression &expression)
 {
-    m_check = expr;
+    m_check.reset(new WCDB::Expression(expression));
 }
 
 WCDB::TableConstraint WCTConstraintCheckBinding::generateConstraint() const
 {
-    return WCDB::TableConstraint(name).makeCheck(m_check);
+    if (m_check==nullptr) {
+        WCDB::Error::Abort(("You must set the checking expression for TableConstraint" + name).c_str());
+    }
+    return WCDB::TableConstraint(name).check(*m_check.get());
+}
+
+WCTConstraintForeignKeyBinding::WCTConstraintForeignKeyBinding(const std::string &name)
+: WCTConstraintBindingBase(name, WCTConstraintForeignKeyBinding::type)
+{    
+}
+
+void WCTConstraintForeignKeyBinding::addColumn(const WCDB::Column &column)
+{
+    m_columnList.push_back(column);
+}
+void WCTConstraintForeignKeyBinding::setForeignKey(const WCDB::ForeignKey& foreignKey)
+{
+    m_foreignKey.reset(new WCDB::ForeignKey(foreignKey));
+}
+
+WCDB::TableConstraint WCTConstraintForeignKeyBinding::generateConstraint() const 
+{
+    if (m_foreignKey==nullptr) {
+        WCDB::Error::Abort(("You must setup the foreign key for TableConstraint " + name).c_str());
+    }
+    return WCDB::TableConstraint(name).makeForeignKey(m_columnList, *m_foreignKey.get());
 }

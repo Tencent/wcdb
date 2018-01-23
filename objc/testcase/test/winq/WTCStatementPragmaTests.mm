@@ -21,38 +21,19 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementPragmaTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementPragmaTests
 
-- (void)setUp
+- (void)testStatementPragma
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    XCTAssertEqual(WCDB::StatementPragma().getStatementType(), WCDB::Statement::Type::Pragma);
+    
+    WINQAssertEqual(WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize), @"PRAGMA page_size");
+    
+    WINQAssertEqual(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, true), @"PRAGMA secure_delete=1");
 }
 
 @end

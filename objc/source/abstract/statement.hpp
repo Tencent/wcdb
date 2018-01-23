@@ -21,12 +21,15 @@
 #ifndef statement_hpp
 #define statement_hpp
 
-#include <WCDB/describable.hpp>
+#include <WCDB/declare.hpp>
+#include <WCDB/convertible.hpp>
 
 namespace WCDB {
 
 class Statement : public Describable {
 public:
+    static const StatementSelect FTS3Tokenizer;
+    
     enum class Type : int {
         None = 0,
         AlterTable,
@@ -51,7 +54,6 @@ public:
         Reindex,
     };
     Statement();
-    virtual ~Statement();
     virtual Statement::Type getStatementType() const = 0;
 };
 

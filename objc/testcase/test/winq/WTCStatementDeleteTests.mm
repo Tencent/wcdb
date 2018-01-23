@@ -21,38 +21,38 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementDeleteTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementDeleteTests
 
-- (void)setUp
+- (WCDB::StatementDelete)generateStatementDelete
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    std::string table1 = "table1";
+    return WCDB::StatementDelete().deleteFrom(table1);
 }
 
-- (void)tearDown
+- (void)testStatementDelete
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    //Give
+    WCDB::Column column1("column1");
+    WCDB::Column column2("column2");
+    
+    //Then
+    XCTAssertEqual(WCDB::StatementDelete().getStatementType(), WCDB::Statement::Type::Delete);
+    
+    WINQAssertEqual([self generateStatementDelete].where(column1 > 1), @"DELETE FROM table1 WHERE (column1 > 1)");
+    
+    WINQAssertEqual([self generateStatementDelete].orderBy({column1, column2}), @"DELETE FROM table1 ORDER BY column1, column2");
+    
+    WINQAssertEqual([self generateStatementDelete].limit(1), @"DELETE FROM table1 LIMIT 1");
+    
+    WINQAssertEqual([self generateStatementDelete].limit(1, 2), @"DELETE FROM table1 LIMIT 1, 2");
+    
+    WINQAssertEqual([self generateStatementDelete].limit(1).offset(3), @"DELETE FROM table1 LIMIT 1 OFFSET 3");
+    
+    WINQAssertEqual([self generateStatementDelete].where(column1 > 1).orderBy({column1, column2}).limit(1).offset(2), @"DELETE FROM table1 WHERE (column1 > 1) ORDER BY column1, column2 LIMIT 1 OFFSET 2");
 }
 
 @end

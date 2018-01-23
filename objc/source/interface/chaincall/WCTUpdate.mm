@@ -24,7 +24,6 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpression.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
 #import <WCDB/handle_statement.hpp>
@@ -39,31 +38,13 @@
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
-        if (propertyList.size() == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Update,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Updating %@ with empty property", tableName].UTF8String,
-                                         &_error);
-            return self;
-        }
-        if (tableName.length == 0) {
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
-                                         WCDB::Error::InterfaceOperation::Update,
-                                         WCDB::Error::InterfaceCode::Misuse,
-                                         @"Nil table name".UTF8String,
-                                         &_error);
-            return self;
-        }
         _statement.update(tableName.UTF8String);
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         WCDB::UpdateValueList updateValueList;
         for (const WCTProperty &property : propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (columnBinding) {
-                updateValueList.push_back({property, WCTExpression::BindParameter});
+                updateValueList.push_back({WCDB::Column(property.getDescription()), WCDB::Expression::BindParameter});
             } else {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),
@@ -78,25 +59,25 @@
     return self;
 }
 
-- (instancetype)where:(const WCTCondition &)condition
+- (instancetype)where:(const WCDB::Expression &)condition
 {
     _statement.where(condition);
     return self;
 }
 
-- (instancetype)orderBy:(const WCTOrderByList &)orderList
+- (instancetype)orderBy:(const WCDB::OrderList &)orderList
 {
     _statement.orderBy(orderList);
     return self;
 }
 
-- (instancetype)limit:(const WCTLimit &)limit
+- (instancetype)limit:(const WCDB::Expression &)limit
 {
     _statement.limit(limit);
     return self;
 }
 
-- (instancetype)offset:(const WCTOffset &)offset
+- (instancetype)offset:(const WCDB::Expression &)offset
 {
     _statement.offset(offset);
     return self;
@@ -104,7 +85,6 @@
 
 - (BOOL)executeWithObject:(WCTObject *)object
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }
@@ -146,7 +126,6 @@
 
 - (BOOL)executeWithRow:(WCTOneRow *)row
 {
-    WCDB::ScopedTicker scopedTicker(_ticker);
     if (!_error.isOK()) {
         return NO;
     }

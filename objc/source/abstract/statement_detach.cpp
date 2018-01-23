@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/expression.hpp>
 #include <WCDB/statement_detach.hpp>
 
 namespace WCDB {
@@ -31,13 +30,6 @@ Statement::Type StatementDetach::getStatementType() const
 StatementDetach &StatementDetach::detach(const std::string &schema)
 {
     m_description.append("DETACH " + schema);
-    return *this;
-}
-
-StatementDetach &StatementDetach::detach(const std::string &schema,
-                                         const std::string &database)
-{
-    m_description.append("DETACH " + database + " " + schema);
     return *this;
 }
 

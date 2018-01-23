@@ -49,7 +49,7 @@ void sample_repair_main(NSString *baseDirectory)
             [database insertObject:object
                               into:tableName];
         }
-        NSLog(@"The count of objects before: %lu", [database getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
+        NSLog(@"The count of objects before: %lu", [database getObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
 
     //backup
@@ -66,9 +66,9 @@ void sample_repair_main(NSString *baseDirectory)
     //Since page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. You have no need to get the page size like this. Instead, you can hardcode it.
     {
         @autoreleasepool {
-            WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
+            WCTCoreStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize)];
             [statement step];
-            NSNumber *value = (NSNumber *) [statement getValueAtIndex:0];
+            NSNumber *value = (NSNumber *) [statement valueAtIndex:0];
             pageSize = value.intValue;
             statement = nil;
         }
@@ -85,7 +85,7 @@ void sample_repair_main(NSString *baseDirectory)
           fclose(file);
         }];
 
-        NSLog(@"The count of objects corrupted: %lu", [database getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
+        NSLog(@"The count of objects corrupted: %lu", [database getObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
 
     //repair
@@ -99,7 +99,7 @@ void sample_repair_main(NSString *baseDirectory)
         [database close:^{
           [recover recoverFromPath:path withPageSize:pageSize backupCipher:backupCipher databaseCipher:databaseCipher];
         }];
-        NSLog(@"The count of objects repaired: %lu", [recover getAllObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
+        NSLog(@"The count of objects repaired: %lu", [recover getObjectsOfClass:WCTSampleRepair.class fromTable:tableName].count);
     }
     NSLog(@"Sample-repair End");
 }

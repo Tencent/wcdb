@@ -28,13 +28,14 @@ StatementTransaction::begin(StatementTransaction::Mode mode)
     m_type = StatementTransaction::Type::Begin;
     m_description.append("BEGIN");
     switch (mode) {
+        case StatementTransaction::Mode::Deferred:
+            m_description.append(" DEFERRED");
+            break;
         case StatementTransaction::Mode::Immediate:
             m_description.append(" IMMEDIATE");
             break;
         case StatementTransaction::Mode::Exclusive:
             m_description.append(" EXCLUSIVE");
-        default:
-            break;
     }
     return *this;
 }

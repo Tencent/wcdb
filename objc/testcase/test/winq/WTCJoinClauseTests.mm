@@ -21,38 +21,30 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCJoinClauseTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCJoinClauseTests
 
-- (void)setUp
+- (WCDB::JoinClause)generateJoinClause
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    return WCDB::JoinClause("testJoinClauseTable");
 }
 
-- (void)tearDown
+- (void)testJoinClause
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    WINQAssertEqual([self generateJoinClause].join("testJoinClauseTable2", WCDB::JoinClause::Type::Left), @"testJoinClauseTable LEFT JOIN testJoinClauseTable2");
+    
+    WINQAssertEqual([self generateJoinClause].naturalJoin("testJoinClauseTable2", WCDB::JoinClause::Type::LeftOuter), @"testJoinClauseTable NATURAL LEFT OUTER JOIN testJoinClauseTable2");
+    
+    WINQAssertEqual([self generateJoinClause].join("testJoinClauseTable2", WCDB::JoinClause::Type::Inner), @"testJoinClauseTable INNER JOIN testJoinClauseTable2");
+    
+    WINQAssertEqual([self generateJoinClause].naturalJoin("testJoinClauseTable2", WCDB::JoinClause::Type::Cross), @"testJoinClauseTable NATURAL CROSS JOIN testJoinClauseTable2");
+    
+    WINQAssertEqual([self generateJoinClause].on(1), @"testJoinClauseTable ON 1");
+    
+    WINQAssertEqual([self generateJoinClause].usingColumns({WCDB::Column("testColumn1"), WCDB::Column("testColumn2")}), @"testJoinClauseTable USING testColumn1, testColumn2");
 }
 
 @end

@@ -21,38 +21,24 @@
 #import "WTCAssert.h"
 #import "WTCBaseTestCase.h"
 
-using namespace WCDB;
-
 @interface WTCStatementTransactionTests : WTCBaseTestCase
 
 @end
 
 @implementation WTCStatementTransactionTests
 
-- (void)setUp
+- (void)testStatementTransaction
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    XCTAssertEqual(WCDB::StatementTransaction().getStatementType(), WCDB::Statement::Type::Transaction);
+    WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Deferred), @"BEGIN DEFERRED");
+    
+    WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Immediate), @"BEGIN IMMEDIATE");
+    
+    WINQAssertEqual(WCDB::StatementTransaction().begin(WCDB::StatementTransaction::Mode::Exclusive), @"BEGIN EXCLUSIVE");
+    
+    WINQAssertEqual(WCDB::StatementTransaction().commit(), @"COMMIT");
+    
+    WINQAssertEqual(WCDB::StatementTransaction().rollback(), @"ROLLBACK");
 }
 
 @end

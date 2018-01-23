@@ -24,10 +24,11 @@
 
 namespace WCDB {
 
-Subquery::Subquery(const char *table) : Describable(table)
+Subquery::Subquery(const char *table)
+    : Describable(table?table:"")
 {
 }
-
+    
 Subquery::Subquery(const std::string &table) : Describable(table)
 {
 }
@@ -47,8 +48,8 @@ Subquery &Subquery::as(const std::string &alias)
     m_description.append(" AS " + alias);
     return *this;
 }
-
-Subquery::operator SubqueryList() const
+    
+Subquery::operator std::list<const Subquery>() const
 {
     return {*this};
 }
