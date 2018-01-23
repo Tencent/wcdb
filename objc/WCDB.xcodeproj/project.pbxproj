@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231039151F03E13600BC3FCC /* timed_queue.hpp */; };
+		232124442017287C008146EF /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243E20172865008146EF /* sqlcipher.framework */; };
+		232124452017287C008146EF /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243620172859008146EF /* sqliterk.framework */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
@@ -181,8 +183,6 @@
 		2386B3D31ED44442000B72F6 /* WCTDatabase+Statistics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3D11ED44442000B72F6 /* WCTDatabase+Statistics.mm */; };
 		239E50741F00AF0000E3A01D /* WCTSelectBase+NoARC.h in Headers */ = {isa = PBXBuildFile; fileRef = 239E50721F00AF0000E3A01D /* WCTSelectBase+NoARC.h */; };
 		239E50761F00AF0000E3A01D /* WCTSelectBase+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E50731F00AF0000E3A01D /* WCTSelectBase+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		23A747D020039698003CECFA /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A747C420039675003CECFA /* sqlcipher.framework */; };
-		23A747D120039698003CECFA /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A747CB20039675003CECFA /* sqliterk.framework */; };
 		23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+Database.h */; };
 		23C623821EE12D22009D55D3 /* thread_local.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C623801EE12D22009D55D3 /* thread_local.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D920712009B534000634CB /* statement_drop_table.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D920172009B529000634CB /* statement_drop_table.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -285,40 +285,40 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2349FC171FDF8648005230E8;
-			remoteInfo = "Install file template";
-		};
-		23A747C320039675003CECFA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 239325C81E836A7700D677CC;
-			remoteInfo = sqlcipher;
-		};
-		23A747CA20039675003CECFA /* PBXContainerItemProxy */ = {
+		2321243520172859008146EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 233032391FB9435700101373;
 			remoteInfo = sqliterk;
 		};
-		23A747CC20039693003CECFA /* PBXContainerItemProxy */ = {
+		2321243D20172865008146EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.xcodeproj */;
+			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 239325C81E836A7700D677CC;
+			remoteInfo = sqlcipher;
+		};
+		2321244020172876008146EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 239325C71E836A7700D677CC;
 			remoteInfo = sqlcipher;
 		};
-		23A747CE20039693003CECFA /* PBXContainerItemProxy */ = {
+		2321244220172876008146EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 233032381FB9435700101373;
 			remoteInfo = sqliterk;
+		};
+		2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2349FC171FDF8648005230E8;
+			remoteInfo = "Install file template";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -485,8 +485,8 @@
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		239E50721F00AF0000E3A01D /* WCTSelectBase+NoARC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSelectBase+NoARC.h"; sourceTree = "<group>"; };
 		239E50731F00AF0000E3A01D /* WCTSelectBase+NoARC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTSelectBase+NoARC.mm"; sourceTree = "<group>"; };
-		23A747BE20039675003CECFA /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = source/util/sqlcipher.xcodeproj; sourceTree = "<group>"; };
-		23A747C520039675003CECFA /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
+		23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
+		23A747C520039675003CECFA /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = ../repair/sqliterk.xcodeproj; sourceTree = "<group>"; };
 		23B31B331EB97B480092EA80 /* WCTTable+Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Database.h"; sourceTree = "<group>"; };
 		23C623801EE12D22009D55D3 /* thread_local.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = thread_local.hpp; sourceTree = "<group>"; };
 		23D920172009B529000634CB /* statement_drop_table.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = statement_drop_table.hpp; sourceTree = "<group>"; };
@@ -593,14 +593,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23A747D020039698003CECFA /* sqlcipher.framework in Frameworks */,
-				23A747D120039698003CECFA /* sqliterk.framework in Frameworks */,
+				232124442017287C008146EF /* sqlcipher.framework in Frameworks */,
+				232124452017287C008146EF /* sqliterk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2321243220172859008146EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2321243620172859008146EF /* sqliterk.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2321243920172865008146EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2321243E20172865008146EF /* sqlcipher.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		232147001F6AAE6500BF7AF2 /* fts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1019,26 +1035,10 @@
 			path = statictics;
 			sourceTree = "<group>";
 		};
-		23A747BF20039675003CECFA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				23A747C420039675003CECFA /* sqlcipher.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		23A747C620039675003CECFA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				23A747CB20039675003CECFA /* sqliterk.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		23B5F75A1E1111C100E58396 = {
 			isa = PBXGroup;
 			children = (
-				23A747BE20039675003CECFA /* sqlcipher.xcodeproj */,
+				23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */,
 				23A747C520039675003CECFA /* sqliterk.xcodeproj */,
 				231C22BA1EA6191100B55554 /* Info.plist */,
 				2349F5D51EA0D6680021EFA7 /* source */,
@@ -1232,8 +1232,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				23A747CD20039693003CECFA /* PBXTargetDependency */,
-				23A747CF20039693003CECFA /* PBXTargetDependency */,
+				2321244120172876008146EF /* PBXTargetDependency */,
+				2321244320172876008146EF /* PBXTargetDependency */,
 				2349FC1E1FDF8665005230E8 /* PBXTargetDependency */,
 			);
 			name = WCDB;
@@ -1272,11 +1272,11 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 23A747BF20039675003CECFA /* Products */;
-					ProjectRef = 23A747BE20039675003CECFA /* sqlcipher.xcodeproj */;
+					ProductGroup = 2321243920172865008146EF /* Products */;
+					ProjectRef = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
 				},
 				{
-					ProductGroup = 23A747C620039675003CECFA /* Products */;
+					ProductGroup = 2321243220172859008146EF /* Products */;
 					ProjectRef = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
 				},
 			);
@@ -1289,18 +1289,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		23A747C420039675003CECFA /* sqlcipher.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = sqlcipher.framework;
-			remoteRef = 23A747C320039675003CECFA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		23A747CB20039675003CECFA /* sqliterk.framework */ = {
+		2321243620172859008146EF /* sqliterk.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = sqliterk.framework;
-			remoteRef = 23A747CA20039675003CECFA /* PBXContainerItemProxy */;
+			remoteRef = 2321243520172859008146EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2321243E20172865008146EF /* sqlcipher.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = sqlcipher.framework;
+			remoteRef = 2321243D20172865008146EF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1457,20 +1457,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2321244120172876008146EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqlcipher;
+			targetProxy = 2321244020172876008146EF /* PBXContainerItemProxy */;
+		};
+		2321244320172876008146EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqliterk;
+			targetProxy = 2321244220172876008146EF /* PBXContainerItemProxy */;
+		};
 		2349FC1E1FDF8665005230E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2349FC171FDF8648005230E8 /* Install templates */;
 			targetProxy = 2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */;
-		};
-		23A747CD20039693003CECFA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = sqlcipher;
-			targetProxy = 23A747CC20039693003CECFA /* PBXContainerItemProxy */;
-		};
-		23A747CF20039693003CECFA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = sqliterk;
-			targetProxy = 23A747CE20039693003CECFA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

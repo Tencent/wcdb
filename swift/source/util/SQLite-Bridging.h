@@ -21,13 +21,8 @@
 #ifndef SQLite_Bridging_h
 #define SQLite_Bridging_h
 
-#ifdef WCDB_COCOAPODS
-#import "fts3_tokenizer.h"
-#import "sqlite3.h"
-#else //WCDB_COCOAPODS
 #import <sqlcipher/fts3_tokenizer.h>
 #import <sqlcipher/sqlite3.h>
-#endif //WCDB_COCOAPODS
 
 struct Tokenizer {
     sqlite3_tokenizer base;

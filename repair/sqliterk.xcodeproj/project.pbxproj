@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2321242A201727E6008146EF /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232124232017279C008146EF /* sqlcipher.framework */; };
 		233032581FB9437F00101373 /* SQLiteRepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032451FB9437F00101373 /* SQLiteRepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233032591FB9437F00101373 /* sqliterk.c in Sources */ = {isa = PBXBuildFile; fileRef = 233032461FB9437F00101373 /* sqliterk.c */; };
 		2330325A1FB9437F00101373 /* sqliterk.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032471FB9437F00101373 /* sqliterk.h */; };
@@ -27,28 +28,27 @@
 		233032691FB9437F00101373 /* sqliterk_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 233032561FB9437F00101373 /* sqliterk_values.c */; };
 		2330326A1FB9437F00101373 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032571FB9437F00101373 /* sqliterk_values.h */; };
 		2330326D1FB9452800101373 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330326C1FB9452800101373 /* libz.tbd */; };
-		2381022B2004DEA20041B41F /* sqlcipher.swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238102122004DD550041B41F /* sqlcipher.swift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		238102112004DD550041B41F /* PBXContainerItemProxy */ = {
+		232124222017279C008146EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 233032751FB9455E00101373 /* sqlcipher.swift.xcodeproj */;
+			containerPortal = 233032751FB9455E00101373 /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 239325C81E836A7700D677CC;
-			remoteInfo = sqlcipher.swift;
+			remoteInfo = sqlcipher;
 		};
-		238102292004DE9F0041B41F /* PBXContainerItemProxy */ = {
+		23212426201727E1008146EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 233032751FB9455E00101373 /* sqlcipher.swift.xcodeproj */;
+			containerPortal = 233032751FB9455E00101373 /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 239325C71E836A7700D677CC;
-			remoteInfo = sqlcipher.swift;
+			remoteInfo = sqlcipher;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		233032391FB9435700101373 /* sqliterk.swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sqliterk.swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		233032391FB9435700101373 /* sqliterk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sqliterk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		233032451FB9437F00101373 /* SQLiteRepairKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteRepairKit.h; sourceTree = "<group>"; };
 		233032461FB9437F00101373 /* sqliterk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk.c; sourceTree = "<group>"; };
 		233032471FB9437F00101373 /* sqliterk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk.h; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 		233032561FB9437F00101373 /* sqliterk_values.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqliterk_values.c; sourceTree = "<group>"; };
 		233032571FB9437F00101373 /* sqliterk_values.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqliterk_values.h; sourceTree = "<group>"; };
 		2330326C1FB9452800101373 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		233032751FB9455E00101373 /* sqlcipher.swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = sqlcipher.swift.xcodeproj; sourceTree = "<group>"; };
+		233032751FB9455E00101373 /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2381022B2004DEA20041B41F /* sqlcipher.swift.framework in Frameworks */,
+				2321242A201727E6008146EF /* sqlcipher.framework in Frameworks */,
 				2330326D1FB9452800101373 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,10 +85,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2321241E2017279C008146EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				232124232017279C008146EF /* sqlcipher.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		2330322F1FB9435700101373 = {
 			isa = PBXGroup;
 			children = (
-				233032751FB9455E00101373 /* sqlcipher.swift.xcodeproj */,
+				233032751FB9455E00101373 /* sqlcipher.preprocessed.xcodeproj */,
 				233032441FB9437F00101373 /* repair */,
 				2330323A1FB9435700101373 /* Products */,
 				2330326B1FB9452800101373 /* Frameworks */,
@@ -98,7 +106,7 @@
 		2330323A1FB9435700101373 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				233032391FB9435700101373 /* sqliterk.swift.framework */,
+				233032391FB9435700101373 /* sqliterk.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +135,6 @@
 				233032571FB9437F00101373 /* sqliterk_values.h */,
 			);
 			name = repair;
-			path = ../../../repair;
 			sourceTree = "<group>";
 		};
 		2330326B1FB9452800101373 /* Frameworks */ = {
@@ -136,14 +143,6 @@
 				2330326C1FB9452800101373 /* libz.tbd */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		2381020D2004DD550041B41F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				238102122004DD550041B41F /* sqlcipher.swift.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,9 +167,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		233032381FB9435700101373 /* sqliterk.swift */ = {
+		233032381FB9435700101373 /* sqliterk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk.swift" */;
+			buildConfigurationList = 233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk" */;
 			buildPhases = (
 				233032341FB9435700101373 /* Sources */,
 				233032351FB9435700101373 /* Frameworks */,
@@ -180,11 +179,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				2381022A2004DE9F0041B41F /* PBXTargetDependency */,
+				23212427201727E1008146EF /* PBXTargetDependency */,
 			);
-			name = sqliterk.swift;
+			name = sqliterk;
 			productName = sqliterk;
-			productReference = 233032391FB9435700101373 /* sqliterk.swift.framework */;
+			productReference = 233032391FB9435700101373 /* sqliterk.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -202,7 +201,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 233032331FB9435700101373 /* Build configuration list for PBXProject "sqliterk.swift" */;
+			buildConfigurationList = 233032331FB9435700101373 /* Build configuration list for PBXProject "sqliterk" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -214,23 +213,23 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 2381020D2004DD550041B41F /* Products */;
-					ProjectRef = 233032751FB9455E00101373 /* sqlcipher.swift.xcodeproj */;
+					ProductGroup = 2321241E2017279C008146EF /* Products */;
+					ProjectRef = 233032751FB9455E00101373 /* sqlcipher.preprocessed.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				233032381FB9435700101373 /* sqliterk.swift */,
+				233032381FB9435700101373 /* sqliterk */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		238102122004DD550041B41F /* sqlcipher.swift.framework */ = {
+		232124232017279C008146EF /* sqlcipher.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = sqlcipher.swift.framework;
-			remoteRef = 238102112004DD550041B41F /* PBXContainerItemProxy */;
+			path = sqlcipher.framework;
+			remoteRef = 232124222017279C008146EF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -266,10 +265,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2381022A2004DE9F0041B41F /* PBXTargetDependency */ = {
+		23212427201727E1008146EF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = sqlcipher.swift;
-			targetProxy = 238102292004DE9F0041B41F /* PBXContainerItemProxy */;
+			name = sqlcipher;
+			targetProxy = 23212426201727E1008146EF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -423,12 +422,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/../../../repair/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.sqliterk.swift;
-				PRODUCT_MODULE_NAME = sqliterk.swift;
-				PRODUCT_NAME = sqliterk.swift;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
+				PRODUCT_MODULE_NAME = sqliterk;
+				PRODUCT_NAME = sqliterk;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -443,12 +442,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/../../../repair/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.sqliterk.swift;
-				PRODUCT_MODULE_NAME = sqliterk.swift;
-				PRODUCT_NAME = sqliterk.swift;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
+				PRODUCT_MODULE_NAME = sqliterk;
+				PRODUCT_NAME = sqliterk;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -456,7 +455,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		233032331FB9435700101373 /* Build configuration list for PBXProject "sqliterk.swift" */ = {
+		233032331FB9435700101373 /* Build configuration list for PBXProject "sqliterk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2330323F1FB9435700101373 /* Debug */,
@@ -465,7 +464,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk.swift" */ = {
+		233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				233032421FB9435700101373 /* Debug */,
