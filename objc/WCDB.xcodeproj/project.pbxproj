@@ -22,8 +22,6 @@
 
 /* Begin PBXBuildFile section */
 		231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231039151F03E13600BC3FCC /* timed_queue.hpp */; };
-		231316571F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */ = {isa = PBXBuildFile; fileRef = 231316551F73A0A80087288A /* WCTTokenizer+Apple.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		231316591F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
@@ -326,8 +324,6 @@
 
 /* Begin PBXFileReference section */
 		231039151F03E13600BC3FCC /* timed_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timed_queue.hpp; sourceTree = "<group>"; };
-		231316551F73A0A80087288A /* WCTTokenizer+Apple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTokenizer+Apple.h"; sourceTree = "<group>"; };
-		231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTokenizer+Apple.mm"; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
@@ -612,8 +608,6 @@
 				23577F781F74F4E800D31C05 /* WCTTokenizer+WCDB.mm */,
 				2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */,
 				2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */,
-				231316551F73A0A80087288A /* WCTTokenizer+Apple.h */,
-				231316561F73A0A80087288A /* WCTTokenizer+Apple.mm */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -1143,7 +1137,6 @@
 				2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */,
 				2349F7181EA0D6680021EFA7 /* WCTMaster.h in Headers */,
 				231039171F03E13600BC3FCC /* timed_queue.hpp in Headers */,
-				231316571F73A0A80087288A /* WCTTokenizer+Apple.h in Headers */,
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
 				2349F7061EA0D6680021EFA7 /* handle_pool.hpp in Headers */,
 				23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */,
@@ -1424,7 +1417,6 @@
 				2349F7091EA0D6680021EFA7 /* statement_recyclable.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
 				2386B3CB1ED44316000B72F6 /* WCTChainCall+Statistics.mm in Sources */,
-				231316591F73A0A80087288A /* WCTTokenizer+Apple.mm in Sources */,
 				23D920EF2009B534000634CB /* statement_create_table.cpp in Sources */,
 				2349F7761EA0D6680021EFA7 /* WCTTransaction+Table.mm in Sources */,
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
