@@ -72,7 +72,6 @@
 #import <WCDB/WCTStatistics.h>
 #import <WCDB/WCTTransaction+Statistics.h>
 
-#import <WCDB/WCTTokenizer+Apple.h>
 #import <WCDB/WCTTokenizer+WCDB.h>
 
 #endif /* WCDB_h */
