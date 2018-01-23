@@ -54,12 +54,11 @@
 
 - (void)setUpWithPreCreateTable:(const int &)count
 {
-    XCTAssertTrue([self.database runTransaction:^BOOL {
+    XCTAssertTrue([self.database runTransaction:^void {
       for (int i = 0; i < count; ++i) {
           NSString *tableName = [self getTableNameWithIndex:i];
           XCTAssertTrue([self.database createTableAndIndexesOfName:tableName withClass:WTCBenchmarkObject.class]);
       }
-      return YES;
     }]);
 }
 
