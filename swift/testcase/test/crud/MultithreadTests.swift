@@ -122,7 +122,6 @@ class MultithreadTests: CRUDTestCase {
         }
         database.close()
 
-        //Get single read time
         XCTAssertNoThrow(try database.delete(fromTable: tableName))
         database.close()
         //When
