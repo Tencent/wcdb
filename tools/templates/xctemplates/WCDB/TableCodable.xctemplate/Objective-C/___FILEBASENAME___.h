@@ -8,6 +8,6 @@
 @property(nonatomic, assign) NSInteger <#property2#>;
 @property(nonatomic, assign) float <#property3#>;
 @property(nonatomic, strong) NSArray *<#property4#>;
-@property(nonatomic, readonly) NSDate *<#..........#>;
+@property(nonatomic, readonly) NSDate *<#..........#>; //An ORM property must contains a setter which can be private
 
 @end
