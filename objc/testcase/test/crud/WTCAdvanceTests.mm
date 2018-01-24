@@ -394,10 +394,19 @@
     XCTAssertFalse([self.database canOpen]);
 }
 
-//- (void)testRedirect
-//{
-//    //TODO
-//}
+- (void)testRedirect
+{
+    WTCCRUDObject *object = [self.database getObjectOnProperties:WTCCRUDObject.AllColumns.count().as(WTCCRUDObject.variable1) fromTable:WTCCRUDObject.Name];
+    XCTAssertNotNil(object);
+    XCTAssertEqual(object.variable1, self.preInsertedObjects.count);
+}
+
+- (void)testPropertyRedirect
+{
+    WTCCRUDObject *object = [self.database getObjectOnProperties:WTCCRUDObject.variable1.as(WTCCRUDObject.variable1) fromTable:WTCCRUDObject.Name];
+    XCTAssertNotNil(object);
+    XCTAssertEqual(object.variable1, self.preInsertedObjects[0].variable1);
+}
 
 - (void)testFTS
 {
