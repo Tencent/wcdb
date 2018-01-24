@@ -33,7 +33,6 @@ public:
 
 protected:
     Describable(const std::string &description);
-    Describable(const char *description);
 
     std::string m_description;
 };

@@ -27,10 +27,6 @@ Describable::Describable(const std::string &description)
 {
 }
 
-Describable::Describable(const char *description) : m_description(description)
-{
-}
-
 const std::string &Describable::getDescription() const
 {
     return m_description;
