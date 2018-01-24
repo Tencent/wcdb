@@ -24,10 +24,23 @@
 #include <WCDB/convertible.hpp>
 #include <WCDB/declare.hpp>
 #include <WCDB/operable.hpp>
+#include <WCDB/redirectable.hpp>
 
 namespace WCDB {
 
-class Column : public Describable, public Operable {
+template <>
+class Redirectable<Column> {
+public:
+    template <typename T>
+    T as(const T &t) const;
+
+private:
+    virtual const std::string &getRedirectableDescription() const = 0;
+};
+
+class Column : public Describable,
+               public Operable,
+               public Redirectable<Column> {
 public:
     static const Column All;
     static const Column Rowid;
@@ -44,9 +57,11 @@ public:
 
     Column inTable(const std::string &table) const;
 
-    virtual Expression asExpression() const override;
-
     operator std::list<const Column>() const;
+
+protected:
+    virtual const std::string &getRedirectableDescription() const override;
+    virtual Expression asExpression() const override;
 };
 
 } //namespace WCDB

@@ -278,6 +278,7 @@
 		23D92142200A3DCE000634CB /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D92141200A3DCE000634CB /* utility.cpp */; };
 		23D92149200B8F99000634CB /* convertible.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D92148200B8F99000634CB /* convertible.cpp */; };
 		23DE0A761EA868C400AA146A /* concurrent_list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DE0A741EA868C400AA146A /* concurrent_list.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23DEB38A201881FA000DA36B /* redirectable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DEB388201881FA000DA36B /* redirectable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E58B3B200F455900E0CECE /* operable_impl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E58B39200F455900E0CECE /* operable_impl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E732651F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		242E1E271EA3771400F77029 /* WCTRowSelect+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 242E1E221EA376FB00F77029 /* WCTRowSelect+Private.h */; };
@@ -582,6 +583,7 @@
 		23D92141200A3DCE000634CB /* utility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		23D92148200B8F99000634CB /* convertible.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = convertible.cpp; sourceTree = "<group>"; };
 		23DE0A741EA868C400AA146A /* concurrent_list.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = concurrent_list.hpp; sourceTree = "<group>"; };
+		23DEB388201881FA000DA36B /* redirectable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = redirectable.hpp; sourceTree = "<group>"; };
 		23E58B39200F455900E0CECE /* operable_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = operable_impl.hpp; sourceTree = "<group>"; };
 		23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
 		242E1E221EA376FB00F77029 /* WCTRowSelect+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTRowSelect+Private.h"; sourceTree = "<group>"; };
@@ -735,6 +737,7 @@
 				23D9205B2009B531000634CB /* statement.hpp */,
 				23D920642009B532000634CB /* subquery.cpp */,
 				23D920262009B52B000634CB /* subquery.hpp */,
+				23DEB388201881FA000DA36B /* redirectable.hpp */,
 			);
 			path = abstract;
 			sourceTree = "<group>";
@@ -1091,6 +1094,7 @@
 				2349F7461EA0D6680021EFA7 /* WCTDatabase+Database.h in Headers */,
 				236DB4B81F209D100091FC79 /* WCTMaster+WCTTableCoding.h in Headers */,
 				23D920732009B534000634CB /* statement_update.hpp in Headers */,
+				23DEB38A201881FA000DA36B /* redirectable.hpp in Headers */,
 				23D921032009B534000634CB /* statement_detach.hpp in Headers */,
 				2353E4831F0E300D00260BBE /* WCTValue.h in Headers */,
 				2349F74F1EA0D6680021EFA7 /* WCTDeclare.h in Headers */,

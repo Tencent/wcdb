@@ -22,8 +22,37 @@
 #import <WCDB/abstract.h>
 
 class WCTColumnBinding;
+class WCTProperty;
 
-class WCTProperty : public WCDB::Describable, public WCDB::Operable {
+namespace WCDB {
+
+template <>
+class Redirectable<WCTProperty> {
+public:
+    template <typename T>
+    T as(const T &t) const;
+
+private:
+    virtual const std::string &getRedirectableDescription() const = 0;
+};
+
+template <>
+WCTProperty
+Redirectable<WCTProperty>::as<WCTProperty>(const WCTProperty &property) const;
+
+template <>
+WCTProperty
+Redirectable<Column>::as<WCTProperty>(const WCTProperty &property) const;
+
+template <>
+WCTProperty
+Redirectable<Expression>::as<WCTProperty>(const WCTProperty &property) const;
+
+} //namespace WCDB
+
+class WCTProperty : public WCDB::Describable,
+                    public WCDB::Operable,
+                    public WCDB::Redirectable<WCTProperty> {
 public:
     WCTProperty(const std::string &name,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
@@ -41,14 +70,15 @@ public:
     WCDB::ColumnDef asDef() const;
     WCDB::ColumnDef asDef(WCTColumnType columnType) const;
 
-    virtual WCDB::Expression asExpression() const override;
-
     operator std::list<const WCTProperty>() const;
     operator std::list<const WCDB::Order>() const;
     operator std::list<const WCDB::ColumnResult>() const;
     operator std::list<const WCDB::Expression>() const;
 
 protected:
+    virtual const std::string &getRedirectableDescription() const override;
+    virtual WCDB::Expression asExpression() const override;
+
     std::shared_ptr<WCTColumnBinding> m_columnBinding;
 };
 

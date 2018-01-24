@@ -18,36 +18,21 @@
  * limitations under the License.
  */
 
-#include <WCDB/column.hpp>
-#include <WCDB/expression.hpp>
+#ifndef redirectable_hpp
+#define redirectable_hpp
 
 namespace WCDB {
 
-const Column Column::Rowid("rowid");
-const Column Column::All("*");
+template <typename Self>
+class Redirectable {
+public:
+    template <typename T>
+    T as(const T &t) const;
 
-Column::Column(const std::string &name) : Describable(name)
-{
-}
-
-Column Column::inTable(const std::string &table) const
-{
-    return Column(table + "." + getDescription());
-}
-
-Expression Column::asExpression() const
-{
-    return ExpressionConvertible<Column>::asExpression(*this);
-}
-
-const std::string &Column::getRedirectableDescription() const
-{
-    return m_description;
-}
-
-Column::operator std::list<const Column>() const
-{
-    return {*this};
-}
+private:
+    virtual const std::string &getRedirectableDescription() const = 0;
+};
 
 } //namespace WCDB
+
+#endif /* redirectable_hpp */

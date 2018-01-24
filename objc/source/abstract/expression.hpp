@@ -24,10 +24,23 @@
 #include <WCDB/convertible.hpp>
 #include <WCDB/declare.hpp>
 #include <WCDB/operable.hpp>
+#include <WCDB/redirectable.hpp>
 
 namespace WCDB {
 
-class Expression : public Describable, public Operable {
+template <>
+class Redirectable<Expression> {
+public:
+    template <typename T>
+    T as(const T &t) const;
+
+private:
+    virtual const std::string &getRedirectableDescription() const = 0;
+};
+
+class Expression : public Describable,
+                   public Operable,
+                   public Redirectable<Expression> {
 public:
     operator std::list<const Expression>() const;
 
@@ -100,6 +113,7 @@ protected:
     friend class Operator;
     Expression(const std::string &raw, const std::nullptr_t &dummy);
     virtual Expression asExpression() const override;
+    virtual const std::string &getRedirectableDescription() const override;
 };
 
 } //namespace WCDB

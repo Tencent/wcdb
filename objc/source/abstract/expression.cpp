@@ -80,6 +80,11 @@ Expression Expression::asExpression() const
     return *this;
 }
 
+const std::string &Expression::getRedirectableDescription() const
+{
+    return m_description;
+}
+
 Expression::operator std::list<const Expression>() const
 {
     return {*this};

@@ -101,7 +101,30 @@ WCTProperty::operator std::list<const WCDB::Expression>() const
     return {asExpression()};
 }
 
+const std::string &WCTProperty::getRedirectableDescription() const
+{
+    return m_description;
+}
+
 namespace WCDB {
+
+template <>
+WCTProperty Redirectable<Column>::as<WCTProperty>(const WCTProperty &property) const
+{
+    return WCTProperty(getRedirectableDescription(), property.getColumnBinding());
+}
+
+template <>
+WCTProperty Redirectable<Expression>::as<WCTProperty>(const WCTProperty &property) const
+{
+    return WCTProperty(getRedirectableDescription(), property.getColumnBinding());
+}
+
+template <>
+WCTProperty Redirectable<WCTProperty>::as(const WCTProperty &property) const
+{
+    return WCTProperty(getRedirectableDescription(), property.getColumnBinding());
+}
 
 Column ColumnConvertible<WCTProperty>::asColumn(const WCTProperty &property)
 {

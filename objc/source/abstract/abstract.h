@@ -29,6 +29,8 @@
 #include <WCDB/operable.hpp>
 #include <WCDB/operable_impl.hpp>
 
+#include <WCDB/redirectable.hpp>
+
 #include <WCDB/clause_join.hpp>
 #include <WCDB/column.hpp>
 #include <WCDB/column_def.hpp>
