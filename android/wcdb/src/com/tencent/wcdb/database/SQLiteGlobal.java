@@ -63,6 +63,11 @@ public final class SQLiteGlobal {
     public static final int walConnectionPoolSize = 4;
 
     static {
+        // Test if libwcdb.so is already loaded in other routines.
+        if (!WCDBInitializationProbe.libLoaded) {
+            System.loadLibrary("wcdb");
+        }
+
         int pageSize;
         try {
             String dataPath = Environment.getDataDirectory().getAbsolutePath();
@@ -71,24 +76,13 @@ public final class SQLiteGlobal {
             pageSize = 4096;
         }
         defaultPageSize = pageSize;
-
-        // To be compatible to frameworks which handle native library loading themselves,
-        // we do a simple test for whether native methods have been registered already.
-        try {
-            nativeSetDefaultPageSize(pageSize);
-        } catch (UnsatisfiedLinkError e) {
-            // If we reached here, native methods are not registered.
-            // Load shared library and try again.
-            System.loadLibrary("wcdb");
-            nativeSetDefaultPageSize(pageSize);
-        }
+        nativeSetDefaultPageSize(pageSize);
     }
     // Dummy static method to trigger class initialization.
     // See [JLS 12.4.1](http://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4.1)
     public static void loadLib() {}
 
-    private SQLiteGlobal() {
-    }
+    private SQLiteGlobal() {}
 
     /**
      * Attempts to release memory by pruning the SQLite page cache and other
@@ -100,4 +94,13 @@ public final class SQLiteGlobal {
         return nativeReleaseMemory();
     }
 
+}
+
+/**
+ * Probe class to detect whether "libwcdb.so" is loaded.
+ * It's set to true in JNI initialization routine.
+ */
+class WCDBInitializationProbe {
+    static boolean libLoaded = false;
+    private WCDBInitializationProbe() {}
 }
