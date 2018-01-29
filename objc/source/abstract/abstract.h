@@ -26,6 +26,7 @@
  *  It's implemented by C++ class, function and template feature.
  *
  *  As the [SQL syntax](http://www.sqlite.org/lang.html) documented,
+ *
  *  1. For those fixed big-letter **keywords**, they will be implemented as function, while the keyword will be the function name.
  *
  *      e.g. `ALTER TABLE` keyword in [`alter-table-stmt`](http://www.sqlite.org/syntax/alter-table-stmt.html) is one of the functions in `StatementAlterTable`.
@@ -33,6 +34,10 @@
  *  2. For those small-letter **tokens**, they will be implemented as a class , enum type or pure string.
  *
  *      e.g. `column-def` token in [`alter-table-stmt`](http://www.sqlite.org/syntax/alter-table-stmt.html) is a separated class.
+ *
+ *     WCDB divides tokens into two different types - statements and other tokens.
+ *     A statement can be prepared or executed and all its functions will return itself.
+ *     Instead, a non-statement token is the parameter of statement and it will return a new copy or have no return.
  *
  *  Why we need WINQ?
  *
