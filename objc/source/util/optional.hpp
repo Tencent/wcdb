@@ -38,9 +38,7 @@ protected:
     class OptionalStorage {
     public:
         OptionalStorage(const T &value);
-
-    protected:
-        T m_value;
+        T value;
     };
 
 public:

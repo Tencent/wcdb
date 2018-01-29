@@ -27,7 +27,7 @@
 namespace WCDB {
 
 template <typename T>
-Optional<T>::OptionalStorage::OptionalStorage(const T &value) : m_value(value)
+Optional<T>::OptionalStorage::OptionalStorage(const T &theValue) : value(theValue)
 {
 }
 
@@ -71,7 +71,7 @@ const T &Optional<T>::value() const
     if (!isValid()) {
         Error::Abort("Unwrap a disengaged value");
     }
-    return *m_storage.get();
+    return m_storage->value;
 }
 
 template <typename T>
@@ -80,7 +80,7 @@ T &Optional<T>::value()
     if (!isValid()) {
         Error::Abort("Unwrap a disengaged value");
     }
-    return *m_storage.get();
+    return m_storage->value;
 }
 
 } //namespace WCDB
