@@ -7,6 +7,7 @@
 -keep class com.tencent.wcdb.**.*Exception
 
 # Keep classes referenced in JNI code
+-keep class com.tencent.wcdb.database.WCDBInitializationProbe { <fields>; }
 -keep,includedescriptorclasses class com.tencent.wcdb.database.SQLiteCustomFunction { *; }
 -keep class com.tencent.wcdb.database.SQLiteDebug$* { *; }
 -keep class com.tencent.wcdb.database.SQLiteCipherSpec { <fields>; }

@@ -21,6 +21,7 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
+#include "SQLiteCommon.h"
 #include "fts/mm_fts.h"
 
 // Forward declarations
@@ -120,6 +121,13 @@ static JNINativeMethod sMethods[] = {
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)
 {
     sqliteInitialize();
+
+    jclass clazz;
+    FIND_CLASS(clazz, "com/tencent/wcdb/database/WCDBInitializationProbe");
+
+    jfieldID fidLibLoaded = env->GetStaticFieldID(clazz, "libLoaded", "Z");
+    env->SetStaticBooleanField(clazz, fidLibLoaded, JNI_TRUE);
+    env->DeleteLocalRef(clazz);
 
     return jniRegisterNativeMethods(env,
                                     "com/tencent/wcdb/database/SQLiteGlobal",
