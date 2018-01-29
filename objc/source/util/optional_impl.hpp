@@ -42,27 +42,9 @@ Optional<T>::Optional() : m_storage(nullptr)
 }
 
 template <typename T>
-Optional<T>::operator bool() const
-{
-    return isValid();
-}
-
-template <typename T>
 bool Optional<T>::isValid() const
 {
     return m_storage != nullptr;
-}
-
-template <typename T>
-const T &Optional<T>::operator*() const
-{
-    return value();
-}
-
-template <typename T>
-T &Optional<T>::operator*()
-{
-    return value();
 }
 
 template <typename T>
@@ -81,6 +63,18 @@ T &Optional<T>::value()
         Error::Abort("Unwrap a disengaged value");
     }
     return m_storage->value;
+}
+    
+template <typename T>
+void Optional<T>::assign(const T& t)
+{
+    m_storage.reset(new T(t));
+}
+
+template <typename T>
+void Optional<T>::clear()
+{
+    m_storage = nullptr;
 }
 
 } //namespace WCDB

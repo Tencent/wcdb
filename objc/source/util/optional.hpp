@@ -45,17 +45,14 @@ public:
     Optional(const T &value);
     Optional();
 
-    operator bool() const;
-
     bool isValid() const;
-
-    const T &operator*() const;
-
-    T &operator*();
 
     const T &value() const;
 
     T &value();
+    
+    void assign(const T& t);
+    void clear();
 
 protected:
     std::shared_ptr<OptionalStorage> m_storage;
