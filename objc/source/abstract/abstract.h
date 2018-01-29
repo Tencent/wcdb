@@ -21,6 +21,28 @@
 #ifndef abstract_h
 #define abstract_h
 
+/*  How WINQ implement?
+ *  
+ *  It's implemented by C++ class, function and template feature.
+ *
+ *  As the [SQL syntax](http://www.sqlite.org/lang.html) documented,
+ *  1. For those fixed big-letter **keywords**, they will be implemented as function, while the keyword will be the function name.
+ *
+ *      e.g. `ALTER TABLE` keyword in [`alter-table-stmt`](http://www.sqlite.org/syntax/alter-table-stmt.html) is one of the functions in `StatementAlterTable`.
+ *
+ *  2. For those small-letter **tokens**, they will be implemented as a class , enum type or pure string.
+ *
+ *      e.g. `column-def` token in [`alter-table-stmt`](http://www.sqlite.org/syntax/alter-table-stmt.html) is a separated class.
+ *
+ *  Why we need WINQ?
+ *
+ *  1. With a pure string SQL, IDE can't recognize it so that developers can't find the syntax error until it runs.
+ *     Instead, it will result in a compiler error for a syntax error while writing WINQ, which can let developers notice the error much ealier.
+       Further more, IDE can give developers a code hint so that developers have less need to check the syntax documentation.
+ *  2. More importantly, WINQ gives WCDB an ability to recognize, check and hook the SQL to do some smart feature, such as data migration. This kind of feature may not be implemented in current version, but it's already in our roadmap.
+ *
+ */
+
 #include <WCDB/describable.hpp>
 
 #include <WCDB/convertible.hpp>
