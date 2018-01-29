@@ -24,7 +24,7 @@
 #include "Errors.h"
 #include "Logger.h"
 
-#if NDEBUG
+#if 1
 
 #define IF_LOG_WINDOW() if (false)
 #define LOG_WINDOW(...)
