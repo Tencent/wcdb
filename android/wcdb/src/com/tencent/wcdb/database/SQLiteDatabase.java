@@ -2337,6 +2337,32 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    /** Returns the {@link SQLiteChangeListener} object bound to this database.
+     *
+     * @return {@link SQLiteChangeListener} object bound to this database.
+     * @see SQLiteChangeListener
+     * @see #setChangeListener(SQLiteChangeListener, boolean)
+     */
+    public SQLiteChangeListener getChangeListener() {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            return mConnectionPoolLocked.getChangeListener();
+        }
+    }
+
+    /**
+     * Bind a {@link SQLiteChangeListener} object for database change notifications.
+     *
+     * @param listener      listener to be set
+     * @param notifyRowId   whether RowIDs of each modified row should be reported
+     */
+    public void setChangeListener(SQLiteChangeListener listener, boolean notifyRowId) {
+        synchronized (mLock) {
+            throwIfNotOpenLocked();
+            mConnectionPoolLocked.setChangeListener(listener, notifyRowId);
+        }
+    }
+
     /**
      * Returns the {@link SQLiteTrace} object bound to this database.
      *
