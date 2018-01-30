@@ -156,7 +156,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private static native void nativeSetKey(long connectionPtr, byte[] password);
     private static native void nativeSetWalHook(long connectionPtr);
     private static native long nativeWalCheckpoint(long connectionPtr, String dbName);
-    private static native long nativeGetSQLiteHandle(long connectionPtr);
+    private static native long nativeSQLiteHandle(long connectionPtr, boolean acquire);
+    private static native void nativeSetUpdateNotification(long connectionPtr, boolean enabled,
+            boolean notifyRowId);
 
     // Password for encrypted database.
     private byte[] mPassword;
@@ -169,6 +171,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     // Recurse count for getNativeHandle().
     private int mNativeHandleCount;
+
 
     private SQLiteConnection(SQLiteConnectionPool pool, SQLiteDatabaseConfiguration configuration,
             int connectionId, boolean primaryConnection, byte[] password, SQLiteCipherSpec cipher) {
@@ -184,7 +187,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         mPreparedStatementCache = new PreparedStatementCache(mConfiguration.maxSqlCacheSize);
     }
 
-    /*package*/ long getNativeHandle(String operation) {
+    long getNativeHandle(String operation) {
         if (mConnectionPtr == 0)
             return 0;
 
@@ -194,11 +197,13 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
 
         mNativeHandleCount++;
-        return nativeGetSQLiteHandle(mConnectionPtr);
+        return nativeSQLiteHandle(mConnectionPtr, true);
     }
 
-    /*package*/ void endNativeHandle(Exception ex) {
+    void endNativeHandle(Exception ex) {
         if (--mNativeHandleCount == 0 && mNativeOperation != null) {
+            nativeSQLiteHandle(mConnectionPtr, false);
+
             if (ex == null) {
                 mRecentOperations.endOperationDeferLog(mNativeOperation.mCookie);
                 // Don't log native operations for now. Drop return value.
@@ -270,6 +275,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         setJournalSizeLimit();
         setCheckpointStrategy();
         setLocaleFromConfiguration();
+        setUpdateNotificationFromConfiguration();
 
         // Register custom functions.
         final int functionCount = mConfiguration.customFunctions.size();
@@ -471,6 +477,17 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
     }
 
+    @SuppressWarnings("unused")
+    private void notifyChange(String db, String table, long[] insertIds, long[] updateIds, long[] deleteIds) {
+        mPool.notifyChanges(db, table, insertIds, updateIds, deleteIds);
+    }
+
+    private void setUpdateNotificationFromConfiguration() {
+        nativeSetUpdateNotification(mConnectionPtr,
+                mConfiguration.updateNotificationEnabled,
+                mConfiguration.updateNotificationRowID);
+    }
+
     // Called by SQLiteConnectionPool only.
     void reconfigure(SQLiteDatabaseConfiguration configuration) {
         mOnlyAllowReadOnlyOperations = false;
@@ -494,6 +511,9 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 != mConfiguration.customWALHookEnabled;
         boolean synchronousChanged = configuration.synchronousMode
                 != mConfiguration.synchronousMode;
+        boolean updateNotificationChanged =
+                (configuration.updateNotificationEnabled != mConfiguration.updateNotificationEnabled) ||
+                (configuration.updateNotificationRowID != mConfiguration.updateNotificationRowID);
 
         // Update configuration parameters.
         mConfiguration.updateParametersFrom(configuration);
@@ -524,6 +544,11 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         // Update locale.
         if (localeChanged) {
             setLocaleFromConfiguration();
+        }
+
+        // Update notification.
+        if (updateNotificationChanged) {
+            setUpdateNotificationFromConfiguration();
         }
     }
 

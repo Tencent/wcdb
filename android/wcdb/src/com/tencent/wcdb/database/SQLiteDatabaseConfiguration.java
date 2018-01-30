@@ -74,26 +74,36 @@ public final class SQLiteDatabaseConfiguration {
 
     /**
      * The database locale.
-     *
      * Default is the value returned by {@link Locale#getDefault()}.
      */
     public Locale locale;
 
     /**
      * True if foreign key constraints are enabled.
-     *
      * Default is false.
      */
     public boolean foreignKeyConstraintsEnabled;
 
     /**
      * True if custom WAL hook, including async-checkpoint, is enabled.
-     *
      * Default is false.
      */
     public boolean customWALHookEnabled;
 
+    /**
+     * Synchronize mode to be used.
+     */
     public int synchronousMode;
+
+    /**
+     * True if SQLite should call registered callback when database is updated.
+     */
+    public boolean updateNotificationEnabled;
+
+    /**
+     * True if update notifications should contain information about modified RowID.
+     */
+    public boolean updateNotificationRowID;
 
     /**
      * The custom functions to register.
@@ -159,6 +169,8 @@ public final class SQLiteDatabaseConfiguration {
         locale = other.locale;
         foreignKeyConstraintsEnabled = other.foreignKeyConstraintsEnabled;
         customWALHookEnabled = other.customWALHookEnabled;
+        updateNotificationEnabled = other.updateNotificationEnabled;
+        updateNotificationRowID = other.updateNotificationRowID;
         synchronousMode = other.synchronousMode;
         vfsName = other.vfsName;
         customFunctions.clear();

@@ -80,6 +80,7 @@ public final class SQLiteConnectionPool implements Closeable {
 
     // Keep reference to SQLiteDatabase which owns this connection pool.
     private final WeakReference<SQLiteDatabase> mDB;
+    private volatile SQLiteChangeListener mChangeListener;
     private volatile SQLiteTrace mTraceCallback;
     private volatile SQLiteCheckpointListener mCheckpointListener;
 
@@ -1049,15 +1050,48 @@ public final class SQLiteConnectionPool implements Closeable {
         mConnectionWaiterPool = waiter;
     }
 
-    /*package*/ SQLiteTrace getTraceCallback() {
+    SQLiteChangeListener getChangeListener() {
+        return mChangeListener;
+    }
+
+    void setChangeListener(SQLiteChangeListener listener, boolean notifyRowId) {
+        boolean notifyEnabled = (listener != null);
+        if (!notifyEnabled)
+            notifyRowId = false;
+
+        synchronized (mLock) {
+            if (mConfiguration.updateNotificationEnabled != notifyEnabled ||
+                    mConfiguration.updateNotificationRowID != notifyRowId) {
+                mConfiguration.updateNotificationEnabled = notifyEnabled;
+                mConfiguration.updateNotificationRowID = notifyRowId;
+
+                closeExcessConnectionsAndLogExceptionsLocked();
+                reconfigureAllConnectionsLocked();
+            }
+
+            mChangeListener = listener;
+        }
+    }
+
+    void notifyChanges(String dbName, String table,
+            long[] insertIds, long[] updateIds, long[] deleteIds) {
+        SQLiteDatabase db = mDB.get();
+        SQLiteChangeListener listener = mChangeListener;
+
+        if (listener == null || db == null)
+            return;
+        listener.onChange(db, dbName, table, insertIds, updateIds, deleteIds);
+    }
+
+    SQLiteTrace getTraceCallback() {
         return mTraceCallback;
     }
 
-    /*package*/ void setTraceCallback(SQLiteTrace callback) {
+    void setTraceCallback(SQLiteTrace callback) {
         mTraceCallback = callback;
     }
 
-    /*package*/ void traceExecute(String sql, int type, long time) {
+    void traceExecute(String sql, int type, long time) {
         SQLiteDatabase db = mDB.get();
         SQLiteTrace trace = mTraceCallback;
 
@@ -1066,11 +1100,11 @@ public final class SQLiteConnectionPool implements Closeable {
         trace.onSQLExecuted(db, sql, type, time);
     }
 
-    /*package*/ SQLiteCheckpointListener getCheckpointListener() {
+    SQLiteCheckpointListener getCheckpointListener() {
         return mCheckpointListener;
     }
 
-    /*package*/ void setCheckpointListener(SQLiteCheckpointListener listener) {
+    void setCheckpointListener(SQLiteCheckpointListener listener) {
         SQLiteDatabase db = mDB.get();
 
         if (mCheckpointListener != null)
