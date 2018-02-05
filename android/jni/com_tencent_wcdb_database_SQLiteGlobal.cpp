@@ -42,7 +42,7 @@ extern volatile int sLastErrorLine;
 static void sqliteLogCallback(void *data, int iErrCode, const char *zMsg)
 {
     // Extract line number for specific error codes.
-    const char *pattern = NULL;
+    const char *pattern = nullptr;
     int priority = ANDROID_LOG_WARN;
     switch (iErrCode & 0xFF) {
         case SQLITE_NOTICE:
@@ -96,7 +96,7 @@ static void sqliteInitialize()
     sqlite3_soft_heap_limit(SOFT_HEAP_LIMIT);
 
     // Register vfslog VFS.
-    sqlite3_register_vfslog(NULL);
+    sqlite3_register_vfslog(nullptr);
 
     // Initialize SQLite.
     sqlite3_initialize();

@@ -172,7 +172,7 @@ nativeGetBlob(JNIEnv *env, jclass cls, jlong rowPtr, jint column)
         if (!byteArray) {
             env->ExceptionClear();
             throw_sqlite3_exception(env, "Native could not create new byte[]");
-            return NULL;
+            return nullptr;
         }
         env->SetByteArrayRegion(byteArray, 0, size,
                                 static_cast<const jbyte *>(value));
@@ -186,7 +186,7 @@ nativeGetBlob(JNIEnv *env, jclass cls, jlong rowPtr, jint column)
     } else {
         throwUnknownTypeException(env, type);
     }
-    return NULL;
+    return nullptr;
 }
 
 static jstring
@@ -236,12 +236,12 @@ nativeGetString(JNIEnv *env, jclass cls, jlong rowPtr, jint column)
         return env->NewStringUTF(buf);
     } else if (type == CursorWindow::FIELD_TYPE_BLOB) {
         throw_sqlite3_exception(env, "Unable to covert BLOB to string");
-        return NULL;
+        return nullptr;
     } else if (type == CursorWindow::FIELD_TYPE_NULL) {
-        return NULL;
+        return nullptr;
     } else {
         throwUnknownTypeException(env, type);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -262,7 +262,7 @@ static jlong nativeGetLong(JNIEnv *env, jclass cls, jlong rowPtr, jint column)
     } else if (type == CursorWindow::FIELD_TYPE_STRING) {
         size_t sizeIncludingNull;
         const char *value = row->getFieldString(field, sizeIncludingNull);
-        return sizeIncludingNull > 1 ? strtoll(value, NULL, 0) : 0L;
+        return sizeIncludingNull > 1 ? strtoll(value, nullptr, 0) : 0L;
     } else if (type == CursorWindow::FIELD_TYPE_FLOAT) {
         return jlong(row->getFieldDouble(field));
     } else if (type == CursorWindow::FIELD_TYPE_NULL) {
@@ -294,7 +294,7 @@ nativeGetDouble(JNIEnv *env, jclass clazz, jlong rowPtr, jint column)
     } else if (type == CursorWindow::FIELD_TYPE_STRING) {
         size_t sizeIncludingNull;
         const char *value = row->getFieldString(field, sizeIncludingNull);
-        return sizeIncludingNull > 1 ? strtod(value, NULL) : 0.0;
+        return sizeIncludingNull > 1 ? strtod(value, nullptr) : 0.0;
     } else if (type == CursorWindow::FIELD_TYPE_INTEGER) {
         return jdouble(row->getFieldLong(field));
     } else if (type == CursorWindow::FIELD_TYPE_NULL) {

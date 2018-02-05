@@ -60,7 +60,7 @@ status_t CursorWindow::create(size_t size, CursorWindow **outCursorWindow)
         }
         return OK;
     } else {
-        *outCursorWindow = NULL;
+        *outCursorWindow = nullptr;
         return NO_MEMORY;
     }
 }
@@ -93,9 +93,9 @@ status_t CursorWindow::allocRow(RowSlot **outSlot)
 {
     // Fill in the row slot
     RowSlot *rowSlot = allocRowSlot();
-    if (rowSlot == NULL) {
+    if (rowSlot == nullptr) {
         if (outSlot)
-            *outSlot = NULL;
+            *outSlot = nullptr;
         return NO_MEMORY;
     }
 
@@ -108,7 +108,7 @@ status_t CursorWindow::allocRow(RowSlot **outSlot)
                    "from allocRowSlot %d",
                    mHeader->numRows);
         if (outSlot)
-            *outSlot = NULL;
+            *outSlot = nullptr;
         return NO_MEMORY;
     }
     FieldSlot *fieldDir = static_cast<FieldSlot *>(offsetToPtr(fieldDirOffset));
@@ -161,7 +161,7 @@ CursorWindow::RowSlot *CursorWindow::getRowSlot(uint32_t row)
     if (row >= mHeader->numRows) {
         ALOGE("Failed to read row %d from a CursorWindow which has %d rows.",
               row, mHeader->numRows);
-        return NULL;
+        return nullptr;
     }
 
     uint32_t chunkPos = row;
@@ -190,7 +190,7 @@ CursorWindow::RowSlot *CursorWindow::allocRowSlot()
             chunk->nextChunkOffset =
                 alloc(sizeof(RowSlotChunk), true /*aligned*/);
             if (!chunk->nextChunkOffset) {
-                return NULL;
+                return nullptr;
             }
         }
         chunk =
@@ -209,7 +209,7 @@ CursorWindow::FieldSlot *CursorWindow::getFieldSlot(RowSlot *rowSlot,
         ALOGE("Failed to find row or column(%d) from a CursorWindow (has %d "
               "columns).",
               column, mHeader->numColumns);
-        return NULL;
+        return nullptr;
     }
     FieldSlot *fieldDir =
         static_cast<FieldSlot *>(offsetToPtr(rowSlot->offset));

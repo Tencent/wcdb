@@ -57,7 +57,7 @@ public:
     };
 
     class Row {
-        Row() : mPoolNext(NULL) {}
+        Row() : mPoolNext(nullptr) {}
 
         ~Row() {}
 
@@ -79,7 +79,7 @@ public:
 
         inline bool isFieldValid(const Field &field)
         {
-            return field.mSlot != NULL;
+            return field.mSlot != nullptr;
         }
 
         inline int32_t getFieldType(const Field &field)

@@ -6,6 +6,7 @@ build_info_path := $(NDK_OUT)
 common_cflags := -Wall -Werror -Wno-unused-const-variable \
 	-ffunction-sections -fdata-sections \
 	-DSQLITE_HAS_CODEC -DSQLITE_CORE -DSQLITE_OS_UNIX
+common_cppflags := -std=c++14 -fno-exception -fno-rtti
 common_c_includes := \
 	$(prebuilt_path)/include \
 	$(root_path)/android/sqlcipher \
@@ -16,6 +17,7 @@ LOCAL_PATH := $(root_path)/android/jni
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb
 LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes) $(root_path)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
@@ -44,6 +46,7 @@ LOCAL_PATH := $(root_path)/repair
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-repair
 LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
@@ -55,6 +58,7 @@ LOCAL_PATH := $(root_path)/backup
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-backup
 LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
@@ -66,6 +70,7 @@ LOCAL_PATH := $(root_path)/icucompat
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-icucompat
 LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
@@ -77,6 +82,7 @@ LOCAL_PATH := $(root_path)/fts
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-fts
 LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
@@ -88,6 +94,7 @@ LOCAL_PATH := $(root_path)/vfslog
 include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb-vfslog
 LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \

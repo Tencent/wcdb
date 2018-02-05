@@ -28,7 +28,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <unistd.h>
 
 #include "CursorWindow.h"
@@ -115,7 +114,7 @@ nativeSetNumColumns(JNIEnv *env, jclass clazz, jlong windowPtr, jint columnNum)
 static jboolean nativeAllocRow(JNIEnv *env, jclass clazz, jlong windowPtr)
 {
     CursorWindow *window = (CursorWindow *) (intptr_t) windowPtr;
-    status_t status = window->allocRow(NULL);
+    status_t status = window->allocRow(nullptr);
     return status == OK;
 }
 
@@ -149,7 +148,7 @@ nativeGetBlob(JNIEnv *env, jclass clazz, jlong windowPtr, jint row, jint column)
     CursorWindow::FieldSlot *fieldSlot = window->getFieldSlot(row, column);
     if (!fieldSlot) {
         throwExceptionWithRowCol(env, row, column);
-        return NULL;
+        return nullptr;
     }
 
     int32_t type = window->getFieldSlotType(fieldSlot);
@@ -161,7 +160,7 @@ nativeGetBlob(JNIEnv *env, jclass clazz, jlong windowPtr, jint row, jint column)
         if (!byteArray) {
             env->ExceptionClear();
             throw_sqlite3_exception(env, "Native could not create new byte[]");
-            return NULL;
+            return nullptr;
         }
         env->SetByteArrayRegion(byteArray, 0, size,
                                 static_cast<const jbyte *>(value));
@@ -175,7 +174,7 @@ nativeGetBlob(JNIEnv *env, jclass clazz, jlong windowPtr, jint row, jint column)
     } else {
         throwUnknownTypeException(env, type);
     }
-    return NULL;
+    return nullptr;
 }
 
 static jstring nativeGetString(
@@ -187,7 +186,7 @@ static jstring nativeGetString(
     CursorWindow::FieldSlot *fieldSlot = window->getFieldSlot(row, column);
     if (!fieldSlot) {
         throwExceptionWithRowCol(env, row, column);
-        return NULL;
+        return nullptr;
     }
 
     int32_t type = window->getFieldSlotType(fieldSlot);
@@ -223,13 +222,13 @@ static jstring nativeGetString(
         snprintf(buf, sizeof(buf), "%g", value);
         return env->NewStringUTF(buf);
     } else if (type == CursorWindow::FIELD_TYPE_NULL) {
-        return NULL;
+        return nullptr;
     } else if (type == CursorWindow::FIELD_TYPE_BLOB) {
         throw_sqlite3_exception(env, "Unable to convert BLOB to string");
-        return NULL;
+        return nullptr;
     } else {
         throwUnknownTypeException(env, type);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -242,7 +241,7 @@ allocCharArrayBuffer(JNIEnv *env, jobject bufferObj, size_t size)
         jsize capacity = env->GetArrayLength(dataObj);
         if (size_t(capacity) < size) {
             env->DeleteLocalRef(dataObj);
-            dataObj = NULL;
+            dataObj = nullptr;
         }
     }
     if (!dataObj) {
@@ -273,7 +272,7 @@ static void fillCharArrayBufferUTF(JNIEnv *env,
     if (dataObj) {
         if (size) {
             jchar *data = static_cast<jchar *>(
-                env->GetPrimitiveArrayCritical(dataObj, NULL));
+                env->GetPrimitiveArrayCritical(dataObj, nullptr));
             utf8_to_utf16_no_null_terminator(
                 reinterpret_cast<const uint8_t *>(str), len,
                 reinterpret_cast<uint16_t *>(data));
@@ -356,7 +355,7 @@ nativeGetLong(JNIEnv *env, jclass clazz, jlong windowPtr, jint row, jint column)
         size_t sizeIncludingNull;
         const char *value =
             window->getFieldSlotValueString(fieldSlot, &sizeIncludingNull);
-        return sizeIncludingNull > 1 ? strtoll(value, NULL, 0) : 0L;
+        return sizeIncludingNull > 1 ? strtoll(value, nullptr, 0) : 0L;
     } else if (type == CursorWindow::FIELD_TYPE_FLOAT) {
         return jlong(window->getFieldSlotValueDouble(fieldSlot));
     } else if (type == CursorWindow::FIELD_TYPE_NULL) {
@@ -389,7 +388,7 @@ static jdouble nativeGetDouble(
         size_t sizeIncludingNull;
         const char *value =
             window->getFieldSlotValueString(fieldSlot, &sizeIncludingNull);
-        return sizeIncludingNull > 1 ? strtod(value, NULL) : 0.0;
+        return sizeIncludingNull > 1 ? strtod(value, nullptr) : 0.0;
     } else if (type == CursorWindow::FIELD_TYPE_INTEGER) {
         return jdouble(window->getFieldSlotValueLong(fieldSlot));
     } else if (type == CursorWindow::FIELD_TYPE_NULL) {
@@ -413,7 +412,7 @@ static jboolean nativePutBlob(JNIEnv *env,
     CursorWindow *window = (CursorWindow *) (intptr_t) windowPtr;
     jsize len = env->GetArrayLength(valueObj);
 
-    void *value = env->GetPrimitiveArrayCritical(valueObj, NULL);
+    void *value = env->GetPrimitiveArrayCritical(valueObj, nullptr);
     status_t status = window->putBlob(row, column, value, len);
     env->ReleasePrimitiveArrayCritical(valueObj, value, JNI_ABORT);
 
@@ -436,7 +435,7 @@ static jboolean nativePutString(JNIEnv *env,
     CursorWindow *window = (CursorWindow *) (intptr_t) windowPtr;
 
     size_t sizeIncludingNull = env->GetStringUTFLength(valueObj) + 1;
-    const char *valueStr = env->GetStringUTFChars(valueObj, NULL);
+    const char *valueStr = env->GetStringUTFChars(valueObj, nullptr);
     if (!valueStr) {
         LOG_WINDOW("value can't be transferred to UTFChars");
         return false;
@@ -529,14 +528,6 @@ static const JNINativeMethod sMethods[] = {
     {"nativePutDouble", "(JDII)Z", (void *) nativePutDouble},
     {"nativePutNull", "(JII)Z", (void *) nativePutNull},
 };
-
-#define FIND_CLASS(var, className)                                             \
-    var = env->FindClass(className);                                           \
-    LOG_FATAL_IF(!var, "Unable to find class " className);
-
-#define GET_FIELD_ID(var, clazz, fieldName, fieldDescriptor)                   \
-    var = env->GetFieldID(clazz, fieldName, fieldDescriptor);                  \
-    LOG_FATAL_IF(!var, "Unable to find field " fieldName);
 
 static int register_wcdb_CursorWindow(JavaVM *vm, JNIEnv *env)
 {

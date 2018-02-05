@@ -57,26 +57,25 @@ ChunkedCursorWindow::Chunk::create(uint32_t startPos_, size_t size)
     if (ret == OK && window) {
         return new Chunk(window, startPos_);
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 ChunkedCursorWindow::ChunkedCursorWindow(uint32_t chunkCapacity)
     : mChunkCapacity(chunkCapacity)
     , mNumColumns(0)
-    , mLastReadChunk(NULL)
-    , mLastWriteChunk(NULL)
+    , mLastReadChunk(nullptr)
+    , mLastWriteChunk(nullptr)
     , mLastWriteChunkRowLimit(__UINT32_MAX__)
     , mCurrentWritingRow(__UINT32_MAX__)
-    , mRowPool(NULL)
+    , mRowPool(nullptr)
 {
 }
 
 ChunkedCursorWindow::~ChunkedCursorWindow()
 {
     // Release all allocated chunk.
-    ChunkMap::iterator it;
-    for (it = mChunkMap.begin(); it != mChunkMap.end(); ++it) {
+    for (auto it = mChunkMap.begin(); it != mChunkMap.end(); ++it) {
         it->second->release();
     }
 
@@ -105,7 +104,7 @@ ChunkedCursorWindow::Row *ChunkedCursorWindow::allocRowLocked()
     if (mRowPool) {
         r = mRowPool;
         mRowPool = r->mPoolNext;
-        r->mPoolNext = NULL;
+        r->mPoolNext = nullptr;
     } else {
         r = new Row();
     }
@@ -116,7 +115,7 @@ void ChunkedCursorWindow::recycleRowLocked(ChunkedCursorWindow::Row *row)
 {
     // Must be called with mMutex locked.
 
-    assert(row->mPoolNext == NULL);
+    assert(row->mPoolNext == nullptr);
     row->mPoolNext = mRowPool;
     mRowPool = row;
 }
@@ -163,8 +162,8 @@ ChunkedCursorWindow::findChunkByRowLocked(uint32_t row)
     }
 
     // Not found, search ChunkMap.
-    Chunk *chunk = NULL;
-    ChunkMap::iterator it = mChunkMap.lower_bound(row);
+    Chunk *chunk = nullptr;
+    auto it = mChunkMap.lower_bound(row);
     if (it != mChunkMap.end() && it->first == row) {
         chunk = it->second;
     } else if (it != mChunkMap.begin()) {
@@ -173,7 +172,7 @@ ChunkedCursorWindow::findChunkByRowLocked(uint32_t row)
 
     if (chunk) {
         if (row - chunk->startPos >= chunk->window->getNumRows())
-            chunk = NULL;
+            chunk = nullptr;
         else
             mLastReadChunk = chunk;
     }
@@ -209,18 +208,18 @@ ChunkedCursorWindow::allocChunkLocked(uint32_t startPos)
     // TODO: check capacity.
 
     // Lookup if row to insert already existed.
-    ChunkMap::iterator it = mChunkMap.lower_bound(startPos);
-    ChunkMap::iterator hint = it;
+    auto it = mChunkMap.lower_bound(startPos);
+    auto hint = it;
     if (it != mChunkMap.end() && it->first == startPos) {
         // Found a chunk with exactly the same startPos.
-        // Anyway it's not posible to insert a chunk here, just return failure.
-        return NULL;
+        // Anyway it's not possible to insert a chunk here, just return failure.
+        return nullptr;
     } else if (it != mChunkMap.begin()) {
         Chunk *chunk = (--it)->second;
 
         // Got chunk just before the insertion point, check for conflict.
         if (startPos - chunk->startPos < chunk->window->getNumRows())
-            return NULL;
+            return nullptr;
     }
     // If we found no chunk with startPos lesser than insertion point, it's perfectly
     // okay to insert a chunk at the beginning.
@@ -229,9 +228,9 @@ ChunkedCursorWindow::allocChunkLocked(uint32_t startPos)
     Chunk *chunk = Chunk::create(startPos, CHUNK_SIZE);
     if (chunk->window->setNumColumns(mNumColumns) != OK) {
         chunk->release();
-        return NULL;
+        return nullptr;
     }
-    mChunkMap.insert(hint, std::make_pair(startPos, chunk));
+    mChunkMap.emplace_hint(hint, startPos, chunk);
 
     // Update cache.
     mLastWriteChunk = chunk;
@@ -249,15 +248,15 @@ ChunkedCursorWindow::Chunk *ChunkedCursorWindow::removeChunkLocked(uint32_t row)
     } else if (it != mChunkMap.begin()) {
         chunk = (--it)->second;
         if (row - chunk->startPos < chunk->window->getNumRows())
-            return NULL;
+            return nullptr;
     } else { // it == mChunkMap.begin()
-        return NULL;
+        return nullptr;
     }
 
     if (mLastReadChunk == chunk)
-        mLastReadChunk = NULL;
+        mLastReadChunk = nullptr;
     if (mLastWriteChunk == chunk) {
-        mLastWriteChunk = NULL;
+        mLastWriteChunk = nullptr;
         mLastWriteChunkRowLimit = __UINT32_MAX__;
     }
 
@@ -271,9 +270,9 @@ ChunkedCursorWindow::Row *ChunkedCursorWindow::newRow(uint32_t row,
     AutoMutex lock(mMutex);
 
     if (mCurrentWritingRow != __UINT32_MAX__)
-        return NULL;
+        return nullptr;
 
-    Chunk *chunk = NULL;
+    Chunk *chunk = nullptr;
     if (!newChunk) {
         // Not forced to new chunk, lookup cache.
         chunk = getChunkForWritingLocked(row);
@@ -281,9 +280,9 @@ ChunkedCursorWindow::Row *ChunkedCursorWindow::newRow(uint32_t row,
         if (chunk == CHUNK_CONFLICT) {
             // We are in conflict, remove the chunk in requesting position.
             Chunk *removedChunk = removeChunkLocked(row);
-            assert(removedChunk != NULL);
+            assert(removedChunk != nullptr);
             removedChunk->release();
-            chunk = NULL;
+            chunk = nullptr;
         }
     }
 
@@ -292,7 +291,7 @@ ChunkedCursorWindow::Row *ChunkedCursorWindow::newRow(uint32_t row,
         chunk = allocChunkLocked(row);
         if (!chunk) {
             // Chunk allocation failed.
-            return NULL;
+            return nullptr;
 
             // TODO: handle capacity limit.
         }
@@ -307,7 +306,7 @@ ChunkedCursorWindow::Row *ChunkedCursorWindow::newRow(uint32_t row,
     if (ret != OK || !slot) {
         // Row allocation failed, probably because there is no space left on the window
         // to allocate RowSlotChunk or field directory. Return failure and let caller retry.
-        return NULL;
+        return nullptr;
     }
 
     // Fill Row object and return.
@@ -327,17 +326,17 @@ ChunkedCursorWindow::Row *ChunkedCursorWindow::getRow(uint32_t row)
     AutoMutex lock(mMutex);
 
     if (mCurrentWritingRow == row)
-        return NULL;
+        return nullptr;
 
     Chunk *chunk = findChunkByRowLocked(row);
     if (!chunk)
-        return NULL;
+        return nullptr;
 
     assert(row >= chunk->startPos);
     CursorWindow *window = chunk->window;
     CursorWindow::RowSlot *slot = window->getRowSlot(row - chunk->startPos);
     if (!slot)
-        return NULL;
+        return nullptr;
 
     chunk->acquire();
     Row *rowObj = allocRowLocked();
@@ -383,8 +382,8 @@ status_t ChunkedCursorWindow::clear()
     mChunkMap.clear();
 
     mNumColumns = 0;
-    mLastReadChunk = NULL;
-    mLastWriteChunk = NULL;
+    mLastReadChunk = nullptr;
+    mLastWriteChunk = nullptr;
     mLastWriteChunkRowLimit = __UINT32_MAX__;
     mCurrentWritingRow = __UINT32_MAX__;
     return OK;
