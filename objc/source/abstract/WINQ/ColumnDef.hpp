@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef ColumnDef_hpp
+#define ColumnDef_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class ColumnDef : public DescribableWithLang<LangColumnDef> {
+public:
+    ColumnDef(const std::string &columnName);
+
+    ColumnDef &withType(const ColumnType &columnType);
+    ColumnDef &byAddingConstraint(const ColumnConstraint &columnConstraint);
+    ColumnDef &
+    byAddingConstraints(const std::list<ColumnConstraint> &columnConstraints);
+};
+
+#endif /* ColumnDef_hpp */

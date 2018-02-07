@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangDropViewSTMT_hpp
+#define LangDropViewSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/LangDropInternalSTMT.hpp>
 
-#endif /* abstract_h */
+class LangDropViewSTMT : public LangDropInternalSTMT {
+protected:
+    virtual const char *getInternalName() const override;
+};
+
+#endif /* LangDropViewSTMT_hpp */

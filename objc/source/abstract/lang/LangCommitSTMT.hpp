@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangCommitSTMT_hpp
+#define LangCommitSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangCommitSTMT : public Lang {
+public:
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangCommitSTMT_hpp */

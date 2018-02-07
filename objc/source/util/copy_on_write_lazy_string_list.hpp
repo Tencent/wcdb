@@ -18,10 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef copy_on_write_lazy_string_list_hpp
+#define copy_on_write_lazy_string_list_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include "copy_on_write_lazy_describable.hpp"
+#include <list>
 
-#endif /* abstract_h */
+class copy_on_write_lazy_string_list
+    : public copy_on_write_lazy_describable<std::list<copy_on_write_string>> {
+public:
+    using Super =
+        copy_on_write_lazy_describable<std::list<copy_on_write_string>>;
+
+    void append(const copy_on_write_string &string);
+
+    bool empty() const;
+
+protected:
+    virtual copy_on_write_string calculatedDescription() const override;
+
+private:
+    using Super::get_or_copy;
+};
+
+#endif /* copy_on_write_lazy_string_list_hpp */

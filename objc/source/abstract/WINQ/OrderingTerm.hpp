@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef OrderingTerm_hpp
+#define OrderingTerm_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class OrderingTerm : public DescribableWithLang<LangOrderingTerm> {
+public:
+    OrderingTerm(const Expression& expression);
+    OrderingTerm& withCollate(const std::string& collateName);
+    OrderingTerm& withOrder(const Order& order);
+};
+
+#endif /* OrderingTerm_hpp */

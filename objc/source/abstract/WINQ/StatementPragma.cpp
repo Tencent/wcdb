@@ -18,10 +18,32 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementPragma& StatementPragma::withSchema(const std::string& schemaName)
+{
+    LangPragmaSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+StatementPragma& StatementPragma::pragma(const Pragma& pragmaName)
+{
+    LangPragmaSTMT& lang = getMutableLang();
+    lang.pragmaName.assign(pragmaName.getDescription());
+    lang.value.clear();
+    return *this;
+}
+
+StatementPragma& StatementPragma::pragma(const Pragma& pragmaName, const LiteralValue& pragmaValue)
+{
+    LangPragmaSTMT& lang = getMutableLang();
+    lang.pragmaName.assign(pragmaName.getDescription());
+    lang.value.assign(pragmaValue.getLang());
+    return *this;
+}
+
+Statement::Type StatementPragma::getType() const
+{
+    return Statement::Type::Pragma;
+}

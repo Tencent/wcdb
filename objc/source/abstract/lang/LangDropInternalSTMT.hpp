@@ -18,10 +18,21 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangDropInternalSTMT_hpp
+#define LangDropInternalSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangDropInternalSTMT : public Lang {
+public:
+    bool ifExists;
+    copy_on_write_string schemaName;
+    copy_on_write_string name;
+
+    virtual copy_on_write_string SQL() const override;
+
+protected:
+    virtual const char *getInternalName() const = 0;
+};
+
+#endif /* LangDropInternalSTMT_hpp */

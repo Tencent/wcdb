@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangModuleArgument::SQL() const
+{
+    std::string description;
+    switch (type) {
+        case Type::TableConstraint:
+            assert(!tableConstraint.empty());
+            description.append(tableConstraint.description().get());
+            break;
+        case Type::ColumnDef:
+            assert(!columnDef.empty());
+            description.append(columnDef.description().get());
+            break;
+        case Type::LeftRight:
+            assert(!left.empty() && !right.empty());
+            description.append(left.get() + "=" + right.get());
+    }
+    return description;
+}

@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef ModuleArgument_hpp
+#define ModuleArgument_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class ModuleArgument : public DescribableWithLang<LangModuleArgument> {
+public:
+    ModuleArgument(const std::string& left, const std::string& right);
+    ModuleArgument(const ColumnDef& columnDef);
+    ModuleArgument(const TableConstraint& tableConstraint);
+};
+
+#endif /* ModuleArgument_hpp */

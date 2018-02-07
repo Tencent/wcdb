@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementBegin_hpp
+#define StatementBegin_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementBegin : public DescribableWithLang<LangBeginSTMT>,
+                       public Statement {
+public:
+   using Transaction = LangBeginSTMT::Type;
+   StatementBegin& begin(const Transaction& transaction = Transaction::Immediate);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementBegin_hpp */

@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementCommit& StatementCommit::commit()
+{
+    return *this;
+}
+
+Statement::Type StatementCommit::getType() const 
+{
+    return Statement::Type::Commit;
+}

@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementRollback_hpp
+#define StatementRollback_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementRollback : public DescribableWithLang<LangRollbackSTMT>,
+                          public Statement {
+public:
+                              StatementRollback& rollback();
+                              StatementRollback& rollbackTo(const std::string& savepointName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementRollback_hpp */

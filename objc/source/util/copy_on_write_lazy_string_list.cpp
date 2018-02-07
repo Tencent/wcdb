@@ -18,10 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#include "copy_on_write_lazy_string_list.hpp"
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+void copy_on_write_lazy_string_list::append(const copy_on_write_string &string)
+{
+    if (!empty()) {
+        assign({string});
+    } else {
+        get_or_copy().push_back(string);
+    }
+}
 
-#endif /* abstract_h */
+bool copy_on_write_lazy_string_list::empty() const
+{
+    return Super::empty() || get().empty();
+}
+
+copy_on_write_string
+copy_on_write_lazy_string_list::calculatedDescription() const
+{
+    std::string description;
+    bool comma = false;
+    for (const auto &element : get()) {
+        if (comma) {
+            description.append(", ");
+        } else {
+            comma = true;
+        }
+        assert(!element.empty());
+        description.append(element.get());
+    }
+    return description;
+}

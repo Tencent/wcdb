@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementVacuum& StatementVacuum::vacuum(const std::string& schemaName)
+{
+    LangVacuumSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+Statement::Type StatementVacuum::getType() const
+{
+    return Statement::Type::Vacuum;
+}

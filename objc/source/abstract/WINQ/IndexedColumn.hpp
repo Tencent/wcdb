@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef IndexedColumn_hpp
+#define IndexedColumn_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class IndexedColumn : public DescribableWithLang<LangIndexedColumn> {
+public:
+    IndexedColumn(const Expression& expression);
+    IndexedColumn(const std::string& columnName);
+    
+    IndexedColumn& withCollate(const std::string& collationName);
+    
+    IndexedColumn& withOrder(const Order& order = Order::NotSet);
+};
+
+#endif /* IndexedColumn_hpp */

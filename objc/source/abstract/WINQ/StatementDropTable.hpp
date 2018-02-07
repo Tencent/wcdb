@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementDropTable_hpp
+#define StatementDropTable_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementDropTable : public DescribableWithLang<LangDropTableSTMT>,
+                           public Statement {
+public:
+                               StatementDropTable& dropTable(const std::string& tableName, bool ifExists = true);
+                               StatementDropTable& withSchema(const std::string& schemaName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementDropTable_hpp */

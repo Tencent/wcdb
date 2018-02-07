@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementRollback& StatementRollback::rollback()
+{
+    LangRollbackSTMT& lang = getMutableLang();
+    lang.savepointName.clear();
+    return *this;
+}
+
+StatementRollback& StatementRollback::rollbackTo(const std::string& savepointName)
+{
+    LangRollbackSTMT& lang = getMutableLang();
+    lang.savepointName.assign(savepointName);
+    return *this;
+}
+
+Statement::Type StatementRollback::getType() const
+{
+    return Statement::Type::Rollback;
+}

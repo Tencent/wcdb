@@ -18,10 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangResultColumn_hpp
+#define LangResultColumn_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangResultColumn : public Lang {
+public:
+    enum class Type : int {
+        Expr,
+        Star,
+    };
+    Type type;
+
+    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_string columnAlias;
+
+    copy_on_write_string tableName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangResultColumn_hpp */

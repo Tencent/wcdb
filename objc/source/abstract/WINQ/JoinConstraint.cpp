@@ -18,10 +18,29 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+JoinConstraint& JoinConstraint::on(const Expression& expression)
+{
+    LangJoinConstraint& lang = getMutableLang();
+    lang.type = LangJoinConstraint::Type::On; 
+    lang.expr.assign(expression.getLang());
+    return *this;
+}
+
+JoinConstraint& JoinConstraint::usingColumn(const std::string columnName)
+{
+    LangJoinConstraint& lang = getMutableLang();
+    lang.type = LangJoinConstraint::Type::Using; 
+    lang.columnNames.append(columnName);
+    return *this;
+}
+
+JoinConstraint& JoinConstraint::usingColumns(const std::list<std::string> columnNames)
+{
+    LangJoinConstraint& lang = getMutableLang();
+    for (const std::string & columnName : columnNames) {
+        lang.columnNames.append(columnName);
+    }
+    return *this;
+}

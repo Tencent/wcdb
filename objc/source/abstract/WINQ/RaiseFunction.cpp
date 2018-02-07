@@ -18,10 +18,28 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+RaiseFunction& RaiseFunction::withRollback(const std::string& errorMessage)
+{
+    LangRaiseFunction& lang = getMutableLang();
+    lang.type = LangRaiseFunction::Type::Rollback;
+    lang.errorMessage.assign(errorMessage);
+    return *this;
+}
+
+RaiseFunction& RaiseFunction::withAbort(const std::string& errorMessage)
+{
+    LangRaiseFunction& lang = getMutableLang();
+    lang.type = LangRaiseFunction::Type::Abort;
+    lang.errorMessage.assign(errorMessage);
+    return *this;
+}
+
+RaiseFunction& RaiseFunction::withFail(const std::string& errorMessage)
+{
+    LangRaiseFunction& lang = getMutableLang();
+    lang.type = LangRaiseFunction::Type::Fail;
+    lang.errorMessage.assign(errorMessage);
+    return *this;
+}

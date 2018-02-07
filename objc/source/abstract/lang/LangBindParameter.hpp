@@ -18,10 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangBindParameter_hpp
+#define LangBindParameter_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangBindParameter : public Lang {
+public:
+    enum class Type : int {
+        QuestionMark,
+        QuestionMarkWithNumber,
+        Colon,
+        At,
+        DollarSign,
+    };
+    Type type;
+    int n;
+    copy_on_write_string name;
+
+    virtual copy_on_write_string SQL() const;
+};
+
+#endif /* LangBindParameter_hpp */

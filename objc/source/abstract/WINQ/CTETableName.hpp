@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef CTETableName_hpp
+#define CTETableName_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class CTETableName : public DescribableWithLang<LangCTETableName> {
+public:
+    CTETableName(const std::string &tableName);
+
+    CTETableName &byAddingColumnName(const std::string &columnName);
+
+    CTETableName &
+    byAddingColumnNames(const std::list<std::string> &columnNames);
+};
+
+#endif /* CTETableName_hpp */

@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangDropIndexSTMT_hpp
+#define LangDropIndexSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/LangDropInternalSTMT.hpp>
 
-#endif /* abstract_h */
+class LangDropIndexSTMT : public LangDropInternalSTMT {
+protected:
+    virtual const char *getInternalName() const override;
+};
+
+#endif /* LangDropIndexSTMT_hpp */

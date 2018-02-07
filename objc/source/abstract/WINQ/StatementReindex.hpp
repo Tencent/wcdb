@@ -18,10 +18,21 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementReindex_hpp
+#define StatementReindex_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementReindex : public DescribableWithLang<LangReindexSTMT>,
+                         public Statement {
+public:
+                             StatementReindex& reindex();
+                             StatementReindex& reindex(const std::string& tableOrIndexName);
+                             StatementReindex& withSchema(const std::string& schemaName);
+                             
+                             StatementReindex& reindexCollation(const std::string& collationName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementReindex_hpp */

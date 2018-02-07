@@ -18,10 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangConflictClause_hpp
+#define LangConflictClause_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+enum class LangConflictClause {
+    NotSet,
+    Rollback,
+    Abort,
+    Fail,
+    Ignore,
+    Replace,
+};
 
-#endif /* abstract_h */
+constexpr const char *
+LangConflictClauseName(const LangConflictClause &conflictClause)
+{
+    switch (conflictClause) {
+        case LangConflictClause::Rollback:
+            return "ROLLBACK";
+        case LangConflictClause::Abort:
+            return "ABORT";
+        case LangConflictClause::Fail:
+            return "FAIL";
+        case LangConflictClause::Ignore:
+            return "IGNORE";
+        case LangConflictClause::Replace:
+            return "REPLACE";
+        default:
+            return "";
+    }
+}
+
+#endif /* LangConflictClause_hpp */

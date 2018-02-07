@@ -18,10 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangTableConstraint_hpp
+#define LangTableConstraint_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangTableConstraint : public Lang {
+public:
+    copy_on_write_string name;
+    enum class Type : int {
+        PrimaryKey,
+        Unique,
+        Check,
+        ForeignKey,
+    };
+    Type type;
+
+    copy_on_write_lazy_lang_list<LangIndexedColumn> indexedColumns;
+    LangConflictClause conflictClause;
+
+    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang<LangForeignKeyClause> foreignKeyClause;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangTableConstraint_hpp */

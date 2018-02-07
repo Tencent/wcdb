@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangPragmaSTMT_hpp
+#define LangPragmaSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangPragmaSTMT : public Lang {
+public:
+    copy_on_write_string schemaName;
+    copy_on_write_string pragmaName;
+
+    copy_on_write_lazy_lang<LangLiteralValue> value;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangPragmaSTMT_hpp */

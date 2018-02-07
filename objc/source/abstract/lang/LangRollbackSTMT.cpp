@@ -18,10 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangRollbackSTMT::SQL() const
+{
+    std::string description("ROLLBACK");
+    if (!savepointName.empty()) {
+        description.append(" TO " + savepointName.get());
+    }
+    return description;
+}

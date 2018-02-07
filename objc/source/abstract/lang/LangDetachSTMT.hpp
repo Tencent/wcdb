@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangDetachSTMT_hpp
+#define LangDetachSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangDetachSTMT : public Lang {
+public:
+    copy_on_write_string schemaName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangDetachSTMT_hpp */

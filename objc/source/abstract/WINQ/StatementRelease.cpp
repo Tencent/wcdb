@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementRelease& StatementRelease::release(const std::string& savepointName)
+{
+    LangReleaseSTMT& lang = getMutableLang();
+    lang.savepointName.assign(savepointName);
+    return *this;
+}
+
+Statement::Type StatementRelease::getType() const
+{
+    return Statement::Type::Release;
+}

@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangAnalyzeSTMT::SQL() const
+{
+    std::string description("ANALYZE ");
+    bool appended = false;
+    if (!schemaName.empty()) {
+        description.append(schemaName.get());
+        appended = true;
+    }
+    if (!tableOrIndexName.empty()) {
+        if (appended) {
+            description.append(".");
+        }
+        description.append(tableOrIndexName.get());
+        appended = true;
+    }
+    assert(appended);
+    return description;
+}

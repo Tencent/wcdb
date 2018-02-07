@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangColumnDef_hpp
+#define LangColumnDef_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangColumnDef : public Lang {
+public:
+    copy_on_write_string columnName;
+    LangColumnType type;
+    copy_on_write_lazy_lang_list<LangColumnConstraint> columnConstraints;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangColumnDef_hpp */

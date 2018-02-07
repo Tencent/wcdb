@@ -18,10 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangBindParameter::SQL() const
+{
+    std::string description;
+    switch (type) {
+        case Type::QuestionMark:
+            description.assign("?");
+            break;
+        case Type::QuestionMarkWithNumber:
+            description.assign("?" + std::to_string(n));
+            break;
+        case Type::Colon:
+            assert(!name.empty());
+            description.append(":" + name.get());
+            break;
+        case Type::At:
+            assert(!name.empty());
+            description.append("@" + name.get());
+            break;
+        case Type::DollarSign:
+            assert(!name.empty());
+            description.append("$" + name.get());
+            break;
+    }
+    return description;
+}

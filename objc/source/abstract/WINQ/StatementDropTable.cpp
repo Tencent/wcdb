@@ -18,10 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementDropTable& StatementDropTable::dropTable(const std::string& tableName, bool ifExists)
+{
+    LangDropTableSTMT& lang = getMutableLang();
+    lang.name.assign(tableName);
+    lang.ifExists = ifExists;
+    return *this;
+}
+
+StatementDropTable& StatementDropTable::withSchema(const std::string& schemaName)
+{
+    LangDropTableSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+Statement::Type StatementDropTable::getType() const 
+{
+    return Statement::Type::DropTable; 
+}

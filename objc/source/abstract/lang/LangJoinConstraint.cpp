@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangJoinConstraint::SQL() const
+{
+    std::string description;
+    switch (type) {
+        case Type::On:
+            assert(!expr.empty());
+            description.append("ON " + expr.description().get());
+            break;
+        case Type::Using:
+            assert(!columnNames.empty());
+            description.append("USING(" + columnNames.description().get() +
+                               ")");
+            break;
+        default:
+            break;
+    }
+    return description;
+}

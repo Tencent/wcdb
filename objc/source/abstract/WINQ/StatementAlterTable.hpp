@@ -18,10 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementAlterTable_hpp
+#define StatementAlterTable_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementAlterTable : public DescribableWithLang<LangAlterTableSTMT>,
+                            public Statement {
+public:
+    StatementAlterTable &alterTable(const std::string &schemaName,
+                                    const std::string &tableName);
+    StatementAlterTable &alterTable(const std::string &tableName);
+    StatementAlterTable &renameTo(const std::string &newTableName);
+    StatementAlterTable &addColumn(const ColumnDef &columnDef);
+
+    virtual Type getType() const override;
+};
+
+#endif /* StatementAlterTable_hpp */

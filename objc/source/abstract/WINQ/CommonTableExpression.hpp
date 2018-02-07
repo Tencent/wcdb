@@ -18,10 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef CommonTableExpression_hpp
+#define CommonTableExpression_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class CommonTableExpression
+    : public DescribableWithLang<LangCommonTableExpression> {
+public:
+    CommonTableExpression(const std::string &tableName);
+
+    CommonTableExpression &byAddingColumn(const std::string &columnName);
+
+    CommonTableExpression &
+    byAddingColumns(const std::list<std::string> &columnNames);
+
+    CommonTableExpression &as(const StatementSelect &statementSelect);
+};
+
+#endif /* CommonTableExpression_hpp */

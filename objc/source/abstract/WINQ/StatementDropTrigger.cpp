@@ -18,10 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementDropTrigger& StatementDropTrigger::dropTrigger(const std::string& triggerName, bool ifExists)
+{
+    LangDropTriggerSTMT& lang = getMutableLang();
+    lang.name.assign(triggerName);
+    lang.ifExists = ifExists;
+    return *this;
+}
+
+StatementDropTrigger& StatementDropTrigger::withSchema(const std::string& schemaName)
+{
+    LangDropTriggerSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+Statement::Type StatementDropTrigger::getType() const 
+{
+    return Statement::Type::DropTrigger;
+}

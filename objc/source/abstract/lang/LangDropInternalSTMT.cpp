@@ -18,10 +18,20 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangDropInternalSTMT::SQL() const
+{
+    std::string description("DROP ");
+    description.append(getInternalName());
+    description.append(" ");
+    if (ifExists) {
+        description.append("IF EXISTS ");
+    }
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    assert(!name.empty());
+    description.append(name.get());
+    return description;
+}

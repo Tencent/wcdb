@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementDetach& StatementDetach::detach(const std::string& schemaName)
+{
+    LangDetachSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+Statement::Type StatementDetach::getType() const
+{
+    return Statement::Type::Detach;
+}

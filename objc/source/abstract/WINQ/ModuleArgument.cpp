@@ -18,10 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+ModuleArgument::ModuleArgument(const std::string& left, const std::string& right)
+{
+    LangModuleArgument& lang = getMutableLang();
+    lang.type = LangModuleArgument::Type::LeftRight;
+    lang.left.assign(left);
+    lang.right.assign(right);
+}
+
+ModuleArgument::ModuleArgument(const ColumnDef& columnDef)
+{
+    LangModuleArgument& lang = getMutableLang();
+    lang.type = LangModuleArgument::Type::ColumnDef;
+    lang.columnDef.assign(columnDef.getLang());
+}
+
+ModuleArgument::ModuleArgument(const TableConstraint& tableConstraint)
+{
+    LangModuleArgument& lang = getMutableLang();
+    lang.type = LangModuleArgument::Type::TableConstraint;
+    lang.tableConstraint.assign(tableConstraint.getLang());
+}

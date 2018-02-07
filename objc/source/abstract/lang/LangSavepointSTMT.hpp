@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangSavepointSTMT_hpp
+#define LangSavepointSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangSavepointSTMT : public Lang {
+public:
+    copy_on_write_string savepointName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangSavepointSTMT_hpp */

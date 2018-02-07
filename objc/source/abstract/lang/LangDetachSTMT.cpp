@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangDetachSTMT::SQL() const
+{
+    std::string description("DETACH ");
+    assert(!schemaName.empty());
+    description.append(schemaName.get());
+    return description;
+}

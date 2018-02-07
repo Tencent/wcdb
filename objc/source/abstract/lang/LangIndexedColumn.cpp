@@ -18,10 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangIndexedColumn::SQL() const
+{
+    std::string description;
+    switch (switcher) {
+        case Switch::ColumnName:
+            assert(!columnName.empty());
+            description.append(columnName.get());
+            break;
+        case Switch::Expr:
+            assert(!expr.empty());
+            description.append(expr.description().get());
+            break;
+    }
+    if (!collationName.empty()) {
+        description.append(" COLLATE " + collationName.get());
+    }
+    if (order != LangOrder::NotSet) {
+        description.append(" ");
+        description.append(LangOrderName(order));
+    }
+    return description;
+}

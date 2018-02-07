@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangOrderingTerm_hpp
+#define LangOrderingTerm_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangOrderingTerm : public Lang {
+public:
+    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_string collationName;
+    LangOrder order;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangOrderingTerm_hpp */

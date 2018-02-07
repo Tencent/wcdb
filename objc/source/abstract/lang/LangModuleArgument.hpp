@@ -18,10 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangModuleArgument_hpp
+#define LangModuleArgument_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+// What's the true syntax of LangModuleArgument?
+class LangModuleArgument : public Lang {
+public:
+    enum class Type : int {
+        ColumnDef,
+        TableConstraint,
+        LeftRight,
+    };
+    Type type;
+    copy_on_write_lazy_lang<LangColumnDef> columnDef;
+    copy_on_write_lazy_lang<LangTableConstraint> tableConstraint;
+    copy_on_write_string left;
+    copy_on_write_string right;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangModuleArgument_hpp */

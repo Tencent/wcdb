@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangJoinConstraint_hpp
+#define LangJoinConstraint_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangJoinConstraint : public Lang {
+public:
+    enum class Type : int {
+        NotSet,
+        On,
+        Using,
+    };
+    Type type;
+    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_string_list columnNames;
+
+    virtual copy_on_write_string SQL() const;
+};
+
+#endif /* LangJoinConstraint_hpp */

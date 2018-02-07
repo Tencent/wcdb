@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef JoinConstraint_hpp
+#define JoinConstraint_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class JoinConstraint : public DescribableWithLang<LangJoinConstraint> {
+public:
+    JoinConstraint& on(const Expression& expression);
+    JoinConstraint& usingColumn(const std::string columnName);
+    JoinConstraint& usingColumns(const std::list<std::string> columnNames);
+};
+
+#endif /* JoinConstraint_hpp */

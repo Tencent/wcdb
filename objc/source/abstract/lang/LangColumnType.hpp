@@ -18,10 +18,33 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangColumnType_hpp
+#define LangColumnType_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+enum class LangColumnType {
+    Null,
+    Integer32,
+    Integer64,
+    Float,
+    Text,
+    BLOB,
+};
 
-#endif /* abstract_h */
+constexpr const char *LangColumnTypeName(const LangColumnType &columnType)
+{
+    switch (columnType) {
+        case LangColumnType::Null:
+            return "NULL";
+        case LangColumnType::Integer32:
+        case LangColumnType::Integer64:
+            return "INTEGER";
+        case LangColumnType::Float:
+            return "FLOAT";
+        case LangColumnType::Text:
+            return "TEXT";
+        case LangColumnType::BLOB:
+            return "BLOB";
+    }
+}
+
+#endif /* LangColumnType_hpp */

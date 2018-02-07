@@ -18,10 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangOrder_hpp
+#define LangOrder_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+enum class LangOrder : int {
+    NotSet,
+    ASC,
+    DESC,
+};
 
-#endif /* abstract_h */
+constexpr const char *LangOrderName(const LangOrder &order)
+{
+    switch (order) {
+        case LangOrder::ASC:
+            return "ASC";
+        case LangOrder::DESC:
+            return "DESC";
+        default:
+            return "";
+    }
+}
+
+#endif /* LangOrder_hpp */

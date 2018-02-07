@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementDropIndex_hpp
+#define StatementDropIndex_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementDropIndex : public DescribableWithLang<LangDropIndexSTMT>,
+                           public Statement {
+public:
+                               StatementDropIndex& dropIndex(const std::string& indexName, bool ifExists = true);
+                               StatementDropIndex& withSchema(const std::string& schemaName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementDropIndex_hpp */

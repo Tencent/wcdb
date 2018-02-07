@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangPragmaSTMT::SQL() const
+{
+    std::string description("PRAGMA ");
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    if (!pragmaName.empty()) {
+        description.append(pragmaName.get());
+    }
+    if (!value.empty()) {
+        description.append(" = " + value.description().get());
+    }
+    return description;
+}

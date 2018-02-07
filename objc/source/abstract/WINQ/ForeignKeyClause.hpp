@@ -1,0 +1,63 @@
+/*
+ * Tencent is pleased to support the open source community by making
+ * WCDB available.
+ *
+ * Copyright (C) 2017 THL A29 Limited, a Tencent company.
+ * All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ *       https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef ForeignKeyClause_hpp
+#define ForeignKeyClause_hpp
+
+#include <WCDB/Describable.hpp>
+
+class ForeignKeyClause : public DescribableWithLang<LangForeignKeyClause> {
+public:
+    ForeignKeyClause(const std::string &foreignTable);
+
+    ForeignKeyClause &byAddingColumnName(const std::string &columnName);
+
+    ForeignKeyClause &
+    byAddingColumnNames(const std::list<std::string> &columnNames);
+
+    ForeignKeyClause &onDeleteSetNull();
+    ForeignKeyClause &onDeleteSetDefault();
+    ForeignKeyClause &onDeleteCascade();
+    ForeignKeyClause &onDeleteRestrict();
+    ForeignKeyClause &onDeleteNoAction();
+
+    ForeignKeyClause &onUpdateSetNull();
+    ForeignKeyClause &onUpdateSetDefault();
+    ForeignKeyClause &onUpdateCascade();
+    ForeignKeyClause &onUpdateRestrict();
+    ForeignKeyClause &onUpdateNoAction();
+
+    ForeignKeyClause &byMatching(const std::string &name);
+
+    ForeignKeyClause &deferrableInitiallyDeferred();
+    ForeignKeyClause &deferrableInitiallyImmediate();
+    ForeignKeyClause &notDeferrableInitiallyDeferred();
+    ForeignKeyClause &notDeferrableInitiallyImmediate();
+
+private:
+    void addTriggerForUpdating(
+        const LangForeignKeyClause::Trigger::Operation &operation);
+    void addTriggerForDeleting(
+        const LangForeignKeyClause::Trigger::Operation &operation);
+    void addTriggerForMatching(const std::string &name);
+    void addTrigger(const LangForeignKeyClause::Trigger& trigger);
+};
+
+#endif /* ForeignKeyClause_hpp */

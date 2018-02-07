@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementPragma_hpp
+#define StatementPragma_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementPragma : public DescribableWithLang<LangPragmaSTMT>,
+                        public Statement {
+public:
+                            StatementPragma& withSchema(const std::string& schemaName);
+                            StatementPragma& pragma(const Pragma& pragmaName);
+                            StatementPragma& pragma(const Pragma& pragmaName, const LiteralValue& pragmaValue);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementPragma_hpp */

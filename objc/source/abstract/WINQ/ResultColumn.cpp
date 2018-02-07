@@ -18,10 +18,31 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+const ResultColumn ResultColumn::All(LangResultColumn::Type::Star);
+
+ResultColumn ResultColumn::AllInTable(const std::string& tableName)
+{
+    return ResultColumn(tableName); 
+}
+
+ResultColumn::ResultColumn(const Expression& expression)
+{
+    LangResultColumn& lang = getMutableLang();
+    lang.type = LangResultColumn::Type::Expr;
+    lang.expr.assign(expression.getLang());
+}
+
+ResultColumn::ResultColumn(const LangResultColumn::Type& type)
+{
+    LangResultColumn& lang = getMutableLang();
+    lang.type = LangResultColumn::Type::Star;
+}
+
+ResultColumn::ResultColumn(const std::string& tableName)
+{
+    LangResultColumn& lang = getMutableLang();
+    lang.type = LangResultColumn::Type::Star;
+    lang.tableName.assign(tableName);
+}

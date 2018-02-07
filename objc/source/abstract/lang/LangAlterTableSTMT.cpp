@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangAlterTableSTMT::SQL() const
+{
+    std::string description("ALTER TABLE ");
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    assert(!tableName.empty());
+    description.append(tableName.get());
+    switch (switcher) {
+        case Switch::Rename:
+            description.append(" RENAME TO " + newTableName.get());
+            break;
+        case Switch::AddColumn:
+            description.append(" ADD " + columnDef.description().get());
+            break;
+    }
+    return description;
+}

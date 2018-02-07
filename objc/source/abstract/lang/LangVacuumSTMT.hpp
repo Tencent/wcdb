@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangVacuumSTMT_hpp
+#define LangVacuumSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangVacuumSTMT : public Lang {
+public:
+    copy_on_write_string schemaName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangVacuumSTMT_hpp */

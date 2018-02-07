@@ -18,10 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef TableConstraint_hpp
+#define TableConstraint_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class TableConstraint : public DescribableWithLang<LangTableConstraint> {
+public:
+};
+
+#endif /* TableConstraint_hpp */

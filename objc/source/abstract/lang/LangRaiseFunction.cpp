@@ -18,10 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangRaiseFunction::SQL() const
+{
+    std::string description("RAISE(");
+    switch (type) {
+        case Type::Ignore:
+            description.append("IGNORE");
+            break;
+        case Type::Rollback:
+            assert(!errorMessage.empty());
+            description.append("ROLLBACK " + errorMessage.get());
+            break;
+        case Type::Abort:
+            assert(!errorMessage.empty());
+            description.append("ABORT " + errorMessage.get());
+            break;
+        case Type::Fail:
+            assert(!errorMessage.empty());
+            description.append("FAIL " + errorMessage.get());
+            break;
+    }
+    return description;
+}

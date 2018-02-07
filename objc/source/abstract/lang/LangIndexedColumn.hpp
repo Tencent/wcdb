@@ -18,10 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangIndexedColumn_hpp
+#define LangIndexedColumn_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangIndexedColumn : public Lang {
+public:
+    enum class Switch : int {
+        ColumnName,
+        Expr,
+    };
+    Switch switcher;
+    copy_on_write_string columnName;
+    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_string collationName;
+    LangOrder order;
+
+    virtual copy_on_write_string SQL() const;
+};
+
+#endif /* LangIndexedColumn_hpp */

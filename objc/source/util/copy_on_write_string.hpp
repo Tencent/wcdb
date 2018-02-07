@@ -18,10 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef copy_on_write_string_hpp
+#define copy_on_write_string_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include "copy_on_write.hpp"
+#include <string>
 
-#endif /* abstract_h */
+class copy_on_write_string : public copy_on_write<std::string> {
+public:
+    using Super = copy_on_write<std::string>;
+
+    copy_on_write_string();
+
+    copy_on_write_string(const std::string &string);
+    
+    copy_on_write_string(const char* string);
+
+    void append(const std::string &string);
+    
+    void append(const copy_on_write_string &string);
+
+    bool empty() const;
+
+private:
+    using copy_on_write<std::string>::get_or_copy;
+};
+
+#endif /* copy_on_write_string_hpp */

@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef RaiseFunction_hpp
+#define RaiseFunction_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class RaiseFunction : public DescribableWithLang<LangRaiseFunction> {
+public:
+    RaiseFunction& withRollback(const std::string& errorMessage);
+    RaiseFunction& withAbort(const std::string& errorMessage);
+    RaiseFunction& withFail(const std::string& errorMessage);    
+};
+
+#endif /* RaiseFunction_hpp */

@@ -18,10 +18,28 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangJoinOperator_hpp
+#define LangJoinOperator_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangJoinOperator : public Lang {
+public:
+    bool join;
+    bool natural;
+    enum class Type : int {
+        NotSet,
+        Left,
+        LeftOuter,
+        Inner,
+        Cross,
+    };
+    Type type;
+
+    virtual copy_on_write_string SQL() const;
+
+protected:
+    static constexpr const char *JoinTypeName(const Type &type);
+};
+
+#endif /* LangJoinOperator_hpp */

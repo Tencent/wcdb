@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementBegin& StatementBegin::begin(const Transaction& transaction)
+{
+    LangBeginSTMT& lang = getMutableLang();
+    lang.type = transaction;
+    return *this;
+}
+
+Statement::Type StatementBegin::getType() const 
+{
+    return Statement::Type::Begin;
+}

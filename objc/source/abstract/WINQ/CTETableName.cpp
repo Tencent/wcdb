@@ -18,10 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+CTETableName::CTETableName(const std::string &tableName)
+{
+    LangCTETableName &lang = getMutableLang();
+    lang.tableName.assign(tableName);
+}
+
+CTETableName &CTETableName::byAddingColumnName(const std::string &columnName)
+{
+    LangCTETableName &lang = getMutableLang();
+    lang.columnNames.append(columnName);
+    return *this;
+}
+
+CTETableName &
+CTETableName::byAddingColumnNames(const std::list<std::string> &columnNames)
+{
+    LangCTETableName &lang = getMutableLang();
+    for (const std::string &columnName : columnNames) {
+        lang.columnNames.append(columnName);
+    }
+    return *this;
+}

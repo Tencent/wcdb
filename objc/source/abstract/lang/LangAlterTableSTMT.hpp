@@ -18,10 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangAlterTableSTMT_hpp
+#define LangAlterTableSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangAlterTableSTMT : public Lang {
+public:
+    copy_on_write_string schemaName;
+    copy_on_write_string tableName;
+    enum class Switch : int {
+        Rename,
+        AddColumn,
+    };
+    Switch switcher;
+    copy_on_write_string newTableName;
+    copy_on_write_lazy_lang<LangColumnDef> columnDef;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangAlterTableSTMT_hpp */

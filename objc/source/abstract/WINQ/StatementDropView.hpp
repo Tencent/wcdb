@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementDropView_hpp
+#define StatementDropView_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementDropView : public DescribableWithLang<LangDropViewSTMT>,
+                          public Statement {
+public:
+                              StatementDropView& dropView(const std::string& viewName, bool ifExists = true);
+                              StatementDropView& withSchema(const std::string& schemaName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementDropView_hpp */

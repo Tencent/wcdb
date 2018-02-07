@@ -18,10 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangCreateVirtualTableSTMT::SQL() const
+{
+    std::string description("CREATE VIRTUAL TABLE ");
+    if (ifNotExists) {
+        description.append("IF NOT EXISTS ");
+    }
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    assert(!tableName.empty());
+    description.append(tableName.get());
+    description.append(" USING ");
+    assert(!moduleName.empty());
+    description.append(moduleName.get());
+    if (!moduleArguments.empty()) {
+        description.append("(" + moduleArguments.description().get() + ")");
+    }
+    return description;
+}

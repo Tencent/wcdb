@@ -18,10 +18,21 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangCreateVirtualTableSTMT_hpp
+#define LangCreateVirtualTableSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangCreateVirtualTableSTMT : public Lang {
+public:
+    bool ifNotExists;
+    copy_on_write_string schemaName;
+    copy_on_write_string tableName;
+    copy_on_write_string moduleName;
+
+    copy_on_write_lazy_lang_list<LangModuleArgument> moduleArguments;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangCreateVirtualTableSTMT_hpp */

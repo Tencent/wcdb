@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangBeginSTMT::SQL() const
+{
+    std::string description("BEGIN ");
+    description.append(LangBeginSTMT::TypeName(type));
+    return description;
+}
+
+constexpr const char *LangBeginSTMT::TypeName(const Type &type)
+{
+    switch (type) {
+        case Type::Deferred:
+            return "DEFERRED";
+        case Type::Immediate:
+            return "IMMEDIATE";
+        case Type::Exclusive:
+            return "DEFERRED";
+    }
+}

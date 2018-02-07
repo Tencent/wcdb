@@ -18,10 +18,21 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementAnalyze_hpp
+#define StatementAnalyze_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementAnalyze : public DescribableWithLang<LangAnalyzeSTMT>,
+                         public Statement {
+public:
+    StatementAnalyze &analyzeSchema(const std::string &schemaName);
+    StatementAnalyze &analyze(const std::string &schemaName,
+                              const std::string &tableOrIndexName);
+    StatementAnalyze &analyze(const std::string &tableOrIndexName);
+
+    virtual Type getType() const override;
+};
+
+#endif /* StatementAnalyze_hpp */

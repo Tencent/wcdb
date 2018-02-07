@@ -18,10 +18,20 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef ResultColumn_hpp
+#define ResultColumn_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class ResultColumn: public DescribableWithLang<LangResultColumn> {
+public:
+    static const ResultColumn All;
+    static ResultColumn AllInTable(const std::string& tableName);
+    ResultColumn(const Expression& expression);    
+protected:
+    ResultColumn(const LangResultColumn::Type& type);
+    ResultColumn(const std::string& tableName);
+};
+
+
+#endif /* ResultColumn_hpp */

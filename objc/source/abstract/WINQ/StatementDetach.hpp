@@ -18,10 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementDetach_hpp
+#define StatementDetach_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementDetach : public DescribableWithLang<LangDetachSTMT>,
+                        public Statement {
+public:
+                            StatementDetach& detach(const std::string& schemaName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementDetach_hpp */

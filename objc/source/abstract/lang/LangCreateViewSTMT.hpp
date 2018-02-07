@@ -18,10 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangCreateViewSTMT_hpp
+#define LangCreateViewSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangCreateViewSTMT : public Lang {
+public:
+    bool temp;
+    bool ifNotExists;
+    copy_on_write_string schemaName;
+    copy_on_write_string viewName;
+    copy_on_write_lazy_string_list columnNames;
+
+    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangCreateViewSTMT_hpp */

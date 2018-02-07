@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangOrderingTerm::SQL() const
+{
+    std::string description;
+    assert(!expr.empty());
+    description.append(expr.description().get());
+    if (!collationName.empty()) {
+        description.append(" COLLATE " + collationName.get());
+    }
+    if (order != LangOrder::NotSet) {
+        description.append(" ");
+        description.append(LangOrderName(order));
+    }
+    return description;
+}

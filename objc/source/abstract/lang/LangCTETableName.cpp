@@ -18,10 +18,15 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangCTETableName::SQL() const
+{
+    std::string description;
+    assert(!tableName.empty());
+    description.append(tableName.get());
+    if (!columnNames.empty()) {
+        description.append("(" + columnNames.description().get() + ")");
+    }
+    return description;
+}

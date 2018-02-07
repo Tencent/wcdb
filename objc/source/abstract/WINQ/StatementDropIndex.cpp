@@ -18,10 +18,20 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementDropIndex& StatementDropIndex::dropIndex(const std::string& indexName, bool ifExists)
+{
+    LangDropIndexSTMT& lang = getMutableLang();
+    lang.name.assign(indexName);
+    lang.ifExists = ifExists;
+    return *this;
+}
+
+StatementDropIndex& StatementDropIndex::withSchema(const std::string& schemaName)
+{
+    LangDropIndexSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+

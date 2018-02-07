@@ -18,10 +18,15 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangWithClause::SQL() const
+{
+    std::string description("WITH ");
+    if (recursive) {
+        description.append("RECURSIVE ");
+    }
+    assert(!pairs.empty());
+    description.append(pairs.description().get());
+    return description;
+}

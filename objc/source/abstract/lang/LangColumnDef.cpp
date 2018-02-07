@@ -18,10 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangColumnDef::SQL() const
+{
+    std::string description;
+    assert(!columnName.empty());
+    description.append(columnName.get() + " ");
+    description.append(LangColumnTypeName(type));
+    if (!columnConstraints.empty()) {
+        description.append(" " + columnConstraints.description().get());
+    }
+    return description;
+}

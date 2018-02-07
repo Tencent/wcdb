@@ -18,10 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangWithClause_hpp
+#define LangWithClause_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangWithClause : public Lang {
+public:
+    bool recursive;
+
+    class Pair : public Lang {
+    public:
+        copy_on_write_lazy_lang<LangCTETableName> cteTableName;
+        copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+
+        virtual copy_on_write_string SQL() const override;
+    };
+    copy_on_write_lazy_lang_list<Pair> pairs;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangWithClause_hpp */

@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangAttachSTMT::SQL() const
+{
+    std::string description("ATTACH ");
+    assert(!expr.empty());
+    description.append(expr.description().get());
+    assert(!schemaName.empty());
+    description.append(" AS " + schemaName.get());
+    return description;
+}

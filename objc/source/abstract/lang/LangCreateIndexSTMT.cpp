@@ -18,10 +18,29 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangCreateIndexSTMT::SQL() const
+{
+    std::string description("CREATE ");
+    if (unique) {
+        description.append("UNIQUE ");
+    }
+    description.append("INDEX ");
+    if (ifNotExists) {
+        description.append("IF NOT EXISTS ");
+    }
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    assert(!indexName.empty());
+    description.append(indexName.get());
+    assert(!tableName.empty());
+    description.append(" ON " + tableName.get());
+    assert(!indexedColumns.empty());
+    description.append("(" + indexedColumns.description().get() + ")");
+    if (!expr.empty()) {
+        description.append(" WHERE " + expr.description().get());
+    }
+    return description;
+}

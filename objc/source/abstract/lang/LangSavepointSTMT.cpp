@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangSavepointSTMT::SQL() const
+{
+    std::string description("SAVEPOINT ");
+    assert(!savepointName.empty());
+    description.append(savepointName.get());
+    return description;
+}

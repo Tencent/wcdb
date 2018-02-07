@@ -18,10 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangDeleteSTMT_hpp
+#define LangDeleteSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangDeleteSTMT : public CRUDLang {
+public:
+    copy_on_write_lazy_lang<LangWithClause> withClause;
+    copy_on_write_lazy_lang<LangQualifiedTableName> qualifiedTableName;
+    copy_on_write_lazy_lang<LangExpr> condition;
+    copy_on_write_lazy_lang_list<LangOrderingTerm> orderingTerms;
+    copy_on_write_lazy_lang<LangExpr> limit;
+    bool offset;
+    copy_on_write_lazy_lang<LangExpr> limitParameter;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangDeleteSTMT_hpp */

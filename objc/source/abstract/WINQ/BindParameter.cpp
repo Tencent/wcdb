@@ -18,10 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+BindParameter BindParameter::defaultBindParameter;
+
+BindParameter::BindParameter()
+{
+    LangBindParameter &lang = getMutableLang();
+    lang.type = LangBindParameter::Type::QuestionMark;
+}
+
+BindParameter::BindParameter(int n)
+{
+    LangBindParameter &lang = getMutableLang();
+    lang.type = LangBindParameter::Type::QuestionMarkWithNumber;
+    lang.n = n;
+}
+
+BindParameter::BindParameter(const std::string &name)
+{
+    LangBindParameter &lang = getMutableLang();
+    lang.type = LangBindParameter::Type::Colon;
+    lang.name.assign(name);
+}

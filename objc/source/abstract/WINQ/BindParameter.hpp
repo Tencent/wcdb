@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef BindParameter_hpp
+#define BindParameter_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+// http://www.sqlite.org/lang_expr.html
+class BindParameter : public DescribableWithLang<LangBindParameter> {
+public:
+    static BindParameter defaultBindParameter;
+
+    BindParameter();                        // ?
+    BindParameter(int n);                   // ?NNN
+    BindParameter(const std::string &name); // :AAAA
+};
+
+#endif /* BindParameter_hpp */

@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangRaiseFunction_hpp
+#define LangRaiseFunction_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangRaiseFunction : public Lang {
+public:
+    enum class Type : int {
+        Ignore,
+        Rollback,
+        Abort,
+        Fail,
+    };
+    Type type;
+    copy_on_write_string errorMessage;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangRaiseFunction_hpp */

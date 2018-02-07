@@ -18,10 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementRelease_hpp
+#define StatementRelease_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementRelease : public DescribableWithLang<LangReleaseSTMT>,
+                         public Statement {
+public:
+                             StatementRelease& release(const std::string& savepointName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementRelease_hpp */

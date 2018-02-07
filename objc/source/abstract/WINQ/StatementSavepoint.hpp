@@ -18,10 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementSavepoint_hpp
+#define StatementSavepoint_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementSavepoint : public DescribableWithLang<LangSavepointSTMT>,
+                           public Statement {
+public:
+                               StatementSavepoint& savepoint(const std::string& savepointName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementSavepoint_hpp */

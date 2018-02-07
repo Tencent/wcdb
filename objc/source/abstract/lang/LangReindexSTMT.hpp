@@ -18,10 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangReindexSTMT_hpp
+#define LangReindexSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangReindexSTMT : public Lang {
+public:
+    enum class Switch : int {
+        NotSet,
+        Collation,
+        TableOrIndex,
+    };
+    Switch switcher;
+
+    copy_on_write_string collationName;
+    copy_on_write_string schemaName;
+    copy_on_write_string tableOrIndexName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangReindexSTMT_hpp */

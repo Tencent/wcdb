@@ -18,10 +18,29 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#include "copy_on_write_data.hpp"
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+void copy_on_write_data::append(const unsigned char *raw, const size_t &size)
+{
+    if (!empty()) {
+        std::vector<unsigned char> &vector = get_or_copy();
+        vector.insert(vector.begin(), raw, raw + size);
+    } else {
+        assign(std::vector<unsigned char>(raw, raw + size));
+    }
+}
 
-#endif /* abstract_h */
+void copy_on_write_data::append(const std::vector<unsigned char> &data)
+{
+    if (!empty()) {
+        std::vector<unsigned char> &vector = get_or_copy();
+        vector.insert(vector.begin(), data.begin(), data.end());
+    } else {
+        assign(data);
+    }
+}
+
+bool copy_on_write_data::empty() const
+{
+    return copy_on_write<std::vector<unsigned char>>::empty() || get().empty();
+}

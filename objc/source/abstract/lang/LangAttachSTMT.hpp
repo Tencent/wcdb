@@ -18,10 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangAttachSTMT_hpp
+#define LangAttachSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangAttachSTMT : public Lang {
+public:
+    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_string schemaName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangAttachSTMT_hpp */

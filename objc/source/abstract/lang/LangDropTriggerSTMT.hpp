@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangDropTriggerSTMT_hpp
+#define LangDropTriggerSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/LangDropTriggerSTMT.hpp>
 
-#endif /* abstract_h */
+class LangDropTriggerSTMT : public LangDropInternalSTMT {
+protected:
+    virtual const char *getInternalName() const override;
+};
+
+#endif /* LangDropTriggerSTMT_hpp */

@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef QualifiedTableName_hpp
+#define QualifiedTableName_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class QualifiedTableName : public DescribableWithLang<LangQualifiedTableName> {
+public:
+    QualifiedTableName(const std::string& tableName);
+    
+    QualifiedTableName& withSchema(const std::string& schemaName);
+    
+    QualifiedTableName& indexedBy(const std::string& indexName);
+    QualifiedTableName& notIndexed();
+};
+
+#endif /* QualifiedTableName_hpp */

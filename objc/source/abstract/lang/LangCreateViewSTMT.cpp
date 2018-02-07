@@ -18,10 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangCreateViewSTMT::SQL() const
+{
+    std::string description("CREATE ");
+    if (temp) {
+        description.append("TEMP ");
+    }
+    description.append("VIEW ");
+    if (ifNotExists) {
+        description.append("IF NOT EXISTS ");
+    }
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    assert(!viewName.empty());
+    description.append(viewName.get());
+    if (!columnNames.empty()) {
+        description.append("(" + columnNames.description().get() + ")");
+    }
+    assert(!selectSTMT.empty());
+    description.append(" AS " + selectSTMT.description().get());
+    return description;
+}

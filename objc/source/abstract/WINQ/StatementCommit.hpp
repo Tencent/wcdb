@@ -18,10 +18,15 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementCommit_hpp
+#define StatementCommit_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
 
-#endif /* abstract_h */
+class StatementCommit : public DescribableWithLang<LangCommitSTMT>, public Statement {
+public:
+    StatementCommit& commit();
+    virtual Type getType() const override;
+};
+
+#endif /* StatementCommit_hpp */

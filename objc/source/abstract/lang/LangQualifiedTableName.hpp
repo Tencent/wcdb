@@ -18,10 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangQualifiedTableName_hpp
+#define LangQualifiedTableName_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangQualifiedTableName : public Lang {
+public:
+    copy_on_write_string schemaName;
+    copy_on_write_string tableName;
+
+    enum class IndexSwitch : int {
+        NotSet,
+        Indexed,
+        NotIndexed,
+    };
+    IndexSwitch indexSwitcher;
+    copy_on_write_string indexName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangQualifiedTableName_hpp */

@@ -18,10 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef LangAnalyzeSTMT_hpp
+#define LangAnalyzeSTMT_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/lang_common.h>
 
-#endif /* abstract_h */
+class LangAnalyzeSTMT : public Lang {
+public:
+    copy_on_write_string schemaName;
+    copy_on_write_string tableOrIndexName;
+
+    virtual copy_on_write_string SQL() const override;
+};
+
+#endif /* LangAnalyzeSTMT_hpp */

@@ -18,10 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+StatementDropView& StatementDropView::dropView(const std::string& viewName, bool ifExists)
+{
+    LangDropViewSTMT& lang = getMutableLang();
+    lang.name.assign(viewName);
+    lang.ifExists = ifExists;
+    return *this;
+}
+
+StatementDropView& StatementDropView::withSchema(const std::string& schemaName)
+{
+    LangDropViewSTMT& lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+Statement::Type StatementDropView::getType() const
+{
+    return Statement::Type::DropView;
+}

@@ -18,10 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementAttach_hpp
+#define StatementAttach_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementAttach : public DescribableWithLang<LangAttachSTMT>,
+                        public Statement {
+public:
+    StatementAttach &attach(const Expression &expression);
+    StatementAttach &as(const std::string &schemaName);
+
+    virtual Type getType() const override;
+};
+
+#endif /* StatementAttach_hpp */

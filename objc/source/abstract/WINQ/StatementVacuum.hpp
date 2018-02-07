@@ -18,10 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementVacuum_hpp
+#define StatementVacuum_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementVacuum : public DescribableWithLang<LangVacuumSTMT>,
+                        public Statement {
+public:
+                            StatementVacuum& vacuum(const std::string& schemaName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementVacuum_hpp */

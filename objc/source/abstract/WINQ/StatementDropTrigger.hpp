@@ -18,10 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
+#ifndef StatementDropTrigger_hpp
+#define StatementDropTrigger_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
-#endif /* abstract_h */
+class StatementDropTrigger : public DescribableWithLang<LangDropTriggerSTMT>,
+                             public Statement {
+public:
+                                 StatementDropTrigger& dropTrigger(const std::string& triggerName, bool ifExists = true);
+                                 StatementDropTrigger& withSchema(const std::string& schemaName);
+    virtual Type getType() const override;
+};
+
+#endif /* StatementDropTrigger_hpp */

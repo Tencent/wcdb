@@ -18,10 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
 #include <WCDB/lang.h>
-#include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+copy_on_write_string LangQualifiedTableName::SQL() const
+{
+    std::string description;
+    if (!schemaName.empty()) {
+        description.append(schemaName.get() + ".");
+    }
+    assert(!tableName.empty());
+    description.append(tableName.get());
+    switch (indexSwitcher) {
+        case IndexSwitch::Indexed:
+            assert(!indexName.empty());
+            description.append(" INDEXED BY " + indexName.get());
+            break;
+        case IndexSwitch::NotIndexed:
+            description.append(" NOT INDEXED");
+            break;
+        default:
+            break;
+    }
+    return description;
+}

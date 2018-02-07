@@ -18,10 +18,23 @@
  * limitations under the License.
  */
 
-#ifndef abstract_h
-#define abstract_h
-
-#include <WCDB/lang.h>
 #include <WCDB/WINQ.h>
 
-#endif /* abstract_h */
+Statement::Type StatementAttach::getType() const
+{
+    return Statement::Type::Attach;
+}
+
+StatementAttach &StatementAttach::attach(const Expression &expression)
+{
+    LangAttachSTMT &lang = getMutableLang();
+    lang.expr.assign(expression.getLang());
+    return *this;
+}
+
+StatementAttach &StatementAttach::as(const std::string &schemaName)
+{
+    LangAttachSTMT &lang = getMutableLang();
+    lang.schemaName.assign(schemaName);
+    return *this;
+}
