@@ -42,9 +42,10 @@ public:
         willProbablyChange();
         m_shared = t.m_shared;
     }
-    
+
     template <typename U>
-    void assign(const copy_on_write<U> &u) {
+    void assign(const copy_on_write<U> &u)
+    {
         willProbablyChange();
         m_shared = std::static_pointer_cast<T>(u.m_shared);
     }
@@ -81,7 +82,7 @@ protected:
 
 private:
     std::shared_ptr<T> m_shared;
-    
+
     template <typename D>
     friend class copy_on_write;
 };

@@ -22,12 +22,12 @@
 
 namespace WCDB {
 
-StatementCommit& StatementCommit::commit()
+StatementCommit &StatementCommit::commit()
 {
     return *this;
 }
 
-Statement::Type StatementCommit::getType() const 
+Statement::Type StatementCommit::getType() const
 {
     return Statement::Type::Commit;
 }

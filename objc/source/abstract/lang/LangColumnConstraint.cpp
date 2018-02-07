@@ -92,4 +92,3 @@ copy_on_write_string ColumnConstraint::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

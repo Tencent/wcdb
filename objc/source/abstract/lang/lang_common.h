@@ -96,5 +96,4 @@ class VacuumSTMT;
 
 } // namespace WCDB
 
-    
 #endif /* lang_common_h */

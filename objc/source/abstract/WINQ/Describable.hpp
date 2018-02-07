@@ -56,7 +56,7 @@ public:
 private:
     lang::copy_on_write_lazy_lang<T> m_lang;
 };
-    
+
 typedef lang::Order Order;
 typedef lang::ConflictClause ConflictClause;
 typedef lang::ColumnType ColumnType;

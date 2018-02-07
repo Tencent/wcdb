@@ -22,30 +22,30 @@
 
 namespace WCDB {
 
-IndexedColumn::IndexedColumn(const Expression& expression)
+IndexedColumn::IndexedColumn(const Expression &expression)
 {
-    lang::IndexedColumn& lang = getMutableLang();
+    lang::IndexedColumn &lang = getMutableLang();
     lang.switcher = lang::IndexedColumn::Switch::Expr;
-    lang.expr.assign(expression.getLang());    
+    lang.expr.assign(expression.getLang());
 }
 
-IndexedColumn::IndexedColumn(const std::string& columnName)
+IndexedColumn::IndexedColumn(const std::string &columnName)
 {
-    lang::IndexedColumn& lang = getMutableLang();
+    lang::IndexedColumn &lang = getMutableLang();
     lang.switcher = lang::IndexedColumn::Switch::ColumnName;
     lang.columnName.assign(columnName);
 }
 
-IndexedColumn& IndexedColumn::withCollate(const std::string& collationName)
+IndexedColumn &IndexedColumn::withCollate(const std::string &collationName)
 {
-    lang::IndexedColumn& lang = getMutableLang();
+    lang::IndexedColumn &lang = getMutableLang();
     lang.collationName.assign(collationName);
     return *this;
 }
 
-IndexedColumn& IndexedColumn::withOrder(const Order& order)
+IndexedColumn &IndexedColumn::withOrder(const Order &order)
 {
-    lang::IndexedColumn& lang = getMutableLang();
+    lang::IndexedColumn &lang = getMutableLang();
     lang.order = order;
     return *this;
 }

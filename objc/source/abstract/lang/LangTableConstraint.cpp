@@ -59,4 +59,3 @@ copy_on_write_string TableConstraint::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

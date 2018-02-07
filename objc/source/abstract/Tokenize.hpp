@@ -21,10 +21,10 @@
 #ifndef Tokenize_hpp
 #define Tokenize_hpp
 
+#include <WCDB/spin.hpp>
 #include <sqlcipher/fts3_tokenizer.h>
 #include <sqlcipher/sqlite3.h>
 #include <stdlib.h>
-#include <WCDB/spin.hpp>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -32,16 +32,16 @@
 namespace WCDB {
 
 namespace FTS {
-    
+
 class Modules {
 public:
     static Modules *SharedModules();
-    
+
     void addModule(const std::string &name,
                    const std::shared_ptr<void> &module);
-    
+
     std::vector<unsigned char> getAddress(const std::string &name) const;
-    
+
 protected:
     std::unordered_map<std::string, std::shared_ptr<void>> m_modules;
     mutable Spin m_spin;
@@ -57,20 +57,20 @@ public:
     CursorInfoBase(const char *input,
                    int inputLength,
                    TokenizerInfoBase *tokenizerInfo);
-    
+
     virtual int step(const char **ppToken,
                      int *pnBytes,
                      int *piStartOffset,
                      int *piEndOffset,
                      int *piPosition) = 0;
-    
+
 protected:
     TokenizerInfoBase *m_tokenizerInfo;
 };
 
 template <const char name[],
-typename TokenizerInfo /* = TokenizerInfoBase */,
-typename CursorInfo /* = CursorInfoBase */>
+          typename TokenizerInfo /* = TokenizerInfoBase */,
+          typename CursorInfo /* = CursorInfoBase */>
 class Module {
 public:
     struct Tokenizer {
@@ -78,13 +78,13 @@ public:
         TokenizerInfo *info;
     };
     typedef struct Tokenizer Tokenizer;
-    
+
     struct Cursor {
         sqlite3_tokenizer_cursor base;
         CursorInfo *info;
     };
     typedef struct Cursor Cursor;
-    
+
     static int
     Create(int argc, const char *const *argv, sqlite3_tokenizer **ppTokenizer)
     {
@@ -100,7 +100,7 @@ public:
         *ppTokenizer = &tokenizer->base;
         return SQLITE_OK;
     }
-    
+
     static int Destroy(sqlite3_tokenizer *pTokenizer)
     {
         if (pTokenizer) {
@@ -110,7 +110,7 @@ public:
         }
         return SQLITE_OK;
     }
-    
+
     template <typename T /* = TokenizerInfo */>
     static typename std::enable_if<!std::is_same<T, void>::value, int>::type
     CreateTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
@@ -121,14 +121,14 @@ public:
         }
         return SQLITE_OK;
     }
-    
+
     template <typename T /* = void */>
     static typename std::enable_if<std::is_same<T, void>::value, int>::type
     CreateTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
     {
         return SQLITE_OK;
     }
-    
+
     template <typename T /* = TokenizerInfo */>
     static typename std::enable_if<!std::is_same<T, void>::value, void>::type
     DestroyTokenizerInfo(Tokenizer *tokenizer)
@@ -138,13 +138,13 @@ public:
             tokenizer->info = nullptr;
         }
     }
-    
+
     template <typename T /* = void */>
     static typename std::enable_if<std::is_same<T, void>::value, void>::type
     DestroyTokenizerInfo(Tokenizer *tokenizer)
     {
     }
-    
+
     static int Open(sqlite3_tokenizer *pTokenizer,
                     const char *pInput,
                     int nBytes,
@@ -170,7 +170,7 @@ public:
         *ppCursor = &cursor->base;
         return SQLITE_OK;
     }
-    
+
     static int Close(sqlite3_tokenizer_cursor *pCursor)
     {
         if (pCursor) {
@@ -183,7 +183,7 @@ public:
         }
         return SQLITE_OK;
     }
-    
+
     static int Next(sqlite3_tokenizer_cursor *pCursor,
                     const char **ppToken,
                     int *pnBytes,
@@ -200,7 +200,7 @@ public:
         }
         return SQLITE_NOMEM;
     }
-    
+
     static void Register()
     {
         std::shared_ptr<void> module(new sqlite3_tokenizer_module({
@@ -209,9 +209,9 @@ public:
         Modules::SharedModules()->addModule(name, module);
     }
 };
-    
+
 } // namespace FTS
-    
+
 } //namespace WCDB
 
 #endif /* Tokenize_hpp */

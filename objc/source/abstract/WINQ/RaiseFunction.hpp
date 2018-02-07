@@ -27,9 +27,9 @@ namespace WCDB {
 
 class RaiseFunction : public DescribableWithLang<lang::RaiseFunction> {
 public:
-    RaiseFunction& withRollback(const std::string& errorMessage);
-    RaiseFunction& withAbort(const std::string& errorMessage);
-    RaiseFunction& withFail(const std::string& errorMessage);    
+    RaiseFunction &withRollback(const std::string &errorMessage);
+    RaiseFunction &withAbort(const std::string &errorMessage);
+    RaiseFunction &withFail(const std::string &errorMessage);
 };
 
 } // namespace WCDB

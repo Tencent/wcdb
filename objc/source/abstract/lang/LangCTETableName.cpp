@@ -38,4 +38,3 @@ copy_on_write_string CTETableName::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

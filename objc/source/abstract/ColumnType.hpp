@@ -21,11 +21,11 @@
 #ifndef ColumnType_hpp
 #define ColumnType_hpp
 
+#include <WCDB/WINQ.h>
 #include <cstdint>
 #include <string>
 #include <type_traits>
 #include <vector>
-#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -160,36 +160,36 @@ struct ColumnInfo {
 //NULL
 template <typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Null> {
+    : public ColumnTypeInfo<ColumnType::Null> {
 };
 //Float
 template <typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Float> {
+    : public ColumnTypeInfo<ColumnType::Float> {
 };
 //Integer32
 template <typename T>
 struct ColumnInfo<
-T,
-typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Integer32> {
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::Integer32> {
 };
 //Integer64
 template <typename T>
 struct ColumnInfo<
-T,
-typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Integer64> {
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public ColumnTypeInfo<ColumnType::Integer64> {
 };
 //Text
 template <typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Text> {
+    : public ColumnTypeInfo<ColumnType::Text> {
 };
 //BLOB
 template <typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::BLOB> {
+    : public ColumnTypeInfo<ColumnType::BLOB> {
 };
 
 #pragma mark - Builtin Type
@@ -207,9 +207,9 @@ public:
 //Float
 template <typename T>
 struct ColumnIsFloatType<
-T,
-typename std::enable_if<std::is_floating_point<T>::value>::type>
-: public std::true_type {
+    T,
+    typename std::enable_if<std::is_floating_point<T>::value>::type>
+    : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Float>::UnderlyingType
     asUnderlyingType(const T &t)
@@ -221,10 +221,10 @@ public:
 //Integer32
 template <typename T>
 struct ColumnIsInteger32Type<
-T,
-typename std::enable_if<(std::is_integral<T>::value ||
-                         std::is_enum<T>::value) &&
-(sizeof(T) <= 4)>::type> : public std::true_type {
+    T,
+    typename std::enable_if<(std::is_integral<T>::value ||
+                             std::is_enum<T>::value) &&
+                            (sizeof(T) <= 4)>::type> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
     asUnderlyingType(const T &t)
@@ -236,10 +236,10 @@ public:
 //Integer64
 template <typename T>
 struct ColumnIsInteger64Type<
-T,
-typename std::enable_if<(std::is_integral<T>::value ||
-                         std::is_enum<T>::value) &&
-(sizeof(T) > 4)>::type> : public std::true_type {
+    T,
+    typename std::enable_if<(std::is_integral<T>::value ||
+                             std::is_enum<T>::value) &&
+                            (sizeof(T) > 4)>::type> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
     asUnderlyingType(const T &t)
@@ -309,7 +309,7 @@ public:
         return blob;
     }
 };
-    
+
 } //namespace WCDB
 
 #endif /* ColumnType_hpp */

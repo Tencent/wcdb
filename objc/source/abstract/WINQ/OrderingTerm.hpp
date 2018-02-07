@@ -27,9 +27,9 @@ namespace WCDB {
 
 class OrderingTerm : public DescribableWithLang<lang::OrderingTerm> {
 public:
-    OrderingTerm(const Expression& expression);
-    OrderingTerm& withCollate(const std::string& collateName);
-    OrderingTerm& withOrder(const Order& order);
+    OrderingTerm(const Expression &expression);
+    OrderingTerm &withCollate(const std::string &collateName);
+    OrderingTerm &withOrder(const Order &order);
 };
 
 } // namespace WCDB

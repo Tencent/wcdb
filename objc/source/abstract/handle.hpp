@@ -21,9 +21,9 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
+#include <WCDB/HandleStatement.hpp>
 #include <WCDB/abstract_common.h>
 #include <WCDB/error.hpp>
-#include <WCDB/HandleStatement.hpp>
 #include <WCDB/utility.hpp>
 #include <map>
 #include <memory>
@@ -34,8 +34,8 @@ namespace WCDB {
 
 //{{sql->count}, cost}
 typedef std::function<void(
-Tag, const std::map<const std::string, unsigned int> &, const int64_t &)>
-PerformanceTrace;
+    Tag, const std::map<const std::string, unsigned int> &, const int64_t &)>
+    PerformanceTrace;
 
 typedef std::function<void(const std::string &)> SQLTrace;
 
@@ -46,22 +46,22 @@ public:
     Handle(const std::string &path);
     ~Handle();
     const std::string path;
-    
+
     void setTag(Tag tag);
     Tag getTag() const;
-    
+
     std::shared_ptr<HandleStatement> prepare(const Statement &statement);
     bool exec(const Statement &statement);
-    
+
     bool open();
     void close();
-    
+
     bool setCipherKey(const void *data, int size);
     long long getLastInsertedRowID();
-    
+
     void setPerformanceTrace(const PerformanceTrace &trace);
     void setSQLTrace(const SQLTrace &trace);
-    
+
     bool backup(const void *key = nullptr, const unsigned int &length = 0);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          const int pageSize,
@@ -70,36 +70,36 @@ public:
                          const void *databaseKey,
                          const unsigned int &databaseKeyLength);
     std::string getBackupPath() const;
-    
+
     const Error &getError() const;
-    
+
     void registerCommittedHook(const CommittedHook &onCommitted, void *info);
-    
+
     static const std::string backupSuffix;
-    
+
     int getChanges();
-    
+
     bool isReadonly();
-    
+
 protected:
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
     void *m_handle;
     Error m_error;
     Tag m_tag;
-    
+
     void reportPerformance();
     void addPerformanceTrace(const std::string &sql, const int64_t &cost);
     bool shouldPerformanceAggregation() const;
     void reportSQL(const std::string &sql);
-    
+
     typedef struct {
         CommittedHook onCommitted;
         void *info;
         Handle *handle;
     } CommittedHookInfo;
     CommittedHookInfo m_committedHookInfo;
-    
+
     void setupTrace();
     PerformanceTrace m_performanceTrace;
     SQLTrace m_sqlTrace;
@@ -107,7 +107,7 @@ protected:
     int64_t m_cost;
     bool m_aggregation;
 };
-    
+
 } //namespace WCDB
 
 #endif /* Handle_hpp */

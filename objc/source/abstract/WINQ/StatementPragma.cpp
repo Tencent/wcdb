@@ -22,24 +22,25 @@
 
 namespace WCDB {
 
-StatementPragma& StatementPragma::withSchema(const std::string& schemaName)
+StatementPragma &StatementPragma::withSchema(const std::string &schemaName)
 {
-    lang::PragmaSTMT& lang = getMutableLang();
+    lang::PragmaSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-StatementPragma& StatementPragma::pragma(const Pragma& pragmaName)
+StatementPragma &StatementPragma::pragma(const Pragma &pragmaName)
 {
-    lang::PragmaSTMT& lang = getMutableLang();
+    lang::PragmaSTMT &lang = getMutableLang();
     lang.pragmaName.assign(pragmaName.getDescription());
     lang.value.clear();
     return *this;
 }
 
-StatementPragma& StatementPragma::pragma(const Pragma& pragmaName, const LiteralValue& pragmaValue)
+StatementPragma &StatementPragma::pragma(const Pragma &pragmaName,
+                                         const LiteralValue &pragmaValue)
 {
-    lang::PragmaSTMT& lang = getMutableLang();
+    lang::PragmaSTMT &lang = getMutableLang();
     lang.pragmaName.assign(pragmaName.getDescription());
     lang.value.assign(pragmaValue.getLang());
     return *this;

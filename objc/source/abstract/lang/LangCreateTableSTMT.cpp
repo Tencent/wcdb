@@ -61,4 +61,3 @@ copy_on_write_string CreateTableSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

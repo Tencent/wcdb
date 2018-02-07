@@ -29,11 +29,11 @@ namespace WCDB {
 class StatementReindex : public DescribableWithLang<lang::ReindexSTMT>,
                          public Statement {
 public:
-                             StatementReindex& reindex();
-                             StatementReindex& reindex(const std::string& tableOrIndexName);
-                             StatementReindex& withSchema(const std::string& schemaName);
-                             
-                             StatementReindex& reindexCollation(const std::string& collationName);
+    StatementReindex &reindex();
+    StatementReindex &reindex(const std::string &tableOrIndexName);
+    StatementReindex &withSchema(const std::string &schemaName);
+
+    StatementReindex &reindexCollation(const std::string &collationName);
     virtual Type getType() const override;
 };
 

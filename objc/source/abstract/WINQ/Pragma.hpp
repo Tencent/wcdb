@@ -25,8 +25,7 @@
 
 namespace WCDB {
 
-class Pragma : public Describable
-{
+class Pragma : public Describable {
 public:
     static const Pragma ApplicationId;
     static const Pragma AutoVacuum;
@@ -109,8 +108,9 @@ public:
     static const Pragma WritableSchema;
 
     virtual const std::string &getDescription() const override;
+
 protected:
-    Pragma(const std::string& name);
+    Pragma(const std::string &name);
     copy_on_write_string m_name;
 };
 

@@ -22,14 +22,14 @@
 
 namespace WCDB {
 
-StatementBegin& StatementBegin::begin(const Transaction& transaction)
+StatementBegin &StatementBegin::begin(const Transaction &transaction)
 {
-    lang::BeginSTMT& lang = getMutableLang();
+    lang::BeginSTMT &lang = getMutableLang();
     lang.type = transaction;
     return *this;
 }
 
-Statement::Type StatementBegin::getType() const 
+Statement::Type StatementBegin::getType() const
 {
     return Statement::Type::Begin;
 }

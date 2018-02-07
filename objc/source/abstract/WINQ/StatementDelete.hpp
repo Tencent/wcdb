@@ -29,14 +29,14 @@ namespace WCDB {
 class StatementDelete : public DescribableWithLang<lang::DeleteSTMT>,
                         public CRUDStatement {
 public:
-                            StatementDelete& with(const WithClause& withClause);
-                            StatementDelete& deleteFrom(const QualifiedTableName& qualifiedTableName);
-                            StatementDelete& where(const Expression& condition);
-                            StatementDelete& orderBy(const OrderingTerm& orderingTerm);
-                            StatementDelete& orderBy(const std::list<OrderingTerm>& orderingTerms);
-                            StatementDelete& limit(const Expression& from, const Expression& to);
-                            StatementDelete& limit(const Expression& limit);
-                            StatementDelete& offset(const Expression& offset);
+    StatementDelete &with(const WithClause &withClause);
+    StatementDelete &deleteFrom(const QualifiedTableName &qualifiedTableName);
+    StatementDelete &where(const Expression &condition);
+    StatementDelete &orderBy(const OrderingTerm &orderingTerm);
+    StatementDelete &orderBy(const std::list<OrderingTerm> &orderingTerms);
+    StatementDelete &limit(const Expression &from, const Expression &to);
+    StatementDelete &limit(const Expression &limit);
+    StatementDelete &offset(const Expression &offset);
     virtual Type getType() const override;
 };
 

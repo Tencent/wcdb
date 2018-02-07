@@ -76,4 +76,3 @@ constexpr const char *InsertSTMT::TypeName(const Type &type)
 } // namespace lang
 
 } // namespace WCDB
-

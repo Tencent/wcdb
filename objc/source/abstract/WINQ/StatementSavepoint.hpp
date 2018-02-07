@@ -29,7 +29,7 @@ namespace WCDB {
 class StatementSavepoint : public DescribableWithLang<lang::SavepointSTMT>,
                            public Statement {
 public:
-                               StatementSavepoint& savepoint(const std::string& savepointName);
+    StatementSavepoint &savepoint(const std::string &savepointName);
     virtual Type getType() const override;
 };
 

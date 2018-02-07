@@ -29,14 +29,18 @@ namespace WCDB {
 class StatementCreateTable : public DescribableWithLang<lang::CreateTableSTMT>,
                              public Statement {
 public:
-                                 StatementCreateTable& createTable(const std::string& tableName, bool ifNotExists = true, bool temp = false);
-                                 StatementCreateTable& withSchema(const std::string& schemaName);
-                                 StatementCreateTable& as(const StatementSelect& selectSTMT);
-                                 StatementCreateTable& define(const ColumnDef& columnDef);
-                                 StatementCreateTable& define(const std::list<ColumnDef>& columnDefs);
-                                 StatementCreateTable& addTableConstraint(const TableConstraint& tableConstraint);
-                                 StatementCreateTable& addTableConstraints(const std::list<TableConstraint>& tableConstraints);
-                                 StatementCreateTable& withoutRowID();
+    StatementCreateTable &createTable(const std::string &tableName,
+                                      bool ifNotExists = true,
+                                      bool temp = false);
+    StatementCreateTable &withSchema(const std::string &schemaName);
+    StatementCreateTable &as(const StatementSelect &selectSTMT);
+    StatementCreateTable &define(const ColumnDef &columnDef);
+    StatementCreateTable &define(const std::list<ColumnDef> &columnDefs);
+    StatementCreateTable &
+    addTableConstraint(const TableConstraint &tableConstraint);
+    StatementCreateTable &
+    addTableConstraints(const std::list<TableConstraint> &tableConstraints);
+    StatementCreateTable &withoutRowID();
     virtual Type getType() const override;
 };
 

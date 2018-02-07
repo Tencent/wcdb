@@ -87,4 +87,3 @@ SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
 } // namespace lang
 
 } // namespace WCDB
-

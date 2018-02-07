@@ -22,24 +22,26 @@
 
 namespace WCDB {
 
-StatementDropTable& StatementDropTable::dropTable(const std::string& tableName, bool ifExists)
+StatementDropTable &StatementDropTable::dropTable(const std::string &tableName,
+                                                  bool ifExists)
 {
-    lang::DropTableSTMT& lang = getMutableLang();
+    lang::DropTableSTMT &lang = getMutableLang();
     lang.name.assign(tableName);
     lang.ifExists = ifExists;
     return *this;
 }
 
-StatementDropTable& StatementDropTable::withSchema(const std::string& schemaName)
+StatementDropTable &
+StatementDropTable::withSchema(const std::string &schemaName)
 {
-    lang::DropTableSTMT& lang = getMutableLang();
+    lang::DropTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-Statement::Type StatementDropTable::getType() const 
+Statement::Type StatementDropTable::getType() const
 {
-    return Statement::Type::DropTable; 
+    return Statement::Type::DropTable;
 }
 
 } // namespace WCDB

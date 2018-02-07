@@ -48,4 +48,3 @@ copy_on_write_string ReindexSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

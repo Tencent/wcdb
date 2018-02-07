@@ -29,11 +29,15 @@ namespace WCDB {
 class StatementCreateIndex : public DescribableWithLang<lang::CreateIndexSTMT>,
                              public Statement {
 public:
-     StatementCreateIndex& createIndex(const std::string& indexName, bool ifNotExists = true, bool unique = false);
-                                 StatementCreateIndex& withSchema(const std::string& schemaName);
-                                 StatementCreateIndex& on(const std::string& tableName, const IndexedColumn& indexedColumn);
-                                 StatementCreateIndex& on(const std::string& tableName, const std::list<IndexedColumn>& indexedColumns);
-                                 StatementCreateIndex& where(const Expression& condition);
+    StatementCreateIndex &createIndex(const std::string &indexName,
+                                      bool ifNotExists = true,
+                                      bool unique = false);
+    StatementCreateIndex &withSchema(const std::string &schemaName);
+    StatementCreateIndex &on(const std::string &tableName,
+                             const IndexedColumn &indexedColumn);
+    StatementCreateIndex &on(const std::string &tableName,
+                             const std::list<IndexedColumn> &indexedColumns);
+    StatementCreateIndex &where(const Expression &condition);
     virtual Type getType() const override;
 };
 

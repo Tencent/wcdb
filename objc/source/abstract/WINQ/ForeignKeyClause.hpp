@@ -59,7 +59,7 @@ private:
     void addTriggerForDeleting(
         const lang::ForeignKeyClause::Trigger::Operation &operation);
     void addTriggerForMatching(const std::string &name);
-    void addTrigger(const lang::ForeignKeyClause::Trigger& trigger);
+    void addTrigger(const lang::ForeignKeyClause::Trigger &trigger);
 };
 
 } // namespace WCDB

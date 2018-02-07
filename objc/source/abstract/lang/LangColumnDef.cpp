@@ -39,4 +39,3 @@ copy_on_write_string ColumnDef::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

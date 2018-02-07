@@ -61,4 +61,3 @@ constexpr const char *JoinOperator::JoinTypeName(const Type &type)
 } // namespace lang
 
 } // namespace WCDB
-

@@ -41,10 +41,7 @@ public:
     }
 
 protected:
-    virtual void willProbablyChange() override
-    {
-        m_calculated = false;
-    }
+    virtual void willProbablyChange() override { m_calculated = false; }
     virtual copy_on_write_string calculatedDescription() const = 0;
 
 private:

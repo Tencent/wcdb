@@ -30,11 +30,16 @@ class StatementCreateVirtualTable
     : public DescribableWithLang<lang::CreateVirtualTableSTMT>,
       public Statement {
 public:
-          StatementCreateVirtualTable& createVirtualTable(const std::string& tableName, bool ifNotExists = true);
-          StatementCreateVirtualTable& withSchema(const std::string& schemaName);
-          StatementCreateVirtualTable& usingModule(const std::string& moduleName);
-          StatementCreateVirtualTable& usingModule(const std::string& moduleName, const ModuleArgument& moduleArgument);
-          StatementCreateVirtualTable& usingModule(const std::string& moduleName, const std::list<ModuleArgument>& moduleArguments);
+    StatementCreateVirtualTable &
+    createVirtualTable(const std::string &tableName, bool ifNotExists = true);
+    StatementCreateVirtualTable &withSchema(const std::string &schemaName);
+    StatementCreateVirtualTable &usingModule(const std::string &moduleName);
+    StatementCreateVirtualTable &
+    usingModule(const std::string &moduleName,
+                const ModuleArgument &moduleArgument);
+    StatementCreateVirtualTable &
+    usingModule(const std::string &moduleName,
+                const std::list<ModuleArgument> &moduleArguments);
     virtual Type getType() const override;
 };
 

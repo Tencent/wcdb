@@ -49,4 +49,3 @@ copy_on_write_string QualifiedTableName::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

@@ -56,4 +56,3 @@ copy_on_write_string DeleteSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

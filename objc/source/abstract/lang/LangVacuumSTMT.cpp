@@ -36,4 +36,3 @@ copy_on_write_string VacuumSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

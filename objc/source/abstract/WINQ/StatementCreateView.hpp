@@ -29,11 +29,13 @@ namespace WCDB {
 class StatementCreateView : public DescribableWithLang<lang::CreateViewSTMT>,
                             public Statement {
 public:
-                                StatementCreateView& createView(const std::string& viewName, bool ifNotExists = true, bool temp = false);
-                                StatementCreateView& withSchema(const std::string& schemaName);
-                                StatementCreateView& on(const std::string& columnName);
-                                StatementCreateView& on(const std::list<std::string>& columnNames);
-                                StatementCreateView& as(const StatementSelect& selectSTMT);
+    StatementCreateView &createView(const std::string &viewName,
+                                    bool ifNotExists = true,
+                                    bool temp = false);
+    StatementCreateView &withSchema(const std::string &schemaName);
+    StatementCreateView &on(const std::string &columnName);
+    StatementCreateView &on(const std::list<std::string> &columnNames);
+    StatementCreateView &as(const StatementSelect &selectSTMT);
     virtual Type getType() const override;
 };
 

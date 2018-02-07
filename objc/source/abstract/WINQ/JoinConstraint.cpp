@@ -22,26 +22,27 @@
 
 namespace WCDB {
 
-JoinConstraint& JoinConstraint::on(const Expression& expression)
+JoinConstraint &JoinConstraint::on(const Expression &expression)
 {
-    lang::JoinConstraint& lang = getMutableLang();
-    lang.type = lang::JoinConstraint::Type::On; 
+    lang::JoinConstraint &lang = getMutableLang();
+    lang.type = lang::JoinConstraint::Type::On;
     lang.expr.assign(expression.getLang());
     return *this;
 }
 
-JoinConstraint& JoinConstraint::usingColumn(const std::string columnName)
+JoinConstraint &JoinConstraint::usingColumn(const std::string columnName)
 {
-    lang::JoinConstraint& lang = getMutableLang();
-    lang.type = lang::JoinConstraint::Type::Using; 
+    lang::JoinConstraint &lang = getMutableLang();
+    lang.type = lang::JoinConstraint::Type::Using;
     lang.columnNames.append(columnName);
     return *this;
 }
 
-JoinConstraint& JoinConstraint::usingColumns(const std::list<std::string> columnNames)
+JoinConstraint &
+JoinConstraint::usingColumns(const std::list<std::string> columnNames)
 {
-    lang::JoinConstraint& lang = getMutableLang();
-    for (const std::string & columnName : columnNames) {
+    lang::JoinConstraint &lang = getMutableLang();
+    for (const std::string &columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
     return *this;

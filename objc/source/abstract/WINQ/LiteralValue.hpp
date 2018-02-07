@@ -26,32 +26,37 @@
 namespace WCDB {
 
 class LiteralValue : public DescribableWithLang<lang::LiteralValue> {
-public:        
+public:
     template <typename T>
-    LiteralValue(const T& t, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr) {
-        lang::LiteralValue& lang = getMutableLang();
+    LiteralValue(const T &t,
+                 typename std::enable_if<std::is_floating_point<T>::value>::type
+                     * = nullptr)
+    {
+        lang::LiteralValue &lang = getMutableLang();
         lang.type = lang::LiteralValue::Type::NumbericFloat;
         lang.floatValue = t;
     }
-    
+
     template <typename T>
-    LiteralValue(const T& t, 
-                 typename std::enable_if<(std::is_integral<T>::value || 
-                                          std::is_enum<T>::value)> * = nullptr) {
-        lang::LiteralValue& lang = getMutableLang();
+    LiteralValue(const T &t,
+                 typename std::enable_if<(std::is_integral<T>::value ||
+                                          std::is_enum<T>::value)> * = nullptr)
+    {
+        lang::LiteralValue &lang = getMutableLang();
         lang.type = lang::LiteralValue::Type::NumbericInteger;
-        lang.integerValue = (int64_t)t;
+        lang.integerValue = (int64_t) t;
     }
-    
-    LiteralValue(const std::string& value);
-    LiteralValue(const std::vector<unsigned char>& value);
-    
+
+    LiteralValue(const std::string &value);
+    LiteralValue(const std::vector<unsigned char> &value);
+
     static const LiteralValue Null;
     static const LiteralValue CurrentTime;
     static const LiteralValue CurrentDate;
     static const LiteralValue CurrentTimestamp;
+
 protected:
-    LiteralValue(const lang::LiteralValue::Type& type);
+    LiteralValue(const lang::LiteralValue::Type &type);
 };
 
 } // namespace WCDB

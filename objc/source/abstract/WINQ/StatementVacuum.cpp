@@ -22,9 +22,9 @@
 
 namespace WCDB {
 
-StatementVacuum& StatementVacuum::vacuum(const std::string& schemaName)
+StatementVacuum &StatementVacuum::vacuum(const std::string &schemaName)
 {
-    lang::VacuumSTMT& lang = getMutableLang();
+    lang::VacuumSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

@@ -29,9 +29,10 @@ namespace WCDB {
 class StatementPragma : public DescribableWithLang<lang::PragmaSTMT>,
                         public Statement {
 public:
-                            StatementPragma& withSchema(const std::string& schemaName);
-                            StatementPragma& pragma(const Pragma& pragmaName);
-                            StatementPragma& pragma(const Pragma& pragmaName, const LiteralValue& pragmaValue);
+    StatementPragma &withSchema(const std::string &schemaName);
+    StatementPragma &pragma(const Pragma &pragmaName);
+    StatementPragma &pragma(const Pragma &pragmaName,
+                            const LiteralValue &pragmaValue);
     virtual Type getType() const override;
 };
 

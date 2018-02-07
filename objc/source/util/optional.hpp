@@ -50,8 +50,8 @@ public:
     const T &value() const;
 
     T &value();
-    
-    void assign(const T& t);
+
+    void assign(const T &t);
     void clear();
 
 protected:

@@ -35,4 +35,3 @@ copy_on_write_string ReleaseSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

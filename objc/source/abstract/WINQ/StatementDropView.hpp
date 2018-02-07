@@ -29,8 +29,9 @@ namespace WCDB {
 class StatementDropView : public DescribableWithLang<lang::DropViewSTMT>,
                           public Statement {
 public:
-                              StatementDropView& dropView(const std::string& viewName, bool ifExists = true);
-                              StatementDropView& withSchema(const std::string& schemaName);
+    StatementDropView &dropView(const std::string &viewName,
+                                bool ifExists = true);
+    StatementDropView &withSchema(const std::string &schemaName);
     virtual Type getType() const override;
 };
 

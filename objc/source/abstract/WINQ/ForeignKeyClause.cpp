@@ -53,7 +53,8 @@ ForeignKeyClause &ForeignKeyClause::onDeleteSetNull()
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteSetDefault()
 {
-    addTriggerForDeleting(lang::ForeignKeyClause::Trigger::Operation::SetDefault);
+    addTriggerForDeleting(
+        lang::ForeignKeyClause::Trigger::Operation::SetDefault);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteCascade()
@@ -79,7 +80,8 @@ ForeignKeyClause &ForeignKeyClause::onUpdateSetNull()
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateSetDefault()
 {
-    addTriggerForUpdating(lang::ForeignKeyClause::Trigger::Operation::SetDefault);
+    addTriggerForUpdating(
+        lang::ForeignKeyClause::Trigger::Operation::SetDefault);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateCascade()
@@ -165,7 +167,8 @@ void ForeignKeyClause::addTriggerForMatching(const std::string &name)
     addTrigger(trigger);
 }
 
-void ForeignKeyClause::addTrigger(const lang::ForeignKeyClause::Trigger& trigger)
+void ForeignKeyClause::addTrigger(
+    const lang::ForeignKeyClause::Trigger &trigger)
 {
     lang::copy_on_write_lazy_lang<lang::ForeignKeyClause::Trigger> cowTrigger;
     cowTrigger.assign(trigger);

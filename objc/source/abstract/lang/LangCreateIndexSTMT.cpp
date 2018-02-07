@@ -52,4 +52,3 @@ copy_on_write_string CreateIndexSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

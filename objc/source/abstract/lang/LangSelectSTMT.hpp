@@ -30,8 +30,7 @@ namespace lang {
 class SelectSTMT : public CRUDLang {
 public:
     bool recursive;
-    copy_on_write_lazy_lang_list<CommonTableExpression>
-        commonTableExpressions;
+    copy_on_write_lazy_lang_list<CommonTableExpression> commonTableExpressions;
 
     copy_on_write_lazy_lang<SelectCore> selectCore;
 
@@ -47,6 +46,7 @@ public:
         copy_on_write_lazy_lang<SelectCore> selectCore;
 
         virtual copy_on_write_string SQL() const override;
+
     protected:
         static constexpr const char *
         OperatorName(const Operator &compoundOperator);

@@ -47,8 +47,7 @@ copy_on_write_string JoinClause::Operand::SQL() const
 
 template <>
 copy_on_write_string
-copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription()
-    const
+copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription() const
 {
     std::string description;
     bool comma = false;
@@ -67,4 +66,3 @@ copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription()
 } // namespace lang
 
 } // namespace WCDB
-

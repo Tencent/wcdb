@@ -35,4 +35,3 @@ copy_on_write_string DetachSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

@@ -29,30 +29,37 @@ namespace WCDB {
 class StatementUpdate : public DescribableWithLang<lang::UpdateSTMT>,
                         public CRUDStatement {
 public:
-                            StatementUpdate& with(const WithClause& withClause);
-                            StatementUpdate& update(const QualifiedTableName& qualifiedTableName);
-                            StatementUpdate& updateOrRollback(const QualifiedTableName& qualifiedTableName);
-                            StatementUpdate& updateOrAbort(const QualifiedTableName& qualifiedTableName);
-                            StatementUpdate& updateOrReplace(const QualifiedTableName& qualifiedTableName);
-                            StatementUpdate& updateOrFail(const QualifiedTableName& qualifiedTableName);
-                            StatementUpdate& updateOrIgnore(const QualifiedTableName& qualifiedTableName);
-                            
-                            StatementUpdate& set(const std::string& columnName, const Expression& expression);
-                            StatementUpdate& set(const std::list<std::string>& columnNames, const Expression& expression);
-                            
-                            StatementUpdate& where(const Expression& condition);
-                            
-                            StatementUpdate& orderBy(const OrderingTerm& orderingTerm);
-                            StatementUpdate& orderBy(const std::list<OrderingTerm>& orderingTerms);
-                            
-                            StatementUpdate& limit(const Expression& from, const Expression& to);
-                            StatementUpdate& limit(const Expression& limit);
-                            StatementUpdate& offset(const Expression& offset);
+    StatementUpdate &with(const WithClause &withClause);
+    StatementUpdate &update(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &
+    updateOrRollback(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &
+    updateOrAbort(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &
+    updateOrReplace(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &updateOrFail(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &
+    updateOrIgnore(const QualifiedTableName &qualifiedTableName);
 
-                            
+    StatementUpdate &set(const std::string &columnName,
+                         const Expression &expression);
+    StatementUpdate &set(const std::list<std::string> &columnNames,
+                         const Expression &expression);
+
+    StatementUpdate &where(const Expression &condition);
+
+    StatementUpdate &orderBy(const OrderingTerm &orderingTerm);
+    StatementUpdate &orderBy(const std::list<OrderingTerm> &orderingTerms);
+
+    StatementUpdate &limit(const Expression &from, const Expression &to);
+    StatementUpdate &limit(const Expression &limit);
+    StatementUpdate &offset(const Expression &offset);
+
     virtual Type getType() const override;
-                        protected:
-                            void update(const QualifiedTableName& qualifiedTableName, const lang::UpdateSTMT::Type& type);
+
+protected:
+    void update(const QualifiedTableName &qualifiedTableName,
+                const lang::UpdateSTMT::Type &type);
 };
 
 } // namespace WCDB

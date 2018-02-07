@@ -24,8 +24,8 @@ namespace WCDB {
 
 namespace lang {
 
-constexpr const char *ForeignKeyClause::InitiallySwitchName(
-    const InitiallySwitch &initiallySwitcher)
+constexpr const char *
+ForeignKeyClause::InitiallySwitchName(const InitiallySwitch &initiallySwitcher)
 {
     switch (initiallySwitcher) {
         case InitiallySwitch::Deferred:
@@ -101,4 +101,3 @@ copy_on_write_string ForeignKeyClause::Trigger::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

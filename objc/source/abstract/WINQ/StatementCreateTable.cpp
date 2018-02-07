@@ -22,64 +22,70 @@
 
 namespace WCDB {
 
-StatementCreateTable& StatementCreateTable::createTable(const std::string& tableName, bool ifNotExists, bool temp)
+StatementCreateTable &StatementCreateTable::createTable(
+    const std::string &tableName, bool ifNotExists, bool temp)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     lang.ifNotExists = ifNotExists;
     lang.temp = temp;
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::withSchema(const std::string& schemaName)
+StatementCreateTable &
+StatementCreateTable::withSchema(const std::string &schemaName)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::as(const StatementSelect& selectSTMT)
+StatementCreateTable &
+StatementCreateTable::as(const StatementSelect &selectSTMT)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::define(const ColumnDef& columnDef)
+StatementCreateTable &StatementCreateTable::define(const ColumnDef &columnDef)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.columnDefs.append(columnDef.getLang());
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::define(const std::list<ColumnDef>& columnDefs)
+StatementCreateTable &
+StatementCreateTable::define(const std::list<ColumnDef> &columnDefs)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
-    for (const ColumnDef& columnDef : columnDefs) {
+    lang::CreateTableSTMT &lang = getMutableLang();
+    for (const ColumnDef &columnDef : columnDefs) {
         lang.columnDefs.append(columnDef.getLang());
     }
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::addTableConstraint(const TableConstraint& tableConstraint)
+StatementCreateTable &
+StatementCreateTable::addTableConstraint(const TableConstraint &tableConstraint)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.tableConstraints.append(tableConstraint.getLang());
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::addTableConstraints(const std::list<TableConstraint>& tableConstraints)
+StatementCreateTable &StatementCreateTable::addTableConstraints(
+    const std::list<TableConstraint> &tableConstraints)
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
-    for (const TableConstraint& tableConstraint : tableConstraints) {
+    lang::CreateTableSTMT &lang = getMutableLang();
+    for (const TableConstraint &tableConstraint : tableConstraints) {
         lang.tableConstraints.append(tableConstraint.getLang());
     }
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::withoutRowID()
+StatementCreateTable &StatementCreateTable::withoutRowID()
 {
-    lang::CreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.withoutRowID = true;
     return *this;
 }

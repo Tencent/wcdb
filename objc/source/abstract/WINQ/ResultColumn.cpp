@@ -24,27 +24,27 @@ namespace WCDB {
 
 const ResultColumn ResultColumn::All(lang::ResultColumn::Type::Star);
 
-ResultColumn ResultColumn::AllInTable(const std::string& tableName)
+ResultColumn ResultColumn::AllInTable(const std::string &tableName)
 {
-    return ResultColumn(tableName); 
+    return ResultColumn(tableName);
 }
 
-ResultColumn::ResultColumn(const Expression& expression)
+ResultColumn::ResultColumn(const Expression &expression)
 {
-    lang::ResultColumn& lang = getMutableLang();
+    lang::ResultColumn &lang = getMutableLang();
     lang.type = lang::ResultColumn::Type::Expr;
     lang.expr.assign(expression.getLang());
 }
 
-ResultColumn::ResultColumn(const lang::ResultColumn::Type& type)
+ResultColumn::ResultColumn(const lang::ResultColumn::Type &type)
 {
-    lang::ResultColumn& lang = getMutableLang();
+    lang::ResultColumn &lang = getMutableLang();
     lang.type = lang::ResultColumn::Type::Star;
 }
 
-ResultColumn::ResultColumn(const std::string& tableName)
+ResultColumn::ResultColumn(const std::string &tableName)
 {
-    lang::ResultColumn& lang = getMutableLang();
+    lang::ResultColumn &lang = getMutableLang();
     lang.type = lang::ResultColumn::Type::Star;
     lang.tableName.assign(tableName);
 }

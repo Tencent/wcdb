@@ -32,4 +32,3 @@ inline const char *DropTableSTMT::getInternalName() const
 } // namespace lang
 
 } // namespace WCDB
-

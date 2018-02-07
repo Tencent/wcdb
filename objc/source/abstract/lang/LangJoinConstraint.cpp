@@ -46,4 +46,3 @@ copy_on_write_string JoinConstraint::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

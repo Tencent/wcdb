@@ -115,4 +115,3 @@ copy_on_write_string TableOrSubquery::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

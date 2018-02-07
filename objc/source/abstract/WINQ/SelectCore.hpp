@@ -27,18 +27,18 @@ namespace WCDB {
 
 class SelectCore : public DescribableWithLang<lang::SelectCore> {
 public:
-    SelectCore& distinct();
-    SelectCore& select(const ResultColumn& resultColumn);
-    SelectCore& select(const std::list<ResultColumn>& resultColumns);
-    SelectCore& from(const JoinClause& joinClause);
-    SelectCore& from(const TableOrSubquery& tableOrSubquery);
-    SelectCore& from(const std::list<TableOrSubquery>& tableOrSubquerys);
-    SelectCore& where(const Expression& condition);
-    SelectCore& groupBy(const Expression& group);
-    SelectCore& groupBy(const std::list<Expression>& groups);
-    SelectCore& having(const Expression& having);
-    SelectCore& values(const Expression& value);
-    SelectCore& values(const std::list<Expression>& values);
+    SelectCore &distinct();
+    SelectCore &select(const ResultColumn &resultColumn);
+    SelectCore &select(const std::list<ResultColumn> &resultColumns);
+    SelectCore &from(const JoinClause &joinClause);
+    SelectCore &from(const TableOrSubquery &tableOrSubquery);
+    SelectCore &from(const std::list<TableOrSubquery> &tableOrSubquerys);
+    SelectCore &where(const Expression &condition);
+    SelectCore &groupBy(const Expression &group);
+    SelectCore &groupBy(const std::list<Expression> &groups);
+    SelectCore &having(const Expression &having);
+    SelectCore &values(const Expression &value);
+    SelectCore &values(const std::list<Expression> &values);
 };
 
 } // namespace WCDB

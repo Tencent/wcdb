@@ -69,8 +69,8 @@ copy_on_write_string ExprBinaryOperation::SQL() const
            right.description().get();
 }
 
-constexpr const char *ExprBinaryOperation::OperatorName(
-    const Operator &binaryOpeartor)
+constexpr const char *
+ExprBinaryOperation::OperatorName(const Operator &binaryOpeartor)
 {
     switch (binaryOpeartor) {
         case Operator::Concatenate:
@@ -361,4 +361,3 @@ copy_on_write_string Expr::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

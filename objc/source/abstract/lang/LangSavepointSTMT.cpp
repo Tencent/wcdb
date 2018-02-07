@@ -35,4 +35,3 @@ copy_on_write_string SavepointSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

@@ -67,8 +67,7 @@ public:
     virtual copy_on_write_string SQL() const override;
 
 private:
-    static constexpr const char *
-    OperatorName(const Operator &unaryOpeartor);
+    static constexpr const char *OperatorName(const Operator &unaryOpeartor);
 };
 
 class ExprBinaryOperation : public ExprBase {
@@ -102,8 +101,7 @@ public:
     virtual copy_on_write_string SQL() const override;
 
 private:
-    static constexpr const char *
-    OperatorName(const Operator &binaryOpeartor);
+    static constexpr const char *OperatorName(const Operator &binaryOpeartor);
 };
 
 class ExprFunction : public ExprBase {

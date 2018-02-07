@@ -68,4 +68,3 @@ copy_on_write_string SelectCore::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

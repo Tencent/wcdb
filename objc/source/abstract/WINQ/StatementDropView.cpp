@@ -22,17 +22,18 @@
 
 namespace WCDB {
 
-StatementDropView& StatementDropView::dropView(const std::string& viewName, bool ifExists)
+StatementDropView &StatementDropView::dropView(const std::string &viewName,
+                                               bool ifExists)
 {
-    lang::DropViewSTMT& lang = getMutableLang();
+    lang::DropViewSTMT &lang = getMutableLang();
     lang.name.assign(viewName);
     lang.ifExists = ifExists;
     return *this;
 }
 
-StatementDropView& StatementDropView::withSchema(const std::string& schemaName)
+StatementDropView &StatementDropView::withSchema(const std::string &schemaName)
 {
-    lang::DropViewSTMT& lang = getMutableLang();
+    lang::DropViewSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

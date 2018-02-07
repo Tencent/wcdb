@@ -22,22 +22,22 @@
 
 namespace WCDB {
 
-OrderingTerm::OrderingTerm(const Expression& expression)
+OrderingTerm::OrderingTerm(const Expression &expression)
 {
-    lang::OrderingTerm& lang = getMutableLang();
+    lang::OrderingTerm &lang = getMutableLang();
     lang.expr.assign(expression.getLang());
 }
 
-OrderingTerm& OrderingTerm::withCollate(const std::string& collateName)
+OrderingTerm &OrderingTerm::withCollate(const std::string &collateName)
 {
-    lang::OrderingTerm& lang = getMutableLang();
+    lang::OrderingTerm &lang = getMutableLang();
     lang.collationName.assign(collateName);
     return *this;
 }
 
-OrderingTerm& OrderingTerm::withOrder(const Order& order)
+OrderingTerm &OrderingTerm::withOrder(const Order &order)
 {
-    lang::OrderingTerm& lang = getMutableLang();
+    lang::OrderingTerm &lang = getMutableLang();
     lang.order = order;
     return *this;
 }

@@ -27,19 +27,31 @@ namespace WCDB {
 
 class JoinClause : public DescribableWithLang<lang::JoinClause> {
 public:
-    JoinClause(const TableOrSubquery& tableOrSubquery);
-    
-    JoinClause& leftJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    JoinClause& leftOuterJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    JoinClause& innerJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    JoinClause& crossJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    
-    JoinClause& naturalLeftJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    JoinClause& naturalLeftOuterJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    JoinClause& naturalInnerJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
-    JoinClause& naturalCrossJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
+    JoinClause(const TableOrSubquery &tableOrSubquery);
+
+    JoinClause &leftJoin(const TableOrSubquery &tableOrSubquery,
+                         const JoinConstraint &joinConstraint);
+    JoinClause &leftOuterJoin(const TableOrSubquery &tableOrSubquery,
+                              const JoinConstraint &joinConstraint);
+    JoinClause &innerJoin(const TableOrSubquery &tableOrSubquery,
+                          const JoinConstraint &joinConstraint);
+    JoinClause &crossJoin(const TableOrSubquery &tableOrSubquery,
+                          const JoinConstraint &joinConstraint);
+
+    JoinClause &naturalLeftJoin(const TableOrSubquery &tableOrSubquery,
+                                const JoinConstraint &joinConstraint);
+    JoinClause &naturalLeftOuterJoin(const TableOrSubquery &tableOrSubquery,
+                                     const JoinConstraint &joinConstraint);
+    JoinClause &naturalInnerJoin(const TableOrSubquery &tableOrSubquery,
+                                 const JoinConstraint &joinConstraint);
+    JoinClause &naturalCrossJoin(const TableOrSubquery &tableOrSubquery,
+                                 const JoinConstraint &joinConstraint);
+
 protected:
-    void appendJoinOperand(bool natural, const lang::JoinOperator::Type& type, const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint);
+    void appendJoinOperand(bool natural,
+                           const lang::JoinOperator::Type &type,
+                           const TableOrSubquery &tableOrSubquery,
+                           const JoinConstraint &joinConstraint);
 };
 
 } // namespace WCDB

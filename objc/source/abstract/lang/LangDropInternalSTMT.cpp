@@ -43,4 +43,3 @@ copy_on_write_string DropInternalSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

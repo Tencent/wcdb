@@ -53,4 +53,3 @@ copy_on_write_string BindParameter::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

@@ -45,7 +45,7 @@ public:
                    std::list<copy_on_write_lazy_lang<T>>>::empty() ||
                this->get().empty();
     }
-              
+
     void append(const copy_on_write_lazy_lang<T> &element)
     {
         if (!this->empty()) {
@@ -54,18 +54,18 @@ public:
             this->assign({element});
         }
     }
-              
-  template <typename U>
-  void append(const copy_on_write_lazy_lang<U> &element)
-  {
-      copy_on_write_lazy_lang<T> convert;
-      convert.assign(element);
-      if (!this->empty()) {
-          this->get_or_copy().push_back(convert);
-      } else {
-          this->assign({convert});
-      }
-  }
+
+    template <typename U>
+    void append(const copy_on_write_lazy_lang<U> &element)
+    {
+        copy_on_write_lazy_lang<T> convert;
+        convert.assign(element);
+        if (!this->empty()) {
+            this->get_or_copy().push_back(convert);
+        } else {
+            this->assign({convert});
+        }
+    }
 
 protected:
     virtual copy_on_write_string calculatedDescription() const override

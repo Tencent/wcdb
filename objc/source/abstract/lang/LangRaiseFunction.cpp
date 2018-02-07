@@ -50,4 +50,3 @@ copy_on_write_string RaiseFunction::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

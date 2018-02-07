@@ -34,15 +34,15 @@ copy_on_write_string WithClause::SQL() const
     description.append(pairs.description().get());
     return description;
 }
-    
+
 copy_on_write_string WithClause::Pair::SQL() const
 {
     assert(!cteTableName.empty());
     assert(!selectSTMT.empty());
-    return cteTableName.description().get() + " AS(" + selectSTMT.description().get() + ")";
+    return cteTableName.description().get() + " AS(" +
+           selectSTMT.description().get() + ")";
 }
 
 } // namespace lang
 
 } // namespace WCDB
-

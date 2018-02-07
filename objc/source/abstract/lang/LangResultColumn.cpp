@@ -48,4 +48,3 @@ copy_on_write_string ResultColumn::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

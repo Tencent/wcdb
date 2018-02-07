@@ -25,14 +25,15 @@
 
 namespace WCDB {
 
-class QualifiedTableName : public DescribableWithLang<lang::QualifiedTableName> {
+class QualifiedTableName
+    : public DescribableWithLang<lang::QualifiedTableName> {
 public:
-    QualifiedTableName(const std::string& tableName);
-    
-    QualifiedTableName& withSchema(const std::string& schemaName);
-    
-    QualifiedTableName& indexedBy(const std::string& indexName);
-    QualifiedTableName& notIndexed();
+    QualifiedTableName(const std::string &tableName);
+
+    QualifiedTableName &withSchema(const std::string &schemaName);
+
+    QualifiedTableName &indexedBy(const std::string &indexName);
+    QualifiedTableName &notIndexed();
 };
 
 } // namespace WCDB

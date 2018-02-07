@@ -29,7 +29,7 @@ namespace WCDB {
 class StatementRelease : public DescribableWithLang<lang::ReleaseSTMT>,
                          public Statement {
 public:
-                             StatementRelease& release(const std::string& savepointName);
+    StatementRelease &release(const std::string &savepointName);
     virtual Type getType() const override;
 };
 

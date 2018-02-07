@@ -22,222 +22,233 @@
 
 namespace WCDB {
 
-StatementSelect& StatementSelect::with(const CommonTableExpression& commonTableExpression)
+StatementSelect &
+StatementSelect::with(const CommonTableExpression &commonTableExpression)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.recursive = false;
     lang.commonTableExpressions.append(commonTableExpression.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::with(const std::list<CommonTableExpression>& commonTableExpressions)
+StatementSelect &StatementSelect::with(
+    const std::list<CommonTableExpression> &commonTableExpressions)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.recursive = false;
-    for (const CommonTableExpression& commonTableExpression : commonTableExpressions) {
+    for (const CommonTableExpression &commonTableExpression :
+         commonTableExpressions) {
         lang.commonTableExpressions.append(commonTableExpression.getLang());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::withRecursive(const CommonTableExpression& commonTableExpression)
+StatementSelect &StatementSelect::withRecursive(
+    const CommonTableExpression &commonTableExpression)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.recursive = true;
     lang.commonTableExpressions.append(commonTableExpression.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::withRecursive(const std::list<CommonTableExpression>& commonTableExpressions)
+StatementSelect &StatementSelect::withRecursive(
+    const std::list<CommonTableExpression> &commonTableExpressions)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.recursive = true;
-    for (const CommonTableExpression& commonTableExpression : commonTableExpressions) {
+    for (const CommonTableExpression &commonTableExpression :
+         commonTableExpressions) {
         lang.commonTableExpressions.append(commonTableExpression.getLang());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::distinct()
+StatementSelect &StatementSelect::distinct()
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.selectCore.get_or_copy().distinct = true;
     return *this;
 }
 
-StatementSelect& StatementSelect::select(const ResultColumn& resultColumn)
+StatementSelect &StatementSelect::select(const ResultColumn &resultColumn)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy(); 
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = lang::SelectCore::Switch::Select;
     selectCore.resultColumns.append(resultColumn.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::select(const std::list<ResultColumn>& resultColumns)
+StatementSelect &
+StatementSelect::select(const std::list<ResultColumn> &resultColumns)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();  
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = lang::SelectCore::Switch::Select;
-    for (const ResultColumn& resultColumn : resultColumns) {
+    for (const ResultColumn &resultColumn : resultColumns) {
         selectCore.resultColumns.append(resultColumn.getLang());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::from(const TableOrSubquery& tableOrSubquery)
+StatementSelect &StatementSelect::from(const TableOrSubquery &tableOrSubquery)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.fromSwitcher = lang::SelectCore::FromSwitch::TableOrSubquery;
     selectCore.tableOrSubquerys.append(tableOrSubquery.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::from(const JoinClause& joinClause)
+StatementSelect &StatementSelect::from(const JoinClause &joinClause)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.fromSwitcher = lang::SelectCore::FromSwitch::JoinClause;
     selectCore.joinClause.assign(joinClause.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::from(const std::list<TableOrSubquery>& tableOrSubquerys)
+StatementSelect &
+StatementSelect::from(const std::list<TableOrSubquery> &tableOrSubquerys)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.fromSwitcher = lang::SelectCore::FromSwitch::TableOrSubquery;
-    for (const TableOrSubquery& tableOrSubquery : tableOrSubquerys) {
+    for (const TableOrSubquery &tableOrSubquery : tableOrSubquerys) {
         selectCore.tableOrSubquerys.append(tableOrSubquery.getLang());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::where(const Expression& condition)
+StatementSelect &StatementSelect::where(const Expression &condition)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.selectCore.get_or_copy().condition.assign(condition.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::groupBy(const Expression& group)
+StatementSelect &StatementSelect::groupBy(const Expression &group)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.selectCore.get_or_copy().groups.append(group.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::groupBy(const std::list<Expression>& groups)
+StatementSelect &StatementSelect::groupBy(const std::list<Expression> &groups)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();
-    for (const Expression& group : groups) {
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
+    for (const Expression &group : groups) {
         selectCore.groups.append(group.getLang());
     }
     return *this;
 }
 
-StatementSelect& StatementSelect::having(const Expression& having)
+StatementSelect &StatementSelect::having(const Expression &having)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.selectCore.get_or_copy().having.assign(having.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::values(const Expression& value)
+StatementSelect &StatementSelect::values(const Expression &value)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = lang::SelectCore::Switch::Values;
-    selectCore.values.append(value.getLang());    
+    selectCore.values.append(value.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::values(const std::list<Expression>& values)
+StatementSelect &StatementSelect::values(const std::list<Expression> &values)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    lang::SelectCore& selectCore = lang.selectCore.get_or_copy();
+    lang::SelectSTMT &lang = getMutableLang();
+    lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = lang::SelectCore::Switch::Values;
-    for (const Expression& value : values) {
+    for (const Expression &value : values) {
         selectCore.values.append(value.getLang());
-    }    
+    }
     return *this;
 }
 
-StatementSelect& StatementSelect::union_(const SelectCore& selectCore)
+StatementSelect &StatementSelect::union_(const SelectCore &selectCore)
 {
     compound(lang::SelectSTMT::Compound::Operator::Union, selectCore);
     return *this;
 }
 
-StatementSelect& StatementSelect::unionAll(const SelectCore& selectCore)
+StatementSelect &StatementSelect::unionAll(const SelectCore &selectCore)
 {
     compound(lang::SelectSTMT::Compound::Operator::UnionAll, selectCore);
     return *this;
 }
 
-StatementSelect& StatementSelect::intersect(const SelectCore& selectCore)
+StatementSelect &StatementSelect::intersect(const SelectCore &selectCore)
 {
     compound(lang::SelectSTMT::Compound::Operator::Intersect, selectCore);
     return *this;
 }
 
-StatementSelect& StatementSelect::except(const SelectCore& selectCore)
+StatementSelect &StatementSelect::except(const SelectCore &selectCore)
 {
     compound(lang::SelectSTMT::Compound::Operator::Except, selectCore);
     return *this;
 }
 
-StatementSelect& StatementSelect::orderBy(const OrderingTerm& orderingTerm)
+StatementSelect &StatementSelect::orderBy(const OrderingTerm &orderingTerm)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.orderingTerms.append(orderingTerm.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::orderBy(const std::list<OrderingTerm>& orderingTerms)
+StatementSelect &
+StatementSelect::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
-    lang::SelectSTMT& lang = getMutableLang();
-    for (const OrderingTerm& orderingTerm : orderingTerms) {
+    lang::SelectSTMT &lang = getMutableLang();
+    for (const OrderingTerm &orderingTerm : orderingTerms) {
         lang.orderingTerms.append(orderingTerm.getLang());
     }
     return *this;
 }
 
-
-StatementSelect& StatementSelect::limit(const Expression& from, const Expression& to)
+StatementSelect &StatementSelect::limit(const Expression &from,
+                                        const Expression &to)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.offset = false;
     lang.limit.assign(from.getLang());
     lang.limitParameter.assign(to.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::limit(const Expression& limit)
+StatementSelect &StatementSelect::limit(const Expression &limit)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.offset = true;
     lang.limit.assign(limit.getLang());
     return *this;
 }
 
-StatementSelect& StatementSelect::offset(const Expression& offset)
+StatementSelect &StatementSelect::offset(const Expression &offset)
 {
-    lang::SelectSTMT& lang = getMutableLang();
+    lang::SelectSTMT &lang = getMutableLang();
     lang.limitParameter.assign(offset.getLang());
     return *this;
 }
 
-void StatementSelect::compound(const lang::SelectSTMT::Compound::Operator& compoundOperator, const SelectCore& selectCore)
+void StatementSelect::compound(
+    const lang::SelectSTMT::Compound::Operator &compoundOperator,
+    const SelectCore &selectCore)
 {
     lang::copy_on_write_lazy_lang<lang::SelectSTMT::Compound> compoundCore;
-    lang::SelectSTMT::Compound& compound = compoundCore.get_or_copy();
+    lang::SelectSTMT::Compound &compound = compoundCore.get_or_copy();
     compound.compoundOperator = compoundOperator;
     compound.selectCore.assign(selectCore.getLang());
-    
-    lang::SelectSTMT& lang = getMutableLang();
+
+    lang::SelectSTMT &lang = getMutableLang();
     lang.compoundCores.append(compoundCore);
 }
 

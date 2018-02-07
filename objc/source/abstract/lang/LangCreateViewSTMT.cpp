@@ -50,4 +50,3 @@ copy_on_write_string CreateViewSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

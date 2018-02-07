@@ -30,25 +30,28 @@ class StatementCreateTrigger
     : public DescribableWithLang<lang::CreateTriggerSTMT>,
       public Statement {
 public:
-          StatementCreateTrigger& createTrigger(const std::string& triggerName, bool ifNotExists = true, bool temp = false);
-          StatementCreateTrigger& withSchema(const std::string& schemaName);
-          
-          StatementCreateTrigger& before();
-          StatementCreateTrigger& after();
-          StatementCreateTrigger& insteadOf();
-          
-          StatementCreateTrigger& delete_();
-          StatementCreateTrigger& insert();
-          StatementCreateTrigger& update();
-          StatementCreateTrigger& updateOf(const std::string& columnName);
-          StatementCreateTrigger& updateOf(const std::list<std::string>& columnNames);
-          
-          StatementCreateTrigger& on(const std::string& tableName);
-          StatementCreateTrigger& forEachRow();
-          StatementCreateTrigger& when(const Expression& expression);
-          
-          StatementCreateTrigger& byAddingTriggeredStatement(const CRUDStatement& CRUDSTMT);
-          
+    StatementCreateTrigger &createTrigger(const std::string &triggerName,
+                                          bool ifNotExists = true,
+                                          bool temp = false);
+    StatementCreateTrigger &withSchema(const std::string &schemaName);
+
+    StatementCreateTrigger &before();
+    StatementCreateTrigger &after();
+    StatementCreateTrigger &insteadOf();
+
+    StatementCreateTrigger &delete_();
+    StatementCreateTrigger &insert();
+    StatementCreateTrigger &update();
+    StatementCreateTrigger &updateOf(const std::string &columnName);
+    StatementCreateTrigger &updateOf(const std::list<std::string> &columnNames);
+
+    StatementCreateTrigger &on(const std::string &tableName);
+    StatementCreateTrigger &forEachRow();
+    StatementCreateTrigger &when(const Expression &expression);
+
+    StatementCreateTrigger &
+    byAddingTriggeredStatement(const CRUDStatement &CRUDSTMT);
+
     virtual Type getType() const override;
 };
 

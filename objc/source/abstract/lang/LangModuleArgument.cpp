@@ -46,4 +46,3 @@ copy_on_write_string ModuleArgument::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

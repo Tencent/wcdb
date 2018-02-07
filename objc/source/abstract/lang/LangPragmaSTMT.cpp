@@ -42,4 +42,3 @@ copy_on_write_string PragmaSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

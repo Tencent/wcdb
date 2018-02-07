@@ -29,39 +29,44 @@ namespace WCDB {
 class StatementSelect : public DescribableWithLang<lang::SelectSTMT>,
                         public CRUDStatement {
 public:
-                            StatementSelect& with(const CommonTableExpression& commonTableExpression);
-                            StatementSelect& with(const std::list<CommonTableExpression>& commonTableExpressions);
-                            StatementSelect& withRecursive(const CommonTableExpression& commonTableExpression);
-                            StatementSelect& withRecursive(const std::list<CommonTableExpression>& commonTableExpressions);
-                            
-                            StatementSelect& distinct();
-                            StatementSelect& select(const ResultColumn& resultColumn);
-                            StatementSelect& select(const std::list<ResultColumn>& resultColumns);
-                            StatementSelect& from(const TableOrSubquery& tableOrSubquery);
-                            StatementSelect& from(const JoinClause& joinClause);
-                            StatementSelect& from(const std::list<TableOrSubquery>& tableOrSubquerys);
-                            StatementSelect& where(const Expression& condition);
-                            StatementSelect& groupBy(const Expression& group);
-                            StatementSelect& groupBy(const std::list<Expression>& groups);
-                            StatementSelect& having(const Expression& having);
-                            StatementSelect& values(const Expression& value);
-                            StatementSelect& values(const std::list<Expression>& values);
-                            
-                            StatementSelect& union_(const SelectCore& selectCore);
-                            StatementSelect& unionAll(const SelectCore& selectCore);
-                            StatementSelect& intersect(const SelectCore& selectCore);
-                            StatementSelect& except(const SelectCore& selectCore);
-                            
-                            StatementSelect& orderBy(const OrderingTerm& orderingTerm);
-                            StatementSelect& orderBy(const std::list<OrderingTerm>& orderingTerms);
+    StatementSelect &with(const CommonTableExpression &commonTableExpression);
+    StatementSelect &
+    with(const std::list<CommonTableExpression> &commonTableExpressions);
+    StatementSelect &
+    withRecursive(const CommonTableExpression &commonTableExpression);
+    StatementSelect &withRecursive(
+        const std::list<CommonTableExpression> &commonTableExpressions);
 
-                            StatementSelect& limit(const Expression& from, const Expression& to);
-                            StatementSelect& limit(const Expression& limit);
-                            StatementSelect& offset(const Expression& offset);
+    StatementSelect &distinct();
+    StatementSelect &select(const ResultColumn &resultColumn);
+    StatementSelect &select(const std::list<ResultColumn> &resultColumns);
+    StatementSelect &from(const TableOrSubquery &tableOrSubquery);
+    StatementSelect &from(const JoinClause &joinClause);
+    StatementSelect &from(const std::list<TableOrSubquery> &tableOrSubquerys);
+    StatementSelect &where(const Expression &condition);
+    StatementSelect &groupBy(const Expression &group);
+    StatementSelect &groupBy(const std::list<Expression> &groups);
+    StatementSelect &having(const Expression &having);
+    StatementSelect &values(const Expression &value);
+    StatementSelect &values(const std::list<Expression> &values);
+
+    StatementSelect &union_(const SelectCore &selectCore);
+    StatementSelect &unionAll(const SelectCore &selectCore);
+    StatementSelect &intersect(const SelectCore &selectCore);
+    StatementSelect &except(const SelectCore &selectCore);
+
+    StatementSelect &orderBy(const OrderingTerm &orderingTerm);
+    StatementSelect &orderBy(const std::list<OrderingTerm> &orderingTerms);
+
+    StatementSelect &limit(const Expression &from, const Expression &to);
+    StatementSelect &limit(const Expression &limit);
+    StatementSelect &offset(const Expression &offset);
 
     virtual Type getType() const override;
-                        protected:
-                            void compound(const lang::SelectSTMT::Compound::Operator& compoundOperator, const SelectCore& selectCore);
+
+protected:
+    void compound(const lang::SelectSTMT::Compound::Operator &compoundOperator,
+                  const SelectCore &selectCore);
 };
 
 } // namespace WCDB

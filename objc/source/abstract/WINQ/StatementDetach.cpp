@@ -22,9 +22,9 @@
 
 namespace WCDB {
 
-StatementDetach& StatementDetach::detach(const std::string& schemaName)
+StatementDetach &StatementDetach::detach(const std::string &schemaName)
 {
-    lang::DetachSTMT& lang = getMutableLang();
+    lang::DetachSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

@@ -24,7 +24,7 @@
 namespace WCDB {
 
 HandleStatement::HandleStatement(void *stmt, const Handle &handle)
-: m_stmt(stmt), m_handle(handle)
+    : m_stmt(stmt), m_handle(handle)
 {
 }
 
@@ -53,9 +53,9 @@ bool HandleStatement::step()
     }
     sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
     Error::ReportSQLite(
-                        m_handle.getTag(), m_handle.path, Error::HandleOperation::Step, rc,
-                        sqlite3_extended_errcode(handle), sqlite3_errmsg(handle),
-                        sqlite3_sql((sqlite3_stmt *) m_stmt), &m_error);
+        m_handle.getTag(), m_handle.path, Error::HandleOperation::Step, rc,
+        sqlite3_extended_errcode(handle), sqlite3_errmsg(handle),
+        sqlite3_sql((sqlite3_stmt *) m_stmt), &m_error);
     return false;
 }
 
@@ -81,34 +81,34 @@ HandleStatement::~HandleStatement()
 }
 
 void HandleStatement::bindInteger32(
-                                    const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
-                                    int index)
+    const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
+    int index)
 {
     sqlite3_bind_int((sqlite3_stmt *) m_stmt, index, value);
 }
 
 void HandleStatement::bindInteger64(
-                                    const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
-                                    int index)
+    const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
+    int index)
 {
     sqlite3_bind_int64((sqlite3_stmt *) m_stmt, index, value);
 }
 
 void HandleStatement::bindDouble(
-                                 const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value, int index)
+    const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value, int index)
 {
     sqlite3_bind_double((sqlite3_stmt *) m_stmt, index, value);
 }
 
 void HandleStatement::bindText(
-                               const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value, int index)
+    const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value, int index)
 {
     sqlite3_bind_text((sqlite3_stmt *) m_stmt, index, value, -1,
                       SQLITE_TRANSIENT);
 }
 
 void HandleStatement::bindBLOB(
-                               const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
+    const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
 {
     sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.data(),
                       (int) value.size(), SQLITE_TRANSIENT);
@@ -123,28 +123,28 @@ ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
 HandleStatement::getInteger32(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType)
-    sqlite3_column_int((sqlite3_stmt *) m_stmt, index);
+        sqlite3_column_int((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
 HandleStatement::getInteger64(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType)
-    sqlite3_column_int64((sqlite3_stmt *) m_stmt, index);
+        sqlite3_column_int64((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Float>::UnderlyingType
 HandleStatement::getDouble(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Float>::UnderlyingType)
-    sqlite3_column_double((sqlite3_stmt *) m_stmt, index);
+        sqlite3_column_double((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 HandleStatement::getText(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Text>::UnderlyingType)
-    sqlite3_column_text((sqlite3_stmt *) m_stmt, index);
+        sqlite3_column_text((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
@@ -152,7 +152,7 @@ HandleStatement::getBLOB(int index)
 {
     int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
     const unsigned char *data = (const unsigned char *) sqlite3_column_blob(
-                                                                            (sqlite3_stmt *) m_stmt, index);
+        (sqlite3_stmt *) m_stmt, index);
     return ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType(data, data + size);
 }
 
@@ -189,7 +189,7 @@ ColumnType HandleStatement::getType(int index)
 long long HandleStatement::getLastInsertedRowID()
 {
     return sqlite3_last_insert_rowid(
-                                     sqlite3_db_handle((sqlite3_stmt *) m_stmt));
+        sqlite3_db_handle((sqlite3_stmt *) m_stmt));
 }
 
 bool HandleStatement::finalize()
@@ -210,6 +210,5 @@ bool HandleStatement::finalize()
     }
     return true;
 }
-    
-} //namespace WCDB
 
+} //namespace WCDB

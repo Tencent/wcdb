@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Handle.hpp>
 #include <WCDB/File.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/handle.hpp>
 #include <WCDB/macro.hpp>
@@ -44,13 +44,13 @@ const auto UNUSED_UNIQUE_ID = []() {
 }();
 
 Handle::Handle(const std::string &p)
-: m_handle(nullptr)
-, m_tag(InvalidTag)
-, path(p)
-, m_performanceTrace(nullptr)
-, m_sqlTrace(nullptr)
-, m_cost(0)
-, m_aggregation(false)
+    : m_handle(nullptr)
+    , m_tag(InvalidTag)
+    , path(p)
+    , m_performanceTrace(nullptr)
+    , m_sqlTrace(nullptr)
+    , m_cost(0)
+    , m_aggregation(false)
 {
 }
 
@@ -99,37 +99,37 @@ void Handle::setupTrace()
     }
     if (flag > 0) {
         sqlite3_trace_v2(
-                         (sqlite3 *) m_handle, flag,
-                         [](unsigned int flag, void *M, void *P, void *X) -> int {
-                             Handle *handle = (Handle *) M;
-                             sqlite3_stmt *stmt = (sqlite3_stmt *) P;
-                             switch (flag) {
-                                 case SQLITE_TRACE_STMT: {
-                                     const char *sql = sqlite3_sql(stmt);
-                                     if (sql) {
-                                         handle->reportSQL(sql);
-                                     }
-                                 } break;
-                                 case SQLITE_TRACE_PROFILE: {
-                                     sqlite3_int64 *cost = (sqlite3_int64 *) X;
-                                     const char *sql = sqlite3_sql(stmt);
-                                     
-                                     //report last trace
-                                     if (!handle->shouldPerformanceAggregation()) {
-                                         handle->reportPerformance();
-                                     }
-                                     
-                                     if (sql) {
-                                         handle->addPerformanceTrace(sql, *cost);
-                                     }
-                                 } break;
-                                 default:
-                                     break;
-                             }
-                             
-                             return SQLITE_OK;
-                         },
-                         this);
+            (sqlite3 *) m_handle, flag,
+            [](unsigned int flag, void *M, void *P, void *X) -> int {
+                Handle *handle = (Handle *) M;
+                sqlite3_stmt *stmt = (sqlite3_stmt *) P;
+                switch (flag) {
+                    case SQLITE_TRACE_STMT: {
+                        const char *sql = sqlite3_sql(stmt);
+                        if (sql) {
+                            handle->reportSQL(sql);
+                        }
+                    } break;
+                    case SQLITE_TRACE_PROFILE: {
+                        sqlite3_int64 *cost = (sqlite3_int64 *) X;
+                        const char *sql = sqlite3_sql(stmt);
+
+                        //report last trace
+                        if (!handle->shouldPerformanceAggregation()) {
+                            handle->reportPerformance();
+                        }
+
+                        if (sql) {
+                            handle->addPerformanceTrace(sql, *cost);
+                        }
+                    } break;
+                    default:
+                        break;
+                }
+
+                return SQLITE_OK;
+            },
+            this);
     } else {
         sqlite3_trace_v2((sqlite3 *) m_handle, 0, nullptr, nullptr);
     }
@@ -195,7 +195,7 @@ std::shared_ptr<HandleStatement> Handle::prepare(const Statement &statement)
     if (rc == SQLITE_OK) {
         m_error.reset();
         return std::shared_ptr<HandleStatement>(
-                                                new HandleStatement(stmt, *this));
+            new HandleStatement(stmt, *this));
     }
     Error::ReportSQLite(m_tag, path, Error::HandleOperation::Prepare, rc,
                         sqlite3_extended_errcode((sqlite3 *) m_handle),
@@ -207,8 +207,8 @@ std::shared_ptr<HandleStatement> Handle::prepare(const Statement &statement)
 bool Handle::exec(const Statement &statement)
 {
     int rc =
-    sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
-                 nullptr, nullptr, nullptr);
+        sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
+                     nullptr, nullptr, nullptr);
     bool result = rc == SQLITE_OK;
     //TODO
     //    if (statement.getStatementType() == Statement::Type::Transaction) {
@@ -274,14 +274,14 @@ void Handle::registerCommittedHook(const CommittedHook &onCommitted, void *info)
     m_committedHookInfo.handle = this;
     if (m_committedHookInfo.onCommitted) {
         sqlite3_wal_hook(
-                         (sqlite3 *) m_handle,
-                         [](void *p, sqlite3 *, const char *, int pages) -> int {
-                             CommittedHookInfo *committedHookInfo = (CommittedHookInfo *) p;
-                             committedHookInfo->onCommitted(committedHookInfo->handle, pages,
-                                                            committedHookInfo->info);
-                             return SQLITE_OK;
-                         },
-                         &m_committedHookInfo);
+            (sqlite3 *) m_handle,
+            [](void *p, sqlite3 *, const char *, int pages) -> int {
+                CommittedHookInfo *committedHookInfo = (CommittedHookInfo *) p;
+                committedHookInfo->onCommitted(committedHookInfo->handle, pages,
+                                               committedHookInfo->info);
+                return SQLITE_OK;
+            },
+            &m_committedHookInfo);
     } else {
         sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
     }
@@ -320,10 +320,10 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
                                   backupKeyLength, nullptr, 0, &info, kdfSalt);
     if (rc != SQLITERK_OK) {
         Error::ReportRepair(
-                            backupPath, WCDB::Error::RepairOperation::LoadMaster, rc, &m_error);
+            backupPath, WCDB::Error::RepairOperation::LoadMaster, rc, &m_error);
         return false;
     }
-    
+
     sqliterk_cipher_conf conf;
     memset(&conf, 0, sizeof(sqliterk_cipher_conf));
     conf.key = databaseKey;
@@ -331,7 +331,7 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
     conf.page_size = pageSize;
     conf.kdf_salt = kdfSalt;
     conf.use_hmac = true;
-    
+
     sqliterk *rk;
     rc = sqliterk_open(corruptedDBPath.c_str(), &conf, &rk);
     if (rc != SQLITERK_OK) {
@@ -339,7 +339,7 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
                             WCDB::Error::RepairOperation::Repair, rc, &m_error);
         return false;
     }
-    
+
     rc = sqliterk_output(rk, (sqlite3 *) m_handle, info,
                          SQLITERK_OUTPUT_ALL_TABLES);
     if (rc != SQLITERK_OK) {

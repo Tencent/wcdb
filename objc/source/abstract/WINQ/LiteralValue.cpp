@@ -23,27 +23,30 @@
 namespace WCDB {
 
 const LiteralValue LiteralValue::Null(lang::LiteralValue::Type::Null);
-const LiteralValue LiteralValue::CurrentTime(lang::LiteralValue::Type::CurrentTime);
-const LiteralValue LiteralValue::CurrentDate(lang::LiteralValue::Type::CurrentDate);
-const LiteralValue LiteralValue::CurrentTimestamp(lang::LiteralValue::Type::CurrentTimestamp);
+const LiteralValue
+    LiteralValue::CurrentTime(lang::LiteralValue::Type::CurrentTime);
+const LiteralValue
+    LiteralValue::CurrentDate(lang::LiteralValue::Type::CurrentDate);
+const LiteralValue
+    LiteralValue::CurrentTimestamp(lang::LiteralValue::Type::CurrentTimestamp);
 
-LiteralValue::LiteralValue(const std::string& value)
+LiteralValue::LiteralValue(const std::string &value)
 {
-    lang::LiteralValue& lang = getMutableLang();
+    lang::LiteralValue &lang = getMutableLang();
     lang.type = lang::LiteralValue::Type::String;
     lang.stringValue.assign(value);
 }
 
-LiteralValue::LiteralValue(const std::vector<unsigned char>& value)
+LiteralValue::LiteralValue(const std::vector<unsigned char> &value)
 {
-    lang::LiteralValue& lang = getMutableLang();
+    lang::LiteralValue &lang = getMutableLang();
     lang.type = lang::LiteralValue::Type::Null;
     lang.dataValue.assign(value);
 }
 
-LiteralValue::LiteralValue(const lang::LiteralValue::Type& type)
+LiteralValue::LiteralValue(const lang::LiteralValue::Type &type)
 {
-    lang::LiteralValue& lang = getMutableLang();
+    lang::LiteralValue &lang = getMutableLang();
     lang.type = type;
 }
 

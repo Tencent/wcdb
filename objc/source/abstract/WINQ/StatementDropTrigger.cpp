@@ -22,22 +22,24 @@
 
 namespace WCDB {
 
-StatementDropTrigger& StatementDropTrigger::dropTrigger(const std::string& triggerName, bool ifExists)
+StatementDropTrigger &
+StatementDropTrigger::dropTrigger(const std::string &triggerName, bool ifExists)
 {
-    lang::DropTriggerSTMT& lang = getMutableLang();
+    lang::DropTriggerSTMT &lang = getMutableLang();
     lang.name.assign(triggerName);
     lang.ifExists = ifExists;
     return *this;
 }
 
-StatementDropTrigger& StatementDropTrigger::withSchema(const std::string& schemaName)
+StatementDropTrigger &
+StatementDropTrigger::withSchema(const std::string &schemaName)
 {
-    lang::DropTriggerSTMT& lang = getMutableLang();
+    lang::DropTriggerSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-Statement::Type StatementDropTrigger::getType() const 
+Statement::Type StatementDropTrigger::getType() const
 {
     return Statement::Type::DropTrigger;
 }

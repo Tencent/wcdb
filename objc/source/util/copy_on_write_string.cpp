@@ -29,10 +29,9 @@ copy_on_write_string::copy_on_write_string(const std::string &string)
 {
 }
 
-copy_on_write_string::copy_on_write_string(const char* string)
-: Super(string ? string : "")
+copy_on_write_string::copy_on_write_string(const char *string)
+    : Super(string ? string : "")
 {
-    
 }
 
 void copy_on_write_string::append(const copy_on_write_string &string)

@@ -28,18 +28,28 @@ namespace WCDB {
 class TableConstraint : public DescribableWithLang<lang::TableConstraint> {
 public:
     TableConstraint();
-    TableConstraint(const std::string& name);
-    
-    TableConstraint& withPrimaryKey(const IndexedColumn& indexedColumn, const ConflictClause& conflictClause = ConflictClause::NotSet);
-    TableConstraint& withPrimaryKey(const std::list<IndexedColumn>& indexedColumns, const ConflictClause& conflictClause = ConflictClause::NotSet);
-    
-    TableConstraint& withUnique(const IndexedColumn& indexedColumn, const ConflictClause& conflictClause = ConflictClause::NotSet);
-    TableConstraint& withUnique(const std::list<IndexedColumn>& indexedColumns, const ConflictClause& conflictClause = ConflictClause::NotSet);
+    TableConstraint(const std::string &name);
 
-    TableConstraint& withChecking(const Expression& expression);
-    
-    TableConstraint& withForeignKey(const std::string& columnName, const ForeignKeyClause& foreignKeyClause);
-    TableConstraint& withForeignKey(const std::list<std::string>& columnNames, const ForeignKeyClause& foreignKeyClause);
+    TableConstraint &withPrimaryKey(
+        const IndexedColumn &indexedColumn,
+        const ConflictClause &conflictClause = ConflictClause::NotSet);
+    TableConstraint &withPrimaryKey(
+        const std::list<IndexedColumn> &indexedColumns,
+        const ConflictClause &conflictClause = ConflictClause::NotSet);
+
+    TableConstraint &
+    withUnique(const IndexedColumn &indexedColumn,
+               const ConflictClause &conflictClause = ConflictClause::NotSet);
+    TableConstraint &
+    withUnique(const std::list<IndexedColumn> &indexedColumns,
+               const ConflictClause &conflictClause = ConflictClause::NotSet);
+
+    TableConstraint &withChecking(const Expression &expression);
+
+    TableConstraint &withForeignKey(const std::string &columnName,
+                                    const ForeignKeyClause &foreignKeyClause);
+    TableConstraint &withForeignKey(const std::list<std::string> &columnNames,
+                                    const ForeignKeyClause &foreignKeyClause);
 };
 
 } // namespace WCDB

@@ -29,8 +29,9 @@ namespace WCDB {
 class StatementBegin : public DescribableWithLang<lang::BeginSTMT>,
                        public Statement {
 public:
-   using Transaction = lang::BeginSTMT::Type;
-   StatementBegin& begin(const Transaction& transaction = Transaction::Immediate);
+    using Transaction = lang::BeginSTMT::Type;
+    StatementBegin &
+    begin(const Transaction &transaction = Transaction::Immediate);
     virtual Type getType() const override;
 };
 

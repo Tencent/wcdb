@@ -32,4 +32,3 @@ copy_on_write_string CommitSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

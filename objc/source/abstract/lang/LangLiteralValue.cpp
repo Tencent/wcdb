@@ -64,8 +64,8 @@ std::string LiteralValue::stringByAntiInjecting(const std::string &origin)
     return "'" + stringByReplacingOccurrencesOfString(origin, "'", "''") + "'";
 }
 
-std::string LiteralValue::stringByAntiInjecting(
-    const std::vector<unsigned char> &origin)
+std::string
+LiteralValue::stringByAntiInjecting(const std::vector<unsigned char> &origin)
 {
     std::string str(origin.begin(), origin.end());
     return "'" + stringByReplacingOccurrencesOfString(str, "'", "''") + "'";
@@ -74,4 +74,3 @@ std::string LiteralValue::stringByAntiInjecting(
 } // namespace lang
 
 } // namespace WCDB
-

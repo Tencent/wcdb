@@ -46,4 +46,3 @@ copy_on_write_string AnalyzeSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

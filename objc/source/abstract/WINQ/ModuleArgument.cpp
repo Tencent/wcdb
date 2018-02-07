@@ -22,24 +22,25 @@
 
 namespace WCDB {
 
-ModuleArgument::ModuleArgument(const std::string& left, const std::string& right)
+ModuleArgument::ModuleArgument(const std::string &left,
+                               const std::string &right)
 {
-    lang::ModuleArgument& lang = getMutableLang();
+    lang::ModuleArgument &lang = getMutableLang();
     lang.type = lang::ModuleArgument::Type::LeftRight;
     lang.left.assign(left);
     lang.right.assign(right);
 }
 
-ModuleArgument::ModuleArgument(const ColumnDef& columnDef)
+ModuleArgument::ModuleArgument(const ColumnDef &columnDef)
 {
-    lang::ModuleArgument& lang = getMutableLang();
+    lang::ModuleArgument &lang = getMutableLang();
     lang.type = lang::ModuleArgument::Type::ColumnDef;
     lang.columnDef.assign(columnDef.getLang());
 }
 
-ModuleArgument::ModuleArgument(const TableConstraint& tableConstraint)
+ModuleArgument::ModuleArgument(const TableConstraint &tableConstraint)
 {
-    lang::ModuleArgument& lang = getMutableLang();
+    lang::ModuleArgument &lang = getMutableLang();
     lang.type = lang::ModuleArgument::Type::TableConstraint;
     lang.tableConstraint.assign(tableConstraint.getLang());
 }

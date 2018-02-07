@@ -32,4 +32,3 @@ inline const char *DropIndexSTMT::getInternalName() const
 } // namespace lang
 
 } // namespace WCDB
-

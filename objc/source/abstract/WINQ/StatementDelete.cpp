@@ -22,63 +22,66 @@
 
 namespace WCDB {
 
-StatementDelete& StatementDelete::with(const WithClause& withClause)
+StatementDelete &StatementDelete::with(const WithClause &withClause)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.withClause.assign(withClause.getLang());
     return *this;
 }
 
-StatementDelete& StatementDelete::deleteFrom(const QualifiedTableName& qualifiedTableName)
+StatementDelete &
+StatementDelete::deleteFrom(const QualifiedTableName &qualifiedTableName)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.qualifiedTableName.assign(qualifiedTableName.getLang());
     return *this;
 }
 
-StatementDelete& StatementDelete::where(const Expression& condition)
+StatementDelete &StatementDelete::where(const Expression &condition)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.condition.assign(condition.getLang());
     return *this;
 }
 
-StatementDelete& StatementDelete::orderBy(const OrderingTerm& orderingTerm)
+StatementDelete &StatementDelete::orderBy(const OrderingTerm &orderingTerm)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.orderingTerms.append(orderingTerm.getLang());
     return *this;
 }
 
-StatementDelete& StatementDelete::orderBy(const std::list<OrderingTerm>& orderingTerms)
+StatementDelete &
+StatementDelete::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
-    for (const OrderingTerm& orderingTerm : orderingTerms) {
+    lang::DeleteSTMT &lang = getMutableLang();
+    for (const OrderingTerm &orderingTerm : orderingTerms) {
         lang.orderingTerms.append(orderingTerm.getLang());
     }
     return *this;
 }
 
-StatementDelete& StatementDelete::limit(const Expression& from, const Expression& to)
+StatementDelete &StatementDelete::limit(const Expression &from,
+                                        const Expression &to)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.offset = false;
     lang.limit.assign(from.getLang());
     lang.limitParameter.assign(to.getLang());
     return *this;
 }
 
-StatementDelete& StatementDelete::limit(const Expression& limit)
+StatementDelete &StatementDelete::limit(const Expression &limit)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.offset = true;
     lang.limit.assign(limit.getLang());
     return *this;
 }
 
-StatementDelete& StatementDelete::offset(const Expression& offset)
+StatementDelete &StatementDelete::offset(const Expression &offset)
 {
-    lang::DeleteSTMT& lang = getMutableLang();
+    lang::DeleteSTMT &lang = getMutableLang();
     lang.limitParameter.assign(offset.getLang());
     return *this;
 }

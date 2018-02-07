@@ -32,4 +32,3 @@ inline const char *DropTriggerSTMT::getInternalName() const
 } // namespace lang
 
 } // namespace WCDB
-

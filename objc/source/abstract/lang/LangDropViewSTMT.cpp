@@ -32,4 +32,3 @@ inline const char *DropViewSTMT::getInternalName() const
 } // namespace lang
 
 } // namespace WCDB
-

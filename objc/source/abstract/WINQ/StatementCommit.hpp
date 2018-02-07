@@ -25,9 +25,10 @@
 
 namespace WCDB {
 
-class StatementCommit : public DescribableWithLang<lang::CommitSTMT>, public Statement {
+class StatementCommit : public DescribableWithLang<lang::CommitSTMT>,
+                        public Statement {
 public:
-    StatementCommit& commit();
+    StatementCommit &commit();
     virtual Type getType() const override;
 };
 

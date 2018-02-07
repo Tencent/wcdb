@@ -22,41 +22,49 @@
 
 namespace WCDB {
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::createVirtualTable(const std::string& tableName, bool ifNotExists)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::createVirtualTable(const std::string &tableName,
+                                                bool ifNotExists)
 {
-    lang::CreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     lang.ifNotExists = ifNotExists;
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::withSchema(const std::string& schemaName)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::withSchema(const std::string &schemaName)
 {
-    lang::CreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::usingModule(const std::string &moduleName)
 {
-    lang::CreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.moduleName.assign(moduleName);
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName, const ModuleArgument& moduleArgument)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::usingModule(const std::string &moduleName,
+                                         const ModuleArgument &moduleArgument)
 {
-    lang::CreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.moduleName.assign(moduleName);
     lang.moduleArguments.append(moduleArgument.getLang());
     return *this;
 }
 
-StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName, const std::list<ModuleArgument>& moduleArguments)
+StatementCreateVirtualTable &StatementCreateVirtualTable::usingModule(
+    const std::string &moduleName,
+    const std::list<ModuleArgument> &moduleArguments)
 {
-    lang::CreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.moduleName.assign(moduleName);
-    for (const ModuleArgument& moduleArgument : moduleArguments) {
+    for (const ModuleArgument &moduleArgument : moduleArguments) {
         lang.moduleArguments.append(moduleArgument.getLang());
     }
     return *this;

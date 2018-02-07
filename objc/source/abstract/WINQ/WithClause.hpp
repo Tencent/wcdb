@@ -27,10 +27,15 @@ namespace WCDB {
 
 class WithClause : public DescribableWithLang<lang::WithClause> {
 public:
-    WithClause& with(const CTETableName& cteTableName, const StatementSelect& selectSTMT);
-    WithClause& withRecursive(const CTETableName& cteTableName, const StatementSelect& selectSTMT);
+    WithClause &with(const CTETableName &cteTableName,
+                     const StatementSelect &selectSTMT);
+    WithClause &withRecursive(const CTETableName &cteTableName,
+                              const StatementSelect &selectSTMT);
+
 protected:
-    WithClause& with(const CTETableName& cteTableName, const StatementSelect& selectSTMT, bool recursive);
+    WithClause &with(const CTETableName &cteTableName,
+                     const StatementSelect &selectSTMT,
+                     bool recursive);
 };
 
 } // namespace WCDB

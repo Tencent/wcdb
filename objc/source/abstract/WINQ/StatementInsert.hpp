@@ -29,24 +29,26 @@ namespace WCDB {
 class StatementInsert : public DescribableWithLang<lang::InsertSTMT>,
                         public CRUDStatement {
 public:
-                            StatementInsert& with(const WithClause& withClause);
-                            StatementInsert& insertInto(const std::string& tableName);
-                            StatementInsert& insertOrReplaceInto(const std::string& tableName);
-                            StatementInsert& insertOrRollbackInto(const std::string& tableName);
-                            StatementInsert& insertOrAbortInto(const std::string& tableName);
-                            StatementInsert& insertOrFailInto(const std::string& tableName);
-                            StatementInsert& insertOrIgnoreInto(const std::string& tableName);
-                            StatementInsert& withSchema(const std::string& schemaName);
-                            StatementInsert& on(const std::string& columnName);
-                            StatementInsert& on(const std::list<std::string>& columnNames);
-                            StatementInsert& values(const Expression& value);
-                            StatementInsert& values(const std::list<Expression>& values);
-                            StatementInsert& values(const StatementSelect& selectSTMT);
-                            StatementInsert& defaultValues();
-                            
+    StatementInsert &with(const WithClause &withClause);
+    StatementInsert &insertInto(const std::string &tableName);
+    StatementInsert &insertOrReplaceInto(const std::string &tableName);
+    StatementInsert &insertOrRollbackInto(const std::string &tableName);
+    StatementInsert &insertOrAbortInto(const std::string &tableName);
+    StatementInsert &insertOrFailInto(const std::string &tableName);
+    StatementInsert &insertOrIgnoreInto(const std::string &tableName);
+    StatementInsert &withSchema(const std::string &schemaName);
+    StatementInsert &on(const std::string &columnName);
+    StatementInsert &on(const std::list<std::string> &columnNames);
+    StatementInsert &values(const Expression &value);
+    StatementInsert &values(const std::list<Expression> &values);
+    StatementInsert &values(const StatementSelect &selectSTMT);
+    StatementInsert &defaultValues();
+
     virtual Type getType() const override;
-                        protected:
-                            void insertInto(const std::string& tableName, const lang::InsertSTMT::Type& type);
+
+protected:
+    void insertInto(const std::string &tableName,
+                    const lang::InsertSTMT::Type &type);
 };
 
 } // namespace WCDB

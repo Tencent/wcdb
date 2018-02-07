@@ -102,7 +102,7 @@ const Pragma Pragma::WalAutocheckpoint("wal_autocheckpoint");
 const Pragma Pragma::WalCheckpoint("wal_checkpoint");
 const Pragma Pragma::WritableSchema("writable_schema");
 
-Pragma::Pragma(const std::string& name)
+Pragma::Pragma(const std::string &name)
 {
     m_name.assign(name);
 }

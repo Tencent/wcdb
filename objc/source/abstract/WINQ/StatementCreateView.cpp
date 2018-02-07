@@ -22,41 +22,44 @@
 
 namespace WCDB {
 
-StatementCreateView& StatementCreateView::createView(const std::string& viewName, bool ifNotExists, bool temp)
+StatementCreateView &StatementCreateView::createView(
+    const std::string &viewName, bool ifNotExists, bool temp)
 {
-    lang::CreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT &lang = getMutableLang();
     lang.viewName.assign(viewName);
     lang.ifNotExists = ifNotExists;
     lang.temp = temp;
     return *this;
 }
 
-StatementCreateView& StatementCreateView::withSchema(const std::string& schemaName)
+StatementCreateView &
+StatementCreateView::withSchema(const std::string &schemaName)
 {
-    lang::CreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-StatementCreateView& StatementCreateView::on(const std::string& columnName)
+StatementCreateView &StatementCreateView::on(const std::string &columnName)
 {
-    lang::CreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT &lang = getMutableLang();
     lang.columnNames.append(columnName);
     return *this;
 }
 
-StatementCreateView& StatementCreateView::on(const std::list<std::string>& columnNames)
+StatementCreateView &
+StatementCreateView::on(const std::list<std::string> &columnNames)
 {
-    lang::CreateViewSTMT& lang = getMutableLang();
-    for (const std::string& columnName : columnNames) {
+    lang::CreateViewSTMT &lang = getMutableLang();
+    for (const std::string &columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
     return *this;
 }
 
-StatementCreateView& StatementCreateView::as(const StatementSelect& selectSTMT)
+StatementCreateView &StatementCreateView::as(const StatementSelect &selectSTMT)
 {
-    lang::CreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT &lang = getMutableLang();
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }

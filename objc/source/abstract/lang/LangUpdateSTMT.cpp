@@ -86,4 +86,3 @@ copy_on_write_string UpdateSTMT::KeyValue::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

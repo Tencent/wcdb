@@ -22,50 +22,57 @@
 
 namespace WCDB {
 
-TableOrSubquery::TableOrSubquery(const std::string& tableName)
+TableOrSubquery::TableOrSubquery(const std::string &tableName)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     lang.switcher = lang::TableOrSubquery::Switch::Table;
-    lang::TableOrSubqueryTable& langTable = lang.tableOrSubqueryTable.get_or_copy();
+    lang::TableOrSubqueryTable &langTable =
+        lang.tableOrSubqueryTable.get_or_copy();
     langTable.tableName.assign(tableName);
 }
 
-TableOrSubquery::TableOrSubquery(const StatementSelect& selectSTMT)
+TableOrSubquery::TableOrSubquery(const StatementSelect &selectSTMT)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     lang.switcher = lang::TableOrSubquery::Switch::Select;
-    lang::TableOrSubquerySelect& langSelect = lang.tableOrSubquerySelect.get_or_copy();
+    lang::TableOrSubquerySelect &langSelect =
+        lang.tableOrSubquerySelect.get_or_copy();
     langSelect.selectSTMT.assign(selectSTMT.getLang());
 }
 
-TableOrSubquery::TableOrSubquery(const JoinClause& joinClause)
+TableOrSubquery::TableOrSubquery(const JoinClause &joinClause)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     lang.switcher = lang::TableOrSubquery::Switch::JoinClause;
-    lang::TableOrSubqueryJoinClause& langJoinClause = lang.tableOrSubqueryJoinClause.get_or_copy();
+    lang::TableOrSubqueryJoinClause &langJoinClause =
+        lang.tableOrSubqueryJoinClause.get_or_copy();
     langJoinClause.joinClause.assign(joinClause.getLang());
 }
 
-TableOrSubquery::TableOrSubquery(const std::list<TableOrSubquery>& tableOrSubquerys)
+TableOrSubquery::TableOrSubquery(
+    const std::list<TableOrSubquery> &tableOrSubquerys)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     lang.switcher = lang::TableOrSubquery::Switch::List;
-    lang::TableOrSubqueryList& langList = lang.tableOrSubqueryList.get_or_copy();
-    for (const TableOrSubquery& tableOrSubquery : tableOrSubquerys) {
+    lang::TableOrSubqueryList &langList =
+        lang.tableOrSubqueryList.get_or_copy();
+    for (const TableOrSubquery &tableOrSubquery : tableOrSubquerys) {
         langList.tableOrSubquerys.append(tableOrSubquery.getLang());
     }
 }
 
-TableOrSubquery& TableOrSubquery::withSchema(const std::string& schemaName)
+TableOrSubquery &TableOrSubquery::withSchema(const std::string &schemaName)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     switch (lang.switcher) {
         case lang::TableOrSubquery::Switch::Table:
-            lang.tableOrSubqueryTable.get_or_copy().schemaName.assign(schemaName);
+            lang.tableOrSubqueryTable.get_or_copy().schemaName.assign(
+                schemaName);
             break;
         case lang::TableOrSubquery::Switch::TableFunction:
-            lang.tableOrSubqueryTableFunction.get_or_copy().schemaName.assign(schemaName);
-            break;            
+            lang.tableOrSubqueryTableFunction.get_or_copy().schemaName.assign(
+                schemaName);
+            break;
         default:
             abort();
             break;
@@ -73,18 +80,21 @@ TableOrSubquery& TableOrSubquery::withSchema(const std::string& schemaName)
     return *this;
 }
 
-TableOrSubquery& TableOrSubquery::as(const std::string& tableAlias)
+TableOrSubquery &TableOrSubquery::as(const std::string &tableAlias)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     switch (lang.switcher) {
         case lang::TableOrSubquery::Switch::Table:
-            lang.tableOrSubqueryTable.get_or_copy().tableAlias.assign(tableAlias);
-            break;            
-        case lang::TableOrSubquery::Switch::TableFunction:            
-            lang.tableOrSubqueryTableFunction.get_or_copy().tableAlias.assign(tableAlias);
+            lang.tableOrSubqueryTable.get_or_copy().tableAlias.assign(
+                tableAlias);
             break;
-        case lang::TableOrSubquery::Switch::Select:            
-            lang.tableOrSubquerySelect.get_or_copy().tableAlias.assign(tableAlias);
+        case lang::TableOrSubquery::Switch::TableFunction:
+            lang.tableOrSubqueryTableFunction.get_or_copy().tableAlias.assign(
+                tableAlias);
+            break;
+        case lang::TableOrSubquery::Switch::Select:
+            lang.tableOrSubquerySelect.get_or_copy().tableAlias.assign(
+                tableAlias);
             break;
         default:
             abort();
@@ -93,53 +103,60 @@ TableOrSubquery& TableOrSubquery::as(const std::string& tableAlias)
     return *this;
 }
 
-TableOrSubquery& TableOrSubquery::indexedBy(const std::string& indexName)
+TableOrSubquery &TableOrSubquery::indexedBy(const std::string &indexName)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     assert(lang.switcher == lang::TableOrSubquery::Switch::Table);
-    lang::TableOrSubqueryTable& langTable = lang.tableOrSubqueryTable.get_or_copy();
+    lang::TableOrSubqueryTable &langTable =
+        lang.tableOrSubqueryTable.get_or_copy();
     langTable.indexSwitcher = lang::TableOrSubqueryTable::IndexSwitch::Indexed;
     langTable.indexName.assign(indexName);
     return *this;
 }
-TableOrSubquery& TableOrSubquery::notIndexed()
+TableOrSubquery &TableOrSubquery::notIndexed()
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     assert(lang.switcher == lang::TableOrSubquery::Switch::Table);
-    lang.tableOrSubqueryTable.get_or_copy().indexSwitcher = lang::TableOrSubqueryTable::IndexSwitch::NotIndexed;
+    lang.tableOrSubqueryTable.get_or_copy().indexSwitcher =
+        lang::TableOrSubqueryTable::IndexSwitch::NotIndexed;
     return *this;
 }
 
-TableOrSubquery TableOrSubquery::Function(const std::string& functionName)
+TableOrSubquery TableOrSubquery::Function(const std::string &functionName)
 {
     lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction> cowLang;
     cowLang.get_or_copy().tableFunctionName.assign(functionName);
     return cowLang;
 }
 
-TableOrSubquery TableOrSubquery::Function(const std::string& functionName, const Expression& expression)
+TableOrSubquery TableOrSubquery::Function(const std::string &functionName,
+                                          const Expression &expression)
 {
     lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction> cowLang;
-    lang::TableOrSubqueryTableFunction& lang = cowLang.get_or_copy();
+    lang::TableOrSubqueryTableFunction &lang = cowLang.get_or_copy();
     lang.tableFunctionName.assign(functionName);
     lang.exprs.append(expression.getLang());
     return cowLang;
 }
 
-TableOrSubquery TableOrSubquery::Function(const std::string& functionName, const std::list<Expression>& expressions)
+TableOrSubquery
+TableOrSubquery::Function(const std::string &functionName,
+                          const std::list<Expression> &expressions)
 {
     lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction> cowLang;
-    lang::TableOrSubqueryTableFunction& lang = cowLang.get_or_copy();
+    lang::TableOrSubqueryTableFunction &lang = cowLang.get_or_copy();
     lang.tableFunctionName.assign(functionName);
-    for (const Expression& expression : expressions) {
+    for (const Expression &expression : expressions) {
         lang.exprs.append(expression.getLang());
     }
     return cowLang;
 }
 
-TableOrSubquery::TableOrSubquery(const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>& tableOrSubqueryTableFunction)
+TableOrSubquery::TableOrSubquery(
+    const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>
+        &tableOrSubqueryTableFunction)
 {
-    lang::TableOrSubquery& lang = getMutableLang();
+    lang::TableOrSubquery &lang = getMutableLang();
     lang.switcher = lang::TableOrSubquery::Switch::TableFunction;
     lang.tableOrSubqueryTableFunction.assign(tableOrSubqueryTableFunction);
 }

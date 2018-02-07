@@ -22,48 +22,54 @@
 
 namespace WCDB {
 
-StatementCreateIndex& StatementCreateIndex::createIndex(const std::string& indexName, bool ifNotExists, bool unique)
+StatementCreateIndex &StatementCreateIndex::createIndex(
+    const std::string &indexName, bool ifNotExists, bool unique)
 {
-    lang::CreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexName.assign(indexName);
     lang.ifNotExists = ifNotExists;
     lang.unique = unique;
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::withSchema(const std::string& schemaName)
+StatementCreateIndex &
+StatementCreateIndex::withSchema(const std::string &schemaName)
 {
-    lang::CreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::on(const std::string& tableName, const IndexedColumn& indexedColumn)
+StatementCreateIndex &
+StatementCreateIndex::on(const std::string &tableName,
+                         const IndexedColumn &indexedColumn)
 {
-    lang::CreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     lang.indexedColumns.append(indexedColumn.getLang());
     return *this;
 }
-StatementCreateIndex& StatementCreateIndex::on(const std::string& tableName, const std::list<IndexedColumn>& indexedColumns)
+StatementCreateIndex &
+StatementCreateIndex::on(const std::string &tableName,
+                         const std::list<IndexedColumn> &indexedColumns)
 {
-    lang::CreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
-    for (const IndexedColumn& indexedColumn : indexedColumns) {
+    for (const IndexedColumn &indexedColumn : indexedColumns) {
         lang.indexedColumns.append(indexedColumn.getLang());
     }
     return *this;
 }
-StatementCreateIndex& StatementCreateIndex::where(const Expression& condition)
+StatementCreateIndex &StatementCreateIndex::where(const Expression &condition)
 {
-    lang::CreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.expr.assign(condition.getLang());
     return *this;
 }
 
 Statement::Type StatementCreateIndex::getType() const
 {
-    return Statement::Type::CreateIndex; 
+    return Statement::Type::CreateIndex;
 }
 
 } // namespace WCDB

@@ -22,115 +22,118 @@
 
 namespace WCDB {
 
-StatementCreateTrigger& StatementCreateTrigger::createTrigger(const std::string& triggerName, bool ifNotExists, bool temp)
+StatementCreateTrigger &StatementCreateTrigger::createTrigger(
+    const std::string &triggerName, bool ifNotExists, bool temp)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.triggerName.assign(triggerName);
     lang.ifNotExists = ifNotExists;
     lang.temp = temp;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::withSchema(const std::string& schemaName)
+StatementCreateTrigger &
+StatementCreateTrigger::withSchema(const std::string &schemaName)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-
-StatementCreateTrigger& StatementCreateTrigger::before()
+StatementCreateTrigger &StatementCreateTrigger::before()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
-    lang.type = lang::CreateTriggerSTMT::Type::Before; 
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.type = lang::CreateTriggerSTMT::Type::Before;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::after()
+StatementCreateTrigger &StatementCreateTrigger::after()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.type = lang::CreateTriggerSTMT::Type::After;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::insteadOf()
+StatementCreateTrigger &StatementCreateTrigger::insteadOf()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.type = lang::CreateTriggerSTMT::Type::InsteadOf;
     return *this;
 }
 
-
-StatementCreateTrigger& StatementCreateTrigger::delete_()
+StatementCreateTrigger &StatementCreateTrigger::delete_()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Delete;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::insert()
+StatementCreateTrigger &StatementCreateTrigger::insert()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Insert;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::update()
+StatementCreateTrigger &StatementCreateTrigger::update()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Update;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::updateOf(const std::string& columnName)
+StatementCreateTrigger &
+StatementCreateTrigger::updateOf(const std::string &columnName)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Update;
     lang.columnNames.append(columnName);
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::updateOf(const std::list<std::string>& columnNames)
+StatementCreateTrigger &
+StatementCreateTrigger::updateOf(const std::list<std::string> &columnNames)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Update;
-    for (const std::string& columnName : columnNames) {
+    for (const std::string &columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
     return *this;
 }
 
-
-StatementCreateTrigger& StatementCreateTrigger::on(const std::string& tableName)
+StatementCreateTrigger &StatementCreateTrigger::on(const std::string &tableName)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::forEachRow()
+StatementCreateTrigger &StatementCreateTrigger::forEachRow()
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.forEachRow = true;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::when(const Expression& expression)
+StatementCreateTrigger &
+StatementCreateTrigger::when(const Expression &expression)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.expr.assign(expression.getLang());
     return *this;
 }
 
-
-StatementCreateTrigger& StatementCreateTrigger::byAddingTriggeredStatement(const CRUDStatement& CRUDSTMT)
+StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
+    const CRUDStatement &CRUDSTMT)
 {
-    lang::CreateTriggerSTMT& lang = getMutableLang();
-    lang.STMTs.append(CRUDSTMT.getCRUDLang());;
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.STMTs.append(CRUDSTMT.getCRUDLang());
+    ;
     return *this;
 }
 
-Statement::Type StatementCreateTrigger::getType() const 
+Statement::Type StatementCreateTrigger::getType() const
 {
     return Statement::Type::CreateTrigger;
 }

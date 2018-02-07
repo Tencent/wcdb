@@ -27,7 +27,7 @@ namespace WCDB {
 
 class Handle;
 class HandleStatement;
-    
-} // namespace WCDB 
+
+} // namespace WCDB
 
 #endif /* abstract_common_h */

@@ -27,7 +27,8 @@
 namespace WCDB {
 
 template <typename T>
-Optional<T>::OptionalStorage::OptionalStorage(const T &theValue) : value(theValue)
+Optional<T>::OptionalStorage::OptionalStorage(const T &theValue)
+    : value(theValue)
 {
 }
 
@@ -64,9 +65,9 @@ T &Optional<T>::value()
     }
     return m_storage->value;
 }
-    
+
 template <typename T>
-void Optional<T>::assign(const T& t)
+void Optional<T>::assign(const T &t)
 {
     m_storage.reset(new T(t));
 }

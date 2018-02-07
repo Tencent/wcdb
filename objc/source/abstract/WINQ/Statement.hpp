@@ -58,7 +58,8 @@ public:
 
 class CRUDStatement : public Statement {
 public:
-    virtual lang::copy_on_write_lazy_lang<lang::CRUDLang> getCRUDLang() const = 0;
+    virtual lang::copy_on_write_lazy_lang<lang::CRUDLang>
+    getCRUDLang() const = 0;
 };
 
 } // namespace WCDB

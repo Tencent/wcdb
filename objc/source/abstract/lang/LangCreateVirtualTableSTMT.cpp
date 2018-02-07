@@ -47,4 +47,3 @@ copy_on_write_string CreateVirtualTableSTMT::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

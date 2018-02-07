@@ -40,4 +40,3 @@ copy_on_write_string CommonTableExpression::SQL() const
 } // namespace lang
 
 } // namespace WCDB
-

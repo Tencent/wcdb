@@ -22,9 +22,9 @@
 
 namespace WCDB {
 
-StatementRelease& StatementRelease::release(const std::string& savepointName)
+StatementRelease &StatementRelease::release(const std::string &savepointName)
 {
-    lang::ReleaseSTMT& lang = getMutableLang();
+    lang::ReleaseSTMT &lang = getMutableLang();
     lang.savepointName.assign(savepointName);
     return *this;
 }

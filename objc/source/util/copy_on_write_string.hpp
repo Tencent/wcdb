@@ -31,11 +31,11 @@ public:
     copy_on_write_string();
 
     copy_on_write_string(const std::string &string);
-    
-    copy_on_write_string(const char* string);
+
+    copy_on_write_string(const char *string);
 
     void append(const std::string &string);
-    
+
     void append(const copy_on_write_string &string);
 
     bool empty() const;

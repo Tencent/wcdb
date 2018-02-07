@@ -22,29 +22,30 @@
 
 namespace WCDB {
 
-QualifiedTableName::QualifiedTableName(const std::string& tableName)
+QualifiedTableName::QualifiedTableName(const std::string &tableName)
 {
-    lang::QualifiedTableName& lang = getMutableLang();
+    lang::QualifiedTableName &lang = getMutableLang();
     lang.tableName.assign(tableName);
 }
 
-QualifiedTableName& QualifiedTableName::withSchema(const std::string& schemaName)
+QualifiedTableName &
+QualifiedTableName::withSchema(const std::string &schemaName)
 {
-    lang::QualifiedTableName& lang = getMutableLang();
+    lang::QualifiedTableName &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
-QualifiedTableName& QualifiedTableName::indexedBy(const std::string& indexName)
+QualifiedTableName &QualifiedTableName::indexedBy(const std::string &indexName)
 {
-    lang::QualifiedTableName& lang = getMutableLang();
-    lang.indexSwitcher = lang::QualifiedTableName::IndexSwitch::Indexed; 
+    lang::QualifiedTableName &lang = getMutableLang();
+    lang.indexSwitcher = lang::QualifiedTableName::IndexSwitch::Indexed;
     lang.indexName.assign(indexName);
     return *this;
 }
-QualifiedTableName& QualifiedTableName::notIndexed()
+QualifiedTableName &QualifiedTableName::notIndexed()
 {
-    lang::QualifiedTableName& lang = getMutableLang();
+    lang::QualifiedTableName &lang = getMutableLang();
     lang.indexSwitcher = lang::QualifiedTableName::IndexSwitch::NotIndexed;
     return *this;
 }

@@ -27,23 +27,28 @@ namespace WCDB {
 
 class TableOrSubquery : public DescribableWithLang<lang::TableOrSubquery> {
 public:
-    TableOrSubquery(const std::string& tableName);
-    TableOrSubquery(const StatementSelect& selectSTMT);
-    TableOrSubquery(const JoinClause& joinClause);
-    TableOrSubquery(const std::list<TableOrSubquery>& tableOrSubquerys);
-    
-    TableOrSubquery& withSchema(const std::string& schemaName);
-    
-    TableOrSubquery& as(const std::string& tableAlias);
-    
-    TableOrSubquery& indexedBy(const std::string& indexName);
-    TableOrSubquery& notIndexed();
-    
-    static TableOrSubquery Function(const std::string& functionName);
-    static TableOrSubquery Function(const std::string& functionName, const Expression& expression);
-    static TableOrSubquery Function(const std::string& functionName, const std::list<Expression>& expressions);
+    TableOrSubquery(const std::string &tableName);
+    TableOrSubquery(const StatementSelect &selectSTMT);
+    TableOrSubquery(const JoinClause &joinClause);
+    TableOrSubquery(const std::list<TableOrSubquery> &tableOrSubquerys);
+
+    TableOrSubquery &withSchema(const std::string &schemaName);
+
+    TableOrSubquery &as(const std::string &tableAlias);
+
+    TableOrSubquery &indexedBy(const std::string &indexName);
+    TableOrSubquery &notIndexed();
+
+    static TableOrSubquery Function(const std::string &functionName);
+    static TableOrSubquery Function(const std::string &functionName,
+                                    const Expression &expression);
+    static TableOrSubquery Function(const std::string &functionName,
+                                    const std::list<Expression> &expressions);
+
 protected:
-    TableOrSubquery(const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>& tableOrSubqueryTableFunction);
+    TableOrSubquery(
+        const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>
+            &tableOrSubqueryTableFunction);
 };
 
 } // namespace WCDB

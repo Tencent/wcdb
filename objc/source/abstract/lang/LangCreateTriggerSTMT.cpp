@@ -86,4 +86,3 @@ CreateTriggerSTMT::OperationName(const Operation &operation)
 } // namespace lang
 
 } // namespace WCDB
-

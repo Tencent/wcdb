@@ -46,4 +46,3 @@ constexpr const char *BeginSTMT::TypeName(const Type &type)
 } // namespace lang
 
 } // namespace WCDB
-

@@ -27,12 +27,12 @@ namespace WCDB {
 
 class IndexedColumn : public DescribableWithLang<lang::IndexedColumn> {
 public:
-    IndexedColumn(const Expression& expression);
-    IndexedColumn(const std::string& columnName);
-    
-    IndexedColumn& withCollate(const std::string& collationName);
-    
-    IndexedColumn& withOrder(const Order& order = Order::NotSet);
+    IndexedColumn(const Expression &expression);
+    IndexedColumn(const std::string &columnName);
+
+    IndexedColumn &withCollate(const std::string &collationName);
+
+    IndexedColumn &withOrder(const Order &order = Order::NotSet);
 };
 
 } // namespace WCDB
