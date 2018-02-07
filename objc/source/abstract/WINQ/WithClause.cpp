@@ -22,5 +22,29 @@
 
 namespace WCDB {
 
+WithClause& WithClause::with(const CTETableName& cteTableName, const StatementSelect& selectSTMT)
+{
+    return with(cteTableName, selectSTMT, false);
+}
+
+WithClause& WithClause::withRecursive(const CTETableName& cteTableName, const StatementSelect& selectSTMT)
+{
+    return with(cteTableName, selectSTMT, true);
+}
+    
+WithClause& WithClause::with(const CTETableName& cteTableName, const StatementSelect& selectSTMT, bool recursive)
+{
+    lang::copy_on_write_lazy_lang<lang::WithClause::Pair> pair;
+    {
+        lang::WithClause::Pair& lang = pair.get_or_copy();
+        lang.cteTableName.assign(cteTableName.getLang());
+        lang.selectSTMT.assign(selectSTMT.getLang());
+    }
+    
+    lang::WithClause& lang = getMutableLang();
+    lang.pairs.append(pair);
+    lang.recursive = recursive;
+    return *this;
+}
 
 } // namespace WCDB

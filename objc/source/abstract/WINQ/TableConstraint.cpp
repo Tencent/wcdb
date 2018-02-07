@@ -22,5 +22,83 @@
 
 namespace WCDB {
 
+TableConstraint::TableConstraint()
+{
+}
+
+TableConstraint::TableConstraint(const std::string& name)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.name.assign(name);
+}
+
+TableConstraint& TableConstraint::withPrimaryKey(const IndexedColumn& indexedColumn, const ConflictClause& conflictClause)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::PrimaryKey;
+    lang.indexedColumns.append(indexedColumn.getLang());
+    lang.conflictClause = conflictClause;
+    return *this;
+}
+
+TableConstraint& TableConstraint::withPrimaryKey(const std::list<IndexedColumn>& indexedColumns, const ConflictClause& conflictClause)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::PrimaryKey;
+    for (const IndexedColumn& indexedColumn : indexedColumns) {
+        lang.indexedColumns.append(indexedColumn.getLang());
+    }
+    lang.conflictClause = conflictClause;
+    return *this;
+}
+
+TableConstraint& TableConstraint::withUnique(const IndexedColumn& indexedColumn, const ConflictClause& conflictClause)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::Unique;
+    lang.indexedColumns.append(indexedColumn.getLang());
+    lang.conflictClause = conflictClause;
+    return *this;
+}
+
+TableConstraint& TableConstraint::withUnique(const std::list<IndexedColumn>& indexedColumns, const ConflictClause& conflictClause)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::Unique;
+    for (const IndexedColumn& indexedColumn : indexedColumns) {
+        lang.indexedColumns.append(indexedColumn.getLang());
+    }
+    lang.conflictClause = conflictClause;
+    return *this;
+}
+
+TableConstraint& TableConstraint::withChecking(const Expression& expression)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::Check;
+    lang.expr.assign(expression.getLang());
+    return *this;
+}
+
+TableConstraint& TableConstraint::withForeignKey(const std::string& columnName, const ForeignKeyClause& foreignKeyClause)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::ForeignKey;
+    lang.columnNames.append(columnName);
+    lang.foreignKeyClause.assign(foreignKeyClause.getLang());
+    return *this;
+}
+
+TableConstraint& TableConstraint::withForeignKey(const std::list<std::string>& columnNames, const ForeignKeyClause& foreignKeyClause)
+{
+    lang::TableConstraint& lang = getMutableLang();
+    lang.type = lang::TableConstraint::Type::ForeignKey;
+    for (const std::string& columnName : columnNames) {
+        lang.columnNames.append(columnName);
+    }
+    lang.foreignKeyClause.assign(foreignKeyClause.getLang());
+    return *this;
+}
 
 } // namespace WCDB
+
