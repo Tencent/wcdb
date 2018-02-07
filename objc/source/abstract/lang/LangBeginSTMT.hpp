@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangBeginSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class BeginSTMT : public Lang {
 public:
     enum class Type : int {
         Deferred,
@@ -37,5 +41,9 @@ public:
 protected:
     constexpr static const char *TypeName(const Type &type);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangBeginSTMT_hpp */

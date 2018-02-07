@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangDropInternalSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string DropInternalSTMT::SQL() const
 {
     std::string description("DROP ");
     description.append(getInternalName());
@@ -35,3 +39,8 @@ copy_on_write_string LangDropInternalSTMT::SQL() const
     description.append(name.get());
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

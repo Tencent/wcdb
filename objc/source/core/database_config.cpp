@@ -77,20 +77,20 @@ const Configs Database::defaultConfigs(
                      StatementPragma().pragma(Pragma::JournalMode);
 
                  //Get Journal Mode
-                 std::shared_ptr<StatementHandle> statementHandle =
+                 std::shared_ptr<HandleStatement> handleStatement =
                      handle->prepare(s_getJournalMode);
-                 if (!statementHandle) {
+                 if (!handleStatement) {
                      error = handle->getError();
                      return false;
                  }
-                 statementHandle->step();
-                 if (!statementHandle->isOK()) {
-                     error = statementHandle->getError();
+                 handleStatement->step();
+                 if (!handleStatement->isOK()) {
+                     error = handleStatement->getError();
                      return false;
                  }
                  std::string journalMode =
-                     statementHandle->getValue<WCDB::ColumnType::Text>(0);
-                 statementHandle->finalize();
+                     handleStatement->getValue<WCDB::ColumnType::Text>(0);
+                 handleStatement->finalize();
 
                  if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
                      // See also: http://www.sqlite.org/wal.html#readonly
@@ -109,20 +109,20 @@ const Configs Database::defaultConfigs(
                      StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
 
                  //Get Locking Mode
-                 std::shared_ptr<StatementHandle> statementHandle =
+                 std::shared_ptr<HandleStatement> handleStatement =
                      handle->prepare(s_getLockingMode);
-                 if (!statementHandle) {
+                 if (!handleStatement) {
                      error = handle->getError();
                      return false;
                  }
-                 statementHandle->step();
-                 if (!statementHandle->isOK()) {
-                     error = statementHandle->getError();
+                 handleStatement->step();
+                 if (!handleStatement->isOK()) {
+                     error = handleStatement->getError();
                      return false;
                  }
                  std::string lockingMode =
-                     statementHandle->getValue<WCDB::ColumnType::Text>(0);
-                 statementHandle->finalize();
+                     handleStatement->getValue<WCDB::ColumnType::Text>(0);
+                 handleStatement->finalize();
 
                  //Set Locking Mode
                  if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
@@ -151,20 +151,20 @@ const Configs Database::defaultConfigs(
                      StatementPragma().pragma(Pragma::JournalMode, "WAL");
 
                  //Get Journal Mode
-                 std::shared_ptr<StatementHandle> statementHandle =
+                 std::shared_ptr<HandleStatement> handleStatement =
                      handle->prepare(s_getJournalMode);
-                 if (!statementHandle) {
+                 if (!handleStatement) {
                      error = handle->getError();
                      return false;
                  }
-                 statementHandle->step();
-                 if (!statementHandle->isOK()) {
-                     error = statementHandle->getError();
+                 handleStatement->step();
+                 if (!handleStatement->isOK()) {
+                     error = handleStatement->getError();
                      return false;
                  }
                  std::string journalMode =
-                     statementHandle->getValue<WCDB::ColumnType::Text>(0);
-                 statementHandle->finalize();
+                     handleStatement->getValue<WCDB::ColumnType::Text>(0);
+                 handleStatement->finalize();
 
                  //Set Journal Mode
                  if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
@@ -332,18 +332,18 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 
                 //Tokenize
                 {
-                    std::shared_ptr<StatementHandle> statementHandle =
+                    std::shared_ptr<HandleStatement> handleStatement =
                         handle->prepare(Statement::FTS3Tokenizer);
-                    if (!statementHandle) {
+                    if (!handleStatement) {
                         error = handle->getError();
                         return false;
                     }
-                    statementHandle->bind<WCDB::ColumnType::Text>(
+                    handleStatement->bind<WCDB::ColumnType::Text>(
                         tokenizeName.c_str(), 1);
-                    statementHandle->bind<WCDB::ColumnType::BLOB>(address, 2);
-                    statementHandle->step();
-                    if (!statementHandle->isOK()) {
-                        error = statementHandle->getError();
+                    handleStatement->bind<WCDB::ColumnType::BLOB>(address, 2);
+                    handleStatement->step();
+                    if (!handleStatement->isOK()) {
+                        error = handleStatement->getError();
                         return false;
                     }
                 }

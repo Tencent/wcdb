@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementReindex : public DescribableWithLang<LangReindexSTMT>,
+namespace WCDB {
+
+class StatementReindex : public DescribableWithLang<lang::ReindexSTMT>,
                          public Statement {
 public:
                              StatementReindex& reindex();
@@ -34,5 +36,7 @@ public:
                              StatementReindex& reindexCollation(const std::string& collationName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementReindex_hpp */

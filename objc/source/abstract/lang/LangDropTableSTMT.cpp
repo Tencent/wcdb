@@ -20,7 +20,16 @@
 
 #include <WCDB/lang.h>
 
-inline const char *LangDropTableSTMT::getInternalName() const
+namespace WCDB {
+
+namespace lang {
+
+inline const char *DropTableSTMT::getInternalName() const
 {
     return "TABLE";
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

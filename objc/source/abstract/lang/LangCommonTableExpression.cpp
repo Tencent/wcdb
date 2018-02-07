@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCommonTableExpression::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CommonTableExpression::SQL() const
 {
     std::string description;
     assert(!tableName.empty());
@@ -32,3 +36,8 @@ copy_on_write_string LangCommonTableExpression::SQL() const
     description.append(" AS(" + selectSTMT.description().get() + ")");
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

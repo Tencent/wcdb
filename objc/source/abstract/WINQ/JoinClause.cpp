@@ -20,64 +20,66 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 JoinClause::JoinClause(const TableOrSubquery& tableOrSubquery)
 {
-    LangJoinClause& lang = getMutableLang();
+    lang::JoinClause& lang = getMutableLang();
     lang.tableOrSubquery.assign(tableOrSubquery.getLang());
 }
 
 JoinClause& JoinClause::leftJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(false, LangJoinOperator::Type::Left, tableOrSubquery, joinConstraint);
+    appendJoinOperand(false, lang::JoinOperator::Type::Left, tableOrSubquery, joinConstraint);
     return *this;
 }
 JoinClause& JoinClause::leftOuterJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(false, LangJoinOperator::Type::LeftOuter, tableOrSubquery, joinConstraint);
+    appendJoinOperand(false, lang::JoinOperator::Type::LeftOuter, tableOrSubquery, joinConstraint);
     return *this;
 }
 JoinClause& JoinClause::innerJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(false, LangJoinOperator::Type::Inner, tableOrSubquery, joinConstraint);
+    appendJoinOperand(false, lang::JoinOperator::Type::Inner, tableOrSubquery, joinConstraint);
     return *this;
 }
 JoinClause& JoinClause::crossJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(false, LangJoinOperator::Type::Cross, tableOrSubquery, joinConstraint);
+    appendJoinOperand(false, lang::JoinOperator::Type::Cross, tableOrSubquery, joinConstraint);
     return *this;
 }
 
 JoinClause& JoinClause::naturalLeftJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(true, LangJoinOperator::Type::Left, tableOrSubquery, joinConstraint);
+    appendJoinOperand(true, lang::JoinOperator::Type::Left, tableOrSubquery, joinConstraint);
     return *this;
 }
 JoinClause& JoinClause::naturalLeftOuterJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(true, LangJoinOperator::Type::LeftOuter, tableOrSubquery, joinConstraint);
+    appendJoinOperand(true, lang::JoinOperator::Type::LeftOuter, tableOrSubquery, joinConstraint);
     return *this;
 }
 JoinClause& JoinClause::naturalInnerJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(true, LangJoinOperator::Type::Inner, tableOrSubquery, joinConstraint);
+    appendJoinOperand(true, lang::JoinOperator::Type::Inner, tableOrSubquery, joinConstraint);
     return *this;
 }
 JoinClause& JoinClause::naturalCrossJoin(const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    appendJoinOperand(true, LangJoinOperator::Type::Cross, tableOrSubquery, joinConstraint);
+    appendJoinOperand(true, lang::JoinOperator::Type::Cross, tableOrSubquery, joinConstraint);
     return *this;
 }
 
-void JoinClause::appendJoinOperand(bool natural, const LangJoinOperator::Type& type, const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
+void JoinClause::appendJoinOperand(bool natural, const lang::JoinOperator::Type& type, const TableOrSubquery& tableOrSubquery, const JoinConstraint& joinConstraint)
 {
-    LangJoinClause& lang = getMutableLang();
+    lang::JoinClause& lang = getMutableLang();
     
-    copy_on_write_lazy_lang<LangJoinClause::Operand> cowJoinOperand;
+    lang::copy_on_write_lazy_lang<lang::JoinClause::Operand> cowJoinOperand;
     
     {
-        LangJoinClause::Operand& joinOperand = cowJoinOperand.get_or_copy();
+        lang::JoinClause::Operand& joinOperand = cowJoinOperand.get_or_copy();
         
-        LangJoinOperator joinOperator;
+        lang::JoinOperator joinOperator;
         joinOperator.join = true;
         joinOperator.natural = natural;
         joinOperator.type = type;
@@ -89,3 +91,5 @@ void JoinClause::appendJoinOperand(bool natural, const LangJoinOperator::Type& t
     
     lang.joinOperands.append(cowJoinOperand);
 }
+
+} // namespace WCDB

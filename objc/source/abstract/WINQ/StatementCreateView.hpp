@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementCreateView : public DescribableWithLang<LangCreateViewSTMT>,
+namespace WCDB {
+
+class StatementCreateView : public DescribableWithLang<lang::CreateViewSTMT>,
                             public Statement {
 public:
                                 StatementCreateView& createView(const std::string& viewName, bool ifNotExists = true, bool temp = false);
@@ -34,5 +36,7 @@ public:
                                 StatementCreateView& as(const StatementSelect& selectSTMT);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementCreateView_hpp */

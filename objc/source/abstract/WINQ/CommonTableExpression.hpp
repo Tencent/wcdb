@@ -23,8 +23,10 @@
 
 #include <WCDB/Describable.hpp>
 
+namespace WCDB {
+
 class CommonTableExpression
-    : public DescribableWithLang<LangCommonTableExpression> {
+    : public DescribableWithLang<lang::CommonTableExpression> {
 public:
     CommonTableExpression(const std::string &tableName);
 
@@ -35,5 +37,7 @@ public:
 
     CommonTableExpression &as(const StatementSelect &statementSelect);
 };
+
+} // namespace WCDB
 
 #endif /* CommonTableExpression_hpp */

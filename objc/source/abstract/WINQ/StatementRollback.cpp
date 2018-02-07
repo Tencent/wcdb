@@ -20,16 +20,18 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementRollback& StatementRollback::rollback()
 {
-    LangRollbackSTMT& lang = getMutableLang();
+    lang::RollbackSTMT& lang = getMutableLang();
     lang.savepointName.clear();
     return *this;
 }
 
 StatementRollback& StatementRollback::rollbackTo(const std::string& savepointName)
 {
-    LangRollbackSTMT& lang = getMutableLang();
+    lang::RollbackSTMT& lang = getMutableLang();
     lang.savepointName.assign(savepointName);
     return *this;
 }
@@ -38,3 +40,5 @@ Statement::Type StatementRollback::getType() const
 {
     return Statement::Type::Rollback;
 }
+
+} // namespace WCDB

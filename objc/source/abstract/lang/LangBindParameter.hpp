@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangBindParameter : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class BindParameter : public Lang {
 public:
     enum class Type : int {
         QuestionMark,
@@ -38,5 +42,9 @@ public:
 
     virtual copy_on_write_string SQL() const;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangBindParameter_hpp */

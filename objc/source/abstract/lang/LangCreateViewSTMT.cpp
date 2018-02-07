@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCreateViewSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CreateViewSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (temp) {
@@ -42,3 +46,8 @@ copy_on_write_string LangCreateViewSTMT::SQL() const
     description.append(" AS " + selectSTMT.description().get());
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

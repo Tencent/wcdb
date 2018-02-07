@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementAlterTable : public DescribableWithLang<LangAlterTableSTMT>,
+namespace WCDB {
+
+class StatementAlterTable : public DescribableWithLang<lang::AlterTableSTMT>,
                             public Statement {
 public:
     StatementAlterTable &alterTable(const std::string &schemaName,
@@ -35,5 +37,7 @@ public:
 
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementAlterTable_hpp */

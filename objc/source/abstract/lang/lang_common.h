@@ -33,6 +33,10 @@
 #include <WCDB/LangConflictClause.hpp>
 #include <WCDB/LangOrder.hpp>
 
+namespace WCDB {
+
+namespace lang {
+
 class Lang {
 public:
     virtual copy_on_write_string SQL() const = 0;
@@ -41,51 +45,56 @@ public:
 class CRUDLang : public Lang {
 };
 
-class LangBindParameter;
-class LangColumnDef;
-class LangColumnConstraint;
-class LangExpr;
-class LangIndexedColumn;
-class LangTableConstraint;
-class LangModuleArgument;
-class LangWithClause;
-class LangQualifiedTableName;
-class LangOrderingTerm;
-class LangLiteralValue;
-class LangResultColumn;
-class LangSelectCore;
-class LangTableOrSubquery;
-class LangJoinClause;
-class LangCommonTableExpression;
-class LangForeignKeyClause;
-class LangCTETableName;
-class LangJoinOperator;
-class LangJoinConstraint;
-class LangRaiseFunction;
+class BindParameter;
+class ColumnDef;
+class ColumnConstraint;
+class Expr;
+class IndexedColumn;
+class TableConstraint;
+class ModuleArgument;
+class WithClause;
+class QualifiedTableName;
+class OrderingTerm;
+class LiteralValue;
+class ResultColumn;
+class SelectCore;
+class TableOrSubquery;
+class JoinClause;
+class CommonTableExpression;
+class ForeignKeyClause;
+class CTETableName;
+class JoinOperator;
+class JoinConstraint;
+class RaiseFunction;
 
-class LangAnalyzeSTMT;
-class LangAttachSTMT;
-class LangBeginSTMT;
-class LangCommitSTMT;
-class LangCreateIndexSTMT;
-class LangCreateTableSTMT;
-class LangCreateTriggerSTMT;
-class LangCreateViewSTMT;
-class LangCreateVirtualTableSTMT;
-class LangDeleteSTMT;
-class LangDetachSTMT;
-class LangDropIndexSTMT;
-class LangDropTableSTMT;
-class LangDropTriggerSTMT;
-class LangDropViewSTMT;
-class LangInsertSTMT;
-class LangPragmaSTMT;
-class LangReindexSTMT;
-class LangReleaseSTMT;
-class LangRollbackSTMT;
-class LangSavepointSTMT;
-class LangSelectSTMT;
-class LangUpdateSTMT;
-class LangVacuumSTMT;
+class AnalyzeSTMT;
+class AttachSTMT;
+class BeginSTMT;
+class CommitSTMT;
+class CreateIndexSTMT;
+class CreateTableSTMT;
+class CreateTriggerSTMT;
+class CreateViewSTMT;
+class CreateVirtualTableSTMT;
+class DeleteSTMT;
+class DetachSTMT;
+class DropIndexSTMT;
+class DropTableSTMT;
+class DropTriggerSTMT;
+class DropViewSTMT;
+class InsertSTMT;
+class PragmaSTMT;
+class ReindexSTMT;
+class ReleaseSTMT;
+class RollbackSTMT;
+class SavepointSTMT;
+class SelectSTMT;
+class UpdateSTMT;
+class VacuumSTMT;
 
+} // namespace lang
+
+} // namespace WCDB
+
+    
 #endif /* lang_common_h */

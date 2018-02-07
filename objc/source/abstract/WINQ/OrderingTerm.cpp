@@ -20,22 +20,26 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 OrderingTerm::OrderingTerm(const Expression& expression)
 {
-    LangOrderingTerm& lang = getMutableLang();
+    lang::OrderingTerm& lang = getMutableLang();
     lang.expr.assign(expression.getLang());
 }
 
 OrderingTerm& OrderingTerm::withCollate(const std::string& collateName)
 {
-    LangOrderingTerm& lang = getMutableLang();
+    lang::OrderingTerm& lang = getMutableLang();
     lang.collationName.assign(collateName);
     return *this;
 }
 
 OrderingTerm& OrderingTerm::withOrder(const Order& order)
 {
-    LangOrderingTerm& lang = getMutableLang();
+    lang::OrderingTerm& lang = getMutableLang();
     lang.order = order;
     return *this;
 }
+
+} // namespace WCDB

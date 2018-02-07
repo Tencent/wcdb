@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangCreateTriggerSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class CreateTriggerSTMT : public Lang {
 public:
     bool temp;
     bool ifNotExists;
@@ -47,7 +51,7 @@ public:
     copy_on_write_string tableName;
 
     bool forEachRow;
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang<Expr> expr;
 
     copy_on_write_lazy_lang_list<CRUDLang> STMTs;
 
@@ -57,5 +61,9 @@ protected:
     constexpr static const char *TypeName(const Type &type);
     constexpr static const char *OperationName(const Operation &operation);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangCreateTriggerSTMT_hpp */

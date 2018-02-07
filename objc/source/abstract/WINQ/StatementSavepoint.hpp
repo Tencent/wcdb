@@ -24,11 +24,15 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementSavepoint : public DescribableWithLang<LangSavepointSTMT>,
+namespace WCDB {
+
+class StatementSavepoint : public DescribableWithLang<lang::SavepointSTMT>,
                            public Statement {
 public:
                                StatementSavepoint& savepoint(const std::string& savepointName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementSavepoint_hpp */

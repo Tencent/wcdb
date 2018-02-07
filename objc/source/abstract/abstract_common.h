@@ -18,34 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef fts_modules_hpp
-#define fts_modules_hpp
+#ifndef abstract_common_h
+#define abstract_common_h
 
-#include <WCDB/spin.hpp>
-#include <string>
-#include <unordered_map>
-#include <vector>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-namespace FTS {
+class Handle;
+class HandleStatement;
+    
+} // namespace WCDB 
 
-class Modules {
-public:
-    static Modules *SharedModules();
-
-    void addModule(const std::string &name,
-                   const std::shared_ptr<void> &module);
-
-    std::vector<unsigned char> getAddress(const std::string &name) const;
-
-protected:
-    std::unordered_map<std::string, std::shared_ptr<void>> m_modules;
-    mutable Spin m_spin;
-};
-
-} //namespace FTS
-
-} //namespace WCDB
-
-#endif /* fts_modules_hpp */
+#endif /* abstract_common_h */

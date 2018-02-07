@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementDropTable& StatementDropTable::dropTable(const std::string& tableName, bool ifExists)
 {
-    LangDropTableSTMT& lang = getMutableLang();
+    lang::DropTableSTMT& lang = getMutableLang();
     lang.name.assign(tableName);
     lang.ifExists = ifExists;
     return *this;
@@ -30,7 +32,7 @@ StatementDropTable& StatementDropTable::dropTable(const std::string& tableName, 
 
 StatementDropTable& StatementDropTable::withSchema(const std::string& schemaName)
 {
-    LangDropTableSTMT& lang = getMutableLang();
+    lang::DropTableSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -39,3 +41,5 @@ Statement::Type StatementDropTable::getType() const
 {
     return Statement::Type::DropTable; 
 }
+
+} // namespace WCDB

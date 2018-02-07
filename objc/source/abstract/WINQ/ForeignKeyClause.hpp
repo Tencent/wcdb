@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class ForeignKeyClause : public DescribableWithLang<LangForeignKeyClause> {
+namespace WCDB {
+
+class ForeignKeyClause : public DescribableWithLang<lang::ForeignKeyClause> {
 public:
     ForeignKeyClause(const std::string &foreignTable);
 
@@ -53,11 +55,13 @@ public:
 
 private:
     void addTriggerForUpdating(
-        const LangForeignKeyClause::Trigger::Operation &operation);
+        const lang::ForeignKeyClause::Trigger::Operation &operation);
     void addTriggerForDeleting(
-        const LangForeignKeyClause::Trigger::Operation &operation);
+        const lang::ForeignKeyClause::Trigger::Operation &operation);
     void addTriggerForMatching(const std::string &name);
-    void addTrigger(const LangForeignKeyClause::Trigger& trigger);
+    void addTrigger(const lang::ForeignKeyClause::Trigger& trigger);
 };
+
+} // namespace WCDB
 
 #endif /* ForeignKeyClause_hpp */

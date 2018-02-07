@@ -24,11 +24,15 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementDetach : public DescribableWithLang<LangDetachSTMT>,
+namespace WCDB {
+
+class StatementDetach : public DescribableWithLang<lang::DetachSTMT>,
                         public Statement {
 public:
                             StatementDetach& detach(const std::string& schemaName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementDetach_hpp */

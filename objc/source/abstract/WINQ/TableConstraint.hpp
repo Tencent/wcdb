@@ -23,8 +23,13 @@
 
 #include <WCDB/Describable.hpp>
 
-class TableConstraint : public DescribableWithLang<LangTableConstraint> {
+namespace WCDB {
+
+class TableConstraint : public DescribableWithLang<lang::TableConstraint> {
 public:
+    //TODO
 };
+
+} // namespace WCDB
 
 #endif /* TableConstraint_hpp */

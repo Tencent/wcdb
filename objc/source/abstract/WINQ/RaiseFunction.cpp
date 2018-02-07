@@ -20,26 +20,30 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 RaiseFunction& RaiseFunction::withRollback(const std::string& errorMessage)
 {
-    LangRaiseFunction& lang = getMutableLang();
-    lang.type = LangRaiseFunction::Type::Rollback;
+    lang::RaiseFunction& lang = getMutableLang();
+    lang.type = lang::RaiseFunction::Type::Rollback;
     lang.errorMessage.assign(errorMessage);
     return *this;
 }
 
 RaiseFunction& RaiseFunction::withAbort(const std::string& errorMessage)
 {
-    LangRaiseFunction& lang = getMutableLang();
-    lang.type = LangRaiseFunction::Type::Abort;
+    lang::RaiseFunction& lang = getMutableLang();
+    lang.type = lang::RaiseFunction::Type::Abort;
     lang.errorMessage.assign(errorMessage);
     return *this;
 }
 
 RaiseFunction& RaiseFunction::withFail(const std::string& errorMessage)
 {
-    LangRaiseFunction& lang = getMutableLang();
-    lang.type = LangRaiseFunction::Type::Fail;
+    lang::RaiseFunction& lang = getMutableLang();
+    lang.type = lang::RaiseFunction::Type::Fail;
     lang.errorMessage.assign(errorMessage);
     return *this;
 }
+
+} // namespace WCDB

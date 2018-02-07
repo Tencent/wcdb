@@ -20,13 +20,17 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangUpdateSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string UpdateSTMT::SQL() const
 {
     std::string description;
     if (!withClause.empty()) {
         description.append(withClause.description().get() + " ");
     }
-    description.append(LangUpdateSTMT::TypeName(type));
+    description.append(UpdateSTMT::TypeName(type));
     description.append(" ");
     assert(!qualifiedTableName.empty());
     description.append(qualifiedTableName.description().get());
@@ -56,7 +60,7 @@ copy_on_write_string LangUpdateSTMT::SQL() const
     return description;
 }
 
-constexpr const char *LangUpdateSTMT::TypeName(const Type &type)
+constexpr const char *UpdateSTMT::TypeName(const Type &type)
 {
     switch (type) {
         case Type::Update:
@@ -74,7 +78,12 @@ constexpr const char *LangUpdateSTMT::TypeName(const Type &type)
     }
 }
 
-copy_on_write_string LangUpdateSTMT::KeyValue::SQL() const
+copy_on_write_string UpdateSTMT::KeyValue::SQL() const
 {
     return keys.description().get() + " = " + value.description().get();
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

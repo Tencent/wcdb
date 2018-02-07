@@ -89,7 +89,7 @@ public:
         IsTableExists = 8,
     };
     enum class InterfaceOperation : int {
-        StatementHandle = 1,
+        HandleStatement = 1,
         Insert = 2,
         Update = 3,
         Select = 4,

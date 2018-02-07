@@ -20,27 +20,31 @@
 
 #include <WCDB/WINQ.h>
 
-const LiteralValue LiteralValue::Null(LangLiteralValue::Type::Null);
-const LiteralValue LiteralValue::CurrentTime(LangLiteralValue::Type::CurrentTime);
-const LiteralValue LiteralValue::CurrentDate(LangLiteralValue::Type::CurrentDate);
-const LiteralValue LiteralValue::CurrentTimestamp(LangLiteralValue::Type::CurrentTimestamp);
+namespace WCDB {
+
+const LiteralValue LiteralValue::Null(lang::LiteralValue::Type::Null);
+const LiteralValue LiteralValue::CurrentTime(lang::LiteralValue::Type::CurrentTime);
+const LiteralValue LiteralValue::CurrentDate(lang::LiteralValue::Type::CurrentDate);
+const LiteralValue LiteralValue::CurrentTimestamp(lang::LiteralValue::Type::CurrentTimestamp);
 
 LiteralValue::LiteralValue(const std::string& value)
 {
-    LangLiteralValue& lang = getMutableLang();
-    lang.type = LangLiteralValue::Type::String;
+    lang::LiteralValue& lang = getMutableLang();
+    lang.type = lang::LiteralValue::Type::String;
     lang.stringValue.assign(value);
 }
 
 LiteralValue::LiteralValue(const std::vector<unsigned char>& value)
 {
-    LangLiteralValue& lang = getMutableLang();
-    lang.type = LangLiteralValue::Type::Null;
+    lang::LiteralValue& lang = getMutableLang();
+    lang.type = lang::LiteralValue::Type::Null;
     lang.dataValue.assign(value);
 }
 
-LiteralValue::LiteralValue(const LangLiteralValue::Type& type)
+LiteralValue::LiteralValue(const lang::LiteralValue::Type& type)
 {
-    LangLiteralValue& lang = getMutableLang();
+    lang::LiteralValue& lang = getMutableLang();
     lang.type = type;
 }
+
+} // namespace WCDB

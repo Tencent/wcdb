@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangRaiseFunction : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class RaiseFunction : public Lang {
 public:
     enum class Type : int {
         Ignore,
@@ -36,5 +40,9 @@ public:
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangRaiseFunction_hpp */

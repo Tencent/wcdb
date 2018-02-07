@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangPragmaSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string PragmaSTMT::SQL() const
 {
     std::string description("PRAGMA ");
     if (!schemaName.empty()) {
@@ -34,3 +38,8 @@ copy_on_write_string LangPragmaSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

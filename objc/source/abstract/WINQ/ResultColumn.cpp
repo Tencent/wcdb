@@ -20,7 +20,9 @@
 
 #include <WCDB/WINQ.h>
 
-const ResultColumn ResultColumn::All(LangResultColumn::Type::Star);
+namespace WCDB {
+
+const ResultColumn ResultColumn::All(lang::ResultColumn::Type::Star);
 
 ResultColumn ResultColumn::AllInTable(const std::string& tableName)
 {
@@ -29,20 +31,22 @@ ResultColumn ResultColumn::AllInTable(const std::string& tableName)
 
 ResultColumn::ResultColumn(const Expression& expression)
 {
-    LangResultColumn& lang = getMutableLang();
-    lang.type = LangResultColumn::Type::Expr;
+    lang::ResultColumn& lang = getMutableLang();
+    lang.type = lang::ResultColumn::Type::Expr;
     lang.expr.assign(expression.getLang());
 }
 
-ResultColumn::ResultColumn(const LangResultColumn::Type& type)
+ResultColumn::ResultColumn(const lang::ResultColumn::Type& type)
 {
-    LangResultColumn& lang = getMutableLang();
-    lang.type = LangResultColumn::Type::Star;
+    lang::ResultColumn& lang = getMutableLang();
+    lang.type = lang::ResultColumn::Type::Star;
 }
 
 ResultColumn::ResultColumn(const std::string& tableName)
 {
-    LangResultColumn& lang = getMutableLang();
-    lang.type = LangResultColumn::Type::Star;
+    lang::ResultColumn& lang = getMutableLang();
+    lang.type = lang::ResultColumn::Type::Star;
     lang.tableName.assign(tableName);
 }
+
+} // namespace WCDB

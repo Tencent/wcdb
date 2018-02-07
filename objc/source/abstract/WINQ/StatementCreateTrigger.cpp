@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementCreateTrigger& StatementCreateTrigger::createTrigger(const std::string& triggerName, bool ifNotExists, bool temp)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT& lang = getMutableLang();
     lang.triggerName.assign(triggerName);
     lang.ifNotExists = ifNotExists;
     lang.temp = temp;
@@ -31,7 +33,7 @@ StatementCreateTrigger& StatementCreateTrigger::createTrigger(const std::string&
 
 StatementCreateTrigger& StatementCreateTrigger::withSchema(const std::string& schemaName)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -39,59 +41,59 @@ StatementCreateTrigger& StatementCreateTrigger::withSchema(const std::string& sc
 
 StatementCreateTrigger& StatementCreateTrigger::before()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.type = LangCreateTriggerSTMT::Type::Before; 
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.type = lang::CreateTriggerSTMT::Type::Before; 
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::after()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.type = LangCreateTriggerSTMT::Type::After;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.type = lang::CreateTriggerSTMT::Type::After;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::insteadOf()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.type = LangCreateTriggerSTMT::Type::InsteadOf;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.type = lang::CreateTriggerSTMT::Type::InsteadOf;
     return *this;
 }
 
 
 StatementCreateTrigger& StatementCreateTrigger::delete_()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.operation = LangCreateTriggerSTMT::Operation::Delete;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.operation = lang::CreateTriggerSTMT::Operation::Delete;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::insert()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.operation = LangCreateTriggerSTMT::Operation::Insert;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.operation = lang::CreateTriggerSTMT::Operation::Insert;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::update()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.operation = LangCreateTriggerSTMT::Operation::Update;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.operation = lang::CreateTriggerSTMT::Operation::Update;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::updateOf(const std::string& columnName)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.operation = LangCreateTriggerSTMT::Operation::Update;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.operation = lang::CreateTriggerSTMT::Operation::Update;
     lang.columnNames.append(columnName);
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::updateOf(const std::list<std::string>& columnNames)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
-    lang.operation = LangCreateTriggerSTMT::Operation::Update;
+    lang::CreateTriggerSTMT& lang = getMutableLang();
+    lang.operation = lang::CreateTriggerSTMT::Operation::Update;
     for (const std::string& columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
@@ -101,21 +103,21 @@ StatementCreateTrigger& StatementCreateTrigger::updateOf(const std::list<std::st
 
 StatementCreateTrigger& StatementCreateTrigger::on(const std::string& tableName)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT& lang = getMutableLang();
     lang.tableName.assign(tableName);
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::forEachRow()
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT& lang = getMutableLang();
     lang.forEachRow = true;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::when(const Expression& expression)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT& lang = getMutableLang();
     lang.expr.assign(expression.getLang());
     return *this;
 }
@@ -123,7 +125,7 @@ StatementCreateTrigger& StatementCreateTrigger::when(const Expression& expressio
 
 StatementCreateTrigger& StatementCreateTrigger::byAddingTriggeredStatement(const CRUDStatement& CRUDSTMT)
 {
-    LangCreateTriggerSTMT& lang = getMutableLang();
+    lang::CreateTriggerSTMT& lang = getMutableLang();
     lang.STMTs.append(CRUDSTMT.getCRUDLang());;
     return *this;
 }
@@ -132,3 +134,5 @@ Statement::Type StatementCreateTrigger::getType() const
 {
     return Statement::Type::CreateTrigger;
 }
+
+} // namespace WCDB

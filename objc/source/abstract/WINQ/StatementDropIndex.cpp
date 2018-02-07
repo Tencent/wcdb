@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementDropIndex& StatementDropIndex::dropIndex(const std::string& indexName, bool ifExists)
 {
-    LangDropIndexSTMT& lang = getMutableLang();
+    lang::DropIndexSTMT& lang = getMutableLang();
     lang.name.assign(indexName);
     lang.ifExists = ifExists;
     return *this;
@@ -30,8 +32,9 @@ StatementDropIndex& StatementDropIndex::dropIndex(const std::string& indexName, 
 
 StatementDropIndex& StatementDropIndex::withSchema(const std::string& schemaName)
 {
-    LangDropIndexSTMT& lang = getMutableLang();
+    lang::DropIndexSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
+} // namespace WCDB

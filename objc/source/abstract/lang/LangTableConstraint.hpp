@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangTableConstraint : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class TableConstraint : public Lang {
 public:
     copy_on_write_string name;
     enum class Type : int {
@@ -34,14 +38,18 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang_list<LangIndexedColumn> indexedColumns;
-    LangConflictClause conflictClause;
+    copy_on_write_lazy_lang_list<IndexedColumn> indexedColumns;
+    ConflictClause conflictClause;
 
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_lazy_string_list columnNames;
-    copy_on_write_lazy_lang<LangForeignKeyClause> foreignKeyClause;
+    copy_on_write_lazy_lang<ForeignKeyClause> foreignKeyClause;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangTableConstraint_hpp */

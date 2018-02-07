@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangResultColumn::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string ResultColumn::SQL() const
 {
     std::string description;
     switch (type) {
@@ -40,3 +44,8 @@ copy_on_write_string LangResultColumn::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

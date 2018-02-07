@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class CTETableName : public DescribableWithLang<LangCTETableName> {
+namespace WCDB {
+
+class CTETableName : public DescribableWithLang<lang::CTETableName> {
 public:
     CTETableName(const std::string &tableName);
 
@@ -32,5 +34,7 @@ public:
     CTETableName &
     byAddingColumnNames(const std::list<std::string> &columnNames);
 };
+
+} // namespace WCDB
 
 #endif /* CTETableName_hpp */

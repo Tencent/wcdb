@@ -23,14 +23,22 @@
 
 #include <WCDB/lang_common.h>
 
-class LangPragmaSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class PragmaSTMT : public Lang {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string pragmaName;
 
-    copy_on_write_lazy_lang<LangLiteralValue> value;
+    copy_on_write_lazy_lang<LiteralValue> value;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangPragmaSTMT_hpp */

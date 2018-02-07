@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangRaiseFunction::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string RaiseFunction::SQL() const
 {
     std::string description("RAISE(");
     switch (type) {
@@ -42,3 +46,8 @@ copy_on_write_string LangRaiseFunction::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

@@ -100,7 +100,7 @@ typedef NS_ENUM(int, WCTDefaultType) {
         WCDB::ColumnDef::DefaultType::CurrentTimestamp,
 };
 
-#pragma mark - StatementHandle
+#pragma mark - HandleStatement
 @class WCTCoreStatement;
 typedef NSObject<WCTTableCoding> WCTObject;
 typedef NSDictionary<NSString *, WCTObject *>

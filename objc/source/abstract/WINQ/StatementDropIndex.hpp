@@ -24,12 +24,16 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementDropIndex : public DescribableWithLang<LangDropIndexSTMT>,
+namespace WCDB {
+
+class StatementDropIndex : public DescribableWithLang<lang::DropIndexSTMT>,
                            public Statement {
 public:
                                StatementDropIndex& dropIndex(const std::string& indexName, bool ifExists = true);
                                StatementDropIndex& withSchema(const std::string& schemaName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementDropIndex_hpp */

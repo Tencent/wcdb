@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementCreateTable& StatementCreateTable::createTable(const std::string& tableName, bool ifNotExists, bool temp)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     lang.tableName.assign(tableName);
     lang.ifNotExists = ifNotExists;
     lang.temp = temp;
@@ -31,28 +33,28 @@ StatementCreateTable& StatementCreateTable::createTable(const std::string& table
 
 StatementCreateTable& StatementCreateTable::withSchema(const std::string& schemaName)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::as(const StatementSelect& selectSTMT)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::define(const ColumnDef& columnDef)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     lang.columnDefs.append(columnDef.getLang());
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::define(const std::list<ColumnDef>& columnDefs)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     for (const ColumnDef& columnDef : columnDefs) {
         lang.columnDefs.append(columnDef.getLang());
     }
@@ -61,14 +63,14 @@ StatementCreateTable& StatementCreateTable::define(const std::list<ColumnDef>& c
 
 StatementCreateTable& StatementCreateTable::addTableConstraint(const TableConstraint& tableConstraint)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     lang.tableConstraints.append(tableConstraint.getLang());
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::addTableConstraints(const std::list<TableConstraint>& tableConstraints)
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     for (const TableConstraint& tableConstraint : tableConstraints) {
         lang.tableConstraints.append(tableConstraint.getLang());
     }
@@ -77,7 +79,7 @@ StatementCreateTable& StatementCreateTable::addTableConstraints(const std::list<
 
 StatementCreateTable& StatementCreateTable::withoutRowID()
 {
-    LangCreateTableSTMT& lang = getMutableLang();
+    lang::CreateTableSTMT& lang = getMutableLang();
     lang.withoutRowID = true;
     return *this;
 }
@@ -86,3 +88,5 @@ Statement::Type StatementCreateTable::getType() const
 {
     return Statement::Type::CreateTable;
 }
+
+} // namespace WCDB

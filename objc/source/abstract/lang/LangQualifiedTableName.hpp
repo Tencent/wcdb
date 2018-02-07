@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangQualifiedTableName : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class QualifiedTableName : public Lang {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
@@ -38,5 +42,9 @@ public:
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangQualifiedTableName_hpp */

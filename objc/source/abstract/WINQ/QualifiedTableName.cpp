@@ -20,29 +20,33 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 QualifiedTableName::QualifiedTableName(const std::string& tableName)
 {
-    LangQualifiedTableName& lang = getMutableLang();
+    lang::QualifiedTableName& lang = getMutableLang();
     lang.tableName.assign(tableName);
 }
 
 QualifiedTableName& QualifiedTableName::withSchema(const std::string& schemaName)
 {
-    LangQualifiedTableName& lang = getMutableLang();
+    lang::QualifiedTableName& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 QualifiedTableName& QualifiedTableName::indexedBy(const std::string& indexName)
 {
-    LangQualifiedTableName& lang = getMutableLang();
-    lang.indexSwitcher = LangQualifiedTableName::IndexSwitch::Indexed; 
+    lang::QualifiedTableName& lang = getMutableLang();
+    lang.indexSwitcher = lang::QualifiedTableName::IndexSwitch::Indexed; 
     lang.indexName.assign(indexName);
     return *this;
 }
 QualifiedTableName& QualifiedTableName::notIndexed()
 {
-    LangQualifiedTableName& lang = getMutableLang();
-    lang.indexSwitcher = LangQualifiedTableName::IndexSwitch::NotIndexed;
+    lang::QualifiedTableName& lang = getMutableLang();
+    lang.indexSwitcher = lang::QualifiedTableName::IndexSwitch::NotIndexed;
     return *this;
 }
+
+} // namespace WCDB

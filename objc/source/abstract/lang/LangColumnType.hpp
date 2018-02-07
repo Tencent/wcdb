@@ -21,7 +21,11 @@
 #ifndef LangColumnType_hpp
 #define LangColumnType_hpp
 
-enum class LangColumnType {
+namespace WCDB {
+
+namespace lang {
+
+enum class ColumnType {
     Null,
     Integer32,
     Integer64,
@@ -30,21 +34,25 @@ enum class LangColumnType {
     BLOB,
 };
 
-constexpr const char *LangColumnTypeName(const LangColumnType &columnType)
+constexpr const char *ColumnTypeName(const ColumnType &columnType)
 {
     switch (columnType) {
-        case LangColumnType::Null:
+        case ColumnType::Null:
             return "NULL";
-        case LangColumnType::Integer32:
-        case LangColumnType::Integer64:
+        case ColumnType::Integer32:
+        case ColumnType::Integer64:
             return "INTEGER";
-        case LangColumnType::Float:
-            return "FLOAT";
-        case LangColumnType::Text:
+        case ColumnType::Float:
+            return "REAL";
+        case ColumnType::Text:
             return "TEXT";
-        case LangColumnType::BLOB:
+        case ColumnType::BLOB:
             return "BLOB";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangColumnType_hpp */

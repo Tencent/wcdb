@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementCreateVirtualTable& StatementCreateVirtualTable::createVirtualTable(const std::string& tableName, bool ifNotExists)
 {
-    LangCreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT& lang = getMutableLang();
     lang.tableName.assign(tableName);
     lang.ifNotExists = ifNotExists;
     return *this;
@@ -30,21 +32,21 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::createVirtualTable(con
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::withSchema(const std::string& schemaName)
 {
-    LangCreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName)
 {
-    LangCreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT& lang = getMutableLang();
     lang.moduleName.assign(moduleName);
     return *this;
 }
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName, const ModuleArgument& moduleArgument)
 {
-    LangCreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT& lang = getMutableLang();
     lang.moduleName.assign(moduleName);
     lang.moduleArguments.append(moduleArgument.getLang());
     return *this;
@@ -52,7 +54,7 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std:
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const std::string& moduleName, const std::list<ModuleArgument>& moduleArguments)
 {
-    LangCreateVirtualTableSTMT& lang = getMutableLang();
+    lang::CreateVirtualTableSTMT& lang = getMutableLang();
     lang.moduleName.assign(moduleName);
     for (const ModuleArgument& moduleArgument : moduleArguments) {
         lang.moduleArguments.append(moduleArgument.getLang());
@@ -64,3 +66,5 @@ Statement::Type StatementCreateVirtualTable::getType() const
 {
     return Statement::Type::CreateVirtualTable;
 }
+
+} // namespace WCDB

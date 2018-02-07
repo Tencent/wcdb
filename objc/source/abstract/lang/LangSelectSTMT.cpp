@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangSelectSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string SelectSTMT::SQL() const
 {
     std::string description;
     if (!commonTableExpressions.empty()) {
@@ -56,17 +60,17 @@ copy_on_write_string LangSelectSTMT::SQL() const
     return description;
 }
 
-copy_on_write_string LangSelectSTMT::Compound::SQL() const
+copy_on_write_string SelectSTMT::Compound::SQL() const
 {
     std::string description;
-    description.append(LangSelectSTMT::Compound::OperatorName(compoundOperator));
+    description.append(SelectSTMT::Compound::OperatorName(compoundOperator));
     description.append(" ");
     description.append(selectCore.description().get());
     return description;
 }
 
 constexpr const char *
-LangSelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
+SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
 {
     switch (compoundOperator) {
         case Operator::Union:
@@ -79,4 +83,8 @@ LangSelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
             return "EXCEPT";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
 

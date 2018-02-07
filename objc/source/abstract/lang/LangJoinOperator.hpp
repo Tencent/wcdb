@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangJoinOperator : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class JoinOperator : public Lang {
 public:
     bool join;
     bool natural;
@@ -41,5 +45,9 @@ public:
 protected:
     static constexpr const char *JoinTypeName(const Type &type);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangJoinOperator_hpp */

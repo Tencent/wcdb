@@ -23,15 +23,19 @@
 
 #include <WCDB/Describable.hpp>
 
-class ResultColumn: public DescribableWithLang<LangResultColumn> {
+namespace WCDB {
+
+class ResultColumn: public DescribableWithLang<lang::ResultColumn> {
 public:
     static const ResultColumn All;
     static ResultColumn AllInTable(const std::string& tableName);
     ResultColumn(const Expression& expression);    
 protected:
-    ResultColumn(const LangResultColumn::Type& type);
+    ResultColumn(const lang::ResultColumn::Type& type);
     ResultColumn(const std::string& tableName);
 };
 
+
+} // namespace WCDB
 
 #endif /* ResultColumn_hpp */

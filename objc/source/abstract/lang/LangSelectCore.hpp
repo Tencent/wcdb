@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangSelectCore : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class SelectCore : public Lang {
 public:
     enum class Switch : int {
         Select,
@@ -32,7 +36,7 @@ public:
     Switch switcher;
 
     bool distinct;
-    copy_on_write_lazy_lang_list<LangResultColumn> resultColumns;
+    copy_on_write_lazy_lang_list<ResultColumn> resultColumns;
 
     enum class FromSwitch : int {
         NotSet,
@@ -40,18 +44,22 @@ public:
         JoinClause,
     };
     FromSwitch fromSwitcher;
-    copy_on_write_lazy_lang_list<LangTableOrSubquery> tableOrSubquerys;
-    copy_on_write_lazy_lang<LangJoinClause> joinClause;
+    copy_on_write_lazy_lang_list<TableOrSubquery> tableOrSubquerys;
+    copy_on_write_lazy_lang<JoinClause> joinClause;
 
-    copy_on_write_lazy_lang<LangExpr> condition;
+    copy_on_write_lazy_lang<Expr> condition;
 
-    copy_on_write_lazy_lang_list<LangExpr> groups;
+    copy_on_write_lazy_lang_list<Expr> groups;
 
-    copy_on_write_lazy_lang<LangExpr> having;
+    copy_on_write_lazy_lang<Expr> having;
 
-    copy_on_write_lazy_lang_list<LangExpr> values;
+    copy_on_write_lazy_lang_list<Expr> values;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangSelectCore_hpp */

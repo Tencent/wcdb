@@ -20,6 +20,8 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementCommit& StatementCommit::commit()
 {
     return *this;
@@ -29,3 +31,5 @@ Statement::Type StatementCommit::getType() const
 {
     return Statement::Type::Commit;
 }
+
+} // namespace WCDB

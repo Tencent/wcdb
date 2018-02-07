@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementAnalyze : public DescribableWithLang<LangAnalyzeSTMT>,
+namespace WCDB {
+
+class StatementAnalyze : public DescribableWithLang<lang::AnalyzeSTMT>,
                          public Statement {
 public:
     StatementAnalyze &analyzeSchema(const std::string &schemaName);
@@ -34,5 +36,7 @@ public:
 
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementAnalyze_hpp */

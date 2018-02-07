@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementBegin& StatementBegin::begin(const Transaction& transaction)
 {
-    LangBeginSTMT& lang = getMutableLang();
+    lang::BeginSTMT& lang = getMutableLang();
     lang.type = transaction;
     return *this;
 }
@@ -31,3 +33,5 @@ Statement::Type StatementBegin::getType() const
 {
     return Statement::Type::Begin;
 }
+
+} // namespace WCDB

@@ -20,19 +20,21 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 ColumnConstraint::ColumnConstraint()
 {
 }
 
 ColumnConstraint::ColumnConstraint(const std::string &name)
 {
-    LangColumnConstraint &lang = getMutableLang();
+    lang::ColumnConstraint &lang = getMutableLang();
     lang.name.assign(name);
 }
 
 ColumnConstraint &ColumnConstraint::named(const std::string &name)
 {
-    LangColumnConstraint &lang = getMutableLang();
+    lang::ColumnConstraint &lang = getMutableLang();
     lang.name.assign(name);
     return *this;
 }
@@ -42,8 +44,8 @@ ColumnConstraint::withPrimaryKey(const Order &order,
                                  const ConflictClause &conflictClause,
                                  bool autoIncrement)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::PrimaryKey;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::PrimaryKey;
     lang.order = order;
     lang.conflictClause = conflictClause;
     lang.autoIncrement = autoIncrement;
@@ -53,8 +55,8 @@ ColumnConstraint::withPrimaryKey(const Order &order,
 ColumnConstraint &
 ColumnConstraint::withNotNull(const ConflictClause &conflictClause)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::NotNull;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::NotNull;
     lang.conflictClause = conflictClause;
     return *this;
 }
@@ -62,16 +64,16 @@ ColumnConstraint::withNotNull(const ConflictClause &conflictClause)
 ColumnConstraint &
 ColumnConstraint::withUnique(const ConflictClause &conflictClause)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::Unique;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::Unique;
     lang.conflictClause = conflictClause;
     return *this;
 }
 
 ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::Check;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::Check;
     lang.expr.assign(expression.getLang());
     return *this;
 }
@@ -79,18 +81,18 @@ ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
 ColumnConstraint &
 ColumnConstraint::withDefault(const LiteralValue &literalValue)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::Default;
-    lang.defaultSwitcher = LangColumnConstraint::DefaultSwitch::LiteralValue;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::Default;
+    lang.defaultSwitcher = lang::ColumnConstraint::DefaultSwitch::LiteralValue;
     lang.literalValue.assign(literalValue.getLang());
     return *this;
 }
 
 ColumnConstraint &ColumnConstraint::withDefault(const Expression &expression)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::Default;
-    lang.defaultSwitcher = LangColumnConstraint::DefaultSwitch::Expr;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::Default;
+    lang.defaultSwitcher = lang::ColumnConstraint::DefaultSwitch::Expr;
     lang.expr.assign(expression.getLang());
     return *this;
 }
@@ -98,8 +100,8 @@ ColumnConstraint &ColumnConstraint::withDefault(const Expression &expression)
 ColumnConstraint &
 ColumnConstraint::withCollate(const std::string &collationName)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::Collate;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::Collate;
     lang.collationName.assign(collationName);
     return *this;
 }
@@ -107,8 +109,10 @@ ColumnConstraint::withCollate(const std::string &collationName)
 ColumnConstraint &
 ColumnConstraint::withForeignKeyClause(const ForeignKeyClause &foreignKeyClause)
 {
-    LangColumnConstraint &lang = getMutableLang();
-    lang.type = LangColumnConstraint::Type::ForeignKeyClause;
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::ForeignKeyClause;
     lang.foreignKeyClause.assign(foreignKeyClause.getLang());
     return *this;
 }
+
+} // namespace WCDB

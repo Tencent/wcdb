@@ -23,11 +23,19 @@
 
 #include <WCDB/lang_common.h>
 
-class LangDetachSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class DetachSTMT : public Lang {
 public:
     copy_on_write_string schemaName;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangDetachSTMT_hpp */

@@ -23,9 +23,17 @@
 
 #include <WCDB/lang_common.h>
 
-class LangCommitSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class CommitSTMT : public Lang {
 public:
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangCommitSTMT_hpp */

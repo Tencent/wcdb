@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangDeleteSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string DeleteSTMT::SQL() const
 {
     std::string description;
     if (!withClause.empty()) {
@@ -48,3 +52,8 @@ copy_on_write_string LangDeleteSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

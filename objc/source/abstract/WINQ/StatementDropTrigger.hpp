@@ -24,12 +24,16 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementDropTrigger : public DescribableWithLang<LangDropTriggerSTMT>,
+namespace WCDB {
+
+class StatementDropTrigger : public DescribableWithLang<lang::DropTriggerSTMT>,
                              public Statement {
 public:
                                  StatementDropTrigger& dropTrigger(const std::string& triggerName, bool ifExists = true);
                                  StatementDropTrigger& withSchema(const std::string& schemaName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementDropTrigger_hpp */

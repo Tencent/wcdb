@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/handle_statement.hpp>
+#include <WCDB/HandleStatement.hpp>
 #include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 
-StatementHandle::StatementHandle(void *stmt, const Handle &handle)
-    : m_stmt(stmt), m_handle(handle)
+HandleStatement::HandleStatement(void *stmt, const Handle &handle)
+: m_stmt(stmt), m_handle(handle)
 {
 }
 
-bool StatementHandle::reset()
+bool HandleStatement::reset()
 {
     int rc = sqlite3_reset((sqlite3_stmt *) m_stmt);
     if (rc == SQLITE_OK) {
@@ -44,7 +44,7 @@ bool StatementHandle::reset()
     return false;
 }
 
-bool StatementHandle::step()
+bool HandleStatement::step()
 {
     int rc = sqlite3_step((sqlite3_stmt *) m_stmt);
     if (rc == SQLITE_ROW || rc == SQLITE_OK || rc == SQLITE_DONE) {
@@ -53,125 +53,125 @@ bool StatementHandle::step()
     }
     sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
     Error::ReportSQLite(
-        m_handle.getTag(), m_handle.path, Error::HandleOperation::Step, rc,
-        sqlite3_extended_errcode(handle), sqlite3_errmsg(handle),
-        sqlite3_sql((sqlite3_stmt *) m_stmt), &m_error);
+                        m_handle.getTag(), m_handle.path, Error::HandleOperation::Step, rc,
+                        sqlite3_extended_errcode(handle), sqlite3_errmsg(handle),
+                        sqlite3_sql((sqlite3_stmt *) m_stmt), &m_error);
     return false;
 }
 
-bool StatementHandle::isOK() const
+bool HandleStatement::isOK() const
 {
     return m_error.isOK();
 }
 
-const Error &StatementHandle::getError() const
+const Error &HandleStatement::getError() const
 {
     return m_error;
 }
 
-int StatementHandle::getChanges()
+int HandleStatement::getChanges()
 {
     sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
     return sqlite3_changes((sqlite3 *) handle);
 }
 
-StatementHandle::~StatementHandle()
+HandleStatement::~HandleStatement()
 {
     finalize();
 }
 
-void StatementHandle::bindInteger32(
-    const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
-    int index)
+void HandleStatement::bindInteger32(
+                                    const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
+                                    int index)
 {
     sqlite3_bind_int((sqlite3_stmt *) m_stmt, index, value);
 }
 
-void StatementHandle::bindInteger64(
-    const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
-    int index)
+void HandleStatement::bindInteger64(
+                                    const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
+                                    int index)
 {
     sqlite3_bind_int64((sqlite3_stmt *) m_stmt, index, value);
 }
 
-void StatementHandle::bindDouble(
-    const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value, int index)
+void HandleStatement::bindDouble(
+                                 const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value, int index)
 {
     sqlite3_bind_double((sqlite3_stmt *) m_stmt, index, value);
 }
 
-void StatementHandle::bindText(
-    const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value, int index)
+void HandleStatement::bindText(
+                               const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value, int index)
 {
     sqlite3_bind_text((sqlite3_stmt *) m_stmt, index, value, -1,
                       SQLITE_TRANSIENT);
 }
 
-void StatementHandle::bindBLOB(
-    const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
+void HandleStatement::bindBLOB(
+                               const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
 {
     sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.data(),
                       (int) value.size(), SQLITE_TRANSIENT);
 }
 
-void StatementHandle::bindNull(int index)
+void HandleStatement::bindNull(int index)
 {
     sqlite3_bind_null((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
-StatementHandle::getInteger32(int index)
+HandleStatement::getInteger32(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType)
-        sqlite3_column_int((sqlite3_stmt *) m_stmt, index);
+    sqlite3_column_int((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
-StatementHandle::getInteger64(int index)
+HandleStatement::getInteger64(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType)
-        sqlite3_column_int64((sqlite3_stmt *) m_stmt, index);
+    sqlite3_column_int64((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Float>::UnderlyingType
-StatementHandle::getDouble(int index)
+HandleStatement::getDouble(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Float>::UnderlyingType)
-        sqlite3_column_double((sqlite3_stmt *) m_stmt, index);
+    sqlite3_column_double((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-StatementHandle::getText(int index)
+HandleStatement::getText(int index)
 {
     return (typename ColumnTypeInfo<ColumnType::Text>::UnderlyingType)
-        sqlite3_column_text((sqlite3_stmt *) m_stmt, index);
+    sqlite3_column_text((sqlite3_stmt *) m_stmt, index);
 }
 
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-StatementHandle::getBLOB(int index)
+HandleStatement::getBLOB(int index)
 {
     int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
     const unsigned char *data = (const unsigned char *) sqlite3_column_blob(
-        (sqlite3_stmt *) m_stmt, index);
+                                                                            (sqlite3_stmt *) m_stmt, index);
     return ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType(data, data + size);
 }
 
-int StatementHandle::getColumnCount()
+int HandleStatement::getColumnCount()
 {
     return sqlite3_column_count((sqlite3_stmt *) m_stmt);
 }
 
-const char *StatementHandle::getColumnName(int index)
+const char *HandleStatement::getColumnName(int index)
 {
     return sqlite3_column_name((sqlite3_stmt *) m_stmt, index);
 }
 
-const char *StatementHandle::getColumnTableName(int index)
+const char *HandleStatement::getColumnTableName(int index)
 {
     return sqlite3_column_table_name((sqlite3_stmt *) m_stmt, index);
 }
 
-ColumnType StatementHandle::getType(int index)
+ColumnType HandleStatement::getType(int index)
 {
     switch (sqlite3_column_type((sqlite3_stmt *) m_stmt, index)) {
         case SQLITE_INTEGER:
@@ -186,13 +186,13 @@ ColumnType StatementHandle::getType(int index)
     return ColumnType::Null;
 }
 
-long long StatementHandle::getLastInsertedRowID()
+long long HandleStatement::getLastInsertedRowID()
 {
     return sqlite3_last_insert_rowid(
-        sqlite3_db_handle((sqlite3_stmt *) m_stmt));
+                                     sqlite3_db_handle((sqlite3_stmt *) m_stmt));
 }
 
-bool StatementHandle::finalize()
+bool HandleStatement::finalize()
 {
     if (m_stmt) {
         sqlite3 *handle = sqlite3_db_handle((sqlite3_stmt *) m_stmt);
@@ -210,5 +210,6 @@ bool StatementHandle::finalize()
     }
     return true;
 }
-
+    
 } //namespace WCDB
+

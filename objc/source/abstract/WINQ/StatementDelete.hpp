@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementDelete : public DescribableWithLang<LangDeleteSTMT>,
+namespace WCDB {
+
+class StatementDelete : public DescribableWithLang<lang::DeleteSTMT>,
                         public CRUDStatement {
 public:
                             StatementDelete& with(const WithClause& withClause);
@@ -37,5 +39,7 @@ public:
                             StatementDelete& offset(const Expression& offset);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementDelete_hpp */

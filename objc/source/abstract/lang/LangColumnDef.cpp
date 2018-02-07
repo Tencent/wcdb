@@ -20,14 +20,23 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangColumnDef::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string ColumnDef::SQL() const
 {
     std::string description;
     assert(!columnName.empty());
     description.append(columnName.get() + " ");
-    description.append(LangColumnTypeName(type));
+    description.append(ColumnTypeName(type));
     if (!columnConstraints.empty()) {
         description.append(" " + columnConstraints.description().get());
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

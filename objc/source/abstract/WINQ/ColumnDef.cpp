@@ -20,15 +20,17 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 ColumnDef::ColumnDef(const std::string &columnName)
 {
-    LangColumnDef &lang = getMutableLang();
+    lang::ColumnDef &lang = getMutableLang();
     lang.columnName.assign(columnName);
 }
 
 ColumnDef &ColumnDef::withType(const ColumnType &columnType)
 {
-    LangColumnDef &lang = getMutableLang();
+    lang::ColumnDef &lang = getMutableLang();
     lang.type = columnType;
     return *this;
 }
@@ -36,7 +38,7 @@ ColumnDef &ColumnDef::withType(const ColumnType &columnType)
 ColumnDef &
 ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
 {
-    LangColumnDef &lang = getMutableLang();
+    lang::ColumnDef &lang = getMutableLang();
     lang.columnConstraints.append(columnConstraint.getLang());
     return *this;
 }
@@ -44,9 +46,11 @@ ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
 ColumnDef &ColumnDef::byAddingConstraints(
     const std::list<ColumnConstraint> &columnConstraints)
 {
-    LangColumnDef &lang = getMutableLang();
+    lang::ColumnDef &lang = getMutableLang();
     for (const ColumnConstraint &columnConstraint : columnConstraints) {
         lang.columnConstraints.append(columnConstraint.getLang());
     }
     return *this;
 }
+
+} // namespace WCDB

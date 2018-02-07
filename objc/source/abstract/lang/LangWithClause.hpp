@@ -23,14 +23,18 @@
 
 #include <WCDB/lang_common.h>
 
-class LangWithClause : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class WithClause : public Lang {
 public:
     bool recursive;
 
     class Pair : public Lang {
     public:
-        copy_on_write_lazy_lang<LangCTETableName> cteTableName;
-        copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+        copy_on_write_lazy_lang<CTETableName> cteTableName;
+        copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
 
         virtual copy_on_write_string SQL() const override;
     };
@@ -38,5 +42,9 @@ public:
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangWithClause_hpp */

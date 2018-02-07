@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangDropInternalSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class DropInternalSTMT : public Lang {
 public:
     bool ifExists;
     copy_on_write_string schemaName;
@@ -34,5 +38,9 @@ public:
 protected:
     virtual const char *getInternalName() const = 0;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangDropInternalSTMT_hpp */

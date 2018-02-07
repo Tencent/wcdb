@@ -20,10 +20,19 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangSavepointSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string SavepointSTMT::SQL() const
 {
     std::string description("SAVEPOINT ");
     assert(!savepointName.empty());
     description.append(savepointName.get());
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

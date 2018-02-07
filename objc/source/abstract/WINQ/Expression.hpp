@@ -23,13 +23,15 @@
 
 #include <WCDB/Describable.hpp>
 
-class Expression : public DescribableWithLang<LangExpr> {
+namespace WCDB {
+
+class Expression : public DescribableWithLang<lang::Expr> {
 public:
     Expression(const LiteralValue& literalValue);
     
     Expression(const BindParameter& bindParameter);
     
-    class Column : public DescribableWithLang<LangExprColumn> {
+    class Column : public DescribableWithLang<lang::ExprColumn> {
     public:
         Column(const std::string& columnName);
         Column& withTable(const std::string& tableName);
@@ -109,7 +111,7 @@ public:
     static Expression Exists(const StatementSelect& selectSTMT);
     static Expression NotExists(const StatementSelect& selectSTMT);
         
-    class CaseInternal : public DescribableWithLang<LangExprCase> {
+    class CaseInternal : public DescribableWithLang<lang::ExprCase> {
     public:
         CaseInternal(const Expression& expression);
         CaseInternal& whenAndThen(const Expression& when, const Expression& then);
@@ -120,31 +122,33 @@ public:
     
     Expression(const RaiseFunction& raiseFunction);
 protected:
-    Expression(const copy_on_write_lazy_lang<LangExprUnaryOperation>& exprUnaryOperation);
-    Expression(const copy_on_write_lazy_lang<LangExprBinaryOperation>& exprBinaryOperation);
-    Expression(const copy_on_write_lazy_lang<LangExprFunction>& exprFunction);
-    Expression(const copy_on_write_lazy_lang<LangExprCast>& exprCast);
-    Expression(const copy_on_write_lazy_lang<LangExprPattern>& exprPattern);
-    Expression(const copy_on_write_lazy_lang<LangExprNull>& exprNull);
-    Expression(const copy_on_write_lazy_lang<LangExprBetween>& exprBetween);
-    Expression(const copy_on_write_lazy_lang<LangExprIn>& exprIn);    
-    Expression(const copy_on_write_lazy_lang<LangExprExists>& exprExists);    
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation>& exprUnaryOperation);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation>& exprBinaryOperation);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprFunction>& exprFunction);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprCast>& exprCast);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprPattern>& exprPattern);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprNull>& exprNull);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprBetween>& exprBetween);
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprIn>& exprIn);    
+    Expression(const lang::copy_on_write_lazy_lang<lang::ExprExists>& exprExists);    
     
-    copy_on_write_lazy_lang<LangExprUnaryOperation> unaryOperation(const LangExprUnaryOperation::Operator& unaryOperator) const;
-    copy_on_write_lazy_lang<LangExprBinaryOperation> binaryOperation(const LangExprBinaryOperation::Operator& binaryOperator, const Expression& operand) const; 
-    copy_on_write_lazy_lang<LangExprPattern> pattern(const LangExprPattern::Type& type, const Expression& operand, bool isNot) const;
-    copy_on_write_lazy_lang<LangExprNull> null(bool isNull) const;
-    copy_on_write_lazy_lang<LangExprBetween> between(const Expression& left, const Expression& right, bool isNot) const;
+    lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation> unaryOperation(const lang::ExprUnaryOperation::Operator& unaryOperator) const;
+    lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation> binaryOperation(const lang::ExprBinaryOperation::Operator& binaryOperator, const Expression& operand) const; 
+    lang::copy_on_write_lazy_lang<lang::ExprPattern> pattern(const lang::ExprPattern::Type& type, const Expression& operand, bool isNot) const;
+    lang::copy_on_write_lazy_lang<lang::ExprNull> null(bool isNull) const;
+    lang::copy_on_write_lazy_lang<lang::ExprBetween> between(const Expression& left, const Expression& right, bool isNot) const;
     
-    copy_on_write_lazy_lang<LangExprIn> in(const StatementSelect& selectSTMT, bool isNot);
-    copy_on_write_lazy_lang<LangExprIn> in(const Expression& expression, bool isNot);
-    copy_on_write_lazy_lang<LangExprIn> in(const std::list<Expression>& expressions, bool isNot);
-    copy_on_write_lazy_lang<LangExprIn> in(const std::string& schemaName, const std::string& tableOrFunctionName, bool isNot);
-    copy_on_write_lazy_lang<LangExprIn> in(const std::string& schemaName, const std::string& tableFunctionName, const Expression& expression, bool isNot);
-    copy_on_write_lazy_lang<LangExprIn> in(const std::string& schemaName, const std::string& tableFunctionName, const std::list<Expression>& expressions, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const StatementSelect& selectSTMT, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const Expression& expression, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const std::list<Expression>& expressions, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const std::string& schemaName, const std::string& tableOrFunctionName, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const std::string& schemaName, const std::string& tableFunctionName, const Expression& expression, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const std::string& schemaName, const std::string& tableFunctionName, const std::list<Expression>& expressions, bool isNot);
     
-    static copy_on_write_lazy_lang<LangExprExists> Exists(const StatementSelect& selectSTMT, bool isNot);
+    static lang::copy_on_write_lazy_lang<lang::ExprExists> Exists(const StatementSelect& selectSTMT, bool isNot);
     
 };
+
+} // namespace WCDB
 
 #endif /* Expression_hpp */

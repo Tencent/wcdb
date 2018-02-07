@@ -20,13 +20,17 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangInsertSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string InsertSTMT::SQL() const
 {
     std::string description;
     if (!withClause.empty()) {
         description.append(withClause.description().get() + " ");
     }
-    description.append(LangInsertSTMT::TypeName(type));
+    description.append(InsertSTMT::TypeName(type));
     description.append(" INTO ");
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
@@ -51,7 +55,7 @@ copy_on_write_string LangInsertSTMT::SQL() const
     return description;
 }
 
-constexpr const char *LangInsertSTMT::TypeName(const Type &type)
+constexpr const char *InsertSTMT::TypeName(const Type &type)
 {
     switch (type) {
         case Type::Insert:
@@ -68,3 +72,8 @@ constexpr const char *LangInsertSTMT::TypeName(const Type &type)
             return "INSERT OR IGNORE";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

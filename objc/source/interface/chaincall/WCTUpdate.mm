@@ -103,24 +103,24 @@
         return NO;
     }
 
-    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
-    if (!statementHandle) {
+    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, _error);
+    if (!handleStatement) {
         return NO;
     }
     int index = 1;
     for (const WCTProperty &property : _propertyList) {
         if (![self bindProperty:property
                          ofObject:object
-                toStatementHandle:statementHandle
+                toStatementHandle:handleStatement
                           atIndex:index
                         withError:_error]) {
             return NO;
         }
         ++index;
     }
-    statementHandle->step();
-    _error = statementHandle->getError();
-    _changes = statementHandle->getChanges();
+    handleStatement->step();
+    _error = handleStatement->getError();
+    _changes = handleStatement->getChanges();
     return _error.isOK();
 }
 
@@ -134,23 +134,23 @@
         return NO;
     }
 
-    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
-    if (!statementHandle) {
+    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, _error);
+    if (!handleStatement) {
         return NO;
     }
     int index = 1;
     for (WCTValue *value in row) {
         if (![self bindWithValue:value
-                toStatementHandle:statementHandle
+                toStatementHandle:handleStatement
                           atIndex:index
                         withError:_error]) {
             return NO;
         }
         ++index;
     }
-    statementHandle->step();
-    _error = statementHandle->getError();
-    _changes = statementHandle->getChanges();
+    handleStatement->step();
+    _error = handleStatement->getError();
+    _changes = handleStatement->getChanges();
     return _error.isOK();
 }
 

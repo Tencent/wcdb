@@ -23,15 +23,19 @@
 
 #include <WCDB/lang_common.h>
 
-class LangJoinClause : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class JoinClause : public Lang {
 public:
-    copy_on_write_lazy_lang<LangTableOrSubquery> tableOrSubquery;
+    copy_on_write_lazy_lang<TableOrSubquery> tableOrSubquery;
 
     class Operand : public Lang {
     public:
-        copy_on_write_lazy_lang<LangJoinOperator> joinOperator;
-        copy_on_write_lazy_lang<LangTableOrSubquery> tableOrSubquery;
-        copy_on_write_lazy_lang<LangJoinConstraint> joinConstraint;
+        copy_on_write_lazy_lang<JoinOperator> joinOperator;
+        copy_on_write_lazy_lang<TableOrSubquery> tableOrSubquery;
+        copy_on_write_lazy_lang<JoinConstraint> joinConstraint;
 
         virtual copy_on_write_string SQL() const override;
     };
@@ -42,7 +46,11 @@ public:
 
 template <>
 copy_on_write_string
-copy_on_write_lazy_lang_list<LangJoinClause::Operand>::calculatedDescription()
+copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription()
     const;
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangJoinClause_hpp */

@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementAttach : public DescribableWithLang<LangAttachSTMT>,
+namespace WCDB {
+
+class StatementAttach : public DescribableWithLang<lang::AttachSTMT>,
                         public Statement {
 public:
     StatementAttach &attach(const Expression &expression);
@@ -32,5 +34,7 @@ public:
 
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementAttach_hpp */

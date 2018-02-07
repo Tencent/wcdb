@@ -23,11 +23,19 @@
 
 #include <WCDB/lang_common.h>
 
-class LangSavepointSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class SavepointSTMT : public Lang {
 public:
     copy_on_write_string savepointName;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangSavepointSTMT_hpp */

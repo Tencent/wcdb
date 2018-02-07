@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCreateTableSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CreateTableSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (temp) {
@@ -53,3 +57,8 @@ copy_on_write_string LangCreateTableSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementCreateIndex& StatementCreateIndex::createIndex(const std::string& indexName, bool ifNotExists, bool unique)
 {
-    LangCreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT& lang = getMutableLang();
     lang.indexName.assign(indexName);
     lang.ifNotExists = ifNotExists;
     lang.unique = unique;
@@ -31,21 +33,21 @@ StatementCreateIndex& StatementCreateIndex::createIndex(const std::string& index
 
 StatementCreateIndex& StatementCreateIndex::withSchema(const std::string& schemaName)
 {
-    LangCreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::on(const std::string& tableName, const IndexedColumn& indexedColumn)
 {
-    LangCreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT& lang = getMutableLang();
     lang.tableName.assign(tableName);
     lang.indexedColumns.append(indexedColumn.getLang());
     return *this;
 }
 StatementCreateIndex& StatementCreateIndex::on(const std::string& tableName, const std::list<IndexedColumn>& indexedColumns)
 {
-    LangCreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT& lang = getMutableLang();
     lang.tableName.assign(tableName);
     for (const IndexedColumn& indexedColumn : indexedColumns) {
         lang.indexedColumns.append(indexedColumn.getLang());
@@ -54,7 +56,7 @@ StatementCreateIndex& StatementCreateIndex::on(const std::string& tableName, con
 }
 StatementCreateIndex& StatementCreateIndex::where(const Expression& condition)
 {
-    LangCreateIndexSTMT& lang = getMutableLang();
+    lang::CreateIndexSTMT& lang = getMutableLang();
     lang.expr.assign(condition.getLang());
     return *this;
 }
@@ -63,3 +65,5 @@ Statement::Type StatementCreateIndex::getType() const
 {
     return Statement::Type::CreateIndex; 
 }
+
+} // namespace WCDB

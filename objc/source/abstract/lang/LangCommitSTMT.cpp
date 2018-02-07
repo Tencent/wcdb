@@ -20,7 +20,16 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCommitSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CommitSTMT::SQL() const
 {
     return std::string("COMMIT");
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

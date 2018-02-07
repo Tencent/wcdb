@@ -23,17 +23,25 @@
 
 #include <WCDB/lang_common.h>
 
-class LangCreateIndexSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class CreateIndexSTMT : public Lang {
 public:
     bool unique;
     bool ifNotExists;
     copy_on_write_string schemaName;
     copy_on_write_string indexName;
     copy_on_write_string tableName;
-    copy_on_write_lazy_lang_list<LangIndexedColumn> indexedColumns;
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang_list<IndexedColumn> indexedColumns;
+    copy_on_write_lazy_lang<Expr> expr;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangCreateIndexSTMT_hpp */

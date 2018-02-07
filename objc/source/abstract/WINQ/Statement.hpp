@@ -21,6 +21,8 @@
 #ifndef Statement_hpp
 #define Statement_hpp
 
+namespace WCDB {
+
 class Statement {
 public:
     enum class Type : int {
@@ -51,11 +53,14 @@ public:
         Vacuum,
     };
     virtual Type getType() const = 0;
+    virtual const std::string &getDescription() const = 0;
 };
 
 class CRUDStatement : public Statement {
 public:
-    virtual copy_on_write_lazy_lang<CRUDLang> getCRUDLang() const = 0;
+    virtual lang::copy_on_write_lazy_lang<lang::CRUDLang> getCRUDLang() const = 0;
 };
+
+} // namespace WCDB
 
 #endif /* Statement_hpp */

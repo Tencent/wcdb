@@ -21,7 +21,11 @@
 #ifndef LangConflictClause_hpp
 #define LangConflictClause_hpp
 
-enum class LangConflictClause {
+namespace WCDB {
+
+namespace lang {
+
+enum class ConflictClause {
     NotSet,
     Rollback,
     Abort,
@@ -31,22 +35,26 @@ enum class LangConflictClause {
 };
 
 constexpr const char *
-LangConflictClauseName(const LangConflictClause &conflictClause)
+LangConflictClauseName(const ConflictClause &conflictClause)
 {
     switch (conflictClause) {
-        case LangConflictClause::Rollback:
+        case ConflictClause::Rollback:
             return "ROLLBACK";
-        case LangConflictClause::Abort:
+        case ConflictClause::Abort:
             return "ABORT";
-        case LangConflictClause::Fail:
+        case ConflictClause::Fail:
             return "FAIL";
-        case LangConflictClause::Ignore:
+        case ConflictClause::Ignore:
             return "IGNORE";
-        case LangConflictClause::Replace:
+        case ConflictClause::Replace:
             return "REPLACE";
         default:
             return "";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangConflictClause_hpp */

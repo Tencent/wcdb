@@ -23,17 +23,25 @@
 
 #include <WCDB/lang_common.h>
 
-class LangDeleteSTMT : public CRUDLang {
+namespace WCDB {
+
+namespace lang {
+
+class DeleteSTMT : public CRUDLang {
 public:
-    copy_on_write_lazy_lang<LangWithClause> withClause;
-    copy_on_write_lazy_lang<LangQualifiedTableName> qualifiedTableName;
-    copy_on_write_lazy_lang<LangExpr> condition;
-    copy_on_write_lazy_lang_list<LangOrderingTerm> orderingTerms;
-    copy_on_write_lazy_lang<LangExpr> limit;
+    copy_on_write_lazy_lang<WithClause> withClause;
+    copy_on_write_lazy_lang<QualifiedTableName> qualifiedTableName;
+    copy_on_write_lazy_lang<Expr> condition;
+    copy_on_write_lazy_lang_list<OrderingTerm> orderingTerms;
+    copy_on_write_lazy_lang<Expr> limit;
     bool offset;
-    copy_on_write_lazy_lang<LangExpr> limitParameter;
+    copy_on_write_lazy_lang<Expr> limitParameter;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangDeleteSTMT_hpp */

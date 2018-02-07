@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangReindexSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string ReindexSTMT::SQL() const
 {
     std::string description("REINDEX");
     switch (switcher) {
@@ -40,3 +44,8 @@ copy_on_write_string LangReindexSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

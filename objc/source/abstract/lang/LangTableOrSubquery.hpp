@@ -23,15 +23,19 @@
 
 #include <WCDB/lang_common.h>
 
-class LangTableOrSubqueryBase : public Lang {
-};
-class LangTableOrSubqueryTable;
-class LangTableOrSubqueryTableFunction;
-class LangTableOrSubqueryJoinClause;
-class LangTableOrSubquerySelect;
-class LangTableOrSubqueryList;
+namespace WCDB {
 
-class LangTableOrSubqueryTable : public LangTableOrSubqueryBase {
+namespace lang {
+
+class TableOrSubqueryBase : public Lang {
+};
+class TableOrSubqueryTable;
+class TableOrSubqueryTableFunction;
+class TableOrSubqueryJoinClause;
+class TableOrSubquerySelect;
+class TableOrSubqueryList;
+
+class TableOrSubqueryTable : public TableOrSubqueryBase {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
@@ -47,39 +51,39 @@ public:
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangTableOrSubqueryTableFunction : public LangTableOrSubqueryBase {
+class TableOrSubqueryTableFunction : public TableOrSubqueryBase {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableFunctionName;
     copy_on_write_string tableAlias;
-    copy_on_write_lazy_lang_list<LangExpr> exprs;
+    copy_on_write_lazy_lang_list<Expr> exprs;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangTableOrSubqueryJoinClause : public LangTableOrSubqueryBase {
+class TableOrSubqueryJoinClause : public TableOrSubqueryBase {
 public:
-    copy_on_write_lazy_lang<LangJoinClause> joinClause;
+    copy_on_write_lazy_lang<JoinClause> joinClause;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangTableOrSubquerySelect : public LangTableOrSubqueryBase {
+class TableOrSubquerySelect : public TableOrSubqueryBase {
 public:
-    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
     copy_on_write_string tableAlias;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangTableOrSubqueryList : public LangTableOrSubqueryBase {
+class TableOrSubqueryList : public TableOrSubqueryBase {
 public:
-    copy_on_write_lazy_lang_list<LangTableOrSubqueryBase> tableOrSubquerys;
+    copy_on_write_lazy_lang_list<TableOrSubqueryBase> tableOrSubquerys;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangTableOrSubquery : public LangTableOrSubqueryBase {
+class TableOrSubquery : public TableOrSubqueryBase {
 public:
     enum class Switch : int {
         Table,
@@ -89,15 +93,19 @@ public:
         List,
     };
     Switch switcher;
-    copy_on_write_lazy_lang<LangTableOrSubqueryTable> tableOrSubqueryTable;
-    copy_on_write_lazy_lang<LangTableOrSubqueryTableFunction>
+    copy_on_write_lazy_lang<TableOrSubqueryTable> tableOrSubqueryTable;
+    copy_on_write_lazy_lang<TableOrSubqueryTableFunction>
         tableOrSubqueryTableFunction;
-    copy_on_write_lazy_lang<LangTableOrSubqueryJoinClause>
+    copy_on_write_lazy_lang<TableOrSubqueryJoinClause>
         tableOrSubqueryJoinClause;
-    copy_on_write_lazy_lang<LangTableOrSubquerySelect> tableOrSubquerySelect;
-    copy_on_write_lazy_lang<LangTableOrSubqueryList> tableOrSubqueryList;
+    copy_on_write_lazy_lang<TableOrSubquerySelect> tableOrSubquerySelect;
+    copy_on_write_lazy_lang<TableOrSubqueryList> tableOrSubqueryList;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangTableOrSubquery_hpp */

@@ -23,12 +23,20 @@
 
 #include <WCDB/lang_common.h>
 
-class LangAnalyzeSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class AnalyzeSTMT : public Lang {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableOrIndexName;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangAnalyzeSTMT_hpp */

@@ -23,24 +23,28 @@
 
 #include <WCDB/lang_common.h>
 
-class LangExprBase : public Lang {
-};
-class LangExprColumn;
-class LangExprUnaryOperation;
-class LangExprBinaryOperation;
-class LangExprFunction;
-class LangExprList;
-class LangExprCast;
-class LangExprCollate;
-class LangExprPattern;
-class LangExprNull;
-class LangExprBetween;
-class LangExprIn;
-class LangExprExists;
-class LangExprCase;
-class LangExpr;
+namespace WCDB {
 
-class LangExprColumn : public LangExprBase {
+namespace lang {
+
+class ExprBase : public Lang {
+};
+class ExprColumn;
+class ExprUnaryOperation;
+class ExprBinaryOperation;
+class ExprFunction;
+class ExprList;
+class ExprCast;
+class ExprCollate;
+class ExprPattern;
+class ExprNull;
+class ExprBetween;
+class ExprIn;
+class ExprExists;
+class ExprCase;
+class Expr;
+
+class ExprColumn : public ExprBase {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
@@ -49,7 +53,7 @@ public:
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprUnaryOperation : public LangExprBase {
+class ExprUnaryOperation : public ExprBase {
 public:
     enum class Operator : int {
         Negative,
@@ -58,7 +62,7 @@ public:
         Not,
     };
     Operator unaryOperator;
-    copy_on_write_lazy_lang<LangExprBase> expr;
+    copy_on_write_lazy_lang<ExprBase> expr;
 
     virtual copy_on_write_string SQL() const override;
 
@@ -67,7 +71,7 @@ private:
     OperatorName(const Operator &unaryOpeartor);
 };
 
-class LangExprBinaryOperation : public LangExprBase {
+class ExprBinaryOperation : public ExprBase {
 public:
     enum class Operator : int {
         Concatenate,
@@ -91,8 +95,8 @@ public:
         And,
         Or,
     };
-    copy_on_write_lazy_lang<LangExprBase> left;
-    copy_on_write_lazy_lang<LangExprBase> right;
+    copy_on_write_lazy_lang<ExprBase> left;
+    copy_on_write_lazy_lang<ExprBase> right;
     Operator binaryOperator;
 
     virtual copy_on_write_string SQL() const override;
@@ -102,7 +106,7 @@ private:
     OperatorName(const Operator &binaryOpeartor);
 };
 
-class LangExprFunction : public LangExprBase {
+class ExprFunction : public ExprBase {
 public:
     copy_on_write_string functionName;
     enum class Type : int {
@@ -112,38 +116,38 @@ public:
         Star,
     };
     Type type;
-    copy_on_write_lazy_lang_list<LangExprBase> exprs;
+    copy_on_write_lazy_lang_list<ExprBase> exprs;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprList : public LangExprBase {
+class ExprList : public ExprBase {
 public:
-    copy_on_write_lazy_lang_list<LangExprBase> exprs;
+    copy_on_write_lazy_lang_list<ExprBase> exprs;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprCast : public LangExprBase {
+class ExprCast : public ExprBase {
 public:
-    copy_on_write_lazy_lang<LangExprBase> expr;
-    LangColumnType type;
+    copy_on_write_lazy_lang<ExprBase> expr;
+    ColumnType type;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprCollate : public LangExprBase {
+class ExprCollate : public ExprBase {
 public:
-    copy_on_write_lazy_lang<LangExprBase> expr;
+    copy_on_write_lazy_lang<ExprBase> expr;
     copy_on_write_string collationName;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprPattern : public LangExprBase {
+class ExprPattern : public ExprBase {
 public:
     bool isNot;
-    copy_on_write_lazy_lang<LangExprBase> left;
+    copy_on_write_lazy_lang<ExprBase> left;
     enum class Type : int {
         Like,
         Glob,
@@ -151,8 +155,8 @@ public:
         Match,
     };
     Type type;
-    copy_on_write_lazy_lang<LangExprBase> right;
-    copy_on_write_lazy_lang<LangExprBase> escape;
+    copy_on_write_lazy_lang<ExprBase> right;
+    copy_on_write_lazy_lang<ExprBase> escape;
 
     virtual copy_on_write_string SQL() const override;
 
@@ -160,28 +164,28 @@ protected:
     static constexpr const char *TypeName(const Type &type);
 };
 
-class LangExprNull : public LangExprBase {
+class ExprNull : public ExprBase {
 public:
-    copy_on_write_lazy_lang<LangExprBase> expr;
+    copy_on_write_lazy_lang<ExprBase> expr;
     bool isNull;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprBetween : public LangExprBase {
+class ExprBetween : public ExprBase {
 public:
     bool isNot;
-    copy_on_write_lazy_lang<LangExprBase> expr;
-    copy_on_write_lazy_lang<LangExprBase> left;
-    copy_on_write_lazy_lang<LangExprBase> right;
+    copy_on_write_lazy_lang<ExprBase> expr;
+    copy_on_write_lazy_lang<ExprBase> left;
+    copy_on_write_lazy_lang<ExprBase> right;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprIn : public LangExprBase {
+class ExprIn : public ExprBase {
 public:
     bool isNot;
-    copy_on_write_lazy_lang<LangExprBase> expr;
+    copy_on_write_lazy_lang<ExprBase> expr;
 
     enum class Switch : int {
         NotSet,
@@ -191,47 +195,47 @@ public:
     };
     Switch switcher;
 
-    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
-    copy_on_write_lazy_lang_list<LangExprBase> exprs;
+    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
+    copy_on_write_lazy_lang_list<ExprBase> exprs;
     copy_on_write_string schemaName;
     copy_on_write_string tableNameOrFunction;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprExists : public LangExprBase {
+class ExprExists : public ExprBase {
 public:
     bool exists;
     bool isNot;
-    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
 
     virtual copy_on_write_string SQL() const override;
 };
 
-class LangExprCase : public LangExprBase {
+class ExprCase : public ExprBase {
 public:
-    copy_on_write_lazy_lang<LangExprBase> exprCase;
+    copy_on_write_lazy_lang<ExprBase> exprCase;
 
     class Pair : public Lang {
     public:
-        copy_on_write_lazy_lang<LangExprBase> when;
-        copy_on_write_lazy_lang<LangExprBase> then;
+        copy_on_write_lazy_lang<ExprBase> when;
+        copy_on_write_lazy_lang<ExprBase> then;
 
         virtual copy_on_write_string SQL() const override;
     };
 
     copy_on_write_lazy_lang_list<Pair> pairs;
 
-    copy_on_write_lazy_lang<LangExprBase> exprElse;
+    copy_on_write_lazy_lang<ExprBase> exprElse;
 
     virtual copy_on_write_string SQL() const override;
 };
 
 template <>
 copy_on_write_string
-copy_on_write_lazy_lang_list<LangExprCase::Pair>::calculatedDescription() const;
+copy_on_write_lazy_lang_list<ExprCase::Pair>::calculatedDescription() const;
 
-class LangExpr : public LangExprBase {
+class Expr : public ExprBase {
 public:
     enum class Type : int {
         LiteralValue,
@@ -253,24 +257,28 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang<LangLiteralValue> literalValue;
-    copy_on_write_lazy_lang<LangBindParameter> bindParamter;
-    copy_on_write_lazy_lang<LangExprColumn> exprColumn;
-    copy_on_write_lazy_lang<LangExprUnaryOperation> exprUnaryOperator;
-    copy_on_write_lazy_lang<LangExprBinaryOperation> exprBinaryOperator;
-    copy_on_write_lazy_lang<LangExprFunction> exprFunction;
-    copy_on_write_lazy_lang<LangExprList> exprList;
-    copy_on_write_lazy_lang<LangExprCast> exprCast;
-    copy_on_write_lazy_lang<LangExprCollate> exprCollate;
-    copy_on_write_lazy_lang<LangExprPattern> exprPattern;
-    copy_on_write_lazy_lang<LangExprNull> exprNull;
-    copy_on_write_lazy_lang<LangExprBetween> exprBetween;
-    copy_on_write_lazy_lang<LangExprIn> exprIn;
-    copy_on_write_lazy_lang<LangExprExists> exprExists;
-    copy_on_write_lazy_lang<LangExprCase> exprCase;
-    copy_on_write_lazy_lang<LangRaiseFunction> raiseFunction;
+    copy_on_write_lazy_lang<LiteralValue> literalValue;
+    copy_on_write_lazy_lang<BindParameter> bindParamter;
+    copy_on_write_lazy_lang<ExprColumn> exprColumn;
+    copy_on_write_lazy_lang<ExprUnaryOperation> exprUnaryOperator;
+    copy_on_write_lazy_lang<ExprBinaryOperation> exprBinaryOperator;
+    copy_on_write_lazy_lang<ExprFunction> exprFunction;
+    copy_on_write_lazy_lang<ExprList> exprList;
+    copy_on_write_lazy_lang<ExprCast> exprCast;
+    copy_on_write_lazy_lang<ExprCollate> exprCollate;
+    copy_on_write_lazy_lang<ExprPattern> exprPattern;
+    copy_on_write_lazy_lang<ExprNull> exprNull;
+    copy_on_write_lazy_lang<ExprBetween> exprBetween;
+    copy_on_write_lazy_lang<ExprIn> exprIn;
+    copy_on_write_lazy_lang<ExprExists> exprExists;
+    copy_on_write_lazy_lang<ExprCase> exprCase;
+    copy_on_write_lazy_lang<RaiseFunction> raiseFunction;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangExpr_hpp */

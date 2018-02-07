@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class IndexedColumn : public DescribableWithLang<LangIndexedColumn> {
+namespace WCDB {
+
+class IndexedColumn : public DescribableWithLang<lang::IndexedColumn> {
 public:
     IndexedColumn(const Expression& expression);
     IndexedColumn(const std::string& columnName);
@@ -32,5 +34,7 @@ public:
     
     IndexedColumn& withOrder(const Order& order = Order::NotSet);
 };
+
+} // namespace WCDB
 
 #endif /* IndexedColumn_hpp */

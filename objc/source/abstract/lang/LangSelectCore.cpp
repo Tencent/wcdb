@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangSelectCore::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string SelectCore::SQL() const
 {
     std::string description;
     switch (switcher) {
@@ -60,3 +64,8 @@ copy_on_write_string LangSelectCore::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

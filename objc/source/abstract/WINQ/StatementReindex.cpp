@@ -20,32 +20,34 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementReindex& StatementReindex::reindex()
 {
-    LangReindexSTMT& lang = getMutableLang();
-    lang.switcher = LangReindexSTMT::Switch::NotSet;
+    lang::ReindexSTMT& lang = getMutableLang();
+    lang.switcher = lang::ReindexSTMT::Switch::NotSet;
     return *this;
 }
 
 StatementReindex& StatementReindex::reindexCollation(const std::string& collationName)
 {
-    LangReindexSTMT& lang = getMutableLang();
-    lang.switcher = LangReindexSTMT::Switch::Collation;
+    lang::ReindexSTMT& lang = getMutableLang();
+    lang.switcher = lang::ReindexSTMT::Switch::Collation;
     lang.collationName.assign(collationName);
     return *this;
 }
 
 StatementReindex& StatementReindex::reindex(const std::string& tableOrIndexName)
 {
-    LangReindexSTMT& lang = getMutableLang();
-    lang.switcher = LangReindexSTMT::Switch::TableOrIndex;
+    lang::ReindexSTMT& lang = getMutableLang();
+    lang.switcher = lang::ReindexSTMT::Switch::TableOrIndex;
     lang.tableOrIndexName.assign(tableOrIndexName);
     return *this;
 }
 
 StatementReindex& StatementReindex::withSchema(const std::string& schemaName)
 {
-    LangReindexSTMT& lang = getMutableLang();
+    lang::ReindexSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -54,3 +56,5 @@ Statement::Type StatementReindex::getType() const
 {
     return Statement::Type::Reindex;
 }
+
+} // namespace WCDB

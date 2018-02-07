@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangLiteralValue : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class LiteralValue : public Lang {
 public:
     enum class Type : int {
         NumbericInteger,
@@ -50,5 +54,9 @@ protected:
     static std::string
     stringByAntiInjecting(const std::vector<unsigned char> &origin);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangLiteralValue_hpp */

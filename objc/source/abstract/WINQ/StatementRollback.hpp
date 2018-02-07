@@ -24,12 +24,16 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementRollback : public DescribableWithLang<LangRollbackSTMT>,
+namespace WCDB {
+
+class StatementRollback : public DescribableWithLang<lang::RollbackSTMT>,
                           public Statement {
 public:
                               StatementRollback& rollback();
                               StatementRollback& rollbackTo(const std::string& savepointName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementRollback_hpp */

@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangJoinClause::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string JoinClause::SQL() const
 {
     std::string description;
     assert(!tableOrSubquery.empty());
@@ -31,7 +35,7 @@ copy_on_write_string LangJoinClause::SQL() const
     return description;
 }
 
-copy_on_write_string LangJoinClause::Operand::SQL() const
+copy_on_write_string JoinClause::Operand::SQL() const
 {
     assert(!joinOperator.empty());
     assert(!tableOrSubquery.empty());
@@ -43,7 +47,7 @@ copy_on_write_string LangJoinClause::Operand::SQL() const
 
 template <>
 copy_on_write_string
-copy_on_write_lazy_lang_list<LangJoinClause::Operand>::calculatedDescription()
+copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription()
     const
 {
     std::string description;
@@ -59,3 +63,8 @@ copy_on_write_lazy_lang_list<LangJoinClause::Operand>::calculatedDescription()
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

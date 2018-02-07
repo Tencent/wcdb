@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangIndexedColumn::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string IndexedColumn::SQL() const
 {
     std::string description;
     switch (switcher) {
@@ -36,9 +40,14 @@ copy_on_write_string LangIndexedColumn::SQL() const
     if (!collationName.empty()) {
         description.append(" COLLATE " + collationName.get());
     }
-    if (order != LangOrder::NotSet) {
+    if (order != Order::NotSet) {
         description.append(" ");
         description.append(LangOrderName(order));
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

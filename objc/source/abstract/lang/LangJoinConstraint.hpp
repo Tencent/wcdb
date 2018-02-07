@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangJoinConstraint : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class JoinConstraint : public Lang {
 public:
     enum class Type : int {
         NotSet,
@@ -31,10 +35,14 @@ public:
         Using,
     };
     Type type;
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_lazy_string_list columnNames;
 
     virtual copy_on_write_string SQL() const;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangJoinConstraint_hpp */

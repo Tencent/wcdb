@@ -23,8 +23,12 @@
 
 #include <WCDB/lang_common.h>
 
-// What's the true syntax of LangModuleArgument?
-class LangModuleArgument : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+// What's the true syntax of ModuleArgument?
+class ModuleArgument : public Lang {
 public:
     enum class Type : int {
         ColumnDef,
@@ -32,12 +36,16 @@ public:
         LeftRight,
     };
     Type type;
-    copy_on_write_lazy_lang<LangColumnDef> columnDef;
-    copy_on_write_lazy_lang<LangTableConstraint> tableConstraint;
+    copy_on_write_lazy_lang<ColumnDef> columnDef;
+    copy_on_write_lazy_lang<TableConstraint> tableConstraint;
     copy_on_write_string left;
     copy_on_write_string right;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangModuleArgument_hpp */

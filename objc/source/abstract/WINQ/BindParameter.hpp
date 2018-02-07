@@ -23,8 +23,10 @@
 
 #include <WCDB/Describable.hpp>
 
+namespace WCDB {
+
 // http://www.sqlite.org/lang_expr.html
-class BindParameter : public DescribableWithLang<LangBindParameter> {
+class BindParameter : public DescribableWithLang<lang::BindParameter> {
 public:
     static BindParameter defaultBindParameter;
 
@@ -32,5 +34,7 @@ public:
     BindParameter(int n);                   // ?NNN
     BindParameter(const std::string &name); // :AAAA
 };
+
+} // namespace WCDB
 
 #endif /* BindParameter_hpp */

@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangJoinConstraint::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string JoinConstraint::SQL() const
 {
     std::string description;
     switch (type) {
@@ -38,3 +42,8 @@ copy_on_write_string LangJoinConstraint::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

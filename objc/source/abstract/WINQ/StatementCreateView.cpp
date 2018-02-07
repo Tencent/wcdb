@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementCreateView& StatementCreateView::createView(const std::string& viewName, bool ifNotExists, bool temp)
 {
-    LangCreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT& lang = getMutableLang();
     lang.viewName.assign(viewName);
     lang.ifNotExists = ifNotExists;
     lang.temp = temp;
@@ -31,21 +33,21 @@ StatementCreateView& StatementCreateView::createView(const std::string& viewName
 
 StatementCreateView& StatementCreateView::withSchema(const std::string& schemaName)
 {
-    LangCreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementCreateView& StatementCreateView::on(const std::string& columnName)
 {
-    LangCreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT& lang = getMutableLang();
     lang.columnNames.append(columnName);
     return *this;
 }
 
 StatementCreateView& StatementCreateView::on(const std::list<std::string>& columnNames)
 {
-    LangCreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT& lang = getMutableLang();
     for (const std::string& columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
@@ -54,7 +56,7 @@ StatementCreateView& StatementCreateView::on(const std::list<std::string>& colum
 
 StatementCreateView& StatementCreateView::as(const StatementSelect& selectSTMT)
 {
-    LangCreateViewSTMT& lang = getMutableLang();
+    lang::CreateViewSTMT& lang = getMutableLang();
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }
@@ -63,3 +65,5 @@ Statement::Type StatementCreateView::getType() const
 {
     return Statement::Type::CreateView;
 }
+
+} // namespace WCDB

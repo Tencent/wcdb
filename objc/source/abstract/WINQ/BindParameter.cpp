@@ -20,24 +20,28 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 BindParameter BindParameter::defaultBindParameter;
 
 BindParameter::BindParameter()
 {
-    LangBindParameter &lang = getMutableLang();
-    lang.type = LangBindParameter::Type::QuestionMark;
+    lang::BindParameter &lang = getMutableLang();
+    lang.type = lang::BindParameter::Type::QuestionMark;
 }
 
 BindParameter::BindParameter(int n)
 {
-    LangBindParameter &lang = getMutableLang();
-    lang.type = LangBindParameter::Type::QuestionMarkWithNumber;
+    lang::BindParameter &lang = getMutableLang();
+    lang.type = lang::BindParameter::Type::QuestionMarkWithNumber;
     lang.n = n;
 }
 
 BindParameter::BindParameter(const std::string &name)
 {
-    LangBindParameter &lang = getMutableLang();
-    lang.type = LangBindParameter::Type::Colon;
+    lang::BindParameter &lang = getMutableLang();
+    lang.type = lang::BindParameter::Type::Colon;
     lang.name.assign(name);
 }
+
+} // namespace WCDB

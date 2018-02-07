@@ -23,11 +23,19 @@
 
 #include <WCDB/lang_common.h>
 
-class LangVacuumSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class VacuumSTMT : public Lang {
 public:
     copy_on_write_string schemaName;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangVacuumSTMT_hpp */

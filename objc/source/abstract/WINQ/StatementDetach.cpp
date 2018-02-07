@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementDetach& StatementDetach::detach(const std::string& schemaName)
 {
-    LangDetachSTMT& lang = getMutableLang();
+    lang::DetachSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -31,3 +33,5 @@ Statement::Type StatementDetach::getType() const
 {
     return Statement::Type::Detach;
 }
+
+} // namespace WCDB

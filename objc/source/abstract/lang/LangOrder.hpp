@@ -21,22 +21,30 @@
 #ifndef LangOrder_hpp
 #define LangOrder_hpp
 
-enum class LangOrder : int {
+namespace WCDB {
+
+namespace lang {
+
+enum class Order : int {
     NotSet,
     ASC,
     DESC,
 };
 
-constexpr const char *LangOrderName(const LangOrder &order)
+constexpr const char *LangOrderName(const Order &order)
 {
     switch (order) {
-        case LangOrder::ASC:
+        case Order::ASC:
             return "ASC";
-        case LangOrder::DESC:
+        case Order::DESC:
             return "DESC";
         default:
             return "";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangOrder_hpp */

@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangVacuumSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string VacuumSTMT::SQL() const
 {
     std::string description("VACUUM");
     if (!schemaName.empty()) {
@@ -28,3 +32,8 @@ copy_on_write_string LangVacuumSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

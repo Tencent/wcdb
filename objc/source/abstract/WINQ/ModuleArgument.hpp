@@ -23,11 +23,15 @@
 
 #include <WCDB/Describable.hpp>
 
-class ModuleArgument : public DescribableWithLang<LangModuleArgument> {
+namespace WCDB {
+
+class ModuleArgument : public DescribableWithLang<lang::ModuleArgument> {
 public:
     ModuleArgument(const std::string& left, const std::string& right);
     ModuleArgument(const ColumnDef& columnDef);
     ModuleArgument(const TableConstraint& tableConstraint);
 };
+
+} // namespace WCDB
 
 #endif /* ModuleArgument_hpp */

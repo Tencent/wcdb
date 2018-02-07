@@ -23,10 +23,14 @@
 
 #include <WCDB/Describable.hpp>
 
-class StatementCommit : public DescribableWithLang<LangCommitSTMT>, public Statement {
+namespace WCDB {
+
+class StatementCommit : public DescribableWithLang<lang::CommitSTMT>, public Statement {
 public:
     StatementCommit& commit();
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementCommit_hpp */

@@ -20,24 +20,28 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 ModuleArgument::ModuleArgument(const std::string& left, const std::string& right)
 {
-    LangModuleArgument& lang = getMutableLang();
-    lang.type = LangModuleArgument::Type::LeftRight;
+    lang::ModuleArgument& lang = getMutableLang();
+    lang.type = lang::ModuleArgument::Type::LeftRight;
     lang.left.assign(left);
     lang.right.assign(right);
 }
 
 ModuleArgument::ModuleArgument(const ColumnDef& columnDef)
 {
-    LangModuleArgument& lang = getMutableLang();
-    lang.type = LangModuleArgument::Type::ColumnDef;
+    lang::ModuleArgument& lang = getMutableLang();
+    lang.type = lang::ModuleArgument::Type::ColumnDef;
     lang.columnDef.assign(columnDef.getLang());
 }
 
 ModuleArgument::ModuleArgument(const TableConstraint& tableConstraint)
 {
-    LangModuleArgument& lang = getMutableLang();
-    lang.type = LangModuleArgument::Type::TableConstraint;
+    lang::ModuleArgument& lang = getMutableLang();
+    lang.type = lang::ModuleArgument::Type::TableConstraint;
     lang.tableConstraint.assign(tableConstraint.getLang());
 }
+
+} // namespace WCDB

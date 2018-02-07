@@ -20,6 +20,8 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 Statement::Type StatementAlterTable::getType() const
 {
     return Statement::Type::AlterTable;
@@ -29,7 +31,7 @@ StatementAlterTable &
 StatementAlterTable::alterTable(const std::string &schemaName,
                                 const std::string &tableName)
 {
-    LangAlterTableSTMT &lang = getMutableLang();
+    lang::AlterTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     lang.tableName.assign(tableName);
     return *this;
@@ -38,7 +40,7 @@ StatementAlterTable::alterTable(const std::string &schemaName,
 StatementAlterTable &
 StatementAlterTable::alterTable(const std::string &tableName)
 {
-    LangAlterTableSTMT &lang = getMutableLang();
+    lang::AlterTableSTMT &lang = getMutableLang();
     lang.schemaName.clear();
     lang.tableName.assign(tableName);
     return *this;
@@ -47,16 +49,18 @@ StatementAlterTable::alterTable(const std::string &tableName)
 StatementAlterTable &
 StatementAlterTable::renameTo(const std::string &newTableName)
 {
-    LangAlterTableSTMT &lang = getMutableLang();
-    lang.switcher = LangAlterTableSTMT::Switch::Rename;
+    lang::AlterTableSTMT &lang = getMutableLang();
+    lang.switcher = lang::AlterTableSTMT::Switch::Rename;
     lang.newTableName.assign(newTableName);
     return *this;
 }
 
 StatementAlterTable &StatementAlterTable::addColumn(const ColumnDef &columnDef)
 {
-    LangAlterTableSTMT &lang = getMutableLang();
-    lang.switcher = LangAlterTableSTMT::Switch::AddColumn;
+    lang::AlterTableSTMT &lang = getMutableLang();
+    lang.switcher = lang::AlterTableSTMT::Switch::AddColumn;
     lang.columnDef.assign(columnDef.getLang());
     return *this;
 }
+
+} // namespace WCDB

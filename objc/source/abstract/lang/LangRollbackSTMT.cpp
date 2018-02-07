@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangRollbackSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string RollbackSTMT::SQL() const
 {
     std::string description("ROLLBACK");
     if (!savepointName.empty()) {
@@ -28,3 +32,8 @@ copy_on_write_string LangRollbackSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

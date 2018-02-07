@@ -18,13 +18,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/column.hpp>
-#include <WCDB/column_def.hpp>
-#include <WCDB/column_index.hpp>
-#include <WCDB/expression.hpp>
-#include <WCDB/foreign_key.hpp>
-#include <WCDB/module_argument.hpp>
-#include <WCDB/table_constraint.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {

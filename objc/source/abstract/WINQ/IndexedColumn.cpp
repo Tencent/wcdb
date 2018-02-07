@@ -20,30 +20,34 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 IndexedColumn::IndexedColumn(const Expression& expression)
 {
-    LangIndexedColumn& lang = getMutableLang();
-    lang.switcher = LangIndexedColumn::Switch::Expr;
+    lang::IndexedColumn& lang = getMutableLang();
+    lang.switcher = lang::IndexedColumn::Switch::Expr;
     lang.expr.assign(expression.getLang());    
 }
 
 IndexedColumn::IndexedColumn(const std::string& columnName)
 {
-    LangIndexedColumn& lang = getMutableLang();
-    lang.switcher = LangIndexedColumn::Switch::ColumnName;
+    lang::IndexedColumn& lang = getMutableLang();
+    lang.switcher = lang::IndexedColumn::Switch::ColumnName;
     lang.columnName.assign(columnName);
 }
 
 IndexedColumn& IndexedColumn::withCollate(const std::string& collationName)
 {
-    LangIndexedColumn& lang = getMutableLang();
+    lang::IndexedColumn& lang = getMutableLang();
     lang.collationName.assign(collationName);
     return *this;
 }
 
 IndexedColumn& IndexedColumn::withOrder(const Order& order)
 {
-    LangIndexedColumn& lang = getMutableLang();
+    lang::IndexedColumn& lang = getMutableLang();
     lang.order = order;
     return *this;
 }
+
+} // namespace WCDB

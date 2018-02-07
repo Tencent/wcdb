@@ -20,92 +20,94 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementUpdate& StatementUpdate::with(const WithClause& withClause)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.withClause.assign(withClause.getLang());
     return *this;
 }
 
 StatementUpdate& StatementUpdate::update(const QualifiedTableName& qualifiedTableName)
 {
-    update(qualifiedTableName, LangUpdateSTMT::Type::Update);
+    update(qualifiedTableName, lang::UpdateSTMT::Type::Update);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::updateOrRollback(const QualifiedTableName& qualifiedTableName)
 {
-    update(qualifiedTableName, LangUpdateSTMT::Type::UpdateOrRollback);
+    update(qualifiedTableName, lang::UpdateSTMT::Type::UpdateOrRollback);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::updateOrAbort(const QualifiedTableName& qualifiedTableName)
 {
-    update(qualifiedTableName, LangUpdateSTMT::Type::UpdateOrAbort);
+    update(qualifiedTableName, lang::UpdateSTMT::Type::UpdateOrAbort);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::updateOrReplace(const QualifiedTableName& qualifiedTableName)
 {
-    update(qualifiedTableName, LangUpdateSTMT::Type::UpdateOrReplace);
+    update(qualifiedTableName, lang::UpdateSTMT::Type::UpdateOrReplace);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::updateOrFail(const QualifiedTableName& qualifiedTableName)
 {
-    update(qualifiedTableName, LangUpdateSTMT::Type::UpdateOrFail);
+    update(qualifiedTableName, lang::UpdateSTMT::Type::UpdateOrFail);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::updateOrIgnore(const QualifiedTableName& qualifiedTableName)
 {
-    update(qualifiedTableName, LangUpdateSTMT::Type::UpdateOrIgnore);
+    update(qualifiedTableName, lang::UpdateSTMT::Type::UpdateOrIgnore);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::set(const std::string& columnName, const Expression& expression)
 {    
-    copy_on_write_lazy_lang<LangUpdateSTMT::KeyValue> cowKeyValue;
-    LangUpdateSTMT::KeyValue& keyValue = cowKeyValue.get_or_copy();
+    lang::copy_on_write_lazy_lang<lang::UpdateSTMT::KeyValue> cowKeyValue;
+    lang::UpdateSTMT::KeyValue& keyValue = cowKeyValue.get_or_copy();
     keyValue.keys.append(columnName);
     keyValue.value.assign(expression.getLang());
     
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.keyValues.append(cowKeyValue);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::set(const std::list<std::string>& columnNames, const Expression& expression)
 {
-    copy_on_write_lazy_lang<LangUpdateSTMT::KeyValue> cowKeyValue;
-    LangUpdateSTMT::KeyValue& keyValue = cowKeyValue.get_or_copy();
+    lang::copy_on_write_lazy_lang<lang::UpdateSTMT::KeyValue> cowKeyValue;
+    lang::UpdateSTMT::KeyValue& keyValue = cowKeyValue.get_or_copy();
     for (const std::string& columnName : columnNames) {
         keyValue.keys.append(columnName);
     }
     keyValue.value.assign(expression.getLang());
     
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.keyValues.append(cowKeyValue);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::where(const Expression& condition)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.condition.assign(condition.getLang());
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orderBy(const OrderingTerm& orderingTerm)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.orderingTerm.append(orderingTerm.getLang());
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orderBy(const std::list<OrderingTerm>& orderingTerms)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     for (const OrderingTerm& orderingTerm : orderingTerms) {
         lang.orderingTerm.append(orderingTerm.getLang());
     }
@@ -114,7 +116,7 @@ StatementUpdate& StatementUpdate::orderBy(const std::list<OrderingTerm>& orderin
 
 StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression& to)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.offset = false;
     lang.limit.assign(from.getLang());
     lang.limitParameter.assign(to.getLang());
@@ -123,7 +125,7 @@ StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression
 
 StatementUpdate& StatementUpdate::limit(const Expression& limit)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.offset = true;
     lang.limit.assign(limit.getLang());
     return *this;
@@ -131,7 +133,7 @@ StatementUpdate& StatementUpdate::limit(const Expression& limit)
 
 StatementUpdate& StatementUpdate::offset(const Expression& offset)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.limitParameter.assign(offset.getLang());
     return *this;
 }
@@ -141,9 +143,11 @@ Statement::Type StatementUpdate::getType() const
     return Statement::Type::Update;
 }
 
-void StatementUpdate::update(const QualifiedTableName& qualifiedTableName, const LangUpdateSTMT::Type& type)
+void StatementUpdate::update(const QualifiedTableName& qualifiedTableName, const lang::UpdateSTMT::Type& type)
 {
-    LangUpdateSTMT& lang = getMutableLang();
+    lang::UpdateSTMT& lang = getMutableLang();
     lang.qualifiedTableName.assign(qualifiedTableName.getLang());
     lang.type = type;
 }
+
+} // namespace WCDB

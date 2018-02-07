@@ -20,15 +20,17 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 CTETableName::CTETableName(const std::string &tableName)
 {
-    LangCTETableName &lang = getMutableLang();
+    lang::CTETableName &lang = getMutableLang();
     lang.tableName.assign(tableName);
 }
 
 CTETableName &CTETableName::byAddingColumnName(const std::string &columnName)
 {
-    LangCTETableName &lang = getMutableLang();
+    lang::CTETableName &lang = getMutableLang();
     lang.columnNames.append(columnName);
     return *this;
 }
@@ -36,9 +38,11 @@ CTETableName &CTETableName::byAddingColumnName(const std::string &columnName)
 CTETableName &
 CTETableName::byAddingColumnNames(const std::list<std::string> &columnNames)
 {
-    LangCTETableName &lang = getMutableLang();
+    lang::CTETableName &lang = getMutableLang();
     for (const std::string &columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
     return *this;
 }
+
+} // namespace WCDB

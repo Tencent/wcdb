@@ -20,6 +20,8 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 const Pragma Pragma::ApplicationId("application_id");
 const Pragma Pragma::AutoVacuum("auto_vacuum");
 const Pragma Pragma::AutomaticIndex("automatic_index");
@@ -112,3 +114,5 @@ const std::string &Pragma::getDescription() const
     }
     return Describable::s_empty;
 }
+
+} // namespace WCDB

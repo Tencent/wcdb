@@ -19,3 +19,8 @@
  */
 
 #include <WCDB/WINQ.h>
+
+namespace WCDB {
+
+
+} // namespace WCDB

@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangAlterTableSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string AlterTableSTMT::SQL() const
 {
     std::string description("ALTER TABLE ");
     if (!schemaName.empty()) {
@@ -38,3 +42,8 @@ copy_on_write_string LangAlterTableSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

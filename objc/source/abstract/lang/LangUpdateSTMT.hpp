@@ -23,9 +23,13 @@
 
 #include <WCDB/lang_common.h>
 
-class LangUpdateSTMT : public CRUDLang {
+namespace WCDB {
+
+namespace lang {
+
+class UpdateSTMT : public CRUDLang {
 public:
-    copy_on_write_lazy_lang<LangWithClause> withClause;
+    copy_on_write_lazy_lang<WithClause> withClause;
     enum class Type : int {
         Update,
         UpdateOrRollback,
@@ -36,27 +40,31 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang<LangQualifiedTableName> qualifiedTableName;
+    copy_on_write_lazy_lang<QualifiedTableName> qualifiedTableName;
 
     class KeyValue : public Lang {
     public:
         copy_on_write_lazy_string_list keys;
-        copy_on_write_lazy_lang<LangExpr> value;
+        copy_on_write_lazy_lang<Expr> value;
 
         virtual copy_on_write_string SQL() const override;
     };
     copy_on_write_lazy_lang_list<KeyValue> keyValues;
 
-    copy_on_write_lazy_lang<LangExpr> condition;
-    copy_on_write_lazy_lang_list<LangOrderingTerm> orderingTerm;
-    copy_on_write_lazy_lang<LangExpr> limit;
+    copy_on_write_lazy_lang<Expr> condition;
+    copy_on_write_lazy_lang_list<OrderingTerm> orderingTerm;
+    copy_on_write_lazy_lang<Expr> limit;
     bool offset;
-    copy_on_write_lazy_lang<LangExpr> limitParameter;
+    copy_on_write_lazy_lang<Expr> limitParameter;
 
     virtual copy_on_write_string SQL() const override;
 
 protected:
     constexpr static const char *TypeName(const Type &type);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangUpdateSTMT_hpp */

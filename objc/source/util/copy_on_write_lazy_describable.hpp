@@ -21,8 +21,8 @@
 #ifndef copy_on_write_lazy_describable_hpp
 #define copy_on_write_lazy_describable_hpp
 
-#include "copy_on_write.hpp"
-#include "copy_on_write_string.hpp"
+#include <WCDB/copy_on_write.hpp>
+#include <WCDB/copy_on_write_string.hpp>
 
 template <typename T>
 class copy_on_write_lazy_describable : public copy_on_write<T> {

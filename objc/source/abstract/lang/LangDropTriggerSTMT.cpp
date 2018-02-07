@@ -20,7 +20,16 @@
 
 #include <WCDB/lang.h>
 
-inline const char *LangDropTriggerSTMT::getInternalName() const
+namespace WCDB {
+
+namespace lang {
+
+inline const char *DropTriggerSTMT::getInternalName() const
 {
     return "TRIGGER";
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

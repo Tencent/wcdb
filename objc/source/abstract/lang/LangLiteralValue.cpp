@@ -21,7 +21,11 @@
 #include <WCDB/lang.h>
 #include <WCDB/utility.hpp>
 
-copy_on_write_string LangLiteralValue::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string LiteralValue::SQL() const
 {
     std::string description;
     switch (type) {
@@ -33,11 +37,11 @@ copy_on_write_string LangLiteralValue::SQL() const
             break;
         case Type::BLOB:
             description.append(
-                LangLiteralValue::stringByAntiInjecting(dataValue.get()));
+                LiteralValue::stringByAntiInjecting(dataValue.get()));
             break;
         case Type::String:
             description.append(
-                LangLiteralValue::stringByAntiInjecting(stringValue.get()));
+                LiteralValue::stringByAntiInjecting(stringValue.get()));
             break;
         case Type::Null:
             description.append("NULL");
@@ -55,14 +59,19 @@ copy_on_write_string LangLiteralValue::SQL() const
     return description;
 }
 
-std::string LangLiteralValue::stringByAntiInjecting(const std::string &origin)
+std::string LiteralValue::stringByAntiInjecting(const std::string &origin)
 {
     return "'" + stringByReplacingOccurrencesOfString(origin, "'", "''") + "'";
 }
 
-std::string LangLiteralValue::stringByAntiInjecting(
+std::string LiteralValue::stringByAntiInjecting(
     const std::vector<unsigned char> &origin)
 {
     std::string str(origin.begin(), origin.end());
     return "'" + stringByReplacingOccurrencesOfString(str, "'", "''") + "'";
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

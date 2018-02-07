@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementCreateIndex : public DescribableWithLang<LangCreateIndexSTMT>,
+namespace WCDB {
+
+class StatementCreateIndex : public DescribableWithLang<lang::CreateIndexSTMT>,
                              public Statement {
 public:
      StatementCreateIndex& createIndex(const std::string& indexName, bool ifNotExists = true, bool unique = false);
@@ -34,5 +36,7 @@ public:
                                  StatementCreateIndex& where(const Expression& condition);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementCreateIndex_hpp */

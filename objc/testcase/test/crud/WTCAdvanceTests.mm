@@ -261,7 +261,7 @@
                    withOrder:-2];
     __block bool tested = false;
     [self.database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
-      std::shared_ptr<WCDB::StatementHandle> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete));
+      std::shared_ptr<WCDB::HandleStatement> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete));
       XCTAssertNotEqual(handleStatement, nullptr);
       handleStatement->step();
       XCTAssertTrue(handleStatement->isOK());
@@ -291,7 +291,7 @@
                    withOrder:0];
     __block bool tested = false;
     [self.database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
-      std::shared_ptr<WCDB::StatementHandle> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete));
+      std::shared_ptr<WCDB::HandleStatement> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete));
       XCTAssertNotEqual(handleStatement, nullptr);
       handleStatement->step();
       XCTAssertTrue(handleStatement->isOK());
@@ -323,7 +323,7 @@
 
     __block bool testBeforeSynchronousEnable = false;
     [self.database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
-      std::shared_ptr<WCDB::StatementHandle> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::Synchronous));
+      std::shared_ptr<WCDB::HandleStatement> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::Synchronous));
       XCTAssertNotEqual(handleStatement, nullptr);
       handleStatement->step();
       XCTAssertTrue(handleStatement->isOK());
@@ -344,7 +344,7 @@
 
     __block bool testAfterSynchronousEnable = false;
     [self.database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
-      std::shared_ptr<WCDB::StatementHandle> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::Synchronous));
+      std::shared_ptr<WCDB::HandleStatement> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::Synchronous));
       XCTAssertNotEqual(handleStatement, nullptr);
       handleStatement->step();
       XCTAssertTrue(handleStatement->isOK());
@@ -365,7 +365,7 @@
 
     __block bool testAfterSynchronousDisable = false;
     [self.database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
-      std::shared_ptr<WCDB::StatementHandle> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::Synchronous));
+      std::shared_ptr<WCDB::HandleStatement> handleStatement = handle->prepare(WCDB::StatementPragma().pragma(WCDB::Pragma::Synchronous));
       XCTAssertNotEqual(handleStatement, nullptr);
       handleStatement->step();
       XCTAssertTrue(handleStatement->isOK());

@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangCreateViewSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class CreateViewSTMT : public Lang {
 public:
     bool temp;
     bool ifNotExists;
@@ -31,9 +35,13 @@ public:
     copy_on_write_string viewName;
     copy_on_write_lazy_string_list columnNames;
 
-    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangCreateViewSTMT_hpp */

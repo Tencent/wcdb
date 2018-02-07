@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCTETableName::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CTETableName::SQL() const
 {
     std::string description;
     assert(!tableName.empty());
@@ -30,3 +34,8 @@ copy_on_write_string LangCTETableName::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

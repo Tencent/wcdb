@@ -28,10 +28,10 @@
 
 @implementation WCTCoreStatement
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)statementHandle
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)handleStatement
 {
     if (self = [super initWithCore:core]) {
-        _statementHandle = statementHandle;
+        _statementHandle = handleStatement;
     }
     return self;
 }

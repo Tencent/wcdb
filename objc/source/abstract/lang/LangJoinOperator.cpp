@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangJoinOperator::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string JoinOperator::SQL() const
 {
     std::string description;
     if (join) {
@@ -30,7 +34,7 @@ copy_on_write_string LangJoinOperator::SQL() const
             description.append("NATURAL ");
         }
         if (type != Type::NotSet) {
-            description.append(LangJoinOperator::JoinTypeName(type));
+            description.append(JoinOperator::JoinTypeName(type));
             description.append(" ");
         }
         description.append("JOIN");
@@ -38,7 +42,7 @@ copy_on_write_string LangJoinOperator::SQL() const
     return description;
 }
 
-constexpr const char *LangJoinOperator::JoinTypeName(const Type &type)
+constexpr const char *JoinOperator::JoinTypeName(const Type &type)
 {
     switch (type) {
         case Type::NotSet:
@@ -53,3 +57,8 @@ constexpr const char *LangJoinOperator::JoinTypeName(const Type &type)
             return "CROSS";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

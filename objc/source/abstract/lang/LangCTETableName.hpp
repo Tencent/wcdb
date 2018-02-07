@@ -23,12 +23,20 @@
 
 #include <WCDB/lang_common.h>
 
-class LangCTETableName : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class CTETableName : public Lang {
 public:
     copy_on_write_string tableName;
     copy_on_write_lazy_string_list columnNames;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangCTETableName_hpp */

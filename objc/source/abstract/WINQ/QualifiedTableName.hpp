@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class QualifiedTableName : public DescribableWithLang<LangQualifiedTableName> {
+namespace WCDB {
+
+class QualifiedTableName : public DescribableWithLang<lang::QualifiedTableName> {
 public:
     QualifiedTableName(const std::string& tableName);
     
@@ -32,5 +34,7 @@ public:
     QualifiedTableName& indexedBy(const std::string& indexName);
     QualifiedTableName& notIndexed();
 };
+
+} // namespace WCDB
 
 #endif /* QualifiedTableName_hpp */

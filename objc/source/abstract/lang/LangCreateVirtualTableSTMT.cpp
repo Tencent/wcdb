@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCreateVirtualTableSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CreateVirtualTableSTMT::SQL() const
 {
     std::string description("CREATE VIRTUAL TABLE ");
     if (ifNotExists) {
@@ -39,3 +43,8 @@ copy_on_write_string LangCreateVirtualTableSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

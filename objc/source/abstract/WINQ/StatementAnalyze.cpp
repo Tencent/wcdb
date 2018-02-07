@@ -20,6 +20,8 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 Statement::Type StatementAnalyze::getType() const
 {
     return Statement::Type::Analyze;
@@ -27,7 +29,7 @@ Statement::Type StatementAnalyze::getType() const
 
 StatementAnalyze &StatementAnalyze::analyzeSchema(const std::string &schemaName)
 {
-    LangAnalyzeSTMT &lang = getMutableLang();
+    lang::AnalyzeSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     lang.tableOrIndexName.clear();
     return *this;
@@ -36,7 +38,7 @@ StatementAnalyze &StatementAnalyze::analyzeSchema(const std::string &schemaName)
 StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaName,
                                             const std::string &tableOrIndexName)
 {
-    LangAnalyzeSTMT &lang = getMutableLang();
+    lang::AnalyzeSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     lang.tableOrIndexName.assign(tableOrIndexName);
     return *this;
@@ -44,8 +46,10 @@ StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaName,
 
 StatementAnalyze &StatementAnalyze::analyze(const std::string &tableOrIndexName)
 {
-    LangAnalyzeSTMT &lang = getMutableLang();
+    lang::AnalyzeSTMT &lang = getMutableLang();
     lang.schemaName.clear();
     lang.tableOrIndexName.assign(tableOrIndexName);
     return *this;
 }
+
+} // namespace WCDB

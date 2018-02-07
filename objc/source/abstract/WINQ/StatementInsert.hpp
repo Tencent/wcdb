@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementInsert : public DescribableWithLang<LangInsertSTMT>,
+namespace WCDB {
+
+class StatementInsert : public DescribableWithLang<lang::InsertSTMT>,
                         public CRUDStatement {
 public:
                             StatementInsert& with(const WithClause& withClause);
@@ -44,7 +46,9 @@ public:
                             
     virtual Type getType() const override;
                         protected:
-                            void insertInto(const std::string& tableName, const LangInsertSTMT::Type& type);
+                            void insertInto(const std::string& tableName, const lang::InsertSTMT::Type& type);
 };
+
+} // namespace WCDB
 
 #endif /* StatementInsert_hpp */

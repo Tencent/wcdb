@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-constexpr const char *LangForeignKeyClause::InitiallySwitchName(
+namespace WCDB {
+
+namespace lang {
+
+constexpr const char *ForeignKeyClause::InitiallySwitchName(
     const InitiallySwitch &initiallySwitcher)
 {
     switch (initiallySwitcher) {
@@ -34,7 +38,7 @@ constexpr const char *LangForeignKeyClause::InitiallySwitchName(
 }
 
 constexpr const char *
-LangForeignKeyClause::Trigger::OperationName(const Operation &operation)
+ForeignKeyClause::Trigger::OperationName(const Operation &operation)
 {
     switch (operation) {
         case Operation::SetNull:
@@ -50,7 +54,7 @@ LangForeignKeyClause::Trigger::OperationName(const Operation &operation)
     }
 }
 
-copy_on_write_string LangForeignKeyClause::SQL() const
+copy_on_write_string ForeignKeyClause::SQL() const
 {
     std::string description("REFERENCES ");
     assert(!foreignTable.empty());
@@ -70,13 +74,13 @@ copy_on_write_string LangForeignKeyClause::SQL() const
         if (initiallySwitcher != InitiallySwitch::NotSet) {
             description.append(" ");
             description.append(
-                LangForeignKeyClause::InitiallySwitchName(initiallySwitcher));
+                ForeignKeyClause::InitiallySwitchName(initiallySwitcher));
         }
     }
     return description;
 }
 
-copy_on_write_string LangForeignKeyClause::Trigger::SQL() const
+copy_on_write_string ForeignKeyClause::Trigger::SQL() const
 {
     std::string description;
     if (match) {
@@ -93,3 +97,8 @@ copy_on_write_string LangForeignKeyClause::Trigger::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

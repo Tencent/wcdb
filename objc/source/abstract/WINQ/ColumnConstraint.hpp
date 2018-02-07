@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class ColumnConstraint : public DescribableWithLang<LangColumnConstraint> {
+namespace WCDB {
+
+    class ColumnConstraint : public DescribableWithLang<lang::ColumnConstraint> {
 public:
     ColumnConstraint();
     ColumnConstraint(const std::string &name);
@@ -51,5 +53,7 @@ public:
     ColumnConstraint &
     withForeignKeyClause(const ForeignKeyClause &foreignKeyClause);
 };
+
+} // namespace WCDB
 
 #endif /* ColumnConstraint_hpp */

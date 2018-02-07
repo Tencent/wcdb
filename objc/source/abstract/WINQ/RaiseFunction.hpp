@@ -23,11 +23,15 @@
 
 #include <WCDB/Describable.hpp>
 
-class RaiseFunction : public DescribableWithLang<LangRaiseFunction> {
+namespace WCDB {
+
+class RaiseFunction : public DescribableWithLang<lang::RaiseFunction> {
 public:
     RaiseFunction& withRollback(const std::string& errorMessage);
     RaiseFunction& withAbort(const std::string& errorMessage);
     RaiseFunction& withFail(const std::string& errorMessage);    
 };
+
+} // namespace WCDB
 
 #endif /* RaiseFunction_hpp */

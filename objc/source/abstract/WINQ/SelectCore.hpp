@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class SelectCore : public DescribableWithLang<LangSelectCore> {
+namespace WCDB {
+
+class SelectCore : public DescribableWithLang<lang::SelectCore> {
 public:
     SelectCore& distinct();
     SelectCore& select(const ResultColumn& resultColumn);
@@ -38,5 +40,7 @@ public:
     SelectCore& values(const Expression& value);
     SelectCore& values(const std::list<Expression>& values);
 };
+
+} // namespace WCDB
 
 #endif /* SelectCore_hpp */

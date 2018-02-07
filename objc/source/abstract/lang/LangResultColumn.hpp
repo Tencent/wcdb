@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangResultColumn : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class ResultColumn : public Lang {
 public:
     enum class Type : int {
         Expr,
@@ -31,12 +35,16 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_string columnAlias;
 
     copy_on_write_string tableName;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangResultColumn_hpp */

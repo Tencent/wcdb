@@ -20,7 +20,16 @@
 
 #include <WCDB/lang.h>
 
-inline const char *LangDropIndexSTMT::getInternalName() const
+namespace WCDB {
+
+namespace lang {
+
+inline const char *DropIndexSTMT::getInternalName() const
 {
     return "INDEX";
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

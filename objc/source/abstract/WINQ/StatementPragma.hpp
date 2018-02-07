@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementPragma : public DescribableWithLang<LangPragmaSTMT>,
+namespace WCDB {
+
+class StatementPragma : public DescribableWithLang<lang::PragmaSTMT>,
                         public Statement {
 public:
                             StatementPragma& withSchema(const std::string& schemaName);
@@ -32,5 +34,7 @@ public:
                             StatementPragma& pragma(const Pragma& pragmaName, const LiteralValue& pragmaValue);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementPragma_hpp */

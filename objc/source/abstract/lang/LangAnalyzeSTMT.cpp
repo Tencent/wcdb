@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangAnalyzeSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string AnalyzeSTMT::SQL() const
 {
     std::string description("ANALYZE ");
     bool appended = false;
@@ -38,3 +42,8 @@ copy_on_write_string LangAnalyzeSTMT::SQL() const
     assert(appended);
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

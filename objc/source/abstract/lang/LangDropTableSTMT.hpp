@@ -23,9 +23,17 @@
 
 #include <WCDB/LangDropInternalSTMT.hpp>
 
-class LangDropTableSTMT : public LangDropInternalSTMT {
+namespace WCDB {
+
+namespace lang {
+
+class DropTableSTMT : public DropInternalSTMT {
 protected:
     virtual const char *getInternalName() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangDropTableSTMT_hpp */

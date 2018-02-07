@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangTableOrSubqueryTable::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string TableOrSubqueryTable::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -47,7 +51,7 @@ copy_on_write_string LangTableOrSubqueryTable::SQL() const
     return description;
 }
 
-copy_on_write_string LangTableOrSubqueryTableFunction::SQL() const
+copy_on_write_string TableOrSubqueryTableFunction::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -64,13 +68,13 @@ copy_on_write_string LangTableOrSubqueryTableFunction::SQL() const
     return description;
 }
 
-copy_on_write_string LangTableOrSubqueryJoinClause::SQL() const
+copy_on_write_string TableOrSubqueryJoinClause::SQL() const
 {
     assert(!joinClause.empty());
     return "(" + joinClause.description().get() + ")";
 }
 
-copy_on_write_string LangTableOrSubquerySelect::SQL() const
+copy_on_write_string TableOrSubquerySelect::SQL() const
 {
     std::string description;
     assert(!selectSTMT.empty());
@@ -81,13 +85,13 @@ copy_on_write_string LangTableOrSubquerySelect::SQL() const
     return description;
 }
 
-copy_on_write_string LangTableOrSubqueryList::SQL() const
+copy_on_write_string TableOrSubqueryList::SQL() const
 {
     assert(!tableOrSubquerys.empty());
     return "(" + tableOrSubquerys.description().get() + ")";
 }
 
-copy_on_write_string LangTableOrSubquery::SQL() const
+copy_on_write_string TableOrSubquery::SQL() const
 {
     switch (switcher) {
         case Switch::Table:
@@ -107,3 +111,8 @@ copy_on_write_string LangTableOrSubquery::SQL() const
             return tableOrSubqueryList.description();
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

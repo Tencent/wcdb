@@ -24,8 +24,10 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
+namespace WCDB {
+
 class StatementCreateTrigger
-    : public DescribableWithLang<LangCreateTriggerSTMT>,
+    : public DescribableWithLang<lang::CreateTriggerSTMT>,
       public Statement {
 public:
           StatementCreateTrigger& createTrigger(const std::string& triggerName, bool ifNotExists = true, bool temp = false);
@@ -49,5 +51,7 @@ public:
           
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementCreateTrigger_hpp */

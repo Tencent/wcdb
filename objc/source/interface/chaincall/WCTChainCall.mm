@@ -30,7 +30,7 @@
 
 @implementation WCTChainCall
 
-- (BOOL)bindProperty:(const WCTProperty &)property ofObject:(WCTObject *)object toStatementHandle:(WCDB::RecyclableStatement &)statementHandle atIndex:(int)index withError:(WCDB::Error &)error
+- (BOOL)bindProperty:(const WCTProperty &)property ofObject:(WCTObject *)object toStatementHandle:(WCDB::RecyclableStatement &)handleStatement atIndex:(int)index withError:(WCDB::Error &)error
 {
     const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
     if (!columnBinding) {
@@ -48,27 +48,27 @@
             switch (accessor->getColumnType()) {
                 case WCTColumnTypeInteger32: {
                     WCTCppAccessor<WCTColumnTypeInteger32> *i32Accessor = (WCTCppAccessor<WCTColumnTypeInteger32> *) accessor.get();
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(i32Accessor->getValue(object),
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(i32Accessor->getValue(object),
                                                                                      index);
                 } break;
                 case WCTColumnTypeInteger64: {
                     WCTCppAccessor<WCTColumnTypeInteger64> *i64Accessor = (WCTCppAccessor<WCTColumnTypeInteger64> *) accessor.get();
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(i64Accessor->getValue(object),
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(i64Accessor->getValue(object),
                                                                                      index);
                 } break;
                 case WCTColumnTypeDouble: {
                     WCTCppAccessor<WCTColumnTypeDouble> *floatAccessor = (WCTCppAccessor<WCTColumnTypeDouble> *) accessor.get();
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(floatAccessor->getValue(object),
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(floatAccessor->getValue(object),
                                                                                   index);
                 } break;
                 case WCTColumnTypeString: {
                     WCTCppAccessor<WCTColumnTypeString> *textAccessor = (WCTCppAccessor<WCTColumnTypeString> *) accessor.get();
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(textAccessor->getValue(object),
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeString>(textAccessor->getValue(object),
                                                                                   index);
                 } break;
                 case WCTColumnTypeBinary: {
                     WCTCppAccessor<WCTColumnTypeBinary> *blobAccessor = (WCTCppAccessor<WCTColumnTypeBinary> *) accessor.get();
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(blobAccessor->getValue(object), index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(blobAccessor->getValue(object), index);
                 } break;
                 default:
                     WCDB::Error::ReportInterface(_core->getTag(),
@@ -86,29 +86,29 @@
             switch (accessor->getColumnType()) {
                 case WCTColumnTypeInteger32: {
                     NSNumber *number = objcAccessor->getObject(object);
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
                     break;
                 }
                 case WCTColumnTypeInteger64: {
                     NSNumber *number = objcAccessor->getObject(object);
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
                     break;
                 }
                 case WCTColumnTypeDouble: {
                     NSNumber *number = objcAccessor->getObject(object);
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
                     break;
                 }
                 case WCTColumnTypeString: {
                     NSString *string = objcAccessor->getObject(object);
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(string.UTF8String, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeString>(string.UTF8String, index);
                     break;
                 }
                 case WCTColumnTypeBinary: {
                     NSData *data = objcAccessor->getObject(object);
                     const unsigned char *raw = (const unsigned char *) data.bytes;
                     std::vector<unsigned char> vector(raw, raw + data.length);
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
                     break;
                 }
                 default:
@@ -135,7 +135,7 @@
     return YES;
 }
 
-- (BOOL)bindWithValue:(WCTValue *)value toStatementHandle:(WCDB::RecyclableStatement &)statementHandle atIndex:(int)index withError:(WCDB::Error &)error
+- (BOOL)bindWithValue:(WCTValue *)value toStatementHandle:(WCDB::RecyclableStatement &)handleStatement atIndex:(int)index withError:(WCDB::Error &)error
 {
     WCTValueType valueType = [value valueType];
     if (valueType == WCTValueTypeColumnCoding) {
@@ -145,17 +145,17 @@
     BOOL result = YES;
     switch (valueType) {
         case WCTValueTypeString:
-            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(((NSString *) value).UTF8String, index);
+            handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeString>(((NSString *) value).UTF8String, index);
             break;
         case WCTValueTypeNumber: {
             NSNumber *number = (NSNumber *) value;
             if (CFNumberIsFloatType((CFNumberRef) number)) {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
+                handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
             } else {
                 if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
                 } else {
-                    statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
+                    handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
                 }
             }
         } break;
@@ -163,10 +163,10 @@
             NSData *data = (NSData *) value;
             const unsigned char *raw = (const unsigned char *) data.bytes;
             std::vector<unsigned char> vector(raw, raw + data.length);
-            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
+            handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
         } break;
         case WCTValueTypeNil:
-            statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
+            handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
             break;
         default:
             WCDB::Error::ReportInterface(_core->getTag(),

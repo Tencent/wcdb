@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementRelease& StatementRelease::release(const std::string& savepointName)
 {
-    LangReleaseSTMT& lang = getMutableLang();
+    lang::ReleaseSTMT& lang = getMutableLang();
     lang.savepointName.assign(savepointName);
     return *this;
 }
@@ -31,3 +33,5 @@ Statement::Type StatementRelease::getType() const
 {
     return Statement::Type::Release;
 }
+
+} // namespace WCDB

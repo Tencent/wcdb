@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangQualifiedTableName::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string QualifiedTableName::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -41,3 +45,8 @@ copy_on_write_string LangQualifiedTableName::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

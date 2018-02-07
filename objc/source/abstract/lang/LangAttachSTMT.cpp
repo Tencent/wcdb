@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangAttachSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string AttachSTMT::SQL() const
 {
     std::string description("ATTACH ");
     assert(!expr.empty());
@@ -29,3 +33,8 @@ copy_on_write_string LangAttachSTMT::SQL() const
     description.append(" AS " + schemaName.get());
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

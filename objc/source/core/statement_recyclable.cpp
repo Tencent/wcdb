@@ -24,8 +24,8 @@ namespace WCDB {
 
 RecyclableStatement::RecyclableStatement(
     const RecyclableHandle &handle,
-    const std::shared_ptr<StatementHandle> &statementHandle)
-    : m_handle(handle), m_statementHandle(statementHandle)
+    const std::shared_ptr<HandleStatement> &handleStatement)
+    : m_handle(handle), m_statementHandle(handleStatement)
 {
 }
 

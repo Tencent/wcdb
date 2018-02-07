@@ -23,6 +23,8 @@
 
 #include <WCDB/Describable.hpp>
 
+namespace WCDB {
+
 class Pragma : public Describable
 {
 public:
@@ -111,5 +113,7 @@ protected:
     Pragma(const std::string& name);
     copy_on_write_string m_name;
 };
+
+} // namespace WCDB
 
 #endif /* Pragma_hpp */

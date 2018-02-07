@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementDropView& StatementDropView::dropView(const std::string& viewName, bool ifExists)
 {
-    LangDropViewSTMT& lang = getMutableLang();
+    lang::DropViewSTMT& lang = getMutableLang();
     lang.name.assign(viewName);
     lang.ifExists = ifExists;
     return *this;
@@ -30,7 +32,7 @@ StatementDropView& StatementDropView::dropView(const std::string& viewName, bool
 
 StatementDropView& StatementDropView::withSchema(const std::string& schemaName)
 {
-    LangDropViewSTMT& lang = getMutableLang();
+    lang::DropViewSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -39,3 +41,5 @@ Statement::Type StatementDropView::getType() const
 {
     return Statement::Type::DropView;
 }
+
+} // namespace WCDB

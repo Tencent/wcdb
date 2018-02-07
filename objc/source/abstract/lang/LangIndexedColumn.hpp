@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangIndexedColumn : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class IndexedColumn : public Lang {
 public:
     enum class Switch : int {
         ColumnName,
@@ -31,11 +35,15 @@ public:
     };
     Switch switcher;
     copy_on_write_string columnName;
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_string collationName;
-    LangOrder order;
+    Order order;
 
     virtual copy_on_write_string SQL() const;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangIndexedColumn_hpp */

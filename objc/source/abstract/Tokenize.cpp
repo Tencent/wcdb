@@ -18,14 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/error.hpp>
-#include <WCDB/fts_module.hpp>
-#include <WCDB/fts_modules.hpp>
-
+#include <WCDB/Tokenize.hpp>
 namespace WCDB {
 
 namespace FTS {
-
+    
 Modules *Modules::SharedModules()
 {
     static Modules s_modules;
@@ -52,6 +49,17 @@ std::vector<unsigned char> Modules::getAddress(const std::string &name) const
                                       address + sizeof(unsigned char *));
 }
 
-} //namespace FTS
+TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
+{
+}
 
+CursorInfoBase::CursorInfoBase(const char *input,
+                               int inputLength,
+                               TokenizerInfoBase *tokenizerInfo)
+: m_tokenizerInfo(tokenizerInfo)
+{
+}
+    
+} // namespace FTS
+    
 } //namespace WCDB

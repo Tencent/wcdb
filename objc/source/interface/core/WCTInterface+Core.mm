@@ -40,9 +40,9 @@
 - (WCTCoreStatement *)prepare:(const WCDB::Statement &)statement withError:(WCTError *__autoreleasing *)error
 {
     WCDB::Error innerError;
-    WCDB::RecyclableStatement statementHandle = _core->prepare(statement, innerError);
-    if (statementHandle) {
-        return [[WCTCoreStatement alloc] initWithCore:_core andStatementHandle:statementHandle];
+    WCDB::RecyclableStatement handleStatement = _core->prepare(statement, innerError);
+    if (handleStatement) {
+        return [[WCTCoreStatement alloc] initWithCore:_core andStatementHandle:handleStatement];
     }
     if (error) {
         *error = [WCTError errorWithWCDBError:innerError];

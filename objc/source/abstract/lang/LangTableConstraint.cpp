@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangTableConstraint::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string TableConstraint::SQL() const
 {
     std::string description;
     if (!name.empty()) {
@@ -51,3 +55,8 @@ copy_on_write_string LangTableConstraint::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

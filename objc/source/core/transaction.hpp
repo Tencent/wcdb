@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class StatementHandle;
+class HandleStatement;
 class Statement;
 
 class Transaction : public CoreBase {

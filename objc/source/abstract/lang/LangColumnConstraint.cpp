@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangColumnConstraint::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string ColumnConstraint::SQL() const
 {
     std::string description;
     if (!name.empty()) {
@@ -30,11 +34,11 @@ copy_on_write_string LangColumnConstraint::SQL() const
     switch (type) {
         case Type::PrimaryKey:
             description.append("PRIMARY KEY ");
-            if (order != LangOrder::NotSet) {
+            if (order != Order::NotSet) {
                 description.append(LangOrderName(order));
                 description.append(" ");
             }
-            if (conflictClause != LangConflictClause::NotSet) {
+            if (conflictClause != ConflictClause::NotSet) {
                 description.append(LangConflictClauseName(conflictClause));
                 description.append(" ");
             }
@@ -44,14 +48,14 @@ copy_on_write_string LangColumnConstraint::SQL() const
             break;
         case Type::NotNull:
             description.append("NOT NULL ");
-            if (conflictClause != LangConflictClause::NotSet) {
+            if (conflictClause != ConflictClause::NotSet) {
                 description.append(LangConflictClauseName(conflictClause));
                 description.append(" ");
             }
             break;
         case Type::Unique:
             description.append("UNIQUE ");
-            if (conflictClause != LangConflictClause::NotSet) {
+            if (conflictClause != ConflictClause::NotSet) {
                 description.append(LangConflictClauseName(conflictClause));
                 description.append(" ");
             }
@@ -84,3 +88,8 @@ copy_on_write_string LangColumnConstraint::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

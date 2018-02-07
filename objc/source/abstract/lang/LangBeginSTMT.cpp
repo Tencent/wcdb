@@ -20,14 +20,18 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangBeginSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string BeginSTMT::SQL() const
 {
     std::string description("BEGIN ");
-    description.append(LangBeginSTMT::TypeName(type));
+    description.append(BeginSTMT::TypeName(type));
     return description;
 }
 
-constexpr const char *LangBeginSTMT::TypeName(const Type &type)
+constexpr const char *BeginSTMT::TypeName(const Type &type)
 {
     switch (type) {
         case Type::Deferred:
@@ -38,3 +42,8 @@ constexpr const char *LangBeginSTMT::TypeName(const Type &type)
             return "DEFERRED";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

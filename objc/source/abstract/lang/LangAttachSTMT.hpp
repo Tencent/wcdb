@@ -23,12 +23,20 @@
 
 #include <WCDB/lang_common.h>
 
-class LangAttachSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class AttachSTMT : public Lang {
 public:
-    copy_on_write_lazy_lang<LangExpr> expr;
+    copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_string schemaName;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangAttachSTMT_hpp */

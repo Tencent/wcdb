@@ -31,8 +31,8 @@ class RecyclableStatement {
 public:
     RecyclableStatement(
         const RecyclableHandle &handle,
-        const std::shared_ptr<StatementHandle> &statementHandle);
-    constexpr StatementHandle *operator->() const
+        const std::shared_ptr<HandleStatement> &handleStatement);
+    constexpr HandleStatement *operator->() const
     {
         return m_statementHandle.get();
     }
@@ -44,7 +44,7 @@ public:
 
 protected:
     RecyclableHandle m_handle;
-    std::shared_ptr<StatementHandle> m_statementHandle;
+    std::shared_ptr<HandleStatement> m_statementHandle;
 };
 
 } //namespace WCDB

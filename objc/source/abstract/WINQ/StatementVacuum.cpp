@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementVacuum& StatementVacuum::vacuum(const std::string& schemaName)
 {
-    LangVacuumSTMT& lang = getMutableLang();
+    lang::VacuumSTMT& lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -31,3 +33,5 @@ Statement::Type StatementVacuum::getType() const
 {
     return Statement::Type::Vacuum;
 }
+
+} // namespace WCDB

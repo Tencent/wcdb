@@ -23,12 +23,14 @@
 
 #include <WCDB/Describable.hpp>
 
-class LiteralValue : public DescribableWithLang<LangLiteralValue> {
+namespace WCDB {
+
+class LiteralValue : public DescribableWithLang<lang::LiteralValue> {
 public:        
     template <typename T>
     LiteralValue(const T& t, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr) {
-        LangLiteralValue& lang = getMutableLang();
-        lang.type = LangLiteralValue::Type::NumbericFloat;
+        lang::LiteralValue& lang = getMutableLang();
+        lang.type = lang::LiteralValue::Type::NumbericFloat;
         lang.floatValue = t;
     }
     
@@ -36,8 +38,8 @@ public:
     LiteralValue(const T& t, 
                  typename std::enable_if<(std::is_integral<T>::value || 
                                           std::is_enum<T>::value)> * = nullptr) {
-        LangLiteralValue& lang = getMutableLang();
-        lang.type = LangLiteralValue::Type::NumbericInteger;
+        lang::LiteralValue& lang = getMutableLang();
+        lang.type = lang::LiteralValue::Type::NumbericInteger;
         lang.integerValue = (int64_t)t;
     }
     
@@ -49,7 +51,9 @@ public:
     static const LiteralValue CurrentDate;
     static const LiteralValue CurrentTimestamp;
 protected:
-    LiteralValue(const LangLiteralValue::Type& type);
+    LiteralValue(const lang::LiteralValue::Type& type);
 };
+
+} // namespace WCDB
 
 #endif /* LiteralValue_hpp */

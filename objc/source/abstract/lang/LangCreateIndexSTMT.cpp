@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCreateIndexSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CreateIndexSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (unique) {
@@ -44,3 +48,8 @@ copy_on_write_string LangCreateIndexSTMT::SQL() const
     }
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

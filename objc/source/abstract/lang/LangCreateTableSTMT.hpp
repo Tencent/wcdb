@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangCreateTableSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class CreateTableSTMT : public Lang {
 public:
     bool temp;
     bool ifNotExists;
@@ -34,13 +38,17 @@ public:
         Select,
     };
     Switch switcher;
-    copy_on_write_lazy_lang_list<LangColumnDef> columnDefs;
-    copy_on_write_lazy_lang_list<LangTableConstraint> tableConstraints;
+    copy_on_write_lazy_lang_list<ColumnDef> columnDefs;
+    copy_on_write_lazy_lang_list<TableConstraint> tableConstraints;
     bool withoutRowID;
 
-    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangCreateTableSTMT_hpp */

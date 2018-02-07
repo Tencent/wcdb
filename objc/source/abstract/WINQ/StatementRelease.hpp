@@ -24,11 +24,15 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementRelease : public DescribableWithLang<LangReleaseSTMT>,
+namespace WCDB {
+
+class StatementRelease : public DescribableWithLang<lang::ReleaseSTMT>,
                          public Statement {
 public:
                              StatementRelease& release(const std::string& savepointName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementRelease_hpp */

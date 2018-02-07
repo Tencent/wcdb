@@ -24,12 +24,16 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementBegin : public DescribableWithLang<LangBeginSTMT>,
+namespace WCDB {
+
+class StatementBegin : public DescribableWithLang<lang::BeginSTMT>,
                        public Statement {
 public:
-   using Transaction = LangBeginSTMT::Type;
+   using Transaction = lang::BeginSTMT::Type;
    StatementBegin& begin(const Transaction& transaction = Transaction::Immediate);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementBegin_hpp */

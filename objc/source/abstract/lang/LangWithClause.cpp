@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangWithClause::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string WithClause::SQL() const
 {
     std::string description("WITH ");
     if (recursive) {
@@ -30,3 +34,8 @@ copy_on_write_string LangWithClause::SQL() const
     description.append(pairs.description().get());
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

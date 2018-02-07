@@ -42,12 +42,12 @@ RecyclableStatement CoreBase::prepare(RecyclableHandle &handle,
                                       const Statement &statement,
                                       Error &error)
 {
-    std::shared_ptr<StatementHandle> statementHandle = nullptr;
+    std::shared_ptr<HandleStatement> handleStatement = nullptr;
     if (handle) {
-        statementHandle = handle->prepare(statement);
+        handleStatement = handle->prepare(statement);
         error = handle->getError();
     }
-    return RecyclableStatement(handle, statementHandle);
+    return RecyclableStatement(handle, handleStatement);
 }
 
 bool CoreBase::exec(RecyclableHandle &handle,
@@ -73,14 +73,14 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
             ColumnResult(Expression(1))};
         StatementSelect select =
             StatementSelect().select(resultList).from(tableName).limit(0);
-        std::shared_ptr<StatementHandle> statementHandle =
+        std::shared_ptr<HandleStatement> handleStatement =
             handle->prepare(select);
         Error::setThreadedSlient(false);
-        if (statementHandle) {
-            statementHandle->step();
-            result = statementHandle->isOK();
+        if (handleStatement) {
+            handleStatement->step();
+            result = handleStatement->isOK();
             if (!result) {
-                error = statementHandle->getError();
+                error = handleStatement->getError();
             }
         } else {
             error = handle->getError();

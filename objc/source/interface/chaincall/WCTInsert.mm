@@ -49,8 +49,8 @@
 
 - (BOOL)doInsertObjects:(NSArray<WCTObject *> *)objects withError:(WCDB::Error &)error
 {
-    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, error);
-    if (!statementHandle) {
+    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, error);
+    if (!handleStatement) {
         return NO;
     }
     int index;
@@ -60,11 +60,11 @@
         for (const WCTProperty &property : _propertyList) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
+                handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
             } else {
                 if (![self bindProperty:property
                                  ofObject:object
-                        toStatementHandle:statementHandle
+                        toStatementHandle:handleStatement
                                   atIndex:index
                                 withError:error]) {
                     return NO;
@@ -72,17 +72,17 @@
             }
             ++index;
         }
-        statementHandle->step();
-        if (!statementHandle->isOK()) {
-            error = statementHandle->getError();
+        handleStatement->step();
+        if (!handleStatement->isOK()) {
+            error = handleStatement->getError();
             return NO;
         }
         if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
-            object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
+            object.lastInsertedRowID = handleStatement->getLastInsertedRowID();
         }
-        statementHandle->reset();
-        if (!statementHandle->isOK()) {
-            error = statementHandle->getError();
+        handleStatement->reset();
+        if (!handleStatement->isOK()) {
+            error = handleStatement->getError();
             return NO;
         }
     }

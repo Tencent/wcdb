@@ -62,16 +62,16 @@
 
 - (BOOL)execute
 {
-    WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
-    if (!statementHandle) {
+    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, _error);
+    if (!handleStatement) {
         return NO;
     }
-    statementHandle->step();
-    if (!statementHandle->isOK()) {
-        _error = statementHandle->getError();
+    handleStatement->step();
+    if (!handleStatement->isOK()) {
+        _error = handleStatement->getError();
         return NO;
     }
-    _changes = statementHandle->getChanges();
+    _changes = handleStatement->getChanges();
     return YES;
 }
 

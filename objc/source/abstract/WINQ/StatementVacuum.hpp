@@ -24,11 +24,15 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementVacuum : public DescribableWithLang<LangVacuumSTMT>,
+namespace WCDB {
+
+class StatementVacuum : public DescribableWithLang<lang::VacuumSTMT>,
                         public Statement {
 public:
                             StatementVacuum& vacuum(const std::string& schemaName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementVacuum_hpp */

@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangAlterTableSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class AlterTableSTMT : public Lang {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
@@ -33,9 +37,13 @@ public:
     };
     Switch switcher;
     copy_on_write_string newTableName;
-    copy_on_write_lazy_lang<LangColumnDef> columnDef;
+    copy_on_write_lazy_lang<ColumnDef> columnDef;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangAlterTableSTMT_hpp */

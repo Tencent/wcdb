@@ -20,22 +20,24 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 SelectCore& SelectCore::distinct()
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     lang.distinct = true;
     return *this;
 }
 
 SelectCore& SelectCore::select(const ResultColumn& resultColumn)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     lang.resultColumns.append(resultColumn.getLang());
     return *this;
 }
 SelectCore& SelectCore::select(const std::list<ResultColumn>& resultColumns)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     for (const ResultColumn& resultColumn : resultColumns) {
         lang.resultColumns.append(resultColumn.getLang());
     }
@@ -43,22 +45,22 @@ SelectCore& SelectCore::select(const std::list<ResultColumn>& resultColumns)
 }
 SelectCore& SelectCore::from(const JoinClause& joinClause)
 {
-    LangSelectCore& lang = getMutableLang();
-    lang.fromSwitcher = LangSelectCore::FromSwitch::JoinClause; 
+    lang::SelectCore& lang = getMutableLang();
+    lang.fromSwitcher = lang::SelectCore::FromSwitch::JoinClause; 
     lang.joinClause.assign(joinClause.getLang());
     return *this;
 }
 SelectCore& SelectCore::from(const TableOrSubquery& tableOrSubquery)
 {
-    LangSelectCore& lang = getMutableLang();
-    lang.fromSwitcher = LangSelectCore::FromSwitch::TableOrSubquery; 
+    lang::SelectCore& lang = getMutableLang();
+    lang.fromSwitcher = lang::SelectCore::FromSwitch::TableOrSubquery; 
     lang.tableOrSubquerys.append(tableOrSubquery.getLang());
     return *this;
 }
 SelectCore& SelectCore::from(const std::list<TableOrSubquery>& tableOrSubquerys)
 {
-    LangSelectCore& lang = getMutableLang();
-    lang.fromSwitcher = LangSelectCore::FromSwitch::TableOrSubquery;
+    lang::SelectCore& lang = getMutableLang();
+    lang.fromSwitcher = lang::SelectCore::FromSwitch::TableOrSubquery;
     for (const TableOrSubquery& tableOrSubquery : tableOrSubquerys) {
         lang.tableOrSubquerys.append(tableOrSubquery.getLang());
     }
@@ -66,19 +68,19 @@ SelectCore& SelectCore::from(const std::list<TableOrSubquery>& tableOrSubquerys)
 }
 SelectCore& SelectCore::where(const Expression& condition)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     lang.condition.assign(condition.getLang());
     return *this;
 }
 SelectCore& SelectCore::groupBy(const Expression& group)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     lang.groups.append(group.getLang());
     return *this;
 }
 SelectCore& SelectCore::groupBy(const std::list<Expression>& groups)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     for (const Expression& group : groups) {
         lang.groups.append(group.getLang());
     }
@@ -86,21 +88,23 @@ SelectCore& SelectCore::groupBy(const std::list<Expression>& groups)
 }
 SelectCore& SelectCore::having(const Expression& having)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     lang.having.assign(having.getLang());
     return *this;
 }
 SelectCore& SelectCore::values(const Expression& value)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     lang.values.append(value.getLang());
     return *this;
 }
 SelectCore& SelectCore::values(const std::list<Expression>& values)
 {
-    LangSelectCore& lang = getMutableLang();
+    lang::SelectCore& lang = getMutableLang();
     for (const Expression& value : values) {
         lang.values.append(value.getLang());
     }
     return *this;
 }
+
+} // namespace WCDB

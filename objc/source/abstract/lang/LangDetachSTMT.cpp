@@ -20,10 +20,19 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangDetachSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string DetachSTMT::SQL() const
 {
     std::string description("DETACH ");
     assert(!schemaName.empty());
     description.append(schemaName.get());
     return description;
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

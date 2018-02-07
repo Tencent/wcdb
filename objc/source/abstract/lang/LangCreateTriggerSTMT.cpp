@@ -20,7 +20,11 @@
 
 #include <WCDB/lang.h>
 
-copy_on_write_string LangCreateTriggerSTMT::SQL() const
+namespace WCDB {
+
+namespace lang {
+
+copy_on_write_string CreateTriggerSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (temp) {
@@ -35,9 +39,9 @@ copy_on_write_string LangCreateTriggerSTMT::SQL() const
     }
     assert(!triggerName.empty());
     description.append(triggerName.get() + " ");
-    description.append(LangCreateTriggerSTMT::TypeName(type));
+    description.append(CreateTriggerSTMT::TypeName(type));
     description.append(" ");
-    description.append(LangCreateTriggerSTMT::OperationName(operation));
+    description.append(CreateTriggerSTMT::OperationName(operation));
     if (operation == Operation::Update && !columnNames.empty()) {
         description.append(" ON " + columnNames.description().get());
     }
@@ -54,7 +58,7 @@ copy_on_write_string LangCreateTriggerSTMT::SQL() const
     return description;
 }
 
-constexpr const char *LangCreateTriggerSTMT::TypeName(const Type &type)
+constexpr const char *CreateTriggerSTMT::TypeName(const Type &type)
 {
     switch (type) {
         case Type::Before:
@@ -67,7 +71,7 @@ constexpr const char *LangCreateTriggerSTMT::TypeName(const Type &type)
 }
 
 constexpr const char *
-LangCreateTriggerSTMT::OperationName(const Operation &operation)
+CreateTriggerSTMT::OperationName(const Operation &operation)
 {
     switch (operation) {
         case Operation::Delete:
@@ -78,3 +82,8 @@ LangCreateTriggerSTMT::OperationName(const Operation &operation)
             return "UPDATE";
     }
 }
+
+} // namespace lang
+
+} // namespace WCDB
+

@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangForeignKeyClause : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class ForeignKeyClause : public Lang {
 public:
     copy_on_write_string foreignTable;
     copy_on_write_lazy_string_list columnNames;
@@ -65,5 +69,9 @@ protected:
     static constexpr const char *
     InitiallySwitchName(const InitiallySwitch &initiallySwitcher);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangForeignKeyClause_hpp */

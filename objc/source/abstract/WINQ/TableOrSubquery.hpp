@@ -23,7 +23,9 @@
 
 #include <WCDB/Describable.hpp>
 
-class TableOrSubquery : public DescribableWithLang<LangTableOrSubquery> {
+namespace WCDB {
+
+class TableOrSubquery : public DescribableWithLang<lang::TableOrSubquery> {
 public:
     TableOrSubquery(const std::string& tableName);
     TableOrSubquery(const StatementSelect& selectSTMT);
@@ -41,7 +43,9 @@ public:
     static TableOrSubquery Function(const std::string& functionName, const Expression& expression);
     static TableOrSubquery Function(const std::string& functionName, const std::list<Expression>& expressions);
 protected:
-    TableOrSubquery(const copy_on_write_lazy_lang<LangTableOrSubqueryTableFunction>& tableOrSubqueryTableFunction);
+    TableOrSubquery(const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>& tableOrSubqueryTableFunction);
 };
+
+} // namespace WCDB
 
 #endif /* TableOrSubquery_hpp */

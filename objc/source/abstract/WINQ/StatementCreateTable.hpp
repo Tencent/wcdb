@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementCreateTable : public DescribableWithLang<LangCreateTableSTMT>,
+namespace WCDB {
+
+class StatementCreateTable : public DescribableWithLang<lang::CreateTableSTMT>,
                              public Statement {
 public:
                                  StatementCreateTable& createTable(const std::string& tableName, bool ifNotExists = true, bool temp = false);
@@ -37,5 +39,7 @@ public:
                                  StatementCreateTable& withoutRowID();
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementCreateTable_hpp */

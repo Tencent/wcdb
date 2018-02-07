@@ -24,12 +24,16 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementDropTable : public DescribableWithLang<LangDropTableSTMT>,
+namespace WCDB {
+
+class StatementDropTable : public DescribableWithLang<lang::DropTableSTMT>,
                            public Statement {
 public:
                                StatementDropTable& dropTable(const std::string& tableName, bool ifExists = true);
                                StatementDropTable& withSchema(const std::string& schemaName);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementDropTable_hpp */

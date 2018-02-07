@@ -23,13 +23,17 @@
 
 #include <WCDB/lang_common.h>
 
-class LangSelectSTMT : public CRUDLang {
+namespace WCDB {
+
+namespace lang {
+
+class SelectSTMT : public CRUDLang {
 public:
     bool recursive;
-    copy_on_write_lazy_lang_list<LangCommonTableExpression>
+    copy_on_write_lazy_lang_list<CommonTableExpression>
         commonTableExpressions;
 
-    copy_on_write_lazy_lang<LangSelectCore> selectCore;
+    copy_on_write_lazy_lang<SelectCore> selectCore;
 
     class Compound : public Lang {
     public:
@@ -40,7 +44,7 @@ public:
             Except,
         };
         Operator compoundOperator;
-        copy_on_write_lazy_lang<LangSelectCore> selectCore;
+        copy_on_write_lazy_lang<SelectCore> selectCore;
 
         virtual copy_on_write_string SQL() const override;
     protected:
@@ -49,13 +53,17 @@ public:
     };
     copy_on_write_lazy_lang_list<Compound> compoundCores;
 
-    copy_on_write_lazy_lang_list<LangOrderingTerm> orderingTerms;
+    copy_on_write_lazy_lang_list<OrderingTerm> orderingTerms;
 
-    copy_on_write_lazy_lang<LangExpr> limit;
+    copy_on_write_lazy_lang<Expr> limit;
     bool offset;
-    copy_on_write_lazy_lang<LangExpr> limitParameter;
+    copy_on_write_lazy_lang<Expr> limitParameter;
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangSelectSTMT_hpp */

@@ -23,7 +23,11 @@
 
 #include <WCDB/lang_common.h>
 
-class LangReindexSTMT : public Lang {
+namespace WCDB {
+
+namespace lang {
+
+class ReindexSTMT : public Lang {
 public:
     enum class Switch : int {
         NotSet,
@@ -38,5 +42,9 @@ public:
 
     virtual copy_on_write_string SQL() const override;
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangReindexSTMT_hpp */

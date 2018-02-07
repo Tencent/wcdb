@@ -24,8 +24,10 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
+namespace WCDB {
+
 class StatementCreateVirtualTable
-    : public DescribableWithLang<LangCreateVirtualTableSTMT>,
+    : public DescribableWithLang<lang::CreateVirtualTableSTMT>,
       public Statement {
 public:
           StatementCreateVirtualTable& createVirtualTable(const std::string& tableName, bool ifNotExists = true);
@@ -35,5 +37,7 @@ public:
           StatementCreateVirtualTable& usingModule(const std::string& moduleName, const std::list<ModuleArgument>& moduleArguments);
     virtual Type getType() const override;
 };
+
+} // namespace WCDB
 
 #endif /* StatementCreateVirtualTable_hpp */

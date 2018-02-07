@@ -23,9 +23,13 @@
 
 #include <WCDB/lang_common.h>
 
-class LangInsertSTMT : public CRUDLang {
+namespace WCDB {
+
+namespace lang {
+
+class InsertSTMT : public CRUDLang {
 public:
-    copy_on_write_lazy_lang<LangWithClause> withClause;
+    copy_on_write_lazy_lang<WithClause> withClause;
 
     enum class Type : int {
         Insert,
@@ -49,13 +53,17 @@ public:
     };
     Switch switcher;
 
-    copy_on_write_lazy_lang_list<LangExpr> exprs;
-    copy_on_write_lazy_lang<LangSelectSTMT> selectSTMT;
+    copy_on_write_lazy_lang_list<Expr> exprs;
+    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
 
     virtual copy_on_write_string SQL() const override;
 
 protected:
     constexpr static const char *TypeName(const Type &type);
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* LangInsertSTMT_hpp */

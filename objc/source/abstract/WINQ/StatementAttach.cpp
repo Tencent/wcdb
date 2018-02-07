@@ -20,6 +20,8 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 Statement::Type StatementAttach::getType() const
 {
     return Statement::Type::Attach;
@@ -27,14 +29,16 @@ Statement::Type StatementAttach::getType() const
 
 StatementAttach &StatementAttach::attach(const Expression &expression)
 {
-    LangAttachSTMT &lang = getMutableLang();
+    lang::AttachSTMT &lang = getMutableLang();
     lang.expr.assign(expression.getLang());
     return *this;
 }
 
 StatementAttach &StatementAttach::as(const std::string &schemaName)
 {
-    LangAttachSTMT &lang = getMutableLang();
+    lang::AttachSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
+
+} // namespace WCDB

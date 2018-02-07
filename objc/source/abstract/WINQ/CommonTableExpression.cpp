@@ -20,16 +20,18 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 CommonTableExpression::CommonTableExpression(const std::string &tableName)
 {
-    LangCommonTableExpression &lang = getMutableLang();
+    lang::CommonTableExpression &lang = getMutableLang();
     lang.tableName.assign(tableName);
 }
 
 CommonTableExpression &
 CommonTableExpression::byAddingColumn(const std::string &columnName)
 {
-    LangCommonTableExpression &lang = getMutableLang();
+    lang::CommonTableExpression &lang = getMutableLang();
     lang.columnNames.append(columnName);
     return *this;
 }
@@ -37,7 +39,7 @@ CommonTableExpression::byAddingColumn(const std::string &columnName)
 CommonTableExpression &CommonTableExpression::byAddingColumns(
     const std::list<std::string> &columnNames)
 {
-    LangCommonTableExpression &lang = getMutableLang();
+    lang::CommonTableExpression &lang = getMutableLang();
     for (const auto &columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
@@ -47,7 +49,9 @@ CommonTableExpression &CommonTableExpression::byAddingColumns(
 CommonTableExpression &
 CommonTableExpression::as(const StatementSelect &statementSelect)
 {
-    LangCommonTableExpression &lang = getMutableLang();
+    lang::CommonTableExpression &lang = getMutableLang();
     lang.selectSTMT.assign(statementSelect.getLang());
     return *this;
 }
+
+} // namespace WCDB

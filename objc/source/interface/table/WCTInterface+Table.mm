@@ -46,18 +46,18 @@
             //Get all column names
             std::list<std::string> columnNameList;
             {
-                WCDB::RecyclableStatement statementHandle = _core->prepare(WCDB::StatementPragma()
+                WCDB::RecyclableStatement handleStatement = _core->prepare(WCDB::StatementPragma()
                                                                                .pragma(WCDB::Pragma::TableInfo, tableName.UTF8String),
                                                                            error);
                 if (!error.isOK()) {
                     return;
                 }
-                while (statementHandle->step()) {
-                    columnNameList.push_back(statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(1));
+                while (handleStatement->step()) {
+                    columnNameList.push_back(handleStatement->getValue<(WCDB::ColumnType) WCTColumnTypeString>(1));
                 }
 
-                if (!statementHandle->isOK()) {
-                    error = statementHandle->getError();
+                if (!handleStatement->isOK()) {
+                    error = handleStatement->getError();
                     return;
                 }
             }

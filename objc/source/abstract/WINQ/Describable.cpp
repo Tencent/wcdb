@@ -20,4 +20,8 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 const std::string Describable::s_empty("");
+
+} // namespace WCDB

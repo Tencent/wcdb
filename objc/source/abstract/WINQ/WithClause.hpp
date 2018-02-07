@@ -23,8 +23,13 @@
 
 #include <WCDB/Describable.hpp>
 
-class WithClause : public DescribableWithLang<LangWithClause> {
+namespace WCDB {
+
+class WithClause : public DescribableWithLang<lang::WithClause> {
 public:
+    //TODO
 };
+
+} // namespace WCDB
 
 #endif /* WithClause_hpp */

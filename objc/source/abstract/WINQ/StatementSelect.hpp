@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementSelect : public DescribableWithLang<LangSelectSTMT>,
+namespace WCDB {
+
+class StatementSelect : public DescribableWithLang<lang::SelectSTMT>,
                         public CRUDStatement {
 public:
                             StatementSelect& with(const CommonTableExpression& commonTableExpression);
@@ -59,7 +61,9 @@ public:
 
     virtual Type getType() const override;
                         protected:
-                            void compound(const LangSelectSTMT::Compound::Operator& compoundOperator, const SelectCore& selectCore);
+                            void compound(const lang::SelectSTMT::Compound::Operator& compoundOperator, const SelectCore& selectCore);
 };
+
+} // namespace WCDB
 
 #endif /* StatementSelect_hpp */

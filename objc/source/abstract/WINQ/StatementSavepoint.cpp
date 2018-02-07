@@ -20,9 +20,11 @@
 
 #include <WCDB/WINQ.h>
 
+namespace WCDB {
+
 StatementSavepoint& StatementSavepoint::savepoint(const std::string& savepointName)
 {
-    LangSavepointSTMT& lang = getMutableLang();
+    lang::SavepointSTMT& lang = getMutableLang();
     lang.savepointName.assign(savepointName);
     return *this;
 }
@@ -31,3 +33,5 @@ Statement::Type StatementSavepoint::getType() const
 {
     return Statement::Type::Savepoint;
 }
+
+} // namespace WCDB

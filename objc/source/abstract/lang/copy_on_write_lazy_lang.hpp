@@ -21,6 +21,10 @@
 #ifndef copy_on_write_lazy_lang_hpp
 #define copy_on_write_lazy_lang_hpp
 
+namespace WCDB {
+
+namespace lang {
+
 template <typename T>
 class copy_on_write_lazy_lang : public copy_on_write_lazy_describable<T> {
 protected:
@@ -80,5 +84,9 @@ protected:
         return description;
     }
 };
+
+} // namespace lang
+
+} // namespace WCDB
 
 #endif /* copy_on_write_lazy_lang_hpp */

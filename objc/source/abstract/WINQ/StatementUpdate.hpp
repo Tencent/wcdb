@@ -24,7 +24,9 @@
 #include <WCDB/Describable.hpp>
 #include <WCDB/Statement.hpp>
 
-class StatementUpdate : public DescribableWithLang<LangUpdateSTMT>,
+namespace WCDB {
+
+class StatementUpdate : public DescribableWithLang<lang::UpdateSTMT>,
                         public CRUDStatement {
 public:
                             StatementUpdate& with(const WithClause& withClause);
@@ -50,7 +52,9 @@ public:
                             
     virtual Type getType() const override;
                         protected:
-                            void update(const QualifiedTableName& qualifiedTableName, const LangUpdateSTMT::Type& type);
+                            void update(const QualifiedTableName& qualifiedTableName, const lang::UpdateSTMT::Type& type);
 };
+
+} // namespace WCDB
 
 #endif /* StatementUpdate_hpp */
