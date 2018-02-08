@@ -19,9 +19,9 @@
  */
 
 #import "WTCAssert.h"
-#import "WTCBaseTestCase.h"
+#import <WINQ/abstract.h>
 
-@interface WTCColumnDefTests : WTCBaseTestCase
+@interface WTCColumnDefTests : XCTestCase
 
 @end
 
