@@ -22,10 +22,10 @@
 
 void copy_on_write_lazy_string_list::append(const copy_on_write_string &string)
 {
-    if (empty()) {
-        assign({string});
-    } else {
+    if (!empty()) {
         get_or_copy().push_back(string);
+    } else {
+        assign({string});
     }
 }
 
