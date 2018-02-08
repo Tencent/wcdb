@@ -27,46 +27,24 @@
 
 @implementation WTCColumnDefTests
 
-- (WCDB::ColumnDef)generateColumnDef
-{
-    return WCDB::ColumnDef(WCDB::Column("testColumnDef"), WCDB::ColumnType::Integer32);
-}
-
 - (void)testColumnDef
 {
+    WCDB::ColumnType type = WCDB::ColumnType::Integer32;
+    WCDB::ColumnConstraint columnConstraint1 = WCDB::ColumnConstraint().named("testConstraint1").withNotNull();
+    WCDB::ColumnConstraint columnConstraint2 = WCDB::ColumnConstraint().named("testConstraint2").withUnique();
+    std::list<WCDB::ColumnConstraint> columnConstraintList = {columnConstraint1, columnConstraint2};
 
-    WINQAssertEqual(self.generateColumnDef.makePrimary(), @"testColumnDef INTEGER PRIMARY KEY");
+    WINQAssertEqual(WCDB::ColumnDef("localID").withType(type), @"localID INTEGER");
 
-    WINQAssertEqual(self.generateColumnDef.makePrimary(WCDB::OrderTerm::ASC), @"testColumnDef INTEGER PRIMARY KEY ASC");
+    WINQAssertEqual(WCDB::ColumnDef("localID"), @"localID");
 
-    WINQAssertEqual(self.generateColumnDef.makePrimary(WCDB::OrderTerm::NotSet, true), @"testColumnDef INTEGER PRIMARY KEY AUTOINCREMENT");
+    WINQAssertEqual(WCDB::ColumnDef("localID").byAddingConstraint(columnConstraint1), @"localID CONSTRAINT testConstraint1 NOT NULL");
 
-    WINQAssertEqual(self.generateColumnDef.makePrimary(WCDB::OrderTerm::NotSet, false, WCDB::Conflict::Ignore), @"testColumnDef INTEGER PRIMARY KEY ON CONFLICT IGNORE");
+    WINQAssertEqual(WCDB::ColumnDef("localID").byAddingConstraints(columnConstraintList), @"localID CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
 
-    WINQAssertEqual(self.generateColumnDef.makeDefault(nullptr), @"testColumnDef INTEGER DEFAULT NULL");
+    WINQAssertEqual(WCDB::ColumnDef("localID").withType(type).byAddingConstraint(columnConstraint1), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL");
 
-    WINQAssertEqual(self.generateColumnDef.makeDefault(-1), @"testColumnDef INTEGER DEFAULT -1");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(171798691840), @"testColumnDef INTEGER DEFAULT 171798691840");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(false), @"testColumnDef INTEGER DEFAULT 0");
-    WINQAssertEqual(self.generateColumnDef.makeDefault("SampleText"), @"testColumnDef INTEGER DEFAULT 'SampleText'");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(0.1), @"testColumnDef INTEGER DEFAULT 0.100000");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(1), @"testColumnDef INTEGER DEFAULT 1");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(WCDB::ColumnDef::DefaultType::CurrentDate), @"testColumnDef INTEGER DEFAULT CURRENT_DATE");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(WCDB::ColumnDef::DefaultType::CurrentTime), @"testColumnDef INTEGER DEFAULT CURRENT_TIME");
-
-    WINQAssertEqual(self.generateColumnDef.makeDefault(WCDB::ColumnDef::DefaultType::CurrentTimestamp), @"testColumnDef INTEGER DEFAULT CURRENT_TIMESTAMP");
-
-    WINQAssertEqual(self.generateColumnDef.makeNotNull(), @"testColumnDef INTEGER NOT NULL");
-
-    WINQAssertEqual(self.generateColumnDef.makeUnique(), @"testColumnDef INTEGER UNIQUE");
-
-    WINQAssertEqual(self.generateColumnDef.makeForeignKey(WCDB::ForeignKey("testColumnDefTable")), @"testColumnDef INTEGER REFERENCES testColumnDefTable");
+    WINQAssertEqual(WCDB::ColumnDef("localID").withType(type).byAddingConstraints(columnConstraintList), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
 }
 
 @end
