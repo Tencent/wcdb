@@ -25,14 +25,16 @@
 #import <XCTest/XCTest.h>
 
 #define WINQAssertEqual(describable, expression)                               \
-    XCTAssertTrue(                                                             \
-        [(expression)                                                          \
-            isEqualToString:@((describable).getDescription().c_str())],        \
-        @"different from `%@` for `%@`",                                       \
-        [@((describable).getDescription().c_str())                             \
-            commonPrefixWithString:(expression) options                        \
-                                  :NSCaseInsensitiveSearch],                   \
-        @((describable).getDescription().c_str()))
+    {                                                                          \
+        NSString *tempDescription = @((describable).getDescription().c_str()); \
+        NSLog(@"com `%@` `%@`", tempDescription, expression);                  \
+        XCTAssertTrue(                                                         \
+            [(expression) isEqualToString:tempDescription],                    \
+            @"different from `%@` for `%@`",                                   \
+            [tempDescription commonPrefixWithString:(expression) options       \
+                                                   :NSCaseInsensitiveSearch],  \
+            tempDescription);                                                  \
+    }
 
 #define WTCAssertEqual(raw, expected)                                          \
     XCTAssertTrue([(expected) isEqualToString:@(raw)],                         \
