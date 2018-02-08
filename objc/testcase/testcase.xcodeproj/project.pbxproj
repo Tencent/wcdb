@@ -93,6 +93,8 @@
 		23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */; };
 		23DC30A8202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */; };
 		23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */; };
+		23DC30AB202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */; };
+		23DC30AC202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */; };
 		23DD427B20050DC600330946 /* WTCInitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */; };
 		23DD427E20050DD800330946 /* WTCBaselineWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D620050A3600E22C76 /* WTCBaselineWriteBenchmark.mm */; };
 		23DD427F20050DD800330946 /* WTCBaselineBatchWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D420050A3600E22C76 /* WTCBaselineBatchWriteBenchmark.mm */; };
@@ -291,6 +293,7 @@
 		23890DE9201210EE0036C53F /* WTCInsertInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCInsertInterfaceTests.mm; sourceTree = "<group>"; };
 		23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBindParameterTests.mm; sourceTree = "<group>"; };
 		23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnConstraintTests.mm; sourceTree = "<group>"; };
+		23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCommonTableExpression.mm; sourceTree = "<group>"; };
 		23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCInitializationBenchmark.mm; sourceTree = "<group>"; };
 		23DD427820050DA400330946 /* WTCSyncWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSyncWriteBenchmark.mm; sourceTree = "<group>"; };
 		23DD428320050EDD00330946 /* WTCMultithreadReadReadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCMultithreadReadReadBenchmark.mm; sourceTree = "<group>"; };
@@ -574,6 +577,7 @@
 				23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */,
 				23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */,
 				23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */,
+				23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */,
 				23698B0A20047BDE00C0291C /* WTCColumnIndexTests.mm */,
 				23698AFB20047BDD00C0291C /* WTCColumnResultTests.mm */,
 				23698B0C20047BDE00C0291C /* WTCColumnTests.mm */,
@@ -903,6 +907,7 @@
 				23E58B5B200F6D8300E0CECE /* WTCRepairTests.mm in Sources */,
 				23DE00CD2010C1F500CDF00D /* WTCIndexMultiIndexesObject.mm in Sources */,
 				23698B3A20047BE000C0291C /* WTCStatementRollbackTests.mm in Sources */,
+				23DC30AB202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */,
 				23698B1E20047BE000C0291C /* WTCColumnResultTests.mm in Sources */,
 				23E58B5F200F6DEE00E0CECE /* WTCRepairObject.mm in Sources */,
 				233FDCB520108472003EC196 /* WTCColumnConstraintConflictPrimaryKeyObject.mm in Sources */,
@@ -1011,6 +1016,7 @@
 				23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */,
 				23731A43201F02E3005967ED /* WTCColumnDefTests.mm in Sources */,
 				23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */,
+				23DC30AC202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
