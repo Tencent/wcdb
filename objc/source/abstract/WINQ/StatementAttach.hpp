@@ -21,13 +21,13 @@
 #ifndef StatementAttach_hpp
 #define StatementAttach_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementAttach : public DescribableWithLang<lang::AttachSTMT>,
-                        public Statement {
+class StatementAttach : public StatementWithLang<lang::AttachSTMT> {
+
 public:
     StatementAttach &attach(const Expression &expression);
     StatementAttach &as(const std::string &schemaName);

@@ -21,7 +21,7 @@
 #ifndef LangCommitSTMT_hpp
 #define LangCommitSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

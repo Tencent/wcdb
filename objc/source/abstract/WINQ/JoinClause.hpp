@@ -21,7 +21,7 @@
 #ifndef JoinClause_hpp
 #define JoinClause_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

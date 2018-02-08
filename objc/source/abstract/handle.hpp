@@ -21,9 +21,9 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
-#include <WCDB/abstract_common.h>
-#include <WCDB/error.hpp>
-#include <WCDB/utility.hpp>
+#include <WINQ/abstract_common.h>
+#include <WINQ/error.hpp>
+#include <WINQ/utility.hpp>
 #include <map>
 #include <memory>
 #include <mutex>

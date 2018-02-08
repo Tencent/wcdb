@@ -21,7 +21,7 @@
 #ifndef ColumnConstraint_hpp
 #define ColumnConstraint_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

@@ -21,7 +21,7 @@
 #ifndef WithClause_hpp
 #define WithClause_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

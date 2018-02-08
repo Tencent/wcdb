@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/path.hpp>
+#include <WINQ/path.hpp>
 #include <libgen.h>
 
 namespace WCDB {

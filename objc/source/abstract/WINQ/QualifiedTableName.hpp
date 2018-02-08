@@ -21,7 +21,7 @@
 #ifndef QualifiedTableName_hpp
 #define QualifiedTableName_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

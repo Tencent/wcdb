@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#include <WINQ/WINQ.h>
 
 namespace WCDB {
 
@@ -125,10 +125,37 @@ StatementCreateTrigger::when(const Expression &expression)
 }
 
 StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
-    const CRUDStatement &CRUDSTMT)
+    const StatementUpdate &updateSTMT)
 {
     lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.STMTs.append(CRUDSTMT.getCRUDLang());
+    lang.STMTs.append(updateSTMT.getLang());
+    ;
+    return *this;
+}
+
+StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
+    const StatementInsert &insertSTMT)
+{
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.STMTs.append(insertSTMT.getLang());
+    ;
+    return *this;
+}
+
+StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
+    const StatementDelete &deleteSTMT)
+{
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.STMTs.append(deleteSTMT.getLang());
+    ;
+    return *this;
+}
+
+StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
+    const StatementSelect &selectSTMT)
+{
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.STMTs.append(selectSTMT.getLang());
     ;
     return *this;
 }

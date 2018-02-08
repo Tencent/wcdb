@@ -21,13 +21,13 @@
 #ifndef StatementDetach_hpp
 #define StatementDetach_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementDetach : public DescribableWithLang<lang::DetachSTMT>,
-                        public Statement {
+class StatementDetach : public StatementWithLang<lang::DetachSTMT> {
+
 public:
     StatementDetach &detach(const std::string &schemaName);
     virtual Type getType() const override;

@@ -21,7 +21,7 @@
 #ifndef ModuleArgument_hpp
 #define ModuleArgument_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

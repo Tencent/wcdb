@@ -21,14 +21,13 @@
 #ifndef StatementCreateTrigger_hpp
 #define StatementCreateTrigger_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
 class StatementCreateTrigger
-    : public DescribableWithLang<lang::CreateTriggerSTMT>,
-      public Statement {
+    : public StatementWithLang<lang::CreateTriggerSTMT> {
 public:
     StatementCreateTrigger &createTrigger(const std::string &triggerName,
                                           bool ifNotExists = true,
@@ -50,7 +49,13 @@ public:
     StatementCreateTrigger &when(const Expression &expression);
 
     StatementCreateTrigger &
-    byAddingTriggeredStatement(const CRUDStatement &CRUDSTMT);
+    byAddingTriggeredStatement(const StatementUpdate &updateSTMT);
+    StatementCreateTrigger &
+    byAddingTriggeredStatement(const StatementInsert &insertSTMT);
+    StatementCreateTrigger &
+    byAddingTriggeredStatement(const StatementDelete &deleteSTMT);
+    StatementCreateTrigger &
+    byAddingTriggeredStatement(const StatementSelect &selectSTMT);
 
     virtual Type getType() const override;
 };

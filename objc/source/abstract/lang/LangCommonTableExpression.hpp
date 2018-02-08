@@ -21,7 +21,7 @@
 #ifndef LangCommonTableExpression_hpp
 #define LangCommonTableExpression_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

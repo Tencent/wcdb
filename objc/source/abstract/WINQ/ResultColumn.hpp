@@ -21,7 +21,7 @@
 #ifndef ResultColumn_hpp
 #define ResultColumn_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

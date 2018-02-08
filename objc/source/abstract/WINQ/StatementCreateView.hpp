@@ -21,13 +21,13 @@
 #ifndef StatementCreateView_hpp
 #define StatementCreateView_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementCreateView : public DescribableWithLang<lang::CreateViewSTMT>,
-                            public Statement {
+class StatementCreateView : public StatementWithLang<lang::CreateViewSTMT> {
+
 public:
     StatementCreateView &createView(const std::string &viewName,
                                     bool ifNotExists = true,

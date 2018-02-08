@@ -21,7 +21,7 @@
 #ifndef LangQualifiedTableName_hpp
 #define LangQualifiedTableName_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

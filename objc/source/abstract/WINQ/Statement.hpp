@@ -21,9 +21,11 @@
 #ifndef Statement_hpp
 #define Statement_hpp
 
+#include <WINQ/Describable.hpp>
+
 namespace WCDB {
 
-class Statement {
+class Statement : public Describable {
 public:
     enum class Type : int {
         AlterTable,
@@ -53,13 +55,18 @@ public:
         Vacuum,
     };
     virtual Type getType() const = 0;
-    virtual const std::string &getDescription() const = 0;
 };
 
-class CRUDStatement : public Statement {
+template <typename T>
+class StatementWithLang : public Statement, public WithLang<T> {
 public:
-    virtual lang::copy_on_write_lazy_lang<lang::CRUDLang>
-    getCRUDLang() const = 0;
+    virtual const std::string &getDescription() const override
+    {
+        if (!this->getLang().empty()) {
+            return this->getLang().description().get();
+        }
+        return Describable::s_empty;
+    }
 };
 
 } // namespace WCDB

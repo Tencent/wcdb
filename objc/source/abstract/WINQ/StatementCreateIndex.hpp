@@ -21,13 +21,13 @@
 #ifndef StatementCreateIndex_hpp
 #define StatementCreateIndex_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementCreateIndex : public DescribableWithLang<lang::CreateIndexSTMT>,
-                             public Statement {
+class StatementCreateIndex : public StatementWithLang<lang::CreateIndexSTMT> {
+
 public:
     StatementCreateIndex &createIndex(const std::string &indexName,
                                       bool ifNotExists = true,

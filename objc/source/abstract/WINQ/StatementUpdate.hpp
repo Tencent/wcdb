@@ -21,13 +21,12 @@
 #ifndef StatementUpdate_hpp
 #define StatementUpdate_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementUpdate : public DescribableWithLang<lang::UpdateSTMT>,
-                        public CRUDStatement {
+class StatementUpdate : public StatementWithLang<lang::UpdateSTMT> {
 public:
     StatementUpdate &with(const WithClause &withClause);
     StatementUpdate &update(const QualifiedTableName &qualifiedTableName);

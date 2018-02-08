@@ -21,7 +21,7 @@
 #ifndef Describable_hpp
 #define Describable_hpp
 
-#include <WCDB/lang.h>
+#include <WINQ/lang.h>
 
 namespace WCDB {
 
@@ -33,28 +33,26 @@ protected:
     static const std::string s_empty;
 };
 
-template <typename T, typename Enable = void>
-class DescribableWithLang {
-};
-
 template <typename T>
-class DescribableWithLang<
-    T,
-    typename std::enable_if<std::is_base_of<lang::Lang, T>::value>::type>
-    : public Describable {
+class WithLang {
 public:
-    virtual const std::string &getDescription() const
-    {
-        if (!m_lang.empty()) {
-            return m_lang.description().get();
-        }
-        return Describable::s_empty;
-    }
     T &getMutableLang() { return m_lang.get_or_copy(); }
     const lang::copy_on_write_lazy_lang<T> &getLang() const { return m_lang; }
 
 private:
     lang::copy_on_write_lazy_lang<T> m_lang;
+};
+
+template <typename T>
+class DescribableWithLang : public Describable, public WithLang<T> {
+public:
+    virtual const std::string &getDescription() const override
+    {
+        if (!this->getLang().empty()) {
+            return this->getLang().description().get();
+        }
+        return Describable::s_empty;
+    }
 };
 
 typedef lang::Order Order;

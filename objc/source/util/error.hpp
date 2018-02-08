@@ -21,9 +21,9 @@
 #ifndef error_hpp
 #define error_hpp
 
-#include <WCDB/optional.hpp>
-#include <WCDB/thread_local.hpp>
-#include <WCDB/utility.hpp>
+#include <WINQ/optional.hpp>
+#include <WINQ/thread_local.hpp>
+#include <WINQ/utility.hpp>
 #include <climits>
 #include <functional>
 #include <map>

@@ -21,13 +21,12 @@
 #ifndef StatementInsert_hpp
 #define StatementInsert_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementInsert : public DescribableWithLang<lang::InsertSTMT>,
-                        public CRUDStatement {
+class StatementInsert : public StatementWithLang<lang::InsertSTMT> {
 public:
     StatementInsert &with(const WithClause &withClause);
     StatementInsert &insertInto(const std::string &tableName);

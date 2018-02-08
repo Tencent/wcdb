@@ -21,13 +21,13 @@
 #ifndef StatementAlterTable_hpp
 #define StatementAlterTable_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementAlterTable : public DescribableWithLang<lang::AlterTableSTMT>,
-                            public Statement {
+class StatementAlterTable : public StatementWithLang<lang::AlterTableSTMT> {
+
 public:
     StatementAlterTable &alterTable(const std::string &schemaName,
                                     const std::string &tableName);

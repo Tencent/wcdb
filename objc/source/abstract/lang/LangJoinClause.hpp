@@ -21,7 +21,7 @@
 #ifndef LangJoinClause_hpp
 #define LangJoinClause_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

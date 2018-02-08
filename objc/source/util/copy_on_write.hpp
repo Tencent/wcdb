@@ -34,12 +34,14 @@ public:
     void assign(const T &t)
     {
         willProbablyChange();
+        printf("assign. isCopy: %d\n", !empty());
         m_shared.reset(new T(t));
     }
 
     void assign(const copy_on_write<T> &t)
     {
         willProbablyChange();
+        printf("direct assign \n");
         m_shared = t.m_shared;
     }
 
@@ -47,6 +49,7 @@ public:
     void assign(const copy_on_write<U> &u)
     {
         willProbablyChange();
+        printf("direct assign diff\n");
         m_shared = std::static_pointer_cast<T>(u.m_shared);
     }
 
@@ -69,8 +72,10 @@ public:
         willProbablyChange();
         if (!m_shared.unique()) {
             if (empty()) {
+                printf("copy \n");
                 m_shared.reset(new T);
             } else {
+                printf("copy self \n");
                 m_shared.reset(new T(*m_shared.get()));
             }
         }

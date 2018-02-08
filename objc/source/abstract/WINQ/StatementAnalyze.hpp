@@ -21,13 +21,13 @@
 #ifndef StatementAnalyze_hpp
 #define StatementAnalyze_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementAnalyze : public DescribableWithLang<lang::AnalyzeSTMT>,
-                         public Statement {
+class StatementAnalyze : public StatementWithLang<lang::AnalyzeSTMT> {
+
 public:
     StatementAnalyze &analyzeSchema(const std::string &schemaName);
     StatementAnalyze &analyze(const std::string &schemaName,

@@ -21,7 +21,7 @@
 #ifndef LangDropViewSTMT_hpp
 #define LangDropViewSTMT_hpp
 
-#include <WCDB/LangDropInternalSTMT.hpp>
+#include <WINQ/LangDropInternalSTMT.hpp>
 
 namespace WCDB {
 

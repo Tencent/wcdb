@@ -21,7 +21,7 @@
 #ifndef TableConstraint_hpp
 #define TableConstraint_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

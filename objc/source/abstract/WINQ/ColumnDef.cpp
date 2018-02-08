@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#include <WINQ/WINQ.h>
 
 namespace WCDB {
 
@@ -30,16 +30,14 @@ ColumnDef::ColumnDef(const std::string &columnName)
 
 ColumnDef &ColumnDef::withType(const ColumnType &columnType)
 {
-    lang::ColumnDef &lang = getMutableLang();
-    lang.type = columnType;
+    getMutableLang().type = columnType;
     return *this;
 }
 
 ColumnDef &
 ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
 {
-    lang::ColumnDef &lang = getMutableLang();
-    lang.columnConstraints.append(columnConstraint.getLang());
+    getMutableLang().columnConstraints.append(columnConstraint.getLang());
     return *this;
 }
 

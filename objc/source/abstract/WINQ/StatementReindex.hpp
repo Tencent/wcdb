@@ -21,13 +21,13 @@
 #ifndef StatementReindex_hpp
 #define StatementReindex_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementReindex : public DescribableWithLang<lang::ReindexSTMT>,
-                         public Statement {
+class StatementReindex : public StatementWithLang<lang::ReindexSTMT> {
+
 public:
     StatementReindex &reindex();
     StatementReindex &reindex(const std::string &tableOrIndexName);

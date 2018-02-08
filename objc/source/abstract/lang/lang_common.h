@@ -23,15 +23,15 @@
 
 #include <assert.h>
 
-#include <WCDB/copy_on_write_data.hpp>
-#include <WCDB/copy_on_write_lazy_string_list.hpp>
-#include <WCDB/copy_on_write_string.hpp>
+#include <WINQ/copy_on_write_data.hpp>
+#include <WINQ/copy_on_write_lazy_string_list.hpp>
+#include <WINQ/copy_on_write_string.hpp>
 
-#include <WCDB/copy_on_write_lazy_lang.hpp>
+#include <WINQ/copy_on_write_lazy_lang.hpp>
 
-#include <WCDB/LangColumnType.hpp>
-#include <WCDB/LangConflictClause.hpp>
-#include <WCDB/LangOrder.hpp>
+#include <WINQ/LangColumnType.hpp>
+#include <WINQ/LangConflictClause.hpp>
+#include <WINQ/LangOrder.hpp>
 
 namespace WCDB {
 

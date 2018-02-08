@@ -21,13 +21,13 @@
 #ifndef StatementRollback_hpp
 #define StatementRollback_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementRollback : public DescribableWithLang<lang::RollbackSTMT>,
-                          public Statement {
+class StatementRollback : public StatementWithLang<lang::RollbackSTMT> {
+
 public:
     StatementRollback &rollback();
     StatementRollback &rollbackTo(const std::string &savepointName);

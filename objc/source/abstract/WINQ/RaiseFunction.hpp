@@ -21,7 +21,7 @@
 #ifndef RaiseFunction_hpp
 #define RaiseFunction_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

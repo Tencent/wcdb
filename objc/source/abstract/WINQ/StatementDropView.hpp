@@ -21,13 +21,13 @@
 #ifndef StatementDropView_hpp
 #define StatementDropView_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementDropView : public DescribableWithLang<lang::DropViewSTMT>,
-                          public Statement {
+class StatementDropView : public StatementWithLang<lang::DropViewSTMT> {
+
 public:
     StatementDropView &dropView(const std::string &viewName,
                                 bool ifExists = true);

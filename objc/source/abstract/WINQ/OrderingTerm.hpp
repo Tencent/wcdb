@@ -21,7 +21,7 @@
 #ifndef OrderingTerm_hpp
 #define OrderingTerm_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

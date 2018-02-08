@@ -21,7 +21,7 @@
 #ifndef LangDropTriggerSTMT_hpp
 #define LangDropTriggerSTMT_hpp
 
-#include <WCDB/LangDropTriggerSTMT.hpp>
+#include <WINQ/LangDropTriggerSTMT.hpp>
 
 namespace WCDB {
 

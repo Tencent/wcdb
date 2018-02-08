@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Tokenize.hpp>
+#include <WINQ/Tokenize.hpp>
 namespace WCDB {
 
 namespace FTS {

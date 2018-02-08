@@ -21,13 +21,13 @@
 #ifndef StatementBegin_hpp
 #define StatementBegin_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementBegin : public DescribableWithLang<lang::BeginSTMT>,
-                       public Statement {
+class StatementBegin : public StatementWithLang<lang::BeginSTMT> {
+
 public:
     using Transaction = lang::BeginSTMT::Type;
     StatementBegin &

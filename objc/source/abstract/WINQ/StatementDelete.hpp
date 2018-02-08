@@ -21,13 +21,12 @@
 #ifndef StatementDelete_hpp
 #define StatementDelete_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementDelete : public DescribableWithLang<lang::DeleteSTMT>,
-                        public CRUDStatement {
+class StatementDelete : public StatementWithLang<lang::DeleteSTMT> {
 public:
     StatementDelete &with(const WithClause &withClause);
     StatementDelete &deleteFrom(const QualifiedTableName &qualifiedTableName);

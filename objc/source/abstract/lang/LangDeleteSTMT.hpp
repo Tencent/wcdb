@@ -21,7 +21,7 @@
 #ifndef LangDeleteSTMT_hpp
 #define LangDeleteSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

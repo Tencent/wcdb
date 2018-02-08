@@ -21,7 +21,7 @@
 #ifndef ForeignKeyClause_hpp
 #define ForeignKeyClause_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

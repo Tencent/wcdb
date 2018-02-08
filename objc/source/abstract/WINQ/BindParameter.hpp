@@ -21,7 +21,7 @@
 #ifndef BindParameter_hpp
 #define BindParameter_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

@@ -21,13 +21,13 @@
 #ifndef StatementPragma_hpp
 #define StatementPragma_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementPragma : public DescribableWithLang<lang::PragmaSTMT>,
-                        public Statement {
+class StatementPragma : public StatementWithLang<lang::PragmaSTMT> {
+
 public:
     StatementPragma &withSchema(const std::string &schemaName);
     StatementPragma &pragma(const Pragma &pragmaName);

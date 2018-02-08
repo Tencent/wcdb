@@ -21,14 +21,13 @@
 #ifndef StatementCreateVirtualTable_hpp
 #define StatementCreateVirtualTable_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
 class StatementCreateVirtualTable
-    : public DescribableWithLang<lang::CreateVirtualTableSTMT>,
-      public Statement {
+    : public StatementWithLang<lang::CreateVirtualTableSTMT> {
 public:
     StatementCreateVirtualTable &
     createVirtualTable(const std::string &tableName, bool ifNotExists = true);

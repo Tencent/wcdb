@@ -21,13 +21,13 @@
 #ifndef StatementDropTable_hpp
 #define StatementDropTable_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementDropTable : public DescribableWithLang<lang::DropTableSTMT>,
-                           public Statement {
+class StatementDropTable : public StatementWithLang<lang::DropTableSTMT> {
+
 public:
     StatementDropTable &dropTable(const std::string &tableName,
                                   bool ifExists = true);

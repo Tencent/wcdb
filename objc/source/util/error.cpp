@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/error.hpp>
-#include <WCDB/optional_impl.hpp>
+#include <WINQ/error.hpp>
+#include <WINQ/optional_impl.hpp>
 #include <stdlib.h>
 #include <string>
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/HandleStatement.hpp>
+#include <WINQ/HandleStatement.hpp>
 #include <sqlcipher/sqlite3.h>
 
 namespace WCDB {

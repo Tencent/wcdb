@@ -21,12 +21,12 @@
 #ifndef StatementCommit_hpp
 #define StatementCommit_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 
-class StatementCommit : public DescribableWithLang<lang::CommitSTMT>,
-                        public Statement {
+class StatementCommit : public StatementWithLang<lang::CommitSTMT> {
+
 public:
     StatementCommit &commit();
     virtual Type getType() const override;

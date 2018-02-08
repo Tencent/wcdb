@@ -21,7 +21,7 @@
 #ifndef LangCreateTriggerSTMT_hpp
 #define LangCreateTriggerSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

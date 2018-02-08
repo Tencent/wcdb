@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/copy_on_write_lazy_string_list.hpp>
+#include <WINQ/copy_on_write_lazy_string_list.hpp>
 
 void copy_on_write_lazy_string_list::append(const copy_on_write_string &string)
 {

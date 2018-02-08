@@ -21,7 +21,7 @@
 #ifndef CommonTableExpression_hpp
 #define CommonTableExpression_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

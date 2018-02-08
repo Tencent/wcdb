@@ -21,13 +21,13 @@
 #ifndef StatementDropTrigger_hpp
 #define StatementDropTrigger_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementDropTrigger : public DescribableWithLang<lang::DropTriggerSTMT>,
-                             public Statement {
+class StatementDropTrigger : public StatementWithLang<lang::DropTriggerSTMT> {
+
 public:
     StatementDropTrigger &dropTrigger(const std::string &triggerName,
                                       bool ifExists = true);

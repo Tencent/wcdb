@@ -21,7 +21,7 @@
 #ifndef abstract_h
 #define abstract_h
 
-#include <WCDB/WINQ.h>
-#include <WCDB/lang.h>
+#include <WINQ/WINQ.h>
+#include <WINQ/lang.h>
 
 #endif /* abstract_h */

@@ -21,7 +21,7 @@
 #ifndef copy_on_write_lazy_string_list_hpp
 #define copy_on_write_lazy_string_list_hpp
 
-#include <WCDB/copy_on_write_lazy_describable.hpp>
+#include <WINQ/copy_on_write_lazy_describable.hpp>
 #include <list>
 
 class copy_on_write_lazy_string_list

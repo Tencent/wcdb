@@ -21,13 +21,13 @@
 #ifndef StatementVacuum_hpp
 #define StatementVacuum_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementVacuum : public DescribableWithLang<lang::VacuumSTMT>,
-                        public Statement {
+class StatementVacuum : public StatementWithLang<lang::VacuumSTMT> {
+
 public:
     StatementVacuum &vacuum(const std::string &schemaName);
     virtual Type getType() const override;

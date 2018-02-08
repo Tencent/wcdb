@@ -21,7 +21,7 @@
 #ifndef LangCreateIndexSTMT_hpp
 #define LangCreateIndexSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WINQ/lang_common.h>
 
 namespace WCDB {
 

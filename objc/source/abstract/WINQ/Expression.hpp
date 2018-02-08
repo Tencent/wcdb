@@ -21,7 +21,7 @@
 #ifndef Expression_hpp
 #define Expression_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 

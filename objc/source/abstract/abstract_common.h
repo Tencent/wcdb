@@ -21,7 +21,7 @@
 #ifndef abstract_common_h
 #define abstract_common_h
 
-#include <WCDB/WINQ.h>
+#include <WINQ/WINQ.h>
 
 namespace WCDB {
 

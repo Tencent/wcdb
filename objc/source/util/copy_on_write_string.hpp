@@ -21,7 +21,7 @@
 #ifndef copy_on_write_string_hpp
 #define copy_on_write_string_hpp
 
-#include <WCDB/copy_on_write.hpp>
+#include <WINQ/copy_on_write.hpp>
 #include <string>
 
 class copy_on_write_string : public copy_on_write<std::string> {

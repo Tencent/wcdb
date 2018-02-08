@@ -21,13 +21,13 @@
 #ifndef StatementSavepoint_hpp
 #define StatementSavepoint_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementSavepoint : public DescribableWithLang<lang::SavepointSTMT>,
-                           public Statement {
+class StatementSavepoint : public StatementWithLang<lang::SavepointSTMT> {
+
 public:
     StatementSavepoint &savepoint(const std::string &savepointName);
     virtual Type getType() const override;

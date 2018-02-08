@@ -631,6 +631,9 @@
 		23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC3078202B0066000F7895 /* Tokenize.hpp */; };
 		23DC307B202B0184000F7895 /* HandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC3074202AFFE9000F7895 /* HandleStatement.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DC307C202B0188000F7895 /* HandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DC3073202AFFE9000F7895 /* HandleStatement.cpp */; };
+		23DC309F202BF59F000F7895 /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6BA1EA0D6680021EFA7 /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23DC30A1202BF5D7000F7895 /* abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* abstract.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23DC30A2202BF5E5000F7895 /* Tokenize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC3078202B0066000F7895 /* Tokenize.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E732651F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		242E1E271EA3771400F77029 /* WCTRowSelect+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 242E1E221EA376FB00F77029 /* WCTRowSelect+Private.h */; };
 		242E1E2E1EA37DFD00F77029 /* WCTMultiSelect+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 242E1E2B1EA37DDF00F77029 /* WCTMultiSelect+Private.h */; };
@@ -1779,6 +1782,7 @@
 				2397760D202AEE17000A681C /* TableConstraint.hpp in Headers */,
 				2397760E202AEE17000A681C /* TableOrSubquery.hpp in Headers */,
 				2397770F202AF486000A681C /* WINQ.h in Headers */,
+				23DC30A1202BF5D7000F7895 /* abstract.h in Headers */,
 				2397760F202AEE17000A681C /* WithClause.hpp in Headers */,
 				239775B1202AEE10000A681C /* LangBindParameter.hpp in Headers */,
 				239775B2202AEE10000A681C /* LangColumnConstraint.hpp in Headers */,
@@ -1786,6 +1790,7 @@
 				239775B4202AEE10000A681C /* LangColumnType.hpp in Headers */,
 				239775B5202AEE10000A681C /* LangCommitSTMT.hpp in Headers */,
 				239775B6202AEE10000A681C /* LangCommonTableExpression.hpp in Headers */,
+				23DC309F202BF59F000F7895 /* WCDB.h in Headers */,
 				239775B7202AEE10000A681C /* LangConflictClause.hpp in Headers */,
 				239775B8202AEE10000A681C /* LangCreateIndexSTMT.hpp in Headers */,
 				239775B9202AEE10000A681C /* LangCreateTableSTMT.hpp in Headers */,
@@ -1830,6 +1835,7 @@
 				239775D8202AEE10000A681C /* LangSelectCore.hpp in Headers */,
 				239775D9202AEE10000A681C /* LangSelectSTMT.hpp in Headers */,
 				239775DA202AEE10000A681C /* LangTableConstraint.hpp in Headers */,
+				23DC30A2202BF5E5000F7895 /* Tokenize.hpp in Headers */,
 				239776E9202AF2E3000A681C /* optional_impl.hpp in Headers */,
 				239775DB202AEE10000A681C /* LangTableOrSubquery.hpp in Headers */,
 				239775DC202AEE10000A681C /* LangUpdateSTMT.hpp in Headers */,

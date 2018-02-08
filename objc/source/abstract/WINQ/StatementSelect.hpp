@@ -21,13 +21,12 @@
 #ifndef StatementSelect_hpp
 #define StatementSelect_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementSelect : public DescribableWithLang<lang::SelectSTMT>,
-                        public CRUDStatement {
+class StatementSelect : public StatementWithLang<lang::SelectSTMT> {
 public:
     StatementSelect &with(const CommonTableExpression &commonTableExpression);
     StatementSelect &

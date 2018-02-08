@@ -21,13 +21,13 @@
 #ifndef StatementRelease_hpp
 #define StatementRelease_hpp
 
-#include <WCDB/Describable.hpp>
-#include <WCDB/Statement.hpp>
+#include <WINQ/Describable.hpp>
+#include <WINQ/Statement.hpp>
 
 namespace WCDB {
 
-class StatementRelease : public DescribableWithLang<lang::ReleaseSTMT>,
-                         public Statement {
+class StatementRelease : public StatementWithLang<lang::ReleaseSTMT> {
+
 public:
     StatementRelease &release(const std::string &savepointName);
     virtual Type getType() const override;

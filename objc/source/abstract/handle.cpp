@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/File.hpp>
-#include <WCDB/Handle.hpp>
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/Path.hpp>
-#include <WCDB/macro.hpp>
+#include <WINQ/File.hpp>
+#include <WINQ/Handle.hpp>
+#include <WINQ/HandleStatement.hpp>
+#include <WINQ/Path.hpp>
+#include <WINQ/macro.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <sqliterk/SQLiteRepairKit.h>
 

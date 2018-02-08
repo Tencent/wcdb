@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/copy_on_write_string.hpp>
+#include <WINQ/copy_on_write_string.hpp>
 
 copy_on_write_string::copy_on_write_string() : Super()
 {

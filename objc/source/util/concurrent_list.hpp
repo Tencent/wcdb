@@ -21,7 +21,7 @@
 #ifndef concurrent_list_hpp
 #define concurrent_list_hpp
 
-#include <WCDB/spin.hpp>
+#include <WINQ/spin.hpp>
 #include <list>
 
 namespace WCDB {
