@@ -62,15 +62,14 @@ copy_on_write_string ForeignKeyClause::SQL() const
     if (!columnNames.empty()) {
         description.append("(" + columnNames.description().get() + ")");
     }
-    description.append(" ");
     if (!triggers.empty()) {
-        description.append(triggers.description().get() + " ");
+        description.append(" " + triggers.description().get() + " ");
     }
     if (doDeferrable) {
         if (notDeferrable) {
-            description.append("NOT ");
+            description.append(" NOT");
         }
-        description.append("DEFERRABLE");
+        description.append(" DEFERRABLE");
         if (initiallySwitcher != InitiallySwitch::NotSet) {
             description.append(" ");
             description.append(
