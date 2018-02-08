@@ -21,7 +21,6 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
-#include <WCDB/HandleStatement.hpp>
 #include <WCDB/abstract_common.h>
 #include <WCDB/error.hpp>
 #include <WCDB/utility.hpp>

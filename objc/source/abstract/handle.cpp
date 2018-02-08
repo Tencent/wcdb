@@ -20,8 +20,8 @@
 
 #include <WCDB/File.hpp>
 #include <WCDB/Handle.hpp>
+#include <WCDB/HandleStatement.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/handle.hpp>
 #include <WCDB/macro.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <sqliterk/SQLiteRepairKit.h>
