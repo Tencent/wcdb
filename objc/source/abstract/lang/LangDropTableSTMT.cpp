@@ -24,7 +24,7 @@ namespace WCDB {
 
 namespace lang {
 
-inline const char *DropTableSTMT::getInternalName() const
+const char *DropTableSTMT::getInternalName() const
 {
     return "TABLE";
 }

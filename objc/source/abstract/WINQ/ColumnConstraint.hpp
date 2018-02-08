@@ -28,7 +28,6 @@ namespace WCDB {
 class ColumnConstraint : public DescribableWithLang<lang::ColumnConstraint> {
 public:
     ColumnConstraint();
-    ColumnConstraint(const std::string &name);
 
     ColumnConstraint &named(const std::string &name);
 

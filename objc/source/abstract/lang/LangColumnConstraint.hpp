@@ -62,6 +62,10 @@ public:
     virtual copy_on_write_string SQL() const override;
 };
 
+template <>
+copy_on_write_string
+copy_on_write_lazy_lang_list<ColumnConstraint>::calculatedDescription() const;
+
 } // namespace lang
 
 } // namespace WCDB

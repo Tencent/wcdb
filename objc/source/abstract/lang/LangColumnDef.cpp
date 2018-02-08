@@ -24,12 +24,19 @@ namespace WCDB {
 
 namespace lang {
 
+ColumnDef::ColumnDef() : typed(false), type(ColumnType::Null)
+{
+}
+
 copy_on_write_string ColumnDef::SQL() const
 {
     std::string description;
     assert(!columnName.empty());
-    description.append(columnName.get() + " ");
-    description.append(ColumnTypeName(type));
+    description.append(columnName.get());
+    if (typed) {
+        description.append(" ");
+        description.append(ColumnTypeName(type));
+    }
     if (!columnConstraints.empty()) {
         description.append(" " + columnConstraints.description().get());
     }

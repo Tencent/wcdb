@@ -24,7 +24,7 @@ namespace WCDB {
 
 namespace lang {
 
-inline const char *DropViewSTMT::getInternalName() const
+const char *DropViewSTMT::getInternalName() const
 {
     return "VIEW";
 }

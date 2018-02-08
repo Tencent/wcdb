@@ -33,31 +33,31 @@ copy_on_write_string ColumnConstraint::SQL() const
     description.append(" ");
     switch (type) {
         case Type::PrimaryKey:
-            description.append("PRIMARY KEY ");
+            description.append("PRIMARY KEY");
             if (order != Order::NotSet) {
-                description.append(LangOrderName(order));
                 description.append(" ");
+                description.append(LangOrderName(order));
             }
             if (conflictClause != ConflictClause::NotSet) {
-                description.append(LangConflictClauseName(conflictClause));
                 description.append(" ");
+                description.append(LangConflictClauseName(conflictClause));
             }
             if (autoIncrement) {
-                description.append("AUTOINCREMENT");
+                description.append(" AUTOINCREMENT");
             }
             break;
         case Type::NotNull:
-            description.append("NOT NULL ");
+            description.append("NOT NULL");
             if (conflictClause != ConflictClause::NotSet) {
-                description.append(LangConflictClauseName(conflictClause));
                 description.append(" ");
+                description.append(LangConflictClauseName(conflictClause));
             }
             break;
         case Type::Unique:
-            description.append("UNIQUE ");
+            description.append("UNIQUE");
             if (conflictClause != ConflictClause::NotSet) {
-                description.append(LangConflictClauseName(conflictClause));
                 description.append(" ");
+                description.append(LangConflictClauseName(conflictClause));
             }
             break;
         case Type::Check:
@@ -85,6 +85,24 @@ copy_on_write_string ColumnConstraint::SQL() const
             assert(!foreignKeyClause.empty());
             description.append(foreignKeyClause.description().get());
             break;
+    }
+    return description;
+}
+
+template <>
+copy_on_write_string
+copy_on_write_lazy_lang_list<ColumnConstraint>::calculatedDescription() const
+{
+    std::string description;
+    bool comma = false;
+    for (const auto &element : this->get()) {
+        if (comma) {
+            description.append(" ");
+        } else {
+            comma = true;
+        }
+        assert(!element.empty());
+        description.append(element.description().get());
     }
     return description;
 }

@@ -26,12 +26,6 @@ ColumnConstraint::ColumnConstraint()
 {
 }
 
-ColumnConstraint::ColumnConstraint(const std::string &name)
-{
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.name.assign(name);
-}
-
 ColumnConstraint &ColumnConstraint::named(const std::string &name)
 {
     lang::ColumnConstraint &lang = getMutableLang();

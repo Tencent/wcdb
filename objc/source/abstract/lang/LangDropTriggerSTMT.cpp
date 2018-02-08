@@ -24,7 +24,7 @@ namespace WCDB {
 
 namespace lang {
 
-inline const char *DropTriggerSTMT::getInternalName() const
+const char *DropTriggerSTMT::getInternalName() const
 {
     return "TRIGGER";
 }

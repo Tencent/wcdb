@@ -24,7 +24,7 @@ namespace WCDB {
 
 namespace lang {
 
-inline const char *DropIndexSTMT::getInternalName() const
+const char *DropIndexSTMT::getInternalName() const
 {
     return "INDEX";
 }
