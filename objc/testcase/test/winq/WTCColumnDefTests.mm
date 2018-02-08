@@ -33,14 +33,15 @@
     WCDB::ColumnConstraint columnConstraint1 = WCDB::ColumnConstraint().named("testConstraint1").withNotNull();
     WCDB::ColumnConstraint columnConstraint2 = WCDB::ColumnConstraint().named("testConstraint2").withUnique();
     std::list<WCDB::ColumnConstraint> columnConstraintList = {columnConstraint1, columnConstraint2};
+    std::string columnName = "localID";
 
-    WINQAssertEqual(WCDB::ColumnDef("localID").withType(type), @"localID INTEGER");
+    WINQAssertEqual(WCDB::ColumnDef(columnName).withType(type), @"localID INTEGER");
 
-    WINQAssertEqual(WCDB::ColumnDef("localID"), @"localID");
+    WINQAssertEqual(WCDB::ColumnDef(columnName), @"localID");
 
-    WINQAssertEqual(WCDB::ColumnDef("localID").withType(type).byAddingConstraint(columnConstraint1), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL");
+    WINQAssertEqual(WCDB::ColumnDef(columnName).withType(type).byAddingConstraint(columnConstraint1), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL");
 
-    WINQAssertEqual(WCDB::ColumnDef("localID").withType(type).byAddingConstraints(columnConstraintList), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
+    WINQAssertEqual(WCDB::ColumnDef(columnName).withType(type).byAddingConstraints(columnConstraintList), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
 }
 
 @end
