@@ -38,10 +38,6 @@
 
     WINQAssertEqual(WCDB::ColumnDef("localID"), @"localID");
 
-    WINQAssertEqual(WCDB::ColumnDef("localID").byAddingConstraint(columnConstraint1), @"localID CONSTRAINT testConstraint1 NOT NULL");
-
-    WINQAssertEqual(WCDB::ColumnDef("localID").byAddingConstraints(columnConstraintList), @"localID CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
-
     WINQAssertEqual(WCDB::ColumnDef("localID").withType(type).byAddingConstraint(columnConstraint1), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL");
 
     WINQAssertEqual(WCDB::ColumnDef("localID").withType(type).byAddingConstraints(columnConstraintList), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
