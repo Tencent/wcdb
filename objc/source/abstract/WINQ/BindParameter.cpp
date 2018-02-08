@@ -22,8 +22,6 @@
 
 namespace WCDB {
 
-BindParameter BindParameter::defaultBindParameter;
-
 BindParameter::BindParameter()
 {
     lang::BindParameter &lang = getMutableLang();
