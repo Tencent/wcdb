@@ -29,10 +29,12 @@ copy_on_write_string SelectCore::SQL() const
     std::string description;
     switch (switcher) {
         case Switch::Select:
-            description.append("SELECT");
+            description.append("SELECT ");
             if (distinct) {
-                description.append(" DISTINCT");
+                description.append("DISTINCT ");
             }
+            assert(!resultColumns.empty());
+            description.append(resultColumns.description().get());
             switch (fromSwitcher) {
                 case FromSwitch::TableOrSubquery:
                     assert(!tableOrSubquerys.empty());
