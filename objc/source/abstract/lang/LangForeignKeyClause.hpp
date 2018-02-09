@@ -72,6 +72,9 @@ protected:
     static constexpr const char *
     InitiallySwitchName(const InitiallySwitch &initiallySwitcher);
 };
+    
+template <>
+    copy_on_write_string copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription() const;
 
 } // namespace lang
 

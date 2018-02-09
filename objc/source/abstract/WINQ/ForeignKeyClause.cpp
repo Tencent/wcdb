@@ -106,36 +106,33 @@ ForeignKeyClause &ForeignKeyClause::byMatching(const std::string &name)
     return *this;
 }
 
-ForeignKeyClause &ForeignKeyClause::deferrableInitiallyDeferred()
+ForeignKeyClause &ForeignKeyClause::deferrable()
 {
     lang::ForeignKeyClause &lang = getMutableLang();
     lang.doDeferrable = true;
     lang.notDeferrable = false;
-    lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Deferred;
     return *this;
 }
-ForeignKeyClause &ForeignKeyClause::deferrableInitiallyImmediate()
-{
-    lang::ForeignKeyClause &lang = getMutableLang();
-    lang.doDeferrable = true;
-    lang.notDeferrable = false;
-    lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Immediate;
-    return *this;
-}
-ForeignKeyClause &ForeignKeyClause::notDeferrableInitiallyDeferred()
+
+ForeignKeyClause &ForeignKeyClause::notDeferrable()
 {
     lang::ForeignKeyClause &lang = getMutableLang();
     lang.doDeferrable = true;
     lang.notDeferrable = true;
-    lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Deferred;
     return *this;
 }
-ForeignKeyClause &ForeignKeyClause::notDeferrableInitiallyImmediate()
+
+ForeignKeyClause &ForeignKeyClause::initiallyImmediate()
 {
     lang::ForeignKeyClause &lang = getMutableLang();
-    lang.doDeferrable = true;
-    lang.notDeferrable = true;
     lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Immediate;
+    return *this;
+}
+
+ForeignKeyClause &ForeignKeyClause::initiallyDeferred()
+{
+    lang::ForeignKeyClause &lang = getMutableLang();
+    lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Deferred;
     return *this;
 }
 

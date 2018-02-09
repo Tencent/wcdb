@@ -40,7 +40,8 @@ ForeignKeyClause::InitiallySwitchName(const InitiallySwitch &initiallySwitcher)
         case InitiallySwitch::Immediate:
             return "INITIALLY IMMEDIATE";
         default:
-            return "";
+            assert(false);
+            break;
     }
 }
 
@@ -78,7 +79,7 @@ copy_on_write_string ForeignKeyClause::SQL() const
         description.append("(" + columnNames.description().get() + ")");
     }
     if (!triggers.empty()) {
-        description.append(" " + triggers.description().get() + " ");
+        description.append(" " + triggers.description().get());
     }
     if (doDeferrable) {
         if (notDeferrable) {
@@ -112,6 +113,23 @@ copy_on_write_string ForeignKeyClause::Trigger::SQL() const
     return description;
 }
 
+template <>
+copy_on_write_string copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription() const
+{
+    std::string description;
+    bool space = false;
+    for (const auto &element : this->get()) {
+        if (space) {
+            description.append(" ");
+        } else {
+            space = true;
+        }
+        assert(!element.empty());
+        description.append(element.description().get());
+    }
+    return description;
+}
+    
 } // namespace lang
 
 } // namespace WCDB

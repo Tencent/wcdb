@@ -304,12 +304,12 @@ copy_on_write_string
 copy_on_write_lazy_lang_list<ExprCase::Pair>::calculatedDescription() const
 {
     std::string description;
-    bool comma = false;
+    bool space = false;
     for (const auto &element : this->get()) {
-        if (comma) {
+        if (space) {
             description.append(" ");
         } else {
-            comma = true;
+            space = true;
         }
         assert(!element.empty());
         description.append(element.description().get());

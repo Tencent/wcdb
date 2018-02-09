@@ -48,10 +48,10 @@ public:
 
     ForeignKeyClause &byMatching(const std::string &name);
 
-    ForeignKeyClause &deferrableInitiallyDeferred();
-    ForeignKeyClause &deferrableInitiallyImmediate();
-    ForeignKeyClause &notDeferrableInitiallyDeferred();
-    ForeignKeyClause &notDeferrableInitiallyImmediate();
+    ForeignKeyClause &deferrable();
+    ForeignKeyClause &notDeferrable();
+    ForeignKeyClause &initiallyImmediate();
+    ForeignKeyClause &initiallyDeferred();
 
 private:
     void addTriggerForUpdating(
