@@ -29,8 +29,19 @@
 
 - (void)testIndexedColumn
 {
+    std::string columnName = "testColumn1";
+    WCDB::Expression expression = WCDB::Expression::ColumnNamed("testColumn2");
+    std::string collationName = "testCollation";
 
+    WINQAssertEqual(WCDB::IndexedColumn(columnName), @"testColumn1");
+
+    WINQAssertEqual(WCDB::IndexedColumn(columnName).withOrder(WCDB::Order::ASC), @"testColumn1 ASC");
+
+    WINQAssertEqual(WCDB::IndexedColumn(columnName).withOrder(WCDB::Order::DESC), @"testColumn1 DESC");
+
+    WINQAssertEqual(WCDB::IndexedColumn(columnName).withCollate(collationName), @"testColumn1 COLLATE testCollation");
+
+    WINQAssertEqual(WCDB::IndexedColumn(expression), @"testColumn2");
 }
 
 @end
-
