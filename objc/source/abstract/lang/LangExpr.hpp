@@ -189,7 +189,8 @@ public:
         NotSet,
         Select,
         Expr,
-        TableOrFunction,
+        Table,
+        Function,
     };
     Switch switcher;
 

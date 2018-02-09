@@ -165,9 +165,9 @@ copy_on_write_string ExprPattern::SQL() const
 {
     std::string description;
     assert(!left.empty());
-    description.append(left.description().get());
+    description.append(left.description().get() + " ");
     if (isNot) {
-        description.append(" NOT ");
+        description.append("NOT ");
     }
     description.append(ExprPattern::TypeName(type));
     assert(!right.empty());
@@ -237,16 +237,26 @@ copy_on_write_string ExprIn::SQL() const
             assert(!exprs.empty());
             description.append("(" + exprs.description().get() + ")");
             break;
-        case Switch::TableOrFunction:
+        case Switch::Table:
+            description.append(" ");
             if (!schemaName.empty()) {
                 description.append(schemaName.get() + ".");
             }
             assert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get());
+            break;
+        case Switch::Function:
+            description.append(" ");
+            if (!schemaName.empty()) {
+                description.append(schemaName.get() + ".");
+            }
+            assert(!tableNameOrFunction.empty());
+            description.append(tableNameOrFunction.get() + "(");
             if (!exprs.empty()) {
                 description.append(exprs.description().get());
             }
             description.append(")");
+            break;
     }
     return description;
 }
@@ -254,11 +264,14 @@ copy_on_write_string ExprIn::SQL() const
 copy_on_write_string ExprExists::SQL() const
 {
     std::string description;
+    if (isNot) {
+        description.append("NOT");
+    }
     if (exists) {
         if (isNot) {
-            description.append("NOT ");
+            description.append(" ");
         }
-        description.append("EXISTS ");
+        description.append("EXISTS");
     }
     assert(!selectSTMT.empty());
     description.append("(" + selectSTMT.description().get() + ")");

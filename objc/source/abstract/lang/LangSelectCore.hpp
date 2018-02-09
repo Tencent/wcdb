@@ -29,6 +29,8 @@ namespace lang {
 
 class SelectCore : public Lang {
 public:
+    SelectCore();
+
     enum class Switch : int {
         Select,
         Values,

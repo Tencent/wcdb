@@ -24,6 +24,13 @@ namespace WCDB {
 
 namespace lang {
 
+SelectCore::SelectCore()
+    : switcher(Switch::Select)
+    , fromSwitcher(FromSwitch::NotSet)
+    , distinct(false)
+{
+}
+
 copy_on_write_string SelectCore::SQL() const
 {
     std::string description;

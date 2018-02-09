@@ -77,8 +77,7 @@ public:
 
     Expression(const std::list<Expression> &expressions);
 
-    static Expression Cast(const Expression &expression,
-                           const ColumnType &columnType);
+    Expression as(const ColumnType &columnType);
 
     Expression &withCollate(const std::string &collationName);
 
@@ -105,36 +104,59 @@ public:
     Expression notIn(const Expression &expression);
     Expression in(const std::list<Expression> &expressions);
     Expression notIn(const std::list<Expression> &expressions);
-    Expression in(const std::string &tableOrFunctionName);
-    Expression notIn(const std::string &tableOrFunctionName);
-    Expression in(const std::string &schemaName,
-                  const std::string &tableOrFunctionName);
-    Expression notIn(const std::string &schemaName,
-                     const std::string &tableOrFunctionName);
-    Expression in(const std::string &schemaName,
-                  const std::string &functionName,
-                  const Expression &expression);
-    Expression notIn(const std::string &schemaName,
-                     const std::string &functionName,
-                     const Expression &expression);
-    Expression in(const std::string &schemaName,
-                  const std::string &functionName,
-                  const std::list<Expression> &expressions);
-    Expression notIn(const std::string &schemaName,
-                     const std::string &functionName,
-                     const std::list<Expression> &expressions);
+
+    Expression inTable(const std::string &tableName);
+    Expression notInTable(const std::string &tableName);
+    Expression inTable(const std::string &schemaName,
+                       const std::string &tableName);
+    Expression notInTable(const std::string &schemaName,
+                          const std::string &tableName);
+
+    Expression inFunction(const std::string &functionName);
+    Expression notInFunction(const std::string &functionName);
+    Expression inFunction(const std::string &schemaName,
+                          const std::string &functionName);
+    Expression notInFunction(const std::string &schemaName,
+                             const std::string &functionName);
+
+    Expression inFunction(const std::string &functionName,
+                          const Expression &expression);
+    Expression notInFunction(const std::string &functionName,
+                             const Expression &expression);
+    Expression inFunction(const std::string &schemaName,
+                          const std::string &functionName,
+                          const Expression &expression);
+    Expression notInFunction(const std::string &schemaName,
+                             const std::string &functionName,
+                             const Expression &expression);
+
+    Expression inFunction(const std::string &functionName,
+                          const std::list<Expression> &expressions);
+    Expression notInFunction(const std::string &functionName,
+                             const std::list<Expression> &expressions);
+    Expression inFunction(const std::string &schemaName,
+                          const std::string &functionName,
+                          const std::list<Expression> &expressions);
+    Expression notInFunction(const std::string &schemaName,
+                             const std::string &functionName,
+                             const std::list<Expression> &expressions);
 
     static Expression Exists(const StatementSelect &selectSTMT);
     static Expression NotExists(const StatementSelect &selectSTMT);
+    Expression(const StatementSelect &selectSTMT,
+               bool isNot = false,
+               bool exists = false);
 
     class CaseInternal : public DescribableWithLang<lang::ExprCase> {
     public:
+        CaseInternal();
         CaseInternal(const Expression &expression);
         CaseInternal &whenAndThen(const Expression &when,
                                   const Expression &then);
         CaseInternal &else_(const Expression &expression);
     };
     static Expression::CaseInternal Case(const Expression &expression);
+    static Expression::CaseInternal Case();
     Expression(const CaseInternal &expressionCase);
 
     Expression(const RaiseFunction &raiseFunction);
@@ -175,23 +197,38 @@ protected:
                                                    bool isNot);
     lang::copy_on_write_lazy_lang<lang::ExprIn>
     in(const std::list<Expression> &expressions, bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    in(const std::string &schemaName,
-       const std::string &tableOrFunctionName,
-       bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    in(const std::string &schemaName,
-       const std::string &tableFunctionName,
-       const Expression &expression,
-       bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    in(const std::string &schemaName,
-       const std::string &tableFunctionName,
-       const std::list<Expression> &expressions,
-       bool isNot);
 
-    static lang::copy_on_write_lazy_lang<lang::ExprExists>
-    Exists(const StatementSelect &selectSTMT, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inTable(const std::string &tableName, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inTable(const std::string &schemaName,
+            const std::string &tableName,
+            bool isNot);
+
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inFunction(const std::string &functionName, bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inFunction(const std::string &schemaName,
+               const std::string &functionName,
+               bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inFunction(const std::string &functionName,
+               const Expression &parameter,
+               bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inFunction(const std::string &schemaName,
+               const std::string &functionName,
+               const Expression &parameter,
+               bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inFunction(const std::string &functionName,
+               const std::list<Expression> &parameters,
+               bool isNot);
+    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    inFunction(const std::string &schemaName,
+               const std::string &functionName,
+               const std::list<Expression> &parameters,
+               bool isNot);
 };
 
 } // namespace WCDB

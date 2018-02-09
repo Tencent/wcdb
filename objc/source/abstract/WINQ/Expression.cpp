@@ -255,6 +255,7 @@ Expression Expression::Function(const std::string &functionName)
 {
     lang::copy_on_write_lazy_lang<lang::ExprFunction> cowLang;
     lang::ExprFunction &lang = cowLang.get_or_copy();
+    lang.type = lang::ExprFunction::Type::NotSet;
     lang.functionName.assign(functionName);
     return cowLang;
 }
@@ -320,12 +321,11 @@ Expression::Expression(
     lang.exprCast.assign(exprCast);
 }
 
-Expression Expression::Cast(const Expression &expression,
-                            const ColumnType &columnType)
+Expression Expression::as(const ColumnType &columnType)
 {
     lang::copy_on_write_lazy_lang<lang::ExprCast> cowLang;
     lang::ExprCast &lang = cowLang.get_or_copy();
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(getLang());
     lang.type = columnType;
     return cowLang;
 }
@@ -447,6 +447,7 @@ lang::copy_on_write_lazy_lang<lang::ExprBetween> Expression::between(
     lang::copy_on_write_lazy_lang<lang::ExprBetween> cowLang;
     lang::ExprBetween &lang = cowLang.get_or_copy();
     lang.isNot = isNot;
+    lang.expr.assign(getLang());
     lang.left.assign(left.getLang());
     lang.right.assign(right.getLang());
     return cowLang;
@@ -480,6 +481,132 @@ Expression::Expression(
     lang::Expr &lang = getMutableLang();
     lang.type = lang::Expr::Type::In;
     lang.exprIn.assign(exprIn);
+}
+
+Expression Expression::in(const StatementSelect &selectSTMT)
+{
+    return in(selectSTMT, false);
+}
+
+Expression Expression::notIn(const StatementSelect &selectSTMT)
+{
+    return in(selectSTMT, true);
+}
+
+Expression Expression::in(const Expression &expression)
+{
+    return in(expression, false);
+}
+
+Expression Expression::notIn(const Expression &expression)
+{
+    return in(expression, true);
+}
+
+Expression Expression::in(const std::list<Expression> &expressions)
+{
+    return in(expressions, false);
+}
+
+Expression Expression::notIn(const std::list<Expression> &expressions)
+{
+    return in(expressions, true);
+}
+
+Expression Expression::inTable(const std::string &tableName)
+{
+    return inTable(tableName, false);
+}
+
+Expression Expression::notInTable(const std::string &tableName)
+{
+    return inTable(tableName, true);
+}
+
+Expression Expression::inTable(const std::string &schemaName,
+                               const std::string &tableName)
+{
+    return inTable(schemaName, tableName, false);
+}
+
+Expression Expression::notInTable(const std::string &schemaName,
+                                  const std::string &tableName)
+{
+    return inTable(schemaName, tableName, true);
+}
+
+Expression Expression::inFunction(const std::string &functionName)
+{
+    return inFunction(functionName, false);
+}
+
+Expression Expression::notInFunction(const std::string &functionName)
+{
+    return inFunction(functionName, true);
+}
+
+Expression Expression::inFunction(const std::string &schemaName,
+                                  const std::string &functionName)
+{
+    return inFunction(schemaName, functionName, false);
+}
+
+Expression Expression::notInFunction(const std::string &schemaName,
+                                     const std::string &functionName)
+{
+    return inFunction(schemaName, functionName, true);
+}
+
+Expression Expression::inFunction(const std::string &functionName,
+                                  const Expression &expression)
+{
+    return inFunction(functionName, expression, false);
+}
+
+Expression Expression::notInFunction(const std::string &functionName,
+                                     const Expression &expression)
+{
+    return inFunction(functionName, expression, true);
+}
+
+Expression Expression::inFunction(const std::string &schemaName,
+                                  const std::string &functionName,
+                                  const Expression &expression)
+{
+    return inFunction(schemaName, functionName, expression, false);
+}
+
+Expression Expression::notInFunction(const std::string &schemaName,
+                                     const std::string &functionName,
+                                     const Expression &expression)
+{
+    return inFunction(schemaName, functionName, expression, true);
+}
+
+Expression Expression::inFunction(const std::string &functionName,
+                                  const std::list<Expression> &expressions)
+{
+    return inFunction(functionName, expressions, false);
+}
+
+Expression Expression::notInFunction(const std::string &functionName,
+                                     const std::list<Expression> &expressions)
+{
+    return inFunction(functionName, expressions, true);
+}
+
+Expression Expression::inFunction(const std::string &schemaName,
+                                  const std::string &functionName,
+                                  const std::list<Expression> &expressions)
+{
+    return inFunction(schemaName, functionName, expressions, false);
+}
+
+Expression Expression::notInFunction(const std::string &schemaName,
+                                     const std::string &functionName,
+                                     const std::list<Expression> &expressions)
+{
+    return inFunction(schemaName, functionName, expressions, true);
 }
 
 lang::copy_on_write_lazy_lang<lang::ExprIn>
@@ -521,168 +648,141 @@ Expression::in(const std::list<Expression> &expressions, bool isNot)
 }
 
 lang::copy_on_write_lazy_lang<lang::ExprIn>
-Expression::in(const std::string &schemaName,
-               const std::string &tableOrFunctionName,
-               bool isNot)
+Expression::inTable(const std::string &tableName, bool isNot)
 {
     lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
     lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::TableOrFunction;
+    lang.switcher = lang::ExprIn::Switch::Table;
     lang.expr.assign(getLang());
-    if (!schemaName.empty()) {
-        lang.schemaName.assign(schemaName);
-    }
-    lang.tableNameOrFunction.assign(tableOrFunctionName);
+    lang.tableNameOrFunction.assign(tableName);
+    lang.isNot = isNot;
+    return cowLang;
+}
+
+lang::copy_on_write_lazy_lang<lang::ExprIn> Expression::inTable(
+    const std::string &schemaName, const std::string &tableName, bool isNot)
+{
+    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
+    lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = lang::ExprIn::Switch::Table;
+    lang.expr.assign(getLang());
+    lang.schemaName.assign(schemaName);
+    lang.tableNameOrFunction.assign(tableName);
     lang.isNot = isNot;
     return cowLang;
 }
 
 lang::copy_on_write_lazy_lang<lang::ExprIn>
-Expression::in(const std::string &schemaName,
-               const std::string &tableOrFunctionName,
-               const Expression &expression,
-               bool isNot)
+Expression::inFunction(const std::string &functionName, bool isNot)
 {
     lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
     lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::TableOrFunction;
+    lang.switcher = lang::ExprIn::Switch::Function;
     lang.expr.assign(getLang());
-    if (!schemaName.empty()) {
-        lang.schemaName.assign(schemaName);
-    }
-    lang.tableNameOrFunction.assign(tableOrFunctionName);
-    lang.exprs.append(expression.getLang());
+    lang.tableNameOrFunction.assign(functionName);
+    lang.isNot = isNot;
+    return cowLang;
+}
+
+lang::copy_on_write_lazy_lang<lang::ExprIn> Expression::inFunction(
+    const std::string &schemaName, const std::string &functionName, bool isNot)
+{
+    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
+    lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = lang::ExprIn::Switch::Function;
+    lang.expr.assign(getLang());
+    lang.schemaName.assign(schemaName);
+    lang.tableNameOrFunction.assign(functionName);
+    lang.isNot = isNot;
+    return cowLang;
+}
+
+lang::copy_on_write_lazy_lang<lang::ExprIn> Expression::inFunction(
+    const std::string &functionName, const Expression &parameter, bool isNot)
+{
+    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
+    lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = lang::ExprIn::Switch::Function;
+    lang.expr.assign(getLang());
+    lang.tableNameOrFunction.assign(functionName);
+    lang.exprs.append(parameter.getLang());
     lang.isNot = isNot;
     return cowLang;
 }
 
 lang::copy_on_write_lazy_lang<lang::ExprIn>
-Expression::in(const std::string &schemaName,
-               const std::string &tableOrFunctionName,
-               const std::list<Expression> &expressions,
-               bool isNot)
+Expression::inFunction(const std::string &schemaName,
+                       const std::string &functionName,
+                       const Expression &parameter,
+                       bool isNot)
 {
     lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
     lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::TableOrFunction;
+    lang.switcher = lang::ExprIn::Switch::Function;
     lang.expr.assign(getLang());
-    if (!schemaName.empty()) {
-        lang.schemaName.assign(schemaName);
+    lang.schemaName.assign(schemaName);
+    lang.tableNameOrFunction.assign(functionName);
+    lang.exprs.append(parameter.getLang());
+    lang.isNot = isNot;
+    return cowLang;
+}
+
+lang::copy_on_write_lazy_lang<lang::ExprIn>
+Expression::inFunction(const std::string &functionName,
+                       const std::list<Expression> &parameters,
+                       bool isNot)
+{
+    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
+    lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = lang::ExprIn::Switch::Function;
+    lang.expr.assign(getLang());
+    for (const Expression &expression : parameters) {
+        lang.exprs.append(expression.getLang());
     }
-    lang.tableNameOrFunction.assign(tableOrFunctionName);
-    for (const Expression &expression : expressions) {
+    lang.tableNameOrFunction.assign(functionName);
+    lang.isNot = isNot;
+    return cowLang;
+}
+
+lang::copy_on_write_lazy_lang<lang::ExprIn>
+Expression::inFunction(const std::string &schemaName,
+                       const std::string &functionName,
+                       const std::list<Expression> &parameters,
+                       bool isNot)
+{
+    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
+    lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = lang::ExprIn::Switch::Function;
+    lang.expr.assign(getLang());
+    lang.schemaName.assign(schemaName);
+    lang.tableNameOrFunction.assign(functionName);
+    for (const Expression &expression : parameters) {
         lang.exprs.append(expression.getLang());
     }
     lang.isNot = isNot;
     return cowLang;
 }
 
-Expression Expression::in(const StatementSelect &selectSTMT)
-{
-    return in(selectSTMT, false);
-}
-
-Expression Expression::notIn(const StatementSelect &selectSTMT)
-{
-    return in(selectSTMT, true);
-}
-
-Expression Expression::in(const Expression &expression)
-{
-    return in(expression, false);
-}
-
-Expression Expression::notIn(const Expression &expression)
-{
-    return in(expression, true);
-}
-
-Expression Expression::in(const std::list<Expression> &expressions)
-{
-    return in(expressions, false);
-}
-
-Expression Expression::notIn(const std::list<Expression> &expressions)
-{
-    return in(expressions, true);
-}
-
-Expression Expression::in(const std::string &tableOrFunctionName)
-{
-    return in("", tableOrFunctionName, false);
-}
-
-Expression Expression::notIn(const std::string &tableOrFunctionName)
-{
-    return in("", tableOrFunctionName, true);
-}
-
-Expression Expression::in(const std::string &schemaName,
-                          const std::string &tableOrFunctionName)
-{
-    return in(schemaName, tableOrFunctionName, false);
-}
-
-Expression Expression::notIn(const std::string &schemaName,
-                             const std::string &tableOrFunctionName)
-{
-    return in(schemaName, tableOrFunctionName, false);
-}
-
-Expression Expression::in(const std::string &schemaName,
-                          const std::string &functionName,
-                          const Expression &expression)
-{
-    return in(schemaName, functionName, expression, true);
-}
-
-Expression Expression::notIn(const std::string &schemaName,
-                             const std::string &functionName,
-                             const Expression &expression)
-{
-    return in(schemaName, functionName, expression, false);
-}
-
-Expression Expression::in(const std::string &schemaName,
-                          const std::string &functionName,
-                          const std::list<Expression> &expressions)
-{
-    return in(schemaName, functionName, expressions, false);
-}
-
-Expression Expression::notIn(const std::string &schemaName,
-                             const std::string &functionName,
-                             const std::list<Expression> &expressions)
-{
-    return in(schemaName, functionName, expressions, true);
-}
-
-Expression::Expression(
-    const lang::copy_on_write_lazy_lang<lang::ExprExists> &exprExists)
+Expression::Expression(const StatementSelect &selectSTMT,
+                       bool isNot,
+                       bool exists)
 {
     lang::Expr &lang = getMutableLang();
     lang.type = lang::Expr::Type::Exists;
-    lang.exprExists.assign(exprExists);
-}
-
-lang::copy_on_write_lazy_lang<lang::ExprExists>
-Expression::Exists(const StatementSelect &selectSTMT, bool isNot)
-{
-    lang::copy_on_write_lazy_lang<lang::ExprExists> cowLang;
-    lang::ExprExists &lang = cowLang.get_or_copy();
-    lang.isNot = isNot;
-    lang.selectSTMT.assign(selectSTMT.getLang());
-    return cowLang;
+    lang::ExprExists &langExists = lang.exprExists.get_or_copy();
+    langExists.isNot = isNot;
+    langExists.exists = exists;
+    langExists.selectSTMT.assign(selectSTMT.getLang());
 }
 
 Expression Expression::Exists(const StatementSelect &selectSTMT)
 {
-    return Expression::Exists(selectSTMT, false);
+    return Expression(selectSTMT, false, true);
 }
 
 Expression Expression::NotExists(const StatementSelect &selectSTMT)
 {
-    return Expression::Exists(selectSTMT, true);
+    return Expression(selectSTMT, true, true);
 }
 
 Expression::Expression(const CaseInternal &expressionCase)
@@ -692,9 +792,18 @@ Expression::Expression(const CaseInternal &expressionCase)
     lang.exprCase.assign(expressionCase.getLang());
 }
 
+Expression::CaseInternal Expression::Case()
+{
+    return Expression::CaseInternal();
+}
+
 Expression::CaseInternal Expression::Case(const Expression &expression)
 {
     return Expression::CaseInternal(expression);
+}
+
+Expression::CaseInternal::CaseInternal()
+{
 }
 
 Expression::CaseInternal::CaseInternal(const Expression &expression)

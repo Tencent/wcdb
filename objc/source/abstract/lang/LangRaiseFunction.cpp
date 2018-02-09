@@ -44,6 +44,7 @@ copy_on_write_string RaiseFunction::SQL() const
             description.append("FAIL " + errorMessage.get());
             break;
     }
+    description.append(")");
     return description;
 }
 
