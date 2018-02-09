@@ -29,8 +29,28 @@
 
 - (void)testForeignKeyClause
 {
-    
+    std::string tableName = "testTable";
+    std::string columName1 = "testColumn1";
+    std::list<std::string> columNames = {columName1, "testColumn2"};
+    std::string name = "matchingName";
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().notDeferrable().initiallyImmediate(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().notDeferrable(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().deferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetDefault().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteCascade().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE CASCADE NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteRestrict().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteNoAction().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onUpdateSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON UPDATE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).byMatching(name).notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) MATCH matchingName NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().byMatching(name).notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL MATCH matchingName NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnNames(columNames).onDeleteSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1, testColumn2) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).onDeleteSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
 @end
-
