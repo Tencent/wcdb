@@ -42,6 +42,7 @@ JoinConstraint &
 JoinConstraint::usingColumns(const std::list<std::string> columnNames)
 {
     lang::JoinConstraint &lang = getMutableLang();
+    lang.type = lang::JoinConstraint::Type::Using;
     for (const std::string &columnName : columnNames) {
         lang.columnNames.append(columnName);
     }
