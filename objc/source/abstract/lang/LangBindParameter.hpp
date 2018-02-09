@@ -29,7 +29,9 @@ namespace lang {
 
 class BindParameter : public Lang {
 public:
+    BindParameter();
     enum class Type : int {
+        NotSet,
         QuestionMark,
         QuestionMarkWithNumber,
         Colon,

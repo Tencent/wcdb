@@ -29,6 +29,8 @@ namespace lang {
 
 class CreateIndexSTMT : public Lang {
 public:
+    CreateIndexSTMT();
+
     bool unique;
     bool ifNotExists;
     copy_on_write_string schemaName;

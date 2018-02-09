@@ -30,7 +30,10 @@ namespace lang {
 // What's the true syntax of ModuleArgument?
 class ModuleArgument : public Lang {
 public:
+    ModuleArgument();
+
     enum class Type : int {
+        NotSet,
         ColumnDef,
         TableConstraint,
         LeftRight,

@@ -29,8 +29,11 @@ namespace lang {
 
 class ColumnConstraint : public Lang {
 public:
+    ColumnConstraint();
+
     copy_on_write_string name;
     enum class Type : int {
+        NotSet,
         PrimaryKey,
         NotNull,
         Unique,
@@ -49,6 +52,7 @@ public:
     copy_on_write_lazy_lang<Expr> expr;
 
     enum class DefaultSwitch {
+        NotSet,
         LiteralValue,
         Expr,
     };

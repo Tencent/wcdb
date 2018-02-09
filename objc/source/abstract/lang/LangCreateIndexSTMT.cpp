@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+CreateIndexSTMT::CreateIndexSTMT() : unique(false), ifNotExists(false)
+{
+}
+
 copy_on_write_string CreateIndexSTMT::SQL() const
 {
     std::string description("CREATE ");

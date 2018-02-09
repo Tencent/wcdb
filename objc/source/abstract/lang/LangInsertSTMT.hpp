@@ -29,9 +29,12 @@ namespace lang {
 
 class InsertSTMT : public CRUDLang {
 public:
+    InsertSTMT();
+
     copy_on_write_lazy_lang<WithClause> withClause;
 
     enum class Type : int {
+        NotSet,
         Insert,
         InsertOrReplace,
         InsertOrRollback,
@@ -47,6 +50,7 @@ public:
     copy_on_write_lazy_string_list columnNames;
 
     enum class Switch : int {
+        NotSet,
         Values,
         Select,
         DefaultValues,

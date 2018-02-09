@@ -24,6 +24,15 @@ namespace WCDB {
 
 namespace lang {
 
+ColumnConstraint::ColumnConstraint()
+    : type(Type::NotSet)
+    , order(Order::NotSet)
+    , conflictClause(ConflictClause::NotSet)
+    , autoIncrement(false)
+    , defaultSwitcher(DefaultSwitch::NotSet)
+{
+}
+
 copy_on_write_string ColumnConstraint::SQL() const
 {
     std::string description;
@@ -74,6 +83,9 @@ copy_on_write_string ColumnConstraint::SQL() const
                     assert(!expr.empty());
                     description.append("(" + expr.description().get() + ")");
                     break;
+                default:
+                    assert(false);
+                    break;
             }
             break;
         case Type::Collate:
@@ -83,6 +95,10 @@ copy_on_write_string ColumnConstraint::SQL() const
         case Type::ForeignKeyClause:
             assert(!foreignKeyClause.empty());
             description.append(foreignKeyClause.description().get());
+            break;
+        default:
+            assert(false);
+            ;
             break;
     }
     return description;

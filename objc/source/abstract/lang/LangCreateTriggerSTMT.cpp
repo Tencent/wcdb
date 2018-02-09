@@ -24,6 +24,15 @@ namespace WCDB {
 
 namespace lang {
 
+CreateTriggerSTMT::CreateTriggerSTMT()
+    : temp(false)
+    , ifNotExists(false)
+    , type(Type::NotSet)
+    , operation(Operation::NotSet)
+    , forEachRow(false)
+{
+}
+
 copy_on_write_string CreateTriggerSTMT::SQL() const
 {
     std::string description("CREATE ");
@@ -67,6 +76,9 @@ constexpr const char *CreateTriggerSTMT::TypeName(const Type &type)
             return "AFTER";
         case Type::InsteadOf:
             return "INSTEAD OF";
+        default:
+            assert(false);
+            break;
     }
 }
 
@@ -80,6 +92,9 @@ CreateTriggerSTMT::OperationName(const Operation &operation)
             return "INSERT";
         case Operation::Update:
             return "UPDATE";
+        default:
+            assert(false);
+            break;
     }
 }
 

@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+ReindexSTMT::ReindexSTMT() : switcher(Switch::NotSet)
+{
+}
+
 copy_on_write_string ReindexSTMT::SQL() const
 {
     std::string description("REINDEX");

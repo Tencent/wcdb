@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+InsertSTMT::InsertSTMT() : type(Type::NotSet), switcher(Switch::NotSet)
+{
+}
+
 copy_on_write_string InsertSTMT::SQL() const
 {
     std::string description;
@@ -51,6 +55,10 @@ copy_on_write_string InsertSTMT::SQL() const
             break;
         case Switch::DefaultValues:
             description.append(" DEFAULT VALUES");
+            break;
+        default:
+            assert(false);
+            break;
     }
     return description;
 }
@@ -70,6 +78,9 @@ constexpr const char *InsertSTMT::TypeName(const Type &type)
             return "INSERT OR FAIL";
         case Type::InsertOrIgnore:
             return "INSERT OR IGNORE";
+        default:
+            assert(false);
+            break;
     }
 }
 

@@ -29,7 +29,9 @@ namespace lang {
 
 class IndexedColumn : public Lang {
 public:
+    IndexedColumn();
     enum class Switch : int {
+        NotSet,
         ColumnName,
         Expr,
     };

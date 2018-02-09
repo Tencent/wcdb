@@ -29,6 +29,8 @@ namespace lang {
 
 class SelectSTMT : public CRUDLang {
 public:
+    SelectSTMT();
+
     bool recursive;
     copy_on_write_lazy_lang_list<CommonTableExpression> commonTableExpressions;
 
@@ -36,7 +38,10 @@ public:
 
     class Compound : public Lang {
     public:
+        Compound();
+
         enum class Operator : int {
+            NotSet,
             Union,
             UnionAll,
             Intersect,

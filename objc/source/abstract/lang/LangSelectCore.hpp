@@ -32,6 +32,7 @@ public:
     SelectCore();
 
     enum class Switch : int {
+        NotSet,
         Select,
         Values,
     };

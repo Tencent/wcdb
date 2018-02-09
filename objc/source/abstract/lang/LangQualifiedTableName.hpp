@@ -29,6 +29,8 @@ namespace lang {
 
 class QualifiedTableName : public Lang {
 public:
+    QualifiedTableName();
+
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
 

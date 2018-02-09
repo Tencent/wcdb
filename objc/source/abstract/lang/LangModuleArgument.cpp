@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+ModuleArgument::ModuleArgument() : type(Type::NotSet)
+{
+}
+
 copy_on_write_string ModuleArgument::SQL() const
 {
     std::string description;
@@ -39,6 +43,10 @@ copy_on_write_string ModuleArgument::SQL() const
         case Type::LeftRight:
             assert(!left.empty() && !right.empty());
             description.append(left.get() + "=" + right.get());
+            break;
+        default:
+            assert(false);
+            break;
     }
     return description;
 }

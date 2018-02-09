@@ -37,6 +37,8 @@ class TableOrSubqueryList;
 
 class TableOrSubqueryTable : public TableOrSubqueryBase {
 public:
+    TableOrSubqueryTable();
+
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
     copy_on_write_string tableAlias;
@@ -85,7 +87,10 @@ public:
 
 class TableOrSubquery : public TableOrSubqueryBase {
 public:
+    TableOrSubquery();
+
     enum class Switch : int {
+        NotSet,
         Table,
         TableFunction,
         JoinClause,

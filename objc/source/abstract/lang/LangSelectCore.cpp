@@ -25,7 +25,7 @@ namespace WCDB {
 namespace lang {
 
 SelectCore::SelectCore()
-    : switcher(Switch::Select)
+    : switcher(Switch::NotSet)
     , fromSwitcher(FromSwitch::NotSet)
     , distinct(false)
 {
@@ -69,6 +69,9 @@ copy_on_write_string SelectCore::SQL() const
         case Switch::Values:
             assert(!values.empty());
             description.append("VALUES(" + values.description().get() + ")");
+            break;
+        default:
+            assert(false);
             break;
     }
     return description;

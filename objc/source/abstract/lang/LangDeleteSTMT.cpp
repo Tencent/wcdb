@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+DeleteSTMT::DeleteSTMT() : offset(false)
+{
+}
+
 copy_on_write_string DeleteSTMT::SQL() const
 {
     std::string description;

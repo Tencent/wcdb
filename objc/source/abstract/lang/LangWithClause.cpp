@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+WithClause::WithClause() : recursive(false)
+{
+}
+
 copy_on_write_string WithClause::SQL() const
 {
     std::string description("WITH ");

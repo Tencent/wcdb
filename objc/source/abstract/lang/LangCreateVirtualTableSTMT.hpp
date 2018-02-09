@@ -29,6 +29,8 @@ namespace lang {
 
 class CreateVirtualTableSTMT : public Lang {
 public:
+    CreateVirtualTableSTMT();
+
     bool ifNotExists;
     copy_on_write_string schemaName;
     copy_on_write_string tableName;

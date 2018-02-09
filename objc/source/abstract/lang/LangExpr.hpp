@@ -236,7 +236,10 @@ copy_on_write_lazy_lang_list<ExprCase::Pair>::calculatedDescription() const;
 
 class Expr : public ExprBase {
 public:
+    Expr();
+
     enum class Type : int {
+        NotSet,
         LiteralValue,
         BindParameter,
         Column,

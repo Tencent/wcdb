@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+CreateViewSTMT::CreateViewSTMT() : temp(false), ifNotExists(false)
+{
+}
+
 copy_on_write_string CreateViewSTMT::SQL() const
 {
     std::string description("CREATE ");

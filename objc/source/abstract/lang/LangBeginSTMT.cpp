@@ -24,10 +24,17 @@ namespace WCDB {
 
 namespace lang {
 
+BeginSTMT::BeginSTMT() : type(Type::NotSet)
+{
+}
+
 copy_on_write_string BeginSTMT::SQL() const
 {
-    std::string description("BEGIN ");
-    description.append(BeginSTMT::TypeName(type));
+    std::string description("BEGIN");
+    if (type != Type::NotSet) {
+        description.append(" ");
+        description.append(BeginSTMT::TypeName(type));
+    }
     return description;
 }
 
@@ -40,6 +47,8 @@ constexpr const char *BeginSTMT::TypeName(const Type &type)
             return "IMMEDIATE";
         case Type::Exclusive:
             return "DEFERRED";
+        default:
+            return "";
     }
 }
 

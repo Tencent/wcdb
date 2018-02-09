@@ -29,7 +29,10 @@ namespace lang {
 
 class ResultColumn : public Lang {
 public:
+    ResultColumn();
+
     enum class Type : int {
+        NotSet,
         Expr,
         Star,
     };

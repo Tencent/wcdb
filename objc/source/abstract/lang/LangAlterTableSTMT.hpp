@@ -29,9 +29,12 @@ namespace lang {
 
 class AlterTableSTMT : public Lang {
 public:
+    AlterTableSTMT();
+
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
     enum class Switch : int {
+        NotSet,
         Rename,
         AddColumn,
     };

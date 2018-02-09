@@ -24,6 +24,14 @@ namespace WCDB {
 
 namespace lang {
 
+CreateTableSTMT::CreateTableSTMT()
+    : temp(false)
+    , ifNotExists(false)
+    , switcher(Switch::NotSet)
+    , withoutRowID(false)
+{
+}
+
 copy_on_write_string CreateTableSTMT::SQL() const
 {
     std::string description("CREATE ");
@@ -53,6 +61,9 @@ copy_on_write_string CreateTableSTMT::SQL() const
         case Switch::Select:
             assert(!selectSTMT.empty());
             description.append(" AS " + selectSTMT.description().get());
+            break;
+        default:
+            assert(false);
             break;
     }
     return description;

@@ -29,14 +29,17 @@ namespace lang {
 
 class ForeignKeyClause : public Lang {
 public:
+    ForeignKeyClause();
     copy_on_write_string foreignTable;
     copy_on_write_lazy_string_list columnNames;
 
     class Trigger : public Lang {
     public:
+        Trigger();
         bool match;
         bool update;
         enum class Operation : int {
+            NotSet,
             SetNull,
             SetDefault,
             Cascade,

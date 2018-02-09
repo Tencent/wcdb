@@ -29,6 +29,8 @@ namespace lang {
 
 class JoinConstraint : public Lang {
 public:
+    JoinConstraint();
+
     enum class Type : int {
         NotSet,
         On,

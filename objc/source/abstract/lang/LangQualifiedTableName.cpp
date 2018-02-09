@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+QualifiedTableName::QualifiedTableName() : indexSwitcher(IndexSwitch::NotSet)
+{
+}
+
 copy_on_write_string QualifiedTableName::SQL() const
 {
     std::string description;

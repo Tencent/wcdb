@@ -29,6 +29,8 @@ namespace lang {
 
 class CreateViewSTMT : public Lang {
 public:
+    CreateViewSTMT();
+
     bool temp;
     bool ifNotExists;
     copy_on_write_string schemaName;

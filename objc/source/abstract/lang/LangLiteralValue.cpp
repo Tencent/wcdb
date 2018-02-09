@@ -25,6 +25,10 @@ namespace WCDB {
 
 namespace lang {
 
+LiteralValue::LiteralValue() : type(Type::NotSet), integerValue(0)
+{
+}
+
 copy_on_write_string LiteralValue::SQL() const
 {
     std::string description;
@@ -54,6 +58,9 @@ copy_on_write_string LiteralValue::SQL() const
             break;
         case Type::CurrentTimestamp:
             description.append("CURRENT_TIMESTAMP");
+            break;
+        default:
+            assert(false);
             break;
     }
     return description;

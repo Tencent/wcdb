@@ -29,8 +29,11 @@ namespace lang {
 
 class UpdateSTMT : public CRUDLang {
 public:
+    UpdateSTMT();
+
     copy_on_write_lazy_lang<WithClause> withClause;
     enum class Type : int {
+        NotSet,
         Update,
         UpdateOrRollback,
         UpdateOrAbort,

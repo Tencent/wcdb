@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+CreateVirtualTableSTMT::CreateVirtualTableSTMT() : ifNotExists(false)
+{
+}
+
 copy_on_write_string CreateVirtualTableSTMT::SQL() const
 {
     std::string description("CREATE VIRTUAL TABLE ");

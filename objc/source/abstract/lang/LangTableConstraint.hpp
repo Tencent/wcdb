@@ -29,8 +29,11 @@ namespace lang {
 
 class TableConstraint : public Lang {
 public:
+    TableConstraint();
+
     copy_on_write_string name;
     enum class Type : int {
+        NotSet,
         PrimaryKey,
         Unique,
         Check,

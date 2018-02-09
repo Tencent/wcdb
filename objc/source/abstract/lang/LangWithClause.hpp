@@ -29,6 +29,8 @@ namespace lang {
 
 class WithClause : public Lang {
 public:
+    WithClause();
+
     bool recursive;
 
     class Pair : public Lang {

@@ -24,6 +24,13 @@ namespace WCDB {
 
 namespace lang {
 
+ForeignKeyClause::ForeignKeyClause()
+    : doDeferrable(false)
+    , notDeferrable(false)
+    , initiallySwitcher(InitiallySwitch::NotSet)
+{
+}
+
 constexpr const char *
 ForeignKeyClause::InitiallySwitchName(const InitiallySwitch &initiallySwitcher)
 {
@@ -35,6 +42,11 @@ ForeignKeyClause::InitiallySwitchName(const InitiallySwitch &initiallySwitcher)
         default:
             return "";
     }
+}
+
+ForeignKeyClause::Trigger::Trigger()
+    : operation(Operation::NotSet), match(false), update(false)
+{
 }
 
 constexpr const char *
@@ -51,6 +63,9 @@ ForeignKeyClause::Trigger::OperationName(const Operation &operation)
             return "RESTRICT";
         case Operation::NoAction:
             return "NO ACTION";
+        default:
+            assert(false);
+            break;
     }
 }
 

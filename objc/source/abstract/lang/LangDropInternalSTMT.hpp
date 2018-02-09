@@ -29,6 +29,8 @@ namespace lang {
 
 class DropInternalSTMT : public Lang {
 public:
+    DropInternalSTMT();
+
     bool ifExists;
     copy_on_write_string schemaName;
     copy_on_write_string name;

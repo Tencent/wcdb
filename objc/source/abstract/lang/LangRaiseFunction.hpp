@@ -29,6 +29,7 @@ namespace lang {
 
 class RaiseFunction : public Lang {
 public:
+    RaiseFunction();
     enum class Type : int {
         Ignore,
         Rollback,

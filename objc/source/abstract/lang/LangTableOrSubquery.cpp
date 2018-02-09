@@ -51,6 +51,11 @@ copy_on_write_string TableOrSubqueryTable::SQL() const
     return description;
 }
 
+TableOrSubqueryTable::TableOrSubqueryTable()
+    : indexSwitcher(IndexSwitch::NotSet)
+{
+}
+
 copy_on_write_string TableOrSubqueryTableFunction::SQL() const
 {
     std::string description;
@@ -91,6 +96,10 @@ copy_on_write_string TableOrSubqueryList::SQL() const
     return "(" + tableOrSubquerys.description().get() + ")";
 }
 
+TableOrSubquery::TableOrSubquery() : switcher(Switch::NotSet)
+{
+}
+
 copy_on_write_string TableOrSubquery::SQL() const
 {
     switch (switcher) {
@@ -109,6 +118,9 @@ copy_on_write_string TableOrSubquery::SQL() const
         case Switch::List:
             assert(!tableOrSubqueryList.empty());
             return tableOrSubqueryList.description();
+        default:
+            assert(false);
+            break;
     }
 }
 

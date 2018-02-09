@@ -29,6 +29,8 @@ namespace lang {
 
 class OrderingTerm : public Lang {
 public:
+    OrderingTerm();
+
     copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_string collationName;
     Order order;

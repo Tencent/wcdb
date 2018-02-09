@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+RaiseFunction::RaiseFunction() : type(Type::Ignore)
+{
+}
+
 copy_on_write_string RaiseFunction::SQL() const
 {
     std::string description("RAISE(");

@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+DropInternalSTMT::DropInternalSTMT() : ifExists(false)
+{
+}
+
 copy_on_write_string DropInternalSTMT::SQL() const
 {
     std::string description("DROP ");

@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+BindParameter::BindParameter() : type(Type::NotSet), n(0)
+{
+}
+
 copy_on_write_string BindParameter::SQL() const
 {
     std::string description;
@@ -46,6 +50,9 @@ copy_on_write_string BindParameter::SQL() const
             assert(!name.empty());
             description.append("$" + name.get());
             break;
+        default:
+            assert(false);
+            ;
     }
     return description;
 }

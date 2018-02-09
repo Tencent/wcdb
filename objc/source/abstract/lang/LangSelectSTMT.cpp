@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+SelectSTMT::SelectSTMT() : recursive(false), offset(false)
+{
+}
+
 copy_on_write_string SelectSTMT::SQL() const
 {
     std::string description;
@@ -60,6 +64,10 @@ copy_on_write_string SelectSTMT::SQL() const
     return description;
 }
 
+SelectSTMT::Compound::Compound() : compoundOperator(Operator::NotSet)
+{
+}
+
 copy_on_write_string SelectSTMT::Compound::SQL() const
 {
     std::string description;
@@ -81,6 +89,9 @@ SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
             return "INTERSECT";
         case Operator::Except:
             return "EXCEPT";
+        default:
+            assert(false);
+            break;
     }
 }
 

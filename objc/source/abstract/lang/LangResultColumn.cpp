@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+ResultColumn::ResultColumn() : type(Type::NotSet)
+{
+}
+
 copy_on_write_string ResultColumn::SQL() const
 {
     std::string description;
@@ -40,6 +44,9 @@ copy_on_write_string ResultColumn::SQL() const
                 description.append(tableName.get() + ".");
             }
             description.append("*");
+            break;
+        default:
+            assert(false);
             break;
     }
     return description;

@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+IndexedColumn::IndexedColumn() : switcher(Switch::NotSet), order(Order::NotSet)
+{
+}
+
 copy_on_write_string IndexedColumn::SQL() const
 {
     std::string description;
@@ -35,6 +39,9 @@ copy_on_write_string IndexedColumn::SQL() const
         case Switch::Expr:
             assert(!expr.empty());
             description.append(expr.description().get());
+            break;
+        default:
+            assert(false);
             break;
     }
     if (!collationName.empty()) {

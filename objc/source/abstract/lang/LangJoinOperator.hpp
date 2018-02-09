@@ -29,6 +29,8 @@ namespace lang {
 
 class JoinOperator : public Lang {
 public:
+    JoinOperator();
+
     bool join;
     bool natural;
     enum class Type : int {

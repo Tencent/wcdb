@@ -29,11 +29,14 @@ namespace lang {
 
 class CreateTableSTMT : public Lang {
 public:
+    CreateTableSTMT();
+
     bool temp;
     bool ifNotExists;
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
     enum class Switch : int {
+        NotSet,
         ColumnDef,
         Select,
     };

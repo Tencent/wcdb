@@ -29,6 +29,8 @@ namespace lang {
 
 class ReindexSTMT : public Lang {
 public:
+    ReindexSTMT();
+
     enum class Switch : int {
         NotSet,
         Collation,

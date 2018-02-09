@@ -29,6 +29,8 @@ namespace lang {
 
 class DeleteSTMT : public CRUDLang {
 public:
+    DeleteSTMT();
+
     copy_on_write_lazy_lang<WithClause> withClause;
     copy_on_write_lazy_lang<QualifiedTableName> qualifiedTableName;
     copy_on_write_lazy_lang<Expr> condition;

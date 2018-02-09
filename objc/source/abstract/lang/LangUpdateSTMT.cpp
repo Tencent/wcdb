@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+UpdateSTMT::UpdateSTMT() : type(Type::NotSet), offset(false)
+{
+}
+
 copy_on_write_string UpdateSTMT::SQL() const
 {
     std::string description;
@@ -75,6 +79,9 @@ constexpr const char *UpdateSTMT::TypeName(const Type &type)
             return "UPDATE OR FAIL";
         case Type::UpdateOrIgnore:
             return "UPDATE OR IGNORE";
+        default:
+            assert(false);
+            break;
     }
 }
 

@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+JoinConstraint::JoinConstraint() : type(Type::NotSet)
+{
+}
+
 copy_on_write_string JoinConstraint::SQL() const
 {
     std::string description;

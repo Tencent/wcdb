@@ -24,6 +24,11 @@ namespace WCDB {
 
 namespace lang {
 
+TableConstraint::TableConstraint()
+    : type(Type::NotSet), conflictClause(ConflictClause::NotSet)
+{
+}
+
 copy_on_write_string TableConstraint::SQL() const
 {
     std::string description;
@@ -51,6 +56,9 @@ copy_on_write_string TableConstraint::SQL() const
             description.append("FOREIGN KEY(" +
                                columnNames.description().get() + ")" +
                                LangConflictClauseName(conflictClause));
+            break;
+        default:
+            assert(false);
             break;
     }
     return description;

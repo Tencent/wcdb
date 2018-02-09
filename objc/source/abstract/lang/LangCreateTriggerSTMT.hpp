@@ -29,11 +29,14 @@ namespace lang {
 
 class CreateTriggerSTMT : public Lang {
 public:
+    CreateTriggerSTMT();
+
     bool temp;
     bool ifNotExists;
     copy_on_write_string schemaName;
     copy_on_write_string triggerName;
     enum class Type : int {
+        NotSet,
         After,
         Before,
         InsteadOf,
@@ -41,6 +44,7 @@ public:
     Type type;
 
     enum class Operation : int {
+        NotSet,
         Delete,
         Insert,
         Update,

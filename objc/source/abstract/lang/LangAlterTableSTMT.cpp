@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+AlterTableSTMT::AlterTableSTMT() : switcher(Switch::NotSet)
+{
+}
+
 copy_on_write_string AlterTableSTMT::SQL() const
 {
     std::string description("ALTER TABLE ");
@@ -38,6 +42,9 @@ copy_on_write_string AlterTableSTMT::SQL() const
             break;
         case Switch::AddColumn:
             description.append(" ADD " + columnDef.description().get());
+            break;
+        default:
+            assert(false);
             break;
     }
     return description;

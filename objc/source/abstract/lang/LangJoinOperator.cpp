@@ -24,6 +24,10 @@ namespace WCDB {
 
 namespace lang {
 
+JoinOperator::JoinOperator() : join(false), natural(false), type(Type::NotSet)
+{
+}
+
 copy_on_write_string JoinOperator::SQL() const
 {
     std::string description;

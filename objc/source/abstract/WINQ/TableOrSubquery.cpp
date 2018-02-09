@@ -74,7 +74,8 @@ TableOrSubquery &TableOrSubquery::withSchema(const std::string &schemaName)
                 schemaName);
             break;
         default:
-            abort();
+            assert(false);
+            ;
             break;
     }
     return *this;
@@ -97,7 +98,7 @@ TableOrSubquery &TableOrSubquery::as(const std::string &tableAlias)
                 tableAlias);
             break;
         default:
-            abort();
+            assert(false);
             break;
     }
     return *this;

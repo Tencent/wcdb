@@ -29,7 +29,9 @@ namespace lang {
 
 class BeginSTMT : public Lang {
 public:
+    BeginSTMT();
     enum class Type : int {
+        NotSet,
         Deferred,
         Immediate,
         Exclusive,

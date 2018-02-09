@@ -317,6 +317,10 @@ copy_on_write_lazy_lang_list<ExprCase::Pair>::calculatedDescription() const
     return description;
 }
 
+Expr::Expr() : type(Type::NotSet)
+{
+}
+
 copy_on_write_string Expr::SQL() const
 {
     switch (type) {
@@ -368,6 +372,9 @@ copy_on_write_string Expr::SQL() const
         case Type::RaiseFunction:
             assert(!raiseFunction.empty());
             return raiseFunction.description();
+        default:
+            assert(false);
+            break;
     }
 }
 

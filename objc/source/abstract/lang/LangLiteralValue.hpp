@@ -29,7 +29,10 @@ namespace lang {
 
 class LiteralValue : public Lang {
 public:
+    LiteralValue();
+
     enum class Type : int {
+        NotSet,
         NumbericInteger,
         NumbericFloat,
         String,
