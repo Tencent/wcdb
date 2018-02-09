@@ -29,6 +29,12 @@
 
 - (void)testModuleArgument
 {
+    WCDB::ColumnDef columnDef("testColumn");
+    WCDB::TableConstraint tableConstraint = WCDB::TableConstraint().withPrimaryKey(WCDB::IndexedColumn("testColumn"));
+    
+    WINQAssertEqual(WCDB::ModuleArgument(columnDef), @"testColumn");
+    WINQAssertEqual(WCDB::ModuleArgument(tableConstraint), @"PRIMARY KEY(testColumn)");
+    WINQAssertEqual(WCDB::ModuleArgument("tokenize", "fts3"), @"tokenize=fts3");    
 }
 
 @end
