@@ -27,6 +27,7 @@ namespace WCDB {
 
 class TableOrSubquery : public DescribableWithLang<lang::TableOrSubquery> {
 public:
+    TableOrSubquery(const char *tableName);
     TableOrSubquery(const std::string &tableName);
     TableOrSubquery(const StatementSelect &selectSTMT);
     TableOrSubquery(const JoinClause &joinClause);
@@ -49,6 +50,7 @@ protected:
     TableOrSubquery(
         const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>
             &tableOrSubqueryTableFunction);
+    void setTableName(const std::string &tableName);
 };
 
 } // namespace WCDB

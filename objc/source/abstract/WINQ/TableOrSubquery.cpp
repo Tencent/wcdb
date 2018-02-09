@@ -22,13 +22,14 @@
 
 namespace WCDB {
 
+TableOrSubquery::TableOrSubquery(const char *tableName)
+{
+    setTableName(tableName ? tableName : Describable::s_empty);
+}
+
 TableOrSubquery::TableOrSubquery(const std::string &tableName)
 {
-    lang::TableOrSubquery &lang = getMutableLang();
-    lang.switcher = lang::TableOrSubquery::Switch::Table;
-    lang::TableOrSubqueryTable &langTable =
-        lang.tableOrSubqueryTable.get_or_copy();
-    langTable.tableName.assign(tableName);
+    setTableName(tableName);
 }
 
 TableOrSubquery::TableOrSubquery(const StatementSelect &selectSTMT)
@@ -160,6 +161,15 @@ TableOrSubquery::TableOrSubquery(
     lang::TableOrSubquery &lang = getMutableLang();
     lang.switcher = lang::TableOrSubquery::Switch::TableFunction;
     lang.tableOrSubqueryTableFunction.assign(tableOrSubqueryTableFunction);
+}
+
+void TableOrSubquery::setTableName(const std::string &tableName)
+{
+    lang::TableOrSubquery &lang = getMutableLang();
+    lang.switcher = lang::TableOrSubquery::Switch::Table;
+    lang::TableOrSubqueryTable &langTable =
+        lang.tableOrSubqueryTable.get_or_copy();
+    langTable.tableName.assign(tableName);
 }
 
 } // namespace WCDB
