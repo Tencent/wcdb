@@ -29,8 +29,6 @@
 
 - (void)testJoinConstraint
 {
-
 }
 
 @end
-

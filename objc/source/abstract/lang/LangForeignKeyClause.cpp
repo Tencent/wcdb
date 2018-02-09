@@ -114,7 +114,9 @@ copy_on_write_string ForeignKeyClause::Trigger::SQL() const
 }
 
 template <>
-copy_on_write_string copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription() const
+copy_on_write_string
+copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription()
+    const
 {
     std::string description;
     bool space = false;
@@ -129,7 +131,7 @@ copy_on_write_string copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::ca
     }
     return description;
 }
-    
+
 } // namespace lang
 
 } // namespace WCDB

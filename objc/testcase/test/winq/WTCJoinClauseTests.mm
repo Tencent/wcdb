@@ -29,8 +29,6 @@
 
 - (void)testJoinClause
 {
-
 }
 
 @end
-

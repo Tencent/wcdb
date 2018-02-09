@@ -29,8 +29,6 @@
 
 - (void)testQualifiedTableName
 {
-
 }
 
 @end
-
