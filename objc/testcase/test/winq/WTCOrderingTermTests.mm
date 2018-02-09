@@ -29,6 +29,16 @@
 
 - (void)testOrderingTerm
 {
+    WCDB::Expression expression = WCDB::Expression::ColumnNamed("testColumn");
+    std::string collationName = "testCollation";
+
+    WINQAssertEqual(WCDB::OrderingTerm(expression), @"testColumn");
+
+    WINQAssertEqual(WCDB::OrderingTerm(expression).withOrder(WCDB::Order::ASC), @"testColumn ASC");
+
+    WINQAssertEqual(WCDB::OrderingTerm(expression).withOrder(WCDB::Order::DESC), @"testColumn DESC");
+
+    WINQAssertEqual(WCDB::OrderingTerm(expression).withCollate(collationName), @"testColumn COLLATE testCollation");
 }
 
 @end
