@@ -29,6 +29,18 @@
 
 - (void)testJoinConstraint
 {
+    std::string columnName1 = "testColumn1";
+    std::string columnName2 = "testColumn2";
+    WCDB::Expression expression = WCDB::Expression::ColumnNamed(columnName1);
+    std::list<std::string> columnNames = {columnName1, columnName2};
+
+    WINQAssertEqual(WCDB::JoinConstraint(), @"");
+
+    WINQAssertEqual(WCDB::JoinConstraint().on(expression), @"ON testColumn1");
+
+    WINQAssertEqual(WCDB::JoinConstraint().usingColumn(columnName1), @"USING(testColumn1)");
+
+    WINQAssertEqual(WCDB::JoinConstraint().usingColumns(columnNames), @"USING(testColumn1, testColumn2)");
 }
 
 @end
