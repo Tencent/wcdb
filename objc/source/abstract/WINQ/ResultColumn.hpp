@@ -30,6 +30,7 @@ public:
     static const ResultColumn All;
     static ResultColumn AllInTable(const std::string &tableName);
     ResultColumn(const Expression &expression);
+    ResultColumn &as(const std::string &columnAlias);
 
 protected:
     ResultColumn(const lang::ResultColumn::Type &type);

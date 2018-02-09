@@ -49,4 +49,11 @@ ResultColumn::ResultColumn(const std::string &tableName)
     lang.tableName.assign(tableName);
 }
 
+ResultColumn &ResultColumn::as(const std::string &columnAlias)
+{
+    lang::ResultColumn &lang = getMutableLang();
+    lang.columnAlias.assign(columnAlias);
+    return *this;
+}
+
 } // namespace WCDB
