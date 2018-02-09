@@ -30,7 +30,10 @@ copy_on_write_string JoinClause::SQL() const
     assert(!tableOrSubquery.empty());
     description.append(tableOrSubquery.description().get());
     if (!joinOperands.empty()) {
-        description.append(" " + joinOperands.description().get());
+        if (joinOperands.get().front().get().joinOperator.get().join) {
+            description.append(" ");
+        }
+        description.append(joinOperands.description().get());
     }
     return description;
 }

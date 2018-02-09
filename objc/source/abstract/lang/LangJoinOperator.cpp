@@ -31,8 +31,8 @@ JoinOperator::JoinOperator() : join(false), natural(false), type(Type::NotSet)
 copy_on_write_string JoinOperator::SQL() const
 {
     std::string description;
-    if (join) {
-        description.append(", ");
+    if (!join) {
+        description.append(",");
     } else {
         if (natural) {
             description.append("NATURAL ");
