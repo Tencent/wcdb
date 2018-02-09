@@ -37,15 +37,15 @@ copy_on_write_string RaiseFunction::SQL() const
             break;
         case Type::Rollback:
             assert(!errorMessage.empty());
-            description.append("ROLLBACK " + errorMessage.get());
+            description.append("ROLLBACK, " + errorMessage.get());
             break;
         case Type::Abort:
             assert(!errorMessage.empty());
-            description.append("ABORT " + errorMessage.get());
+            description.append("ABORT, " + errorMessage.get());
             break;
         case Type::Fail:
             assert(!errorMessage.empty());
-            description.append("FAIL " + errorMessage.get());
+            description.append("FAIL, " + errorMessage.get());
             break;
     }
     description.append(")");
