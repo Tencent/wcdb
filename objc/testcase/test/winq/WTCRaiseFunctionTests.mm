@@ -30,13 +30,13 @@
 - (void)testRaiseFunction
 {
     std::string errorMessage = "testError";
-    
+
     WINQAssertEqual(WCDB::RaiseFunction().withIgnore(), @"RAISE(IGNORE)");
-    
+
     WINQAssertEqual(WCDB::RaiseFunction().withRollback(errorMessage), @"RAISE(ROLLBACK, testError)");
-    
+
     WINQAssertEqual(WCDB::RaiseFunction().withAbort(errorMessage), @"RAISE(ABORT, testError)");
-    
+
     WINQAssertEqual(WCDB::RaiseFunction().withFail(errorMessage), @"RAISE(FAIL, testError)");
 }
 
