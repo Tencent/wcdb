@@ -29,6 +29,17 @@
 
 - (void)testResultColumn
 {
+    WCDB::Expression expression = WCDB::Expression::ColumnNamed("testColumn");
+    std::string columnAlias = "testColumnAlias";
+    std::string tableName = "testTable";
+
+    WINQAssertEqual(WCDB::ResultColumn(expression), @"testColumn");
+
+    WINQAssertEqual(WCDB::ResultColumn(expression).as(columnAlias), @"testColumn AS testColumnAlias");
+
+    WINQAssertEqual(WCDB::ResultColumn::All, @"*");
+
+    WINQAssertEqual(WCDB::ResultColumn::AllInTable(tableName), @"testTable.*");
 }
 
 @end
