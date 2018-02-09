@@ -97,6 +97,7 @@
 		23DC30AC202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */; };
 		23DC30AE202C3CC2000F7895 /* WTCCTETableName.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */; };
 		23DC30AF202C3CC2000F7895 /* WTCCTETableName.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */; };
+		23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0920047BDE00C0291C /* WTCExpressionTests.mm */; };
 		23DD427B20050DC600330946 /* WTCInitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */; };
 		23DD427E20050DD800330946 /* WTCBaselineWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D620050A3600E22C76 /* WTCBaselineWriteBenchmark.mm */; };
 		23DD427F20050DD800330946 /* WTCBaselineBatchWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D420050A3600E22C76 /* WTCBaselineBatchWriteBenchmark.mm */; };
@@ -582,12 +583,12 @@
 				23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */,
 				23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */,
 				23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */,
+				23698B0920047BDE00C0291C /* WTCExpressionTests.mm */,
 				23698B0A20047BDE00C0291C /* WTCColumnIndexTests.mm */,
 				23698AFB20047BDD00C0291C /* WTCColumnResultTests.mm */,
 				23698B0C20047BDE00C0291C /* WTCColumnTests.mm */,
 				23698B0720047BDE00C0291C /* WTCColumnTypeTests.mm */,
 				23698B1820047BDF00C0291C /* WTCConflictTests.mm */,
-				23698B0920047BDE00C0291C /* WTCExpressionTests.mm */,
 				23698AF920047BDD00C0291C /* WTCForeignKeyTests.mm */,
 				23698B0820047BDE00C0291C /* WTCJoinClauseTests.mm */,
 				23698AFA20047BDD00C0291C /* WTCLiteralValueTests.mm */,
@@ -1019,6 +1020,7 @@
 			files = (
 				23731A42201F02D9005967ED /* Convenience.m in Sources */,
 				23DC30AF202C3CC2000F7895 /* WTCCTETableName.mm in Sources */,
+				23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */,
 				23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */,
 				23731A43201F02E3005967ED /* WTCColumnDefTests.mm in Sources */,
 				23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */,
