@@ -30,6 +30,13 @@ const LiteralValue
 const LiteralValue
     LiteralValue::CurrentTimestamp(lang::LiteralValue::Type::CurrentTimestamp);
 
+LiteralValue::LiteralValue(const char *value)
+{
+    lang::LiteralValue &lang = getMutableLang();
+    lang.type = lang::LiteralValue::Type::String;
+    lang.stringValue.assign(value ? value : Describable::s_empty);
+}
+
 LiteralValue::LiteralValue(const std::string &value)
 {
     lang::LiteralValue &lang = getMutableLang();

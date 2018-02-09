@@ -48,6 +48,7 @@ public:
     }
 
     LiteralValue(const std::string &value);
+    LiteralValue(const char *value);
     LiteralValue(const std::vector<unsigned char> &value);
 
     static const LiteralValue Null;
