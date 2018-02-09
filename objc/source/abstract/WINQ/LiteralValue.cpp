@@ -47,7 +47,7 @@ LiteralValue::LiteralValue(const std::string &value)
 LiteralValue::LiteralValue(const std::vector<unsigned char> &value)
 {
     lang::LiteralValue &lang = getMutableLang();
-    lang.type = lang::LiteralValue::Type::Null;
+    lang.type = lang::LiteralValue::Type::BLOB;
     lang.dataValue.assign(value);
 }
 
