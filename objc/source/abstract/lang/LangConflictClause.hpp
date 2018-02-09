@@ -39,15 +39,15 @@ LangConflictClauseName(const ConflictClause &conflictClause)
 {
     switch (conflictClause) {
         case ConflictClause::Rollback:
-            return "ROLLBACK";
+            return "ON CONFLICT ROLLBACK";
         case ConflictClause::Abort:
-            return "ABORT";
+            return "ON CONFLICT ABORT";
         case ConflictClause::Fail:
-            return "FAIL";
+            return "ON CONFLICT FAIL";
         case ConflictClause::Ignore:
-            return "IGNORE";
+            return "ON CONFLICT IGNORE";
         case ConflictClause::Replace:
-            return "REPLACE";
+            return "ON CONFLICT REPLACE";
         default:
             return "";
     }

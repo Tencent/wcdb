@@ -47,7 +47,7 @@ copy_on_write_string ColumnConstraint::SQL() const
                 description.append(LangOrderName(order));
             }
             if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ON CONFLICT ");
+                description.append(" ");
                 description.append(LangConflictClauseName(conflictClause));
             }
             if (autoIncrement) {
@@ -57,14 +57,14 @@ copy_on_write_string ColumnConstraint::SQL() const
         case Type::NotNull:
             description.append("NOT NULL");
             if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ON CONFLICT ");
+                description.append(" ");
                 description.append(LangConflictClauseName(conflictClause));
             }
             break;
         case Type::Unique:
             description.append("UNIQUE");
             if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ON CONFLICT ");
+                description.append(" ");
                 description.append(LangConflictClauseName(conflictClause));
             }
             break;
