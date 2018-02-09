@@ -22,6 +22,13 @@
 
 namespace WCDB {
 
+RaiseFunction &RaiseFunction::withIgnore()
+{
+    lang::RaiseFunction &lang = getMutableLang();
+    lang.type = lang::RaiseFunction::Type::Ignore;
+    return *this;
+}
+
 RaiseFunction &RaiseFunction::withRollback(const std::string &errorMessage)
 {
     lang::RaiseFunction &lang = getMutableLang();
