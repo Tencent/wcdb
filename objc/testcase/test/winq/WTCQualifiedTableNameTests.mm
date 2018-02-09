@@ -29,6 +29,17 @@
 
 - (void)testQualifiedTableName
 {
+    std::string schemaName = "testSchema";
+    std::string tableName = "testTable";
+    std::string indexName = "testIndex";
+
+    WINQAssertEqual(WCDB::QualifiedTableName(tableName), @"testTable");
+
+    WINQAssertEqual(WCDB::QualifiedTableName(tableName).indexedBy(indexName), @"testTable INDEXED BY testIndex");
+
+    WINQAssertEqual(WCDB::QualifiedTableName(tableName).notIndexed(), @"testTable NOT INDEXED");
+
+    WINQAssertEqual(WCDB::QualifiedTableName(tableName).withSchema(schemaName), @"testSchema.testTable");
 }
 
 @end
