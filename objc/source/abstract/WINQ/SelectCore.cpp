@@ -32,12 +32,14 @@ SelectCore &SelectCore::distinct()
 SelectCore &SelectCore::select(const ResultColumn &resultColumn)
 {
     lang::SelectCore &lang = getMutableLang();
+    lang.switcher = lang::SelectCore::Switch::Select;
     lang.resultColumns.append(resultColumn.getLang());
     return *this;
 }
 SelectCore &SelectCore::select(const std::list<ResultColumn> &resultColumns)
 {
     lang::SelectCore &lang = getMutableLang();
+    lang.switcher = lang::SelectCore::Switch::Select;
     for (const ResultColumn &resultColumn : resultColumns) {
         lang.resultColumns.append(resultColumn.getLang());
     }
@@ -95,12 +97,14 @@ SelectCore &SelectCore::having(const Expression &having)
 SelectCore &SelectCore::values(const Expression &value)
 {
     lang::SelectCore &lang = getMutableLang();
+    lang.switcher = lang::SelectCore::Switch::Values;
     lang.values.append(value.getLang());
     return *this;
 }
 SelectCore &SelectCore::values(const std::list<Expression> &values)
 {
     lang::SelectCore &lang = getMutableLang();
+    lang.switcher = lang::SelectCore::Switch::Values;
     for (const Expression &value : values) {
         lang.values.append(value.getLang());
     }
