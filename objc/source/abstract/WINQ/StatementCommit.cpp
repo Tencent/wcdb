@@ -24,6 +24,7 @@ namespace WCDB {
 
 StatementCommit &StatementCommit::commit()
 {
+    getMutableLang();
     return *this;
 }
 
