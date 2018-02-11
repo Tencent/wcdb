@@ -41,7 +41,7 @@ copy_on_write_string AlterTableSTMT::SQL() const
             description.append(" RENAME TO " + newTableName.get());
             break;
         case Switch::AddColumn:
-            description.append(" ADD " + columnDef.description().get());
+            description.append(" ADD COLUMN " + columnDef.description().get());
             break;
         default:
             assert(false);
