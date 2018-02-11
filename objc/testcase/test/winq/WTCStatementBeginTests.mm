@@ -29,6 +29,12 @@
 
 - (void)testStatementBegin
 {
+    WINQAssertEqual(WCDB::StatementBegin().begin(WCDB::StatementBegin::Transaction::NotSet), @"BEGIN");
+    WINQAssertEqual(WCDB::StatementBegin().begin(WCDB::StatementBegin::Transaction::Deferred), @"BEGIN DEFERRED");
+    WINQAssertEqual(WCDB::StatementBegin().begin(WCDB::StatementBegin::Transaction::Immediate), @"BEGIN IMMEDIATE");
+    WINQAssertEqual(WCDB::StatementBegin().begin(WCDB::StatementBegin::Transaction::Exclusive), @"BEGIN EXCLUSIVE");
+
+    WINQAssertEqual(WCDB::StatementBegin().begin(), @"BEGIN IMMEDIATE");
 }
 
 @end

@@ -29,6 +29,7 @@
 
 - (void)testStatementCommit
 {
+    WINQAssertEqual(WCDB::StatementCommit().commit(), @"COMMIT");
 }
 
 @end

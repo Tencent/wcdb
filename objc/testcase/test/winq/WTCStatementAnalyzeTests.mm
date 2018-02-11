@@ -29,6 +29,16 @@
 
 - (void)testStatementAnalyze
 {
+    std::string schemaName = "testSchema";
+    std::string tableOrIndexName = "testTableOrIndex";
+
+    WINQAssertEqual(WCDB::StatementAnalyze(), @"ANALYZE");
+
+    WINQAssertEqual(WCDB::StatementAnalyze().analyzeSchema(schemaName), @"ANALYZE testSchema");
+
+    WINQAssertEqual(WCDB::StatementAnalyze().analyze(tableOrIndexName), @"ANALYZE testTableOrIndex");
+
+    WINQAssertEqual(WCDB::StatementAnalyze().analyze(schemaName, tableOrIndexName), @"ANALYZE testSchema.testTableOrIndex");
 }
 
 @end

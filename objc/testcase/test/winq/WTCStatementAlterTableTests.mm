@@ -29,6 +29,15 @@
 
 - (void)testStatementAlterTable
 {
+    std::string schemaName = "testSchema";
+    std::string tableName = "testTable";
+    std::string newTableName = "testNewTable";
+    WCDB::ColumnDef columnDef = WCDB::ColumnDef("testColumn").withType(WCDB::ColumnType::Integer32);
+
+    WINQAssertEqual(WCDB::StatementAlterTable().alterTable(tableName).renameTo(newTableName), @"ALTER TABLE testTable RENAME TO testNewTable");
+    WINQAssertEqual(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnDef), @"ALTER TABLE testTable ADD COLUMN testColumn INTEGER");
+
+    WINQAssertEqual(WCDB::StatementAlterTable().alterTable(schemaName, tableName).renameTo(newTableName), @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
 }
 
 @end

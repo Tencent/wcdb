@@ -80,8 +80,6 @@
 		23BDBAB7202D52DC001BEEDA /* WTCResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB5202D52DC001BEEDA /* WTCResultColumnTests.mm */; };
 		23BDBAB9202D52E2001BEEDA /* WTCSelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB8202D52E2001BEEDA /* WTCSelectCoreTests.mm */; };
 		23BDBABA202D52E2001BEEDA /* WTCSelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB8202D52E2001BEEDA /* WTCSelectCoreTests.mm */; };
-		23BDBABC202D52E7001BEEDA /* WTCStatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBABB202D52E7001BEEDA /* WTCStatementTests.mm */; };
-		23BDBABD202D52E7001BEEDA /* WTCStatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBABB202D52E7001BEEDA /* WTCStatementTests.mm */; };
 		23BDBABF202D52EE001BEEDA /* WTCStatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBABE202D52EE001BEEDA /* WTCStatementAlterTableTests.mm */; };
 		23BDBAC0202D52EE001BEEDA /* WTCStatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBABE202D52EE001BEEDA /* WTCStatementAlterTableTests.mm */; };
 		23BDBAC2202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC1202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm */; };
@@ -320,7 +318,6 @@
 		23BDBAB2202D52D7001BEEDA /* WTCRaiseFunctionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCRaiseFunctionTests.mm; sourceTree = "<group>"; };
 		23BDBAB5202D52DC001BEEDA /* WTCResultColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCResultColumnTests.mm; sourceTree = "<group>"; };
 		23BDBAB8202D52E2001BEEDA /* WTCSelectCoreTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSelectCoreTests.mm; sourceTree = "<group>"; };
-		23BDBABB202D52E7001BEEDA /* WTCStatementTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementTests.mm; sourceTree = "<group>"; };
 		23BDBABE202D52EE001BEEDA /* WTCStatementAlterTableTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementAlterTableTests.mm; sourceTree = "<group>"; };
 		23BDBAC1202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementAnalyzeTests.mm; sourceTree = "<group>"; };
 		23BDBAC4202D5301001BEEDA /* WTCStatementAttachTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCStatementAttachTests.mm; sourceTree = "<group>"; };
@@ -650,7 +647,6 @@
 				23BDBAB2202D52D7001BEEDA /* WTCRaiseFunctionTests.mm */,
 				23BDBAB5202D52DC001BEEDA /* WTCResultColumnTests.mm */,
 				23BDBAB8202D52E2001BEEDA /* WTCSelectCoreTests.mm */,
-				23BDBABB202D52E7001BEEDA /* WTCStatementTests.mm */,
 				23BDBABE202D52EE001BEEDA /* WTCStatementAlterTableTests.mm */,
 				23BDBAC1202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm */,
 				23BDBAC4202D5301001BEEDA /* WTCStatementAttachTests.mm */,
@@ -980,7 +976,6 @@
 				233FDCB520108472003EC196 /* WTCColumnConstraintConflictPrimaryKeyObject.mm in Sources */,
 				233FDCC1201084A6003EC196 /* WTCColumnConstraintDefaultObject.mm in Sources */,
 				2358941220118CBA0057B3E9 /* WTCDeleteTests.mm in Sources */,
-				23BDBABC202D52E7001BEEDA /* WTCStatementTests.mm in Sources */,
 				23BDBABF202D52EE001BEEDA /* WTCStatementAlterTableTests.mm in Sources */,
 				23890DE8201210CA0036C53F /* WTCDeleteInterfaceTests.mm in Sources */,
 				2358940F20118C370057B3E9 /* WTCInsertTests.mm in Sources */,
@@ -1117,7 +1112,6 @@
 				23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */,
 				23BDBAD8202D538B001BEEDA /* WTCStatementCreateViewTests.mm in Sources */,
 				23BDBABA202D52E2001BEEDA /* WTCSelectCoreTests.mm in Sources */,
-				23BDBABD202D52E7001BEEDA /* WTCStatementTests.mm in Sources */,
 				23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */,
 				23BDBA99202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */,
 				23BDBAA2202D52B2001BEEDA /* WTCJoinConstraintTests.mm in Sources */,

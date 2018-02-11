@@ -29,6 +29,10 @@
 
 - (void)testStatementAttach
 {
+    WCDB::Expression expr = WCDB::Expression::ColumnNamed("testColumn");
+    std::string schemaName = "testSchema";
+
+    WINQAssertEqual(WCDB::StatementAttach().attach(expr).as(schemaName), @"ATTACH testColumn AS testSchema");
 }
 
 @end
