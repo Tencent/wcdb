@@ -29,6 +29,8 @@ namespace WCDB {
 class StatementAnalyze : public StatementWithLang<lang::AnalyzeSTMT> {
 
 public:
+    StatementAnalyze();
+
     StatementAnalyze &analyzeSchema(const std::string &schemaName);
     StatementAnalyze &analyze(const std::string &schemaName,
                               const std::string &tableOrIndexName);

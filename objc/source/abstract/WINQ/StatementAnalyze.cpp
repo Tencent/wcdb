@@ -27,6 +27,11 @@ Statement::Type StatementAnalyze::getType() const
     return Statement::Type::Analyze;
 }
 
+StatementAnalyze::StatementAnalyze()
+{
+    getMutableLang();
+}
+
 StatementAnalyze &StatementAnalyze::analyzeSchema(const std::string &schemaName)
 {
     lang::AnalyzeSTMT &lang = getMutableLang();
