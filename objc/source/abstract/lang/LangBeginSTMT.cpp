@@ -46,7 +46,7 @@ constexpr const char *BeginSTMT::TypeName(const Type &type)
         case Type::Immediate:
             return "IMMEDIATE";
         case Type::Exclusive:
-            return "DEFERRED";
+            return "EXCLUSIVE";
         default:
             return "";
     }
