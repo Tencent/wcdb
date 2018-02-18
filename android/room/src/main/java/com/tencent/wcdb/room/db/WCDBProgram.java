@@ -20,6 +20,8 @@ import android.arch.persistence.db.SupportSQLiteProgram;
 
 import com.tencent.wcdb.database.SQLiteProgram;
 
+import java.io.IOException;
+
 /**
  * An wrapper around {@link SQLiteProgram} to implement {@link SupportSQLiteProgram} API.
  */
@@ -61,7 +63,7 @@ class WCDBProgram implements SupportSQLiteProgram {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         mDelegate.close();
     }
 }

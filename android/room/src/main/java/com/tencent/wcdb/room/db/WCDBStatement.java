@@ -20,6 +20,8 @@ import android.arch.persistence.db.SupportSQLiteStatement;
 
 import com.tencent.wcdb.database.SQLiteStatement;
 
+import java.io.IOException;
+
 /**
  * Delegates all calls to a {@link SQLiteStatement}.
  */
@@ -91,7 +93,7 @@ class WCDBStatement implements SupportSQLiteStatement {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         mDelegate.close();
     }
 }
