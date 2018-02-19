@@ -58,6 +58,7 @@ copy_on_write_string CreateTableSTMT::SQL() const
             if (withoutRowID) {
                 description.append(" WITHOUT ROWID");
             }
+            break;
         case Switch::Select:
             assert(!selectSTMT.empty());
             description.append(" AS " + selectSTMT.description().get());

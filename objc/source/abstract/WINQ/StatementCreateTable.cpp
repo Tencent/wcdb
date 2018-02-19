@@ -44,6 +44,7 @@ StatementCreateTable &
 StatementCreateTable::as(const StatementSelect &selectSTMT)
 {
     lang::CreateTableSTMT &lang = getMutableLang();
+    lang.switcher = lang::CreateTableSTMT::Switch::Select;
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }
@@ -51,6 +52,7 @@ StatementCreateTable::as(const StatementSelect &selectSTMT)
 StatementCreateTable &StatementCreateTable::define(const ColumnDef &columnDef)
 {
     lang::CreateTableSTMT &lang = getMutableLang();
+    lang.switcher = lang::CreateTableSTMT::Switch::ColumnDef;
     lang.columnDefs.append(columnDef.getLang());
     return *this;
 }
@@ -59,6 +61,7 @@ StatementCreateTable &
 StatementCreateTable::define(const std::list<ColumnDef> &columnDefs)
 {
     lang::CreateTableSTMT &lang = getMutableLang();
+    lang.switcher = lang::CreateTableSTMT::Switch::ColumnDef;
     for (const ColumnDef &columnDef : columnDefs) {
         lang.columnDefs.append(columnDef.getLang());
     }
