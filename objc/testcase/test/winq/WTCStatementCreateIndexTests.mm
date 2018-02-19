@@ -29,6 +29,24 @@
 
 - (void)testStatementCreateIndex
 {
+    std::string schemaName = "testSchema";
+    std::string indexName = "testIndex";
+    std::string tableName = "testTable";
+    WCDB::IndexedColumn indexedColumn1 = "testColumn1";
+    std::list<WCDB::IndexedColumn> indexedColumns = {indexedColumn1, "testColumn2"};
+    WCDB::Expression expr = WCDB::Expression(WCDB::Expression::ColumnNamed("testColumn1")).notNull();
+
+    WINQAssertEqual(WCDB::StatementCreateIndex().createIndex(indexName, false, false).withSchema(schemaName).on(tableName, indexedColumn1), @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1)");
+
+    WINQAssertEqual(WCDB::StatementCreateIndex().createIndex(indexName, false, false).withSchema(schemaName).on(tableName, indexedColumn1).where(expr), @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1) WHERE testColumn1 NOTNULL");
+
+    WINQAssertEqual(WCDB::StatementCreateIndex().createIndex(indexName, false, false).withSchema(schemaName).on(tableName, indexedColumns), @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2)");
+
+    WINQAssertEqual(WCDB::StatementCreateIndex().createIndex(indexName, false, false).on(tableName, indexedColumns), @"CREATE INDEX testIndex ON testTable(testColumn1, testColumn2)");
+
+    WINQAssertEqual(WCDB::StatementCreateIndex().createIndex(indexName, true, false).withSchema(schemaName).on(tableName, indexedColumn1), @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn1)");
+
+    WINQAssertEqual(WCDB::StatementCreateIndex().createIndex(indexName, false, true).withSchema(schemaName).on(tableName, indexedColumn1), @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn1)");
 }
 
 @end
