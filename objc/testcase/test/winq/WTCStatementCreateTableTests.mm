@@ -29,6 +29,37 @@
 
 - (void)testStatementCreateTable
 {
+    std::string schemaName = "testSchema";
+
+    std::string tableName = "testTable";
+
+    WCDB::ColumnDef columnDef1 = WCDB::ColumnDef("testColumn1").withType(WCDB::ColumnType::Integer32);
+    WCDB::ColumnDef columnDef2 = WCDB::ColumnDef("testColumn2").withType(WCDB::ColumnType::Text);
+    std::list<WCDB::ColumnDef> columnDefs = {columnDef1, columnDef2};
+
+    WCDB::TableConstraint tableConstraint1 = WCDB::TableConstraint().withPrimaryKey("testColumn1");
+    WCDB::TableConstraint tableConstraint2 = WCDB::TableConstraint().withUnique("testColumn2");
+    std::list<WCDB::TableConstraint> tableConstraints = {tableConstraint1, tableConstraint2};
+
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::ResultColumn(WCDB::Expression::ColumnNamed("testColumn1")));
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER)");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1).withoutRowID(), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER) WITHOUT ROWID");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1).addTableConstraint(tableConstraint1), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, PRIMARY KEY(testColumn1))");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1).addTableConstraints(tableConstraints), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, PRIMARY KEY(testColumn1), UNIQUE(testColumn2))");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDefs), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, testColumn2 TEXT)");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).as(statementSelect), @"CREATE TABLE testSchema.testTable AS SELECT testColumn1");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).define(columnDef1), @"CREATE TABLE testTable(testColumn1 INTEGER)");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, true, false).withSchema(schemaName).define(columnDef1), @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn1 INTEGER)");
+
+    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, true).withSchema(schemaName).define(columnDef1), @"CREATE TEMP TABLE testSchema.testTable(testColumn1 INTEGER)");
 }
 
 @end
