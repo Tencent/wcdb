@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementReleaseTests : XCTestCase
+@interface WTCStatementReleaseTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,9 @@
 
 - (void)testStatementRelease
 {
+    WINQAssertEqual(WCDB::StatementRelease()
+                        .release(self.class.savepointName),
+                    @"RELEASE testSavepoint");
 }
 
 @end
