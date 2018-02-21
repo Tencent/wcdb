@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementVacuumTests : XCTestCase
+@interface WTCStatementVacuumTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,13 @@
 
 - (void)testStatementVacuum
 {
+    WINQAssertEqual(WCDB::StatementVacuum()
+                        .vacuum(),
+                    @"VACUUM");
+
+    WINQAssertEqual(WCDB::StatementVacuum()
+                        .vacuum(self.class.schemaName),
+                    @"VACUUM testSchema");
 }
 
 @end
