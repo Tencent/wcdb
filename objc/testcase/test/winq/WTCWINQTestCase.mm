@@ -32,6 +32,21 @@
     return "testTable";
 }
 
++ (std::string)indexName
+{
+    return "testIndex";
+}
+
++ (std::string)triggerName
+{
+    return "testTrigger";
+}
+
++ (std::string)viewName
+{
+    return "testView";
+}
+
 + (std::string)columnName
 {
     return "testColumn1";
@@ -40,6 +55,11 @@
 + (std::list<std::string>)columnNames
 {
     return {"testColumn1", "testColumn2"};
+}
+
++ (std::string)collationName
+{
+    return "testCollation";
 }
 
 + (WCDB::StatementSelect)statementSelect
