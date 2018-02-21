@@ -66,6 +66,10 @@ protected:
     constexpr static const char *OperationName(const Operation &operation);
 };
 
+template <>
+copy_on_write_string
+copy_on_write_lazy_lang_list<CRUDLang>::calculatedDescription() const;
+
 } // namespace lang
 
 } // namespace WCDB

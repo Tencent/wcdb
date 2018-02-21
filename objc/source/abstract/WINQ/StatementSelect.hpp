@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementSelect : public StatementWithLang<lang::SelectSTMT> {
+class StatementSelect : public CRUDStatementWithLang<lang::SelectSTMT> {
 public:
     StatementSelect &with(const CommonTableExpression &commonTableExpression);
     StatementSelect &

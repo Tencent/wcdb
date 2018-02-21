@@ -48,14 +48,7 @@ public:
     StatementCreateTrigger &forEachRow();
     StatementCreateTrigger &when(const Expression &expression);
 
-    StatementCreateTrigger &
-    byAddingTriggeredStatement(const StatementUpdate &updateSTMT);
-    StatementCreateTrigger &
-    byAddingTriggeredStatement(const StatementInsert &insertSTMT);
-    StatementCreateTrigger &
-    byAddingTriggeredStatement(const StatementDelete &deleteSTMT);
-    StatementCreateTrigger &
-    byAddingTriggeredStatement(const StatementSelect &selectSTMT);
+    StatementCreateTrigger &run(const CRUDStatement &statement);
 
     virtual Type getType() const override;
 };

@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementDelete : public StatementWithLang<lang::DeleteSTMT> {
+class StatementDelete : public CRUDStatementWithLang<lang::DeleteSTMT> {
 public:
     StatementDelete &with(const WithClause &withClause);
     StatementDelete &deleteFrom(const QualifiedTableName &qualifiedTableName);

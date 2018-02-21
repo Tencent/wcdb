@@ -69,6 +69,25 @@ public:
     }
 };
 
+class CRUDStatement {
+public:
+    virtual lang::copy_on_write_lazy_lang<lang::CRUDLang>
+    getCRUDLang() const = 0;
+};
+
+template <typename T>
+class CRUDStatementWithLang : public CRUDStatement,
+                              public StatementWithLang<T> {
+public:
+    virtual lang::copy_on_write_lazy_lang<lang::CRUDLang>
+    getCRUDLang() const override
+    {
+        lang::copy_on_write_lazy_lang<lang::CRUDLang> CRUDLang;
+        CRUDLang.assign(this->getLang());
+        return CRUDLang;
+    }
+};
+
 } // namespace WCDB
 
 #endif /* Statement_hpp */

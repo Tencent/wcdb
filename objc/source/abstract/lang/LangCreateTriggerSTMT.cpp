@@ -48,17 +48,20 @@ copy_on_write_string CreateTriggerSTMT::SQL() const
     }
     assert(!triggerName.empty());
     description.append(triggerName.get() + " ");
-    description.append(CreateTriggerSTMT::TypeName(type));
-    description.append(" ");
+    if (type != CreateTriggerSTMT::Type::NotSet) {
+        description.append(CreateTriggerSTMT::TypeName(type));
+        description.append(" ");
+    }
     description.append(CreateTriggerSTMT::OperationName(operation));
     if (operation == Operation::Update && !columnNames.empty()) {
-        description.append(" ON " + columnNames.description().get());
+        description.append(" OF " + columnNames.description().get());
     }
+    description.append(" ON " + tableName.get());
     if (forEachRow) {
         description.append(" FOR EACH ROW");
     }
     if (!expr.empty()) {
-        description.append(" WHERE " + expr.description().get());
+        description.append(" WHEN " + expr.description().get());
     }
     description.append(" BEGIN ");
     assert(!STMTs.empty());
@@ -96,6 +99,24 @@ CreateTriggerSTMT::OperationName(const Operation &operation)
             assert(false);
             break;
     }
+}
+
+template <>
+copy_on_write_string
+copy_on_write_lazy_lang_list<CRUDLang>::calculatedDescription() const
+{
+    std::string description;
+    bool space = false;
+    for (const auto &element : this->get()) {
+        if (space) {
+            description.append(" ");
+        } else {
+            space = true;
+        }
+        assert(!element.empty());
+        description.append(element.description().get() + ";");
+    }
+    return description;
 }
 
 } // namespace lang

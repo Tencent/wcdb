@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementInsert : public StatementWithLang<lang::InsertSTMT> {
+class StatementInsert : public CRUDStatementWithLang<lang::InsertSTMT> {
 public:
     StatementInsert &with(const WithClause &withClause);
     StatementInsert &insertInto(const std::string &tableName);

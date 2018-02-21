@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementUpdate : public StatementWithLang<lang::UpdateSTMT> {
+class StatementUpdate : public CRUDStatementWithLang<lang::UpdateSTMT> {
 public:
     StatementUpdate &with(const WithClause &withClause);
     StatementUpdate &update(const QualifiedTableName &qualifiedTableName);

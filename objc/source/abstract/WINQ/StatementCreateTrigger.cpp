@@ -124,39 +124,11 @@ StatementCreateTrigger::when(const Expression &expression)
     return *this;
 }
 
-StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
-    const StatementUpdate &updateSTMT)
+StatementCreateTrigger &
+StatementCreateTrigger::run(const CRUDStatement &statement)
 {
     lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.STMTs.append(updateSTMT.getLang());
-    ;
-    return *this;
-}
-
-StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
-    const StatementInsert &insertSTMT)
-{
-    lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.STMTs.append(insertSTMT.getLang());
-    ;
-    return *this;
-}
-
-StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
-    const StatementDelete &deleteSTMT)
-{
-    lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.STMTs.append(deleteSTMT.getLang());
-    ;
-    return *this;
-}
-
-StatementCreateTrigger &StatementCreateTrigger::byAddingTriggeredStatement(
-    const StatementSelect &selectSTMT)
-{
-    lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.STMTs.append(selectSTMT.getLang());
-    ;
+    lang.STMTs.append(statement.getCRUDLang());
     return *this;
 }
 
