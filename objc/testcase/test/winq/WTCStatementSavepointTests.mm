@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementSavepointTests : XCTestCase
+@interface WTCStatementSavepointTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,9 @@
 
 - (void)testStatementSavepoint
 {
+    WINQAssertEqual(WCDB::StatementSavepoint()
+                        .savepoint(self.class.savepointName),
+                    @"SAVEPOINT testSavepoint");
 }
 
 @end

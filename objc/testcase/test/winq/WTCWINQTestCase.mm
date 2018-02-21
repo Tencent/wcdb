@@ -62,6 +62,11 @@
     return "testCollation";
 }
 
++ (std::string)savepointName
+{
+    return "testSavepoint";
+}
+
 + (WCDB::StatementSelect)statementSelect
 {
     WCDB::Expression column = WCDB::Expression::ColumnNamed("testColumn1");

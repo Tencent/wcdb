@@ -32,6 +32,7 @@
 @property(class, readonly) std::string columnName;
 @property(class, readonly) std::list<std::string> columnNames;
 @property(class, readonly) std::string collationName;
+@property(class, readonly) std::string savepointName;
 
 @property(class, readonly) WCDB::StatementSelect statementSelect;
 @property(class, readonly) WCDB::WithClause withClause;
