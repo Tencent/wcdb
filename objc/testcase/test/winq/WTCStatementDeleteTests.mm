@@ -29,6 +29,26 @@
 
 - (void)testStatementDelete
 {
+    WCDB::CTETableName cteTableName("testTable");
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::ResultColumn(WCDB::Expression::ColumnNamed("testColumn1")));
+    WCDB::WithClause withClause = WCDB::WithClause().with(cteTableName, statementSelect);
+    WCDB::QualifiedTableName qualifiedTableName("testTable");
+    WCDB::Expression expr = WCDB::Expression(WCDB::Expression::ColumnNamed("testColumn1")).notNull();
+
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .deleteFrom(qualifiedTableName)
+                        .where(expr),
+                    @"DELETE FROM testTable WHERE testColumn1 NOTNULL");
+
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .deleteFrom(qualifiedTableName),
+                    @"DELETE FROM testTable");
+
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .with(withClause)
+                        .deleteFrom(qualifiedTableName)
+                        .where(expr),
+                    @"WITH testTable AS(SELECT testColumn1) DELETE FROM testTable WHERE testColumn1 NOTNULL");
 }
 
 @end
