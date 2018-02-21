@@ -49,7 +49,7 @@ copy_on_write_string DeleteSTMT::SQL() const
             if (offset) {
                 description.append(" OFFSET ");
             } else {
-                description.append(" , ");
+                description.append(", ");
             }
             description.append(limitParameter.description().get());
         }
