@@ -29,6 +29,28 @@
 
 - (void)testStatementDropView
 {
+    std::string schemaName = "testSchema";
+    std::string viewName = "testView";
+
+    WINQAssertEqual(WCDB::StatementDropView()
+                        .dropView(viewName, true)
+                        .withSchema(schemaName),
+                    @"DROP VIEW IF EXISTS testSchema.testView");
+
+    WINQAssertEqual(WCDB::StatementDropView()
+                        .dropView(viewName, true),
+                    @"DROP VIEW IF EXISTS testView");
+
+    WINQAssertEqual(WCDB::StatementDropView()
+                        .dropView(viewName, false)
+                        .withSchema(schemaName),
+                    @"DROP VIEW testSchema.testView");
+
+    //Default
+    WINQAssertEqual(WCDB::StatementDropView()
+                        .dropView(viewName)
+                        .withSchema(schemaName),
+                    @"DROP VIEW IF EXISTS testSchema.testView");
 }
 
 @end
