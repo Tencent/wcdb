@@ -55,7 +55,7 @@ copy_on_write_string SelectSTMT::SQL() const
             if (offset) {
                 description.append(" OFFSET ");
             } else {
-                description.append(" , ");
+                description.append(", ");
             }
             description.append(limitParameter.description().get());
         }
@@ -84,7 +84,7 @@ SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
         case Operator::Union:
             return "UNION";
         case Operator::UnionAll:
-            return "UNIONALL";
+            return "UNION ALL";
         case Operator::Intersect:
             return "INTERSECT";
         case Operator::Except:
