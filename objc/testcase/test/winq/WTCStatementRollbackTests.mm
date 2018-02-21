@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementRollbackTests : XCTestCase
+@interface WTCStatementRollbackTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,13 @@
 
 - (void)testStatementRollback
 {
+    WINQAssertEqual(WCDB::StatementRollback()
+                        .rollbackTo(self.class.savepointName),
+                    @"ROLLBACK TO testSavepoint");
+
+    WINQAssertEqual(WCDB::StatementRollback()
+                        .rollback(),
+                    @"ROLLBACK");
 }
 
 @end
