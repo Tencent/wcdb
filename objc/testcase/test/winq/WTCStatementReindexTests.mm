@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementReindexTests : XCTestCase
+@interface WTCStatementReindexTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,27 @@
 
 - (void)testStatementReindex
 {
+    WINQAssertEqual(WCDB::StatementReindex()
+                        .reindex(),
+                    @"REINDEX");
+
+    WINQAssertEqual(WCDB::StatementReindex()
+                        .reindexCollation(self.class.collationName),
+                    @"REINDEX testCollation");
+
+    WINQAssertEqual(WCDB::StatementReindex()
+                        .withSchema(self.class.schemaName)
+                        .reindex(self.class.tableName),
+                    @"REINDEX testSchema.testTable");
+
+    WINQAssertEqual(WCDB::StatementReindex()
+                        .withSchema(self.class.schemaName)
+                        .reindex(self.class.indexName),
+                    @"REINDEX testSchema.testIndex");
+
+    WINQAssertEqual(WCDB::StatementReindex()
+                        .reindex(self.class.tableName),
+                    @"REINDEX testTable");
 }
 
 @end
