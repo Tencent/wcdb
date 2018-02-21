@@ -29,6 +29,11 @@
 
 - (void)testStatementDetach
 {
+    std::string schemaName = "testSchema";
+
+    WINQAssertEqual(WCDB::StatementDetach()
+                        .detach(schemaName),
+                    @"DETACH testSchema");
 }
 
 @end
