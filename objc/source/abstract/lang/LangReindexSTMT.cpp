@@ -37,11 +37,12 @@ copy_on_write_string ReindexSTMT::SQL() const
             description.append(" " + collationName.get());
             break;
         case Switch::TableOrIndex:
+            description.append(" ");
             if (!schemaName.empty()) {
-                description.append(" " + schemaName.get() + ".");
+                description.append(schemaName.get() + ".");
             }
             assert(!tableOrIndexName.empty());
-            description.append(" " + tableOrIndexName.get());
+            description.append(tableOrIndexName.get());
             break;
         default:
             break;
