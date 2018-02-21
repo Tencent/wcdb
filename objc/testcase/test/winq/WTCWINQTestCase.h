@@ -51,5 +51,8 @@
 @property(class, readonly) std::list<WCDB::OrderingTerm> orderingTerms;
 @property(class, readonly) WCDB::Expression limit;
 @property(class, readonly) WCDB::Expression limitParameter;
+@property(class, readonly) WCDB::CommonTableExpression commonTableExpression;
+@property(class, readonly) std::list<WCDB::CommonTableExpression>
+    commonTableExpressions;
 
 @end

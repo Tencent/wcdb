@@ -93,8 +93,8 @@
 + (std::list<WCDB::ResultColumn>)resultColumns
 {
     std::list<WCDB::ResultColumn> resultColumns;
-    for (const std::string columnName : self.class.columnNames) {
-        WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
+    for (const std::string &columnName : self.class.columnNames) {
+        WCDB::Expression column = WCDB::Expression::ColumnNamed(columnName);
         resultColumns.push_back(column);
     }
     return resultColumns;
@@ -172,6 +172,18 @@
 + (WCDB::Expression)limitParameter
 {
     return WCDB::Expression(WCDB::LiteralValue(2));
+}
+
++ (WCDB::CommonTableExpression)commonTableExpression
+{
+    return WCDB::CommonTableExpression(self.class.tableName);
+}
+
++ (std::list<WCDB::CommonTableExpression>)commonTableExpressions
+{
+    WCDB::CommonTableExpression commonTableExpression1 = self.class.commonTableExpression;
+    WCDB::CommonTableExpression commonTableExpression2("testTable2");
+    return {commonTableExpression1, commonTableExpression2};
 }
 
 @end
