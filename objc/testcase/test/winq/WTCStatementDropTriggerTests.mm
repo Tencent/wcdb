@@ -29,6 +29,28 @@
 
 - (void)testStatementDropTrigger
 {
+    std::string schemaName = "testSchema";
+    std::string triggerName = "testTrigger";
+
+    WINQAssertEqual(WCDB::StatementDropTrigger()
+                        .dropTrigger(triggerName, true)
+                        .withSchema(schemaName),
+                    @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
+
+    WINQAssertEqual(WCDB::StatementDropTrigger()
+                        .dropTrigger(triggerName, true),
+                    @"DROP TRIGGER IF EXISTS testTrigger");
+
+    WINQAssertEqual(WCDB::StatementDropTrigger()
+                        .dropTrigger(triggerName, false)
+                        .withSchema(schemaName),
+                    @"DROP TRIGGER testSchema.testTrigger");
+
+    //Default
+    WINQAssertEqual(WCDB::StatementDropTrigger()
+                        .dropTrigger(triggerName)
+                        .withSchema(schemaName),
+                    @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 }
 
 @end
