@@ -39,4 +39,9 @@ StatementDropIndex::withSchema(const std::string &schemaName)
     return *this;
 }
 
+Statement::Type StatementDropIndex::getType() const
+{
+    return Statement::Type::DropIndex;
+}
+
 } // namespace WCDB
