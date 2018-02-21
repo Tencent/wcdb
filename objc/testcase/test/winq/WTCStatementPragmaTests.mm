@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementPragmaTests : XCTestCase
+@interface WTCStatementPragmaTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,22 @@
 
 - (void)testStatementPragma
 {
+    WCDB::Pragma pragmaName = WCDB::Pragma::JournalMode;
+    WCDB::LiteralValue pragmaValue = WCDB::LiteralValue("WAL");
+
+    WINQAssertEqual(WCDB::StatementPragma()
+                        .withSchema(self.class.schemaName)
+                        .pragma(pragmaName),
+                    @"PRAGMA testSchema.journal_mode");
+
+    WINQAssertEqual(WCDB::StatementPragma()
+                        .withSchema(self.class.schemaName)
+                        .pragma(pragmaName, pragmaValue),
+                    @"PRAGMA testSchema.journal_mode = 'WAL'");
+
+    WINQAssertEqual(WCDB::StatementPragma()
+                        .pragma(pragmaName),
+                    @"PRAGMA journal_mode");
 }
 
 @end
