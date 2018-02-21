@@ -29,6 +29,28 @@
 
 - (void)testStatementDropIndex
 {
+    std::string schemaName = "testSchema";
+    std::string indexName = "testIndex";
+
+    WINQAssertEqual(WCDB::StatementDropIndex()
+                        .dropIndex(indexName, true)
+                        .withSchema(schemaName),
+                    @"DROP INDEX IF EXISTS testSchema.testIndex");
+
+    WINQAssertEqual(WCDB::StatementDropIndex()
+                        .dropIndex(indexName, true),
+                    @"DROP INDEX IF EXISTS testIndex");
+
+    WINQAssertEqual(WCDB::StatementDropIndex()
+                        .dropIndex(indexName, false)
+                        .withSchema(schemaName),
+                    @"DROP INDEX testSchema.testIndex");
+
+    //Default
+    WINQAssertEqual(WCDB::StatementDropIndex()
+                        .dropIndex(indexName)
+                        .withSchema(schemaName),
+                    @"DROP INDEX IF EXISTS testSchema.testIndex");
 }
 
 @end
