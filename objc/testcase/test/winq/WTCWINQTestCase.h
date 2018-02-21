@@ -36,5 +36,20 @@
 
 @property(class, readonly) WCDB::StatementSelect statementSelect;
 @property(class, readonly) WCDB::WithClause withClause;
+@property(class, readonly) WCDB::ResultColumn resultColumn;
+@property(class, readonly) std::list<WCDB::ResultColumn> resultColumns;
+@property(class, readonly) WCDB::TableOrSubquery tableOrSubquery;
+@property(class, readonly) std::list<WCDB::TableOrSubquery> tableOrSubquerys;
+@property(class, readonly) WCDB::JoinClause joinClause;
+@property(class, readonly) WCDB::Expression condition;
+@property(class, readonly) WCDB::Expression group;
+@property(class, readonly) std::list<WCDB::Expression> groups;
+@property(class, readonly) WCDB::Expression having;
+@property(class, readonly) WCDB::Expression value;
+@property(class, readonly) std::list<WCDB::Expression> values;
+@property(class, readonly) WCDB::OrderingTerm orderingTerm;
+@property(class, readonly) std::list<WCDB::OrderingTerm> orderingTerms;
+@property(class, readonly) WCDB::Expression limit;
+@property(class, readonly) WCDB::Expression limitParameter;
 
 @end
