@@ -56,6 +56,8 @@
 		23890DE6201210C30036C53F /* WTCSelectInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE5201210C30036C53F /* WTCSelectInterfaceTests.mm */; };
 		23890DE8201210CA0036C53F /* WTCDeleteInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE7201210CA0036C53F /* WTCDeleteInterfaceTests.mm */; };
 		23890DEA201210EE0036C53F /* WTCInsertInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE9201210EE0036C53F /* WTCInsertInterfaceTests.mm */; };
+		238CB75E203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */; };
+		238CB75F203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */; };
 		23BDBA98202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */; };
 		23BDBA99202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */; };
 		23BDBA9B202D52A2001BEEDA /* WTCIndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */; };
@@ -306,6 +308,8 @@
 		23890DE5201210C30036C53F /* WTCSelectInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSelectInterfaceTests.mm; sourceTree = "<group>"; };
 		23890DE7201210CA0036C53F /* WTCDeleteInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCDeleteInterfaceTests.mm; sourceTree = "<group>"; };
 		23890DE9201210EE0036C53F /* WTCInsertInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCInsertInterfaceTests.mm; sourceTree = "<group>"; };
+		238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCWINQTestCase.mm; sourceTree = "<group>"; };
+		238CB761203D3754009E2A2E /* WTCWINQTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCWINQTestCase.h; sourceTree = "<group>"; };
 		23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCForeignKeyClauseTests.mm; sourceTree = "<group>"; };
 		23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCIndexedColumnTests.mm; sourceTree = "<group>"; };
 		23BDBA9D202D52A7001BEEDA /* WTCJoinClauseTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCJoinClauseTests.mm; sourceTree = "<group>"; };
@@ -674,6 +678,8 @@
 				23BDBB06202D546C001BEEDA /* WTCStatementVacuumTests.mm */,
 				23BDBB09202D5475001BEEDA /* WTCTableConstraintTests.mm */,
 				23BDBB0C202D5479001BEEDA /* WTCWithClauseTests.mm */,
+				238CB761203D3754009E2A2E /* WTCWINQTestCase.h */,
+				238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */,
 			);
 			path = winq;
 			sourceTree = "<group>";
@@ -995,6 +1001,7 @@
 				233FDC6320105549003EC196 /* WTCTracerObject.mm in Sources */,
 				23BDBADA202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm in Sources */,
 				23DC30A8202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */,
+				238CB75E203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */,
 				23BDBACB202D530A001BEEDA /* WTCStatementCommitTests.mm in Sources */,
 				23BDBB0D202D5479001BEEDA /* WTCWithClauseTests.mm in Sources */,
 				23BDBAD4202D5383001BEEDA /* WTCStatementCreateTriggerTests.mm in Sources */,
@@ -1085,6 +1092,7 @@
 				23BDBAE7202D53B0001BEEDA /* WTCStatementDropTableTests.mm in Sources */,
 				23BDBAAE202D52CA001BEEDA /* WTCPragmaTests.mm in Sources */,
 				23BDBB02202D5462001BEEDA /* WTCStatementSelectTests.mm in Sources */,
+				238CB75F203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */,
 				23BDBAE1202D53A1001BEEDA /* WTCStatementDetachTests.mm in Sources */,
 				23BDBAA8202D52BD001BEEDA /* WTCModuleArgumentTests.mm in Sources */,
 				23731A42201F02D9005967ED /* Convenience.m in Sources */,
