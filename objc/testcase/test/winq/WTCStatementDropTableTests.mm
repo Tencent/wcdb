@@ -29,6 +29,28 @@
 
 - (void)testStatementDropTable
 {
+    std::string schemaName = "testSchema";
+    std::string tableName = "testTable";
+
+    WINQAssertEqual(WCDB::StatementDropTable()
+                        .dropTable(tableName, true)
+                        .withSchema(schemaName),
+                    @"DROP TABLE IF EXISTS testSchema.testTable");
+
+    WINQAssertEqual(WCDB::StatementDropTable()
+                        .dropTable(tableName, true),
+                    @"DROP TABLE IF EXISTS testTable");
+
+    WINQAssertEqual(WCDB::StatementDropTable()
+                        .dropTable(tableName, false)
+                        .withSchema(schemaName),
+                    @"DROP TABLE testSchema.testTable");
+
+    //Default
+    WINQAssertEqual(WCDB::StatementDropTable()
+                        .dropTable(tableName)
+                        .withSchema(schemaName),
+                    @"DROP TABLE IF EXISTS testSchema.testTable");
 }
 
 @end
