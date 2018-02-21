@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementInsertTests : XCTestCase
+@interface WTCStatementInsertTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,99 @@
 
 - (void)testStatementInsert
 {
+    WCDB::Expression value1 = WCDB::Expression(WCDB::LiteralValue(1));
+    WCDB::Expression value2 = WCDB::Expression(WCDB::LiteralValue("2"));
+    std::list<WCDB::Expression> values = {value1, value2};
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(values),
+                    @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, '2')");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(self.class.statementSelect),
+                    @"INSERT INTO testSchema.testTable(testColumn1) SELECT testColumn1 FROM testTable");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .defaultValues(),
+                    @"INSERT INTO testSchema.testTable(testColumn1) DEFAULT VALUES");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnNames)
+                        .values(value1),
+                    @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .values(value1),
+                    @"INSERT INTO testSchema.testTable VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertInto(self.class.tableName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT INTO testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertOrReplaceInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT OR REPLACE INTO testSchema.testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertOrRollbackInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT OR ROLLBACK INTO testSchema.testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertOrAbortInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT OR ABORT INTO testSchema.testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertOrFailInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT OR FAIL INTO testSchema.testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .insertOrIgnoreInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"INSERT OR IGNORE INTO testSchema.testTable(testColumn1) VALUES(1)");
+
+    WINQAssertEqual(WCDB::StatementInsert()
+                        .with(self.class.withClause)
+                        .insertInto(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .on(self.class.columnName)
+                        .values(value1),
+                    @"WITH testTable AS(SELECT testColumn1 FROM testTable) INSERT INTO testSchema.testTable(testColumn1) VALUES(1)");
 }
 
 @end
