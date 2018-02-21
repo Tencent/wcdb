@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementDeleteTests : XCTestCase
+@interface WTCStatementDeleteTests : WTCWINQTestCase
 
 @end
 
@@ -29,26 +28,58 @@
 
 - (void)testStatementDelete
 {
-    WCDB::CTETableName cteTableName("testTable");
-    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::ResultColumn(WCDB::Expression::ColumnNamed("testColumn1")));
-    WCDB::WithClause withClause = WCDB::WithClause().with(cteTableName, statementSelect);
-    WCDB::QualifiedTableName qualifiedTableName("testTable");
-    WCDB::Expression expr = WCDB::Expression(WCDB::Expression::ColumnNamed("testColumn1")).notNull();
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .where(self.class.condition)
+                        .orderBy(self.class.orderingTerm)
+                        .limit(self.class.limit)
+                        .offset(self.class.limitParameter),
+                    @"DELETE FROM testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementDelete()
-                        .deleteFrom(qualifiedTableName)
-                        .where(expr),
-                    @"DELETE FROM testTable WHERE testColumn1 NOTNULL");
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .where(self.class.condition)
+                        .orderBy(self.class.orderingTerm)
+                        .limit(self.class.limit, self.class.limitParameter),
+                    @"DELETE FROM testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
 
     WINQAssertEqual(WCDB::StatementDelete()
-                        .deleteFrom(qualifiedTableName),
-                    @"DELETE FROM testTable");
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .where(self.class.condition)
+                        .orderBy(self.class.orderingTerm)
+                        .limit(self.class.limit),
+                    @"DELETE FROM testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1");
 
     WINQAssertEqual(WCDB::StatementDelete()
-                        .with(withClause)
-                        .deleteFrom(qualifiedTableName)
-                        .where(expr),
-                    @"WITH testTable AS(SELECT testColumn1) DELETE FROM testTable WHERE testColumn1 NOTNULL");
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .where(self.class.condition)
+                        .orderBy(self.class.orderingTerms)
+                        .limit(self.class.limit)
+                        .offset(self.class.limitParameter),
+                    @"DELETE FROM testTable WHERE testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1 OFFSET 2");
+
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .where(self.class.condition)
+                        .limit(self.class.limit)
+                        .offset(self.class.limitParameter),
+                    @"DELETE FROM testTable WHERE testColumn NOTNULL LIMIT 1 OFFSET 2");
+
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .orderBy(self.class.orderingTerm)
+                        .limit(self.class.limit)
+                        .offset(self.class.limitParameter),
+                    @"DELETE FROM testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
+
+    WINQAssertEqual(WCDB::StatementDelete()
+                        .with(self.class.withClause)
+                        .deleteFrom(self.class.qualifiedTableName)
+                        .where(self.class.condition)
+                        .orderBy(self.class.orderingTerm)
+                        .limit(self.class.limit)
+                        .offset(self.class.limitParameter),
+                    @"WITH testTable AS(SELECT testColumn FROM testTable) DELETE FROM testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 
 @end

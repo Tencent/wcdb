@@ -52,9 +52,14 @@
     return "testColumn";
 }
 
++ (std::string)columnName2
+{
+    return "testColumn2";
+}
+
 + (std::list<std::string>)columnNames
 {
-    return {"testColumn", "testColumn2"};
+    return {self.class.columnName, self.class.columnName2};
 }
 
 + (std::string)collationName
@@ -130,7 +135,7 @@
 + (std::list<WCDB::Expression>)groups
 {
     WCDB::Expression group1 = self.class.group;
-    WCDB::Expression group2 = WCDB::Expression::ColumnNamed("testColumn2");
+    WCDB::Expression group2 = WCDB::Expression::ColumnNamed(self.class.columnName2);
     ;
     return {group1, group2};
 }
@@ -145,11 +150,14 @@
     return WCDB::Expression(WCDB::LiteralValue(1));
 }
 
++ (WCDB::Expression)value2
+{
+    return WCDB::Expression(WCDB::LiteralValue("testValue"));
+}
+
 + (std::list<WCDB::Expression>)values
 {
-    WCDB::Expression value1 = self.class.value;
-    WCDB::Expression value2 = WCDB::LiteralValue("testValue");
-    return {value1, value2};
+    return {self.class.value, self.class.value2};
 }
 
 + (WCDB::OrderingTerm)orderingTerm
@@ -160,7 +168,7 @@
 + (std::list<WCDB::OrderingTerm>)orderingTerms
 {
     WCDB::OrderingTerm orderingTerm1 = self.class.orderingTerm;
-    WCDB::OrderingTerm orderingTerm2 = WCDB::OrderingTerm(WCDB::Expression::ColumnNamed("testColumn2"));
+    WCDB::OrderingTerm orderingTerm2 = WCDB::OrderingTerm(WCDB::Expression::ColumnNamed(self.class.columnName2));
     return {orderingTerm1, orderingTerm2};
 }
 
@@ -184,6 +192,11 @@
     WCDB::CommonTableExpression commonTableExpression1 = self.class.commonTableExpression;
     WCDB::CommonTableExpression commonTableExpression2("testTable2");
     return {commonTableExpression1, commonTableExpression2};
+}
+
++ (WCDB::QualifiedTableName)qualifiedTableName
+{
+    return WCDB::QualifiedTableName(self.class.tableName);
 }
 
 @end

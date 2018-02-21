@@ -30,6 +30,7 @@
 @property(class, readonly) std::string triggerName;
 @property(class, readonly) std::string viewName;
 @property(class, readonly) std::string columnName;
+@property(class, readonly) std::string columnName2;
 @property(class, readonly) std::list<std::string> columnNames;
 @property(class, readonly) std::string collationName;
 @property(class, readonly) std::string savepointName;
@@ -46,6 +47,7 @@
 @property(class, readonly) std::list<WCDB::Expression> groups;
 @property(class, readonly) WCDB::Expression having;
 @property(class, readonly) WCDB::Expression value;
+@property(class, readonly) WCDB::Expression value2;
 @property(class, readonly) std::list<WCDB::Expression> values;
 @property(class, readonly) WCDB::OrderingTerm orderingTerm;
 @property(class, readonly) std::list<WCDB::OrderingTerm> orderingTerms;
@@ -54,5 +56,6 @@
 @property(class, readonly) WCDB::CommonTableExpression commonTableExpression;
 @property(class, readonly) std::list<WCDB::CommonTableExpression>
     commonTableExpressions;
+@property(class, readonly) WCDB::QualifiedTableName qualifiedTableName;
 
 @end
