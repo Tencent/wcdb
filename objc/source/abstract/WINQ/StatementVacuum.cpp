@@ -22,6 +22,12 @@
 
 namespace WCDB {
 
+StatementVacuum &StatementVacuum::vacuum()
+{
+    getMutableLang();
+    return *this;
+}
+
 StatementVacuum &StatementVacuum::vacuum(const std::string &schemaName)
 {
     lang::VacuumSTMT &lang = getMutableLang();

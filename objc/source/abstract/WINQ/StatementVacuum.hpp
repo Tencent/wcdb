@@ -29,6 +29,7 @@ namespace WCDB {
 class StatementVacuum : public StatementWithLang<lang::VacuumSTMT> {
 
 public:
+    StatementVacuum &vacuum();
     StatementVacuum &vacuum(const std::string &schemaName);
     virtual Type getType() const override;
 };
