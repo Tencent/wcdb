@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementDetachTests : XCTestCase
+@interface WTCStatementDetachTests : WTCWINQTestCase
 
 @end
 
@@ -29,10 +28,8 @@
 
 - (void)testStatementDetach
 {
-    std::string schemaName = "testSchema";
-
     WINQAssertEqual(WCDB::StatementDetach()
-                        .detach(schemaName),
+                        .detach(self.class.schemaName),
                     @"DETACH testSchema");
 }
 

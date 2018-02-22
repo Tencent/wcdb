@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCCommonTableExpression : XCTestCase
+@interface WTCCommonTableExpression : WTCWINQTestCase
 
 @end
 
@@ -29,17 +28,19 @@
 
 - (void)testCommonTableExpression
 {
-    WCDB::ResultColumn resultColumn(WCDB::Expression::ColumnNamed("testColumn1"));
-    WCDB::StatementSelect selectSTMT = WCDB::StatementSelect().select(resultColumn);
-    std::string columnName = "testColumn2";
-    std::list<std::string> columnNames = {columnName, "testColumn3"};
-    std::string tableName = "testTable";
+    WINQAssertEqual(WCDB::CommonTableExpression(self.class.tableName)
+                        .byAddingColumn(self.class.columnName)
+                        .as(self.class.statementSelect),
+                    @"testTable(testColumn) AS(SELECT testColumn FROM testTable)");
 
-    WINQAssertEqual(WCDB::CommonTableExpression(tableName).byAddingColumn(columnName).as(selectSTMT), @"testTable(testColumn2) AS(SELECT testColumn1)");
+    WINQAssertEqual(WCDB::CommonTableExpression(self.class.tableName)
+                        .byAddingColumns(self.class.columnNames)
+                        .as(self.class.statementSelect),
+                    @"testTable(testColumn, testColumn2) AS(SELECT testColumn FROM testTable)");
 
-    WINQAssertEqual(WCDB::CommonTableExpression(tableName).byAddingColumns(columnNames).as(selectSTMT), @"testTable(testColumn2, testColumn3) AS(SELECT testColumn1)");
-
-    WINQAssertEqual(WCDB::CommonTableExpression(tableName).as(selectSTMT), @"testTable AS(SELECT testColumn1)");
+    WINQAssertEqual(WCDB::CommonTableExpression(self.class.tableName)
+                        .as(self.class.statementSelect),
+                    @"testTable AS(SELECT testColumn FROM testTable)");
 }
 
 @end

@@ -184,7 +184,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH testTable SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH testTable AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .with(self.class.commonTableExpressions)
@@ -196,7 +196,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH testTable, testTable2 SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH testTable AS(SELECT testColumn FROM testTable), testTable2 AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .withRecursive(self.class.commonTableExpression)
@@ -208,7 +208,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH RECURSIVE testTable SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH RECURSIVE testTable AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .withRecursive(self.class.commonTableExpressions)
@@ -220,7 +220,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH RECURSIVE testTable, testTable2 SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH RECURSIVE testTable AS(SELECT testColumn FROM testTable), testTable2 AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 
 - (void)testValues

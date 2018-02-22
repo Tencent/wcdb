@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCJoinConstraintTests : XCTestCase
+@interface WTCJoinConstraintTests : WTCWINQTestCase
 
 @end
 
@@ -29,18 +28,19 @@
 
 - (void)testJoinConstraint
 {
-    std::string columnName1 = "testColumn1";
-    std::string columnName2 = "testColumn2";
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed(columnName1);
-    std::list<std::string> columnNames = {columnName1, columnName2};
+    WINQAssertEqual(WCDB::JoinConstraint()
+                        .on(self.class.condition),
+                    @"ON testColumn NOTNULL");
+
+    WINQAssertEqual(WCDB::JoinConstraint()
+                        .usingColumn(self.class.columnName),
+                    @"USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinConstraint()
+                        .usingColumns(self.class.columnNames),
+                    @"USING(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::JoinConstraint(), @"");
-
-    WINQAssertEqual(WCDB::JoinConstraint().on(expression), @"ON testColumn1");
-
-    WINQAssertEqual(WCDB::JoinConstraint().usingColumn(columnName1), @"USING(testColumn1)");
-
-    WINQAssertEqual(WCDB::JoinConstraint().usingColumns(columnNames), @"USING(testColumn1, testColumn2)");
 }
 
 @end

@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementAlterTableTests : XCTestCase
+@interface WTCStatementAlterTableTests : WTCWINQTestCase
 
 @end
 
@@ -29,15 +28,20 @@
 
 - (void)testStatementAlterTable
 {
-    std::string schemaName = "testSchema";
-    std::string tableName = "testTable";
-    std::string newTableName = "testNewTable";
-    WCDB::ColumnDef columnDef = WCDB::ColumnDef("testColumn").withType(WCDB::ColumnType::Integer32);
+    WINQAssertEqual(WCDB::StatementAlterTable()
+                        .alterTable(self.class.schemaName, self.class.tableName)
+                        .renameTo("testNewTable"),
+                    @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
 
-    WINQAssertEqual(WCDB::StatementAlterTable().alterTable(tableName).renameTo(newTableName), @"ALTER TABLE testTable RENAME TO testNewTable");
-    WINQAssertEqual(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnDef), @"ALTER TABLE testTable ADD COLUMN testColumn INTEGER");
+    WINQAssertEqual(WCDB::StatementAlterTable()
+                        .alterTable(self.class.schemaName, self.class.tableName)
+                        .addColumn(self.class.columnDef),
+                    @"ALTER TABLE testSchema.testTable ADD COLUMN testColumn INTEGER");
 
-    WINQAssertEqual(WCDB::StatementAlterTable().alterTable(schemaName, tableName).renameTo(newTableName), @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
+    WINQAssertEqual(WCDB::StatementAlterTable()
+                        .alterTable(self.class.tableName)
+                        .renameTo("testNewTable"),
+                    @"ALTER TABLE testTable RENAME TO testNewTable");
 }
 
 @end

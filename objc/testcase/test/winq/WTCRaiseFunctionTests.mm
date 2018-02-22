@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCRaiseFunctionTests : XCTestCase
+@interface WTCRaiseFunctionTests : WTCWINQTestCase
 
 @end
 
@@ -31,13 +30,21 @@
 {
     std::string errorMessage = "testError";
 
-    WINQAssertEqual(WCDB::RaiseFunction().withIgnore(), @"RAISE(IGNORE)");
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withIgnore(),
+                    @"RAISE(IGNORE)");
 
-    WINQAssertEqual(WCDB::RaiseFunction().withRollback(errorMessage), @"RAISE(ROLLBACK, testError)");
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withRollback(errorMessage),
+                    @"RAISE(ROLLBACK, testError)");
 
-    WINQAssertEqual(WCDB::RaiseFunction().withAbort(errorMessage), @"RAISE(ABORT, testError)");
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withAbort(errorMessage),
+                    @"RAISE(ABORT, testError)");
 
-    WINQAssertEqual(WCDB::RaiseFunction().withFail(errorMessage), @"RAISE(FAIL, testError)");
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withFail(errorMessage),
+                    @"RAISE(FAIL, testError)");
 }
 
 @end

@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementAttachTests : XCTestCase
+@interface WTCStatementAttachTests : WTCWINQTestCase
 
 @end
 
@@ -29,10 +28,12 @@
 
 - (void)testStatementAttach
 {
-    WCDB::Expression expr = WCDB::Expression::ColumnNamed("testColumn");
-    std::string schemaName = "testSchema";
+    WCDB::Expression expr = WCDB::Expression::ColumnNamed(self.class.columnName);
 
-    WINQAssertEqual(WCDB::StatementAttach().attach(expr).as(schemaName), @"ATTACH testColumn AS testSchema");
+    WINQAssertEqual(WCDB::StatementAttach()
+                        .attach(expr)
+                        .as(self.class.schemaName),
+                    @"ATTACH testColumn AS testSchema");
 }
 
 @end

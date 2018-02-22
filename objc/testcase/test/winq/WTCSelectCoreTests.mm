@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCSelectCoreTests : XCTestCase
+@interface WTCSelectCoreTests : WTCWINQTestCase
 
 @end
 
@@ -29,43 +28,89 @@
 
 - (void)testSelectCore
 {
-    WCDB::Expression column1 = WCDB::Expression::ColumnNamed("testColumn1");
-    WCDB::Expression column2 = WCDB::Expression::ColumnNamed("testColumn2");
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    WCDB::ResultColumn resultColumn1 = column1;
-    WCDB::ResultColumn resultColumn2 = column2;
-    std::list<WCDB::ResultColumn> resultColumns = {resultColumn1, resultColumn2};
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group),
+                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn");
 
-    WCDB::TableOrSubquery tableOrSubquery1 = WCDB::TableOrSubquery("testTable1");
-    WCDB::TableOrSubquery tableOrSubquery2 = WCDB::TableOrSubquery("testTable2");
-    std::list<WCDB::TableOrSubquery> tableOrSubquerys = {tableOrSubquery1, tableOrSubquery2};
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .where(self.class.condition)
+                        .groupBy(self.class.groups)
+                        .having(self.class.having),
+                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn, testColumn2 HAVING testColumn NOTNULL");
 
-    WCDB::JoinClause joinClause = tableOrSubquery1;
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .where(self.class.condition),
+                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL");
 
-    WCDB::Expression condition = column1.notNull();
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT testColumn FROM testTable GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    std::list<WCDB::Expression> groupList = {column1, column2};
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquerys)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT testColumn FROM testTable, testTable2 WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    WCDB::Expression having = column2.notNull();
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .from(self.class.joinClause)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    WCDB::Expression value1 = WCDB::LiteralValue(1);
-    WCDB::Expression value2 = WCDB::LiteralValue("2");
-    std::list<WCDB::Expression> values = {value1, value2};
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT testColumn WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(tableOrSubquery1).where(condition).groupBy(column1).having(having), @"SELECT testColumn1 FROM testTable1 WHERE testColumn1 NOTNULL GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(tableOrSubquery1).where(condition).groupBy(column1), @"SELECT testColumn1 FROM testTable1 WHERE testColumn1 NOTNULL GROUP BY testColumn1");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(tableOrSubquery1).where(condition).groupBy(groupList).having(having), @"SELECT testColumn1 FROM testTable1 WHERE testColumn1 NOTNULL GROUP BY testColumn1, testColumn2 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(tableOrSubquery1).where(condition), @"SELECT testColumn1 FROM testTable1 WHERE testColumn1 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(tableOrSubquery1).groupBy(column1).having(having), @"SELECT testColumn1 FROM testTable1 GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(tableOrSubquerys).where(condition).groupBy(column1).having(having), @"SELECT testColumn1 FROM testTable1, testTable2 WHERE testColumn1 NOTNULL GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).from(joinClause).where(condition).groupBy(column1).having(having), @"SELECT testColumn1 FROM testTable1 WHERE testColumn1 NOTNULL GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).where(condition).groupBy(column1).having(having), @"SELECT testColumn1 WHERE testColumn1 NOTNULL GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumns).from(tableOrSubquery1).where(condition).groupBy(column1).having(having), @"SELECT testColumn1, testColumn2 FROM testTable1 WHERE testColumn1 NOTNULL GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
-    WINQAssertEqual(WCDB::SelectCore().select(resultColumn1).distinct().from(tableOrSubquery1).where(condition).groupBy(column1).having(having), @"SELECT DISTINCT testColumn1 FROM testTable1 WHERE testColumn1 NOTNULL GROUP BY testColumn1 HAVING testColumn2 NOTNULL");
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumns)
+                        .from(self.class.tableOrSubquery)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT testColumn, testColumn2 FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    WINQAssertEqual(WCDB::SelectCore().values(value1), @"VALUES(1)");
+    WINQAssertEqual(WCDB::SelectCore()
+                        .select(self.class.resultColumn)
+                        .distinct()
+                        .from(self.class.tableOrSubquery)
+                        .where(self.class.condition)
+                        .groupBy(self.class.group)
+                        .having(self.class.having),
+                    @"SELECT DISTINCT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
-    WINQAssertEqual(WCDB::SelectCore().values(values), @"VALUES(1, '2')");
+    WINQAssertEqual(WCDB::SelectCore()
+                        .values(self.class.value),
+                    @"VALUES(1)");
+
+    WINQAssertEqual(WCDB::SelectCore()
+                        .values(self.class.values),
+                    @"VALUES(1, 'testValue')");
 }
 
 @end

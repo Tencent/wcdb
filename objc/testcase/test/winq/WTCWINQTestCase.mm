@@ -72,14 +72,41 @@
     return "testSavepoint";
 }
 
++ (std::string)constraintName
+{
+    return "testConstraint";
+}
+
++ (std::string)functionName
+{
+    return "testFunction";
+}
+
++ (WCDB::StatementUpdate)statementUpdate
+{
+    return WCDB::StatementUpdate()
+        .update(self.class.qualifiedTableName)
+        .set(self.class.columnName, self.class.value);
+}
+
++ (WCDB::StatementInsert)statementInsert
+{
+    return WCDB::StatementInsert()
+        .insertInto(self.class.tableName)
+        .values(self.class.value);
+}
+
++ (WCDB::StatementDelete)statementDelete
+{
+    return WCDB::StatementDelete()
+        .deleteFrom(self.class.qualifiedTableName);
+}
+
 + (WCDB::StatementSelect)statementSelect
 {
-    WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
-    WCDB::ResultColumn resultColumn(column);
-    WCDB::TableOrSubquery tableOrSubquery(self.class.tableName);
     return WCDB::StatementSelect()
-        .select(resultColumn)
-        .from(tableOrSubquery);
+        .select(self.class.resultColumn)
+        .from(self.class.tableOrSubquery);
 }
 
 + (WCDB::WithClause)withClause
@@ -184,19 +211,102 @@
 
 + (WCDB::CommonTableExpression)commonTableExpression
 {
-    return WCDB::CommonTableExpression(self.class.tableName);
+    return WCDB::CommonTableExpression(self.class.tableName).as(self.class.statementSelect);
 }
 
 + (std::list<WCDB::CommonTableExpression>)commonTableExpressions
 {
     WCDB::CommonTableExpression commonTableExpression1 = self.class.commonTableExpression;
-    WCDB::CommonTableExpression commonTableExpression2("testTable2");
+    WCDB::CommonTableExpression commonTableExpression2 = WCDB::CommonTableExpression("testTable2").as(self.class.statementSelect);
     return {commonTableExpression1, commonTableExpression2};
 }
 
 + (WCDB::QualifiedTableName)qualifiedTableName
 {
     return WCDB::QualifiedTableName(self.class.tableName);
+}
+
++ (WCDB::ForeignKeyClause)foreignKeyClause
+{
+    return WCDB::ForeignKeyClause("testForeignTable");
+}
+
++ (WCDB::LiteralValue)literalValue
+{
+    return WCDB::LiteralValue(1);
+}
+
++ (WCDB::ColumnConstraint)columnConstraint
+{
+    return WCDB::ColumnConstraint().withNotNull();
+}
+
++ (std::list<WCDB::ColumnConstraint>)columnConstraints
+{
+    return {
+        WCDB::ColumnConstraint().withNotNull(),
+        WCDB::ColumnConstraint().withUnique(),
+    };
+}
+
++ (WCDB::ColumnDef)columnDef
+{
+    return WCDB::ColumnDef(self.class.columnName).withType(WCDB::ColumnType::Integer32);
+}
+
++ (std::list<WCDB::ColumnDef>)columnDefs
+{
+    return {
+        self.class.columnDef,
+        WCDB::ColumnDef(self.class.columnName2)
+            .withType(WCDB::ColumnType::Text),
+    };
+}
+
++ (WCDB::TableConstraint)tableConstraint
+{
+    return WCDB::TableConstraint(self.class.constraintName).withPrimaryKey(self.class.indexedColumn);
+}
+
++ (std::list<WCDB::TableConstraint>)tableConstraints
+{
+    return {
+        self.class.tableConstraint,
+        WCDB::TableConstraint("testConstraint2")
+            .withUnique(WCDB::IndexedColumn(self.class.columnName2)),
+    };
+}
+
++ (WCDB::IndexedColumn)indexedColumn
+{
+    return WCDB::IndexedColumn(self.class.columnName);
+}
+
++ (std::list<WCDB::IndexedColumn>)indexedColumns
+{
+    std::list<WCDB::IndexedColumn> indexedColumns;
+    for (const std::string &column : self.class.columnNames) {
+        indexedColumns.push_back(WCDB::IndexedColumn(column));
+    }
+    return indexedColumns;
+}
+
++ (WCDB::ModuleArgument)moduleArgument
+{
+    return WCDB::ModuleArgument("tokenize", "WCDB");
+}
+
++ (std::list<WCDB::ModuleArgument>)moduleArguments
+{
+    return {
+        self.class.moduleArgument,
+        WCDB::ModuleArgument(self.class.columnDef),
+    };
+}
+
++ (WCDB::CTETableName)cteTableName
+{
+    return WCDB::CTETableName(self.class.tableName);
 }
 
 @end

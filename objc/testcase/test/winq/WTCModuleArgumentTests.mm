@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCModuleArgumentTests : XCTestCase
+@interface WTCModuleArgumentTests : WTCWINQTestCase
 
 @end
 
@@ -29,12 +28,11 @@
 
 - (void)testModuleArgument
 {
-    WCDB::ColumnDef columnDef("testColumn");
-    WCDB::TableConstraint tableConstraint = WCDB::TableConstraint().withPrimaryKey(WCDB::IndexedColumn("testColumn"));
+    WINQAssertEqual(WCDB::ModuleArgument(self.class.columnDef), @"testColumn INTEGER");
 
-    WINQAssertEqual(WCDB::ModuleArgument(columnDef), @"testColumn");
-    WINQAssertEqual(WCDB::ModuleArgument(tableConstraint), @"PRIMARY KEY(testColumn)");
-    WINQAssertEqual(WCDB::ModuleArgument("tokenize", "fts3"), @"tokenize=fts3");
+    WINQAssertEqual(WCDB::ModuleArgument(self.class.tableConstraint), @"CONSTRAINT testConstraint PRIMARY KEY(testColumn)");
+
+    WINQAssertEqual(WCDB::ModuleArgument("tokenize", "WCDB"), @"tokenize=WCDB");
 }
 
 @end

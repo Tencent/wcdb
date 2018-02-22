@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCJoinClauseTests : XCTestCase
+@interface WTCJoinClauseTests : WTCWINQTestCase
 
 @end
 
@@ -29,29 +28,104 @@
 
 - (void)testJoinClause
 {
-    WCDB::TableOrSubquery tableOrSubquery = "testTable";
-    WCDB::TableOrSubquery tableOrSubquery1 = "testTable1";
-    WCDB::JoinConstraint joinConstraint1 = WCDB::JoinConstraint().usingColumn("testColumn1");
-    WCDB::TableOrSubquery tableOrSubquery2 = "testTable2";
-    WCDB::JoinConstraint joinConstraint2 = WCDB::JoinConstraint().usingColumn("testColumn2");
+    WCDB::TableOrSubquery tableOrSubquery2("testTable2");
+    WCDB::TableOrSubquery tableOrSubquery3("testTable3");
+    WCDB::JoinConstraint joinConstraint = WCDB::JoinConstraint().usingColumn(self.class.columnName);
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery), @"testTable");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery), @"testTable");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).with(tableOrSubquery1, joinConstraint1), @"testTable, testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .with(tableOrSubquery2),
+                    @"testTable, testTable2");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).join(tableOrSubquery1, joinConstraint1), @"testTable JOIN testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .with(tableOrSubquery2, joinConstraint),
+                    @"testTable, testTable2 USING(testColumn)");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).leftOuterJoin(tableOrSubquery1, joinConstraint1), @"testTable LEFT OUTER JOIN testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .join(tableOrSubquery2),
+                    @"testTable JOIN testTable2");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).leftJoin(tableOrSubquery1, joinConstraint1), @"testTable LEFT JOIN testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .join(tableOrSubquery2, joinConstraint),
+                    @"testTable JOIN testTable2 USING(testColumn)");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).innerJoin(tableOrSubquery1, joinConstraint1), @"testTable INNER JOIN testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .leftJoin(tableOrSubquery2),
+                    @"testTable LEFT JOIN testTable2");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).crossJoin(tableOrSubquery1, joinConstraint1), @"testTable CROSS JOIN testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .leftJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable LEFT JOIN testTable2 USING(testColumn)");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).leftOuterJoin(tableOrSubquery1, joinConstraint1), @"testTable LEFT OUTER JOIN testTable1 USING(testColumn1)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .leftOuterJoin(tableOrSubquery2),
+                    @"testTable LEFT OUTER JOIN testTable2");
 
-    WINQAssertEqual(WCDB::JoinClause(tableOrSubquery).with(tableOrSubquery1, joinConstraint1).join(tableOrSubquery2, joinConstraint2), @"testTable, testTable1 USING(testColumn1) JOIN testTable2 USING(testColumn2)");
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .leftOuterJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable LEFT OUTER JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .innerJoin(tableOrSubquery2),
+                    @"testTable INNER JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .innerJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable INNER JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .crossJoin(tableOrSubquery2),
+                    @"testTable CROSS JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .crossJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable CROSS JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalJoin(tableOrSubquery2),
+                    @"testTable NATURAL JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable NATURAL JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalLeftJoin(tableOrSubquery2),
+                    @"testTable NATURAL LEFT JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalLeftJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable NATURAL LEFT JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalLeftOuterJoin(tableOrSubquery2),
+                    @"testTable NATURAL LEFT OUTER JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalLeftOuterJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable NATURAL LEFT OUTER JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalInnerJoin(tableOrSubquery2),
+                    @"testTable NATURAL INNER JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalInnerJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable NATURAL INNER JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalCrossJoin(tableOrSubquery2),
+                    @"testTable NATURAL CROSS JOIN testTable2");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .naturalCrossJoin(tableOrSubquery2, joinConstraint),
+                    @"testTable NATURAL CROSS JOIN testTable2 USING(testColumn)");
+
+    WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery)
+                        .with(tableOrSubquery2)
+                        .join(tableOrSubquery3, joinConstraint),
+                    @"testTable, testTable2 JOIN testTable3 USING(testColumn)");
 }
 
 @end

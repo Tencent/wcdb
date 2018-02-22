@@ -18,50 +18,115 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCColumnConstraintTests : XCTestCase
+@interface WTCColumnConstraintTests : WTCWINQTestCase
 
 @end
 
 @implementation WTCColumnConstraintTests
 
-- (void)testColumnConstraint
+- (void)testPrimaryKey
 {
-    WCDB::ConflictClause conflictClause = WCDB::ConflictClause::Rollback;
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed("testColumn");
-    expression = expression.notNull();
-    WCDB::ForeignKeyClause foreignKeyClause("testForeignTable");
-    std::string constraintName = "testConstraint";
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withPrimaryKey(WCDB::Order::NotSet, WCDB::ConflictClause::NotSet, false),
+                    @"CONSTRAINT testConstraint PRIMARY KEY");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withPrimaryKey(), @"CONSTRAINT testConstraint PRIMARY KEY");
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withPrimaryKey(WCDB::Order::ASC, WCDB::ConflictClause::NotSet, false),
+                    @"CONSTRAINT testConstraint PRIMARY KEY ASC");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().withPrimaryKey(), @"PRIMARY KEY");
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withPrimaryKey(WCDB::Order::DESC, WCDB::ConflictClause::NotSet, false),
+                    @"CONSTRAINT testConstraint PRIMARY KEY DESC");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withPrimaryKey(WCDB::Order::ASC), @"CONSTRAINT testConstraint PRIMARY KEY ASC");
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withPrimaryKey(WCDB::Order::NotSet, WCDB::ConflictClause::Rollback, false),
+                    @"CONSTRAINT testConstraint PRIMARY KEY ON CONFLICT ROLLBACK");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withPrimaryKey(WCDB::Order::DESC), @"CONSTRAINT testConstraint PRIMARY KEY DESC");
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withPrimaryKey(WCDB::Order::NotSet, WCDB::ConflictClause::NotSet, true),
+                    @"CONSTRAINT testConstraint PRIMARY KEY AUTOINCREMENT");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withPrimaryKey(WCDB::Order::NotSet, conflictClause), @"CONSTRAINT testConstraint PRIMARY KEY ON CONFLICT ROLLBACK");
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .withPrimaryKey(WCDB::Order::NotSet, WCDB::ConflictClause::NotSet, false),
+                    @"PRIMARY KEY");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withPrimaryKey(WCDB::Order::NotSet, WCDB::ConflictClause::NotSet, true), @"CONSTRAINT testConstraint PRIMARY KEY AUTOINCREMENT");
+    //Default
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withPrimaryKey(),
+                    @"CONSTRAINT testConstraint PRIMARY KEY");
+}
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withNotNull(), @"CONSTRAINT testConstraint NOT NULL");
+- (void)testNotNull
+{
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withNotNull(WCDB::ConflictClause::NotSet),
+                    @"CONSTRAINT testConstraint NOT NULL");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withNotNull(conflictClause), @"CONSTRAINT testConstraint NOT NULL ON CONFLICT ROLLBACK");
+    //Default
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withNotNull(),
+                    @"CONSTRAINT testConstraint NOT NULL");
+}
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withUnique(), @"CONSTRAINT testConstraint UNIQUE");
+- (void)testUnique
+{
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withUnique(WCDB::ConflictClause::NotSet),
+                    @"CONSTRAINT testConstraint UNIQUE");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withUnique(conflictClause), @"CONSTRAINT testConstraint UNIQUE ON CONFLICT ROLLBACK");
+    //Default
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withUnique(),
+                    @"CONSTRAINT testConstraint UNIQUE");
+}
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withChecking(expression), @"CONSTRAINT testConstraint CHECK(testColumn NOTNULL)");
+- (void)testCheck
+{
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withChecking(self.class.condition),
+                    @"CONSTRAINT testConstraint CHECK(testColumn NOTNULL)");
+}
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withDefault(1), @"CONSTRAINT testConstraint DEFAULT 1");
+- (void)testDefault
+{
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withDefault(self.class.literalValue),
+                    @"CONSTRAINT testConstraint DEFAULT 1");
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withCollate("testCollate"), @"CONSTRAINT testConstraint COLLATE testCollate");
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withDefault(self.class.value),
+                    @"CONSTRAINT testConstraint DEFAULT(1)");
+}
 
-    WINQAssertEqual(WCDB::ColumnConstraint().named(constraintName).withForeignKeyClause(foreignKeyClause), @"CONSTRAINT testConstraint REFERENCES testForeignTable");
+- (void)testCollate
+{
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withCollate(self.class.collationName),
+                    @"CONSTRAINT testConstraint COLLATE testCollation");
+}
+
+- (void)testForeignKey
+{
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withForeignKeyClause(self.class.foreignKeyClause),
+                    @"CONSTRAINT testConstraint REFERENCES testForeignTable");
 }
 
 @end

@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementDropTriggerTests : XCTestCase
+@interface WTCStatementDropTriggerTests : WTCWINQTestCase
 
 @end
 
@@ -29,27 +28,24 @@
 
 - (void)testStatementDropTrigger
 {
-    std::string schemaName = "testSchema";
-    std::string triggerName = "testTrigger";
-
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(triggerName, true)
-                        .withSchema(schemaName),
+                        .dropTrigger(self.class.triggerName, true)
+                        .withSchema(self.class.schemaName),
                     @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(triggerName, true),
+                        .dropTrigger(self.class.triggerName, true),
                     @"DROP TRIGGER IF EXISTS testTrigger");
 
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(triggerName, false)
-                        .withSchema(schemaName),
+                        .dropTrigger(self.class.triggerName, false)
+                        .withSchema(self.class.schemaName),
                     @"DROP TRIGGER testSchema.testTrigger");
 
     //Default
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(triggerName)
-                        .withSchema(schemaName),
+                        .dropTrigger(self.class.triggerName)
+                        .withSchema(self.class.schemaName),
                     @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 }
 

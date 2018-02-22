@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCWithClauseTests : XCTestCase
+@interface WTCWithClauseTests : WTCWINQTestCase
 
 @end
 
@@ -29,6 +28,24 @@
 
 - (void)testWithClause
 {
+    WINQAssertEqual(WCDB::WithClause()
+                        .with(self.class.cteTableName, self.class.statementSelect),
+                    @"WITH testTable AS(SELECT testColumn FROM testTable)");
+
+    std::string tableName2 = "testTable2";
+    WCDB::CTETableName cteTableName2(tableName2);
+    WCDB::StatementSelect statementSelect2 = WCDB::StatementSelect()
+                                                 .select(self.class.resultColumn)
+                                                 .from(WCDB::TableOrSubquery(tableName2));
+
+    WINQAssertEqual(WCDB::WithClause()
+                        .with(self.class.cteTableName, self.class.statementSelect)
+                        .with(cteTableName2, statementSelect2),
+                    @"WITH testTable AS(SELECT testColumn FROM testTable), testTable2 AS(SELECT testColumn FROM testTable2)");
+
+    WINQAssertEqual(WCDB::WithClause()
+                        .withRecursive(self.class.cteTableName, self.class.statementSelect),
+                    @"WITH RECURSIVE testTable AS(SELECT testColumn FROM testTable)");
 }
 
 @end

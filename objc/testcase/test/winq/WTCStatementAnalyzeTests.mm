@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementAnalyzeTests : XCTestCase
+@interface WTCStatementAnalyzeTests : WTCWINQTestCase
 
 @end
 
@@ -29,16 +28,29 @@
 
 - (void)testStatementAnalyze
 {
-    std::string schemaName = "testSchema";
-    std::string tableOrIndexName = "testTableOrIndex";
+    WINQAssertEqual(WCDB::StatementAnalyze()
+                        .analyze(),
+                    @"ANALYZE");
 
-    WINQAssertEqual(WCDB::StatementAnalyze(), @"ANALYZE");
+    WINQAssertEqual(WCDB::StatementAnalyze()
+                        .analyze(self.class.schemaName),
+                    @"ANALYZE testSchema");
 
-    WINQAssertEqual(WCDB::StatementAnalyze().analyzeSchema(schemaName), @"ANALYZE testSchema");
+    WINQAssertEqual(WCDB::StatementAnalyze()
+                        .analyze(self.class.tableName),
+                    @"ANALYZE testTable");
 
-    WINQAssertEqual(WCDB::StatementAnalyze().analyze(tableOrIndexName), @"ANALYZE testTableOrIndex");
+    WINQAssertEqual(WCDB::StatementAnalyze()
+                        .analyze(self.class.indexName),
+                    @"ANALYZE testIndex");
 
-    WINQAssertEqual(WCDB::StatementAnalyze().analyze(schemaName, tableOrIndexName), @"ANALYZE testSchema.testTableOrIndex");
+    WINQAssertEqual(WCDB::StatementAnalyze()
+                        .analyze(self.class.schemaName, self.class.tableName),
+                    @"ANALYZE testSchema.testTable");
+
+    WINQAssertEqual(WCDB::StatementAnalyze()
+                        .analyze(self.class.schemaName, self.class.indexName),
+                    @"ANALYZE testSchema.testIndex");
 }
 
 @end

@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementCreateViewTests : XCTestCase
+@interface WTCStatementCreateViewTests : WTCWINQTestCase
 
 @end
 
@@ -29,44 +28,44 @@
 
 - (void)testStatementCreateView
 {
-    std::string schemaName = "testSchema";
-    std::string viewName = "testView";
-    std::string columnName1 = "testColumn1";
-    std::list<std::string> columnNames = {columnName1, "testColumn2"};
-    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::ResultColumn(WCDB::Expression::ColumnNamed("testColumn1")));
+    WINQAssertEqual(WCDB::StatementCreateView()
+                        .createView(self.class.viewName, false, false)
+                        .as(self.class.statementSelect),
+                    @"CREATE VIEW testView AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(viewName, false, false)
-                        .as(statementSelect),
-                    @"CREATE VIEW testView AS SELECT testColumn1");
+                        .createView(self.class.viewName, false, false)
+                        .on(self.class.columnName)
+                        .as(self.class.statementSelect),
+                    @"CREATE VIEW testView(testColumn) AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(viewName, false, false)
-                        .on(columnName1)
-                        .as(statementSelect),
-                    @"CREATE VIEW testView(testColumn1) AS SELECT testColumn1");
+                        .createView(self.class.viewName, false, false)
+                        .on(self.class.columnNames)
+                        .as(self.class.statementSelect),
+                    @"CREATE VIEW testView(testColumn, testColumn2) AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(viewName, false, false)
-                        .on(columnNames)
-                        .as(statementSelect),
-                    @"CREATE VIEW testView(testColumn1, testColumn2) AS SELECT testColumn1");
+                        .createView(self.class.viewName, false, false)
+                        .withSchema(self.class.schemaName)
+                        .as(self.class.statementSelect),
+                    @"CREATE VIEW testSchema.testView AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(viewName, false, false)
-                        .withSchema(schemaName)
-                        .as(statementSelect),
-                    @"CREATE VIEW testSchema.testView AS SELECT testColumn1");
+                        .createView(self.class.viewName, true, false)
+                        .as(self.class.statementSelect),
+                    @"CREATE VIEW IF NOT EXISTS testView AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(viewName, true, false)
-                        .as(statementSelect),
-                    @"CREATE VIEW IF NOT EXISTS testView AS SELECT testColumn1");
+                        .createView(self.class.viewName, false, true)
+                        .as(self.class.statementSelect),
+                    @"CREATE TEMP VIEW testView AS SELECT testColumn FROM testTable");
 
+    //Default
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(viewName, false, true)
-                        .as(statementSelect),
-                    @"CREATE TEMP VIEW testView AS SELECT testColumn1");
+                        .createView(self.class.viewName)
+                        .as(self.class.statementSelect),
+                    @"CREATE VIEW IF NOT EXISTS testView AS SELECT testColumn FROM testTable");
 }
 
 @end

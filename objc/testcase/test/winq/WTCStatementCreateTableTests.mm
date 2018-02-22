@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementCreateTableTests : XCTestCase
+@interface WTCStatementCreateTableTests : WTCWINQTestCase
 
 @end
 
@@ -29,37 +28,68 @@
 
 - (void)testStatementCreateTable
 {
-    std::string schemaName = "testSchema";
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, false)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDef),
+                    @"CREATE TABLE testSchema.testTable(testColumn INTEGER)");
 
-    std::string tableName = "testTable";
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, false)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDef)
+                        .withoutRowID(),
+                    @"CREATE TABLE testSchema.testTable(testColumn INTEGER) WITHOUT ROWID");
 
-    WCDB::ColumnDef columnDef1 = WCDB::ColumnDef("testColumn1").withType(WCDB::ColumnType::Integer32);
-    WCDB::ColumnDef columnDef2 = WCDB::ColumnDef("testColumn2").withType(WCDB::ColumnType::Text);
-    std::list<WCDB::ColumnDef> columnDefs = {columnDef1, columnDef2};
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, false)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDef)
+                        .addTableConstraint(self.class.tableConstraint),
+                    @"CREATE TABLE testSchema.testTable(testColumn INTEGER, CONSTRAINT testConstraint PRIMARY KEY(testColumn))")
 
-    WCDB::TableConstraint tableConstraint1 = WCDB::TableConstraint().withPrimaryKey("testColumn1");
-    WCDB::TableConstraint tableConstraint2 = WCDB::TableConstraint().withUnique("testColumn2");
-    std::list<WCDB::TableConstraint> tableConstraints = {tableConstraint1, tableConstraint2};
+        WINQAssertEqual(WCDB::StatementCreateTable()
+                            .createTable(self.class.tableName, false, false)
+                            .withSchema(self.class.schemaName)
+                            .define(self.class.columnDef)
+                            .addTableConstraints(self.class.tableConstraints),
+                        @"CREATE TABLE testSchema.testTable(testColumn INTEGER, CONSTRAINT testConstraint PRIMARY KEY(testColumn), CONSTRAINT testConstraint2 UNIQUE(testColumn2))");
 
-    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::ResultColumn(WCDB::Expression::ColumnNamed("testColumn1")));
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, false)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDefs),
+                    @"CREATE TABLE testSchema.testTable(testColumn INTEGER, testColumn2 TEXT)");
 
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER)");
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, false)
+                        .withSchema(self.class.schemaName)
+                        .as(self.class.statementSelect),
+                    @"CREATE TABLE testSchema.testTable AS SELECT testColumn FROM testTable");
 
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1).withoutRowID(), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER) WITHOUT ROWID");
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, false)
+                        .define(self.class.columnDef),
+                    @"CREATE TABLE testTable(testColumn INTEGER)");
 
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1).addTableConstraint(tableConstraint1), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, PRIMARY KEY(testColumn1))");
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, true, false)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDef),
+                    @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn INTEGER)");
 
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDef1).addTableConstraints(tableConstraints), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, PRIMARY KEY(testColumn1), UNIQUE(testColumn2))");
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName, false, true)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDef),
+                    @"CREATE TEMP TABLE testSchema.testTable(testColumn INTEGER)");
 
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).define(columnDefs), @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, testColumn2 TEXT)");
-
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).withSchema(schemaName).as(statementSelect), @"CREATE TABLE testSchema.testTable AS SELECT testColumn1");
-
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, false).define(columnDef1), @"CREATE TABLE testTable(testColumn1 INTEGER)");
-
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, true, false).withSchema(schemaName).define(columnDef1), @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn1 INTEGER)");
-
-    WINQAssertEqual(WCDB::StatementCreateTable().createTable(tableName, false, true).withSchema(schemaName).define(columnDef1), @"CREATE TEMP TABLE testSchema.testTable(testColumn1 INTEGER)");
+    //Default
+    WINQAssertEqual(WCDB::StatementCreateTable()
+                        .createTable(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .define(self.class.columnDef),
+                    @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn INTEGER)");
 }
 
 @end

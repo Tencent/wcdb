@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCQualifiedTableNameTests : XCTestCase
+@interface WTCQualifiedTableNameTests : WTCWINQTestCase
 
 @end
 
@@ -29,17 +28,21 @@
 
 - (void)testQualifiedTableName
 {
-    std::string schemaName = "testSchema";
-    std::string tableName = "testTable";
-    std::string indexName = "testIndex";
+    WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName)
+                        .withSchema(self.class.schemaName),
+                    @"testSchema.testTable");
 
-    WINQAssertEqual(WCDB::QualifiedTableName(tableName), @"testTable");
+    WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .indexedBy(self.class.indexName),
+                    @"testSchema.testTable INDEXED BY testIndex");
 
-    WINQAssertEqual(WCDB::QualifiedTableName(tableName).indexedBy(indexName), @"testTable INDEXED BY testIndex");
+    WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName)
+                        .withSchema(self.class.schemaName)
+                        .notIndexed(),
+                    @"testSchema.testTable NOT INDEXED");
 
-    WINQAssertEqual(WCDB::QualifiedTableName(tableName).notIndexed(), @"testTable NOT INDEXED");
-
-    WINQAssertEqual(WCDB::QualifiedTableName(tableName).withSchema(schemaName), @"testSchema.testTable");
+    WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName), @"testTable");
 }
 
 @end

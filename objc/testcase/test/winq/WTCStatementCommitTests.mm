@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementCommitTests : XCTestCase
+@interface WTCStatementCommitTests : WTCWINQTestCase
 
 @end
 
@@ -29,7 +28,9 @@
 
 - (void)testStatementCommit
 {
-    WINQAssertEqual(WCDB::StatementCommit().commit(), @"COMMIT");
+    WINQAssertEqual(WCDB::StatementCommit()
+                        .commit(),
+                    @"COMMIT");
 }
 
 @end

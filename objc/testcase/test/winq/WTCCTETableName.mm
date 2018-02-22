@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCCTETableName : XCTestCase
+@interface WTCCTETableName : WTCWINQTestCase
 
 @end
 
@@ -29,15 +28,15 @@
 
 - (void)testCTETableName
 {
-    std::string tableName = "testTable";
-    std::string columnName = "testColumn1";
-    std::list<std::string> columnNames = {columnName, "testColumn2"};
+    WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
+                        .byAddingColumnName(self.class.columnName),
+                    @"testTable(testColumn)");
 
-    WINQAssertEqual(WCDB::CTETableName(tableName).byAddingColumnName(columnName), @"testTable(testColumn1)");
+    WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
+                        .byAddingColumnNames(self.class.columnNames),
+                    @"testTable(testColumn, testColumn2)");
 
-    WINQAssertEqual(WCDB::CTETableName(tableName).byAddingColumnNames(columnNames), @"testTable(testColumn1, testColumn2)");
-
-    WINQAssertEqual(WCDB::CTETableName(tableName), @"testTable");
+    WINQAssertEqual(WCDB::CTETableName(self.class.tableName), @"testTable");
 }
 
 @end

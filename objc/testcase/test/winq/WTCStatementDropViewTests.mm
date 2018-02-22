@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementDropViewTests : XCTestCase
+@interface WTCStatementDropViewTests : WTCWINQTestCase
 
 @end
 
@@ -29,27 +28,24 @@
 
 - (void)testStatementDropView
 {
-    std::string schemaName = "testSchema";
-    std::string viewName = "testView";
-
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(viewName, true)
-                        .withSchema(schemaName),
+                        .dropView(self.class.viewName, true)
+                        .withSchema(self.class.schemaName),
                     @"DROP VIEW IF EXISTS testSchema.testView");
 
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(viewName, true),
+                        .dropView(self.class.viewName, true),
                     @"DROP VIEW IF EXISTS testView");
 
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(viewName, false)
-                        .withSchema(schemaName),
+                        .dropView(self.class.viewName, false)
+                        .withSchema(self.class.schemaName),
                     @"DROP VIEW testSchema.testView");
 
     //Default
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(viewName)
-                        .withSchema(schemaName),
+                        .dropView(self.class.viewName)
+                        .withSchema(self.class.schemaName),
                     @"DROP VIEW IF EXISTS testSchema.testView");
 }
 

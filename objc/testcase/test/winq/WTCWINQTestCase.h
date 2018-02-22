@@ -34,7 +34,12 @@
 @property(class, readonly) std::list<std::string> columnNames;
 @property(class, readonly) std::string collationName;
 @property(class, readonly) std::string savepointName;
+@property(class, readonly) std::string constraintName;
+@property(class, readonly) std::string functionName;
 
+@property(class, readonly) WCDB::StatementUpdate statementUpdate;
+@property(class, readonly) WCDB::StatementInsert statementInsert;
+@property(class, readonly) WCDB::StatementDelete statementDelete;
 @property(class, readonly) WCDB::StatementSelect statementSelect;
 @property(class, readonly) WCDB::WithClause withClause;
 @property(class, readonly) WCDB::ResultColumn resultColumn;
@@ -57,5 +62,18 @@
 @property(class, readonly) std::list<WCDB::CommonTableExpression>
     commonTableExpressions;
 @property(class, readonly) WCDB::QualifiedTableName qualifiedTableName;
+@property(class, readonly) WCDB::ForeignKeyClause foreignKeyClause;
+@property(class, readonly) WCDB::LiteralValue literalValue;
+@property(class, readonly) WCDB::ColumnConstraint columnConstraint;
+@property(class, readonly) std::list<WCDB::ColumnConstraint> columnConstraints;
+@property(class, readonly) WCDB::ColumnDef columnDef;
+@property(class, readonly) std::list<WCDB::ColumnDef> columnDefs;
+@property(class, readonly) WCDB::TableConstraint tableConstraint;
+@property(class, readonly) std::list<WCDB::TableConstraint> tableConstraints;
+@property(class, readonly) WCDB::IndexedColumn indexedColumn;
+@property(class, readonly) std::list<WCDB::IndexedColumn> indexedColumns;
+@property(class, readonly) WCDB::ModuleArgument moduleArgument;
+@property(class, readonly) std::list<WCDB::ModuleArgument> moduleArguments;
+@property(class, readonly) WCDB::CTETableName cteTableName;
 
 @end

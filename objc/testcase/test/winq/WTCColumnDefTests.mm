@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCColumnDefTests : XCTestCase
+@interface WTCColumnDefTests : WTCWINQTestCase
 
 @end
 
@@ -29,19 +28,21 @@
 
 - (void)testColumnDef
 {
-    WCDB::ColumnType type = WCDB::ColumnType::Integer32;
-    WCDB::ColumnConstraint columnConstraint1 = WCDB::ColumnConstraint().named("testConstraint1").withNotNull();
-    WCDB::ColumnConstraint columnConstraint2 = WCDB::ColumnConstraint().named("testConstraint2").withUnique();
-    std::list<WCDB::ColumnConstraint> columnConstraintList = {columnConstraint1, columnConstraint2};
-    std::string columnName = "localID";
+    WINQAssertEqual(WCDB::ColumnDef(self.class.columnName)
+                        .withType(WCDB::ColumnType::Integer32),
+                    @"testColumn INTEGER");
 
-    WINQAssertEqual(WCDB::ColumnDef(columnName).withType(type), @"localID INTEGER");
+    WINQAssertEqual(WCDB::ColumnDef(self.class.columnName)
+                        .withType(WCDB::ColumnType::Integer32)
+                        .byAddingConstraint(self.class.columnConstraint),
+                    @"testColumn INTEGER NOT NULL");
 
-    WINQAssertEqual(WCDB::ColumnDef(columnName), @"localID");
+    WINQAssertEqual(WCDB::ColumnDef(self.class.columnName)
+                        .withType(WCDB::ColumnType::Integer32)
+                        .byAddingConstraints(self.class.columnConstraints),
+                    @"testColumn INTEGER NOT NULL UNIQUE");
 
-    WINQAssertEqual(WCDB::ColumnDef(columnName).withType(type).byAddingConstraint(columnConstraint1), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL");
-
-    WINQAssertEqual(WCDB::ColumnDef(columnName).withType(type).byAddingConstraints(columnConstraintList), @"localID INTEGER CONSTRAINT testConstraint1 NOT NULL CONSTRAINT testConstraint2 UNIQUE");
+    WINQAssertEqual(WCDB::ColumnDef(self.class.columnName), @"testColumn");
 }
 
 @end

@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCBindParameterTests : XCTestCase
+@interface WTCBindParameterTests : WTCWINQTestCase
 
 @end
 

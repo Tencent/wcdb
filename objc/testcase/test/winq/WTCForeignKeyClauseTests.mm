@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCForeignKeyClauseTests : XCTestCase
+@interface WTCForeignKeyClauseTests : WTCWINQTestCase
 
 @end
 
@@ -29,28 +28,132 @@
 
 - (void)testForeignKeyClause
 {
-    std::string tableName = "testTable";
-    std::string columName1 = "testColumn1";
-    std::list<std::string> columNames = {columName1, "testColumn2"};
-    std::string name = "matchingName";
+    std::string foreignTableName = "testForeignTable";
+    std::string matchName = "testMatchName";
 
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().notDeferrable().initiallyImmediate(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().notDeferrable(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().deferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL");
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteSetNull()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetDefault().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteCascade().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE CASCADE NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteRestrict().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteNoAction().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onUpdateSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON UPDATE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteSetNull()
+                        .notDeferrable()
+                        .initiallyImmediate(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
 
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).byMatching(name).notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) MATCH matchingName NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteSetNull()
+                        .notDeferrable(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE SET NULL NOT DEFERRABLE");
 
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnName(columName1).onDeleteSetNull().byMatching(name).notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1) ON DELETE SET NULL MATCH matchingName NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).byAddingColumnNames(columNames).onDeleteSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable(testColumn1, testColumn2) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
-    WINQAssertEqual(WCDB::ForeignKeyClause(tableName).onDeleteSetNull().notDeferrable().initiallyDeferred(), @"REFERENCES testTable ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteSetNull()
+                        .deferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE SET NULL DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteSetDefault()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteCascade()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE CASCADE NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteRestrict()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteNoAction()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onUpdateSetNull()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON UPDATE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onUpdateSetDefault()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON UPDATE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onUpdateCascade()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON UPDATE CASCADE NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onUpdateRestrict()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON UPDATE RESTRICT NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onUpdateNoAction()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON UPDATE NO ACTION NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .byMatching(matchName)
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) MATCH testMatchName NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .onDeleteSetNull()
+                        .byMatching(matchName)
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) ON DELETE SET NULL MATCH testMatchName NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnName(self.class.columnName)
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn) NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .byAddingColumnNames(self.class.columnNames)
+                        .onDeleteSetNull()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable(testColumn, testColumn2) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
+
+    WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
+                        .onDeleteSetNull()
+                        .notDeferrable()
+                        .initiallyDeferred(),
+                    @"REFERENCES testForeignTable ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
 @end

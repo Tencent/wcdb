@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCStatementDropTableTests : XCTestCase
+@interface WTCStatementDropTableTests : WTCWINQTestCase
 
 @end
 
@@ -29,27 +28,24 @@
 
 - (void)testStatementDropTable
 {
-    std::string schemaName = "testSchema";
-    std::string tableName = "testTable";
-
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(tableName, true)
-                        .withSchema(schemaName),
+                        .dropTable(self.class.tableName, true)
+                        .withSchema(self.class.schemaName),
                     @"DROP TABLE IF EXISTS testSchema.testTable");
 
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(tableName, true),
+                        .dropTable(self.class.tableName, true),
                     @"DROP TABLE IF EXISTS testTable");
 
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(tableName, false)
-                        .withSchema(schemaName),
+                        .dropTable(self.class.tableName, false)
+                        .withSchema(self.class.schemaName),
                     @"DROP TABLE testSchema.testTable");
 
     //Default
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(tableName)
-                        .withSchema(schemaName),
+                        .dropTable(self.class.tableName)
+                        .withSchema(self.class.schemaName),
                     @"DROP TABLE IF EXISTS testSchema.testTable");
 }
 

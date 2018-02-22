@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCResultColumnTests : XCTestCase
+@interface WTCResultColumnTests : WTCWINQTestCase
 
 @end
 
@@ -29,17 +28,17 @@
 
 - (void)testResultColumn
 {
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed("testColumn");
-    std::string columnAlias = "testColumnAlias";
-    std::string tableName = "testTable";
+    WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
 
-    WINQAssertEqual(WCDB::ResultColumn(expression), @"testColumn");
+    WINQAssertEqual(WCDB::ResultColumn(column), @"testColumn");
 
-    WINQAssertEqual(WCDB::ResultColumn(expression).as(columnAlias), @"testColumn AS testColumnAlias");
+    WINQAssertEqual(WCDB::ResultColumn(column)
+                        .as(self.class.columnName2),
+                    @"testColumn AS testColumn2");
 
     WINQAssertEqual(WCDB::ResultColumn::All, @"*");
 
-    WINQAssertEqual(WCDB::ResultColumn::AllInTable(tableName), @"testTable.*");
+    WINQAssertEqual(WCDB::ResultColumn::AllInTable(self.class.tableName), @"testTable.*");
 }
 
 @end

@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import "WTCWINQTestCase.h"
 
-@interface WTCIndexedColumnTests : XCTestCase
+@interface WTCIndexedColumnTests : WTCWINQTestCase
 
 @end
 
@@ -29,19 +28,30 @@
 
 - (void)testIndexedColumn
 {
-    std::string columnName = "testColumn1";
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed("testColumn2");
-    std::string collationName = "testCollation";
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName), @"testColumn");
 
-    WINQAssertEqual(WCDB::IndexedColumn(columnName), @"testColumn1");
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+                        .withOrder(WCDB::Order::NotSet),
+                    @"testColumn");
 
-    WINQAssertEqual(WCDB::IndexedColumn(columnName).withOrder(WCDB::Order::ASC), @"testColumn1 ASC");
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+                        .withOrder(WCDB::Order::ASC),
+                    @"testColumn ASC");
 
-    WINQAssertEqual(WCDB::IndexedColumn(columnName).withOrder(WCDB::Order::DESC), @"testColumn1 DESC");
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+                        .withOrder(WCDB::Order::DESC),
+                    @"testColumn DESC");
 
-    WINQAssertEqual(WCDB::IndexedColumn(columnName).withCollate(collationName), @"testColumn1 COLLATE testCollation");
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+                        .withCollate(self.class.collationName),
+                    @"testColumn COLLATE testCollation");
 
-    WINQAssertEqual(WCDB::IndexedColumn(expression), @"testColumn2");
+    WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WINQAssertEqual(WCDB::IndexedColumn(column), @"testColumn");
+    //Default
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+                        .withOrder(),
+                    @"testColumn");
 }
 
 @end
