@@ -28,28 +28,65 @@ namespace WCDB {
 class LiteralValue : public DescribableWithLang<lang::LiteralValue> {
 public:
     template <typename T>
-    LiteralValue(const T &t,
-                 typename std::enable_if<std::is_floating_point<T>::value>::type
-                     * = nullptr)
+    LiteralValue(
+        const T &t,
+        typename std::enable_if<ColumnIsNullType<T>::value>::type * = nullptr)
+    {
+        lang::LiteralValue &lang = getMutableLang();
+        lang.type = lang::LiteralValue::Type::Null;
+    }
+
+    template <typename T>
+    LiteralValue(
+        const T &t,
+        typename std::enable_if<ColumnIsFloatType<T>::value>::type * = nullptr)
     {
         lang::LiteralValue &lang = getMutableLang();
         lang.type = lang::LiteralValue::Type::NumbericFloat;
-        lang.floatValue = t;
+        lang.floatValue = (double) ColumnIsFloatType<T>::asUnderlyingType(t);
     }
 
     template <typename T>
     LiteralValue(const T &t,
-                 typename std::enable_if<(std::is_integral<T>::value ||
-                                          std::is_enum<T>::value)> * = nullptr)
+                 typename std::enable_if<ColumnIsInteger32Type<T>::value>::type
+                     * = nullptr)
     {
         lang::LiteralValue &lang = getMutableLang();
         lang.type = lang::LiteralValue::Type::NumbericInteger;
-        lang.integerValue = (int64_t) t;
+        lang.integerValue =
+            (int64_t) ColumnIsInteger32Type<T>::asUnderlyingType(t);
     }
 
-    LiteralValue(const std::string &value);
-    LiteralValue(const char *value);
-    LiteralValue(const std::vector<unsigned char> &value);
+    template <typename T>
+    LiteralValue(const T &t,
+                 typename std::enable_if<ColumnIsInteger64Type<T>::value>::type
+                     * = nullptr)
+    {
+        lang::LiteralValue &lang = getMutableLang();
+        lang.type = lang::LiteralValue::Type::NumbericInteger;
+        lang.integerValue =
+            (int64_t) ColumnIsInteger64Type<T>::asUnderlyingType(t);
+    }
+
+    template <typename T>
+    LiteralValue(
+        const T &t,
+        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    {
+        lang::LiteralValue &lang = getMutableLang();
+        lang.type = lang::LiteralValue::Type::String;
+        lang.stringValue.assign(ColumnIsTextType<T>::asUnderlyingType(t));
+    }
+
+    template <typename T>
+    LiteralValue(
+        const T &t,
+        typename std::enable_if<ColumnIsBLOBType<T>::value>::type * = nullptr)
+    {
+        lang::LiteralValue &lang = getMutableLang();
+        lang.type = lang::LiteralValue::Type::BLOB;
+        lang.dataValue.assign(ColumnIsBLOBType<T>::asUnderlyingType(t));
+    }
 
     static const LiteralValue Null;
     static const LiteralValue CurrentTime;

@@ -21,13 +21,15 @@
 #ifndef ColumnType_hpp
 #define ColumnType_hpp
 
-#include <WINQ/WINQ.h>
+#include <WINQ/lang.h>
 #include <cstdint>
 #include <string>
 #include <type_traits>
 #include <vector>
 
 namespace WCDB {
+
+typedef lang::ColumnType ColumnType;
 
 #pragma mark - Column Type Info
 //Null

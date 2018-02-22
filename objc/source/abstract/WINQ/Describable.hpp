@@ -21,6 +21,7 @@
 #ifndef Describable_hpp
 #define Describable_hpp
 
+#include <WINQ/ColumnType.hpp>
 #include <WINQ/lang.h>
 
 namespace WCDB {
@@ -57,7 +58,6 @@ public:
 
 typedef lang::Order Order;
 typedef lang::ConflictClause ConflictClause;
-typedef lang::ColumnType ColumnType;
 
 class BindParameter;
 class Column;
