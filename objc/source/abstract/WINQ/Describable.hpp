@@ -60,6 +60,7 @@ typedef lang::ConflictClause ConflictClause;
 typedef lang::ColumnType ColumnType;
 
 class BindParameter;
+class Column;
 class ColumnConstraint;
 class ColumnDef;
 class Expression;

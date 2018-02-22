@@ -37,9 +37,8 @@ copy_on_write_string JoinConstraint::SQL() const
             description.append("ON " + expr.description().get());
             break;
         case Type::Using:
-            assert(!columnNames.empty());
-            description.append("USING(" + columnNames.description().get() +
-                               ")");
+            assert(!columns.empty());
+            description.append("USING(" + columns.description().get() + ")");
             break;
         default:
             break;

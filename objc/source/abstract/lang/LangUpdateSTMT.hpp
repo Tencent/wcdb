@@ -47,7 +47,7 @@ public:
 
     class KeyValue : public Lang {
     public:
-        copy_on_write_lazy_string_list keys;
+        copy_on_write_lazy_lang_list<Column> keys;
         copy_on_write_lazy_lang<Expr> value;
 
         virtual copy_on_write_string SQL() const override;

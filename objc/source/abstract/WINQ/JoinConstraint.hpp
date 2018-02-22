@@ -29,8 +29,8 @@ class JoinConstraint : public DescribableWithLang<lang::JoinConstraint> {
 public:
     JoinConstraint();
     JoinConstraint &on(const Expression &expression);
-    JoinConstraint &usingColumn(const std::string columnName);
-    JoinConstraint &usingColumns(const std::list<std::string> columnNames);
+    JoinConstraint &usingColumn(const Column &column);
+    JoinConstraint &usingColumns(const std::list<Column> columns);
 };
 
 } // namespace WCDB

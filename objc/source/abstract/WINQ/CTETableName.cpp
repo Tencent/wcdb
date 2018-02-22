@@ -28,19 +28,18 @@ CTETableName::CTETableName(const std::string &tableName)
     lang.tableName.assign(tableName);
 }
 
-CTETableName &CTETableName::byAddingColumnName(const std::string &columnName)
+CTETableName &CTETableName::byAddingColumn(const Column &column)
 {
     lang::CTETableName &lang = getMutableLang();
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     return *this;
 }
 
-CTETableName &
-CTETableName::byAddingColumnNames(const std::list<std::string> &columnNames)
+CTETableName &CTETableName::byAddingColumns(const std::list<Column> &columns)
 {
     lang::CTETableName &lang = getMutableLang();
-    for (const std::string &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     return *this;
 }

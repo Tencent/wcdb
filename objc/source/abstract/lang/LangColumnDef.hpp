@@ -31,7 +31,7 @@ class ColumnDef : public Lang {
 public:
     ColumnDef();
 
-    copy_on_write_string columnName;
+    copy_on_write_lazy_lang<Column> column;
     bool typed;
     ColumnType type;
     copy_on_write_lazy_lang_list<ColumnConstraint> columnConstraints;

@@ -32,9 +32,9 @@ copy_on_write_string IndexedColumn::SQL() const
 {
     std::string description;
     switch (switcher) {
-        case Switch::ColumnName:
-            assert(!columnName.empty());
-            description.append(columnName.get());
+        case Switch::Column:
+            assert(!column.empty());
+            description.append(column.description().get());
             break;
         case Switch::Expr:
             assert(!expr.empty());

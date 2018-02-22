@@ -30,10 +30,9 @@ class CommonTableExpression
 public:
     CommonTableExpression(const std::string &tableName);
 
-    CommonTableExpression &byAddingColumn(const std::string &columnName);
+    CommonTableExpression &byAddingColumn(const Column &column);
 
-    CommonTableExpression &
-    byAddingColumns(const std::list<std::string> &columnNames);
+    CommonTableExpression &byAddingColumns(const std::list<Column> &columns);
 
     CommonTableExpression &as(const StatementSelect &statementSelect);
 };

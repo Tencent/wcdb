@@ -59,11 +59,10 @@ copy_on_write_string TableConstraint::SQL() const
             description.append("CHECK(" + expr.description().get() + ")");
             break;
         case Type::ForeignKey:
-            assert(!columnNames.empty());
+            assert(!columns.empty());
             assert(!foreignKeyClause.empty());
-            description.append("FOREIGN KEY(" +
-                               columnNames.description().get() + ") " +
-                               foreignKeyClause.description().get());
+            description.append("FOREIGN KEY(" + columns.description().get() +
+                               ") " + foreignKeyClause.description().get());
             break;
         default:
             assert(false);

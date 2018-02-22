@@ -27,7 +27,7 @@ namespace WCDB {
 
 class ColumnDef : public DescribableWithLang<lang::ColumnDef> {
 public:
-    ColumnDef(const std::string &columnName);
+    ColumnDef(const Column &column);
 
     ColumnDef &withType(const ColumnType &columnType);
     ColumnDef &byAddingConstraint(const ColumnConstraint &columnConstraint);

@@ -29,10 +29,9 @@ class CTETableName : public DescribableWithLang<lang::CTETableName> {
 public:
     CTETableName(const std::string &tableName);
 
-    CTETableName &byAddingColumnName(const std::string &columnName);
+    CTETableName &byAddingColumn(const Column &column);
 
-    CTETableName &
-    byAddingColumnNames(const std::list<std::string> &columnNames);
+    CTETableName &byAddingColumns(const std::list<Column> &columns);
 };
 
 } // namespace WCDB

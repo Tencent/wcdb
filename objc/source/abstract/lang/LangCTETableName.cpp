@@ -29,8 +29,8 @@ copy_on_write_string CTETableName::SQL() const
     std::string description;
     assert(!tableName.empty());
     description.append(tableName.get());
-    if (!columnNames.empty()) {
-        description.append("(" + columnNames.description().get() + ")");
+    if (!columns.empty()) {
+        description.append("(" + columns.description().get() + ")");
     }
     return description;
 }

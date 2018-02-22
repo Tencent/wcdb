@@ -40,9 +40,8 @@ public:
     StatementUpdate &
     updateOrIgnore(const QualifiedTableName &qualifiedTableName);
 
-    StatementUpdate &set(const std::string &columnName,
-                         const Expression &expression);
-    StatementUpdate &set(const std::list<std::string> &columnNames,
+    StatementUpdate &set(const Column &column, const Expression &expression);
+    StatementUpdate &set(const std::list<Column> &columns,
                          const Expression &expression);
 
     StatementUpdate &where(const Expression &condition);

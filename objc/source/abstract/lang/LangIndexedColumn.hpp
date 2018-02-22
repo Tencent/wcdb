@@ -32,11 +32,11 @@ public:
     IndexedColumn();
     enum class Switch : int {
         NotSet,
-        ColumnName,
+        Column,
         Expr,
     };
     Switch switcher;
-    copy_on_write_string columnName;
+    copy_on_write_lazy_lang<Column> column;
     copy_on_write_lazy_lang<Expr> expr;
     copy_on_write_string collationName;
     Order order;

@@ -41,8 +41,8 @@ copy_on_write_string InsertSTMT::SQL() const
     }
     assert(!tableName.empty());
     description.append(tableName.get());
-    if (!columnNames.empty()) {
-        description.append("(" + columnNames.description().get() + ")");
+    if (!columns.empty()) {
+        description.append("(" + columns.description().get() + ")");
     }
     switch (switcher) {
         case Switch::Values:

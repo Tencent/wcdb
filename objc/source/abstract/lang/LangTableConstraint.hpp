@@ -45,7 +45,7 @@ public:
     ConflictClause conflictClause;
 
     copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang_list<Column> columns;
     copy_on_write_lazy_lang<ForeignKeyClause> foreignKeyClause;
 
     virtual copy_on_write_string SQL() const override;

@@ -89,24 +89,24 @@ TableConstraint &TableConstraint::withChecking(const Expression &expression)
 }
 
 TableConstraint &
-TableConstraint::withForeignKey(const std::string &columnName,
+TableConstraint::withForeignKey(const Column &column,
                                 const ForeignKeyClause &foreignKeyClause)
 {
     lang::TableConstraint &lang = getMutableLang();
     lang.type = lang::TableConstraint::Type::ForeignKey;
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     lang.foreignKeyClause.assign(foreignKeyClause.getLang());
     return *this;
 }
 
 TableConstraint &
-TableConstraint::withForeignKey(const std::list<std::string> &columnNames,
+TableConstraint::withForeignKey(const std::list<Column> &columns,
                                 const ForeignKeyClause &foreignKeyClause)
 {
     lang::TableConstraint &lang = getMutableLang();
     lang.type = lang::TableConstraint::Type::ForeignKey;
-    for (const std::string &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     lang.foreignKeyClause.assign(foreignKeyClause.getLang());
     return *this;

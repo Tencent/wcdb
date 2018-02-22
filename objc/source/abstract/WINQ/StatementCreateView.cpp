@@ -40,19 +40,18 @@ StatementCreateView::withSchema(const std::string &schemaName)
     return *this;
 }
 
-StatementCreateView &StatementCreateView::on(const std::string &columnName)
+StatementCreateView &StatementCreateView::on(const Column &column)
 {
     lang::CreateViewSTMT &lang = getMutableLang();
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     return *this;
 }
 
-StatementCreateView &
-StatementCreateView::on(const std::list<std::string> &columnNames)
+StatementCreateView &StatementCreateView::on(const std::list<Column> &columns)
 {
     lang::CreateViewSTMT &lang = getMutableLang();
-    for (const std::string &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     return *this;
 }

@@ -75,8 +75,8 @@ copy_on_write_string ForeignKeyClause::SQL() const
     std::string description("REFERENCES ");
     assert(!foreignTable.empty());
     description.append(foreignTable.get());
-    if (!columnNames.empty()) {
-        description.append("(" + columnNames.description().get() + ")");
+    if (!columns.empty()) {
+        description.append("(" + columns.description().get() + ")");
     }
     if (!triggers.empty()) {
         description.append(" " + triggers.description().get());

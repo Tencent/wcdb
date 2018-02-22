@@ -82,22 +82,21 @@ StatementCreateTrigger &StatementCreateTrigger::update()
     return *this;
 }
 
-StatementCreateTrigger &
-StatementCreateTrigger::updateOf(const std::string &columnName)
+StatementCreateTrigger &StatementCreateTrigger::updateOf(const Column &column)
 {
     lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Update;
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     return *this;
 }
 
 StatementCreateTrigger &
-StatementCreateTrigger::updateOf(const std::list<std::string> &columnNames)
+StatementCreateTrigger::updateOf(const std::list<Column> &columns)
 {
     lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = lang::CreateTriggerSTMT::Operation::Update;
-    for (const std::string &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     return *this;
 }

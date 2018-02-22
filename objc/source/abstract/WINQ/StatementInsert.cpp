@@ -76,18 +76,18 @@ StatementInsert &StatementInsert::withSchema(const std::string &schemaName)
     return *this;
 }
 
-StatementInsert &StatementInsert::on(const std::string &columnName)
+StatementInsert &StatementInsert::on(const Column &column)
 {
     lang::InsertSTMT &lang = getMutableLang();
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     return *this;
 }
 
-StatementInsert &StatementInsert::on(const std::list<std::string> &columnNames)
+StatementInsert &StatementInsert::on(const std::list<Column> &columns)
 {
     lang::InsertSTMT &lang = getMutableLang();
-    for (const std::string &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     return *this;
 }

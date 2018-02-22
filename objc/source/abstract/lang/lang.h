@@ -24,6 +24,7 @@
 
 #include <WINQ/LangBindParameter.hpp>
 #include <WINQ/LangCTETableName.hpp>
+#include <WINQ/LangColumn.hpp>
 #include <WINQ/LangColumnConstraint.hpp>
 #include <WINQ/LangColumnDef.hpp>
 #include <WINQ/LangColumnType.hpp>

@@ -18,27 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef StatementCreateView_hpp
-#define StatementCreateView_hpp
-
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WINQ/WINQ.h>
 
 namespace WCDB {
 
-class StatementCreateView : public StatementWithLang<lang::CreateViewSTMT> {
-
-public:
-    StatementCreateView &createView(const std::string &viewName,
-                                    bool ifNotExists = true,
-                                    bool temp = false);
-    StatementCreateView &withSchema(const std::string &schemaName);
-    StatementCreateView &on(const Column &column);
-    StatementCreateView &on(const std::list<Column> &columns);
-    StatementCreateView &as(const StatementSelect &selectSTMT);
-    virtual Type getType() const override;
-};
+Column::Column(const std::string &name)
+{
+    lang::Column &lang = getMutableLang();
+    lang.name.assign(name);
+}
 
 } // namespace WCDB
-
-#endif /* StatementCreateView_hpp */

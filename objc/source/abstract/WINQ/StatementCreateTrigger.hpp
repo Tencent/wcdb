@@ -41,8 +41,8 @@ public:
     StatementCreateTrigger &delete_();
     StatementCreateTrigger &insert();
     StatementCreateTrigger &update();
-    StatementCreateTrigger &updateOf(const std::string &columnName);
-    StatementCreateTrigger &updateOf(const std::list<std::string> &columnNames);
+    StatementCreateTrigger &updateOf(const Column &column);
+    StatementCreateTrigger &updateOf(const std::list<Column> &columns);
 
     StatementCreateTrigger &on(const std::string &tableName);
     StatementCreateTrigger &forEachRow();

@@ -50,7 +50,7 @@ public:
         Update,
     };
     Operation operation;
-    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang_list<Column> columns;
 
     copy_on_write_string tableName;
 

@@ -33,8 +33,8 @@ copy_on_write_string ExprColumn::SQL() const
     if (!tableName.empty()) {
         description.append(tableName.get() + ".");
     }
-    assert(!columnName.empty());
-    description.append(columnName.get());
+    assert(!column.empty());
+    description.append(column.description().get());
     return description;
 }
 

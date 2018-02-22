@@ -22,9 +22,10 @@
 
 namespace WCDB {
 
-ColumnDef::ColumnDef(const std::string &columnName)
+ColumnDef::ColumnDef(const Column &column)
 {
-    getMutableLang().columnName.assign(columnName);
+    lang::ColumnDef &lang = getMutableLang();
+    lang.column.assign(column.getLang());
 }
 
 ColumnDef &ColumnDef::withType(const ColumnType &columnType)

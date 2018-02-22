@@ -29,14 +29,11 @@ IndexedColumn::IndexedColumn(const Expression &expression)
     lang.expr.assign(expression.getLang());
 }
 
-IndexedColumn::IndexedColumn(const char *columnName)
+IndexedColumn::IndexedColumn(const Column &column)
 {
-    setColumnName(columnName ? columnName : "");
-}
-
-IndexedColumn::IndexedColumn(const std::string &columnName)
-{
-    setColumnName(columnName);
+    lang::IndexedColumn &lang = getMutableLang();
+    lang.switcher = lang::IndexedColumn::Switch::Column;
+    lang.column.assign(column.getLang());
 }
 
 IndexedColumn &IndexedColumn::withCollate(const std::string &collationName)
@@ -51,13 +48,6 @@ IndexedColumn &IndexedColumn::withOrder(const Order &order)
     lang::IndexedColumn &lang = getMutableLang();
     lang.order = order;
     return *this;
-}
-
-void IndexedColumn::setColumnName(const std::string &columnName)
-{
-    lang::IndexedColumn &lang = getMutableLang();
-    lang.switcher = lang::IndexedColumn::Switch::ColumnName;
-    lang.columnName.assign(columnName);
 }
 
 } // namespace WCDB

@@ -29,10 +29,9 @@ class ForeignKeyClause : public DescribableWithLang<lang::ForeignKeyClause> {
 public:
     ForeignKeyClause(const std::string &foreignTable);
 
-    ForeignKeyClause &byAddingColumnName(const std::string &columnName);
+    ForeignKeyClause &byAddingColumn(const Column &column);
 
-    ForeignKeyClause &
-    byAddingColumnNames(const std::list<std::string> &columnNames);
+    ForeignKeyClause &byAddingColumns(const std::list<Column> &columns);
 
     ForeignKeyClause &onDeleteSetNull();
     ForeignKeyClause &onDeleteSetDefault();

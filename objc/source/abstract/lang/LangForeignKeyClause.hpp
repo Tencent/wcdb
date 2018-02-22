@@ -31,7 +31,7 @@ class ForeignKeyClause : public Lang {
 public:
     ForeignKeyClause();
     copy_on_write_string foreignTable;
-    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang_list<Column> columns;
 
     class Trigger : public Lang {
     public:

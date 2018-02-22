@@ -39,7 +39,7 @@ public:
     Type type;
 
     copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_string columnAlias;
+    copy_on_write_lazy_lang<Column> columnAlias;
 
     copy_on_write_string tableName;
 

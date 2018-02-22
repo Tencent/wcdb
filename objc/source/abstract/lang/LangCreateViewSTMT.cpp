@@ -43,8 +43,8 @@ copy_on_write_string CreateViewSTMT::SQL() const
     }
     assert(!viewName.empty());
     description.append(viewName.get());
-    if (!columnNames.empty()) {
-        description.append("(" + columnNames.description().get() + ")");
+    if (!columns.empty()) {
+        description.append("(" + columns.description().get() + ")");
     }
     assert(!selectSTMT.empty());
     description.append(" AS " + selectSTMT.description().get());

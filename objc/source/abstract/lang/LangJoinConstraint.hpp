@@ -38,7 +38,7 @@ public:
     };
     Type type;
     copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang_list<Column> columns;
 
     virtual copy_on_write_string SQL() const;
 };

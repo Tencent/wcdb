@@ -36,8 +36,8 @@ public:
     StatementInsert &insertOrFailInto(const std::string &tableName);
     StatementInsert &insertOrIgnoreInto(const std::string &tableName);
     StatementInsert &withSchema(const std::string &schemaName);
-    StatementInsert &on(const std::string &columnName);
-    StatementInsert &on(const std::list<std::string> &columnNames);
+    StatementInsert &on(const Column &column);
+    StatementInsert &on(const std::list<Column> &columns);
     StatementInsert &values(const Expression &value);
     StatementInsert &values(const std::list<Expression> &values);
     StatementInsert &values(const StatementSelect &selectSTMT);

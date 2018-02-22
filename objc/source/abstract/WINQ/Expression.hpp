@@ -31,14 +31,9 @@ public:
 
     Expression(const BindParameter &bindParameter);
 
-    class Column : public DescribableWithLang<lang::ExprColumn> {
-    public:
-        Column(const std::string &columnName);
-        Column &withTable(const std::string &tableName);
-        Column &withSchema(const std::string &schemaName);
-    };
-    static Expression::Column ColumnNamed(const std::string &columnName);
-    Expression(const Expression::Column &expressionColumn);
+    Expression(const Column &column);
+    Expression &withTable(const std::string &tableName);
+    Expression &withSchema(const std::string &schemaName);
 
     Expression operator-() const;
     Expression operator+() const;

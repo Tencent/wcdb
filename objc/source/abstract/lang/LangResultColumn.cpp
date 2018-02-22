@@ -36,7 +36,7 @@ copy_on_write_string ResultColumn::SQL() const
             assert(!expr.empty());
             description.append(expr.description().get());
             if (!columnAlias.empty()) {
-                description.append(" AS " + columnAlias.get());
+                description.append(" AS " + columnAlias.description().get());
             }
             break;
         case Type::Star:

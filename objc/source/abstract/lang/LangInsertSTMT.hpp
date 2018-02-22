@@ -47,7 +47,7 @@ public:
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
 
-    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang_list<Column> columns;
 
     enum class Switch : int {
         NotSet,

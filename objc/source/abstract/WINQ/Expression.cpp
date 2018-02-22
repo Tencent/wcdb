@@ -36,36 +36,26 @@ Expression::Expression(const BindParameter &bindParameter)
     lang.bindParamter.assign(bindParameter.getLang());
 }
 
-Expression::Expression(const Expression::Column &expressionColumn)
+Expression::Expression(const Column &column)
 {
     lang::Expr &lang = getMutableLang();
     lang.type = lang::Expr::Type::Column;
-    lang.exprColumn.assign(expressionColumn.getLang());
+    lang.exprColumn.get_or_copy().column.assign(column.getLang());
 }
 
-Expression::Column Expression::ColumnNamed(const std::string &columnName)
+Expression &Expression::withTable(const std::string &tableName)
 {
-    return Expression::Column(columnName);
-}
-
-Expression::Column::Column(const std::string &columnName)
-{
-    lang::ExprColumn &lang = getMutableLang();
-    lang.columnName.assign(columnName);
-}
-
-Expression::Column &Expression::Column::withTable(const std::string &tableName)
-{
-    lang::ExprColumn &lang = getMutableLang();
-    lang.tableName.assign(tableName);
+    lang::Expr &lang = getMutableLang();
+    assert(lang.type == lang::Expr::Type::Column);
+    lang.exprColumn.get_or_copy().tableName.assign(tableName);
     return *this;
 }
 
-Expression::Column &
-Expression::Column::withSchema(const std::string &schemaName)
+Expression &Expression::withSchema(const std::string &schemaName)
 {
-    lang::ExprColumn &lang = getMutableLang();
-    lang.schemaName.assign(schemaName);
+    lang::Expr &lang = getMutableLang();
+    assert(lang.type == lang::Expr::Type::Column);
+    lang.exprColumn.get_or_copy().schemaName.assign(schemaName);
     return *this;
 }
 

@@ -71,12 +71,12 @@ StatementUpdate::updateOrIgnore(const QualifiedTableName &qualifiedTableName)
     return *this;
 }
 
-StatementUpdate &StatementUpdate::set(const std::string &columnName,
+StatementUpdate &StatementUpdate::set(const Column &column,
                                       const Expression &expression)
 {
     lang::copy_on_write_lazy_lang<lang::UpdateSTMT::KeyValue> cowKeyValue;
     lang::UpdateSTMT::KeyValue &keyValue = cowKeyValue.get_or_copy();
-    keyValue.keys.append(columnName);
+    keyValue.keys.append(column.getLang());
     keyValue.value.assign(expression.getLang());
 
     lang::UpdateSTMT &lang = getMutableLang();
@@ -84,13 +84,13 @@ StatementUpdate &StatementUpdate::set(const std::string &columnName,
     return *this;
 }
 
-StatementUpdate &StatementUpdate::set(const std::list<std::string> &columnNames,
+StatementUpdate &StatementUpdate::set(const std::list<Column> &columns,
                                       const Expression &expression)
 {
     lang::copy_on_write_lazy_lang<lang::UpdateSTMT::KeyValue> cowKeyValue;
     lang::UpdateSTMT::KeyValue &keyValue = cowKeyValue.get_or_copy();
-    for (const std::string &columnName : columnNames) {
-        keyValue.keys.append(columnName);
+    for (const Column &column : columns) {
+        keyValue.keys.append(column.getLang());
     }
     keyValue.value.assign(expression.getLang());
 

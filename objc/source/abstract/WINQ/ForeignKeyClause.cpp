@@ -28,20 +28,19 @@ ForeignKeyClause::ForeignKeyClause(const std::string &foreignTable)
     lang.foreignTable.assign(foreignTable);
 }
 
-ForeignKeyClause &
-ForeignKeyClause::byAddingColumnName(const std::string &columnName)
+ForeignKeyClause &ForeignKeyClause::byAddingColumn(const Column &column)
 {
     lang::ForeignKeyClause &lang = getMutableLang();
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     return *this;
 }
 
 ForeignKeyClause &
-ForeignKeyClause::byAddingColumnNames(const std::list<std::string> &columnNames)
+ForeignKeyClause::byAddingColumns(const std::list<Column> &columns)
 {
     lang::ForeignKeyClause &lang = getMutableLang();
-    for (const std::string &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     return *this;
 }

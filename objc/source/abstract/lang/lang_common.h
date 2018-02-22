@@ -46,6 +46,7 @@ class CRUDLang : public Lang {
 };
 
 class BindParameter;
+class Column;
 class ColumnDef;
 class ColumnConstraint;
 class Expr;

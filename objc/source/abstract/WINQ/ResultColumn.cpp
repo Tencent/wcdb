@@ -49,10 +49,10 @@ ResultColumn::ResultColumn(const std::string &tableName)
     lang.tableName.assign(tableName);
 }
 
-ResultColumn &ResultColumn::as(const std::string &columnAlias)
+ResultColumn &ResultColumn::as(const Column &columnAlias)
 {
     lang::ResultColumn &lang = getMutableLang();
-    lang.columnAlias.assign(columnAlias);
+    lang.columnAlias.assign(columnAlias.getLang());
     return *this;
 }
 

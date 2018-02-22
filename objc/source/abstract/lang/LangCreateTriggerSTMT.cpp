@@ -53,8 +53,8 @@ copy_on_write_string CreateTriggerSTMT::SQL() const
         description.append(" ");
     }
     description.append(CreateTriggerSTMT::OperationName(operation));
-    if (operation == Operation::Update && !columnNames.empty()) {
-        description.append(" OF " + columnNames.description().get());
+    if (operation == Operation::Update && !columns.empty()) {
+        description.append(" OF " + columns.description().get());
     }
     description.append(" ON " + tableName.get());
     if (forEachRow) {

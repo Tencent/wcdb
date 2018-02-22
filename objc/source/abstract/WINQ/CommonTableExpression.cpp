@@ -29,19 +29,19 @@ CommonTableExpression::CommonTableExpression(const std::string &tableName)
 }
 
 CommonTableExpression &
-CommonTableExpression::byAddingColumn(const std::string &columnName)
+CommonTableExpression::byAddingColumn(const Column &column)
 {
     lang::CommonTableExpression &lang = getMutableLang();
-    lang.columnNames.append(columnName);
+    lang.columns.append(column.getLang());
     return *this;
 }
 
-CommonTableExpression &CommonTableExpression::byAddingColumns(
-    const std::list<std::string> &columnNames)
+CommonTableExpression &
+CommonTableExpression::byAddingColumns(const std::list<Column> &columns)
 {
     lang::CommonTableExpression &lang = getMutableLang();
-    for (const auto &columnName : columnNames) {
-        lang.columnNames.append(columnName);
+    for (const Column &column : columns) {
+        lang.columns.append(column.getLang());
     }
     return *this;
 }

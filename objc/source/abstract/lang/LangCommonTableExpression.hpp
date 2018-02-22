@@ -30,7 +30,7 @@ namespace lang {
 class CommonTableExpression : public Lang {
 public:
     copy_on_write_string tableName;
-    copy_on_write_lazy_string_list columnNames;
+    copy_on_write_lazy_lang_list<Column> columns;
     copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
 
     virtual copy_on_write_string SQL() const override;

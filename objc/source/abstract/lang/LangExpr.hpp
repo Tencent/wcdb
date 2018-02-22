@@ -48,7 +48,7 @@ class ExprColumn : public ExprBase {
 public:
     copy_on_write_string schemaName;
     copy_on_write_string tableName;
-    copy_on_write_string columnName;
+    copy_on_write_lazy_lang<Column> column;
 
     virtual copy_on_write_string SQL() const override;
 };

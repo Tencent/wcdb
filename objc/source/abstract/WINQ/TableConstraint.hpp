@@ -46,9 +46,9 @@ public:
 
     TableConstraint &withChecking(const Expression &expression);
 
-    TableConstraint &withForeignKey(const std::string &columnName,
+    TableConstraint &withForeignKey(const Column &column,
                                     const ForeignKeyClause &foreignKeyClause);
-    TableConstraint &withForeignKey(const std::list<std::string> &columnNames,
+    TableConstraint &withForeignKey(const std::list<Column> &columns,
                                     const ForeignKeyClause &foreignKeyClause);
 };
 

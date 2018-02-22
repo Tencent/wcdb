@@ -50,6 +50,7 @@
 
 #include <WINQ/BindParameter.hpp>
 #include <WINQ/CTETableName.hpp>
+#include <WINQ/Column.hpp>
 #include <WINQ/ColumnConstraint.hpp>
 #include <WINQ/ColumnDef.hpp>
 #include <WINQ/CommonTableExpression.hpp>
