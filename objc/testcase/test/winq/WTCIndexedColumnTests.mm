@@ -28,28 +28,28 @@
 
 - (void)testIndexedColumn
 {
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName), @"testColumn");
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.column), @"testColumn");
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
                         .withOrder(WCDB::Order::NotSet),
                     @"testColumn");
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
                         .withOrder(WCDB::Order::ASC),
                     @"testColumn ASC");
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
                         .withOrder(WCDB::Order::DESC),
                     @"testColumn DESC");
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
                         .withCollate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 
-    WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression column = WCDB::Expression(self.class.column);
     WINQAssertEqual(WCDB::IndexedColumn(column), @"testColumn");
     //Default
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.columnName)
+    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
                         .withOrder(),
                     @"testColumn");
 }

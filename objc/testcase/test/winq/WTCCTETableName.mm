@@ -29,11 +29,11 @@
 - (void)testCTETableName
 {
     WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
-                        .byAddingColumnName(self.class.columnName),
+                        .byAddingColumn(self.class.column),
                     @"testTable(testColumn)");
 
     WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
-                        .byAddingColumnNames(self.class.columnNames),
+                        .byAddingColumns(self.class.columns),
                     @"testTable(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::CTETableName(self.class.tableName), @"testTable");

@@ -29,12 +29,12 @@
 - (void)testCommonTableExpression
 {
     WINQAssertEqual(WCDB::CommonTableExpression(self.class.tableName)
-                        .byAddingColumn(self.class.columnName)
+                        .byAddingColumn(self.class.column)
                         .as(self.class.statementSelect),
                     @"testTable(testColumn) AS(SELECT testColumn FROM testTable)");
 
     WINQAssertEqual(WCDB::CommonTableExpression(self.class.tableName)
-                        .byAddingColumns(self.class.columnNames)
+                        .byAddingColumns(self.class.columns)
                         .as(self.class.statementSelect),
                     @"testTable(testColumn, testColumn2) AS(SELECT testColumn FROM testTable)");
 

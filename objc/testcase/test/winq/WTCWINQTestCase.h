@@ -29,13 +29,14 @@
 @property(class, readonly) std::string indexName;
 @property(class, readonly) std::string triggerName;
 @property(class, readonly) std::string viewName;
-@property(class, readonly) std::string columnName;
-@property(class, readonly) std::string columnName2;
-@property(class, readonly) std::list<std::string> columnNames;
 @property(class, readonly) std::string collationName;
 @property(class, readonly) std::string savepointName;
 @property(class, readonly) std::string constraintName;
 @property(class, readonly) std::string functionName;
+
+@property(class, readonly) WCDB::Column column;
+@property(class, readonly) WCDB::Column column2;
+@property(class, readonly) std::list<WCDB::Column> columns;
 
 @property(class, readonly) WCDB::StatementUpdate statementUpdate;
 @property(class, readonly) WCDB::StatementInsert statementInsert;

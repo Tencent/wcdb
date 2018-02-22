@@ -35,13 +35,13 @@
 
     WINQAssertEqual(WCDB::StatementCreateView()
                         .createView(self.class.viewName, false, false)
-                        .on(self.class.columnName)
+                        .on(self.class.column)
                         .as(self.class.statementSelect),
                     @"CREATE VIEW testView(testColumn) AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
                         .createView(self.class.viewName, false, false)
-                        .on(self.class.columnNames)
+                        .on(self.class.columns)
                         .as(self.class.statementSelect),
                     @"CREATE VIEW testView(testColumn, testColumn2) AS SELECT testColumn FROM testTable");
 

@@ -47,21 +47,6 @@
     return "testView";
 }
 
-+ (std::string)columnName
-{
-    return "testColumn";
-}
-
-+ (std::string)columnName2
-{
-    return "testColumn2";
-}
-
-+ (std::list<std::string>)columnNames
-{
-    return {self.class.columnName, self.class.columnName2};
-}
-
 + (std::string)collationName
 {
     return "testCollation";
@@ -82,11 +67,26 @@
     return "testFunction";
 }
 
++ (WCDB::Column)column
+{
+    return WCDB::Column("testColumn");
+}
+
++ (WCDB::Column)column2
+{
+    return WCDB::Column("testColumn2");
+}
+
++ (std::list<WCDB::Column>)columns
+{
+    return {self.class.column, self.class.column2};
+}
+
 + (WCDB::StatementUpdate)statementUpdate
 {
     return WCDB::StatementUpdate()
         .update(self.class.qualifiedTableName)
-        .set(self.class.columnName, self.class.value);
+        .set(self.class.column, self.class.value);
 }
 
 + (WCDB::StatementInsert)statementInsert
@@ -118,16 +118,15 @@
 
 + (WCDB::ResultColumn)resultColumn
 {
-    WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression column = WCDB::Expression(self.class.column);
     return WCDB::ResultColumn(column);
 }
 
 + (std::list<WCDB::ResultColumn>)resultColumns
 {
     std::list<WCDB::ResultColumn> resultColumns;
-    for (const std::string &columnName : self.class.columnNames) {
-        WCDB::Expression column = WCDB::Expression::ColumnNamed(columnName);
-        resultColumns.push_back(column);
+    for (const WCDB::Column &column : self.class.columns) {
+        resultColumns.push_back(WCDB::Expression(column));
     }
     return resultColumns;
 }
@@ -151,18 +150,18 @@
 
 + (WCDB::Expression)condition
 {
-    return WCDB::Expression(WCDB::Expression::ColumnNamed(self.class.columnName)).notNull();
+    return WCDB::Expression(self.class.column).notNull();
 }
 
 + (WCDB::Expression)group
 {
-    return WCDB::Expression::ColumnNamed(self.class.columnName);
+    return WCDB::Expression(self.class.column);
 }
 
 + (std::list<WCDB::Expression>)groups
 {
     WCDB::Expression group1 = self.class.group;
-    WCDB::Expression group2 = WCDB::Expression::ColumnNamed(self.class.columnName2);
+    WCDB::Expression group2 = WCDB::Expression(self.class.column2);
     ;
     return {group1, group2};
 }
@@ -189,13 +188,13 @@
 
 + (WCDB::OrderingTerm)orderingTerm
 {
-    return WCDB::OrderingTerm(WCDB::Expression::ColumnNamed(self.class.columnName));
+    return WCDB::OrderingTerm(WCDB::Expression(self.class.column));
 }
 
 + (std::list<WCDB::OrderingTerm>)orderingTerms
 {
     WCDB::OrderingTerm orderingTerm1 = self.class.orderingTerm;
-    WCDB::OrderingTerm orderingTerm2 = WCDB::OrderingTerm(WCDB::Expression::ColumnNamed(self.class.columnName2));
+    WCDB::OrderingTerm orderingTerm2 = WCDB::OrderingTerm(WCDB::Expression(self.class.column2));
     return {orderingTerm1, orderingTerm2};
 }
 
@@ -251,14 +250,14 @@
 
 + (WCDB::ColumnDef)columnDef
 {
-    return WCDB::ColumnDef(self.class.columnName).withType(WCDB::ColumnType::Integer32);
+    return WCDB::ColumnDef(self.class.column).withType(WCDB::ColumnType::Integer32);
 }
 
 + (std::list<WCDB::ColumnDef>)columnDefs
 {
     return {
         self.class.columnDef,
-        WCDB::ColumnDef(self.class.columnName2)
+        WCDB::ColumnDef(self.class.column2)
             .withType(WCDB::ColumnType::Text),
     };
 }
@@ -273,19 +272,19 @@
     return {
         self.class.tableConstraint,
         WCDB::TableConstraint("testConstraint2")
-            .withUnique(WCDB::IndexedColumn(self.class.columnName2)),
+            .withUnique(WCDB::IndexedColumn(self.class.column2)),
     };
 }
 
 + (WCDB::IndexedColumn)indexedColumn
 {
-    return WCDB::IndexedColumn(self.class.columnName);
+    return WCDB::IndexedColumn(self.class.column);
 }
 
 + (std::list<WCDB::IndexedColumn>)indexedColumns
 {
     std::list<WCDB::IndexedColumn> indexedColumns;
-    for (const std::string &column : self.class.columnNames) {
+    for (const WCDB::Column &column : self.class.columns) {
         indexedColumns.push_back(WCDB::IndexedColumn(column));
     }
     return indexedColumns;

@@ -30,7 +30,7 @@
 {
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -39,7 +39,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit, self.class.limitParameter),
@@ -47,7 +47,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit),
@@ -55,7 +55,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerms)
                         .limit(self.class.limit, self.class.limitParameter),
@@ -63,7 +63,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
@@ -71,7 +71,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
@@ -79,7 +79,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnNames, self.class.value)
+                        .set(self.class.columns, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -88,8 +88,8 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
-                        .set(self.class.columnName2, self.class.value2)
+                        .set(self.class.column, self.class.value)
+                        .set(self.class.column2, self.class.value2)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -98,7 +98,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrRollback(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -107,7 +107,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrAbort(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -116,7 +116,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrReplace(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -125,7 +125,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrFail(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -134,7 +134,7 @@
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrIgnore(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
@@ -144,7 +144,7 @@
     WINQAssertEqual(WCDB::StatementUpdate()
                         .with(self.class.withClause)
                         .update(self.class.qualifiedTableName)
-                        .set(self.class.columnName, self.class.value)
+                        .set(self.class.column, self.class.value)
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)

@@ -49,11 +49,11 @@
                     @"CONSTRAINT testConstraint CHECK(testColumn NOTNULL)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withForeignKey(self.class.columnName, self.class.foreignKeyClause),
+                        .withForeignKey(self.class.column, self.class.foreignKeyClause),
                     @"CONSTRAINT testConstraint FOREIGN KEY(testColumn) REFERENCES testForeignTable");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withForeignKey(self.class.columnNames, self.class.foreignKeyClause),
+                        .withForeignKey(self.class.columns, self.class.foreignKeyClause),
                     @"CONSTRAINT testConstraint FOREIGN KEY(testColumn, testColumn2) REFERENCES testForeignTable");
 }
 

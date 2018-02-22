@@ -30,7 +30,7 @@
 {
     WCDB::TableOrSubquery tableOrSubquery2("testTable2");
     WCDB::TableOrSubquery tableOrSubquery3("testTable3");
-    WCDB::JoinConstraint joinConstraint = WCDB::JoinConstraint().usingColumn(self.class.columnName);
+    WCDB::JoinConstraint joinConstraint = WCDB::JoinConstraint().usingColumn(self.class.column);
 
     WINQAssertEqual(WCDB::JoinClause(self.class.tableOrSubquery), @"testTable");
 

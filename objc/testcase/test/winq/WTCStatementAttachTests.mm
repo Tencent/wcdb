@@ -28,7 +28,7 @@
 
 - (void)testStatementAttach
 {
-    WCDB::Expression expr = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expr = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::StatementAttach()
                         .attach(expr)

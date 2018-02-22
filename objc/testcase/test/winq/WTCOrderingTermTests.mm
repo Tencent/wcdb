@@ -28,7 +28,7 @@
 
 - (void)testOrderingTerm
 {
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expression = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::OrderingTerm(expression), @"testColumn");
 

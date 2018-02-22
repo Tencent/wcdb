@@ -33,11 +33,11 @@
                     @"ON testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::JoinConstraint()
-                        .usingColumn(self.class.columnName),
+                        .usingColumn(self.class.column),
                     @"USING(testColumn)");
 
     WINQAssertEqual(WCDB::JoinConstraint()
-                        .usingColumns(self.class.columnNames),
+                        .usingColumns(self.class.columns),
                     @"USING(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::JoinConstraint(), @"");

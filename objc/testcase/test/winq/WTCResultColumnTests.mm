@@ -28,12 +28,12 @@
 
 - (void)testResultColumn
 {
-    WCDB::Expression column = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression column = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::ResultColumn(column), @"testColumn");
 
     WINQAssertEqual(WCDB::ResultColumn(column)
-                        .as(self.class.columnName2),
+                        .as(self.class.column2),
                     @"testColumn AS testColumn2");
 
     WINQAssertEqual(WCDB::ResultColumn::All, @"*");

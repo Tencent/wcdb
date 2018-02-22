@@ -33,7 +33,8 @@
     WCDB::BindParameter bindParameter;
     WINQAssertEqual(WCDB::Expression(bindParameter), @"?");
 
-    WCDB::Expression::Column column = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression column = WCDB::Expression(self.class.column);
+
     WINQAssertEqual(WCDB::Expression(column)
                         .as(WCDB::ColumnType::Integer32),
                     @"CAST(testColumn AS INTEGER)");
@@ -56,13 +57,13 @@
 
 - (void)testColumn
 {
-    WINQAssertEqual(WCDB::Expression::ColumnNamed(self.class.columnName), @"testColumn");
+    WINQAssertEqual(WCDB::Expression(self.class.column), @"testColumn");
 
-    WINQAssertEqual(WCDB::Expression::ColumnNamed(self.class.columnName)
+    WINQAssertEqual(WCDB::Expression(self.class.column)
                         .withTable(self.class.tableName),
                     @"testTable.testColumn");
 
-    WINQAssertEqual(WCDB::Expression::ColumnNamed(self.class.columnName)
+    WINQAssertEqual(WCDB::Expression(self.class.column)
                         .withTable(self.class.tableName)
                         .withSchema(self.class.schemaName),
                     @"testSchema.testTable.testColumn");
@@ -70,7 +71,7 @@
 
 - (void)testUnaryOperation
 {
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expression = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(!expression, @"NOT testColumn");
     WINQAssertEqual(~expression, @"~testColumn");
@@ -80,7 +81,7 @@
 
 - (void)testBinaryOperation
 {
-    WCDB::Expression expression1 = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expression1 = WCDB::Expression(self.class.column);
     WCDB::Expression expression2 = self.class.literalValue;
 
     WINQAssertEqual(expression1.concat(expression2), @"testColumn || 1");
@@ -107,8 +108,8 @@
 
 - (void)testFunction
 {
-    WCDB::Expression expression1 = WCDB::Expression::ColumnNamed(self.class.columnName);
-    WCDB::Expression expression2 = WCDB::Expression::ColumnNamed(self.class.columnName2);
+    WCDB::Expression expression1 = WCDB::Expression(self.class.column);
+    WCDB::Expression expression2 = WCDB::Expression(self.class.column2);
     std::list<WCDB::Expression> expressions = {expression1, expression2};
 
     WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expression1, true), @"testFunction(DISTINCT testColumn)");
@@ -124,8 +125,8 @@
 
 - (void)testList
 {
-    WCDB::Expression expression1 = WCDB::Expression::ColumnNamed(self.class.columnName);
-    WCDB::Expression expression2 = WCDB::Expression::ColumnNamed(self.class.columnName2);
+    WCDB::Expression expression1 = WCDB::Expression(self.class.column);
+    WCDB::Expression expression2 = WCDB::Expression(self.class.column2);
     std::list<WCDB::Expression> expressions = {expression1, expression2};
 
     WINQAssertEqual(WCDB::Expression(expressions), @"(testColumn, testColumn2)");
@@ -133,7 +134,7 @@
 
 - (void)testPattern
 {
-    WCDB::Expression expression1(WCDB::Expression::ColumnNamed("testColumn"));
+    WCDB::Expression expression1(WCDB::Expression(self.class.column));
     WCDB::Expression expression2(WCDB::LiteralValue("a%"));
     WCDB::Expression expression3((WCDB::BindParameter()));
 
@@ -212,7 +213,7 @@
 
 - (void)testNull
 {
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expression = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(expression.isNull(), @"testColumn ISNULL");
     WINQAssertEqual(expression.notNull(), @"testColumn NOTNULL");
@@ -220,7 +221,7 @@
 
 - (void)testBetween
 {
-    WCDB::Expression expression1 = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expression1 = WCDB::Expression(self.class.column);
     WCDB::Expression expression2 = self.class.literalValue;
     WCDB::Expression expression3 = WCDB::LiteralValue(3);
 
@@ -235,7 +236,7 @@
 
 - (void)testIn
 {
-    WCDB::Expression expression = WCDB::Expression::ColumnNamed(self.class.columnName);
+    WCDB::Expression expression = WCDB::Expression(self.class.column);
     WCDB::Expression expression1 = self.class.literalValue;
     WCDB::Expression expression2 = WCDB::LiteralValue(2);
     std::list<WCDB::Expression> expressions = {expression1, expression2};
@@ -315,10 +316,10 @@
 
 - (void)testCase
 {
-    WCDB::Expression caseExpression = WCDB::Expression(WCDB::Expression::ColumnNamed(self.class.columnName));
-    WCDB::Expression when1 = WCDB::Expression(WCDB::Expression::ColumnNamed("testColumn2")) > WCDB::Expression(WCDB::LiteralValue(0));
+    WCDB::Expression caseExpression = WCDB::Expression(self.class.column);
+    WCDB::Expression when1 = WCDB::Expression(self.class.column2) > WCDB::Expression(WCDB::LiteralValue(0));
     WCDB::Expression then1 = WCDB::LiteralValue(1);
-    WCDB::Expression when2 = WCDB::Expression(WCDB::Expression::ColumnNamed("testColumn3")) < WCDB::Expression(WCDB::LiteralValue(0));
+    WCDB::Expression when2 = WCDB::Expression(WCDB::Column("testColumn3")) < WCDB::Expression(WCDB::LiteralValue(0));
     WCDB::Expression then2 = WCDB::LiteralValue(2);
     WCDB::Expression elseExpression = WCDB::LiteralValue(3);
 
