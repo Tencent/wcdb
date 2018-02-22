@@ -20,11 +20,11 @@
 
 #import "WTCWINQTestCase.h"
 
-@interface WTCCommonTableExpression : WTCWINQTestCase
+@interface WTCCommonTableExpressionTests : WTCWINQTestCase
 
 @end
 
-@implementation WTCCommonTableExpression
+@implementation WTCCommonTableExpressionTests
 
 - (void)testCommonTableExpression
 {

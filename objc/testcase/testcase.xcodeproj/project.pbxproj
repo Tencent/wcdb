@@ -140,10 +140,10 @@
 		23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */; };
 		23DC30A8202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */; };
 		23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */; };
-		23DC30AB202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */; };
-		23DC30AC202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */; };
-		23DC30AE202C3CC2000F7895 /* WTCCTETableName.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */; };
-		23DC30AF202C3CC2000F7895 /* WTCCTETableName.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */; };
+		23DC30AB202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */; };
+		23DC30AC202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */; };
+		23DC30AE202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */; };
+		23DC30AF202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */; };
 		23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0920047BDE00C0291C /* WTCExpressionTests.mm */; };
 		23DD427B20050DC600330946 /* WTCInitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */; };
 		23DD427E20050DD800330946 /* WTCBaselineWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D620050A3600E22C76 /* WTCBaselineWriteBenchmark.mm */; };
@@ -351,8 +351,8 @@
 		23BDBB0C202D5479001BEEDA /* WTCWithClauseTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCWithClauseTests.mm; sourceTree = "<group>"; };
 		23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBindParameterTests.mm; sourceTree = "<group>"; };
 		23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCColumnConstraintTests.mm; sourceTree = "<group>"; };
-		23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCommonTableExpression.mm; sourceTree = "<group>"; };
-		23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCTETableName.mm; sourceTree = "<group>"; };
+		23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCommonTableExpressionTests.mm; sourceTree = "<group>"; };
+		23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCTETableNameTests.mm; sourceTree = "<group>"; };
 		23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCInitializationBenchmark.mm; sourceTree = "<group>"; };
 		23DD427820050DA400330946 /* WTCSyncWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSyncWriteBenchmark.mm; sourceTree = "<group>"; };
 		23DD428320050EDD00330946 /* WTCMultithreadReadReadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCMultithreadReadReadBenchmark.mm; sourceTree = "<group>"; };
@@ -636,8 +636,8 @@
 				23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */,
 				23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */,
 				23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */,
-				23DC30AA202C3828000F7895 /* WTCCommonTableExpression.mm */,
-				23DC30AD202C3CC2000F7895 /* WTCCTETableName.mm */,
+				23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */,
+				23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */,
 				23698B0920047BDE00C0291C /* WTCExpressionTests.mm */,
 				23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */,
 				23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */,
@@ -975,10 +975,10 @@
 				23E58B5B200F6D8300E0CECE /* WTCRepairTests.mm in Sources */,
 				23BDBAEF202D53CB001BEEDA /* WTCStatementInsertTests.mm in Sources */,
 				23DE00CD2010C1F500CDF00D /* WTCIndexMultiIndexesObject.mm in Sources */,
-				23DC30AB202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */,
+				23DC30AB202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */,
 				23E58B5F200F6DEE00E0CECE /* WTCRepairObject.mm in Sources */,
 				23BDBB01202D5462001BEEDA /* WTCStatementSelectTests.mm in Sources */,
-				23DC30AE202C3CC2000F7895 /* WTCCTETableName.mm in Sources */,
+				23DC30AE202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */,
 				233FDCB520108472003EC196 /* WTCColumnConstraintConflictPrimaryKeyObject.mm in Sources */,
 				233FDCC1201084A6003EC196 /* WTCColumnConstraintDefaultObject.mm in Sources */,
 				2358941220118CBA0057B3E9 /* WTCDeleteTests.mm in Sources */,
@@ -1114,7 +1114,7 @@
 				23BDBAF9202D5445001BEEDA /* WTCStatementReleaseTests.mm in Sources */,
 				23BDBAD2202D537D001BEEDA /* WTCStatementCreateTableTests.mm in Sources */,
 				23BDBB05202D5467001BEEDA /* WTCStatementUpdateTests.mm in Sources */,
-				23DC30AF202C3CC2000F7895 /* WTCCTETableName.mm in Sources */,
+				23DC30AF202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */,
 				23BDBAAB202D52C2001BEEDA /* WTCOrderingTermTests.mm in Sources */,
 				23BDBB0E202D5479001BEEDA /* WTCWithClauseTests.mm in Sources */,
 				23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */,
@@ -1130,7 +1130,7 @@
 				23731A43201F02E3005967ED /* WTCColumnDefTests.mm in Sources */,
 				23BDBAB4202D52D7001BEEDA /* WTCRaiseFunctionTests.mm in Sources */,
 				23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */,
-				23DC30AC202C3828000F7895 /* WTCCommonTableExpression.mm in Sources */,
+				23DC30AC202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */,
 				23BDBAEA202D53B9001BEEDA /* WTCStatementDropTriggerTests.mm in Sources */,
 				23BDBAA5202D52B7001BEEDA /* WTCLiteralValueTests.mm in Sources */,
 				23BDBAE4202D53A9001BEEDA /* WTCStatementDropIndexTests.mm in Sources */,

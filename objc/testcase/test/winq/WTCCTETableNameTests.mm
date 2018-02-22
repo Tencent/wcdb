@@ -20,11 +20,11 @@
 
 #import "WTCWINQTestCase.h"
 
-@interface WTCCTETableName : WTCWINQTestCase
+@interface WTCCTETableNameTests : WTCWINQTestCase
 
 @end
 
-@implementation WTCCTETableName
+@implementation WTCCTETableNameTests
 
 - (void)testCTETableName
 {
