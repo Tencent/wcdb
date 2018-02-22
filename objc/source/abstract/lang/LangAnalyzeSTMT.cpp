@@ -27,16 +27,11 @@ namespace lang {
 copy_on_write_string AnalyzeSTMT::SQL() const
 {
     std::string description("ANALYZE");
-    if (!schemaName.empty()) {
-        description.append(" " + schemaName.get());
-    }
-    if (!tableOrIndexName.empty()) {
-        if (schemaName.empty()) {
-            description.append(" ");
-        } else {
-            description.append(".");
+    if (!first.empty()) {
+        description.append(" " + first.get());
+        if (!second.empty()) {
+            description.append("." + second.get());
         }
-        description.append(tableOrIndexName.get());
     }
     return description;
 }

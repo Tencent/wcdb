@@ -27,16 +27,11 @@ Statement::Type StatementAnalyze::getType() const
     return Statement::Type::Analyze;
 }
 
-StatementAnalyze::StatementAnalyze()
-{
-    getMutableLang();
-}
-
-StatementAnalyze &StatementAnalyze::analyzeSchema(const std::string &schemaName)
+StatementAnalyze &StatementAnalyze::analyze()
 {
     lang::AnalyzeSTMT &lang = getMutableLang();
-    lang.schemaName.assign(schemaName);
-    lang.tableOrIndexName.clear();
+    lang.first.clear();
+    lang.second.clear();
     return *this;
 }
 
@@ -44,16 +39,17 @@ StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaName,
                                             const std::string &tableOrIndexName)
 {
     lang::AnalyzeSTMT &lang = getMutableLang();
-    lang.schemaName.assign(schemaName);
-    lang.tableOrIndexName.assign(tableOrIndexName);
+    lang.first.assign(schemaName);
+    lang.second.assign(tableOrIndexName);
     return *this;
 }
 
-StatementAnalyze &StatementAnalyze::analyze(const std::string &tableOrIndexName)
+StatementAnalyze &
+StatementAnalyze::analyze(const std::string &schemaOrTableOrIndexName)
 {
     lang::AnalyzeSTMT &lang = getMutableLang();
-    lang.schemaName.clear();
-    lang.tableOrIndexName.assign(tableOrIndexName);
+    lang.first.assign(schemaOrTableOrIndexName);
+    lang.second.clear();
     return *this;
 }
 

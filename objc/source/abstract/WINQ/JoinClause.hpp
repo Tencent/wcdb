@@ -54,11 +54,29 @@ public:
     JoinClause &naturalCrossJoin(const TableOrSubquery &tableOrSubquery,
                                  const JoinConstraint &joinConstraint);
 
+    JoinClause &with(const TableOrSubquery &tableOrSubquery);
+    JoinClause &join(const TableOrSubquery &tableOrSubquery);
+
+    JoinClause &leftJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &leftOuterJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &innerJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &crossJoin(const TableOrSubquery &tableOrSubquery);
+
+    JoinClause &naturalJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &naturalLeftJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &naturalLeftOuterJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &naturalInnerJoin(const TableOrSubquery &tableOrSubquery);
+    JoinClause &naturalCrossJoin(const TableOrSubquery &tableOrSubquery);
+
 protected:
     void appendJoinOperand(bool natural,
                            const lang::JoinOperator::Type &type,
                            const TableOrSubquery &tableOrSubquery,
                            const JoinConstraint &joinConstraint);
+
+    void appendJoinOperand(bool natural,
+                           const lang::JoinOperator::Type &type,
+                           const TableOrSubquery &tableOrSubquery);
 };
 
 } // namespace WCDB

@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+JoinConstraint::JoinConstraint()
+{
+    getMutableLang();
+}
+
 JoinConstraint &JoinConstraint::on(const Expression &expression)
 {
     lang::JoinConstraint &lang = getMutableLang();

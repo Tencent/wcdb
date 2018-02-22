@@ -65,6 +65,7 @@ JoinClause &JoinClause::leftJoin(const TableOrSubquery &tableOrSubquery,
                       joinConstraint);
     return *this;
 }
+
 JoinClause &JoinClause::leftOuterJoin(const TableOrSubquery &tableOrSubquery,
                                       const JoinConstraint &joinConstraint)
 {
@@ -72,6 +73,7 @@ JoinClause &JoinClause::leftOuterJoin(const TableOrSubquery &tableOrSubquery,
                       tableOrSubquery, joinConstraint);
     return *this;
 }
+
 JoinClause &JoinClause::innerJoin(const TableOrSubquery &tableOrSubquery,
                                   const JoinConstraint &joinConstraint)
 {
@@ -79,6 +81,7 @@ JoinClause &JoinClause::innerJoin(const TableOrSubquery &tableOrSubquery,
                       joinConstraint);
     return *this;
 }
+
 JoinClause &JoinClause::crossJoin(const TableOrSubquery &tableOrSubquery,
                                   const JoinConstraint &joinConstraint)
 {
@@ -102,6 +105,7 @@ JoinClause &JoinClause::naturalLeftJoin(const TableOrSubquery &tableOrSubquery,
                       joinConstraint);
     return *this;
 }
+
 JoinClause &
 JoinClause::naturalLeftOuterJoin(const TableOrSubquery &tableOrSubquery,
                                  const JoinConstraint &joinConstraint)
@@ -110,6 +114,7 @@ JoinClause::naturalLeftOuterJoin(const TableOrSubquery &tableOrSubquery,
                       tableOrSubquery, joinConstraint);
     return *this;
 }
+
 JoinClause &JoinClause::naturalInnerJoin(const TableOrSubquery &tableOrSubquery,
                                          const JoinConstraint &joinConstraint)
 {
@@ -117,11 +122,95 @@ JoinClause &JoinClause::naturalInnerJoin(const TableOrSubquery &tableOrSubquery,
                       joinConstraint);
     return *this;
 }
+
 JoinClause &JoinClause::naturalCrossJoin(const TableOrSubquery &tableOrSubquery,
                                          const JoinConstraint &joinConstraint)
 {
     appendJoinOperand(true, lang::JoinOperator::Type::Cross, tableOrSubquery,
                       joinConstraint);
+    return *this;
+}
+
+JoinClause &JoinClause::with(const TableOrSubquery &tableOrSubquery)
+{
+    lang::JoinClause &lang = getMutableLang();
+
+    lang::copy_on_write_lazy_lang<lang::JoinClause::Operand> cowJoinOperand;
+
+    {
+        lang::JoinClause::Operand &joinOperand = cowJoinOperand.get_or_copy();
+
+        lang::JoinOperator joinOperator;
+        joinOperator.join = false;
+
+        joinOperand.joinOperator.assign(joinOperator);
+        joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
+    }
+
+    lang.joinOperands.append(cowJoinOperand);
+    return *this;
+}
+
+JoinClause &JoinClause::join(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(false, lang::JoinOperator::Type::NotSet, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::leftJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(false, lang::JoinOperator::Type::Left, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::leftOuterJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(false, lang::JoinOperator::Type::LeftOuter,
+                      tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::innerJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(false, lang::JoinOperator::Type::Inner, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::crossJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(false, lang::JoinOperator::Type::Cross, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::naturalJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(true, lang::JoinOperator::Type::NotSet, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::naturalLeftJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(true, lang::JoinOperator::Type::Left, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &
+JoinClause::naturalLeftOuterJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(true, lang::JoinOperator::Type::LeftOuter,
+                      tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::naturalInnerJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(true, lang::JoinOperator::Type::Inner, tableOrSubquery);
+    return *this;
+}
+
+JoinClause &JoinClause::naturalCrossJoin(const TableOrSubquery &tableOrSubquery)
+{
+    appendJoinOperand(true, lang::JoinOperator::Type::Cross, tableOrSubquery);
     return *this;
 }
 
@@ -145,6 +234,29 @@ void JoinClause::appendJoinOperand(bool natural,
         joinOperand.joinOperator.assign(joinOperator);
         joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
         joinOperand.joinConstraint.assign(joinConstraint.getLang());
+    }
+
+    lang.joinOperands.append(cowJoinOperand);
+}
+
+void JoinClause::appendJoinOperand(bool natural,
+                                   const lang::JoinOperator::Type &type,
+                                   const TableOrSubquery &tableOrSubquery)
+{
+    lang::JoinClause &lang = getMutableLang();
+
+    lang::copy_on_write_lazy_lang<lang::JoinClause::Operand> cowJoinOperand;
+
+    {
+        lang::JoinClause::Operand &joinOperand = cowJoinOperand.get_or_copy();
+
+        lang::JoinOperator joinOperator;
+        joinOperator.join = true;
+        joinOperator.natural = natural;
+        joinOperator.type = type;
+
+        joinOperand.joinOperator.assign(joinOperator);
+        joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
     }
 
     lang.joinOperands.append(cowJoinOperand);

@@ -40,12 +40,15 @@ copy_on_write_string JoinClause::SQL() const
 
 copy_on_write_string JoinClause::Operand::SQL() const
 {
+    std::string description;
     assert(!joinOperator.empty());
     assert(!tableOrSubquery.empty());
-    assert(!joinConstraint.empty());
-    return joinOperator.description().get() + " " +
-           tableOrSubquery.description().get() + " " +
-           joinConstraint.description().get();
+    description.append(joinOperator.description().get() + " " +
+                       tableOrSubquery.description().get());
+    if (!joinConstraint.empty()) {
+        description.append(" " + joinConstraint.description().get());
+    }
+    return description;
 }
 
 template <>

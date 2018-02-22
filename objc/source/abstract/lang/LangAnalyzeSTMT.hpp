@@ -29,8 +29,8 @@ namespace lang {
 
 class AnalyzeSTMT : public Lang {
 public:
-    copy_on_write_string schemaName;
-    copy_on_write_string tableOrIndexName;
+    copy_on_write_string first;
+    copy_on_write_string second;
 
     virtual copy_on_write_string SQL() const override;
 };

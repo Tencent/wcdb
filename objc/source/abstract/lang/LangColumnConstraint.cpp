@@ -73,11 +73,11 @@ copy_on_write_string ColumnConstraint::SQL() const
             description.append("CHECK(" + expr.description().get() + ")");
             break;
         case Type::Default:
-            description.append("DEFAULT ");
+            description.append("DEFAULT");
             switch (defaultSwitcher) {
                 case DefaultSwitch::LiteralValue:
                     assert(!literalValue.empty());
-                    description.append(literalValue.description().get());
+                    description.append(" " + literalValue.description().get());
                     break;
                 case DefaultSwitch::Expr:
                     assert(!expr.empty());
