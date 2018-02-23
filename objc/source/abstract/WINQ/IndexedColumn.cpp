@@ -24,9 +24,7 @@ namespace WCDB {
 
 IndexedColumn::IndexedColumn(const Expression &expression)
 {
-    lang::IndexedColumn &lang = getMutableLang();
-    lang.switcher = lang::IndexedColumn::Switch::Expr;
-    lang.expr.assign(expression.getLang());
+    setupWithExpression(expression);
 }
 
 IndexedColumn::IndexedColumn(const Column &column)
@@ -48,6 +46,13 @@ IndexedColumn &IndexedColumn::withOrder(const Order &order)
     lang::IndexedColumn &lang = getMutableLang();
     lang.order = order;
     return *this;
+}
+
+void IndexedColumn::setupWithExpression(const Expression &expression)
+{
+    lang::IndexedColumn &lang = getMutableLang();
+    lang.switcher = lang::IndexedColumn::Switch::Expr;
+    lang.expr.assign(expression.getLang());
 }
 
 } // namespace WCDB

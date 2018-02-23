@@ -22,16 +22,6 @@
 
 namespace WCDB {
 
-TableOrSubquery::TableOrSubquery(const char *tableName)
-{
-    setTableName(tableName ? tableName : Describable::s_empty);
-}
-
-TableOrSubquery::TableOrSubquery(const std::string &tableName)
-{
-    setTableName(tableName);
-}
-
 TableOrSubquery::TableOrSubquery(const StatementSelect &selectSTMT)
 {
     lang::TableOrSubquery &lang = getMutableLang();

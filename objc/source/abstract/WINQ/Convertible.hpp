@@ -18,16 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef abstract_common_h
-#define abstract_common_h
+#ifndef Convertible_hpp
+#define Convertible_hpp
 
-#include <WINQ/WINQ.h>
+#include <WINQ/Describable.hpp>
 
 namespace WCDB {
 
-class Handle;
-class HandleStatement;
+template <typename T, typename Enable = void>
+class ExpressionConvertible : public std::false_type {
+public:
+    static Expression as(const T &t);
+};
+
+template <typename T, typename Enable = void>
+class IndexedColumnConvertible : public std::false_type {
+public:
+    static IndexedColumn as(const T &t);
+};
 
 } // namespace WCDB
 
-#endif /* abstract_common_h */
+#endif /* Convertible_hpp */

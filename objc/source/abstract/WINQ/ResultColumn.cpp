@@ -31,9 +31,7 @@ ResultColumn ResultColumn::AllInTable(const std::string &tableName)
 
 ResultColumn::ResultColumn(const Expression &expression)
 {
-    lang::ResultColumn &lang = getMutableLang();
-    lang.type = lang::ResultColumn::Type::Expr;
-    lang.expr.assign(expression.getLang());
+    setupWithExpression(expression);
 }
 
 ResultColumn::ResultColumn(const lang::ResultColumn::Type &type)
@@ -54,6 +52,13 @@ ResultColumn &ResultColumn::as(const Column &columnAlias)
     lang::ResultColumn &lang = getMutableLang();
     lang.columnAlias.assign(columnAlias.getLang());
     return *this;
+}
+
+void ResultColumn::setupWithExpression(const Expression &expression)
+{
+    lang::ResultColumn &lang = getMutableLang();
+    lang.type = lang::ResultColumn::Type::Expr;
+    lang.expr.assign(expression.getLang());
 }
 
 } // namespace WCDB

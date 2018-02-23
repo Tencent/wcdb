@@ -27,12 +27,23 @@ namespace WCDB {
 
 class IndexedColumn : public DescribableWithLang<lang::IndexedColumn> {
 public:
+    template <typename T, typename Enable = void>
+    IndexedColumn(const T &t,
+                  typename std::enable_if<ExpressionConvertible<T>::value>::type
+                      * = nullptr)
+    {
+        setupWithExpression(ExpressionConvertible<T>::as(t));
+    }
+
     IndexedColumn(const Expression &expression);
     IndexedColumn(const Column &column);
 
     IndexedColumn &withCollate(const std::string &collationName);
 
     IndexedColumn &withOrder(const Order &order = Order::NotSet);
+
+protected:
+    void setupWithExpression(const Expression &expression);
 };
 
 } // namespace WCDB

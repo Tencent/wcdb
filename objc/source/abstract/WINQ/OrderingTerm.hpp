@@ -27,9 +27,20 @@ namespace WCDB {
 
 class OrderingTerm : public DescribableWithLang<lang::OrderingTerm> {
 public:
+    template <typename T, typename Enable = void>
+    OrderingTerm(const T &t,
+                 typename std::enable_if<ExpressionConvertible<T>::value>::type
+                     * = nullptr)
+    {
+        setupWithExpression(ExpressionConvertible<T>::as(t));
+    }
+
     OrderingTerm(const Expression &expression);
     OrderingTerm &withCollate(const std::string &collateName);
     OrderingTerm &withOrder(const Order &order);
+
+protected:
+    void setupWithExpression(const Expression &expression);
 };
 
 } // namespace WCDB

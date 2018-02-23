@@ -48,6 +48,8 @@
  *
  */
 
+#include <WINQ/Convertible.hpp>
+
 #include <WINQ/BindParameter.hpp>
 #include <WINQ/CTETableName.hpp>
 #include <WINQ/Column.hpp>

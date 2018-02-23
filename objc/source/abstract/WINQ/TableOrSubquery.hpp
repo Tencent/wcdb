@@ -27,8 +27,14 @@ namespace WCDB {
 
 class TableOrSubquery : public DescribableWithLang<lang::TableOrSubquery> {
 public:
-    TableOrSubquery(const char *tableName);
-    TableOrSubquery(const std::string &tableName);
+    template <typename T>
+    TableOrSubquery(
+        const T &t,
+        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    {
+        setTableName(ColumnIsTextType<T>::asUnderlyingType(t));
+    }
+
     TableOrSubquery(const StatementSelect &selectSTMT);
     TableOrSubquery(const JoinClause &joinClause);
     TableOrSubquery(const std::list<TableOrSubquery> &tableOrSubquerys);

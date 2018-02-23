@@ -22,26 +22,38 @@
 
 namespace WCDB {
 
-CTETableName &CTETableName::byAddingColumn(const Column &column)
+template <>
+Expression
+ExpressionConvertible<LiteralValue>::as(const LiteralValue &literalValue)
 {
-    lang::CTETableName &lang = getMutableLang();
-    lang.columns.append(column.getLang());
-    return *this;
+    return literalValue;
 }
 
-CTETableName &CTETableName::byAddingColumns(const std::list<Column> &columns)
+template <>
+Expression ExpressionConvertible<Column>::as(const Column &column)
 {
-    lang::CTETableName &lang = getMutableLang();
-    for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
-    }
-    return *this;
+    return column;
 }
 
-void CTETableName::setTableName(const std::string &name)
+template <>
+Expression
+ExpressionConvertible<BindParameter>::as(const BindParameter &bindParameter)
 {
-    lang::CTETableName &lang = getMutableLang();
-    lang.tableName.assign(name);
+    return bindParameter;
+}
+
+template <>
+Expression
+ExpressionConvertible<RaiseFunction>::as(const RaiseFunction &raiseFunction)
+{
+    return raiseFunction;
+}
+
+template <>
+Expression ExpressionConvertible<StatementSelect>::as(
+    const StatementSelect &statementSelect)
+{
+    return statementSelect;
 }
 
 } // namespace WCDB

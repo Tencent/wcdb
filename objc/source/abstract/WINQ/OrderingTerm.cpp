@@ -24,8 +24,7 @@ namespace WCDB {
 
 OrderingTerm::OrderingTerm(const Expression &expression)
 {
-    lang::OrderingTerm &lang = getMutableLang();
-    lang.expr.assign(expression.getLang());
+    setupWithExpression(expression);
 }
 
 OrderingTerm &OrderingTerm::withCollate(const std::string &collateName)
@@ -40,6 +39,12 @@ OrderingTerm &OrderingTerm::withOrder(const Order &order)
     lang::OrderingTerm &lang = getMutableLang();
     lang.order = order;
     return *this;
+}
+
+void OrderingTerm::setupWithExpression(const Expression &expression)
+{
+    lang::OrderingTerm &lang = getMutableLang();
+    lang.expr.assign(expression.getLang());
 }
 
 } // namespace WCDB

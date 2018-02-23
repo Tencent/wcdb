@@ -21,6 +21,11 @@
 #ifndef abstract_h
 #define abstract_h
 
+#include <WINQ/ColumnType.hpp>
+#include <WINQ/Convertible_impl.hpp>
+#include <WINQ/Handle.hpp>
+#include <WINQ/HandleStatement.hpp>
+#include <WINQ/Tokenize.hpp>
 #include <WINQ/WINQ.h>
 #include <WINQ/lang.h>
 

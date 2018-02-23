@@ -21,7 +21,7 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
-#include <WINQ/abstract_common.h>
+#include <WINQ/WINQ.h>
 #include <WINQ/error.hpp>
 #include <WINQ/utility.hpp>
 #include <map>
@@ -30,6 +30,9 @@
 #include <string>
 
 namespace WCDB {
+
+class Handle;
+class HandleStatement;
 
 //{{sql->count}, cost}
 typedef std::function<void(

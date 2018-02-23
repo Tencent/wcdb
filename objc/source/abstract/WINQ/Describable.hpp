@@ -22,6 +22,7 @@
 #define Describable_hpp
 
 #include <WINQ/ColumnType.hpp>
+#include <WINQ/Convertible.hpp>
 #include <WINQ/lang.h>
 
 namespace WCDB {

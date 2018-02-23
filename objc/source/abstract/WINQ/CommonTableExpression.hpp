@@ -28,13 +28,22 @@ namespace WCDB {
 class CommonTableExpression
     : public DescribableWithLang<lang::CommonTableExpression> {
 public:
-    CommonTableExpression(const std::string &tableName);
+    template <typename T>
+    CommonTableExpression(
+        const T &t,
+        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    {
+        setTableName(ColumnIsTextType<T>::asUnderlyingType(t));
+    }
 
     CommonTableExpression &byAddingColumn(const Column &column);
 
     CommonTableExpression &byAddingColumns(const std::list<Column> &columns);
 
     CommonTableExpression &as(const StatementSelect &statementSelect);
+
+protected:
+    void setTableName(const std::string &name);
 };
 
 } // namespace WCDB

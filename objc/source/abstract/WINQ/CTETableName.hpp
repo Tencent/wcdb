@@ -27,11 +27,20 @@ namespace WCDB {
 
 class CTETableName : public DescribableWithLang<lang::CTETableName> {
 public:
-    CTETableName(const std::string &tableName);
+    template <typename T, typename Enable = void>
+    CTETableName(
+        const T &t,
+        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    {
+        setTableName(ColumnIsTextType<T>::asUnderlyingType(t));
+    }
 
     CTETableName &byAddingColumn(const Column &column);
 
     CTETableName &byAddingColumns(const std::list<Column> &columns);
+
+protected:
+    void setTableName(const std::string &name);
 };
 
 } // namespace WCDB

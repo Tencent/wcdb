@@ -29,6 +29,12 @@
 		23000F1A203EDFDC00ED8008 /* Column.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23000F17203EDFDC00ED8008 /* Column.cpp */; };
 		23000F1B203EDFDC00ED8008 /* Column.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23000F18203EDFDC00ED8008 /* Column.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23000F1C203EDFDC00ED8008 /* Column.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23000F18203EDFDC00ED8008 /* Column.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2301DA63203F016200C3B52A /* Convertible.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2301DA61203F016200C3B52A /* Convertible.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2301DA65203F019B00C3B52A /* Convertible.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2301DA61203F016200C3B52A /* Convertible.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		230477ED203FACD1000A49CD /* Convertible_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 230477EB203FACD0000A49CD /* Convertible_impl.cpp */; };
+		230477EE203FACD1000A49CD /* Convertible_impl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 230477EC203FACD0000A49CD /* Convertible_impl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		230477EF203FACD6000A49CD /* Convertible_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 230477EB203FACD0000A49CD /* Convertible_impl.cpp */; };
+		230477F0203FACDB000A49CD /* Convertible_impl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 230477EC203FACD0000A49CD /* Convertible_impl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		232124442017287C008146EF /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243E20172865008146EF /* sqlcipher.framework */; };
 		232124452017287C008146EF /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243620172859008146EF /* sqliterk.framework */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -627,8 +633,6 @@
 		23D920C72009B534000634CB /* abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* abstract.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DC3063202AFBE3000F7895 /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC3061202AFBE3000F7895 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DC3066202AFBEA000F7895 /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC3061202AFBE3000F7895 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23DC306B202AFDE2000F7895 /* abstract_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306A202AFD57000F7895 /* abstract_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23DC306C202AFDE2000F7895 /* abstract_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306A202AFD57000F7895 /* abstract_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DC306F202AFF8B000F7895 /* Handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DC306D202AFF8B000F7895 /* Handle.cpp */; };
 		23DC3070202AFF8B000F7895 /* Handle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306E202AFF8B000F7895 /* Handle.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DC3071202AFF92000F7895 /* Handle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306E202AFF8B000F7895 /* Handle.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -711,6 +715,9 @@
 		23000F11203EC89700ED8008 /* LangColumn.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LangColumn.hpp; sourceTree = "<group>"; };
 		23000F17203EDFDC00ED8008 /* Column.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Column.cpp; sourceTree = "<group>"; };
 		23000F18203EDFDC00ED8008 /* Column.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Column.hpp; sourceTree = "<group>"; };
+		2301DA61203F016200C3B52A /* Convertible.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Convertible.hpp; sourceTree = "<group>"; };
+		230477EB203FACD0000A49CD /* Convertible_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Convertible_impl.cpp; sourceTree = "<group>"; };
+		230477EC203FACD0000A49CD /* Convertible_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Convertible_impl.hpp; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
@@ -1086,7 +1093,6 @@
 		23B31B331EB97B480092EA80 /* WCTTable+Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Database.h"; sourceTree = "<group>"; };
 		23D920422009B52E000634CB /* abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstract.h; sourceTree = "<group>"; };
 		23DC3061202AFBE3000F7895 /* ColumnType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ColumnType.hpp; sourceTree = "<group>"; };
-		23DC306A202AFD57000F7895 /* abstract_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = abstract_common.h; sourceTree = "<group>"; };
 		23DC306D202AFF8B000F7895 /* Handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Handle.cpp; sourceTree = "<group>"; };
 		23DC306E202AFF8B000F7895 /* Handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Handle.hpp; sourceTree = "<group>"; };
 		23DC3073202AFFE9000F7895 /* HandleStatement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleStatement.cpp; sourceTree = "<group>"; };
@@ -1165,7 +1171,8 @@
 				23977482202AECD3000A681C /* lang */,
 				23977420202AECD2000A681C /* WINQ */,
 				23D920422009B52E000634CB /* abstract.h */,
-				23DC306A202AFD57000F7895 /* abstract_common.h */,
+				230477EB203FACD0000A49CD /* Convertible_impl.cpp */,
+				230477EC203FACD0000A49CD /* Convertible_impl.hpp */,
 				23DC3077202B0066000F7895 /* Tokenize.cpp */,
 				23DC3078202B0066000F7895 /* Tokenize.hpp */,
 				23DC3073202AFFE9000F7895 /* HandleStatement.cpp */,
@@ -1494,6 +1501,7 @@
 				23977426202AECD2000A681C /* ColumnDef.hpp */,
 				23977427202AECD2000A681C /* CommonTableExpression.cpp */,
 				23977428202AECD3000A681C /* CommonTableExpression.hpp */,
+				2301DA61203F016200C3B52A /* Convertible.hpp */,
 				23977429202AECD3000A681C /* CTETableName.cpp */,
 				2397742A202AECD3000A681C /* CTETableName.hpp */,
 				2397742C202AECD3000A681C /* Describable.cpp */,
@@ -1770,6 +1778,7 @@
 				239775F5202AEE17000A681C /* StatementAnalyze.hpp in Headers */,
 				239775F6202AEE17000A681C /* StatementAttach.hpp in Headers */,
 				239775F7202AEE17000A681C /* StatementBegin.hpp in Headers */,
+				2301DA65203F019B00C3B52A /* Convertible.hpp in Headers */,
 				239775F8202AEE17000A681C /* StatementCommit.hpp in Headers */,
 				239775F9202AEE17000A681C /* StatementCreateIndex.hpp in Headers */,
 				239775FA202AEE17000A681C /* StatementCreateTable.hpp in Headers */,
@@ -1829,10 +1838,10 @@
 				239775C4202AEE10000A681C /* LangDropViewSTMT.hpp in Headers */,
 				239775C5202AEE10000A681C /* LangExpr.hpp in Headers */,
 				239775C6202AEE10000A681C /* LangForeignKeyClause.hpp in Headers */,
+				230477F0203FACDB000A49CD /* Convertible_impl.hpp in Headers */,
 				239775C7202AEE10000A681C /* LangIndexedColumn.hpp in Headers */,
 				239775C8202AEE10000A681C /* LangInsertSTMT.hpp in Headers */,
 				239775C9202AEE10000A681C /* LangJoinClause.hpp in Headers */,
-				23DC306C202AFDE2000F7895 /* abstract_common.h in Headers */,
 				239775CA202AEE10000A681C /* LangJoinConstraint.hpp in Headers */,
 				239775CB202AEE10000A681C /* LangJoinOperator.hpp in Headers */,
 				239775CC202AEE10000A681C /* LangLiteralValue.hpp in Headers */,
@@ -1932,7 +1941,6 @@
 				23977554202AECD3000A681C /* LangBindParameter.hpp in Headers */,
 				23977556202AECD3000A681C /* LangColumnConstraint.hpp in Headers */,
 				239776E0202AF2E3000A681C /* copy_on_write_lazy_describable.hpp in Headers */,
-				23DC306B202AFDE2000F7895 /* abstract_common.h in Headers */,
 				239776FE202AF2E3000A681C /* macro.hpp in Headers */,
 				23977558202AECD3000A681C /* LangColumnDef.hpp in Headers */,
 				23977559202AECD3000A681C /* LangColumnType.hpp in Headers */,
@@ -1956,6 +1964,7 @@
 				239776F2202AF2E3000A681C /* recyclable.hpp in Headers */,
 				2397757C202AECD3000A681C /* LangForeignKeyClause.hpp in Headers */,
 				2397757E202AECD3000A681C /* LangIndexedColumn.hpp in Headers */,
+				230477EE203FACD1000A49CD /* Convertible_impl.hpp in Headers */,
 				23977580202AECD3000A681C /* LangInsertSTMT.hpp in Headers */,
 				23977582202AECD3000A681C /* LangJoinClause.hpp in Headers */,
 				23977584202AECD3000A681C /* LangJoinConstraint.hpp in Headers */,
@@ -2029,6 +2038,7 @@
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2349F7441EA0D6680021EFA7 /* WCTCoreStatement.h in Headers */,
 				2386B3C01ED442E2000B72F6 /* WCTStatistics.h in Headers */,
+				2301DA63203F016200C3B52A /* Convertible.hpp in Headers */,
 				23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */,
 				2349F7751EA0D6680021EFA7 /* WCTTransaction+Table.h in Headers */,
 				23D920C72009B534000634CB /* abstract.h in Headers */,
@@ -2317,6 +2327,7 @@
 				2397762B202AEE24000A681C /* StatementCreateView.cpp in Sources */,
 				2397762C202AEE24000A681C /* StatementCreateVirtualTable.cpp in Sources */,
 				2397762D202AEE24000A681C /* StatementDelete.cpp in Sources */,
+				230477EF203FACD6000A49CD /* Convertible_impl.cpp in Sources */,
 				2397762E202AEE24000A681C /* StatementDetach.cpp in Sources */,
 				2397762F202AEE24000A681C /* StatementDropIndex.cpp in Sources */,
 				23977630202AEE24000A681C /* StatementDropTable.cpp in Sources */,
@@ -2463,6 +2474,7 @@
 				239775A6202AECD3000A681C /* LangUpdateSTMT.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
 				23977519202AECD3000A681C /* StatementCreateIndex.cpp in Sources */,
+				230477ED203FACD1000A49CD /* Convertible_impl.cpp in Sources */,
 				23977561202AECD3000A681C /* LangCreateTableSTMT.cpp in Sources */,
 				2397750C202AECD3000A681C /* SelectCore.cpp in Sources */,
 				2386B3CB1ED44316000B72F6 /* WCTChainCall+Statistics.mm in Sources */,

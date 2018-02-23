@@ -29,12 +29,23 @@ class ResultColumn : public DescribableWithLang<lang::ResultColumn> {
 public:
     static const ResultColumn All;
     static ResultColumn AllInTable(const std::string &tableName);
+
+    template <typename T>
+    ResultColumn(const T &t,
+                 typename std::enable_if<ExpressionConvertible<T>::value>::type
+                     * = nullptr)
+    {
+        setupWithExpression(ExpressionConvertible<T>::as(t));
+    }
+
     ResultColumn(const Expression &expression);
     ResultColumn &as(const Column &columnAlias);
 
 protected:
     ResultColumn(const lang::ResultColumn::Type &type);
     ResultColumn(const std::string &tableName);
+
+    void setupWithExpression(const Expression &expression);
 };
 
 } // namespace WCDB
