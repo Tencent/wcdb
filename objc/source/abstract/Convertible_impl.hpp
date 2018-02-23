@@ -55,6 +55,15 @@ public:
 template <typename T>
 class ExpressionConvertible<
     T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+    : public std::true_type {
+public:
+    static Expression as(const T &t) { return LiteralValue(t); }
+};
+
+template <typename T>
+class ExpressionConvertible<
+    T,
     typename std::enable_if<ColumnIsTextType<T>::value>::type>
     : public std::true_type {
 public:
@@ -122,6 +131,15 @@ template <typename T>
 class LiteralValueConvertible<
     T,
     typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
+public:
+    static LiteralValue as(const T &t) { return t; }
+};
+
+template <typename T>
+class LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
     : public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
