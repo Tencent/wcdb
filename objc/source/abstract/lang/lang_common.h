@@ -24,7 +24,6 @@
 #include <assert.h>
 
 #include <WINQ/copy_on_write_data.hpp>
-#include <WINQ/copy_on_write_lazy_string_list.hpp>
 #include <WINQ/copy_on_write_string.hpp>
 
 #include <WINQ/copy_on_write_lazy_lang.hpp>

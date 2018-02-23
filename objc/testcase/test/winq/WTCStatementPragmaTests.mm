@@ -28,6 +28,8 @@
 
 - (void)testStatementPragma
 {
+    XCTAssertEqual(WCDB::StatementPragma().getType(), WCDB::Statement::Type::Pragma);
+
     WCDB::Pragma pragmaName = WCDB::Pragma::JournalMode;
     WCDB::LiteralValue pragmaValue = WCDB::LiteralValue("WAL");
 

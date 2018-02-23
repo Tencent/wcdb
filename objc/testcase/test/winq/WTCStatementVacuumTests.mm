@@ -28,6 +28,8 @@
 
 - (void)testStatementVacuum
 {
+    XCTAssertEqual(WCDB::StatementVacuum().getType(), WCDB::Statement::Type::Vacuum);
+
     WINQAssertEqual(WCDB::StatementVacuum()
                         .vacuum(),
                     @"VACUUM");

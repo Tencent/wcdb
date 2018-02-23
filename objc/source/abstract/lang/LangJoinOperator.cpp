@@ -49,8 +49,6 @@ copy_on_write_string JoinOperator::SQL() const
 constexpr const char *JoinOperator::JoinTypeName(const Type &type)
 {
     switch (type) {
-        case Type::NotSet:
-            return "";
         case Type::Left:
             return "LEFT";
         case Type::LeftOuter:
@@ -59,6 +57,9 @@ constexpr const char *JoinOperator::JoinTypeName(const Type &type)
             return "INNER";
         case Type::Cross:
             return "CROSS";
+        default:
+            assert(false);
+            break;
     }
 }
 

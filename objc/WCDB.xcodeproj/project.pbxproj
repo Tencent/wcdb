@@ -577,12 +577,8 @@
 		239776DB202AF2E3000A681C /* copy_on_write_string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776BE202AF2E1000A681C /* copy_on_write_string.cpp */; };
 		239776DC202AF2E3000A681C /* spin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776BF202AF2E1000A681C /* spin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776DD202AF2E3000A681C /* spin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776BF202AF2E1000A681C /* spin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		239776DE202AF2E3000A681C /* copy_on_write_lazy_string_list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C0202AF2E1000A681C /* copy_on_write_lazy_string_list.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		239776DF202AF2E3000A681C /* copy_on_write_lazy_string_list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C0202AF2E1000A681C /* copy_on_write_lazy_string_list.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776E0202AF2E3000A681C /* copy_on_write_lazy_describable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C1202AF2E1000A681C /* copy_on_write_lazy_describable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776E1202AF2E3000A681C /* copy_on_write_lazy_describable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C1202AF2E1000A681C /* copy_on_write_lazy_describable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		239776E2202AF2E3000A681C /* copy_on_write_lazy_string_list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776C2202AF2E1000A681C /* copy_on_write_lazy_string_list.cpp */; };
-		239776E3202AF2E3000A681C /* copy_on_write_lazy_string_list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776C2202AF2E1000A681C /* copy_on_write_lazy_string_list.cpp */; };
 		239776E4202AF2E3000A681C /* utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C3202AF2E2000A681C /* utility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776E5202AF2E3000A681C /* utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C3202AF2E2000A681C /* utility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776E6202AF2E3000A681C /* rwlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776C4202AF2E2000A681C /* rwlock.cpp */; };
@@ -1062,9 +1058,7 @@
 		239776BD202AF2E1000A681C /* error.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = error.hpp; sourceTree = "<group>"; };
 		239776BE202AF2E1000A681C /* copy_on_write_string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = copy_on_write_string.cpp; sourceTree = "<group>"; };
 		239776BF202AF2E1000A681C /* spin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = spin.hpp; sourceTree = "<group>"; };
-		239776C0202AF2E1000A681C /* copy_on_write_lazy_string_list.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = copy_on_write_lazy_string_list.hpp; sourceTree = "<group>"; };
 		239776C1202AF2E1000A681C /* copy_on_write_lazy_describable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = copy_on_write_lazy_describable.hpp; sourceTree = "<group>"; };
-		239776C2202AF2E1000A681C /* copy_on_write_lazy_string_list.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = copy_on_write_lazy_string_list.cpp; sourceTree = "<group>"; };
 		239776C3202AF2E2000A681C /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
 		239776C4202AF2E2000A681C /* rwlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rwlock.cpp; sourceTree = "<group>"; };
 		239776C5202AF2E2000A681C /* optional_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = optional_impl.hpp; sourceTree = "<group>"; };
@@ -1443,8 +1437,6 @@
 				239776C6202AF2E2000A681C /* copy_on_write_data.cpp */,
 				239776CC202AF2E2000A681C /* copy_on_write_data.hpp */,
 				239776C1202AF2E1000A681C /* copy_on_write_lazy_describable.hpp */,
-				239776C2202AF2E1000A681C /* copy_on_write_lazy_string_list.cpp */,
-				239776C0202AF2E1000A681C /* copy_on_write_lazy_string_list.hpp */,
 				239776BE202AF2E1000A681C /* copy_on_write_string.cpp */,
 				239776CD202AF2E2000A681C /* copy_on_write_string.hpp */,
 				239776D6202AF2E3000A681C /* copy_on_write.hpp */,
@@ -1789,7 +1781,6 @@
 				239775FE202AEE17000A681C /* StatementDelete.hpp in Headers */,
 				2397770E202AF423000A681C /* lang_common.h in Headers */,
 				239775FF202AEE17000A681C /* StatementDetach.hpp in Headers */,
-				239776DF202AF2E3000A681C /* copy_on_write_lazy_string_list.hpp in Headers */,
 				239776ED202AF2E3000A681C /* path.hpp in Headers */,
 				23977600202AEE17000A681C /* StatementDropIndex.hpp in Headers */,
 				23977601202AEE17000A681C /* StatementDropTable.hpp in Headers */,
@@ -2006,7 +1997,6 @@
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
 				2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */,
 				2349F7461EA0D6680021EFA7 /* WCTDatabase+Database.h in Headers */,
-				239776DE202AF2E3000A681C /* copy_on_write_lazy_string_list.hpp in Headers */,
 				236DB4B81F209D100091FC79 /* WCTMaster+WCTTableCoding.h in Headers */,
 				2353E4831F0E300D00260BBE /* WCTValue.h in Headers */,
 				2349F74F1EA0D6680021EFA7 /* WCTDeclare.h in Headers */,
@@ -2281,7 +2271,6 @@
 				23DC307C202B0188000F7895 /* HandleStatement.cpp in Sources */,
 				23977661202AEE2C000A681C /* LangRaiseFunction.cpp in Sources */,
 				23977662202AEE2C000A681C /* LangReindexSTMT.cpp in Sources */,
-				239776E3202AF2E3000A681C /* copy_on_write_lazy_string_list.cpp in Sources */,
 				23977663202AEE2C000A681C /* LangReleaseSTMT.cpp in Sources */,
 				23977664202AEE2C000A681C /* LangResultColumn.cpp in Sources */,
 				23977665202AEE2C000A681C /* LangRollbackSTMT.cpp in Sources */,
@@ -2491,7 +2480,6 @@
 				2397755A202AECD3000A681C /* LangCommitSTMT.cpp in Sources */,
 				2386B3C11ED442E2000B72F6 /* WCTStatistics.mm in Sources */,
 				239774E7202AECD3000A681C /* BindParameter.cpp in Sources */,
-				239776E2202AF2E3000A681C /* copy_on_write_lazy_string_list.cpp in Sources */,
 				23977506202AECD3000A681C /* QualifiedTableName.cpp in Sources */,
 				2349F7301EA0D6680021EFA7 /* WCTSelectBase.mm in Sources */,
 				23977533202AECD3000A681C /* StatementReindex.cpp in Sources */,

@@ -34,23 +34,23 @@ copy_on_write_string::copy_on_write_string(const char *string)
 {
 }
 
-void copy_on_write_string::append(const copy_on_write_string &string)
-{
-    if (!empty()) {
-        get_or_copy().append(string.get());
-    } else {
-        assign(string);
-    }
-}
-
-void copy_on_write_string::append(const std::string &string)
-{
-    if (!empty()) {
-        get_or_copy().append(string);
-    } else {
-        assign(string);
-    }
-}
+//void copy_on_write_string::append(const copy_on_write_string &string)
+//{
+//    if (!empty()) {
+//        get_or_copy().append(string.get());
+//    } else {
+//        assign(string);
+//    }
+//}
+//
+//void copy_on_write_string::append(const std::string &string)
+//{
+//    if (!empty()) {
+//        get_or_copy().append(string);
+//    } else {
+//        assign(string);
+//    }
+//}
 
 bool copy_on_write_string::empty() const
 {

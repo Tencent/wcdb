@@ -39,7 +39,7 @@ copy_on_write_string TableOrSubqueryTable::SQL() const
         switch (indexSwitcher) {
             case IndexSwitch::Indexed:
                 assert(!indexName.empty());
-                description.append(" INDEX BY " + indexName.get());
+                description.append(" INDEXED BY " + indexName.get());
                 break;
             case IndexSwitch::NotIndexed:
                 description.append(" NOT INDEXED");
@@ -64,11 +64,13 @@ copy_on_write_string TableOrSubqueryTableFunction::SQL() const
     }
     assert(!tableFunctionName.empty());
     description.append(tableFunctionName.get());
+    description.append("(");
     if (!exprs.empty()) {
-        description.append("(" + exprs.description().get() + ")");
+        description.append(exprs.description().get());
     }
+    description.append(")");
     if (!tableAlias.empty()) {
-        description.append(" " + tableAlias.get());
+        description.append(" AS " + tableAlias.get());
     }
     return description;
 }

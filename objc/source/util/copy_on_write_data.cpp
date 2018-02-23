@@ -20,25 +20,25 @@
 
 #include <WINQ/copy_on_write_data.hpp>
 
-void copy_on_write_data::append(const unsigned char *raw, const size_t &size)
-{
-    if (!empty()) {
-        std::vector<unsigned char> &vector = get_or_copy();
-        vector.insert(vector.begin(), raw, raw + size);
-    } else {
-        assign(std::vector<unsigned char>(raw, raw + size));
-    }
-}
-
-void copy_on_write_data::append(const std::vector<unsigned char> &data)
-{
-    if (!empty()) {
-        std::vector<unsigned char> &vector = get_or_copy();
-        vector.insert(vector.begin(), data.begin(), data.end());
-    } else {
-        assign(data);
-    }
-}
+//void copy_on_write_data::append(const unsigned char *raw, const size_t &size)
+//{
+//    if (!empty()) {
+//        std::vector<unsigned char> &vector = get_or_copy();
+//        vector.insert(vector.begin(), raw, raw + size);
+//    } else {
+//        assign(std::vector<unsigned char>(raw, raw + size));
+//    }
+//}
+//
+//void copy_on_write_data::append(const std::vector<unsigned char> &data)
+//{
+//    if (!empty()) {
+//        std::vector<unsigned char> &vector = get_or_copy();
+//        vector.insert(vector.begin(), data.begin(), data.end());
+//    } else {
+//        assign(data);
+//    }
+//}
 
 bool copy_on_write_data::empty() const
 {

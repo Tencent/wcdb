@@ -28,6 +28,8 @@
 
 - (void)testStatementInsert
 {
+    XCTAssertEqual(WCDB::StatementInsert().getType(), WCDB::Statement::Type::Insert);
+
     WINQAssertEqual(WCDB::StatementInsert()
                         .insertInto(self.class.tableName)
                         .withSchema(self.class.schemaName)

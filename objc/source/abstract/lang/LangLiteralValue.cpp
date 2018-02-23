@@ -20,6 +20,7 @@
 
 #include <WINQ/lang.h>
 #include <WINQ/utility.hpp>
+#include <sstream>
 
 namespace WCDB {
 
@@ -36,14 +37,18 @@ copy_on_write_string LiteralValue::SQL() const
         case Type::NumbericInteger:
             description.append(std::to_string(integerValue));
             break;
-        case Type::NumbericFloat:
-            description.append(std::to_string(floatValue));
-            break;
+        case Type::NumbericFloat: {
+            std::ostringstream os;
+            os << floatValue;
+            description.append(os.str());
+        } break;
         case Type::BLOB:
+            assert(!dataValue.empty());
             description.append(
                 LiteralValue::stringByAntiInjecting(dataValue.get()));
             break;
         case Type::String:
+            assert(!stringValue.empty());
             description.append(
                 LiteralValue::stringByAntiInjecting(stringValue.get()));
             break;

@@ -21,6 +21,9 @@
 #ifndef copy_on_write_lazy_lang_hpp
 #define copy_on_write_lazy_lang_hpp
 
+#include <WINQ/copy_on_write_lazy_describable.hpp>
+#include <list>
+
 namespace WCDB {
 
 namespace lang {

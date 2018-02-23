@@ -18,35 +18,26 @@
  * limitations under the License.
  */
 
-#include <WINQ/copy_on_write_lazy_string_list.hpp>
+#import "WTCWINQTestCase.h"
 
-void copy_on_write_lazy_string_list::append(const copy_on_write_string &string)
+@interface WTCUnexpectedTests : WTCWINQTestCase
+
+@end
+
+@implementation WTCUnexpectedTests
+
+- (void)testUnexpected
 {
-    if (!empty()) {
-        get_or_copy().push_back(string);
-    } else {
-        assign({string});
-    }
+    WINQAssertEqual(WCDB::TableConstraint(), @"");
+
+    WINQAssertEqual(WCDB::StatementSelect(), @"");
+
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect()
+                                                .select(self.class.resultColumn)
+                                                .from(self.class.tableOrSubquery);
+    WINQAssertEqual(statementSelect, @"SELECT testColumn FROM testTable");
+    statementSelect = WCDB::StatementSelect();
+    WINQAssertEqual(statementSelect, @"");
 }
 
-bool copy_on_write_lazy_string_list::empty() const
-{
-    return Super::empty() || get().empty();
-}
-
-copy_on_write_string
-copy_on_write_lazy_string_list::calculatedDescription() const
-{
-    std::string description;
-    bool comma = false;
-    for (const auto &element : get()) {
-        if (comma) {
-            description.append(", ");
-        } else {
-            comma = true;
-        }
-        assert(!element.empty());
-        description.append(element.get());
-    }
-    return description;
-}
+@end

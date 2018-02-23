@@ -28,6 +28,8 @@
 
 - (void)testStatementCreateVirtualTable
 {
+    XCTAssertEqual(WCDB::StatementCreateVirtualTable().getType(), WCDB::Statement::Type::CreateVirtualTable);
+
     std::string moduleName = "FTS3";
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()

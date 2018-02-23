@@ -29,12 +29,10 @@
 - (void)testRaw
 {
     int numericLiteral = 1;
-    std::string stringLiteral = "2";
+    float floatLiteral = 2.1;
+    std::string stringLiteral = "3";
     std::vector<unsigned char> blobLiteral;
     blobLiteral.push_back('4');
-
-    WCDB::Expression e(numericLiteral);
-    WCDB::LiteralValue l(numericLiteral);
 
     //To Expression
     WINQAssertEqual(WCDB::StatementSelect()
@@ -46,13 +44,13 @@
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
-                        .where(stringLiteral),
-                    @"SELECT testColumn FROM testTable WHERE '2'");
+                        .where(floatLiteral),
+                    @"SELECT testColumn FROM testTable WHERE 2.1");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
-                        .where("3"),
+                        .where(stringLiteral),
                     @"SELECT testColumn FROM testTable WHERE '3'");
 
     WINQAssertEqual(WCDB::StatementSelect()
@@ -60,6 +58,12 @@
                         .from(self.class.tableOrSubquery)
                         .where(blobLiteral),
                     @"SELECT testColumn FROM testTable WHERE '4'");
+
+    WINQAssertEqual(WCDB::StatementSelect()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .where("3"),
+                    @"SELECT testColumn FROM testTable WHERE '3'");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -75,18 +79,23 @@
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, stringLiteral),
-                    @"CREATE INDEX testIndex ON testTable('2')");
+                        .on(self.class.tableName, floatLiteral),
+                    @"CREATE INDEX testIndex ON testTable(2.1)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, "3"),
+                        .on(self.class.tableName, stringLiteral),
                     @"CREATE INDEX testIndex ON testTable('3')");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName, false, false)
                         .on(self.class.tableName, blobLiteral),
                     @"CREATE INDEX testIndex ON testTable('4')");
+
+    WINQAssertEqual(WCDB::StatementCreateIndex()
+                        .createIndex(self.class.indexName, false, false)
+                        .on(self.class.tableName, "3"),
+                    @"CREATE INDEX testIndex ON testTable('3')");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName, false, false)
@@ -100,12 +109,12 @@
                     @"SELECT 1 FROM testTable");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(stringLiteral)
+                        .select(floatLiteral)
                         .from(self.class.tableOrSubquery),
-                    @"SELECT '2' FROM testTable");
+                    @"SELECT 2.1 FROM testTable");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select("3")
+                        .select(stringLiteral)
                         .from(self.class.tableOrSubquery),
                     @"SELECT '3' FROM testTable");
 
@@ -113,6 +122,11 @@
                         .select(blobLiteral)
                         .from(self.class.tableOrSubquery),
                     @"SELECT '4' FROM testTable");
+
+    WINQAssertEqual(WCDB::StatementSelect()
+                        .select("3")
+                        .from(self.class.tableOrSubquery),
+                    @"SELECT '3' FROM testTable");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(nullptr)
@@ -123,19 +137,19 @@
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
-                        .orderBy(1),
+                        .orderBy(numericLiteral),
                     @"SELECT testColumn FROM testTable ORDER BY 1");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
-                        .orderBy(stringLiteral),
-                    @"SELECT testColumn FROM testTable ORDER BY '2'");
+                        .orderBy(floatLiteral),
+                    @"SELECT testColumn FROM testTable ORDER BY 2.1");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
-                        .orderBy("3"),
+                        .orderBy(stringLiteral),
                     @"SELECT testColumn FROM testTable ORDER BY '3'");
 
     WINQAssertEqual(WCDB::StatementSelect()
@@ -147,11 +161,39 @@
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
+                        .orderBy("3"),
+                    @"SELECT testColumn FROM testTable ORDER BY '3'");
+
+    WINQAssertEqual(WCDB::StatementSelect()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
                         .orderBy(nullptr),
                     @"SELECT testColumn FROM testTable ORDER BY NULL");
 }
 
-- (void)testColumn2ResultColumn
+- (void)testLiteralValue
+{
+    //To IndexedColumn
+    WINQAssertEqual(WCDB::StatementCreateIndex()
+                        .createIndex(self.class.indexName, false, false)
+                        .on(self.class.tableName, self.class.literalValue),
+                    @"CREATE INDEX testIndex ON testTable(1)");
+
+    //To ResultColumn
+    WINQAssertEqual(WCDB::StatementSelect()
+                        .select(self.class.literalValue)
+                        .from(self.class.tableOrSubquery),
+                    @"SELECT 1 FROM testTable");
+
+    //To OrderingTerm
+    WINQAssertEqual(WCDB::StatementSelect()
+                        .select(self.class.resultColumn)
+                        .from(self.class.tableOrSubquery)
+                        .orderBy(self.class.literalValue),
+                    @"SELECT testColumn FROM testTable ORDER BY 1");
+}
+
+- (void)testColumn
 {
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()

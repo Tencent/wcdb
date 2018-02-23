@@ -28,6 +28,8 @@
 
 - (void)testStatementRollback
 {
+    XCTAssertEqual(WCDB::StatementRollback().getType(), WCDB::Statement::Type::Rollback);
+
     WINQAssertEqual(WCDB::StatementRollback()
                         .rollbackTo(self.class.savepointName),
                     @"ROLLBACK TO testSavepoint");

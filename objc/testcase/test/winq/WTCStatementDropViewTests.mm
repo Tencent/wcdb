@@ -28,6 +28,8 @@
 
 - (void)testStatementDropView
 {
+    XCTAssertEqual(WCDB::StatementDropView().getType(), WCDB::Statement::Type::DropView);
+
     WINQAssertEqual(WCDB::StatementDropView()
                         .dropView(self.class.viewName, true)
                         .withSchema(self.class.schemaName),

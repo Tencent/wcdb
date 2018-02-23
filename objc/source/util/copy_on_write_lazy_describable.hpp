@@ -30,11 +30,7 @@ public:
     const copy_on_write_string &description() const
     {
         if (!m_calculated) {
-            if (!this->empty()) {
-                m_description.assign(calculatedDescription());
-            } else {
-                m_description.clear();
-            }
+            m_description.assign(calculatedDescription());
             m_calculated = true;
         }
         return m_description;

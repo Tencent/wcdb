@@ -28,6 +28,8 @@
 
 - (void)testStatementAnalyze
 {
+    XCTAssertEqual(WCDB::StatementAnalyze().getType(), WCDB::Statement::Type::Analyze);
+
     WINQAssertEqual(WCDB::StatementAnalyze()
                         .analyze(),
                     @"ANALYZE");

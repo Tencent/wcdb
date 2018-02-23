@@ -28,6 +28,8 @@
 
 - (void)testStatementUpdate
 {
+    XCTAssertEqual(WCDB::StatementUpdate().getType(), WCDB::Statement::Type::Update);
+
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
                         .set(self.class.column, self.class.value)

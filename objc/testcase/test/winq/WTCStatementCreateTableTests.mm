@@ -28,6 +28,8 @@
 
 - (void)testStatementCreateTable
 {
+    XCTAssertEqual(WCDB::StatementCreateTable().getType(), WCDB::Statement::Type::CreateTable);
+
     WINQAssertEqual(WCDB::StatementCreateTable()
                         .createTable(self.class.tableName, false, false)
                         .withSchema(self.class.schemaName)

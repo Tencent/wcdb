@@ -106,10 +106,7 @@ Pragma::Pragma(const std::string &name)
 
 const std::string &Pragma::getDescription() const
 {
-    if (!m_name.empty()) {
-        return m_name.get();
-    }
-    return Describable::s_empty;
+    return m_name.get();
 }
 
 } // namespace WCDB

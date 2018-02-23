@@ -28,6 +28,8 @@
 
 - (void)testStatementDropTrigger
 {
+    XCTAssertEqual(WCDB::StatementDropTrigger().getType(), WCDB::Statement::Type::DropTrigger);
+
     WINQAssertEqual(WCDB::StatementDropTrigger()
                         .dropTrigger(self.class.triggerName, true)
                         .withSchema(self.class.schemaName),

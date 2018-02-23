@@ -28,6 +28,8 @@
 
 - (void)testStatementCreateIndex
 {
+    XCTAssertEqual(WCDB::StatementCreateIndex().getType(), WCDB::Statement::Type::CreateIndex);
+
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName, false, false)
                         .withSchema(self.class.schemaName)

@@ -28,6 +28,8 @@
 
 - (void)testStatementDelete
 {
+    XCTAssertEqual(WCDB::StatementDelete().getType(), WCDB::Statement::Type::Delete);
+
     WINQAssertEqual(WCDB::StatementDelete()
                         .deleteFrom(self.class.qualifiedTableName)
                         .where(self.class.condition)

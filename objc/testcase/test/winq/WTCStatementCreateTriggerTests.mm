@@ -28,6 +28,8 @@
 
 - (void)testStatementCreateTrigger
 {
+    XCTAssertEqual(WCDB::StatementCreateTrigger().getType(), WCDB::Statement::Type::CreateTrigger);
+
     WINQAssertEqual(WCDB::StatementCreateTrigger()
                         .createTrigger(self.class.triggerName, false, false)
                         .withSchema(self.class.schemaName)

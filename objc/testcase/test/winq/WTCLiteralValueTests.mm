@@ -29,19 +29,27 @@
 - (void)testLiteralValue
 {
     int numericLiteral = 1;
-    std::string stringLiteral = "2";
+    float floatLitearl = 2.1;
+    std::string stringLiteral = "3";
     std::vector<unsigned char> blobLiteral;
     blobLiteral.push_back('4');
 
     WINQAssertEqual(WCDB::LiteralValue(numericLiteral), @"1");
-    WINQAssertEqual(WCDB::LiteralValue(stringLiteral), @"'2'");
-    WINQAssertEqual(WCDB::LiteralValue("3"), @"'3'");
+    WINQAssertEqual(WCDB::LiteralValue(floatLitearl), @"2.1");
+    WINQAssertEqual(WCDB::LiteralValue(stringLiteral), @"'3'");
     WINQAssertEqual(WCDB::LiteralValue(blobLiteral), @"'4'");
+
+    WINQAssertEqual(WCDB::LiteralValue("3"), @"'3'");
     WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
 
     WINQAssertEqual(WCDB::LiteralValue::CurrentTime, @"CURRENT_TIME");
     WINQAssertEqual(WCDB::LiteralValue::CurrentDate, @"CURRENT_DATE");
     WINQAssertEqual(WCDB::LiteralValue::CurrentTimestamp, @"CURRENT_TIMESTAMP");
+}
+
+- (void)testAnitInjection
+{
+    WINQAssertEqual(WCDB::LiteralValue("'SELECT'"), @"'''SELECT'''")
 }
 
 @end

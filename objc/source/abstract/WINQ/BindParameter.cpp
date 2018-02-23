@@ -35,10 +35,10 @@ BindParameter::BindParameter(int n)
     lang.n = n;
 }
 
-BindParameter::BindParameter(const std::string &name)
+BindParameter::BindParameter(const std::string &name, const Type &type)
 {
     lang::BindParameter &lang = getMutableLang();
-    lang.type = lang::BindParameter::Type::Colon;
+    lang.type = (lang::BindParameter::Type) type;
     lang.name.assign(name);
 }
 

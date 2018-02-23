@@ -471,6 +471,16 @@ Expression::Expression(
     lang.exprIn.assign(exprIn);
 }
 
+Expression Expression::in()
+{
+    return in(false);
+}
+
+Expression Expression::notIn()
+{
+    return in(true);
+}
+
 Expression Expression::in(const StatementSelect &selectSTMT)
 {
     return in(selectSTMT, false);
@@ -595,6 +605,16 @@ Expression Expression::notInFunction(const std::string &schemaName,
                                      const std::list<Expression> &expressions)
 {
     return inFunction(schemaName, functionName, expressions, true);
+}
+
+lang::copy_on_write_lazy_lang<lang::ExprIn> Expression::in(bool isNot)
+{
+    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
+    lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = lang::ExprIn::Switch::NotSet;
+    lang.expr.assign(getLang());
+    lang.isNot = isNot;
+    return cowLang;
 }
 
 lang::copy_on_write_lazy_lang<lang::ExprIn>

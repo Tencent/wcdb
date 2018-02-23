@@ -28,6 +28,8 @@
 
 - (void)testStatementDropTable
 {
+    XCTAssertEqual(WCDB::StatementDropTable().getType(), WCDB::Statement::Type::DropTable);
+
     WINQAssertEqual(WCDB::StatementDropTable()
                         .dropTable(self.class.tableName, true)
                         .withSchema(self.class.schemaName),

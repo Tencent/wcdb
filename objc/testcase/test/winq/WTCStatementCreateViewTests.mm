@@ -28,6 +28,8 @@
 
 - (void)testStatementCreateView
 {
+    XCTAssertEqual(WCDB::StatementCreateView().getType(), WCDB::Statement::Type::CreateView);
+
     WINQAssertEqual(WCDB::StatementCreateView()
                         .createView(self.class.viewName, false, false)
                         .as(self.class.statementSelect),

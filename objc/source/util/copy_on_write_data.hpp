@@ -26,8 +26,8 @@
 
 class copy_on_write_data : public copy_on_write<std::vector<unsigned char>> {
 public:
-    void append(const unsigned char *raw, const size_t &size);
-    void append(const std::vector<unsigned char> &data);
+    //    void append(const unsigned char *raw, const size_t &size);
+    //    void append(const std::vector<unsigned char> &data);
 
     bool empty() const;
 

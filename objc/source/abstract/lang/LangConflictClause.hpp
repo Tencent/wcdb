@@ -49,7 +49,8 @@ LangConflictClauseName(const ConflictClause &conflictClause)
         case ConflictClause::Replace:
             return "ON CONFLICT REPLACE";
         default:
-            return "";
+            assert(false);
+            break;
     }
 }
 

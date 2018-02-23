@@ -32,6 +32,13 @@
 
     WINQAssertEqual(WCDB::BindParameter(3), @"?3");
 
+    WINQAssertEqual(WCDB::BindParameter("name", WCDB::BindParameter::Type::Colon), @":name");
+
+    WINQAssertEqual(WCDB::BindParameter("name", WCDB::BindParameter::Type::At), @"@name");
+
+    WINQAssertEqual(WCDB::BindParameter("name", WCDB::BindParameter::Type::DollarSign), @"$name");
+
+    //Default
     WINQAssertEqual(WCDB::BindParameter("name"), @":name");
 }
 

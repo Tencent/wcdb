@@ -28,6 +28,8 @@
 
 - (void)testStatementAlterTable
 {
+    XCTAssertEqual(WCDB::StatementAlterTable().getType(), WCDB::Statement::Type::AlterTable);
+
     WINQAssertEqual(WCDB::StatementAlterTable()
                         .alterTable(self.class.schemaName, self.class.tableName)
                         .renameTo("testNewTable"),

@@ -48,7 +48,8 @@ constexpr const char *BeginSTMT::TypeName(const Type &type)
         case Type::Exclusive:
             return "EXCLUSIVE";
         default:
-            return "";
+            assert(false);
+            break;
     }
 }
 

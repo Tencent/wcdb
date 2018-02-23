@@ -101,6 +101,8 @@ public:
     Expression notBetween(const Expression &left,
                           const Expression &right) const;
 
+    Expression in();
+    Expression notIn();
     Expression in(const StatementSelect &selectSTMT);
     Expression notIn(const StatementSelect &selectSTMT);
     Expression in(const Expression &expression);
@@ -193,6 +195,8 @@ protected:
     lang::copy_on_write_lazy_lang<lang::ExprNull> null(bool isNull) const;
     lang::copy_on_write_lazy_lang<lang::ExprBetween>
     between(const Expression &left, const Expression &right, bool isNot) const;
+
+    lang::copy_on_write_lazy_lang<lang::ExprIn> in(bool isNot);
 
     lang::copy_on_write_lazy_lang<lang::ExprIn>
     in(const StatementSelect &selectSTMT, bool isNot);

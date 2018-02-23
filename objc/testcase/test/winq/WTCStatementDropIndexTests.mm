@@ -28,6 +28,8 @@
 
 - (void)testStatementDropIndex
 {
+    XCTAssertEqual(WCDB::StatementDropIndex().getType(), WCDB::Statement::Type::DropIndex);
+
     WINQAssertEqual(WCDB::StatementDropIndex()
                         .dropIndex(self.class.indexName, true)
                         .withSchema(self.class.schemaName),

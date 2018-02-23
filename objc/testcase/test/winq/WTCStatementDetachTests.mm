@@ -28,6 +28,8 @@
 
 - (void)testStatementDetach
 {
+    XCTAssertEqual(WCDB::StatementDetach().getType(), WCDB::Statement::Type::Detach);
+
     WINQAssertEqual(WCDB::StatementDetach()
                         .detach(self.class.schemaName),
                     @"DETACH testSchema");

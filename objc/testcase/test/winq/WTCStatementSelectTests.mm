@@ -28,6 +28,8 @@
 
 - (void)testStatementSelect
 {
+    XCTAssertEqual(WCDB::StatementSelect().getType(), WCDB::Statement::Type::Select);
+
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)

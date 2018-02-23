@@ -28,6 +28,8 @@
 
 - (void)testStatementBegin
 {
+    XCTAssertEqual(WCDB::StatementBegin().getType(), WCDB::Statement::Type::Begin);
+
     WINQAssertEqual(WCDB::StatementBegin()
                         .begin(WCDB::StatementBegin::Transaction::NotSet),
                     @"BEGIN");

@@ -71,6 +71,11 @@
                         .withNotNull(WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint NOT NULL");
 
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withNotNull(WCDB::ConflictClause::Rollback),
+                    @"CONSTRAINT testConstraint NOT NULL ON CONFLICT ROLLBACK");
+
     //Default
     WINQAssertEqual(WCDB::ColumnConstraint()
                         .named(self.class.constraintName)
@@ -84,6 +89,11 @@
                         .named(self.class.constraintName)
                         .withUnique(WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint UNIQUE");
+
+    WINQAssertEqual(WCDB::ColumnConstraint()
+                        .named(self.class.constraintName)
+                        .withUnique(WCDB::ConflictClause::Rollback),
+                    @"CONSTRAINT testConstraint UNIQUE ON CONFLICT ROLLBACK");
 
     //Default
     WINQAssertEqual(WCDB::ColumnConstraint()

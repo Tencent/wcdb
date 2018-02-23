@@ -29,7 +29,7 @@
 - (void)testTableConstraint
 {
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn),
+                        .withPrimaryKey(self.class.indexedColumn, WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
@@ -37,12 +37,20 @@
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT ROLLBACK");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumns),
+                        .withPrimaryKey(self.class.indexedColumns, WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withUnique(self.class.indexedColumn),
+                        .withUnique(self.class.indexedColumn, WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint UNIQUE(testColumn)");
+
+    WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
+                        .withUnique(self.class.indexedColumn, WCDB::ConflictClause::Rollback),
+                    @"CONSTRAINT testConstraint UNIQUE(testColumn) ON CONFLICT ROLLBACK");
+
+    WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
+                        .withUnique(self.class.indexedColumns),
+                    @"CONSTRAINT testConstraint UNIQUE(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
                         .withChecking(self.class.condition),
@@ -55,6 +63,15 @@
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
                         .withForeignKey(self.class.columns, self.class.foreignKeyClause),
                     @"CONSTRAINT testConstraint FOREIGN KEY(testColumn, testColumn2) REFERENCES testForeignTable");
+
+    //Default
+    WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
+                        .withPrimaryKey(self.class.indexedColumn),
+                    @"CONSTRAINT testConstraint PRIMARY KEY(testColumn)");
+
+    WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
+                        .withUnique(self.class.indexedColumn),
+                    @"CONSTRAINT testConstraint UNIQUE(testColumn)");
 }
 
 @end

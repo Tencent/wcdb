@@ -39,7 +39,8 @@ constexpr const char *LangOrderName(const Order &order)
         case Order::DESC:
             return "DESC";
         default:
-            return "";
+            assert(false);
+            break;
     }
 }
 

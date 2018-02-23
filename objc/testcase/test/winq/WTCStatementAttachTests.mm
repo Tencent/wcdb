@@ -28,6 +28,8 @@
 
 - (void)testStatementAttach
 {
+    XCTAssertEqual(WCDB::StatementAttach().getType(), WCDB::Statement::Type::Attach);
+
     WCDB::Expression expr = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::StatementAttach()
