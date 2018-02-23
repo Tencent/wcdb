@@ -32,9 +32,9 @@ public:
 };
 
 template <typename T, typename Enable = void>
-class IndexedColumnConvertible : public std::false_type {
+class LiteralValueConvertible : public std::false_type {
 public:
-    static IndexedColumn as(const T &t);
+    static LiteralValueConvertible as(const T &t);
 };
 
 } // namespace WCDB

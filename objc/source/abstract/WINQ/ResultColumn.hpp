@@ -42,8 +42,8 @@ public:
     ResultColumn &as(const Column &columnAlias);
 
 protected:
-    ResultColumn(const lang::ResultColumn::Type &type);
-    ResultColumn(const std::string &tableName);
+    explicit ResultColumn(const lang::ResultColumn::Type &type);
+    explicit ResultColumn(const std::string &tableName);
 
     void setupWithExpression(const Expression &expression);
 };

@@ -28,9 +28,9 @@ namespace WCDB {
 // http://www.sqlite.org/lang_expr.html
 class BindParameter : public DescribableWithLang<lang::BindParameter> {
 public:
-    BindParameter();                        // ?
-    BindParameter(int n);                   // ?NNN
-    BindParameter(const std::string &name); // :AAAA
+    BindParameter();                                 // ?
+    explicit BindParameter(int n);                   // ?NNN
+    explicit BindParameter(const std::string &name); // :AAAA
 };
 
 } // namespace WCDB

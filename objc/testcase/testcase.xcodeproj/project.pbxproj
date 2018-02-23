@@ -58,6 +58,8 @@
 		23890DEA201210EE0036C53F /* WTCInsertInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE9201210EE0036C53F /* WTCInsertInterfaceTests.mm */; };
 		238CB75E203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */; };
 		238CB75F203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */; };
+		239B7EF3203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239B7EF2203FF85300D10CE0 /* WTCConvertibleTests.mm */; };
+		239B7EF4203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239B7EF2203FF85300D10CE0 /* WTCConvertibleTests.mm */; };
 		23BDBA98202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */; };
 		23BDBA99202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */; };
 		23BDBA9B202D52A2001BEEDA /* WTCIndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */; };
@@ -310,6 +312,7 @@
 		23890DE9201210EE0036C53F /* WTCInsertInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCInsertInterfaceTests.mm; sourceTree = "<group>"; };
 		238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCWINQTestCase.mm; sourceTree = "<group>"; };
 		238CB761203D3754009E2A2E /* WTCWINQTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCWINQTestCase.h; sourceTree = "<group>"; };
+		239B7EF2203FF85300D10CE0 /* WTCConvertibleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCConvertibleTests.mm; sourceTree = "<group>"; };
 		23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCForeignKeyClauseTests.mm; sourceTree = "<group>"; };
 		23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCIndexedColumnTests.mm; sourceTree = "<group>"; };
 		23BDBA9D202D52A7001BEEDA /* WTCJoinClauseTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCJoinClauseTests.mm; sourceTree = "<group>"; };
@@ -678,6 +681,7 @@
 				23BDBB06202D546C001BEEDA /* WTCStatementVacuumTests.mm */,
 				23BDBB09202D5475001BEEDA /* WTCTableConstraintTests.mm */,
 				23BDBB0C202D5479001BEEDA /* WTCWithClauseTests.mm */,
+				239B7EF2203FF85300D10CE0 /* WTCConvertibleTests.mm */,
 				238CB761203D3754009E2A2E /* WTCWINQTestCase.h */,
 				238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */,
 			);
@@ -1037,6 +1041,7 @@
 				234EF4562015A0CA00B81929 /* WTCTableConstraintObject.mm in Sources */,
 				23890DE6201210C30036C53F /* WTCSelectInterfaceTests.mm in Sources */,
 				23DE00C92010C1EA00CDF00D /* WTCIndexUniqueIndexObject.mm in Sources */,
+				239B7EF3203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */,
 				23BDBA9B202D52A2001BEEDA /* WTCIndexedColumnTests.mm in Sources */,
 				23BDBAF8202D5445001BEEDA /* WTCStatementReleaseTests.mm in Sources */,
 				23698B2C20047BE000C0291C /* WTCExpressionTests.mm in Sources */,
@@ -1102,6 +1107,7 @@
 				23BDBACF202D5377001BEEDA /* WTCStatementCreateIndexTests.mm in Sources */,
 				23BDBACC202D530A001BEEDA /* WTCStatementCommitTests.mm in Sources */,
 				23BDBAC6202D5301001BEEDA /* WTCStatementAttachTests.mm in Sources */,
+				239B7EF4203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */,
 				23BDBAB1202D52D2001BEEDA /* WTCQualifiedTableNameTests.mm in Sources */,
 				23BDBAF6202D543F001BEEDA /* WTCStatementReindexTests.mm in Sources */,
 				23BDBADB202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm in Sources */,

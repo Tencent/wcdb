@@ -101,15 +101,48 @@ public:
 };
 
 template <typename T>
-class IndexedColumnConvertible<
+class LiteralValueConvertible<
     T,
-    typename std::enable_if<ExpressionConvertible<T>::value>::type>
+    typename std::enable_if<ColumnIsNullType<T>::value>::type>
     : public std::true_type {
 public:
-    static IndexedColumn as(const T &t)
-    {
-        return ExpressionConvertible<T>::as(t);
-    }
+    static LiteralValue as(const T &t) { return t; }
+};
+
+template <typename T>
+class LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+    : public std::true_type {
+public:
+    static LiteralValue as(const T &t) { return t; }
+};
+
+template <typename T>
+class LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+    : public std::true_type {
+public:
+    static LiteralValue as(const T &t) { return t; }
+};
+
+template <typename T>
+class LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
+public:
+    static LiteralValue as(const T &t) { return t; }
+};
+
+template <typename T>
+class LiteralValueConvertible<
+    T,
+    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
+public:
+    static LiteralValue as(const T &t) { return t; }
 };
 
 } // namespace WCDB

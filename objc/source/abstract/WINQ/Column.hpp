@@ -27,7 +27,7 @@ namespace WCDB {
 
 class Column : public DescribableWithLang<lang::Column> {
 public:
-    Column(const std::string &name);
+    explicit Column(const std::string &name);
 };
 
 } // namespace WCDB

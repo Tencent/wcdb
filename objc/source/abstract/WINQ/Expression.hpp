@@ -27,6 +27,14 @@ namespace WCDB {
 
 class Expression : public DescribableWithLang<lang::Expr> {
 public:
+    template <typename T>
+    Expression(const T &t,
+               typename std::enable_if<LiteralValueConvertible<T>::value>::type
+                   * = nullptr)
+    {
+        setLiteralValue(LiteralValueConvertible<T>::as(t));
+    }
+
     Expression(const LiteralValue &literalValue);
 
     Expression(const BindParameter &bindParameter);
@@ -224,6 +232,9 @@ protected:
                const std::string &functionName,
                const std::list<Expression> &parameters,
                bool isNot);
+
+protected:
+    void setLiteralValue(const LiteralValue &literalValue);
 };
 
 } // namespace WCDB

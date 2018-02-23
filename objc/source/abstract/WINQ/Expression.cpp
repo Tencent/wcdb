@@ -24,9 +24,7 @@ namespace WCDB {
 
 Expression::Expression(const LiteralValue &literalValue)
 {
-    lang::Expr &lang = getMutableLang();
-    lang.type = lang::Expr::Type::LiteralValue;
-    lang.literalValue.assign(literalValue.getLang());
+    setLiteralValue(literalValue);
 }
 
 Expression::Expression(const BindParameter &bindParameter)
@@ -830,6 +828,13 @@ Expression::Expression(const RaiseFunction &raiseFunction)
     lang::Expr &lang = getMutableLang();
     lang.type = lang::Expr::Type::RaiseFunction;
     lang.raiseFunction.assign(raiseFunction.getLang());
+}
+
+void Expression::setLiteralValue(const LiteralValue &literalValue)
+{
+    lang::Expr &lang = getMutableLang();
+    lang.type = lang::Expr::Type::LiteralValue;
+    lang.literalValue.assign(literalValue.getLang());
 }
 
 } // namespace WCDB
