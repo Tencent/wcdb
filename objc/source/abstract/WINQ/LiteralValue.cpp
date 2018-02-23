@@ -22,7 +22,6 @@
 
 namespace WCDB {
 
-const LiteralValue LiteralValue::Null(lang::LiteralValue::Type::Null);
 const LiteralValue
     LiteralValue::CurrentTime(lang::LiteralValue::Type::CurrentTime);
 const LiteralValue

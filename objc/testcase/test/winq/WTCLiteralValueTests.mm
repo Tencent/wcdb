@@ -31,13 +31,14 @@
     int numericLiteral = 1;
     std::string stringLiteral = "2";
     std::vector<unsigned char> blobLiteral;
-    blobLiteral.push_back('3');
+    blobLiteral.push_back('4');
 
     WINQAssertEqual(WCDB::LiteralValue(numericLiteral), @"1");
     WINQAssertEqual(WCDB::LiteralValue(stringLiteral), @"'2'");
-    WINQAssertEqual(WCDB::LiteralValue(blobLiteral), @"'3'");
+    WINQAssertEqual(WCDB::LiteralValue("3"), @"'3'");
+    WINQAssertEqual(WCDB::LiteralValue(blobLiteral), @"'4'");
+    WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
 
-    WINQAssertEqual(WCDB::LiteralValue::Null, @"NULL");
     WINQAssertEqual(WCDB::LiteralValue::CurrentTime, @"CURRENT_TIME");
     WINQAssertEqual(WCDB::LiteralValue::CurrentDate, @"CURRENT_DATE");
     WINQAssertEqual(WCDB::LiteralValue::CurrentTimestamp, @"CURRENT_TIMESTAMP");

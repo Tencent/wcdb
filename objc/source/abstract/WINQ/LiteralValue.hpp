@@ -88,7 +88,6 @@ public:
         lang.dataValue.assign(ColumnIsBLOBType<T>::asUnderlyingType(t));
     }
 
-    static const LiteralValue Null;
     static const LiteralValue CurrentTime;
     static const LiteralValue CurrentDate;
     static const LiteralValue CurrentTimestamp;
