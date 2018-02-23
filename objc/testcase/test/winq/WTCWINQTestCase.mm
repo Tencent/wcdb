@@ -22,6 +22,12 @@
 
 @implementation WTCWINQTestCase
 
+- (void)setUp
+{
+    [super setUp];
+    self.continueAfterFailure = YES;
+}
+
 + (std::string)schemaName
 {
     return "testSchema";
