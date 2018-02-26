@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/config.hpp>
+#include <WCDB/Config.hpp>
 
 namespace WCDB {
 

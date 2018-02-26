@@ -21,7 +21,6 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTCoreStatement.h>
-#import <WCDB/core_base.hpp>
 
 @interface WCTCoreStatement () {
     WCDB::RecyclableStatement _statementHandle;

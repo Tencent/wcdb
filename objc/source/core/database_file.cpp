@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/database.hpp>
+#include <WCDB/Database.hpp>
 #include <WCDB/file.hpp>
 #include <WCDB/path.hpp>
 #include <WCDB/utility.hpp>

@@ -20,9 +20,8 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/abstract.h>
+#import <WCDB/core.h>
 #import <WCDB/utility.hpp>
-#import <map>
-#import <unordered_map>
 
 #pragma mark - Chain Call
 @class WCTInsert;

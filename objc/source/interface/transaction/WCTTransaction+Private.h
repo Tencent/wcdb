@@ -20,7 +20,6 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTTransaction.h>
-#import <WCDB/transaction.hpp>
 
 @interface WCTTransaction () {
     WCDB::Error _error;

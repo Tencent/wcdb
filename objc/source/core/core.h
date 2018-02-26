@@ -18,16 +18,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDeclare.h>
+#ifndef core_h
+#define core_h
 
-typedef NS_ENUM(int, WCTAccessorType) {
-    WCTAccessorCpp,
-    WCTAccessorObjC,
-};
+#include <WCDB/Config.hpp>
+#include <WCDB/CoreBase.hpp>
+#include <WCDB/Database.hpp>
+#include <WCDB/HandlePool.hpp>
+#include <WCDB/RecyclableHandle.hpp>
+#include <WCDB/RecyclableStatement.hpp>
+#include <WCDB/Tokenizer.hpp>
+#include <WCDB/Transaction.hpp>
 
-class WCTBaseAccessor {
-public:
-    using InstanceType = id; //NSObject<WCTTableCoding>*
-    virtual WCDB::ColumnType getColumnType() const = 0;
-    virtual WCTAccessorType getAccessorType() const = 0;
-};
+#endif /* core_h */

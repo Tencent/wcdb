@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/Database.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/database.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/timed_queue.hpp>
 #include <WCDB/utility.hpp>

@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTDeclare.h>

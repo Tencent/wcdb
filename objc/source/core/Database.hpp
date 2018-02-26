@@ -18,14 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef database_hpp
-#define database_hpp
+#ifndef Database_hpp
+#define Database_hpp
 
+#include <WCDB/CoreBase.hpp>
+#include <WCDB/HandlePool.hpp>
+#include <WCDB/RecyclableStatement.hpp>
 #include <WCDB/abstract.h>
-#include <WCDB/core_base.hpp>
-#include <WCDB/handle.hpp>
-#include <WCDB/handle_pool.hpp>
-#include <WCDB/statement_recyclable.hpp>
 #include <WCDB/thread_local.hpp>
 #include <array>
 

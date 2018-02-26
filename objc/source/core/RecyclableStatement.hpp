@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#ifndef statement_recyclable_hpp
-#define statement_recyclable_hpp
+#ifndef RecyclableStatement_hpp
+#define RecyclableStatement_hpp
 
+#include <WCDB/HandlePool.hpp>
 #include <WCDB/abstract.h>
-#include <WCDB/handle_pool.hpp>
 #include <WCDB/recyclable.hpp>
 
 namespace WCDB {

@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/WCTBaseAccessor.h>
-#import <WCDB/abstract.h>
 
 template <typename T, typename Enable = void>
 struct ColumnIsCppType : public std::false_type {

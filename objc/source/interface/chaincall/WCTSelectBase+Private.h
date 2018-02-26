@@ -21,7 +21,6 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTSelectBase+NoARC.h>
 #import <WCDB/WCTSelectBase.h>
-#import <WCDB/statement_recyclable.hpp>
 
 @interface WCTSelectBase () {
 @protected

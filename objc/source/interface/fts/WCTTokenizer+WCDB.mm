@@ -19,8 +19,8 @@
  */
 
 #import <CoreFoundation/CoreFoundation.h>
+#import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTTokenizer+WCDB.h>
-#import <WCDB/tokenizer.hpp>
 
 namespace WCDB {
 

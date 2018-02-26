@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/CoreBase.hpp>
 #import <WCDB/WCTCore.h>
-#import <WCDB/core_base.hpp>
 
 @interface WCTCore () {
 @protected

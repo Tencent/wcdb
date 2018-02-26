@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef tokenizer_hpp
-#define tokenizer_hpp
+#ifndef Tokenizer_hpp
+#define Tokenizer_hpp
 
-#include <WCDB/Tokenize.hpp>
+#include <WCDB/abstract.h>
 #include <cstddef>
 #include <vector>
 
@@ -88,4 +88,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* tokenizer_hpp */
+#endif /* Tokenizer_hpp */

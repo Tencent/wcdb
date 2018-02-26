@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef core_base_hpp
-#define core_base_hpp
+#ifndef CoreBase_hpp
+#define CoreBase_hpp
 
-#include <WCDB/config.hpp>
-#include <WCDB/handle_pool.hpp>
-#include <WCDB/statement_recyclable.hpp>
+#include <WCDB/Config.hpp>
+#include <WCDB/HandlePool.hpp>
+#include <WCDB/RecyclableStatement.hpp>
 #include <WCDB/utility.hpp>
 
 namespace WCDB {
@@ -86,4 +86,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* core_base_hpp */
+#endif /* CoreBase_hpp */

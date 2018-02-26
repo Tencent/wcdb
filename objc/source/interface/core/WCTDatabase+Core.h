@@ -20,8 +20,6 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
-#import <WCDB/config.hpp>
-#import <WCDB/handle.hpp>
 
 /**
  Configuration

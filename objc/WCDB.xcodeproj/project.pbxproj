@@ -36,25 +36,26 @@
 		23404271204110F4005EB12C /* sequantial_increasing_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2340426F204110F4005EB12C /* sequantial_increasing_map.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		234591F220440A0200DC7D34 /* WCTRedirectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234591F020440A0200DC7D34 /* WCTRedirectable.mm */; };
 		234591F320440A0200DC7D34 /* WCTRedirectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F120440A0200DC7D34 /* WCTRedirectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F6F91EA0D6680021EFA7 /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6161EA0D6680021EFA7 /* config.cpp */; };
-		2349F6FA1EA0D6680021EFA7 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6171EA0D6680021EFA7 /* config.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F6FC1EA0D6680021EFA7 /* core_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6191EA0D6680021EFA7 /* core_base.cpp */; };
-		2349F6FD1EA0D6680021EFA7 /* core_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F61A1EA0D6680021EFA7 /* core_base.hpp */; };
-		2349F6FE1EA0D6680021EFA7 /* database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61B1EA0D6680021EFA7 /* database.cpp */; };
-		2349F6FF1EA0D6680021EFA7 /* database.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F61C1EA0D6680021EFA7 /* database.hpp */; };
+		234591F6204433E200DC7D34 /* core.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* core.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F6F91EA0D6680021EFA7 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6161EA0D6680021EFA7 /* Config.cpp */; };
+		2349F6FA1EA0D6680021EFA7 /* Config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6171EA0D6680021EFA7 /* Config.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F6FC1EA0D6680021EFA7 /* CoreBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6191EA0D6680021EFA7 /* CoreBase.cpp */; };
+		2349F6FD1EA0D6680021EFA7 /* CoreBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F61A1EA0D6680021EFA7 /* CoreBase.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F6FE1EA0D6680021EFA7 /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61B1EA0D6680021EFA7 /* Database.cpp */; };
+		2349F6FF1EA0D6680021EFA7 /* Database.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F61C1EA0D6680021EFA7 /* Database.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7001EA0D6680021EFA7 /* database_config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61D1EA0D6680021EFA7 /* database_config.cpp */; };
 		2349F7011EA0D6680021EFA7 /* database_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61E1EA0D6680021EFA7 /* database_file.cpp */; };
 		2349F7021EA0D6680021EFA7 /* database_repair_kit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61F1EA0D6680021EFA7 /* database_repair_kit.cpp */; };
 		2349F7031EA0D6680021EFA7 /* database_sql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6201EA0D6680021EFA7 /* database_sql.cpp */; };
 		2349F7041EA0D6680021EFA7 /* database_transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6211EA0D6680021EFA7 /* database_transaction.cpp */; };
-		2349F7051EA0D6680021EFA7 /* handle_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6221EA0D6680021EFA7 /* handle_pool.cpp */; };
-		2349F7061EA0D6680021EFA7 /* handle_pool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6231EA0D6680021EFA7 /* handle_pool.hpp */; };
-		2349F7071EA0D6680021EFA7 /* handle_recyclable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* handle_recyclable.cpp */; };
-		2349F7081EA0D6680021EFA7 /* handle_recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6251EA0D6680021EFA7 /* handle_recyclable.hpp */; };
-		2349F7091EA0D6680021EFA7 /* statement_recyclable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6261EA0D6680021EFA7 /* statement_recyclable.cpp */; };
-		2349F70A1EA0D6680021EFA7 /* statement_recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6271EA0D6680021EFA7 /* statement_recyclable.hpp */; };
-		2349F70B1EA0D6680021EFA7 /* transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6281EA0D6680021EFA7 /* transaction.cpp */; };
-		2349F70C1EA0D6680021EFA7 /* transaction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6291EA0D6680021EFA7 /* transaction.hpp */; };
+		2349F7051EA0D6680021EFA7 /* HandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6221EA0D6680021EFA7 /* HandlePool.cpp */; };
+		2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6231EA0D6680021EFA7 /* HandlePool.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */; };
+		2349F7081EA0D6680021EFA7 /* RecyclableHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F7091EA0D6680021EFA7 /* RecyclableStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6261EA0D6680021EFA7 /* RecyclableStatement.cpp */; };
+		2349F70A1EA0D6680021EFA7 /* RecyclableStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6271EA0D6680021EFA7 /* RecyclableStatement.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2349F70B1EA0D6680021EFA7 /* Transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6281EA0D6680021EFA7 /* Transaction.cpp */; };
+		2349F70C1EA0D6680021EFA7 /* Transaction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6291EA0D6680021EFA7 /* Transaction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F70E1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F62D1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm */; };
 		2349F70F1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F62E1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm */; };
 		2349F7131EA0D6680021EFA7 /* NSNumber+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6321EA0D6680021EFA7 /* NSNumber+WCTColumnCoding.mm */; };
@@ -155,8 +156,8 @@
 		234EF46F2015CFDE00B81929 /* NSObject+Convertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* NSObject+Convertible.mm */; };
 		2353E4831F0E300D00260BBE /* WCTValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 2353E4811F0E300D00260BBE /* WCTValue.h */; };
 		2353E4851F0E300D00260BBE /* WCTValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2353E4821F0E300D00260BBE /* WCTValue.mm */; };
-		23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* tokenizer.hpp */; };
-		23577F741F74F4D000D31C05 /* tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* tokenizer.cpp */; };
+		23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* Tokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer+WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer+WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTTokenizer+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTTokenizer+WCDB.mm */; };
 		236DB4B81F209D100091FC79 /* WCTMaster+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 236DB4B61F209D100091FC79 /* WCTMaster+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -464,25 +465,26 @@
 		2340426F204110F4005EB12C /* sequantial_increasing_map.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sequantial_increasing_map.hpp; sourceTree = "<group>"; };
 		234591F020440A0200DC7D34 /* WCTRedirectable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRedirectable.mm; sourceTree = "<group>"; };
 		234591F120440A0200DC7D34 /* WCTRedirectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTRedirectable.h; sourceTree = "<group>"; };
-		2349F6161EA0D6680021EFA7 /* config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = config.cpp; sourceTree = "<group>"; };
-		2349F6171EA0D6680021EFA7 /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
-		2349F6191EA0D6680021EFA7 /* core_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = core_base.cpp; sourceTree = "<group>"; };
-		2349F61A1EA0D6680021EFA7 /* core_base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = core_base.hpp; sourceTree = "<group>"; };
-		2349F61B1EA0D6680021EFA7 /* database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = database.cpp; sourceTree = "<group>"; };
-		2349F61C1EA0D6680021EFA7 /* database.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = database.hpp; sourceTree = "<group>"; };
+		234591F5204432E400DC7D34 /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
+		2349F6161EA0D6680021EFA7 /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
+		2349F6171EA0D6680021EFA7 /* Config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Config.hpp; sourceTree = "<group>"; };
+		2349F6191EA0D6680021EFA7 /* CoreBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoreBase.cpp; sourceTree = "<group>"; };
+		2349F61A1EA0D6680021EFA7 /* CoreBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CoreBase.hpp; sourceTree = "<group>"; };
+		2349F61B1EA0D6680021EFA7 /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Database.cpp; sourceTree = "<group>"; };
+		2349F61C1EA0D6680021EFA7 /* Database.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Database.hpp; sourceTree = "<group>"; };
 		2349F61D1EA0D6680021EFA7 /* database_config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = database_config.cpp; sourceTree = "<group>"; };
 		2349F61E1EA0D6680021EFA7 /* database_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = database_file.cpp; sourceTree = "<group>"; };
 		2349F61F1EA0D6680021EFA7 /* database_repair_kit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = database_repair_kit.cpp; sourceTree = "<group>"; };
 		2349F6201EA0D6680021EFA7 /* database_sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = database_sql.cpp; sourceTree = "<group>"; };
 		2349F6211EA0D6680021EFA7 /* database_transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = database_transaction.cpp; sourceTree = "<group>"; };
-		2349F6221EA0D6680021EFA7 /* handle_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = handle_pool.cpp; sourceTree = "<group>"; };
-		2349F6231EA0D6680021EFA7 /* handle_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = handle_pool.hpp; sourceTree = "<group>"; };
-		2349F6241EA0D6680021EFA7 /* handle_recyclable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = handle_recyclable.cpp; sourceTree = "<group>"; };
-		2349F6251EA0D6680021EFA7 /* handle_recyclable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = handle_recyclable.hpp; sourceTree = "<group>"; };
-		2349F6261EA0D6680021EFA7 /* statement_recyclable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = statement_recyclable.cpp; sourceTree = "<group>"; };
-		2349F6271EA0D6680021EFA7 /* statement_recyclable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = statement_recyclable.hpp; sourceTree = "<group>"; };
-		2349F6281EA0D6680021EFA7 /* transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = transaction.cpp; sourceTree = "<group>"; };
-		2349F6291EA0D6680021EFA7 /* transaction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = transaction.hpp; sourceTree = "<group>"; };
+		2349F6221EA0D6680021EFA7 /* HandlePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePool.cpp; sourceTree = "<group>"; };
+		2349F6231EA0D6680021EFA7 /* HandlePool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HandlePool.hpp; sourceTree = "<group>"; };
+		2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RecyclableHandle.cpp; sourceTree = "<group>"; };
+		2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecyclableHandle.hpp; sourceTree = "<group>"; };
+		2349F6261EA0D6680021EFA7 /* RecyclableStatement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RecyclableStatement.cpp; sourceTree = "<group>"; };
+		2349F6271EA0D6680021EFA7 /* RecyclableStatement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecyclableStatement.hpp; sourceTree = "<group>"; };
+		2349F6281EA0D6680021EFA7 /* Transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transaction.cpp; sourceTree = "<group>"; };
+		2349F6291EA0D6680021EFA7 /* Transaction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Transaction.hpp; sourceTree = "<group>"; };
 		2349F62D1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2349F62E1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSDate+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2349F6321EA0D6680021EFA7 /* NSNumber+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSNumber+WCTColumnCoding.mm"; sourceTree = "<group>"; };
@@ -583,8 +585,8 @@
 		234EF46D2015CFDE00B81929 /* NSObject+Convertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+Convertible.mm"; sourceTree = "<group>"; };
 		2353E4811F0E300D00260BBE /* WCTValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTValue.h; sourceTree = "<group>"; };
 		2353E4821F0E300D00260BBE /* WCTValue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTValue.mm; sourceTree = "<group>"; };
-		23577F701F74F4CF00D31C05 /* tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tokenizer.hpp; sourceTree = "<group>"; };
-		23577F721F74F4D000D31C05 /* tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tokenizer.cpp; sourceTree = "<group>"; };
+		23577F701F74F4CF00D31C05 /* Tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tokenizer.hpp; sourceTree = "<group>"; };
+		23577F721F74F4D000D31C05 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenizer.cpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTTokenizer+WCDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTokenizer+WCDB.h"; sourceTree = "<group>"; };
 		23577F781F74F4E800D31C05 /* WCTTokenizer+WCDB.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTokenizer+WCDB.mm"; sourceTree = "<group>"; };
 		236DB4B61F209D100091FC79 /* WCTMaster+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTMaster+WCTTableCoding.h"; sourceTree = "<group>"; };
@@ -916,27 +918,28 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				23577F721F74F4D000D31C05 /* tokenizer.cpp */,
-				23577F701F74F4CF00D31C05 /* tokenizer.hpp */,
-				2349F6161EA0D6680021EFA7 /* config.cpp */,
-				2349F6171EA0D6680021EFA7 /* config.hpp */,
-				2349F6191EA0D6680021EFA7 /* core_base.cpp */,
-				2349F61A1EA0D6680021EFA7 /* core_base.hpp */,
-				2349F61B1EA0D6680021EFA7 /* database.cpp */,
-				2349F61C1EA0D6680021EFA7 /* database.hpp */,
+				23577F721F74F4D000D31C05 /* Tokenizer.cpp */,
+				23577F701F74F4CF00D31C05 /* Tokenizer.hpp */,
+				2349F6161EA0D6680021EFA7 /* Config.cpp */,
+				2349F6171EA0D6680021EFA7 /* Config.hpp */,
+				2349F6191EA0D6680021EFA7 /* CoreBase.cpp */,
+				2349F61A1EA0D6680021EFA7 /* CoreBase.hpp */,
+				2349F61B1EA0D6680021EFA7 /* Database.cpp */,
+				2349F61C1EA0D6680021EFA7 /* Database.hpp */,
 				2349F61D1EA0D6680021EFA7 /* database_config.cpp */,
 				2349F61E1EA0D6680021EFA7 /* database_file.cpp */,
 				2349F61F1EA0D6680021EFA7 /* database_repair_kit.cpp */,
 				2349F6201EA0D6680021EFA7 /* database_sql.cpp */,
 				2349F6211EA0D6680021EFA7 /* database_transaction.cpp */,
-				2349F6221EA0D6680021EFA7 /* handle_pool.cpp */,
-				2349F6231EA0D6680021EFA7 /* handle_pool.hpp */,
-				2349F6241EA0D6680021EFA7 /* handle_recyclable.cpp */,
-				2349F6251EA0D6680021EFA7 /* handle_recyclable.hpp */,
-				2349F6261EA0D6680021EFA7 /* statement_recyclable.cpp */,
-				2349F6271EA0D6680021EFA7 /* statement_recyclable.hpp */,
-				2349F6281EA0D6680021EFA7 /* transaction.cpp */,
-				2349F6291EA0D6680021EFA7 /* transaction.hpp */,
+				2349F6221EA0D6680021EFA7 /* HandlePool.cpp */,
+				2349F6231EA0D6680021EFA7 /* HandlePool.hpp */,
+				2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */,
+				2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */,
+				2349F6261EA0D6680021EFA7 /* RecyclableStatement.cpp */,
+				2349F6271EA0D6680021EFA7 /* RecyclableStatement.hpp */,
+				2349F6281EA0D6680021EFA7 /* Transaction.cpp */,
+				2349F6291EA0D6680021EFA7 /* Transaction.hpp */,
+				234591F5204432E400DC7D34 /* core.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1466,11 +1469,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2349F6FD1EA0D6680021EFA7 /* core_base.hpp in Headers */,
+				2349F6FD1EA0D6680021EFA7 /* CoreBase.hpp in Headers */,
 				239774E8202AECD3000A681C /* BindParameter.hpp in Headers */,
 				2397770A202AF2E3000A681C /* copy_on_write.hpp in Headers */,
 				239774EA202AECD3000A681C /* ColumnConstraint.hpp in Headers */,
 				23DC3070202AFF8B000F7895 /* Handle.hpp in Headers */,
+				234591F6204433E200DC7D34 /* core.h in Headers */,
 				239774EC202AECD3000A681C /* ColumnDef.hpp in Headers */,
 				239774EE202AECD3000A681C /* CommonTableExpression.hpp in Headers */,
 				239776D8202AF2E3000A681C /* error.hpp in Headers */,
@@ -1523,7 +1527,7 @@
 				23977542202AECD3000A681C /* TableConstraint.hpp in Headers */,
 				23977544202AECD3000A681C /* TableOrSubquery.hpp in Headers */,
 				23977547202AECD3000A681C /* WithClause.hpp in Headers */,
-				2349F70A1EA0D6680021EFA7 /* statement_recyclable.hpp in Headers */,
+				2349F70A1EA0D6680021EFA7 /* RecyclableStatement.hpp in Headers */,
 				23977548202AECD3000A681C /* copy_on_write_lazy_lang.hpp in Headers */,
 				2397754C202AECD3000A681C /* LangAlterTableSTMT.hpp in Headers */,
 				2397754E202AECD3000A681C /* LangAnalyzeSTMT.hpp in Headers */,
@@ -1587,7 +1591,7 @@
 				239775AB202AECD3000A681C /* LangWithClause.hpp in Headers */,
 				2349F76A1EA0D6680021EFA7 /* WCTCodingMacro.h in Headers */,
 				23DC3076202AFFE9000F7895 /* HandleStatement.hpp in Headers */,
-				2349F7081EA0D6680021EFA7 /* handle_recyclable.hpp in Headers */,
+				2349F7081EA0D6680021EFA7 /* RecyclableHandle.hpp in Headers */,
 				2349F7311EA0D6680021EFA7 /* WCTTable+ChainCall.h in Headers */,
 				2397754A202AECD3000A681C /* lang_common.h in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTConstraintMacro.h in Headers */,
@@ -1605,7 +1609,7 @@
 				2349F71D1EA0D6680021EFA7 /* WCTChainCall.h in Headers */,
 				239776E4202AF2E3000A681C /* utility.hpp in Headers */,
 				2349F7501EA0D6680021EFA7 /* WCTInterface.h in Headers */,
-				2349F6FF1EA0D6680021EFA7 /* database.hpp in Headers */,
+				2349F6FF1EA0D6680021EFA7 /* Database.hpp in Headers */,
 				23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */,
 				242E1E2E1EA37DFD00F77029 /* WCTMultiSelect+Private.h in Headers */,
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
@@ -1623,8 +1627,8 @@
 				23404271204110F4005EB12C /* sequantial_increasing_map.hpp in Headers */,
 				2349F7181EA0D6680021EFA7 /* WCTMaster.h in Headers */,
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
-				2349F7061EA0D6680021EFA7 /* handle_pool.hpp in Headers */,
-				23577F731F74F4D000D31C05 /* tokenizer.hpp in Headers */,
+				2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */,
+				23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */,
 				239776EC202AF2E3000A681C /* path.hpp in Headers */,
 				2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
@@ -1649,11 +1653,11 @@
 				2349F7551EA0D6680021EFA7 /* WCTBaseAccessor.h in Headers */,
 				2349F7571EA0D6680021EFA7 /* WCTObjCAccessor.h in Headers */,
 				2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */,
-				2349F70C1EA0D6680021EFA7 /* transaction.hpp in Headers */,
+				2349F70C1EA0D6680021EFA7 /* Transaction.hpp in Headers */,
 				242E1E271EA3771400F77029 /* WCTRowSelect+Private.h in Headers */,
 				2349F7561EA0D6680021EFA7 /* WCTCppAccessor.h in Headers */,
 				232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */,
-				2349F6FA1EA0D6680021EFA7 /* config.hpp in Headers */,
+				2349F6FA1EA0D6680021EFA7 /* Config.hpp in Headers */,
 				2349F76B1EA0D6680021EFA7 /* WCTPropertyMacro.h in Headers */,
 				2349F76F1EA0D6680021EFA7 /* WCTORM.h in Headers */,
 				2349F7481EA0D6680021EFA7 /* WCTDatabase+File.h in Headers */,
@@ -1818,8 +1822,8 @@
 				2349F70F1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm in Sources */,
 				23977581202AECD3000A681C /* LangJoinClause.cpp in Sources */,
 				2349F7711EA0D6680021EFA7 /* WCTDatabase+Table.mm in Sources */,
-				2349F7071EA0D6680021EFA7 /* handle_recyclable.cpp in Sources */,
-				2349F70B1EA0D6680021EFA7 /* transaction.cpp in Sources */,
+				2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */,
+				2349F70B1EA0D6680021EFA7 /* Transaction.cpp in Sources */,
 				239776DA202AF2E3000A681C /* copy_on_write_string.cpp in Sources */,
 				23977539202AECD3000A681C /* StatementSavepoint.cpp in Sources */,
 				23977596202AECD3000A681C /* LangReleaseSTMT.cpp in Sources */,
@@ -1844,7 +1848,7 @@
 				2397753F202AECD3000A681C /* StatementVacuum.cpp in Sources */,
 				239774F2202AECD3000A681C /* Describable.cpp in Sources */,
 				2397757F202AECD3000A681C /* LangInsertSTMT.cpp in Sources */,
-				23577F741F74F4D000D31C05 /* tokenizer.cpp in Sources */,
+				23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */,
 				2349F7421EA0D6680021EFA7 /* WCTInterface+Core.mm in Sources */,
 				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
 				2397754D202AECD3000A681C /* LangAnalyzeSTMT.cpp in Sources */,
@@ -1867,7 +1871,7 @@
 				2397758C202AECD3000A681C /* LangOrderingTerm.cpp in Sources */,
 				23977575202AECD3000A681C /* LangDropTriggerSTMT.cpp in Sources */,
 				2349F7031EA0D6680021EFA7 /* database_sql.cpp in Sources */,
-				2349F6F91EA0D6680021EFA7 /* config.cpp in Sources */,
+				2349F6F91EA0D6680021EFA7 /* Config.cpp in Sources */,
 				23DC306F202AFF8B000F7895 /* Handle.cpp in Sources */,
 				2349F7471EA0D6680021EFA7 /* WCTDatabase+Database.mm in Sources */,
 				239776E6202AF2E3000A681C /* rwlock.cpp in Sources */,
@@ -1876,7 +1880,7 @@
 				23977500202AECD3000A681C /* ModuleArgument.cpp in Sources */,
 				2349F71E1EA0D6680021EFA7 /* WCTChainCall.mm in Sources */,
 				239774FC202AECD3000A681C /* JoinConstraint.cpp in Sources */,
-				2349F7051EA0D6680021EFA7 /* handle_pool.cpp in Sources */,
+				2349F7051EA0D6680021EFA7 /* HandlePool.cpp in Sources */,
 				239774EF202AECD3000A681C /* CTETableName.cpp in Sources */,
 				239774E9202AECD3000A681C /* ColumnConstraint.cpp in Sources */,
 				23977535202AECD3000A681C /* StatementRelease.cpp in Sources */,
@@ -1890,7 +1894,7 @@
 				2349F7281EA0D6680021EFA7 /* WCTMultiSelect.mm in Sources */,
 				2397750A202AECD3000A681C /* ResultColumn.cpp in Sources */,
 				23977590202AECD3000A681C /* LangQualifiedTableName.cpp in Sources */,
-				2349F6FE1EA0D6680021EFA7 /* database.cpp in Sources */,
+				2349F6FE1EA0D6680021EFA7 /* Database.cpp in Sources */,
 				23000F12203EC89700ED8008 /* LangColumn.cpp in Sources */,
 				23DC3079202B0066000F7895 /* Tokenize.cpp in Sources */,
 				2349F7241EA0D6680021EFA7 /* WCTInsert.mm in Sources */,
@@ -1905,7 +1909,7 @@
 				232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */,
 				23977587202AECD3000A681C /* LangLiteralValue.cpp in Sources */,
 				2349F70E1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm in Sources */,
-				2349F6FC1EA0D6680021EFA7 /* core_base.cpp in Sources */,
+				2349F6FC1EA0D6680021EFA7 /* CoreBase.cpp in Sources */,
 				2349F7011EA0D6680021EFA7 /* database_file.cpp in Sources */,
 				23977592202AECD3000A681C /* LangRaiseFunction.cpp in Sources */,
 				2349F74E1EA0D6680021EFA7 /* WCTDatabase.mm in Sources */,
@@ -1915,7 +1919,7 @@
 				23977527202AECD3000A681C /* StatementDropIndex.cpp in Sources */,
 				23977579202AECD3000A681C /* LangExpr.cpp in Sources */,
 				23977567202AECD3000A681C /* LangCreateVirtualTableSTMT.cpp in Sources */,
-				2349F7091EA0D6680021EFA7 /* statement_recyclable.cpp in Sources */,
+				2349F7091EA0D6680021EFA7 /* RecyclableStatement.cpp in Sources */,
 				239774F6202AECD3000A681C /* ForeignKeyClause.cpp in Sources */,
 				239775A6202AECD3000A681C /* LangUpdateSTMT.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,

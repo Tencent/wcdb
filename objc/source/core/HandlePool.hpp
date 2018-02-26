@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef handle_pool_hpp
-#define handle_pool_hpp
+#ifndef HandlePool_hpp
+#define HandlePool_hpp
 
+#include <WCDB/Config.hpp>
+#include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/abstract.h>
 #include <WCDB/concurrent_list.hpp>
-#include <WCDB/config.hpp>
 #include <WCDB/error.hpp>
-#include <WCDB/handle_recyclable.hpp>
 #include <WCDB/recyclable.hpp>
 #include <WCDB/rwlock.hpp>
 #include <WCDB/utility.hpp>
@@ -100,4 +100,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* handle_pool_hpp */
+#endif /* HandlePool_hpp */

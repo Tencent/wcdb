@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/abstract.h>
+#import <WCDB/WCTDeclare.h>
 
 namespace WCDB {
 

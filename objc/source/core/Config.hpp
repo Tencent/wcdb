@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef config_hpp
-#define config_hpp
+#ifndef Config_hpp
+#define Config_hpp
 
 #include <WCDB/abstract.h>
 #include <WCDB/error.hpp>
@@ -98,4 +98,4 @@ struct ConfigWrap {
 
 } //namespace WCDB
 
-#endif /* config_hpp */
+#endif /* Config_hpp */

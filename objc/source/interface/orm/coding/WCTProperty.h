@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/abstract.h>
 
 class WCTColumnBinding;
 class WCTProperty;
