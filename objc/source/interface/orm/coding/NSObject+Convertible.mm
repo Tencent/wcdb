@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-LiteralValue LiteralValueConvertible<NSObject *>::asLiteralValue(NSObject *const &t)
+LiteralValue LiteralValueConvertible<NSObject *>::as(NSObject *const &t)
 {
     WCTValue *value = t;
     WCTValueType valueType = [value valueType];
@@ -64,24 +64,9 @@ LiteralValue LiteralValueConvertible<NSObject *>::asLiteralValue(NSObject *const
     return LiteralValue("");
 }
 
-Expression ExpressionConvertible<NSObject *>::asExpression(NSObject *const &t)
+Expression ExpressionConvertible<NSObject *>::as(NSObject *const &t)
 {
-    return Expression(LiteralValueConvertible<NSObject *>::asLiteralValue(t));
-}
-
-ColumnResult ColumnResultConvertible<NSObject *>::asColumnResult(NSObject *const &t)
-{
-    return ColumnResult(ExpressionConvertible<NSObject *>::asExpression(t));
-}
-
-Order OrderConvertible<NSObject *>::asOrder(NSObject *const &t)
-{
-    return Order(ExpressionConvertible<NSObject *>::asExpression(t));
-}
-
-Order SpecificOrderConvertible<NSObject *>::asOrder(NSObject *const &t, OrderTerm term)
-{
-    return Order(ExpressionConvertible<NSObject *>::asExpression(t), term);
+    return Expression(LiteralValueConvertible<NSObject *>::as(t));
 }
 
 } //namespace WCDB

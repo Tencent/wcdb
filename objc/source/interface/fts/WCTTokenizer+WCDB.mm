@@ -20,7 +20,6 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <WCDB/WCTTokenizer+WCDB.h>
-#import <WCDB/fts_module.hpp>
 #import <WCDB/tokenizer.hpp>
 
 namespace WCDB {

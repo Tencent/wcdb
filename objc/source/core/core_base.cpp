@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/HandleStatement.hpp>
 #include <WCDB/core_base.hpp>
-#include <WCDB/handle_statement.hpp>
 
 namespace WCDB {
 
@@ -69,10 +69,8 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
     bool result = false;
     if (handle) {
         Error::setThreadedSlient(true);
-        static const ColumnResultList resultList = {
-            ColumnResult(Expression(1))};
         StatementSelect select =
-            StatementSelect().select(resultList).from(tableName).limit(0);
+            StatementSelect().select(1).from(tableName).limit(0);
         std::shared_ptr<HandleStatement> handleStatement =
             handle->prepare(select);
         Error::setThreadedSlient(false);
@@ -92,7 +90,7 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
 bool CoreBase::runControllableTransaction(
     ControllableTransactionBlock transaction, Error &error)
 {
-    if (!begin(StatementTransaction::Mode::Immediate, error)) {
+    if (!begin(StatementBegin::Transaction::Immediate, error)) {
         return false;
     }
     if (transaction(error)) {
@@ -109,7 +107,7 @@ bool CoreBase::runControllableTransaction(
 
 bool CoreBase::runTransaction(TransactionBlock transaction, Error &error)
 {
-    if (!begin(StatementTransaction::Mode::Immediate, error)) {
+    if (!begin(StatementBegin::Transaction::Immediate, error)) {
         return false;
     }
     transaction(error);

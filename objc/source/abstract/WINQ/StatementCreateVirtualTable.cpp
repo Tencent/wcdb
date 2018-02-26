@@ -18,16 +18,27 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
+StatementCreateVirtualTable::StatementCreateVirtualTable()
+{
+    getMutableLang().ifNotExists = true;
+}
+
 StatementCreateVirtualTable &
-StatementCreateVirtualTable::createVirtualTable(const std::string &tableName,
-                                                bool ifNotExists)
+StatementCreateVirtualTable::createVirtualTable(const std::string &tableName)
 {
     lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
+    return *this;
+}
+
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::ifNotExists(bool ifNotExists)
+{
+    lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
     return *this;
 }
@@ -49,21 +60,17 @@ StatementCreateVirtualTable::usingModule(const std::string &moduleName)
 }
 
 StatementCreateVirtualTable &
-StatementCreateVirtualTable::usingModule(const std::string &moduleName,
-                                         const ModuleArgument &moduleArgument)
+StatementCreateVirtualTable::on(const ModuleArgument &moduleArgument)
 {
     lang::CreateVirtualTableSTMT &lang = getMutableLang();
-    lang.moduleName.assign(moduleName);
     lang.moduleArguments.append(moduleArgument.getLang());
     return *this;
 }
 
-StatementCreateVirtualTable &StatementCreateVirtualTable::usingModule(
-    const std::string &moduleName,
+StatementCreateVirtualTable &StatementCreateVirtualTable::on(
     const std::list<ModuleArgument> &moduleArguments)
 {
     lang::CreateVirtualTableSTMT &lang = getMutableLang();
-    lang.moduleName.assign(moduleName);
     for (const ModuleArgument &moduleArgument : moduleArguments) {
         lang.moduleArguments.append(moduleArgument.getLang());
     }

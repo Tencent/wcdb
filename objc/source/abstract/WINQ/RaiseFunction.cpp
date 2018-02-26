@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -50,6 +50,11 @@ RaiseFunction &RaiseFunction::withFail(const std::string &errorMessage)
     lang::RaiseFunction &lang = getMutableLang();
     lang.type = lang::RaiseFunction::Type::Fail;
     lang.errorMessage.assign(errorMessage);
+    return *this;
+}
+
+Expression RaiseFunction::getRedirectSource() const
+{
     return *this;
 }
 

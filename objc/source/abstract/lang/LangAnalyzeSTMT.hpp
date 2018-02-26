@@ -21,7 +21,7 @@
 #ifndef LangAnalyzeSTMT_hpp
 #define LangAnalyzeSTMT_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

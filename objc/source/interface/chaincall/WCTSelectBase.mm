@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
-#import <WCDB/handle_statement.hpp>
 
 @implementation WCTSelectBase
 
@@ -53,9 +53,9 @@
     return self;
 }
 
-- (instancetype)orderBy:(const WCDB::OrderList &)orderList
+- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders
 {
-    _statement.orderBy(orderList);
+    _statement.orderBy(orders);
     return self;
 }
 
@@ -71,13 +71,9 @@
     return self;
 }
 
-- (instancetype)groupBy:(const WCDB::ExpressionList &)groupList
+- (instancetype)groupBy:(const std::list<WCDB::Expression> &)groups
 {
-    WCDB::ExpressionList expressionList;
-    for (const WCDB::Expression &group : groupList) {
-        expressionList.push_back(group);
-    }
-    _statement.groupBy(expressionList);
+    _statement.groupBy(groups);
     return self;
 }
 

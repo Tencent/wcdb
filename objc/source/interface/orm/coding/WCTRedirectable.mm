@@ -18,26 +18,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDeclare.h>
-#import <WCDB/abstract.h>
+#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTRedirectable.h>
 
-class WCTIndexBinding {
-public:
-    WCTIndexBinding(const std::string &indexNameSubfix);
-    const std::string indexNameSubfix;
+namespace WCDB {
 
-    void addIndex(const WCDB::ColumnIndex &index);
-    void setUnique(bool unique);
-    void setCondition(const WCDB::Expression &condition);
+template <>
+WCTProperty Redirectable::redirect(const WCTProperty &property) const
+{
+    return WCTProperty(getRedirectSource(), property.getColumnBinding());
+}
 
-    const WCDB::ColumnIndexList &getIndexes() const;
-    const WCDB::Expression &getCondition() const;
-
-    WCDB::StatementCreateIndex
-    generateCreateIndexStatement(const std::string &tableName) const;
-
-protected:
-    WCDB::ColumnIndexList m_indexes;
-    std::shared_ptr<WCDB::Expression> m_condition;
-    bool m_unique;
-};
+} //namespace WCDB

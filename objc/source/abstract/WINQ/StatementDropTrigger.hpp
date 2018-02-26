@@ -21,17 +21,18 @@
 #ifndef StatementDropTrigger_hpp
 #define StatementDropTrigger_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementDropTrigger : public StatementWithLang<lang::DropTriggerSTMT> {
 
 public:
-    StatementDropTrigger &dropTrigger(const std::string &triggerName,
-                                      bool ifExists = true);
+    StatementDropTrigger();
+    StatementDropTrigger &dropTrigger(const std::string &triggerName);
     StatementDropTrigger &withSchema(const std::string &schemaName);
+    StatementDropTrigger &ifExists(bool ifExists = true);
     virtual Type getType() const override;
 };
 

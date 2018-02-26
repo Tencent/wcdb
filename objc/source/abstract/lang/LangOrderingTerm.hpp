@@ -21,7 +21,7 @@
 #ifndef LangOrderingTerm_hpp
 #define LangOrderingTerm_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

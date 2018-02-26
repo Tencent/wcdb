@@ -21,14 +21,14 @@
 #ifndef ResultColumn_hpp
 #define ResultColumn_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Redirectable.hpp>
 
 namespace WCDB {
 
 class ResultColumn : public DescribableWithLang<lang::ResultColumn> {
 public:
     static const ResultColumn All;
-    static ResultColumn AllInTable(const std::string &tableName);
 
     template <typename T>
     ResultColumn(const T &t,
@@ -39,12 +39,12 @@ public:
     }
 
     ResultColumn(const Expression &expression);
+    ResultColumn(const Expression::All &all);
+
     ResultColumn &as(const Column &columnAlias);
+    ResultColumn &withTable(const std::string &tableName);
 
 protected:
-    explicit ResultColumn(const lang::ResultColumn::Type &type);
-    explicit ResultColumn(const std::string &tableName);
-
     void setupWithExpression(const Expression &expression);
 };
 

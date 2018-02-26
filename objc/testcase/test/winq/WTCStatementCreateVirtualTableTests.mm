@@ -30,43 +30,53 @@
 {
     XCTAssertEqual(WCDB::StatementCreateVirtualTable().getType(), WCDB::Statement::Type::CreateVirtualTable);
 
-    std::string moduleName = "FTS3";
+    std::string moduleName = "fts3";
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                        .createVirtualTable(self.class.tableName, false)
+                        .createVirtualTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
-                        .usingModule(moduleName, self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE testSchema.testTable USING FTS3(tokenize=WCDB)");
+                        .usingModule(moduleName)
+                        .on(self.class.moduleArgument),
+                    @"CREATE VIRTUAL TABLE testSchema.testTable USING fts3(tokenize=WCDB)");
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                        .createVirtualTable(self.class.tableName, false)
+                        .createVirtualTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
-                        .usingModule(moduleName, self.class.moduleArguments),
-                    @"CREATE VIRTUAL TABLE testSchema.testTable USING FTS3(tokenize=WCDB, testColumn INTEGER)");
+                        .usingModule(moduleName)
+                        .on(self.class.moduleArguments),
+                    @"CREATE VIRTUAL TABLE testSchema.testTable USING fts3(tokenize=WCDB, testColumn INTEGER)");
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                        .createVirtualTable(self.class.tableName, false)
+                        .createVirtualTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .usingModule(moduleName),
-                    @"CREATE VIRTUAL TABLE testSchema.testTable USING FTS3");
+                    @"CREATE VIRTUAL TABLE testSchema.testTable USING fts3");
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                        .createVirtualTable(self.class.tableName, false)
-                        .usingModule(moduleName, self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE testTable USING FTS3(tokenize=WCDB)");
+                        .createVirtualTable(self.class.tableName)
+                        .ifNotExists(false)
+                        .usingModule(moduleName)
+                        .on(self.class.moduleArgument),
+                    @"CREATE VIRTUAL TABLE testTable USING fts3(tokenize=WCDB)");
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                        .createVirtualTable(self.class.tableName, true)
+                        .createVirtualTable(self.class.tableName)
+                        .ifNotExists(true)
                         .withSchema(self.class.schemaName)
-                        .usingModule(moduleName, self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING FTS3(tokenize=WCDB)");
+                        .usingModule(moduleName)
+                        .on(self.class.moduleArgument),
+                    @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING fts3(tokenize=WCDB)");
 
     //Default
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
                         .createVirtualTable(self.class.tableName)
                         .withSchema(self.class.schemaName)
-                        .usingModule(moduleName, self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING FTS3(tokenize=WCDB)");
+                        .usingModule(moduleName)
+                        .on(self.class.moduleArgument),
+                    @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING fts3(tokenize=WCDB)");
 }
 
 @end

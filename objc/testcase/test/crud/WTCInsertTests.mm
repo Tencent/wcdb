@@ -131,13 +131,4 @@
     XCTAssertFalse([self.insert executeWithObjects:@[]]);
 }
 
-- (void)testInsertFailed
-{
-    _insert = [self.database prepareInsertOrReplaceObjectsOfClass:WTCCRUDObject.class into:@""];
-    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
-    object.variable1 = (int) self.preInsertedObjects.count + 1;
-    object.variable2 = self.name;
-    XCTAssertFalse([_insert executeWithObjects:@[ object ]]);
-}
-
 @end

@@ -94,13 +94,13 @@
 - (BOOL)begin
 {
     WCDB::Error innerError;
-    return _database->begin(WCDB::StatementTransaction::Mode::Immediate, innerError);
+    return _database->begin(WCDB::StatementBegin::Transaction::Immediate, innerError);
 }
 
-- (BOOL)beginWithMode:(WCTTransactionMode)mode
+- (BOOL)begin:(WCTTransactionMode)mode
 {
     WCDB::Error innerError;
-    return _database->begin((WCDB::StatementTransaction::Mode) mode, innerError);
+    return _database->begin((WCDB::StatementBegin::Transaction) mode, innerError);
 }
 
 - (BOOL)commit

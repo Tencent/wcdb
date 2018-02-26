@@ -31,7 +31,8 @@
     XCTAssertEqual(WCDB::StatementCreateTrigger().getType(), WCDB::Statement::Type::CreateTrigger);
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -42,7 +43,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -53,7 +55,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN INSERT INTO testTable VALUES(1); END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -64,7 +67,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN DELETE FROM testTable; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -75,7 +79,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN SELECT testColumn FROM testTable; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -89,7 +94,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; INSERT INTO testTable VALUES(1); DELETE FROM testTable; SELECT testColumn FROM testTable; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -99,7 +105,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .insert()
@@ -109,7 +116,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE INSERT ON testTable WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .update()
@@ -120,7 +128,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .updateOf(self.class.column)
@@ -131,7 +140,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF testColumn ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .updateOf(self.class.columns)
@@ -142,7 +152,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF testColumn, testColumn2 ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .after()
                         .delete_()
@@ -153,7 +164,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger AFTER DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .insteadOf()
                         .delete_()
@@ -164,7 +176,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger INSTEAD OF DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .delete_()
                         .on(self.class.tableName)
@@ -174,7 +187,8 @@
                     @"CREATE TRIGGER testSchema.testTrigger DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(false)
                         .before()
                         .delete_()
                         .on(self.class.tableName)
@@ -184,7 +198,8 @@
                     @"CREATE TRIGGER testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, true, false)
+                        .createTrigger(self.class.triggerName)
+                        .ifNotExists(true)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()
@@ -195,7 +210,9 @@
                     @"CREATE TRIGGER IF NOT EXISTS testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE testTable SET testColumn = 1; END");
 
     WINQAssertEqual(WCDB::StatementCreateTrigger()
-                        .createTrigger(self.class.triggerName, false, true)
+                        .createTrigger(self.class.triggerName)
+                        .temp()
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .before()
                         .delete_()

@@ -25,28 +25,39 @@ namespace WCDB {
 
 RecyclableStatement Database::prepare(const Statement &statement, Error &error)
 {
-    if (statement.getStatementType() == Statement::Type::Transaction) {
-        Error::ReportCore(getTag(), getPath(), Error::CoreOperation::Prepare,
-                          Error::CoreCode::Misuse,
-                          "Using [getTransaction] method to do a transaction",
-                          &error);
-        return RecyclableStatement(RecyclableHandle(nullptr, nullptr), nullptr);
+    switch (statement.getType()) {
+        case Statement::Type::Begin:
+        case Statement::Type::Commit:
+        case Statement::Type::Rollback:
+            Error::ReportCore(
+                getTag(), getPath(), Error::CoreOperation::Prepare,
+                Error::CoreCode::Misuse,
+                "Using [getTransaction] method to do a transaction", &error);
+            return RecyclableStatement(RecyclableHandle(nullptr, nullptr),
+                                       nullptr);
+        default: {
+            RecyclableHandle handle = flowOut(error);
+            return CoreBase::prepare(handle, statement, error);
+        }
     }
-    RecyclableHandle handle = flowOut(error);
-    return CoreBase::prepare(handle, statement, error);
 }
 
 bool Database::exec(const Statement &statement, Error &error)
 {
-    if (statement.getStatementType() == Statement::Type::Transaction) {
-        Error::ReportCore(getTag(), getPath(), Error::CoreOperation::Exec,
-                          Error::CoreCode::Misuse,
-                          "Using [getTransaction] method to do a transaction",
-                          &error);
-        return false;
+    switch (statement.getType()) {
+        case Statement::Type::Begin:
+        case Statement::Type::Commit:
+        case Statement::Type::Rollback:
+            Error::ReportCore(
+                getTag(), getPath(), Error::CoreOperation::Exec,
+                Error::CoreCode::Misuse,
+                "Using [getTransaction] method to do a transaction", &error);
+            return false;
+        default: {
+            RecyclableHandle handle = flowOut(error);
+            return CoreBase::exec(handle, statement, error);
+        }
     }
-    RecyclableHandle handle = flowOut(error);
-    return CoreBase::exec(handle, statement, error);
 }
 
 bool Database::isTableExists(const std::string &tableName, Error &error)

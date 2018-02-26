@@ -21,12 +21,14 @@
 #ifndef StatementSelect_hpp
 #define StatementSelect_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Redirectable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
-class StatementSelect : public CRUDStatementWithLang<lang::SelectSTMT> {
+class StatementSelect : public CRUDStatementWithLang<lang::SelectSTMT>,
+                        public Redirectable {
 public:
     StatementSelect &with(const CommonTableExpression &commonTableExpression);
     StatementSelect &
@@ -64,6 +66,8 @@ public:
     virtual Type getType() const override;
 
 protected:
+    virtual Expression getRedirectSource() const override;
+
     void compound(const lang::SelectSTMT::Compound::Operator &compoundOperator,
                   const SelectCore &selectCore);
 };

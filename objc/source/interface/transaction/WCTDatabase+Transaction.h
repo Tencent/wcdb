@@ -106,7 +106,7 @@
  @brief Begin this transaction.
  @return YES only if no error occurs.
  */
-- (BOOL)beginWithMode:(WCTTransactionMode)mode;
+- (BOOL)begin:(WCTTransactionMode)mode;
 
 /**
  @brief Separate interface of runTransaction:

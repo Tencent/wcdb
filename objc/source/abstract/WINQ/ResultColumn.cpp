@@ -18,15 +18,16 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-const ResultColumn ResultColumn::All(lang::ResultColumn::Type::Star);
+const ResultColumn ResultColumn::All = Expression::All();
 
-ResultColumn ResultColumn::AllInTable(const std::string &tableName)
+ResultColumn::ResultColumn(const Expression::All &all)
 {
-    return ResultColumn(tableName);
+    lang::ResultColumn &lang = getMutableLang();
+    lang.type = lang::ResultColumn::Type::Star;
 }
 
 ResultColumn::ResultColumn(const Expression &expression)
@@ -34,22 +35,18 @@ ResultColumn::ResultColumn(const Expression &expression)
     setupWithExpression(expression);
 }
 
-ResultColumn::ResultColumn(const lang::ResultColumn::Type &type)
+ResultColumn &ResultColumn::withTable(const std::string &tableName)
 {
     lang::ResultColumn &lang = getMutableLang();
-    lang.type = lang::ResultColumn::Type::Star;
-}
-
-ResultColumn::ResultColumn(const std::string &tableName)
-{
-    lang::ResultColumn &lang = getMutableLang();
-    lang.type = lang::ResultColumn::Type::Star;
+    assert(lang.type == lang::ResultColumn::Type::Star);
     lang.tableName.assign(tableName);
+    return *this;
 }
 
 ResultColumn &ResultColumn::as(const Column &columnAlias)
 {
     lang::ResultColumn &lang = getMutableLang();
+    assert(lang.type == lang::ResultColumn::Type::Expr);
     lang.columnAlias.assign(columnAlias.getLang());
     return *this;
 }

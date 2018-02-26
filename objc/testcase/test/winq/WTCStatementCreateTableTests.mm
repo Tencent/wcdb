@@ -31,57 +31,67 @@
     XCTAssertEqual(WCDB::StatementCreateTable().getType(), WCDB::Statement::Type::CreateTable);
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .define(self.class.columnDef),
                     @"CREATE TABLE testSchema.testTable(testColumn INTEGER)");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .define(self.class.columnDef)
                         .withoutRowID(),
                     @"CREATE TABLE testSchema.testTable(testColumn INTEGER) WITHOUT ROWID");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .define(self.class.columnDef)
                         .addTableConstraint(self.class.tableConstraint),
                     @"CREATE TABLE testSchema.testTable(testColumn INTEGER, CONSTRAINT testConstraint PRIMARY KEY(testColumn))")
 
         WINQAssertEqual(WCDB::StatementCreateTable()
-                            .createTable(self.class.tableName, false, false)
+                            .createTable(self.class.tableName)
+                            .ifNotExists(false)
                             .withSchema(self.class.schemaName)
                             .define(self.class.columnDef)
                             .addTableConstraints(self.class.tableConstraints),
                         @"CREATE TABLE testSchema.testTable(testColumn INTEGER, CONSTRAINT testConstraint PRIMARY KEY(testColumn), CONSTRAINT testConstraint2 UNIQUE(testColumn2))");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .define(self.class.columnDefs),
                     @"CREATE TABLE testSchema.testTable(testColumn INTEGER, testColumn2 TEXT)");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .as(self.class.statementSelect),
                     @"CREATE TABLE testSchema.testTable AS SELECT testColumn FROM testTable");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(false)
                         .define(self.class.columnDef),
                     @"CREATE TABLE testTable(testColumn INTEGER)");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, true, false)
+                        .createTable(self.class.tableName)
+                        .ifNotExists(true)
                         .withSchema(self.class.schemaName)
                         .define(self.class.columnDef),
                     @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn INTEGER)");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
-                        .createTable(self.class.tableName, false, true)
+                        .createTable(self.class.tableName)
+                        .temp()
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .define(self.class.columnDef),
                     @"CREATE TEMP TABLE testSchema.testTable(testColumn INTEGER)");

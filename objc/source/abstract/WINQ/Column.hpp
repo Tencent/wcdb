@@ -21,13 +21,25 @@
 #ifndef Column_hpp
 #define Column_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Operable.hpp>
+#include <WCDB/Redirectable.hpp>
 
 namespace WCDB {
 
-class Column : public DescribableWithLang<lang::Column> {
+class Column : public DescribableWithLang<lang::Column>,
+               public Operable,
+               public Redirectable {
 public:
     explicit Column(const std::string &name);
+
+    virtual lang::copy_on_write_lazy_lang<lang::Expr>
+    getExpressionLang() const override;
+
+    Column(const lang::copy_on_write_lazy_lang<lang::Column> &column);
+
+protected:
+    virtual Expression getRedirectSource() const override;
 };
 
 } // namespace WCDB

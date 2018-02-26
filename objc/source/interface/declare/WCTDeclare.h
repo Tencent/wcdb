@@ -42,63 +42,42 @@ typedef int WCTTag;
 
 #pragma mark - ORM - Binding
 class WCTBinding;
-
 class WCTColumnBinding;
-typedef std::list<std::shared_ptr<WCTColumnBinding>> WCTColumnBindingList;
-
-//Case insensitive
-typedef std::map<std::string,
-                 std::shared_ptr<WCTColumnBinding>,
-                 WCDB::CaseInsensiveComparetor>
-    WCTColumnBindingMap;
-
-class WCTIndexBinding;
-typedef std::unordered_map<std::string, std::shared_ptr<WCTIndexBinding>>
-    WCTIndexBindingMap;
-
-class WCTConstraintBindingBase;
-typedef std::list<std::shared_ptr<WCTConstraintBindingBase>>
-    WCTConstraintBindingList;
-typedef std::unordered_map<std::string,
-                           std::shared_ptr<WCTConstraintBindingBase>>
-    WCTConstraintBindingMap;
 
 #pragma mark - ORM - Coding
 @protocol WCTTableCoding;
 @protocol WCTColumnCoding;
 
-typedef NS_ENUM(int, WCTOrderTerm) {
-    WCTOrderedAscending = (WCTOrderTerm) WCDB::OrderTerm::ASC,
-    WCTOrderedDescending = (WCTOrderTerm) WCDB::OrderTerm::DESC,
-    WCTOrderedNotSet = (WCTOrderTerm) WCDB::OrderTerm::NotSet,
-};
+class WCTProperty;
+class WCTPropertyList;
 
-typedef NS_ENUM(int, WCTConflict) {
-    WCTConflictNotSet = (WCTConflict) WCDB::Conflict::NotSet,
-    WCTConflictRollback = (WCTConflict) WCDB::Conflict::Rollback,
-    WCTConflictAbort = (WCTConflict) WCDB::Conflict::Abort,
-    WCTConflictFail = (WCTConflict) WCDB::Conflict::Fail,
-    WCTConflictIgnore = (WCTConflict) WCDB::Conflict::Ignore,
-    WCTConflictReplace = (WCTConflict) WCDB::Conflict::Replace,
-};
+using WCTOrder = WCDB::Order;
+constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;
+constexpr const WCDB::Order WCTOrderedDescending = WCDB::Order::DESC;
+constexpr const WCDB::Order WCTOrderedNotSet = WCDB::Order::NotSet;
 
-typedef NS_ENUM(int, WCTColumnType) {
-    WCTColumnTypeInteger32 = (WCTColumnType) WCDB::ColumnType::Integer32,
-    WCTColumnTypeInteger64 = (WCTColumnType) WCDB::ColumnType::Integer64,
-    WCTColumnTypeDouble = (WCTColumnType) WCDB::ColumnType::Float,
-    WCTColumnTypeString = (WCTColumnType) WCDB::ColumnType::Text,
-    WCTColumnTypeBinary = (WCTColumnType) WCDB::ColumnType::BLOB,
-    WCTColumnTypeNull = (WCTColumnType) WCDB::ColumnType::Null,
-};
+constexpr const WCDB::ConflictClause WCTConflictNotSet =
+    WCDB::ConflictClause::NotSet;
+constexpr const WCDB::ConflictClause WCTConflictRollback =
+    WCDB::ConflictClause::Rollback;
+constexpr const WCDB::ConflictClause WCTConflictAbort =
+    WCDB::ConflictClause::Abort;
+constexpr const WCDB::ConflictClause WCTConflictFail =
+    WCDB::ConflictClause::Fail;
+constexpr const WCDB::ConflictClause WCTConflictIgnore =
+    WCDB::ConflictClause::Ignore;
+constexpr const WCDB::ConflictClause WCTConflictReplace =
+    WCDB::ConflictClause::Replace;
 
-typedef NS_ENUM(int, WCTDefaultType) {
-    WCTDefaultTypeCurrentTime = (WCTDefaultType)
-        WCDB::ColumnDef::DefaultType::CurrentTime,
-    WCTDefaultTypeCurrentDate = (WCTDefaultType)
-        WCDB::ColumnDef::DefaultType::CurrentDate,
-    WCTDefaultTypeCurrentTimestamp = (WCTDefaultType)
-        WCDB::ColumnDef::DefaultType::CurrentTimestamp,
-};
+using WCTColumnType = WCDB::ColumnType;
+constexpr const WCDB::ColumnType WCTColumnTypeInteger32 =
+    WCDB::ColumnType::Integer32;
+constexpr const WCDB::ColumnType WCTColumnTypeInteger64 =
+    WCDB::ColumnType::Integer64;
+constexpr const WCDB::ColumnType WCTColumnTypeDouble = WCDB::ColumnType::Float;
+constexpr const WCDB::ColumnType WCTColumnTypeString = WCDB::ColumnType::Text;
+constexpr const WCDB::ColumnType WCTColumnTypeBinary = WCDB::ColumnType::BLOB;
+constexpr const WCDB::ColumnType WCTColumnTypeNull = WCDB::ColumnType::Null;
 
 #pragma mark - HandleStatement
 @class WCTCoreStatement;

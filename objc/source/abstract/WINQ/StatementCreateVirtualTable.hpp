@@ -21,24 +21,23 @@
 #ifndef StatementCreateVirtualTable_hpp
 #define StatementCreateVirtualTable_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementCreateVirtualTable
     : public StatementWithLang<lang::CreateVirtualTableSTMT> {
 public:
+    StatementCreateVirtualTable();
     StatementCreateVirtualTable &
-    createVirtualTable(const std::string &tableName, bool ifNotExists = true);
+    createVirtualTable(const std::string &tableName);
     StatementCreateVirtualTable &withSchema(const std::string &schemaName);
+    StatementCreateVirtualTable &ifNotExists(bool ifNotExists = true);
     StatementCreateVirtualTable &usingModule(const std::string &moduleName);
+    StatementCreateVirtualTable &on(const ModuleArgument &moduleArgument);
     StatementCreateVirtualTable &
-    usingModule(const std::string &moduleName,
-                const ModuleArgument &moduleArgument);
-    StatementCreateVirtualTable &
-    usingModule(const std::string &moduleName,
-                const std::list<ModuleArgument> &moduleArguments);
+    on(const std::list<ModuleArgument> &moduleArguments);
     virtual Type getType() const override;
 };
 

@@ -18,17 +18,20 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementCreateTrigger &StatementCreateTrigger::createTrigger(
-    const std::string &triggerName, bool ifNotExists, bool temp)
+StatementCreateTrigger::StatementCreateTrigger()
+{
+    getMutableLang().ifNotExists = true;
+}
+
+StatementCreateTrigger &
+StatementCreateTrigger::createTrigger(const std::string &triggerName)
 {
     lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.triggerName.assign(triggerName);
-    lang.ifNotExists = ifNotExists;
-    lang.temp = temp;
     return *this;
 }
 
@@ -37,6 +40,20 @@ StatementCreateTrigger::withSchema(const std::string &schemaName)
 {
     lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+StatementCreateTrigger &StatementCreateTrigger::ifNotExists(bool ifNotExists)
+{
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.ifNotExists = ifNotExists;
+    return *this;
+}
+
+StatementCreateTrigger &StatementCreateTrigger::temp(bool temp)
+{
+    lang::CreateTriggerSTMT &lang = getMutableLang();
+    lang.temp = temp;
     return *this;
 }
 

@@ -44,18 +44,18 @@
 /**
  Generate a WCTInsert to do a partial insertion on this table.
 
- @param propertyList The specific properties to be inserted.
+ @param properties The specific properties to be inserted.
  @return WCTInsert
  */
-- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList;
+- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)properties;
 
 /**
  Generate a WCTInsert to do a partial insertion or replacement on this table.
 
- @param propertyList The specific properties to be inserted.
+ @param properties The specific properties to be inserted.
  @return WCTInsert
  */
-- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)propertyList;
+- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)properties;
 
 /**
  Generate a WCTDelete to do a deletion.
@@ -67,10 +67,10 @@
 /**
  Generate a WCTUpdate to do an update.
 
- @param propertyList The specific properties to be updated.
+ @param properties The specific properties to be updated.
  @return WCTUpdate
  */
-- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)propertyList;
+- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)properties;
 
 /**
  Generate a WCTSelect to do an object selection.
@@ -82,18 +82,18 @@
 /**
  Generate a WCTSelect to do an object selection on the specific results.
  
- @param propertyList The column results to be selected.
+ @param properties The column results to be selected.
  @return WCTSelect
  */
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList;
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties;
 
 /**
  Generate a WCTSelect to do an object selection on the specific results.
  
- @param propertyList The column results to be selected.
+ @param properties The column results to be selected.
  @return WCTSelect
  */
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList isDistinct:(BOOL)isDistinct;
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties isDistinct:(BOOL)isDistinct;
 
 /**
  Generate a WCTRowSelect to do a row selection on the specific results.
@@ -105,17 +105,17 @@
 /**
  Generate a WCTRowSelect to do a row selection on the specific results.
 
- @param resultList The column results to be selected.
+ @param resultColumns The column results to be selected.
  @return WCTRowSelect
  */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList;
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns;
 
 /**
  Generate a WCTRowSelect to do a row selection on the specific results.
  
- @param resultList The column results to be selected.
+ @param resultColumns The column results to be selected.
  @return WCTRowSelect
  */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList isDistinct:(BOOL)isDistinct;
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns isDistinct:(BOOL)isDistinct;
 
 @end

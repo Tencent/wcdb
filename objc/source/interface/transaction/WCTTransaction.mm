@@ -42,12 +42,12 @@
 
 - (BOOL)begin
 {
-    return _transaction->begin(WCDB::StatementTransaction::Mode::Immediate, _error);
+    return _transaction->begin(WCDB::StatementBegin::Transaction::Immediate, _error);
 }
 
-- (BOOL)beginWithMode:(WCTTransactionMode)mode
+- (BOOL)begin:(WCTTransactionMode)mode
 {
-    return _transaction->begin((WCDB::StatementTransaction::Mode) mode, _error);
+    return _transaction->begin((WCDB::StatementBegin::Transaction) mode, _error);
 }
 
 - (BOOL)commit

@@ -34,14 +34,14 @@
     return [self createVirtualTableOfName:tableName withClass:cls andError:_error];
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs
 {
-    return [self createTableOfName:tableName withColumnDefList:columnDefList andError:_error];
+    return [self createTableOfName:tableName withColumnDefs:columnDefs andError:_error];
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints
 {
-    return [self createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:constraintList andError:_error];
+    return [self createTableOfName:tableName withColumnDefs:columnDefs andConstraints:constraints andError:_error];
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
@@ -54,9 +54,9 @@
     return [self dropTableOfName:tableName withError:_error];
 }
 
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName
 {
-    return [self createIndexOfName:indexName withIndexList:indexList forTable:tableName andError:_error];
+    return [self createIndexOfName:indexName withIndexedColumns:indexedColumns forTable:tableName andError:_error];
 }
 
 - (BOOL)dropIndexOfName:(NSString *)indexName

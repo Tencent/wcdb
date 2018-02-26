@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTDeclare.h>
@@ -25,21 +26,26 @@
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTSelectBase+Private.h>
-#import <WCDB/handle_statement.hpp>
 
 @implementation WCTMultiSelect {
-    WCTPropertyList _propertyList;
+    WCTPropertyList _properties;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andPropertyList:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+               andProperties:(const WCTPropertyList &)properties
+                  fromTables:(NSArray<NSString *> *)tableNames
+                  isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
-        WCDB::SubqueryList subqueryList;
+        _properties = properties;
+        std::list<WCDB::TableOrSubquery> tableOrSubquerys;
         for (NSString *tableName in tableNames) {
-            subqueryList.push_back(tableName.UTF8String);
+            tableOrSubquerys.push_back(tableName.UTF8String);
         }
-        _statement.select(_propertyList, isDistinct).from(subqueryList);
+        if (isDistinct) {
+            _statement.distinct();
+        }
+        _statement.select(_properties).from(tableOrSubquerys);
     }
     return self;
 }
@@ -52,7 +58,7 @@
         Class cls = nil;
         NSString *tableName = nil;
         WCTObject *object = nil;
-        for (const WCTProperty &property : _propertyList) {
+        for (const WCTProperty &property : _properties) {
             const char *columnTableName = _statementHandle->getColumnTableName(index);
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             cls = columnBinding->getClass();
@@ -92,7 +98,7 @@
         while ([self next]) {
             multiObject = [[NSMutableDictionary alloc] init];
             index = 0;
-            for (const WCTProperty &property : _propertyList) {
+            for (const WCTProperty &property : _properties) {
                 const char *columnTableName = _statementHandle->getColumnTableName(index);
                 const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
                 Class cls = columnBinding->getClass();

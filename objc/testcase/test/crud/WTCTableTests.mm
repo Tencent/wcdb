@@ -108,7 +108,7 @@
     //Give
     NSString *tableName = WTCTableVirtualTableObject.Name;
     [self.database setTokenizer:WCTTokenizerNameWCDB];
-    NSString *expected = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE %@ USING fts3(variable1 INTEGER, variable2 INTEGER, tokenize=WCDB)", tableName];
+    NSString *expected = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE %@ USING fts3(tokenize=WCDB, variable1 INTEGER, variable2 INTEGER)", tableName];
     //When
     XCTAssertTrue([self.database createVirtualTableOfName:tableName withClass:WTCTableVirtualTableObject.class]);
     //Then
@@ -160,19 +160,20 @@
 {
     //Give
     NSString *tableName = WTCTableBaselineObject.Name;
-    NSString *expected = [NSString stringWithFormat:@"CREATE TABLE %@(anInt32 INTEGER, anInt64 INTEGER, CONSTRAINT WTCTableBaselineObjectConstraint CHECK(anInt32 > 0))", tableName];
+    NSString *expected = [NSString stringWithFormat:@"CREATE TABLE %@(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, CONSTRAINT WTCTableBaselineObjectConstraint CHECK(anInt32 > 0))", tableName];
 
     WCDB::TableConstraint tableConstraint("WTCTableBaselineObjectConstraint");
-    tableConstraint.check(WTCTableBaselineObject.anInt32 > 0);
+    tableConstraint.withChecking(WTCTableBaselineObject.anInt32 > 0);
 
-    WCDB::ColumnDef def1 = WTCTableBaselineObject.anInt32.asDef(WCTColumnTypeInteger32);
+    WCDB::ColumnDef def1 = WTCTableBaselineObject.anInt32.getColumnDef();
     WCDB::Column column2 = WCDB::Column("anInt64");
-    WCDB::ColumnDef def2 = WCDB::ColumnDef(column2, WCDB::ColumnType::Integer64);
-    WCDB::ColumnDefList defList = {def1, def2};
+    WCDB::ColumnDef def2 = WCDB::ColumnDef(column2).withType(WCDB::ColumnType::Integer64);
+    std::list<WCDB::ColumnDef> defList = {def1, def2};
     //When
-    XCTAssertTrue([self.database createTableOfName:tableName withColumnDefList:defList andConstraintList:tableConstraint]);
+    XCTAssertTrue([self.database createTableOfName:tableName withColumnDefs:defList andConstraints:{tableConstraint}]);
     WCTMaster *object = [self.database getObjectOfClass:WCTMaster.class fromTable:WCTMaster.TableName where:WCTMaster.name == tableName];
     XCTAssertNotNil(object);
+    NSLog(@"%@", object.sql);
     XCTAssertTrue([object.sql isEqualToString:expected]);
 }
 
@@ -180,7 +181,8 @@
 {
     //Give
     NSString *tableName = WTCTableBaselineObject.Name;
-    WCDB::ColumnDef def(WCDB::Column("newColumn"), WCDB::ColumnType::Integer32);
+    WCDB::Column column("newColumn");
+    WCDB::ColumnDef def = WCDB::ColumnDef(column).withType(WCDB::ColumnType::Integer32);
     NSString *expected = [NSString stringWithFormat:@"CREATE TABLE %@(anInt32 INTEGER PRIMARY KEY ASC AUTOINCREMENT, anInt64 INTEGER, aString TEXT, aData BLOB, aDouble REAL, newColumn INTEGER)", tableName];
     //When
     XCTAssertTrue([self.database createTableAndIndexesOfName:tableName withClass:WTCTableBaselineObject.class]);
@@ -196,13 +198,13 @@
     //Give
     NSString *tableName = WTCTableBaselineObject.Name;
     NSString *indexName = [tableName stringByAppendingString:@"_index"];
-    WCDB::ColumnIndex index1 = WTCTableBaselineObject.aString.asIndex();
-    WCDB::ColumnIndex index2 = WTCTableBaselineObject.aDouble.asIndex();
-    WCDB::ColumnIndexList indexList = {index1, index2};
+    WCDB::IndexedColumn index1 = WTCTableBaselineObject.aString.asIndex();
+    WCDB::IndexedColumn index2 = WTCTableBaselineObject.aDouble.asIndex();
+    std::list<WCDB::IndexedColumn> indexes = {index1, index2};
     NSString *expected = [NSString stringWithFormat:@"CREATE INDEX %@ ON %@(aString, aDouble)", indexName, tableName];
     //When
     XCTAssertTrue([self.database createTableAndIndexesOfName:tableName withClass:WTCTableBaselineObject.class]);
-    XCTAssertTrue([self.database createIndexOfName:indexName withIndexList:indexList forTable:tableName]);
+    XCTAssertTrue([self.database createIndexOfName:indexName withIndexedColumns:indexes forTable:tableName]);
     WCTMaster *object = [self.database getObjectOfClass:WCTMaster.class fromTable:WCTMaster.TableName where:WCTMaster.name == indexName];
     XCTAssertNotNil(object);
     XCTAssertTrue([object.sql isEqualToString:expected]);

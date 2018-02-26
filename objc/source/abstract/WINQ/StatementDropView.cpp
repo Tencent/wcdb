@@ -18,15 +18,25 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementDropView &StatementDropView::dropView(const std::string &viewName,
-                                               bool ifExists)
+StatementDropView::StatementDropView()
+{
+    getMutableLang().ifExists = true;
+}
+
+StatementDropView &StatementDropView::dropView(const std::string &viewName)
 {
     lang::DropViewSTMT &lang = getMutableLang();
     lang.name.assign(viewName);
+    return *this;
+}
+
+StatementDropView &StatementDropView::ifExists(bool ifExists)
+{
+    lang::DropViewSTMT &lang = getMutableLang();
     lang.ifExists = ifExists;
     return *this;
 }

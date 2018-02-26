@@ -21,7 +21,7 @@
 #ifndef Convertible_impl_hpp
 #define Convertible_impl_hpp
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 

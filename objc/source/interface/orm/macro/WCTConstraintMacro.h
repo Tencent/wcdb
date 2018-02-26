@@ -20,24 +20,28 @@
 
 //Column Constraint
 #define __WCDB_PRIMARY_IMP(className, propertyName, order, autoIncrement,      \
-                           onConflict)                                         \
+                           conflictClause)                                     \
     WCDB_IF(autoIncrement, @synthesize isAutoIncrement;)                       \
     WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)                     \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding->getColumnBinding(className.propertyName)                      \
-            ->makePrimary(order, autoIncrement, onConflict);                   \
+        binding->addColumnConstraint(WCDB::ColumnConstraint()                  \
+                                         .withPrimaryKey(order, autoIncrement) \
+                                         .onConflict(conflictClause),          \
+                                     className.propertyName);                  \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_NOT_NULL_IMP(className, propertyName)                           \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding->getColumnBinding(className.propertyName)->makeNotNull();      \
+        binding->addColumnConstraint(WCDB::ColumnConstraint().withNotNull(),   \
+                                     className.propertyName);                  \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_UNIQUE_IMP(className, propertyName)                             \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding->getColumnBinding(className.propertyName)->makeUnique();       \
+        binding->addColumnConstraint(WCDB::ColumnConstraint().withUnique(),    \
+                                     className.propertyName);                  \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
@@ -45,64 +49,43 @@
 #define __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName,      \
                                  order)                                        \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintPrimaryKeyBinding>(    \
-                constraintName)                                                \
-            ->addPrimaryKey(className.propertyName.asIndex(order));            \
+        binding->getOrCreateTableConstraint(constraintName)                    \
+            ->withPrimaryKey(className.propertyName.asIndex(order));           \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, conflict) \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintPrimaryKeyBinding>(    \
-                constraintName)                                                \
-            ->setConflict(conflict);                                           \
+        binding->getOrCreateTableConstraint(constraintName)                    \
+            ->onConflict(conflict);                                            \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName,       \
                                 order)                                         \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintUniqueBinding>(        \
-                constraintName)                                                \
-            ->addUnique(className.propertyName.asIndex(order));                \
+        binding->getOrCreateTableConstraint(constraintName)                    \
+            ->withUnique(className.propertyName.asIndex(order));               \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, conflict)  \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintUniqueBinding>(        \
-                constraintName)                                                \
-            ->setConflict(conflict);                                           \
+        binding->getOrCreateTableConstraint(constraintName)                    \
+            ->onConflict(conflict);                                            \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_CHECK_IMP(className, constraintName, expr)                      \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintCheckBinding>(         \
-                constraintName)                                                \
-            ->makeCheck(expr);                                                 \
+        binding->getOrCreateTableConstraint(constraintName)                    \
+            ->withChecking(expr);                                              \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
-#define __WCDB_FOREIGN_KEY_COLUMN_IMP(className, constraintName, column)       \
+#define __WCDB_FOREIGN_KEY_IMP(className, constraintName, columns, foreignKey) \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintForeignKeyBinding>(    \
-                constraintName)                                                \
-            ->addColumn(column);                                               \
-        return nullptr;                                                        \
-    }(&__WCDB_BINDING(className));
-
-#define __WCDB_FOREIGN_KEY_IMP(className, constraintName, foreignKey)          \
-    static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding                                                                \
-            ->getOrCreateConstraintBinding<WCTConstraintForeignKeyBinding>(    \
-                constraintName)                                                \
-            ->setForeignKey(foreignKey);                                       \
+        binding->getOrCreateTableConstraint(constraintName)                    \
+            ->withForeignKey(columns, foreignKey);                             \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));

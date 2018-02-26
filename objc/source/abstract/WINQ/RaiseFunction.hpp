@@ -21,16 +21,20 @@
 #ifndef RaiseFunction_hpp
 #define RaiseFunction_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
-class RaiseFunction : public DescribableWithLang<lang::RaiseFunction> {
+class RaiseFunction : public DescribableWithLang<lang::RaiseFunction>,
+                      public Redirectable {
 public:
     RaiseFunction &withIgnore();
     RaiseFunction &withRollback(const std::string &errorMessage);
     RaiseFunction &withAbort(const std::string &errorMessage);
     RaiseFunction &withFail(const std::string &errorMessage);
+
+protected:
+    virtual Expression getRedirectSource() const override;
 };
 
 } // namespace WCDB

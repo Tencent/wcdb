@@ -21,7 +21,7 @@
 #ifndef JoinConstraint_hpp
 #define JoinConstraint_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

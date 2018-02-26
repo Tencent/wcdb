@@ -21,7 +21,7 @@
 #ifndef tokenizer_hpp
 #define tokenizer_hpp
 
-#include <WCDB/fts_module.hpp>
+#include <WCDB/Tokenize.hpp>
 #include <cstddef>
 #include <vector>
 

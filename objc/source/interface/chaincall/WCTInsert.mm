@@ -18,31 +18,35 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/handle_statement.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTInsert {
-    WCTPropertyList _propertyList;
+    WCTPropertyList _properties;
     WCDB::StatementInsert _statement;
     BOOL _replace;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+               andProperties:(const WCTPropertyList &)properties
+                andTableName:(NSString *)tableName
+              andReplaceFlag:(BOOL)replace
 {
     if (self = [super initWithCore:core]) {
         _replace = replace;
-        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
-        _statement = WCDB::StatementInsert()
-                         .insert(tableName.UTF8String,
-                                 _propertyList,
-                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
-                         .values(WCDB::ExpressionList(_propertyList.size(), WCDB::Expression::BindParameter));
+        _properties = properties;
+        if (!replace) {
+            _statement.insertInto(tableName.UTF8String);
+        } else {
+            _statement.insertOrReplaceInto(tableName.UTF8String);
+        }
+        _statement.on(_properties).values(std::list<WCDB::Expression>(_properties.size(), WCDB::BindParameter()));
     }
     return self;
 }
@@ -55,12 +59,18 @@
     }
     int index;
     BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
+
+    std::vector<bool> autoIncrements;
+    for (const WCTProperty &property : _properties) {
+        const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
+        autoIncrements.push_back(!_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement());
+    }
+
     for (WCTObject *object in objects) {
         index = 1;
-        for (const WCTProperty &property : _propertyList) {
-            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-            if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
-                handleStatement->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
+        for (const WCTProperty &property : _properties) {
+            if (autoIncrements[index - 1] && object.isAutoIncrement) {
+                handleStatement->bind<WCTColumnTypeNull>(index);
             } else {
                 if (![self bindProperty:property
                                  ofObject:object

@@ -65,7 +65,7 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     return [block copy];
 }
 
-WCTColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string &propertyName)
+WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string &propertyName)
 {
     static const SEL ColumnTypeSelector = NSSelectorFromString(@"columnTypeForWCDB");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
@@ -73,11 +73,11 @@ WCTColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const s
         WCDB::Error::Abort([NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()].UTF8String);
     }
     IMP implementation = GetClassMethodImplementation(propertyClass, ColumnTypeSelector);
-    using GetColumnTyper = WCTColumnType (*)(Class, SEL);
+    using GetColumnTyper = WCDB::ColumnType (*)(Class, SEL);
     return ((GetColumnTyper) implementation)(propertyClass, ColumnTypeSelector);
 }
 
-WCTColumnType WCTRuntimeObjCAccessor::getColumnType() const
+WCDB::ColumnType WCTRuntimeObjCAccessor::getColumnType() const
 {
     return m_columnType;
 }

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -33,49 +33,48 @@ TableConstraint::TableConstraint(const std::string &name)
 }
 
 TableConstraint &
-TableConstraint::withPrimaryKey(const IndexedColumn &indexedColumn,
-                                const ConflictClause &conflictClause)
+TableConstraint::withPrimaryKey(const IndexedColumn &indexedColumn)
 {
     lang::TableConstraint &lang = getMutableLang();
     lang.type = lang::TableConstraint::Type::PrimaryKey;
     lang.indexedColumns.append(indexedColumn.getLang());
-    lang.conflictClause = conflictClause;
     return *this;
 }
 
 TableConstraint &
-TableConstraint::withPrimaryKey(const std::list<IndexedColumn> &indexedColumns,
-                                const ConflictClause &conflictClause)
+TableConstraint::withPrimaryKey(const std::list<IndexedColumn> &indexedColumns)
 {
     lang::TableConstraint &lang = getMutableLang();
     lang.type = lang::TableConstraint::Type::PrimaryKey;
     for (const IndexedColumn &indexedColumn : indexedColumns) {
         lang.indexedColumns.append(indexedColumn.getLang());
     }
-    lang.conflictClause = conflictClause;
     return *this;
 }
 
-TableConstraint &
-TableConstraint::withUnique(const IndexedColumn &indexedColumn,
-                            const ConflictClause &conflictClause)
+TableConstraint &TableConstraint::withUnique(const IndexedColumn &indexedColumn)
 {
     lang::TableConstraint &lang = getMutableLang();
     lang.type = lang::TableConstraint::Type::Unique;
     lang.indexedColumns.append(indexedColumn.getLang());
-    lang.conflictClause = conflictClause;
     return *this;
 }
 
 TableConstraint &
-TableConstraint::withUnique(const std::list<IndexedColumn> &indexedColumns,
-                            const ConflictClause &conflictClause)
+TableConstraint::withUnique(const std::list<IndexedColumn> &indexedColumns)
 {
     lang::TableConstraint &lang = getMutableLang();
     lang.type = lang::TableConstraint::Type::Unique;
     for (const IndexedColumn &indexedColumn : indexedColumns) {
         lang.indexedColumns.append(indexedColumn.getLang());
     }
+    return *this;
+}
+
+TableConstraint &
+TableConstraint::onConflict(const ConflictClause &conflictClause)
+{
+    lang::TableConstraint &lang = getMutableLang();
     lang.conflictClause = conflictClause;
     return *this;
 }

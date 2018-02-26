@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -40,6 +40,11 @@ BindParameter::BindParameter(const std::string &name, const Type &type)
     lang::BindParameter &lang = getMutableLang();
     lang.type = (lang::BindParameter::Type) type;
     lang.name.assign(name);
+}
+
+Expression BindParameter::getRedirectSource() const
+{
+    return *this;
 }
 
 } // namespace WCDB

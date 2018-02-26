@@ -18,52 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTValue.h>
-#import <WCDB/error.hpp>
-
-bool WCTColumnBinding::isPrimary() const
-{
-    return m_isPrimary;
-}
-
-bool WCTColumnBinding::isAutoIncrement() const
-{
-    return m_isAutoIncrement;
-}
-
-const WCDB::ColumnDef WCTColumnBinding::getColumnDef() const
-{
-    return m_columnDef;
-}
-
-void WCTColumnBinding::makePrimary(WCTOrderTerm order, bool isAutoIncrement, WCTConflict conflict)
-{
-    m_isPrimary = true;
-    m_isAutoIncrement = isAutoIncrement;
-    m_columnDef.makePrimary((WCDB::OrderTerm) order, isAutoIncrement, (WCDB::Conflict) conflict);
-}
-
-void WCTColumnBinding::makeNotNull()
-{
-    m_columnDef.makeNotNull();
-}
-
-void WCTColumnBinding::makeUnique()
-{
-    m_columnDef.makeUnique();
-}
-
-void WCTColumnBinding::makeDefault(const WCDB::Expression defaultValue)
-{
-    m_columnDef.makeDefault(defaultValue);
-}
-
-void WCTColumnBinding::makeDefault(WCTDefaultType defaultType)
-{
-    m_columnDef.makeDefault((WCDB::ColumnDef::DefaultType) defaultType);
-}
 
 Class WCTColumnBinding::getClass() const
 {

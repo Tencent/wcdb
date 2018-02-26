@@ -21,7 +21,7 @@
 #ifndef LangBindParameter_hpp
 #define LangBindParameter_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 
@@ -42,7 +42,7 @@ public:
     int n;
     copy_on_write_string name;
 
-    virtual copy_on_write_string SQL() const;
+    virtual copy_on_write_string SQL() const override;
 };
 
 } // namespace lang

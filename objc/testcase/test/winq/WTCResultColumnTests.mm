@@ -38,7 +38,7 @@
 
     WINQAssertEqual(WCDB::ResultColumn::All, @"*");
 
-    WINQAssertEqual(WCDB::ResultColumn::AllInTable(self.class.tableName), @"testTable.*");
+    WINQAssertEqual(WCDB::ResultColumn(WCDB::Expression::All()).withTable(self.class.tableName), @"testTable.*");
 }
 
 @end

@@ -41,7 +41,7 @@
     {                                                                          \
         return __WCDB_PROPERTIES(className);                                   \
     }                                                                          \
-    +(const WCDB::Column &) AllColumns { return WCDB::Column::All; }
+    +(WCDB::Expression::All) AllResults { return WCDB::Expression::All(); }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)
@@ -85,9 +85,9 @@
                        WCTConflictNotSet)
 
 #define WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement,      \
-                         onConflict)                                           \
+                         conflictClause)                                       \
     __WCDB_PRIMARY_IMP(className, propertyName, order, isAutoIncrement,        \
-                       onConflict)
+                       conflictClause)
 
 #define WCDB_NOT_NULL(className, propertyName)                                 \
     __WCDB_NOT_NULL_IMP(className, propertyName)
@@ -108,8 +108,8 @@
     __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName,          \
                              WCTOrderedDescending)
 
-#define WCDB_MULTI_PRIMARY_CONFLICT(className, constraintName, onConflict)     \
-    __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, onConflict)
+#define WCDB_MULTI_PRIMARY_CONFLICT(className, constraintName, conflictClause) \
+    __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, conflictClause)
 
 #define WCDB_MULTI_UNIQUE(className, constraintName, propertyName)             \
     __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName,           \
@@ -123,17 +123,14 @@
     __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName,           \
                             WCTOrderedDescending)
 
-#define WCDB_MULTI_UNIQUE_CONFLICT(className, constraintName, onConflict)      \
-    __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, onConflict)
+#define WCDB_MULTI_UNIQUE_CONFLICT(className, constraintName, conflictClause)  \
+    __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, conflictClause)
 
 #define WCDB_CHECK(className, constraintName, check)                           \
     __WCDB_CHECK_IMP(className, constraintName, check)
 
-#define WCDB_FOREIGN_KEY_COLUMN(className, constraintName, column)             \
-    __WCDB_FOREIGN_KEY_COLUMN_IMP(className, constraintName, column)
-
-#define WCDB_FOREIGN_KEY(className, constraintName, foreignKey)                \
-    __WCDB_FOREIGN_KEY_IMP(className, constraintName, foreignKey)
+#define WCDB_FOREIGN_KEY(className, constraintName, columns, foreignKey)       \
+    __WCDB_FOREIGN_KEY_IMP(className, constraintName, columns, foreignKey)
 
 //Index
 #define WCDB_INDEX(className, indexSubfixName, propertyName)                   \
@@ -169,10 +166,10 @@
 
 #define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)                   \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize",                   \
-                                      WCTTokenizerNameWCDB)
+                                      WCTTokenizerNameWCDB.UTF8String)
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName)                       \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)
 
 #define WCDB_VIRTUAL_TABLE_MODULE_FTS3(className)                              \
-    __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, WCTModuleNameFTS3)
+    __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, WCTModuleNameFTS3.UTF8String)

@@ -21,9 +21,9 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
-#include <WINQ/WINQ.h>
-#include <WINQ/error.hpp>
-#include <WINQ/utility.hpp>
+#include <WCDB/WINQ.h>
+#include <WCDB/error.hpp>
+#include <WCDB/utility.hpp>
 #include <map>
 #include <memory>
 #include <mutex>

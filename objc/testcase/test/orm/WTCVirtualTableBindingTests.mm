@@ -36,7 +36,7 @@
 
 - (void)testVirtualBinding
 {
-    WINQAssertEqual([self generateCreateVirtualTableStatementForClass:WTCVirtualTableBaselineObject.class], @"CREATE VIRTUAL TABLE IF NOT EXISTS WTCVirtualTableBaselineObject USING fts3(variable INTEGER, CONSTRAINT WTCVirtualTableBaselineObjectConstraint PRIMARY KEY(variable), left=right, tokenize=WCDB)");
+    WINQAssertEqual([self generateCreateVirtualTableStatementForClass:WTCVirtualTableBaselineObject.class], @"CREATE VIRTUAL TABLE IF NOT EXISTS WTCVirtualTableBaselineObject USING fts3(tokenize=WCDB, left=right, variable INTEGER, CONSTRAINT WTCVirtualTableBaselineObjectConstraint PRIMARY KEY(variable))");
 }
 
 @end

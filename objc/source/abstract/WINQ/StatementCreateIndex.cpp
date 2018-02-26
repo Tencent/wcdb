@@ -18,16 +18,33 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementCreateIndex &StatementCreateIndex::createIndex(
-    const std::string &indexName, bool ifNotExists, bool unique)
+StatementCreateIndex::StatementCreateIndex()
+{
+    getMutableLang().ifNotExists = true;
+}
+
+StatementCreateIndex &
+StatementCreateIndex::createIndex(const std::string &indexName)
 {
     lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexName.assign(indexName);
+    return *this;
+}
+
+StatementCreateIndex &StatementCreateIndex::ifNotExists(bool ifNotExists)
+{
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
+    return *this;
+}
+
+StatementCreateIndex &StatementCreateIndex::unique(bool unique)
+{
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.unique = unique;
     return *this;
 }
@@ -40,26 +57,31 @@ StatementCreateIndex::withSchema(const std::string &schemaName)
     return *this;
 }
 
-StatementCreateIndex &
-StatementCreateIndex::on(const std::string &tableName,
-                         const IndexedColumn &indexedColumn)
+StatementCreateIndex &StatementCreateIndex::on(const std::string &tableName)
 {
     lang::CreateIndexSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
+    return *this;
+}
+
+StatementCreateIndex &
+StatementCreateIndex::indexedBy(const IndexedColumn &indexedColumn)
+{
+    lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexedColumns.append(indexedColumn.getLang());
     return *this;
 }
+
 StatementCreateIndex &
-StatementCreateIndex::on(const std::string &tableName,
-                         const std::list<IndexedColumn> &indexedColumns)
+StatementCreateIndex::indexedBy(const std::list<IndexedColumn> &indexedColumns)
 {
     lang::CreateIndexSTMT &lang = getMutableLang();
-    lang.tableName.assign(tableName);
     for (const IndexedColumn &indexedColumn : indexedColumns) {
         lang.indexedColumns.append(indexedColumn.getLang());
     }
     return *this;
 }
+
 StatementCreateIndex &StatementCreateIndex::where(const Expression &condition)
 {
     lang::CreateIndexSTMT &lang = getMutableLang();

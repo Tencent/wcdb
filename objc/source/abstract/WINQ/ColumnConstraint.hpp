@@ -21,7 +21,7 @@
 #ifndef ColumnConstraint_hpp
 #define ColumnConstraint_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
@@ -31,21 +31,19 @@ public:
 
     ColumnConstraint &named(const std::string &name);
 
-    ColumnConstraint &withPrimaryKey(
-        const Order &order = Order::NotSet,
-        const ConflictClause &conflictClause = ConflictClause::NotSet,
-        bool autoIncrement = false);
+    ColumnConstraint &withPrimaryKey(const Order &order = Order::NotSet,
+                                     bool autoIncrement = false);
 
-    ColumnConstraint &
-    withNotNull(const ConflictClause &conflictClause = ConflictClause::NotSet);
+    ColumnConstraint &withNotNull();
 
-    ColumnConstraint &
-    withUnique(const ConflictClause &conflictClause = ConflictClause::NotSet);
+    ColumnConstraint &withUnique();
+
+    ColumnConstraint &onConflict(const ConflictClause &conflictClause);
 
     ColumnConstraint &withChecking(const Expression &expression);
 
-    ColumnConstraint &withDefault(const LiteralValue &literalValue);
-    ColumnConstraint &withDefault(const Expression &expression);
+    ColumnConstraint &withDefaultValue(const LiteralValue &literalValue);
+    ColumnConstraint &withDefaultExpression(const Expression &expression);
 
     ColumnConstraint &withCollate(const std::string &collationName);
 

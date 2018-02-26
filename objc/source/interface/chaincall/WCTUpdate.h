@@ -35,10 +35,10 @@
 
 /**
  @brief WINQ interface for SQL.
- @param orderList order list
+ @param orders order list
  @return self
  */
-- (instancetype)orderBy:(const WCDB::OrderList &)orderList;
+- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
 /**
  @brief WINQ interface for SQL.

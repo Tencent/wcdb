@@ -35,7 +35,8 @@
 
 - (WCDB::StatementCreateIndex)generateCreateIndexStatementForClass:(Class<WCTTableCoding>)cls
 {
-    return [cls objectRelationalMappingForWCDB]->getIndexBindingMap()->begin()->second->generateCreateIndexStatement(NSStringFromClass(cls).UTF8String);
+    WCDB::StatementCreateIndex statementCreateIndex = *([cls objectRelationalMappingForWCDB]->generateCreateIndexStatements(NSStringFromClass(cls).UTF8String).begin());
+    return statementCreateIndex;
 }
 
 - (void)testIndexBinding

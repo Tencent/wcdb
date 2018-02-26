@@ -38,7 +38,7 @@
     return [NSData dataWithData:self];
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnTypeForWCDB
 {
     return WCTColumnTypeBinary;
 }
@@ -60,7 +60,7 @@
     return [NSData dataWithData:self];
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnTypeForWCDB
 {
     return WCTColumnTypeBinary;
 }

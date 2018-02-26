@@ -21,7 +21,7 @@
 #ifndef OrderingTerm_hpp
 #define OrderingTerm_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
@@ -38,6 +38,8 @@ public:
     OrderingTerm(const Expression &expression);
     OrderingTerm &withCollate(const std::string &collateName);
     OrderingTerm &withOrder(const Order &order);
+
+    operator std::list<OrderingTerm>() const;
 
 protected:
     void setupWithExpression(const Expression &expression);

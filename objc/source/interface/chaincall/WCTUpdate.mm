@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCoding.h>
@@ -26,35 +27,32 @@
 #import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
-#import <WCDB/handle_statement.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
-    WCTPropertyList _propertyList;
+    WCTPropertyList _properties;
     int _changes;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList andTableName:(NSString *)tableName
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)properties andTableName:(NSString *)tableName
 {
     if (self = [super initWithCore:core]) {
         _statement.update(tableName.UTF8String);
-        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
-        WCDB::UpdateValueList updateValueList;
-        for (const WCTProperty &property : propertyList) {
+        _properties = properties;
+        for (const WCTProperty &property : properties) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (columnBinding) {
-                updateValueList.push_back({WCDB::Column(property.getDescription()), WCDB::Expression::BindParameter});
+                _statement.set(property, WCDB::BindParameter());
             } else {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),
                                              WCDB::Error::InterfaceOperation::Update,
                                              WCDB::Error::InterfaceCode::ORM,
-                                             [NSString stringWithFormat:@"Updating [%@] with an unknown column [%s]", tableName, columnBinding->columnName.c_str()].UTF8String,
+                                             [NSString stringWithFormat:@"Updating [%@] with an unknown column [%s]", tableName, columnBinding->columnDef.getColumnName().c_str()].UTF8String,
                                              &_error);
             }
         }
-        _statement.set(updateValueList);
     }
     return self;
 }
@@ -65,9 +63,9 @@
     return self;
 }
 
-- (instancetype)orderBy:(const WCDB::OrderList &)orderList
+- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders
 {
-    _statement.orderBy(orderList);
+    _statement.orderBy(orders);
     return self;
 }
 
@@ -108,7 +106,7 @@
         return NO;
     }
     int index = 1;
-    for (const WCTProperty &property : _propertyList) {
+    for (const WCTProperty &property : _properties) {
         if (![self bindProperty:property
                          ofObject:object
                 toStatementHandle:handleStatement

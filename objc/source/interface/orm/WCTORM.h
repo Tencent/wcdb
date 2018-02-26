@@ -23,8 +23,6 @@
 
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTConstraintBinding.h>
-#import <WCDB/WCTIndexBinding.h>
 
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTProperty.h>

@@ -21,7 +21,7 @@
 #ifndef LangColumn_hpp
 #define LangColumn_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

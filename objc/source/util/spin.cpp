@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/spin.hpp>
+#include <WCDB/spin.hpp>
 
 namespace WCDB {
 

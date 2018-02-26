@@ -48,20 +48,20 @@
  Create table from user-defined column.
  
  @param tableName The name of the table to be created.
- @param columnDefList The list of column definition.
- @param constraintList The list of constraint.
+ @param columnDefs The list of column definition.
+ @param constraints The list of constraint.
  @return YES only if no error occurs.
  */
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints;
 
 /**
- This interface is equivalent to [database createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:{}].
+ This interface is equivalent to [database createTableOfName:tableName withColumnDefs:columnDefs andConstraints:{}].
  
  @param tableName The name of the table to be created.
- @param columnDefList The list of column definition.
+ @param columnDefs The list of column definition.
  @return YES only if no error occurs.
  */
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs;
 
 /**
  Check whether table exists
@@ -83,11 +83,11 @@
  Create table from user-defined index.
  
  @param indexName The name of the index to be created.
- @param indexList The list of index definition.
+ @param indexedColumns The list of index definition.
  @param tableName The name of index-associated table.
  @return YES only if no error occurs.
  */
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName;
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName;
 
 /**
  Drop index.

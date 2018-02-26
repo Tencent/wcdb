@@ -21,22 +21,23 @@
 #ifndef StatementCreateIndex_hpp
 #define StatementCreateIndex_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementCreateIndex : public StatementWithLang<lang::CreateIndexSTMT> {
 
 public:
-    StatementCreateIndex &createIndex(const std::string &indexName,
-                                      bool ifNotExists = true,
-                                      bool unique = false);
+    StatementCreateIndex();
+    StatementCreateIndex &createIndex(const std::string &indexName);
+    StatementCreateIndex &ifNotExists(bool ifNotExists = true);
+    StatementCreateIndex &unique(bool unique = true);
     StatementCreateIndex &withSchema(const std::string &schemaName);
-    StatementCreateIndex &on(const std::string &tableName,
-                             const IndexedColumn &indexedColumn);
-    StatementCreateIndex &on(const std::string &tableName,
-                             const std::list<IndexedColumn> &indexedColumns);
+    StatementCreateIndex &on(const std::string &tableName);
+    StatementCreateIndex &indexedBy(const IndexedColumn &indexedColumn);
+    StatementCreateIndex &
+    indexedBy(const std::list<IndexedColumn> &indexedColumns);
     StatementCreateIndex &where(const Expression &condition);
     virtual Type getType() const override;
 };

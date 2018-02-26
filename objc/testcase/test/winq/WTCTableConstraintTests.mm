@@ -29,23 +29,28 @@
 - (void)testTableConstraint
 {
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn, WCDB::ConflictClause::NotSet),
+                        .withPrimaryKey(self.class.indexedColumn)
+                        .onConflict(WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn, WCDB::ConflictClause::Rollback),
+                        .withPrimaryKey(self.class.indexedColumn)
+                        .onConflict(WCDB::ConflictClause::Rollback),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT ROLLBACK");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumns, WCDB::ConflictClause::NotSet),
+                        .withPrimaryKey(self.class.indexedColumns)
+                        .onConflict(WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withUnique(self.class.indexedColumn, WCDB::ConflictClause::NotSet),
+                        .withUnique(self.class.indexedColumn)
+                        .onConflict(WCDB::ConflictClause::NotSet),
                     @"CONSTRAINT testConstraint UNIQUE(testColumn)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withUnique(self.class.indexedColumn, WCDB::ConflictClause::Rollback),
+                        .withUnique(self.class.indexedColumn)
+                        .onConflict(WCDB::ConflictClause::Rollback),
                     @"CONSTRAINT testConstraint UNIQUE(testColumn) ON CONFLICT ROLLBACK");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)

@@ -19,7 +19,7 @@
  */
 
 #import "WTCAssert.h"
-#import <WINQ/abstract.h>
+#import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>
 
 @interface WTCWINQTestCase : XCTestCase

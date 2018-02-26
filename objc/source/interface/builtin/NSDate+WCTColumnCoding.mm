@@ -38,7 +38,7 @@
     return [NSNumber numberWithLongLong:self.timeIntervalSince1970];
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnTypeForWCDB
 {
     return WCTColumnTypeInteger64;
 }

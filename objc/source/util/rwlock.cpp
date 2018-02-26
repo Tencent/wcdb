@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/rwlock.hpp>
+#include <WCDB/rwlock.hpp>
 
 namespace WCDB {
 

@@ -192,11 +192,13 @@
 
           currentConcurrency += 1;
 
-          XCTAssertTrue([self.database beginWithMode:WCTTransactionModeDeferred]);
+          XCTAssertTrue([self.database begin:WCTTransactionModeDeferred]);
 
           [cond wait];
 
           currentConcurrency -= 1;
+
+          XCTAssertTrue([self.database rollback]);
 
           [cond unlock];
         });
@@ -216,7 +218,7 @@
 
     XCTAssertEqual(currentConcurrency, maxConcurrency);
 
-    XCTAssertFalse([self.database beginWithMode:WCTTransactionModeDeferred]);
+    XCTAssertFalse([self.database begin:WCTTransactionModeDeferred]);
 
     [cond broadcast];
 

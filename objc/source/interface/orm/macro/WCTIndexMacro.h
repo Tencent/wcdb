@@ -19,23 +19,23 @@
  */
 
 #define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order,      \
-                         unique)                                               \
+                         isUnique)                                             \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding->getOrCreateIndexBinding(indexSubfixName)                      \
-            ->addIndex(className.propertyName.asIndex(order));                 \
-        WCDB_IF(unique, binding->getOrCreateIndexBinding(indexSubfixName)      \
-                            ->setUnique(true);)                                \
+        binding->getOrCreateIndex(indexSubfixName)                             \
+            ->indexedBy(className.propertyName.asIndex(order));                \
+        WCDB_IF(isUnique,                                                      \
+                binding->getOrCreateIndex(indexSubfixName)->unique();)         \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding->addVirtualTableArgument(left, right);                         \
+        binding->statementVirtualTable.on(WCDB::ModuleArgument(left, right));  \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));
 
 #define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
-        binding->setVirtualTableModule(moduleName);                            \
+        binding->statementVirtualTable.usingModule(moduleName);                \
         return nullptr;                                                        \
     }(&__WCDB_BINDING(className));

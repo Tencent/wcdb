@@ -32,10 +32,9 @@ class WCTRuntimeCppAccessor<
     typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
     : public WCTRuntimeAccessor<PropertyType>,
       public WCTCppAccessor<(
-          WCTColumnType) WCDB::ColumnInfo<PropertyType>::type> {
+          WCDB::ColumnType) WCDB::ColumnInfo<PropertyType>::type> {
 protected:
-    using CppAccessor =
-        WCTCppAccessor<(WCTColumnType) WCDB::ColumnInfo<PropertyType>::type>;
+    using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
     using UnderlyingType = typename CppAccessor::UnderlyingType;

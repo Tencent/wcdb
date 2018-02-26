@@ -124,18 +124,4 @@
     XCTAssertEqual(self.update.changes, self.preInsertedObjects.count);
 }
 
-- (void)testUpdateFailed
-{
-    WTCCRUDObject *object = [[WTCCRUDObject alloc] init];
-    object.variable2 = self.name;
-
-    _update = [self.database prepareUpdateTable:@"" onProperties:WTCCRUDObject.variable2];
-    XCTAssertNotNil(_update);
-    XCTAssertFalse([self.update executeWithObject:object]);
-
-    _update = [self.database prepareUpdateTable:WTCCRUDObject.Name onProperties:{}];
-    XCTAssertNotNil(_update);
-    XCTAssertFalse([self.update executeWithObject:object]);
-}
-
 @end

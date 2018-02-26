@@ -30,16 +30,22 @@
 #import <WCDB/utility.hpp>
 
 @implementation WCTSelect {
-    WCTPropertyList _propertyList;
+    WCTPropertyList _properties;
     Class _class;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+               andProperties:(const WCTPropertyList &)properties
+                   fromTable:(NSString *)tableName
+                  isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
-        _statement.select(_propertyList, isDistinct).from(tableName.UTF8String);
-        _class = _propertyList.front().getColumnBinding()->getClass();
+        _properties = properties;
+        if (isDistinct) {
+            _statement.distinct();
+        }
+        _statement.select(_properties).from(tableName.UTF8String);
+        _class = _properties.front().getColumnBinding()->getClass();
     }
     return self;
 }
@@ -53,7 +59,7 @@
         while ([self next]) {
             object = [[_class alloc] init];
             index = 0;
-            for (const WCTProperty &property : _propertyList) {
+            for (const WCTProperty &property : _properties) {
                 if ([self extractPropertyToObject:object
                                           atIndex:index
                                 withColumnBinding:property.getColumnBinding()]) {
@@ -74,7 +80,7 @@
     if ([self lazyPrepare] && [self next]) {
         WCTObject *object = [[_class alloc] init];
         int index = 0;
-        for (const WCTProperty &property : _propertyList) {
+        for (const WCTProperty &property : _properties) {
             if ([self extractPropertyToObject:object
                                       atIndex:index
                             withColumnBinding:property.getColumnBinding()]) {

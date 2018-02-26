@@ -25,33 +25,15 @@ namespace WCDB {
 
 //NSObject
 template <>
-struct LiteralValueConvertible<NSObject *> : public std::true_type {
+class LiteralValueConvertible<NSObject *> : public std::true_type {
 public:
-    static LiteralValue asLiteralValue(NSObject *const &t);
+    static LiteralValue as(NSObject *const &t);
 };
 
 template <>
-struct ExpressionConvertible<NSObject *> : public std::true_type {
+class ExpressionConvertible<NSObject *> : public std::true_type {
 public:
-    static Expression asExpression(NSObject *const &t);
-};
-
-template <>
-struct ColumnResultConvertible<NSObject *> : public std::true_type {
-public:
-    static ColumnResult asColumnResult(NSObject *const &t);
-};
-
-template <>
-struct OrderConvertible<NSObject *> : public std::true_type {
-public:
-    static Order asOrder(NSObject *const &t);
-};
-
-template <>
-struct SpecificOrderConvertible<NSObject *> : public std::true_type {
-public:
-    static Order asOrder(NSObject *const &t, OrderTerm term);
+    static Expression as(NSObject *const &t);
 };
 
 //NSObject Subclass
@@ -67,73 +49,21 @@ struct IsObjCType<
 };
 
 template <typename T>
-struct LiteralValueConvertible<
+class LiteralValueConvertible<
     T,
     typename std::enable_if<IsObjCType<T>::value>::type>
     : public std::true_type {
 public:
-    static LiteralValue asLiteralValue(const T &t);
-};
-
-template <typename T>
-struct ColumnResultConvertible<
-    T,
-    typename std::enable_if<IsObjCType<T>::value>::type>
-    : public std::true_type {
-public:
-    static ColumnResult asColumnResult(const T &t);
-};
-
-template <typename T>
-struct OrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>
-    : public std::true_type {
-public:
-    static Order asOrder(const T &t);
-};
-
-template <typename T>
-struct SpecificOrderConvertible<
-    T,
-    typename std::enable_if<IsObjCType<T>::value>::type>
-    : public std::true_type {
-public:
-    static Order asOrder(const T &t, OrderTerm term);
+    static LiteralValue as(const T &t);
 };
 
 //NSObject Subclass Implementation
 template <typename T>
-LiteralValue
-LiteralValueConvertible<T,
-                        typename std::enable_if<IsObjCType<T>::value>::type>::
-    asLiteralValue(const T &t)
-{
-    return LiteralValueConvertible<NSObject *>::asLiteralValue(t);
-}
-
-template <typename T>
-ColumnResult
-ColumnResultConvertible<T,
-                        typename std::enable_if<IsObjCType<T>::value>::type>::
-    asColumnResult(const T &t)
-{
-    return ColumnResultConvertible<NSObject *>::asColumnResult(t);
-}
-
-template <typename T>
-Order OrderConvertible<T, typename std::enable_if<IsObjCType<T>::value>::type>::
-    asOrder(const T &t)
-{
-    return OrderConvertible<NSObject *>::asOrder(t);
-}
-
-template <typename T>
-Order SpecificOrderConvertible<
+LiteralValue LiteralValueConvertible<
     T,
-    typename std::enable_if<IsObjCType<T>::value>::type>::asOrder(const T &t,
-                                                                  OrderTerm
-                                                                      term)
+    typename std::enable_if<IsObjCType<T>::value>::type>::as(const T &t)
 {
-    return OrderConvertible<NSObject *>::asOrder(t);
+    return LiteralValueConvertible<NSObject *>::as(t);
 }
 
 } //namespace WCDB

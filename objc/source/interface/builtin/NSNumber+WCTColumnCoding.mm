@@ -38,7 +38,7 @@
     return self;
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnTypeForWCDB
 {
     return WCTColumnTypeDouble;
 }

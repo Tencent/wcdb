@@ -21,7 +21,7 @@
 #ifndef ColumnType_hpp
 #define ColumnType_hpp
 
-#include <WINQ/lang.h>
+#include <WCDB/lang.h>
 #include <cstdint>
 #include <string>
 #include <type_traits>

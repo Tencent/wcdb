@@ -23,9 +23,9 @@
 #import <WCDB/WCTInterface.h>
 
 typedef NS_ENUM(int, WCTTransactionMode) {
-    WCTTransactionModeDeferred = (WCTTransactionMode) WCDB::StatementTransaction::Mode::Deferred,
-    WCTTransactionModeImmediate = (WCTTransactionMode) WCDB::StatementTransaction::Mode::Immediate,
-    WCTTransactionModeExclusive = (WCTTransactionMode) WCDB::StatementTransaction::Mode::Exclusive
+    WCTTransactionModeDeferred = (WCTTransactionMode) WCDB::StatementBegin::Transaction::Deferred,
+    WCTTransactionModeImmediate = (WCTTransactionMode) WCDB::StatementBegin::Transaction::Immediate,
+    WCTTransactionModeExclusive = (WCTTransactionMode) WCDB::StatementBegin::Transaction::Exclusive
 };
 
 /**
@@ -53,7 +53,7 @@ typedef void (^WCTTransactionBlock)();
  @brief Begin this transaction.
  @return YES only if no error occurs.
  */
-- (BOOL)beginWithMode:(WCTTransactionMode)mode;
+- (BOOL)begin:(WCTTransactionMode)mode;
 
 /**
  @brief Commit this transaction.

@@ -21,8 +21,8 @@
 #ifndef StatementAttach_hpp
 #define StatementAttach_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 

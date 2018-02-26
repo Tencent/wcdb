@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -51,6 +51,54 @@ ColumnDef &ColumnDef::byAddingConstraints(
         lang.columnConstraints.append(columnConstraint.getLang());
     }
     return *this;
+}
+
+bool ColumnDef::isAutoIncrement() const
+{
+    const auto &lang = getLang();
+    if (lang.empty()) {
+        return false;
+    }
+    const auto &columnConstraints = lang.get().columnConstraints;
+    if (columnConstraints.empty()) {
+        return false;
+    }
+    for (const auto &columnConstraint : columnConstraints.get()) {
+        if (columnConstraint.get().autoIncrement) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ColumnDef::isPrimary() const
+{
+    const auto &lang = getLang();
+    if (lang.empty()) {
+        return false;
+    }
+    const auto &columnConstraints = lang.get().columnConstraints;
+    if (columnConstraints.empty()) {
+        return false;
+    }
+    for (const auto &columnConstraint : columnConstraints.get()) {
+        if (columnConstraint.get().type ==
+            lang::ColumnConstraint::Type::PrimaryKey) {
+            return true;
+        }
+    }
+    return false;
+}
+
+const std::string &ColumnDef::getColumnName() const
+{
+    const auto &lang = getLang();
+    assert(!lang.empty());
+    const auto &column = lang.get().column;
+    assert(!column.empty());
+    const auto &name = column.get().name;
+    assert(!name.empty());
+    return name.get();
 }
 
 } // namespace WCDB

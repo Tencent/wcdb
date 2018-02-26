@@ -21,16 +21,17 @@
 #ifndef StatementDropIndex_hpp
 #define StatementDropIndex_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementDropIndex : public StatementWithLang<lang::DropIndexSTMT> {
 
 public:
-    StatementDropIndex &dropIndex(const std::string &indexName,
-                                  bool ifExists = true);
+    StatementDropIndex();
+    StatementDropIndex &dropIndex(const std::string &indexName);
+    StatementDropIndex &ifExists(bool ifExists = true);
     StatementDropIndex &withSchema(const std::string &schemaName);
     virtual Type getType() const override;
 };

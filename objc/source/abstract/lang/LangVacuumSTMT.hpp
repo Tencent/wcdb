@@ -21,7 +21,7 @@
 #ifndef LangVacuumSTMT_hpp
 #define LangVacuumSTMT_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

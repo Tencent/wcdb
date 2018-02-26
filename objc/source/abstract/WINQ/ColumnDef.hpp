@@ -21,7 +21,7 @@
 #ifndef ColumnDef_hpp
 #define ColumnDef_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
@@ -33,6 +33,10 @@ public:
     ColumnDef &byAddingConstraint(const ColumnConstraint &columnConstraint);
     ColumnDef &
     byAddingConstraints(const std::list<ColumnConstraint> &columnConstraints);
+
+    bool isAutoIncrement() const;
+    bool isPrimary() const;
+    const std::string &getColumnName() const;
 };
 
 } // namespace WCDB

@@ -48,11 +48,12 @@ RecyclableHandle Database::flowOut(Error &error)
     return iter->second;
 }
 
-bool Database::begin(StatementTransaction::Mode mode, Error &error)
+bool Database::begin(const StatementBegin::Transaction &transaction,
+                     Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     if (handle != nullptr &&
-        CoreBase::exec(handle, StatementTransaction().begin(mode), error)) {
+        CoreBase::exec(handle, StatementBegin().begin(transaction), error)) {
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->insert({getPath(), handle});
@@ -65,7 +66,7 @@ bool Database::commit(Error &error)
 {
     RecyclableHandle handle = flowOut(error);
     if (handle != nullptr &&
-        CoreBase::exec(handle, StatementTransaction().commit(), error)) {
+        CoreBase::exec(handle, StatementCommit().commit(), error)) {
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->erase(getPath());
@@ -79,8 +80,7 @@ bool Database::rollback(Error &error)
     RecyclableHandle handle = flowOut(error);
     bool result = false;
     if (handle != nullptr) {
-        result =
-            CoreBase::exec(handle, StatementTransaction().rollback(), error);
+        result = CoreBase::exec(handle, StatementRollback().rollback(), error);
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->erase(getPath());

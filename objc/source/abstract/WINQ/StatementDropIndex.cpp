@@ -18,16 +18,19 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementDropIndex &StatementDropIndex::dropIndex(const std::string &indexName,
-                                                  bool ifExists)
+StatementDropIndex::StatementDropIndex()
+{
+    getMutableLang().ifExists = true;
+}
+
+StatementDropIndex &StatementDropIndex::dropIndex(const std::string &indexName)
 {
     lang::DropIndexSTMT &lang = getMutableLang();
     lang.name.assign(indexName);
-    lang.ifExists = ifExists;
     return *this;
 }
 
@@ -36,6 +39,13 @@ StatementDropIndex::withSchema(const std::string &schemaName)
 {
     lang::DropIndexSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+StatementDropIndex &StatementDropIndex::ifExists(bool ifExists)
+{
+    lang::DropIndexSTMT &lang = getMutableLang();
+    lang.ifExists = ifExists;
     return *this;
 }
 

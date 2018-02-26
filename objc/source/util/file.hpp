@@ -21,7 +21,7 @@
 #ifndef file_hpp
 #define file_hpp
 
-#include <WINQ/error.hpp>
+#include <WCDB/error.hpp>
 #include <list>
 #include <string>
 

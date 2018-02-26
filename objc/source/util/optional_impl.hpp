@@ -21,8 +21,8 @@
 #ifndef optional_impl_hpp
 #define optional_impl_hpp
 
-#include <WINQ/error.hpp>
-#include <WINQ/optional.hpp>
+#include <WCDB/error.hpp>
+#include <WCDB/optional.hpp>
 
 namespace WCDB {
 

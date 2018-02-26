@@ -105,11 +105,4 @@
     XCTAssertEqual(self.delete_.changes, self.preInsertedObjects.count);
 }
 
-- (void)testDeleteFailed
-{
-    _delete_ = [self.database prepareDeleteFromTable:@""];
-    XCTAssertNotNil(_delete_);
-    XCTAssertFalse([self.delete_ execute]);
-}
-
 @end

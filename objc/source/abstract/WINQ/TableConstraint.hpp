@@ -21,7 +21,7 @@
 #ifndef TableConstraint_hpp
 #define TableConstraint_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
@@ -30,19 +30,14 @@ public:
     TableConstraint();
     TableConstraint(const std::string &name);
 
-    TableConstraint &withPrimaryKey(
-        const IndexedColumn &indexedColumn,
-        const ConflictClause &conflictClause = ConflictClause::NotSet);
-    TableConstraint &withPrimaryKey(
-        const std::list<IndexedColumn> &indexedColumns,
-        const ConflictClause &conflictClause = ConflictClause::NotSet);
+    TableConstraint &withPrimaryKey(const IndexedColumn &indexedColumn);
+    TableConstraint &
+    withPrimaryKey(const std::list<IndexedColumn> &indexedColumns);
 
-    TableConstraint &
-    withUnique(const IndexedColumn &indexedColumn,
-               const ConflictClause &conflictClause = ConflictClause::NotSet);
-    TableConstraint &
-    withUnique(const std::list<IndexedColumn> &indexedColumns,
-               const ConflictClause &conflictClause = ConflictClause::NotSet);
+    TableConstraint &withUnique(const IndexedColumn &indexedColumn);
+    TableConstraint &withUnique(const std::list<IndexedColumn> &indexedColumns);
+
+    TableConstraint &onConflict(const ConflictClause &conflictClause);
 
     TableConstraint &withChecking(const Expression &expression);
 

@@ -22,16 +22,14 @@
 #define WCTBinding_hpp
 
 #import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTConstraintBinding.h>
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTIndexBinding.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/sequantial_increasing_map.hpp>
 
 class WCTBinding {
 public:
     WCTBinding(Class cls);
 
-#pragma mark - Column
     template <typename T>
     std::shared_ptr<WCTColumnBinding>
     addColumnBinding(const std::string &propertyName,
@@ -39,7 +37,7 @@ public:
     {
         std::shared_ptr<WCTColumnBinding> columnBinding(new WCTColumnBinding(
             m_cls, propertyName, columnName, (T *) nullptr));
-        _addColumnBinding(columnName, columnBinding);
+        m_columnBindings.append(columnName, columnBinding);
         return columnBinding;
     }
 
@@ -54,73 +52,46 @@ public:
     std::shared_ptr<WCTColumnBinding>
     getColumnBinding(const WCTProperty &property) const;
 
-    std::shared_ptr<WCTIndexBinding>
-    getOrCreateIndexBinding(const std::string &indexSubfixName);
+    void addColumnConstraint(const WCDB::ColumnConstraint &columnConstraint,
+                             const WCTProperty &property) const;
 
-    template <typename T>
-    typename std::enable_if<std::is_base_of<WCTConstraintBindingBase, T>::value,
-                            T *>::type
-    getOrCreateConstraintBinding(const std::string &constraintName)
-    {
-        T *constraint = (T *) getConstraint(constraintName, T::type);
-        if (!constraint) {
-            std::shared_ptr<T> constraintBinding(new T(constraintName));
-            addConstraintBinding(
-                constraintName,
-                std::static_pointer_cast<WCTConstraintBindingBase>(
-                    constraintBinding));
-            constraint = constraintBinding.get();
-        }
-        return constraint;
-    }
+    std::shared_ptr<WCDB::TableConstraint>
+    getOrCreateTableConstraint(const std::string &name);
 
-    const std::shared_ptr<WCTIndexBindingMap> getIndexBindingMap() const;
-    const WCTColumnBindingList &getColumnBindingList() const;
-    const WCTColumnBindingMap &getColumnBindingMap() const;
+    std::shared_ptr<WCDB::StatementCreateIndex>
+    getOrCreateIndex(const std::string &subfix);
 
-    const std::shared_ptr<std::list<std::pair<std::string, std::string>>>
-    getVirtualTableArgumentList() const;
+    const std::map<std::string,
+                   std::shared_ptr<WCTColumnBinding>,
+                   WCDB::CaseInsensiveComparator> &
+    getColumnBindingMap() const;
 
-    void addVirtualTableArgument(const std::string &left,
-                                 const std::string &right);
-    void addVirtualTableArgument(const std::string &left, NSString *right);
-    void setVirtualTableModule(const std::string &moduleName);
-    void setVirtualTableModule(NSString *moduleName);
+    WCDB::StatementCreateVirtualTable statementVirtualTable;
 
     WCDB::StatementCreateTable
     generateCreateTableStatement(const std::string &tableName) const;
     WCDB::StatementCreateVirtualTable
     generateVirtualCreateTableStatement(const std::string &tableName) const;
+    std::list<WCDB::StatementCreateIndex>
+    generateCreateIndexStatements(const std::string &tableName) const;
 
 protected:
-    void
-    _addColumnBinding(const std::string &propertyName,
-                      const std::shared_ptr<WCTColumnBinding> &columnBinding);
-    WCTConstraintBindingBase *getConstraint(const std::string &constraintName,
-                                            WCTConstraintBindingType type);
-    void addConstraintBinding(
-        const std::string &constraintName,
-        const std::shared_ptr<WCTConstraintBindingBase> &constraintBinding);
+    SequentialIncreasingMap<std::string,
+                            WCTColumnBinding,
+                            WCDB::CaseInsensiveComparator>
+        m_columnBindings;
+
+    SequentialIncreasingMap<std::string,
+                            WCDB::TableConstraint,
+                            WCDB::CaseInsensiveComparator>
+        m_constraints;
+
+    SequentialIncreasingMap<std::string,
+                            WCDB::StatementCreateIndex,
+                            WCDB::CaseInsensiveComparator>
+        m_indexes;
 
     Class m_cls;
-
-    WCTColumnBindingMap m_columnBindingMap;   //columnName->column binding
-    WCTColumnBindingList m_columnBindingList; //ordered column binding
-
-    void lazyInitIndexBinding();
-    std::shared_ptr<WCTIndexBindingMap>
-        m_indexBindingMap; //indexName->index binding
-
-    void lazyInitConstraintBinding();
-    std::shared_ptr<WCTConstraintBindingMap>
-        m_constraintBindingMap; //constraintName->constraint binding
-    std::shared_ptr<WCTConstraintBindingList>
-        m_constraintBindingList; //ordered constraint binding
-
-    void lazyInitVirtualTableArgumentList();
-    std::shared_ptr<std::list<std::pair<std::string, std::string>>>
-        m_virtualTableArgumentList; //for Virtual Table
-    std::string m_virtualTableModuleName;
 };
 
 #endif /* WCTBinding_hpp */

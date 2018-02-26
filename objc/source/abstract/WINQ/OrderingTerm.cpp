@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -45,6 +45,11 @@ void OrderingTerm::setupWithExpression(const Expression &expression)
 {
     lang::OrderingTerm &lang = getMutableLang();
     lang.expr.assign(expression.getLang());
+}
+
+OrderingTerm::operator std::list<OrderingTerm>() const
+{
+    return {*this};
 }
 
 } // namespace WCDB

@@ -61,7 +61,8 @@ public:
     typedef std::function<void(Error &)> TransactionBlock;
     bool runTransaction(TransactionBlock transaction, Error &error);
 
-    virtual bool begin(StatementTransaction::Mode mode, Error &error) = 0;
+    virtual bool begin(const StatementBegin::Transaction &transaction,
+                       Error &error) = 0;
     virtual bool commit(Error &error) = 0;
     virtual bool rollback(Error &error) = 0;
     virtual bool runEmbeddedTransaction(TransactionBlock transaction,

@@ -21,7 +21,7 @@
 #ifndef Convertible_hpp
 #define Convertible_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

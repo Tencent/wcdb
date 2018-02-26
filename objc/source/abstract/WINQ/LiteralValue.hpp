@@ -21,7 +21,7 @@
 #ifndef LiteralValue_hpp
 #define LiteralValue_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

@@ -82,14 +82,14 @@
  @param index Begin with 0.
  @return Column type.
  */
-- (WCTColumnType)columnTypeAtIndex:(int)index;
+- (WCDB::ColumnType)columnTypeAtIndex:(int)index;
 
 /**
  @brief The wrapper of sqlite3_column_type.
  @param columnName columnName.
  @return Column type.
  */
-- (WCTColumnType)columnTypeByName:(NSString *)columnName;
+- (WCDB::ColumnType)columnTypeByName:(NSString *)columnName;
 
 /**
  @brief The wrapper of sqlite3_column_count.

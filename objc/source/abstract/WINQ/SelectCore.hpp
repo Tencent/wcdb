@@ -21,7 +21,7 @@
 #ifndef SelectCore_hpp
 #define SelectCore_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

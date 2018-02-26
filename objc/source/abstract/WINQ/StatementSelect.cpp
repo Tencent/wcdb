@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -255,6 +255,11 @@ void StatementSelect::compound(
 Statement::Type StatementSelect::getType() const
 {
     return Statement::Type::Select;
+}
+
+Expression StatementSelect::getRedirectSource() const
+{
+    return *this;
 }
 
 } // namespace WCDB

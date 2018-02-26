@@ -29,9 +29,9 @@
 
 - (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class)cls andError:(WCDB::Error &)error;
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andError:(WCDB::Error &)error;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andError:(WCDB::Error &)error;
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList andError:(WCDB::Error &)error;
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints andError:(WCDB::Error &)error;
 
 - (BOOL)addColumn:(const WCDB::ColumnDef &)columnDef forTable:(NSString *)tableName withError:(WCDB::Error &)error;
 
@@ -39,7 +39,7 @@
 
 - (BOOL)isTableExists:(NSString *)tableName withError:(WCDB::Error &)error;
 
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName andError:(WCDB::Error &)error;
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName andError:(WCDB::Error &)error;
 
 - (BOOL)dropIndexOfName:(NSString *)indexName withError:(WCDB::Error &)error;
 

@@ -21,17 +21,18 @@
 #ifndef StatementDropTable_hpp
 #define StatementDropTable_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementDropTable : public StatementWithLang<lang::DropTableSTMT> {
 
 public:
-    StatementDropTable &dropTable(const std::string &tableName,
-                                  bool ifExists = true);
+    StatementDropTable();
+    StatementDropTable &dropTable(const std::string &tableName);
     StatementDropTable &withSchema(const std::string &schemaName);
+    StatementDropTable &ifExists(bool ifExists = true);
     virtual Type getType() const override;
 };
 

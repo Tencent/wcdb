@@ -87,7 +87,7 @@
 - (void)testRowSelect
 {
     //When
-    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Column::All} fromTable:WTCCRUDObject.Name];
+    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Expression::All()} fromTable:WTCCRUDObject.Name];
     //Then
     XCTAssertEqual(rows.count, self.preInsertedObjects.count);
     XCTAssertEqual(((NSNumber *) rows[0][0]).intValue, self.preInsertedObjects[0].variable1);
@@ -99,7 +99,7 @@
 - (void)testConditionalRowSelect
 {
     //When
-    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Column::All} fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
+    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Expression::All()} fromTable:WTCCRUDObject.Name where:WTCCRUDObject.variable1 == 1];
     //Then
     XCTAssertEqual(rows.count, 1);
     XCTAssertEqual(((NSNumber *) rows[0][0]).intValue, self.preInsertedObjects[0].variable1);
@@ -109,7 +109,7 @@
 - (void)testOrderedRowSelect
 {
     //When
-    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Column::All} fromTable:WTCCRUDObject.Name orderBy:WTCCRUDObject.variable1.asOrder(WCTOrderedDescending)];
+    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Expression::All()} fromTable:WTCCRUDObject.Name orderBy:WTCCRUDObject.variable1.asOrder(WCTOrderedDescending)];
     //Then
     XCTAssertEqual(rows.count, self.preInsertedObjects.count);
     XCTAssertEqual(((NSNumber *) rows[0][0]).intValue, self.preInsertedObjects[1].variable1);
@@ -121,7 +121,7 @@
 - (void)testLimitedRowSelect
 {
     //When
-    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Column::All} fromTable:WTCCRUDObject.Name limit:1];
+    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Expression::All()} fromTable:WTCCRUDObject.Name limit:1];
     //Then
     XCTAssertEqual(rows.count, 1);
     XCTAssertEqual(((NSNumber *) rows[0][0]).intValue, self.preInsertedObjects[0].variable1);
@@ -131,7 +131,7 @@
 - (void)testOffsetRowSelect
 {
     //When
-    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Column::All} fromTable:WTCCRUDObject.Name limit:1 offset:1];
+    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WCDB::Expression::All()} fromTable:WTCCRUDObject.Name limit:1 offset:1];
     //Then
     XCTAssertEqual(rows.count, 1);
     XCTAssertEqual(((NSNumber *) rows[0][0]).intValue, self.preInsertedObjects[1].variable1);
@@ -141,7 +141,7 @@
 - (void)testPartialRowSelect
 {
     //When
-    WCTColumnsXRows *rows = [self.database getRowsOnResults:WTCCRUDObject.variable2 fromTable:WTCCRUDObject.Name];
+    WCTColumnsXRows *rows = [self.database getRowsOnResults:{WTCCRUDObject.variable2} fromTable:WTCCRUDObject.Name];
     //Then
     XCTAssertEqual(rows.count, self.preInsertedObjects.count);
     XCTAssertTrue([(NSString *) rows[0][0] isEqualToString:self.preInsertedObjects[0].variable2]);

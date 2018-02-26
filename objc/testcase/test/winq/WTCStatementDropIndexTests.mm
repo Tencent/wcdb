@@ -31,16 +31,19 @@
     XCTAssertEqual(WCDB::StatementDropIndex().getType(), WCDB::Statement::Type::DropIndex);
 
     WINQAssertEqual(WCDB::StatementDropIndex()
-                        .dropIndex(self.class.indexName, true)
+                        .dropIndex(self.class.indexName)
+                        .ifExists(true)
                         .withSchema(self.class.schemaName),
                     @"DROP INDEX IF EXISTS testSchema.testIndex");
 
     WINQAssertEqual(WCDB::StatementDropIndex()
-                        .dropIndex(self.class.indexName, true),
+                        .dropIndex(self.class.indexName)
+                        .ifExists(true),
                     @"DROP INDEX IF EXISTS testIndex");
 
     WINQAssertEqual(WCDB::StatementDropIndex()
-                        .dropIndex(self.class.indexName, false)
+                        .dropIndex(self.class.indexName)
+                        .ifExists(false)
                         .withSchema(self.class.schemaName),
                     @"DROP INDEX testSchema.testIndex");
 

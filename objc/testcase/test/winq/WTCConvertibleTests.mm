@@ -73,33 +73,51 @@
 
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, numericLiteral),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(numericLiteral),
                     @"CREATE INDEX testIndex ON testTable(1)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, floatLiteral),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(floatLiteral),
                     @"CREATE INDEX testIndex ON testTable(2.1)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, stringLiteral),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(stringLiteral),
                     @"CREATE INDEX testIndex ON testTable('3')");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, blobLiteral),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(blobLiteral),
                     @"CREATE INDEX testIndex ON testTable('4')");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, "3"),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy("3"),
                     @"CREATE INDEX testIndex ON testTable('3')");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, nullptr),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(nullptr),
                     @"CREATE INDEX testIndex ON testTable(NULL)");
 
     //To ResultColumn
@@ -175,8 +193,11 @@
 {
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, self.class.literalValue),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.literalValue),
                     @"CREATE INDEX testIndex ON testTable(1)");
 
     //To ResultColumn
@@ -197,8 +218,11 @@
 {
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, self.class.column),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.column),
                     @"CREATE INDEX testIndex ON testTable(testColumn)");
 
     //To ResultColumn
@@ -221,8 +245,11 @@
 
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, bindParameter),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(bindParameter),
                     @"CREATE INDEX testIndex ON testTable(?)");
 
     //To ResultColumn
@@ -243,8 +270,11 @@
 {
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, self.class.statementSelect),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.statementSelect),
                     @"CREATE INDEX testIndex ON testTable((SELECT testColumn FROM testTable))");
 
     //To ResultColumn
@@ -267,8 +297,11 @@
 
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, raiseFunction),
+                        .createIndex(self.class.indexName)
+                        .unique(false)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(raiseFunction),
                     @"CREATE INDEX testIndex ON testTable(RAISE(IGNORE))");
 
     //To ResultColumn

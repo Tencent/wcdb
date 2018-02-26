@@ -49,112 +49,59 @@
 		23698BB72004AC2C00C0291C /* WTCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 23698BB62004AC2C00C0291C /* WTCConfig.m */; };
 		23698BBB2004ACE100C0291C /* WTCBenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698BBA2004ACE100C0291C /* WTCBenchmarkObject.mm */; };
 		23698BBD2004AD2500C0291C /* WTCBaselineReadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698BBC2004AD2500C0291C /* WTCBaselineReadBenchmark.mm */; };
-		23731A42201F02D9005967ED /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23731A43201F02E3005967ED /* WTCColumnDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0420047BDD00C0291C /* WTCColumnDefTests.mm */; };
-		23731A66201F02E8005967ED /* WINQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 237319E1201F0263005967ED /* WINQ.framework */; };
 		23890DE4201210BB0036C53F /* WTCUpdateInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE3201210BB0036C53F /* WTCUpdateInterfaceTests.mm */; };
 		23890DE6201210C30036C53F /* WTCSelectInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE5201210C30036C53F /* WTCSelectInterfaceTests.mm */; };
 		23890DE8201210CA0036C53F /* WTCDeleteInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE7201210CA0036C53F /* WTCDeleteInterfaceTests.mm */; };
 		23890DEA201210EE0036C53F /* WTCInsertInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23890DE9201210EE0036C53F /* WTCInsertInterfaceTests.mm */; };
 		238CB75E203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */; };
-		238CB75F203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238CB75D203D3739009E2A2E /* WTCWINQTestCase.mm */; };
 		239B7EF3203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239B7EF2203FF85300D10CE0 /* WTCConvertibleTests.mm */; };
-		239B7EF4203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239B7EF2203FF85300D10CE0 /* WTCConvertibleTests.mm */; };
 		23A7DCB5204008AE00189529 /* WTCTableOrSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCB4204008AE00189529 /* WTCTableOrSubqueryTests.mm */; };
-		23A7DCB6204008AE00189529 /* WTCTableOrSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCB4204008AE00189529 /* WTCTableOrSubqueryTests.mm */; };
 		23A7DCB920400D6D00189529 /* WTCUnexpectedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCB820400D6D00189529 /* WTCUnexpectedTests.mm */; };
-		23A7DCBA20400D6D00189529 /* WTCUnexpectedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCB820400D6D00189529 /* WTCUnexpectedTests.mm */; };
 		23A7DCBC204010D000189529 /* WTCColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCBB204010D000189529 /* WTCColumnTypeTests.mm */; };
-		23A7DCBD204010D000189529 /* WTCColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCBB204010D000189529 /* WTCColumnTypeTests.mm */; };
 		23A7DCC2204011A000189529 /* WTCConflictClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCC1204011A000189529 /* WTCConflictClauseTests.mm */; };
-		23A7DCC3204011A000189529 /* WTCConflictClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A7DCC1204011A000189529 /* WTCConflictClauseTests.mm */; };
 		23BDBA98202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */; };
-		23BDBA99202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA97202D5111001BEEDA /* WTCForeignKeyClauseTests.mm */; };
 		23BDBA9B202D52A2001BEEDA /* WTCIndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */; };
-		23BDBA9C202D52A2001BEEDA /* WTCIndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA9A202D52A2001BEEDA /* WTCIndexedColumnTests.mm */; };
 		23BDBA9E202D52A7001BEEDA /* WTCJoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA9D202D52A7001BEEDA /* WTCJoinClauseTests.mm */; };
-		23BDBA9F202D52A7001BEEDA /* WTCJoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBA9D202D52A7001BEEDA /* WTCJoinClauseTests.mm */; };
 		23BDBAA1202D52B2001BEEDA /* WTCJoinConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA0202D52B2001BEEDA /* WTCJoinConstraintTests.mm */; };
-		23BDBAA2202D52B2001BEEDA /* WTCJoinConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA0202D52B2001BEEDA /* WTCJoinConstraintTests.mm */; };
 		23BDBAA4202D52B7001BEEDA /* WTCLiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA3202D52B7001BEEDA /* WTCLiteralValueTests.mm */; };
-		23BDBAA5202D52B7001BEEDA /* WTCLiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA3202D52B7001BEEDA /* WTCLiteralValueTests.mm */; };
 		23BDBAA7202D52BD001BEEDA /* WTCModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA6202D52BD001BEEDA /* WTCModuleArgumentTests.mm */; };
-		23BDBAA8202D52BD001BEEDA /* WTCModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA6202D52BD001BEEDA /* WTCModuleArgumentTests.mm */; };
 		23BDBAAA202D52C2001BEEDA /* WTCOrderingTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA9202D52C2001BEEDA /* WTCOrderingTermTests.mm */; };
-		23BDBAAB202D52C2001BEEDA /* WTCOrderingTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAA9202D52C2001BEEDA /* WTCOrderingTermTests.mm */; };
 		23BDBAAD202D52CA001BEEDA /* WTCPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAAC202D52CA001BEEDA /* WTCPragmaTests.mm */; };
-		23BDBAAE202D52CA001BEEDA /* WTCPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAAC202D52CA001BEEDA /* WTCPragmaTests.mm */; };
 		23BDBAB0202D52D2001BEEDA /* WTCQualifiedTableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAAF202D52D2001BEEDA /* WTCQualifiedTableNameTests.mm */; };
-		23BDBAB1202D52D2001BEEDA /* WTCQualifiedTableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAAF202D52D2001BEEDA /* WTCQualifiedTableNameTests.mm */; };
 		23BDBAB3202D52D7001BEEDA /* WTCRaiseFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB2202D52D7001BEEDA /* WTCRaiseFunctionTests.mm */; };
-		23BDBAB4202D52D7001BEEDA /* WTCRaiseFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB2202D52D7001BEEDA /* WTCRaiseFunctionTests.mm */; };
 		23BDBAB6202D52DC001BEEDA /* WTCResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB5202D52DC001BEEDA /* WTCResultColumnTests.mm */; };
-		23BDBAB7202D52DC001BEEDA /* WTCResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB5202D52DC001BEEDA /* WTCResultColumnTests.mm */; };
 		23BDBAB9202D52E2001BEEDA /* WTCSelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB8202D52E2001BEEDA /* WTCSelectCoreTests.mm */; };
-		23BDBABA202D52E2001BEEDA /* WTCSelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAB8202D52E2001BEEDA /* WTCSelectCoreTests.mm */; };
 		23BDBABF202D52EE001BEEDA /* WTCStatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBABE202D52EE001BEEDA /* WTCStatementAlterTableTests.mm */; };
-		23BDBAC0202D52EE001BEEDA /* WTCStatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBABE202D52EE001BEEDA /* WTCStatementAlterTableTests.mm */; };
 		23BDBAC2202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC1202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm */; };
-		23BDBAC3202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC1202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm */; };
 		23BDBAC5202D5301001BEEDA /* WTCStatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC4202D5301001BEEDA /* WTCStatementAttachTests.mm */; };
-		23BDBAC6202D5301001BEEDA /* WTCStatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC4202D5301001BEEDA /* WTCStatementAttachTests.mm */; };
 		23BDBAC8202D5305001BEEDA /* WTCStatementBeginTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC7202D5305001BEEDA /* WTCStatementBeginTests.mm */; };
-		23BDBAC9202D5305001BEEDA /* WTCStatementBeginTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAC7202D5305001BEEDA /* WTCStatementBeginTests.mm */; };
 		23BDBACB202D530A001BEEDA /* WTCStatementCommitTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBACA202D530A001BEEDA /* WTCStatementCommitTests.mm */; };
-		23BDBACC202D530A001BEEDA /* WTCStatementCommitTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBACA202D530A001BEEDA /* WTCStatementCommitTests.mm */; };
 		23BDBACE202D5377001BEEDA /* WTCStatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBACD202D5377001BEEDA /* WTCStatementCreateIndexTests.mm */; };
-		23BDBACF202D5377001BEEDA /* WTCStatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBACD202D5377001BEEDA /* WTCStatementCreateIndexTests.mm */; };
 		23BDBAD1202D537D001BEEDA /* WTCStatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD0202D537D001BEEDA /* WTCStatementCreateTableTests.mm */; };
-		23BDBAD2202D537D001BEEDA /* WTCStatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD0202D537D001BEEDA /* WTCStatementCreateTableTests.mm */; };
 		23BDBAD4202D5383001BEEDA /* WTCStatementCreateTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD3202D5383001BEEDA /* WTCStatementCreateTriggerTests.mm */; };
-		23BDBAD5202D5383001BEEDA /* WTCStatementCreateTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD3202D5383001BEEDA /* WTCStatementCreateTriggerTests.mm */; };
 		23BDBAD7202D538B001BEEDA /* WTCStatementCreateViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD6202D538B001BEEDA /* WTCStatementCreateViewTests.mm */; };
-		23BDBAD8202D538B001BEEDA /* WTCStatementCreateViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD6202D538B001BEEDA /* WTCStatementCreateViewTests.mm */; };
 		23BDBADA202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD9202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm */; };
-		23BDBADB202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAD9202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm */; };
 		23BDBADD202D5399001BEEDA /* WTCStatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBADC202D5399001BEEDA /* WTCStatementDeleteTests.mm */; };
-		23BDBADE202D5399001BEEDA /* WTCStatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBADC202D5399001BEEDA /* WTCStatementDeleteTests.mm */; };
 		23BDBAE0202D53A1001BEEDA /* WTCStatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBADF202D53A1001BEEDA /* WTCStatementDetachTests.mm */; };
-		23BDBAE1202D53A1001BEEDA /* WTCStatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBADF202D53A1001BEEDA /* WTCStatementDetachTests.mm */; };
 		23BDBAE3202D53A9001BEEDA /* WTCStatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAE2202D53A9001BEEDA /* WTCStatementDropIndexTests.mm */; };
-		23BDBAE4202D53A9001BEEDA /* WTCStatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAE2202D53A9001BEEDA /* WTCStatementDropIndexTests.mm */; };
 		23BDBAE6202D53B0001BEEDA /* WTCStatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAE5202D53B0001BEEDA /* WTCStatementDropTableTests.mm */; };
-		23BDBAE7202D53B0001BEEDA /* WTCStatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAE5202D53B0001BEEDA /* WTCStatementDropTableTests.mm */; };
 		23BDBAE9202D53B9001BEEDA /* WTCStatementDropTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAE8202D53B9001BEEDA /* WTCStatementDropTriggerTests.mm */; };
-		23BDBAEA202D53B9001BEEDA /* WTCStatementDropTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAE8202D53B9001BEEDA /* WTCStatementDropTriggerTests.mm */; };
 		23BDBAEC202D53BF001BEEDA /* WTCStatementDropViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAEB202D53BF001BEEDA /* WTCStatementDropViewTests.mm */; };
-		23BDBAED202D53BF001BEEDA /* WTCStatementDropViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAEB202D53BF001BEEDA /* WTCStatementDropViewTests.mm */; };
 		23BDBAEF202D53CB001BEEDA /* WTCStatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAEE202D53CB001BEEDA /* WTCStatementInsertTests.mm */; };
-		23BDBAF0202D53CB001BEEDA /* WTCStatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAEE202D53CB001BEEDA /* WTCStatementInsertTests.mm */; };
 		23BDBAF2202D5437001BEEDA /* WTCStatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAF1202D5437001BEEDA /* WTCStatementPragmaTests.mm */; };
-		23BDBAF3202D5437001BEEDA /* WTCStatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAF1202D5437001BEEDA /* WTCStatementPragmaTests.mm */; };
 		23BDBAF5202D543F001BEEDA /* WTCStatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAF4202D543F001BEEDA /* WTCStatementReindexTests.mm */; };
-		23BDBAF6202D543F001BEEDA /* WTCStatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAF4202D543F001BEEDA /* WTCStatementReindexTests.mm */; };
 		23BDBAF8202D5445001BEEDA /* WTCStatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAF7202D5445001BEEDA /* WTCStatementReleaseTests.mm */; };
-		23BDBAF9202D5445001BEEDA /* WTCStatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAF7202D5445001BEEDA /* WTCStatementReleaseTests.mm */; };
 		23BDBAFB202D5455001BEEDA /* WTCStatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAFA202D5455001BEEDA /* WTCStatementRollbackTests.mm */; };
-		23BDBAFC202D5455001BEEDA /* WTCStatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAFA202D5455001BEEDA /* WTCStatementRollbackTests.mm */; };
 		23BDBAFE202D545C001BEEDA /* WTCStatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAFD202D545C001BEEDA /* WTCStatementSavepointTests.mm */; };
-		23BDBAFF202D545C001BEEDA /* WTCStatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBAFD202D545C001BEEDA /* WTCStatementSavepointTests.mm */; };
 		23BDBB01202D5462001BEEDA /* WTCStatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB00202D5462001BEEDA /* WTCStatementSelectTests.mm */; };
-		23BDBB02202D5462001BEEDA /* WTCStatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB00202D5462001BEEDA /* WTCStatementSelectTests.mm */; };
 		23BDBB04202D5467001BEEDA /* WTCStatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB03202D5467001BEEDA /* WTCStatementUpdateTests.mm */; };
-		23BDBB05202D5467001BEEDA /* WTCStatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB03202D5467001BEEDA /* WTCStatementUpdateTests.mm */; };
 		23BDBB07202D546C001BEEDA /* WTCStatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB06202D546C001BEEDA /* WTCStatementVacuumTests.mm */; };
-		23BDBB08202D546C001BEEDA /* WTCStatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB06202D546C001BEEDA /* WTCStatementVacuumTests.mm */; };
 		23BDBB0A202D5475001BEEDA /* WTCTableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB09202D5475001BEEDA /* WTCTableConstraintTests.mm */; };
-		23BDBB0B202D5475001BEEDA /* WTCTableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB09202D5475001BEEDA /* WTCTableConstraintTests.mm */; };
 		23BDBB0D202D5479001BEEDA /* WTCWithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB0C202D5479001BEEDA /* WTCWithClauseTests.mm */; };
-		23BDBB0E202D5479001BEEDA /* WTCWithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BDBB0C202D5479001BEEDA /* WTCWithClauseTests.mm */; };
 		23DC30A5202C303B000F7895 /* WTCBindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */; };
-		23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A4202C303B000F7895 /* WTCBindParameterTests.mm */; };
 		23DC30A8202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */; };
-		23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30A7202C322F000F7895 /* WTCColumnConstraintTests.mm */; };
 		23DC30AB202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */; };
-		23DC30AC202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */; };
 		23DC30AE202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */; };
-		23DC30AF202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */; };
-		23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698B0920047BDE00C0291C /* WTCExpressionTests.mm */; };
 		23DD427B20050DC600330946 /* WTCInitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */; };
 		23DD427E20050DD800330946 /* WTCBaselineWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D620050A3600E22C76 /* WTCBaselineWriteBenchmark.mm */; };
 		23DD427F20050DD800330946 /* WTCBaselineBatchWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D420050A3600E22C76 /* WTCBaselineBatchWriteBenchmark.mm */; };
@@ -205,20 +152,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 239326601E836D7300D677CC;
 			remoteInfo = WCDB;
-		};
-		237319E0201F0263005967ED /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 23731978201F0220005967ED;
-			remoteInfo = WINQ;
-		};
-		23731A3F201F02CD005967ED /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 23731864201F0220005967ED;
-			remoteInfo = WINQ;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -313,7 +246,6 @@
 		23698BB92004ACE100C0291C /* WTCBenchmarkObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WTCBenchmarkObject.h; sourceTree = "<group>"; };
 		23698BBA2004ACE100C0291C /* WTCBenchmarkObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBenchmarkObject.mm; sourceTree = "<group>"; };
 		23698BBC2004AD2500C0291C /* WTCBaselineReadBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaselineReadBenchmark.mm; sourceTree = "<group>"; };
-		237319DD201F0263005967ED /* WINQ Testcases.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WINQ Testcases.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23890DE3201210BB0036C53F /* WTCUpdateInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCUpdateInterfaceTests.mm; sourceTree = "<group>"; };
 		23890DE5201210C30036C53F /* WTCSelectInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSelectInterfaceTests.mm; sourceTree = "<group>"; };
 		23890DE7201210CA0036C53F /* WTCDeleteInterfaceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCDeleteInterfaceTests.mm; sourceTree = "<group>"; };
@@ -431,14 +363,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23698B6520047E1A00C0291C /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		237319D7201F0263005967ED /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23731A66201F02E8005967ED /* WINQ.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -601,7 +525,6 @@
 			children = (
 				23698A6320045EF100C0291C /* All Testcases.xctest */,
 				23698B6A20047E1A00C0291C /* All Benchmark.xctest */,
-				237319DD201F0263005967ED /* WINQ Testcases.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -633,7 +556,6 @@
 			isa = PBXGroup;
 			children = (
 				23698A8120045F4A00C0291C /* WCDB.framework */,
-				237319E1201F0263005967ED /* WINQ.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -867,24 +789,6 @@
 			productReference = 23698B6A20047E1A00C0291C /* All Benchmark.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		2373197B201F0263005967ED /* WINQ Testcases */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 237319DA201F0263005967ED /* Build configuration list for PBXNativeTarget "WINQ Testcases" */;
-			buildPhases = (
-				2373197E201F0263005967ED /* Sources */,
-				237319D7201F0263005967ED /* Frameworks */,
-				237319D9201F0263005967ED /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23731A40201F02CD005967ED /* PBXTargetDependency */,
-			);
-			name = "WINQ Testcases";
-			productName = testcaseTests;
-			productReference = 237319DD201F0263005967ED /* WINQ Testcases.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -900,9 +804,6 @@
 						TestTargetID = 23698A4A20045EF100C0291C;
 					};
 					23698B3C20047E1A00C0291C = {
-						ProvisioningStyle = Automatic;
-					};
-					2373197B201F0263005967ED = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -928,7 +829,6 @@
 			targets = (
 				23698A6220045EF100C0291C /* All Testcases */,
 				23698B3C20047E1A00C0291C /* All Benchmark */,
-				2373197B201F0263005967ED /* WINQ Testcases */,
 			);
 		};
 /* End PBXProject section */
@@ -939,13 +839,6 @@
 			fileType = wrapper.framework;
 			path = WCDB.framework;
 			remoteRef = 23698A8020045F4A00C0291C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		237319E1201F0263005967ED /* WINQ.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = WINQ.framework;
-			remoteRef = 237319E0201F0263005967ED /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -959,13 +852,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		23698B6620047E1A00C0291C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		237319D9201F0263005967ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1109,65 +995,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2373197E201F0263005967ED /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BDBB0B202D5475001BEEDA /* WTCTableConstraintTests.mm in Sources */,
-				23BDBAE7202D53B0001BEEDA /* WTCStatementDropTableTests.mm in Sources */,
-				23BDBAAE202D52CA001BEEDA /* WTCPragmaTests.mm in Sources */,
-				23BDBB02202D5462001BEEDA /* WTCStatementSelectTests.mm in Sources */,
-				238CB75F203D3739009E2A2E /* WTCWINQTestCase.mm in Sources */,
-				23BDBAE1202D53A1001BEEDA /* WTCStatementDetachTests.mm in Sources */,
-				23BDBAA8202D52BD001BEEDA /* WTCModuleArgumentTests.mm in Sources */,
-				23731A42201F02D9005967ED /* Convenience.m in Sources */,
-				23BDBAFC202D5455001BEEDA /* WTCStatementRollbackTests.mm in Sources */,
-				23BDBAB7202D52DC001BEEDA /* WTCResultColumnTests.mm in Sources */,
-				23BDBAC9202D5305001BEEDA /* WTCStatementBeginTests.mm in Sources */,
-				23BDBACF202D5377001BEEDA /* WTCStatementCreateIndexTests.mm in Sources */,
-				23BDBACC202D530A001BEEDA /* WTCStatementCommitTests.mm in Sources */,
-				23BDBAC6202D5301001BEEDA /* WTCStatementAttachTests.mm in Sources */,
-				239B7EF4203FF85300D10CE0 /* WTCConvertibleTests.mm in Sources */,
-				23BDBAB1202D52D2001BEEDA /* WTCQualifiedTableNameTests.mm in Sources */,
-				23BDBAF6202D543F001BEEDA /* WTCStatementReindexTests.mm in Sources */,
-				23BDBADB202D5393001BEEDA /* WTCStatementCreateVirtualTableTests.mm in Sources */,
-				23BDBADE202D5399001BEEDA /* WTCStatementDeleteTests.mm in Sources */,
-				23A7DCB6204008AE00189529 /* WTCTableOrSubqueryTests.mm in Sources */,
-				23BDBAD5202D5383001BEEDA /* WTCStatementCreateTriggerTests.mm in Sources */,
-				23BDBAF3202D5437001BEEDA /* WTCStatementPragmaTests.mm in Sources */,
-				23BDBAC0202D52EE001BEEDA /* WTCStatementAlterTableTests.mm in Sources */,
-				23BDBAFF202D545C001BEEDA /* WTCStatementSavepointTests.mm in Sources */,
-				23BDBA9F202D52A7001BEEDA /* WTCJoinClauseTests.mm in Sources */,
-				23BDBAF9202D5445001BEEDA /* WTCStatementReleaseTests.mm in Sources */,
-				23BDBAD2202D537D001BEEDA /* WTCStatementCreateTableTests.mm in Sources */,
-				23BDBB05202D5467001BEEDA /* WTCStatementUpdateTests.mm in Sources */,
-				23DC30AF202C3CC2000F7895 /* WTCCTETableNameTests.mm in Sources */,
-				23BDBAAB202D52C2001BEEDA /* WTCOrderingTermTests.mm in Sources */,
-				23BDBB0E202D5479001BEEDA /* WTCWithClauseTests.mm in Sources */,
-				23A7DCC3204011A000189529 /* WTCConflictClauseTests.mm in Sources */,
-				23DC30B0202C3ED8000F7895 /* WTCExpressionTests.mm in Sources */,
-				23BDBAD8202D538B001BEEDA /* WTCStatementCreateViewTests.mm in Sources */,
-				23BDBABA202D52E2001BEEDA /* WTCSelectCoreTests.mm in Sources */,
-				23DC30A9202C322F000F7895 /* WTCColumnConstraintTests.mm in Sources */,
-				23BDBA99202D5111001BEEDA /* WTCForeignKeyClauseTests.mm in Sources */,
-				23BDBAA2202D52B2001BEEDA /* WTCJoinConstraintTests.mm in Sources */,
-				23A7DCBA20400D6D00189529 /* WTCUnexpectedTests.mm in Sources */,
-				23BDBB08202D546C001BEEDA /* WTCStatementVacuumTests.mm in Sources */,
-				23BDBAED202D53BF001BEEDA /* WTCStatementDropViewTests.mm in Sources */,
-				23BDBAF0202D53CB001BEEDA /* WTCStatementInsertTests.mm in Sources */,
-				23BDBAC3202D52F6001BEEDA /* WTCStatementAnalyzeTests.mm in Sources */,
-				23731A43201F02E3005967ED /* WTCColumnDefTests.mm in Sources */,
-				23BDBAB4202D52D7001BEEDA /* WTCRaiseFunctionTests.mm in Sources */,
-				23A7DCBD204010D000189529 /* WTCColumnTypeTests.mm in Sources */,
-				23DC30A6202C3043000F7895 /* WTCBindParameterTests.mm in Sources */,
-				23DC30AC202C3828000F7895 /* WTCCommonTableExpressionTests.mm in Sources */,
-				23BDBAEA202D53B9001BEEDA /* WTCStatementDropTriggerTests.mm in Sources */,
-				23BDBAA5202D52B7001BEEDA /* WTCLiteralValueTests.mm in Sources */,
-				23BDBAE4202D53A9001BEEDA /* WTCStatementDropIndexTests.mm in Sources */,
-				23BDBA9C202D52A2001BEEDA /* WTCIndexedColumnTests.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1180,11 +1007,6 @@
 			isa = PBXTargetDependency;
 			name = WCDB;
 			targetProxy = 23698B3E20047E1A00C0291C /* PBXContainerItemProxy */;
-		};
-		23731A40201F02CD005967ED /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WINQ;
-			targetProxy = 23731A3F201F02CD005967ED /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1380,30 +1202,6 @@
 			};
 			name = Release;
 		};
-		237319DB201F0263005967ED /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		237319DC201F0263005967ED /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1430,15 +1228,6 @@
 			buildConfigurations = (
 				23698B6820047E1A00C0291C /* Debug */,
 				23698B6920047E1A00C0291C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		237319DA201F0263005967ED /* Build configuration list for PBXNativeTarget "WINQ Testcases" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				237319DB201F0263005967ED /* Debug */,
-				237319DC201F0263005967ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -26,7 +26,7 @@
 @required
 + (const WCTBinding *)objectRelationalMappingForWCDB;
 + (const WCTPropertyList &)AllProperties;
-+ (const WCDB::Column &)AllColumns;
++ (WCDB::Expression::All)AllResults;
 @optional
 @property(nonatomic, assign) long long lastInsertedRowID;
 @property(nonatomic, assign) BOOL isAutoIncrement;
@@ -36,5 +36,5 @@
 @required
 + (instancetype)unarchiveWithWCTValue:(WCTValue *)value; //value could be nil
 - (id /* WCTValue* */)archivedWCTValue;                  //value could be nil
-+ (WCTColumnType)columnTypeForWCDB;
++ (WCDB::ColumnType)columnTypeForWCDB;
 @end

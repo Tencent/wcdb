@@ -29,6 +29,6 @@ typedef NS_ENUM(int, WCTAccessorType) {
 class WCTBaseAccessor {
 public:
     using InstanceType = id; //NSObject<WCTTableCoding>*
-    virtual WCTColumnType getColumnType() const = 0;
+    virtual WCDB::ColumnType getColumnType() const = 0;
     virtual WCTAccessorType getAccessorType() const = 0;
 };

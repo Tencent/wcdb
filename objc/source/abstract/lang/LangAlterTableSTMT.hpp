@@ -21,7 +21,7 @@
 #ifndef LangAlterTableSTMT_hpp
 #define LangAlterTableSTMT_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

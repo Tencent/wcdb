@@ -36,11 +36,11 @@
     WCDB::Expression column = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::Expression(column)
-                        .as(WCDB::ColumnType::Integer32),
+                        .cast(WCDB::ColumnType::Integer32),
                     @"CAST(testColumn AS INTEGER)");
 
     WINQAssertEqual(WCDB::Expression(column)
-                        .withCollate(self.class.collationName),
+                        .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 
     WINQAssertEqual(WCDB::Expression::Exists(self.class.statementSelect), @"EXISTS(SELECT testColumn FROM testTable)");
@@ -120,7 +120,7 @@
 
     WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expressions, false), @"testFunction(testColumn, testColumn2)");
 
-    WINQAssertEqual(WCDB::Expression::FunctionAll(self.class.functionName), @"testFunction(*)");
+    WINQAssertEqual(WCDB::Expression::All().function(self.class.functionName), @"testFunction(*)");
 
     WINQAssertEqual(WCDB::Expression::Function(self.class.functionName), @"testFunction()");
 

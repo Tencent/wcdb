@@ -21,7 +21,7 @@
 #ifndef CTETableName_hpp
 #define CTETableName_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

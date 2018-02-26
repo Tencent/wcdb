@@ -21,9 +21,9 @@
 #ifndef Describable_hpp
 #define Describable_hpp
 
-#include <WINQ/ColumnType.hpp>
-#include <WINQ/Convertible.hpp>
-#include <WINQ/lang.h>
+#include <WCDB/ColumnType.hpp>
+#include <WCDB/Convertible.hpp>
+#include <WCDB/lang.h>
 
 namespace WCDB {
 
@@ -38,6 +38,10 @@ protected:
 template <typename T>
 class WithLang {
 public:
+    WithLang() {}
+
+    WithLang(const lang::copy_on_write_lazy_lang<T> &lang) : m_lang(lang) {}
+
     T &getMutableLang() { return m_lang.get_or_copy(); }
     const lang::copy_on_write_lazy_lang<T> &getLang() const { return m_lang; }
 
@@ -48,6 +52,12 @@ private:
 template <typename T>
 class DescribableWithLang : public Describable, public WithLang<T> {
 public:
+    DescribableWithLang() {}
+    DescribableWithLang(const lang::copy_on_write_lazy_lang<T> &lang)
+        : WithLang<T>(lang)
+    {
+    }
+
     virtual const std::string &getDescription() const override
     {
         if (!this->getLang().empty()) {

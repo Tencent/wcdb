@@ -31,11 +31,10 @@ struct ColumnIsCppType<T,
     : public std::true_type {
 };
 
-template <WCTColumnType t>
+template <WCDB::ColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {
 public:
-    using UnderlyingType =
-        typename WCDB::ColumnTypeInfo<(WCDB::ColumnType) t>::UnderlyingType;
+    using UnderlyingType = typename WCDB::ColumnTypeInfo<t>::UnderlyingType;
     using Setter = void (^)(InstanceType, UnderlyingType);
     using Getter = UnderlyingType (^)(InstanceType);
 
@@ -44,10 +43,7 @@ public:
     {
     }
 
-    virtual WCTColumnType getColumnType() const override
-    {
-        return (WCTColumnType) t;
-    };
+    virtual WCDB::ColumnType getColumnType() const override { return t; };
     virtual WCTAccessorType getAccessorType() const override
     {
         return WCTAccessorCpp;
@@ -70,7 +66,7 @@ public:
     {
     }
 
-    virtual WCTColumnType getColumnType() const override
+    virtual WCDB::ColumnType getColumnType() const override
     {
         return WCTColumnTypeBinary;
     }

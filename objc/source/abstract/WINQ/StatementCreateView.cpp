@@ -18,17 +18,20 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementCreateView &StatementCreateView::createView(
-    const std::string &viewName, bool ifNotExists, bool temp)
+StatementCreateView::StatementCreateView()
+{
+    getMutableLang().ifNotExists = true;
+}
+
+StatementCreateView &
+StatementCreateView::createView(const std::string &viewName)
 {
     lang::CreateViewSTMT &lang = getMutableLang();
     lang.viewName.assign(viewName);
-    lang.ifNotExists = ifNotExists;
-    lang.temp = temp;
     return *this;
 }
 
@@ -37,6 +40,20 @@ StatementCreateView::withSchema(const std::string &schemaName)
 {
     lang::CreateViewSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
+    return *this;
+}
+
+StatementCreateView &StatementCreateView::ifNotExists(bool ifNotExists)
+{
+    lang::CreateViewSTMT &lang = getMutableLang();
+    lang.ifNotExists = ifNotExists;
+    return *this;
+}
+
+StatementCreateView &StatementCreateView::temp(bool temp)
+{
+    lang::CreateViewSTMT &lang = getMutableLang();
+    lang.temp = temp;
     return *this;
 }
 

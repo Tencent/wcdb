@@ -46,16 +46,16 @@
     return [self createVirtualTableOfName:tableName withClass:cls andError:innerError];
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs
 {
     WCDB::Error innerError;
-    return [self createTableOfName:tableName withColumnDefList:columnDefList andError:innerError];
+    return [self createTableOfName:tableName withColumnDefs:columnDefs andError:innerError];
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints
 {
     WCDB::Error innerError;
-    return [self createTableOfName:tableName withColumnDefList:columnDefList andConstraintList:constraintList andError:innerError];
+    return [self createTableOfName:tableName withColumnDefs:columnDefs andConstraints:constraints andError:innerError];
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
@@ -70,10 +70,10 @@
     return [self dropTableOfName:tableName withError:innerError];
 }
 
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName
 {
     WCDB::Error innerError;
-    return [self createIndexOfName:indexName withIndexList:indexList forTable:tableName andError:innerError];
+    return [self createIndexOfName:indexName withIndexedColumns:indexedColumns forTable:tableName andError:innerError];
 }
 
 - (BOOL)dropIndexOfName:(NSString *)indexName

@@ -38,7 +38,7 @@
     return [NSString stringWithString:self];
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnTypeForWCDB
 {
     return WCTColumnTypeString;
 }
@@ -60,7 +60,7 @@
     return [NSString stringWithString:self];
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnTypeForWCDB
 {
     return WCTColumnTypeString;
 }

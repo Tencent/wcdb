@@ -21,7 +21,7 @@
 #ifndef LangRaiseFunction_hpp
 #define LangRaiseFunction_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

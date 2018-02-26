@@ -47,14 +47,14 @@
     return [[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES];
 }
 
-- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList
+- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:NO];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:properties andTableName:_tableName andReplaceFlag:NO];
 }
 
-- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)propertyList
+- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName andReplaceFlag:YES];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:properties andTableName:_tableName andReplaceFlag:YES];
 }
 
 - (WCTDelete *)prepareDelete
@@ -62,9 +62,9 @@
     return [[WCTDelete alloc] initWithCore:_core andTableName:_tableName];
 }
 
-- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)propertyList
+- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:_tableName];
+    return [[WCTUpdate alloc] initWithCore:_core andProperties:properties andTableName:_tableName];
 }
 
 - (WCTSelect *)prepareSelectObjects
@@ -72,29 +72,29 @@
     return [[WCTSelect alloc] initWithCore:_core andProperties:[_class AllProperties] fromTable:_tableName isDistinct:NO];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:_tableName isDistinct:NO];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:properties fromTable:_tableName isDistinct:NO];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList isDistinct:(BOOL)isDistinct
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties isDistinct:(BOOL)isDistinct
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:_tableName isDistinct:isDistinct];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:properties fromTable:_tableName isDistinct:isDistinct];
 }
 
 - (WCTRowSelect *)prepareSelectRows
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:@[ _tableName ] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:{WCDB::ResultColumn::All} fromTables:@[ _tableName ] isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[ _tableName ] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList isDistinct:(BOOL)isDistinct
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:@[ _tableName ] isDistinct:isDistinct];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:isDistinct];
 }
 
 @end

@@ -21,11 +21,12 @@
 #ifndef BindParameter_hpp
 #define BindParameter_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
-class BindParameter : public DescribableWithLang<lang::BindParameter> {
+class BindParameter : public DescribableWithLang<lang::BindParameter>,
+                      public Redirectable {
 public:
     enum class Type : int {
         Colon = (int) lang::BindParameter::Type::Colon,           //:AAAA
@@ -37,6 +38,9 @@ public:
     explicit BindParameter(int n); // ?NNN
     explicit BindParameter(const std::string &name,
                            const Type &type = Type::Colon);
+
+protected:
+    virtual Expression getRedirectSource() const override;
 };
 
 } // namespace WCDB

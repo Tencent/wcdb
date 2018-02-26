@@ -18,15 +18,25 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementDropTable &StatementDropTable::dropTable(const std::string &tableName,
-                                                  bool ifExists)
+StatementDropTable::StatementDropTable()
+{
+    getMutableLang().ifExists = true;
+}
+
+StatementDropTable &StatementDropTable::dropTable(const std::string &tableName)
 {
     lang::DropTableSTMT &lang = getMutableLang();
     lang.name.assign(tableName);
+    return *this;
+}
+
+StatementDropTable &StatementDropTable::ifExists(bool ifExists)
+{
+    lang::DropTableSTMT &lang = getMutableLang();
     lang.ifExists = ifExists;
     return *this;
 }

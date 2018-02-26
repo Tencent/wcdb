@@ -21,7 +21,7 @@
 #ifndef LangCTETableName_hpp
 #define LangCTETableName_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

@@ -21,16 +21,17 @@
 #ifndef StatementDropView_hpp
 #define StatementDropView_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementDropView : public StatementWithLang<lang::DropViewSTMT> {
 
 public:
-    StatementDropView &dropView(const std::string &viewName,
-                                bool ifExists = true);
+    StatementDropView();
+    StatementDropView &dropView(const std::string &viewName);
+    StatementDropView &ifExists(bool ifExists = true);
     StatementDropView &withSchema(const std::string &schemaName);
     virtual Type getType() const override;
 };

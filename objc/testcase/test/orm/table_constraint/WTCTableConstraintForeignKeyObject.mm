@@ -28,7 +28,10 @@ WCDB_IMPLEMENTATION(WTCTableConstraintForeignKeyObject)
 WCDB_SYNTHESIZE(WTCTableConstraintForeignKeyObject, variable1)
 WCDB_SYNTHESIZE(WTCTableConstraintForeignKeyObject, variable2)
 
-WCDB_FOREIGN_KEY(WTCTableConstraintForeignKeyObject, "WTCTableConstraintForeignKeyObjectConstraint", WCDB::ForeignKey("WTCTableConstraintForeignKeyObject", WTCTableConstraintForeignKeyObject.variable2))
-WCDB_FOREIGN_KEY_COLUMN(WTCTableConstraintForeignKeyObject, "WTCTableConstraintForeignKeyObjectConstraint", WTCTableConstraintForeignKeyObject.variable1)
+WCDB_FOREIGN_KEY(WTCTableConstraintForeignKeyObject,
+                 "WTCTableConstraintForeignKeyObjectConstraint",
+                 {WTCTableConstraintForeignKeyObject.variable1},
+                 WCDB::ForeignKeyClause("WTCTableConstraintForeignKeyObject")
+                     .byAddingColumn(WTCTableConstraintForeignKeyObject.variable2))
 
 @end

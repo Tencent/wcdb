@@ -37,10 +37,10 @@
 /**
  WINQ interface for SQL.
 
- @param orderList order list
+ @param orders order list
  @return self
  */
-- (instancetype)orderBy:(const WCDB::OrderList &)orderList;
+- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
 /**
  WINQ interface for SQL.
@@ -61,10 +61,10 @@
 /**
  WINQ interface for SQL.
 
- @param groupList group by list
+ @param groups group by list
  @return self
  */
-- (instancetype)groupBy:(const WCDB::ExpressionList &)groupList;
+- (instancetype)groupBy:(const std::list<WCDB::Expression> &)groups;
 
 /**
  WINQ interface for SQL.

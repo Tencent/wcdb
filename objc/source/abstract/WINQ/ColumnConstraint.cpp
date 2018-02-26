@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -33,33 +33,34 @@ ColumnConstraint &ColumnConstraint::named(const std::string &name)
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::withPrimaryKey(const Order &order,
-                                 const ConflictClause &conflictClause,
-                                 bool autoIncrement)
+ColumnConstraint &ColumnConstraint::withPrimaryKey(const Order &order,
+                                                   bool autoIncrement)
 {
     lang::ColumnConstraint &lang = getMutableLang();
     lang.type = lang::ColumnConstraint::Type::PrimaryKey;
     lang.order = order;
-    lang.conflictClause = conflictClause;
     lang.autoIncrement = autoIncrement;
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::withNotNull(const ConflictClause &conflictClause)
+ColumnConstraint &ColumnConstraint::withNotNull()
 {
     lang::ColumnConstraint &lang = getMutableLang();
     lang.type = lang::ColumnConstraint::Type::NotNull;
-    lang.conflictClause = conflictClause;
+    return *this;
+}
+
+ColumnConstraint &ColumnConstraint::withUnique()
+{
+    lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = lang::ColumnConstraint::Type::Unique;
     return *this;
 }
 
 ColumnConstraint &
-ColumnConstraint::withUnique(const ConflictClause &conflictClause)
+ColumnConstraint::onConflict(const ConflictClause &conflictClause)
 {
     lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::Unique;
     lang.conflictClause = conflictClause;
     return *this;
 }
@@ -73,7 +74,7 @@ ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
 }
 
 ColumnConstraint &
-ColumnConstraint::withDefault(const LiteralValue &literalValue)
+ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
 {
     lang::ColumnConstraint &lang = getMutableLang();
     lang.type = lang::ColumnConstraint::Type::Default;
@@ -82,7 +83,8 @@ ColumnConstraint::withDefault(const LiteralValue &literalValue)
     return *this;
 }
 
-ColumnConstraint &ColumnConstraint::withDefault(const Expression &expression)
+ColumnConstraint &
+ColumnConstraint::withDefaultExpression(const Expression &expression)
 {
     lang::ColumnConstraint &lang = getMutableLang();
     lang.type = lang::ColumnConstraint::Type::Default;

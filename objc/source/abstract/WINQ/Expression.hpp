@@ -21,11 +21,15 @@
 #ifndef Expression_hpp
 #define Expression_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Operable.hpp>
+#include <WCDB/Redirectable.hpp>
 
 namespace WCDB {
 
-class Expression : public DescribableWithLang<lang::Expr> {
+class Expression : public DescribableWithLang<lang::Expr>,
+                   public Operable,
+                   public Redirectable {
 public:
     template <typename T>
     Expression(const T &t,
@@ -43,32 +47,6 @@ public:
     Expression &withTable(const std::string &tableName);
     Expression &withSchema(const std::string &schemaName);
 
-    Expression operator-() const;
-    Expression operator+() const;
-    Expression operator!() const;
-    Expression operator~() const;
-
-    Expression concat(const Expression &operand) const;
-    Expression operator*(const Expression &operand) const;
-    Expression operator/(const Expression &operand) const;
-    Expression operator%(const Expression &operand) const;
-    Expression operator+(const Expression &operand) const;
-    Expression operator-(const Expression &operand) const;
-    Expression operator<<(const Expression &operand) const;
-    Expression operator>>(const Expression &operand) const;
-    Expression operator&(const Expression &operand) const;
-    Expression operator|(const Expression &operand) const;
-    Expression operator<(const Expression &operand) const;
-    Expression operator<=(const Expression &operand) const;
-    Expression operator>(const Expression &operand) const;
-    Expression operator>=(const Expression &operand) const;
-    Expression operator==(const Expression &operand) const;
-    Expression operator!=(const Expression &operand) const;
-    Expression is(const Expression &operand) const;
-    Expression isNot(const Expression &operand) const;
-    Expression operator&&(const Expression &operand) const;
-    Expression operator||(const Expression &operand) const;
-
     static Expression Function(const std::string &functionName);
     static Expression Function(const std::string &functionName,
                                const Expression &parameter,
@@ -76,75 +54,18 @@ public:
     static Expression Function(const std::string &functionName,
                                const std::list<Expression> &parameters,
                                bool distinct = false);
-    static Expression FunctionAll(const std::string &functionName);
+
+    class All : public DescribableWithLang<lang::ExprFunction>,
+                public FunctionOperable {
+    public:
+        virtual Expression
+        function(const std::string &functionName,
+                 __unused bool distinct = false) const override;
+    };
 
     Expression(const std::list<Expression> &expressions);
 
-    Expression as(const ColumnType &columnType);
-
-    Expression &withCollate(const std::string &collationName);
-
-    Expression like(const Expression &expr) const;
-    Expression glob(const Expression &expr) const;
-    Expression regexp(const Expression &expr) const;
-    Expression match(const Expression &expr) const;
-    Expression notLike(const Expression &expr) const;
-    Expression notGlob(const Expression &expr) const;
-    Expression notRegexp(const Expression &expr) const;
-    Expression notMatch(const Expression &expr) const;
     Expression &withEscape(const Expression &expr);
-
-    Expression isNull() const;
-    Expression notNull() const;
-
-    Expression between(const Expression &left, const Expression &right) const;
-    Expression notBetween(const Expression &left,
-                          const Expression &right) const;
-
-    Expression in();
-    Expression notIn();
-    Expression in(const StatementSelect &selectSTMT);
-    Expression notIn(const StatementSelect &selectSTMT);
-    Expression in(const Expression &expression);
-    Expression notIn(const Expression &expression);
-    Expression in(const std::list<Expression> &expressions);
-    Expression notIn(const std::list<Expression> &expressions);
-
-    Expression inTable(const std::string &tableName);
-    Expression notInTable(const std::string &tableName);
-    Expression inTable(const std::string &schemaName,
-                       const std::string &tableName);
-    Expression notInTable(const std::string &schemaName,
-                          const std::string &tableName);
-
-    Expression inFunction(const std::string &functionName);
-    Expression notInFunction(const std::string &functionName);
-    Expression inFunction(const std::string &schemaName,
-                          const std::string &functionName);
-    Expression notInFunction(const std::string &schemaName,
-                             const std::string &functionName);
-
-    Expression inFunction(const std::string &functionName,
-                          const Expression &expression);
-    Expression notInFunction(const std::string &functionName,
-                             const Expression &expression);
-    Expression inFunction(const std::string &schemaName,
-                          const std::string &functionName,
-                          const Expression &expression);
-    Expression notInFunction(const std::string &schemaName,
-                             const std::string &functionName,
-                             const Expression &expression);
-
-    Expression inFunction(const std::string &functionName,
-                          const std::list<Expression> &expressions);
-    Expression notInFunction(const std::string &functionName,
-                             const std::list<Expression> &expressions);
-    Expression inFunction(const std::string &schemaName,
-                          const std::string &functionName,
-                          const std::list<Expression> &expressions);
-    Expression notInFunction(const std::string &schemaName,
-                             const std::string &functionName,
-                             const std::list<Expression> &expressions);
 
     static Expression Exists(const StatementSelect &selectSTMT);
     static Expression NotExists(const StatementSelect &selectSTMT);
@@ -166,7 +87,10 @@ public:
 
     Expression(const RaiseFunction &raiseFunction);
 
+    Expression(const lang::copy_on_write_lazy_lang<lang::Expr> &expr);
+
 protected:
+    friend class Operable;
     Expression(const lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation>
                    &exprUnaryOperation);
     Expression(const lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation>
@@ -182,62 +106,14 @@ protected:
     Expression(const lang::copy_on_write_lazy_lang<lang::ExprIn> &exprIn);
     Expression(
         const lang::copy_on_write_lazy_lang<lang::ExprExists> &exprExists);
+    Expression(
+        const lang::copy_on_write_lazy_lang<lang::ExprCollate> &exprCollate);
 
-    lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation> unaryOperation(
-        const lang::ExprUnaryOperation::Operator &unaryOperator) const;
-    lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation>
-    binaryOperation(const lang::ExprBinaryOperation::Operator &binaryOperator,
-                    const Expression &operand) const;
-    lang::copy_on_write_lazy_lang<lang::ExprPattern>
-    pattern(const lang::ExprPattern::Type &type,
-            const Expression &operand,
-            bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprNull> null(bool isNull) const;
-    lang::copy_on_write_lazy_lang<lang::ExprBetween>
-    between(const Expression &left, const Expression &right, bool isNot) const;
+    virtual lang::copy_on_write_lazy_lang<lang::Expr>
+    getExpressionLang() const override;
 
-    lang::copy_on_write_lazy_lang<lang::ExprIn> in(bool isNot);
+    virtual Expression getRedirectSource() const override;
 
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    in(const StatementSelect &selectSTMT, bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const Expression &expression,
-                                                   bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    in(const std::list<Expression> &expressions, bool isNot);
-
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inTable(const std::string &tableName, bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inTable(const std::string &schemaName,
-            const std::string &tableName,
-            bool isNot);
-
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inFunction(const std::string &functionName, bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inFunction(const std::string &schemaName,
-               const std::string &functionName,
-               bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inFunction(const std::string &functionName,
-               const Expression &parameter,
-               bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inFunction(const std::string &schemaName,
-               const std::string &functionName,
-               const Expression &parameter,
-               bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inFunction(const std::string &functionName,
-               const std::list<Expression> &parameters,
-               bool isNot);
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
-    inFunction(const std::string &schemaName,
-               const std::string &functionName,
-               const std::list<Expression> &parameters,
-               bool isNot);
-
-protected:
     void setLiteralValue(const LiteralValue &literalValue);
 };
 

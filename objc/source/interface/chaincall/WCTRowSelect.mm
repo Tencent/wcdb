@@ -18,23 +18,29 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTRowSelect+Private.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
-#import <WCDB/handle_statement.hpp>
 
 @implementation WCTRowSelect
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andColumnResultList:(const WCDB::ColumnResultList &)columnResultList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+            andResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
+                  fromTables:(NSArray<NSString *> *)tableNames
+                  isDistinct:(BOOL)isDistinct
 {
     if (self = [super initWithCore:core]) {
-        WCDB::SubqueryList subqueryList;
+        std::list<WCDB::TableOrSubquery> tableOrSubquerys;
         for (NSString *tableName in tableNames) {
-            subqueryList.push_back(tableName.UTF8String);
+            tableOrSubquerys.push_back(tableName.UTF8String);
         }
-        _statement.select(columnResultList, isDistinct).from(subqueryList);
+        if (isDistinct) {
+            _statement.distinct();
+        }
+        _statement.select(resultColumns).from(tableOrSubquerys);
     }
     return self;
 }

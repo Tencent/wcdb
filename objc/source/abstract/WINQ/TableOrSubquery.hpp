@@ -21,7 +21,7 @@
 #ifndef TableOrSubquery_hpp
 #define TableOrSubquery_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

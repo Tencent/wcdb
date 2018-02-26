@@ -21,7 +21,7 @@
 #ifndef LangSelectCore_hpp
 #define LangSelectCore_hpp
 
-#include <WINQ/lang_common.h>
+#include <WCDB/lang_common.h>
 
 namespace WCDB {
 

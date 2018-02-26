@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTSelectBase+NoARC.h>
 #import <WCDB/WCTSelectBase+Private.h>
 #import <WCDB/WCTSelectBase.h>
-#import <WCDB/handle_statement.hpp>
 
 #if __has_feature(objc_arc)
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
@@ -34,22 +34,22 @@
 
 - (WCTValue *)extractValue
 {
-    switch ((WCTColumnType) _statementHandle->getType(0)) {
+    switch (_statementHandle->getType(0)) {
         case WCTColumnTypeDouble:
-            return [NSNumber numberWithDouble:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeDouble>(0)];
+            return [NSNumber numberWithDouble:_statementHandle->getValue<WCTColumnTypeDouble>(0)];
             break;
         case WCTColumnTypeInteger32:
-            return [NSNumber numberWithInt:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger32>(0)];
+            return [NSNumber numberWithInt:_statementHandle->getValue<WCTColumnTypeInteger32>(0)];
             break;
         case WCTColumnTypeInteger64:
-            return [NSNumber numberWithLongLong:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger64>(0)];
+            return [NSNumber numberWithLongLong:_statementHandle->getValue<WCTColumnTypeInteger64>(0)];
             break;
         case WCTColumnTypeString: {
-            const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(0);
+            const char *string = _statementHandle->getValue<WCTColumnTypeString>(0);
             return string ? [NSString stringWithUTF8String:string] : nil;
         } break;
         case WCTColumnTypeBinary: {
-            std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(0);
+            std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(0);
             return [NSData dataWithBytes:data.data() length:data.size()];
         } break;
         case WCTColumnTypeNull: {
@@ -72,22 +72,22 @@
 {
     WCTValue *value = nil;
     for (int i = 0; i < _statementHandle->getColumnCount(); ++i) {
-        switch ((WCTColumnType) _statementHandle->getType(i)) {
+        switch (_statementHandle->getType(i)) {
             case WCTColumnTypeDouble:
-                value = [NSNumber numberWithDouble:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeDouble>(i)];
+                value = [NSNumber numberWithDouble:_statementHandle->getValue<WCTColumnTypeDouble>(i)];
                 break;
             case WCTColumnTypeInteger32:
-                value = [NSNumber numberWithInt:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger32>(i)];
+                value = [NSNumber numberWithInt:_statementHandle->getValue<WCTColumnTypeInteger32>(i)];
                 break;
             case WCTColumnTypeInteger64:
-                value = [NSNumber numberWithLongLong:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger64>(i)];
+                value = [NSNumber numberWithLongLong:_statementHandle->getValue<WCTColumnTypeInteger64>(i)];
                 break;
             case WCTColumnTypeString: {
-                const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(i);
+                const char *string = _statementHandle->getValue<WCTColumnTypeString>(i);
                 value = string ? [NSString stringWithUTF8String:string] : @"";
             } break;
             case WCTColumnTypeBinary: {
-                std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(i);
+                std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(i);
                 value = [NSData dataWithBytes:data.data() length:data.size()];
             } break;
             case WCTColumnTypeNull: {
@@ -120,26 +120,26 @@
                 case WCTColumnTypeInteger32: {
                     WCTCppAccessor<WCTColumnTypeInteger32> *i32Accessor = (WCTCppAccessor<WCTColumnTypeInteger32> *) accessor.get();
                     i32Accessor->setValue(object,
-                                          _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger32>(index));
+                                          _statementHandle->getValue<WCTColumnTypeInteger32>(index));
                 } break;
                 case WCTColumnTypeInteger64: {
                     WCTCppAccessor<WCTColumnTypeInteger64> *i64Accessor = (WCTCppAccessor<WCTColumnTypeInteger64> *) accessor.get();
                     i64Accessor->setValue(object,
-                                          _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger64>(index));
+                                          _statementHandle->getValue<WCTColumnTypeInteger64>(index));
                 } break;
                 case WCTColumnTypeDouble: {
                     WCTCppAccessor<WCTColumnTypeDouble> *floatAccessor = (WCTCppAccessor<WCTColumnTypeDouble> *) accessor.get();
                     floatAccessor->setValue(object,
-                                            _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeDouble>(index));
+                                            _statementHandle->getValue<WCTColumnTypeDouble>(index));
                 } break;
                 case WCTColumnTypeString: {
                     WCTCppAccessor<WCTColumnTypeString> *textAccessor = (WCTCppAccessor<WCTColumnTypeString> *) accessor.get();
                     textAccessor->setValue(object,
-                                           _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(index));
+                                           _statementHandle->getValue<WCTColumnTypeString>(index));
                 } break;
                 case WCTColumnTypeBinary: {
                     WCTCppAccessor<WCTColumnTypeBinary> *blobAccessor = (WCTCppAccessor<WCTColumnTypeBinary> *) accessor.get();
-                    std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index);
+                    std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
                     blobAccessor->setValue(object, data);
                 } break;
                 default:
@@ -147,7 +147,7 @@
                                                  _core->getPath(),
                                                  WCDB::Error::InterfaceOperation::Select,
                                                  WCDB::Error::InterfaceCode::Misuse,
-                                                 [NSString stringWithFormat:@"Extracting column [%s] with unknown type %d", columnBinding->columnName.c_str(), (int) accessor->getColumnType()].UTF8String,
+                                                 [NSString stringWithFormat:@"Extracting column [%s] with unknown type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getColumnType()].UTF8String,
                                                  &_error);
                     result = NO;
                     break;
@@ -158,20 +158,20 @@
             id value = nil;
             switch (accessor->getColumnType()) {
                 case WCTColumnTypeInteger32:
-                    value = [NSNumber numberWithInt:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger32>(index)];
+                    value = [NSNumber numberWithInt:_statementHandle->getValue<WCTColumnTypeInteger32>(index)];
                     break;
                 case WCTColumnTypeInteger64:
-                    value = [NSNumber numberWithLongLong:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger64>(index)];
+                    value = [NSNumber numberWithLongLong:_statementHandle->getValue<WCTColumnTypeInteger64>(index)];
                     break;
                 case WCTColumnTypeDouble:
-                    value = [NSNumber numberWithDouble:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeDouble>(index)];
+                    value = [NSNumber numberWithDouble:_statementHandle->getValue<WCTColumnTypeDouble>(index)];
                     break;
                 case WCTColumnTypeString: {
-                    const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(index);
+                    const char *string = _statementHandle->getValue<WCTColumnTypeString>(index);
                     value = string ? [NSString stringWithUTF8String:string] : nil;
                 } break;
                 case WCTColumnTypeBinary: {
-                    std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index);
+                    std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
                     value = [NSData dataWithBytes:data.data() length:data.size()];
                 } break;
                 default:
@@ -179,7 +179,7 @@
                                                  _core->getPath(),
                                                  WCDB::Error::InterfaceOperation::Select,
                                                  WCDB::Error::InterfaceCode::Misuse,
-                                                 [NSString stringWithFormat:@"Extracting column [%s] with unknown type %d", columnBinding->columnName.c_str(), (int) accessor->getColumnType()].UTF8String,
+                                                 [NSString stringWithFormat:@"Extracting column [%s] with unknown type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getColumnType()].UTF8String,
                                                  &_error);
                     result = NO;
                     break;
@@ -191,7 +191,7 @@
                                          _core->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
                                          WCDB::Error::InterfaceCode::Misuse,
-                                         [NSString stringWithFormat:@"Extracting column [%s] with unknown accessor type %d", columnBinding->columnName.c_str(), (int) accessor->getAccessorType()].UTF8String,
+                                         [NSString stringWithFormat:@"Extracting column [%s] with unknown accessor type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getAccessorType()].UTF8String,
                                          &_error);
             result = NO;
             break;

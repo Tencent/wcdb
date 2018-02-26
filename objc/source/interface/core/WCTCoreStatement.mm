@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTCoreStatement+Private.h>
 #import <WCDB/WCTCoreStatement.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTValue.h>
-#import <WCDB/handle_statement.hpp>
 
 @implementation WCTCoreStatement
 
@@ -55,17 +55,17 @@
     BOOL result = YES;
     switch (valueType) {
         case WCTValueTypeString:
-            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeString>(((NSString *) value).UTF8String, index);
+            _statementHandle->bind<WCTColumnTypeString>(((NSString *) value).UTF8String, index);
             break;
         case WCTValueTypeNumber: {
             NSNumber *number = (NSNumber *) value;
             if (CFNumberIsFloatType((CFNumberRef) number)) {
-                _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeDouble>(number.doubleValue, index);
+                _statementHandle->bind<WCTColumnTypeDouble>(number.doubleValue, index);
             } else {
                 if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
-                    _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger32>(number.intValue, index);
+                    _statementHandle->bind<WCTColumnTypeInteger32>(number.intValue, index);
                 } else {
-                    _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeInteger64>(number.longLongValue, index);
+                    _statementHandle->bind<WCTColumnTypeInteger64>(number.longLongValue, index);
                 }
             }
         } break;
@@ -73,10 +73,10 @@
             NSData *data = (NSData *) value;
             const unsigned char *raw = (const unsigned char *) data.bytes;
             std::vector<unsigned char> vector(raw, raw + data.length);
-            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeBinary>(vector, index);
+            _statementHandle->bind<WCTColumnTypeBinary>(vector, index);
         } break;
         case WCTValueTypeNil:
-            _statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNull>(index);
+            _statementHandle->bind<WCTColumnTypeNull>(index);
             break;
         default:
             WCDB::Error::Abort(([NSString stringWithFormat:@"Binding statement with unknown type %@", NSStringFromClass(value.class)].UTF8String));
@@ -98,22 +98,22 @@
 - (WCTValue *)valueAtIndex:(int)index
 {
     WCTValue *value = nil;
-    switch ((WCTColumnType) _statementHandle->getType(index)) {
+    switch (_statementHandle->getType(index)) {
         case WCTColumnTypeInteger32:
-            value = [NSNumber numberWithInt:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger32>(index)];
+            value = [NSNumber numberWithInt:_statementHandle->getValue<WCTColumnTypeInteger32>(index)];
             break;
         case WCTColumnTypeInteger64:
-            value = [NSNumber numberWithLongLong:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeInteger64>(index)];
+            value = [NSNumber numberWithLongLong:_statementHandle->getValue<WCTColumnTypeInteger64>(index)];
             break;
         case WCTColumnTypeDouble:
-            value = [NSNumber numberWithDouble:_statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeDouble>(index)];
+            value = [NSNumber numberWithDouble:_statementHandle->getValue<WCTColumnTypeDouble>(index)];
             break;
         case WCTColumnTypeString: {
-            const char *string = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeString>(index);
+            const char *string = _statementHandle->getValue<WCTColumnTypeString>(index);
             value = string ? [NSString stringWithUTF8String:string] : nil;
         } break;
         case WCTColumnTypeBinary: {
-            std::vector<unsigned char> data = _statementHandle->getValue<(WCDB::ColumnType) WCTColumnTypeBinary>(index);
+            std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
             value = [NSData dataWithBytes:data.data() length:data.size()];
         } break;
         case WCTColumnTypeNull: {
@@ -158,12 +158,12 @@
     return _statementHandle->step();
 }
 
-- (WCTColumnType)columnTypeAtIndex:(int)index
+- (WCDB::ColumnType)columnTypeAtIndex:(int)index
 {
-    return (WCTColumnType) _statementHandle->getType(index);
+    return _statementHandle->getType(index);
 }
 
-- (WCTColumnType)columnTypeByName:(NSString *)columnName
+- (WCDB::ColumnType)columnTypeByName:(NSString *)columnName
 {
     int index = [self indexByColumnName:columnName];
     if (index != INT_MAX) {

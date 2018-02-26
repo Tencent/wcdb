@@ -46,14 +46,14 @@
     return [[WCTInsert alloc] initWithCore:_core andProperties:[cls AllProperties] andTableName:tableName andReplaceFlag:YES];
 }
 
-- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
+- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)properties into:(NSString *)tableName
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:NO];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:properties andTableName:tableName andReplaceFlag:NO];
 }
 
-- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)propertyList into:(NSString *)tableName
+- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)properties into:(NSString *)tableName
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:propertyList andTableName:tableName andReplaceFlag:YES];
+    return [[WCTInsert alloc] initWithCore:_core andProperties:properties andTableName:tableName andReplaceFlag:YES];
 }
 
 - (WCTDelete *)prepareDeleteFromTable:(NSString *)tableName
@@ -61,9 +61,9 @@
     return [[WCTDelete alloc] initWithCore:_core andTableName:tableName];
 }
 
-- (WCTUpdate *)prepareUpdateTable:(NSString *)tableName onProperties:(const WCTPropertyList &)propertyList
+- (WCTUpdate *)prepareUpdateTable:(NSString *)tableName onProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTUpdate alloc] initWithCore:_core andProperties:propertyList andTableName:tableName];
+    return [[WCTUpdate alloc] initWithCore:_core andProperties:properties andTableName:tableName];
 }
 
 - (WCTSelect *)prepareSelectObjectsOfClass:(Class)cls fromTable:(NSString *)tableName
@@ -76,54 +76,54 @@
     return [[WCTSelect alloc] initWithCore:_core andProperties:[cls AllProperties] fromTable:tableName isDistinct:isDistinct];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties fromTable:(NSString *)tableName
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:NO];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:properties fromTable:tableName isDistinct:NO];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)propertyList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
+- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:propertyList fromTable:tableName isDistinct:isDistinct];
+    return [[WCTSelect alloc] initWithCore:_core andProperties:properties fromTable:tableName isDistinct:isDistinct];
 }
 
 - (WCTRowSelect *)prepareSelectRowsFromTable:(NSString *)tableName
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:{WCDB::ResultColumn::All} fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns fromTable:(NSString *)tableName
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:tableName ? @[ tableName ] : @[] isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns fromTable:(NSString *)tableName isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableName ? @[ tableName ] : @[] isDistinct:isDistinct];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:tableName ? @[ tableName ] : @[] isDistinct:isDistinct];
 }
 
 - (WCTRowSelect *)prepareSelectRowsFromTables:(NSArray<NSString *> *)tableNames
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:{WCDB::Column::All} fromTables:tableNames isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:{WCDB::ResultColumn::All} fromTables:tableNames isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns fromTables:(NSArray<NSString *> *)tableNames
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableNames isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:tableNames isDistinct:NO];
 }
 
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const WCDB::ColumnResultList &)resultList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
+- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andColumnResultList:resultList fromTables:tableNames isDistinct:isDistinct];
+    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:tableNames isDistinct:isDistinct];
 }
 
-- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)properties fromTables:(NSArray<NSString *> *)tableNames
 {
-    return [[WCTMultiSelect alloc] initWithCore:_core andPropertyList:propertyList fromTables:tableNames isDistinct:NO];
+    return [[WCTMultiSelect alloc] initWithCore:_core andProperties:properties fromTables:tableNames isDistinct:NO];
 }
 
-- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
+- (WCTMultiSelect *)prepareSelectMultiObjectsOnProperties:(const WCTPropertyList &)properties fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct
 {
-    return [[WCTMultiSelect alloc] initWithCore:_core andPropertyList:propertyList fromTables:tableNames isDistinct:isDistinct];
+    return [[WCTMultiSelect alloc] initWithCore:_core andProperties:properties fromTables:tableNames isDistinct:isDistinct];
 }
 
 @end

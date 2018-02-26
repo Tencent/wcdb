@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
+#import <WCDB/HandleStatement.hpp>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTInterface+Table.h>
 #import <WCDB/WCTORM.h>
-#import <WCDB/handle_statement.hpp>
 #import <WCDB/utility.hpp>
 
 @implementation WCTInterface (Table)
@@ -44,7 +44,7 @@
         bool isTableExists = _core->isTableExists(tableName.UTF8String, innerError);
         if (isTableExists) {
             //Get all column names
-            std::list<std::string> columnNameList;
+            std::list<std::string> columnNames;
             {
                 WCDB::RecyclableStatement handleStatement = _core->prepare(WCDB::StatementPragma()
                                                                                .pragma(WCDB::Pragma::TableInfo, tableName.UTF8String),
@@ -53,7 +53,7 @@
                     return;
                 }
                 while (handleStatement->step()) {
-                    columnNameList.push_back(handleStatement->getValue<(WCDB::ColumnType) WCTColumnTypeString>(1));
+                    columnNames.push_back(handleStatement->getValue<WCTColumnTypeString>(1));
                 }
 
                 if (!handleStatement->isOK()) {
@@ -62,8 +62,8 @@
                 }
             }
             //Check whether the column names exists
-            WCTColumnBindingMap columnBindingMap = binding->getColumnBindingMap();
-            for (const std::string &columnName : columnNameList) {
+            auto columnBindingMap = binding->getColumnBindingMap();
+            for (const std::string &columnName : columnNames) {
                 auto iter = columnBindingMap.find(columnName);
                 if (iter == columnBindingMap.end()) {
                     WCDB::Error::Warning([NSString stringWithFormat:@"Skip column named [%s] for table [%s]", columnName.c_str(), tableName.UTF8String].UTF8String);
@@ -74,8 +74,8 @@
             //Add new column
             for (const auto &iter : columnBindingMap) {
                 if (!_core->exec(WCDB::StatementAlterTable()
-                                     .alter(tableName.UTF8String)
-                                     .addColumn(iter.second->getColumnDef()),
+                                     .alterTable(tableName.UTF8String)
+                                     .addColumn(iter.second->columnDef),
                                  error)) {
                     return;
                 }
@@ -85,10 +85,9 @@
                 return;
             }
         }
-        const std::shared_ptr<WCTIndexBindingMap> &indexBindingMap = binding->getIndexBindingMap();
-        if (indexBindingMap) {
-            for (const auto &indexBinding : *indexBindingMap.get()) {
-                _core->exec(indexBinding.second->generateCreateIndexStatement(tableName.UTF8String), innerError);
+        for (const auto &statementCreateIndex : binding->generateCreateIndexStatements(tableName.UTF8String)) {
+            if (!_core->exec(statementCreateIndex, error)) {
+                return;
             }
         }
     },
@@ -115,23 +114,26 @@
     return error.isOK();
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andError:(WCDB::Error &)error
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementCreateTable()
-                           .create(tableName.UTF8String, columnDefList),
+                           .createTable(tableName.UTF8String)
+                           .define(columnDefs),
                        error);
 }
 
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefList:(const WCDB::ColumnDefList &)columnDefList andConstraintList:(const WCDB::TableConstraintList &)constraintList andError:(WCDB::Error &)error
+- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints andError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementCreateTable()
-                           .create(tableName.UTF8String, columnDefList, constraintList),
+                           .createTable(tableName.UTF8String)
+                           .define(columnDefs)
+                           .addTableConstraints(constraints),
                        error);
 }
 
 - (BOOL)dropTableOfName:(NSString *)tableName withError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementDropTable().drop(tableName.UTF8String), error);
+    return _core->exec(WCDB::StatementDropTable().dropTable(tableName.UTF8String), error);
 }
 
 - (BOOL)isTableExists:(NSString *)tableName withError:(WCDB::Error &)error
@@ -142,23 +144,24 @@
 - (BOOL)addColumn:(const WCDB::ColumnDef &)columnDef forTable:(NSString *)tableName withError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementAlterTable()
-                           .alter(tableName.UTF8String)
+                           .alterTable(tableName.UTF8String)
                            .addColumn(columnDef),
                        error);
 }
 
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexList:(const WCDB::ColumnIndexList &)indexList forTable:(NSString *)tableName andError:(WCDB::Error &)error
+- (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName andError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementCreateIndex()
-                           .create(indexName.UTF8String)
-                           .on(tableName.UTF8String, indexList),
+                           .createIndex(indexName.UTF8String)
+                           .on(tableName.UTF8String)
+                           .indexedBy(indexedColumns),
                        error);
 }
 
 - (BOOL)dropIndexOfName:(NSString *)indexName withError:(WCDB::Error &)error
 {
     return _core->exec(WCDB::StatementDropIndex()
-                           .drop(indexName.UTF8String),
+                           .dropIndex(indexName.UTF8String),
                        error);
 }
 

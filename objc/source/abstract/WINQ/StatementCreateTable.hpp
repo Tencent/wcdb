@@ -21,17 +21,18 @@
 #ifndef StatementCreateTable_hpp
 #define StatementCreateTable_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementCreateTable : public StatementWithLang<lang::CreateTableSTMT> {
 
 public:
-    StatementCreateTable &createTable(const std::string &tableName,
-                                      bool ifNotExists = true,
-                                      bool temp = false);
+    StatementCreateTable();
+    StatementCreateTable &createTable(const std::string &tableName);
+    StatementCreateTable &temp(bool temp = true);
+    StatementCreateTable &ifNotExists(bool ifNotExists = true);
     StatementCreateTable &withSchema(const std::string &schemaName);
     StatementCreateTable &as(const StatementSelect &selectSTMT);
     StatementCreateTable &define(const ColumnDef &columnDef);

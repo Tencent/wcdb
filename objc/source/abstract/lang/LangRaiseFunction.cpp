@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/lang.h>
+#include <WCDB/lang.h>
 
 namespace WCDB {
 

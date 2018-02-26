@@ -31,46 +31,60 @@
     XCTAssertEqual(WCDB::StatementCreateIndex().getType(), WCDB::Statement::Type::CreateIndex);
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
+                        .createIndex(self.class.indexName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
-                        .on(self.class.tableName, self.class.indexedColumn),
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumn),
                     @"CREATE INDEX testSchema.testIndex ON testTable(testColumn)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
+                        .createIndex(self.class.indexName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
-                        .on(self.class.tableName, self.class.indexedColumn)
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumn)
                         .where(self.class.condition),
                     @"CREATE INDEX testSchema.testIndex ON testTable(testColumn) WHERE testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
+                        .createIndex(self.class.indexName)
+                        .ifNotExists(false)
                         .withSchema(self.class.schemaName)
-                        .on(self.class.tableName, self.class.indexedColumns),
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumns),
                     @"CREATE INDEX testSchema.testIndex ON testTable(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, false)
-                        .on(self.class.tableName, self.class.indexedColumn),
+                        .createIndex(self.class.indexName)
+                        .ifNotExists(false)
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumn),
                     @"CREATE INDEX testIndex ON testTable(testColumn)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, true, false)
+                        .createIndex(self.class.indexName)
+                        .ifNotExists(true)
                         .withSchema(self.class.schemaName)
-                        .on(self.class.tableName, self.class.indexedColumn),
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumn),
                     @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
-                        .createIndex(self.class.indexName, false, true)
+                        .createIndex(self.class.indexName)
+                        .ifNotExists(false)
+                        .unique()
                         .withSchema(self.class.schemaName)
-                        .on(self.class.tableName, self.class.indexedColumn),
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumn),
                     @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn)");
 
     //Default
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName)
                         .withSchema(self.class.schemaName)
-                        .on(self.class.tableName, self.class.indexedColumn),
+                        .on(self.class.tableName)
+                        .indexedBy(self.class.indexedColumn),
                     @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn)");
 }
 

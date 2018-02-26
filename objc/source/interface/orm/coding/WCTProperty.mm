@@ -18,22 +18,75 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
 
-WCTProperty::WCTProperty(const std::string &name, const std::shared_ptr<WCTColumnBinding> &columnBinding)
-    : Describable(name)
+WCTProperty::WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding)
+    : m_columnBinding(columnBinding)
+{
+    WCDB::lang::Expr &lang = getMutableLang();
+    lang.type = WCDB::lang::Expr::Type::Column;
+    lang.exprColumn.get_or_copy().column.assign(m_columnBinding->columnDef.getLang().get().column);
+}
+
+WCTProperty::WCTProperty(const WCDB::Expression &expression,
+                         const std::shared_ptr<WCTColumnBinding> &columnBinding)
+    : WCDB::DescribableWithLang<WCDB::lang::Expr>(expression.getLang())
     , m_columnBinding(columnBinding)
 {
 }
 
-WCTProperty WCTProperty::inTable(NSString *tableName) const
+WCTProperty::operator WCDB::Column() const
 {
-    return WCTProperty(WCDB::Column(m_description).inTable(tableName.UTF8String).getDescription(), m_columnBinding);
+    return m_columnBinding->columnDef.getLang().get().column;
 }
 
-WCTProperty WCTProperty::inTable(const std::string &tableName) const
+WCTProperty::operator WCDB::Expression() const
 {
-    return WCTProperty(WCDB::Column(m_description).inTable(tableName).getDescription(), m_columnBinding);
+    return getLang();
+}
+
+WCTProperty::operator WCDB::ResultColumn() const
+{
+    return operator WCDB::Expression();
+}
+
+WCTProperty::operator WCDB::OrderingTerm() const
+{
+    return operator WCDB::Expression();
+}
+
+WCTProperty::operator WCDB::IndexedColumn() const
+{
+    return operator WCDB::Expression();
+}
+
+WCTProperty WCTProperty::atTable(NSString *tableName) const
+{
+    WCDB::Expression expression(getLang());
+    expression.withTable(tableName.UTF8String);
+    return WCTProperty(expression, m_columnBinding);
+}
+
+WCTProperty WCTProperty::atTable(const std::string &tableName) const
+{
+    WCDB::Expression expression(getLang());
+    expression.withTable(tableName);
+    return WCTProperty(expression, m_columnBinding);
+}
+
+WCTProperty WCTProperty::atSchema(NSString *schemaName) const
+{
+    WCDB::Expression expression(getLang());
+    expression.withSchema(schemaName.UTF8String);
+    return WCTProperty(expression, m_columnBinding);
+}
+
+WCTProperty WCTProperty::atSchema(const std::string &schemaName) const
+{
+    WCDB::Expression expression(getLang());
+    expression.withSchema(schemaName);
+    return WCTProperty(expression, m_columnBinding);
 }
 
 const std::shared_ptr<WCTColumnBinding> &WCTProperty::getColumnBinding() const
@@ -41,129 +94,82 @@ const std::shared_ptr<WCTColumnBinding> &WCTProperty::getColumnBinding() const
     return m_columnBinding;
 }
 
-WCDB::Column WCTProperty::asColumn() const
+WCDB::IndexedColumn WCTProperty::asIndex(WCDB::Order order) const
 {
-    return WCDB::Column(*this);
+    return WCDB::IndexedColumn(WCDB::Expression(getLang())).withOrder(order);
 }
 
-WCDB::Order WCTProperty::asOrder() const
+WCDB::OrderingTerm WCTProperty::asOrder(WCDB::Order order) const
 {
-    return WCDB::Order(asColumn());
+    return WCDB::OrderingTerm(getLang()).withOrder(order);
 }
 
-WCDB::Order WCTProperty::asOrder(WCTOrderTerm term) const
+const WCDB::ColumnDef &WCTProperty::getColumnDef() const
 {
-    return WCDB::Order(asColumn(), (WCDB::OrderTerm) term);
+    return m_columnBinding->columnDef;
 }
 
-WCDB::ColumnIndex WCTProperty::asIndex() const
+WCDB::lang::copy_on_write_lazy_lang<WCDB::lang::Expr> WCTProperty::getExpressionLang() const
 {
-    return WCDB::ColumnIndex(asColumn());
+    return getLang();
 }
 
-WCDB::ColumnIndex WCTProperty::asIndex(WCTOrderTerm term) const
+WCDB::Expression WCTProperty::getRedirectSource() const
 {
-    return WCDB::ColumnIndex(asColumn(), (WCDB::OrderTerm) term);
+    return getLang();
 }
 
-WCDB::Expression WCTProperty::asExpression() const
+WCTPropertyList::WCTPropertyList()
+    : std::list<WCTProperty>()
 {
-    return WCDB::Expression(asColumn());
 }
 
-WCDB::ColumnDef WCTProperty::asDef() const
+WCTPropertyList::WCTPropertyList(const WCTProperty &property)
+    : std::list<WCTProperty>({property})
 {
-    return WCDB::ColumnDef(asColumn());
 }
 
-WCDB::ColumnDef WCTProperty::asDef(WCTColumnType columnType) const
+WCTPropertyList::WCTPropertyList(const std::initializer_list<WCTProperty> &properties)
+    : std::list<WCTProperty>(properties)
 {
-    return WCDB::ColumnDef(asColumn(), (WCDB::ColumnType) columnType);
 }
 
-WCTProperty::operator std::list<const WCTProperty>() const
+WCTPropertyList::WCTPropertyList(const std::list<WCTProperty> &properties)
+    : std::list<WCTProperty>(properties)
 {
-    return {*this};
 }
 
-WCTProperty::operator std::list<const WCDB::Order>() const
+WCTPropertyList::operator std::list<WCDB::Column>() const
 {
-    return {asOrder()};
+    return std::list<WCDB::Column>(begin(), end());
+    ;
 }
 
-WCTProperty::operator std::list<const WCDB::ColumnResult>() const
+WCTPropertyList::operator std::list<WCDB::Expression>() const
 {
-    return {WCDB::ColumnResult(asColumn())};
+    return std::list<WCDB::Expression>(begin(), end());
 }
 
-WCTProperty::operator std::list<const WCDB::Expression>() const
+WCTPropertyList::operator std::list<WCDB::ResultColumn>() const
 {
-    return {asExpression()};
+    return std::list<WCDB::ResultColumn>(begin(), end());
 }
 
-const std::string &WCTProperty::getRedirectableDescription() const
+WCTPropertyList::operator std::list<WCDB::OrderingTerm>() const
 {
-    return m_description;
+    return std::list<WCDB::OrderingTerm>(begin(), end());
+}
+
+WCTPropertyList::operator std::list<WCDB::IndexedColumn>() const
+{
+    return std::list<WCDB::IndexedColumn>(begin(), end());
 }
 
 namespace WCDB {
 
-template <>
-WCTProperty Redirectable<Column>::as<WCTProperty>(const WCTProperty &property) const
+Expression ExpressionConvertible<WCTProperty>::as(const WCTProperty &property)
 {
-    return WCTProperty(getRedirectableDescription(), property.getColumnBinding());
-}
-
-template <>
-WCTProperty Redirectable<Expression>::as<WCTProperty>(const WCTProperty &property) const
-{
-    return WCTProperty(getRedirectableDescription(), property.getColumnBinding());
-}
-
-template <>
-WCTProperty Redirectable<WCTProperty>::as(const WCTProperty &property) const
-{
-    return WCTProperty(getRedirectableDescription(), property.getColumnBinding());
-}
-
-Column ColumnConvertible<WCTProperty>::asColumn(const WCTProperty &property)
-{
-    return Column(property.getDescription());
-}
-
-Expression ExpressionConvertible<WCTProperty>::asExpression(const WCTProperty &property)
-{
-    return Expression(ColumnConvertible<WCTProperty>::asColumn(property));
-}
-
-ColumnResult ColumnResultConvertible<WCTProperty>::asColumnResult(const WCTProperty &property)
-{
-    return ColumnResult(ColumnConvertible<WCTProperty>::asColumn(property));
-}
-
-Order SpecificOrderConvertible<WCTProperty>::asOrder(const WCTProperty &property, OrderTerm term)
-{
-    return Order(ExpressionConvertible<WCTProperty>::asExpression(property), term);
-}
-
-Order OrderConvertible<WCTProperty>::asOrder(const WCTProperty &property)
-{
-    return SpecificOrderConvertible<WCTProperty>::asOrder(property, OrderTerm::NotSet);
-}
-
-ColumnIndex SpecificColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty &property, OrderTerm term)
-{
-    return ColumnIndex(ColumnConvertible<WCTProperty>::asColumn(property), term);
-}
-
-ColumnIndex ColumnIndexConvertible<WCTProperty>::asIndex(const WCTProperty &property)
-{
-    return SpecificColumnIndexConvertible<WCTProperty>::asIndex(property, OrderTerm::NotSet);
-}
-
-ColumnDef SpecificColumnDefConvertible<WCTProperty>::asDef(const WCTProperty &property, ColumnType propertyType)
-{
-    return ColumnDef(ColumnConvertible<WCTProperty>::asColumn(property), propertyType);
+    return Expression(property.getLang());
 }
 
 } //namespace WCDB

@@ -128,9 +128,9 @@
     }
     XCTAssertTrue([self.database insertObjects:preInsertedObjects into:WTCCRUDObject.Name]);
 
-    _rowSelect = [self.database prepareSelectRowsOnResults:{WCDB::Column::All.count()} fromTable:WTCCRUDObject.Name];
+    _rowSelect = [self.database prepareSelectRowsOnResults:{WCDB::Expression::All().count()} fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(_rowSelect);
-    [[self.rowSelect groupBy:WTCCRUDObject.variable2] having:WTCCRUDObject.variable1 > 0];
+    [[self.rowSelect groupBy:{WTCCRUDObject.variable2}] having:WTCCRUDObject.variable1 > 0];
     //When
     WCTOneColumn *results = self.rowSelect.allValues;
     XCTAssertNotNil(results);
@@ -143,7 +143,7 @@
 - (void)testPartialRowSelect
 {
     //Give
-    _rowSelect = [self.database prepareSelectRowsOnResults:WTCCRUDObject.variable2 fromTable:WTCCRUDObject.Name];
+    _rowSelect = [self.database prepareSelectRowsOnResults:{WTCCRUDObject.variable2} fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(_rowSelect);
     //When
     WCTColumnsXRows *results = self.rowSelect.allRows;
@@ -211,10 +211,10 @@
     object1.variable2 = @"object3";
     XCTAssertTrue([self.database insertObject:object1 into:table2]);
 
-    WCTProperty column1Table1 = WTCCRUDObject.variable1.inTable(table);
-    WCTProperty column1Table2 = WTCCRUDObject.variable1.inTable(table2);
-    WCTProperty column2Table1 = WTCCRUDObject.variable2.inTable(table);
-    WCTProperty column2Table2 = WTCCRUDObject.variable2.inTable(table2);
+    WCTProperty column1Table1 = WTCCRUDObject.variable1.atTable(table);
+    WCTProperty column1Table2 = WTCCRUDObject.variable1.atTable(table2);
+    WCTProperty column2Table1 = WTCCRUDObject.variable2.atTable(table);
+    WCTProperty column2Table2 = WTCCRUDObject.variable2.atTable(table2);
     //When
     _rowSelect = [[self.database prepareSelectRowsOnResults:{column2Table1, column2Table2} fromTables:@[ table, table2 ]] where:column1Table1 == column1Table2];
     XCTAssertNotNil(_rowSelect);
@@ -240,8 +240,8 @@
     object1.variable2 = @"object3";
     XCTAssertTrue([self.database insertObject:object1 into:table2]);
 
-    WCTProperty column1Table1 = WTCCRUDObject.variable1.inTable(table);
-    WCTProperty column1Table2 = WTCCRUDObject.variable1.inTable(table2);
+    WCTProperty column1Table1 = WTCCRUDObject.variable1.atTable(table);
+    WCTProperty column1Table2 = WTCCRUDObject.variable1.atTable(table2);
     //When
     _rowSelect = [[self.database prepareSelectRowsFromTables:@[ table, table2 ]] where:column1Table1 == column1Table2];
     XCTAssertNotNil(_rowSelect);
@@ -255,12 +255,6 @@
 
     XCTAssertEqual(((NSNumber *) results[0][2]).intValue, 1);
     XCTAssertTrue([(NSString *) results[0][3] isEqualToString:@"object3"]);
-}
-
-- (void)testRowSelectFailed
-{
-    _rowSelect = [self.database prepareSelectRowsFromTables:@[]];
-    XCTAssertNil(self.rowSelect.allRows);
 }
 
 @end

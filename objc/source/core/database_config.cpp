@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/HandleStatement.hpp>
 #include <WCDB/database.hpp>
-#include <WCDB/fts_modules.hpp>
-#include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>
 #include <WCDB/timed_queue.hpp>
 #include <WCDB/utility.hpp>
@@ -332,15 +331,19 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 
                 //Tokenize
                 {
+                    static const StatementSelect FTS3Tokenizer =
+                        StatementSelect().select(Expression::Function(
+                            "fts3_tokenizer",
+                            std::list<Expression>(2, BindParameter())));
                     std::shared_ptr<HandleStatement> handleStatement =
-                        handle->prepare(Statement::FTS3Tokenizer);
+                        handle->prepare(FTS3Tokenizer);
                     if (!handleStatement) {
                         error = handle->getError();
                         return false;
                     }
-                    handleStatement->bind<WCDB::ColumnType::Text>(
+                    handleStatement->bind<ColumnType::Text>(
                         tokenizeName.c_str(), 1);
-                    handleStatement->bind<WCDB::ColumnType::BLOB>(address, 2);
+                    handleStatement->bind<ColumnType::BLOB>(address, 2);
                     handleStatement->step();
                     if (!handleStatement->isOK()) {
                         error = handleStatement->getError();

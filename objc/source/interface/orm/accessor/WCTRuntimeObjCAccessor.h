@@ -43,10 +43,10 @@ protected:
     ValueSetter generateValueSetter(Class instanceClass,
                                     const std::string &propertyName);
 
-    virtual WCTColumnType getColumnType() const override;
+    virtual WCDB::ColumnType getColumnType() const override;
 
-    WCTColumnType GetColumnType(Class instanceClass,
-                                const std::string &propertyName);
+    WCDB::ColumnType GetColumnType(Class instanceClass,
+                                   const std::string &propertyName);
 
-    const WCTColumnType m_columnType;
+    const WCDB::ColumnType m_columnType;
 };

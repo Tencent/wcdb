@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#include <WINQ/File.hpp>
-#include <WINQ/Handle.hpp>
-#include <WINQ/HandleStatement.hpp>
-#include <WINQ/Path.hpp>
-#include <WINQ/macro.hpp>
+#include <WCDB/File.hpp>
+#include <WCDB/Handle.hpp>
+#include <WCDB/HandleStatement.hpp>
+#include <WCDB/Path.hpp>
+#include <WCDB/macro.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <sqliterk/SQLiteRepairKit.h>
 
@@ -182,12 +182,14 @@ void Handle::reportSQL(const std::string &sql)
 std::shared_ptr<HandleStatement> Handle::prepare(const Statement &statement)
 {
     //TODO
-    //    if (statement.getStatementType() == Statement::Type::Transaction) {
-    //        Error::Abort(
-    //            "[prepare] a transaction is not allowed, use [exec] instead",
-    //            &m_error);
-    //        return nullptr;
-    //    }
+    if (statement.getType() == Statement::Type::Begin ||
+        statement.getType() == Statement::Type::Commit ||
+        statement.getType() == Statement::Type::Rollback) {
+        Error::Abort(
+            "[prepare] a transaction is not allowed, use [exec] instead",
+            &m_error);
+        return nullptr;
+    }
     sqlite3_stmt *stmt = nullptr;
     int rc = sqlite3_prepare_v2((sqlite3 *) m_handle,
                                 statement.getDescription().c_str(), -1, &stmt,
@@ -210,26 +212,23 @@ bool Handle::exec(const Statement &statement)
         sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
                      nullptr, nullptr, nullptr);
     bool result = rc == SQLITE_OK;
-    //TODO
-    //    if (statement.getStatementType() == Statement::Type::Transaction) {
-    //        const StatementTransaction &transaction =
-    //            (const StatementTransaction &) statement;
-    //        switch (transaction.getTransactionType()) {
-    //            case StatementTransaction::Type::Begin:
-    //                if (result) {
-    //                    m_aggregation = true;
-    //                }
-    //                break;
-    //            case StatementTransaction::Type::Commit:
-    //                if (result) {
-    //                    m_aggregation = false;
-    //                }
-    //                break;
-    //            case StatementTransaction::Type::Rollback:
-    //                m_aggregation = false;
-    //                break;
-    //        }
-    //    }
+    switch (statement.getType()) {
+        case Statement::Type::Begin:
+            if (result) {
+                m_aggregation = true;
+            }
+            break;
+        case Statement::Type::Commit:
+            if (result) {
+                m_aggregation = false;
+            }
+            break;
+        case Statement::Type::Rollback:
+            m_aggregation = false;
+            break;
+        default:
+            break;
+    }
     if (result) {
         m_error.reset();
         return true;

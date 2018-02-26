@@ -21,18 +21,19 @@
 #ifndef StatementCreateTrigger_hpp
 #define StatementCreateTrigger_hpp
 
-#include <WINQ/Describable.hpp>
-#include <WINQ/Statement.hpp>
+#include <WCDB/Describable.hpp>
+#include <WCDB/Statement.hpp>
 
 namespace WCDB {
 
 class StatementCreateTrigger
     : public StatementWithLang<lang::CreateTriggerSTMT> {
 public:
-    StatementCreateTrigger &createTrigger(const std::string &triggerName,
-                                          bool ifNotExists = true,
-                                          bool temp = false);
+    StatementCreateTrigger();
+    StatementCreateTrigger &createTrigger(const std::string &triggerName);
     StatementCreateTrigger &withSchema(const std::string &schemaName);
+    StatementCreateTrigger &ifNotExists(bool ifNotExists = true);
+    StatementCreateTrigger &temp(bool temp = true);
 
     StatementCreateTrigger &before();
     StatementCreateTrigger &after();

@@ -41,7 +41,8 @@ public:
     bool exec(const Statement &statement, Error &error) override;
     bool isTableExists(const std::string &tableName, Error &error) override;
 
-    bool begin(StatementTransaction::Mode mode, Error &error) override;
+    bool begin(const StatementBegin::Transaction &transaction,
+               Error &error) override;
     bool commit(Error &error) override;
     bool rollback(Error &error) override;
     bool runEmbeddedTransaction(TransactionBlock transaction,

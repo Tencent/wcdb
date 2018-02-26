@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
@@ -26,6 +26,21 @@ Column::Column(const std::string &name)
 {
     lang::Column &lang = getMutableLang();
     lang.name.assign(name);
+}
+
+lang::copy_on_write_lazy_lang<lang::Expr> Column::getExpressionLang() const
+{
+    return Expression(*this).getLang();
+}
+
+Column::Column(const lang::copy_on_write_lazy_lang<lang::Column> &column)
+    : DescribableWithLang<lang::Column>(column)
+{
+}
+
+Expression Column::getRedirectSource() const
+{
+    return *this;
 }
 
 } // namespace WCDB

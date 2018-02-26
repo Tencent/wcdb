@@ -39,7 +39,7 @@
 
 - (void)testCoreStatement
 {
-    WCDB::StatementSelect statement = WCDB::StatementSelect().select(WCDB::Column::All).from(WCTMaster.TableName.UTF8String);
+    WCDB::StatementSelect statement = WCDB::StatementSelect().select(WCDB::Expression::All()).from(WCTMaster.TableName.UTF8String);
     _coreStatement = [self.database prepare:statement];
     XCTAssertNotNil(_coreStatement);
     XCTAssertEqual(self.coreStatement.tag, self.database.tag);
@@ -49,7 +49,7 @@
 - (void)testCoreStatementRead
 {
     //Give
-    WCDB::StatementSelect statement = WCDB::StatementSelect().select(WCDB::Column::All).from(WTCCRUDObject.Name.UTF8String);
+    WCDB::StatementSelect statement = WCDB::StatementSelect().select(WCDB::Expression::All()).from(WTCCRUDObject.Name.UTF8String);
     _coreStatement = [self.database prepare:statement];
     XCTAssertNotNil(_coreStatement);
 
@@ -103,7 +103,7 @@
 
 //- (void)testCoreStatementWrite {
 //    //Give
-//    const WCDB::Expression& bindParameter = WCDB::Expression::BindParameter;
+//    const WCDB::Expression& bindParameter = WCDB::BindParameter();
 //    WCDB::StatementInsert statementInsert = WCDB::StatementInsert().insert(WTCCRUDObject.Name.UTF8String).values({bindParameter, bindParameter});
 //    _coreStatement = [self.database prepare:statementInsert];
 //    XCTAssertNotNil(_coreStatement);
@@ -146,8 +146,8 @@
 - (void)testStepFailed
 {
     //Give
-    const WCDB::Expression &bindParameter = WCDB::Expression::BindParameter;
-    WCDB::StatementInsert statementInsert = WCDB::StatementInsert().insert(WTCCRUDObject.Name.UTF8String).values({bindParameter, bindParameter});
+    const WCDB::Expression &bindParameter = WCDB::BindParameter();
+    WCDB::StatementInsert statementInsert = WCDB::StatementInsert().insertInto(WTCCRUDObject.Name.UTF8String).values({bindParameter, bindParameter});
 
     _coreStatement = [self.database prepare:statementInsert];
     XCTAssertNotNil(_coreStatement);
@@ -164,7 +164,7 @@
 
 - (void)testExecFailed
 {
-    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::Column::All).from("nonexistentTable");
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(WCDB::Expression::All()).from("nonexistentTable");
     XCTAssertFalse([self.database exec:statementSelect]);
 }
 
@@ -387,7 +387,7 @@
     //Give
     [self.database close];
     [self.database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) {
-      return handle->exec(WCDB::StatementSelect().select(WCDB::Column::All).from("nonexistentTable"));
+      return handle->exec(WCDB::StatementSelect().select(WCDB::Expression::All()).from("nonexistentTable"));
     }
                      forName:@"testConfigFailed"];
     //When
@@ -396,14 +396,14 @@
 
 - (void)testRedirect
 {
-    WTCCRUDObject *object = [self.database getObjectOnProperties:WTCCRUDObject.AllColumns.count().as(WTCCRUDObject.variable1) fromTable:WTCCRUDObject.Name];
+    WTCCRUDObject *object = [self.database getObjectOnProperties:WTCCRUDObject.AllResults.count().redirect(WTCCRUDObject.variable1) fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(object);
     XCTAssertEqual(object.variable1, self.preInsertedObjects.count);
 }
 
 - (void)testPropertyRedirect
 {
-    WTCCRUDObject *object = [self.database getObjectOnProperties:WTCCRUDObject.variable1.as(WTCCRUDObject.variable1) fromTable:WTCCRUDObject.Name];
+    WTCCRUDObject *object = [self.database getObjectOnProperties:WTCCRUDObject.variable1.redirect(WTCCRUDObject.variable1) fromTable:WTCCRUDObject.Name];
     XCTAssertNotNil(object);
     XCTAssertEqual(object.variable1, self.preInsertedObjects[0].variable1);
 }

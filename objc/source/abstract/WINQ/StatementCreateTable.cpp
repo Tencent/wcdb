@@ -18,17 +18,34 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-StatementCreateTable &StatementCreateTable::createTable(
-    const std::string &tableName, bool ifNotExists, bool temp)
+StatementCreateTable::StatementCreateTable()
+{
+    getMutableLang().ifNotExists = true;
+}
+
+StatementCreateTable &
+StatementCreateTable::createTable(const std::string &tableName)
 {
     lang::CreateTableSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
-    lang.ifNotExists = ifNotExists;
+    return *this;
+}
+
+StatementCreateTable &StatementCreateTable::temp(bool temp)
+{
+    lang::CreateTableSTMT &lang = getMutableLang();
     lang.temp = temp;
+    return *this;
+}
+
+StatementCreateTable &StatementCreateTable::ifNotExists(bool ifNotExists)
+{
+    lang::CreateTableSTMT &lang = getMutableLang();
+    lang.ifNotExists = ifNotExists;
     return *this;
 }
 

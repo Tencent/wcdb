@@ -21,7 +21,7 @@
 #ifndef copy_on_write_data_hpp
 #define copy_on_write_data_hpp
 
-#include <WINQ/copy_on_write.hpp>
+#include <WCDB/copy_on_write.hpp>
 #include <vector>
 
 class copy_on_write_data : public copy_on_write<std::vector<unsigned char>> {

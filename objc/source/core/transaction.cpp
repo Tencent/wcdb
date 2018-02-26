@@ -37,29 +37,38 @@ RecyclableStatement Transaction::prepare(const Statement &statement,
                                          Error &error)
 {
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());
-    if (statement.getStatementType() == Statement::Type::Transaction) {
-        Error::ReportCore(
-            getTag(), getPath(), Error::CoreOperation::Prepare,
-            Error::CoreCode::Misuse,
-            "Using [begin], [commit], [rollback] method to do a transaction",
-            &error);
-        return RecyclableStatement(m_handle, nullptr);
+    switch (statement.getType()) {
+        case Statement::Type::Begin:
+        case Statement::Type::Commit:
+        case Statement::Type::Rollback:
+            Error::ReportCore(getTag(), getPath(),
+                              Error::CoreOperation::Prepare,
+                              Error::CoreCode::Misuse,
+                              "Using [begin], [commit], [rollback] method to "
+                              "do a transaction",
+                              &error);
+            return RecyclableStatement(m_handle, nullptr);
+        default:
+            return CoreBase::prepare(m_handle, statement, error);
     }
-    return CoreBase::prepare(m_handle, statement, error);
 }
 
 bool Transaction::exec(const Statement &statement, Error &error)
 {
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());
-    if (statement.getStatementType() == Statement::Type::Transaction) {
-        Error::ReportCore(
-            getTag(), getPath(), Error::CoreOperation::Exec,
-            Error::CoreCode::Misuse,
-            "Using [begin], [commit], [rollback] method to do a transaction",
-            &error);
-        return false;
+    switch (statement.getType()) {
+        case Statement::Type::Begin:
+        case Statement::Type::Commit:
+        case Statement::Type::Rollback:
+            Error::ReportCore(getTag(), getPath(), Error::CoreOperation::Exec,
+                              Error::CoreCode::Misuse,
+                              "Using [begin], [commit], [rollback] method to "
+                              "do a transaction",
+                              &error);
+            return false;
+        default:
+            return CoreBase::exec(m_handle, statement, error);
     }
-    return CoreBase::exec(m_handle, statement, error);
 }
 
 bool Transaction::isTableExists(const std::string &tableName, Error &error)
@@ -68,10 +77,11 @@ bool Transaction::isTableExists(const std::string &tableName, Error &error)
     return CoreBase::isTableExists(m_handle, tableName, error);
 }
 
-bool Transaction::begin(StatementTransaction::Mode mode, Error &error)
+bool Transaction::begin(const StatementBegin::Transaction &transaction,
+                        Error &error)
 {
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());
-    if (CoreBase::exec(m_handle, StatementTransaction().begin(mode), error)) {
+    if (CoreBase::exec(m_handle, StatementBegin().begin(transaction), error)) {
         m_isInTransaction = true;
         return true;
     }
@@ -81,8 +91,7 @@ bool Transaction::begin(StatementTransaction::Mode mode, Error &error)
 bool Transaction::commit(Error &error)
 {
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());
-    bool result =
-        CoreBase::exec(m_handle, StatementTransaction().commit(), error);
+    bool result = CoreBase::exec(m_handle, StatementCommit().commit(), error);
     if (result) {
         m_isInTransaction = false;
     }
@@ -93,7 +102,7 @@ bool Transaction::rollback(Error &error)
 {
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());
     bool result =
-        CoreBase::exec(m_handle, StatementTransaction().rollback(), error);
+        CoreBase::exec(m_handle, StatementRollback().rollback(), error);
     m_isInTransaction = false;
     return result;
 }

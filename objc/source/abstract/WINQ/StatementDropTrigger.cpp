@@ -18,15 +18,26 @@
  * limitations under the License.
  */
 
-#include <WINQ/WINQ.h>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
+StatementDropTrigger::StatementDropTrigger()
+{
+    getMutableLang().ifExists = true;
+}
+
 StatementDropTrigger &
-StatementDropTrigger::dropTrigger(const std::string &triggerName, bool ifExists)
+StatementDropTrigger::dropTrigger(const std::string &triggerName)
 {
     lang::DropTriggerSTMT &lang = getMutableLang();
     lang.name.assign(triggerName);
+    return *this;
+}
+
+StatementDropTrigger &StatementDropTrigger::ifExists(bool ifExists)
+{
+    lang::DropTriggerSTMT &lang = getMutableLang();
     lang.ifExists = ifExists;
     return *this;
 }

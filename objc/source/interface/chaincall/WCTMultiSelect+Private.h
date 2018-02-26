@@ -24,6 +24,9 @@
 
 @interface WCTMultiSelect ()
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andPropertyList:(const WCTPropertyList &)propertyList fromTables:(NSArray<NSString *> *)tableNames isDistinct:(BOOL)isDistinct;
+- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+               andProperties:(const WCTPropertyList &)properties
+                  fromTables:(NSArray<NSString *> *)tableNames
+                  isDistinct:(BOOL)isDistinct;
 
 @end

@@ -21,7 +21,7 @@
 #ifndef StatementCommit_hpp
 #define StatementCommit_hpp
 
-#include <WINQ/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 

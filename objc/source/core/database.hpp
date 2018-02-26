@@ -99,7 +99,8 @@ public:
     //transaction
     std::shared_ptr<Transaction> getTransaction(Error &error);
 
-    bool begin(StatementTransaction::Mode mode, Error &error) override;
+    bool begin(const StatementBegin::Transaction &transaction,
+               Error &error) override;
     bool commit(Error &error) override;
     bool rollback(Error &error) override;
     bool runEmbeddedTransaction(TransactionBlock transaction,

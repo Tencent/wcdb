@@ -21,9 +21,9 @@
 #ifndef HandleStatement_hpp
 #define HandleStatement_hpp
 
-#include <WINQ/ColumnType.hpp>
-#include <WINQ/Handle.hpp>
-#include <WINQ/error.hpp>
+#include <WCDB/ColumnType.hpp>
+#include <WCDB/Handle.hpp>
+#include <WCDB/error.hpp>
 #include <mutex>
 
 namespace WCDB {
