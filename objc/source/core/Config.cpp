@@ -60,12 +60,13 @@ void Configs::setConfig(const Config &config)
             break;
         }
     }
-    for (auto iter = configs.begin(); iter != configs.end(); ++iter) {
-        if (iter->get().order < iter->get().order) {
-            configs.insert(iter, config);
+    std::list<copy_on_write<Config>>::iterator iter;
+    for (iter = configs.begin(); iter != configs.end(); ++iter) {
+        if (config.order < iter->get().order) {
             break;
         }
     }
+    configs.insert(iter, config);
 }
 
 void Configs::setConfig(const std::string &name,
