@@ -22,6 +22,7 @@
 #define BuiltinConfig_hpp
 
 #include <WCDB/Config.hpp>
+#include <WCDB/timed_queue.hpp>
 
 namespace WCDB {
 
@@ -49,6 +50,8 @@ public:
     static const Config tokenizeWithNames(const std::list<std::string> &names);
 
 protected:
+    static std::thread s_checkpointThread;
+    static TimedQueue<std::string> s_timedQueue;
     static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
     static std::shared_ptr<SQLTrace> s_globalSQLTrace;
 };

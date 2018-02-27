@@ -201,9 +201,10 @@ BuiltinConfig::cipherWithKey(const void *key, int keySize, int pageSize)
 const Config BuiltinConfig::checkpoint(
     "checkpoint",
     [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+        static std::once_flag s_flag;
+        std::call_once(s_flag, []() { s_checkpointThread.detach(); });
         handle->registerCommittedHook(
             [](Handle *handle, int pages, void *) {
-                static TimedQueue<std::string> s_timedQueue(2);
                 if (pages > 1000) {
                     if (pages > 3000) {
                         s_timedQueue.remove(handle->path);
@@ -212,37 +213,37 @@ const Config BuiltinConfig::checkpoint(
                         s_timedQueue.reQueue(handle->path);
                     }
                 }
-                static std::thread s_checkpointThread([]() {
-                    pthread_setname_np("WCDB-checkpoint");
-                    static std::atomic<bool> stop(false);
-                    atexit([]() {
-                        stop = true;
-                        s_timedQueue.notify();
-                    });
-                    while (!stop) {
-                        s_timedQueue.waitUntilExpired(
-                            [](const std::string &path) {
-                                if (stop) {
-                                    return;
-                                }
-                                Database database(
-                                    path,
-                                    true); // Get Existing Database Only
-                                if (database.getType() != CoreType::None) {
-                                    WCDB::Error innerError;
-                                    database.exec(BuiltinStatement::checkpoint,
-                                                  innerError);
-                                }
-                            });
-                    }
-                });
-                static std::once_flag s_flag;
-                std::call_once(s_flag, []() { s_checkpointThread.detach(); });
             },
             nullptr);
         return true;
     },
     Order::Checkpoint);
+
+TimedQueue<std::string> BuiltinConfig::s_timedQueue(2);
+
+std::thread BuiltinConfig::s_checkpointThread([]() {
+    pthread_setname_np("WCDB-checkpoint");
+    static std::atomic<bool> s_stop(false);
+    atexit([]() {
+        s_stop = true; //will stop
+        s_timedQueue.notify();
+        while (!s_stop)
+            ;
+    });
+    while (!s_stop) {
+        s_timedQueue.waitUntilExpired([](const std::string &path) {
+            if (s_stop) {
+                return;
+            }
+            Database database(path, true); // Get Existing Database Only
+            if (database.getType() != CoreType::None) {
+                WCDB::Error innerError;
+                database.exec(BuiltinStatement::checkpoint, innerError);
+            }
+        });
+    }
+    s_stop = true; // stopped
+});
 
 const Config
 BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)

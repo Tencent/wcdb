@@ -35,7 +35,8 @@ namespace WCDB {
 template <typename Key>
 class TimedQueue {
 public:
-    TimedQueue(int delay) : m_delay(std::chrono::seconds(delay)){};
+    TimedQueue(int delay)
+        : m_delay(std::chrono::seconds(delay)), m_break(false){};
 
     typedef std::function<void(const Key &)> OnExpired;
 
@@ -61,14 +62,18 @@ public:
         unsafeRemove(key);
     }
 
-    void notify() { m_cond.notify_one(); }
+    void notify()
+    {
+        m_break = true;
+        m_cond.notify_one();
+    }
 
-    void waitUntilExpired(const OnExpired &onExpired, bool forever = true)
+    void waitUntilExpired(const OnExpired &onExpired)
     {
         {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
             while (m_list.empty()) {
-                if (forever) {
+                if (!m_break) {
                     m_cond.wait(lockGuard);
                 } else {
                     return;
@@ -106,6 +111,7 @@ protected:
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::chrono::seconds m_delay;
+    std::atomic<bool> m_break;
 
     void unsafeRemove(const Key &key)
     {
