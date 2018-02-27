@@ -44,11 +44,7 @@ public:
         std::lock_guard<std::mutex> lockGuard(m_mutex);
         bool signal = m_list.empty();
 
-        auto iter = m_map.find(key);
-        if (iter != m_map.end()) {
-            m_list.erase(iter->second);
-            m_map.erase(iter);
-        }
+        unsafeRemove(key);
 
         //delay
         m_list.push_front({key, std::chrono::steady_clock::now() + m_delay});
@@ -58,6 +54,14 @@ public:
             m_cond.notify_one();
         }
     }
+
+    void remove(const Key &key)
+    {
+        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        unsafeRemove(key);
+    }
+
+    void notify() { m_cond.notify_one(); }
 
     void waitUntilExpired(const OnExpired &onExpired, bool forever = true)
     {
@@ -102,6 +106,15 @@ protected:
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::chrono::seconds m_delay;
+
+    void unsafeRemove(const Key &key)
+    {
+        auto iter = m_map.find(key);
+        if (iter != m_map.end()) {
+            m_list.erase(iter->second);
+            m_map.erase(iter);
+        }
+    }
 };
 
 } //namespace WCDB

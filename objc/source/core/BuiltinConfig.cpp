@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/BuiltinConfig.hpp>
+#include <WCDB/BuiltinStatement.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/timed_queue.hpp>
@@ -34,12 +35,9 @@ const Config BuiltinConfig::basic(
     [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
 
         if (handle->isReadonly()) {
-            static const StatementPragma s_getJournalMode =
-                StatementPragma().pragma(Pragma::JournalMode);
-
             //Get Journal Mode
             std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(s_getJournalMode);
+                handle->prepare(BuiltinStatement::getJournalMode);
             if (!handleStatement) {
                 error = handle->getError();
                 return false;
@@ -64,14 +62,9 @@ const Config BuiltinConfig::basic(
 
         //Locking Mode
         {
-            static const StatementPragma s_getLockingMode =
-                StatementPragma().pragma(Pragma::LockingMode);
-            static const StatementPragma s_setLockingModeNormal =
-                StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
-
             //Get Locking Mode
             std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(s_getLockingMode);
+                handle->prepare(BuiltinStatement::getLockingMode);
             if (!handleStatement) {
                 error = handle->getError();
                 return false;
@@ -87,7 +80,7 @@ const Config BuiltinConfig::basic(
 
             //Set Locking Mode
             if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
-                !handle->exec(s_setLockingModeNormal)) {
+                !handle->exec(BuiltinStatement::setLockingModeNormal)) {
                 error = handle->getError();
                 return false;
             }
@@ -95,10 +88,8 @@ const Config BuiltinConfig::basic(
 
         //Synchronous
         {
-            static const StatementPragma s_setSynchronousNormal =
-                StatementPragma().pragma(Pragma::Synchronous, "NORMAL");
 
-            if (!handle->exec(s_setSynchronousNormal)) {
+            if (!handle->exec(BuiltinStatement::setSynchronousNormal)) {
                 error = handle->getError();
                 return false;
             }
@@ -106,14 +97,9 @@ const Config BuiltinConfig::basic(
 
         //Journal Mode
         {
-            static const StatementPragma s_getJournalMode =
-                StatementPragma().pragma(Pragma::JournalMode);
-            static const StatementPragma s_setJournalModeWAL =
-                StatementPragma().pragma(Pragma::JournalMode, "WAL");
-
             //Get Journal Mode
             std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(s_getJournalMode);
+                handle->prepare(BuiltinStatement::getJournalMode);
             if (!handleStatement) {
                 error = handle->getError();
                 return false;
@@ -129,7 +115,7 @@ const Config BuiltinConfig::basic(
 
             //Set Journal Mode
             if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
-                !handle->exec(s_setJournalModeWAL)) {
+                !handle->exec(BuiltinStatement::setJournalModeWAL)) {
                 error = handle->getError();
                 return false;
             }
@@ -137,10 +123,7 @@ const Config BuiltinConfig::basic(
 
         //Fullfsync
         {
-            static const StatementPragma s_setFullFsync =
-                StatementPragma().pragma(Pragma::Fullfsync, true);
-
-            if (!handle->exec(s_setFullFsync)) {
+            if (!handle->exec(BuiltinStatement::setFullFSync)) {
                 error = handle->getError();
                 return false;
             }
@@ -222,21 +205,32 @@ const Config BuiltinConfig::checkpoint(
             [](Handle *handle, int pages, void *) {
                 static TimedQueue<std::string> s_timedQueue(2);
                 if (pages > 1000) {
-                    s_timedQueue.reQueue(handle->path);
+                    if (pages > 3000) {
+                        s_timedQueue.remove(handle->path);
+                        handle->exec(BuiltinStatement::checkpoint);
+                    } else {
+                        s_timedQueue.reQueue(handle->path);
+                    }
                 }
                 static std::thread s_checkpointThread([]() {
                     pthread_setname_np("WCDB-checkpoint");
-                    while (true) {
-                        //TODO atExit
+                    static std::atomic<bool> stop(false);
+                    atexit([]() {
+                        stop = true;
+                        s_timedQueue.notify();
+                    });
+                    while (!stop) {
                         s_timedQueue.waitUntilExpired(
                             [](const std::string &path) {
+                                if (stop) {
+                                    return;
+                                }
                                 Database database(
                                     path,
                                     true); // Get Existing Database Only
                                 if (database.getType() != CoreType::None) {
                                     WCDB::Error innerError;
-                                    database.exec(StatementPragma().pragma(
-                                                      Pragma::WalCheckpoint),
+                                    database.exec(BuiltinStatement::checkpoint,
                                                   innerError);
                                 }
                             });
@@ -262,12 +256,8 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
 
                 //Tokenize
                 {
-                    static const StatementSelect FTS3Tokenizer =
-                        StatementSelect().select(Expression::Function(
-                            "fts3_tokenizer",
-                            std::list<Expression>(2, BindParameter())));
                     std::shared_ptr<HandleStatement> handleStatement =
-                        handle->prepare(FTS3Tokenizer);
+                        handle->prepare(BuiltinStatement::fts3Tokenizer);
                     if (!handleStatement) {
                         error = handle->getError();
                         return false;
