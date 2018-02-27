@@ -171,8 +171,8 @@ const Config
 BuiltinConfig::cipherWithKey(const void *key, int keySize, int pageSize)
 {
     std::shared_ptr<std::vector<unsigned char>> keys(
-        new std::vector<unsigned char>(keySize));
-    memcpy(keys->data(), key, keySize);
+        new std::vector<unsigned char>((unsigned char *) key,
+                                       (unsigned char *) key + keySize));
     return Config("cipher",
                   [keys, pageSize](std::shared_ptr<Handle> &handle,
                                    Error &error) -> bool {
