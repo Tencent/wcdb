@@ -52,7 +52,7 @@
             }
         }
     } checkCorrectness:^{
-        NSNumber *count = [self.database getValueOnResult:WTCBenchmarkObject.AllColumns.count() fromTable:tableName];
+        NSNumber *count = [self.database getValueOnResult:WTCBenchmarkObject.AllResults.count() fromTable:tableName];
         XCTAssertEqual(count.intValue, self.config.writeCount);
     }];
 }

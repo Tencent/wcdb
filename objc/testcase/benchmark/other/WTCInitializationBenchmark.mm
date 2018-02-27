@@ -40,7 +40,7 @@
     } for:^{
         XCTAssertTrue(self.database.canOpen);
     } checkCorrectness:^{
-        NSNumber *count = [self.database getValueOnResult:WCTMaster.AllColumns.count() fromTable:WCTMaster.TableName];
+        NSNumber *count = [self.database getValueOnResult:WCTMaster.AllResults.count() fromTable:WCTMaster.TableName];
         XCTAssertEqual(count.intValue, self.config.tableCount);
     }];
 }
