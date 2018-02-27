@@ -34,9 +34,9 @@
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
 		233D0F132045032700DDB462 /* BuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233D0F112045032700DDB462 /* BuiltinConfig.cpp */; };
-		233D0F142045032700DDB462 /* BuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F122045032700DDB462 /* BuiltinConfig.hpp */; };
+		233D0F142045032700DDB462 /* BuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F122045032700DDB462 /* BuiltinConfig.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		233D0F1A204547F200DDB462 /* BuiltinStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233D0F18204547F200DDB462 /* BuiltinStatement.cpp */; };
-		233D0F1B204547F200DDB462 /* BuiltinStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F19204547F200DDB462 /* BuiltinStatement.hpp */; };
+		233D0F1B204547F200DDB462 /* BuiltinStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F19204547F200DDB462 /* BuiltinStatement.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23404271204110F4005EB12C /* sequantial_increasing_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2340426F204110F4005EB12C /* sequantial_increasing_map.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		234591F220440A0200DC7D34 /* WCTRedirectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234591F020440A0200DC7D34 /* WCTRedirectable.mm */; };
 		234591F320440A0200DC7D34 /* WCTRedirectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F120440A0200DC7D34 /* WCTRedirectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -388,7 +388,7 @@
 		2397770C202AF2E3000A681C /* spin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776D7202AF2E3000A681C /* spin.cpp */; };
 		239E50741F00AF0000E3A01D /* WCTSelectBase+NoARC.h in Headers */ = {isa = PBXBuildFile; fileRef = 239E50721F00AF0000E3A01D /* WCTSelectBase+NoARC.h */; };
 		239E50761F00AF0000E3A01D /* WCTSelectBase+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E50731F00AF0000E3A01D /* WCTSelectBase+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		23A7B35B2044F52000775DB8 /* copy_on_write_list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A7B35A2044F52000775DB8 /* copy_on_write_list.hpp */; };
+		23A7B35B2044F52000775DB8 /* copy_on_write_list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A7B35A2044F52000775DB8 /* copy_on_write_list.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B31B351EB97B480092EA80 /* WCTTable+Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B31B331EB97B480092EA80 /* WCTTable+Database.h */; };
 		23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B8F5642043A2CE00EC571D /* Operable.cpp */; };
 		23B8F5672043A2CE00EC571D /* Operable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F5652043A2CE00EC571D /* Operable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };

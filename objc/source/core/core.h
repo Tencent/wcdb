@@ -21,6 +21,7 @@
 #ifndef core_h
 #define core_h
 
+#include <WCDB/BuiltinStatement.hpp>
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/CoreBase.hpp>
