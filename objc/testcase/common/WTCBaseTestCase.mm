@@ -56,7 +56,6 @@
 - (void)setUp
 {
     [super setUp];
-    self.continueAfterFailure = NO;
 
     if ([self.fileManager fileExistsAtPath:self.recommendedDirectory]) {
         XCTAssertTrue([self.fileManager removeItemAtPath:self.recommendedDirectory error:nil]);
