@@ -180,15 +180,12 @@
     [self.database setCipherKey:password];
     XCTAssertTrue([self.database createTableAndIndexesOfName:WTCCRUDObject.Name withClass:WTCCRUDObject.class]);
     //Then
-    [self.database close];
     [self.database setCipherKey:wrongPassword];
     XCTAssertFalse([self.database isTableExists:WTCCRUDObject.Name]);
 
-    [self.database close];
     [self.database setCipherKey:nil];
     XCTAssertFalse([self.database isTableExists:WTCCRUDObject.Name]);
 
-    [self.database close];
     [self.database setCipherKey:password];
     XCTAssertTrue([self.database isTableExists:WTCCRUDObject.Name]);
 }
