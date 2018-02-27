@@ -52,32 +52,10 @@ public:
     void purge();
     static void PurgeInAllDatabases();
 
-    //config
-    enum class ConfigOrder : Configs::Order {
-        Trace = 0,
-        Cipher = 1,
-        Basic = 2,
-        Synchronous = 3,
-        Checkpoint = 4,
-        Tokenize = 5,
-    };
-    static const std::string defaultBasicConfigName;
-    static const std::string defaultCipherConfigName;
-    static const std::string defaultTraceConfigName;
-    static const std::string defaultCheckpointConfigName;
-    static const std::string defaultSynchronousConfigName;
-    static const std::string defaultTokenizeConfigName;
-    static const Configs defaultConfigs;
-    void setConfig(const std::string &name,
-                   const Config &config,
-                   Configs::Order order);
-    void setConfig(const std::string &name, const Config &config);
+    void setConfig(const Config &config);
+    void setConfig(const std::string &name, const Config::Callback &callback);
     void setCipher(const void *key, int keySize, int pageSize = 4096);
-    void setSynchronousFull(bool full);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
-    void setPerformanceTrace(const PerformanceTrace &trace);
-    static void SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace);
-    static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
 
     //file
     bool moveFiles(const std::string &directory, Error &error);

@@ -67,11 +67,8 @@
 #import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTTransaction.h>
 
-#import <WCDB/WCTChainCall+Statistics.h>
-#import <WCDB/WCTDatabase+Statistics.h>
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTStatistics.h>
-#import <WCDB/WCTTransaction+Statistics.h>
 
 #import <WCDB/WCTTokenizer+WCDB.h>
 

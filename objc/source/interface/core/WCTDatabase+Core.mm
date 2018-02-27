@@ -23,49 +23,19 @@
 
 @implementation WCTDatabase (Core)
 
-+ (NSString *)DefaultBasicConfigName
+- (void)setConfig:(WCTConfig)invoke forName:(NSString *)name withOrder:(int)order
 {
-    return @(WCDB::Database::defaultBasicConfigName.c_str());
+    _database->setConfig(WCDB::Config(name.UTF8String, [invoke](std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) -> bool {
+        return invoke(handle, error);
+    },
+                                      order));
 }
 
-+ (NSString *)DefaultCipherConfigName
+- (void)setConfig:(WCTConfig)invoke forName:(NSString *)name
 {
-    return @(WCDB::Database::defaultCipherConfigName.c_str());
-}
-
-+ (NSString *)DefaultTraceConfigName
-{
-    return @(WCDB::Database::defaultTraceConfigName.c_str());
-}
-
-+ (NSString *)DefaultCheckpointConfigName
-{
-    return @(WCDB::Database::defaultCheckpointConfigName.c_str());
-}
-
-+ (NSString *)DefaultSynchronousConfigName
-{
-    return @(WCDB::Database::defaultSynchronousConfigName.c_str());
-}
-
-+ (NSString *)DefaultTokenizeConfigName
-{
-    return @(WCDB::Database::defaultTokenizeConfigName.c_str());
-}
-
-- (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name withOrder:(WCDB::Configs::Order)order
-{
-    _database->setConfig(name.UTF8String, invoke, order);
-}
-
-- (void)setConfig:(WCDB::Config)invoke forName:(NSString *)name
-{
-    _database->setConfig(name.UTF8String, invoke);
-}
-
-- (void)setSynchronousFull:(BOOL)full
-{
-    _database->setSynchronousFull(full);
+    _database->setConfig(name.UTF8String, [invoke](std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) -> bool {
+        return invoke(handle, error);
+    });
 }
 
 @end

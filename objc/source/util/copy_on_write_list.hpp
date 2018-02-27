@@ -18,18 +18,26 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTChainCall+Statistics.h>
-#import <WCDB/WCTError+Private.h>
+#ifndef copy_on_write_list_hpp
+#define copy_on_write_list_hpp
 
-@implementation WCTChainCall (Statistics)
+#include <WCDB/copy_on_write.hpp>
 
-- (WCTError *)error
-{
-    if (_error.isOK()) {
-        return nil;
+template <typename T>
+class copy_on_write_list : public copy_on_write<std::list<copy_on_write<T>>> {
+public:
+    using Super = copy_on_write<std::list<copy_on_write<T>>>;
+
+    bool empty() const { return Super::empty() || this->get().empty(); }
+
+    void append(const copy_on_write<T> &element)
+    {
+        if (!this->empty()) {
+            this->get_or_copy().push_back(element);
+        } else {
+            this->assign({element});
+        }
     }
-    return [WCTError errorWithWCDBError:_error];
-}
+};
 
-@end
+#endif /* copy_on_write_list_hpp */

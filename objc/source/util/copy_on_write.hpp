@@ -77,6 +77,11 @@ public:
         return *(m_shared.get());
     }
 
+    bool equal(const copy_on_write<T> &other) const
+    {
+        return m_shared.get() == other.m_shared.get();
+    }
+
 protected:
     virtual void willProbablyChange(){};
 

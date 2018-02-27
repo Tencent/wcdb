@@ -24,60 +24,9 @@
 /**
  Configuration
  */
-typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
+typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle> &, WCDB::Error &);
 
 @interface WCTDatabase (Core)
-
-/**
- @brief Default config name. 
-        The default config for WCDB is :
-        1. PRAGMA locking_mode=NORMAL
-        2. PRAGMA synchronous=NORMAL
-        3. PRAGMA journal_mode=WAL
-        4. PRAGMA fullfsync=ON
-        Setting config for this name will overwrite the default config.
- @return default config name
- */
-+ (NSString *)DefaultBasicConfigName;
-
-/**
- @brief Default cipher config name
-        The default cipher config for WCDB is :
-        1. PRAGMA key=yourCipherKey
-        2. PRAGMA cipher_page_size=yourCipherPageSize. Default to 4096
- @return default cipher config name
- */
-+ (NSString *)DefaultCipherConfigName;
-
-/**
- @brief Default trace config name. It's off by default. Call [WCTStatistics SetGlobalPerformanceTrace:] to open it.
-        The config for performance and sql tracing.
- @return default trace config name
- @see [WCTStatistics SetGlobalPerformanceTrace:]
- */
-+ (NSString *)DefaultTraceConfigName;
-
-/**
- @brief Default checkpoint config name
-        The config for subthread checkpoint optimization
- @return default checkpoint config name
- */
-+ (NSString *)DefaultCheckpointConfigName;
-
-/**
- @brief Default synchronous config name. It's off by default. Call [WCTDatabase setSynchronousFull:] to open it.
-        The default synchronous config for WCDB is :
-        1. PRAGMA synchronous=FULL
- @return default synchronous config name
- @see [WCTDatabase setSynchronousFull:]
- */
-+ (NSString *)DefaultSynchronousConfigName;
-
-/**
- @brief Default tokenize config name
- @return default tokenize config name
- */
-+ (NSString *)DefaultTokenizeConfigName;
 
 /**
  @brief Set config for this database.  
@@ -91,7 +40,7 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  @param name The Identifier for this config
  @param order The smaller number is called first
  */
-- (void)setConfig:(WCDB::Config)config forName:(NSString *)name withOrder:(WCDB::Configs::Order)order;
+- (void)setConfig:(WCTConfig)config forName:(NSString *)name withOrder:(int)order;
 
 /**
  @brief This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];
@@ -99,13 +48,6 @@ typedef BOOL (^WCTConfig)(std::shared_ptr<WCDB::Handle>, WCDB::Error &);
  @param config config
  @param name The Identifier for this config
  */
-- (void)setConfig:(WCDB::Config)config forName:(NSString *)name;
-
-/**
- @brief Set Synchronous for this database. It will disable checkpoint opti to avoid performance degradation.
-        Synchronous can improve the stability of the database and reduce database damage, but there will be performance degradation.
- @param full enable or disable full synchronous
- */
-- (void)setSynchronousFull:(BOOL)full;
+- (void)setConfig:(WCTConfig)config forName:(NSString *)name;
 
 @end

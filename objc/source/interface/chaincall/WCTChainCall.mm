@@ -179,4 +179,13 @@
     }
     return result;
 }
+
+- (WCTError *)error
+{
+    if (_error.isOK()) {
+        return nil;
+    }
+    return [WCTError errorWithWCDBError:_error];
+}
+
 @end

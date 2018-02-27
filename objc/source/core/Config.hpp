@@ -22,8 +22,8 @@
 #define Config_hpp
 
 #include <WCDB/abstract.h>
+#include <WCDB/copy_on_write_list.hpp>
 #include <WCDB/error.hpp>
-#include <WCDB/rwlock.hpp>
 #include <WCDB/utility.hpp>
 #include <functional>
 #include <list>
@@ -31,69 +31,34 @@
 
 namespace WCDB {
 
-typedef std::function<bool(std::shared_ptr<Handle> &, Error &)> Config;
-typedef struct ConfigWrap ConfigWrap;
+class Config {
+public:
+    using Callback = std::function<bool(std::shared_ptr<Handle> &, Error &)>;
 
-/*
- * [Configs] is a copy-on-write class.
- * Different [Configs]s with same configs share a [ConfigList].
- * When a write op acts, the new config will not be added to original [ConfigList].
- * Instead, a new [ConfigList] will be generated which combines the original [ConfigList] and the new config.
- *
- * Let code talks:
- *  
- *  if
- *      Configs c1, c2;
- *      c2 = c1;
- *  then
- *      &c1!=&c2
- *      c1.m_configs==c2.m_configs
- *      *c1.m_configs.get()==*c2.m_configs.get()
- *      c1==c2
- *
- *  if
- *      c1.setConfig("newConfig", ...);
- *  then
- *      &c1!=&c2
- *      c1.m_configs!=c2.m_configs//The pointer is changed
- *      *c1.m_configs.get()!=*c2.m_configs.get()
- *      c1!=c2
- */
+    Config(const std::string &theName,
+           const Callback &theCallback,
+           const int &theOrder); //Small numbers in front
+
+    bool invoke(std::shared_ptr<Handle> &handle, Error &error) const;
+
+    const std::string name;
+    const Callback callback;
+    const int order;
+};
 
 class Configs {
 public:
-    typedef int Order; //Small numbers in front
-    void setConfig(const std::string &name,
-                   const Config &config,
-                   Configs::Order order);
-    void setConfig(const std::string &name, const Config &config);
+    Configs(const std::list<Config> &configs);
 
-    bool invoke(std::shared_ptr<Handle> &handle, Error &error);
+    void setConfig(const Config &config);
+    void setConfig(const std::string &name, const Config::Callback &callback);
 
-    friend bool operator==(const Configs &left, const Configs &right);
-    friend bool operator!=(const Configs &left, const Configs &right);
+    bool invoke(std::shared_ptr<Handle> &handle, Error &error) const;
 
-    Configs();
-    Configs(std::initializer_list<const ConfigWrap> configs);
+    bool operator!=(const Configs &other) const;
 
-    Config getConfigByName(const std::string &name) const;
-
-protected:
-    typedef std::list<ConfigWrap> ConfigList;
-
-    std::shared_ptr<ConfigList> m_configs; //copy-on-write
-};
-
-struct ConfigWrap {
-    const std::string name;
-    const Config invoke;
-    const Configs::Order order;
-    ConfigWrap(const std::string &theName,
-               const Config &theConfig,
-               Configs::Order theOrder)
-        : name(theName), invoke(theConfig), order(theOrder)
-    {
-    }
+public:
+    copy_on_write_list<Config> m_configs;
 };
 
 } //namespace WCDB

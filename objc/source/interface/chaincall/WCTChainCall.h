@@ -27,4 +27,10 @@
  */
 @interface WCTChainCall : WCTCore
 
+/**
+ @brief More detailed error messages.
+ @return nil or error.isOK==YES if no error occurs.
+ */
+- (WCTError *)error;
+
 @end

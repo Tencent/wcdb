@@ -73,10 +73,8 @@ public:
 
     void purgeFreeHandles();
 
-    void setConfig(const std::string &name,
-                   const Config &config,
-                   Configs::Order order);
-    void setConfig(const std::string &name, const Config &config);
+    void setConfig(const std::string &name, const Config::Callback &callback);
+    void setConfig(const Config &config);
 
 protected:
     HandlePool(const std::string &path, const Configs &configs);

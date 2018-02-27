@@ -22,88 +22,70 @@
 
 namespace WCDB {
 
-Configs::Configs() : m_configs(new ConfigList)
+Config::Config(const std::string &theName,
+               const Callback &theCallback,
+               const int &theOrder)
+    : name(theName), callback(theCallback), order(theOrder)
 {
 }
 
-Configs::Configs(std::initializer_list<const ConfigWrap> configs)
-    : m_configs(new ConfigList)
+bool Config::invoke(std::shared_ptr<Handle> &handle, Error &error) const
 {
-    for (const auto &config : configs) {
-        m_configs->push_back(config);
+    return callback ? callback(handle, error) : true;
+}
+
+Configs::Configs(const std::list<Config> &configs)
+{
+    for (const Config &config : configs) {
+        setConfig(config);
     }
 }
 
-void Configs::setConfig(const std::string &name,
-                        const Config &config,
-                        Configs::Order order)
+bool Configs::invoke(std::shared_ptr<Handle> &handle, Error &error) const
 {
-    std::shared_ptr<ConfigList> configs = m_configs;
-    std::shared_ptr<ConfigList> newConfigs(new ConfigList);
-    bool inserted = false;
-    for (const auto &wrap : *configs.get()) {
-        if (!inserted && order < wrap.order) {
-            newConfigs->push_back({name, config, order});
-            inserted = true;
-        } else if (name != wrap.name) {
-            newConfigs->push_back(wrap);
-        }
-    }
-    if (!inserted) {
-        newConfigs->push_back({name, config, order});
-    }
-    m_configs = newConfigs;
-}
-
-void Configs::setConfig(const std::string &name, const Config &config)
-{
-    std::shared_ptr<ConfigList> configs = m_configs;
-    std::shared_ptr<ConfigList> newConfigs(new ConfigList);
-    bool inserted = false;
-    for (const auto &wrap : *configs.get()) {
-        if (name != wrap.name) {
-            newConfigs->push_back(wrap);
-        } else {
-            newConfigs->push_back({name, config, wrap.order});
-            inserted = true;
-        }
-    }
-    if (!inserted) {
-        newConfigs->push_back({name, config, INT_MAX});
-    }
-    m_configs = newConfigs;
-}
-
-bool Configs::invoke(std::shared_ptr<Handle> &handle, Error &error)
-{
-    std::shared_ptr<ConfigList> configs = m_configs;
-    for (const auto &config : *configs.get()) {
-        if (config.invoke && !config.invoke(handle, error)) {
+    for (const auto &element : m_configs.get()) {
+        if (!element.get().invoke(handle, error)) {
             return false;
         }
     }
     return true;
 }
 
-Config Configs::getConfigByName(const std::string &name) const
+void Configs::setConfig(const Config &config)
 {
-    std::shared_ptr<ConfigList> configs = m_configs;
-    for (const auto &config : *configs.get()) {
-        if (config.name == name) {
-            return config.invoke;
+    auto &configs = m_configs.get_or_copy();
+    for (auto iter = configs.begin(); iter != configs.end(); ++iter) {
+        if (iter->get().name == config.name) {
+            configs.erase(iter);
+            break;
         }
     }
-    return nullptr;
+    for (auto iter = configs.begin(); iter != configs.end(); ++iter) {
+        if (iter->get().order < iter->get().order) {
+            configs.insert(iter, config);
+            break;
+        }
+    }
 }
 
-bool operator==(const Configs &left, const Configs &right)
+void Configs::setConfig(const std::string &name,
+                        const Config::Callback &callback)
 {
-    return left.m_configs == right.m_configs;
+    auto &configs = m_configs.get_or_copy();
+    int order = 0;
+    for (auto iter = configs.begin(); iter != configs.end(); ++iter) {
+        order = iter->get().order;
+        if (iter->get().name == name) {
+            iter->assign(Config(name, callback, order));
+            return;
+        }
+    }
+    configs.push_back(Config(name, callback, order + 1));
 }
 
-bool operator!=(const Configs &left, const Configs &right)
+bool Configs::operator!=(const Configs &other) const
 {
-    return left.m_configs != right.m_configs;
+    return !m_configs.equal(other.m_configs);
 }
 
 } //namespace WCDB

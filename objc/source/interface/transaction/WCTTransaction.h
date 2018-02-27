@@ -139,4 +139,11 @@ typedef void (^WCTTransactionBlock)();
  */
 - (int)changes;
 
+/**
+ More detailed error messages.
+ 
+ @return nil or error.isOK==YES if no error occurs.
+ */
+- (WCTError *)error;
+
 @end

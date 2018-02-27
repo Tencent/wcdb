@@ -256,15 +256,14 @@ bool HandlePool::invoke(std::shared_ptr<HandleWrap> &handleWrap, Error &error)
 }
 
 void HandlePool::setConfig(const std::string &name,
-                           const Config &config,
-                           Configs::Order order)
+                           const Config::Callback &callback)
 {
-    m_configs.setConfig(name, config, order);
+    m_configs.setConfig(name, callback);
 }
 
-void HandlePool::setConfig(const std::string &name, const Config &config)
+void HandlePool::setConfig(const Config &config)
 {
-    m_configs.setConfig(name, config);
+    m_configs.setConfig(config);
 }
 
 } //namespace WCDB
