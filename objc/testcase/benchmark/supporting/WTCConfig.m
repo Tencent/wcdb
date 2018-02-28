@@ -43,7 +43,6 @@
         _writeCount = 100000;
 
         _tableCount = 50000;
-        _syncWriteCount = 500;
     }
     return self;
 }

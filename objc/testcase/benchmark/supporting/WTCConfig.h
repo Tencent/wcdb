@@ -33,6 +33,5 @@
 @property(readonly) int batchWriteCount;
 
 @property(readonly) int tableCount;
-@property(readonly) int syncWriteCount;
 
 @end
