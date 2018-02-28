@@ -21,9 +21,10 @@
 #ifndef SequantialIncreasingMap_hpp
 #define SequantialIncreasingMap_hpp
 
-#import <list>
-#import <map>
-#import <memory>
+#include <assert.h>
+#include <list>
+#include <map>
+#include <memory>
 
 template <typename Key, typename Value, class Comparator = std::less<Key>>
 class SequentialIncreasingMap {

@@ -21,7 +21,7 @@
 #ifndef Redirectable_hpp
 #define Redirectable_hpp
 
-#import <WCDB/Describable.hpp>
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
