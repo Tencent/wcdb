@@ -106,7 +106,7 @@ bool Transaction::rollback(Error &error)
     return result;
 }
 
-bool Transaction::runEmbeddedTransaction(TransactionBlock transaction,
+bool Transaction::runEmbeddedTransaction(const TransactionBlock& transaction,
                                          WCDB::Error &error)
 {
     std::lock_guard<std::recursive_mutex> lockGuard(*m_mutex.get());

@@ -88,7 +88,7 @@ bool CoreBase::isTableExists(RecyclableHandle &handle,
 }
 
 bool CoreBase::runControllableTransaction(
-    ControllableTransactionBlock transaction, Error &error)
+    const ControllableTransactionBlock& transaction, Error &error)
 {
     if (!begin(StatementBegin::Transaction::Immediate, error)) {
         return false;
@@ -105,7 +105,7 @@ bool CoreBase::runControllableTransaction(
     return false;
 }
 
-bool CoreBase::runTransaction(TransactionBlock transaction, Error &error)
+bool CoreBase::runTransaction(const TransactionBlock& transaction, Error &error)
 {
     if (!begin(StatementBegin::Transaction::Immediate, error)) {
         return false;

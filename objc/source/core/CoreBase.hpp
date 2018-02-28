@@ -55,17 +55,17 @@ public:
 
     //Transaction Protocol
     typedef std::function<bool(Error &)> ControllableTransactionBlock;
-    bool runControllableTransaction(ControllableTransactionBlock transaction,
+    bool runControllableTransaction(const ControllableTransactionBlock& transaction,
                                     Error &error);
 
     typedef std::function<void(Error &)> TransactionBlock;
-    bool runTransaction(TransactionBlock transaction, Error &error);
+    bool runTransaction(const TransactionBlock& transaction, Error &error);
 
     virtual bool begin(const StatementBegin::Transaction &transaction,
                        Error &error) = 0;
     virtual bool commit(Error &error) = 0;
     virtual bool rollback(Error &error) = 0;
-    virtual bool runEmbeddedTransaction(TransactionBlock transaction,
+    virtual bool runEmbeddedTransaction(const TransactionBlock& transaction,
                                         Error &error) = 0;
 
 protected:
