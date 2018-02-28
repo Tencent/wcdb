@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 SelectSTMT::SelectSTMT() : recursive(false), offset(false)
 {
 }
 
-copy_on_write_string SelectSTMT::SQL() const
+CopyOnWriteString SelectSTMT::SQL() const
 {
     std::string description;
     if (!commonTableExpressions.empty()) {
@@ -68,7 +68,7 @@ SelectSTMT::Compound::Compound() : compoundOperator(Operator::NotSet)
 {
 }
 
-copy_on_write_string SelectSTMT::Compound::SQL() const
+CopyOnWriteString SelectSTMT::Compound::SQL() const
 {
     std::string description;
     description.append(SelectSTMT::Compound::OperatorName(compoundOperator));
@@ -95,6 +95,6 @@ SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 RaiseFunction::RaiseFunction() : type(Type::Ignore)
 {
 }
 
-copy_on_write_string RaiseFunction::SQL() const
+CopyOnWriteString RaiseFunction::SQL() const
 {
     std::string description("RAISE(");
     switch (type) {
@@ -52,6 +52,6 @@ copy_on_write_string RaiseFunction::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

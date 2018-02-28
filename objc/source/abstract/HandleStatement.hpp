@@ -22,8 +22,8 @@
 #define HandleStatement_hpp
 
 #include <WCDB/ColumnType.hpp>
+#include <WCDB/Error.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/error.hpp>
 #include <mutex>
 
 namespace WCDB {

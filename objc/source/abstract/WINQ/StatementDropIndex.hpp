@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementDropIndex : public StatementWithLang<lang::DropIndexSTMT> {
+class StatementDropIndex : public StatementWithLang<Lang::DropIndexSTMT> {
 
 public:
     StatementDropIndex();

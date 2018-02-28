@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 const char *DropTableSTMT::getInternalName() const
 {
     return "TABLE";
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

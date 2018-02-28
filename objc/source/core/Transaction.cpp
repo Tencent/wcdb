@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Transaction.hpp>
-#include <WCDB/utility.hpp>
+#include <WCDB/Utility.hpp>
 
 namespace WCDB {
 

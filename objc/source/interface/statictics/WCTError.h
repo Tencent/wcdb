@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/error.hpp>
+#import <WCDB/Error.hpp>
 #import <type_traits>
 
 /**
@@ -35,11 +35,11 @@ typedef NS_ENUM(int, WCTErrorType) {
      */
     WCTErrorTypeSystemCall = (WCTErrorType) WCDB::Error::Type::SystemCall,
     /**
-     * An error comes from core layer of WCDB. For further information, see [Error::CoreCode] in [error.hpp].
+     * An error comes from core layer of WCDB. For further information, see [Error::CoreCode] in [Error.hpp].
      */
     WCTErrorTypeCore = (WCTErrorType) WCDB::Error::Type::Core,
     /**
-     * An error comes from interface layer of WCDB. For further information, see [Error::InterfaceCode] in [error.hpp].
+     * An error comes from interface layer of WCDB. For further information, see [Error::InterfaceCode] in [Error.hpp].
      */
     WCTErrorTypeInterface = (WCTErrorType) WCDB::Error::Type::Interface,
     /**

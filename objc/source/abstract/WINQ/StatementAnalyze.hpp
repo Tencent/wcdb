@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementAnalyze : public StatementWithLang<lang::AnalyzeSTMT> {
+class StatementAnalyze : public StatementWithLang<Lang::AnalyzeSTMT> {
 
 public:
     StatementAnalyze &analyze();

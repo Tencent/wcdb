@@ -21,17 +21,17 @@
 #ifndef LangForeignKeyClause_hpp
 #define LangForeignKeyClause_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class ForeignKeyClause : public Lang {
 public:
     ForeignKeyClause();
-    copy_on_write_string foreignTable;
-    copy_on_write_lazy_lang_list<Column> columns;
+    CopyOnWriteString foreignTable;
+    CopyOnWriteLazyLangList<Column> columns;
 
     class Trigger : public Lang {
     public:
@@ -47,15 +47,15 @@ public:
             NoAction,
         };
         Operation operation;
-        copy_on_write_string name;
+        CopyOnWriteString name;
 
-        virtual copy_on_write_string SQL() const override;
+        virtual CopyOnWriteString SQL() const override;
 
     protected:
         static constexpr const char *OperationName(const Operation &operation);
     };
 
-    copy_on_write_lazy_lang_list<Trigger> triggers;
+    CopyOnWriteLazyLangList<Trigger> triggers;
 
     bool doDeferrable;
     bool notDeferrable;
@@ -66,7 +66,7 @@ public:
     };
     InitiallySwitch initiallySwitcher;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *
@@ -74,11 +74,11 @@ protected:
 };
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription()
+CopyOnWriteString
+CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription()
     const;
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

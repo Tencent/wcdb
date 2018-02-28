@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 CreateTriggerSTMT::CreateTriggerSTMT()
     : temp(false)
@@ -33,7 +33,7 @@ CreateTriggerSTMT::CreateTriggerSTMT()
 {
 }
 
-copy_on_write_string CreateTriggerSTMT::SQL() const
+CopyOnWriteString CreateTriggerSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (temp) {
@@ -102,8 +102,8 @@ CreateTriggerSTMT::OperationName(const Operation &operation)
 }
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<CRUDLang>::calculatedDescription() const
+CopyOnWriteString
+CopyOnWriteLazyLangList<CRUDLang>::calculatedDescription() const
 {
     std::string description;
     bool space = false;
@@ -119,6 +119,6 @@ copy_on_write_lazy_lang_list<CRUDLang>::calculatedDescription() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

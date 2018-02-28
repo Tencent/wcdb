@@ -21,11 +21,11 @@
 #ifndef LangExpr_hpp
 #define LangExpr_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class ExprBase : public Lang {
 };
@@ -46,11 +46,11 @@ class Expr;
 
 class ExprColumn : public ExprBase {
 public:
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
-    copy_on_write_lazy_lang<Column> column;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
+    CopyOnWriteLazyLang<Column> column;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprUnaryOperation : public ExprBase {
@@ -62,9 +62,9 @@ public:
         Not,
     };
     Operator unaryOperator;
-    copy_on_write_lazy_lang<ExprBase> expr;
+    CopyOnWriteLazyLang<ExprBase> expr;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 private:
     static constexpr const char *OperatorName(const Operator &unaryOpeartor);
@@ -94,11 +94,11 @@ public:
         And,
         Or,
     };
-    copy_on_write_lazy_lang<ExprBase> left;
-    copy_on_write_lazy_lang<ExprBase> right;
+    CopyOnWriteLazyLang<ExprBase> left;
+    CopyOnWriteLazyLang<ExprBase> right;
     Operator binaryOperator;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 private:
     static constexpr const char *OperatorName(const Operator &binaryOpeartor);
@@ -106,7 +106,7 @@ private:
 
 class ExprFunction : public ExprBase {
 public:
-    copy_on_write_string functionName;
+    CopyOnWriteString functionName;
     enum class Type : int {
         NotSet,
         Expr,
@@ -114,38 +114,38 @@ public:
         Star,
     };
     Type type;
-    copy_on_write_lazy_lang_list<ExprBase> exprs;
+    CopyOnWriteLazyLangList<ExprBase> exprs;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprList : public ExprBase {
 public:
-    copy_on_write_lazy_lang_list<ExprBase> exprs;
+    CopyOnWriteLazyLangList<ExprBase> exprs;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprCast : public ExprBase {
 public:
-    copy_on_write_lazy_lang<ExprBase> expr;
+    CopyOnWriteLazyLang<ExprBase> expr;
     ColumnType type;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprCollate : public ExprBase {
 public:
-    copy_on_write_lazy_lang<ExprBase> expr;
-    copy_on_write_string collationName;
+    CopyOnWriteLazyLang<ExprBase> expr;
+    CopyOnWriteString collationName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprPattern : public ExprBase {
 public:
     bool isNot;
-    copy_on_write_lazy_lang<ExprBase> left;
+    CopyOnWriteLazyLang<ExprBase> left;
     enum class Type : int {
         Like,
         Glob,
@@ -153,10 +153,10 @@ public:
         Match,
     };
     Type type;
-    copy_on_write_lazy_lang<ExprBase> right;
-    copy_on_write_lazy_lang<ExprBase> escape;
+    CopyOnWriteLazyLang<ExprBase> right;
+    CopyOnWriteLazyLang<ExprBase> escape;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
@@ -164,26 +164,26 @@ protected:
 
 class ExprNull : public ExprBase {
 public:
-    copy_on_write_lazy_lang<ExprBase> expr;
+    CopyOnWriteLazyLang<ExprBase> expr;
     bool isNull;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprBetween : public ExprBase {
 public:
     bool isNot;
-    copy_on_write_lazy_lang<ExprBase> expr;
-    copy_on_write_lazy_lang<ExprBase> left;
-    copy_on_write_lazy_lang<ExprBase> right;
+    CopyOnWriteLazyLang<ExprBase> expr;
+    CopyOnWriteLazyLang<ExprBase> left;
+    CopyOnWriteLazyLang<ExprBase> right;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprIn : public ExprBase {
 public:
     bool isNot;
-    copy_on_write_lazy_lang<ExprBase> expr;
+    CopyOnWriteLazyLang<ExprBase> expr;
 
     enum class Switch : int {
         NotSet,
@@ -194,45 +194,45 @@ public:
     };
     Switch switcher;
 
-    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
-    copy_on_write_lazy_lang_list<ExprBase> exprs;
-    copy_on_write_string schemaName;
-    copy_on_write_string tableNameOrFunction;
+    CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
+    CopyOnWriteLazyLangList<ExprBase> exprs;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableNameOrFunction;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprExists : public ExprBase {
 public:
     bool exists;
     bool isNot;
-    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
+    CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class ExprCase : public ExprBase {
 public:
-    copy_on_write_lazy_lang<ExprBase> exprCase;
+    CopyOnWriteLazyLang<ExprBase> exprCase;
 
     class Pair : public Lang {
     public:
-        copy_on_write_lazy_lang<ExprBase> when;
-        copy_on_write_lazy_lang<ExprBase> then;
+        CopyOnWriteLazyLang<ExprBase> when;
+        CopyOnWriteLazyLang<ExprBase> then;
 
-        virtual copy_on_write_string SQL() const override;
+        virtual CopyOnWriteString SQL() const override;
     };
 
-    copy_on_write_lazy_lang_list<Pair> pairs;
+    CopyOnWriteLazyLangList<Pair> pairs;
 
-    copy_on_write_lazy_lang<ExprBase> exprElse;
+    CopyOnWriteLazyLang<ExprBase> exprElse;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<ExprCase::Pair>::calculatedDescription() const;
+CopyOnWriteString
+CopyOnWriteLazyLangList<ExprCase::Pair>::calculatedDescription() const;
 
 class Expr : public ExprBase {
 public:
@@ -259,27 +259,27 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang<LiteralValue> literalValue;
-    copy_on_write_lazy_lang<BindParameter> bindParamter;
-    copy_on_write_lazy_lang<ExprColumn> exprColumn;
-    copy_on_write_lazy_lang<ExprUnaryOperation> exprUnaryOperator;
-    copy_on_write_lazy_lang<ExprBinaryOperation> exprBinaryOperator;
-    copy_on_write_lazy_lang<ExprFunction> exprFunction;
-    copy_on_write_lazy_lang<ExprList> exprList;
-    copy_on_write_lazy_lang<ExprCast> exprCast;
-    copy_on_write_lazy_lang<ExprCollate> exprCollate;
-    copy_on_write_lazy_lang<ExprPattern> exprPattern;
-    copy_on_write_lazy_lang<ExprNull> exprNull;
-    copy_on_write_lazy_lang<ExprBetween> exprBetween;
-    copy_on_write_lazy_lang<ExprIn> exprIn;
-    copy_on_write_lazy_lang<ExprExists> exprExists;
-    copy_on_write_lazy_lang<ExprCase> exprCase;
-    copy_on_write_lazy_lang<RaiseFunction> raiseFunction;
+    CopyOnWriteLazyLang<LiteralValue> literalValue;
+    CopyOnWriteLazyLang<BindParameter> bindParamter;
+    CopyOnWriteLazyLang<ExprColumn> exprColumn;
+    CopyOnWriteLazyLang<ExprUnaryOperation> exprUnaryOperator;
+    CopyOnWriteLazyLang<ExprBinaryOperation> exprBinaryOperator;
+    CopyOnWriteLazyLang<ExprFunction> exprFunction;
+    CopyOnWriteLazyLang<ExprList> exprList;
+    CopyOnWriteLazyLang<ExprCast> exprCast;
+    CopyOnWriteLazyLang<ExprCollate> exprCollate;
+    CopyOnWriteLazyLang<ExprPattern> exprPattern;
+    CopyOnWriteLazyLang<ExprNull> exprNull;
+    CopyOnWriteLazyLang<ExprBetween> exprBetween;
+    CopyOnWriteLazyLang<ExprIn> exprIn;
+    CopyOnWriteLazyLang<ExprExists> exprExists;
+    CopyOnWriteLazyLang<ExprCase> exprCase;
+    CopyOnWriteLazyLang<RaiseFunction> raiseFunction;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

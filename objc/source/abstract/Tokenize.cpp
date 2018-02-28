@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/Error.hpp>
 #include <WCDB/Tokenize.hpp>
-#include <WCDB/error.hpp>
 
 namespace WCDB {
 

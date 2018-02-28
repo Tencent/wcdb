@@ -21,31 +21,31 @@
 #ifndef LangAlterTableSTMT_hpp
 #define LangAlterTableSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class AlterTableSTMT : public Lang {
 public:
     AlterTableSTMT();
 
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
     enum class Switch : int {
         NotSet,
         Rename,
         AddColumn,
     };
     Switch switcher;
-    copy_on_write_string newTableName;
-    copy_on_write_lazy_lang<ColumnDef> columnDef;
+    CopyOnWriteString newTableName;
+    CopyOnWriteLazyLang<ColumnDef> columnDef;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

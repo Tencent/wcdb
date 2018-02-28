@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 SelectCore::SelectCore()
     : switcher(Switch::NotSet)
@@ -31,7 +31,7 @@ SelectCore::SelectCore()
 {
 }
 
-copy_on_write_string SelectCore::SQL() const
+CopyOnWriteString SelectCore::SQL() const
 {
     std::string description;
     switch (switcher) {
@@ -77,6 +77,6 @@ copy_on_write_string SelectCore::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

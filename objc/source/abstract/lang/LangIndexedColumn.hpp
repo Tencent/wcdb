@@ -21,11 +21,11 @@
 #ifndef LangIndexedColumn_hpp
 #define LangIndexedColumn_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class IndexedColumn : public Lang {
 public:
@@ -36,15 +36,15 @@ public:
         Expr,
     };
     Switch switcher;
-    copy_on_write_lazy_lang<Column> column;
-    copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_string collationName;
+    CopyOnWriteLazyLang<Column> column;
+    CopyOnWriteLazyLang<Expr> expr;
+    CopyOnWriteString collationName;
     Order order;
 
-    virtual copy_on_write_string SQL() const;
+    virtual CopyOnWriteString SQL() const;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

@@ -22,7 +22,7 @@
 #define BuiltinConfig_hpp
 
 #include <WCDB/Config.hpp>
-#include <WCDB/timed_queue.hpp>
+#include <WCDB/TimedQueue.hpp>
 
 namespace WCDB {
 

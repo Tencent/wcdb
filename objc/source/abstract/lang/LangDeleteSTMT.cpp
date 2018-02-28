@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 DeleteSTMT::DeleteSTMT() : offset(false)
 {
 }
 
-copy_on_write_string DeleteSTMT::SQL() const
+CopyOnWriteString DeleteSTMT::SQL() const
 {
     std::string description;
     if (!withClause.empty()) {
@@ -57,6 +57,6 @@ copy_on_write_string DeleteSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

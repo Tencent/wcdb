@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
+#import <WCDB/Utility.hpp>
 #import <WCDB/WCTDatabase+File.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/utility.hpp>
 
 @implementation WCTDatabase (File)
 

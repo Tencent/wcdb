@@ -21,11 +21,11 @@
 #ifndef LangWithClause_hpp
 #define LangWithClause_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class WithClause : public Lang {
 public:
@@ -35,17 +35,17 @@ public:
 
     class Pair : public Lang {
     public:
-        copy_on_write_lazy_lang<CTETableName> cteTableName;
-        copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
+        CopyOnWriteLazyLang<CTETableName> cteTableName;
+        CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-        virtual copy_on_write_string SQL() const override;
+        virtual CopyOnWriteString SQL() const override;
     };
-    copy_on_write_lazy_lang_list<Pair> pairs;
+    CopyOnWriteLazyLangList<Pair> pairs;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

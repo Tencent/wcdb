@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class SelectCore : public DescribableWithLang<lang::SelectCore> {
+class SelectCore : public DescribableWithLang<Lang::SelectCore> {
 public:
     SelectCore &distinct();
     SelectCore &select(const ResultColumn &resultColumn);

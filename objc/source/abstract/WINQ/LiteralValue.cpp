@@ -23,15 +23,15 @@
 namespace WCDB {
 
 const LiteralValue
-    LiteralValue::CurrentTime(lang::LiteralValue::Type::CurrentTime);
+    LiteralValue::CurrentTime(Lang::LiteralValue::Type::CurrentTime);
 const LiteralValue
-    LiteralValue::CurrentDate(lang::LiteralValue::Type::CurrentDate);
+    LiteralValue::CurrentDate(Lang::LiteralValue::Type::CurrentDate);
 const LiteralValue
-    LiteralValue::CurrentTimestamp(lang::LiteralValue::Type::CurrentTimestamp);
+    LiteralValue::CurrentTimestamp(Lang::LiteralValue::Type::CurrentTimestamp);
 
-LiteralValue::LiteralValue(const lang::LiteralValue::Type &type)
+LiteralValue::LiteralValue(const Lang::LiteralValue::Type &type)
 {
-    lang::LiteralValue &lang = getMutableLang();
+    Lang::LiteralValue &lang = getMutableLang();
     lang.type = type;
 }
 

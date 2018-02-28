@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 const char *DropTriggerSTMT::getInternalName() const
 {
     return "TRIGGER";
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

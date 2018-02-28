@@ -21,27 +21,27 @@
 #ifndef LangDropInternalSTMT_hpp
 #define LangDropInternalSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class DropInternalSTMT : public Lang {
 public:
     DropInternalSTMT();
 
     bool ifExists;
-    copy_on_write_string schemaName;
-    copy_on_write_string name;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString name;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     virtual const char *getInternalName() const = 0;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

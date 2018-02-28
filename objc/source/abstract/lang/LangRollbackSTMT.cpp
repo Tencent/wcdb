@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string RollbackSTMT::SQL() const
+CopyOnWriteString RollbackSTMT::SQL() const
 {
     std::string description("ROLLBACK");
     if (!savepointName.empty()) {
@@ -33,6 +33,6 @@ copy_on_write_string RollbackSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

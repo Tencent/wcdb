@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 JoinOperator::JoinOperator() : join(false), natural(false), type(Type::NotSet)
 {
 }
 
-copy_on_write_string JoinOperator::SQL() const
+CopyOnWriteString JoinOperator::SQL() const
 {
     std::string description;
     if (!join) {
@@ -63,6 +63,6 @@ constexpr const char *JoinOperator::JoinTypeName(const Type &type)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

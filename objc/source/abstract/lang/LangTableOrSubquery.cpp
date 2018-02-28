@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string TableOrSubqueryTable::SQL() const
+CopyOnWriteString TableOrSubqueryTable::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -56,7 +56,7 @@ TableOrSubqueryTable::TableOrSubqueryTable()
 {
 }
 
-copy_on_write_string TableOrSubqueryTableFunction::SQL() const
+CopyOnWriteString TableOrSubqueryTableFunction::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -75,13 +75,13 @@ copy_on_write_string TableOrSubqueryTableFunction::SQL() const
     return description;
 }
 
-copy_on_write_string TableOrSubqueryJoinClause::SQL() const
+CopyOnWriteString TableOrSubqueryJoinClause::SQL() const
 {
     assert(!joinClause.empty());
     return "(" + joinClause.description().get() + ")";
 }
 
-copy_on_write_string TableOrSubquerySelect::SQL() const
+CopyOnWriteString TableOrSubquerySelect::SQL() const
 {
     std::string description;
     assert(!selectSTMT.empty());
@@ -92,7 +92,7 @@ copy_on_write_string TableOrSubquerySelect::SQL() const
     return description;
 }
 
-copy_on_write_string TableOrSubqueryList::SQL() const
+CopyOnWriteString TableOrSubqueryList::SQL() const
 {
     assert(!tableOrSubquerys.empty());
     return "(" + tableOrSubquerys.description().get() + ")";
@@ -102,7 +102,7 @@ TableOrSubquery::TableOrSubquery() : switcher(Switch::NotSet)
 {
 }
 
-copy_on_write_string TableOrSubquery::SQL() const
+CopyOnWriteString TableOrSubquery::SQL() const
 {
     switch (switcher) {
         case Switch::Table:
@@ -126,6 +126,6 @@ copy_on_write_string TableOrSubquery::SQL() const
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

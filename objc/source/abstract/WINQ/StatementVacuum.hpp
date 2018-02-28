@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementVacuum : public StatementWithLang<lang::VacuumSTMT> {
+class StatementVacuum : public StatementWithLang<Lang::VacuumSTMT> {
 
 public:
     StatementVacuum &vacuum();

@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 ForeignKeyClause::ForeignKeyClause()
     : doDeferrable(false)
@@ -70,7 +70,7 @@ ForeignKeyClause::Trigger::OperationName(const Operation &operation)
     }
 }
 
-copy_on_write_string ForeignKeyClause::SQL() const
+CopyOnWriteString ForeignKeyClause::SQL() const
 {
     std::string description("REFERENCES ");
     assert(!foreignTable.empty());
@@ -95,7 +95,7 @@ copy_on_write_string ForeignKeyClause::SQL() const
     return description;
 }
 
-copy_on_write_string ForeignKeyClause::Trigger::SQL() const
+CopyOnWriteString ForeignKeyClause::Trigger::SQL() const
 {
     std::string description;
     if (match) {
@@ -114,8 +114,8 @@ copy_on_write_string ForeignKeyClause::Trigger::SQL() const
 }
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription()
+CopyOnWriteString
+CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription()
     const
 {
     std::string description;
@@ -132,6 +132,6 @@ copy_on_write_lazy_lang_list<ForeignKeyClause::Trigger>::calculatedDescription()
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

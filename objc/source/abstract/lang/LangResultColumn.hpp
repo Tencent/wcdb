@@ -21,11 +21,11 @@
 #ifndef LangResultColumn_hpp
 #define LangResultColumn_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class ResultColumn : public Lang {
 public:
@@ -38,15 +38,15 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_lazy_lang<Column> columnAlias;
+    CopyOnWriteLazyLang<Expr> expr;
+    CopyOnWriteLazyLang<Column> columnAlias;
 
-    copy_on_write_string tableName;
+    CopyOnWriteString tableName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

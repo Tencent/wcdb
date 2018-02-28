@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 
 /**
  Not Thread-safe

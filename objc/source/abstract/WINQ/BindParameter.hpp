@@ -25,15 +25,15 @@
 
 namespace WCDB {
 
-class BindParameter : public DescribableWithLang<lang::BindParameter>,
+class BindParameter : public DescribableWithLang<Lang::BindParameter>,
                       public Redirectable {
 public:
     static const BindParameter default_;
 
     enum class Type : int {
-        Colon = (int) lang::BindParameter::Type::Colon,           //:AAAA
-        At = (int) lang::BindParameter::Type::At,                 //@AAAA
-        DollarSign = (int) lang::BindParameter::Type::DollarSign, //$AAAA
+        Colon = (int) Lang::BindParameter::Type::Colon,           //:AAAA
+        At = (int) Lang::BindParameter::Type::At,                 //@AAAA
+        DollarSign = (int) Lang::BindParameter::Type::DollarSign, //$AAAA
     };
 
     BindParameter();               // ?

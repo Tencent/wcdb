@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 QualifiedTableName::QualifiedTableName() : indexSwitcher(IndexSwitch::NotSet)
 {
 }
 
-copy_on_write_string QualifiedTableName::SQL() const
+CopyOnWriteString QualifiedTableName::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -50,6 +50,6 @@ copy_on_write_string QualifiedTableName::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

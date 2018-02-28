@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTRuntimeCppAccessor.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 

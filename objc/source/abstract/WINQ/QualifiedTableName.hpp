@@ -26,7 +26,7 @@
 namespace WCDB {
 
 class QualifiedTableName
-    : public DescribableWithLang<lang::QualifiedTableName> {
+    : public DescribableWithLang<Lang::QualifiedTableName> {
 public:
     template <typename T>
     QualifiedTableName(

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#import <WCDB/Error.hpp>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
-#import <WCDB/error.hpp>
 #import <objc/runtime.h>
 #import <string>
 

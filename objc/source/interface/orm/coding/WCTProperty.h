@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 
 class WCTColumnBinding;
 class WCTProperty;
 
 class WCTProperty : public WCDB::Operable,
-                    public WCDB::DescribableWithLang<WCDB::lang::Expr>,
+                    public WCDB::DescribableWithLang<WCDB::Lang::Expr>,
                     public WCDB::Redirectable {
 public:
     WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding);
@@ -52,7 +52,7 @@ public:
 protected:
     virtual WCDB::Expression getRedirectSource() const override;
 
-    virtual WCDB::lang::copy_on_write_lazy_lang<WCDB::lang::Expr>
+    virtual WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>
     getExpressionLang() const override;
 
     std::shared_ptr<WCTColumnBinding> m_columnBinding;

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 AlterTableSTMT::AlterTableSTMT() : switcher(Switch::NotSet)
 {
 }
 
-copy_on_write_string AlterTableSTMT::SQL() const
+CopyOnWriteString AlterTableSTMT::SQL() const
 {
     std::string description("ALTER TABLE ");
     if (!schemaName.empty()) {
@@ -50,6 +50,6 @@ copy_on_write_string AlterTableSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string ExprColumn::SQL() const
+CopyOnWriteString ExprColumn::SQL() const
 {
     std::string description;
     if (!schemaName.empty()) {
@@ -38,7 +38,7 @@ copy_on_write_string ExprColumn::SQL() const
     return description;
 }
 
-copy_on_write_string ExprUnaryOperation::SQL() const
+CopyOnWriteString ExprUnaryOperation::SQL() const
 {
     assert(!expr.empty());
     return ExprUnaryOperation::OperatorName(unaryOperator) +
@@ -60,7 +60,7 @@ ExprUnaryOperation::OperatorName(const Operator &unaryOpeartor)
     }
 }
 
-copy_on_write_string ExprBinaryOperation::SQL() const
+CopyOnWriteString ExprBinaryOperation::SQL() const
 {
     assert(!left.empty());
     assert(!right.empty());
@@ -116,7 +116,7 @@ ExprBinaryOperation::OperatorName(const Operator &binaryOpeartor)
     }
 }
 
-copy_on_write_string ExprFunction::SQL() const
+CopyOnWriteString ExprFunction::SQL() const
 {
     std::string description;
     assert(!functionName.empty());
@@ -139,13 +139,13 @@ copy_on_write_string ExprFunction::SQL() const
     return description;
 }
 
-copy_on_write_string ExprList::SQL() const
+CopyOnWriteString ExprList::SQL() const
 {
     assert(!exprs.empty());
     return "(" + exprs.description().get() + ")";
 }
 
-copy_on_write_string ExprCast::SQL() const
+CopyOnWriteString ExprCast::SQL() const
 {
     std::string description("CAST(");
     assert(!expr.empty());
@@ -156,12 +156,12 @@ copy_on_write_string ExprCast::SQL() const
     return description;
 }
 
-copy_on_write_string ExprCollate::SQL() const
+CopyOnWriteString ExprCollate::SQL() const
 {
     return expr.description().get() + " COLLATE " + collationName.get();
 }
 
-copy_on_write_string ExprPattern::SQL() const
+CopyOnWriteString ExprPattern::SQL() const
 {
     std::string description;
     assert(!left.empty());
@@ -192,7 +192,7 @@ constexpr const char *ExprPattern::TypeName(const Type &pattern)
     }
 }
 
-copy_on_write_string ExprNull::SQL() const
+CopyOnWriteString ExprNull::SQL() const
 {
     assert(!expr.empty());
     if (isNull) {
@@ -202,7 +202,7 @@ copy_on_write_string ExprNull::SQL() const
     }
 }
 
-copy_on_write_string ExprBetween::SQL() const
+CopyOnWriteString ExprBetween::SQL() const
 {
     std::string description;
     assert(!expr.empty());
@@ -216,7 +216,7 @@ copy_on_write_string ExprBetween::SQL() const
     return description;
 }
 
-copy_on_write_string ExprIn::SQL() const
+CopyOnWriteString ExprIn::SQL() const
 {
     std::string description;
     assert(!expr.empty());
@@ -261,7 +261,7 @@ copy_on_write_string ExprIn::SQL() const
     return description;
 }
 
-copy_on_write_string ExprExists::SQL() const
+CopyOnWriteString ExprExists::SQL() const
 {
     std::string description;
     if (isNot) {
@@ -278,7 +278,7 @@ copy_on_write_string ExprExists::SQL() const
     return description;
 }
 
-copy_on_write_string ExprCase::SQL() const
+CopyOnWriteString ExprCase::SQL() const
 {
     std::string description("CASE ");
     if (!exprCase.empty()) {
@@ -293,15 +293,15 @@ copy_on_write_string ExprCase::SQL() const
     return description;
 }
 
-copy_on_write_string ExprCase::Pair::SQL() const
+CopyOnWriteString ExprCase::Pair::SQL() const
 {
     return "WHEN " + when.description().get() + " THEN " +
            then.description().get();
 }
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<ExprCase::Pair>::calculatedDescription() const
+CopyOnWriteString
+CopyOnWriteLazyLangList<ExprCase::Pair>::calculatedDescription() const
 {
     std::string description;
     bool space = false;
@@ -321,7 +321,7 @@ Expr::Expr() : type(Type::NotSet)
 {
 }
 
-copy_on_write_string Expr::SQL() const
+CopyOnWriteString Expr::SQL() const
 {
     switch (type) {
         case Type::LiteralValue:
@@ -378,6 +378,6 @@ copy_on_write_string Expr::SQL() const
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

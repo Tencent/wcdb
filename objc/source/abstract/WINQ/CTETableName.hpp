@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class CTETableName : public DescribableWithLang<lang::CTETableName> {
+class CTETableName : public DescribableWithLang<Lang::CTETableName> {
 public:
     template <typename T, typename Enable = void>
     CTETableName(

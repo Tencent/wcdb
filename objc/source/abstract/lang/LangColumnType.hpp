@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 enum class ColumnType {
     Null,
@@ -51,7 +51,7 @@ constexpr const char *ColumnTypeName(const ColumnType &columnType)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

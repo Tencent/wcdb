@@ -30,7 +30,7 @@ StatementCreateVirtualTable::StatementCreateVirtualTable()
 StatementCreateVirtualTable &
 StatementCreateVirtualTable::createVirtualTable(const std::string &tableName)
 {
-    lang::CreateVirtualTableSTMT &lang = getMutableLang();
+    Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     return *this;
 }
@@ -38,7 +38,7 @@ StatementCreateVirtualTable::createVirtualTable(const std::string &tableName)
 StatementCreateVirtualTable &
 StatementCreateVirtualTable::ifNotExists(bool ifNotExists)
 {
-    lang::CreateVirtualTableSTMT &lang = getMutableLang();
+    Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
     return *this;
 }
@@ -46,7 +46,7 @@ StatementCreateVirtualTable::ifNotExists(bool ifNotExists)
 StatementCreateVirtualTable &
 StatementCreateVirtualTable::withSchema(const std::string &schemaName)
 {
-    lang::CreateVirtualTableSTMT &lang = getMutableLang();
+    Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -54,7 +54,7 @@ StatementCreateVirtualTable::withSchema(const std::string &schemaName)
 StatementCreateVirtualTable &
 StatementCreateVirtualTable::usingModule(const std::string &moduleName)
 {
-    lang::CreateVirtualTableSTMT &lang = getMutableLang();
+    Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.moduleName.assign(moduleName);
     return *this;
 }
@@ -62,7 +62,7 @@ StatementCreateVirtualTable::usingModule(const std::string &moduleName)
 StatementCreateVirtualTable &
 StatementCreateVirtualTable::on(const ModuleArgument &moduleArgument)
 {
-    lang::CreateVirtualTableSTMT &lang = getMutableLang();
+    Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.moduleArguments.append(moduleArgument.getLang());
     return *this;
 }
@@ -70,7 +70,7 @@ StatementCreateVirtualTable::on(const ModuleArgument &moduleArgument)
 StatementCreateVirtualTable &StatementCreateVirtualTable::on(
     const std::list<ModuleArgument> &moduleArguments)
 {
-    lang::CreateVirtualTableSTMT &lang = getMutableLang();
+    Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     for (const ModuleArgument &moduleArgument : moduleArguments) {
         lang.moduleArguments.append(moduleArgument.getLang());
     }

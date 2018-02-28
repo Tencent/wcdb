@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class RaiseFunction : public DescribableWithLang<lang::RaiseFunction>,
+class RaiseFunction : public DescribableWithLang<Lang::RaiseFunction>,
                       public Redirectable {
 public:
     RaiseFunction &withIgnore();

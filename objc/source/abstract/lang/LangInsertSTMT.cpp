@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 InsertSTMT::InsertSTMT() : type(Type::NotSet), switcher(Switch::NotSet)
 {
 }
 
-copy_on_write_string InsertSTMT::SQL() const
+CopyOnWriteString InsertSTMT::SQL() const
 {
     std::string description;
     if (!withClause.empty()) {
@@ -84,6 +84,6 @@ constexpr const char *InsertSTMT::TypeName(const Type &type)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

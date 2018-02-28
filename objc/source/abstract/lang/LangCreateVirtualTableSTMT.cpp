@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 CreateVirtualTableSTMT::CreateVirtualTableSTMT() : ifNotExists(false)
 {
 }
 
-copy_on_write_string CreateVirtualTableSTMT::SQL() const
+CopyOnWriteString CreateVirtualTableSTMT::SQL() const
 {
     std::string description("CREATE VIRTUAL TABLE ");
     if (ifNotExists) {
@@ -48,6 +48,6 @@ copy_on_write_string CreateVirtualTableSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

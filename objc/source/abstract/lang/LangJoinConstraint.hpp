@@ -21,11 +21,11 @@
 #ifndef LangJoinConstraint_hpp
 #define LangJoinConstraint_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class JoinConstraint : public Lang {
 public:
@@ -37,13 +37,13 @@ public:
         Using,
     };
     Type type;
-    copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_lazy_lang_list<Column> columns;
+    CopyOnWriteLazyLang<Expr> expr;
+    CopyOnWriteLazyLangList<Column> columns;
 
-    virtual copy_on_write_string SQL() const;
+    virtual CopyOnWriteString SQL() const;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

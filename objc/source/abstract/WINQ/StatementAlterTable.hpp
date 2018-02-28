@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementAlterTable : public StatementWithLang<lang::AlterTableSTMT> {
+class StatementAlterTable : public StatementWithLang<Lang::AlterTableSTMT> {
 
 public:
     StatementAlterTable &alterTable(const std::string &schemaName,

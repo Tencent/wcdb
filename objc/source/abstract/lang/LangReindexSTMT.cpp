@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 ReindexSTMT::ReindexSTMT() : switcher(Switch::NotSet)
 {
 }
 
-copy_on_write_string ReindexSTMT::SQL() const
+CopyOnWriteString ReindexSTMT::SQL() const
 {
     std::string description("REINDEX");
     switch (switcher) {
@@ -50,6 +50,6 @@ copy_on_write_string ReindexSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

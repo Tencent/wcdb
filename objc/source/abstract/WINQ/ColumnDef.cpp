@@ -24,13 +24,13 @@ namespace WCDB {
 
 ColumnDef::ColumnDef(const Column &column)
 {
-    lang::ColumnDef &lang = getMutableLang();
+    Lang::ColumnDef &lang = getMutableLang();
     lang.column.assign(column.getLang());
 }
 
 ColumnDef &ColumnDef::withType(const ColumnType &columnType)
 {
-    lang::ColumnDef &lang = getMutableLang();
+    Lang::ColumnDef &lang = getMutableLang();
     lang.typed = true;
     lang.type = columnType;
     return *this;
@@ -46,7 +46,7 @@ ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
 ColumnDef &ColumnDef::byAddingConstraints(
     const std::list<ColumnConstraint> &columnConstraints)
 {
-    lang::ColumnDef &lang = getMutableLang();
+    Lang::ColumnDef &lang = getMutableLang();
     for (const ColumnConstraint &columnConstraint : columnConstraints) {
         lang.columnConstraints.append(columnConstraint.getLang());
     }
@@ -83,7 +83,7 @@ bool ColumnDef::isPrimary() const
     }
     for (const auto &columnConstraint : columnConstraints.get()) {
         if (columnConstraint.get().type ==
-            lang::ColumnConstraint::Type::PrimaryKey) {
+            Lang::ColumnConstraint::Type::PrimaryKey) {
             return true;
         }
     }

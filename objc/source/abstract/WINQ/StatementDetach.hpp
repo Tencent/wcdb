@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementDetach : public StatementWithLang<lang::DetachSTMT> {
+class StatementDetach : public StatementWithLang<Lang::DetachSTMT> {
 
 public:
     StatementDetach &detach(const std::string &schemaName);

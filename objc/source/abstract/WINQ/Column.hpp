@@ -27,16 +27,16 @@
 
 namespace WCDB {
 
-class Column : public DescribableWithLang<lang::Column>,
+class Column : public DescribableWithLang<Lang::Column>,
                public Operable,
                public Redirectable {
 public:
     explicit Column(const std::string &name);
 
-    virtual lang::copy_on_write_lazy_lang<lang::Expr>
+    virtual Lang::CopyOnWriteLazyLang<Lang::Expr>
     getExpressionLang() const override;
 
-    Column(const lang::copy_on_write_lazy_lang<lang::Column> &column);
+    Column(const Lang::CopyOnWriteLazyLang<Lang::Column> &column);
 
 protected:
     virtual Expression getRedirectSource() const override;

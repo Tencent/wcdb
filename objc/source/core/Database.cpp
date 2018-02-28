@@ -20,11 +20,11 @@
 
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Database.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/File.hpp>
+#include <WCDB/Path.hpp>
 #include <WCDB/Transaction.hpp>
-#include <WCDB/error.hpp>
-#include <WCDB/file.hpp>
-#include <WCDB/path.hpp>
-#include <WCDB/utility.hpp>
+#include <WCDB/Utility.hpp>
 #include <sqliterk/SQLiteRepairKit.h>
 
 namespace WCDB {

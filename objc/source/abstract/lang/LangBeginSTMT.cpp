@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 BeginSTMT::BeginSTMT() : type(Type::NotSet)
 {
 }
 
-copy_on_write_string BeginSTMT::SQL() const
+CopyOnWriteString BeginSTMT::SQL() const
 {
     std::string description("BEGIN");
     if (type != Type::NotSet) {
@@ -53,6 +53,6 @@ constexpr const char *BeginSTMT::TypeName(const Type &type)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

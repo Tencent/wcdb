@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string CTETableName::SQL() const
+CopyOnWriteString CTETableName::SQL() const
 {
     std::string description;
     assert(!tableName.empty());
@@ -35,6 +35,6 @@ copy_on_write_string CTETableName::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

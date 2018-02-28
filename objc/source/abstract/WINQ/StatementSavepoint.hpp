@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementSavepoint : public StatementWithLang<lang::SavepointSTMT> {
+class StatementSavepoint : public StatementWithLang<Lang::SavepointSTMT> {
 
 public:
     StatementSavepoint &savepoint(const std::string &savepointName);

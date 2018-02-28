@@ -21,17 +21,17 @@
 #ifndef LangColumnConstraint_hpp
 #define LangColumnConstraint_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class ColumnConstraint : public Lang {
 public:
     ColumnConstraint();
 
-    copy_on_write_string name;
+    CopyOnWriteString name;
     enum class Type : int {
         NotSet,
         PrimaryKey,
@@ -49,7 +49,7 @@ public:
     ConflictClause conflictClause;
     bool autoIncrement;
 
-    copy_on_write_lazy_lang<Expr> expr;
+    CopyOnWriteLazyLang<Expr> expr;
 
     enum class DefaultSwitch {
         NotSet,
@@ -57,20 +57,20 @@ public:
         Expr,
     };
     DefaultSwitch defaultSwitcher;
-    copy_on_write_lazy_lang<LiteralValue> literalValue;
+    CopyOnWriteLazyLang<LiteralValue> literalValue;
 
-    copy_on_write_string collationName;
+    CopyOnWriteString collationName;
 
-    copy_on_write_lazy_lang<ForeignKeyClause> foreignKeyClause;
+    CopyOnWriteLazyLang<ForeignKeyClause> foreignKeyClause;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<ColumnConstraint>::calculatedDescription() const;
+CopyOnWriteString
+CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const;
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

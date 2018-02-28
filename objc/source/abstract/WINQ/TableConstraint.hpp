@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class TableConstraint : public DescribableWithLang<lang::TableConstraint> {
+class TableConstraint : public DescribableWithLang<Lang::TableConstraint> {
 public:
     TableConstraint();
     TableConstraint(const std::string &name);

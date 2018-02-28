@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 CreateIndexSTMT::CreateIndexSTMT() : unique(false), ifNotExists(false)
 {
 }
 
-copy_on_write_string CreateIndexSTMT::SQL() const
+CopyOnWriteString CreateIndexSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (unique) {
@@ -53,6 +53,6 @@ copy_on_write_string CreateIndexSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

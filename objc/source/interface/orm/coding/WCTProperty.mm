@@ -24,14 +24,14 @@
 WCTProperty::WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding)
     : m_columnBinding(columnBinding)
 {
-    WCDB::lang::Expr &lang = getMutableLang();
-    lang.type = WCDB::lang::Expr::Type::Column;
+    WCDB::Lang::Expr &lang = getMutableLang();
+    lang.type = WCDB::Lang::Expr::Type::Column;
     lang.exprColumn.get_or_copy().column.assign(m_columnBinding->columnDef.getLang().get().column);
 }
 
 WCTProperty::WCTProperty(const WCDB::Expression &expression,
                          const std::shared_ptr<WCTColumnBinding> &columnBinding)
-    : WCDB::DescribableWithLang<WCDB::lang::Expr>(expression.getLang())
+    : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getLang())
     , m_columnBinding(columnBinding)
 {
 }
@@ -109,7 +109,7 @@ const WCDB::ColumnDef &WCTProperty::getColumnDef() const
     return m_columnBinding->columnDef;
 }
 
-WCDB::lang::copy_on_write_lazy_lang<WCDB::lang::Expr> WCTProperty::getExpressionLang() const
+WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> WCTProperty::getExpressionLang() const
 {
     return getLang();
 }

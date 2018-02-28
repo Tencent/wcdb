@@ -21,11 +21,11 @@
 #ifndef LangJoinOperator_hpp
 #define LangJoinOperator_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class JoinOperator : public Lang {
 public:
@@ -42,13 +42,13 @@ public:
     };
     Type type;
 
-    virtual copy_on_write_string SQL() const;
+    virtual CopyOnWriteString SQL() const;
 
 protected:
     static constexpr const char *JoinTypeName(const Type &type);
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

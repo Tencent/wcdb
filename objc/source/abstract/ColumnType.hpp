@@ -21,8 +21,8 @@
 #ifndef ColumnType_hpp
 #define ColumnType_hpp
 
-#include <WCDB/lang.h>
-#include <WCDB/no_copy_data.hpp>
+#include <WCDB/Lang.h>
+#include <WCDB/NoCopyData.hpp>
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-typedef lang::ColumnType ColumnType;
+typedef Lang::ColumnType ColumnType;
 
 #pragma mark - Column Type Info
 //Null

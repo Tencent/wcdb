@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class ResultColumn : public DescribableWithLang<lang::ResultColumn> {
+class ResultColumn : public DescribableWithLang<Lang::ResultColumn> {
 public:
     static const ResultColumn All;
 
@@ -45,9 +45,9 @@ public:
     ResultColumn &withTable(const std::string &tableName);
 
 protected:
-    ResultColumn(const lang::ResultColumn::Type &type);
+    ResultColumn(const Lang::ResultColumn::Type &type);
     void setupWithExpression(const Expression &expression);
-    void setType(const lang::ResultColumn::Type &type);
+    void setType(const Lang::ResultColumn::Type &type);
 };
 
 } // namespace WCDB

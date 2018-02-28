@@ -25,15 +25,15 @@
 
 namespace WCDB {
 
-class LiteralValue : public DescribableWithLang<lang::LiteralValue> {
+class LiteralValue : public DescribableWithLang<Lang::LiteralValue> {
 public:
     template <typename T>
     LiteralValue(
         const T &t,
         typename std::enable_if<ColumnIsNullType<T>::value>::type * = nullptr)
     {
-        lang::LiteralValue &lang = getMutableLang();
-        lang.type = lang::LiteralValue::Type::Null;
+        Lang::LiteralValue &lang = getMutableLang();
+        lang.type = Lang::LiteralValue::Type::Null;
     }
 
     template <typename T>
@@ -41,8 +41,8 @@ public:
         const T &t,
         typename std::enable_if<ColumnIsFloatType<T>::value>::type * = nullptr)
     {
-        lang::LiteralValue &lang = getMutableLang();
-        lang.type = lang::LiteralValue::Type::NumbericFloat;
+        Lang::LiteralValue &lang = getMutableLang();
+        lang.type = Lang::LiteralValue::Type::NumbericFloat;
         lang.floatValue = (double) ColumnIsFloatType<T>::asUnderlyingType(t);
     }
 
@@ -51,8 +51,8 @@ public:
                  typename std::enable_if<ColumnIsInteger32Type<T>::value>::type
                      * = nullptr)
     {
-        lang::LiteralValue &lang = getMutableLang();
-        lang.type = lang::LiteralValue::Type::NumbericInteger;
+        Lang::LiteralValue &lang = getMutableLang();
+        lang.type = Lang::LiteralValue::Type::NumbericInteger;
         lang.integerValue =
             (int64_t) ColumnIsInteger32Type<T>::asUnderlyingType(t);
     }
@@ -62,8 +62,8 @@ public:
                  typename std::enable_if<ColumnIsInteger64Type<T>::value>::type
                      * = nullptr)
     {
-        lang::LiteralValue &lang = getMutableLang();
-        lang.type = lang::LiteralValue::Type::NumbericInteger;
+        Lang::LiteralValue &lang = getMutableLang();
+        lang.type = Lang::LiteralValue::Type::NumbericInteger;
         lang.integerValue =
             (int64_t) ColumnIsInteger64Type<T>::asUnderlyingType(t);
     }
@@ -73,8 +73,8 @@ public:
         const T &t,
         typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
     {
-        lang::LiteralValue &lang = getMutableLang();
-        lang.type = lang::LiteralValue::Type::String;
+        Lang::LiteralValue &lang = getMutableLang();
+        lang.type = Lang::LiteralValue::Type::String;
         lang.stringValue.assign(ColumnIsTextType<T>::asUnderlyingType(t));
     }
 
@@ -83,8 +83,8 @@ public:
         const T &t,
         typename std::enable_if<ColumnIsBLOBType<T>::value>::type * = nullptr)
     {
-        lang::LiteralValue &lang = getMutableLang();
-        lang.type = lang::LiteralValue::Type::BLOB;
+        Lang::LiteralValue &lang = getMutableLang();
+        lang.type = Lang::LiteralValue::Type::BLOB;
         const NoCopyData rawData = ColumnIsBLOBType<T>::asUnderlyingType(t);
         std::vector<unsigned char> vector(rawData.data,
                                           rawData.data + rawData.size);
@@ -96,7 +96,7 @@ public:
     static const LiteralValue CurrentTimestamp;
 
 protected:
-    LiteralValue(const lang::LiteralValue::Type &type);
+    LiteralValue(const Lang::LiteralValue::Type &type);
 };
 
 } // namespace WCDB

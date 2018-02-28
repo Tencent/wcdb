@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string DetachSTMT::SQL() const
+CopyOnWriteString DetachSTMT::SQL() const
 {
     std::string description("DETACH ");
     assert(!schemaName.empty());
@@ -32,6 +32,6 @@ copy_on_write_string DetachSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

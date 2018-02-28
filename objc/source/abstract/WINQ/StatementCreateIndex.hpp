@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementCreateIndex : public StatementWithLang<lang::CreateIndexSTMT> {
+class StatementCreateIndex : public StatementWithLang<Lang::CreateIndexSTMT> {
 
 public:
     StatementCreateIndex();

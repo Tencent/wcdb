@@ -21,10 +21,10 @@
 #ifndef WCTBinding_hpp
 #define WCTBinding_hpp
 
+#import <WCDB/SequantialIncreasingMap.hpp>
 #import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/sequantial_increasing_map.hpp>
 
 class WCTBinding {
 public:

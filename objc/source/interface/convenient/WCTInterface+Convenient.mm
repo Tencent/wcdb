@@ -19,7 +19,7 @@
  */
 
 #import <WCDB/WCTCoding.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDelete+Private.h>
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTInsert+Private.h>

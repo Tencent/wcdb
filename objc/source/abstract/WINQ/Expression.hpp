@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class Expression : public DescribableWithLang<lang::Expr>,
+class Expression : public DescribableWithLang<Lang::Expr>,
                    public Operable,
                    public Redirectable {
 public:
@@ -55,7 +55,7 @@ public:
                                const std::list<Expression> &parameters,
                                bool distinct = false);
 
-    class All : public DescribableWithLang<lang::ExprFunction>,
+    class All : public DescribableWithLang<Lang::ExprFunction>,
                 public FunctionOperable {
     public:
         static const Expression::All default_;
@@ -74,7 +74,7 @@ public:
                bool isNot = false,
                bool exists = false);
 
-    class CaseInternal : public DescribableWithLang<lang::ExprCase> {
+    class CaseInternal : public DescribableWithLang<Lang::ExprCase> {
     public:
         CaseInternal();
         CaseInternal(const Expression &expression);
@@ -88,29 +88,25 @@ public:
 
     Expression(const RaiseFunction &raiseFunction);
 
-    Expression(const lang::copy_on_write_lazy_lang<lang::Expr> &expr);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::Expr> &expr);
 
 protected:
     friend class Operable;
-    Expression(const lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation>
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation>
                    &exprUnaryOperation);
-    Expression(const lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation>
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation>
                    &exprBinaryOperation);
     Expression(
-        const lang::copy_on_write_lazy_lang<lang::ExprFunction> &exprFunction);
-    Expression(const lang::copy_on_write_lazy_lang<lang::ExprCast> &exprCast);
-    Expression(
-        const lang::copy_on_write_lazy_lang<lang::ExprPattern> &exprPattern);
-    Expression(const lang::copy_on_write_lazy_lang<lang::ExprNull> &exprNull);
-    Expression(
-        const lang::copy_on_write_lazy_lang<lang::ExprBetween> &exprBetween);
-    Expression(const lang::copy_on_write_lazy_lang<lang::ExprIn> &exprIn);
-    Expression(
-        const lang::copy_on_write_lazy_lang<lang::ExprExists> &exprExists);
-    Expression(
-        const lang::copy_on_write_lazy_lang<lang::ExprCollate> &exprCollate);
+        const Lang::CopyOnWriteLazyLang<Lang::ExprFunction> &exprFunction);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprCast> &exprCast);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprPattern> &exprPattern);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprNull> &exprNull);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprBetween> &exprBetween);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprIn> &exprIn);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprExists> &exprExists);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprCollate> &exprCollate);
 
-    virtual lang::copy_on_write_lazy_lang<lang::Expr>
+    virtual Lang::CopyOnWriteLazyLang<Lang::Expr>
     getExpressionLang() const override;
 
     virtual Expression getRedirectSource() const override;

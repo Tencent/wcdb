@@ -25,14 +25,14 @@
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class DropIndexSTMT : public DropInternalSTMT {
 protected:
     virtual const char *getInternalName() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

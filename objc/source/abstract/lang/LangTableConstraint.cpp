@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 TableConstraint::TableConstraint()
     : type(Type::NotSet), conflictClause(ConflictClause::NotSet)
 {
 }
 
-copy_on_write_string TableConstraint::SQL() const
+CopyOnWriteString TableConstraint::SQL() const
 {
     std::string description;
     if (!name.empty()) {
@@ -71,6 +71,6 @@ copy_on_write_string TableConstraint::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

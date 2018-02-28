@@ -21,17 +21,17 @@
 #ifndef LangUpdateSTMT_hpp
 #define LangUpdateSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class UpdateSTMT : public CRUDLang {
 public:
     UpdateSTMT();
 
-    copy_on_write_lazy_lang<WithClause> withClause;
+    CopyOnWriteLazyLang<WithClause> withClause;
     enum class Type : int {
         NotSet,
         Update,
@@ -43,30 +43,30 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang<QualifiedTableName> qualifiedTableName;
+    CopyOnWriteLazyLang<QualifiedTableName> qualifiedTableName;
 
     class KeyValue : public Lang {
     public:
-        copy_on_write_lazy_lang_list<Column> keys;
-        copy_on_write_lazy_lang<Expr> value;
+        CopyOnWriteLazyLangList<Column> keys;
+        CopyOnWriteLazyLang<Expr> value;
 
-        virtual copy_on_write_string SQL() const override;
+        virtual CopyOnWriteString SQL() const override;
     };
-    copy_on_write_lazy_lang_list<KeyValue> keyValues;
+    CopyOnWriteLazyLangList<KeyValue> keyValues;
 
-    copy_on_write_lazy_lang<Expr> condition;
-    copy_on_write_lazy_lang_list<OrderingTerm> orderingTerm;
-    copy_on_write_lazy_lang<Expr> limit;
+    CopyOnWriteLazyLang<Expr> condition;
+    CopyOnWriteLazyLangList<OrderingTerm> orderingTerm;
+    CopyOnWriteLazyLang<Expr> limit;
     bool offset;
-    copy_on_write_lazy_lang<Expr> limitParameter;
+    CopyOnWriteLazyLang<Expr> limitParameter;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

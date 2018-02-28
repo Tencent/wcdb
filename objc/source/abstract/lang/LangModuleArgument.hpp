@@ -21,11 +21,11 @@
 #ifndef LangModuleArgument_hpp
 #define LangModuleArgument_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 // What's the true syntax of ModuleArgument?
 class ModuleArgument : public Lang {
@@ -39,15 +39,15 @@ public:
         LeftRight,
     };
     Type type;
-    copy_on_write_lazy_lang<ColumnDef> columnDef;
-    copy_on_write_lazy_lang<TableConstraint> tableConstraint;
-    copy_on_write_string left;
-    copy_on_write_string right;
+    CopyOnWriteLazyLang<ColumnDef> columnDef;
+    CopyOnWriteLazyLang<TableConstraint> tableConstraint;
+    CopyOnWriteString left;
+    CopyOnWriteString right;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

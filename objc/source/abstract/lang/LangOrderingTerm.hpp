@@ -21,24 +21,24 @@
 #ifndef LangOrderingTerm_hpp
 #define LangOrderingTerm_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class OrderingTerm : public Lang {
 public:
     OrderingTerm();
 
-    copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_string collationName;
+    CopyOnWriteLazyLang<Expr> expr;
+    CopyOnWriteString collationName;
     Order order;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

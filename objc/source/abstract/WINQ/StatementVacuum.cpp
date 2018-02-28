@@ -30,7 +30,7 @@ StatementVacuum &StatementVacuum::vacuum()
 
 StatementVacuum &StatementVacuum::vacuum(const std::string &schemaName)
 {
-    lang::VacuumSTMT &lang = getMutableLang();
+    Lang::VacuumSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

@@ -21,20 +21,20 @@
 #ifndef LangVacuumSTMT_hpp
 #define LangVacuumSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class VacuumSTMT : public Lang {
 public:
-    copy_on_write_string schemaName;
+    CopyOnWriteString schemaName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

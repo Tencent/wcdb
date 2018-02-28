@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementAttach : public StatementWithLang<lang::AttachSTMT> {
+class StatementAttach : public StatementWithLang<Lang::AttachSTMT> {
 
 public:
     StatementAttach &attach(const Expression &expression);

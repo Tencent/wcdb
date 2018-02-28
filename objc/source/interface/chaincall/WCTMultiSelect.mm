@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTMultiSelect+Private.h>
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTProperty.h>

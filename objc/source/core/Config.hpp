@@ -21,10 +21,10 @@
 #ifndef Config_hpp
 #define Config_hpp
 
-#include <WCDB/abstract.h>
-#include <WCDB/copy_on_write_list.hpp>
-#include <WCDB/error.hpp>
-#include <WCDB/utility.hpp>
+#include <WCDB/Abstract.h>
+#include <WCDB/CopyOnWriteList.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/Utility.hpp>
 #include <functional>
 #include <list>
 #include <memory>
@@ -58,7 +58,7 @@ public:
     bool operator!=(const Configs &other) const;
 
 public:
-    copy_on_write_list<Config> m_configs;
+    CopyOnWriteList<Config> m_configs;
 };
 
 } //namespace WCDB

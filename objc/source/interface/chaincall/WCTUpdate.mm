@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
+#import <WCDB/Utility.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTDeclare.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTUpdate.h>
-#import <WCDB/utility.hpp>
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;

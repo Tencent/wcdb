@@ -21,11 +21,11 @@
 #ifndef LangCreateTriggerSTMT_hpp
 #define LangCreateTriggerSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class CreateTriggerSTMT : public Lang {
 public:
@@ -33,8 +33,8 @@ public:
 
     bool temp;
     bool ifNotExists;
-    copy_on_write_string schemaName;
-    copy_on_write_string triggerName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString triggerName;
     enum class Type : int {
         NotSet,
         After,
@@ -50,16 +50,16 @@ public:
         Update,
     };
     Operation operation;
-    copy_on_write_lazy_lang_list<Column> columns;
+    CopyOnWriteLazyLangList<Column> columns;
 
-    copy_on_write_string tableName;
+    CopyOnWriteString tableName;
 
     bool forEachRow;
-    copy_on_write_lazy_lang<Expr> expr;
+    CopyOnWriteLazyLang<Expr> expr;
 
-    copy_on_write_lazy_lang_list<CRUDLang> STMTs;
+    CopyOnWriteLazyLangList<CRUDLang> STMTs;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
@@ -67,10 +67,10 @@ protected:
 };
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<CRUDLang>::calculatedDescription() const;
+CopyOnWriteString
+CopyOnWriteLazyLangList<CRUDLang>::calculatedDescription() const;
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

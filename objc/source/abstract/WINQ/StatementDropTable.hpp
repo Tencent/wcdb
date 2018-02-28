@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementDropTable : public StatementWithLang<lang::DropTableSTMT> {
+class StatementDropTable : public StatementWithLang<Lang::DropTableSTMT> {
 
 public:
     StatementDropTable();

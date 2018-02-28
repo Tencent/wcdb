@@ -24,7 +24,7 @@ namespace WCDB {
 
 StatementBegin &StatementBegin::begin(const Transaction &transaction)
 {
-    lang::BeginSTMT &lang = getMutableLang();
+    Lang::BeginSTMT &lang = getMutableLang();
     lang.type = transaction;
     return *this;
 }

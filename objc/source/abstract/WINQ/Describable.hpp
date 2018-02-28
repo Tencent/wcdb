@@ -23,7 +23,7 @@
 
 #include <WCDB/ColumnType.hpp>
 #include <WCDB/Convertible.hpp>
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
@@ -40,20 +40,20 @@ class WithLang {
 public:
     WithLang() {}
 
-    WithLang(const lang::copy_on_write_lazy_lang<T> &lang) : m_lang(lang) {}
+    WithLang(const Lang::CopyOnWriteLazyLang<T> &lang) : m_lang(lang) {}
 
     T &getMutableLang() { return m_lang.get_or_copy(); }
-    const lang::copy_on_write_lazy_lang<T> &getLang() const { return m_lang; }
+    const Lang::CopyOnWriteLazyLang<T> &getLang() const { return m_lang; }
 
 private:
-    lang::copy_on_write_lazy_lang<T> m_lang;
+    Lang::CopyOnWriteLazyLang<T> m_lang;
 };
 
 template <typename T>
 class DescribableWithLang : public Describable, public WithLang<T> {
 public:
     DescribableWithLang() {}
-    DescribableWithLang(const lang::copy_on_write_lazy_lang<T> &lang)
+    DescribableWithLang(const Lang::CopyOnWriteLazyLang<T> &lang)
         : WithLang<T>(lang)
     {
     }
@@ -67,8 +67,8 @@ public:
     }
 };
 
-typedef lang::Order Order;
-typedef lang::ConflictClause ConflictClause;
+typedef Lang::Order Order;
+typedef Lang::ConflictClause ConflictClause;
 
 class BindParameter;
 class Column;

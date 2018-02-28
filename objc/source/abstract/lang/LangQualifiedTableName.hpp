@@ -21,18 +21,18 @@
 #ifndef LangQualifiedTableName_hpp
 #define LangQualifiedTableName_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class QualifiedTableName : public Lang {
 public:
     QualifiedTableName();
 
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
 
     enum class IndexSwitch : int {
         NotSet,
@@ -40,12 +40,12 @@ public:
         NotIndexed,
     };
     IndexSwitch indexSwitcher;
-    copy_on_write_string indexName;
+    CopyOnWriteString indexName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

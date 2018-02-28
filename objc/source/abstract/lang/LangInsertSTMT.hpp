@@ -21,17 +21,17 @@
 #ifndef LangInsertSTMT_hpp
 #define LangInsertSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class InsertSTMT : public CRUDLang {
 public:
     InsertSTMT();
 
-    copy_on_write_lazy_lang<WithClause> withClause;
+    CopyOnWriteLazyLang<WithClause> withClause;
 
     enum class Type : int {
         NotSet,
@@ -44,10 +44,10 @@ public:
     };
     Type type;
 
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
 
-    copy_on_write_lazy_lang_list<Column> columns;
+    CopyOnWriteLazyLangList<Column> columns;
 
     enum class Switch : int {
         NotSet,
@@ -57,16 +57,16 @@ public:
     };
     Switch switcher;
 
-    copy_on_write_lazy_lang_list<Expr> exprs;
-    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
+    CopyOnWriteLazyLangList<Expr> exprs;
+    CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

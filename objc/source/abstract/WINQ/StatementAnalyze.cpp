@@ -29,7 +29,7 @@ Statement::Type StatementAnalyze::getType() const
 
 StatementAnalyze &StatementAnalyze::analyze()
 {
-    lang::AnalyzeSTMT &lang = getMutableLang();
+    Lang::AnalyzeSTMT &lang = getMutableLang();
     lang.first.clear();
     lang.second.clear();
     return *this;
@@ -38,7 +38,7 @@ StatementAnalyze &StatementAnalyze::analyze()
 StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaName,
                                             const std::string &tableOrIndexName)
 {
-    lang::AnalyzeSTMT &lang = getMutableLang();
+    Lang::AnalyzeSTMT &lang = getMutableLang();
     lang.first.assign(schemaName);
     lang.second.assign(tableOrIndexName);
     return *this;
@@ -47,7 +47,7 @@ StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaName,
 StatementAnalyze &
 StatementAnalyze::analyze(const std::string &schemaOrTableOrIndexName)
 {
-    lang::AnalyzeSTMT &lang = getMutableLang();
+    Lang::AnalyzeSTMT &lang = getMutableLang();
     lang.first.assign(schemaOrTableOrIndexName);
     lang.second.clear();
     return *this;

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 BindParameter::BindParameter() : type(Type::NotSet), n(0)
 {
 }
 
-copy_on_write_string BindParameter::SQL() const
+CopyOnWriteString BindParameter::SQL() const
 {
     std::string description;
     switch (type) {
@@ -57,6 +57,6 @@ copy_on_write_string BindParameter::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

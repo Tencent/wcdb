@@ -27,7 +27,7 @@
 namespace WCDB {
 
 class StatementCreateVirtualTable
-    : public StatementWithLang<lang::CreateVirtualTableSTMT> {
+    : public StatementWithLang<Lang::CreateVirtualTableSTMT> {
 public:
     StatementCreateVirtualTable();
     StatementCreateVirtualTable &

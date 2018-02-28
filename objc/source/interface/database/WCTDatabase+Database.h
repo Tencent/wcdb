@@ -19,8 +19,8 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTDeclare.h>
 
 /**
  Close block

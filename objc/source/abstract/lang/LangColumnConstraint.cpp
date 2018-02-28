@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 ColumnConstraint::ColumnConstraint()
     : type(Type::NotSet)
@@ -33,7 +33,7 @@ ColumnConstraint::ColumnConstraint()
 {
 }
 
-copy_on_write_string ColumnConstraint::SQL() const
+CopyOnWriteString ColumnConstraint::SQL() const
 {
     std::string description;
     if (!name.empty()) {
@@ -104,8 +104,8 @@ copy_on_write_string ColumnConstraint::SQL() const
 }
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<ColumnConstraint>::calculatedDescription() const
+CopyOnWriteString
+CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const
 {
     std::string description;
     bool space = false;
@@ -121,6 +121,6 @@ copy_on_write_lazy_lang_list<ColumnConstraint>::calculatedDescription() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

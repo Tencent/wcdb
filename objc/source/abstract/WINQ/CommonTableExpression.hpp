@@ -26,7 +26,7 @@
 namespace WCDB {
 
 class CommonTableExpression
-    : public DescribableWithLang<lang::CommonTableExpression> {
+    : public DescribableWithLang<Lang::CommonTableExpression> {
 public:
     template <typename T>
     CommonTableExpression(

@@ -30,21 +30,21 @@ StatementCreateTable::StatementCreateTable()
 StatementCreateTable &
 StatementCreateTable::createTable(const std::string &tableName)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     return *this;
 }
 
 StatementCreateTable &StatementCreateTable::temp(bool temp)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     lang.temp = temp;
     return *this;
 }
 
 StatementCreateTable &StatementCreateTable::ifNotExists(bool ifNotExists)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
     return *this;
 }
@@ -52,7 +52,7 @@ StatementCreateTable &StatementCreateTable::ifNotExists(bool ifNotExists)
 StatementCreateTable &
 StatementCreateTable::withSchema(const std::string &schemaName)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
@@ -60,16 +60,16 @@ StatementCreateTable::withSchema(const std::string &schemaName)
 StatementCreateTable &
 StatementCreateTable::as(const StatementSelect &selectSTMT)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
-    lang.switcher = lang::CreateTableSTMT::Switch::Select;
+    Lang::CreateTableSTMT &lang = getMutableLang();
+    lang.switcher = Lang::CreateTableSTMT::Switch::Select;
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }
 
 StatementCreateTable &StatementCreateTable::define(const ColumnDef &columnDef)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
-    lang.switcher = lang::CreateTableSTMT::Switch::ColumnDef;
+    Lang::CreateTableSTMT &lang = getMutableLang();
+    lang.switcher = Lang::CreateTableSTMT::Switch::ColumnDef;
     lang.columnDefs.append(columnDef.getLang());
     return *this;
 }
@@ -77,8 +77,8 @@ StatementCreateTable &StatementCreateTable::define(const ColumnDef &columnDef)
 StatementCreateTable &
 StatementCreateTable::define(const std::list<ColumnDef> &columnDefs)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
-    lang.switcher = lang::CreateTableSTMT::Switch::ColumnDef;
+    Lang::CreateTableSTMT &lang = getMutableLang();
+    lang.switcher = Lang::CreateTableSTMT::Switch::ColumnDef;
     for (const ColumnDef &columnDef : columnDefs) {
         lang.columnDefs.append(columnDef.getLang());
     }
@@ -88,7 +88,7 @@ StatementCreateTable::define(const std::list<ColumnDef> &columnDefs)
 StatementCreateTable &
 StatementCreateTable::addTableConstraint(const TableConstraint &tableConstraint)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     lang.tableConstraints.append(tableConstraint.getLang());
     return *this;
 }
@@ -96,7 +96,7 @@ StatementCreateTable::addTableConstraint(const TableConstraint &tableConstraint)
 StatementCreateTable &StatementCreateTable::addTableConstraints(
     const std::list<TableConstraint> &tableConstraints)
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     for (const TableConstraint &tableConstraint : tableConstraints) {
         lang.tableConstraints.append(tableConstraint.getLang());
     }
@@ -105,7 +105,7 @@ StatementCreateTable &StatementCreateTable::addTableConstraints(
 
 StatementCreateTable &StatementCreateTable::withoutRowID()
 {
-    lang::CreateTableSTMT &lang = getMutableLang();
+    Lang::CreateTableSTMT &lang = getMutableLang();
     lang.withoutRowID = true;
     return *this;
 }

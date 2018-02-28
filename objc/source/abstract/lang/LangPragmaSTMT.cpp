@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string PragmaSTMT::SQL() const
+CopyOnWriteString PragmaSTMT::SQL() const
 {
     std::string description("PRAGMA ");
     if (!schemaName.empty()) {
@@ -39,6 +39,6 @@ copy_on_write_string PragmaSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

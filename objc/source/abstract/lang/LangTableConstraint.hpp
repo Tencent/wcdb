@@ -21,17 +21,17 @@
 #ifndef LangTableConstraint_hpp
 #define LangTableConstraint_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class TableConstraint : public Lang {
 public:
     TableConstraint();
 
-    copy_on_write_string name;
+    CopyOnWriteString name;
     enum class Type : int {
         NotSet,
         PrimaryKey,
@@ -41,17 +41,17 @@ public:
     };
     Type type;
 
-    copy_on_write_lazy_lang_list<IndexedColumn> indexedColumns;
+    CopyOnWriteLazyLangList<IndexedColumn> indexedColumns;
     ConflictClause conflictClause;
 
-    copy_on_write_lazy_lang<Expr> expr;
-    copy_on_write_lazy_lang_list<Column> columns;
-    copy_on_write_lazy_lang<ForeignKeyClause> foreignKeyClause;
+    CopyOnWriteLazyLang<Expr> expr;
+    CopyOnWriteLazyLangList<Column> columns;
+    CopyOnWriteLazyLang<ForeignKeyClause> foreignKeyClause;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

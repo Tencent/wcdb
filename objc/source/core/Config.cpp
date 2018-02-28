@@ -60,7 +60,7 @@ void Configs::setConfig(const Config &config)
             break;
         }
     }
-    std::list<copy_on_write<Config>>::iterator iter;
+    std::list<CopyOnWrite<Config>>::iterator iter;
     for (iter = configs.begin(); iter != configs.end(); ++iter) {
         if (config.order < iter->get().order) {
             break;

@@ -25,7 +25,7 @@ namespace WCDB {
 CommonTableExpression &
 CommonTableExpression::byAddingColumn(const Column &column)
 {
-    lang::CommonTableExpression &lang = getMutableLang();
+    Lang::CommonTableExpression &lang = getMutableLang();
     lang.columns.append(column.getLang());
     return *this;
 }
@@ -33,7 +33,7 @@ CommonTableExpression::byAddingColumn(const Column &column)
 CommonTableExpression &
 CommonTableExpression::byAddingColumns(const std::list<Column> &columns)
 {
-    lang::CommonTableExpression &lang = getMutableLang();
+    Lang::CommonTableExpression &lang = getMutableLang();
     for (const Column &column : columns) {
         lang.columns.append(column.getLang());
     }
@@ -43,14 +43,14 @@ CommonTableExpression::byAddingColumns(const std::list<Column> &columns)
 CommonTableExpression &
 CommonTableExpression::as(const StatementSelect &statementSelect)
 {
-    lang::CommonTableExpression &lang = getMutableLang();
+    Lang::CommonTableExpression &lang = getMutableLang();
     lang.selectSTMT.assign(statementSelect.getLang());
     return *this;
 }
 
 void CommonTableExpression::setTableName(const std::string &name)
 {
-    lang::CommonTableExpression &lang = getMutableLang();
+    Lang::CommonTableExpression &lang = getMutableLang();
     lang.tableName.assign(name);
 }
 

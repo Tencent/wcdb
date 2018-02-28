@@ -21,22 +21,22 @@
 #ifndef LangCommonTableExpression_hpp
 #define LangCommonTableExpression_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class CommonTableExpression : public Lang {
 public:
-    copy_on_write_string tableName;
-    copy_on_write_lazy_lang_list<Column> columns;
-    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
+    CopyOnWriteString tableName;
+    CopyOnWriteLazyLangList<Column> columns;
+    CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

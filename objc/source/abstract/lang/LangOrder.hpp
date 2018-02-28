@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 enum class Order : int {
     NotSet,
@@ -44,7 +44,7 @@ constexpr const char *LangOrderName(const Order &order)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

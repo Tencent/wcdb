@@ -21,11 +21,11 @@
 #ifndef LangCreateTableSTMT_hpp
 #define LangCreateTableSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class CreateTableSTMT : public Lang {
 public:
@@ -33,24 +33,24 @@ public:
 
     bool temp;
     bool ifNotExists;
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
     enum class Switch : int {
         NotSet,
         ColumnDef,
         Select,
     };
     Switch switcher;
-    copy_on_write_lazy_lang_list<ColumnDef> columnDefs;
-    copy_on_write_lazy_lang_list<TableConstraint> tableConstraints;
+    CopyOnWriteLazyLangList<ColumnDef> columnDefs;
+    CopyOnWriteLazyLangList<TableConstraint> tableConstraints;
     bool withoutRowID;
 
-    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
+    CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

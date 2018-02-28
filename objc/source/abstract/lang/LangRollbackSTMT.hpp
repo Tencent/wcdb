@@ -21,20 +21,20 @@
 #ifndef LangRollbackSTMT_hpp
 #define LangRollbackSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class RollbackSTMT : public Lang {
 public:
-    copy_on_write_string savepointName;
+    CopyOnWriteString savepointName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

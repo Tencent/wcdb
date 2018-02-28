@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementDropTrigger : public StatementWithLang<lang::DropTriggerSTMT> {
+class StatementDropTrigger : public StatementWithLang<Lang::DropTriggerSTMT> {
 
 public:
     StatementDropTrigger();

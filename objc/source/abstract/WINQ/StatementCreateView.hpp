@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementCreateView : public StatementWithLang<lang::CreateViewSTMT> {
+class StatementCreateView : public StatementWithLang<Lang::CreateViewSTMT> {
 
 public:
     StatementCreateView();

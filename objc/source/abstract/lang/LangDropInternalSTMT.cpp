@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 DropInternalSTMT::DropInternalSTMT() : ifExists(false)
 {
 }
 
-copy_on_write_string DropInternalSTMT::SQL() const
+CopyOnWriteString DropInternalSTMT::SQL() const
 {
     std::string description("DROP ");
     description.append(getInternalName());
@@ -44,6 +44,6 @@ copy_on_write_string DropInternalSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

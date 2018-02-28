@@ -21,8 +21,8 @@
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/timed_queue.hpp>
-#include <WCDB/utility.hpp>
+#include <WCDB/TimedQueue.hpp>
+#include <WCDB/Utility.hpp>
 #include <queue>
 #include <thread>
 #include <vector>

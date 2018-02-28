@@ -28,7 +28,7 @@ ColumnConstraint::ColumnConstraint()
 
 ColumnConstraint &ColumnConstraint::named(const std::string &name)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
+    Lang::ColumnConstraint &lang = getMutableLang();
     lang.name.assign(name);
     return *this;
 }
@@ -36,8 +36,8 @@ ColumnConstraint &ColumnConstraint::named(const std::string &name)
 ColumnConstraint &ColumnConstraint::withPrimaryKey(const Order &order,
                                                    bool autoIncrement)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::PrimaryKey;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::PrimaryKey;
     lang.order = order;
     lang.autoIncrement = autoIncrement;
     return *this;
@@ -45,30 +45,30 @@ ColumnConstraint &ColumnConstraint::withPrimaryKey(const Order &order,
 
 ColumnConstraint &ColumnConstraint::withNotNull()
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::NotNull;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::NotNull;
     return *this;
 }
 
 ColumnConstraint &ColumnConstraint::withUnique()
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::Unique;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::Unique;
     return *this;
 }
 
 ColumnConstraint &
 ColumnConstraint::onConflict(const ConflictClause &conflictClause)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
+    Lang::ColumnConstraint &lang = getMutableLang();
     lang.conflictClause = conflictClause;
     return *this;
 }
 
 ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::Check;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::Check;
     lang.expr.assign(expression.getLang());
     return *this;
 }
@@ -76,9 +76,9 @@ ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
 ColumnConstraint &
 ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::Default;
-    lang.defaultSwitcher = lang::ColumnConstraint::DefaultSwitch::LiteralValue;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::Default;
+    lang.defaultSwitcher = Lang::ColumnConstraint::DefaultSwitch::LiteralValue;
     lang.literalValue.assign(literalValue.getLang());
     return *this;
 }
@@ -86,9 +86,9 @@ ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
 ColumnConstraint &
 ColumnConstraint::withDefaultExpression(const Expression &expression)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::Default;
-    lang.defaultSwitcher = lang::ColumnConstraint::DefaultSwitch::Expr;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::Default;
+    lang.defaultSwitcher = Lang::ColumnConstraint::DefaultSwitch::Expr;
     lang.expr.assign(expression.getLang());
     return *this;
 }
@@ -96,8 +96,8 @@ ColumnConstraint::withDefaultExpression(const Expression &expression)
 ColumnConstraint &
 ColumnConstraint::withCollate(const std::string &collationName)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::Collate;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::Collate;
     lang.collationName.assign(collationName);
     return *this;
 }
@@ -105,8 +105,8 @@ ColumnConstraint::withCollate(const std::string &collationName)
 ColumnConstraint &
 ColumnConstraint::withForeignKeyClause(const ForeignKeyClause &foreignKeyClause)
 {
-    lang::ColumnConstraint &lang = getMutableLang();
-    lang.type = lang::ColumnConstraint::Type::ForeignKeyClause;
+    Lang::ColumnConstraint &lang = getMutableLang();
+    lang.type = Lang::ColumnConstraint::Type::ForeignKeyClause;
     lang.foreignKeyClause.assign(foreignKeyClause.getLang());
     return *this;
 }

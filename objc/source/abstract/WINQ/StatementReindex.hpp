@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementReindex : public StatementWithLang<lang::ReindexSTMT> {
+class StatementReindex : public StatementWithLang<Lang::ReindexSTMT> {
 
 public:
     StatementReindex &reindex();

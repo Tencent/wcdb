@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class StatementSelect : public CRUDStatementWithLang<lang::SelectSTMT>,
+class StatementSelect : public CRUDStatementWithLang<Lang::SelectSTMT>,
                         public Redirectable {
 public:
     StatementSelect &with(const CommonTableExpression &commonTableExpression);
@@ -68,7 +68,7 @@ public:
 protected:
     virtual Expression getRedirectSource() const override;
 
-    void compound(const lang::SelectSTMT::Compound::Operator &compoundOperator,
+    void compound(const Lang::SelectSTMT::Compound::Operator &compoundOperator,
                   const SelectCore &selectCore);
 };
 

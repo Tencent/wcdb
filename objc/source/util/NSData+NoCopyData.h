@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/no_copy_data.hpp>
+#import <WCDB/NoCopyData.hpp>
 
 @interface NSData (NoCopyData)
 

@@ -24,13 +24,13 @@ namespace WCDB {
 
 ForeignKeyClause::ForeignKeyClause(const std::string &foreignTable)
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
+    Lang::ForeignKeyClause &lang = getMutableLang();
     lang.foreignTable.assign(foreignTable);
 }
 
 ForeignKeyClause &ForeignKeyClause::byAddingColumn(const Column &column)
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
+    Lang::ForeignKeyClause &lang = getMutableLang();
     lang.columns.append(column.getLang());
     return *this;
 }
@@ -38,7 +38,7 @@ ForeignKeyClause &ForeignKeyClause::byAddingColumn(const Column &column)
 ForeignKeyClause &
 ForeignKeyClause::byAddingColumns(const std::list<Column> &columns)
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
+    Lang::ForeignKeyClause &lang = getMutableLang();
     for (const Column &column : columns) {
         lang.columns.append(column.getLang());
     }
@@ -47,55 +47,55 @@ ForeignKeyClause::byAddingColumns(const std::list<Column> &columns)
 
 ForeignKeyClause &ForeignKeyClause::onDeleteSetNull()
 {
-    addTriggerForDeleting(lang::ForeignKeyClause::Trigger::Operation::SetNull);
+    addTriggerForDeleting(Lang::ForeignKeyClause::Trigger::Operation::SetNull);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteSetDefault()
 {
     addTriggerForDeleting(
-        lang::ForeignKeyClause::Trigger::Operation::SetDefault);
+        Lang::ForeignKeyClause::Trigger::Operation::SetDefault);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteCascade()
 {
-    addTriggerForDeleting(lang::ForeignKeyClause::Trigger::Operation::Cascade);
+    addTriggerForDeleting(Lang::ForeignKeyClause::Trigger::Operation::Cascade);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteRestrict()
 {
-    addTriggerForDeleting(lang::ForeignKeyClause::Trigger::Operation::Restrict);
+    addTriggerForDeleting(Lang::ForeignKeyClause::Trigger::Operation::Restrict);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteNoAction()
 {
-    addTriggerForDeleting(lang::ForeignKeyClause::Trigger::Operation::NoAction);
+    addTriggerForDeleting(Lang::ForeignKeyClause::Trigger::Operation::NoAction);
     return *this;
 }
 
 ForeignKeyClause &ForeignKeyClause::onUpdateSetNull()
 {
-    addTriggerForUpdating(lang::ForeignKeyClause::Trigger::Operation::SetNull);
+    addTriggerForUpdating(Lang::ForeignKeyClause::Trigger::Operation::SetNull);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateSetDefault()
 {
     addTriggerForUpdating(
-        lang::ForeignKeyClause::Trigger::Operation::SetDefault);
+        Lang::ForeignKeyClause::Trigger::Operation::SetDefault);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateCascade()
 {
-    addTriggerForUpdating(lang::ForeignKeyClause::Trigger::Operation::Cascade);
+    addTriggerForUpdating(Lang::ForeignKeyClause::Trigger::Operation::Cascade);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateRestrict()
 {
-    addTriggerForUpdating(lang::ForeignKeyClause::Trigger::Operation::Restrict);
+    addTriggerForUpdating(Lang::ForeignKeyClause::Trigger::Operation::Restrict);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateNoAction()
 {
-    addTriggerForUpdating(lang::ForeignKeyClause::Trigger::Operation::NoAction);
+    addTriggerForUpdating(Lang::ForeignKeyClause::Trigger::Operation::NoAction);
     return *this;
 }
 
@@ -107,7 +107,7 @@ ForeignKeyClause &ForeignKeyClause::byMatching(const std::string &name)
 
 ForeignKeyClause &ForeignKeyClause::deferrable()
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
+    Lang::ForeignKeyClause &lang = getMutableLang();
     lang.doDeferrable = true;
     lang.notDeferrable = false;
     return *this;
@@ -115,7 +115,7 @@ ForeignKeyClause &ForeignKeyClause::deferrable()
 
 ForeignKeyClause &ForeignKeyClause::notDeferrable()
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
+    Lang::ForeignKeyClause &lang = getMutableLang();
     lang.doDeferrable = true;
     lang.notDeferrable = true;
     return *this;
@@ -123,22 +123,22 @@ ForeignKeyClause &ForeignKeyClause::notDeferrable()
 
 ForeignKeyClause &ForeignKeyClause::initiallyImmediate()
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
-    lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Immediate;
+    Lang::ForeignKeyClause &lang = getMutableLang();
+    lang.initiallySwitcher = Lang::ForeignKeyClause::InitiallySwitch::Immediate;
     return *this;
 }
 
 ForeignKeyClause &ForeignKeyClause::initiallyDeferred()
 {
-    lang::ForeignKeyClause &lang = getMutableLang();
-    lang.initiallySwitcher = lang::ForeignKeyClause::InitiallySwitch::Deferred;
+    Lang::ForeignKeyClause &lang = getMutableLang();
+    lang.initiallySwitcher = Lang::ForeignKeyClause::InitiallySwitch::Deferred;
     return *this;
 }
 
 void ForeignKeyClause::addTriggerForUpdating(
-    const lang::ForeignKeyClause::Trigger::Operation &operation)
+    const Lang::ForeignKeyClause::Trigger::Operation &operation)
 {
-    lang::ForeignKeyClause::Trigger trigger;
+    Lang::ForeignKeyClause::Trigger trigger;
     trigger.match = false;
     trigger.update = true;
     trigger.operation = operation;
@@ -146,9 +146,9 @@ void ForeignKeyClause::addTriggerForUpdating(
 }
 
 void ForeignKeyClause::addTriggerForDeleting(
-    const lang::ForeignKeyClause::Trigger::Operation &operation)
+    const Lang::ForeignKeyClause::Trigger::Operation &operation)
 {
-    lang::ForeignKeyClause::Trigger trigger;
+    Lang::ForeignKeyClause::Trigger trigger;
     trigger.match = false;
     trigger.update = false;
     trigger.operation = operation;
@@ -157,16 +157,16 @@ void ForeignKeyClause::addTriggerForDeleting(
 
 void ForeignKeyClause::addTriggerForMatching(const std::string &name)
 {
-    lang::ForeignKeyClause::Trigger trigger;
+    Lang::ForeignKeyClause::Trigger trigger;
     trigger.match = true;
     trigger.name.assign(name);
     addTrigger(trigger);
 }
 
 void ForeignKeyClause::addTrigger(
-    const lang::ForeignKeyClause::Trigger &trigger)
+    const Lang::ForeignKeyClause::Trigger &trigger)
 {
-    lang::copy_on_write_lazy_lang<lang::ForeignKeyClause::Trigger> cowTrigger;
+    Lang::CopyOnWriteLazyLang<Lang::ForeignKeyClause::Trigger> cowTrigger;
     cowTrigger.assign(trigger);
     getMutableLang().triggers.append(cowTrigger);
 }

@@ -30,21 +30,21 @@ StatementCreateIndex::StatementCreateIndex()
 StatementCreateIndex &
 StatementCreateIndex::createIndex(const std::string &indexName)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexName.assign(indexName);
     return *this;
 }
 
 StatementCreateIndex &StatementCreateIndex::ifNotExists(bool ifNotExists)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
     return *this;
 }
 
 StatementCreateIndex &StatementCreateIndex::unique(bool unique)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.unique = unique;
     return *this;
 }
@@ -52,14 +52,14 @@ StatementCreateIndex &StatementCreateIndex::unique(bool unique)
 StatementCreateIndex &
 StatementCreateIndex::withSchema(const std::string &schemaName)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementCreateIndex &StatementCreateIndex::on(const std::string &tableName)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.tableName.assign(tableName);
     return *this;
 }
@@ -67,7 +67,7 @@ StatementCreateIndex &StatementCreateIndex::on(const std::string &tableName)
 StatementCreateIndex &
 StatementCreateIndex::indexedBy(const IndexedColumn &indexedColumn)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexedColumns.append(indexedColumn.getLang());
     return *this;
 }
@@ -75,7 +75,7 @@ StatementCreateIndex::indexedBy(const IndexedColumn &indexedColumn)
 StatementCreateIndex &
 StatementCreateIndex::indexedBy(const std::list<IndexedColumn> &indexedColumns)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     for (const IndexedColumn &indexedColumn : indexedColumns) {
         lang.indexedColumns.append(indexedColumn.getLang());
     }
@@ -84,7 +84,7 @@ StatementCreateIndex::indexedBy(const std::list<IndexedColumn> &indexedColumns)
 
 StatementCreateIndex &StatementCreateIndex::where(const Expression &condition)
 {
-    lang::CreateIndexSTMT &lang = getMutableLang();
+    Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.expr.assign(condition.getLang());
     return *this;
 }

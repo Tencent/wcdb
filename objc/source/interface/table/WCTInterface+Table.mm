@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
+#import <WCDB/Utility.hpp>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTInterface+Table.h>
 #import <WCDB/WCTORM.h>
-#import <WCDB/utility.hpp>
 
 @implementation WCTInterface (Table)
 

@@ -21,11 +21,11 @@
 #ifndef Transaction_hpp
 #define Transaction_hpp
 
+#include <WCDB/Abstract.h>
 #include <WCDB/CoreBase.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/Recyclable.hpp>
 #include <WCDB/RecyclableStatement.hpp>
-#include <WCDB/abstract.h>
-#include <WCDB/error.hpp>
-#include <WCDB/recyclable.hpp>
 
 namespace WCDB {
 

@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class TableOrSubquery : public DescribableWithLang<lang::TableOrSubquery> {
+class TableOrSubquery : public DescribableWithLang<Lang::TableOrSubquery> {
 public:
     template <typename T>
     TableOrSubquery(
@@ -54,7 +54,7 @@ public:
 
 protected:
     TableOrSubquery(
-        const lang::copy_on_write_lazy_lang<lang::TableOrSubqueryTableFunction>
+        const Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction>
             &tableOrSubqueryTableFunction);
     void setTableName(const std::string &tableName);
 };

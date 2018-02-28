@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string CommitSTMT::SQL() const
+CopyOnWriteString CommitSTMT::SQL() const
 {
     return std::string("COMMIT");
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

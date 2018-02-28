@@ -29,21 +29,21 @@ StatementDropView::StatementDropView()
 
 StatementDropView &StatementDropView::dropView(const std::string &viewName)
 {
-    lang::DropViewSTMT &lang = getMutableLang();
+    Lang::DropViewSTMT &lang = getMutableLang();
     lang.name.assign(viewName);
     return *this;
 }
 
 StatementDropView &StatementDropView::ifExists(bool ifExists)
 {
-    lang::DropViewSTMT &lang = getMutableLang();
+    Lang::DropViewSTMT &lang = getMutableLang();
     lang.ifExists = ifExists;
     return *this;
 }
 
 StatementDropView &StatementDropView::withSchema(const std::string &schemaName)
 {
-    lang::DropViewSTMT &lang = getMutableLang();
+    Lang::DropViewSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

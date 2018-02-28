@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class ColumnConstraint : public DescribableWithLang<lang::ColumnConstraint> {
+class ColumnConstraint : public DescribableWithLang<Lang::ColumnConstraint> {
 public:
     ColumnConstraint();
 

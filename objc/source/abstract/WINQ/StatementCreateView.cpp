@@ -30,7 +30,7 @@ StatementCreateView::StatementCreateView()
 StatementCreateView &
 StatementCreateView::createView(const std::string &viewName)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     lang.viewName.assign(viewName);
     return *this;
 }
@@ -38,35 +38,35 @@ StatementCreateView::createView(const std::string &viewName)
 StatementCreateView &
 StatementCreateView::withSchema(const std::string &schemaName)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementCreateView &StatementCreateView::ifNotExists(bool ifNotExists)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
     return *this;
 }
 
 StatementCreateView &StatementCreateView::temp(bool temp)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     lang.temp = temp;
     return *this;
 }
 
 StatementCreateView &StatementCreateView::on(const Column &column)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     lang.columns.append(column.getLang());
     return *this;
 }
 
 StatementCreateView &StatementCreateView::on(const std::list<Column> &columns)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     for (const Column &column : columns) {
         lang.columns.append(column.getLang());
     }
@@ -75,7 +75,7 @@ StatementCreateView &StatementCreateView::on(const std::list<Column> &columns)
 
 StatementCreateView &StatementCreateView::as(const StatementSelect &selectSTMT)
 {
-    lang::CreateViewSTMT &lang = getMutableLang();
+    Lang::CreateViewSTMT &lang = getMutableLang();
     lang.selectSTMT.assign(selectSTMT.getLang());
     return *this;
 }

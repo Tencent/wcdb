@@ -21,11 +21,11 @@
 #ifndef LangCreateIndexSTMT_hpp
 #define LangCreateIndexSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class CreateIndexSTMT : public Lang {
 public:
@@ -33,16 +33,16 @@ public:
 
     bool unique;
     bool ifNotExists;
-    copy_on_write_string schemaName;
-    copy_on_write_string indexName;
-    copy_on_write_string tableName;
-    copy_on_write_lazy_lang_list<IndexedColumn> indexedColumns;
-    copy_on_write_lazy_lang<Expr> expr;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString indexName;
+    CopyOnWriteString tableName;
+    CopyOnWriteLazyLangList<IndexedColumn> indexedColumns;
+    CopyOnWriteLazyLang<Expr> expr;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

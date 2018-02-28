@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 IndexedColumn::IndexedColumn() : switcher(Switch::NotSet), order(Order::NotSet)
 {
 }
 
-copy_on_write_string IndexedColumn::SQL() const
+CopyOnWriteString IndexedColumn::SQL() const
 {
     std::string description;
     switch (switcher) {
@@ -54,6 +54,6 @@ copy_on_write_string IndexedColumn::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

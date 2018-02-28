@@ -21,7 +21,7 @@
 #ifndef Tokenize_hpp
 #define Tokenize_hpp
 
-#include <WCDB/spin.hpp>
+#include <WCDB/Spin.hpp>
 #include <sqlcipher/fts3_tokenizer.h>
 #include <sqlcipher/sqlite3.h>
 #include <stdlib.h>

@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
+#import <WCDB/Error.hpp>
 #import <WCDB/NSObject+Convertible.h>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTValue.h>
-#import <WCDB/error.hpp>
 
 namespace WCDB {
 

@@ -21,11 +21,11 @@
 #ifndef LangReindexSTMT_hpp
 #define LangReindexSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class ReindexSTMT : public Lang {
 public:
@@ -38,14 +38,14 @@ public:
     };
     Switch switcher;
 
-    copy_on_write_string collationName;
-    copy_on_write_string schemaName;
-    copy_on_write_string tableOrIndexName;
+    CopyOnWriteString collationName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableOrIndexName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

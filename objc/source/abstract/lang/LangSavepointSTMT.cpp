@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string SavepointSTMT::SQL() const
+CopyOnWriteString SavepointSTMT::SQL() const
 {
     std::string description("SAVEPOINT ");
     assert(!savepointName.empty());
@@ -32,6 +32,6 @@ copy_on_write_string SavepointSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

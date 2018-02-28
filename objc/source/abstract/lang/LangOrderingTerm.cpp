@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 OrderingTerm::OrderingTerm() : order(Order::NotSet)
 {
 }
 
-copy_on_write_string OrderingTerm::SQL() const
+CopyOnWriteString OrderingTerm::SQL() const
 {
     std::string description;
     assert(!expr.empty());
@@ -43,6 +43,6 @@ copy_on_write_string OrderingTerm::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

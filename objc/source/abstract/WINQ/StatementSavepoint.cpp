@@ -25,7 +25,7 @@ namespace WCDB {
 StatementSavepoint &
 StatementSavepoint::savepoint(const std::string &savepointName)
 {
-    lang::SavepointSTMT &lang = getMutableLang();
+    Lang::SavepointSTMT &lang = getMutableLang();
     lang.savepointName.assign(savepointName);
     return *this;
 }

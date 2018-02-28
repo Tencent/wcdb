@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class OrderingTerm : public DescribableWithLang<lang::OrderingTerm> {
+class OrderingTerm : public DescribableWithLang<Lang::OrderingTerm> {
 public:
     template <typename T, typename Enable = void>
     OrderingTerm(const T &t,

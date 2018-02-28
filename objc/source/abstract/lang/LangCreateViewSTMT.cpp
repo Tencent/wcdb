@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 CreateViewSTMT::CreateViewSTMT() : temp(false), ifNotExists(false)
 {
 }
 
-copy_on_write_string CreateViewSTMT::SQL() const
+CopyOnWriteString CreateViewSTMT::SQL() const
 {
     std::string description("CREATE ");
     if (temp) {
@@ -51,6 +51,6 @@ copy_on_write_string CreateViewSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 WithClause::WithClause() : recursive(false)
 {
 }
 
-copy_on_write_string WithClause::SQL() const
+CopyOnWriteString WithClause::SQL() const
 {
     std::string description("WITH ");
     if (recursive) {
@@ -39,7 +39,7 @@ copy_on_write_string WithClause::SQL() const
     return description;
 }
 
-copy_on_write_string WithClause::Pair::SQL() const
+CopyOnWriteString WithClause::Pair::SQL() const
 {
     assert(!cteTableName.empty());
     assert(!selectSTMT.empty());
@@ -47,6 +47,6 @@ copy_on_write_string WithClause::Pair::SQL() const
            selectSTMT.description().get() + ")";
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

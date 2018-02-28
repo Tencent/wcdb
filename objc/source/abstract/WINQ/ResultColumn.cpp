@@ -22,21 +22,21 @@
 
 namespace WCDB {
 
-const ResultColumn ResultColumn::All(lang::ResultColumn::Type::Star);
+const ResultColumn ResultColumn::All(Lang::ResultColumn::Type::Star);
 
 ResultColumn::ResultColumn(const Expression::All &all)
 {
-    setType(lang::ResultColumn::Type::Star);
+    setType(Lang::ResultColumn::Type::Star);
 }
 
-ResultColumn::ResultColumn(const lang::ResultColumn::Type &type)
+ResultColumn::ResultColumn(const Lang::ResultColumn::Type &type)
 {
-    setType(lang::ResultColumn::Type::Star);
+    setType(Lang::ResultColumn::Type::Star);
 }
 
-void ResultColumn::setType(const lang::ResultColumn::Type &type)
+void ResultColumn::setType(const Lang::ResultColumn::Type &type)
 {
-    lang::ResultColumn &lang = getMutableLang();
+    Lang::ResultColumn &lang = getMutableLang();
     lang.type = type;
 }
 
@@ -47,24 +47,24 @@ ResultColumn::ResultColumn(const Expression &expression)
 
 ResultColumn &ResultColumn::withTable(const std::string &tableName)
 {
-    lang::ResultColumn &lang = getMutableLang();
-    assert(lang.type == lang::ResultColumn::Type::Star);
+    Lang::ResultColumn &lang = getMutableLang();
+    assert(lang.type == Lang::ResultColumn::Type::Star);
     lang.tableName.assign(tableName);
     return *this;
 }
 
 ResultColumn &ResultColumn::as(const Column &columnAlias)
 {
-    lang::ResultColumn &lang = getMutableLang();
-    assert(lang.type == lang::ResultColumn::Type::Expr);
+    Lang::ResultColumn &lang = getMutableLang();
+    assert(lang.type == Lang::ResultColumn::Type::Expr);
     lang.columnAlias.assign(columnAlias.getLang());
     return *this;
 }
 
 void ResultColumn::setupWithExpression(const Expression &expression)
 {
-    lang::ResultColumn &lang = getMutableLang();
-    lang.type = lang::ResultColumn::Type::Expr;
+    Lang::ResultColumn &lang = getMutableLang();
+    lang.type = Lang::ResultColumn::Type::Expr;
     lang.expr.assign(expression.getLang());
 }
 

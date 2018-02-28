@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class ModuleArgument : public DescribableWithLang<lang::ModuleArgument> {
+class ModuleArgument : public DescribableWithLang<Lang::ModuleArgument> {
 public:
     ModuleArgument(const std::string &left, const std::string &right);
     ModuleArgument(const ColumnDef &columnDef);

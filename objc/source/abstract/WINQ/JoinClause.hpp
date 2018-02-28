@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class JoinClause : public DescribableWithLang<lang::JoinClause> {
+class JoinClause : public DescribableWithLang<Lang::JoinClause> {
 public:
     JoinClause(const TableOrSubquery &tableOrSubquery);
 
@@ -70,12 +70,12 @@ public:
 
 protected:
     void appendJoinOperand(bool natural,
-                           const lang::JoinOperator::Type &type,
+                           const Lang::JoinOperator::Type &type,
                            const TableOrSubquery &tableOrSubquery,
                            const JoinConstraint &joinConstraint);
 
     void appendJoinOperand(bool natural,
-                           const lang::JoinOperator::Type &type,
+                           const Lang::JoinOperator::Type &type,
                            const TableOrSubquery &tableOrSubquery);
 };
 

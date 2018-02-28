@@ -21,11 +21,11 @@
 #ifndef LangLiteralValue_hpp
 #define LangLiteralValue_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class LiteralValue : public Lang {
 public:
@@ -47,10 +47,10 @@ public:
         int64_t integerValue;
         double floatValue;
     };
-    copy_on_write_string stringValue;
-    copy_on_write_data dataValue;
+    CopyOnWriteString stringValue;
+    CopyOnWriteData dataValue;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static std::string stringByAntiInjecting(const std::string &origin);
@@ -58,7 +58,7 @@ protected:
     stringByAntiInjecting(const std::vector<unsigned char> &origin);
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

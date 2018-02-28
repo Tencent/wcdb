@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class JoinConstraint : public DescribableWithLang<lang::JoinConstraint> {
+class JoinConstraint : public DescribableWithLang<Lang::JoinConstraint> {
 public:
     JoinConstraint();
     JoinConstraint &on(const Expression &expression);

@@ -29,14 +29,14 @@ StatementDropTable::StatementDropTable()
 
 StatementDropTable &StatementDropTable::dropTable(const std::string &tableName)
 {
-    lang::DropTableSTMT &lang = getMutableLang();
+    Lang::DropTableSTMT &lang = getMutableLang();
     lang.name.assign(tableName);
     return *this;
 }
 
 StatementDropTable &StatementDropTable::ifExists(bool ifExists)
 {
-    lang::DropTableSTMT &lang = getMutableLang();
+    Lang::DropTableSTMT &lang = getMutableLang();
     lang.ifExists = ifExists;
     return *this;
 }
@@ -44,7 +44,7 @@ StatementDropTable &StatementDropTable::ifExists(bool ifExists)
 StatementDropTable &
 StatementDropTable::withSchema(const std::string &schemaName)
 {
-    lang::DropTableSTMT &lang = getMutableLang();
+    Lang::DropTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

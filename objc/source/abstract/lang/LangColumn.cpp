@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string Column::SQL() const
+CopyOnWriteString Column::SQL() const
 {
     return name;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

@@ -29,29 +29,29 @@ IndexedColumn::IndexedColumn(const Expression &expression)
 
 IndexedColumn::IndexedColumn(const Column &column)
 {
-    lang::IndexedColumn &lang = getMutableLang();
-    lang.switcher = lang::IndexedColumn::Switch::Column;
+    Lang::IndexedColumn &lang = getMutableLang();
+    lang.switcher = Lang::IndexedColumn::Switch::Column;
     lang.column.assign(column.getLang());
 }
 
 IndexedColumn &IndexedColumn::withCollate(const std::string &collationName)
 {
-    lang::IndexedColumn &lang = getMutableLang();
+    Lang::IndexedColumn &lang = getMutableLang();
     lang.collationName.assign(collationName);
     return *this;
 }
 
 IndexedColumn &IndexedColumn::withOrder(const Order &order)
 {
-    lang::IndexedColumn &lang = getMutableLang();
+    Lang::IndexedColumn &lang = getMutableLang();
     lang.order = order;
     return *this;
 }
 
 void IndexedColumn::setupWithExpression(const Expression &expression)
 {
-    lang::IndexedColumn &lang = getMutableLang();
-    lang.switcher = lang::IndexedColumn::Switch::Expr;
+    Lang::IndexedColumn &lang = getMutableLang();
+    lang.switcher = Lang::IndexedColumn::Switch::Expr;
     lang.expr.assign(expression.getLang());
 }
 

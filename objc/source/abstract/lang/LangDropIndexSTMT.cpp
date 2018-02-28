@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 const char *DropIndexSTMT::getInternalName() const
 {
     return "INDEX";
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

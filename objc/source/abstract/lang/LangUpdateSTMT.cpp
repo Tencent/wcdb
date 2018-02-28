@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 UpdateSTMT::UpdateSTMT() : type(Type::NotSet), offset(false)
 {
 }
 
-copy_on_write_string UpdateSTMT::SQL() const
+CopyOnWriteString UpdateSTMT::SQL() const
 {
     std::string description;
     if (!withClause.empty()) {
@@ -85,11 +85,11 @@ constexpr const char *UpdateSTMT::TypeName(const Type &type)
     }
 }
 
-copy_on_write_string UpdateSTMT::KeyValue::SQL() const
+CopyOnWriteString UpdateSTMT::KeyValue::SQL() const
 {
     return keys.description().get() + " = " + value.description().get();
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

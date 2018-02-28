@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string AttachSTMT::SQL() const
+CopyOnWriteString AttachSTMT::SQL() const
 {
     std::string description("ATTACH ");
     assert(!expr.empty());
@@ -34,6 +34,6 @@ copy_on_write_string AttachSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

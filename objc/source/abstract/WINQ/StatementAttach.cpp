@@ -29,14 +29,14 @@ Statement::Type StatementAttach::getType() const
 
 StatementAttach &StatementAttach::attach(const Expression &expression)
 {
-    lang::AttachSTMT &lang = getMutableLang();
+    Lang::AttachSTMT &lang = getMutableLang();
     lang.expr.assign(expression.getLang());
     return *this;
 }
 
 StatementAttach &StatementAttach::as(const std::string &schemaName)
 {
-    lang::AttachSTMT &lang = getMutableLang();
+    Lang::AttachSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }

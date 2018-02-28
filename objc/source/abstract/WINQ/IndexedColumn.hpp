@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class IndexedColumn : public DescribableWithLang<lang::IndexedColumn> {
+class IndexedColumn : public DescribableWithLang<Lang::IndexedColumn> {
 public:
     template <typename T, typename Enable = void>
     IndexedColumn(const T &t,

@@ -18,19 +18,19 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
-#include <WCDB/utility.hpp>
+#include <WCDB/Lang.h>
+#include <WCDB/Utility.hpp>
 #include <sstream>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 LiteralValue::LiteralValue() : type(Type::NotSet), integerValue(0)
 {
 }
 
-copy_on_write_string LiteralValue::SQL() const
+CopyOnWriteString LiteralValue::SQL() const
 {
     std::string description;
     switch (type) {
@@ -83,6 +83,6 @@ LiteralValue::stringByAntiInjecting(const std::vector<unsigned char> &origin)
     return "'" + stringByReplacingOccurrencesOfString(str, "'", "''") + "'";
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

@@ -21,20 +21,20 @@
 #ifndef LangSelectSTMT_hpp
 #define LangSelectSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class SelectSTMT : public CRUDLang {
 public:
     SelectSTMT();
 
     bool recursive;
-    copy_on_write_lazy_lang_list<CommonTableExpression> commonTableExpressions;
+    CopyOnWriteLazyLangList<CommonTableExpression> commonTableExpressions;
 
-    copy_on_write_lazy_lang<SelectCore> selectCore;
+    CopyOnWriteLazyLang<SelectCore> selectCore;
 
     class Compound : public Lang {
     public:
@@ -48,26 +48,26 @@ public:
             Except,
         };
         Operator compoundOperator;
-        copy_on_write_lazy_lang<SelectCore> selectCore;
+        CopyOnWriteLazyLang<SelectCore> selectCore;
 
-        virtual copy_on_write_string SQL() const override;
+        virtual CopyOnWriteString SQL() const override;
 
     protected:
         static constexpr const char *
         OperatorName(const Operator &compoundOperator);
     };
-    copy_on_write_lazy_lang_list<Compound> compoundCores;
+    CopyOnWriteLazyLangList<Compound> compoundCores;
 
-    copy_on_write_lazy_lang_list<OrderingTerm> orderingTerms;
+    CopyOnWriteLazyLangList<OrderingTerm> orderingTerms;
 
-    copy_on_write_lazy_lang<Expr> limit;
+    CopyOnWriteLazyLang<Expr> limit;
     bool offset;
-    copy_on_write_lazy_lang<Expr> limitParameter;
+    CopyOnWriteLazyLang<Expr> limitParameter;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

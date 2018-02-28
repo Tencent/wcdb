@@ -24,31 +24,31 @@ namespace WCDB {
 
 RaiseFunction &RaiseFunction::withIgnore()
 {
-    lang::RaiseFunction &lang = getMutableLang();
-    lang.type = lang::RaiseFunction::Type::Ignore;
+    Lang::RaiseFunction &lang = getMutableLang();
+    lang.type = Lang::RaiseFunction::Type::Ignore;
     return *this;
 }
 
 RaiseFunction &RaiseFunction::withRollback(const std::string &errorMessage)
 {
-    lang::RaiseFunction &lang = getMutableLang();
-    lang.type = lang::RaiseFunction::Type::Rollback;
+    Lang::RaiseFunction &lang = getMutableLang();
+    lang.type = Lang::RaiseFunction::Type::Rollback;
     lang.errorMessage.assign(errorMessage);
     return *this;
 }
 
 RaiseFunction &RaiseFunction::withAbort(const std::string &errorMessage)
 {
-    lang::RaiseFunction &lang = getMutableLang();
-    lang.type = lang::RaiseFunction::Type::Abort;
+    Lang::RaiseFunction &lang = getMutableLang();
+    lang.type = Lang::RaiseFunction::Type::Abort;
     lang.errorMessage.assign(errorMessage);
     return *this;
 }
 
 RaiseFunction &RaiseFunction::withFail(const std::string &errorMessage)
 {
-    lang::RaiseFunction &lang = getMutableLang();
-    lang.type = lang::RaiseFunction::Type::Fail;
+    Lang::RaiseFunction &lang = getMutableLang();
+    lang.type = Lang::RaiseFunction::Type::Fail;
     lang.errorMessage.assign(errorMessage);
     return *this;
 }

@@ -21,25 +21,25 @@
 #ifndef LangColumnDef_hpp
 #define LangColumnDef_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class ColumnDef : public Lang {
 public:
     ColumnDef();
 
-    copy_on_write_lazy_lang<Column> column;
+    CopyOnWriteLazyLang<Column> column;
     bool typed;
     ColumnType type;
-    copy_on_write_lazy_lang_list<ColumnConstraint> columnConstraints;
+    CopyOnWriteLazyLangList<ColumnConstraint> columnConstraints;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

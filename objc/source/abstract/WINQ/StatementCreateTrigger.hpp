@@ -27,7 +27,7 @@
 namespace WCDB {
 
 class StatementCreateTrigger
-    : public StatementWithLang<lang::CreateTriggerSTMT> {
+    : public StatementWithLang<Lang::CreateTriggerSTMT> {
 public:
     StatementCreateTrigger();
     StatementCreateTrigger &createTrigger(const std::string &triggerName);

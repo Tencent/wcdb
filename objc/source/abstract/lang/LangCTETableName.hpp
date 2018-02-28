@@ -21,21 +21,21 @@
 #ifndef LangCTETableName_hpp
 #define LangCTETableName_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class CTETableName : public Lang {
 public:
-    copy_on_write_string tableName;
-    copy_on_write_lazy_lang_list<Column> columns;
+    CopyOnWriteString tableName;
+    CopyOnWriteLazyLangList<Column> columns;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

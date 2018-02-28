@@ -21,11 +21,11 @@
 #ifndef LangTableOrSubquery_hpp
 #define LangTableOrSubquery_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class TableOrSubqueryBase : public Lang {
 };
@@ -39,50 +39,50 @@ class TableOrSubqueryTable : public TableOrSubqueryBase {
 public:
     TableOrSubqueryTable();
 
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
-    copy_on_write_string tableAlias;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
+    CopyOnWriteString tableAlias;
     enum class IndexSwitch : int {
         NotSet,
         Indexed,
         NotIndexed,
     };
     IndexSwitch indexSwitcher;
-    copy_on_write_string indexName;
+    CopyOnWriteString indexName;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class TableOrSubqueryTableFunction : public TableOrSubqueryBase {
 public:
-    copy_on_write_string schemaName;
-    copy_on_write_string tableFunctionName;
-    copy_on_write_string tableAlias;
-    copy_on_write_lazy_lang_list<Expr> exprs;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableFunctionName;
+    CopyOnWriteString tableAlias;
+    CopyOnWriteLazyLangList<Expr> exprs;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class TableOrSubqueryJoinClause : public TableOrSubqueryBase {
 public:
-    copy_on_write_lazy_lang<JoinClause> joinClause;
+    CopyOnWriteLazyLang<JoinClause> joinClause;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class TableOrSubquerySelect : public TableOrSubqueryBase {
 public:
-    copy_on_write_lazy_lang<SelectSTMT> selectSTMT;
-    copy_on_write_string tableAlias;
+    CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
+    CopyOnWriteString tableAlias;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class TableOrSubqueryList : public TableOrSubqueryBase {
 public:
-    copy_on_write_lazy_lang_list<TableOrSubqueryBase> tableOrSubquerys;
+    CopyOnWriteLazyLangList<TableOrSubqueryBase> tableOrSubquerys;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
 class TableOrSubquery : public TableOrSubqueryBase {
@@ -98,18 +98,17 @@ public:
         List,
     };
     Switch switcher;
-    copy_on_write_lazy_lang<TableOrSubqueryTable> tableOrSubqueryTable;
-    copy_on_write_lazy_lang<TableOrSubqueryTableFunction>
+    CopyOnWriteLazyLang<TableOrSubqueryTable> tableOrSubqueryTable;
+    CopyOnWriteLazyLang<TableOrSubqueryTableFunction>
         tableOrSubqueryTableFunction;
-    copy_on_write_lazy_lang<TableOrSubqueryJoinClause>
-        tableOrSubqueryJoinClause;
-    copy_on_write_lazy_lang<TableOrSubquerySelect> tableOrSubquerySelect;
-    copy_on_write_lazy_lang<TableOrSubqueryList> tableOrSubqueryList;
+    CopyOnWriteLazyLang<TableOrSubqueryJoinClause> tableOrSubqueryJoinClause;
+    CopyOnWriteLazyLang<TableOrSubquerySelect> tableOrSubquerySelect;
+    CopyOnWriteLazyLang<TableOrSubqueryList> tableOrSubqueryList;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

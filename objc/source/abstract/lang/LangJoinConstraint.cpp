@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 JoinConstraint::JoinConstraint() : type(Type::NotSet)
 {
 }
 
-copy_on_write_string JoinConstraint::SQL() const
+CopyOnWriteString JoinConstraint::SQL() const
 {
     std::string description;
     switch (type) {
@@ -46,6 +46,6 @@ copy_on_write_string JoinConstraint::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

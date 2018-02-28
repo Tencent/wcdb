@@ -29,24 +29,24 @@ JoinConstraint::JoinConstraint()
 
 JoinConstraint &JoinConstraint::on(const Expression &expression)
 {
-    lang::JoinConstraint &lang = getMutableLang();
-    lang.type = lang::JoinConstraint::Type::On;
+    Lang::JoinConstraint &lang = getMutableLang();
+    lang.type = Lang::JoinConstraint::Type::On;
     lang.expr.assign(expression.getLang());
     return *this;
 }
 
 JoinConstraint &JoinConstraint::usingColumn(const Column &column)
 {
-    lang::JoinConstraint &lang = getMutableLang();
-    lang.type = lang::JoinConstraint::Type::Using;
+    Lang::JoinConstraint &lang = getMutableLang();
+    lang.type = Lang::JoinConstraint::Type::Using;
     lang.columns.append(column.getLang());
     return *this;
 }
 
 JoinConstraint &JoinConstraint::usingColumns(const std::list<Column> columns)
 {
-    lang::JoinConstraint &lang = getMutableLang();
-    lang.type = lang::JoinConstraint::Type::Using;
+    Lang::JoinConstraint &lang = getMutableLang();
+    lang.type = Lang::JoinConstraint::Type::Using;
     for (const Column &column : columns) {
         lang.columns.append(column.getLang());
     }

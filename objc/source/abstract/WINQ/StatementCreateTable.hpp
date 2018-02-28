@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementCreateTable : public StatementWithLang<lang::CreateTableSTMT> {
+class StatementCreateTable : public StatementWithLang<Lang::CreateTableSTMT> {
 
 public:
     StatementCreateTable();

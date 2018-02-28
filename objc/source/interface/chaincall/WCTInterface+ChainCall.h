@@ -19,7 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTDeclare.h>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTInterface.h>
 
 @interface WCTInterface (ChainCall)

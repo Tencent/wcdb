@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementDropView : public StatementWithLang<lang::DropViewSTMT> {
+class StatementDropView : public StatementWithLang<Lang::DropViewSTMT> {
 
 public:
     StatementDropView();

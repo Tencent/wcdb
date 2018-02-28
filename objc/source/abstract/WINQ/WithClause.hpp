@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class WithClause : public DescribableWithLang<lang::WithClause> {
+class WithClause : public DescribableWithLang<Lang::WithClause> {
 public:
     WithClause &with(const CTETableName &cteTableName,
                      const StatementSelect &selectSTMT);

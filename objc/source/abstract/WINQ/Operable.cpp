@@ -93,12 +93,11 @@ Expression FunctionOperable::sum(bool distinct) const
     return function("sum", distinct);
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation>
-Operable::unaryOperation(
-    const lang::ExprUnaryOperation::Operator &unaryOperator) const
+Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> Operable::unaryOperation(
+    const Lang::ExprUnaryOperation::Operator &unaryOperator) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation> cowLang;
-    lang::ExprUnaryOperation &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> cowLang;
+    Lang::ExprUnaryOperation &lang = cowLang.get_or_copy();
     lang.expr.assign(getExpressionLang());
     lang.unaryOperator = unaryOperator;
     return cowLang;
@@ -106,31 +105,30 @@ Operable::unaryOperation(
 
 Expression Operable::operator-() const
 {
-    return unaryOperation(lang::ExprUnaryOperation::Operator::Negative);
+    return unaryOperation(Lang::ExprUnaryOperation::Operator::Negative);
 }
 
 Expression Operable::operator+() const
 {
-    return unaryOperation(lang::ExprUnaryOperation::Operator::Positive);
+    return unaryOperation(Lang::ExprUnaryOperation::Operator::Positive);
 }
 
 Expression Operable::operator!() const
 {
-    return unaryOperation(lang::ExprUnaryOperation::Operator::Not);
+    return unaryOperation(Lang::ExprUnaryOperation::Operator::Not);
 }
 
 Expression Operable::operator~() const
 {
-    return unaryOperation(lang::ExprUnaryOperation::Operator::Tilde);
+    return unaryOperation(Lang::ExprUnaryOperation::Operator::Tilde);
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation>
-Operable::binaryOperation(
-    const lang::ExprBinaryOperation::Operator &binaryOperator,
+Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation> Operable::binaryOperation(
+    const Lang::ExprBinaryOperation::Operator &binaryOperator,
     const Expression &operand) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation> cowLang;
-    lang::ExprBinaryOperation &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation> cowLang;
+    Lang::ExprBinaryOperation &lang = cowLang.get_or_copy();
     lang.left.assign(getExpressionLang());
     lang.right.assign(operand.getLang());
     lang.binaryOperator = binaryOperator;
@@ -139,163 +137,163 @@ Operable::binaryOperation(
 
 Expression Operable::concat(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Concatenate,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Concatenate,
                            operand);
 }
 
 Expression Operable::operator*(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Multiply,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Multiply,
                            operand);
 }
 
 Expression Operable::operator/(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Divide,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Divide,
                            operand);
 }
 
 Expression Operable::operator%(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Modulo,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Modulo,
                            operand);
 }
 
 Expression Operable::operator+(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Plus, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Plus, operand);
 }
 
 Expression Operable::operator-(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Minus, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Minus, operand);
 }
 
 Expression Operable::operator<<(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::LeftShift,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::LeftShift,
                            operand);
 }
 
 Expression Operable::operator>>(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::RightShift,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::RightShift,
                            operand);
 }
 
 Expression Operable::operator&(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::BitwiseAnd,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::BitwiseAnd,
                            operand);
 }
 
 Expression Operable::operator|(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::BitwiseOr,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::BitwiseOr,
                            operand);
 }
 
 Expression Operable::operator<(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Less, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Less, operand);
 }
 
 Expression Operable::operator<=(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::LessOrEqual,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::LessOrEqual,
                            operand);
 }
 
 Expression Operable::operator>(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Greater,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Greater,
                            operand);
 }
 
 Expression Operable::operator>=(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::GreaterOrEqual,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::GreaterOrEqual,
                            operand);
 }
 
 Expression Operable::operator==(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Equal, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Equal, operand);
 }
 
 Expression Operable::operator!=(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::NotEqual,
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::NotEqual,
                            operand);
 }
 
 Expression Operable::is(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Is, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Is, operand);
 }
 
 Expression Operable::isNot(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::IsNot, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::IsNot, operand);
 }
 
 Expression Operable::operator&&(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::And, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::And, operand);
 }
 
 Expression Operable::operator||(const Expression &operand) const
 {
-    return binaryOperation(lang::ExprBinaryOperation::Operator::Or, operand);
+    return binaryOperation(Lang::ExprBinaryOperation::Operator::Or, operand);
 }
 
 Expression Operable::like(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Like, expr, false);
+    return pattern(Lang::ExprPattern::Type::Like, expr, false);
 }
 
 Expression Operable::glob(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Glob, expr, false);
+    return pattern(Lang::ExprPattern::Type::Glob, expr, false);
 }
 
 Expression Operable::regexp(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Regexp, expr, false);
+    return pattern(Lang::ExprPattern::Type::Regexp, expr, false);
 }
 
 Expression Operable::match(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Match, expr, false);
+    return pattern(Lang::ExprPattern::Type::Match, expr, false);
 }
 
 Expression Operable::notLike(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Like, expr, true);
+    return pattern(Lang::ExprPattern::Type::Like, expr, true);
 }
 
 Expression Operable::notGlob(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Glob, expr, true);
+    return pattern(Lang::ExprPattern::Type::Glob, expr, true);
 }
 
 Expression Operable::notRegexp(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Regexp, expr, true);
+    return pattern(Lang::ExprPattern::Type::Regexp, expr, true);
 }
 
 Expression Operable::notMatch(const Expression &expr) const
 {
-    return pattern(lang::ExprPattern::Type::Match, expr, true);
+    return pattern(Lang::ExprPattern::Type::Match, expr, true);
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprPattern>
-Operable::pattern(const lang::ExprPattern::Type &type,
+Lang::CopyOnWriteLazyLang<Lang::ExprPattern>
+Operable::pattern(const Lang::ExprPattern::Type &type,
                   const Expression &operand,
                   bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprPattern> cowLang;
-    lang::ExprPattern &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprPattern> cowLang;
+    Lang::ExprPattern &lang = cowLang.get_or_copy();
     lang.isNot = isNot;
     lang.type = type;
     lang.left.assign(getExpressionLang());
@@ -303,10 +301,10 @@ Operable::pattern(const lang::ExprPattern::Type &type,
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprNull> Operable::null(bool isNull) const
+Lang::CopyOnWriteLazyLang<Lang::ExprNull> Operable::null(bool isNull) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprNull> cowLang;
-    lang::ExprNull &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprNull> cowLang;
+    Lang::ExprNull &lang = cowLang.get_or_copy();
     lang.isNull = isNull;
     lang.expr.assign(getExpressionLang());
     return cowLang;
@@ -322,11 +320,11 @@ Expression Operable::notNull() const
     return null(false);
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprBetween> Operable::between(
+Lang::CopyOnWriteLazyLang<Lang::ExprBetween> Operable::between(
     const Expression &left, const Expression &right, bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprBetween> cowLang;
-    lang::ExprBetween &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprBetween> cowLang;
+    Lang::ExprBetween &lang = cowLang.get_or_copy();
     lang.isNot = isNot;
     lang.expr.assign(getExpressionLang());
     lang.left.assign(left.getLang());
@@ -484,46 +482,46 @@ Operable::notInFunction(const std::string &schemaName,
     return inFunction(schemaName, functionName, expressions, true);
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn> Operable::in(bool isNot) const
+Lang::CopyOnWriteLazyLang<Lang::ExprIn> Operable::in(bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::NotSet;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::NotSet;
     lang.expr.assign(getExpressionLang());
     lang.isNot = isNot;
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::in(const StatementSelect &selectSTMT, bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Select;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Select;
     lang.expr.assign(getExpressionLang());
     lang.selectSTMT.assign(selectSTMT.getLang());
     lang.isNot = isNot;
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::in(const Expression &expression, bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Expr;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Expr;
     lang.expr.assign(getExpressionLang());
     lang.exprs.append(expression.getLang());
     lang.isNot = isNot;
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::in(const std::list<Expression> &expressions, bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Expr;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Expr;
     lang.expr.assign(getExpressionLang());
     for (const Expression &expression : expressions) {
         lang.exprs.append(expression.getLang());
@@ -532,26 +530,26 @@ Operable::in(const std::list<Expression> &expressions, bool isNot) const
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inTable(const std::string &tableName, bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Table;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Table;
     lang.expr.assign(getExpressionLang());
     lang.tableNameOrFunction.assign(tableName);
     lang.isNot = isNot;
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inTable(const std::string &schemaName,
                   const std::string &tableName,
                   bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Table;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Table;
     lang.expr.assign(getExpressionLang());
     lang.schemaName.assign(schemaName);
     lang.tableNameOrFunction.assign(tableName);
@@ -559,26 +557,26 @@ Operable::inTable(const std::string &schemaName,
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inFunction(const std::string &functionName, bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Function;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     lang.tableNameOrFunction.assign(functionName);
     lang.isNot = isNot;
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inFunction(const std::string &schemaName,
                      const std::string &functionName,
                      bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Function;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     lang.schemaName.assign(schemaName);
     lang.tableNameOrFunction.assign(functionName);
@@ -586,14 +584,14 @@ Operable::inFunction(const std::string &schemaName,
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inFunction(const std::string &functionName,
                      const Expression &parameter,
                      bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Function;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     lang.tableNameOrFunction.assign(functionName);
     lang.exprs.append(parameter.getLang());
@@ -601,15 +599,15 @@ Operable::inFunction(const std::string &functionName,
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inFunction(const std::string &schemaName,
                      const std::string &functionName,
                      const Expression &parameter,
                      bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Function;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     lang.schemaName.assign(schemaName);
     lang.tableNameOrFunction.assign(functionName);
@@ -618,14 +616,14 @@ Operable::inFunction(const std::string &schemaName,
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inFunction(const std::string &functionName,
                      const std::list<Expression> &parameters,
                      bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Function;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     for (const Expression &expression : parameters) {
         lang.exprs.append(expression.getLang());
@@ -635,15 +633,15 @@ Operable::inFunction(const std::string &functionName,
     return cowLang;
 }
 
-lang::copy_on_write_lazy_lang<lang::ExprIn>
+Lang::CopyOnWriteLazyLang<Lang::ExprIn>
 Operable::inFunction(const std::string &schemaName,
                      const std::string &functionName,
                      const std::list<Expression> &parameters,
                      bool isNot) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprIn> cowLang;
-    lang::ExprIn &lang = cowLang.get_or_copy();
-    lang.switcher = lang::ExprIn::Switch::Function;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
+    Lang::ExprIn &lang = cowLang.get_or_copy();
+    lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     lang.schemaName.assign(schemaName);
     lang.tableNameOrFunction.assign(functionName);
@@ -656,8 +654,8 @@ Operable::inFunction(const std::string &schemaName,
 
 Expression Operable::cast(const ColumnType &columnType) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprCast> cowLang;
-    lang::ExprCast &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprCast> cowLang;
+    Lang::ExprCast &lang = cowLang.get_or_copy();
     lang.expr.assign(getExpressionLang());
     lang.type = columnType;
     return cowLang;
@@ -665,8 +663,8 @@ Expression Operable::cast(const ColumnType &columnType) const
 
 Expression Operable::collate(const std::string &collationName) const
 {
-    lang::copy_on_write_lazy_lang<lang::ExprCollate> cowLang;
-    lang::ExprCollate &lang = cowLang.get_or_copy();
+    Lang::CopyOnWriteLazyLang<Lang::ExprCollate> cowLang;
+    Lang::ExprCollate &lang = cowLang.get_or_copy();
     lang.collationName.assign(collationName);
     lang.expr.assign(getExpressionLang());
     return cowLang;

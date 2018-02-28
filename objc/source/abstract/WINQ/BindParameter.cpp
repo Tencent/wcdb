@@ -26,21 +26,21 @@ const BindParameter BindParameter::default_;
 
 BindParameter::BindParameter()
 {
-    lang::BindParameter &lang = getMutableLang();
-    lang.type = lang::BindParameter::Type::QuestionMark;
+    Lang::BindParameter &lang = getMutableLang();
+    lang.type = Lang::BindParameter::Type::QuestionMark;
 }
 
 BindParameter::BindParameter(int n)
 {
-    lang::BindParameter &lang = getMutableLang();
-    lang.type = lang::BindParameter::Type::QuestionMarkWithNumber;
+    Lang::BindParameter &lang = getMutableLang();
+    lang.type = Lang::BindParameter::Type::QuestionMarkWithNumber;
     lang.n = n;
 }
 
 BindParameter::BindParameter(const std::string &name, const Type &type)
 {
-    lang::BindParameter &lang = getMutableLang();
-    lang.type = (lang::BindParameter::Type) type;
+    Lang::BindParameter &lang = getMutableLang();
+    lang.type = (Lang::BindParameter::Type) type;
     lang.name.assign(name);
 }
 

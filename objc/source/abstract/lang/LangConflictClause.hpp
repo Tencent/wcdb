@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 enum class ConflictClause {
     NotSet,
@@ -54,7 +54,7 @@ LangConflictClauseName(const ConflictClause &conflictClause)
     }
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

@@ -21,27 +21,27 @@
 #ifndef LangCreateVirtualTableSTMT_hpp
 #define LangCreateVirtualTableSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class CreateVirtualTableSTMT : public Lang {
 public:
     CreateVirtualTableSTMT();
 
     bool ifNotExists;
-    copy_on_write_string schemaName;
-    copy_on_write_string tableName;
-    copy_on_write_string moduleName;
+    CopyOnWriteString schemaName;
+    CopyOnWriteString tableName;
+    CopyOnWriteString moduleName;
 
-    copy_on_write_lazy_lang_list<ModuleArgument> moduleArguments;
+    CopyOnWriteLazyLangList<ModuleArgument> moduleArguments;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

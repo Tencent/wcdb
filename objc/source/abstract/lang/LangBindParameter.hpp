@@ -21,11 +21,11 @@
 #ifndef LangBindParameter_hpp
 #define LangBindParameter_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class BindParameter : public Lang {
 public:
@@ -40,12 +40,12 @@ public:
     };
     Type type;
     int n;
-    copy_on_write_string name;
+    CopyOnWriteString name;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

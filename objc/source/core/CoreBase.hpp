@@ -24,7 +24,7 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/RecyclableStatement.hpp>
-#include <WCDB/utility.hpp>
+#include <WCDB/Utility.hpp>
 
 namespace WCDB {
 

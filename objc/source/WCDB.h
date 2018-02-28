@@ -25,9 +25,9 @@
 #error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.
 #endif
 
+#import <WCDB/Abstract.h>
 #import <WCDB/NSObject+Convertible.h>
 #import <WCDB/WCTRedirectable.h>
-#import <WCDB/abstract.h>
 
 #import <WCDB/WCTMaster+WCTTableCoding.h>
 #import <WCDB/WCTMaster.h>

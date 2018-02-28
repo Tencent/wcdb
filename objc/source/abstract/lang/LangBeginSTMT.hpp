@@ -21,11 +21,11 @@
 #ifndef LangBeginSTMT_hpp
 #define LangBeginSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class BeginSTMT : public Lang {
 public:
@@ -38,13 +38,13 @@ public:
     };
     Type type;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

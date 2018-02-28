@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string VacuumSTMT::SQL() const
+CopyOnWriteString VacuumSTMT::SQL() const
 {
     std::string description("VACUUM");
     if (!schemaName.empty()) {
@@ -33,6 +33,6 @@ copy_on_write_string VacuumSTMT::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

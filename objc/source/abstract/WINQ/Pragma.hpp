@@ -111,7 +111,7 @@ public:
 
 protected:
     Pragma(const std::string &name);
-    copy_on_write_string m_name;
+    CopyOnWriteString m_name;
 };
 
 } // namespace WCDB

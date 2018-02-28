@@ -29,7 +29,7 @@ StatementDropIndex::StatementDropIndex()
 
 StatementDropIndex &StatementDropIndex::dropIndex(const std::string &indexName)
 {
-    lang::DropIndexSTMT &lang = getMutableLang();
+    Lang::DropIndexSTMT &lang = getMutableLang();
     lang.name.assign(indexName);
     return *this;
 }
@@ -37,14 +37,14 @@ StatementDropIndex &StatementDropIndex::dropIndex(const std::string &indexName)
 StatementDropIndex &
 StatementDropIndex::withSchema(const std::string &schemaName)
 {
-    lang::DropIndexSTMT &lang = getMutableLang();
+    Lang::DropIndexSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
     return *this;
 }
 
 StatementDropIndex &StatementDropIndex::ifExists(bool ifExists)
 {
-    lang::DropIndexSTMT &lang = getMutableLang();
+    Lang::DropIndexSTMT &lang = getMutableLang();
     lang.ifExists = ifExists;
     return *this;
 }

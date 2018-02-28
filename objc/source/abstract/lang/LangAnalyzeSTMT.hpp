@@ -21,21 +21,21 @@
 #ifndef LangAnalyzeSTMT_hpp
 #define LangAnalyzeSTMT_hpp
 
-#include <WCDB/lang_common.h>
+#include <WCDB/LangCommon.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 class AnalyzeSTMT : public Lang {
 public:
-    copy_on_write_string first;
-    copy_on_write_string second;
+    CopyOnWriteString first;
+    CopyOnWriteString second;
 
-    virtual copy_on_write_string SQL() const override;
+    virtual CopyOnWriteString SQL() const override;
 };
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB
 

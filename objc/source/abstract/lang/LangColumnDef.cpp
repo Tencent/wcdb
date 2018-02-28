@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 ColumnDef::ColumnDef() : typed(false), type(ColumnType::Null)
 {
 }
 
-copy_on_write_string ColumnDef::SQL() const
+CopyOnWriteString ColumnDef::SQL() const
 {
     std::string description;
     assert(!column.empty());
@@ -43,6 +43,6 @@ copy_on_write_string ColumnDef::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

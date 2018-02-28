@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
-copy_on_write_string JoinClause::SQL() const
+CopyOnWriteString JoinClause::SQL() const
 {
     std::string description;
     assert(!tableOrSubquery.empty());
@@ -38,7 +38,7 @@ copy_on_write_string JoinClause::SQL() const
     return description;
 }
 
-copy_on_write_string JoinClause::Operand::SQL() const
+CopyOnWriteString JoinClause::Operand::SQL() const
 {
     std::string description;
     assert(!joinOperator.empty());
@@ -52,8 +52,8 @@ copy_on_write_string JoinClause::Operand::SQL() const
 }
 
 template <>
-copy_on_write_string
-copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription() const
+CopyOnWriteString
+CopyOnWriteLazyLangList<JoinClause::Operand>::calculatedDescription() const
 {
     std::string description;
     bool space = false;
@@ -69,6 +69,6 @@ copy_on_write_lazy_lang_list<JoinClause::Operand>::calculatedDescription() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

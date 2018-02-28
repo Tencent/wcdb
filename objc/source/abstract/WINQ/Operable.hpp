@@ -148,59 +148,58 @@ public:
                                 bool distinct = false) const override;
 
 protected:
-    virtual lang::copy_on_write_lazy_lang<lang::Expr>
-    getExpressionLang() const = 0;
+    virtual Lang::CopyOnWriteLazyLang<Lang::Expr> getExpressionLang() const = 0;
 
 private:
-    lang::copy_on_write_lazy_lang<lang::ExprUnaryOperation> unaryOperation(
-        const lang::ExprUnaryOperation::Operator &unaryOperator) const;
-    lang::copy_on_write_lazy_lang<lang::ExprBinaryOperation>
-    binaryOperation(const lang::ExprBinaryOperation::Operator &binaryOperator,
+    Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> unaryOperation(
+        const Lang::ExprUnaryOperation::Operator &unaryOperator) const;
+    Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation>
+    binaryOperation(const Lang::ExprBinaryOperation::Operator &binaryOperator,
                     const Expression &operand) const;
-    lang::copy_on_write_lazy_lang<lang::ExprPattern>
-    pattern(const lang::ExprPattern::Type &type,
+    Lang::CopyOnWriteLazyLang<Lang::ExprPattern>
+    pattern(const Lang::ExprPattern::Type &type,
             const Expression &operand,
             bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprNull> null(bool isNull) const;
-    lang::copy_on_write_lazy_lang<lang::ExprBetween>
+    Lang::CopyOnWriteLazyLang<Lang::ExprNull> null(bool isNull) const;
+    Lang::CopyOnWriteLazyLang<Lang::ExprBetween>
     between(const Expression &left, const Expression &right, bool isNot) const;
 
-    lang::copy_on_write_lazy_lang<lang::ExprIn> in(bool isNot) const;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> in(bool isNot) const;
 
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     in(const StatementSelect &selectSTMT, bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn> in(const Expression &expression,
-                                                   bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> in(const Expression &expression,
+                                               bool isNot) const;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     in(const std::list<Expression> &expressions, bool isNot) const;
 
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inTable(const std::string &tableName, bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inTable(const std::string &schemaName,
             const std::string &tableName,
             bool isNot) const;
 
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &functionName, bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &schemaName,
                const std::string &functionName,
                bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &functionName,
                const Expression &parameter,
                bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &schemaName,
                const std::string &functionName,
                const Expression &parameter,
                bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &functionName,
                const std::list<Expression> &parameters,
                bool isNot) const;
-    lang::copy_on_write_lazy_lang<lang::ExprIn>
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &schemaName,
                const std::string &functionName,
                const std::list<Expression> &parameters,

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/lang.h>
+#include <WCDB/Lang.h>
 
 namespace WCDB {
 
-namespace lang {
+namespace Lang {
 
 ResultColumn::ResultColumn() : type(Type::NotSet)
 {
 }
 
-copy_on_write_string ResultColumn::SQL() const
+CopyOnWriteString ResultColumn::SQL() const
 {
     std::string description;
     switch (type) {
@@ -52,6 +52,6 @@ copy_on_write_string ResultColumn::SQL() const
     return description;
 }
 
-} // namespace lang
+} // namespace Lang
 
 } // namespace WCDB

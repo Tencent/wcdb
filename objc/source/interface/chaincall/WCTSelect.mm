@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Utility.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCoding.h>
@@ -27,7 +28,6 @@
 #import <WCDB/WCTSelect+Private.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTSelectBase+Private.h>
-#import <WCDB/utility.hpp>
 
 @implementation WCTSelect {
     WCTPropertyList _properties;

@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class StatementRollback : public StatementWithLang<lang::RollbackSTMT> {
+class StatementRollback : public StatementWithLang<Lang::RollbackSTMT> {
 
 public:
     StatementRollback &rollback();
