@@ -227,7 +227,6 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
     s_timedQueue.loop([](const std::string &path, const int &pages) {
         Database database(path, true); // Get Existing Database Only
         if (database.getType() != CoreType::None) {
-            printf("will checkpoint\n");
             WCDB::Error innerError;
             if (pages > 5000) {
                 database.exec(BuiltinStatement::checkpointTruncate, innerError);
