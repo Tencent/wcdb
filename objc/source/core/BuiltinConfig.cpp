@@ -243,16 +243,17 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
         Database database(path, true); // Get Existing Database Only
         if (database.getType() != CoreType::None) {
             WCDB::Error innerError;
+            const StatementPragma s_checkpointPassive =
+                StatementPragma().pragma(Pragma::WalCheckpoint, "PASSIVE");
+
+            database.exec(s_checkpointPassive, innerError);
             if (pages > 5000) {
+                //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
+                //As a result, checkpoint process will not block the database too long.
                 const StatementPragma s_checkpointTruncate =
                     StatementPragma().pragma(Pragma::WalCheckpoint, "TRUNCATE");
 
                 database.exec(s_checkpointTruncate, innerError);
-            } else {
-                const StatementPragma s_checkpointPassive =
-                    StatementPragma().pragma(Pragma::WalCheckpoint, "PASSIVE");
-
-                database.exec(s_checkpointPassive, innerError);
             }
         }
     });
