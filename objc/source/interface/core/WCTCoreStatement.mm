@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/NSData+NoCopyData.h>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTCoreStatement+Private.h>
@@ -70,9 +71,7 @@
         } break;
         case WCTValueTypeData: {
             NSData *data = (NSData *) value;
-            const unsigned char *raw = (const unsigned char *) data.bytes;
-            std::vector<unsigned char> vector(raw, raw + data.length);
-            _statementHandle->bind<WCTColumnTypeBinary>(vector, index);
+            _statementHandle->bind<WCTColumnTypeBinary>(data.noCopyData, index);
         } break;
         case WCTValueTypeNil:
             _statementHandle->bind<WCTColumnTypeNull>(index);
@@ -112,8 +111,8 @@
             value = string ? [NSString stringWithUTF8String:string] : nil;
         } break;
         case WCTColumnTypeBinary: {
-            std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
-            value = [NSData dataWithBytes:data.data() length:data.size()];
+            WCDB::NoCopyData data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
+            value = [NSData dataWithNoCopyData:data];
         } break;
         case WCTColumnTypeNull: {
             value = nil;

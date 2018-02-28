@@ -42,9 +42,12 @@ const StatementPragma BuiltinStatement::setFullFSync =
 
 const StatementSelect BuiltinStatement::fts3Tokenizer =
     StatementSelect().select(Expression::Function(
-        "fts3_tokenizer", std::list<Expression>(2, BindParameter())));
+        "fts3_tokenizer", std::list<Expression>(2, BindParameter::default_)));
 
-const StatementPragma BuiltinStatement::checkpoint =
-    StatementPragma().pragma(Pragma::WalCheckpoint);
+const StatementPragma BuiltinStatement::checkpointPassive =
+    StatementPragma().pragma(Pragma::WalCheckpoint, "PASSIVE");
+
+const StatementPragma BuiltinStatement::checkpointTruncate =
+    StatementPragma().pragma(Pragma::WalCheckpoint, "TRUNCATE");
 
 } //namespace WCDB

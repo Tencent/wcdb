@@ -206,12 +206,7 @@ const Config BuiltinConfig::checkpoint(
         handle->registerCommittedHook(
             [](Handle *handle, int pages, void *) {
                 if (pages > 1000) {
-                    if (pages > 3000) {
-                        s_timedQueue.remove(handle->path);
-                        handle->exec(BuiltinStatement::checkpoint);
-                    } else {
-                        s_timedQueue.reQueue(handle->path);
-                    }
+                    s_timedQueue.reQueue(handle->path, pages);
                 }
             },
             nullptr);
@@ -219,7 +214,7 @@ const Config BuiltinConfig::checkpoint(
     },
     Order::Checkpoint);
 
-TimedQueue<std::string> BuiltinConfig::s_timedQueue(2);
+TimedQueue<std::string, int> BuiltinConfig::s_timedQueue(2);
 
 std::thread BuiltinConfig::s_checkpointThread([]() {
     pthread_setname_np("WCDB-checkpoint");
@@ -231,16 +226,23 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
             ;
     });
     while (!s_stop) {
-        s_timedQueue.waitUntilExpired([](const std::string &path) {
-            if (s_stop) {
-                return;
-            }
-            Database database(path, true); // Get Existing Database Only
-            if (database.getType() != CoreType::None) {
-                WCDB::Error innerError;
-                database.exec(BuiltinStatement::checkpoint, innerError);
-            }
-        });
+        s_timedQueue.waitUntilExpired(
+            [](const std::string &path, const int &pages) {
+                if (s_stop) {
+                    return;
+                }
+                Database database(path, true); // Get Existing Database Only
+                if (database.getType() != CoreType::None) {
+                    WCDB::Error innerError;
+                    if (pages > 5000) {
+                        database.exec(BuiltinStatement::checkpointTruncate,
+                                      innerError);
+                    } else {
+                        database.exec(BuiltinStatement::checkpointPassive,
+                                      innerError);
+                    }
+                }
+            });
     }
     s_stop = true; // stopped
 });
@@ -252,8 +254,10 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
         "tokenize",
         [names](std::shared_ptr<Handle> &handle, Error &error) -> bool {
             for (const std::string &name : names) {
-                std::vector<unsigned char> address =
+                const unsigned char *address =
                     FTS::Modules::SharedModules()->getAddress(name);
+                NoCopyData data((unsigned char *) &address,
+                                sizeof(unsigned char *));
 
                 //Tokenize
                 {
@@ -264,7 +268,7 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
                         return false;
                     }
                     handleStatement->bind<ColumnType::Text>(name.c_str(), 1);
-                    handleStatement->bind<ColumnType::BLOB>(address, 2);
+                    handleStatement->bind<ColumnType::BLOB>(data, 2);
                     handleStatement->step();
                     if (!handleStatement->isOK()) {
                         error = handleStatement->getError();

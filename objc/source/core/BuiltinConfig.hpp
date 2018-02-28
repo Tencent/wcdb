@@ -51,7 +51,7 @@ public:
 
 protected:
     static std::thread s_checkpointThread;
-    static TimedQueue<std::string> s_timedQueue;
+    static TimedQueue<std::string, int> s_timedQueue;
     static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
     static std::shared_ptr<SQLTrace> s_globalSQLTrace;
 };

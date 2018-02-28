@@ -32,15 +32,15 @@
 
 namespace WCDB {
 
-template <typename Key>
+template <typename Key, typename Info>
 class TimedQueue {
 public:
     TimedQueue(int delay)
         : m_delay(std::chrono::seconds(delay)), m_break(false){};
 
-    typedef std::function<void(const Key &)> OnExpired;
+    typedef std::function<void(const Key &, const Info &)> OnExpired;
 
-    void reQueue(const Key &key)
+    void reQueue(const Key &key, const Info &info)
     {
         std::lock_guard<std::mutex> lockGuard(m_mutex);
         bool signal = m_list.empty();
@@ -48,7 +48,9 @@ public:
         unsafeRemove(key);
 
         //delay
-        m_list.push_front({key, std::chrono::steady_clock::now() + m_delay});
+        std::shared_ptr<Element> element(
+            new Element(key, std::chrono::steady_clock::now() + m_delay, info));
+        m_list.push_front(element);
         auto last = m_list.begin();
         m_map.insert({key, last});
         if (signal) {
@@ -82,29 +84,38 @@ public:
         }
         bool get = false;
         while (!get) {
-            Element element;
+            std::shared_ptr<Element> element;
             Time now = std::chrono::steady_clock::now();
             {
                 std::unique_lock<std::mutex> lockGuard(m_mutex);
                 element = m_list.back();
-                if (now > element.second) {
+                if (now > element->time) {
                     m_list.pop_back();
-                    m_map.erase(element.first);
+                    m_map.erase(element->key);
                     get = true;
                 }
             }
             if (get) {
-                onExpired(element.first);
+                onExpired(element->key, element->info);
             } else {
-                std::this_thread::sleep_for(element.second - now);
+                std::this_thread::sleep_for(element->time - now);
             }
         }
     }
 
 protected:
     using Time = std::chrono::steady_clock::time_point;
-    using Element = std::pair<Key, Time>;
-    using List = std::list<Element>;
+    struct Element {
+        Element(const Key &key_, const Time &time_, const Info &info_)
+            : key(key_), time(time_), info(info_)
+        {
+        }
+        Key key;
+        Time time;
+        Info info;
+    };
+    typedef struct Element Element;
+    using List = std::list<std::shared_ptr<Element>>;
     using Map = std::unordered_map<Key, typename List::iterator>;
     Map m_map;
     List m_list;

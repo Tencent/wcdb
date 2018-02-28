@@ -38,17 +38,14 @@ void Modules::addModule(const std::string &name,
     m_modules.insert({name, module});
 }
 
-std::vector<unsigned char> Modules::getAddress(const std::string &name) const
+unsigned char *Modules::getAddress(const std::string &name) const
 {
     SpinLockGuard<Spin> lockGuard(m_spin);
     auto iter = m_modules.find(name);
     if (iter == m_modules.end()) {
         WCDB::Error::Abort("Tokenize name is not registered");
     }
-    const void *module = iter->second.get();
-    unsigned char *address = (unsigned char *) &module;
-    return std::vector<unsigned char>(address,
-                                      address + sizeof(unsigned char *));
+    return (unsigned char *) iter->second.get();
 }
 
 TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)

@@ -40,7 +40,7 @@ public:
     void addModule(const std::string &name,
                    const std::shared_ptr<void> &module);
 
-    std::vector<unsigned char> getAddress(const std::string &name) const;
+    unsigned char *getAddress(const std::string &name) const;
 
 protected:
     std::unordered_map<std::string, std::shared_ptr<void>> m_modules;

@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/NSData+NoCopyData.h>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTCore+Private.h>
@@ -48,8 +49,8 @@
             return string ? [NSString stringWithUTF8String:string] : nil;
         } break;
         case WCTColumnTypeBinary: {
-            std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(0);
-            return [NSData dataWithBytes:data.data() length:data.size()];
+            WCDB::NoCopyData data = _statementHandle->getValue<WCTColumnTypeBinary>(0);
+            return [NSData dataWithNoCopyData:data];
         } break;
         case WCTColumnTypeNull: {
             return nil;
@@ -86,8 +87,8 @@
                 value = string ? [NSString stringWithUTF8String:string] : @"";
             } break;
             case WCTColumnTypeBinary: {
-                std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(i);
-                value = [NSData dataWithBytes:data.data() length:data.size()];
+                WCDB::NoCopyData data = _statementHandle->getValue<WCTColumnTypeBinary>(i);
+                value = [NSData dataWithNoCopyData:data];
             } break;
             case WCTColumnTypeNull: {
                 value = [NSNull null];
@@ -138,7 +139,7 @@
                 } break;
                 case WCTColumnTypeBinary: {
                     WCTCppAccessor<WCTColumnTypeBinary> *blobAccessor = (WCTCppAccessor<WCTColumnTypeBinary> *) accessor.get();
-                    std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
+                    WCDB::NoCopyData data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
                     blobAccessor->setValue(object, data);
                 } break;
                 default:
@@ -170,8 +171,8 @@
                     value = string ? [NSString stringWithUTF8String:string] : nil;
                 } break;
                 case WCTColumnTypeBinary: {
-                    std::vector<unsigned char> data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
-                    value = [NSData dataWithBytes:data.data() length:data.size()];
+                    WCDB::NoCopyData data = _statementHandle->getValue<WCTColumnTypeBinary>(index);
+                    value = [NSData dataWithNoCopyData:data];
                 } break;
                 default:
                     WCDB::Error::ReportInterface(_core->getTag(),

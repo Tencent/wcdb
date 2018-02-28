@@ -22,6 +22,7 @@
 #define ColumnType_hpp
 
 #include <WCDB/lang.h>
+#include <WCDB/no_copy_data.hpp>
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -107,7 +108,7 @@ struct ColumnTypeInfo<ColumnType::BLOB> {
     static constexpr const bool isText = false;
     static constexpr const bool isBLOB = true;
     static constexpr const bool isBaseType = false;
-    using UnderlyingType = std::vector<unsigned char>;
+    using UnderlyingType = NoCopyData;
     static constexpr const ColumnType type = ColumnType::BLOB;
 };
 
@@ -307,6 +308,16 @@ struct ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const std::vector<unsigned char> &blob)
+    {
+        return NoCopyData(blob.data(), blob.size());
+    }
+};
+
+template <>
+struct ColumnIsBLOBType<NoCopyData> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(const NoCopyData &blob)
     {
         return blob;
     }

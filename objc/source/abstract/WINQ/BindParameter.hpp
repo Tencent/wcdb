@@ -28,6 +28,8 @@ namespace WCDB {
 class BindParameter : public DescribableWithLang<lang::BindParameter>,
                       public Redirectable {
 public:
+    static const BindParameter default_;
+
     enum class Type : int {
         Colon = (int) lang::BindParameter::Type::Colon,           //:AAAA
         At = (int) lang::BindParameter::Type::At,                 //@AAAA

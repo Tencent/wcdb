@@ -18,35 +18,21 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#ifndef no_copy_data_hpp
+#define no_copy_data_hpp
+
+#include <cstddef>
 
 namespace WCDB {
 
-const BindParameter BindParameter::default_;
+struct NoCopyData {
+public:
+    NoCopyData(const unsigned char *data, const size_t &size);
 
-BindParameter::BindParameter()
-{
-    lang::BindParameter &lang = getMutableLang();
-    lang.type = lang::BindParameter::Type::QuestionMark;
-}
+    const unsigned char *data;
+    const size_t size;
+};
 
-BindParameter::BindParameter(int n)
-{
-    lang::BindParameter &lang = getMutableLang();
-    lang.type = lang::BindParameter::Type::QuestionMarkWithNumber;
-    lang.n = n;
-}
+} //namespace WCDB
 
-BindParameter::BindParameter(const std::string &name, const Type &type)
-{
-    lang::BindParameter &lang = getMutableLang();
-    lang.type = (lang::BindParameter::Type) type;
-    lang.name.assign(name);
-}
-
-Expression BindParameter::getRedirectSource() const
-{
-    return *this;
-}
-
-} // namespace WCDB
+#endif /* no_copy_data_hpp */

@@ -34,7 +34,8 @@ public:
     static const StatementPragma setJournalModeWAL;
     static const StatementPragma setFullFSync;
     static const StatementSelect fts3Tokenizer;
-    static const StatementPragma checkpoint;
+    static const StatementPragma checkpointPassive;
+    static const StatementPragma checkpointTruncate;
 };
 
 } //namespace WCDB

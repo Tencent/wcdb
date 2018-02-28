@@ -110,8 +110,8 @@ void HandleStatement::bindText(
 void HandleStatement::bindBLOB(
     const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
 {
-    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.data(),
-                      (int) value.size(), SQLITE_TRANSIENT);
+    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.data,
+                      (int) value.size, SQLITE_TRANSIENT);
 }
 
 void HandleStatement::bindNull(int index)
@@ -153,7 +153,7 @@ HandleStatement::getBLOB(int index)
     int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
     const unsigned char *data = (const unsigned char *) sqlite3_column_blob(
         (sqlite3_stmt *) m_stmt, index);
-    return ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType(data, data + size);
+    return ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType(data, size);
 }
 
 int HandleStatement::getColumnCount()

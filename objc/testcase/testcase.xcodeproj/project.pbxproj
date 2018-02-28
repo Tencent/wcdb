@@ -107,7 +107,6 @@
 		23DD427F20050DD800330946 /* WTCBaselineBatchWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D420050A3600E22C76 /* WTCBaselineBatchWriteBenchmark.mm */; };
 		23DD428020050DD800330946 /* WTCCipherReadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3D920050CC500E22C76 /* WTCCipherReadBenchmark.mm */; };
 		23DD428120050DD800330946 /* WTCCipherWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2329F3DA20050CC500E22C76 /* WTCCipherWriteBenchmark.mm */; };
-		23DD428220050DD800330946 /* WTCSyncWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD427820050DA400330946 /* WTCSyncWriteBenchmark.mm */; };
 		23DD428C20050F4D00330946 /* WTCBaseMultithreadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428520050EDD00330946 /* WTCBaseMultithreadBenchmark.mm */; };
 		23DD428D20050F4D00330946 /* WTCMultithreadReadWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428620050EDD00330946 /* WTCMultithreadReadWriteBenchmark.mm */; };
 		23DD428E20050F4D00330946 /* WTCMultithreadWriteWriteBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428420050EDD00330946 /* WTCMultithreadWriteWriteBenchmark.mm */; };
@@ -301,7 +300,6 @@
 		23DC30AA202C3828000F7895 /* WTCCommonTableExpressionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCommonTableExpressionTests.mm; sourceTree = "<group>"; };
 		23DC30AD202C3CC2000F7895 /* WTCCTETableNameTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCCTETableNameTests.mm; sourceTree = "<group>"; };
 		23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCInitializationBenchmark.mm; sourceTree = "<group>"; };
-		23DD427820050DA400330946 /* WTCSyncWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCSyncWriteBenchmark.mm; sourceTree = "<group>"; };
 		23DD428320050EDD00330946 /* WTCMultithreadReadReadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCMultithreadReadReadBenchmark.mm; sourceTree = "<group>"; };
 		23DD428420050EDD00330946 /* WTCMultithreadWriteWriteBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCMultithreadWriteWriteBenchmark.mm; sourceTree = "<group>"; };
 		23DD428520050EDD00330946 /* WTCBaseMultithreadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WTCBaseMultithreadBenchmark.mm; sourceTree = "<group>"; };
@@ -680,7 +678,6 @@
 			isa = PBXGroup;
 			children = (
 				23DD427720050DA400330946 /* WTCInitializationBenchmark.mm */,
-				23DD427820050DA400330946 /* WTCSyncWriteBenchmark.mm */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -977,7 +974,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23DD427E20050DD800330946 /* WTCBaselineWriteBenchmark.mm in Sources */,
-				23DD428220050DD800330946 /* WTCSyncWriteBenchmark.mm in Sources */,
 				23698BB72004AC2C00C0291C /* WTCConfig.m in Sources */,
 				23DD428020050DD800330946 /* WTCCipherReadBenchmark.mm in Sources */,
 				23DD428F20050F4D00330946 /* WTCMultithreadReadReadBenchmark.mm in Sources */,

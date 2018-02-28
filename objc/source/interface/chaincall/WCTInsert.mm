@@ -45,7 +45,7 @@
         } else {
             _statement.insertOrReplaceInto(tableName.UTF8String);
         }
-        _statement.on(_properties).values(std::list<WCDB::Expression>(_properties.size(), WCDB::BindParameter()));
+        _statement.on(_properties).values(std::list<WCDB::Expression>(_properties.size(), WCDB::BindParameter::default_));
     }
     return self;
 }

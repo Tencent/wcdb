@@ -85,7 +85,10 @@ public:
     {
         lang::LiteralValue &lang = getMutableLang();
         lang.type = lang::LiteralValue::Type::BLOB;
-        lang.dataValue.assign(ColumnIsBLOBType<T>::asUnderlyingType(t));
+        const NoCopyData rawData = ColumnIsBLOBType<T>::asUnderlyingType(t);
+        std::vector<unsigned char> vector(rawData.data,
+                                          rawData.data + rawData.size);
+        lang.dataValue.assign(vector);
     }
 
     static const LiteralValue CurrentTime;

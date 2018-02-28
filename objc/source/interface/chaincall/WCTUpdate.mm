@@ -42,7 +42,7 @@
         for (const WCTProperty &property : properties) {
             const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
             if (columnBinding) {
-                _statement.set(property, WCDB::BindParameter());
+                _statement.set(property, WCDB::BindParameter::default_);
             } else {
                 WCDB::Error::ReportInterface(_core->getTag(),
                                              _core->getPath(),

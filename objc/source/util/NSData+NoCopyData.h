@@ -18,53 +18,13 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
-
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+#import <WCDB/no_copy_data.hpp>
 
-@interface NSData (WCTColumnCoding) <WCTColumnCoding>
-@end
+@interface NSData (NoCopyData)
 
-@implementation NSData (WCTColumnCoding)
++ (instancetype)dataWithNoCopyData:(const WCDB::NoCopyData &)noCopyData;
 
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return self;
-}
-
-+ (WCDB::ColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
-}
+- (const WCDB::NoCopyData)noCopyData;
 
 @end
-
-@interface NSMutableData (WCTColumnCoding) <WCTColumnCoding>
-@end
-
-@implementation NSMutableData (WCTColumnCoding)
-
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return [NSMutableData dataWithData:value];
-}
-
-- (NSData *)archivedWCTValue
-{
-    return [NSData dataWithData:self];
-}
-
-+ (WCDB::ColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
-}
-
-@end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING
