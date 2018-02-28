@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
+#include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <algorithm>
 #include <thread>
 #include <unordered_map>
-#include <WCDB/BuiltinConfig.hpp>
 
 namespace WCDB {
 
@@ -117,7 +117,7 @@ HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
     , m_aliveHandleCount(0)
 {
 }
-    
+
 HandlePool::~HandlePool()
 {
     drain(nullptr);
@@ -138,7 +138,7 @@ bool HandlePool::isBlockaded() const
     return m_rwlock.isWriting();
 }
 
-void HandlePool::drain(const HandlePool::OnDrained& onDrained)
+void HandlePool::drain(const HandlePool::OnDrained &onDrained)
 {
     m_rwlock.lockWrite();
     int size = (int) m_handles.clear();

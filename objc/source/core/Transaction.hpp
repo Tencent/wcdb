@@ -45,7 +45,7 @@ public:
                Error &error) override;
     bool commit(Error &error) override;
     bool rollback(Error &error) override;
-    bool runEmbeddedTransaction(const TransactionBlock& transaction,
+    bool runEmbeddedTransaction(const TransactionBlock &transaction,
                                 WCDB::Error &error) override;
 
     int getChanges();

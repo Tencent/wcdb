@@ -36,9 +36,9 @@ template <typename Key, typename Info>
 class TimedQueue {
 public:
     TimedQueue(double delay)
-        : m_delay(std::chrono::microseconds((long long)(delay * 1000000)))
+        : m_delay(std::chrono::microseconds((long long) (delay * 1000000)))
         , m_stop(false)
-        , m_running(false) {};
+        , m_running(false){};
 
     typedef std::function<void(const Key &, const Info &)> OnExpired;
 
@@ -48,15 +48,15 @@ public:
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
             notify = m_list.empty();
-            
+
             unsafeRemove(key);
-            
+
             //delay
-            std::shared_ptr<Element> element(
-                                             new Element(key, std::chrono::steady_clock::now() + m_delay, info));
+            std::shared_ptr<Element> element(new Element(
+                key, std::chrono::steady_clock::now() + m_delay, info));
             m_list.push_front(element);
             auto last = m_list.begin();
-            m_map.insert({key, last});  
+            m_map.insert({key, last});
         }
         if (notify) {
             m_cond.notify_one();
@@ -66,7 +66,7 @@ public:
     void remove(const Key &key)
     {
         std::lock_guard<std::mutex> lockGuard(m_mutex);
-        unsafeRemove(key); 
+        unsafeRemove(key);
     }
 
     void stop()
@@ -103,10 +103,8 @@ public:
         }
         m_running = false;
     }
-    
-    bool running() const {
-        return m_running;
-    }
+
+    bool running() const { return m_running; }
 
 protected:
     using Time = std::chrono::steady_clock::time_point;
@@ -133,7 +131,7 @@ protected:
     void unsafeRemove(const Key &key)
     {
         auto iter = m_map.find(key);
-        if (iter != m_map.end()) {          
+        if (iter != m_map.end()) {
             m_list.erase(iter->second);
             m_map.erase(iter);
         }

@@ -221,26 +221,24 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
     static std::atomic<bool> s_stop(false);
     atexit([]() {
         s_timedQueue.stop();
-        while (s_timedQueue.running());
+        while (s_timedQueue.running())
+            ;
     });
-    s_timedQueue.loop(
-        [](const std::string &path, const int &pages) {
-            Database database(path, true); // Get Existing Database Only
-            if (database.getType() != CoreType::None) {
-                printf("will checkpoint\n");
-                WCDB::Error innerError;
-                if (pages > 5000) {
-                    database.exec(BuiltinStatement::checkpointTruncate,
-                                  innerError);
-                } else {
-                    database.exec(BuiltinStatement::checkpointPassive,
-                                  innerError);
-                }
+    s_timedQueue.loop([](const std::string &path, const int &pages) {
+        Database database(path, true); // Get Existing Database Only
+        if (database.getType() != CoreType::None) {
+            printf("will checkpoint\n");
+            WCDB::Error innerError;
+            if (pages > 5000) {
+                database.exec(BuiltinStatement::checkpointTruncate, innerError);
+            } else {
+                database.exec(BuiltinStatement::checkpointPassive, innerError);
             }
-        });
+        }
+    });
 });
-    
-void BuiltinConfig::removeKeyFromTimedQueue(const std::string& key)
+
+void BuiltinConfig::removeKeyFromTimedQueue(const std::string &key)
 {
     s_timedQueue.remove(key);
 }

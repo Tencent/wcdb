@@ -66,7 +66,7 @@ public:
     bool isDrained();
     typedef std::function<void(void)> OnDrained;
     void blockade();
-    void drain(const HandlePool::OnDrained& onDrained);
+    void drain(const HandlePool::OnDrained &onDrained);
     void unblockade();
     bool isBlockaded() const;
 
@@ -76,6 +76,7 @@ public:
     void setConfig(const Config &config);
 
     ~HandlePool();
+
 protected:
     HandlePool(const std::string &path, const Configs &configs);
     HandlePool(const HandlePool &) = delete;

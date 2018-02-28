@@ -30,9 +30,8 @@
 namespace WCDB {
 
 Database::Database(const std::string &thePath, bool existingOnly)
-    : CoreBase(!existingOnly
-                   ? HandlePool::GetPool(thePath)
-                   : HandlePool::GetExistingPool(thePath),
+    : CoreBase(!existingOnly ? HandlePool::GetPool(thePath)
+                             : HandlePool::GetExistingPool(thePath),
                CoreType::Database)
 {
 }
@@ -48,7 +47,7 @@ bool Database::canOpen()
     return !m_pool->isDrained() || m_pool->fillOne(innerError);
 }
 
-void Database::close(const std::function<void(void)>& onClosed)
+void Database::close(const std::function<void(void)> &onClosed)
 {
     m_pool->drain(onClosed);
 }
@@ -310,7 +309,7 @@ bool Database::rollback(Error &error)
     return result;
 }
 
-bool Database::runEmbeddedTransaction(const TransactionBlock& transaction,
+bool Database::runEmbeddedTransaction(const TransactionBlock &transaction,
                                       Error &error)
 {
     std::unordered_map<std::string, RecyclableHandle> *threadedHandle =

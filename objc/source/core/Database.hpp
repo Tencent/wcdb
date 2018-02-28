@@ -45,7 +45,7 @@ public:
     bool canOpen();
     bool isOpened() const;
     void blockade();
-    void close(const std::function<void(void)>& onClosed);
+    void close(const std::function<void(void)> &onClosed);
     void unblockade();
     bool isBlockaded();
 
@@ -80,7 +80,7 @@ public:
                Error &error) override;
     bool commit(Error &error) override;
     bool rollback(Error &error) override;
-    bool runEmbeddedTransaction(const TransactionBlock& transaction,
+    bool runEmbeddedTransaction(const TransactionBlock &transaction,
                                 Error &error) override;
 
     //Repair Kit
