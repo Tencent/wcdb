@@ -49,6 +49,7 @@ public:
 
     static const Config tokenizeWithNames(const std::list<std::string> &names);
 
+    static void removeKeyFromTimedQueue(const std::string& key);
 protected:
     static std::thread s_checkpointThread;
     static TimedQueue<std::string, int> s_timedQueue;

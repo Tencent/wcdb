@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <thread>
 #include <unordered_map>
+#include <WCDB/BuiltinConfig.hpp>
 
 namespace WCDB {
 
@@ -33,14 +34,13 @@ const int HandlePool::s_hardwareConcurrency =
 const int HandlePool::s_maxConcurrency =
     std::max<int>(std::thread::hardware_concurrency(), 64);
 
-RecyclableHandlePool HandlePool::GetPool(const std::string &path,
-                                         const Configs &defaultConfigs)
+RecyclableHandlePool HandlePool::GetPool(const std::string &path)
 {
     std::shared_ptr<HandlePool> pool = nullptr;
     std::lock_guard<std::mutex> lockGuard(s_mutex);
     auto iter = s_pools.find(path);
     if (iter == s_pools.end()) {
-        pool.reset(new HandlePool(path, defaultConfigs));
+        pool.reset(new HandlePool(path, BuiltinConfigs::default_));
         iter = s_pools.insert({path, {pool, 0}}).first;
     }
     return HandlePool::GetExistingPool(iter);
@@ -117,6 +117,11 @@ HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
     , m_aliveHandleCount(0)
 {
 }
+    
+HandlePool::~HandlePool()
+{
+    drain(nullptr);
+}
 
 void HandlePool::blockade()
 {
@@ -133,7 +138,7 @@ bool HandlePool::isBlockaded() const
     return m_rwlock.isWriting();
 }
 
-void HandlePool::drain(HandlePool::OnDrained onDrained)
+void HandlePool::drain(const HandlePool::OnDrained& onDrained)
 {
     m_rwlock.lockWrite();
     int size = (int) m_handles.clear();
@@ -141,6 +146,7 @@ void HandlePool::drain(HandlePool::OnDrained onDrained)
     if (onDrained) {
         onDrained();
     }
+    BuiltinConfig::removeKeyFromTimedQueue(path);
     m_rwlock.unlockWrite();
 }
 

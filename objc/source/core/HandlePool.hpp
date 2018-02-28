@@ -38,8 +38,7 @@ typedef Recyclable<std::shared_ptr<HandlePool>> RecyclableHandlePool;
 
 class HandlePool {
 public:
-    static RecyclableHandlePool GetPool(const std::string &path,
-                                        const Configs &defaultConfigs);
+    static RecyclableHandlePool GetPool(const std::string &path);
     static RecyclableHandlePool GetExistingPool(Tag tag);
     static RecyclableHandlePool GetExistingPool(const std::string &path);
 
@@ -67,7 +66,7 @@ public:
     bool isDrained();
     typedef std::function<void(void)> OnDrained;
     void blockade();
-    void drain(HandlePool::OnDrained onDrained);
+    void drain(const HandlePool::OnDrained& onDrained);
     void unblockade();
     bool isBlockaded() const;
 
@@ -76,6 +75,7 @@ public:
     void setConfig(const std::string &name, const Config::Callback &callback);
     void setConfig(const Config &config);
 
+    ~HandlePool();
 protected:
     HandlePool(const std::string &path, const Configs &configs);
     HandlePool(const HandlePool &) = delete;

@@ -220,32 +220,30 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
     pthread_setname_np("WCDB-checkpoint");
     static std::atomic<bool> s_stop(false);
     atexit([]() {
-        s_stop = true; //will stop
-        s_timedQueue.notify();
-        while (!s_stop)
-            ;
+        s_timedQueue.stop();
+        while (s_timedQueue.running());
     });
-    while (!s_stop) {
-        s_timedQueue.waitUntilExpired(
-            [](const std::string &path, const int &pages) {
-                if (s_stop) {
-                    return;
+    s_timedQueue.loop(
+        [](const std::string &path, const int &pages) {
+            Database database(path, true); // Get Existing Database Only
+            if (database.getType() != CoreType::None) {
+                printf("will checkpoint\n");
+                WCDB::Error innerError;
+                if (pages > 5000) {
+                    database.exec(BuiltinStatement::checkpointTruncate,
+                                  innerError);
+                } else {
+                    database.exec(BuiltinStatement::checkpointPassive,
+                                  innerError);
                 }
-                Database database(path, true); // Get Existing Database Only
-                if (database.getType() != CoreType::None) {
-                    WCDB::Error innerError;
-                    if (pages > 5000) {
-                        database.exec(BuiltinStatement::checkpointTruncate,
-                                      innerError);
-                    } else {
-                        database.exec(BuiltinStatement::checkpointPassive,
-                                      innerError);
-                    }
-                }
-            });
-    }
-    s_stop = true; // stopped
+            }
+        });
 });
+    
+void BuiltinConfig::removeKeyFromTimedQueue(const std::string& key)
+{
+    s_timedQueue.remove(key);
+}
 
 const Config
 BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)

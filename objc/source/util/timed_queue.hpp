@@ -35,25 +35,30 @@ namespace WCDB {
 template <typename Key, typename Info>
 class TimedQueue {
 public:
-    TimedQueue(int delay)
-        : m_delay(std::chrono::seconds(delay)), m_break(false){};
+    TimedQueue(double delay)
+        : m_delay(std::chrono::microseconds((long long)(delay * 1000000)))
+        , m_stop(false)
+        , m_running(false) {};
 
     typedef std::function<void(const Key &, const Info &)> OnExpired;
 
     void reQueue(const Key &key, const Info &info)
     {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
-        bool signal = m_list.empty();
-
-        unsafeRemove(key);
-
-        //delay
-        std::shared_ptr<Element> element(
-            new Element(key, std::chrono::steady_clock::now() + m_delay, info));
-        m_list.push_front(element);
-        auto last = m_list.begin();
-        m_map.insert({key, last});
-        if (signal) {
+        bool notify = false;
+        {
+            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            notify = m_list.empty();
+            
+            unsafeRemove(key);
+            
+            //delay
+            std::shared_ptr<Element> element(
+                                             new Element(key, std::chrono::steady_clock::now() + m_delay, info));
+            m_list.push_front(element);
+            auto last = m_list.begin();
+            m_map.insert({key, last});  
+        }
+        if (notify) {
             m_cond.notify_one();
         }
     }
@@ -61,57 +66,57 @@ public:
     void remove(const Key &key)
     {
         std::lock_guard<std::mutex> lockGuard(m_mutex);
-        unsafeRemove(key);
+        unsafeRemove(key); 
     }
 
-    void notify()
+    void stop()
     {
-        m_break = true;
+        {
+            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            m_stop = true;
+        }
         m_cond.notify_one();
     }
 
-    void waitUntilExpired(const OnExpired &onExpired)
+    void loop(const OnExpired &onExpired)
     {
+        m_running = true;
         {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
-            while (m_list.empty()) {
-                if (!m_break) {
+            while (!m_stop) {
+                if (m_list.empty()) {
                     m_cond.wait(lockGuard);
-                } else {
-                    return;
+                    continue;
                 }
-            }
-        }
-        bool get = false;
-        while (!get) {
-            std::shared_ptr<Element> element;
-            Time now = std::chrono::steady_clock::now();
-            {
-                std::unique_lock<std::mutex> lockGuard(m_mutex);
-                element = m_list.back();
-                if (now > element->time) {
-                    m_list.pop_back();
-                    m_map.erase(element->key);
-                    get = true;
+                std::shared_ptr<Element> element = m_list.back();
+                Time now = std::chrono::steady_clock::now();
+                if (now < element->expired) {
+                    m_cond.wait_for(lockGuard, element->expired - now);
+                    continue;
                 }
-            }
-            if (get) {
+                m_list.pop_back();
+                m_map.erase(element->key);
+                lockGuard.unlock();
                 onExpired(element->key, element->info);
-            } else {
-                std::this_thread::sleep_for(element->time - now);
+                lockGuard.lock();
             }
         }
+        m_running = false;
+    }
+    
+    bool running() const {
+        return m_running;
     }
 
 protected:
     using Time = std::chrono::steady_clock::time_point;
     struct Element {
-        Element(const Key &key_, const Time &time_, const Info &info_)
-            : key(key_), time(time_), info(info_)
+        Element(const Key &key_, const Time &expired_, const Info &info_)
+            : key(key_), expired(expired_), info(info_)
         {
         }
         Key key;
-        Time time;
+        Time expired;
         Info info;
     };
     typedef struct Element Element;
@@ -121,13 +126,14 @@ protected:
     List m_list;
     std::condition_variable m_cond;
     std::mutex m_mutex;
-    std::chrono::seconds m_delay;
-    std::atomic<bool> m_break;
+    std::chrono::microseconds m_delay;
+    bool m_stop;
+    std::atomic<bool> m_running;
 
     void unsafeRemove(const Key &key)
     {
         auto iter = m_map.find(key);
-        if (iter != m_map.end()) {
+        if (iter != m_map.end()) {          
             m_list.erase(iter->second);
             m_map.erase(iter);
         }
