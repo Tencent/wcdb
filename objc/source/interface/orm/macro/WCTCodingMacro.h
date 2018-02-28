@@ -25,7 +25,6 @@
 #import <WCDB/macro.hpp>
 
 #define __WCDB_BINDING(className) _s_##className##_binding
-#define __WCDB_PROPERTIES(className) _s_##className##_properties
 
 #define WCDB_IMPLEMENTATION(className)                                         \
     static WCTBinding __WCDB_BINDING(className)(className.class);              \

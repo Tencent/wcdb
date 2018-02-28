@@ -60,7 +60,7 @@ protected:
 
 class BuiltinConfigs {
 public:
-    static const Configs default_;
+    static const Configs &defaultConfig();
 };
 
 } //namespace WCDB

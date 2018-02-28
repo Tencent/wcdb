@@ -35,8 +35,6 @@
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
 		233D0F132045032700DDB462 /* BuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233D0F112045032700DDB462 /* BuiltinConfig.cpp */; };
 		233D0F142045032700DDB462 /* BuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F122045032700DDB462 /* BuiltinConfig.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		233D0F1A204547F200DDB462 /* BuiltinStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233D0F18204547F200DDB462 /* BuiltinStatement.cpp */; };
-		233D0F1B204547F200DDB462 /* BuiltinStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F19204547F200DDB462 /* BuiltinStatement.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23404271204110F4005EB12C /* sequantial_increasing_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2340426F204110F4005EB12C /* sequantial_increasing_map.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		234591F220440A0200DC7D34 /* WCTRedirectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234591F020440A0200DC7D34 /* WCTRedirectable.mm */; };
 		234591F320440A0200DC7D34 /* WCTRedirectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F120440A0200DC7D34 /* WCTRedirectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -462,8 +460,6 @@
 		2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		233D0F112045032700DDB462 /* BuiltinConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BuiltinConfig.cpp; sourceTree = "<group>"; };
 		233D0F122045032700DDB462 /* BuiltinConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuiltinConfig.hpp; sourceTree = "<group>"; };
-		233D0F18204547F200DDB462 /* BuiltinStatement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BuiltinStatement.cpp; sourceTree = "<group>"; };
-		233D0F19204547F200DDB462 /* BuiltinStatement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuiltinStatement.hpp; sourceTree = "<group>"; };
 		2340426F204110F4005EB12C /* sequantial_increasing_map.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sequantial_increasing_map.hpp; sourceTree = "<group>"; };
 		234591F020440A0200DC7D34 /* WCTRedirectable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRedirectable.mm; sourceTree = "<group>"; };
 		234591F120440A0200DC7D34 /* WCTRedirectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTRedirectable.h; sourceTree = "<group>"; };
@@ -920,8 +916,6 @@
 				2349F6171EA0D6680021EFA7 /* Config.hpp */,
 				233D0F112045032700DDB462 /* BuiltinConfig.cpp */,
 				233D0F122045032700DDB462 /* BuiltinConfig.hpp */,
-				233D0F18204547F200DDB462 /* BuiltinStatement.cpp */,
-				233D0F19204547F200DDB462 /* BuiltinStatement.hpp */,
 				2349F6191EA0D6680021EFA7 /* CoreBase.cpp */,
 				2349F61A1EA0D6680021EFA7 /* CoreBase.hpp */,
 				2349F61B1EA0D6680021EFA7 /* Database.cpp */,
@@ -1549,7 +1543,6 @@
 				23977574202AECD3000A681C /* LangDropTableSTMT.hpp in Headers */,
 				23977576202AECD3000A681C /* LangDropTriggerSTMT.hpp in Headers */,
 				23977578202AECD3000A681C /* LangDropViewSTMT.hpp in Headers */,
-				233D0F1B204547F200DDB462 /* BuiltinStatement.hpp in Headers */,
 				2397757A202AECD3000A681C /* LangExpr.hpp in Headers */,
 				239776F2202AF2E3000A681C /* recyclable.hpp in Headers */,
 				2397757C202AECD3000A681C /* LangForeignKeyClause.hpp in Headers */,
@@ -1926,7 +1919,6 @@
 				23977543202AECD3000A681C /* TableOrSubquery.cpp in Sources */,
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
 				239775A8202AECD3000A681C /* LangVacuumSTMT.cpp in Sources */,
-				233D0F1A204547F200DDB462 /* BuiltinStatement.cpp in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
 				23977521202AECD3000A681C /* StatementCreateVirtualTable.cpp in Sources */,
 				239775A2202AECD3000A681C /* LangTableConstraint.cpp in Sources */,

@@ -40,8 +40,8 @@ public:
     }
 
     template <typename T>
-    std::shared_ptr<WCTColumnBinding>
-    addColumnBinding(const std::string &propertyName, NSString *columnName)
+    const WCTProperty &addColumnBinding(const std::string &propertyName,
+                                        NSString *columnName)
     {
         return addColumnBinding<T>(propertyName,
                                    columnName ? columnName.UTF8String : "");

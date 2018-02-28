@@ -34,7 +34,7 @@ public:
 template <typename T, typename Enable = void>
 class LiteralValueConvertible : public std::false_type {
 public:
-    static LiteralValueConvertible as(const T &t);
+    static LiteralValue as(const T &t);
 };
 
 } // namespace WCDB

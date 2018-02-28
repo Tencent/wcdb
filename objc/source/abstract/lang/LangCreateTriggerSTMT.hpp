@@ -62,8 +62,8 @@ public:
     virtual copy_on_write_string SQL() const override;
 
 protected:
-    constexpr static const char *TypeName(const Type &type);
-    constexpr static const char *OperationName(const Operation &operation);
+    static constexpr const char *TypeName(const Type &type);
+    static constexpr const char *OperationName(const Operation &operation);
 };
 
 template <>

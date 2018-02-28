@@ -24,15 +24,11 @@
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
 #define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
-    +(const WCTProperty &) propertyName                                        \
-    {                                                                          \
-        static const WCTProperty &s_property =                                 \
-            __WCDB_BINDING(className)                                          \
-                .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
-                    className, propertyName)>(WCDB_STRINGIFY(propertyName),    \
-                                              columnName);                     \
-        return s_property;                                                     \
-    }
+    static const WCTProperty &_s_##propertyName##_property =                   \
+        __WCDB_BINDING(className)                                              \
+            .addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>(  \
+                WCDB_STRINGIFY(propertyName), columnName);                     \
+    +(const WCTProperty &) propertyName { return _s_##propertyName##_property; }
 
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
                                       defaultValue)                            \

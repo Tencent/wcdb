@@ -45,7 +45,9 @@ public:
     ResultColumn &withTable(const std::string &tableName);
 
 protected:
+    ResultColumn(const lang::ResultColumn::Type &type);
     void setupWithExpression(const Expression &expression);
+    void setType(const lang::ResultColumn::Type &type);
 };
 
 } // namespace WCDB

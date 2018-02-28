@@ -29,7 +29,6 @@ template <typename T>
 class Recyclable {
 public:
     typedef std::function<void(void)> OnRecycled;
-    static const Recyclable inValid;
 
     Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
         : m_value(value)

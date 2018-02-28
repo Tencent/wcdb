@@ -40,7 +40,7 @@ RecyclableHandlePool HandlePool::GetPool(const std::string &path)
     std::lock_guard<std::mutex> lockGuard(s_mutex);
     auto iter = s_pools.find(path);
     if (iter == s_pools.end()) {
-        pool.reset(new HandlePool(path, BuiltinConfigs::default_));
+        pool.reset(new HandlePool(path, BuiltinConfigs::defaultConfig()));
         iter = s_pools.insert({path, {pool, 0}}).first;
     }
     return HandlePool::GetExistingPool(iter);

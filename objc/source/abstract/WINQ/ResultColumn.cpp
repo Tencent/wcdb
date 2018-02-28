@@ -22,12 +22,22 @@
 
 namespace WCDB {
 
-const ResultColumn ResultColumn::All = Expression::All();
+const ResultColumn ResultColumn::All(lang::ResultColumn::Type::Star);
 
 ResultColumn::ResultColumn(const Expression::All &all)
 {
+    setType(lang::ResultColumn::Type::Star);
+}
+
+ResultColumn::ResultColumn(const lang::ResultColumn::Type &type)
+{
+    setType(lang::ResultColumn::Type::Star);
+}
+
+void ResultColumn::setType(const lang::ResultColumn::Type &type)
+{
     lang::ResultColumn &lang = getMutableLang();
-    lang.type = lang::ResultColumn::Type::Star;
+    lang.type = type;
 }
 
 ResultColumn::ResultColumn(const Expression &expression)

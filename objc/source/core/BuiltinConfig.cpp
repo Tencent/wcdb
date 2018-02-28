@@ -19,7 +19,6 @@
  */
 
 #include <WCDB/BuiltinConfig.hpp>
-#include <WCDB/BuiltinStatement.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/timed_queue.hpp>
@@ -34,10 +33,13 @@ const Config BuiltinConfig::basic(
     "basic",
     [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
 
+        const StatementPragma s_getJournalMode =
+            StatementPragma().pragma(Pragma::JournalMode);
+
         if (handle->isReadonly()) {
             //Get Journal Mode
             std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(BuiltinStatement::getJournalMode);
+                handle->prepare(s_getJournalMode);
             if (!handleStatement) {
                 error = handle->getError();
                 return false;
@@ -62,9 +64,12 @@ const Config BuiltinConfig::basic(
 
         //Locking Mode
         {
+            const StatementPragma s_getLockingMode =
+                StatementPragma().pragma(Pragma::LockingMode);
+
             //Get Locking Mode
             std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(BuiltinStatement::getLockingMode);
+                handle->prepare(s_getLockingMode);
             if (!handleStatement) {
                 error = handle->getError();
                 return false;
@@ -79,8 +84,11 @@ const Config BuiltinConfig::basic(
             handleStatement->finalize();
 
             //Set Locking Mode
+            const StatementPragma s_setLockingModeNormal =
+                StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
+
             if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
-                !handle->exec(BuiltinStatement::setLockingModeNormal)) {
+                !handle->exec(s_setLockingModeNormal)) {
                 error = handle->getError();
                 return false;
             }
@@ -88,8 +96,10 @@ const Config BuiltinConfig::basic(
 
         //Synchronous
         {
+            const StatementPragma s_setSynchronousNormal =
+                StatementPragma().pragma(Pragma::Synchronous, "NORMAL");
 
-            if (!handle->exec(BuiltinStatement::setSynchronousNormal)) {
+            if (!handle->exec(s_setSynchronousNormal)) {
                 error = handle->getError();
                 return false;
             }
@@ -99,7 +109,7 @@ const Config BuiltinConfig::basic(
         {
             //Get Journal Mode
             std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(BuiltinStatement::getJournalMode);
+                handle->prepare(s_getJournalMode);
             if (!handleStatement) {
                 error = handle->getError();
                 return false;
@@ -114,8 +124,11 @@ const Config BuiltinConfig::basic(
             handleStatement->finalize();
 
             //Set Journal Mode
+            const StatementPragma s_setJournalModeWAL =
+                StatementPragma().pragma(Pragma::JournalMode, "WAL");
+
             if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
-                !handle->exec(BuiltinStatement::setJournalModeWAL)) {
+                !handle->exec(s_setJournalModeWAL)) {
                 error = handle->getError();
                 return false;
             }
@@ -123,7 +136,10 @@ const Config BuiltinConfig::basic(
 
         //Fullfsync
         {
-            if (!handle->exec(BuiltinStatement::setFullFSync)) {
+            const StatementPragma s_setFullFSync =
+                StatementPragma().pragma(Pragma::Fullfsync, true);
+
+            if (!handle->exec(s_setFullFSync)) {
                 error = handle->getError();
                 return false;
             }
@@ -218,7 +234,6 @@ TimedQueue<std::string, int> BuiltinConfig::s_timedQueue(2);
 
 std::thread BuiltinConfig::s_checkpointThread([]() {
     pthread_setname_np("WCDB-checkpoint");
-    static std::atomic<bool> s_stop(false);
     atexit([]() {
         s_timedQueue.stop();
         while (s_timedQueue.running())
@@ -229,9 +244,15 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
         if (database.getType() != CoreType::None) {
             WCDB::Error innerError;
             if (pages > 5000) {
-                database.exec(BuiltinStatement::checkpointTruncate, innerError);
+                const StatementPragma s_checkpointTruncate =
+                    StatementPragma().pragma(Pragma::WalCheckpoint, "TRUNCATE");
+
+                database.exec(s_checkpointTruncate, innerError);
             } else {
-                database.exec(BuiltinStatement::checkpointPassive, innerError);
+                const StatementPragma s_checkpointPassive =
+                    StatementPragma().pragma(Pragma::WalCheckpoint, "PASSIVE");
+
+                database.exec(s_checkpointPassive, innerError);
             }
         }
     });
@@ -256,8 +277,13 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
 
                 //Tokenize
                 {
+                    const StatementSelect s_fts3Tokenizer =
+                        StatementSelect().select(Expression::Function(
+                            "fts3_tokenizer",
+                            std::list<Expression>(2, BindParameter::default_)));
+
                     std::shared_ptr<HandleStatement> handleStatement =
-                        handle->prepare(BuiltinStatement::fts3Tokenizer);
+                        handle->prepare(s_fts3Tokenizer);
                     if (!handleStatement) {
                         error = handle->getError();
                         return false;
@@ -278,8 +304,11 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
         Order::Tokenize);
 }
 
-const Configs BuiltinConfigs::default_({BuiltinConfig::trace,
-                                        BuiltinConfig::basic,
-                                        BuiltinConfig::checkpoint});
+const Configs &BuiltinConfigs::defaultConfig()
+{
+    static const Configs s_default({BuiltinConfig::trace, BuiltinConfig::basic,
+                                    BuiltinConfig::checkpoint});
+    return s_default;
+}
 
 } //namespace WCDB
