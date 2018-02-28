@@ -66,4 +66,11 @@
                                                     error:nil]);
 }
 
+- (void)tearDown 
+{
+    if ([self.fileManager fileExistsAtPath:self.recommendedDirectory]) {
+        XCTAssertTrue([self.fileManager removeItemAtPath:self.recommendedDirectory error:nil]);
+    }
+}
+
 @end

@@ -37,6 +37,14 @@
     _randomGenerator = [[WTCRandomData alloc] initWithSeed:self.config.randomSeed];
 }
 
+- (void)tearDown
+{
+    _database = nil;
+    _objects = nil;
+    _config = nil;
+    _randomGenerator = nil;
+}
+
 - (NSString *)getTableName
 {
     return [self getTableNameWithIndex:0];
