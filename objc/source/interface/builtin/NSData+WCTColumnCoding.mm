@@ -52,7 +52,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return [NSMutableData dataWithData:value];
+    return value ? [NSMutableData dataWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue
