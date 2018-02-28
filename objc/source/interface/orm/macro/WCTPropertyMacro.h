@@ -26,17 +26,13 @@
 #define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
-        static const WCTProperty s_property(                                   \
+        static const WCTProperty &s_property =                                 \
             __WCDB_BINDING(className)                                          \
                 .addColumnBinding<__WCDB_PROPERTY_TYPE(                        \
                     className, propertyName)>(WCDB_STRINGIFY(propertyName),    \
-                                              columnName));                    \
+                                              columnName);                     \
         return s_property;                                                     \
-    }                                                                          \
-    static const auto UNUSED_UNIQUE_ID = [](WCTPropertyList &properties) {     \
-        properties.push_back(className.propertyName);                          \
-        return nullptr;                                                        \
-    }(__WCDB_PROPERTIES(className));
+    }
 
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
                                       defaultValue)                            \

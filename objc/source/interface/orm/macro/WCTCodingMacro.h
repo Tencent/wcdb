@@ -29,7 +29,6 @@
 
 #define WCDB_IMPLEMENTATION(className)                                         \
     static WCTBinding __WCDB_BINDING(className)(className.class);              \
-    static WCTPropertyList __WCDB_PROPERTIES(className);                       \
     +(const WCTBinding *) objectRelationalMappingForWCDB                       \
     {                                                                          \
         if (self.class != className.class) {                                   \
@@ -39,9 +38,12 @@
     }                                                                          \
     +(const WCTPropertyList &) AllProperties                                   \
     {                                                                          \
-        return __WCDB_PROPERTIES(className);                                   \
+        return __WCDB_BINDING(className).getAllProperties();                   \
     }                                                                          \
-    +(WCDB::Expression::All) AllResults { return WCDB::Expression::All(); }
+    +(const WCDB::Expression::All &) AllResults                                \
+    {                                                                          \
+        return WCDB::Expression::All::default_;                                \
+    }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)

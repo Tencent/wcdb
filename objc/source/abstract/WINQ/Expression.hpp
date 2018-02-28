@@ -58,6 +58,7 @@ public:
     class All : public DescribableWithLang<lang::ExprFunction>,
                 public FunctionOperable {
     public:
+        static const Expression::All default_;
         virtual Expression
         function(const std::string &functionName,
                  __unused bool distinct = false) const override;

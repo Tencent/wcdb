@@ -31,14 +31,12 @@ public:
     WCTBinding(Class cls);
 
     template <typename T>
-    std::shared_ptr<WCTColumnBinding>
-    addColumnBinding(const std::string &propertyName,
-                     const std::string &columnName)
+    const WCTProperty &addColumnBinding(const std::string &propertyName,
+                                        const std::string &columnName)
     {
         std::shared_ptr<WCTColumnBinding> columnBinding(new WCTColumnBinding(
             m_cls, propertyName, columnName, (T *) nullptr));
-        m_columnBindings.append(columnName, columnBinding);
-        return columnBinding;
+        return addColumnBinding(columnName, columnBinding);
     }
 
     template <typename T>
@@ -75,7 +73,13 @@ public:
     std::list<WCDB::StatementCreateIndex>
     generateCreateIndexStatements(const std::string &tableName) const;
 
+    const WCTPropertyList &getAllProperties() const;
+
 protected:
+    const WCTProperty &
+    addColumnBinding(const std::string &columnName,
+                     const std::shared_ptr<WCTColumnBinding> &columnBinding);
+    WCTPropertyList m_properties;
     SequentialIncreasingMap<std::string,
                             WCTColumnBinding,
                             WCDB::CaseInsensiveComparator>

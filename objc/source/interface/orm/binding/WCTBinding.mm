@@ -109,3 +109,17 @@ WCTBinding::generateCreateIndexStatements(const std::string &tableName) const
     }
     return statementCreateIndexs;
 }
+
+const WCTPropertyList &WCTBinding::getAllProperties() const
+{
+    return m_properties;
+}
+
+const WCTProperty &WCTBinding::addColumnBinding(const std::string &columnName,
+                                                const std::shared_ptr<WCTColumnBinding> &columnBinding)
+{
+    m_columnBindings.append(columnName, columnBinding);
+    WCTProperty property(columnBinding);
+    m_properties.push_back(property);
+    return m_properties.back();
+}
