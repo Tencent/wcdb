@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDatabase+Database.h>
-#import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH

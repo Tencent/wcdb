@@ -32,12 +32,12 @@
     BOOL _replace;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
-               andProperties:(const WCTPropertyList &)properties
-                andTableName:(NSString *)tableName
-              andReplaceFlag:(BOOL)replace
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                   andProperties:(const WCTPropertyList &)properties
+                    andTableName:(NSString *)tableName
+                  andReplaceFlag:(BOOL)replace
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _replace = replace;
         _properties = properties;
         if (!replace) {
@@ -52,7 +52,7 @@
 
 - (BOOL)doInsertObjects:(NSArray<WCTObject *> *)objects withError:(WCDB::Error &)error
 {
-    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, error);
+    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, error);
     if (!handleStatement) {
         return NO;
     }
@@ -110,10 +110,10 @@
     if (objects.count == 1) {
         return [self doInsertObjects:objects withError:_error];
     }
-    _core->runEmbeddedTransaction([self, objects](WCDB::Error &error) {
+    _database->runEmbeddedTransaction([self, objects](WCDB::Error &error) {
         [self doInsertObjects:objects withError:error];
     },
-                                  _error);
+                                      _error);
     return _error.isOK();
 }
 

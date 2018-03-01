@@ -29,25 +29,25 @@
 - (BOOL)createTableAndIndexesOfName:(NSString *)tableName withClass:(Class)cls andError:(WCDB::Error &)error
 {
     if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        WCDB::Error::ReportInterface(_core->getTag(),
-                                     _core->getPath(),
+        WCDB::Error::ReportInterface(_database->getTag(),
+                                     _database->getPath(),
                                      WCDB::Error::InterfaceOperation::Table,
                                      WCDB::Error::InterfaceCode::ORM,
                                      [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
                                      &error);
         return NO;
     }
-    _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
+    _database->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
         WCDB::Error innerError;
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
-        bool isTableExists = _core->isTableExists(tableName.UTF8String, innerError);
+        bool isTableExists = _database->isTableExists(tableName.UTF8String, innerError);
         if (isTableExists) {
             //Get all column names
             std::list<std::string> columnNames;
             {
-                WCDB::RecyclableStatement handleStatement = _core->prepare(WCDB::StatementPragma()
-                                                                               .pragma(WCDB::Pragma::TableInfo, tableName.UTF8String),
-                                                                           error);
+                WCDB::RecyclableStatement handleStatement = _database->prepare(WCDB::StatementPragma()
+                                                                                   .pragma(WCDB::Pragma::TableInfo, tableName.UTF8String),
+                                                                               error);
                 if (!error.isOK()) {
                     return;
                 }
@@ -72,96 +72,96 @@
             }
             //Add new column
             for (const auto &iter : columnBindingMap) {
-                if (!_core->exec(WCDB::StatementAlterTable()
-                                     .alterTable(tableName.UTF8String)
-                                     .addColumn(iter.second->columnDef),
-                                 error)) {
+                if (!_database->exec(WCDB::StatementAlterTable()
+                                         .alterTable(tableName.UTF8String)
+                                         .addColumn(iter.second->columnDef),
+                                     error)) {
                     return;
                 }
             }
         } else {
-            if (!_core->exec(binding->generateCreateTableStatement(tableName.UTF8String), error)) {
+            if (!_database->exec(binding->generateCreateTableStatement(tableName.UTF8String), error)) {
                 return;
             }
         }
         for (const auto &statementCreateIndex : binding->generateCreateIndexStatements(tableName.UTF8String)) {
-            if (!_core->exec(statementCreateIndex, error)) {
+            if (!_database->exec(statementCreateIndex, error)) {
                 return;
             }
         }
     },
-                                  error);
+                                      error);
     return error.isOK();
 }
 
 - (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class)cls andError:(WCDB::Error &)error
 {
     if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        WCDB::Error::ReportInterface(_core->getTag(),
-                                     _core->getPath(),
+        WCDB::Error::ReportInterface(_database->getTag(),
+                                     _database->getPath(),
                                      WCDB::Error::InterfaceOperation::Table,
                                      WCDB::Error::InterfaceCode::ORM,
                                      [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
                                      &error);
         return NO;
     }
-    _core->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
+    _database->runEmbeddedTransaction([self, cls, tableName](WCDB::Error &error) {
         const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
-        _core->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String), error);
+        _database->exec(binding->generateVirtualCreateTableStatement(tableName.UTF8String), error);
     },
-                                  error);
+                                      error);
     return error.isOK();
 }
 
 - (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementCreateTable()
-                           .createTable(tableName.UTF8String)
-                           .define(columnDefs),
-                       error);
+    return _database->exec(WCDB::StatementCreateTable()
+                               .createTable(tableName.UTF8String)
+                               .define(columnDefs),
+                           error);
 }
 
 - (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints andError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementCreateTable()
-                           .createTable(tableName.UTF8String)
-                           .define(columnDefs)
-                           .addTableConstraints(constraints),
-                       error);
+    return _database->exec(WCDB::StatementCreateTable()
+                               .createTable(tableName.UTF8String)
+                               .define(columnDefs)
+                               .addTableConstraints(constraints),
+                           error);
 }
 
 - (BOOL)dropTableOfName:(NSString *)tableName withError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementDropTable().dropTable(tableName.UTF8String), error);
+    return _database->exec(WCDB::StatementDropTable().dropTable(tableName.UTF8String), error);
 }
 
 - (BOOL)isTableExists:(NSString *)tableName withError:(WCDB::Error &)error
 {
-    return _core->isTableExists(tableName.UTF8String, error);
+    return _database->isTableExists(tableName.UTF8String, error);
 }
 
 - (BOOL)addColumn:(const WCDB::ColumnDef &)columnDef forTable:(NSString *)tableName withError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementAlterTable()
-                           .alterTable(tableName.UTF8String)
-                           .addColumn(columnDef),
-                       error);
+    return _database->exec(WCDB::StatementAlterTable()
+                               .alterTable(tableName.UTF8String)
+                               .addColumn(columnDef),
+                           error);
 }
 
 - (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName andError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementCreateIndex()
-                           .createIndex(indexName.UTF8String)
-                           .on(tableName.UTF8String)
-                           .indexedBy(indexedColumns),
-                       error);
+    return _database->exec(WCDB::StatementCreateIndex()
+                               .createIndex(indexName.UTF8String)
+                               .on(tableName.UTF8String)
+                               .indexedBy(indexedColumns),
+                           error);
 }
 
 - (BOOL)dropIndexOfName:(NSString *)indexName withError:(WCDB::Error &)error
 {
-    return _core->exec(WCDB::StatementDropIndex()
-                           .dropIndex(indexName.UTF8String),
-                       error);
+    return _database->exec(WCDB::StatementDropIndex()
+                               .dropIndex(indexName.UTF8String),
+                           error);
 }
 
 @end

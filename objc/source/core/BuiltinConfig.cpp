@@ -183,8 +183,9 @@ const Config BuiltinConfig::trace(
     },
     Order::Trace);
 
-const Config
-BuiltinConfig::cipherWithKey(const void *key, int keySize, int pageSize)
+const Config BuiltinConfig::cipherWithKey(const void *key,
+                                          const int &keySize,
+                                          const int &pageSize)
 {
     std::shared_ptr<std::vector<unsigned char>> keys(
         new std::vector<unsigned char>((unsigned char *) key,
@@ -240,20 +241,21 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
             ;
     });
     s_timedQueue.loop([](const std::string &path, const int &pages) {
-        Database database(path, true); // Get Existing Database Only
-        if (database.getType() != CoreType::None) {
+        std::shared_ptr<Database> database =
+            Database::databaseWithExistingPath(path);
+        if (database != nullptr) {
             WCDB::Error innerError;
             const StatementPragma s_checkpointPassive =
                 StatementPragma().pragma(Pragma::WalCheckpoint, "PASSIVE");
 
-            database.exec(s_checkpointPassive, innerError);
+            database->exec(s_checkpointPassive, innerError);
             if (pages > 5000) {
                 //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
                 //As a result, checkpoint process will not block the database too long.
                 const StatementPragma s_checkpointTruncate =
                     StatementPragma().pragma(Pragma::WalCheckpoint, "TRUNCATE");
 
-                database.exec(s_checkpointTruncate, innerError);
+                database->exec(s_checkpointTruncate, innerError);
             }
         }
     });

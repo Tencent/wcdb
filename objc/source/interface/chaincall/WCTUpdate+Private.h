@@ -24,6 +24,6 @@
 
 @interface WCTUpdate (Private)
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)properties andTableName:(NSString *)tableName;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andProperties:(const WCTPropertyList &)properties andTableName:(NSString *)tableName;
 
 @end

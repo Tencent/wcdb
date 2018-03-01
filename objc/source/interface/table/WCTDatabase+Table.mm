@@ -35,7 +35,7 @@
 {
     WCDB::Error innerError;
     if ([self isTableExists:tableName withError:innerError]) {
-        return [[WCTTable alloc] initWithCore:_core andTableName:tableName andClass:cls];
+        return [[WCTTable alloc] initWithDatabase:_database andTableName:tableName andClass:cls];
     }
     return nil;
 }

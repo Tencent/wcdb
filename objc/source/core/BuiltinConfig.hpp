@@ -43,7 +43,7 @@ public:
     static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
 
     static const Config
-    cipherWithKey(const void *key, int keySize, int pageSize);
+    cipherWithKey(const void *key, const int &keySize, const int &pageSize);
 
     static const Config checkpoint;
 

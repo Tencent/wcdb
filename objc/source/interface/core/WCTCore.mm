@@ -23,22 +23,25 @@
 
 @implementation WCTCore
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
 {
+    if (database == nullptr) {
+        return nil;
+    }
     if (self = [self init]) {
-        _core = core;
+        _database = database;
     }
     return self;
 }
 
 - (WCTTag)tag
 {
-    return _core->getTag();
+    return _database->getTag();
 }
 
 - (NSString *)path
 {
-    return @(_core->getPath().c_str());
+    return @(_database->getPath().c_str());
 }
 
 @end

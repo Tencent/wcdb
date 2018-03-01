@@ -57,8 +57,8 @@
             break;
         }
         default:
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
+            WCDB::Error::ReportInterface(_database->getTag(),
+                                         _database->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
                                          WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Extracting statement [%s] with unknown type %d", _statementHandle->getColumnName(0), (int) _statementHandle->getType(0)].UTF8String,
@@ -95,8 +95,8 @@
                 break;
             }
             default:
-                WCDB::Error::ReportInterface(_core->getTag(),
-                                             _core->getPath(),
+                WCDB::Error::ReportInterface(_database->getTag(),
+                                             _database->getPath(),
                                              WCDB::Error::InterfaceOperation::Select,
                                              WCDB::Error::InterfaceCode::Misuse,
                                              [NSString stringWithFormat:@"Extracting statement [%s] with unknown type %d", _statementHandle->getColumnName(i), (int) _statementHandle->getType(i)].UTF8String,
@@ -143,8 +143,8 @@
                     blobAccessor->setValue(object, data);
                 } break;
                 default:
-                    WCDB::Error::ReportInterface(_core->getTag(),
-                                                 _core->getPath(),
+                    WCDB::Error::ReportInterface(_database->getTag(),
+                                                 _database->getPath(),
                                                  WCDB::Error::InterfaceOperation::Select,
                                                  WCDB::Error::InterfaceCode::Misuse,
                                                  [NSString stringWithFormat:@"Extracting column [%s] with unknown type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getColumnType()].UTF8String,
@@ -175,8 +175,8 @@
                     value = [NSData dataWithNoCopyData:data];
                 } break;
                 default:
-                    WCDB::Error::ReportInterface(_core->getTag(),
-                                                 _core->getPath(),
+                    WCDB::Error::ReportInterface(_database->getTag(),
+                                                 _database->getPath(),
                                                  WCDB::Error::InterfaceOperation::Select,
                                                  WCDB::Error::InterfaceCode::Misuse,
                                                  [NSString stringWithFormat:@"Extracting column [%s] with unknown type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getColumnType()].UTF8String,
@@ -187,8 +187,8 @@
             objcAccessor->setObject(object, value);
         } break;
         default:
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
+            WCDB::Error::ReportInterface(_database->getTag(),
+                                         _database->getPath(),
                                          WCDB::Error::InterfaceOperation::Select,
                                          WCDB::Error::InterfaceCode::Misuse,
                                          [NSString stringWithFormat:@"Extracting column [%s] with unknown accessor type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getAccessorType()].UTF8String,

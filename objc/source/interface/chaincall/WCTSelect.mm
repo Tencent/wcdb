@@ -34,12 +34,12 @@
     Class _class;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
-               andProperties:(const WCTPropertyList &)properties
-                   fromTable:(NSString *)tableName
-                  isDistinct:(BOOL)isDistinct
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                   andProperties:(const WCTPropertyList &)properties
+                       fromTable:(NSString *)tableName
+                      isDistinct:(BOOL)isDistinct
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _properties = properties;
         if (isDistinct) {
             _statement.distinct();

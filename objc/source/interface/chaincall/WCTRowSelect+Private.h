@@ -24,9 +24,9 @@
 
 @interface WCTRowSelect ()
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
-            andResultColumns:(const std::list<WCDB::ResultColumn> &)resultLists
-                  fromTables:(NSArray<NSString *> *)tableNames
-                  isDistinct:(BOOL)isDistinct;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                andResultColumns:(const std::list<WCDB::ResultColumn> &)resultLists
+                      fromTables:(NSArray<NSString *> *)tableNames
+                      isDistinct:(BOOL)isDistinct;
 
 @end

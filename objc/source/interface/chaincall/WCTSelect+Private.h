@@ -24,9 +24,9 @@
 
 @interface WCTSelect ()
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
-               andProperties:(const WCTPropertyList &)properties
-                   fromTable:(NSString *)tableName
-                  isDistinct:(BOOL)isDistinct;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                   andProperties:(const WCTPropertyList &)properties
+                       fromTable:(NSString *)tableName
+                      isDistinct:(BOOL)isDistinct;
 
 @end

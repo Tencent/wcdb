@@ -22,7 +22,6 @@
 #define Database_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/CoreBase.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/RecyclableStatement.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -30,18 +29,19 @@
 
 namespace WCDB {
 
-class Transaction;
-
-class Database : public CoreBase {
+class Database {
 public:
     Database() = delete;
 
-    Database(const std::string &path, bool existingOnly = false);
+    static std::shared_ptr<Database> databaseWithPath(const std::string &path);
+    static std::shared_ptr<Database>
+    databaseWithExistingPath(const std::string &path);
+    static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
 
-    Database(Tag tag);
+#pragma mark - Basic
+    void setTag(const Tag &tag);
+    int getTag() const;
 
-    //basic
-    void setTag(Tag tag);
     bool canOpen();
     bool isOpened() const;
     void blockade();
@@ -49,15 +49,18 @@ public:
     void unblockade();
     bool isBlockaded();
 
+#pragma mark - Memory
     void purge();
     static void PurgeInAllDatabases();
 
+#pragma mark - Config
     void setConfig(const Config &config);
     void setConfig(const std::string &name, const Config::Callback &callback);
-    void setCipher(const void *key, int keySize, int pageSize = 4096);
+    void
+    setCipher(const void *key, const int &keySize, const int &pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 
-    //file
+#pragma mark - File
     bool moveFiles(const std::string &directory, Error &error);
     bool
     moveFilesToDirectoryWithExtraFiles(const std::string &directory,
@@ -66,22 +69,27 @@ public:
     bool removeFiles(Error &error);
     size_t getFilesSize(Error &error);
     const std::list<std::string> getPaths() const;
+    const std::string &getPath() const;
 
     //sql
-    RecyclableStatement prepare(const Statement &statement,
-                                Error &error) override;
-    bool exec(const Statement &statement, Error &error) override;
-    bool isTableExists(const std::string &tableName, Error &error) override;
+    RecyclableStatement prepare(const Statement &statement, Error &error);
+    bool exec(const Statement &statement, Error &error);
+    bool isTableExists(const std::string &tableName, Error &error);
 
-    //transaction
-    std::shared_ptr<Transaction> getTransaction(Error &error);
+    bool begin(const StatementBegin::Transaction &transaction, Error &error);
+    bool commit(Error &error);
+    bool rollback(Error &error);
 
-    bool begin(const StatementBegin::Transaction &transaction,
-               Error &error) override;
-    bool commit(Error &error) override;
-    bool rollback(Error &error) override;
+    //Transaction Protocol
+    typedef std::function<bool(Error &)> ControllableTransactionBlock;
+    typedef std::function<void(Error &)> TransactionBlock;
+
     bool runEmbeddedTransaction(const TransactionBlock &transaction,
-                                Error &error) override;
+                                Error &error);
+    bool
+    runControllableTransaction(const ControllableTransactionBlock &transaction,
+                               Error &error);
+    bool runTransaction(const TransactionBlock &transaction, Error &error);
 
     //Repair Kit
     bool backup(const void *key, const unsigned int &length, Error &error);
@@ -94,14 +102,19 @@ public:
                          Error &error);
 
 protected:
+    Database(const std::string &path, bool existingOnly);
+
+    Database(const Tag &tag);
+
+    bool isValid() const;
+
     static const std::array<std::string, 5> &subfixs();
 
     RecyclableHandle flowOut(Error &error);
     static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
         s_threadedHandle;
 
-    static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
-    static std::shared_ptr<SQLTrace> s_globalSQLTrace;
+    RecyclableHandlePool m_pool;
 };
 
 } //namespace WCDB

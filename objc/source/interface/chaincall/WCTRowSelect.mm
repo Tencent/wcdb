@@ -26,12 +26,12 @@
 
 @implementation WCTRowSelect
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
-            andResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
-                  fromTables:(NSArray<NSString *> *)tableNames
-                  isDistinct:(BOOL)isDistinct
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                andResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
+                      fromTables:(NSArray<NSString *> *)tableNames
+                      isDistinct:(BOOL)isDistinct
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         std::list<WCDB::TableOrSubquery> tableOrSubquerys;
         for (NSString *tableName in tableNames) {
             tableOrSubquerys.push_back(tableName.UTF8String);

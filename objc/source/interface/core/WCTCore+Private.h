@@ -19,14 +19,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/CoreBase.hpp>
 #import <WCDB/WCTCore.h>
 
 @interface WCTCore () {
 @protected
-    std::shared_ptr<WCDB::CoreBase> _core;
+    std::shared_ptr<WCDB::Database> _database;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database;
 
 @end

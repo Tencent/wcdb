@@ -23,22 +23,52 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/File.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/Transaction.hpp>
 #include <WCDB/Utility.hpp>
 #include <sqliterk/SQLiteRepairKit.h>
 
 namespace WCDB {
 
+std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
+{
+    std::shared_ptr<Database> database(new Database(tag));
+    if (database->isValid()) {
+        return database;
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Database>
+Database::databaseWithExistingPath(const std::string &path)
+{
+    std::shared_ptr<Database> database(new Database(path, true));
+    if (database->isValid()) {
+        return database;
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
+{
+    std::shared_ptr<Database> database(new Database(path, false));
+    if (database->isValid()) {
+        return database;
+    }
+    return nullptr;
+}
+
 Database::Database(const std::string &thePath, bool existingOnly)
-    : CoreBase(!existingOnly ? HandlePool::GetPool(thePath)
-                             : HandlePool::GetExistingPool(thePath),
-               CoreType::Database)
+    : m_pool(!existingOnly ? HandlePool::GetPool(thePath)
+                           : HandlePool::GetExistingPool(thePath))
 {
 }
 
-Database::Database(Tag tag)
-    : CoreBase(HandlePool::GetExistingPool(tag), CoreType::Database)
+Database::Database(const Tag &tag) : m_pool(HandlePool::GetExistingPool(tag))
 {
+}
+
+const std::string &Database::getPath() const
+{
+    return m_pool->path;
 }
 
 bool Database::canOpen()
@@ -82,9 +112,14 @@ void Database::PurgeInAllDatabases()
     HandlePool::PurgeFreeHandlesInAllPool();
 }
 
-void Database::setTag(Tag tag)
+void Database::setTag(const Tag &tag)
 {
     m_pool->tag = tag;
+}
+
+int Database::getTag() const
+{
+    return m_pool->tag.load();
 }
 
 #pragma mark - Config
@@ -99,7 +134,9 @@ void Database::setConfig(const std::string &name,
     m_pool->setConfig(name, callback);
 }
 
-void Database::setCipher(const void *key, int keySize, int pageSize)
+void Database::setCipher(const void *key,
+                         const int &keySize,
+                         const int &pageSize)
 {
     m_pool->setConfig(BuiltinConfig::cipherWithKey(key, keySize, pageSize));
 }
@@ -215,7 +252,12 @@ RecyclableStatement Database::prepare(const Statement &statement, Error &error)
                                        nullptr);
         default: {
             RecyclableHandle handle = flowOut(error);
-            return CoreBase::prepare(handle, statement, error);
+            std::shared_ptr<HandleStatement> handleStatement = nullptr;
+            if (handle) {
+                handleStatement = handle->prepare(statement);
+                error = handle->getError();
+            }
+            return RecyclableStatement(handle, handleStatement);
         }
     }
 }
@@ -233,7 +275,12 @@ bool Database::exec(const Statement &statement, Error &error)
             return false;
         default: {
             RecyclableHandle handle = flowOut(error);
-            return CoreBase::exec(handle, statement, error);
+            bool result = false;
+            if (handle) {
+                result = handle->exec(statement);
+                error = handle->getError();
+            }
+            return result;
         }
     }
 }
@@ -241,22 +288,30 @@ bool Database::exec(const Statement &statement, Error &error)
 bool Database::isTableExists(const std::string &tableName, Error &error)
 {
     RecyclableHandle handle = flowOut(error);
-    return CoreBase::isTableExists(handle, tableName, error);
+    bool result = false;
+    if (handle) {
+        Error::setThreadedSlient(true);
+        StatementSelect select =
+            StatementSelect().select(1).from(tableName).limit(0);
+        std::shared_ptr<HandleStatement> handleStatement =
+            handle->prepare(select);
+        Error::setThreadedSlient(false);
+        if (handleStatement) {
+            handleStatement->step();
+            result = handleStatement->isOK();
+            if (!result) {
+                error = handleStatement->getError();
+            }
+        } else {
+            error = handle->getError();
+        }
+    }
+    return result;
 }
 
 #pragma mark - Transaction
 ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
     Database::s_threadedHandle;
-
-std::shared_ptr<Transaction> Database::getTransaction(Error &error)
-{
-    RecyclableHandle handle =
-        m_pool->flowOut(error); //get a new handle for transaction
-    if (handle != nullptr) {
-        return std::shared_ptr<Transaction>(new Transaction(m_pool, handle));
-    }
-    return nullptr;
-}
 
 RecyclableHandle Database::flowOut(Error &error)
 {
@@ -273,8 +328,7 @@ bool Database::begin(const StatementBegin::Transaction &transaction,
                      Error &error)
 {
     RecyclableHandle handle = flowOut(error);
-    if (handle != nullptr &&
-        CoreBase::exec(handle, StatementBegin().begin(transaction), error)) {
+    if (handle != nullptr && exec(StatementBegin().begin(transaction), error)) {
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->insert({getPath(), handle});
@@ -286,8 +340,7 @@ bool Database::begin(const StatementBegin::Transaction &transaction,
 bool Database::commit(Error &error)
 {
     RecyclableHandle handle = flowOut(error);
-    if (handle != nullptr &&
-        CoreBase::exec(handle, StatementCommit().commit(), error)) {
+    if (handle != nullptr && exec(StatementCommit().commit(), error)) {
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->erase(getPath());
@@ -301,7 +354,7 @@ bool Database::rollback(Error &error)
     RecyclableHandle handle = flowOut(error);
     bool result = false;
     if (handle != nullptr) {
-        result = CoreBase::exec(handle, StatementRollback().rollback(), error);
+        result = exec(StatementRollback().rollback(), error);
         std::unordered_map<std::string, RecyclableHandle> *threadedHandle =
             s_threadedHandle.get();
         threadedHandle->erase(getPath());
@@ -320,6 +373,46 @@ bool Database::runEmbeddedTransaction(const TransactionBlock &transaction,
         runTransaction(transaction, error);
     }
     return error.isOK();
+}
+
+bool Database::runControllableTransaction(
+    const ControllableTransactionBlock &transaction, Error &error)
+{
+    if (!begin(StatementBegin::Transaction::Immediate, error)) {
+        return false;
+    }
+    if (transaction(error)) {
+        error.reset(); //User discards error
+        if (commit(error)) {
+            return true;
+        }
+    }
+    //Rollback errors do not need to be passed to the outside
+    Error rollBackError;
+    rollback(rollBackError);
+    return false;
+}
+
+bool Database::runTransaction(const TransactionBlock &transaction, Error &error)
+{
+    if (!begin(StatementBegin::Transaction::Immediate, error)) {
+        return false;
+    }
+    transaction(error);
+    if (error.isOK()) {
+        if (commit(error)) {
+            return true;
+        }
+    }
+    //Rollback errors do not need to be passed to the outside
+    Error rollBackError;
+    rollback(rollBackError);
+    return false;
+}
+
+bool Database::isValid() const
+{
+    return m_pool != nullptr;
 }
 
 } //namespace WCDB

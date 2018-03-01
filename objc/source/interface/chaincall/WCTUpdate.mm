@@ -34,9 +34,9 @@
     int _changes;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andProperties:(const WCTPropertyList &)properties andTableName:(NSString *)tableName
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andProperties:(const WCTPropertyList &)properties andTableName:(NSString *)tableName
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _statement.update(tableName.UTF8String);
         _properties = properties;
         for (const WCTProperty &property : properties) {
@@ -44,8 +44,8 @@
             if (columnBinding) {
                 _statement.set(property, WCDB::BindParameter::default_);
             } else {
-                WCDB::Error::ReportInterface(_core->getTag(),
-                                             _core->getPath(),
+                WCDB::Error::ReportInterface(_database->getTag(),
+                                             _database->getPath(),
                                              WCDB::Error::InterfaceOperation::Update,
                                              WCDB::Error::InterfaceCode::ORM,
                                              [NSString stringWithFormat:@"Updating [%@] with an unknown column [%s]", tableName, columnBinding->columnDef.getColumnName().c_str()].UTF8String,
@@ -91,8 +91,8 @@
     }
     Class cls = object.class;
     if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        WCDB::Error::ReportInterface(_core->getTag(),
-                                     _core->getPath(),
+        WCDB::Error::ReportInterface(_database->getTag(),
+                                     _database->getPath(),
                                      WCDB::Error::InterfaceOperation::Update,
                                      WCDB::Error::InterfaceCode::ORM,
                                      [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
@@ -100,7 +100,7 @@
         return NO;
     }
 
-    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, _error);
+    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, _error);
     if (!handleStatement) {
         return NO;
     }
@@ -131,7 +131,7 @@
         return NO;
     }
 
-    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, _error);
+    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, _error);
     if (!handleStatement) {
         return NO;
     }

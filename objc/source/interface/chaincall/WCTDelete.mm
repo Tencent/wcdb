@@ -27,9 +27,9 @@
     int _changes;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andTableName:(NSString *)tableName
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _statement.deleteFrom(tableName.UTF8String);
     }
     return self;
@@ -61,7 +61,7 @@
 
 - (BOOL)execute
 {
-    WCDB::RecyclableStatement handleStatement = _core->prepare(_statement, _error);
+    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, _error);
     if (!handleStatement) {
         return NO;
     }

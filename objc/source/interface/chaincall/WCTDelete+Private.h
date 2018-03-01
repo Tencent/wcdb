@@ -24,6 +24,6 @@
 
 @interface WCTDelete (Private)
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andTableName:(NSString *)tableName;
 
 @end

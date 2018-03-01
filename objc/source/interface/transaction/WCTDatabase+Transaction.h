@@ -20,15 +20,24 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTTransaction.h>
 
-@interface WCTDatabase (Transaction)
+typedef NS_ENUM(int, WCTTransactionMode) {
+    WCTTransactionModeDeferred = (WCTTransactionMode) WCDB::StatementBegin::Transaction::Deferred,
+    WCTTransactionModeImmediate = (WCTTransactionMode) WCDB::StatementBegin::Transaction::Immediate,
+    WCTTransactionModeExclusive = (WCTTransactionMode) WCDB::StatementBegin::Transaction::Exclusive
+};
 
 /**
- @brief Generation a WCTTransaction object to do a transaction.
- @return WCTTransaction
+ Controllable Transaction block
  */
-- (WCTTransaction *)getTransaction;
+typedef BOOL (^WCTControllableTransactionBlock)();
+
+/**
+ Transaction block
+ */
+typedef void (^WCTTransactionBlock)();
+
+@interface WCTDatabase (Transaction)
 
 /**
  @brief Run a transaction in block.
@@ -96,8 +105,7 @@
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call begin, commit, rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
- @see WCTTransaction
+ @warning You should call begin, commit, rollback and all other operations in same thread.
  @return YES only if no error occurs.
  */
 - (BOOL)begin;
@@ -110,16 +118,14 @@
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call begin , commit , rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
- @see WCTTransaction
+ @warning You should call begin , commit , rollback and all other operations in same thread.
  @return YES only if no error occurs.
  */
 - (BOOL)commit;
 
 /**
  @brief Separate interface of runTransaction:
- @warning You should call begin , commit , rollback and all other operations in same thread. To do a cross-thread transaction, use WCTTransaction.
- @see WCTTransaction
+ @warning You should call begin , commit , rollback and all other operations in same thread.
  @return YES only if no error occurs.
  */
 - (BOOL)rollback;

@@ -34,8 +34,8 @@
 {
     const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
     if (!columnBinding) {
-        WCDB::Error::ReportInterface(_core->getTag(),
-                                     _core->getPath(),
+        WCDB::Error::ReportInterface(_database->getTag(),
+                                     _database->getPath(),
                                      WCDB::Error::InterfaceOperation::ChainCall,
                                      WCDB::Error::InterfaceCode::ORM,
                                      [NSString stringWithFormat:@"Binding an unknown column named [%s]", property.getDescription().c_str()].UTF8String,
@@ -71,8 +71,8 @@
                     handleStatement->bind<WCTColumnTypeBinary>(blobAccessor->getValue(object), index);
                 } break;
                 default:
-                    WCDB::Error::ReportInterface(_core->getTag(),
-                                                 _core->getPath(),
+                    WCDB::Error::ReportInterface(_database->getTag(),
+                                                 _database->getPath(),
                                                  WCDB::Error::InterfaceOperation::ChainCall,
                                                  WCDB::Error::InterfaceCode::ORM,
                                                  [NSString stringWithFormat:@"Binding column [%s] with unknown type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getColumnType()].UTF8String,
@@ -110,8 +110,8 @@
                     break;
                 }
                 default:
-                    WCDB::Error::ReportInterface(_core->getTag(),
-                                                 _core->getPath(),
+                    WCDB::Error::ReportInterface(_database->getTag(),
+                                                 _database->getPath(),
                                                  WCDB::Error::InterfaceOperation::ChainCall,
                                                  WCDB::Error::InterfaceCode::ORM,
                                                  [NSString stringWithFormat:@"Binding column [%s] with unknown type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getColumnType()].UTF8String,
@@ -121,8 +121,8 @@
             }
         } break;
         default:
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
+            WCDB::Error::ReportInterface(_database->getTag(),
+                                         _database->getPath(),
                                          WCDB::Error::InterfaceOperation::ChainCall,
                                          WCDB::Error::InterfaceCode::ORM,
                                          [NSString stringWithFormat:@"Binding column [%s] with unknown accessor type %d", columnBinding->columnDef.getColumnName().c_str(), (int) accessor->getAccessorType()].UTF8String,
@@ -165,8 +165,8 @@
             handleStatement->bind<WCTColumnTypeNull>(index);
             break;
         default:
-            WCDB::Error::ReportInterface(_core->getTag(),
-                                         _core->getPath(),
+            WCDB::Error::ReportInterface(_database->getTag(),
+                                         _database->getPath(),
                                          WCDB::Error::InterfaceOperation::ChainCall,
                                          WCDB::Error::InterfaceCode::ORM,
                                          [NSString stringWithFormat:@"Binding with unknown type %@", value.class].UTF8String,

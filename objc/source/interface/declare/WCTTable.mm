@@ -24,9 +24,9 @@
 
 @implementation WCTTable
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andTableName:(NSString *)tableName andClass:(Class<WCTTableCoding>)cls
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andTableName:(NSString *)tableName andClass:(Class<WCTTableCoding>)cls
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _tableName = tableName;
         _class = cls;
     }

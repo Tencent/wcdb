@@ -25,9 +25,9 @@
 
 @implementation WCTSelectBase
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _prepared = NO;
     }
     return self;
@@ -38,7 +38,7 @@
     if (_error.isOK()) {
         if (!_prepared) {
             _prepared = YES;
-            _statementHandle = _core->prepare(_statement, _error);
+            _statementHandle = _database->prepare(_statement, _error);
             return _error.isOK();
         }
         return YES;

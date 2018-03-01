@@ -29,7 +29,7 @@
 - (BOOL)exec:(const WCDB::Statement &)statement
 {
     WCDB::Error innerError;
-    return _core->exec(statement, innerError);
+    return _database->exec(statement, innerError);
 }
 
 - (WCTCoreStatement *)prepare:(const WCDB::Statement &)statement
@@ -40,9 +40,9 @@
 - (WCTCoreStatement *)prepare:(const WCDB::Statement &)statement withError:(WCTError *__autoreleasing *)error
 {
     WCDB::Error innerError;
-    WCDB::RecyclableStatement handleStatement = _core->prepare(statement, innerError);
+    WCDB::RecyclableStatement handleStatement = _database->prepare(statement, innerError);
     if (handleStatement) {
-        return [[WCTCoreStatement alloc] initWithCore:_core andStatementHandle:handleStatement];
+        return [[WCTCoreStatement alloc] initWithDatabase:_database andStatementHandle:handleStatement];
     }
     if (error) {
         *error = [WCTError errorWithWCDBError:innerError];

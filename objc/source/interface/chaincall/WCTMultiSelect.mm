@@ -30,12 +30,12 @@
     WCTPropertyList _properties;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core
-               andProperties:(const WCTPropertyList &)properties
-                  fromTables:(NSArray<NSString *> *)tableNames
-                  isDistinct:(BOOL)isDistinct
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                   andProperties:(const WCTPropertyList &)properties
+                      fromTables:(NSArray<NSString *> *)tableNames
+                      isDistinct:(BOOL)isDistinct
 {
-    if (self = [super initWithCore:core]) {
+    if (self = [super initWithDatabase:database]) {
         _properties = properties;
         std::list<WCDB::TableOrSubquery> tableOrSubquerys;
         for (NSString *tableName in tableNames) {

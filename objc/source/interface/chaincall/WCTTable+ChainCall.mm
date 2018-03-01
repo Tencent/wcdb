@@ -39,62 +39,62 @@
 
 - (WCTInsert *)prepareInsertObjects
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:NO];
+    return [[WCTInsert alloc] initWithDatabase:_database andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:NO];
 }
 
 - (WCTInsert *)prepareInsertOrReplaceObjects
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES];
+    return [[WCTInsert alloc] initWithDatabase:_database andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES];
 }
 
 - (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:properties andTableName:_tableName andReplaceFlag:NO];
+    return [[WCTInsert alloc] initWithDatabase:_database andProperties:properties andTableName:_tableName andReplaceFlag:NO];
 }
 
 - (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTInsert alloc] initWithCore:_core andProperties:properties andTableName:_tableName andReplaceFlag:YES];
+    return [[WCTInsert alloc] initWithDatabase:_database andProperties:properties andTableName:_tableName andReplaceFlag:YES];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[WCTDelete alloc] initWithCore:_core andTableName:_tableName];
+    return [[WCTDelete alloc] initWithDatabase:_database andTableName:_tableName];
 }
 
 - (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTUpdate alloc] initWithCore:_core andProperties:properties andTableName:_tableName];
+    return [[WCTUpdate alloc] initWithDatabase:_database andProperties:properties andTableName:_tableName];
 }
 
 - (WCTSelect *)prepareSelectObjects
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:[_class AllProperties] fromTable:_tableName isDistinct:NO];
+    return [[WCTSelect alloc] initWithDatabase:_database andProperties:[_class AllProperties] fromTable:_tableName isDistinct:NO];
 }
 
 - (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:properties fromTable:_tableName isDistinct:NO];
+    return [[WCTSelect alloc] initWithDatabase:_database andProperties:properties fromTable:_tableName isDistinct:NO];
 }
 
 - (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties isDistinct:(BOOL)isDistinct
 {
-    return [[WCTSelect alloc] initWithCore:_core andProperties:properties fromTable:_tableName isDistinct:isDistinct];
+    return [[WCTSelect alloc] initWithDatabase:_database andProperties:properties fromTable:_tableName isDistinct:isDistinct];
 }
 
 - (WCTRowSelect *)prepareSelectRows
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:{WCDB::ResultColumn::All} fromTables:@[ _tableName ] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithDatabase:_database andResultColumns:{WCDB::ResultColumn::All} fromTables:@[ _tableName ] isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:NO];
+    return [[WCTRowSelect alloc] initWithDatabase:_database andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:NO];
 }
 
 - (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns isDistinct:(BOOL)isDistinct
 {
-    return [[WCTRowSelect alloc] initWithCore:_core andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:isDistinct];
+    return [[WCTRowSelect alloc] initWithDatabase:_database andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:isDistinct];
 }
 
 @end

@@ -20,16 +20,12 @@
 
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDatabase+Database.h>
-#import <WCDB/WCTDatabase+Private.h>
 
 @implementation WCTDatabase (Database)
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    path = [path stringByStandardizingPath];
-    std::shared_ptr<WCDB::CoreBase> core(new WCDB::Database(path.UTF8String));
-    if (self = [super initWithCore:core]) {
-        _database = (WCDB::Database *) _core.get();
+    if (self = [super initWithDatabase:WCDB::Database::databaseWithPath(path.UTF8String)]) {
 #if TARGET_OS_IPHONE
         _database->setConfig("FileProtection",
                              [path](std::shared_ptr<WCDB::Handle> &handle, WCDB::Error &error) -> bool {
@@ -54,14 +50,7 @@
 
 - (instancetype)initWithExistingTag:(WCTTag)tag
 {
-    std::shared_ptr<WCDB::CoreBase> core(new WCDB::Database(tag));
-    if (core->getType() != WCDB::CoreType::None) {
-        if (self = [super initWithCore:core]) {
-            _database = (WCDB::Database *) _core.get();
-        }
-        return self;
-    }
-    return nil;
+    return [super initWithDatabase:WCDB::Database::databaseWithExistingTag(tag)];
 }
 
 - (void)setCipherKey:(NSData *)cipherKey

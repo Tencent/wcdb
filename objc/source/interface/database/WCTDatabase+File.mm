@@ -19,8 +19,8 @@
  */
 
 #import <WCDB/Utility.hpp>
+#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDatabase+File.h>
-#import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 
 @implementation WCTDatabase (File)

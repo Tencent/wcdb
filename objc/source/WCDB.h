@@ -62,10 +62,8 @@
 #import <WCDB/WCTTable+Convenient.h>
 
 #import <WCDB/WCTDatabase+Table.h>
-#import <WCDB/WCTTransaction+Table.h>
 
 #import <WCDB/WCTDatabase+Transaction.h>
-#import <WCDB/WCTTransaction.h>
 
 #import <WCDB/WCTError.h>
 #import <WCDB/WCTStatistics.h>

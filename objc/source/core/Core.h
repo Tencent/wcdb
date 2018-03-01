@@ -23,12 +23,10 @@
 
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/CoreBase.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/RecyclableStatement.hpp>
 #include <WCDB/Tokenizer.hpp>
-#include <WCDB/Transaction.hpp>
 
 #endif /* Core_h */

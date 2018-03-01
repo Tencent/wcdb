@@ -26,6 +26,6 @@
     WCDB::RecyclableStatement _statementHandle;
 }
 
-- (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andStatementHandle:(WCDB::RecyclableStatement &)handleStatement;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andStatementHandle:(WCDB::RecyclableStatement &)handleStatement;
 
 @end

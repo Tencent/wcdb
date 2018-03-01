@@ -19,17 +19,10 @@
  */
 
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTTransaction.h>
 
 @implementation WCTDatabase (Transaction)
-
-- (WCTTransaction *)getTransaction
-{
-    return [[WCTTransaction alloc] initWithCore:_core];
-}
 
 - (BOOL)runTransaction:(WCTTransactionBlock)inTransaction withError:(WCTError **)pError
 {
