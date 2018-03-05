@@ -28,6 +28,12 @@ public final class StatementCreateVirtualTable: Statement {
     public init() {}
 
     @discardableResult
+    public func create<T>(virtualTable table: T, ifNotExists: Bool = true) -> StatementCreateVirtualTable
+        where T : RawRepresentable, T.RawValue == String {
+            return self.create(virtualTable: table.rawValue, ifNotExists: ifNotExists)
+    }
+
+    @discardableResult
     public func create(virtualTable table: String, ifNotExists: Bool = true) -> StatementCreateVirtualTable {
         description.append("CREATE VIRTUAL TABLE ")
         if ifNotExists {

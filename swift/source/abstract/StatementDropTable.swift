@@ -27,6 +27,11 @@ public final class StatementDropTable: Statement {
 
     public init() {}
 
+    public func drop<T>(table: T, ifExists: Bool = true) -> StatementDropTable
+        where T : RawRepresentable, T.RawValue == String {
+            return self.drop(table: table.rawValue)
+    }
+
     public func drop(table: String, ifExists: Bool = true) -> StatementDropTable {
         description.append("DROP TABLE ")
         if ifExists {

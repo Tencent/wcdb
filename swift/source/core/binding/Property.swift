@@ -28,6 +28,13 @@ public protocol PropertyConvertible: ColumnConvertible, PropertyRedirectable {
     func `in`(table: String) -> Property
 }
 
+extension PropertyConvertible {
+    public func `in`<T>(table: T) -> Property
+        where T : RawRepresentable, T.RawValue == String {
+            return self.in(table: table.rawValue)
+    }
+}
+
 public typealias PropertyOperable = PropertyConvertible & ExpressionOperable
 
 public final class Property: Describable {

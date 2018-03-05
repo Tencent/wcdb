@@ -34,6 +34,10 @@ public final class ForeignKey: Describable {
         self.init(withForeignTable: table, and: columnConvertibleList)
     }
 
+    public convenience init<T>(withForeignTable table: T, and columnConvertibleList: ColumnConvertible...) where T : RawRepresentable, T.RawValue == String {
+        self.init(withForeignTable: table.rawValue, and: columnConvertibleList)
+    }
+
     public enum Action: Describable {
         case setNull
         case setDefault

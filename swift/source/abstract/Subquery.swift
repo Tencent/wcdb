@@ -30,6 +30,11 @@ public final class Subquery: Describable {
         description = "(\(statementSelect.description))"
     }
 
+    public convenience init<T>(withTable table: T)
+        where T : RawRepresentable, T.RawValue == String {
+        self.init(withTable: table.rawValue)
+    }
+
     public init(withTable table: String) {
         description = table
     }

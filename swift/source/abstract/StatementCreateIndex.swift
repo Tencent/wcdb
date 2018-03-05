@@ -49,6 +49,13 @@ public final class StatementCreateIndex: Statement {
     }
 
     @discardableResult
+    public func on<T>(table: T,
+                      indexesBy columnIndexConvertibleList: ColumnIndexConvertible...) -> StatementCreateIndex
+                       where T : RawRepresentable, T.RawValue == String {
+        return on(table: table.rawValue, indexesBy: columnIndexConvertibleList)
+    }
+
+    @discardableResult
     public func on(table: String,
                    indexesBy columnIndexConvertibleList: [ColumnIndexConvertible]) -> StatementCreateIndex {
         description.append(" ON \(table)(\(columnIndexConvertibleList.joined()))")

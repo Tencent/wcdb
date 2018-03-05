@@ -28,6 +28,12 @@ public final class StatementUpdate: Statement {
     public init() {}
 
     @discardableResult
+    public func update<T>(table: T, onConflict conflict: Conflict? = nil) -> StatementUpdate
+        where T : RawRepresentable, T.RawValue == String {
+        return update(table: table.rawValue, onConflict: conflict)
+    }
+
+    @discardableResult
     public func update(table: String, onConflict conflict: Conflict? = nil) -> StatementUpdate {
         description.append("UPDATE ")
         if conflict != nil {

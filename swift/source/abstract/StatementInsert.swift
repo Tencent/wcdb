@@ -35,6 +35,14 @@ public final class StatementInsert: Statement {
     }
 
     @discardableResult
+    public func insert<T>(intoTable table: T,
+                       with columnConvertibleList: ColumnConvertible...,
+        onConflict conflict: Conflict? = nil) -> StatementInsert
+        where T : RawRepresentable, T.RawValue == String {
+        return insert(intoTable: table.rawValue, with: columnConvertibleList, onConflict: conflict)
+    }
+
+    @discardableResult
     public func insert(intoTable table: String,
                        with columnConvertibleList: [ColumnConvertible]? = nil,
                        onConflict conflict: Conflict? = nil) -> StatementInsert {
@@ -47,6 +55,14 @@ public final class StatementInsert: Statement {
             description.append("(\(columnConvertibleList!.joined()))")
         }
         return self
+    }
+
+    @discardableResult
+    public func insert<T>(intoTable table: T,
+                          with columnConvertibleList: [ColumnConvertible]? = nil,
+                          onConflict conflict: Conflict? = nil) -> StatementInsert
+        where T : RawRepresentable, T.RawValue == String {
+            return insert(intoTable: table.rawValue, with: columnConvertibleList, onConflict: conflict)
     }
 
     @discardableResult

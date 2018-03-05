@@ -47,8 +47,8 @@ public final class Transaction: Core {
         return try prepare(statement, in: recyclableHandle)
     }
 
-    /// Exec a specific sql.  
-    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
+    /// Exec a specific sql.
+    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer.
     ///
     /// - Parameter statement: WINQ statement
     /// - Throws: `Error`
@@ -57,7 +57,7 @@ public final class Transaction: Core {
         try exec(statement, in: recyclableHandle)
     }
 
-    /// Prepare a specific sql.  
+    /// Prepare a specific sql.
     /// Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer
     ///
     /// - Parameter statement: WINQ statement
@@ -73,6 +73,16 @@ public final class Transaction: Core {
     /// - Parameter table: The name of the table to be checked.
     /// - Returns: True if table exists. False if table does not exist.
     /// - Throws: `Error`
+    public override func isTableExists<T>(_ table: T) throws -> Bool
+        where T : RawRepresentable, T.RawValue == String {
+        return try isTableExists(table.rawValue)
+    }
+
+    /// Check whether table exists
+    ///
+    /// - Parameter table: The name of the table to be checked.
+    /// - Returns: True if table exists. False if table does not exist.
+    /// - Throws: `Error`
     public override func isTableExists(_ table: String) throws -> Bool {
         mutex.lock(); defer { mutex.unlock() }
         return try super.isTableExists(table)
@@ -80,7 +90,7 @@ public final class Transaction: Core {
 
     /// Run a transaction in closure
     ///
-    ///     try transaction.run(transaction: { () throws -> Void in 
+    ///     try transaction.run(transaction: { () throws -> Void in
     ///         try transaction.insert(objects: objects, intoTable: table)
     ///     })
     ///
@@ -93,7 +103,7 @@ public final class Transaction: Core {
 
     /// Run a controllable transaction in closure
     ///
-    ///     try transaction.run(controllableTransaction: { () throws -> Bool in 
+    ///     try transaction.run(controllableTransaction: { () throws -> Bool in
     ///         try transaction.insert(objects: objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
@@ -105,8 +115,8 @@ public final class Transaction: Core {
         try super.run(controllableTransaction: controllableTransaction)
     }
 
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// Separate interface of `run(transaction:)`
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// - Throws: `Error`
     public override func begin(_ mode: StatementTransaction.Mode = .immediate) throws {
         mutex.lock(); defer { mutex.unlock() }
@@ -117,8 +127,8 @@ public final class Transaction: Core {
         isInTransaction = true
     }
 
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
+    /// Separate interface of `run(transaction:)`
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// - Throws: `Error`
     public override func commit() throws {
         mutex.lock(); defer { mutex.unlock() }
@@ -127,7 +137,7 @@ public final class Transaction: Core {
     }
 
     /// Separate interface of run(transaction:)
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// - Throws: `Error`
     public override func rollback() throws {
         mutex.lock(); defer { mutex.unlock() }
@@ -135,11 +145,11 @@ public final class Transaction: Core {
         try handle.exec(CommonStatement.rollbackTransaction)
     }
 
-    /// Run a embedded transaction in closure  
-    /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
+    /// Run a embedded transaction in closure
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
-    ///     try transaction.run(embeddedTransaction: { () throws -> Void in 
+    ///     try transaction.run(embeddedTransaction: { () throws -> Void in
     ///         try transaction.insert(objects: objects, intoTable: table)
     ///     })
     ///
@@ -153,7 +163,7 @@ public final class Transaction: Core {
         return try run(transaction: embeddedTransaction)
     }
 
-    /// The number of changed rows in the most recent call.  
+    /// The number of changed rows in the most recent call.
     /// It should be called after executing successfully
     public var changes: Int {
         mutex.lock(); defer { mutex.unlock() }

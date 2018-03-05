@@ -35,9 +35,21 @@ public final class StatementAlterTable: Statement {
     }
 
     @discardableResult
+    public func alter<T>(table: T) -> StatementAlterTable
+        where T : RawRepresentable, T.RawValue == String {
+        return self.alter(table: table.rawValue)
+    }
+
+    @discardableResult
     public func rename(to newTable: String) -> StatementAlterTable {
         description.append(" RENAME TO \(newTable)")
         return self
+    }
+
+    @discardableResult
+    public func rename<T>(to newTable: T) -> StatementAlterTable
+        where T : RawRepresentable, T.RawValue == String {
+        return self.rename(to: newTable.rawValue)
     }
 
     @discardableResult

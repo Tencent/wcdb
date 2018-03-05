@@ -41,8 +41,21 @@ public final class JoinClause: Describable {
         }
     }
 
+    public convenience init<T>(with subqueryConvertible: T)
+       where T : RawRepresentable, T.RawValue == String {
+        self.init(with: subqueryConvertible.rawValue)
+    }
+
     public init(with subqueryConvertible: TableOrSubqueryConvertible) {
         description = subqueryConvertible.asTableOrSubquery().description
+    }
+
+    @discardableResult
+    private func join<T>(_ subqueryConvertible: T,
+                      with type: JoinClauseType? = nil,
+                      isNatural: Bool = false) -> JoinClause
+        where T : RawRepresentable, T.RawValue == String {
+        return join(subqueryConvertible.rawValue, with: type, isNatural: isNatural)
     }
 
     @discardableResult
@@ -60,9 +73,23 @@ public final class JoinClause: Describable {
     }
 
     @discardableResult
+    public func join<T>(_ subqueryConvertible: T,
+                     with type: JoinClauseType? = nil) -> JoinClause
+        where T : RawRepresentable, T.RawValue == String {
+        return self.join(subqueryConvertible.rawValue, with: type, isNatural: false)
+    }
+
+    @discardableResult
     public func join(_ subqueryConvertible: TableOrSubqueryConvertible,
                      with type: JoinClauseType? = nil) -> JoinClause {
         return self.join(subqueryConvertible, with: type, isNatural: false)
+    }
+
+    @discardableResult
+    public func natureJoin<T>(_ subqueryConvertible: T,
+                           with type: JoinClauseType? = nil) -> JoinClause
+        where T : RawRepresentable, T.RawValue == String {
+        return self.join(subqueryConvertible.rawValue, with: type, isNatural: true)
     }
 
     @discardableResult

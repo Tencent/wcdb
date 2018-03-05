@@ -26,10 +26,10 @@ import UIKit
 /// Thread-safe Database object
 public final class Database: Core {
 
-    /// Init a database from path.  
+    /// Init a database from path.
     /// Note that all database objects with same path share the same core.
-    /// So you can create multiple database objects. WCDB will manage them automatically.  
-    /// Note that WCDB will not generate a sqlite handle until the first operation, 
+    /// So you can create multiple database objects. WCDB will manage them automatically.
+    /// Note that WCDB will not generate a sqlite handle until the first operation,
     /// which is also called as lazy initialization.
     ///
     /// - Parameter path: Path to your database
@@ -37,10 +37,10 @@ public final class Database: Core {
         self.init(withFileURL: URL(fileURLWithPath: path))
     }
 
-    /// Init a database from file url.  
-    /// Note that all database objects with same path share the same core. 
-    /// So you can create multiple database objects. WCDB will manage them automatically.  
-    /// Note that WCDB will not generate a sqlite handle until the first operation, 
+    /// Init a database from file url.
+    /// Note that all database objects with same path share the same core.
+    /// So you can create multiple database objects. WCDB will manage them automatically.
+    /// Note that WCDB will not generate a sqlite handle until the first operation,
     /// which is also called as lazy initialization.
     ///
     /// - Parameter url: File url to your database
@@ -62,16 +62,16 @@ public final class Database: Core {
                         }
                     })
             })
-        #endif //WCDB_IOS     
+        #endif //WCDB_IOS
         super.init(with: HandlePool.getPool(withPath: url.standardizedFileURL.path,
                                             defaultConfigs: Database.defaultConfigs))
     }
 
-    /// Init a database from existing tag.  
-    /// Note that all database objects with same path share the same core. 
-    /// So you can create multiple database objects. WCDB will manage them automatically.  
-    /// Note that WCDB will not generate a sqlite handle until the first operation, 
-    /// which is also called as lazy initialization.  
+    /// Init a database from existing tag.
+    /// Note that all database objects with same path share the same core.
+    /// So you can create multiple database objects. WCDB will manage them automatically.
+    /// Note that WCDB will not generate a sqlite handle until the first operation,
+    /// which is also called as lazy initialization.
     ///
     /// - Parameter tag: An existing tag.
     /// - Throws: `Error` while tag is not exists
@@ -83,10 +83,10 @@ public final class Database: Core {
         super.init(with: try HandlePool.getExistingPool(withPath: path))
     }
 
-    /// The tag of the database. Default to nil.  
-    /// You should set it on a database and can get it from all kind of Core objects, 
-    /// including `Database`, `Table`, `Transaction`, `Select`, `RowSelect`, `MultiSelect`, `Insert`, `Delete`, 
-    /// `Update` and so on.   
+    /// The tag of the database. Default to nil.
+    /// You should set it on a database and can get it from all kind of Core objects,
+    /// including `Database`, `Table`, `Transaction`, `Select`, `RowSelect`, `MultiSelect`, `Insert`, `Delete`,
+    /// `Update` and so on.
     /// Note that core objects with same path share this tag, even they are not the same object.
     ///
     ///     let database1 = Database(withPath: path)
@@ -113,9 +113,9 @@ public final class Database: Core {
         return try handlePool.flowOut()
     }
 
-    /// Since WCDB is using lazy initialization, 
-    /// `init(withPath:)`, `init(withFileURL:)` never failed even the database can't open. 
-    /// So you can call this to check whether the database can be opened.  
+    /// Since WCDB is using lazy initialization,
+    /// `init(withPath:)`, `init(withFileURL:)` never failed even the database can't open.
+    /// So you can call this to check whether the database can be opened.
     /// Return false if an error occurs during sqlite handle initialization.
     public var canOpen: Bool {
         return !handlePool.isDrained || ((try? handlePool.fillOne()) != nil)
@@ -133,26 +133,26 @@ public final class Database: Core {
 
     public typealias OnClosed = HandlePool.OnDrained
 
-    /// Close the database.  
-    ///     Since Multi-threaded operation is supported in WCDB, 
-    ///     other operations in different thread can open the closed database. 
-    ///     So this method can make sure database is closed in the `onClosed` block. 
+    /// Close the database.
+    ///     Since Multi-threaded operation is supported in WCDB,
+    ///     other operations in different thread can open the closed database.
+    ///     So this method can make sure database is closed in the `onClosed` block.
     ///     All other operations will be blocked until this method returns.
     ///
-    /// A close operation consists of 4 steps:  
-    ///     1. `blockade`, which blocks all other operations.  
-    ///     2. `close`, which waits until all sqlite handles return and closes them.  
-    ///     3. `onClosed`, which trigger the callback.  
-    ///     4. `unblokade`, which unblocks all other opreations.  
+    /// A close operation consists of 4 steps:
+    ///     1. `blockade`, which blocks all other operations.
+    ///     2. `close`, which waits until all sqlite handles return and closes them.
+    ///     3. `onClosed`, which trigger the callback.
+    ///     4. `unblokade`, which unblocks all other opreations.
     ///
-    /// You can simply call `close:` to do all steps above or call these separately.  
-    /// Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice. 
-    ///     The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:  
-    ///     1. You should not keep WCDB objects, including `Insert`, `Delete`, `Update`, `Select`, `RowSelect`, 
-    ///        `MultiSelect`, `CoreStatement`, `Transaction`. These objects should not be kept.  
-    ///        You should get them, use them, then release them right away.  
-    ///     2. WCDB objects may not be out of its' scope.  
-    ///     The best practice is to call `close:` in sub-thread and display a loading animation in main thread.  
+    /// You can simply call `close:` to do all steps above or call these separately.
+    /// Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice.
+    ///     The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
+    ///     1. You should not keep WCDB objects, including `Insert`, `Delete`, `Update`, `Select`, `RowSelect`,
+    ///        `MultiSelect`, `CoreStatement`, `Transaction`. These objects should not be kept.
+    ///        You should get them, use them, then release them right away.
+    ///     2. WCDB objects may not be out of its' scope.
+    ///     The best practice is to call `close:` in sub-thread and display a loading animation in main thread.
     ///
     ///     //close directly
     ///     database.close(onClosed: { () throws -> Void in
@@ -186,16 +186,16 @@ public final class Database: Core {
         handlePool.unblockade()
     }
 
-    /// Purge all unused memory of this database.  
-    /// WCDB will cache and reuse some sqlite handles to improve performance.   
+    /// Purge all unused memory of this database.
+    /// WCDB will cache and reuse some sqlite handles to improve performance.
     /// The max count of free sqlite handles is same
-    /// as the number of concurrent threads supported by the hardware implementation.  
+    /// as the number of concurrent threads supported by the hardware implementation.
     /// You can call it to save some memory.
     public func purge() {
         handlePool.purgeFreeHandles()
     }
 
-    /// Purge all unused memory of all databases.  
+    /// Purge all unused memory of all databases.
     /// Note that WCDB will call this interface automatically while it receives memory warning on iOS.
     public static func purge() {
         HandlePool.purgeFreeHandlesInAllPools()
@@ -206,8 +206,8 @@ public final class Database: Core {
         return try prepare(statement, in: recyclableHandle)
     }
 
-    /// Exec a specific sql.  
-    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
+    /// Exec a specific sql.
+    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer.
     ///
     /// - Parameter statement: WINQ statement
     /// - Throws: `Error`
@@ -215,8 +215,8 @@ public final class Database: Core {
         try exec(statement, in: flowOut())
     }
 
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// Separate interface of `run(transaction:)`
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// To do a cross-thread transaction, use `getTransaction`.
     /// - Throws: `Error`
     public override func begin(_ mode: StatementTransaction.Mode = .immediate) throws {
@@ -228,8 +228,8 @@ public final class Database: Core {
         Database.threadedHandles.value[path] = recyableHandlePool
     }
 
-    /// Separate interface of `run(transaction:)`  
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread. 
+    /// Separate interface of `run(transaction:)`
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// To do a cross-thread transaction, use `getTransaction`.
     /// - Throws: `Error`
     public override func commit() throws {
@@ -239,7 +239,7 @@ public final class Database: Core {
     }
 
     /// Separate interface of run(transaction:)
-    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.  
+    /// You should call `begin`, `commit`, `rollback` and all other operations in same thread.
     /// To do a cross-thread transaction, use `getTransaction`.
     /// - Throws: `Error`
     public override func rollback() throws {
@@ -248,11 +248,11 @@ public final class Database: Core {
         try recyableHandlePool.raw.handle.exec(CommonStatement.rollbackTransaction)
     }
 
-    /// Run a embedded transaction in closure  
-    /// The embedded transaction means that it will run a transaction if it's not in other transaction, 
+    /// Run a embedded transaction in closure
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
-    ///     try database.run(embeddedTransaction: { () throws -> Void in 
+    ///     try database.run(embeddedTransaction: { () throws -> Void in
     ///         try database.insert(objects: objects, intoTable: table)
     ///     })
     ///
@@ -269,11 +269,11 @@ public final class Database: Core {
 //Config
 extension Database {
 
-    /// Set cipher key for a database.   
-    /// For an encrypted database, you must call it before all other operation.  
-    /// The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. 
-    /// So for an existing database created by other database framework, you should set it to 1024. 
-    /// Otherwise, you'd better to use cipher page size with 4096 
+    /// Set cipher key for a database.
+    /// For an encrypted database, you must call it before all other operation.
+    /// The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases.
+    /// So for an existing database created by other database framework, you should set it to 1024.
+    /// Otherwise, you'd better to use cipher page size with 4096
     /// or simply call setCipherKey: interface to get better performance.
     ///
     /// - Parameters:
@@ -297,15 +297,15 @@ extension Database {
     static private var performanceTracer = Atomic<PerformanceTracer?>()
     static private var sqlTracer = Atomic<SQLTracer?>()
 
-    /// You can register a tracer to monitor the performance of all SQLs.  
-    /// It returns  
-    /// 1. The collection of SQLs and the executions count of each SQL.  
-    /// 2. Time consuming in nanoseconds.  
-    /// 3. Tag of database.  
+    /// You can register a tracer to monitor the performance of all SQLs.
+    /// It returns
+    /// 1. The collection of SQLs and the executions count of each SQL.
+    /// 2. Time consuming in nanoseconds.
+    /// 3. Tag of database.
     ///
-    /// Note that:  
-    /// 1. You should register trace before all db operations.   
-    /// 2. Global tracer will be recovered by db tracer.  
+    /// Note that:
+    /// 1. You should register trace before all db operations.
+    /// 2. Global tracer will be recovered by db tracer.
     ///
     ///     Database.globalTrace(ofPerformance: { (tag, sqls, cost) in
     ///         if let wrappedTag = tag {
@@ -329,8 +329,8 @@ extension Database {
         performanceTracer.assign(nil)
     }
 
-    /// You can register a tracer to monitor the execution of all SQLs.  
-    /// It returns a prepared or executed SQL.  
+    /// You can register a tracer to monitor the execution of all SQLs.
+    /// It returns a prepared or executed SQL.
     /// Note that you should register trace before all db operations.
     ///
     ///     Database.globalTrace(ofSQL: { (sql) in
@@ -495,7 +495,7 @@ extension Database {
 
     /// Set config for this database.
     ///
-    /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.  
+    /// Since WCDB is a multi-handle database, an executing handle will not apply this config immediately.
     /// Instead, all handles will run this config before its next operation.
     ///
     ///     database.setConfig(named: "demo", with: { (handle: Handle) throws in
@@ -519,8 +519,8 @@ extension Database {
         handlePool.setConfig(named: name, with: callback)
     }
 
-    /// Set Synchronous for this database. It will disable checkpoint opti to avoid performance degradation.  
-    /// Synchronous can improve the stability of the database and reduce database damage, 
+    /// Set Synchronous for this database. It will disable checkpoint opti to avoid performance degradation.
+    /// Synchronous can improve the stability of the database and reduce database damage,
     /// but there will be performance degradation.
     ///
     /// - Parameter isFull: enable or disable full synchronous
@@ -595,6 +595,20 @@ extension Database {
         }
         return Table<Root>(withDatabase: self, named: name)
     }
+
+    /// Get a wrapper from an existing table.
+    ///
+    /// - Parameters:
+    ///   - name: The name of the table.
+    ///   - type: A class conform to TableCodable protocol.
+    /// - Returns: Nil for a non-existent table.
+    /// - Throws: `Error`
+    public func getTable<Root, T>(
+        named name: T,
+        of type: Root.Type = Root.self) throws -> Table<Root>?
+        where Root : TableCodable, T : RawRepresentable, T.RawValue == String {
+            return try getTable(named: name.rawValue, of: type)
+    }
 }
 
 //File
@@ -618,7 +632,7 @@ extension Database {
         })
     }
 
-    /// Remove all database-related files.  
+    /// Remove all database-related files.
     /// You should call it on a closed database. Otherwise you will get a warning.
     ///
     /// - Throws: `Error`
@@ -639,7 +653,7 @@ extension Database {
         try moveFiles(toDirectory: directory, withExtraFiles: extraFiles)
     }
 
-    /// Move all database-related files and some extra files to directory safely.  
+    /// Move all database-related files and some extra files to directory safely.
     /// You should call it on a closed database. Otherwise you will get a warning and you may get a corrupted database.
     ///
     /// - Parameters:
@@ -670,7 +684,7 @@ extension Database {
         try? File.remove(files: paths)
     }
 
-    /// Get the space used by the database files.  
+    /// Get the space used by the database files.
     /// You should call it on a closed database. Otherwise you will get a warning.
     ///
     /// - Returns: The sum of files size in bytes.
@@ -685,8 +699,8 @@ extension Database {
 
 //Repair
 extension Database {
-    /// Backup metadata to recover.  
-    /// Since metadata will be changed while a table or an index is created or dropped, 
+    /// Backup metadata to recover.
+    /// Since metadata will be changed while a table or an index is created or dropped,
     /// you should call this periodically.
     ///
     /// - Parameter key: The cipher key for backup. Nil for non-encrypted.
@@ -696,12 +710,12 @@ extension Database {
         try handle.raw.handle.backup(withKey: key)
     }
 
-    /// Recover data from a corruped db. You'd better to recover a closed database.  
+    /// Recover data from a corruped db. You'd better to recover a closed database.
     ///
     /// - Parameters:
     ///   - source: The path to the corrupted database
-    ///   - pageSize: Page size of the corrupted database. It's default to 4096 on iOS. 
-    ///               Page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. 
+    ///   - pageSize: Page size of the corrupted database. It's default to 4096 on iOS.
+    ///               Page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it.
     ///               Also, you can call "PRAGMA page_size" to check the current value while database is not corrupted.
     ///   - databaseKey: The cipher key for corrupeted database
     ///   - backupKey: The cipher key for backup

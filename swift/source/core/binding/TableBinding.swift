@@ -121,6 +121,11 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
         return columnDef
     }
 
+    public func generateCreateVirtualTableStatement<T>(named table: T) -> StatementCreateVirtualTable
+        where T : RawRepresentable, T.RawValue == String {
+            return generateCreateVirtualTableStatement(named: table.rawValue)
+    }
+
     public func generateCreateVirtualTableStatement(named table: String) -> StatementCreateVirtualTable {
         assert(virtualTableBinding != nil, "Virtual table binding is not defined")
         let columnModuleArguments = allColumnDef.map { ModuleArgument(with: $0) }
@@ -135,11 +140,21 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
                    arguments: arguments)
     }
 
+    public func generateCreateTableStatement<T>(named table: T) -> StatementCreateTable
+        where T : RawRepresentable, T.RawValue == String {
+        return generateCreateTableStatement(named: table.rawValue)
+    }
+    
     public func generateCreateTableStatement(named table: String) -> StatementCreateTable {
         let tableConstraints = tableConstraintBindings?.map { $0.value.generateConstraint(withName: $0.key) }
         return StatementCreateTable().create(table: table,
                                              with: allColumnDef,
                                              and: tableConstraints)
+    }
+
+    public func generateCreateIndexStatements<T>(onTable table: T) -> [StatementCreateIndex]?
+        where T : RawRepresentable, T.RawValue == String {
+            return generateCreateIndexStatements(onTable: table.rawValue)
     }
 
     public func generateCreateIndexStatements(onTable table: String) -> [StatementCreateIndex]? {
