@@ -28,7 +28,7 @@
 #include <WCDB/RWLock.hpp>
 #include <WCDB/Recyclable.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/Utility.hpp>
+#include <WCDB/String.hpp>
 #include <unordered_map>
 
 namespace WCDB {
@@ -60,8 +60,11 @@ public:
     std::atomic<Tag> tag;
     const std::string path;
 
-    RecyclableHandle flowOut(Error &error);
-    bool fillOne(Error &error);
+    RecyclableHandle flowOut();
+    bool fillOne();
+    const Error &getThreadedError() const;
+    void setAndReportThreadedError(const Error &error) const;
+    void resetThreadedError() const;
 
     bool isDrained();
     typedef std::function<void(void)> OnDrained;
@@ -82,19 +85,20 @@ protected:
     HandlePool(const HandlePool &) = delete;
     HandlePool &operator=(const HandlePool &) = delete;
 
-    std::shared_ptr<HandleWrap> generate(Error &error);
-
-    bool invoke(std::shared_ptr<HandleWrap> &handleWrap, Error &error);
+    std::shared_ptr<ConfiguredHandle> generate();
 
     Configs m_configs;
     RWLock m_rwlock;
 
-    void flowBack(const std::shared_ptr<HandleWrap> &handleWrap);
+    void flowBack(const std::shared_ptr<ConfiguredHandle> &handleWrap);
 
-    ConcurrentList<HandleWrap> m_handles;
+    ConcurrentList<ConfiguredHandle> m_handles;
     std::atomic<int> m_aliveHandleCount;
     static const int s_hardwareConcurrency;
     static const int s_maxConcurrency;
+
+    static ThreadLocal<std::unordered_map<const HandlePool *, Error>>
+        s_threadedErrors;
 };
 
 } //namespace WCDB

@@ -38,15 +38,14 @@
 + (void)SetGlobalPerformanceTrace:(WCTPerformanceTrace)trace
 {
     if (trace) {
-        WCDB::BuiltinConfig::SetGlobalPerformanceTrace([trace](WCDB::Tag tag,
-                                                               const std::map<const std::string, unsigned int> &footprint,
+        WCDB::BuiltinConfig::SetGlobalPerformanceTrace([trace](const std::map<const std::string, unsigned int> &footprint,
                                                                const int64_t &cost) {
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             for (const auto &iter : footprint) {
                 [dictionary setObject:@(iter.second)
                                forKey:@(iter.first.c_str())];
             }
-            trace(tag, dictionary, (NSUInteger) cost);
+            trace(dictionary, (NSUInteger) cost);
         });
     } else {
         WCDB::BuiltinConfig::SetGlobalPerformanceTrace(nullptr);

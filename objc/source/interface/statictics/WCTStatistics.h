@@ -29,7 +29,7 @@ typedef void (^WCTErrorReport)(WCTError *);
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
+typedef void (^WCTPerformanceTrace)(NSDictionary<NSString *, NSNumber *> *, NSInteger);
 
 /**
  Trigger when a SQL is executed.

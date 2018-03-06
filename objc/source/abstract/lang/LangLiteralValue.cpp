@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Lang.h>
-#include <WCDB/Utility.hpp>
+#include <WCDB/String.hpp>
 #include <sstream>
 
 namespace WCDB {
@@ -44,13 +44,17 @@ CopyOnWriteString LiteralValue::SQL() const
         } break;
         case Type::BLOB:
             assert(!dataValue.empty());
+            description.append("'");
             description.append(
-                LiteralValue::stringByAntiInjecting(dataValue.get()));
+                LiteralValue::stringByAntiInjecting(dataValue).get());
+            description.append("'");
             break;
         case Type::String:
             assert(!stringValue.empty());
+            description.append("'");
             description.append(
-                LiteralValue::stringByAntiInjecting(stringValue.get()));
+                LiteralValue::stringByAntiInjecting(stringValue).get());
+            description.append("'");
             break;
         case Type::Null:
             description.append("NULL");
@@ -71,16 +75,20 @@ CopyOnWriteString LiteralValue::SQL() const
     return description;
 }
 
-std::string LiteralValue::stringByAntiInjecting(const std::string &origin)
+CopyOnWriteString
+LiteralValue::stringByAntiInjecting(const CopyOnWriteString &origin)
 {
-    return "'" + stringByReplacingOccurrencesOfString(origin, "'", "''") + "'";
+    return String::stringByReplacingOccurrencesOfString(origin, "'", "''");
 }
 
-std::string
-LiteralValue::stringByAntiInjecting(const std::vector<unsigned char> &origin)
+CopyOnWriteString
+LiteralValue::stringByAntiInjecting(const CopyOnWriteData &origin)
 {
-    std::string str(origin.begin(), origin.end());
-    return "'" + stringByReplacingOccurrencesOfString(str, "'", "''") + "'";
+    //TODO use BindParameter to accept data with '\0'
+    const std::vector<unsigned char> &data = origin.get();
+    CopyOnWriteString cowString;
+    cowString.assign(std::string(data.begin(), data.end()));
+    return String::stringByReplacingOccurrencesOfString(cowString, "'", "''");
 }
 
 } // namespace Lang

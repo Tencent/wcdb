@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTTable.h>
 
 /**
@@ -173,71 +171,6 @@
                               limit:(const WCDB::Expression &)limit
                              offset:(const WCDB::Expression &)offset;
 
-#pragma mark - Get One Distinct Column
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      limit:(const WCDB::Expression &)limit;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                      limit:(const WCDB::Expression &)limit;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                      limit:(const WCDB::Expression &)limit;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                      limit:(const WCDB::Expression &)limit;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset;
-
-- (WCTOneColumn *)getDistinctColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                                      where:(const WCDB::Expression &)condition
-                                    orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset;
-
 #pragma mark - Get One Value
 - (id /* WCTValue* */)getValueOnResult:(const WCDB::ResultColumn &)resultColumn;
 
@@ -266,35 +199,6 @@
                                  where:(const WCDB::Expression &)condition
                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
                                 offset:(const WCDB::Expression &)offset;
-
-#pragma mark - Get One Distinct Value
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                         where:(const WCDB::Expression &)condition;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                        offset:(const WCDB::Expression &)offset;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                         where:(const WCDB::Expression &)condition
-                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                         where:(const WCDB::Expression &)condition
-                                        offset:(const WCDB::Expression &)offset;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                        offset:(const WCDB::Expression &)offset;
-
-- (id /* WCTValue* */)getDistinctValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                                         where:(const WCDB::Expression &)condition
-                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                        offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Objects
 - (NSArray /* <WCTObject*> */ *)getObjects;

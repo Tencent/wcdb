@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTDelete : WCTChainCall
+@interface WCTDelete : WCTHandle
+
+- (instancetype)fromTable:(NSString *)tableName;
 
 /**
  @brief WINQ interface for SQL.
@@ -60,11 +60,5 @@
  @return YES if no error occurs.
  */
 - (BOOL)execute;
-
-/**
- @brief It should be called after executing successfully
- @return the number of changes in the most recent call
- */
-- (int)changes;
 
 @end

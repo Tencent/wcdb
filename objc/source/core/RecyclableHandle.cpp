@@ -22,39 +22,26 @@
 
 namespace WCDB {
 
-HandleWrap::HandleWrap(const std::shared_ptr<Handle> &theSqlBase,
-                       const Configs &theConfigs)
-    : handle(theSqlBase), configs(theConfigs)
-{
-}
-
+#pragma mark - RecyclableHandle
 RecyclableHandle::RecyclableHandle(
-    const std::shared_ptr<HandleWrap> &value,
-    const Recyclable<std::shared_ptr<HandleWrap>>::OnRecycled &onRecycled)
-    : m_value(value), m_recyclable(value, onRecycled)
+    const std::shared_ptr<ConfiguredHandle> &value,
+    const Super::OnRecycled &onRecycled)
+    : Super(value, onRecycled), m_handle(value->getHandle())
 {
 }
 
-RecyclableHandle::operator bool() const
+RecyclableHandle::RecyclableHandle(const std::nullptr_t &)
+    : Super(nullptr), m_handle(nullptr)
 {
-    return m_value != nullptr;
 }
 
-bool RecyclableHandle::operator!=(const std::nullptr_t &) const
+RecyclableHandle::RecyclableHandle() : Super(nullptr), m_handle(nullptr)
 {
-    return m_value != nullptr;
 }
 
-bool RecyclableHandle::operator==(const std::nullptr_t &) const
+Handle *RecyclableHandle::getHandle() const
 {
-    return m_value == nullptr;
-}
-
-RecyclableHandle &RecyclableHandle::operator=(const std::nullptr_t &)
-{
-    m_value = nullptr;
-    m_recyclable = nullptr;
-    return *this;
+    return m_handle;
 }
 
 } //namespace WCDB

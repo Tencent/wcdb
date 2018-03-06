@@ -40,7 +40,7 @@
 
 + (WCDB::ColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeBinary;
+    return WCDB::ColumnType::BLOB;
 }
 
 @end
@@ -62,7 +62,7 @@
 
 + (WCDB::ColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeBinary;
+    return WCDB::ColumnType::BLOB;
 }
 
 @end

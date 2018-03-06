@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+const StatementCommit StatementCommit::default_ = StatementCommit().commit();
+
 StatementCommit &StatementCommit::commit()
 {
     getMutableLang();

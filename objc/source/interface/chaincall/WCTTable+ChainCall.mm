@@ -18,83 +18,41 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCoding.h>
-#import <WCDB/WCTDelete+Private.h>
-#import <WCDB/WCTDelete.h>
-#import <WCDB/WCTInsert+Private.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTMultiSelect+Private.h>
-#import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTRowSelect+Private.h>
-#import <WCDB/WCTRowSelect.h>
-#import <WCDB/WCTSelect+Private.h>
-#import <WCDB/WCTSelect.h>
-#import <WCDB/WCTTable+ChainCall.h>
+#import <WCDB/WCDB.h>
+#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTUpdate+Private.h>
-#import <WCDB/WCTUpdate.h>
 
 @implementation WCTTable (ChainCall)
 
-- (WCTInsert *)prepareInsertObjects
+- (WCTInsert *)prepareInsert
 {
-    return [[WCTInsert alloc] initWithDatabase:_database andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:NO];
-}
-
-- (WCTInsert *)prepareInsertOrReplaceObjects
-{
-    return [[WCTInsert alloc] initWithDatabase:_database andProperties:[_class AllProperties] andTableName:_tableName andReplaceFlag:YES];
-}
-
-- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)properties
-{
-    return [[WCTInsert alloc] initWithDatabase:_database andProperties:properties andTableName:_tableName andReplaceFlag:NO];
-}
-
-- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)properties
-{
-    return [[WCTInsert alloc] initWithDatabase:_database andProperties:properties andTableName:_tableName andReplaceFlag:YES];
+    return [[[WCTInsert alloc] initWithDatabase:_database
+                            andRecyclableHandle:_database->flowOut()] intoTable:_tableName];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[WCTDelete alloc] initWithDatabase:_database andTableName:_tableName];
+    return [[[WCTDelete alloc] initWithDatabase:_database
+                            andRecyclableHandle:_database->flowOut()] fromTable:_tableName];
 }
 
-- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)properties
+- (WCTUpdate *)prepareUpdate
 {
-    return [[WCTUpdate alloc] initWithDatabase:_database andProperties:properties andTableName:_tableName];
+    return [[[WCTUpdate alloc] initWithDatabase:_database
+                            andRecyclableHandle:_database->flowOut()] table:_tableName];
 }
 
-- (WCTSelect *)prepareSelectObjects
+- (WCTSelect *)prepareSelect
 {
-    return [[WCTSelect alloc] initWithDatabase:_database andProperties:[_class AllProperties] fromTable:_tableName isDistinct:NO];
+    return [[[[WCTSelect alloc] initWithDatabase:_database
+                             andRecyclableHandle:_database->flowOut()] fromTable:_tableName] ofClass:_class];
 }
 
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties
+- (WCTRowSelect *)prepareRowSelect
 {
-    return [[WCTSelect alloc] initWithDatabase:_database andProperties:properties fromTable:_tableName isDistinct:NO];
-}
-
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties isDistinct:(BOOL)isDistinct
-{
-    return [[WCTSelect alloc] initWithDatabase:_database andProperties:properties fromTable:_tableName isDistinct:isDistinct];
-}
-
-- (WCTRowSelect *)prepareSelectRows
-{
-    return [[WCTRowSelect alloc] initWithDatabase:_database andResultColumns:{WCDB::ResultColumn::All} fromTables:@[ _tableName ] isDistinct:NO];
-}
-
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-{
-    return [[WCTRowSelect alloc] initWithDatabase:_database andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:NO];
-}
-
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns isDistinct:(BOOL)isDistinct
-{
-    return [[WCTRowSelect alloc] initWithDatabase:_database andResultColumns:resultColumns fromTables:@[ _tableName ] isDistinct:isDistinct];
+    return [[[WCTRowSelect alloc] initWithDatabase:_database
+                               andRecyclableHandle:_database->flowOut()] fromTable:_tableName];
 }
 
 @end

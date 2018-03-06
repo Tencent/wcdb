@@ -21,38 +21,25 @@
 #ifndef RecyclableHandle_hpp
 #define RecyclableHandle_hpp
 
-#include <WCDB/Abstract.h>
-#include <WCDB/Config.hpp>
+#include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/Recyclable.hpp>
-#include <memory>
 
 namespace WCDB {
 
-class HandleWrap {
+class RecyclableHandle : public Recyclable<std::shared_ptr<ConfiguredHandle>> {
 public:
-    HandleWrap(const std::shared_ptr<Handle> &handle, const Configs &configs);
+    using Super = Recyclable<std::shared_ptr<ConfiguredHandle>>;
 
-    constexpr Handle *operator->() const { return handle.get(); }
+    RecyclableHandle(const std::shared_ptr<ConfiguredHandle> &value,
+                     const Super::OnRecycled &onRecycled);
+    RecyclableHandle(const std::nullptr_t &);
+    RecyclableHandle();
 
-    std::shared_ptr<Handle> handle;
-    Configs configs;
-};
-
-class RecyclableHandle {
-public:
-    RecyclableHandle(
-        const std::shared_ptr<HandleWrap> &value,
-        const Recyclable<std::shared_ptr<HandleWrap>>::OnRecycled &onRecycled);
-    constexpr Handle *operator->() const { return m_value->operator->(); }
-    operator bool() const;
-    bool operator!=(const std::nullptr_t &) const;
-    bool operator==(const std::nullptr_t &) const;
-
-    RecyclableHandle &operator=(const std::nullptr_t &);
+    constexpr Handle *operator->() { return m_handle; }
+    Handle *getHandle() const;
 
 protected:
-    std::shared_ptr<HandleWrap> m_value;
-    Recyclable<std::shared_ptr<HandleWrap>> m_recyclable;
+    Handle *m_handle;
 };
 
 } //namespace WCDB

@@ -18,8 +18,9 @@
  * limitations under the License.
  */
 
+#import <WCDB/NSData+NoCopyData.h>
+#import <WCDB/WCDB.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTCore.h>
 
 @implementation WCTCore
 

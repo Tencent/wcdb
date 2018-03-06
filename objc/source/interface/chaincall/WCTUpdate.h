@@ -18,13 +18,18 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTChainCall.h>
+#import <WCDB/WCTHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTUpdate : WCTChainCall
+@interface WCTUpdate : WCTHandle
+
+- (instancetype)table:(NSString *)tableName;
+
+- (instancetype)onProperties:(const WCTPropertyList &)properties;
+
+- (instancetype)onProperty:(const WCTProperty &)property;
 
 /**
  @brief WINQ interface for SQL.
@@ -61,17 +66,8 @@
  */
 - (BOOL)executeWithObject:(WCTObject *)object;
 
-/**
- @brief Execute the update SQL with objects.
- @param row Template row to be used to update table
- @return YES if no error occurs. See [error] also.
- */
-- (BOOL)executeWithRow:(WCTOneRow *)row;
+- (BOOL)executeWithValue:(WCTValue *)value;
 
-/**
- @brief It should be called after executing successfully
- @return the number of changes in the most recent call
- */
-- (int)changes;
+- (BOOL)executeWithRow:(WCTOneRow *)row;
 
 @end

@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
 
 @interface WCTDatabase (Table)
@@ -33,7 +31,8 @@
  @param cls class
  @return YES while creating table or adding newly defined columns succeeds. It will not fail if error occurs during creating indexes.  
  */
-- (BOOL)createTableAndIndexesOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
+- (BOOL)createTableAndIndexesOfName:(NSString *)tableName
+                          withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Get a wrapper from an existing table.
@@ -41,7 +40,8 @@
  @param cls a class implement WCTTableCoding.
  @return WCTTable nil for a non-existent table.
  */
-- (WCTTable *)getTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
+- (WCTTable *)getTableOfName:(NSString *)tableName
+                   withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Create virtual table from ORM if not exists.
@@ -50,31 +50,8 @@
  @param cls a class implement WCTTableCoding.
  @return YES only if no error occurs.
  */
-- (BOOL)createVirtualTableOfName:(NSString *)tableName withClass:(Class<WCTTableCoding>)cls;
-
-/**
- @brief Create table from user-defined column if not exists.
- @param tableName The name of the table to be created.
- @param columnDefs The list of column definition.
- @param constraints The list of constraint.
- @return YES only if no error occurs.
- */
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs andConstraints:(const std::list<WCDB::TableConstraint> &)constraints;
-
-/**
- @brief This interface is equivalent to [database createTableOfName:tableName withColumnDefs:columnDefs andConstraints:{}].
- @param tableName The name of the table to be created.
- @param columnDefs The list of column definition.
- @return YES only if no error occurs.
- */
-- (BOOL)createTableOfName:(NSString *)tableName withColumnDefs:(const std::list<WCDB::ColumnDef> &)columnDefs;
-
-/**
- @brief Check whether table exists
- @param tableName The name of the table to be checked.
- @return YES if table exists. NO if table does not exist or an error occurs.
- */
-- (BOOL)isTableExists:(NSString *)tableName;
+- (BOOL)createVirtualTableOfName:(NSString *)tableName
+                       withClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Drop table if exists.
@@ -84,27 +61,10 @@
 - (BOOL)dropTableOfName:(NSString *)tableName;
 
 /**
- @brief Create table from user-defined index if not exists.
- @param indexName The name of the index to be created.
- @param indexedColumns The list of index definition.
- @param tableName The name of index-associated table.
- @return YES only if no error occurs.
- */
-- (BOOL)createIndexOfName:(NSString *)indexName withIndexedColumns:(const std::list<WCDB::IndexedColumn> &)indexedColumns forTable:(NSString *)tableName;
-
-/**
  @brief Drop index if not exists.
  @param indexName The name of the index to be dropped.
  @return YES only if no error occurs.
  */
 - (BOOL)dropIndexOfName:(NSString *)indexName;
-
-/**
- @brief Add column.
- @param columnDef The definition of column to be added.
- @param tableName The name of table to do a column addition.
- @return YES only if no error occurs.
- */
-- (BOOL)addColumn:(const WCDB::ColumnDef &)columnDef forTable:(NSString *)tableName;
 
 @end

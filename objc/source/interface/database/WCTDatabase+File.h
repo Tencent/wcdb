@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/WCTDatabase.h>
 
 @interface WCTDatabase (File)
@@ -26,10 +25,9 @@
 /**
  @brief Remove all database-related files.
  @warning You should call it on a closed database. Otherwise you will get a warning.
- @param error error
  @return YES if all files are removed.
  */
-- (BOOL)removeFilesWithError:(WCTError **)error;
+- (BOOL)removeFiles;
 
 /**
  @brief Move all database-related files and some extra files to directory safely.
@@ -37,18 +35,17 @@
  @warning Since file operation is not atomic, There may be some accidents during this period. For example, app may crash while db file is moved to destination and wal file is not. Then none of destination and source contains the whole data. This interface can make sure all of your data is in source or destination. 
  @param directory destination
  @param extraFiles extraFiles
- @param error error
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(NSString *)directory withExtraFiles:(NSArray<NSString *> *)extraFiles andError:(WCTError **)error;
+- (BOOL)moveFilesToDirectory:(NSString *)directory
+              withExtraFiles:(NSArray<NSString *> *)extraFiles;
 
 /**
  @brief This interface is equivalent to [database moveFilesToDirectory:directory withExtraFiles:nil andError:error].
  @param directory destination
- @param error error
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(NSString *)directory withError:(WCTError **)error;
+- (BOOL)moveFilesToDirectory:(NSString *)directory;
 
 /**
  @brief Paths to all database-related files.
@@ -59,9 +56,8 @@
 /**
  @brief Get the space used by the database files.
  @warning You should call it on a closed database. Otherwise you will get a warning.
- @param error error
  @return The sum of files size in bytes.
  */
-- (NSUInteger)getFilesSizeWithError:(WCTError **)error;
+- (NSUInteger)getFilesSize;
 
 @end

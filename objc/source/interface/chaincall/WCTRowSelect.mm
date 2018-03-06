@@ -18,84 +18,105 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCDB.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTRowSelect+Private.h>
-#import <WCDB/WCTRowSelect.h>
-#import <WCDB/WCTSelectBase+Private.h>
+#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTSelectable+Private.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTRowSelect
 
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                andResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
-                      fromTables:(NSArray<NSString *> *)tableNames
-                      isDistinct:(BOOL)isDistinct
+             andRecyclableHandle:(const WCDB::RecyclableHandle &)handle
 {
-    if (self = [super initWithDatabase:database]) {
-        std::list<WCDB::TableOrSubquery> tableOrSubquerys;
-        for (NSString *tableName in tableNames) {
-            tableOrSubquerys.push_back(tableName.UTF8String);
-        }
-        if (isDistinct) {
-            _statement.distinct();
-        }
-        _statement.select(resultColumns).from(tableOrSubquerys);
+    if (self = [super initWithDatabase:database
+                   andRecyclableHandle:handle]) {
+        _statement.select(WCDB::ResultColumn::All);
     }
+    return self;
+}
+
+- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn
+{
+    _statement.select(resultColumn);
+    return self;
+}
+
+- (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
+{
+    _statement.select(resultColumns);
+    return self;
+}
+
+- (instancetype)fromTable:(NSString *)tableName
+{
+    _statement.from(tableName.UTF8String);
+    return self;
+}
+
+- (instancetype)fromTables:(NSArray<NSString *> *)tableNames
+{
+    std::list<WCDB::TableOrSubquery> tables;
+    for (NSString *tableName in tableNames) {
+        tables.push_back(tableName.UTF8String);
+    }
+    _statement.from(tables);
     return self;
 }
 
 - (WCTColumnsXRows *)allRows
 {
-    if ([self lazyPrepare]) {
-        NSMutableArray *allRows = [NSMutableArray array];
-        NSMutableArray *row = nil;
-        while ([self next]) {
-            row = [NSMutableArray array];
-            if ([self extractValueToRow:row]) {
-                [allRows addObject:row];
-            } else {
-                return nil;
-            }
-        }
-        return _error.isOK() ? allRows : nil;
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    NSMutableArray *rows = [NSMutableArray array];
+    bool done;
+    while (_handle->step(done) && !done) {
+        [rows addObject:[self getRow]];
+    }
+    _handle->finalize();
+    return done ? rows : nil;
 }
 
 - (WCTOneRow *)nextRow
 {
-    if ([self lazyPrepare] && [self next]) {
-        NSMutableArray *row = [NSMutableArray array];
-        if ([self extractValueToRow:row]) {
-            return row;
-        }
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    bool done;
+    if (!_handle->step(done) || done) {
+        _handle->finalize();
+        return nil;
+    }
+    return [self getRow];
 }
 
 - (WCTOneColumn *)allValues
 {
-    if ([self lazyPrepare]) {
-        NSMutableArray *allValues = [NSMutableArray array];
-        WCTValue *value = nil;
-        while ([self next]) {
-            value = [self extractValue];
-            if (!value) {
-                value = [NSNull null];
-            }
-            [allValues addObject:value];
-        }
-        return _error.isOK() ? allValues : nil;
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    NSMutableArray *columns = [[NSMutableArray alloc] init];
+    bool done;
+    while (_handle->step(done) && !done) {
+        NSObject *value = [self getValueAtIndex:0];
+        [columns addObject:value ? value : [NSNull null]];
+    }
+    _handle->finalize();
+    return done ? columns : nil;
 }
 
 - (WCTValue *)nextValue
 {
-    if ([self lazyPrepare] && [self next]) {
-        return [self extractValue];
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    bool done;
+    if (!_handle->step(done) || done) {
+        _handle->finalize();
+        return nil;
+    }
+    return [self getValueAtIndex:0];
 }
 
 @end

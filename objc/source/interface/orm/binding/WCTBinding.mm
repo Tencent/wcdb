@@ -28,7 +28,9 @@
 WCTBinding::WCTBinding(Class cls)
     : m_cls(cls)
 {
-    class_addProtocol(m_cls, @protocol(WCTTableCoding));
+    if (!class_conformsToProtocol(m_cls, @protocol(WCTTableCoding))) {
+        class_addProtocol(m_cls, @protocol(WCTTableCoding));
+    }
 }
 
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::string &tableName) const
@@ -43,7 +45,7 @@ WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::s
     return statement;
 }
 
-const std::map<std::string, std::shared_ptr<WCTColumnBinding>, WCDB::CaseInsensiveComparator> &WCTBinding::getColumnBindingMap() const
+const std::map<std::string, std::shared_ptr<WCTColumnBinding>, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindingMap() const
 {
     return m_columnBindings.getMap();
 }

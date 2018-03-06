@@ -18,14 +18,20 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTSelectBase.h>
+#import <WCDB/WCTSelectable.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTMultiSelect : WCTSelectBase
+@interface WCTMultiSelect : WCTSelectable
+
+- (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
+
+- (instancetype)onProperties:(const WCTPropertyList &)properties;
+
+- (instancetype)ofClasses:(NSArray<Class<WCTTableCoding>> *)classes;
+
+- (instancetype)distinct;
 
 /**
  @brief Get next selected object. You can do an iteration using it.

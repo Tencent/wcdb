@@ -18,9 +18,7 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTSelectBase.h>
+#import <WCDB/WCTSelectable.h>
 
 /**
  Not Thread-safe
@@ -28,7 +26,15 @@
  If you only select one column result from table, you can use nextValue and allValues interface to avoid unwraping for row.
  Otherwise, you should use nextRow and allRows interface.
  */
-@interface WCTRowSelect : WCTSelectBase
+@interface WCTRowSelect : WCTSelectable
+
+- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn;
+
+- (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns;
+
+- (instancetype)fromTable:(NSString *)tableName;
+
+- (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
 
 /**
  @brief Get next selected row. You can do an iteration using it.

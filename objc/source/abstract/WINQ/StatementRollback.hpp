@@ -29,6 +29,8 @@ namespace WCDB {
 class StatementRollback : public StatementWithLang<Lang::RollbackSTMT> {
 
 public:
+    static const StatementRollback default_;
+
     StatementRollback &rollback();
     StatementRollback &rollbackTo(const std::string &savepointName);
     virtual Type getType() const override;

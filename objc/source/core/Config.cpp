@@ -24,14 +24,18 @@ namespace WCDB {
 
 Config::Config(const std::string &theName,
                const Callback &theCallback,
-               const int &theOrder)
+               int theOrder)
     : name(theName), callback(theCallback), order(theOrder)
 {
 }
 
-bool Config::invoke(std::shared_ptr<Handle> &handle, Error &error) const
+bool Config::invoke(Handle *handle) const
 {
-    return callback ? callback(handle, error) : true;
+    return callback ? callback(handle) : true;
+}
+
+Configs::Configs()
+{
 }
 
 Configs::Configs(const std::list<Config> &configs)
@@ -41,10 +45,10 @@ Configs::Configs(const std::list<Config> &configs)
     }
 }
 
-bool Configs::invoke(std::shared_ptr<Handle> &handle, Error &error) const
+bool Configs::invoke(Handle *handle) const
 {
     for (const auto &element : m_configs.get()) {
-        if (!element.get().invoke(handle, error)) {
+        if (!element.get().invoke(handle)) {
             return false;
         }
     }
@@ -84,9 +88,9 @@ void Configs::setConfig(const std::string &name,
     configs.push_back(Config(name, callback, order + 1));
 }
 
-bool Configs::operator!=(const Configs &other) const
+bool Configs::equal(const Configs &other) const
 {
-    return !m_configs.equal(other.m_configs);
+    return m_configs.equal(other.m_configs);
 }
 
 } //namespace WCDB

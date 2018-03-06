@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTTable.h>
 
 /**
@@ -27,95 +25,14 @@
  */
 @interface WCTTable (ChainCall)
 
-/**
- Generate a WCTInsert to do an insertion on this table.
+- (WCTInsert *)prepareInsert;
 
- @return WCTInsert
- */
-- (WCTInsert *)prepareInsertObjects;
-
-/**
- Generate a WCTInsert to do an insertion or replacement on this table.
-
- @return WCTInsert
- */
-- (WCTInsert *)prepareInsertOrReplaceObjects;
-
-/**
- Generate a WCTInsert to do a partial insertion on this table.
-
- @param properties The specific properties to be inserted.
- @return WCTInsert
- */
-- (WCTInsert *)prepareInsertObjectsOnProperties:(const WCTPropertyList &)properties;
-
-/**
- Generate a WCTInsert to do a partial insertion or replacement on this table.
-
- @param properties The specific properties to be inserted.
- @return WCTInsert
- */
-- (WCTInsert *)prepareInsertOrReplaceObjectsOnProperties:(const WCTPropertyList &)properties;
-
-/**
- Generate a WCTDelete to do a deletion.
-
- @return WCTDelete
- */
 - (WCTDelete *)prepareDelete;
 
-/**
- Generate a WCTUpdate to do an update.
+- (WCTUpdate *)prepareUpdate;
 
- @param properties The specific properties to be updated.
- @return WCTUpdate
- */
-- (WCTUpdate *)prepareUpdateOnProperties:(const WCTPropertyList &)properties;
+- (WCTSelect *)prepareSelect;
 
-/**
- Generate a WCTSelect to do an object selection.
-
- @return WCTSelect
- */
-- (WCTSelect *)prepareSelectObjects;
-
-/**
- Generate a WCTSelect to do an object selection on the specific results.
- 
- @param properties The column results to be selected.
- @return WCTSelect
- */
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties;
-
-/**
- Generate a WCTSelect to do an object selection on the specific results.
- 
- @param properties The column results to be selected.
- @return WCTSelect
- */
-- (WCTSelect *)prepareSelectObjectsOnProperties:(const WCTPropertyList &)properties isDistinct:(BOOL)isDistinct;
-
-/**
- Generate a WCTRowSelect to do a row selection on the specific results.
- 
- @return WCTRowSelect
- */
-- (WCTRowSelect *)prepareSelectRows;
-
-/**
- Generate a WCTRowSelect to do a row selection on the specific results.
-
- @param resultColumns The column results to be selected.
- @return WCTRowSelect
- */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns;
-
-/**
- Generate a WCTRowSelect to do a row selection on the specific results.
- 
- @param resultColumns The column results to be selected.
- @return WCTRowSelect
- */
-- (WCTRowSelect *)prepareSelectRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns isDistinct:(BOOL)isDistinct;
+- (WCTRowSelect *)prepareRowSelect;
 
 @end

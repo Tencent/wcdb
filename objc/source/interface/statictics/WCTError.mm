@@ -30,26 +30,31 @@
 - (instancetype)initWithWCDBError:(const WCDB::Error &)error
 {
     NSMutableDictionary *infos = [NSMutableDictionary dictionary];
-    for (const auto &iter : error.getInfos()) {
-        NSString *key = @(WCDB::Error::GetKeyName(iter.first));
-        switch (iter.second.getType()) {
-            case WCDB::ErrorValue::Type::Int:
-                [infos setObject:@(iter.second.getIntValue()) forKey:key];
-                break;
-            case WCDB::ErrorValue::Type::String: {
-                const std::string stringValue = iter.second.getStringValue();
-                NSString *value = @(stringValue.c_str());
-                if (!value) {
-                    value = [[NSString alloc] initWithCString:stringValue.c_str() encoding:NSASCIIStringEncoding];
-                }
-                if (!value) {
-                    value = @"";
-                }
-                [infos setObject:value forKey:key];
-            } break;
+    if (error.getCode() != 0) {
+        for (const auto &iter : error.getInfos()) {
+            NSString *key = @(WCDB::Error::GetKeyName(iter.first));
+            switch (iter.second.getType()) {
+                case WCDB::Error::Value::Type::Int:
+                    [infos setObject:@(iter.second.getIntValue()) forKey:key];
+                    break;
+                case WCDB::Error::Value::Type::String: {
+                    //TODO truncate path
+                    const std::string stringValue = iter.second.getStringValue();
+                    NSString *value = @(stringValue.c_str());
+                    if (!value) {
+                        value = [[NSString alloc] initWithCString:stringValue.c_str() encoding:NSASCIIStringEncoding];
+                    }
+                    if (!value) {
+                        value = @"";
+                    }
+                    [infos setObject:value forKey:key];
+                } break;
+            }
         }
     }
-    return [self initWithType:(WCTErrorType) error.getType() code:error.getCode() userInfo:infos];
+    return [self initWithType:(WCTErrorType) error.getType()
+                         code:error.getCode()
+                     userInfo:infos];
 }
 
 - (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo

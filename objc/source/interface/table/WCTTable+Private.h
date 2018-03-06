@@ -18,13 +18,16 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTTable.h>
 
 @interface WCTTable () {
+@protected
     Class _class;
     NSString *_tableName;
 }
+
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                    andTableName:(NSString *)tableName
+                        andClass:(Class<WCTTableCoding>)cls;
 
 @end

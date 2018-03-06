@@ -24,8 +24,10 @@
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTColumnBinding.h>
 
+#import <WCDB/NSObject+Convertible.h>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTRedirectable.h>
 
 #import <WCDB/WCTCodingMacro.h>
 #import <WCDB/WCTIndexMacro.h>

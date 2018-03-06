@@ -34,14 +34,8 @@ typedef NS_ENUM(int, WCTErrorType) {
      * System error, which is obtained by [errno].
      */
     WCTErrorTypeSystemCall = (WCTErrorType) WCDB::Error::Type::SystemCall,
-    /**
-     * An error comes from core layer of WCDB. For further information, see [Error::CoreCode] in [Error.hpp].
-     */
-    WCTErrorTypeCore = (WCTErrorType) WCDB::Error::Type::Core,
-    /**
-     * An error comes from interface layer of WCDB. For further information, see [Error::InterfaceCode] in [Error.hpp].
-     */
-    WCTErrorTypeInterface = (WCTErrorType) WCDB::Error::Type::Interface,
+    WCTErrorTypeWCDB = (WCTErrorType) WCDB::Error::Type::WCDB,
+    WCTErrorTypeRepairKit = (WCTErrorType) WCDB::Error::Type::RepairKit,
     /**
      * Development error. You should fix it before release.
      */

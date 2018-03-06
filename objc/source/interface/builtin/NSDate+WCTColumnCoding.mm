@@ -40,7 +40,7 @@
 
 + (WCDB::ColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeInteger64;
+    return WCDB::ColumnType::Integer64;
 }
 
 @end

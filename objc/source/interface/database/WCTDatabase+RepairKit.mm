@@ -25,8 +25,7 @@
 
 - (BOOL)backupWithCipher:(NSData *)key
 {
-    WCDB::Error wcdbError;
-    return _database->backup(key.bytes, (unsigned int) key.length, wcdbError);
+    return _database->backup(key.bytes, (unsigned int) key.length);
 }
 
 - (BOOL)backup
@@ -34,10 +33,17 @@
     return [self backupWithCipher:nil];
 }
 
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize backupCipher:(NSData *)backupCipher databaseCipher:(NSData *)databaseCipher
+- (BOOL)recoverFromPath:(NSString *)corruptedDBPath
+           withPageSize:(const int)pageSize
+           backupCipher:(NSData *)backupCipher
+         databaseCipher:(NSData *)databaseCipher
 {
-    WCDB::Error wcdbError;
-    return _database->recoverFromPath(corruptedDBPath.UTF8String, pageSize, backupCipher.bytes, (unsigned int) backupCipher.length, databaseCipher.bytes, (unsigned int) databaseCipher.length, wcdbError);
+    return _database->recoverFromPath(corruptedDBPath.UTF8String,
+                                      pageSize,
+                                      backupCipher.bytes,
+                                      (unsigned int) backupCipher.length,
+                                      databaseCipher.bytes,
+                                      (unsigned int) databaseCipher.length);
 }
 
 @end

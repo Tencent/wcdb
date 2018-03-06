@@ -18,45 +18,31 @@
  * limitations under the License.
  */
 
-#import <WCDB/Utility.hpp>
+#import <WCDB/String.hpp>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTDatabase+File.h>
 #import <WCDB/WCTError+Private.h>
 
 @implementation WCTDatabase (File)
 
-- (BOOL)removeFilesWithError:(WCTError **)error
+- (BOOL)removeFiles
 {
-    WCDB::Error unixError;
-    bool result = _database->removeFiles(unixError);
-    if (!result && error) {
-        *error = [WCTError errorWithWCDBError:unixError];
-    }
-    return result;
+    return _database->removeFiles();
 }
 
-- (BOOL)moveFilesToDirectory:(NSString *)directory withExtraFiles:(NSArray<NSString *> *)extraFiles andError:(WCTError **)error
+- (BOOL)moveFilesToDirectory:(NSString *)directory
+              withExtraFiles:(NSArray<NSString *> *)extraFiles
 {
-    WCDB::Error unixError;
     std::list<std::string> files;
     for (NSString *extraFile in extraFiles) {
         files.push_back(extraFile.UTF8String);
     }
-    bool result = _database->moveFilesToDirectoryWithExtraFiles(directory.UTF8String, files, unixError);
-    if (!result && error) {
-        *error = [WCTError errorWithWCDBError:unixError];
-    }
-    return result;
+    return _database->moveFilesToDirectoryWithExtraFiles(directory.UTF8String, files);
 }
 
-- (BOOL)moveFilesToDirectory:(NSString *)directory withError:(WCTError **)error
+- (BOOL)moveFilesToDirectory:(NSString *)directory
 {
-    WCDB::Error unixError;
-    bool result = _database->moveFiles(directory.UTF8String, unixError);
-    if (!result && error) {
-        *error = [WCTError errorWithWCDBError:unixError];
-    }
-    return result;
+    return _database->moveFiles(directory.UTF8String);
 }
 
 - (NSArray<NSString *> *)paths
@@ -68,14 +54,9 @@
     return paths;
 }
 
-- (NSUInteger)getFilesSizeWithError:(WCTError **)error
+- (NSUInteger)getFilesSize
 {
-    WCDB::Error unixError;
-    size_t size = _database->getFilesSize(unixError);
-    if (!unixError.isOK() && error) {
-        *error = [WCTError errorWithWCDBError:unixError];
-    }
-    return size;
+    return _database->getFilesSize().second;
 }
 
 @end

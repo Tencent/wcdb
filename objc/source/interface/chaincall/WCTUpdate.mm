@@ -18,41 +18,34 @@
  * limitations under the License.
  */
 
-#import <WCDB/Utility.hpp>
-#import <WCDB/WCTBinding.h>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTCoding.h>
-#import <WCDB/WCTColumnBinding.h>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCDB.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTUpdate.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
     WCTPropertyList _properties;
-    int _changes;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andProperties:(const WCTPropertyList &)properties andTableName:(NSString *)tableName
+- (instancetype)table:(NSString *)tableName
 {
-    if (self = [super initWithDatabase:database]) {
-        _statement.update(tableName.UTF8String);
-        _properties = properties;
-        for (const WCTProperty &property : properties) {
-            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-            if (columnBinding) {
-                _statement.set(property, WCDB::BindParameter::default_);
-            } else {
-                WCDB::Error::ReportInterface(_database->getTag(),
-                                             _database->getPath(),
-                                             WCDB::Error::InterfaceOperation::Update,
-                                             WCDB::Error::InterfaceCode::ORM,
-                                             [NSString stringWithFormat:@"Updating [%@] with an unknown column [%s]", tableName, columnBinding->columnDef.getColumnName().c_str()].UTF8String,
-                                             &_error);
-            }
-        }
+    _statement.update(tableName.UTF8String);
+    return self;
+}
+
+- (instancetype)onProperties:(const WCTPropertyList &)properties
+{
+    _properties = properties;
+    for (const WCTProperty &property : properties) {
+        _statement.set(property, WCDB::BindParameter::default_);
     }
+    return self;
+}
+
+- (instancetype)onProperty:(const WCTProperty &)property
+{
+    _properties = property;
+    _statement.set(property, WCDB::BindParameter::default_);
     return self;
 }
 
@@ -82,78 +75,55 @@
 
 - (BOOL)executeWithObject:(WCTObject *)object
 {
-    if (!_error.isOK()) {
+    if (object == nil) {
+        return YES;
+    }
+    if (!_handle->prepare(_statement)) {
         return NO;
     }
-    if (!object) {
-        WCDB::Error::Warning("Updating with a nil object");
-        return NO;
-    }
-    Class cls = object.class;
-    if (![cls conformsToProtocol:@protocol(WCTTableCoding)]) {
-        WCDB::Error::ReportInterface(_database->getTag(),
-                                     _database->getPath(),
-                                     WCDB::Error::InterfaceOperation::Update,
-                                     WCDB::Error::InterfaceCode::ORM,
-                                     [NSString stringWithFormat:@"%@ should conform to protocol WCTTableCoding", NSStringFromClass(cls)].UTF8String,
-                                     &_error);
-        return NO;
-    }
-
-    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, _error);
-    if (!handleStatement) {
-        return NO;
-    }
+    const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
     int index = 1;
-    for (const WCTProperty &property : _properties) {
-        if (![self bindProperty:property
-                         ofObject:object
-                toStatementHandle:handleStatement
-                          atIndex:index
-                        withError:_error]) {
-            return NO;
-        }
+    for (const WCTProperty &property : properties) {
+        [self bindProperty:property
+                  ofObject:object
+                   toIndex:index];
         ++index;
     }
-    handleStatement->step();
-    _error = handleStatement->getError();
-    _changes = handleStatement->getChanges();
-    return _error.isOK();
+    bool result = _handle->step();
+    _handle->finalize();
+    return result;
+}
+
+- (BOOL)executeWithValue:(WCTValue *)value
+{
+    if (value == nil) {
+        return YES;
+    }
+    if (!_handle->prepare(_statement)) {
+        return NO;
+    }
+    [self bindValue:value toIndex:1];
+    bool result = _handle->step();
+    _handle->finalize();
+    return result;
 }
 
 - (BOOL)executeWithRow:(WCTOneRow *)row
 {
-    if (!_error.isOK()) {
-        return NO;
-    }
     if (row.count == 0) {
-        WCDB::Error::Warning("Updating with an empty/nil row");
-        return NO;
+        return YES;
     }
-
-    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, _error);
-    if (!handleStatement) {
+    if (!_handle->prepare(_statement)) {
         return NO;
     }
     int index = 1;
     for (WCTValue *value in row) {
-        if (![self bindWithValue:value
-                toStatementHandle:handleStatement
-                          atIndex:index
-                        withError:_error]) {
-            return NO;
-        }
+        [self bindValue:value toIndex:index];
         ++index;
     }
-    handleStatement->step();
-    _error = handleStatement->getError();
-    _changes = handleStatement->getChanges();
-    return _error.isOK();
-}
-
-- (int)changes
-{
-    return _changes;
+    bool result = _handle->step();
+    _handle->finalize();
+    return result;
 }
 
 @end

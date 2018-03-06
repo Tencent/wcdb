@@ -20,9 +20,9 @@
 
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Database.hpp>
-#include <WCDB/HandleStatement.hpp>
+#include <WCDB/Macro.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/TimedQueue.hpp>
-#include <WCDB/Utility.hpp>
 #include <queue>
 #include <thread>
 #include <vector>
@@ -31,122 +31,67 @@ namespace WCDB {
 
 const Config BuiltinConfig::basic(
     "basic",
-    [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+    [](Handle *handle) -> bool {
 
-        const StatementPragma s_getJournalMode =
+        static const StatementPragma s_getJournalMode =
             StatementPragma().pragma(Pragma::JournalMode);
+        do {
+            if (handle->isReadonly()) {
+                //Get Journal Mode
+                WCDB_BREAK_IF_NOT(handle->prepare(s_getJournalMode));
+                WCDB_BREAK_IF_NOT(handle->step());
+                std::string journalMode = handle->getText(0);
+                handle->finalize();
 
-        if (handle->isReadonly()) {
-            //Get Journal Mode
-            std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(s_getJournalMode);
-            if (!handleStatement) {
-                error = handle->getError();
-                return false;
+                if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
+                    // See also: http://www.sqlite.org/wal.html#readonly
+                    Error::Abort("It is not possible to open read-only WAL "
+                                 "databases.");
+                    return false;
+                }
+                return true;
             }
-            handleStatement->step();
-            if (!handleStatement->isOK()) {
-                error = handleStatement->getError();
-                return false;
-            }
-            std::string journalMode =
-                handleStatement->getValue<WCDB::ColumnType::Text>(0);
-            handleStatement->finalize();
-
-            if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
-                // See also: http://www.sqlite.org/wal.html#readonly
-                Error::Abort("It is not possible to open read-only WAL "
-                             "databases.");
-                return false;
-            }
-            return true;
-        }
-
-        //Locking Mode
-        {
-            const StatementPragma s_getLockingMode =
-                StatementPragma().pragma(Pragma::LockingMode);
 
             //Get Locking Mode
-            std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(s_getLockingMode);
-            if (!handleStatement) {
-                error = handle->getError();
-                return false;
+            static const StatementPragma s_getLockingMode =
+                StatementPragma().pragma(Pragma::LockingMode);
+            WCDB_BREAK_IF_NOT(handle->prepare(s_getLockingMode));
+            WCDB_BREAK_IF_NOT(handle->step());
+            std::string lockingMode = handle->getText(0);
+            handle->finalize();
+            if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
+                //Set Locking Mode Normal
+                static const StatementPragma s_setLockingModeNormal =
+                    StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
+                WCDB_BREAK_IF_NOT(handle->execute(s_setLockingModeNormal));
             }
-            handleStatement->step();
-            if (!handleStatement->isOK()) {
-                error = handleStatement->getError();
-                return false;
-            }
-            std::string lockingMode =
-                handleStatement->getValue<WCDB::ColumnType::Text>(0);
-            handleStatement->finalize();
 
-            //Set Locking Mode
-            const StatementPragma s_setLockingModeNormal =
-                StatementPragma().pragma(Pragma::LockingMode, "NORMAL");
-
-            if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0 &&
-                !handle->exec(s_setLockingModeNormal)) {
-                error = handle->getError();
-                return false;
-            }
-        }
-
-        //Synchronous
-        {
-            const StatementPragma s_setSynchronousNormal =
+            //Set Synchronous Normal
+            static const StatementPragma s_setSynchronousNormal =
                 StatementPragma().pragma(Pragma::Synchronous, "NORMAL");
+            WCDB_BREAK_IF_NOT(handle->execute(s_setSynchronousNormal));
 
-            if (!handle->exec(s_setSynchronousNormal)) {
-                error = handle->getError();
-                return false;
-            }
-        }
-
-        //Journal Mode
-        {
             //Get Journal Mode
-            std::shared_ptr<HandleStatement> handleStatement =
-                handle->prepare(s_getJournalMode);
-            if (!handleStatement) {
-                error = handle->getError();
-                return false;
+            WCDB_BREAK_IF_NOT(handle->prepare(s_getJournalMode));
+            WCDB_BREAK_IF_NOT(handle->step());
+            std::string journalMode = handle->getText(0);
+            handle->finalize();
+            if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
+                //Set Journal Mode WAL
+                static const StatementPragma s_setJournalModeWAL =
+                    StatementPragma().pragma(Pragma::JournalMode, "WAL");
+                WCDB_BREAK_IF_NOT(handle->execute(s_setJournalModeWAL));
             }
-            handleStatement->step();
-            if (!handleStatement->isOK()) {
-                error = handleStatement->getError();
-                return false;
-            }
-            std::string journalMode =
-                handleStatement->getValue<WCDB::ColumnType::Text>(0);
-            handleStatement->finalize();
 
-            //Set Journal Mode
-            const StatementPragma s_setJournalModeWAL =
-                StatementPragma().pragma(Pragma::JournalMode, "WAL");
-
-            if (strcasecmp(journalMode.c_str(), "WAL") != 0 &&
-                !handle->exec(s_setJournalModeWAL)) {
-                error = handle->getError();
-                return false;
-            }
-        }
-
-        //Fullfsync
-        {
-            const StatementPragma s_setFullFSync =
+            //Enable Fullfsync
+            static const StatementPragma s_setFullFSync =
                 StatementPragma().pragma(Pragma::Fullfsync, true);
+            WCDB_BREAK_IF_NOT(handle->execute(s_setFullFSync));
 
-            if (!handle->exec(s_setFullFSync)) {
-                error = handle->getError();
-                return false;
-            }
-        }
-
-        error.reset();
-        return true;
+            return true;
+        } while (false);
+        handle->finalize();
+        return false;
     },
     Order::Basic);
 
@@ -166,7 +111,7 @@ void BuiltinConfig::SetGlobalSQLTrace(const SQLTrace &globalTrace)
 
 const Config BuiltinConfig::trace(
     "trace",
-    [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+    [](Handle *handle) -> bool {
         {
             std::shared_ptr<PerformanceTrace> trace = s_globalPerformanceTrace;
             if (trace) {
@@ -183,41 +128,25 @@ const Config BuiltinConfig::trace(
     },
     Order::Trace);
 
-const Config BuiltinConfig::cipherWithKey(const void *key,
-                                          const int &keySize,
-                                          const int &pageSize)
+const Config
+BuiltinConfig::cipherWithKey(const void *key, int keySize, int pageSize)
 {
     std::shared_ptr<std::vector<unsigned char>> keys(
         new std::vector<unsigned char>((unsigned char *) key,
                                        (unsigned char *) key + keySize));
     return Config("cipher",
-                  [keys, pageSize](std::shared_ptr<Handle> &handle,
-                                   Error &error) -> bool {
-
-                      //Set Cipher Key
-                      bool result = handle->setCipherKey(keys->data(),
-                                                         (int) keys->size());
-                      if (!result) {
-                          error = handle->getError();
-                          return false;
-                      }
-
-                      //Set Cipher Page Size
-                      if (!handle->exec(StatementPragma().pragma(
-                              Pragma::CipherPageSize, pageSize))) {
-                          error = handle->getError();
-                          return false;
-                      }
-
-                      error.reset();
-                      return true;
+                  [keys, pageSize](Handle *handle) -> bool {
+                      return handle->setCipherKey(keys->data(),
+                                                  (int) keys->size()) &&
+                             handle->execute(StatementPragma().pragma(
+                                 Pragma::CipherPageSize, pageSize));
                   },
                   Order::Cipher);
 }
 
 const Config BuiltinConfig::checkpoint(
     "checkpoint",
-    [](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+    [](Handle *handle) -> bool {
         static std::once_flag s_flag;
         std::call_once(s_flag, []() { s_checkpointThread.detach(); });
         handle->registerCommittedHook(
@@ -231,7 +160,7 @@ const Config BuiltinConfig::checkpoint(
     },
     Order::Checkpoint);
 
-TimedQueue<std::string, int> BuiltinConfig::s_timedQueue(2);
+TimedQueue<std::string, const int> BuiltinConfig::s_timedQueue(2);
 
 std::thread BuiltinConfig::s_checkpointThread([]() {
     pthread_setname_np("WCDB-checkpoint");
@@ -240,22 +169,21 @@ std::thread BuiltinConfig::s_checkpointThread([]() {
         while (s_timedQueue.running())
             ;
     });
-    s_timedQueue.loop([](const std::string &path, const int &pages) {
+    s_timedQueue.loop([](const std::string &path, int pages) {
         std::shared_ptr<Database> database =
             Database::databaseWithExistingPath(path);
         if (database != nullptr) {
-            WCDB::Error innerError;
-            const StatementPragma s_checkpointPassive =
+            static const StatementPragma s_checkpointPassive =
                 StatementPragma().pragma(Pragma::WalCheckpoint, "PASSIVE");
 
-            database->exec(s_checkpointPassive, innerError);
+            database->execute(s_checkpointPassive);
             if (pages > 5000) {
                 //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
                 //As a result, checkpoint process will not block the database too long.
-                const StatementPragma s_checkpointTruncate =
+                static const StatementPragma s_checkpointTruncate =
                     StatementPragma().pragma(Pragma::WalCheckpoint, "TRUNCATE");
 
-                database->exec(s_checkpointTruncate, innerError);
+                database->execute(s_checkpointTruncate);
             }
         }
     });
@@ -271,37 +199,26 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
 {
     return Config(
         "tokenize",
-        [names](std::shared_ptr<Handle> &handle, Error &error) -> bool {
+        [names](Handle *handle) -> bool {
             for (const std::string &name : names) {
                 const unsigned char *address =
                     FTS::Modules::SharedModules()->getAddress(name);
                 NoCopyData data((unsigned char *) &address,
                                 sizeof(unsigned char *));
 
-                //Tokenize
-                {
-                    const StatementSelect s_fts3Tokenizer =
-                        StatementSelect().select(Expression::Function(
-                            "fts3_tokenizer",
-                            std::list<Expression>(2, BindParameter::default_)));
-
-                    std::shared_ptr<HandleStatement> handleStatement =
-                        handle->prepare(s_fts3Tokenizer);
-                    if (!handleStatement) {
-                        error = handle->getError();
-                        return false;
-                    }
-                    handleStatement->bind<ColumnType::Text>(name.c_str(), 1);
-                    handleStatement->bind<ColumnType::BLOB>(data, 2);
-                    handleStatement->step();
-                    if (!handleStatement->isOK()) {
-                        error = handleStatement->getError();
-                        return false;
-                    }
+                //Setup Tokenize
+                static const StatementSelect s_fts3Tokenizer =
+                    StatementSelect().select(Expression::Function(
+                        "fts3_tokenizer",
+                        std::list<Expression>(2, BindParameter::default_)));
+                if (handle->prepare(s_fts3Tokenizer)) {
+                    handle->bindText(name.c_str(), 1);
+                    handle->bindBLOB(data, 2);
+                    bool result = handle->step();
+                    handle->finalize();
+                    return result;
                 }
             }
-
-            error.reset();
             return true;
         },
         Order::Tokenize);

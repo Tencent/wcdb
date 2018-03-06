@@ -40,7 +40,7 @@
 
 + (WCDB::ColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeDouble;
+    return WCDB::ColumnType::Float;
 }
 
 @end

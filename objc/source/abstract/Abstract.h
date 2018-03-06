@@ -24,7 +24,6 @@
 #include <WCDB/ColumnType.hpp>
 #include <WCDB/ConvertibleImpl.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/HandleStatement.hpp>
 #include <WCDB/Lang.h>
 #include <WCDB/Tokenize.hpp>
 #include <WCDB/WINQ.h>

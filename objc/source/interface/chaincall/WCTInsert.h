@@ -18,14 +18,18 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTInsert : WCTChainCall
+@interface WCTInsert : WCTHandle
+
+- (instancetype)orReplace;
+
+- (instancetype)intoTable:(NSString *)tableName;
+
+- (instancetype)onProperties:(const WCTPropertyList &)properties;
 
 /**
  @brief Execute the insert SQL with objects.
@@ -35,5 +39,7 @@
  @return YES if no error occurs.
  */
 - (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects;
+
+- (BOOL)executeWithObject:(WCTObject *)object;
 
 @end

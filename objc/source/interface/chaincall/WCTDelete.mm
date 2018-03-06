@@ -18,20 +18,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTDelete.h>
+#import <WCDB/WCDB.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
-    int _changes;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database andTableName:(NSString *)tableName
+- (instancetype)fromTable:(NSString *)tableName
 {
-    if (self = [super initWithDatabase:database]) {
-        _statement.deleteFrom(tableName.UTF8String);
-    }
+    _statement.deleteFrom(tableName.UTF8String);
     return self;
 }
 
@@ -61,22 +57,7 @@
 
 - (BOOL)execute
 {
-    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, _error);
-    if (!handleStatement) {
-        return NO;
-    }
-    handleStatement->step();
-    if (!handleStatement->isOK()) {
-        _error = handleStatement->getError();
-        return NO;
-    }
-    _changes = handleStatement->getChanges();
-    return YES;
-}
-
-- (int)changes
-{
-    return _changes;
+    return _handle->execute(_statement);
 }
 
 @end

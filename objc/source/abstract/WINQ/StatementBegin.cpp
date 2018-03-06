@@ -22,6 +22,9 @@
 
 namespace WCDB {
 
+const StatementBegin StatementBegin::immediate =
+    StatementBegin().begin(Transaction::Immediate);
+
 StatementBegin &StatementBegin::begin(const Transaction &transaction)
 {
     Lang::BeginSTMT &lang = getMutableLang();

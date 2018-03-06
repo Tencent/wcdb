@@ -22,6 +22,9 @@
 
 namespace WCDB {
 
+const StatementRollback StatementRollback::default_ =
+    StatementRollback().rollback();
+
 StatementRollback &StatementRollback::rollback()
 {
     Lang::RollbackSTMT &lang = getMutableLang();

@@ -53,9 +53,10 @@ public:
     virtual CopyOnWriteString SQL() const override;
 
 protected:
-    static std::string stringByAntiInjecting(const std::string &origin);
-    static std::string
-    stringByAntiInjecting(const std::vector<unsigned char> &origin);
+    static CopyOnWriteString
+    stringByAntiInjecting(const CopyOnWriteString &origin);
+    static CopyOnWriteString
+    stringByAntiInjecting(const CopyOnWriteData &origin);
 };
 
 } // namespace Lang

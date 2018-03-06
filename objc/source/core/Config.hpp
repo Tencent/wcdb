@@ -24,7 +24,7 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/CopyOnWriteList.hpp>
 #include <WCDB/Error.hpp>
-#include <WCDB/Utility.hpp>
+#include <WCDB/String.hpp>
 #include <functional>
 #include <list>
 #include <memory>
@@ -33,13 +33,13 @@ namespace WCDB {
 
 class Config {
 public:
-    using Callback = std::function<bool(std::shared_ptr<Handle> &, Error &)>;
+    using Callback = std::function<bool(Handle *)>;
 
     Config(const std::string &theName,
            const Callback &theCallback,
-           const int &theOrder); //Small numbers in front
+           int theOrder); //Small numbers in front
 
-    bool invoke(std::shared_ptr<Handle> &handle, Error &error) const;
+    bool invoke(Handle *handle) const;
 
     const std::string name;
     const Callback callback;
@@ -48,14 +48,15 @@ public:
 
 class Configs {
 public:
+    Configs();
     Configs(const std::list<Config> &configs);
 
     void setConfig(const Config &config);
     void setConfig(const std::string &name, const Config::Callback &callback);
 
-    bool invoke(std::shared_ptr<Handle> &handle, Error &error) const;
+    bool invoke(Handle *handle) const;
 
-    bool operator!=(const Configs &other) const;
+    bool equal(const Configs &other) const;
 
 public:
     CopyOnWriteList<Config> m_configs;

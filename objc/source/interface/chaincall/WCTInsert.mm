@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/Utility.hpp>
-#import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCDB.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTInsert.h>
-#import <WCDB/WCTORM.h>
-#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTInsert {
     WCTPropertyList _properties;
@@ -32,89 +29,140 @@
     BOOL _replace;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                   andProperties:(const WCTPropertyList &)properties
-                    andTableName:(NSString *)tableName
-                  andReplaceFlag:(BOOL)replace
+- (instancetype)orReplace
 {
-    if (self = [super initWithDatabase:database]) {
-        _replace = replace;
-        _properties = properties;
-        if (!replace) {
-            _statement.insertInto(tableName.UTF8String);
-        } else {
-            _statement.insertOrReplaceInto(tableName.UTF8String);
-        }
-        _statement.on(_properties).values(std::list<WCDB::Expression>(_properties.size(), WCDB::BindParameter::default_));
+    _statement.getMutableLang().type = WCDB::Lang::InsertSTMT::Type::InsertOrReplace;
+    _replace = true;
+    return self;
+}
+
+- (instancetype)intoTable:(NSString *)tableName
+{
+    if (!_replace) {
+        _statement.insertInto(tableName.UTF8String);
+    } else {
+        _statement.insertOrReplaceInto(tableName.UTF8String);
     }
     return self;
 }
 
-- (BOOL)doInsertObjects:(NSArray<WCTObject *> *)objects withError:(WCDB::Error &)error
+- (instancetype)onProperties:(const WCTPropertyList &)properties
 {
-    WCDB::RecyclableStatement handleStatement = _database->prepare(_statement, error);
-    if (!handleStatement) {
+    _properties = properties;
+    _statement.on(properties);
+    return self;
+}
+
+- (BOOL)executeWithObject:(WCTObject *)object
+{
+    if (object == nil) {
+        return YES;
+    }
+
+    if (!_handle->prepare(_statement)) {
         return NO;
     }
-    int index;
-    BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
+
+    const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
 
     std::vector<bool> autoIncrements;
-    for (const WCTProperty &property : _properties) {
+    for (const WCTProperty &property : properties) {
         const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
         autoIncrements.push_back(!_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement());
     }
 
-    for (WCTObject *object in objects) {
-        index = 1;
-        for (const WCTProperty &property : _properties) {
-            if (autoIncrements[index - 1] && object.isAutoIncrement) {
-                handleStatement->bind<WCTColumnTypeNull>(index);
-            } else {
-                if (![self bindProperty:property
-                                 ofObject:object
-                        toStatementHandle:handleStatement
-                                  atIndex:index
-                                withError:error]) {
-                    return NO;
-                }
-            }
-            ++index;
+    BOOL canFillLastInsertedRowID = [object respondsToSelector:@selector(lastInsertedRowID)];
+
+    int index = 1;
+    for (const WCTProperty &property : properties) {
+        const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
+        bool isAutoIncrement = !_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement();
+
+        if (!isAutoIncrement || !object.isAutoIncrement) {
+            [self bindProperty:property
+                      ofObject:object
+                       toIndex:index];
+        } else {
+            _handle->bindNull(index);
         }
-        handleStatement->step();
-        if (!handleStatement->isOK()) {
-            error = handleStatement->getError();
-            return NO;
-        }
+        ++index;
+    }
+    bool result = _handle->step();
+    if (result) {
         if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
-            object.lastInsertedRowID = handleStatement->getLastInsertedRowID();
-        }
-        handleStatement->reset();
-        if (!handleStatement->isOK()) {
-            error = handleStatement->getError();
-            return NO;
+            object.lastInsertedRowID = _handle->getLastInsertedRowID();
         }
     }
-    return error.isOK();
+    _handle->finalize();
+    return result;
 }
 
 - (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects
 {
-    if (!_error.isOK()) {
-        return NO;
-    }
     if (objects.count == 0) {
-        WCDB::Error::Warning("Inserting with an empty/nil object");
-        return NO;
+        return YES;
     }
-    if (objects.count == 1) {
-        return [self doInsertObjects:objects withError:_error];
+
+    bool isBegan = false;
+    if (!_handle->isInTransaction()) {
+        if (!_handle->execute(WCDB::StatementBegin::immediate)) {
+            return NO;
+        }
+        isBegan = true;
     }
-    _database->runEmbeddedTransaction([self, objects](WCDB::Error &error) {
-        [self doInsertObjects:objects withError:error];
-    },
-                                      _error);
-    return _error.isOK();
+
+    bool failed = false;
+    if (_handle->prepare(_statement)) {
+        const WCTPropertyList &properties = _properties.empty() ? [objects[0].class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+
+        std::vector<bool> autoIncrements;
+        for (const WCTProperty &property : properties) {
+            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
+            autoIncrements.push_back(!_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement());
+        }
+
+        BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
+
+        int index;
+        for (WCTObject *object in objects) {
+            index = 1;
+            for (const WCTProperty &property : properties) {
+                if (!autoIncrements[index - 1] || !object.isAutoIncrement) {
+                    [self bindProperty:property
+                              ofObject:object
+                               toIndex:index];
+                } else {
+                    _handle->bindNull(index);
+                }
+                ++index;
+            }
+            if (!_handle->step()) {
+                failed = true;
+                break;
+            }
+            if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
+                object.lastInsertedRowID = _handle->getLastInsertedRowID();
+            }
+            _handle->reset();
+        }
+        _handle->finalize();
+    }
+
+    if (!isBegan) {
+        if (!failed) {
+            return YES;
+        }
+    } else {
+        if (!failed) {
+            if (_handle->execute(WCDB::StatementCommit::default_)) {
+                return YES;
+            }
+        }
+        _handle->skipError(true);
+        _handle->execute(WCDB::StatementRollback::default_);
+        _handle->skipError(false);
+    }
+    return NO;
 }
 
 @end

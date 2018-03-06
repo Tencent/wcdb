@@ -61,7 +61,7 @@ public:
 
     const std::map<std::string,
                    std::shared_ptr<WCTColumnBinding>,
-                   WCDB::CaseInsensiveComparator> &
+                   WCDB::String::CaseInsensiveComparator> &
     getColumnBindingMap() const;
 
     WCDB::StatementCreateVirtualTable statementVirtualTable;
@@ -82,17 +82,17 @@ protected:
     WCTPropertyList m_properties;
     SequentialIncreasingMap<std::string,
                             WCTColumnBinding,
-                            WCDB::CaseInsensiveComparator>
+                            WCDB::String::CaseInsensiveComparator>
         m_columnBindings;
 
     SequentialIncreasingMap<std::string,
                             WCDB::TableConstraint,
-                            WCDB::CaseInsensiveComparator>
+                            WCDB::String::CaseInsensiveComparator>
         m_constraints;
 
     SequentialIncreasingMap<std::string,
                             WCDB::StatementCreateIndex,
-                            WCDB::CaseInsensiveComparator>
+                            WCDB::String::CaseInsensiveComparator>
         m_indexes;
 
     Class m_cls;

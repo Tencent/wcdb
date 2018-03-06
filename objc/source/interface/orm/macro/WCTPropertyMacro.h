@@ -33,7 +33,7 @@
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
                                       defaultValue)                            \
     __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
-    static const auto UNUSED_UNIQUE_ID = [](WCTBinding *binding) {             \
+    static const auto WCDB_UNUSED_UNIQUE_ID = [](WCTBinding *binding) {        \
         binding->addColumnConstraint(                                          \
             WCDB::ColumnConstraint().withDefaultValue(defaultValue),           \
             className.propertyName);                                           \

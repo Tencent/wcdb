@@ -43,7 +43,7 @@ public:
     static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
 
     static const Config
-    cipherWithKey(const void *key, const int &keySize, const int &pageSize);
+    cipherWithKey(const void *key, int keySize, int pageSize);
 
     static const Config checkpoint;
 
@@ -53,7 +53,7 @@ public:
 
 protected:
     static std::thread s_checkpointThread;
-    static TimedQueue<std::string, int> s_timedQueue;
+    static TimedQueue<std::string, const int> s_timedQueue;
     static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
     static std::shared_ptr<SQLTrace> s_globalSQLTrace;
 };

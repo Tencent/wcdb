@@ -51,29 +51,3 @@ public:
     const Setter setValue;
     const Getter getValue;
 };
-
-template <>
-class WCTCppAccessor<WCTColumnTypeBinary> : public WCTBaseAccessor {
-public:
-    using UnderlyingType = typename WCDB::ColumnTypeInfo<(
-        WCDB::ColumnType) WCTColumnTypeBinary>::UnderlyingType;
-    using Setter = void (^)(InstanceType, UnderlyingType);
-    using Getter = UnderlyingType (^)(InstanceType);
-
-    WCTCppAccessor(Getter getter, Setter setter)
-        : getValue(getter), setValue(setter)
-    {
-    }
-
-    virtual WCDB::ColumnType getColumnType() const override
-    {
-        return WCTColumnTypeBinary;
-    }
-    virtual WCTAccessorType getAccessorType() const override
-    {
-        return WCTAccessorCpp;
-    }
-
-    const Setter setValue;
-    const Getter getValue;
-};

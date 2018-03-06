@@ -29,6 +29,8 @@ namespace WCDB {
 class StatementBegin : public StatementWithLang<Lang::BeginSTMT> {
 
 public:
+    static const StatementBegin immediate;
+
     using Transaction = Lang::BeginSTMT::Type;
     StatementBegin &
     begin(const Transaction &transaction = Transaction::Immediate);
