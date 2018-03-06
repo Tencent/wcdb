@@ -236,7 +236,7 @@ void Handle::reportSQL(const std::string &sql)
 
 bool Handle::prepare(const Statement &statement)
 {
-    //TODO hook step 
+    //TODO hook step
     if (statement.getType() == Statement::Type::Begin ||
         statement.getType() == Statement::Type::Commit ||
         statement.getType() == Statement::Type::Rollback) {
