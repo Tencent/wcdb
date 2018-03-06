@@ -74,7 +74,7 @@ bool Database::canOpen()
     return !m_pool->isDrained() || m_pool->fillOne();
 }
 
-void Database::close(const std::function<void(void)> &onClosed)
+void Database::close(const ClosedCallback &onClosed)
 {
     m_pool->drain(onClosed);
 }
@@ -320,7 +320,7 @@ std::pair<bool, bool> Database::isTableExists(const std::string &tableName)
 
 #pragma mark - Transaction
 
-bool Database::runNestedTransaction(const TransactionBlock &transaction)
+bool Database::runNestedTransaction(const TransactionCallback &transaction)
 {
     std::unordered_map<const HandlePool *, RecyclableHandle> *threadedHandle =
         s_threadedHandle.get();
@@ -341,7 +341,7 @@ bool Database::runNestedTransaction(const TransactionBlock &transaction)
 }
 
 bool Database::runControllableTransaction(
-    const ControllableTransactionBlock &transaction)
+    const ControllableTransactionCallback &transaction)
 {
     RecyclableHandle recyclableHandle = flowOut();
     if (recyclableHandle == nullptr) {
@@ -383,7 +383,7 @@ bool Database::runControllableTransaction(
     return result;
 }
 
-bool Database::runTransaction(const TransactionBlock &transaction)
+bool Database::runTransaction(const TransactionCallback &transaction)
 {
     return runControllableTransaction(
         [&transaction, this](Handle *handle) -> bool {

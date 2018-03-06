@@ -23,7 +23,7 @@
 /**
  Configuration
  */
-typedef BOOL (^WCTConfig)(WCTUnsafeHandle *);
+typedef BOOL (^WCTConfigCallback)(WCTUnsafeHandle *);
 
 @interface WCTDatabase (Config)
 
@@ -55,7 +55,7 @@ typedef BOOL (^WCTConfig)(WCTUnsafeHandle *);
  @param name The Identifier for this config
  @param order The smaller number is called first
  */
-- (void)setConfig:(WCTConfig)config
+- (void)setConfig:(WCTConfigCallback)config
           forName:(NSString *)name
         withOrder:(int)order;
 
@@ -65,7 +65,7 @@ typedef BOOL (^WCTConfig)(WCTUnsafeHandle *);
  @param config config
  @param name The Identifier for this config
  */
-- (void)setConfig:(WCTConfig)config
+- (void)setConfig:(WCTConfigCallback)config
           forName:(NSString *)name;
 
 @end

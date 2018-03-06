@@ -95,31 +95,33 @@ const Config BuiltinConfig::basic(
     },
     Order::Basic);
 
-std::shared_ptr<PerformanceTrace> BuiltinConfig::s_globalPerformanceTrace;
-std::shared_ptr<SQLTrace> BuiltinConfig::s_globalSQLTrace;
+std::shared_ptr<PerformanceTraceCallback>
+    BuiltinConfig::s_globalPerformanceTrace;
+std::shared_ptr<SQLTraceCallback> BuiltinConfig::s_globalSQLTrace;
 
 void BuiltinConfig::SetGlobalPerformanceTrace(
-    const PerformanceTrace &globalTrace)
+    const PerformanceTraceCallback &globalTrace)
 {
-    s_globalPerformanceTrace.reset(new PerformanceTrace(globalTrace));
+    s_globalPerformanceTrace.reset(new PerformanceTraceCallback(globalTrace));
 }
 
-void BuiltinConfig::SetGlobalSQLTrace(const SQLTrace &globalTrace)
+void BuiltinConfig::SetGlobalSQLTrace(const SQLTraceCallback &globalTrace)
 {
-    s_globalSQLTrace.reset(new SQLTrace(globalTrace));
+    s_globalSQLTrace.reset(new SQLTraceCallback(globalTrace));
 }
 
 const Config BuiltinConfig::trace(
     "trace",
     [](Handle *handle) -> bool {
         {
-            std::shared_ptr<PerformanceTrace> trace = s_globalPerformanceTrace;
+            std::shared_ptr<PerformanceTraceCallback> trace =
+                s_globalPerformanceTrace;
             if (trace) {
                 handle->setPerformanceTrace(*trace.get());
             }
         }
         {
-            std::shared_ptr<SQLTrace> trace = s_globalSQLTrace;
+            std::shared_ptr<SQLTraceCallback> trace = s_globalSQLTrace;
             if (trace) {
                 handle->setSQLTrace(*trace.get());
             }

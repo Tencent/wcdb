@@ -45,7 +45,8 @@ public:
     bool canOpen();
     bool isOpened() const;
     void blockade();
-    void close(const std::function<void(void)> &onClosed);
+    typedef HandlePool::DrainedCallback ClosedCallback;
+    void close(const ClosedCallback &onClosed);
     void unblockade();
     bool isBlockaded();
 
@@ -91,13 +92,13 @@ public:
     std::pair<bool, bool> isTableExists(const std::string &tableName);
 
 #pragma mark - Transaction
-    typedef std::function<bool(Handle *)> ControllableTransactionBlock;
-    typedef std::function<void(Handle *)> TransactionBlock;
+    typedef std::function<bool(Handle *)> ControllableTransactionCallback;
+    typedef std::function<void(Handle *)> TransactionCallback;
 
-    bool runNestedTransaction(const TransactionBlock &transaction);
-    bool
-    runControllableTransaction(const ControllableTransactionBlock &transaction);
-    bool runTransaction(const TransactionBlock &transaction);
+    bool runNestedTransaction(const TransactionCallback &transaction);
+    bool runControllableTransaction(
+        const ControllableTransactionCallback &transaction);
+    bool runTransaction(const TransactionCallback &transaction);
 
 #pragma mark - Protected
 protected:

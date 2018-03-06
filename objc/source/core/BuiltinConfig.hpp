@@ -39,8 +39,9 @@ public:
     static const Config basic;
 
     static const Config trace;
-    static void SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace);
-    static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
+    static void
+    SetGlobalPerformanceTrace(const PerformanceTraceCallback &globalTrace);
+    static void SetGlobalSQLTrace(const SQLTraceCallback &globalTrace);
 
     static const Config
     cipherWithKey(const void *key, int keySize, int pageSize);
@@ -54,8 +55,8 @@ public:
 protected:
     static std::thread s_checkpointThread;
     static TimedQueue<std::string, const int> s_timedQueue;
-    static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
-    static std::shared_ptr<SQLTrace> s_globalSQLTrace;
+    static std::shared_ptr<PerformanceTraceCallback> s_globalPerformanceTrace;
+    static std::shared_ptr<SQLTraceCallback> s_globalSQLTrace;
 };
 
 class BuiltinConfigs {

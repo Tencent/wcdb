@@ -36,16 +36,15 @@ typedef struct sqlite3_stmt sqlite3_stmt;
 namespace WCDB {
 
 class Handle;
-typedef std::function<void(Handle *)> Transaction;
 
 //{{sql->count}, cost}
 typedef std::function<void(const std::map<const std::string, unsigned int> &,
                            const int64_t &)>
-    PerformanceTrace;
+    PerformanceTraceCallback;
 
-typedef std::function<void(const std::string &)> SQLTrace;
+typedef std::function<void(const std::string &)> SQLTraceCallback;
 
-typedef std::function<void(Handle *, int, void *)> CommittedHook;
+typedef std::function<void(Handle *, int, void *)> CommittedCallback;
 
 class Handle {
 public:
@@ -126,8 +125,8 @@ public:
 
     bool isInTransaction();
 
-    void setPerformanceTrace(const PerformanceTrace &trace);
-    void setSQLTrace(const SQLTrace &trace);
+    void setPerformanceTrace(const PerformanceTraceCallback &trace);
+    void setSQLTrace(const SQLTraceCallback &trace);
 
     bool backup(const void *key = nullptr, unsigned int length = 0);
     bool recoverFromPath(const std::string &corruptedDBPath,
@@ -137,7 +136,8 @@ public:
                          const void *databaseKey,
                          unsigned int databaseKeyLength);
 
-    void registerCommittedHook(const CommittedHook &onCommitted, void *info);
+    void registerCommittedHook(const CommittedCallback &onCommitted,
+                               void *info);
 
     const Error &getError();
     void resetError();
@@ -164,15 +164,15 @@ protected:
     void reportSQL(const std::string &sql);
 
     typedef struct {
-        CommittedHook onCommitted;
+        CommittedCallback onCommitted;
         void *info;
         Handle *handle;
     } CommittedHookInfo;
     CommittedHookInfo m_committedHookInfo;
 
     void setupTrace();
-    PerformanceTrace m_performanceTrace;
-    SQLTrace m_sqlTrace;
+    PerformanceTraceCallback m_performanceTrace;
+    SQLTraceCallback m_sqlTrace;
     std::map<const std::string, unsigned int> m_footprint;
     int64_t m_cost;
     bool m_aggregation;

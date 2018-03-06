@@ -24,17 +24,17 @@
 /**
  Trigger when error occurs
  */
-typedef void (^WCTErrorReport)(WCTError *);
+typedef void (^WCTErrorReportCallback)(WCTError *);
 
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTrace)(NSDictionary<NSString *, NSNumber *> *, NSInteger);
+typedef void (^WCTPerformanceTraceCallback)(NSDictionary<NSString *, NSNumber *> *, NSInteger);
 
 /**
  Trigger when a SQL is executed.
  */
-typedef void (^WCTSQLTrace)(NSString *);
+typedef void (^WCTSQLTraceCallback)(NSString *);
 
 /**
  Statistics
@@ -49,9 +49,9 @@ typedef void (^WCTSQLTrace)(NSString *);
      }];
  
  @param report report
- @see WCTErrorReport
+ @see WCTErrorReportCallback
  */
-+ (void)SetGlobalErrorReport:(WCTErrorReport)report;
++ (void)SetGlobalErrorReport:(WCTErrorReportCallback)report;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
@@ -73,10 +73,10 @@ typedef void (^WCTSQLTrace)(NSString *);
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
- @see WCTPerformanceTrace
+ @see WCTPerformanceTraceCallback
  @see [WCTDatabase setPerformanceTrace:]
  */
-+ (void)SetGlobalPerformanceTrace:(WCTPerformanceTrace)trace;
++ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceCallback)trace;
 
 /**
  @brief You can register a tracer to monitor the execution of all SQLs.
@@ -88,10 +88,10 @@ typedef void (^WCTSQLTrace)(NSString *);
     }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
- @see WCTSQLTrace
+ @see WCTSQLTraceCallback
  @param trace trace
  */
-+ (void)SetGlobalSQLTrace:(WCTSQLTrace)trace;
++ (void)SetGlobalSQLTrace:(WCTSQLTraceCallback)trace;
 
 /**
  @brief Reset to builtin error reporter. 

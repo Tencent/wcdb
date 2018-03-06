@@ -67,9 +67,9 @@ public:
     void resetThreadedError() const;
 
     bool isDrained();
-    typedef std::function<void(void)> OnDrained;
+    typedef std::function<void(void)> DrainedCallback;
     void blockade();
-    void drain(const HandlePool::OnDrained &onDrained);
+    void drain(const HandlePool::DrainedCallback &onDrained);
     void unblockade();
     bool isBlockaded() const;
 

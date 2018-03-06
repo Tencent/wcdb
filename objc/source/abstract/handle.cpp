@@ -190,13 +190,13 @@ void Handle::setupTrace()
     }
 }
 
-void Handle::setSQLTrace(const SQLTrace &trace)
+void Handle::setSQLTrace(const SQLTraceCallback &trace)
 {
     m_sqlTrace = trace;
     setupTrace();
 }
 
-void Handle::setPerformanceTrace(const PerformanceTrace &trace)
+void Handle::setPerformanceTrace(const PerformanceTraceCallback &trace)
 {
     m_performanceTrace = trace;
     setupTrace();
@@ -236,7 +236,7 @@ void Handle::reportSQL(const std::string &sql)
 
 bool Handle::prepare(const Statement &statement)
 {
-    //TODO
+    //TODO hook step 
     if (statement.getType() == Statement::Type::Begin ||
         statement.getType() == Statement::Type::Commit ||
         statement.getType() == Statement::Type::Rollback) {
@@ -460,7 +460,8 @@ bool Handle::isPrepared()
     return m_stmt != nullptr;
 }
 
-void Handle::registerCommittedHook(const CommittedHook &onCommitted, void *info)
+void Handle::registerCommittedHook(const CommittedCallback &onCommitted,
+                                   void *info)
 {
     m_committedHookInfo.onCommitted = onCommitted;
     m_committedHookInfo.info = info;

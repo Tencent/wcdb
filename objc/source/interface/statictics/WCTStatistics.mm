@@ -24,7 +24,7 @@
 
 @implementation WCTStatistics
 
-+ (void)SetGlobalErrorReport:(WCTErrorReport)report
++ (void)SetGlobalErrorReport:(WCTErrorReportCallback)report
 {
     if (report) {
         WCDB::Error::SetReportMethod([report](const WCDB::Error &error) {
@@ -35,7 +35,7 @@
     }
 }
 
-+ (void)SetGlobalPerformanceTrace:(WCTPerformanceTrace)trace
++ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceCallback)trace
 {
     if (trace) {
         WCDB::BuiltinConfig::SetGlobalPerformanceTrace([trace](const std::map<const std::string, unsigned int> &footprint,
@@ -52,7 +52,7 @@
     }
 }
 
-+ (void)SetGlobalSQLTrace:(WCTSQLTrace)trace
++ (void)SetGlobalSQLTrace:(WCTSQLTraceCallback)trace
 {
     if (trace) {
         WCDB::BuiltinConfig::SetGlobalSQLTrace([trace](const std::string &sql) {

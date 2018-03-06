@@ -35,7 +35,7 @@
     _database->setCipher(cipherKey.bytes, (int) cipherKey.length, cipherPageSize);
 }
 
-- (void)setConfig:(WCTConfig)invoke
+- (void)setConfig:(WCTConfigCallback)invoke
           forName:(NSString *)name
         withOrder:(int)order
 {
@@ -46,7 +46,7 @@
                                       order));
 }
 
-- (void)setConfig:(WCTConfig)invoke
+- (void)setConfig:(WCTConfigCallback)invoke
           forName:(NSString *)name
 {
     _database->setConfig(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {

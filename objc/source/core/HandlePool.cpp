@@ -143,7 +143,7 @@ bool HandlePool::isBlockaded() const
     return m_rwlock.isWriting();
 }
 
-void HandlePool::drain(const HandlePool::OnDrained &onDrained)
+void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     m_rwlock.lockWrite();
     BuiltinConfig::removeKeyFromTimedQueue(path);
