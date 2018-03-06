@@ -239,11 +239,14 @@ bool HandlePool::fillOne()
     m_rwlock.lockRead();
     bool inserted = false;
     std::shared_ptr<ConfiguredHandle> configuredHandle = generate();
-    //TODO
     if (configuredHandle) {
-        inserted = m_handles.pushBack(configuredHandle);
-        if (inserted) {
-            ++m_aliveHandleCount;
+        Configs configs = m_configs;
+        if (configuredHandle->configured(configs) ||
+            configuredHandle->configure(m_configs)) {
+            inserted = m_handles.pushBack(configuredHandle);
+            if (inserted) {
+                ++m_aliveHandleCount;
+            }
         }
     }
     m_rwlock.unlockRead();
