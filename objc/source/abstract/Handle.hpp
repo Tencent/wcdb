@@ -136,7 +136,7 @@ public:
                          const void *databaseKey,
                          unsigned int databaseKeyLength);
 
-    void registerCommittedHook(const CommittedCallback &onCommitted,
+    void setCommittedHook(const CommittedCallback &onCommitted,
                                void *info);
 
     const Error &getError();

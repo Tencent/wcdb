@@ -460,7 +460,7 @@ bool Handle::isPrepared()
     return m_stmt != nullptr;
 }
 
-void Handle::registerCommittedHook(const CommittedCallback &onCommitted,
+void Handle::setCommittedHook(const CommittedCallback &onCommitted,
                                    void *info)
 {
     m_committedHookInfo.onCommitted = onCommitted;

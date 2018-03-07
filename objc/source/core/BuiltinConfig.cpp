@@ -151,7 +151,7 @@ const Config BuiltinConfig::checkpoint(
     [](Handle *handle) -> bool {
         static std::once_flag s_flag;
         std::call_once(s_flag, []() { s_checkpointThread.detach(); });
-        handle->registerCommittedHook(
+        handle->setCommittedHook(
             [](Handle *handle, int pages, void *) {
                 if (pages > 1000) {
                     s_timedQueue.reQueue(handle->path, pages);
