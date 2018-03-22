@@ -271,3 +271,16 @@ extension ColumnJSONCodable {
         return .BLOB
     }
 }
+
+//RawRepresentable
+extension RawRepresentable where Self: ColumnCodable, Self.RawValue: ColumnCodable {
+    public typealias FundamentalType = Self.RawValue.FundamentalType
+    public func archivedValue() -> Self.RawValue.FundamentalType? {
+        return rawValue.archivedValue()
+    }
+    
+    public init?(with value: Self.RawValue.FundamentalType) {
+        guard let value = Self.RawValue.init(with: value) else { return nil }
+        self.init(rawValue: value)
+    }
+}
