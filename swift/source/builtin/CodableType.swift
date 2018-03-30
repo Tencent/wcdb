@@ -207,7 +207,7 @@ extension URL: ColumnCodable {
     }
 }
 
-extension Array: CollectionColumnCodable {
+extension Array: CollectionColumnCodable where Element: ColumnCodable {
     public init?(with value: Data) {
         guard let decodable = try? JSONDecoder().decode(Array.self, from: value) else {
             return nil
@@ -219,7 +219,7 @@ extension Array: CollectionColumnCodable {
     }
 }
 
-extension Dictionary: CollectionColumnCodable {
+extension Dictionary: CollectionColumnCodable where Key: ColumnCodable, Value: ColumnCodable {
     public init?(with value: Data) {
         guard let decodable = try? JSONDecoder().decode(Dictionary.self, from: value) else {
             return nil
@@ -231,7 +231,7 @@ extension Dictionary: CollectionColumnCodable {
     }
 }
 
-extension Set: CollectionColumnCodable {
+extension Set: CollectionColumnCodable where Element: ColumnCodable {
     public init?(with value: Data) {
         guard let decodable = try? JSONDecoder().decode(Set.self, from: value) else {
             return nil
@@ -266,7 +266,6 @@ extension ColumnJSONDecodable {
 
 public protocol ColumnJSONCodable: ColumnJSONEncodable, ColumnJSONDecodable {}
 extension ColumnJSONCodable {
-    public typealias FundamentalType = Data
     public static var columnType: ColumnType {
         return .BLOB
     }
