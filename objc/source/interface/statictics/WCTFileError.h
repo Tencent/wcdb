@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, WCTFileOperation) {
     WCTFileOperationUnlink = WCDB::FileError::Operation::Unlink,
     WCTFileOperationRemove = WCDB::FileError::Operation::Remove,
     WCTFileOperationMkdir = WCDB::FileError::Operation::Mkdir,
+    WCTFileOperationGetAttribute,
+    WCTFileOperationSetAttribute,
 };
 
 @interface WCTFileError : WCTError

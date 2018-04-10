@@ -175,7 +175,7 @@ bool Database::removeFiles()
         Error::warning(
             "Removing files on an opened database may cause undefined results");
     }
-    FileManager *fileManager = FileManager::sharedFileManager();
+    FileManager *fileManager = FileManager::shared();
     if (fileManager->removeFiles(getPaths())) {
         return true;
     }
@@ -189,7 +189,7 @@ std::pair<bool, size_t> Database::getFilesSize()
         Error::warning("Getting files size on an opened database may get "
                        "incorrect results");
     }
-    FileManager *fileManager = FileManager::sharedFileManager();
+    FileManager *fileManager = FileManager::shared();
     auto ret = fileManager->getFilesSize(getPaths());
     if (!ret.first) {
         m_pool->setThreadedError(fileManager->getError());
@@ -203,7 +203,7 @@ bool Database::moveFiles(const std::string &directory)
         Error::warning("Moving files on an opened database may cause a "
                        "corrupted database");
     }
-    FileManager *fileManager = FileManager::sharedFileManager();
+    FileManager *fileManager = FileManager::shared();
     if (fileManager->moveFiles(getPaths(), directory)) {
         return true;
     }
@@ -220,7 +220,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     }
     std::list<std::string> paths = getPaths();
     paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
-    FileManager *fileManager = FileManager::sharedFileManager();
+    FileManager *fileManager = FileManager::shared();
     if (fileManager->moveFiles(paths, directory)) {
         return true;
     }

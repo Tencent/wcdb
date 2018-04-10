@@ -18,11 +18,31 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#ifndef SQLiteGlobal_hpp
+#define SQLiteGlobal_hpp
 
-class WCTBuiltinConfig {
+#include <functional>
+
+namespace WCDB {
+
+class SQLiteGlobal {
 public:
-#if TARGET_OS_IPHONE
-    static const WCDB::Config fileProtection;
-#endif //TARGET_OS_IPHONE
+    static SQLiteGlobal *shared();
+
+    void hookVFSDidFileCreated(
+        const std::function<void(const char *)> &didFileCreated);
+
+protected:
+    SQLiteGlobal();
+    SQLiteGlobal(const SQLiteGlobal &) = delete;
+    SQLiteGlobal &operator=(const SQLiteGlobal &) = delete;
+
+    static int vfsOpen(const char *zFile, int flags, int mode);
+    static void log(void *userInfo, int code, const char *message);
+
+    std::function<void(const char *)> m_didFileCreated;
 };
+
+} //namespace WCDB
+
+#endif /* SQLiteGlobal_hpp */

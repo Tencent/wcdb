@@ -31,6 +31,8 @@ HandlePools *HandlePools::defaultPools()
 
 HandlePools::HandlePools()
 {
+    //init
+    SQLiteGlobal::shared();
 }
 
 RecyclableHandlePool HandlePools::getPool(const std::string &path)

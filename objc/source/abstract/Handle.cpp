@@ -39,30 +39,6 @@ Handle::Handle(const std::string &path_, Tag tag)
 {
     m_error.tag = tag;
     m_error.path = path_;
-    static std::once_flag s_flag;
-    std::call_once(s_flag, []() {
-        sqlite3_config(SQLITE_CONFIG_LOG,
-                       [](void *userInfo, int code, const char *message) {
-                           SQLiteError error;
-                           switch (code) {
-                               case SQLITE_WARNING:
-                                   error.level = Error::Level::Warning;
-                                   break;
-                               case SQLITE_NOTICE:
-                                   error.level = Error::Level::Ignore;
-                                   break;
-                               default:
-                                   error.level = Error::Level::Debug;
-                                   break;
-                           }
-                           error.code = code;
-                           error.message = message ? message : "";
-                       },
-                       nullptr);
-        sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-        sqlite3_config(SQLITE_CONFIG_MEMSTATUS, false);
-        //    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, 0x7fff0000, 0x7fff0000);
-    });
 }
 
 #pragma mark - Path

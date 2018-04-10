@@ -19,19 +19,58 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/WCTBuiltinConfig.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDatabase
 
+#if TARGET_OS_IPHONE
++ (void)initialize
+{
+    WCDB::SQLiteGlobal::shared()->hookVFSDidFileCreated([](const char *path) {
+        if (!path) {
+            return;
+        }
+        WCTFileOperation operation;
+        NSError *error = nil;
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *nsPath = @(path);
+        operation = WCTFileOperationGetAttribute;
+        NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&error];
+        if (attributes) {
+            NSString *fileProtection = [attributes objectForKey:NSFileProtectionKey];
+            if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
+                return;
+            }
+            operation = WCTFileOperationSetAttribute;
+            NSDictionary *fileProtectionAttribute = @{NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication};
+            [fileManager setAttributes:fileProtectionAttribute
+                          ofItemAtPath:nsPath
+                                 error:&error];
+#ifdef DEBUG
+            //only for testing
+            [fileManager createFileAtPath:[nsPath stringByAppendingString:@"-fileProtection"]
+                                 contents:[NSData data]
+                               attributes:nil];
+#endif
+        }
+        if (error) {
+            WCDB::FileError fileError;
+            fileError.operation = (WCDB::FileError::Operation) operation;
+            fileError.path = path;
+            fileError.level = WCDB::Error::Level::Error;
+            fileError.code = (int) error.code;
+            fileError.message = error.description.UTF8String;
+            fileError.report();
+        }
+    });
+}
+#endif //TARGET_OS_IPHONE
+
 - (instancetype)initWithPath:(NSString *)path
 {
     if (self = [super initWithDatabase:WCDB::Database::databaseWithPath(path.UTF8String)]) {
-#if TARGET_OS_IPHONE
-        _database->setConfig(WCTBuiltinConfig::fileProtection);
-#endif //TARGET_OS_IPHONE
     }
     return self;
 }

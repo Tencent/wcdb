@@ -248,10 +248,9 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     Configs configs = m_configs;
 
     if (m_aliveHandleCount == 0) {
-        if (!FileManager::sharedFileManager()
-                 ->createDirectoryWithIntermediateDirectories(
-                     Path::getBaseName(path))) {
-            setThreadedError(FileManager::sharedFileManager()->getError());
+        if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
+                Path::getBaseName(path))) {
+            setThreadedError(FileManager::shared()->getError());
             return nullptr;
         }
     }

@@ -405,8 +405,6 @@
 		23B94E6F2068A06200197358 /* WCTValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B94E6D2068A06200197358 /* WCTValue.mm */; };
 		23B94E722068A16D00197358 /* WCTValue+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B94E702068A16D00197358 /* WCTValue+Private.h */; };
 		23B94F16204E3AF500E2032D /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B94F15204E3AF100E2032D /* Interface.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23B94F19204E4EDC00E2032D /* WCTBuiltinConfig.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B94F17204E4EDC00E2032D /* WCTBuiltinConfig.mm */; };
-		23B94F1A204E4EDC00E2032D /* WCTBuiltinConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B94F18204E4EDC00E2032D /* WCTBuiltinConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23BBE2992049434D00C4CBB6 /* NSData+NoCopyData.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2972049434D00C4CBB6 /* NSData+NoCopyData.h */; };
 		23BBE29A2049434D00C4CBB6 /* NSData+NoCopyData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2982049434D00C4CBB6 /* NSData+NoCopyData.mm */; };
 		23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -414,6 +412,8 @@
 		23BBE2AE2049565600C4CBB6 /* WCTDatabase+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2AC2049565600C4CBB6 /* WCTDatabase+Config.mm */; };
 		23BBE2B12049576D00C4CBB6 /* WCTDatabase+Memory.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2AF2049576D00C4CBB6 /* WCTDatabase+Memory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23BBE2B22049576D00C4CBB6 /* WCTDatabase+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2B02049576D00C4CBB6 /* WCTDatabase+Memory.mm */; };
+		23BFE2FF207C602800A4BD81 /* SQLiteGlobal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23BFE300207C602800A4BD81 /* SQLiteGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */; };
 		23D18635205A66000001A6CE /* MigrationBuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */; };
 		23D18636205A66000001A6CE /* MigrationBuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D18634205A66000001A6CE /* MigrationBuiltinConfig.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D920C72009B534000634CB /* Abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* Abstract.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -872,8 +872,6 @@
 		23B94E6D2068A06200197358 /* WCTValue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTValue.mm; sourceTree = "<group>"; };
 		23B94E702068A16D00197358 /* WCTValue+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTValue+Private.h"; sourceTree = "<group>"; };
 		23B94F15204E3AF100E2032D /* Interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interface.h; sourceTree = "<group>"; };
-		23B94F17204E4EDC00E2032D /* WCTBuiltinConfig.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBuiltinConfig.mm; sourceTree = "<group>"; };
-		23B94F18204E4EDC00E2032D /* WCTBuiltinConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTBuiltinConfig.h; sourceTree = "<group>"; };
 		23BBE2972049434D00C4CBB6 /* NSData+NoCopyData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+NoCopyData.h"; sourceTree = "<group>"; };
 		23BBE2982049434D00C4CBB6 /* NSData+NoCopyData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+NoCopyData.mm"; sourceTree = "<group>"; };
 		23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTCommon.h; sourceTree = "<group>"; };
@@ -881,6 +879,8 @@
 		23BBE2AC2049565600C4CBB6 /* WCTDatabase+Config.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Config.mm"; sourceTree = "<group>"; };
 		23BBE2AF2049576D00C4CBB6 /* WCTDatabase+Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Memory.h"; sourceTree = "<group>"; };
 		23BBE2B02049576D00C4CBB6 /* WCTDatabase+Memory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Memory.mm"; sourceTree = "<group>"; };
+		23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SQLiteGlobal.hpp; sourceTree = "<group>"; };
+		23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteGlobal.cpp; sourceTree = "<group>"; };
 		23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationBuiltinConfig.cpp; sourceTree = "<group>"; };
 		23D18634205A66000001A6CE /* MigrationBuiltinConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationBuiltinConfig.hpp; sourceTree = "<group>"; };
 		23D920422009B52E000634CB /* Abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Abstract.h; sourceTree = "<group>"; };
@@ -999,6 +999,8 @@
 				2361C43A206358EE00A9966A /* SQLiteError.cpp */,
 				233A057320612F8500F1A212 /* HandleError.cpp */,
 				233A057420612F8500F1A212 /* HandleError.hpp */,
+				23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */,
+				23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */,
 			);
 			path = abstract;
 			sourceTree = "<group>";
@@ -1132,8 +1134,6 @@
 				2349F65E1EA0D6680021EFA7 /* WCTCore.mm */,
 				2349F65F1EA0D6680021EFA7 /* WCTDatabase.h */,
 				2349F6601EA0D6680021EFA7 /* WCTDatabase.mm */,
-				23B94F17204E4EDC00E2032D /* WCTBuiltinConfig.mm */,
-				23B94F18204E4EDC00E2032D /* WCTBuiltinConfig.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1733,6 +1733,7 @@
 				239775A7202AECD3000A681C /* LangUpdateSTMT.hpp in Headers */,
 				23A7B35B2044F52000775DB8 /* CopyOnWriteList.hpp in Headers */,
 				239775A9202AECD3000A681C /* LangVacuumSTMT.hpp in Headers */,
+				23BFE2FF207C602800A4BD81 /* SQLiteGlobal.hpp in Headers */,
 				234DBCF32064DD0C000E31E8 /* WCTDatabase+Handle.h in Headers */,
 				239775AB202AECD3000A681C /* LangWithClause.hpp in Headers */,
 				2349F76A1EA0D6680021EFA7 /* WCTCodingMacro.h in Headers */,
@@ -1796,7 +1797,6 @@
 				23E1FD79206C962E006C6C8E /* NSObject+WCTColumnCoding.h in Headers */,
 				23B8F56F2043FD1E00EC571D /* Redirectable.hpp in Headers */,
 				234DBD0D2064E045000E31E8 /* WCTChainCall.h in Headers */,
-				23B94F1A204E4EDC00E2032D /* WCTBuiltinConfig.h in Headers */,
 				23036A3F205F9BF100ADF01A /* WCTMigrationInfo.h in Headers */,
 				233A057E20621B3900F1A212 /* CoreError.hpp in Headers */,
 				23036A3B205F9A4700ADF01A /* WCTMigrationDatabase.h in Headers */,
@@ -2062,7 +2062,6 @@
 				2370980A20590CA700E768B4 /* HandleStatement.cpp in Sources */,
 				2349F75E1EA0D6680021EFA7 /* WCTBinding.mm in Sources */,
 				2349F7371EA0D6680021EFA7 /* WCTDatabase+Convenient.mm in Sources */,
-				23B94F19204E4EDC00E2032D /* WCTBuiltinConfig.mm in Sources */,
 				2397755C202AECD3000A681C /* LangCommonTableExpression.cpp in Sources */,
 				23977527202AECD3000A681C /* StatementDropIndex.cpp in Sources */,
 				23977579202AECD3000A681C /* LangExpr.cpp in Sources */,
@@ -2096,6 +2095,7 @@
 				233A057520612F8500F1A212 /* HandleError.cpp in Sources */,
 				23036A3C205F9A4700ADF01A /* WCTMigrationDatabase.mm in Sources */,
 				23977506202AECD3000A681C /* QualifiedTableName.cpp in Sources */,
+				23BFE300207C602800A4BD81 /* SQLiteGlobal.cpp in Sources */,
 				2349F7301EA0D6680021EFA7 /* WCTSelectable.mm in Sources */,
 				23977533202AECD3000A681C /* StatementReindex.cpp in Sources */,
 				2397759C202AECD3000A681C /* LangSavepointSTMT.cpp in Sources */,

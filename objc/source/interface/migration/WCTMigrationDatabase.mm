@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/WCTBuiltinConfig.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTMigrationInfo+Private.h>
 #import <atomic>
@@ -31,9 +30,6 @@
 - (instancetype)initWithPath:(NSString *)path
 {
     if (self = [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String)]) {
-#if TARGET_OS_IPHONE
-        _database->setConfig(WCTBuiltinConfig::fileProtection);
-#endif //TARGET_OS_IPHONE
     }
     return self;
 }

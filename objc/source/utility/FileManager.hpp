@@ -48,10 +48,12 @@ public:
 class FileManager {
 #pragma mark - Initialize
 public:
-    static FileManager *sharedFileManager();
+    static FileManager *shared();
 
 protected:
     FileManager();
+    FileManager(const FileManager &) = delete;
+    FileManager &operator=(const FileManager &) = delete;
 
 #pragma mark - Basic
 public:

@@ -29,7 +29,6 @@
  * check OOM
  * replace assert with our own function with log
  * add authorize to avoid writing on the migration database
- * using VFS to implement file protection
  * -Wglobal-constructors
  * remove redundant `virtual`
  * async migration

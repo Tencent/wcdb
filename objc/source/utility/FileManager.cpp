@@ -44,7 +44,7 @@ FileManager::FileManager()
 {
 }
 
-FileManager *FileManager::sharedFileManager()
+FileManager *FileManager::shared()
 {
     static FileManager s_fileManager;
     return &s_fileManager;
