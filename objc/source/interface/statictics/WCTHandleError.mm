@@ -45,7 +45,7 @@
 - (NSString *)description
 {
     NSMutableString *desc = [[NSMutableString alloc] initWithString:[super description]];
-    [desc appendFormat:@"Tag: %d", _tag];
+    [desc appendFormat:@"Tag: %lld", _tag];
     [desc appendFormat:@"ExtCode: %d", _extendedCode];
     [desc appendFormat:@"Path: %@", _path];
     [desc appendFormat:@"SQL: %s", _statement.getDescription().c_str()];

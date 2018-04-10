@@ -51,7 +51,7 @@ std::string Error::getDescription() const
 
 void Error::addToDescription(std::string &description,
                              const char *key,
-                             int value) const
+                             int64_t value) const
 {
     addToDescription(description, key, std::to_string(value));
 }

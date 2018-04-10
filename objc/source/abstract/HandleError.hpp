@@ -28,7 +28,7 @@ namespace WCDB {
 
 class HandleError : public Error {
 public:
-    typedef int32_t Tag;
+    typedef int64_t Tag;
 
     enum Operation {
         NotSet = 0,

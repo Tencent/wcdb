@@ -89,7 +89,7 @@ public:
 protected:
     void addToDescription(std::string &description,
                           const char *key,
-                          int value) const;
+                          int64_t value) const;
     void addToDescription(std::string &description,
                           const char *key,
                           const std::string &value) const;

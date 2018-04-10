@@ -20,7 +20,6 @@
 
 #include <WCDB/FileManager.hpp>
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/Hash.hpp>
 #include <WCDB/Path.hpp>
 #include <algorithm>
 #include <thread>
@@ -31,7 +30,7 @@ namespace WCDB {
 #pragma mark - Initialize
 HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
     : path(thePath)
-    , tag(hash(thePath))
+    , tag(std::hash<std::string>{}(thePath))
     , m_configs(configs)
     , m_handles(s_hardwareConcurrency)
     , m_aliveHandleCount(0)
