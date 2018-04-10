@@ -179,4 +179,23 @@
     XCTAssertTrue(tested);
 }
 
+#if TARGET_OS_IPHONE
+- (void)test_file_protection
+{
+    _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
+    XCTAssertTrue([_database createTableAndIndexes:self.className
+                                         withClass:TestCaseObject.class]);
+    NSArray<NSString *> *paths = @[
+        _database.path,
+        [_database.path stringByAppendingString:@(WCDB::Handle::getSHMSubfix().c_str())],
+        [_database.path stringByAppendingString:@(WCDB::Handle::getWALSubfix().c_str())],
+    ];
+    for (NSString *path in paths) {
+        //file protection is not available on simulator
+        NSString *expectedSQL = [path stringByAppendingString:@"-fileProtection"];
+        XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:expectedSQL]);
+    }
+}
+#endif
+
 @end
