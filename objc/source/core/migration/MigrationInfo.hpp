@@ -167,6 +167,7 @@ protected:
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::SelectSTMT> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::InsertSTMT> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::CreateTableSTMT> &cowLang);
+    bool tamper(Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> &cowLang);
 #pragma mark - Lang
     bool
     tamper(Lang::CopyOnWriteLazyLang<Lang::CommonTableExpression> &cowLang);

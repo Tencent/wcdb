@@ -55,6 +55,7 @@ bool MigrationHandle::execute(const Statement &statement)
             switch (statement.getStatementType()) {
                 case Statement::Type::Update:
                 case Statement::Type::Delete:
+                case Statement::Type::DropTable:
                     return executeWithMultipleStatements(statement,
                                                          tamperedStatement);
                 case Statement::Type::Insert:
@@ -91,6 +92,7 @@ bool MigrationHandle::prepare(const Statement &statement)
             switch (statement.getStatementType()) {
                 case Statement::Type::Update:
                 case Statement::Type::Delete:
+                case Statement::Type::DropTable:
                     return prepareWithMultipleStatements(statement,
                                                          tamperedStatement);
                 case Statement::Type::Insert:

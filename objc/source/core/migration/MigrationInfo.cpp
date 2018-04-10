@@ -36,8 +36,8 @@ MigrationInfo::info(const std::string &targetTable,
 MigrationInfo::MigrationInfo(const std::string &targetTable,
                              const std::string &sourceTable,
                              const std::string &sourceDatabasePath)
-    : m_sourceTable(targetTable)
-    , m_targetTable(targetTable)
+    : m_targetTable(targetTable)
+    , m_sourceTable(sourceTable)
     , m_sourceDatabasePath(sourceDatabasePath)
     , m_isMigrating(false)
 {
@@ -265,6 +265,13 @@ bool MigrationInfo::tamper(Statement &statement)
                     return true;
                 }
             } break;
+            case Statement::Type::DropTable: {
+                Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> stmt(cowLang);
+                if (tamper(stmt)) {
+                    statement.getCOWLang().assign(stmt);
+                    return true;
+                }
+            } break;
             default:
                 break;
         }
@@ -292,6 +299,17 @@ bool MigrationInfo::tamperInsertStatementForUnstartedMigration(
 }
 
 #pragma mark - Tamper STMT
+bool MigrationInfo::tamper(
+    Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> &cowLang)
+{
+    TAMPER_PREPARE(cowLang);
+    if (lang.schemaName.empty() && tamperTableName(lang.name)) {
+        tamperSchemaName(lang.schemaName);
+        return true;
+    }
+    return false;
+}
+
 bool MigrationInfo::tamper(Lang::CopyOnWriteLazyLang<Lang::SelectSTMT> &cowLang)
 {
     TAMPER_PREPARE(cowLang);
