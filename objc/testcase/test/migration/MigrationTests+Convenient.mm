@@ -98,6 +98,19 @@
     [super tearDown];
 }
 
+#pragma mark - Drop Table
+- (void)test_drop_table
+{
+    XCTAssertTrue([_migrated isTableExists:_migratedTableName withError:nil]);
+    XCTAssertTrue([_database isTableExists:_tableName withError:nil]);
+    XCTAssertTrue([_migrated dropTable:_migratedTableName]);
+    WCTError *error = nil;
+    XCTAssertFalse([_migrated isTableExists:_migratedTableName withError:&error]);
+    XCTAssertNil(error);
+    XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
+    XCTAssertNil(error);
+}
+
 #pragma mark - Get Object
 - (void)test_get_object_ofClass
 {
