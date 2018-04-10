@@ -36,13 +36,14 @@
 
     _migratedPath = [self.recommendedPath stringByAppendingString:@"_migrated"];
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath];
+    _info = [[WCTMigrationInfo alloc] initWithTargetTable:_tableName
+                                          fromSourceTable:_tableName
+                                               ofDatabase:_database.path];
+
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath
+                                                   andInfo:_info];
 
     XCTAssertTrue([_migrated createTableAndIndexes:_tableName withClass:_cls]);
-
-    _info = [[WCTMigrationInfo alloc] initWithTargetTable:_tableName fromSourceTable:_tableName ofDatabase:_database.path];
-
-    [_migrated setMigrationInfo:_info];
 
     BOOL done;
     //start
@@ -75,8 +76,8 @@
     [migratedDatabase finalizeDatabase];
     migratedDatabase = nil;
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath];
-    [_migrated setMigrationInfo:_info];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath
+                                                   andInfo:_info];
 }
 
 - (void)tearDown

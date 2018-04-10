@@ -44,7 +44,10 @@
     [_database finalizeDatabase];
     _database = nil;
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath];
+    _info = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTableName fromSourceTable:_tableName];
+
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath
+                                                   andInfo:_info];
     _database = _migrated;
 
     XCTAssertTrue([_migrated createTableAndIndexes:_innocentTableName withClass:_cls]);
@@ -52,10 +55,6 @@
     XCTAssertTrue([_migrated insertObjects:_preInserted intoTable:_innocentTableName]);
 
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
-
-    _info = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTableName fromSourceTable:_tableName];
-
-    [_migrated setMigrationInfo:_info];
 
     BOOL done;
     //start
@@ -93,9 +92,9 @@
     [unmigratedDatabase finalizeDatabase];
     unmigratedDatabase = nil;
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath
+                                                   andInfo:_info];
     _database = _migrated;
-    [_migrated setMigrationInfo:_info];
 }
 
 - (void)tearDown

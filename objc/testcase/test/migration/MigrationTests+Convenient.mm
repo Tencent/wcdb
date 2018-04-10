@@ -39,13 +39,12 @@
 
     _migratedTableName = [_tableName stringByAppendingString:@"_migrated"];
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath];
-
-    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
-
     _info = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTableName fromSourceTable:_tableName ofDatabase:_database.path];
 
-    [_migrated setMigrationInfo:_info];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath
+                                                   andInfo:_info];
+
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
 
     BOOL done;
     //start
@@ -78,8 +77,8 @@
     [migratedDatabase finalizeDatabase];
     migratedDatabase = nil;
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath];
-    [_migrated setMigrationInfo:_info];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath
+                                                   andInfo:_info];
 }
 
 - (void)tearDown
@@ -89,6 +88,8 @@
     [_migrated close:^{
       XCTAssertTrue([_migrated removeFiles]);
     }];
+
+    //    [_migrated finalizeDatabase];
 
     _migrated = nil;
 
