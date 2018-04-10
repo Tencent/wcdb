@@ -32,7 +32,8 @@ namespace WCDB {
 #pragma mark - Initializer
 std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 {
-    std::shared_ptr<Database> database(new Database(tag));
+    std::shared_ptr<Database> database(
+        new Database(HandlePools::defaultPools()->getExistingPool(tag)));
     if (database && database->isValid()) {
         return database;
     }
@@ -42,7 +43,8 @@ std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 std::shared_ptr<Database>
 Database::databaseWithExistingPath(const std::string &path)
 {
-    std::shared_ptr<Database> database(new Database(path, true));
+    std::shared_ptr<Database> database(
+        new Database(HandlePools::defaultPools()->getExistingPool(path)));
     if (database && database->isValid()) {
         return database;
     }
@@ -51,22 +53,17 @@ Database::databaseWithExistingPath(const std::string &path)
 
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
-    std::shared_ptr<Database> database(new Database(path, false));
+    static const HandlePools::Generator s_generator =
+        [](const std::string &path) -> std::shared_ptr<HandlePool> {
+        return std::shared_ptr<HandlePool>(
+            new HandlePool(path, BuiltinConfig::defaultConfigs()));
+    };
+    std::shared_ptr<Database> database(
+        new Database(HandlePools::defaultPools()->getPool(path, s_generator)));
     if (database && database->isValid()) {
         return database;
     }
     return nullptr;
-}
-
-Database::Database(const std::string &path, bool existingOnly)
-    : m_pool(!existingOnly ? HandlePools::defaultPools()->getPool(path)
-                           : HandlePools::defaultPools()->getExistingPool(path))
-{
-}
-
-Database::Database(const Tag &tag)
-    : m_pool(HandlePools::defaultPools()->getExistingPool(tag))
-{
 }
 
 Database::Database(const RecyclableHandlePool &pool) : m_pool(pool)

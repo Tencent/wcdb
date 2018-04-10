@@ -34,27 +34,27 @@ public:
     MigrationDatabase(const MigrationDatabase &) = delete;
     MigrationDatabase &operator=(const MigrationDatabase &) = delete;
 
-    static std::shared_ptr<Database> databaseWithPath(const std::string &path);
+    static std::shared_ptr<Database>
+    databaseWithPath(const std::string &path,
+                     const std::shared_ptr<MigrationInfo> &migrationInfo);
     static std::shared_ptr<Database>
     databaseWithExistingPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
 
 protected:
-    MigrationDatabase(const std::string &path, bool existingOnly);
-    MigrationDatabase(const Tag &tag);
+    MigrationDatabase(const RecyclableHandlePool &pool);
+
+    void setupMigrationPool();
 
 #pragma mark - Migration
 public:
-    //They are not thread-safe, which means that they should be called in the same thread.
-
-    void setMigrationInfo(const std::shared_ptr<MigrationInfo> &migrationInfo);
     const MigrationInfo *getMigrationInfo() const;
 
     bool stepMigration(bool &done);
 
 protected:
     bool startMigration();
-    void updateMigrationInfo(const std::shared_ptr<MigrationInfo> &info);
+    void clearMigrationInfo();
     MigrationHandlePool *m_migrationPool;
 };
 

@@ -42,8 +42,6 @@ public:
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
 
 protected:
-    Database(const std::string &path, bool existingOnly);
-    Database(const Tag &tag);
     Database(const RecyclableHandlePool &recyclableHandlePool);
 
     virtual bool isValid() const;

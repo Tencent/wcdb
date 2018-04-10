@@ -22,7 +22,8 @@
 
 @interface WCTMigrationDatabase : WCTDatabase
 
-- (void)setMigrationInfo:(WCTMigrationInfo *)info;
+- (instancetype)initWithPath:(NSString *)path
+                     andInfo:(WCTMigrationInfo *)info;
 
 - (BOOL)stepMigration:(BOOL &)done;
 

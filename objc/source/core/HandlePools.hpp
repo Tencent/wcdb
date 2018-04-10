@@ -32,14 +32,13 @@ public:
 
     static HandlePools *defaultPools();
 
-    RecyclableHandlePool getPool(const std::string &path);
+    typedef std::function<std::shared_ptr<HandlePool>(const std::string &)>
+        Generator;
+
+    RecyclableHandlePool getPool(const std::string &path,
+                                 const Generator &generator);
     RecyclableHandlePool getExistingPool(HandlePool::Tag tag);
     RecyclableHandlePool getExistingPool(const std::string &path);
-
-    typedef std::function<std::shared_ptr<HandlePool>(const std::string &)>
-        HandlePoolExtraGenerator;
-    void setExtraGenerator(const std::string &path,
-                           const HandlePoolExtraGenerator &generator);
 
     void purge();
 
@@ -58,8 +57,6 @@ protected:
     std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
         m_pools; //path->{pool, reference}
     std::mutex m_mutex;
-
-    std::unordered_map<std::string, HandlePoolExtraGenerator> m_extraGenerators;
 };
 
 } //namespace WCDB

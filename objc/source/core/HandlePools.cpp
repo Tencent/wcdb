@@ -35,13 +35,14 @@ HandlePools::HandlePools()
     SQLiteGlobal::shared();
 }
 
-RecyclableHandlePool HandlePools::getPool(const std::string &path)
+RecyclableHandlePool HandlePools::getPool(const std::string &path,
+                                          const Generator &generator)
 {
     std::shared_ptr<HandlePool> pool = nullptr;
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     auto iter = m_pools.find(path);
     if (iter == m_pools.end()) {
-        pool = generate(path);
+        pool = generator(path);
         if (pool == nullptr) {
             return nullptr;
         }
@@ -94,16 +95,6 @@ RecyclableHandlePool HandlePools::getExistingPool(
     });
 }
 
-std::shared_ptr<HandlePool> HandlePools::generate(const std::string &path)
-{
-    auto iter = m_extraGenerators.find(path);
-    if (iter != m_extraGenerators.end()) {
-        return iter->second(path);
-    }
-    return std::shared_ptr<HandlePool>(
-        new HandlePool(path, BuiltinConfig::defaultConfigs()));
-}
-
 void HandlePools::purge()
 {
     std::list<std::shared_ptr<HandlePool>> handlePools;
@@ -130,13 +121,6 @@ void HandlePools::drain()
     for (const auto &handlePool : handlePools) {
         handlePool->drain(nullptr);
     }
-}
-
-void HandlePools::setExtraGenerator(const std::string &path,
-                                    const HandlePoolExtraGenerator &generator)
-{
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
-    m_extraGenerators.insert({path, generator});
 }
 
 } //namespace WCDB

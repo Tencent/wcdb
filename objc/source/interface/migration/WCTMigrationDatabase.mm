@@ -28,10 +28,14 @@
 }
 
 - (instancetype)initWithPath:(NSString *)path
+                     andInfo:(WCTMigrationInfo *)info
 {
-    if (self = [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String)]) {
-    }
-    return self;
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, [info getWCDBMigrationInfo])];
+}
+
+- (instancetype)initWithPath:(NSString *)path
+{
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, nullptr)];
 }
 
 - (instancetype)initWithExistingTag:(WCTTag)tag
@@ -45,11 +49,6 @@
         _migrationDatabase = static_cast<WCDB::MigrationDatabase *>(database.get());
     }
     return self;
-}
-
-- (void)setMigrationInfo:(WCTMigrationInfo *)info
-{
-    _migrationDatabase->setMigrationInfo([info getWCDBMigrationInfo]);
 }
 
 - (BOOL)stepMigration:(BOOL &)done

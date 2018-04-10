@@ -22,8 +22,7 @@
 #import <WCDB/WCTUnsafeHandle.h>
 
 typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
-    WCTFinalizeLevelNone = 0,
-    WCTFinalizeLevelStatement,
+    WCTFinalizeLevelStatement = 0,
     WCTFinalizeLevelHandle,
     WCTFinalizeLevelDatabase,
 };

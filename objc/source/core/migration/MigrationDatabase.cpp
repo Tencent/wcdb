@@ -31,7 +31,8 @@ namespace WCDB {
 std::shared_ptr<Database>
 MigrationDatabase::databaseWithExistingTag(const Tag &tag)
 {
-    std::shared_ptr<Database> database(new MigrationDatabase(tag));
+    std::shared_ptr<Database> database(new MigrationDatabase(
+        HandlePools::defaultPools()->getExistingPool(tag)));
     if (database &&
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
@@ -42,7 +43,8 @@ MigrationDatabase::databaseWithExistingTag(const Tag &tag)
 std::shared_ptr<Database>
 MigrationDatabase::databaseWithExistingPath(const std::string &path)
 {
-    std::shared_ptr<Database> database(new MigrationDatabase(path, true));
+    std::shared_ptr<Database> database(new MigrationDatabase(
+        HandlePools::defaultPools()->getExistingPool(path)));
     if (database &&
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
@@ -50,16 +52,22 @@ MigrationDatabase::databaseWithExistingPath(const std::string &path)
     return nullptr;
 }
 
-std::shared_ptr<Database>
-MigrationDatabase::databaseWithPath(const std::string &path)
+std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
+    const std::string &path,
+    const std::shared_ptr<MigrationInfo> &migrationInfo)
 {
-    HandlePools::defaultPools()->setExtraGenerator(
-        path, [](const std::string &path) -> std::shared_ptr<HandlePool> {
-            std::shared_ptr<HandlePool> handlePool(
-                new MigrationHandlePool(path, BuiltinConfig::defaultConfigs()));
-            return handlePool;
-        });
-    std::shared_ptr<Database> database(new MigrationDatabase(path, false));
+    const HandlePools::Generator s_generator =
+        [migrationInfo](
+            const std::string &path) -> std::shared_ptr<HandlePool> {
+        return std::shared_ptr<HandlePool>(new MigrationHandlePool(
+            path,
+            MigrationBuiltinConfig::defaultConfigsWithMigrationInfo(
+                migrationInfo),
+            migrationInfo));
+    };
+
+    std::shared_ptr<Database> database(new MigrationDatabase(
+        HandlePools::defaultPools()->getPool(path, s_generator)));
     if (database &&
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
@@ -67,40 +75,16 @@ MigrationDatabase::databaseWithPath(const std::string &path)
     return nullptr;
 }
 
-MigrationDatabase::MigrationDatabase(const std::string &path, bool existingOnly)
-    : Database(path, existingOnly), m_migrationPool(nullptr)
+MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
+    : Database(pool)
+    , m_migrationPool(pool != nullptr ? dynamic_cast<MigrationHandlePool *>(
+                                            pool.getHandlePool())
+                                      : nullptr)
 {
-    if (m_pool != nullptr) {
-        m_migrationPool =
-            dynamic_cast<MigrationHandlePool *>(m_pool.getHandlePool());
-        assert(m_migrationPool != nullptr);
-    }
-}
-
-MigrationDatabase::MigrationDatabase(const Tag &tag)
-    : Database(tag), m_migrationPool(nullptr)
-{
-    if (m_pool != nullptr) {
-        m_migrationPool =
-            dynamic_cast<MigrationHandlePool *>(m_pool.getHandlePool());
-        assert(m_migrationPool != nullptr);
-    }
+    assert(pool == nullptr || m_migrationPool != nullptr);
 }
 
 #pragma mark - Migration
-void MigrationDatabase::setMigrationInfo(
-    const std::shared_ptr<MigrationInfo> &migrationInfo)
-{
-    //It should be called only migration is not started or already finished.
-    assert(migrationInfo.get() != m_migrationPool->getMigrationInfo());
-    assert(m_migrationPool->getMigrationInfo() == nullptr);
-    if (m_migrationPool->getMigrationInfo() != nullptr ||
-        migrationInfo == nullptr) {
-        return;
-    }
-    updateMigrationInfo(migrationInfo);
-}
-
 bool MigrationDatabase::stepMigration(bool &done)
 {
     assert(m_migrationPool->getMigrationInfo() != nullptr);
@@ -153,7 +137,7 @@ bool MigrationDatabase::stepMigration(bool &done)
         });
     done = committed && done;
     if (done) {
-        updateMigrationInfo(nullptr);
+        clearMigrationInfo();
     }
     return committed;
 }
@@ -233,12 +217,10 @@ bool MigrationDatabase::startMigration()
 }
 
 //TODO async migration
-
-void MigrationDatabase::updateMigrationInfo(
-    const std::shared_ptr<MigrationInfo> &info)
+void MigrationDatabase::clearMigrationInfo()
 {
-    m_migrationPool->setMigrationInfo(info);
-    setConfig(MigrationBuiltinConfig::autoAttachAndDetachWithInfo(info));
+    m_migrationPool->clearMigrationInfo();
+    setConfig(MigrationBuiltinConfig::autoDetach());
 }
 
 const MigrationInfo *MigrationDatabase::getMigrationInfo() const

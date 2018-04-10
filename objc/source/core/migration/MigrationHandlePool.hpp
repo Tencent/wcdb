@@ -30,12 +30,14 @@ class MigrationHandlePool : public HandlePool {
 #pragma mark - Initialize
 public:
     friend class MigrationHandlePools;
-    MigrationHandlePool(const std::string &path, const Configs &configs);
+    MigrationHandlePool(const std::string &path,
+                        const Configs &configs,
+                        const std::shared_ptr<MigrationInfo> &migrationInfo);
 
 #pragma mark - Migration
-    //They are not thread-safe except `isMigrating`.
 public:
-    void setMigrationInfo(const std::shared_ptr<MigrationInfo> &migrationInfo);
+    //TODO remove it
+    void clearMigrationInfo();
     MigrationInfo *getMigrationInfo() const;
 
 protected:

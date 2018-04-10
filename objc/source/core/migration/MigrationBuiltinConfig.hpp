@@ -21,6 +21,7 @@
 #ifndef MigrationBuiltinConfig_hpp
 #define MigrationBuiltinConfig_hpp
 
+#include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/MigrationInfo.hpp>
 
@@ -29,11 +30,19 @@ namespace WCDB {
 class MigrationBuiltinConfig {
 public:
     enum Order : int {
-        AutoAttachAndDetach = -1,
+        Migration = -1,
     };
 
     static const Config
-    autoAttachAndDetachWithInfo(const std::shared_ptr<MigrationInfo> &info);
+    autoAttachWithInfo(const std::shared_ptr<MigrationInfo> &info);
+
+    static const Config autoDetach();
+
+    static Configs
+    defaultConfigsWithMigrationInfo(const std::shared_ptr<MigrationInfo> &info);
+
+protected:
+    static bool autoDetachCallback(Handle *handle);
 };
 
 } //namespace WCDB

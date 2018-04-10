@@ -23,10 +23,15 @@
 
 namespace WCDB {
 #pragma mark - Initialize
-MigrationHandlePool::MigrationHandlePool(const std::string &path,
-                                         const Configs &configs)
-    : HandlePool(path, configs)
+MigrationHandlePool::MigrationHandlePool(
+    const std::string &path,
+    const Configs &configs,
+    const std::shared_ptr<MigrationInfo> &migrationInfo)
+    : HandlePool(path, configs), m_info(migrationInfo)
 {
+    assert(migrationInfo == nullptr ||
+           migrationInfo->isSameDatabaseMigration() ||
+           migrationInfo->getSourceDatabasePath() != path);
 }
 
 #pragma mark - Migration
@@ -35,13 +40,9 @@ MigrationInfo *MigrationHandlePool::getMigrationInfo() const
     return m_info.get();
 }
 
-void MigrationHandlePool::setMigrationInfo(
-    const std::shared_ptr<MigrationInfo> &migrationInfo)
+void MigrationHandlePool::clearMigrationInfo()
 {
-    assert(migrationInfo == nullptr ||
-           migrationInfo->isSameDatabaseMigration() ||
-           migrationInfo->getSourceDatabasePath() != path);
-    m_info = migrationInfo;
+    m_info = nullptr;
 }
 
 #pragma mark - Override

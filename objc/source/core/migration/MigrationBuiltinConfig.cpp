@@ -23,46 +23,57 @@
 
 namespace WCDB {
 
-const Config MigrationBuiltinConfig::autoAttachAndDetachWithInfo(
+const Config MigrationBuiltinConfig::autoAttachWithInfo(
     const std::shared_ptr<MigrationInfo> &info)
 {
-    std::function<bool(Handle *)> callback = nullptr;
-    if (info != nullptr) {
-        //Attach if not exists
-        callback = [info](Handle *handle) -> bool {
-            if (info->isSameDatabaseMigration()) {
-                return true;
-            }
-            auto pair = handle->isSchemaExists(MigrationInfo::migrationSchema);
-            if (!pair.first) {
-                return false;
-            }
-            if (pair.second) {
-                return true;
-            }
-            MigrationHandle *migrationHandle =
-                static_cast<MigrationHandle *>(handle);
-            return migrationHandle->executeWithoutTampering(
-                info->getStatementForAttachingOldDatabase());
-        };
-    } else {
-        //Detach if exists
-        callback = [](Handle *handle) -> bool {
-            auto pair = handle->isSchemaExists(MigrationInfo::migrationSchema);
-            if (!pair.first) {
-                return false;
-            }
-            if (!pair.second) {
-                return true;
-            }
-            MigrationHandle *migrationHandle =
-                static_cast<MigrationHandle *>(handle);
-            return migrationHandle->executeWithoutTampering(
-                MigrationInfo::getStatementForDetachingOldDatabase());
-        };
+    assert(info != nullptr);
+    return Config("migration",
+                  [info](Handle *handle) -> bool {
+                      if (info->isSameDatabaseMigration()) {
+                          return true;
+                      }
+                      auto pair = handle->isSchemaExists(
+                          MigrationInfo::migrationSchema);
+                      if (!pair.first) {
+                          return false;
+                      }
+                      if (pair.second) {
+                          return true;
+                      }
+                      MigrationHandle *migrationHandle =
+                          static_cast<MigrationHandle *>(handle);
+                      return migrationHandle->executeWithoutTampering(
+                          info->getStatementForAttachingOldDatabase());
+                  },
+                  MigrationBuiltinConfig::Order::Migration);
+}
+
+bool MigrationBuiltinConfig::autoDetachCallback(Handle *handle)
+{
+    auto pair = handle->isSchemaExists(MigrationInfo::migrationSchema);
+    if (!pair.first) {
+        return false;
     }
-    return Config("autoAttachAndDetach", callback,
-                  MigrationBuiltinConfig::Order::AutoAttachAndDetach);
+    if (!pair.second) {
+        return true;
+    }
+    MigrationHandle *migrationHandle = static_cast<MigrationHandle *>(handle);
+    return migrationHandle->executeWithoutTampering(
+        MigrationInfo::getStatementForDetachingOldDatabase());
+}
+
+const Config MigrationBuiltinConfig::autoDetach()
+{
+    return Config("migration", MigrationBuiltinConfig::autoDetachCallback,
+                  MigrationBuiltinConfig::Order::Migration);
+}
+
+Configs MigrationBuiltinConfig::defaultConfigsWithMigrationInfo(
+    const std::shared_ptr<MigrationInfo> &info)
+{
+    Configs configs = BuiltinConfig::defaultConfigs();
+    configs.setConfig(MigrationBuiltinConfig::autoAttachWithInfo(info));
+    return configs;
 }
 
 } //namespace WCDB
