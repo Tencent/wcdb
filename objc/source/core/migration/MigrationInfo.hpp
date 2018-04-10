@@ -28,19 +28,17 @@ namespace WCDB {
 class MigrationInfo {
 #pragma mark - Initialize
 public:
-    MigrationInfo(const std::string &targetTable,
-                  const std::shared_ptr<Database> &database);
-
-    MigrationInfo(const std::string &targetTable,
-                  const std::string &sourceTable,
-                  const std::shared_ptr<Database> &database = nullptr);
+    static std::shared_ptr<MigrationInfo>
+    info(const std::string &targetTable,
+         const std::string &sourceTable,
+         const std::string &sourceDatabasePath = "");
 
     MigrationInfo() = delete;
     MigrationInfo(const MigrationInfo &) = delete;
     MigrationInfo &operator=(const MigrationInfo &) = delete;
 
 #pragma mark - Basic
-    const std::shared_ptr<Database> &getSourceDatabase() const;
+    const std::string &getSourceDatabasePath() const;
     bool isSameDatabaseMigration() const;
 
     const std::string &getSourceTableName() const;
@@ -53,9 +51,11 @@ public:
     static const std::string migrationSchema;
 
 protected:
-    std::shared_ptr<Database>
-        m_sourceDatabase; // null for the same database migration
+    MigrationInfo(const std::string &targetTable,
+                  const std::string &sourceTable,
+                  const std::string &sourceDatabasePath);
 
+    std::string m_sourceDatabasePath; // empty for the same database migration
     std::string m_sourceTable;
     std::string m_targetTable;
 

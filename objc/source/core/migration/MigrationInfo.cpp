@@ -23,40 +23,38 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationInfo::MigrationInfo(const std::string &targetTable,
-                             const std::shared_ptr<Database> &database)
-    : m_sourceTable(targetTable)
-    , m_targetTable(targetTable)
-    , m_sourceDatabase(database)
-    , m_isMigrating(false)
+std::shared_ptr<MigrationInfo>
+MigrationInfo::info(const std::string &targetTable,
+                    const std::string &sourceTable,
+                    const std::string &sourceDatabasePath)
 {
-    assert(database != nullptr);
-    setupStatement();
+    assert(!sourceDatabasePath.empty() || targetTable != sourceTable);
+    return std::shared_ptr<MigrationInfo>(
+        new MigrationInfo(targetTable, sourceTable, sourceDatabasePath));
 }
 
 MigrationInfo::MigrationInfo(const std::string &targetTable,
                              const std::string &sourceTable,
-                             const std::shared_ptr<Database> &database)
-    : m_sourceTable(sourceTable)
+                             const std::string &sourceDatabasePath)
+    : m_sourceTable(targetTable)
     , m_targetTable(targetTable)
-    , m_sourceDatabase(database)
+    , m_sourceDatabasePath(sourceDatabasePath)
     , m_isMigrating(false)
 {
-    assert(m_sourceTable != m_targetTable || m_sourceDatabase != nullptr);
     setupStatement();
 }
 
 #pragma mark - Basic
 const std::string MigrationInfo::migrationSchema = "WCDBMigration";
 
-const std::shared_ptr<Database> &MigrationInfo::getSourceDatabase() const
+const std::string &MigrationInfo::getSourceDatabasePath() const
 {
-    return m_sourceDatabase;
+    return m_sourceDatabasePath;
 }
 
 bool MigrationInfo::isSameDatabaseMigration() const
 {
-    return m_sourceDatabase == nullptr;
+    return m_sourceDatabasePath.empty();
 }
 
 const std::string &MigrationInfo::getSourceTableName() const
@@ -99,7 +97,7 @@ void MigrationInfo::setupStatement()
     if (!isSameDatabaseMigration()) {
         m_statementForAttachingOldDatabase =
             StatementAttach()
-                .attach(m_sourceDatabase->getPath())
+                .attach(m_sourceDatabasePath)
                 .as(MigrationInfo::migrationSchema);
     }
 

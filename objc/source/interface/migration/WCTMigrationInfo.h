@@ -26,19 +26,13 @@
 
 - (nonnull NSString *)sourceTable;
 
-- (nullable WCTDatabase *)sourceDatabase;
+- (nullable NSString *)sourceDatabasePath;
 
-//same database
-- (nullable instancetype)initWithTargetTable:(nonnull NSString *)targetTable
-                             fromSourceTable:(nonnull NSString *)sourceTable;
-
-//same table migration
-- (nullable instancetype)initWithTable:(nonnull NSString *)targetTable
-                    fromSourceDatabase:(nonnull WCTDatabase *)sourceDatabase;
-
-//different table in different database
 - (nullable instancetype)initWithTargetTable:(nonnull NSString *)targetTable
                              fromSourceTable:(nonnull NSString *)sourceTable
-                                  ofDatabase:(nonnull WCTDatabase *)sourceDatabase;
+                                  ofDatabase:(nullable NSString *)sourceDatabasePath;
+
+- (nullable instancetype)initWithTargetTable:(nonnull NSString *)targetTable
+                             fromSourceTable:(nonnull NSString *)sourceTable;
 
 @end

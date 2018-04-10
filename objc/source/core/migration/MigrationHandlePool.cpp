@@ -38,9 +38,9 @@ MigrationInfo *MigrationHandlePool::getMigrationInfo() const
 void MigrationHandlePool::setMigrationInfo(
     const std::shared_ptr<MigrationInfo> &migrationInfo)
 {
-    assert(!(migrationInfo != nullptr &&
-             migrationInfo->getSourceDatabase() != nullptr) ||
-           migrationInfo->getSourceDatabase()->getPath() != path);
+    assert(migrationInfo == nullptr ||
+           migrationInfo->isSameDatabaseMigration() ||
+           migrationInfo->getSourceDatabasePath() != path);
     m_info = migrationInfo;
 }
 
