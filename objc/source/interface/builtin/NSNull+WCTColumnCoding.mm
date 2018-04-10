@@ -18,32 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef WCDB_h
-#define WCDB_h
-
-#ifndef __cplusplus
-#error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.
-#endif
-
-/* TODO list:
- * check OOM
- * replace assert with our own function with log
- * add authorize to avoid writing on the migration database
- * -Wglobal-constructors
- * remove redundant `virtual`
- * async migration
- * multi-migration
- * fix other TODOs
- * fix template installtion
- * add nonnull, nullable
- * add comment
- * customlize FTS tokenize name
- * performance opti
- * add column coding header to template
- */
-
-#import <WCDB/Abstract.h>
-#import <WCDB/Core.h>
 #import <WCDB/Interface.h>
 
-#endif /* WCDB_h */
+@interface NSNull (WCTColumnCoding) <WCTColumnCoding>
+@end
+
+@implementation NSNull (WCTColumnCoding)
+
++ (instancetype)unarchiveWithWCTValue:(id)value
+{
+    return [NSNull null];
+}
+
+- (id)archivedWCTValue
+{
+    return nil;
+}
+
++ (WCTColumnType)columnTypeForWCDB
+{
+    return WCTColumnTypeNull;
+}
+
+@end

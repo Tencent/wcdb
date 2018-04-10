@@ -414,6 +414,8 @@
 		23BBE2B22049576D00C4CBB6 /* WCTDatabase+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2B02049576D00C4CBB6 /* WCTDatabase+Memory.mm */; };
 		23BFE2FF207C602800A4BD81 /* SQLiteGlobal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23BFE300207C602800A4BD81 /* SQLiteGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */; };
+		23BFE306207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE305207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm */; };
+		23BFE309207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE307207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D18635205A66000001A6CE /* MigrationBuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */; };
 		23D18636205A66000001A6CE /* MigrationBuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D18634205A66000001A6CE /* MigrationBuiltinConfig.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D920C72009B534000634CB /* Abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* Abstract.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -881,6 +883,8 @@
 		23BBE2B02049576D00C4CBB6 /* WCTDatabase+Memory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Memory.mm"; sourceTree = "<group>"; };
 		23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SQLiteGlobal.hpp; sourceTree = "<group>"; };
 		23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteGlobal.cpp; sourceTree = "<group>"; };
+		23BFE305207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSNull+WCTColumnCoding.mm"; sourceTree = "<group>"; };
+		23BFE307207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNull+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationBuiltinConfig.cpp; sourceTree = "<group>"; };
 		23D18634205A66000001A6CE /* MigrationBuiltinConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationBuiltinConfig.hpp; sourceTree = "<group>"; };
 		23D920422009B52E000634CB /* Abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Abstract.h; sourceTree = "<group>"; };
@@ -1073,6 +1077,8 @@
 				2349F6391EA0D6680021EFA7 /* WCTSequence.h */,
 				2349F63A1EA0D6680021EFA7 /* WCTSequence.mm */,
 				23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */,
+				23BFE305207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm */,
+				23BFE307207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h */,
 			);
 			path = builtin;
 			sourceTree = "<group>";
@@ -1593,6 +1599,7 @@
 				239774E8202AECD3000A681C /* BindParameter.hpp in Headers */,
 				2397770A202AF2E3000A681C /* CopyOnWrite.hpp in Headers */,
 				239774EA202AECD3000A681C /* ColumnConstraint.hpp in Headers */,
+				23BFE309207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h in Headers */,
 				23DC3070202AFF8B000F7895 /* Handle.hpp in Headers */,
 				23D96BA42050EB8500DB5E93 /* MigrationHandle.hpp in Headers */,
 				234591F6204433E200DC7D34 /* Core.h in Headers */,
@@ -1971,6 +1978,7 @@
 				2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */,
 				239776DA202AF2E3000A681C /* CopyOnWriteString.cpp in Sources */,
 				23977539202AECD3000A681C /* StatementSavepoint.cpp in Sources */,
+				23BFE306207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm in Sources */,
 				23977596202AECD3000A681C /* LangReleaseSTMT.cpp in Sources */,
 				239774EB202AECD3000A681C /* ColumnDef.cpp in Sources */,
 				2397752B202AECD3000A681C /* StatementDropTrigger.cpp in Sources */,

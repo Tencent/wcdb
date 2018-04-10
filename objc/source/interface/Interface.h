@@ -26,6 +26,7 @@
 #import <WCDB/NSNumber+WCTColumnCoding.h>
 #import <WCDB/NSObject+WCTColumnCoding.h>
 #import <WCDB/NSString+WCTColumnCoding.h>
+#import <WCDB/NSNull+WCTColumnCoding.h>
 
 #import <WCDB/WCTValue.h>
 
