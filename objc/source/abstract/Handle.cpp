@@ -332,8 +332,9 @@ std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
     StatementSelect statementSelect = s_statementSelect;
     statementSelect.from(table);
     m_error.level = Error::Level::Ignore;
-    bool result = Handle::prepare(statementSelect) && step();
+    bool result = prepare(statementSelect) && step();
     m_error.level = Error::Level::Error;
+    finalize();
     return {result || getResultCode() == SQLITE_ERROR, result};
 }
 
