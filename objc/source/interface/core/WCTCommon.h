@@ -21,7 +21,6 @@
 #import <Foundation/Foundation.h>
 #import <WCDB/Abstract.h>
 #import <WCDB/Core.h>
-#import <WCDB/error.hpp>
 
 #pragma mark - Chain Call
 @class WCTInsert;
@@ -34,7 +33,7 @@
 
 #pragma mark - Database
 @class WCTDatabase;
-typedef WCDB::Tag WCTTag;
+typedef WCDB::Database::Tag WCTTag;
 
 #pragma mark - Table
 @class WCTTable;
@@ -86,10 +85,23 @@ constexpr const WCDB::ColumnType WCTColumnTypeNull = WCDB::ColumnType::Null;
 typedef NSObject<WCTTableCoding> WCTObject;
 typedef NSDictionary<NSString *, WCTObject *>
     WCTMultiObject; //table name -> object
-typedef NSObject WCTValue;
+
+typedef NSObject<WCTColumnCoding> WCTColumnCodingValue;
+typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
+
+@class WCTValue;
 typedef NSArray<WCTValue *> WCTOneRow;
 typedef NSArray<WCTValue *> WCTOneColumn;
 typedef NSArray<NSArray<WCTValue *> *> WCTColumnsXRows;
 
 #pragma mark - Error
 @class WCTError;
+@class WCTSQLiteError;
+@class WCTHandleError;
+@class WCTFileError;
+@class WCTCoreError;
+@class WCTPerformanceFootprint;
+
+#pragma mark - Migration
+@class WCTMigrationDatabase;
+@class WCTMigrationInfo;

@@ -57,6 +57,16 @@ CopyOnWriteString DeleteSTMT::SQL() const
     return description;
 }
 
+STMT::Type DeleteSTMT::getSTMTType() const
+{
+    return STMT::Type::Delete;
+}
+
+STMT::Type DeleteSTMT::getType()
+{
+    return STMT::Type::Delete;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

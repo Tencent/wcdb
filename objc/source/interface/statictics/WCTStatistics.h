@@ -18,23 +18,22 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/WCTCommon.h>
 
 /**
  Trigger when error occurs
  */
-typedef void (^WCTErrorReportCallback)(WCTError *);
+typedef void (^WCTErrorReportBlock)(WCTError *);
 
 /**
  Trigger when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceCallback)(NSDictionary<NSString *, NSNumber *> *, NSInteger);
+typedef void (^WCTPerformanceTraceBlock)(WCTTag, NSArray<WCTPerformanceFootprint *> *, NSInteger);
 
 /**
  Trigger when a SQL is executed.
  */
-typedef void (^WCTSQLTraceCallback)(NSString *);
+typedef void (^WCTSQLTraceBlock)(NSString *);
 
 /**
  Statistics
@@ -48,10 +47,10 @@ typedef void (^WCTSQLTraceCallback)(NSString *);
         NSLog(@"%@", error);
      }];
  
- @param report report
- @see WCTErrorReportCallback
+ @param block block
+ @see WCTErrorReportBlock
  */
-+ (void)SetGlobalErrorReport:(WCTErrorReportCallback)report;
++ (void)SetGlobalErrorReport:(WCTErrorReportBlock)block;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
@@ -73,10 +72,10 @@ typedef void (^WCTSQLTraceCallback)(NSString *);
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
- @see WCTPerformanceTraceCallback
+ @see WCTPerformanceTraceBlock
  @see [WCTDatabase setPerformanceTrace:]
  */
-+ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceCallback)trace;
++ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceBlock)trace;
 
 /**
  @brief You can register a tracer to monitor the execution of all SQLs.
@@ -88,10 +87,10 @@ typedef void (^WCTSQLTraceCallback)(NSString *);
     }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
- @see WCTSQLTraceCallback
+ @see WCTSQLTraceBlock
  @param trace trace
  */
-+ (void)SetGlobalSQLTrace:(WCTSQLTraceCallback)trace;
++ (void)SetGlobalSQLTrace:(WCTSQLTraceBlock)trace;
 
 /**
  @brief Reset to builtin error reporter. 

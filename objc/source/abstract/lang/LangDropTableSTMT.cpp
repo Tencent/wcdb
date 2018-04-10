@@ -29,6 +29,16 @@ const char *DropTableSTMT::getInternalName() const
     return "TABLE";
 }
 
+STMT::Type DropTableSTMT::getSTMTType() const
+{
+    return STMT::Type::DropTable;
+}
+
+STMT::Type DropTableSTMT::getType()
+{
+    return STMT::Type::DropTable;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

@@ -49,9 +49,4 @@ StatementDropIndex &StatementDropIndex::ifExists(bool ifExists)
     return *this;
 }
 
-Statement::Type StatementDropIndex::getType() const
-{
-    return Statement::Type::DropIndex;
-}
-
 } // namespace WCDB

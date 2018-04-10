@@ -29,6 +29,16 @@ const char *DropTriggerSTMT::getInternalName() const
     return "TRIGGER";
 }
 
+STMT::Type DropTriggerSTMT::getSTMTType() const
+{
+    return STMT::Type::DropTrigger;
+}
+
+STMT::Type DropTriggerSTMT::getType()
+{
+    return STMT::Type::DropTrigger;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

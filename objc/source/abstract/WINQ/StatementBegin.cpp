@@ -22,19 +22,18 @@
 
 namespace WCDB {
 
+const StatementBegin StatementBegin::deferred =
+    StatementBegin().begin(Lang::BeginSTMT::Type::Deferred);
 const StatementBegin StatementBegin::immediate =
-    StatementBegin().begin(Transaction::Immediate);
+    StatementBegin().begin(Lang::BeginSTMT::Type::Immediate);
+const StatementBegin StatementBegin::exclusive =
+    StatementBegin().begin(Lang::BeginSTMT::Type::Exclusive);
 
-StatementBegin &StatementBegin::begin(const Transaction &transaction)
+StatementBegin &StatementBegin::begin(Lang::BeginSTMT::Type type)
 {
     Lang::BeginSTMT &lang = getMutableLang();
-    lang.type = transaction;
+    lang.type = type;
     return *this;
-}
-
-Statement::Type StatementBegin::getType() const
-{
-    return Statement::Type::Begin;
 }
 
 } // namespace WCDB

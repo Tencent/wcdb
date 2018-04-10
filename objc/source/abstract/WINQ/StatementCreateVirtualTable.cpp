@@ -63,7 +63,7 @@ StatementCreateVirtualTable &
 StatementCreateVirtualTable::on(const ModuleArgument &moduleArgument)
 {
     Lang::CreateVirtualTableSTMT &lang = getMutableLang();
-    lang.moduleArguments.append(moduleArgument.getLang());
+    lang.moduleArguments.append(moduleArgument.getCOWLang());
     return *this;
 }
 
@@ -72,14 +72,9 @@ StatementCreateVirtualTable &StatementCreateVirtualTable::on(
 {
     Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     for (const ModuleArgument &moduleArgument : moduleArguments) {
-        lang.moduleArguments.append(moduleArgument.getLang());
+        lang.moduleArguments.append(moduleArgument.getCOWLang());
     }
     return *this;
-}
-
-Statement::Type StatementCreateVirtualTable::getType() const
-{
-    return Statement::Type::CreateVirtualTable;
 }
 
 } // namespace WCDB

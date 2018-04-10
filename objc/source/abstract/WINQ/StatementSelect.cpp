@@ -27,7 +27,7 @@ StatementSelect::with(const CommonTableExpression &commonTableExpression)
 {
     Lang::SelectSTMT &lang = getMutableLang();
     lang.recursive = false;
-    lang.commonTableExpressions.append(commonTableExpression.getLang());
+    lang.commonTableExpressions.append(commonTableExpression.getCOWLang());
     return *this;
 }
 
@@ -38,7 +38,7 @@ StatementSelect &StatementSelect::with(
     lang.recursive = false;
     for (const CommonTableExpression &commonTableExpression :
          commonTableExpressions) {
-        lang.commonTableExpressions.append(commonTableExpression.getLang());
+        lang.commonTableExpressions.append(commonTableExpression.getCOWLang());
     }
     return *this;
 }
@@ -48,7 +48,7 @@ StatementSelect &StatementSelect::withRecursive(
 {
     Lang::SelectSTMT &lang = getMutableLang();
     lang.recursive = true;
-    lang.commonTableExpressions.append(commonTableExpression.getLang());
+    lang.commonTableExpressions.append(commonTableExpression.getCOWLang());
     return *this;
 }
 
@@ -59,7 +59,7 @@ StatementSelect &StatementSelect::withRecursive(
     lang.recursive = true;
     for (const CommonTableExpression &commonTableExpression :
          commonTableExpressions) {
-        lang.commonTableExpressions.append(commonTableExpression.getLang());
+        lang.commonTableExpressions.append(commonTableExpression.getCOWLang());
     }
     return *this;
 }
@@ -76,7 +76,7 @@ StatementSelect &StatementSelect::select(const ResultColumn &resultColumn)
     Lang::SelectSTMT &lang = getMutableLang();
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = Lang::SelectCore::Switch::Select;
-    selectCore.resultColumns.append(resultColumn.getLang());
+    selectCore.resultColumns.append(resultColumn.getCOWLang());
     return *this;
 }
 
@@ -87,7 +87,7 @@ StatementSelect::select(const std::list<ResultColumn> &resultColumns)
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = Lang::SelectCore::Switch::Select;
     for (const ResultColumn &resultColumn : resultColumns) {
-        selectCore.resultColumns.append(resultColumn.getLang());
+        selectCore.resultColumns.append(resultColumn.getCOWLang());
     }
     return *this;
 }
@@ -97,7 +97,7 @@ StatementSelect &StatementSelect::from(const TableOrSubquery &tableOrSubquery)
     Lang::SelectSTMT &lang = getMutableLang();
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.fromSwitcher = Lang::SelectCore::FromSwitch::TableOrSubquery;
-    selectCore.tableOrSubquerys.append(tableOrSubquery.getLang());
+    selectCore.tableOrSubquerys.append(tableOrSubquery.getCOWLang());
     return *this;
 }
 
@@ -106,7 +106,7 @@ StatementSelect &StatementSelect::from(const JoinClause &joinClause)
     Lang::SelectSTMT &lang = getMutableLang();
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.fromSwitcher = Lang::SelectCore::FromSwitch::JoinClause;
-    selectCore.joinClause.assign(joinClause.getLang());
+    selectCore.joinClause.assign(joinClause.getCOWLang());
     return *this;
 }
 
@@ -117,7 +117,7 @@ StatementSelect::from(const std::list<TableOrSubquery> &tableOrSubquerys)
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.fromSwitcher = Lang::SelectCore::FromSwitch::TableOrSubquery;
     for (const TableOrSubquery &tableOrSubquery : tableOrSubquerys) {
-        selectCore.tableOrSubquerys.append(tableOrSubquery.getLang());
+        selectCore.tableOrSubquerys.append(tableOrSubquery.getCOWLang());
     }
     return *this;
 }
@@ -125,14 +125,14 @@ StatementSelect::from(const std::list<TableOrSubquery> &tableOrSubquerys)
 StatementSelect &StatementSelect::where(const Expression &condition)
 {
     Lang::SelectSTMT &lang = getMutableLang();
-    lang.selectCore.get_or_copy().condition.assign(condition.getLang());
+    lang.selectCore.get_or_copy().condition.assign(condition.getCOWLang());
     return *this;
 }
 
 StatementSelect &StatementSelect::groupBy(const Expression &group)
 {
     Lang::SelectSTMT &lang = getMutableLang();
-    lang.selectCore.get_or_copy().groups.append(group.getLang());
+    lang.selectCore.get_or_copy().groups.append(group.getCOWLang());
     return *this;
 }
 
@@ -141,7 +141,7 @@ StatementSelect &StatementSelect::groupBy(const std::list<Expression> &groups)
     Lang::SelectSTMT &lang = getMutableLang();
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     for (const Expression &group : groups) {
-        selectCore.groups.append(group.getLang());
+        selectCore.groups.append(group.getCOWLang());
     }
     return *this;
 }
@@ -149,7 +149,7 @@ StatementSelect &StatementSelect::groupBy(const std::list<Expression> &groups)
 StatementSelect &StatementSelect::having(const Expression &having)
 {
     Lang::SelectSTMT &lang = getMutableLang();
-    lang.selectCore.get_or_copy().having.assign(having.getLang());
+    lang.selectCore.get_or_copy().having.assign(having.getCOWLang());
     return *this;
 }
 
@@ -158,7 +158,7 @@ StatementSelect &StatementSelect::values(const Expression &value)
     Lang::SelectSTMT &lang = getMutableLang();
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = Lang::SelectCore::Switch::Values;
-    selectCore.values.append(value.getLang());
+    selectCore.values.append(value.getCOWLang());
     return *this;
 }
 
@@ -168,7 +168,7 @@ StatementSelect &StatementSelect::values(const std::list<Expression> &values)
     Lang::SelectCore &selectCore = lang.selectCore.get_or_copy();
     selectCore.switcher = Lang::SelectCore::Switch::Values;
     for (const Expression &value : values) {
-        selectCore.values.append(value.getLang());
+        selectCore.values.append(value.getCOWLang());
     }
     return *this;
 }
@@ -200,7 +200,7 @@ StatementSelect &StatementSelect::except(const SelectCore &selectCore)
 StatementSelect &StatementSelect::orderBy(const OrderingTerm &orderingTerm)
 {
     Lang::SelectSTMT &lang = getMutableLang();
-    lang.orderingTerms.append(orderingTerm.getLang());
+    lang.orderingTerms.append(orderingTerm.getCOWLang());
     return *this;
 }
 
@@ -209,7 +209,7 @@ StatementSelect::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
     Lang::SelectSTMT &lang = getMutableLang();
     for (const OrderingTerm &orderingTerm : orderingTerms) {
-        lang.orderingTerms.append(orderingTerm.getLang());
+        lang.orderingTerms.append(orderingTerm.getCOWLang());
     }
     return *this;
 }
@@ -219,8 +219,8 @@ StatementSelect &StatementSelect::limit(const Expression &from,
 {
     Lang::SelectSTMT &lang = getMutableLang();
     lang.offset = false;
-    lang.limit.assign(from.getLang());
-    lang.limitParameter.assign(to.getLang());
+    lang.limit.assign(from.getCOWLang());
+    lang.limitParameter.assign(to.getCOWLang());
     return *this;
 }
 
@@ -228,14 +228,14 @@ StatementSelect &StatementSelect::limit(const Expression &limit)
 {
     Lang::SelectSTMT &lang = getMutableLang();
     lang.offset = true;
-    lang.limit.assign(limit.getLang());
+    lang.limit.assign(limit.getCOWLang());
     return *this;
 }
 
 StatementSelect &StatementSelect::offset(const Expression &offset)
 {
     Lang::SelectSTMT &lang = getMutableLang();
-    lang.limitParameter.assign(offset.getLang());
+    lang.limitParameter.assign(offset.getCOWLang());
     return *this;
 }
 
@@ -246,20 +246,32 @@ void StatementSelect::compound(
     Lang::CopyOnWriteLazyLang<Lang::SelectSTMT::Compound> compoundCore;
     Lang::SelectSTMT::Compound &compound = compoundCore.get_or_copy();
     compound.compoundOperator = compoundOperator;
-    compound.selectCore.assign(selectCore.getLang());
+    compound.selectCore.assign(selectCore.getCOWLang());
 
     Lang::SelectSTMT &lang = getMutableLang();
     lang.compoundCores.append(compoundCore);
 }
 
-Statement::Type StatementSelect::getType() const
-{
-    return Statement::Type::Select;
-}
-
 Expression StatementSelect::getRedirectSource() const
 {
     return *this;
+}
+
+bool StatementSelect::isResultColumnsNotSet() const
+{
+    const Lang::SelectSTMT &lang = getCOWLang().get<Lang::SelectSTMT>();
+    if (lang.selectCore.empty()) {
+        return true;
+    }
+    auto &selectCoreLang = lang.selectCore.get();
+    switch (selectCoreLang.switcher) {
+        case Lang::SelectCore::Switch::Select:
+            return selectCoreLang.resultColumns.empty();
+        case Lang::SelectCore::Switch::NotSet:
+            return true;
+        default:
+            return false;
+    }
 }
 
 } // namespace WCDB

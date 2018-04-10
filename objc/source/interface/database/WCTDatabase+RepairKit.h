@@ -28,7 +28,7 @@
  @param key The cipher key for backup
  @return YES only if it's successfully backed up
  */
-- (BOOL)backupWithCipher:(NSData *)key;
+- (BOOL)backupWithCipher:(nullable NSData *)key;
 
 /**
  @brief This interface is equivalent to [database backupWithCipher:nil];
@@ -52,6 +52,9 @@
  @param databaseCipher The cipher key for corrupeted database
  @return YES only if it's successfully recovered.
  */
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath withPageSize:(const int)pageSize backupCipher:(NSData *)backupCipher databaseCipher:(NSData *)databaseCipher;
+- (BOOL)recoverFromPath:(nonnull NSString *)corruptedDBPath
+           withPageSize:(const int)pageSize
+           backupCipher:(nullable NSData *)backupCipher
+         databaseCipher:(nullable NSData *)databaseCipher;
 
 @end

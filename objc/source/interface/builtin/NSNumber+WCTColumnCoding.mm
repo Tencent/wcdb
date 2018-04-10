@@ -18,15 +18,9 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#import <WCDB/Interface.h>
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
-
-@interface NSNumber (WCTColumnCoding) <WCTColumnCoding>
-@end
-
-@implementation NSNumber (WCTColumnCoding)
+@implementation NSNumber (ColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
@@ -44,5 +38,3 @@
 }
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

@@ -50,6 +50,16 @@ CopyOnWriteString AlterTableSTMT::SQL() const
     return description;
 }
 
+STMT::Type AlterTableSTMT::getSTMTType() const
+{
+    return STMT::Type::AlterTable;
+}
+
+STMT::Type AlterTableSTMT::getType()
+{
+    return STMT::Type::AlterTable;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

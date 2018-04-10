@@ -33,8 +33,6 @@ public:
     StatementAnalyze &analyze(const std::string &schemaName,
                               const std::string &tableOrIndexName);
     StatementAnalyze &analyze(const std::string &schemaOrTableOrIndexName);
-
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

@@ -130,7 +130,7 @@ Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation> Operable::binaryOperation(
     Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation> cowLang;
     Lang::ExprBinaryOperation &lang = cowLang.get_or_copy();
     lang.left.assign(getExpressionLang());
-    lang.right.assign(operand.getLang());
+    lang.right.assign(operand.getCOWLang());
     lang.binaryOperator = binaryOperator;
     return cowLang;
 }
@@ -297,7 +297,7 @@ Operable::pattern(const Lang::ExprPattern::Type &type,
     lang.isNot = isNot;
     lang.type = type;
     lang.left.assign(getExpressionLang());
-    lang.right.assign(operand.getLang());
+    lang.right.assign(operand.getCOWLang());
     return cowLang;
 }
 
@@ -327,8 +327,8 @@ Lang::CopyOnWriteLazyLang<Lang::ExprBetween> Operable::between(
     Lang::ExprBetween &lang = cowLang.get_or_copy();
     lang.isNot = isNot;
     lang.expr.assign(getExpressionLang());
-    lang.left.assign(left.getLang());
-    lang.right.assign(right.getLang());
+    lang.left.assign(left.getCOWLang());
+    lang.right.assign(right.getCOWLang());
     return cowLang;
 }
 
@@ -384,26 +384,26 @@ Expression Operable::notIn(const std::list<Expression> &expressions) const
     return in(expressions, true);
 }
 
-Expression Operable::inTable(const std::string &tableName) const
+Expression Operable::in(const std::string &tableName) const
 {
-    return inTable(tableName, false);
+    return in(tableName, false);
 }
 
-Expression Operable::notInTable(const std::string &tableName) const
+Expression Operable::notIn(const std::string &tableName) const
 {
-    return inTable(tableName, true);
+    return in(tableName, true);
 }
 
-Expression Operable::inTable(const std::string &schemaName,
-                             const std::string &tableName) const
+Expression Operable::in(const std::string &schemaName,
+                        const std::string &tableName) const
 {
-    return inTable(schemaName, tableName, false);
+    return in(schemaName, tableName, false);
 }
 
-Expression Operable::notInTable(const std::string &schemaName,
-                                const std::string &tableName) const
+Expression Operable::notIn(const std::string &schemaName,
+                           const std::string &tableName) const
 {
-    return inTable(schemaName, tableName, true);
+    return in(schemaName, tableName, true);
 }
 
 Expression Operable::inFunction(const std::string &functionName) const
@@ -499,7 +499,7 @@ Operable::in(const StatementSelect &selectSTMT, bool isNot) const
     Lang::ExprIn &lang = cowLang.get_or_copy();
     lang.switcher = Lang::ExprIn::Switch::Select;
     lang.expr.assign(getExpressionLang());
-    lang.selectSTMT.assign(selectSTMT.getLang());
+    lang.selectSTMT.assign(selectSTMT.getCOWLang());
     lang.isNot = isNot;
     return cowLang;
 }
@@ -511,7 +511,7 @@ Operable::in(const Expression &expression, bool isNot) const
     Lang::ExprIn &lang = cowLang.get_or_copy();
     lang.switcher = Lang::ExprIn::Switch::Expr;
     lang.expr.assign(getExpressionLang());
-    lang.exprs.append(expression.getLang());
+    lang.exprs.append(expression.getCOWLang());
     lang.isNot = isNot;
     return cowLang;
 }
@@ -524,14 +524,14 @@ Operable::in(const std::list<Expression> &expressions, bool isNot) const
     lang.switcher = Lang::ExprIn::Switch::Expr;
     lang.expr.assign(getExpressionLang());
     for (const Expression &expression : expressions) {
-        lang.exprs.append(expression.getLang());
+        lang.exprs.append(expression.getCOWLang());
     }
     lang.isNot = isNot;
     return cowLang;
 }
 
 Lang::CopyOnWriteLazyLang<Lang::ExprIn>
-Operable::inTable(const std::string &tableName, bool isNot) const
+Operable::in(const std::string &tableName, bool isNot) const
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
     Lang::ExprIn &lang = cowLang.get_or_copy();
@@ -543,9 +543,9 @@ Operable::inTable(const std::string &tableName, bool isNot) const
 }
 
 Lang::CopyOnWriteLazyLang<Lang::ExprIn>
-Operable::inTable(const std::string &schemaName,
-                  const std::string &tableName,
-                  bool isNot) const
+Operable::in(const std::string &schemaName,
+             const std::string &tableName,
+             bool isNot) const
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprIn> cowLang;
     Lang::ExprIn &lang = cowLang.get_or_copy();
@@ -594,7 +594,7 @@ Operable::inFunction(const std::string &functionName,
     lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     lang.tableNameOrFunction.assign(functionName);
-    lang.exprs.append(parameter.getLang());
+    lang.exprs.append(parameter.getCOWLang());
     lang.isNot = isNot;
     return cowLang;
 }
@@ -611,7 +611,7 @@ Operable::inFunction(const std::string &schemaName,
     lang.expr.assign(getExpressionLang());
     lang.schemaName.assign(schemaName);
     lang.tableNameOrFunction.assign(functionName);
-    lang.exprs.append(parameter.getLang());
+    lang.exprs.append(parameter.getCOWLang());
     lang.isNot = isNot;
     return cowLang;
 }
@@ -626,7 +626,7 @@ Operable::inFunction(const std::string &functionName,
     lang.switcher = Lang::ExprIn::Switch::Function;
     lang.expr.assign(getExpressionLang());
     for (const Expression &expression : parameters) {
-        lang.exprs.append(expression.getLang());
+        lang.exprs.append(expression.getCOWLang());
     }
     lang.tableNameOrFunction.assign(functionName);
     lang.isNot = isNot;
@@ -646,7 +646,7 @@ Operable::inFunction(const std::string &schemaName,
     lang.schemaName.assign(schemaName);
     lang.tableNameOrFunction.assign(functionName);
     for (const Expression &expression : parameters) {
-        lang.exprs.append(expression.getLang());
+        lang.exprs.append(expression.getCOWLang());
     }
     lang.isNot = isNot;
     return cowLang;

@@ -29,6 +29,16 @@ const char *DropIndexSTMT::getInternalName() const
     return "INDEX";
 }
 
+STMT::Type DropIndexSTMT::getSTMTType() const
+{
+    return STMT::Type::DropIndex;
+}
+
+STMT::Type DropIndexSTMT::getType()
+{
+    return STMT::Type::DropIndex;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

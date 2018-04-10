@@ -26,7 +26,7 @@ CommonTableExpression &
 CommonTableExpression::byAddingColumn(const Column &column)
 {
     Lang::CommonTableExpression &lang = getMutableLang();
-    lang.columns.append(column.getLang());
+    lang.columns.append(column.getCOWLang());
     return *this;
 }
 
@@ -35,7 +35,7 @@ CommonTableExpression::byAddingColumns(const std::list<Column> &columns)
 {
     Lang::CommonTableExpression &lang = getMutableLang();
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
     return *this;
 }
@@ -44,7 +44,7 @@ CommonTableExpression &
 CommonTableExpression::as(const StatementSelect &statementSelect)
 {
     Lang::CommonTableExpression &lang = getMutableLang();
-    lang.selectSTMT.assign(statementSelect.getLang());
+    lang.selectSTMT.assign(statementSelect.getCOWLang());
     return *this;
 }
 

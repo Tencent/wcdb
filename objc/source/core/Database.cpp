@@ -21,7 +21,8 @@
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
-#include <WCDB/File.hpp>
+#include <WCDB/FileManager.hpp>
+#include <WCDB/HandlePools.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/String.hpp>
 #include <sqliterk/SQLiteRepairKit.h>
@@ -32,7 +33,7 @@ namespace WCDB {
 std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 {
     std::shared_ptr<Database> database(new Database(tag));
-    if (database->isValid()) {
+    if (database && database->isValid()) {
         return database;
     }
     return nullptr;
@@ -42,7 +43,7 @@ std::shared_ptr<Database>
 Database::databaseWithExistingPath(const std::string &path)
 {
     std::shared_ptr<Database> database(new Database(path, true));
-    if (database->isValid()) {
+    if (database && database->isValid()) {
         return database;
     }
     return nullptr;
@@ -51,10 +52,30 @@ Database::databaseWithExistingPath(const std::string &path)
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
     std::shared_ptr<Database> database(new Database(path, false));
-    if (database->isValid()) {
+    if (database && database->isValid()) {
         return database;
     }
     return nullptr;
+}
+
+Database::Database(const std::string &path, bool existingOnly)
+    : m_pool(!existingOnly ? HandlePools::defaultPools()->getPool(path)
+                           : HandlePools::defaultPools()->getExistingPool(path))
+{
+}
+
+Database::Database(const Tag &tag)
+    : m_pool(HandlePools::defaultPools()->getExistingPool(tag))
+{
+}
+
+Database::Database(const RecyclableHandlePool &pool) : m_pool(pool)
+{
+}
+
+bool Database::isValid() const
+{
+    return m_pool != nullptr;
 }
 
 #pragma mark - Basic
@@ -64,14 +85,14 @@ void Database::setTag(const Tag &tag)
     m_pool->tag = tag;
 }
 
-Tag Database::getTag() const
+Database::Tag Database::getTag() const
 {
     return m_pool->tag.load();
 }
 
 bool Database::canOpen()
 {
-    return !m_pool->isDrained() || m_pool->fillOne();
+    return m_pool->canFlowOut();
 }
 
 void Database::close(const ClosedCallback &onClosed)
@@ -82,6 +103,11 @@ void Database::close(const ClosedCallback &onClosed)
 void Database::blockade()
 {
     m_pool->blockade();
+}
+
+bool Database::blockadeUntilDone(const BlockadeCallback &onBlockaded)
+{
+    return m_pool->blockadeUntilDone(onBlockaded);
 }
 
 bool Database::isBlockaded()
@@ -104,6 +130,11 @@ const Error &Database::getError() const
     return m_pool->getThreadedError();
 }
 
+void Database::closeAllDatabases()
+{
+    HandlePools::defaultPools()->drain();
+}
+
 #pragma mark - Memory
 void Database::purge()
 {
@@ -112,7 +143,7 @@ void Database::purge()
 
 void Database::PurgeInAllDatabases()
 {
-    HandlePool::PurgeFreeHandlesInAllPool();
+    HandlePools::defaultPools()->purge();
 }
 
 #pragma mark - Config
@@ -141,27 +172,27 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 bool Database::removeFiles()
 {
     if (!isBlockaded() || isOpened()) {
-        WCDB::Error::Warning(
+        Error::warning(
             "Removing files on an opened database may cause undefined results");
     }
-    if (File::removeFiles(getPaths())) {
+    FileManager *fileManager = FileManager::sharedFileManager();
+    if (fileManager->removeFiles(getPaths())) {
         return true;
     }
-    m_pool->setAndReportThreadedError(File::getError());
+    m_pool->setThreadedError(fileManager->getError());
     return false;
 }
 
 std::pair<bool, size_t> Database::getFilesSize()
 {
     if (!isBlockaded() || isOpened()) {
-        WCDB::Error::Warning("Getting files size on an opened database may get "
-                             "incorrect results");
+        Error::warning("Getting files size on an opened database may get "
+                       "incorrect results");
     }
-    auto ret = File::getFilesSize(getPaths());
-    if (ret.first) {
-        m_pool->resetThreadedError();
-    } else {
-        m_pool->setAndReportThreadedError(File::getError());
+    FileManager *fileManager = FileManager::sharedFileManager();
+    auto ret = fileManager->getFilesSize(getPaths());
+    if (!ret.first) {
+        m_pool->setThreadedError(fileManager->getError());
     }
     return ret;
 }
@@ -169,13 +200,14 @@ std::pair<bool, size_t> Database::getFilesSize()
 bool Database::moveFiles(const std::string &directory)
 {
     if (!isBlockaded() || isOpened()) {
-        WCDB::Error::Warning("Moving files on an opened database may cause a "
-                             "corrupted database");
+        Error::warning("Moving files on an opened database may cause a "
+                       "corrupted database");
     }
-    if (File::moveFiles(getPaths(), directory)) {
+    FileManager *fileManager = FileManager::sharedFileManager();
+    if (fileManager->moveFiles(getPaths(), directory)) {
         return true;
     }
-    m_pool->setAndReportThreadedError(File::getError());
+    m_pool->setThreadedError(fileManager->getError());
     return false;
 }
 
@@ -183,15 +215,16 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
     if (!isBlockaded() || isOpened()) {
-        WCDB::Error::Warning("Moving files on an opened database may cause a "
-                             "corrupted database");
+        Error::warning("Moving files on an opened database may cause a "
+                       "corrupted database");
     }
     std::list<std::string> paths = getPaths();
     paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
-    if (File::moveFiles(paths, directory)) {
+    FileManager *fileManager = FileManager::sharedFileManager();
+    if (fileManager->moveFiles(paths, directory)) {
         return true;
     }
-    m_pool->setAndReportThreadedError(File::getError());
+    m_pool->setThreadedError(fileManager->getError());
     return false;
 }
 
@@ -233,11 +266,11 @@ bool Database::backup(const void *key, unsigned int length)
     if (handle == nullptr) {
         return false;
     }
-    if (!handle->backup(key, length)) {
-        m_pool->setAndReportThreadedError(handle->getError());
-        return false;
+    if (handle->backup(key, length)) {
+        return true;
     }
-    return true;
+    m_pool->setThreadedError(handle->getError());
+    return false;
 }
 
 bool Database::recoverFromPath(const std::string &corruptedDBPath,
@@ -251,20 +284,35 @@ bool Database::recoverFromPath(const std::string &corruptedDBPath,
     if (handle == nullptr) {
         return false;
     }
-    return handle->recoverFromPath(corruptedDBPath, pageSize, backupKey,
-                                   backupKeyLength, databaseKey,
-                                   databaseKeyLength);
+    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupKey,
+                                backupKeyLength, databaseKey,
+                                databaseKeyLength)) {
+        return true;
+    }
+    m_pool->setThreadedError(handle->getError());
+    return false;
 }
 
 #pragma mark - Handle
-RecyclableHandle Database::prepare(const Statement &statement)
+ThreadLocal<
+    std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>>
+    Database::s_threadedHandles;
+
+RecyclableHandle Database::flowOut()
 {
-    RecyclableHandle handle = flowOut();
-    if (handle != nullptr) {
-        if (handle->prepare(statement)) {
-            return handle;
-        }
-        m_pool->setAndReportThreadedError(handle->getError());
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    if (recyclableHandle == nullptr) {
+        recyclableHandle = m_pool->flowOut();
+    }
+    return recyclableHandle;
+}
+
+RecyclableHandle Database::flowOutThreadedHandle()
+{
+    ThreadedHandles *threadedHandle = s_threadedHandles.get();
+    const auto iter = threadedHandle->find(m_pool.getHandlePool());
+    if (iter != threadedHandle->end()) {
+        return iter->second.first;
     }
     return nullptr;
 }
@@ -273,163 +321,167 @@ bool Database::execute(const Statement &statement)
 {
     RecyclableHandle handle = flowOut();
     if (handle != nullptr) {
-        if (statement.getType() == Statement::Type::Rollback) {
-            s_threadedHandle.get()->erase(m_pool);
+        if (statement.getStatementType() == Statement::Type::Rollback) {
+            releaseThreadedHandle();
         }
         if (handle->execute(statement)) {
-            switch (statement.getType()) {
+            switch (statement.getStatementType()) {
                 case Statement::Type::Begin:
-                    s_threadedHandle.get()->insert({m_pool, handle});
+                case Statement::Type::Savepoint:
+                    retainThreadedHandle(handle);
                     break;
                 case Statement::Type::Commit:
-                    s_threadedHandle.get()->erase(m_pool);
+                    releaseThreadedHandle();
                     break;
                 default:
                     break;
             }
             return true;
         }
-        m_pool->setAndReportThreadedError(handle->getError());
+        m_pool->setThreadedError(handle->getError());
     }
     return false;
 }
 
-std::pair<bool, bool> Database::isTableExists(const std::string &tableName)
+std::pair<bool, bool> Database::isTableExists(const TableOrSubquery &table)
 {
     RecyclableHandle handle = flowOut();
     if (handle != nullptr) {
-        Error::setThreadedSlient(true);
-        static const StatementSelect s_statementSelect =
-            StatementSelect().select(1).limit(0);
-        StatementSelect statementSelect = s_statementSelect;
-        statementSelect.from(tableName);
-        if (handle->prepare(statementSelect) && handle->step()) {
-            m_pool->resetThreadedError();
-            return {true, true};
+        auto pair = handle->isTableExists(table);
+        if (!pair.first) {
+            m_pool->setThreadedError(handle->getError());
         }
-        Error::setThreadedSlient(false);
-        const Error &error = handle->getError();
-        if (error.getCode() == SQLITE_ERROR) {
-            m_pool->resetThreadedError();
-            return {true, false};
-        }
-        m_pool->setAndReportThreadedError(handle->getError());
+        return pair;
     }
     return {false, false};
 }
 
-#pragma mark - Transaction
-
-bool Database::runNestedTransaction(const TransactionCallback &transaction)
+void Database::retainThreadedHandle(
+    const RecyclableHandle &recyclableHandle) const
 {
-    std::unordered_map<const HandlePool *, RecyclableHandle> *threadedHandle =
-        s_threadedHandle.get();
-
-    auto iter = threadedHandle->find(m_pool);
-    if (iter != threadedHandle->end()) {
-        Handle *handle = iter->second.getHandle();
-        handle->resetError();
-        transaction(handle);
-        if (!handle->getError().isOK()) {
-            m_pool->setAndReportThreadedError(handle->getError());
-            return false;
-        }
-        return true;
+    std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
+        *threadHandles = s_threadedHandles.get();
+    auto iter = threadHandles->find(m_pool.getHandlePool());
+    assert(iter == threadHandles->end() ||
+           recyclableHandle.getHandle() == iter->second.first.getHandle());
+    if (iter == threadHandles->end()) {
+        threadHandles->insert({m_pool.getHandlePool(), {recyclableHandle, 1}});
     } else {
-        return runTransaction(transaction);
+        ++iter->second.second;
     }
 }
 
-bool Database::runControllableTransaction(
-    const ControllableTransactionCallback &transaction)
+void Database::releaseThreadedHandle() const
+{
+    std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
+        *threadHandles = s_threadedHandles.get();
+    auto iter = threadHandles->find(m_pool.getHandlePool());
+    assert(iter != threadHandles->end());
+    if (--iter->second.second == 0) {
+        threadHandles->erase(iter);
+    }
+}
+
+#pragma mark - Transaction
+
+bool Database::beginTransaction()
 {
     RecyclableHandle recyclableHandle = flowOut();
     if (recyclableHandle == nullptr) {
         return false;
     }
 
-    bool result = false;
+    if (recyclableHandle->beginTransaction()) {
+        retainThreadedHandle(recyclableHandle);
+        return true;
+    }
+    return false;
+}
 
-    std::unordered_map<const HandlePool *, RecyclableHandle> *threadedHandle =
-        s_threadedHandle.get();
-
-    auto iter = threadedHandle->insert({m_pool, recyclableHandle}).first;
-
-    do {
-        Handle *handle = recyclableHandle.getHandle();
-
-        if (!handle->execute(StatementBegin::immediate)) {
-            m_pool->setAndReportThreadedError(handle->getError());
-            break;
-        }
-
-        bool commit = transaction(handle);
-        handle->resetError();
-        if (commit) {
-            if (handle->execute(StatementCommit::default_)) {
-                result = true;
-                break;
-            }
-            m_pool->setAndReportThreadedError(handle->getError());
-        }
-
-        handle->skipError(true);
-        handle->execute(StatementRollback::default_);
-        handle->skipError(false);
-    } while (false);
-
-    threadedHandle->erase(iter);
-
+bool Database::commitOrRollbackTransaction()
+{
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+    bool result = recyclableHandle->commitOrRollbackTransaction();
+    releaseThreadedHandle();
     return result;
+}
+
+void Database::rollbackTransaction()
+{
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+    recyclableHandle->rollbackTransaction();
+    releaseThreadedHandle();
 }
 
 bool Database::runTransaction(const TransactionCallback &transaction)
 {
-    return runControllableTransaction(
-        [&transaction, this](Handle *handle) -> bool {
-            handle->resetError();
-            transaction(handle);
-            if (!handle->getError().isOK()) {
-                m_pool->setAndReportThreadedError(handle->getError());
-                return false;
-            }
-            return true;
-        });
-}
-
-#pragma mark - Protected
-Database::Database(const std::string &thePath, bool existingOnly)
-    : m_recyclablePool(!existingOnly ? HandlePool::GetPool(thePath)
-                                     : HandlePool::GetExistingPool(thePath))
-{
-    m_pool =
-        m_recyclablePool != nullptr ? m_recyclablePool.get().get() : nullptr;
-}
-
-Database::Database(const Tag &tag)
-    : m_recyclablePool(HandlePool::GetExistingPool(tag))
-{
-    m_pool =
-        m_recyclablePool != nullptr ? m_recyclablePool.get().get() : nullptr;
-}
-
-bool Database::isValid() const
-{
-    return m_pool != nullptr;
-}
-
-ThreadLocal<std::unordered_map<const HandlePool *, RecyclableHandle>>
-    Database::s_threadedHandle;
-
-RecyclableHandle Database::flowOut()
-{
-    std::unordered_map<const HandlePool *, RecyclableHandle> *threadedHandle =
-        s_threadedHandle.get();
-    const auto &iter = threadedHandle->find(m_pool);
-    if (iter == threadedHandle->end()) {
-        return m_pool->flowOut();
+    if (!beginTransaction()) {
+        return false;
     }
-    return iter->second;
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+    if (transaction(recyclableHandle.getHandle())) {
+        return commitOrRollbackTransaction();
+    }
+    rollbackTransaction();
+    return false;
+}
+
+bool Database::beginNestedTransaction()
+{
+    if (!isInThreadedTransaction()) {
+        return beginTransaction();
+    }
+
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+
+    if (recyclableHandle->beginNestedTransaction()) {
+        retainThreadedHandle(recyclableHandle);
+        return true;
+    }
+    return false;
+}
+
+bool Database::commitOrRollbackNestedTransaction()
+{
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+
+    bool result = recyclableHandle->commitOrRollbackNestedTransaction();
+    releaseThreadedHandle();
+    return result;
+}
+
+void Database::rollbackNestedTransaction()
+{
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+    recyclableHandle->rollbackNestedTransaction();
+    releaseThreadedHandle();
+}
+
+bool Database::runNestedTransaction(const TransactionCallback &transaction)
+{
+    if (!beginNestedTransaction()) {
+        return false;
+    }
+    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
+    assert(recyclableHandle != nullptr);
+    if (transaction(recyclableHandle.getHandle())) {
+        return commitOrRollbackNestedTransaction();
+    }
+    rollbackNestedTransaction();
+    return false;
+}
+
+bool Database::isInThreadedTransaction() const
+{
+    ThreadedHandles *threadedHandle = s_threadedHandles.get();
+    return threadedHandle->find(m_pool.getHandlePool()) !=
+           threadedHandle->end();
 }
 
 } //namespace WCDB

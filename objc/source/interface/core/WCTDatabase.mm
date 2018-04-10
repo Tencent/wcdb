@@ -18,10 +18,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTBuiltinConfig.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDatabase
 
@@ -40,7 +41,7 @@
     return [super initWithDatabase:WCDB::Database::databaseWithExistingTag(tag)];
 }
 
-- (void)setTag:(WCDB::Tag)tag
+- (void)setTag:(WCTTag)tag
 {
     _database->setTag(tag);
 }
@@ -79,6 +80,13 @@
 - (void)blockade
 {
     _database->blockade();
+}
+
+- (bool)blockadeUntilDone:(WCTBlockadeBlock)onBlockaded
+{
+    return _database->blockadeUntilDone([onBlockaded, self](WCDB::Handle *handle) {
+        onBlockaded([[WCTHandle alloc] initWithDatabase:_database andHandle:handle]);
+    });
 }
 
 - (void)unblockade

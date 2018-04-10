@@ -39,7 +39,6 @@ public:
     StatementCreateIndex &
     indexedBy(const std::list<IndexedColumn> &indexedColumns);
     StatementCreateIndex &where(const Expression &condition);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

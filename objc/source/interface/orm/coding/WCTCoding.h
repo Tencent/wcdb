@@ -34,7 +34,7 @@
 
 @protocol WCTColumnCoding
 @required
-+ (instancetype)unarchiveWithWCTValue:(WCTValue *)value; //value could be nil
-- (id /* WCTValue* */)archivedWCTValue;                  //value could be nil
++ (instancetype)unarchiveWithWCTValue:(id /* NSData*, NSString*, NSNumber*, nil */)value; //value could be nil
+- (id /* NSData*, NSString*, NSNumber*, nil */)archivedWCTValue;                          //value could be nil
 + (WCDB::ColumnType)columnTypeForWCDB;
 @end

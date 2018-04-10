@@ -27,7 +27,19 @@ namespace WCDB {
 
 namespace Lang {
 
+//TODO: remove it
 class TableOrSubqueryBase : public Lang {
+public:
+    enum class Type : int {
+        NotSet,
+        Table,
+        TableFunction,
+        JoinClause,
+        Select,
+        List,
+        TableOrSubquery,
+    };
+    virtual Type getType() const = 0;
 };
 class TableOrSubqueryTable;
 class TableOrSubqueryTableFunction;
@@ -51,6 +63,7 @@ public:
     CopyOnWriteString indexName;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class TableOrSubqueryTableFunction : public TableOrSubqueryBase {
@@ -61,6 +74,7 @@ public:
     CopyOnWriteLazyLangList<Expr> exprs;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class TableOrSubqueryJoinClause : public TableOrSubqueryBase {
@@ -68,6 +82,7 @@ public:
     CopyOnWriteLazyLang<JoinClause> joinClause;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class TableOrSubquerySelect : public TableOrSubqueryBase {
@@ -76,6 +91,7 @@ public:
     CopyOnWriteString tableAlias;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class TableOrSubqueryList : public TableOrSubqueryBase {
@@ -83,21 +99,14 @@ public:
     CopyOnWriteLazyLangList<TableOrSubqueryBase> tableOrSubquerys;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class TableOrSubquery : public TableOrSubqueryBase {
 public:
     TableOrSubquery();
 
-    enum class Switch : int {
-        NotSet,
-        Table,
-        TableFunction,
-        JoinClause,
-        Select,
-        List,
-    };
-    Switch switcher;
+    Type type;
     CopyOnWriteLazyLang<TableOrSubqueryTable> tableOrSubqueryTable;
     CopyOnWriteLazyLang<TableOrSubqueryTableFunction>
         tableOrSubqueryTableFunction;
@@ -106,6 +115,7 @@ public:
     CopyOnWriteLazyLang<TableOrSubqueryList> tableOrSubqueryList;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 } // namespace Lang

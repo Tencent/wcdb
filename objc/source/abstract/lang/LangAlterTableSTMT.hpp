@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class AlterTableSTMT : public Lang {
+class AlterTableSTMT : public STMT {
 public:
     AlterTableSTMT();
 
@@ -43,6 +43,9 @@ public:
     CopyOnWriteLazyLang<ColumnDef> columnDef;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

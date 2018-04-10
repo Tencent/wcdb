@@ -62,7 +62,7 @@ StatementCreateTable::as(const StatementSelect &selectSTMT)
 {
     Lang::CreateTableSTMT &lang = getMutableLang();
     lang.switcher = Lang::CreateTableSTMT::Switch::Select;
-    lang.selectSTMT.assign(selectSTMT.getLang());
+    lang.selectSTMT.assign(selectSTMT.getCOWLang());
     return *this;
 }
 
@@ -70,7 +70,7 @@ StatementCreateTable &StatementCreateTable::define(const ColumnDef &columnDef)
 {
     Lang::CreateTableSTMT &lang = getMutableLang();
     lang.switcher = Lang::CreateTableSTMT::Switch::ColumnDef;
-    lang.columnDefs.append(columnDef.getLang());
+    lang.columnDefs.append(columnDef.getCOWLang());
     return *this;
 }
 
@@ -80,7 +80,7 @@ StatementCreateTable::define(const std::list<ColumnDef> &columnDefs)
     Lang::CreateTableSTMT &lang = getMutableLang();
     lang.switcher = Lang::CreateTableSTMT::Switch::ColumnDef;
     for (const ColumnDef &columnDef : columnDefs) {
-        lang.columnDefs.append(columnDef.getLang());
+        lang.columnDefs.append(columnDef.getCOWLang());
     }
     return *this;
 }
@@ -89,7 +89,7 @@ StatementCreateTable &
 StatementCreateTable::addTableConstraint(const TableConstraint &tableConstraint)
 {
     Lang::CreateTableSTMT &lang = getMutableLang();
-    lang.tableConstraints.append(tableConstraint.getLang());
+    lang.tableConstraints.append(tableConstraint.getCOWLang());
     return *this;
 }
 
@@ -98,7 +98,7 @@ StatementCreateTable &StatementCreateTable::addTableConstraints(
 {
     Lang::CreateTableSTMT &lang = getMutableLang();
     for (const TableConstraint &tableConstraint : tableConstraints) {
-        lang.tableConstraints.append(tableConstraint.getLang());
+        lang.tableConstraints.append(tableConstraint.getCOWLang());
     }
     return *this;
 }
@@ -108,11 +108,6 @@ StatementCreateTable &StatementCreateTable::withoutRowID()
     Lang::CreateTableSTMT &lang = getMutableLang();
     lang.withoutRowID = true;
     return *this;
-}
-
-Statement::Type StatementCreateTable::getType() const
-{
-    return Statement::Type::CreateTable;
 }
 
 } // namespace WCDB

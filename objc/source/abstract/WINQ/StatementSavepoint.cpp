@@ -30,9 +30,4 @@ StatementSavepoint::savepoint(const std::string &savepointName)
     return *this;
 }
 
-Statement::Type StatementSavepoint::getType() const
-{
-    return Statement::Type::Savepoint;
-}
-
 } // namespace WCDB

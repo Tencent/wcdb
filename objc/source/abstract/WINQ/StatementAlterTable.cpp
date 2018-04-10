@@ -22,11 +22,6 @@
 
 namespace WCDB {
 
-Statement::Type StatementAlterTable::getType() const
-{
-    return Statement::Type::AlterTable;
-}
-
 StatementAlterTable &
 StatementAlterTable::alterTable(const std::string &schemaName,
                                 const std::string &tableName)
@@ -59,7 +54,7 @@ StatementAlterTable &StatementAlterTable::addColumn(const ColumnDef &columnDef)
 {
     Lang::AlterTableSTMT &lang = getMutableLang();
     lang.switcher = Lang::AlterTableSTMT::Switch::AddColumn;
-    lang.columnDef.assign(columnDef.getLang());
+    lang.columnDef.assign(columnDef.getCOWLang());
     return *this;
 }
 

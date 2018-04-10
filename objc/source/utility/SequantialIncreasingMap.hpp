@@ -26,6 +26,7 @@
 #include <map>
 #include <memory>
 
+//TODO refactor
 template <typename Key, typename Value, class Comparator = std::less<Key>>
 class SequentialIncreasingMap {
 public:

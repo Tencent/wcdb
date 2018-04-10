@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTSelectable+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
@@ -34,91 +34,63 @@
     return self;
 }
 
-- (instancetype)onProperty:(const WCTProperty &)property
-{
-    _statement.select(property);
-    return self;
-}
-
 - (instancetype)onProperties:(const WCTPropertyList &)properties
 {
-    _statement.select(properties);
+    _properties = properties;
     return self;
 }
 
 - (instancetype)ofClass:(Class<WCTTableCoding>)cls
 {
     _class = cls;
-    _statement.select([cls objectRelationalMappingForWCDB]->getAllProperties());
     return self;
 }
 
-- (Class<WCTTableCoding>)getClass
+- (BOOL)lazyPrepare
 {
+    NSAssert(_class != nil || !_properties.empty(), @"");
+    if (_statement.isResultColumnsNotSet()) {
+        _statement.select(!_properties.empty() ? _properties : [_class objectRelationalMappingForWCDB]->getAllProperties());
+    }
     if (!_class) {
         _class = _properties.front().getColumnBinding()->getClass();
     }
-    return _class;
-}
-
-- (const WCTPropertyList &)getProperties
-{
-    assert((_class == nil) ^ _properties.empty());
-    return _class != nil ? [_class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+    return [super lazyPrepare];
 }
 
 - (NSArray /* <WCTObject*> */ *)allObjects
 {
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
-
-    NSMutableArray *objects = [[NSMutableArray alloc] init];
-    WCTObject *object = nil;
-    int index = 0;
-
-    Class cls = [self getClass];
-    const WCTPropertyList &properties = [self getProperties];
-
-    bool done = false;
-    while (_handle->step(done) && !done) {
-        object = [[cls alloc] init];
-        index = 0;
-        for (const WCTProperty &property : properties) {
-            [self extractValueAtIndex:index
-                           toProperty:property
-                             ofObject:object];
-            ++index;
-        }
-        [objects addObject:object];
+    NSArray *objects;
+    if (!_properties.empty()) {
+        objects = [self allObjectsOnProperties:_properties];
+    } else {
+        objects = [self allObjectsOfClass:_class];
     }
-    _handle->finalize();
-    return done ? objects : nil;
+    [self doAutoFinalize:!objects];
+    return objects;
 }
 
 - (id /* WCTObject* */)nextObject
 {
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
-
-    bool done = false;
-    WCTObject *object = nil;
-    if (_handle->step(done) && !done) {
-        Class cls = [self getClass];
-        object = [[cls alloc] init];
-        const WCTPropertyList &properties = [self getProperties];
-
-        int index = 0;
-        for (const WCTProperty &property : properties) {
-            [self extractValueAtIndex:index
-                           toProperty:property
-                             ofObject:object];
-            ++index;
-        }
+    BOOL done;
+    id object;
+    if (!_properties.empty()) {
+        object = [self nextObjectOnProperties:_properties orDone:done];
+    } else {
+        object = [self nextObjectOfClass:_class orDone:done];
     }
-    _handle->finalize();
-    return done ? nil : object;
+    if (!object || _finalizeImmediately) {
+        [self doAutoFinalize:!done];
+    }
+    return object;
 }
 
 @end

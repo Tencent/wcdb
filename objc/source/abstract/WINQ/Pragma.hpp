@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class Pragma : public Describable {
+class Pragma : public DescribableWithLang<Lang::Pragma> {
 public:
     //SQLite
     static const Pragma ApplicationId;
@@ -107,11 +107,8 @@ public:
     static const Pragma KdfIter;
     static const Pragma Rekey;
 
-    virtual const std::string &getDescription() const override;
-
 protected:
     Pragma(const std::string &name);
-    CopyOnWriteString m_name;
 };
 
 } // namespace WCDB

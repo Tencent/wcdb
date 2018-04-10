@@ -31,7 +31,7 @@ ForeignKeyClause::ForeignKeyClause(const std::string &foreignTable)
 ForeignKeyClause &ForeignKeyClause::byAddingColumn(const Column &column)
 {
     Lang::ForeignKeyClause &lang = getMutableLang();
-    lang.columns.append(column.getLang());
+    lang.columns.append(column.getCOWLang());
     return *this;
 }
 
@@ -40,7 +40,7 @@ ForeignKeyClause::byAddingColumns(const std::list<Column> &columns)
 {
     Lang::ForeignKeyClause &lang = getMutableLang();
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
     return *this;
 }

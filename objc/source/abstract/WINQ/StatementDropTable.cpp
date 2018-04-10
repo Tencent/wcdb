@@ -49,9 +49,4 @@ StatementDropTable::withSchema(const std::string &schemaName)
     return *this;
 }
 
-Statement::Type StatementDropTable::getType() const
-{
-    return Statement::Type::DropTable;
-}
-
 } // namespace WCDB

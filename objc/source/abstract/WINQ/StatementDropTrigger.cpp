@@ -50,9 +50,4 @@ StatementDropTrigger::withSchema(const std::string &schemaName)
     return *this;
 }
 
-Statement::Type StatementDropTrigger::getType() const
-{
-    return Statement::Type::DropTrigger;
-}
-
 } // namespace WCDB

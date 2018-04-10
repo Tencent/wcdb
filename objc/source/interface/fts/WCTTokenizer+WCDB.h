@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTMacroHelper.h>
+#import <WCDB/WCTCommon.h>
 
 WCDB_EXTERN NSString *const WCTTokenizerNameWCDB;

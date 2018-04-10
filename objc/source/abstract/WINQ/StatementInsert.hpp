@@ -28,6 +28,8 @@ namespace WCDB {
 
 class StatementInsert : public CRUDStatementWithLang<Lang::InsertSTMT> {
 public:
+    using CRUDStatementWithLang<Lang::InsertSTMT>::CRUDStatementWithLang;
+
     StatementInsert &with(const WithClause &withClause);
     StatementInsert &insertInto(const std::string &tableName);
     StatementInsert &insertOrReplaceInto(const std::string &tableName);
@@ -43,7 +45,12 @@ public:
     StatementInsert &values(const StatementSelect &selectSTMT);
     StatementInsert &defaultValues();
 
-    virtual Type getType() const override;
+    bool isValuesNotSet() const;
+    bool isReplace() const;
+#ifdef DEBUG
+    const Lang::CopyOnWriteLazyLangList<Lang::Column> &
+    getSpecifiedColumns() const;
+#endif
 
 protected:
     void insertInto(const std::string &tableName,

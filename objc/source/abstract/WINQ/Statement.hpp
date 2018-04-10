@@ -27,63 +27,55 @@ namespace WCDB {
 
 class Statement : public Describable {
 public:
-    enum class Type : int {
-        AlterTable,
-        Analyze,
-        Attach,
-        Begin,
-        Commit,
-        CreateIndex,
-        CreateTable,
-        CreateTrigger,
-        CreateView,
-        CreateVirtualTable,
-        Delete,
-        Detach,
-        DropIndex,
-        DropTable,
-        DropTrigger,
-        DropView,
-        Insert,
-        Pragma,
-        Reindex,
-        Release,
-        Rollback,
-        Savepoint,
-        Select,
-        Update,
-        Vacuum,
-    };
-    virtual Type getType() const = 0;
+    using Describable::Describable;
+
+    using Type = Lang::STMT::Type;
+    virtual Statement::Type getStatementType() const;
 };
 
 template <typename T>
-class StatementWithLang : public Statement, public WithLang<T> {
+class StatementWithLang : public Statement {
 public:
-    virtual const std::string &getDescription() const override
+    using Statement::Statement;
+
+    static Statement::Type getType() { return T::getType(); }
+    virtual Statement::Type getStatementType() const override
     {
-        if (!this->getLang().empty()) {
-            return this->getLang().description().get();
+        if (!m_cowLang.empty()) {
+            return Statement::getStatementType();
         }
-        return Describable::s_empty;
-    }
+        return T::getType();
+    };
+    T &getMutableLang() { return this->m_cowLang.template get_or_copy<T>(); }
 };
 
-class CRUDStatement {
+class CRUDStatement : public Statement {
 public:
-    virtual Lang::CopyOnWriteLazyLang<Lang::CRUDLang> getCRUDLang() const = 0;
+    using Statement::Statement;
+
+    virtual Lang::CopyOnWriteLazyLang<Lang::CRUDSTMT> getCRUDSTMT() const = 0;
 };
 
 template <typename T>
-class CRUDStatementWithLang : public CRUDStatement,
-                              public StatementWithLang<T> {
+class CRUDStatementWithLang : public CRUDStatement {
 public:
-    virtual Lang::CopyOnWriteLazyLang<Lang::CRUDLang>
-    getCRUDLang() const override
+    using CRUDStatement::CRUDStatement;
+
+    static Statement::Type getType() { return T::getType(); }
+    virtual Statement::Type getStatementType() const override
     {
-        Lang::CopyOnWriteLazyLang<Lang::CRUDLang> CRUDLang;
-        CRUDLang.assign(this->getLang());
-        return CRUDLang;
+        Statement::Type type = Statement::getStatementType();
+        if (type == Statement::Type::NotSet) {
+            type = T::getType();
+        }
+        return type;
+    };
+    T &getMutableLang() { return this->m_cowLang.template get_or_copy<T>(); }
+
+    virtual Lang::CopyOnWriteLazyLang<Lang::CRUDSTMT>
+    getCRUDSTMT() const override
+    {
+        return m_cowLang;
     }
 };
 

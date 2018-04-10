@@ -37,18 +37,11 @@ StatementPragma &StatementPragma::pragma(const Pragma &pragmaName)
     return *this;
 }
 
-StatementPragma &StatementPragma::pragma(const Pragma &pragmaName,
-                                         const LiteralValue &pragmaValue)
+StatementPragma &StatementPragma::to(const LiteralValue &pragmaValue)
 {
     Lang::PragmaSTMT &lang = getMutableLang();
-    lang.pragmaName.assign(pragmaName.getDescription());
-    lang.value.assign(pragmaValue.getLang());
+    lang.value.assign(pragmaValue.getCOWLang());
     return *this;
-}
-
-Statement::Type StatementPragma::getType() const
-{
-    return Statement::Type::Pragma;
 }
 
 } // namespace WCDB

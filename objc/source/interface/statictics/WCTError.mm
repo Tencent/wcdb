@@ -18,103 +18,52 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTError.h>
+#import <WCDB/Interface.h>
 
 @implementation WCTError
 
-+ (instancetype)errorWithWCDBError:(const WCDB::Error &)error
++ (instancetype)errorWithWCDBError:(const WCDB::Error *)error
 {
+    if (!error) {
+        return nil;
+    }
+    size_t hash = error->getHashedTypeid();
+    if (hash == typeid(WCDB::SQLiteError).hash_code()) {
+        return [[WCTSQLiteError alloc] initWithWCDBError:error];
+    } else if (hash == typeid(WCDB::HandleError).hash_code()) {
+        return [[WCTHandleError alloc] initWithWCDBError:error];
+    } else if (hash == typeid(WCDB::CoreError).hash_code()) {
+        return [[WCTCoreError alloc] initWithWCDBError:error];
+    } else if (hash == typeid(WCDB::FileError).hash_code()) {
+        return [[WCTFileError alloc] initWithWCDBError:error];
+    }
+    assert(hash == typeid(WCDB::Error).hash_code());
     return [[WCTError alloc] initWithWCDBError:error];
 }
 
-- (instancetype)initWithWCDBError:(const WCDB::Error &)error
+- (instancetype)initWithWCDBError:(const WCDB::Error *)error
 {
-    NSMutableDictionary *infos = [NSMutableDictionary dictionary];
-    if (error.getCode() != 0) {
-        for (const auto &iter : error.getInfos()) {
-            NSString *key = @(WCDB::Error::GetKeyName(iter.first));
-            switch (iter.second.getType()) {
-                case WCDB::Error::Value::Type::Int:
-                    [infos setObject:@(iter.second.getIntValue()) forKey:key];
-                    break;
-                case WCDB::Error::Value::Type::String: {
-                    //TODO truncate path
-                    const std::string stringValue = iter.second.getStringValue();
-                    NSString *value = @(stringValue.c_str());
-                    if (!value) {
-                        value = [[NSString alloc] initWithCString:stringValue.c_str() encoding:NSASCIIStringEncoding];
-                    }
-                    if (!value) {
-                        value = @"";
-                    }
-                    [infos setObject:value forKey:key];
-                } break;
-            }
-        }
-    }
-    return [self initWithType:(WCTErrorType) error.getType()
-                         code:error.getCode()
-                     userInfo:infos];
-}
-
-- (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo
-{
-    if (self = [super initWithDomain:@"WCDB" code:code userInfo:userInfo]) {
-        _type = type;
+    assert(error != nullptr);
+    if (self = [super initWithDomain:@"WCDB"
+                                code:error->code
+                            userInfo:nil]) {
+        _message = @(error->message.c_str());
+        _level = (WCTErrorLevel) error->level;
     }
     return self;
 }
 
-- (BOOL)isOK
+- (WCTErrorType)type
 {
-    return self.code == 0;
+    return WCTErrorTypeError;
 }
 
 - (NSString *)description
 {
-    NSMutableString *desc = [[NSMutableString alloc] init];
-    [desc appendFormat:@"Code:%ld, ", (long) self.code];
-    [desc appendFormat:@"Type:%s, ", WCDB::Error::GetTypeName((WCDB::Error::Type) _type)];
-    __block BOOL quote = NO;
-    [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *_Nonnull unused) {
-      if (quote) {
-          [desc appendString:@", "];
-      } else {
-          quote = YES;
-      }
-      [desc appendFormat:@"%@:%@", key, obj];
-    }];
+    NSMutableString *desc = [[NSMutableString alloc] initWithUTF8String:WCDB::Error::LevelName((WCDB::Error::Level) _level)];
+    [desc appendFormat:@"Code: %ld", (long) self.code];
+    [desc appendFormat:@"Msg: %@", _message];
     return desc;
-}
-
-- (NSNumber *)tag
-{
-    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Tag))];
-}
-
-- (NSNumber *)operation
-{
-    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Operation))];
-}
-
-- (NSNumber *)extendedCode
-{
-    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::ExtendedCode))];
-}
-
-- (NSString *)message
-{
-    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Message))];
-}
-
-- (NSString *)sql
-{
-    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::SQL))];
-}
-
-- (NSString *)path
-{
-    return self.userInfo[@(WCDB::Error::GetKeyName(WCDB::Error::Key::Path))];
 }
 
 @end

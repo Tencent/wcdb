@@ -28,6 +28,8 @@ namespace WCDB {
 
 class StatementDelete : public CRUDStatementWithLang<Lang::DeleteSTMT> {
 public:
+    using CRUDStatementWithLang<Lang::DeleteSTMT>::CRUDStatementWithLang;
+
     StatementDelete &with(const WithClause &withClause);
     StatementDelete &deleteFrom(const QualifiedTableName &qualifiedTableName);
     StatementDelete &where(const Expression &condition);
@@ -36,7 +38,8 @@ public:
     StatementDelete &limit(const Expression &from, const Expression &to);
     StatementDelete &limit(const Expression &limit);
     StatementDelete &offset(const Expression &offset);
-    virtual Type getType() const override;
+
+    bool isLimited() const;
 };
 
 } // namespace WCDB

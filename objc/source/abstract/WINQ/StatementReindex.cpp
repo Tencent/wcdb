@@ -53,9 +53,4 @@ StatementReindex &StatementReindex::withSchema(const std::string &schemaName)
     return *this;
 }
 
-Statement::Type StatementReindex::getType() const
-{
-    return Statement::Type::Reindex;
-}
-
 } // namespace WCDB

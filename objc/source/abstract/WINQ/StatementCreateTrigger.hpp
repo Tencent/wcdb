@@ -50,8 +50,6 @@ public:
     StatementCreateTrigger &when(const Expression &expression);
 
     StatementCreateTrigger &run(const CRUDStatement &statement);
-
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

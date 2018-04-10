@@ -48,6 +48,16 @@ CopyOnWriteString CreateVirtualTableSTMT::SQL() const
     return description;
 }
 
+STMT::Type CreateVirtualTableSTMT::getSTMTType() const
+{
+    return STMT::Type::CreateVirtualTable;
+}
+
+STMT::Type CreateVirtualTableSTMT::getType()
+{
+    return STMT::Type::CreateVirtualTable;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

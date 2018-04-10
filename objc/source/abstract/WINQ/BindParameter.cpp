@@ -22,27 +22,28 @@
 
 namespace WCDB {
 
-const BindParameter BindParameter::default_;
-
-BindParameter::BindParameter()
+std::list<Expression> BindParameter::bindParameters(int count)
 {
-    Lang::BindParameter &lang = getMutableLang();
-    lang.type = Lang::BindParameter::Type::QuestionMark;
+    std::list<Expression> bps;
+    for (int i = 1; i <= count; ++i) {
+        bps.push_back(BindParameter(i));
+    }
+    return bps;
 }
 
 BindParameter::BindParameter(int n)
 {
     Lang::BindParameter &lang = getMutableLang();
-    lang.type = Lang::BindParameter::Type::QuestionMarkWithNumber;
+    //    lang.type = Lang::BindParameter::Type::QuestionMark;
     lang.n = n;
 }
 
-BindParameter::BindParameter(const std::string &name, const Type &type)
-{
-    Lang::BindParameter &lang = getMutableLang();
-    lang.type = (Lang::BindParameter::Type) type;
-    lang.name.assign(name);
-}
+//BindParameter::BindParameter(const std::string &name, const Type &type)
+//{
+//    Lang::BindParameter &lang = getMutableLang();
+//    lang.type = (Lang::BindParameter::Type) type;
+//    lang.name.assign(name);
+//}
 
 Expression BindParameter::getRedirectSource() const
 {

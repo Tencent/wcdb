@@ -34,6 +34,16 @@ CopyOnWriteString AttachSTMT::SQL() const
     return description;
 }
 
+STMT::Type AttachSTMT::getSTMTType() const
+{
+    return STMT::Type::Attach;
+}
+
+STMT::Type AttachSTMT::getType()
+{
+    return STMT::Type::Attach;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

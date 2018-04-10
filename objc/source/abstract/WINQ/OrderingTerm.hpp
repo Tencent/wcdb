@@ -27,6 +27,8 @@ namespace WCDB {
 
 class OrderingTerm : public DescribableWithLang<Lang::OrderingTerm> {
 public:
+    OrderingTerm();
+
     template <typename T, typename Enable = void>
     OrderingTerm(const T &t,
                  typename std::enable_if<ExpressionConvertible<T>::value>::type

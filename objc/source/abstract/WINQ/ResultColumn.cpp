@@ -57,7 +57,7 @@ ResultColumn &ResultColumn::as(const Column &columnAlias)
 {
     Lang::ResultColumn &lang = getMutableLang();
     assert(lang.type == Lang::ResultColumn::Type::Expr);
-    lang.columnAlias.assign(columnAlias.getLang());
+    lang.columnAlias.assign(columnAlias.getCOWLang());
     return *this;
 }
 
@@ -65,7 +65,12 @@ void ResultColumn::setupWithExpression(const Expression &expression)
 {
     Lang::ResultColumn &lang = getMutableLang();
     lang.type = Lang::ResultColumn::Type::Expr;
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
+}
+
+ResultColumn::operator std::list<ResultColumn>() const
+{
+    return {*this};
 }
 
 } // namespace WCDB

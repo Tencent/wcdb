@@ -18,18 +18,20 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTUnsafeHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTInsert : WCTHandle
+@interface WCTInsert <ObjectType> : WCTUnsafeHandle
 
-- (instancetype)orReplace;
+@property(nonatomic, readonly) WCDB::StatementInsert& statement;
 
-- (instancetype)intoTable:(NSString *)tableName;
+- (nonnull instancetype)orReplace;
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties;
+- (nonnull instancetype)intoTable:(nonnull NSString *)tableName;
+
+- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
 
 /**
  @brief Execute the insert SQL with objects.
@@ -38,8 +40,8 @@
  @param objects Objects to be inserted into WCDB.
  @return YES if no error occurs.
  */
-- (BOOL)executeWithObjects:(NSArray<WCTObject *> *)objects;
+- (BOOL)executeWithObjects:(nonnull NSArray<ObjectType> *)objects;
 
-- (BOOL)executeWithObject:(WCTObject *)object;
+- (BOOL)executeWithObject:(nonnull ObjectType)object;
 
 @end

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
@@ -35,24 +35,36 @@
     _database->setCipher(cipherKey.bytes, (int) cipherKey.length, cipherPageSize);
 }
 
-- (void)setConfig:(WCTConfigCallback)invoke
+- (void)setConfig:(WCTConfigBlock)invoke
           forName:(NSString *)name
         withOrder:(int)order
 {
-    _database->setConfig(WCDB::Config(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {
-        WCTUnsafeHandle *unsafeHandle = [[WCTUnsafeHandle alloc] initWithDatabase:_database andHandle:handle];
-        return invoke(unsafeHandle);
-    },
-                                      order));
+    if (invoke) {
+        _database->setConfig(WCDB::Config(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {
+            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+            BOOL result = invoke(unsafeHandle);
+            [unsafeHandle finalizeDatabase];
+            return result;
+        },
+                                          order));
+    } else {
+        _database->setConfig(WCDB::Config(name.UTF8String, nullptr, order));
+    }
 }
 
-- (void)setConfig:(WCTConfigCallback)invoke
+- (void)setConfig:(WCTConfigBlock)invoke
           forName:(NSString *)name
 {
-    _database->setConfig(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {
-        WCTUnsafeHandle *unsafeHandle = [[WCTUnsafeHandle alloc] initWithDatabase:_database andHandle:handle];
-        return invoke(unsafeHandle);
-    });
+    if (invoke) {
+        _database->setConfig(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {
+            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+            BOOL result = invoke(unsafeHandle);
+            [unsafeHandle finalizeDatabase];
+            return result;
+        });
+    } else {
+        _database->setConfig(name.UTF8String, nullptr);
+    }
 }
 
 @end

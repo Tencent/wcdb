@@ -33,6 +33,16 @@ CopyOnWriteString VacuumSTMT::SQL() const
     return description;
 }
 
+STMT::Type VacuumSTMT::getSTMTType() const
+{
+    return STMT::Type::Vacuum;
+}
+
+STMT::Type VacuumSTMT::getType()
+{
+    return STMT::Type::Vacuum;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

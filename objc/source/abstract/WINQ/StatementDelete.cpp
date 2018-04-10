@@ -25,7 +25,7 @@ namespace WCDB {
 StatementDelete &StatementDelete::with(const WithClause &withClause)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
-    lang.withClause.assign(withClause.getLang());
+    lang.withClause.assign(withClause.getCOWLang());
     return *this;
 }
 
@@ -33,21 +33,21 @@ StatementDelete &
 StatementDelete::deleteFrom(const QualifiedTableName &qualifiedTableName)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
-    lang.qualifiedTableName.assign(qualifiedTableName.getLang());
+    lang.qualifiedTableName.assign(qualifiedTableName.getCOWLang());
     return *this;
 }
 
 StatementDelete &StatementDelete::where(const Expression &condition)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
-    lang.condition.assign(condition.getLang());
+    lang.condition.assign(condition.getCOWLang());
     return *this;
 }
 
 StatementDelete &StatementDelete::orderBy(const OrderingTerm &orderingTerm)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
-    lang.orderingTerms.append(orderingTerm.getLang());
+    lang.orderingTerms.append(orderingTerm.getCOWLang());
     return *this;
 }
 
@@ -56,7 +56,7 @@ StatementDelete::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
     for (const OrderingTerm &orderingTerm : orderingTerms) {
-        lang.orderingTerms.append(orderingTerm.getLang());
+        lang.orderingTerms.append(orderingTerm.getCOWLang());
     }
     return *this;
 }
@@ -66,8 +66,8 @@ StatementDelete &StatementDelete::limit(const Expression &from,
 {
     Lang::DeleteSTMT &lang = getMutableLang();
     lang.offset = false;
-    lang.limit.assign(from.getLang());
-    lang.limitParameter.assign(to.getLang());
+    lang.limit.assign(from.getCOWLang());
+    lang.limitParameter.assign(to.getCOWLang());
     return *this;
 }
 
@@ -75,20 +75,21 @@ StatementDelete &StatementDelete::limit(const Expression &limit)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
     lang.offset = true;
-    lang.limit.assign(limit.getLang());
+    lang.limit.assign(limit.getCOWLang());
     return *this;
 }
 
 StatementDelete &StatementDelete::offset(const Expression &offset)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
-    lang.limitParameter.assign(offset.getLang());
+    lang.limitParameter.assign(offset.getCOWLang());
     return *this;
 }
 
-Statement::Type StatementDelete::getType() const
+bool StatementDelete::isLimited() const
 {
-    return Statement::Type::Delete;
+    const Lang::DeleteSTMT &lang = getCOWLang().get<Lang::DeleteSTMT>();
+    return !lang.orderingTerms.empty() || !lang.limit.empty();
 }
 
 } // namespace WCDB

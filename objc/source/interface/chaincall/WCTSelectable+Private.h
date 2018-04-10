@@ -23,6 +23,7 @@
 @interface WCTSelectable () {
 @protected
     WCDB::StatementSelect _statement;
+    BOOL _finalizeImmediately;
 }
 
 - (BOOL)lazyPrepare;

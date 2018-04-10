@@ -39,6 +39,8 @@ public:
     //    void append(const CopyOnWriteString &string);
 
     bool empty() const;
+
+    bool equal(const std::string &other) const;
 };
 
 #endif /* CopyOnWriteString_hpp */

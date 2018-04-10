@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class PragmaSTMT : public Lang {
+class PragmaSTMT : public STMT {
 public:
     CopyOnWriteString schemaName;
     CopyOnWriteString pragmaName;
@@ -35,6 +35,9 @@ public:
     CopyOnWriteLazyLang<LiteralValue> value;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

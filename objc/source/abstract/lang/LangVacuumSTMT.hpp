@@ -27,11 +27,14 @@ namespace WCDB {
 
 namespace Lang {
 
-class VacuumSTMT : public Lang {
+class VacuumSTMT : public STMT {
 public:
     CopyOnWriteString schemaName;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

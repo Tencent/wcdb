@@ -30,7 +30,6 @@ class StatementDetach : public StatementWithLang<Lang::DetachSTMT> {
 
 public:
     StatementDetach &detach(const std::string &schemaName);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

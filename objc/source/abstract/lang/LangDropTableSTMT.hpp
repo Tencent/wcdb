@@ -28,6 +28,10 @@ namespace WCDB {
 namespace Lang {
 
 class DropTableSTMT : public DropInternalSTMT {
+public:
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
+
 protected:
     virtual const char *getInternalName() const override;
 };

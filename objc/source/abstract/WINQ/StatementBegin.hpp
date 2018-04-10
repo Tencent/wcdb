@@ -29,12 +29,12 @@ namespace WCDB {
 class StatementBegin : public StatementWithLang<Lang::BeginSTMT> {
 
 public:
+    static const StatementBegin deferred;
     static const StatementBegin immediate;
+    static const StatementBegin exclusive;
 
-    using Transaction = Lang::BeginSTMT::Type;
-    StatementBegin &
-    begin(const Transaction &transaction = Transaction::Immediate);
-    virtual Type getType() const override;
+protected:
+    StatementBegin &begin(Lang::BeginSTMT::Type type);
 };
 
 } // namespace WCDB

@@ -18,11 +18,19 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _finalizeLevel = WCTFinalizeLevelDatabase;
+    }
+    return self;
 }
 
 - (instancetype)fromTable:(NSString *)tableName
@@ -57,7 +65,14 @@
 
 - (BOOL)execute
 {
-    return _handle->execute(_statement);
+    BOOL result = [self execute:_statement];
+    [self doAutoFinalize:!result];
+    return result;
+}
+
+- (WCDB::StatementDelete &)statement
+{
+    return _statement;
 }
 
 @end

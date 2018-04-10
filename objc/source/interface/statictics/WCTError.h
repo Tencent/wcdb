@@ -18,36 +18,25 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/Error.hpp>
-#import <type_traits>
+#import <WCDB/WCTCommon.h>
 
 /**
  It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.
  */
 typedef NS_ENUM(int, WCTErrorType) {
-    /**
-     * An error comes from sqlite interface. You can check it at http://www.sqlite.org/rescode.html .
-     */
-    WCTErrorTypeSQLite = (WCTErrorType) WCDB::Error::Type::SQLite,
-    /**
-     * System error, which is obtained by [errno].
-     */
-    WCTErrorTypeSystemCall = (WCTErrorType) WCDB::Error::Type::SystemCall,
-    WCTErrorTypeWCDB = (WCTErrorType) WCDB::Error::Type::WCDB,
-    WCTErrorTypeRepairKit = (WCTErrorType) WCDB::Error::Type::RepairKit,
-    /**
-     * Development error. You should fix it before release.
-     */
-    WCTErrorTypeAbort = (WCTErrorType) WCDB::Error::Type::Abort,
-    /**
-     * Warning. You'd better fix it.
-     */
-    WCTErrorTypeWarning = (WCTErrorType) WCDB::Error::Type::Warning,
-    /**
-     * An error comes from [SQLITE_CONFIG_LOG]. You can check it at http://www.sqlite.org/rescode.html .
-     */
-    WCTErrorTypeSQLiteGlobal = (WCTErrorType) WCDB::Error::Type::SQLiteGlobal,
+    WCTErrorTypeError,
+    WCTErrorTypeSQLite,
+    WCTErrorTypeHandle,
+    WCTErrorTypeCore,
+    WCTErrorTypeFile,
+};
+
+typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
+    WCTErrorLevelIgnore,
+    WCTErrorLevelDebug,
+    WCTErrorLevelWarning,
+    WCTErrorLevelError,
+    WCTErrorLevelFatal,
 };
 
 /**
@@ -55,33 +44,10 @@ typedef NS_ENUM(int, WCTErrorType) {
  */
 @interface WCTError : NSError
 
-/**
- @brief init
- @param type type
- @param code code
- @param userInfo WCTErrorKey->Value
- @return self
- */
-- (instancetype)initWithType:(WCTErrorType)type code:(NSInteger)code userInfo:(NSDictionary *)userInfo;
+- (WCTErrorType)type;
 
-@property(nonatomic, readonly) WCTErrorType type;
+@property(nonatomic, readonly) WCTErrorLevel level;
 
-- (NSNumber *)tag;
-
-- (NSNumber *)operation;
-
-- (NSNumber *)extendedCode;
-
-- (NSString *)message;
-
-- (NSString *)sql;
-
-- (NSString *)path;
-
-/**
- @brief Convenient interface for checking code==0.
- @return YES for no error 
- */
-- (BOOL)isOK;
+@property(nonatomic, readonly) NSString *message;
 
 @end

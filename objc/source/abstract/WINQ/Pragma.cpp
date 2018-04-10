@@ -101,12 +101,8 @@ const Pragma Pragma::WritableSchema("writable_schema");
 
 Pragma::Pragma(const std::string &name)
 {
-    m_name.assign(name);
-}
-
-const std::string &Pragma::getDescription() const
-{
-    return m_name.get();
+    Lang::Pragma &lang = getMutableLang();
+    lang.name.assign(name);
 }
 
 } // namespace WCDB

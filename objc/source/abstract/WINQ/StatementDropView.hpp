@@ -33,7 +33,6 @@ public:
     StatementDropView &dropView(const std::string &viewName);
     StatementDropView &ifExists(bool ifExists = true);
     StatementDropView &withSchema(const std::string &schemaName);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

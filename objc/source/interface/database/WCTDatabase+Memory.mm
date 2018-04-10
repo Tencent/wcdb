@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
@@ -30,18 +30,26 @@
 + (void)load
 {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    static dispatch_queue_t s_queue = dispatch_queue_create("WCDB-PurgeFreeHandle", DISPATCH_QUEUE_SERIAL);
     //keep it the entire life cycle
-    static id s_observer __attribute__((unused)) =
+    static id s_observer_memory_warning __attribute__((unused)) =
         [notificationCenter addObserverForName:
                                 UIApplicationDidReceiveMemoryWarningNotification
                                         object:nil
                                          queue:nil
-                                    usingBlock:^(NSNotification *_Nonnull note) {
-                                      dispatch_async(s_queue, ^{
-                                        WCDB::Database::PurgeInAllDatabases();
-                                      });
+                                    usingBlock:^(NSNotification *) {
+                                      WCDB::Database::PurgeInAllDatabases();
                                     }];
+
+#ifdef DEBUG
+    static id s_observer_will_terminate __attribute__((unused)) =
+        [notificationCenter addObserverForName:
+                                UIApplicationWillTerminateNotification
+                                        object:nil
+                                         queue:nil
+                                    usingBlock:^(NSNotification *) {
+                                      WCDB::Database::closeAllDatabases();
+                                    }];
+#endif
 }
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 

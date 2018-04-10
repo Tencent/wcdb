@@ -22,11 +22,6 @@
 
 namespace WCDB {
 
-Statement::Type StatementAnalyze::getType() const
-{
-    return Statement::Type::Analyze;
-}
-
 StatementAnalyze &StatementAnalyze::analyze()
 {
     Lang::AnalyzeSTMT &lang = getMutableLang();

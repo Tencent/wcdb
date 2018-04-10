@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class DeleteSTMT : public CRUDLang {
+class DeleteSTMT : public CRUDSTMT {
 public:
     DeleteSTMT();
 
@@ -40,6 +40,9 @@ public:
     CopyOnWriteLazyLang<Expr> limitParameter;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

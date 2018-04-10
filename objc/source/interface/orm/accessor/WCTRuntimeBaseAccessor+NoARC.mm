@@ -68,7 +68,7 @@ Class WCTRuntimeBaseAccessor::GetPropertyClass(Class cls, const std::string &pro
         NSString *encodeType = splitAttributes[0];
         NSArray *splitEncodeTypes = [encodeType componentsSeparatedByString:@"\""];
         if (splitEncodeTypes.count <= 1) {
-            WCDB::Error::Abort(("Failed to parse the type of [" + propertyName + "]").c_str());
+            WCDB::Error::fatal(("Failed to parse the type of [" + propertyName + "]").c_str());
         }
         NSString *className = splitEncodeTypes[1];
         return NSClassFromString(className);

@@ -21,158 +21,78 @@
 #ifndef Error_hpp
 #define Error_hpp
 
-#include <WCDB/Optional.hpp>
-#include <WCDB/String.hpp>
-#include <WCDB/ThreadLocal.hpp>
-#include <climits>
 #include <functional>
-#include <map>
 #include <string>
 
 namespace WCDB {
 
-enum Tag {
-    Invalid = 0,
-};
-typedef enum Tag Tag;
-
 class Error {
 public:
-    class Value {
-    public:
-        enum class Type : int {
-            Int,
-            String,
-        };
-        Value(int value);
-        Value(const char *value);
-        Value(const std::string &value);
-
-        int getIntValue() const;
-        std::string getStringValue() const;
-        Value::Type getType() const;
-
-    protected:
-        Value::Type m_type;
-        int m_intValue;
-        std::string m_stringValue;
-    };
-
-public:
-    enum class Key : int {
-        Tag = 1,
-        Operation = 2,
-        ExtendedCode = 3,
-        Message = 4,
-        SQL = 5,
-        Path = 6,
-    };
-    static constexpr const char *GetKeyName(Key key)
-    {
-        switch (key) {
-            case Error::Key::Operation:
-                return "Op";
-            case Error::Key::ExtendedCode:
-                return "ExtCode";
-            case Error::Key::Message:
-                return "Msg";
-            case Error::Key::SQL:
-                return "SQL";
-            case Error::Key::Tag:
-                return "Tag";
-            case Error::Key::Path:
-                return "Path";
-        }
-    }
-
-    enum class Type : int {
-        NotSet = 0,
-        Warning = 1,
-        Abort = 2,
-        SQLiteGlobal = 3,
-        SQLite = 4,
-        SystemCall = 5,
-        WCDB = 6,
-        RepairKit = 7,
-    };
-    static constexpr const char *GetTypeName(Type type)
-    {
-        switch (type) {
-            case Error::Type::SQLite:
-                return "SQLite";
-            case Error::Type::SystemCall:
-                return "SystemCall";
-            case Error::Type::Abort:
-                return "Abort";
-            case Error::Type::Warning:
-                return "Warning";
-            case Error::Type::SQLiteGlobal:
-                return "SQLiteGlobal";
-            case Error::Type::RepairKit:
-                return "RepairKit";
-            case Error::Type::WCDB:
-                return "WCDB";
-            default:
-                return "";
-        }
-    }
-
-    enum class Operation : int {
-        SystemCallLstat = 1,
-        SystemCallAccess = 2,
-        SystemCallRemove = 3,
-        SystemCallLink = 4,
-        SystemCallUnlink = 5,
-        SystemCallMkdir = 6,
-        RepairKitBackup = 1 | (1 << 8),
-        RepairKitRepair = 2 | (1 << 8),
-    };
-
-    typedef std::map<Error::Key, Value> Infos;
-    typedef std::function<void(const Error &)> ReportMethod;
-
     Error();
 
-    void setError(Type type, int code);
-    void setOperation(Operation operation);
-    void setTag(Tag tag);
-    void setExtendedCode(int extendedCode);
-    void setMessage(const std::string &message);
-    void setSQL(const std::string &sql);
-    void setPath(const std::string &path);
+    virtual size_t getHashedTypeid() const;
 
-    Error::Type getType() const;
-    int getCode() const;
-    Optional<Tag> getTag() const;
-    Optional<int> getOperationValue() const;
-    Optional<int> getExtendedCode() const;
-    Optional<std::string> getMessage() const;
-    Optional<std::string> getSQL() const;
-    Optional<std::string> getPath() const;
-    const Error::Infos &getInfos() const;
+    enum class Level : int {
+        Ignore,
+        Debug,
+        Warning,
+        Error,
+        Fatal,
+    };
+    Level level;
+    static constexpr const char *LevelName(const Level &level)
+    {
+        switch (level) {
+            case Level::Ignore:
+                return "[IGNORE]";
+            case Level::Debug:
+                return "[DEBUG]";
+            case Level::Warning:
+                return "[WARNING]";
+            case Level::Error:
+                return "[ERROR]";
+            case Level::Fatal:
+                return "[FATAL]";
+        }
+    }
 
-    bool isOK() const; //getCode()==0
-    void reset();
-    void clear();
-    std::string description() const;
+    enum class Code {
+        Error = -1,
+    };
+    int code;
+    bool isOK() const;
 
-    static void SetReportMethod(const ReportMethod &reportMethod);
-    static void ResetReportMethod();
+    std::string message;
 
-    void report() const;
-    static void Abort(const std::string &message);
-    static void Warning(const std::string &message);
+    virtual std::string getDescription() const;
 
-    static void setThreadedSlient(bool slient);
+    void report();
+
+    class Report {
+    public:
+        typedef std::function<void(const Error &)> Callback;
+        static Report *sharedReport();
+
+        void report(const Error &error);
+        void setCallback(const Callback &callback);
+        void resetCallback();
+
+    protected:
+        Report(const Callback &callback);
+        static Callback s_defaultCallback;
+        std::shared_ptr<Callback> m_callback;
+    };
+
+    static void warning(const std::string &message);
+    static void fatal(const std::string &message);
 
 protected:
-    int m_code;
-    Error::Type m_type;
-    Error::Infos m_infos;
-
-    static std::shared_ptr<ReportMethod> s_reportMethod;
-    static ReportMethod s_builtinErrorReport;
-    static ThreadLocal<bool> s_slient;
+    void addToDescription(std::string &description,
+                          const char *key,
+                          int value) const;
+    void addToDescription(std::string &description,
+                          const char *key,
+                          const std::string &value) const;
 };
 
 } //namespace WCDB

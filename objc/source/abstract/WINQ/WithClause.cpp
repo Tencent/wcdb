@@ -41,8 +41,8 @@ WithClause &WithClause::with(const CTETableName &cteTableName,
     Lang::CopyOnWriteLazyLang<Lang::WithClause::Pair> pair;
     {
         Lang::WithClause::Pair &lang = pair.get_or_copy();
-        lang.cteTableName.assign(cteTableName.getLang());
-        lang.selectSTMT.assign(selectSTMT.getLang());
+        lang.cteTableName.assign(cteTableName.getCOWLang());
+        lang.selectSTMT.assign(selectSTMT.getCOWLang());
     }
 
     Lang::WithClause &lang = getMutableLang();

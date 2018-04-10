@@ -29,9 +29,4 @@ StatementRelease &StatementRelease::release(const std::string &savepointName)
     return *this;
 }
 
-Statement::Type StatementRelease::getType() const
-{
-    return Statement::Type::Release;
-}
-
 } // namespace WCDB

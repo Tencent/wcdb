@@ -27,20 +27,20 @@ namespace WCDB {
 
 namespace Lang {
 
+//TODO: support string bind parameter for migration
 class BindParameter : public Lang {
 public:
     BindParameter();
-    enum class Type : int {
-        NotSet,
-        QuestionMark,
-        QuestionMarkWithNumber,
-        Colon,
-        At,
-        DollarSign,
-    };
-    Type type;
+    //    enum class Type : int {
+    //        NotSet,
+    //        QuestionMark,
+    //        Colon,
+    //        At,
+    //        DollarSign,
+    //    };
+    //    Type type;
     int n;
-    CopyOnWriteString name;
+    //    CopyOnWriteString name;
 
     virtual CopyOnWriteString SQL() const override;
 };

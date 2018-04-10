@@ -48,9 +48,4 @@ StatementDropView &StatementDropView::withSchema(const std::string &schemaName)
     return *this;
 }
 
-Statement::Type StatementDropView::getType() const
-{
-    return Statement::Type::DropView;
-}
-
 } // namespace WCDB

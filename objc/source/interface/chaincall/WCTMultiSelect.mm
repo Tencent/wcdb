@@ -18,13 +18,27 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTSelectable+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
+struct MultiInfo {
+    WCTProperty property;
+    NSString *tableName;
+    Class cls;
+    MultiInfo(const WCTProperty &property_, NSString *tableName_, Class cls_)
+        : property(property_)
+        , tableName(tableName_)
+        , cls(cls_)
+    {
+    }
+};
+typedef struct MultiInfo MultiInfo;
+
 @implementation WCTMultiSelect {
     WCTPropertyList _properties;
+    std::list<MultiInfo> _infos;
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
@@ -40,108 +54,87 @@
 - (instancetype)onProperties:(const WCTPropertyList &)properties
 {
     _properties = properties;
-    _statement.select(_properties);
+    _statement.select(properties);
     return self;
 }
 
-- (instancetype)ofClasses:(NSArray<Class<WCTTableCoding>> *)classes
+- (void)lazyInitMultiInfo
 {
-    _properties.clear();
-    for (Class<WCTTableCoding> cls in classes) {
-        for (const WCTProperty &property : [cls objectRelationalMappingForWCDB]->getAllProperties()) {
-            _properties.push_back(property);
+    assert(_handle != nullptr);
+    if (_infos.empty()) {
+        int index = 0;
+        for (const WCTProperty &property : _properties) {
+            const char *tableName = _handle->getColumnTableName(index);
+            Class cls = property.getColumnBinding()->getClass();
+            _infos.push_back(MultiInfo(property, @(tableName), cls));
+            ++index;
         }
     }
-    _statement.select(_properties);
-    return self;
 }
 
-- (instancetype)distinct
+- (WCTMultiObject *)extractMutliObject
 {
-    _statement.distinct();
-    return self;
-}
-
-- (WCTMultiObject *)nextMultiObject
-{
-    if (![self lazyPrepare]) {
-        return nil;
-    }
-    bool done;
-    if (!_handle->step(done) || done) {
-        _handle->finalize();
-        return nil;
-    }
     NSMutableDictionary<NSString *, WCTObject *> *multiObject = [[NSMutableDictionary<NSString *, WCTObject *> alloc] init]; // table name -> object
     int index = 0;
-    for (const WCTProperty &property : _properties) {
-        const char *tableName = _handle->getColumnTableName(index);
-        NSString *tableNameNS = tableName ? @(tableName) : @"";
-        WCTObject *object = [multiObject objectForKey:tableNameNS];
+    for (const auto &info : _infos) {
+        WCTObject *object = [multiObject objectForKey:info.tableName];
         if (!object) {
-            object = [[property.getColumnBinding()->getClass() alloc] init];
-            [multiObject setObject:object forKey:tableNameNS];
+            object = [[info.cls alloc] init];
+            [multiObject setObject:object forKey:info.tableName];
         }
         [self extractValueAtIndex:index
-                       toProperty:property
+                       toProperty:info.property
                          ofObject:object];
         ++index;
     }
     return multiObject;
 }
 
+- (WCTMultiObject *)nextMultiObject
+{
+    if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
+        return nil;
+    }
+
+    assert(_handle != nullptr);
+    bool done;
+    if (!_handle->step(done) || done) {
+        [self doAutoFinalize:!done];
+        return nil;
+    }
+
+    [self lazyInitMultiInfo];
+
+    WCTMultiObject *object = [self extractMutliObject];
+    if (_finalizeImmediately) {
+        [self doAutoFinalize:NO];
+    }
+    return object;
+}
+
 - (NSArray<WCTMultiObject *> *)allMultiObjects
 {
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
+
+    assert(_handle != nullptr);
     bool done;
     if (!_handle->step(done) || done) {
-        _handle->finalize();
+        [self doAutoFinalize:!done];
         return nil;
     }
-    struct MultiInfo {
-        WCTProperty property;
-        NSString *tableName;
-        Class cls;
-        MultiInfo(const WCTProperty &property_, NSString *tableName_, Class cls_)
-            : property(property_)
-            , tableName(tableName_)
-            , cls(cls_)
-        {
-        }
-    };
-    typedef struct MultiInfo MultiInfo;
 
-    std::vector<MultiInfo> infos;
-    int index = 0;
+    [self lazyInitMultiInfo];
 
-    for (const WCTProperty &property : _properties) {
-        const char *tableName = _handle->getColumnTableName(index);
-        Class cls = property.getColumnBinding()->getClass();
-        infos.push_back(MultiInfo(property, @(tableName), cls));
-        ++index;
-    }
-
-    NSMutableArray *multiObjects = [[NSMutableArray alloc] init];
+    NSMutableArray<WCTMultiObject *> *multiObjects = [[NSMutableArray alloc] init];
     do {
-        NSMutableDictionary<NSString *, WCTObject *> *multiObject = [[NSMutableDictionary<NSString *, WCTObject *> alloc] init]; // table name -> object
-        index = 0;
-        for (const MultiInfo &info : infos) {
-            WCTObject *object = [multiObject objectForKey:info.tableName];
-            if (!object) {
-                object = [[info.cls alloc] init];
-                [multiObject setObject:object
-                                forKey:info.tableName];
-            }
-            [self extractValueAtIndex:index
-                           toProperty:info.property
-                             ofObject:object];
-            ++index;
-        }
-        [multiObjects addObject:multiObject];
+        [multiObjects addObject:[self extractMutliObject]];
     } while (_handle->step(done) && !done);
-    _handle->finalize();
+
+    [self doAutoFinalize:!done];
     return done ? multiObjects : nil;
 }
 

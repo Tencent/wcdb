@@ -22,11 +22,11 @@
 #define LangCommon_h
 
 #include <assert.h>
+#include <list>
 
 #include <WCDB/CopyOnWriteData.hpp>
+#include <WCDB/CopyOnWriteLazyDescribable.hpp>
 #include <WCDB/CopyOnWriteString.hpp>
-
-#include <WCDB/CopyOnWriteLazyLang.hpp>
 
 #include <WCDB/LangColumnType.hpp>
 #include <WCDB/LangConflictClause.hpp>
@@ -41,7 +41,108 @@ public:
     virtual CopyOnWriteString SQL() const = 0;
 };
 
-class CRUDLang : public Lang {
+template <typename T>
+class CopyOnWriteLazyLang : public CopyOnWriteLazyDescribable<T, Lang> {
+public:
+    CopyOnWriteLazyLang() : CopyOnWriteLazyDescribable<T, Lang>() {}
+
+    template <typename OtherType>
+    CopyOnWriteLazyLang(const CopyOnWriteLazyLang<OtherType> &o)
+        : CopyOnWriteLazyDescribable<T, Lang>(o)
+    {
+    }
+
+protected:
+    virtual CopyOnWriteString calculatedDescription() const override
+    {
+        return this->get().SQL();
+    }
+};
+
+template <typename T>
+class CopyOnWriteLazyLangList
+    : public CopyOnWriteLazyDescribable<std::list<CopyOnWriteLazyLang<T>>> {
+public:
+    bool empty() const
+    {
+        return CopyOnWriteLazyDescribable<
+                   std::list<CopyOnWriteLazyLang<T>>>::empty() ||
+               this->get().empty();
+    }
+
+    void append(const CopyOnWriteLazyLang<T> &element)
+    {
+        if (!this->empty()) {
+            this->get_or_copy().push_back(element);
+        } else {
+            this->assign({element});
+        }
+    }
+
+    template <typename U>
+    void append(const CopyOnWriteLazyLang<U> &element)
+    {
+        CopyOnWriteLazyLang<T> convert;
+        convert.assign(element);
+        if (!this->empty()) {
+            this->get_or_copy().push_back(convert);
+        } else {
+            this->assign({convert});
+        }
+    }
+
+protected:
+    virtual CopyOnWriteString calculatedDescription() const override
+    {
+        std::string description;
+        bool comma = false;
+        for (const auto &element : this->get()) {
+            if (comma) {
+                description.append(", ");
+            } else {
+                comma = true;
+            }
+            assert(!element.empty());
+            description.append(element.description().get());
+        }
+        return description;
+    }
+};
+
+class STMT : public Lang {
+public:
+    enum class Type : int {
+        NotSet = 0,
+        AlterTable,
+        Analyze,
+        Attach,
+        Begin,
+        Commit,
+        CreateIndex,
+        CreateTable,
+        CreateTrigger,
+        CreateView,
+        CreateVirtualTable,
+        Delete,
+        Detach,
+        DropIndex,
+        DropTable,
+        DropTrigger,
+        DropView,
+        Insert,
+        Pragma,
+        Reindex,
+        Release,
+        Rollback,
+        Savepoint,
+        Select,
+        Update,
+        Vacuum,
+    };
+    virtual Type getSTMTType() const = 0;
+};
+
+class CRUDSTMT : public STMT {
 };
 
 class BindParameter;

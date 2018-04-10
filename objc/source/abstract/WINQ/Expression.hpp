@@ -31,6 +31,8 @@ class Expression : public DescribableWithLang<Lang::Expr>,
                    public Operable,
                    public Redirectable {
 public:
+    Expression();
+
     template <typename T>
     Expression(const T &t,
                typename std::enable_if<LiteralValueConvertible<T>::value>::type
@@ -89,6 +91,8 @@ public:
     Expression(const RaiseFunction &raiseFunction);
 
     Expression(const Lang::CopyOnWriteLazyLang<Lang::Expr> &expr);
+
+    operator std::list<WCDB::Expression>() const;
 
 protected:
     friend class Operable;

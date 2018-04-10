@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class ReindexSTMT : public Lang {
+class ReindexSTMT : public STMT {
 public:
     ReindexSTMT();
 
@@ -43,6 +43,9 @@ public:
     CopyOnWriteString tableOrIndexName;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

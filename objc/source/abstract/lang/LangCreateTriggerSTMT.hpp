@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class CreateTriggerSTMT : public Lang {
+class CreateTriggerSTMT : public STMT {
 public:
     CreateTriggerSTMT();
 
@@ -57,9 +57,12 @@ public:
     bool forEachRow;
     CopyOnWriteLazyLang<Expr> expr;
 
-    CopyOnWriteLazyLangList<CRUDLang> STMTs;
+    CopyOnWriteLazyLangList<CRUDSTMT> STMTs;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 
 protected:
     static constexpr const char *TypeName(const Type &type);
@@ -68,7 +71,7 @@ protected:
 
 template <>
 CopyOnWriteString
-CopyOnWriteLazyLangList<CRUDLang>::calculatedDescription() const;
+CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const;
 
 } // namespace Lang
 

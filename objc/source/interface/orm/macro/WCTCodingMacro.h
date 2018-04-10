@@ -31,7 +31,7 @@
     +(const WCTBinding *) objectRelationalMappingForWCDB                       \
     {                                                                          \
         if (self.class != className.class) {                                   \
-            WCDB::Error::Abort("Inheritance is not supported for ORM");        \
+            WCDB::Error::fatal("Inheritance is not supported for ORM");        \
         }                                                                      \
         return &__WCDB_BINDING(className);                                     \
     }                                                                          \

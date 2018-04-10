@@ -18,31 +18,50 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#import <WCDB/Interface.h>
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+static BOOL s_compatible_for_1_0_x = NO;
 
-@interface NSDate (WCTColumnCoding) <WCTColumnCoding>
-@end
+@implementation NSDate (ColumnCoding)
 
-@implementation NSDate (WCTColumnCoding)
++ (BOOL)compatible_for_1_0_x
+{
+    return s_compatible_for_1_0_x;
+}
+
++ (void)setCompatible_for_1_0_x:(BOOL)flag
+{
+    s_compatible_for_1_0_x = flag;
+}
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return value ? [NSDate dateWithTimeIntervalSince1970:value.longLongValue] : nil;
+    if (!value) {
+        return nil;
+    }
+    if (!s_compatible_for_1_0_x) {
+        return [NSDate dateWithTimeIntervalSince1970:value.doubleValue];
+    } else {
+        return [NSDate dateWithTimeIntervalSince1970:value.longLongValue];
+    }
 }
 
 - (NSNumber *)archivedWCTValue
 {
-    return [NSNumber numberWithLongLong:self.timeIntervalSince1970];
+    if (!s_compatible_for_1_0_x) {
+        return [NSNumber numberWithDouble:self.timeIntervalSince1970];
+    } else {
+        return [NSNumber numberWithLongLong:self.timeIntervalSince1970];
+    }
 }
 
 + (WCDB::ColumnType)columnTypeForWCDB
 {
-    return WCDB::ColumnType::Integer64;
+    if (!s_compatible_for_1_0_x) {
+        return WCTColumnTypeFloat;
+    } else {
+        return WCTColumnTypeInteger64;
+    }
 }
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

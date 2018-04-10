@@ -32,6 +32,16 @@ CopyOnWriteString ReleaseSTMT::SQL() const
     return description;
 }
 
+STMT::Type ReleaseSTMT::getSTMTType() const
+{
+    return STMT::Type::Release;
+}
+
+STMT::Type ReleaseSTMT::getType()
+{
+    return STMT::Type::Release;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

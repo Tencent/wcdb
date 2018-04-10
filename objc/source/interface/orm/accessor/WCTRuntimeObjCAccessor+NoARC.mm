@@ -32,7 +32,7 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::s
 {
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
-        WCDB::Error::Abort([NSString stringWithFormat:@"Class %@ should conforms to protocol WCTColumnCoding", NSStringFromClass(propertyClass)].UTF8String);
+        WCDB::Error::fatal([NSString stringWithFormat:@"Class %@ should conforms to protocol WCTColumnCoding", NSStringFromClass(propertyClass)].UTF8String);
     }
 }
 
@@ -70,7 +70,7 @@ WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, cons
     static const SEL ColumnTypeSelector = NSSelectorFromString(@"columnTypeForWCDB");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
     if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
-        WCDB::Error::Abort([NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()].UTF8String);
+        WCDB::Error::fatal([NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()].UTF8String);
     }
     IMP implementation = GetClassMethodImplementation(propertyClass, ColumnTypeSelector);
     using GetColumnTyper = WCDB::ColumnType (*)(Class, SEL);

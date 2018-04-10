@@ -23,16 +23,6 @@
 #import <functional>
 #import <type_traits>
 
-template <typename T, typename Enable = void>
-struct ColumnIsObjCType : public std::false_type {
-};
-template <typename T>
-struct ColumnIsObjCType<
-    T,
-    typename std::enable_if<std::is_convertible<T, id>::value>::type>
-    : public std::true_type {
-};
-
 class WCTObjCAccessor : public WCTBaseAccessor {
 public:
     using OCType = id; //NSData*, NSString*, NSNumber*

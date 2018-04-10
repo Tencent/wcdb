@@ -33,6 +33,16 @@ CopyOnWriteString RollbackSTMT::SQL() const
     return description;
 }
 
+STMT::Type RollbackSTMT::getSTMTType() const
+{
+    return STMT::Type::Rollback;
+}
+
+STMT::Type RollbackSTMT::getType()
+{
+    return STMT::Type::Rollback;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

@@ -31,7 +31,6 @@ class StatementVacuum : public StatementWithLang<Lang::VacuumSTMT> {
 public:
     StatementVacuum &vacuum();
     StatementVacuum &vacuum(const std::string &schemaName);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

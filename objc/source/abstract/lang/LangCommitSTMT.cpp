@@ -29,6 +29,16 @@ CopyOnWriteString CommitSTMT::SQL() const
     return std::string("COMMIT");
 }
 
+STMT::Type CommitSTMT::getSTMTType() const
+{
+    return STMT::Type::Commit;
+}
+
+STMT::Type CommitSTMT::getType()
+{
+    return STMT::Type::Commit;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

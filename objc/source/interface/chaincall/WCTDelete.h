@@ -18,47 +18,49 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTUnsafeHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTDelete : WCTHandle
+@interface WCTDelete : WCTUnsafeHandle
 
-- (instancetype)fromTable:(NSString *)tableName;
+- (nonnull instancetype)fromTable:(nonnull NSString *)tableName;
 
 /**
  @brief WINQ interface for SQL.
  @param expr expr
  @return self
  */
-- (instancetype)where:(const WCDB::Expression &)expr;
+- (nonnull instancetype)where:(const WCDB::Expression &)expr;
 
 /**
  @brief WINQ interface for SQL.
  @param orders order list
  @return self
  */
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nonnull instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
 /**
  @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
-- (instancetype)limit:(const WCDB::Expression &)limit;
+- (nonnull instancetype)limit:(const WCDB::Expression &)limit;
 
 /**
  @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
-- (instancetype)offset:(const WCDB::Expression &)offset;
+- (nonnull instancetype)offset:(const WCDB::Expression &)offset;
 
 /**
  @brief Execute the delete SQL.
  @return YES if no error occurs.
  */
 - (BOOL)execute;
+
+- (WCDB::StatementDelete &)statement;
 
 @end

@@ -32,6 +32,16 @@ CopyOnWriteString DetachSTMT::SQL() const
     return description;
 }
 
+STMT::Type DetachSTMT::getSTMTType() const
+{
+    return STMT::Type::Detach;
+}
+
+STMT::Type DetachSTMT::getType()
+{
+    return STMT::Type::Detach;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

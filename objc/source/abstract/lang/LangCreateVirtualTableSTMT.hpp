@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class CreateVirtualTableSTMT : public Lang {
+class CreateVirtualTableSTMT : public STMT {
 public:
     CreateVirtualTableSTMT();
 
@@ -39,6 +39,9 @@ public:
     CopyOnWriteLazyLangList<ModuleArgument> moduleArguments;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

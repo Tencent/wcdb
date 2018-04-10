@@ -33,7 +33,6 @@ public:
     StatementDropTrigger &dropTrigger(const std::string &triggerName);
     StatementDropTrigger &withSchema(const std::string &schemaName);
     StatementDropTrigger &ifExists(bool ifExists = true);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class CreateViewSTMT : public Lang {
+class CreateViewSTMT : public STMT {
 public:
     CreateViewSTMT();
 
@@ -40,6 +40,9 @@ public:
     CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

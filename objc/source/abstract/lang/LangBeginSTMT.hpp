@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class BeginSTMT : public Lang {
+class BeginSTMT : public STMT {
 public:
     BeginSTMT();
     enum class Type : int {
@@ -39,6 +39,9 @@ public:
     Type type;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 
 protected:
     static constexpr const char *TypeName(const Type &type);

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/NoCopyData.hpp>
+#import <WCDB/WCTCommon.h>
 
 @interface NSData (NoCopyData)
 

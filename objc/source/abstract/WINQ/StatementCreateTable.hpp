@@ -42,7 +42,6 @@ public:
     StatementCreateTable &
     addTableConstraints(const std::list<TableConstraint> &tableConstraints);
     StatementCreateTable &withoutRowID();
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

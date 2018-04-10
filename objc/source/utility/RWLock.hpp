@@ -24,24 +24,20 @@
 #include <condition_variable>
 #include <mutex>
 
-//std::shared_lock is supported from C++14
+//TODO std::shared_mutex is supported from C++17
 
 namespace WCDB {
 
 class RWLock {
 public:
     RWLock();
-    ~RWLock();
     void lockRead();
     void unlockRead();
-    bool tryLockRead();
 
     void lockWrite();
     void unlockWrite();
-    bool tryLockWrite();
 
     bool isWriting() const;
-    bool isReading() const;
 
 protected:
     mutable std::mutex m_mutex;

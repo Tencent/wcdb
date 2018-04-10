@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/NSObject+Convertible.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTRuntimeCppAccessor.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
@@ -44,7 +45,7 @@ public:
         const std::string &pn,
         const std::string &cn,
         T * = nullptr,
-        typename std::enable_if<ColumnIsObjCType<T>::value>::type * = nullptr)
+        typename std::enable_if<WCDB::IsObjCType<T>::value>::type * = nullptr)
         : accessor(new WCTRuntimeObjCAccessor(cls, pn))
         , m_class(cls)
         , columnDef(WCDB::Column(cn))

@@ -25,7 +25,7 @@ namespace WCDB {
 CTETableName &CTETableName::byAddingColumn(const Column &column)
 {
     Lang::CTETableName &lang = getMutableLang();
-    lang.columns.append(column.getLang());
+    lang.columns.append(column.getCOWLang());
     return *this;
 }
 
@@ -33,7 +33,7 @@ CTETableName &CTETableName::byAddingColumns(const std::list<Column> &columns)
 {
     Lang::CTETableName &lang = getMutableLang();
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
     return *this;
 }

@@ -29,7 +29,9 @@
 
 - (const WCDB::NoCopyData)noCopyData
 {
-    return WCDB::NoCopyData((unsigned char *) self.bytes, self.length);
+    static const unsigned char *s_empty_data = (const unsigned char *) "";
+    const unsigned char *bytes = (const unsigned char *) self.bytes;
+    return WCDB::NoCopyData(bytes ? bytes : s_empty_data, self.length);
 }
 
 @end

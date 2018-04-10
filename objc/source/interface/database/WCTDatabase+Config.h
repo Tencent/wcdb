@@ -23,7 +23,7 @@
 /**
  Configuration
  */
-typedef BOOL (^WCTConfigCallback)(WCTUnsafeHandle *);
+typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
 
 @interface WCTDatabase (Config)
 
@@ -31,7 +31,7 @@ typedef BOOL (^WCTConfigCallback)(WCTUnsafeHandle *);
  @brief This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];
  @param cipherKey Cipher key.
  */
-- (void)setCipherKey:(NSData *)cipherKey;
+- (void)setCipherKey:(nonnull NSData *)cipherKey;
 
 /**
  @brief Set cipher key for a database. 
@@ -40,7 +40,7 @@ typedef BOOL (^WCTConfigCallback)(WCTUnsafeHandle *);
  @param cipherKey Cipher key.
  @param cipherPageSize Cipher Page Size
  */
-- (void)setCipherKey:(NSData *)cipherKey
+- (void)setCipherKey:(nonnull NSData *)cipherKey
     andCipherPageSize:(int)cipherPageSize;
 
 /**
@@ -55,8 +55,8 @@ typedef BOOL (^WCTConfigCallback)(WCTUnsafeHandle *);
  @param name The Identifier for this config
  @param order The smaller number is called first
  */
-- (void)setConfig:(WCTConfigCallback)config
-          forName:(NSString *)name
+- (void)setConfig:(nullable WCTConfigBlock)config
+          forName:(nonnull NSString *)name
         withOrder:(int)order;
 
 /**
@@ -65,7 +65,7 @@ typedef BOOL (^WCTConfigCallback)(WCTUnsafeHandle *);
  @param config config
  @param name The Identifier for this config
  */
-- (void)setConfig:(WCTConfigCallback)config
-          forName:(NSString *)name;
+- (void)setConfig:(nullable WCTConfigBlock)config
+          forName:(nonnull NSString *)name;
 
 @end

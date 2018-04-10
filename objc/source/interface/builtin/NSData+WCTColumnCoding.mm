@@ -18,41 +18,13 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#import <WCDB/Interface.h>
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
-
-@interface NSData (WCTColumnCoding) <WCTColumnCoding>
-@end
-
-@implementation NSData (WCTColumnCoding)
+@implementation NSData (ColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return self;
-}
-
-+ (WCDB::ColumnType)columnTypeForWCDB
-{
-    return WCDB::ColumnType::BLOB;
-}
-
-@end
-
-@interface NSMutableData (WCTColumnCoding) <WCTColumnCoding>
-@end
-
-@implementation NSMutableData (WCTColumnCoding)
-
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value ? [NSMutableData dataWithData:value] : nil;
+    return value ? [self dataWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue
@@ -66,5 +38,3 @@
 }
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

@@ -25,7 +25,7 @@ namespace WCDB {
 StatementUpdate &StatementUpdate::with(const WithClause &withClause)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
-    lang.withClause.assign(withClause.getLang());
+    lang.withClause.assign(withClause.getCOWLang());
     return *this;
 }
 
@@ -76,8 +76,8 @@ StatementUpdate &StatementUpdate::set(const Column &column,
 {
     Lang::CopyOnWriteLazyLang<Lang::UpdateSTMT::KeyValue> cowKeyValue;
     Lang::UpdateSTMT::KeyValue &keyValue = cowKeyValue.get_or_copy();
-    keyValue.keys.append(column.getLang());
-    keyValue.value.assign(expression.getLang());
+    keyValue.keys.append(column.getCOWLang());
+    keyValue.value.assign(expression.getCOWLang());
 
     Lang::UpdateSTMT &lang = getMutableLang();
     lang.keyValues.append(cowKeyValue);
@@ -90,9 +90,9 @@ StatementUpdate &StatementUpdate::set(const std::list<Column> &columns,
     Lang::CopyOnWriteLazyLang<Lang::UpdateSTMT::KeyValue> cowKeyValue;
     Lang::UpdateSTMT::KeyValue &keyValue = cowKeyValue.get_or_copy();
     for (const Column &column : columns) {
-        keyValue.keys.append(column.getLang());
+        keyValue.keys.append(column.getCOWLang());
     }
-    keyValue.value.assign(expression.getLang());
+    keyValue.value.assign(expression.getCOWLang());
 
     Lang::UpdateSTMT &lang = getMutableLang();
     lang.keyValues.append(cowKeyValue);
@@ -102,14 +102,14 @@ StatementUpdate &StatementUpdate::set(const std::list<Column> &columns,
 StatementUpdate &StatementUpdate::where(const Expression &condition)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
-    lang.condition.assign(condition.getLang());
+    lang.condition.assign(condition.getCOWLang());
     return *this;
 }
 
 StatementUpdate &StatementUpdate::orderBy(const OrderingTerm &orderingTerm)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
-    lang.orderingTerm.append(orderingTerm.getLang());
+    lang.orderingTerms.append(orderingTerm.getCOWLang());
     return *this;
 }
 
@@ -118,7 +118,7 @@ StatementUpdate::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
     for (const OrderingTerm &orderingTerm : orderingTerms) {
-        lang.orderingTerm.append(orderingTerm.getLang());
+        lang.orderingTerms.append(orderingTerm.getCOWLang());
     }
     return *this;
 }
@@ -128,8 +128,8 @@ StatementUpdate &StatementUpdate::limit(const Expression &from,
 {
     Lang::UpdateSTMT &lang = getMutableLang();
     lang.offset = false;
-    lang.limit.assign(from.getLang());
-    lang.limitParameter.assign(to.getLang());
+    lang.limit.assign(from.getCOWLang());
+    lang.limitParameter.assign(to.getCOWLang());
     return *this;
 }
 
@@ -137,28 +137,29 @@ StatementUpdate &StatementUpdate::limit(const Expression &limit)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
     lang.offset = true;
-    lang.limit.assign(limit.getLang());
+    lang.limit.assign(limit.getCOWLang());
     return *this;
 }
 
 StatementUpdate &StatementUpdate::offset(const Expression &offset)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
-    lang.limitParameter.assign(offset.getLang());
+    lang.limitParameter.assign(offset.getCOWLang());
     return *this;
-}
-
-Statement::Type StatementUpdate::getType() const
-{
-    return Statement::Type::Update;
 }
 
 void StatementUpdate::update(const QualifiedTableName &qualifiedTableName,
                              const Lang::UpdateSTMT::Type &type)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
-    lang.qualifiedTableName.assign(qualifiedTableName.getLang());
+    lang.qualifiedTableName.assign(qualifiedTableName.getCOWLang());
     lang.type = type;
+}
+
+bool StatementUpdate::isLimited() const
+{
+    const Lang::UpdateSTMT &lang = getCOWLang().get<Lang::UpdateSTMT>();
+    return !lang.orderingTerms.empty() || !lang.limit.empty();
 }
 
 } // namespace WCDB

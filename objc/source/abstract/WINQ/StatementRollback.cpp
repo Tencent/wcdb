@@ -22,15 +22,12 @@
 
 namespace WCDB {
 
-const StatementRollback StatementRollback::default_ =
-    StatementRollback().rollback();
-
-StatementRollback &StatementRollback::rollback()
-{
-    Lang::RollbackSTMT &lang = getMutableLang();
-    lang.savepointName.clear();
-    return *this;
-}
+const StatementRollback StatementRollback::rollback =
+    []() -> StatementRollback {
+    StatementRollback statement;
+    statement.getMutableLang();
+    return statement;
+}();
 
 StatementRollback &
 StatementRollback::rollbackTo(const std::string &savepointName)
@@ -38,11 +35,6 @@ StatementRollback::rollbackTo(const std::string &savepointName)
     Lang::RollbackSTMT &lang = getMutableLang();
     lang.savepointName.assign(savepointName);
     return *this;
-}
-
-Statement::Type StatementRollback::getType() const
-{
-    return Statement::Type::Rollback;
 }
 
 } // namespace WCDB

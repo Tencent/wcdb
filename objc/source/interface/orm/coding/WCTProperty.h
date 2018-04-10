@@ -31,10 +31,8 @@ public:
     WCTProperty(const WCDB::Expression &expression,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
 
-    WCTProperty atTable(NSString *tableName) const;
-    WCTProperty atTable(const std::string &tableName) const;
-    WCTProperty atSchema(NSString *schemaName) const;
-    WCTProperty atSchema(const std::string &schemaName) const;
+    WCTProperty inTable(NSString *tableName) const;
+    WCTProperty inSchema(NSString *schemaName) const;
 
     WCDB::IndexedColumn asIndex(WCDB::Order order = WCTOrderedNotSet) const;
     WCDB::OrderingTerm asOrder(WCDB::Order order = WCTOrderedNotSet) const;
@@ -48,6 +46,8 @@ public:
     operator WCDB::ResultColumn() const;
     operator WCDB::OrderingTerm() const;
     operator WCDB::IndexedColumn() const;
+    operator std::list<WCDB::ResultColumn>() const;
+    operator std::list<WCDB::OrderingTerm>() const;
 
 protected:
     virtual WCDB::Expression getRedirectSource() const override;
@@ -60,10 +60,15 @@ protected:
 
 class WCTPropertyList : public std::list<WCTProperty> {
 public:
-    WCTPropertyList();
+    using list<WCTProperty>::list;
     WCTPropertyList(const WCTProperty &property);
-    WCTPropertyList(const std::initializer_list<WCTProperty> &properties);
-    WCTPropertyList(const std::list<WCTProperty> &properties);
+
+    WCTPropertyList inTable(NSString *tableName) const;
+    WCTPropertyList inSchema(NSString *schemaName) const;
+
+    void addProperties(const WCTPropertyList &properties);
+
+    WCTPropertyList byAddingProperties(const WCTPropertyList &properties) const;
 
     operator std::list<WCDB::Column>() const;
     operator std::list<WCDB::Expression>() const;

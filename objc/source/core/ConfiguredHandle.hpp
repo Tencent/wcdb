@@ -28,8 +28,12 @@ namespace WCDB {
 
 class ConfiguredHandle {
 public:
+    ConfiguredHandle() = delete;
+    ConfiguredHandle(const ConfiguredHandle &) = delete;
+    ConfiguredHandle &operator=(const ConfiguredHandle &) = delete;
+
     static std::shared_ptr<ConfiguredHandle>
-    configuredHandleWithPath(const std::string &path);
+    configuredHandle(const std::shared_ptr<Handle> &handle);
 
     bool configured(const Configs &configs) const;
     bool configure(const Configs &configs);

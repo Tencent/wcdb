@@ -18,46 +18,40 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDatabase (ChainCall)
 
 - (WCTInsert *)prepareInsert
 {
-    return [[WCTInsert alloc] initWithDatabase:_database
-                           andRecyclableHandle:_database->flowOut()];
+    return [[WCTInsert alloc] initWithDatabase:_database];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[WCTDelete alloc] initWithDatabase:_database
-                           andRecyclableHandle:_database->flowOut()];
+    return [[WCTDelete alloc] initWithDatabase:_database];
 }
 
 - (WCTUpdate *)prepareUpdate
 {
-    return [[WCTUpdate alloc] initWithDatabase:_database
-                           andRecyclableHandle:_database->flowOut()];
+    return [[WCTUpdate alloc] initWithDatabase:_database];
 }
 
 - (WCTSelect *)prepareSelect
 {
-    return [[WCTSelect alloc] initWithDatabase:_database
-                           andRecyclableHandle:_database->flowOut()];
+    return [[WCTSelect alloc] initWithDatabase:_database];
 }
 
 - (WCTRowSelect *)prepareRowSelect
 {
-    return [[WCTRowSelect alloc] initWithDatabase:_database
-                              andRecyclableHandle:_database->flowOut()];
+    return [[WCTRowSelect alloc] initWithDatabase:_database];
 }
 
 - (WCTMultiSelect *)prepareMultiSelect
 {
-    return [[WCTMultiSelect alloc] initWithDatabase:_database
-                                andRecyclableHandle:_database->flowOut()];
+    return [[WCTMultiSelect alloc] initWithDatabase:_database];
 }
 
 @end

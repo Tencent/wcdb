@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#import <WCDB/Interface.h>
 #import <WCDB/NSData+NoCopyData.h>
-#import <WCDB/WCDB.h>
 #import <WCDB/WCTCore+Private.h>
 
 @implementation WCTCore
@@ -35,6 +35,11 @@
     return self;
 }
 
+- (const std::shared_ptr<WCDB::Database> &)database
+{
+    return _database;
+}
+
 - (WCTTag)tag
 {
     return _database->getTag();
@@ -43,6 +48,11 @@
 - (NSString *)path
 {
     return @(_database->getPath().c_str());
+}
+
+- (void)finalizeDatabase
+{
+    _database = nullptr;
 }
 
 @end

@@ -25,6 +25,8 @@
  */
 typedef void (^WCTCloseBlock)(void);
 
+typedef void (^WCTBlockadeBlock)(WCTHandle *);
+
 @interface WCTDatabase : WCTCore
 
 /**
@@ -104,6 +106,8 @@ typedef void (^WCTCloseBlock)(void);
  @see close:
  */
 - (void)blockade;
+
+- (bool)blockadeUntilDone:(WCTBlockadeBlock)onBlockaded;
 
 /**
  @brief Unblockade the database.

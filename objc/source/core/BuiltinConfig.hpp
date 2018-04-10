@@ -30,18 +30,18 @@ class BuiltinConfig {
 public:
     enum Order : int {
         Trace = 1,
-        Cipher = 2,
-        Basic = 3,
-        Checkpoint = 4,
-        Tokenize = 5,
+        Cipher,
+        Basic,
+        Checkpoint,
+        Tokenize,
     };
 
     static const Config basic;
 
     static const Config trace;
-    static void
-    SetGlobalPerformanceTrace(const PerformanceTraceCallback &globalTrace);
-    static void SetGlobalSQLTrace(const SQLTraceCallback &globalTrace);
+    static void SetGlobalPerformanceTrace(
+        const Handle::PerformanceTraceCallback &globalTrace);
+    static void SetGlobalSQLTrace(const Handle::SQLTraceCallback &globalTrace);
 
     static const Config
     cipherWithKey(const void *key, int keySize, int pageSize);
@@ -50,18 +50,13 @@ public:
 
     static const Config tokenizeWithNames(const std::list<std::string> &names);
 
-    static void removeKeyFromTimedQueue(const std::string &key);
+    static const Configs &defaultConfigs();
 
 protected:
-    static std::thread s_checkpointThread;
     static TimedQueue<std::string, const int> s_timedQueue;
-    static std::shared_ptr<PerformanceTraceCallback> s_globalPerformanceTrace;
-    static std::shared_ptr<SQLTraceCallback> s_globalSQLTrace;
-};
-
-class BuiltinConfigs {
-public:
-    static const Configs &defaultConfig();
+    static std::shared_ptr<Handle::PerformanceTraceCallback>
+        s_globalPerformanceTrace;
+    static std::shared_ptr<Handle::SQLTraceCallback> s_globalSQLTrace;
 };
 
 } //namespace WCDB

@@ -18,41 +18,39 @@
  * limitations under the License.
  */
 
-#import <WCDB/Database.hpp>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTStatistics.h>
 
 @implementation WCTStatistics
 
-+ (void)SetGlobalErrorReport:(WCTErrorReportCallback)report
++ (void)SetGlobalErrorReport:(WCTErrorReportBlock)block
 {
+    WCDB::Error::Report *report = WCDB::Error::Report::sharedReport();
     if (report) {
-        WCDB::Error::SetReportMethod([report](const WCDB::Error &error) {
-            report([WCTError errorWithWCDBError:error]);
+        report->setCallback([block](const WCDB::Error &error) {
+            block([WCTError errorWithWCDBError:error]);
         });
     } else {
-        WCDB::Error::SetReportMethod(nullptr);
+        report->setCallback(nullptr);
     }
 }
 
-+ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceCallback)trace
++ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceBlock)trace
 {
     if (trace) {
-        WCDB::BuiltinConfig::SetGlobalPerformanceTrace([trace](const std::map<const std::string, unsigned int> &footprint,
-                                                               const int64_t &cost) {
-            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-            for (const auto &iter : footprint) {
-                [dictionary setObject:@(iter.second)
-                               forKey:@(iter.first.c_str())];
+        WCDB::BuiltinConfig::SetGlobalPerformanceTrace([trace](WCDB::Database::Tag tag, const WCDB::Tracer::Footprints &footprints, const int64_t &cost) {
+            NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
+            for (const auto &footprint : footprints) {
+                [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:@(footprint.sql.c_str()) andFrequency:footprint.frequency]];
             }
-            trace(dictionary, (NSUInteger) cost);
+            trace(tag, array, (NSUInteger) cost);
         });
     } else {
         WCDB::BuiltinConfig::SetGlobalPerformanceTrace(nullptr);
     }
 }
 
-+ (void)SetGlobalSQLTrace:(WCTSQLTraceCallback)trace
++ (void)SetGlobalSQLTrace:(WCTSQLTraceBlock)trace
 {
     if (trace) {
         WCDB::BuiltinConfig::SetGlobalSQLTrace([trace](const std::string &sql) {
@@ -65,7 +63,7 @@
 
 + (void)ResetGlobalErrorReport
 {
-    WCDB::Error::ResetReportMethod();
+    WCDB::Error::Report::sharedReport()->resetCallback();
 }
 
 @end

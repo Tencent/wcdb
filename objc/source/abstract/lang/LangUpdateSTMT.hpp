@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class UpdateSTMT : public CRUDLang {
+class UpdateSTMT : public CRUDSTMT {
 public:
     UpdateSTMT();
 
@@ -55,12 +55,15 @@ public:
     CopyOnWriteLazyLangList<KeyValue> keyValues;
 
     CopyOnWriteLazyLang<Expr> condition;
-    CopyOnWriteLazyLangList<OrderingTerm> orderingTerm;
+    CopyOnWriteLazyLangList<OrderingTerm> orderingTerms;
     CopyOnWriteLazyLang<Expr> limit;
     bool offset;
     CopyOnWriteLazyLang<Expr> limitParameter;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 
 protected:
     static constexpr const char *TypeName(const Type &type);

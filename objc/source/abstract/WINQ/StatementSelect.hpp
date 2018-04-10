@@ -63,7 +63,7 @@ public:
     StatementSelect &limit(const Expression &limit);
     StatementSelect &offset(const Expression &offset);
 
-    virtual Type getType() const override;
+    bool isResultColumnsNotSet() const;
 
 protected:
     virtual Expression getRedirectSource() const override;

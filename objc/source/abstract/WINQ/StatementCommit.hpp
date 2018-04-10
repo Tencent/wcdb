@@ -28,10 +28,7 @@ namespace WCDB {
 class StatementCommit : public StatementWithLang<Lang::CommitSTMT> {
 
 public:
-    static const StatementCommit default_;
-
-    StatementCommit &commit();
-    virtual Type getType() const override;
+    static const StatementCommit commit;
 };
 
 } // namespace WCDB

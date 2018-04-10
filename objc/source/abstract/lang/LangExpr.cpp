@@ -38,11 +38,21 @@ CopyOnWriteString ExprColumn::SQL() const
     return description;
 }
 
+ExprBase::Type ExprColumn::getType() const
+{
+    return ExprBase::Type::Column;
+}
+
 CopyOnWriteString ExprUnaryOperation::SQL() const
 {
     assert(!expr.empty());
     return ExprUnaryOperation::OperatorName(unaryOperator) +
            expr.description().get();
+}
+
+ExprBase::Type ExprUnaryOperation::getType() const
+{
+    return ExprBase::Type::UnaryOperator;
 }
 
 constexpr const char *
@@ -67,6 +77,11 @@ CopyOnWriteString ExprBinaryOperation::SQL() const
     return left.description().get() +
            ExprBinaryOperation::OperatorName(binaryOperator) +
            right.description().get();
+}
+
+ExprBase::Type ExprBinaryOperation::getType() const
+{
+    return ExprBase::Type::BinaryOperator;
 }
 
 constexpr const char *
@@ -139,10 +154,20 @@ CopyOnWriteString ExprFunction::SQL() const
     return description;
 }
 
+ExprBase::Type ExprFunction::getType() const
+{
+    return ExprBase::Type::Function;
+}
+
 CopyOnWriteString ExprList::SQL() const
 {
     assert(!exprs.empty());
     return "(" + exprs.description().get() + ")";
+}
+
+ExprBase::Type ExprList::getType() const
+{
+    return ExprBase::Type::List;
 }
 
 CopyOnWriteString ExprCast::SQL() const
@@ -156,9 +181,19 @@ CopyOnWriteString ExprCast::SQL() const
     return description;
 }
 
+ExprBase::Type ExprCast::getType() const
+{
+    return ExprBase::Type::Cast;
+}
+
 CopyOnWriteString ExprCollate::SQL() const
 {
     return expr.description().get() + " COLLATE " + collationName.get();
+}
+
+ExprBase::Type ExprCollate::getType() const
+{
+    return ExprBase::Type::Collate;
 }
 
 CopyOnWriteString ExprPattern::SQL() const
@@ -176,6 +211,11 @@ CopyOnWriteString ExprPattern::SQL() const
         description.append(" ESCAPE " + escape.description().get());
     }
     return description;
+}
+
+ExprBase::Type ExprPattern::getType() const
+{
+    return ExprBase::Type::Pattern;
 }
 
 constexpr const char *ExprPattern::TypeName(const Type &pattern)
@@ -202,6 +242,11 @@ CopyOnWriteString ExprNull::SQL() const
     }
 }
 
+ExprBase::Type ExprNull::getType() const
+{
+    return ExprBase::Type::Null;
+}
+
 CopyOnWriteString ExprBetween::SQL() const
 {
     std::string description;
@@ -214,6 +259,11 @@ CopyOnWriteString ExprBetween::SQL() const
     description.append(" BETWEEN " + left.description().get() + " AND " +
                        right.description().get());
     return description;
+}
+
+ExprBase::Type ExprBetween::getType() const
+{
+    return ExprBase::Type::Between;
 }
 
 CopyOnWriteString ExprIn::SQL() const
@@ -261,6 +311,11 @@ CopyOnWriteString ExprIn::SQL() const
     return description;
 }
 
+ExprBase::Type ExprIn::getType() const
+{
+    return ExprBase::Type::In;
+}
+
 CopyOnWriteString ExprExists::SQL() const
 {
     std::string description;
@@ -278,6 +333,11 @@ CopyOnWriteString ExprExists::SQL() const
     return description;
 }
 
+ExprBase::Type ExprExists::getType() const
+{
+    return ExprBase::Type::Exists;
+}
+
 CopyOnWriteString ExprCase::SQL() const
 {
     std::string description("CASE ");
@@ -291,6 +351,11 @@ CopyOnWriteString ExprCase::SQL() const
     }
     description.append(" END");
     return description;
+}
+
+ExprBase::Type ExprCase::getType() const
+{
+    return ExprBase::Type::Case;
 }
 
 CopyOnWriteString ExprCase::Pair::SQL() const
@@ -376,6 +441,11 @@ CopyOnWriteString Expr::SQL() const
             assert(false);
             break;
     }
+}
+
+ExprBase::Type Expr::getType() const
+{
+    return ExprBase::Type::Expr;
 }
 
 } // namespace Lang

@@ -103,7 +103,7 @@ StatementCreateTrigger &StatementCreateTrigger::updateOf(const Column &column)
 {
     Lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = Lang::CreateTriggerSTMT::Operation::Update;
-    lang.columns.append(column.getLang());
+    lang.columns.append(column.getCOWLang());
     return *this;
 }
 
@@ -113,7 +113,7 @@ StatementCreateTrigger::updateOf(const std::list<Column> &columns)
     Lang::CreateTriggerSTMT &lang = getMutableLang();
     lang.operation = Lang::CreateTriggerSTMT::Operation::Update;
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
     return *this;
 }
@@ -136,7 +136,7 @@ StatementCreateTrigger &
 StatementCreateTrigger::when(const Expression &expression)
 {
     Lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
     return *this;
 }
 
@@ -144,13 +144,8 @@ StatementCreateTrigger &
 StatementCreateTrigger::run(const CRUDStatement &statement)
 {
     Lang::CreateTriggerSTMT &lang = getMutableLang();
-    lang.STMTs.append(statement.getCRUDLang());
+    lang.STMTs.append(statement.getCRUDSTMT());
     return *this;
-}
-
-Statement::Type StatementCreateTrigger::getType() const
-{
-    return Statement::Type::CreateTrigger;
 }
 
 } // namespace WCDB

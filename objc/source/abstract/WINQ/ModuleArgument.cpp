@@ -35,14 +35,14 @@ ModuleArgument::ModuleArgument(const ColumnDef &columnDef)
 {
     Lang::ModuleArgument &lang = getMutableLang();
     lang.type = Lang::ModuleArgument::Type::ColumnDef;
-    lang.columnDef.assign(columnDef.getLang());
+    lang.columnDef.assign(columnDef.getCOWLang());
 }
 
 ModuleArgument::ModuleArgument(const TableConstraint &tableConstraint)
 {
     Lang::ModuleArgument &lang = getMutableLang();
     lang.type = Lang::ModuleArgument::Type::TableConstraint;
-    lang.tableConstraint.assign(tableConstraint.getLang());
+    lang.tableConstraint.assign(tableConstraint.getCOWLang());
 }
 
 } // namespace WCDB

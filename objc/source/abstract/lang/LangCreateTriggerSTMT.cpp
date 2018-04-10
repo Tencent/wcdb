@@ -103,7 +103,7 @@ CreateTriggerSTMT::OperationName(const Operation &operation)
 
 template <>
 CopyOnWriteString
-CopyOnWriteLazyLangList<CRUDLang>::calculatedDescription() const
+CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const
 {
     std::string description;
     bool space = false;
@@ -117,6 +117,16 @@ CopyOnWriteLazyLangList<CRUDLang>::calculatedDescription() const
         description.append(element.description().get() + ";");
     }
     return description;
+}
+
+STMT::Type CreateTriggerSTMT::getSTMTType() const
+{
+    return STMT::Type::CreateTrigger;
+}
+
+STMT::Type CreateTriggerSTMT::getType()
+{
+    return STMT::Type::CreateTrigger;
 }
 
 } // namespace Lang

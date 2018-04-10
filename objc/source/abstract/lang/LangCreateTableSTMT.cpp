@@ -70,6 +70,16 @@ CopyOnWriteString CreateTableSTMT::SQL() const
     return description;
 }
 
+STMT::Type CreateTableSTMT::getSTMTType() const
+{
+    return STMT::Type::CreateTable;
+}
+
+STMT::Type CreateTableSTMT::getType()
+{
+    return STMT::Type::CreateTable;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

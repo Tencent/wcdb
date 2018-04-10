@@ -46,8 +46,8 @@ CopyOnWriteString UpdateSTMT::SQL() const
     if (!condition.empty()) {
         description.append(" WHERE " + condition.description().get());
     }
-    if (!orderingTerm.empty()) {
-        description.append(" ORDER BY " + orderingTerm.description().get());
+    if (!orderingTerms.empty()) {
+        description.append(" ORDER BY " + orderingTerms.description().get());
         assert(!limit.empty());
     }
     if (!limit.empty()) {
@@ -88,6 +88,16 @@ constexpr const char *UpdateSTMT::TypeName(const Type &type)
 CopyOnWriteString UpdateSTMT::KeyValue::SQL() const
 {
     return keys.description().get() + " = " + value.description().get();
+}
+
+STMT::Type UpdateSTMT::getSTMTType() const
+{
+    return STMT::Type::Update;
+}
+
+STMT::Type UpdateSTMT::getType()
+{
+    return STMT::Type::Update;
 }
 
 } // namespace Lang

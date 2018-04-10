@@ -29,42 +29,43 @@ namespace WCDB {
 
 class Describable {
 public:
-    virtual const std::string &getDescription() const = 0;
+    Describable() {}
 
-protected:
-    static const std::string s_empty;
-};
-
-template <typename T>
-class WithLang {
-public:
-    WithLang() {}
-
-    WithLang(const Lang::CopyOnWriteLazyLang<T> &lang) : m_lang(lang) {}
-
-    T &getMutableLang() { return m_lang.get_or_copy(); }
-    const Lang::CopyOnWriteLazyLang<T> &getLang() const { return m_lang; }
-
-private:
-    Lang::CopyOnWriteLazyLang<T> m_lang;
-};
-
-template <typename T>
-class DescribableWithLang : public Describable, public WithLang<T> {
-public:
-    DescribableWithLang() {}
-    DescribableWithLang(const Lang::CopyOnWriteLazyLang<T> &lang)
-        : WithLang<T>(lang)
+    Describable(const Lang::CopyOnWriteLazyLang<Lang::Lang> &cowLang)
+        : m_cowLang(cowLang)
     {
     }
 
-    virtual const std::string &getDescription() const override
+    template <typename T>
+    Describable(const Lang::CopyOnWriteLazyLang<T> &cowLang)
+        : m_cowLang(cowLang)
     {
-        if (!this->getLang().empty()) {
-            return this->getLang().description().get();
+    }
+
+    const std::string &getDescription() const
+    {
+        if (!m_cowLang.empty()) {
+            return m_cowLang.description().get();
         }
         return Describable::s_empty;
     }
+
+    Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang() { return m_cowLang; }
+    const Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang() const
+    {
+        return m_cowLang;
+    }
+
+protected:
+    static const std::string s_empty;
+    Lang::CopyOnWriteLazyLang<Lang::Lang> m_cowLang;
+};
+
+template <typename T>
+class DescribableWithLang : public Describable {
+public:
+    using Describable::Describable;
+    T &getMutableLang() { return this->m_cowLang.template get_or_copy<T>(); }
 };
 
 typedef Lang::Order Order;

@@ -21,11 +21,17 @@
 #ifndef Abstract_h
 #define Abstract_h
 
+#include <WCDB/Lang.h>
+
+#include <WCDB/WINQ.h>
+
 #include <WCDB/ColumnType.hpp>
 #include <WCDB/ConvertibleImpl.hpp>
 #include <WCDB/Handle.hpp>
-#include <WCDB/Lang.h>
+#include <WCDB/HandleError.hpp>
+#include <WCDB/HandleStatement.hpp>
+#include <WCDB/SQLiteError.hpp>
 #include <WCDB/Tokenize.hpp>
-#include <WCDB/WINQ.h>
+#include <WCDB/Tracer.hpp>
 
 #endif /* Abstract_h */

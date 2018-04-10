@@ -104,12 +104,12 @@ public:
     Expression in(const std::list<Expression> &expressions) const;
     Expression notIn(const std::list<Expression> &expressions) const;
 
-    Expression inTable(const std::string &tableName) const;
-    Expression notInTable(const std::string &tableName) const;
-    Expression inTable(const std::string &schemaName,
-                       const std::string &tableName) const;
-    Expression notInTable(const std::string &schemaName,
-                          const std::string &tableName) const;
+    Expression in(const std::string &tableName) const;
+    Expression notIn(const std::string &tableName) const;
+    Expression in(const std::string &schemaName,
+                  const std::string &tableName) const;
+    Expression notIn(const std::string &schemaName,
+                     const std::string &tableName) const;
 
     Expression inFunction(const std::string &functionName) const;
     Expression notInFunction(const std::string &functionName) const;
@@ -173,12 +173,11 @@ private:
     Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     in(const std::list<Expression> &expressions, bool isNot) const;
 
-    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
-    inTable(const std::string &tableName, bool isNot) const;
-    Lang::CopyOnWriteLazyLang<Lang::ExprIn>
-    inTable(const std::string &schemaName,
-            const std::string &tableName,
-            bool isNot) const;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> in(const std::string &tableName,
+                                               bool isNot) const;
+    Lang::CopyOnWriteLazyLang<Lang::ExprIn> in(const std::string &schemaName,
+                                               const std::string &tableName,
+                                               bool isNot) const;
 
     Lang::CopyOnWriteLazyLang<Lang::ExprIn>
     inFunction(const std::string &functionName, bool isNot) const;

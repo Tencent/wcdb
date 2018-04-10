@@ -30,7 +30,6 @@ class StatementRelease : public StatementWithLang<Lang::ReleaseSTMT> {
 
 public:
     StatementRelease &release(const std::string &savepointName);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

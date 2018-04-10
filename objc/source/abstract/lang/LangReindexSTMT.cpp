@@ -50,6 +50,16 @@ CopyOnWriteString ReindexSTMT::SQL() const
     return description;
 }
 
+STMT::Type ReindexSTMT::getSTMTType() const
+{
+    return STMT::Type::Reindex;
+}
+
+STMT::Type ReindexSTMT::getType()
+{
+    return STMT::Type::Reindex;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

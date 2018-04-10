@@ -27,7 +27,30 @@ namespace WCDB {
 
 namespace Lang {
 
+//TODO: remove it
 class ExprBase : public Lang {
+public:
+    enum class Type : int {
+        NotSet,
+        LiteralValue,
+        BindParameter,
+        Column,
+        UnaryOperator,
+        BinaryOperator,
+        Function,
+        List,
+        Cast,
+        Collate,
+        Pattern,
+        Null,
+        Between,
+        In,
+        Exists,
+        Case,
+        RaiseFunction,
+        Expr,
+    };
+    virtual Type getType() const = 0;
 };
 class ExprColumn;
 class ExprUnaryOperation;
@@ -51,6 +74,7 @@ public:
     CopyOnWriteLazyLang<Column> column;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprUnaryOperation : public ExprBase {
@@ -65,6 +89,7 @@ public:
     CopyOnWriteLazyLang<ExprBase> expr;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 
 private:
     static constexpr const char *OperatorName(const Operator &unaryOpeartor);
@@ -99,6 +124,7 @@ public:
     Operator binaryOperator;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 
 private:
     static constexpr const char *OperatorName(const Operator &binaryOpeartor);
@@ -117,6 +143,7 @@ public:
     CopyOnWriteLazyLangList<ExprBase> exprs;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual ExprBase::Type getType() const override;
 };
 
 class ExprList : public ExprBase {
@@ -124,6 +151,7 @@ public:
     CopyOnWriteLazyLangList<ExprBase> exprs;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprCast : public ExprBase {
@@ -132,6 +160,7 @@ public:
     ColumnType type;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprCollate : public ExprBase {
@@ -140,6 +169,7 @@ public:
     CopyOnWriteString collationName;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprPattern : public ExprBase {
@@ -157,6 +187,7 @@ public:
     CopyOnWriteLazyLang<ExprBase> escape;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual ExprBase::Type getType() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
@@ -168,6 +199,7 @@ public:
     bool isNull;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprBetween : public ExprBase {
@@ -178,6 +210,7 @@ public:
     CopyOnWriteLazyLang<ExprBase> right;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprIn : public ExprBase {
@@ -200,6 +233,7 @@ public:
     CopyOnWriteString tableNameOrFunction;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprExists : public ExprBase {
@@ -209,6 +243,7 @@ public:
     CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 class ExprCase : public ExprBase {
@@ -228,6 +263,7 @@ public:
     CopyOnWriteLazyLang<ExprBase> exprElse;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 template <>
@@ -238,25 +274,6 @@ class Expr : public ExprBase {
 public:
     Expr();
 
-    enum class Type : int {
-        NotSet,
-        LiteralValue,
-        BindParameter,
-        Column,
-        UnaryOperator,
-        BinaryOperator,
-        Function,
-        List,
-        Cast,
-        Collate,
-        Pattern,
-        Null,
-        Between,
-        In,
-        Exists,
-        Case,
-        RaiseFunction,
-    };
     Type type;
 
     CopyOnWriteLazyLang<LiteralValue> literalValue;
@@ -277,6 +294,7 @@ public:
     CopyOnWriteLazyLang<RaiseFunction> raiseFunction;
 
     virtual CopyOnWriteString SQL() const override;
+    virtual Type getType() const override;
 };
 
 } // namespace Lang

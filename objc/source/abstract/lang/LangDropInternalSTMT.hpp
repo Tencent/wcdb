@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class DropInternalSTMT : public Lang {
+class DropInternalSTMT : public STMT {
 public:
     DropInternalSTMT();
 

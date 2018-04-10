@@ -28,6 +28,8 @@ namespace WCDB {
 
 class StatementUpdate : public CRUDStatementWithLang<Lang::UpdateSTMT> {
 public:
+    using CRUDStatementWithLang<Lang::UpdateSTMT>::CRUDStatementWithLang;
+
     StatementUpdate &with(const WithClause &withClause);
     StatementUpdate &update(const QualifiedTableName &qualifiedTableName);
     StatementUpdate &
@@ -53,7 +55,7 @@ public:
     StatementUpdate &limit(const Expression &limit);
     StatementUpdate &offset(const Expression &offset);
 
-    virtual Type getType() const override;
+    bool isLimited() const;
 
 protected:
     void update(const QualifiedTableName &qualifiedTableName,

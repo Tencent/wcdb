@@ -53,6 +53,16 @@ constexpr const char *BeginSTMT::TypeName(const Type &type)
     }
 }
 
+STMT::Type BeginSTMT::getSTMTType() const
+{
+    return STMT::Type::Begin;
+}
+
+STMT::Type BeginSTMT::getType()
+{
+    return STMT::Type::Begin;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

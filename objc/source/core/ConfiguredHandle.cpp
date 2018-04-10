@@ -23,9 +23,8 @@
 namespace WCDB {
 
 std::shared_ptr<ConfiguredHandle>
-ConfiguredHandle::configuredHandleWithPath(const std::string &path)
+ConfiguredHandle::configuredHandle(const std::shared_ptr<Handle> &handle)
 {
-    std::shared_ptr<Handle> handle = Handle::handleWithPath(path);
     if (handle) {
         return std::shared_ptr<ConfiguredHandle>(new ConfiguredHandle(handle));
     }

@@ -26,7 +26,7 @@
 /**
  Builtin ORM for "sqlite_master" table. For further information, see https://www.sqlite.org/faq.html
  */
-@interface WCTMaster (WCTTableCoding) <WCTTableCoding>
+@interface WCTMaster (TableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(type)
 WCDB_PROPERTY(name)

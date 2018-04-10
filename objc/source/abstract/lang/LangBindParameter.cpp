@@ -24,36 +24,34 @@ namespace WCDB {
 
 namespace Lang {
 
-BindParameter::BindParameter() : type(Type::NotSet), n(0)
+BindParameter::BindParameter() : n(0)
+//, type(Type::NotSet)
 {
 }
 
 CopyOnWriteString BindParameter::SQL() const
 {
     std::string description;
-    switch (type) {
-        case Type::QuestionMark:
-            description.assign("?");
-            break;
-        case Type::QuestionMarkWithNumber:
-            description.assign("?" + std::to_string(n));
-            break;
-        case Type::Colon:
-            assert(!name.empty());
-            description.append(":" + name.get());
-            break;
-        case Type::At:
-            assert(!name.empty());
-            description.append("@" + name.get());
-            break;
-        case Type::DollarSign:
-            assert(!name.empty());
-            description.append("$" + name.get());
-            break;
-        default:
-            assert(false);
-            ;
-    }
+    //    switch (type) {
+    //        case Type::QuestionMark:
+    description.assign("?" + std::to_string(n));
+    //            break;
+    //        case Type::Colon:
+    //            assert(!name.empty());
+    //            description.append(":" + name.get());
+    //            break;
+    //        case Type::At:
+    //            assert(!name.empty());
+    //            description.append("@" + name.get());
+    //            break;
+    //        case Type::DollarSign:
+    //            assert(!name.empty());
+    //            description.append("$" + name.get());
+    //            break;
+    //        default:
+    //            assert(false);
+    //            ;
+    //    }
     return description;
 }
 

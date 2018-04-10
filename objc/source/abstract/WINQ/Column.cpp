@@ -22,6 +22,8 @@
 
 namespace WCDB {
 
+const Column Column::rowid("rowid");
+
 Column::Column(const std::string &name)
 {
     Lang::Column &lang = getMutableLang();
@@ -30,7 +32,7 @@ Column::Column(const std::string &name)
 
 Lang::CopyOnWriteLazyLang<Lang::Expr> Column::getExpressionLang() const
 {
-    return Expression(*this).getLang();
+    return Expression(*this).getCOWLang();
 }
 
 Column::Column(const Lang::CopyOnWriteLazyLang<Lang::Column> &column)

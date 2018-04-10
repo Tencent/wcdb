@@ -37,21 +37,21 @@
  @param extraFiles extraFiles
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(NSString *)directory
-              withExtraFiles:(NSArray<NSString *> *)extraFiles;
+- (BOOL)moveFilesToDirectory:(nonnull NSString *)directory
+              withExtraFiles:(nullable NSArray<NSString *> *)extraFiles;
 
 /**
  @brief This interface is equivalent to [database moveFilesToDirectory:directory withExtraFiles:nil andError:error].
  @param directory destination
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(NSString *)directory;
+- (BOOL)moveFilesToDirectory:(nonnull NSString *)directory;
 
 /**
  @brief Paths to all database-related files.
  @return paths
  */
-- (NSArray<NSString *> *)paths;
+- (nonnull NSArray<NSString *> *)paths;
 
 /**
  @brief Get the space used by the database files.

@@ -46,4 +46,6 @@
  */
 - (NSString *)path;
 
+- (void)finalizeDatabase;
+
 @end

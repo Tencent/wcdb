@@ -24,70 +24,81 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
+#include <WCDB/CoreError.hpp>
 #include <WCDB/Error.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/RWLock.hpp>
-#include <WCDB/Recyclable.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/String.hpp>
+#include <WCDB/ThreadLocal.hpp>
 #include <unordered_map>
 
 namespace WCDB {
 
-class HandlePool;
-typedef Recyclable<std::shared_ptr<HandlePool>> RecyclableHandlePool;
-
 class HandlePool {
+#pragma mark - Initialize
 public:
-    static RecyclableHandlePool GetPool(const std::string &path);
-    static RecyclableHandlePool GetExistingPool(Tag tag);
-    static RecyclableHandlePool GetExistingPool(const std::string &path);
+    friend class HandlePools;
 
-    static void PurgeFreeHandlesInAllPool();
+    HandlePool() = delete;
+    HandlePool(const HandlePool &) = delete;
+    HandlePool &operator=(const HandlePool &) = delete;
+    HandlePool(const std::string &path, const Configs &configs);
 
-protected:
-    static RecyclableHandlePool GetExistingPool(
-        const std::unordered_map<
-            std::string,
-            std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
-
-protected:
-    static std::unordered_map<std::string,
-                              std::pair<std::shared_ptr<HandlePool>, int>>
-        s_pools; //path->{pool, reference}
-    static std::mutex s_mutex;
-
+#pragma mark - Basic
 public:
+    using Tag = Handle::Tag;
     std::atomic<Tag> tag;
     const std::string path;
 
-    RecyclableHandle flowOut();
-    bool fillOne();
+#pragma mark - Error
+public:
     const Error &getThreadedError() const;
-    void setAndReportThreadedError(const Error &error) const;
-    void resetThreadedError() const;
+    void setThreadedError(const HandleError &error) const;
+    void setThreadedError(const FileError &error) const;
+    void setThreadedError(const CoreError &error) const;
 
-    bool isDrained();
-    typedef std::function<void(void)> DrainedCallback;
-    void blockade();
-    void drain(const HandlePool::DrainedCallback &onDrained);
-    void unblockade();
-    bool isBlockaded() const;
+protected:
+    void setAndReportCoreError(const std::string &message);
+    using ThreadedErrors =
+        std::unordered_map<const HandlePool *, std::shared_ptr<Error>>;
+    static ThreadLocal<ThreadedErrors> s_threadedErrors;
+    std::shared_ptr<Error> &getThreadedErrors() const;
 
-    void purgeFreeHandles();
-
+#pragma mark - Config
+public:
     void setConfig(const std::string &name, const Config::Callback &callback);
     void setConfig(const Config &config);
 
-    ~HandlePool();
+protected:
+    Configs m_configs;
+
+#pragma mark - Handle
+public:
+    virtual RecyclableHandle flowOut();
+    bool canFlowOut();
+
+    /**
+     It will be trigger when pool is blockaded and handle is generated and configured successfully.
+     */
+    typedef std::function<void(Handle *)> BlockadeCallback;
+    void blockade();
+    bool blockadeUntilDone(const BlockadeCallback &onBlockaded);
+    bool isBlockaded() const;
+    void unblockade();
+
+    typedef std::function<void(void)> DrainedCallback;
+    void drain(const HandlePool::DrainedCallback &onDrained);
+    bool isDrained();
+
+    void purgeFreeHandles();
 
 protected:
-    HandlePool(const std::string &path, const Configs &configs);
-    HandlePool(const HandlePool &) = delete;
-    HandlePool &operator=(const HandlePool &) = delete;
+    void willConfigurateHandle(Handle *handle);
+    std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
+    std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
+    virtual std::shared_ptr<Handle> generateHandle();
 
-    std::shared_ptr<ConfiguredHandle> generate();
-
-    Configs m_configs;
     RWLock m_rwlock;
 
     void flowBack(const std::shared_ptr<ConfiguredHandle> &handleWrap);
@@ -96,9 +107,6 @@ protected:
     std::atomic<int> m_aliveHandleCount;
     static const int s_hardwareConcurrency;
     static const int s_maxConcurrency;
-
-    static ThreadLocal<std::unordered_map<const HandlePool *, Error>>
-        s_threadedErrors;
 };
 
 } //namespace WCDB

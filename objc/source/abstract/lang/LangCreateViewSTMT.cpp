@@ -51,6 +51,16 @@ CopyOnWriteString CreateViewSTMT::SQL() const
     return description;
 }
 
+STMT::Type CreateViewSTMT::getSTMTType() const
+{
+    return STMT::Type::CreateView;
+}
+
+STMT::Type CreateViewSTMT::getType()
+{
+    return STMT::Type::CreateView;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

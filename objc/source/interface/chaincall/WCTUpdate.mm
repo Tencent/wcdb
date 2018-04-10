@@ -18,13 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
     WCTPropertyList _properties;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _finalizeLevel = WCTFinalizeLevelDatabase;
+    }
+    return self;
 }
 
 - (instancetype)table:(NSString *)tableName
@@ -36,16 +44,10 @@
 - (instancetype)onProperties:(const WCTPropertyList &)properties
 {
     _properties = properties;
+    int bindParameterIndex = 0;
     for (const WCTProperty &property : properties) {
-        _statement.set(property, WCDB::BindParameter::default_);
+        _statement.set(property, WCDB::BindParameter(++bindParameterIndex));
     }
-    return self;
-}
-
-- (instancetype)onProperty:(const WCTProperty &)property
-{
-    _properties = property;
-    _statement.set(property, WCDB::BindParameter::default_);
     return self;
 }
 
@@ -78,33 +80,23 @@
     if (object == nil) {
         return YES;
     }
-    if (!_handle->prepare(_statement)) {
-        return NO;
+    BOOL result;
+    if (_properties.empty()) {
+        result = [self execute:_statement withObject:object];
+    } else {
+        result = [self execute:_statement withObject:object onProperties:_properties];
     }
-    const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
-    int index = 1;
-    for (const WCTProperty &property : properties) {
-        [self bindProperty:property
-                  ofObject:object
-                   toIndex:index];
-        ++index;
-    }
-    bool result = _handle->step();
-    _handle->finalize();
+    [self doAutoFinalize:!result];
     return result;
 }
 
-- (BOOL)executeWithValue:(WCTValue *)value
+- (BOOL)executeWithValue:(WCTColumnCodingValue *)value
 {
     if (value == nil) {
         return YES;
     }
-    if (!_handle->prepare(_statement)) {
-        return NO;
-    }
-    [self bindValue:value toIndex:1];
-    bool result = _handle->step();
-    _handle->finalize();
+    BOOL result = [self execute:_statement withValue:value];
+    [self doAutoFinalize:!result];
     return result;
 }
 
@@ -113,17 +105,14 @@
     if (row.count == 0) {
         return YES;
     }
-    if (!_handle->prepare(_statement)) {
-        return NO;
-    }
-    int index = 1;
-    for (WCTValue *value in row) {
-        [self bindValue:value toIndex:index];
-        ++index;
-    }
-    bool result = _handle->step();
-    _handle->finalize();
+    BOOL result = [self execute:_statement withRow:row];
+    [self doAutoFinalize:!result];
     return result;
+}
+
+- (WCDB::StatementUpdate &)statement
+{
+    return _statement;
 }
 
 @end

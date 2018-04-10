@@ -22,15 +22,10 @@
 
 namespace WCDB {
 
-Statement::Type StatementAttach::getType() const
-{
-    return Statement::Type::Attach;
-}
-
 StatementAttach &StatementAttach::attach(const Expression &expression)
 {
     Lang::AttachSTMT &lang = getMutableLang();
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
     return *this;
 }
 

@@ -29,9 +29,4 @@ StatementDetach &StatementDetach::detach(const std::string &schemaName)
     return *this;
 }
 
-Statement::Type StatementDetach::getType() const
-{
-    return Statement::Type::Detach;
-}
-
 } // namespace WCDB

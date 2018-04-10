@@ -39,6 +39,16 @@ CopyOnWriteString PragmaSTMT::SQL() const
     return description;
 }
 
+STMT::Type PragmaSTMT::getSTMTType() const
+{
+    return STMT::Type::Pragma;
+}
+
+STMT::Type PragmaSTMT::getType()
+{
+    return STMT::Type::Pragma;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

@@ -27,12 +27,15 @@ namespace WCDB {
 
 namespace Lang {
 
-class AttachSTMT : public Lang {
+class AttachSTMT : public STMT {
 public:
     CopyOnWriteLazyLang<Expr> expr;
     CopyOnWriteString schemaName;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

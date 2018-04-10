@@ -69,7 +69,7 @@ ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Check;
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
     return *this;
 }
 
@@ -79,7 +79,7 @@ ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Default;
     lang.defaultSwitcher = Lang::ColumnConstraint::DefaultSwitch::LiteralValue;
-    lang.literalValue.assign(literalValue.getLang());
+    lang.literalValue.assign(literalValue.getCOWLang());
     return *this;
 }
 
@@ -89,7 +89,7 @@ ColumnConstraint::withDefaultExpression(const Expression &expression)
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Default;
     lang.defaultSwitcher = Lang::ColumnConstraint::DefaultSwitch::Expr;
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
     return *this;
 }
 
@@ -107,7 +107,7 @@ ColumnConstraint::withForeignKeyClause(const ForeignKeyClause &foreignKeyClause)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::ForeignKeyClause;
-    lang.foreignKeyClause.assign(foreignKeyClause.getLang());
+    lang.foreignKeyClause.assign(foreignKeyClause.getCOWLang());
     return *this;
 }
 

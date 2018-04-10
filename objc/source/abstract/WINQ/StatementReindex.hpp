@@ -34,7 +34,6 @@ public:
     StatementReindex &withSchema(const std::string &schemaName);
 
     StatementReindex &reindexCollation(const std::string &collationName);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

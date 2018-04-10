@@ -38,7 +38,6 @@ public:
     StatementCreateView &on(const Column &column);
     StatementCreateView &on(const std::list<Column> &columns);
     StatementCreateView &as(const StatementSelect &selectSTMT);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

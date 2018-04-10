@@ -23,15 +23,13 @@
 /**
  Not Thread-safe
  */
-@interface WCTSelect : WCTSelectable
+@interface WCTSelect <ObjectType> : WCTSelectable
 
-- (instancetype)fromTable:(NSString *)tableName;
+- (nonnull instancetype)fromTable:(nonnull NSString *)tableName;
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties;
+- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
 
-- (instancetype)onProperty:(const WCTProperty &)property;
-
-- (instancetype)ofClass:(Class<WCTTableCoding>)cls;
+- (nonnull instancetype)ofClass:(nonnull Class<WCTTableCoding>)cls;
 
 /**
  @brief Get next selected object. You can do an iteration using it.
@@ -43,13 +41,13 @@
  
  @return The real type of WCTObject depends on your selection and ORM.
  */
-- (id /* WCTObject* */)nextObject;
+- (nullable ObjectType)nextObject;
 
 /**
  @brief Get all selected objects.
  @return The NSArray collection of WCTObject.
          The real type of WCTObject depends on your selection and ORM.
  */
-- (NSArray /* <WCTObject*> */ *)allObjects;
+- (nullable NSArray<ObjectType> *)allObjects;
 
 @end

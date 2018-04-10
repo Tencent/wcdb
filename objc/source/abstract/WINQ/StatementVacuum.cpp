@@ -35,9 +35,4 @@ StatementVacuum &StatementVacuum::vacuum(const std::string &schemaName)
     return *this;
 }
 
-Statement::Type StatementVacuum::getType() const
-{
-    return Statement::Type::Vacuum;
-}
-
 } // namespace WCDB

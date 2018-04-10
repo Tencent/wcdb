@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTUnsafeHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTSelectable : WCTHandle
+@interface WCTSelectable : WCTUnsafeHandle
 
 - (instancetype)distinct;
 
@@ -74,5 +74,9 @@
  @return self
  */
 - (instancetype)having:(const WCDB::Expression &)having;
+
+- (WCDB::StatementSelect &)statement;
+
+- (instancetype)autoFinalizeImmediately;
 
 @end

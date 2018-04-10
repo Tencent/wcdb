@@ -26,13 +26,13 @@ WCTProperty::WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding)
 {
     assert(columnBinding != nullptr);
     WCDB::Lang::Expr &lang = getMutableLang();
-    lang.type = WCDB::Lang::Expr::Type::Column;
-    lang.exprColumn.get_or_copy().column.assign(m_columnBinding->columnDef.getLang().get().column);
+    lang.type = WCDB::Lang::ExprBase::Type::Column;
+    lang.exprColumn.get_or_copy().column.assign(m_columnBinding->columnDef.getCOWLang().get<WCDB::Lang::ColumnDef>().column);
 }
 
 WCTProperty::WCTProperty(const WCDB::Expression &expression,
                          const std::shared_ptr<WCTColumnBinding> &columnBinding)
-    : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getLang())
+    : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getCOWLang())
     , m_columnBinding(columnBinding)
 {
     assert(columnBinding != nullptr);
@@ -40,12 +40,12 @@ WCTProperty::WCTProperty(const WCDB::Expression &expression,
 
 WCTProperty::operator WCDB::Column() const
 {
-    return m_columnBinding->columnDef.getLang().get().column;
+    return m_columnBinding->columnDef.getCOWLang().get<WCDB::Lang::ColumnDef>().column;
 }
 
 WCTProperty::operator WCDB::Expression() const
 {
-    return getLang();
+    return WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>(getCOWLang());
 }
 
 WCTProperty::operator WCDB::ResultColumn() const
@@ -63,31 +63,29 @@ WCTProperty::operator WCDB::IndexedColumn() const
     return operator WCDB::Expression();
 }
 
-WCTProperty WCTProperty::atTable(NSString *tableName) const
+WCTProperty::operator std::list<WCDB::ResultColumn>() const
 {
-    WCDB::Expression expression(getLang());
+    return operator WCDB::ResultColumn();
+}
+
+WCTProperty::operator std::list<WCDB::OrderingTerm>() const
+{
+    return operator WCDB::OrderingTerm();
+}
+
+WCTProperty WCTProperty::inTable(NSString *tableName) const
+{
+    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(getCOWLang());
+    WCDB::Expression expression(cowLang);
     expression.withTable(tableName.UTF8String);
     return WCTProperty(expression, m_columnBinding);
 }
 
-WCTProperty WCTProperty::atTable(const std::string &tableName) const
+WCTProperty WCTProperty::inSchema(NSString *schemaName) const
 {
-    WCDB::Expression expression(getLang());
-    expression.withTable(tableName);
-    return WCTProperty(expression, m_columnBinding);
-}
-
-WCTProperty WCTProperty::atSchema(NSString *schemaName) const
-{
-    WCDB::Expression expression(getLang());
+    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(getCOWLang());
+    WCDB::Expression expression(cowLang);
     expression.withSchema(schemaName.UTF8String);
-    return WCTProperty(expression, m_columnBinding);
-}
-
-WCTProperty WCTProperty::atSchema(const std::string &schemaName) const
-{
-    WCDB::Expression expression(getLang());
-    expression.withSchema(schemaName);
     return WCTProperty(expression, m_columnBinding);
 }
 
@@ -98,12 +96,12 @@ const std::shared_ptr<WCTColumnBinding> &WCTProperty::getColumnBinding() const
 
 WCDB::IndexedColumn WCTProperty::asIndex(WCDB::Order order) const
 {
-    return WCDB::IndexedColumn(WCDB::Expression(getLang())).withOrder(order);
+    return WCDB::IndexedColumn(WCDB::Expression(WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>(getCOWLang()))).withOrder(order);
 }
 
 WCDB::OrderingTerm WCTProperty::asOrder(WCDB::Order order) const
 {
-    return WCDB::OrderingTerm(getLang()).withOrder(order);
+    return WCDB::OrderingTerm(WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>(getCOWLang())).withOrder(order);
 }
 
 const WCDB::ColumnDef &WCTProperty::getColumnDef() const
@@ -113,17 +111,12 @@ const WCDB::ColumnDef &WCTProperty::getColumnDef() const
 
 WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> WCTProperty::getExpressionLang() const
 {
-    return getLang();
+    return getCOWLang();
 }
 
 WCDB::Expression WCTProperty::getRedirectSource() const
 {
-    return getLang();
-}
-
-WCTPropertyList::WCTPropertyList()
-    : std::list<WCTProperty>()
-{
+    return WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>(getCOWLang());
 }
 
 WCTPropertyList::WCTPropertyList(const WCTProperty &property)
@@ -131,14 +124,36 @@ WCTPropertyList::WCTPropertyList(const WCTProperty &property)
 {
 }
 
-WCTPropertyList::WCTPropertyList(const std::initializer_list<WCTProperty> &properties)
-    : std::list<WCTProperty>(properties)
+WCTPropertyList WCTPropertyList::inTable(NSString *tableName) const
 {
+    WCTPropertyList properties;
+    for (const WCTProperty &property : *this) {
+        properties.push_back(property.inTable(tableName));
+    }
+    return properties;
 }
 
-WCTPropertyList::WCTPropertyList(const std::list<WCTProperty> &properties)
-    : std::list<WCTProperty>(properties)
+WCTPropertyList WCTPropertyList::inSchema(NSString *schemaName) const
 {
+    WCTPropertyList properties;
+    for (const WCTProperty &property : *this) {
+        properties.push_back(property.inSchema(schemaName));
+    }
+    return properties;
+}
+
+void WCTPropertyList::addProperties(const WCTPropertyList &properties)
+{
+    for (const WCTProperty &property : properties) {
+        push_back(property);
+    }
+}
+
+WCTPropertyList WCTPropertyList::byAddingProperties(const WCTPropertyList &properties) const
+{
+    WCTPropertyList newProperties = *this;
+    newProperties.addProperties(properties);
+    return newProperties;
 }
 
 WCTPropertyList::operator std::list<WCDB::Column>() const
@@ -171,7 +186,8 @@ namespace WCDB {
 
 Expression ExpressionConvertible<WCTProperty>::as(const WCTProperty &property)
 {
-    return Expression(property.getLang());
+    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(property.getCOWLang());
+    return Expression(cowLang);
 }
 
 } //namespace WCDB

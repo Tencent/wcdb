@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class InsertSTMT : public CRUDLang {
+class InsertSTMT : public CRUDSTMT {
 public:
     InsertSTMT();
 
@@ -61,6 +61,9 @@ public:
     CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 
 protected:
     static constexpr const char *TypeName(const Type &type);

@@ -95,6 +95,35 @@ SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
     }
 }
 
+STMT::Type SelectSTMT::getSTMTType() const
+{
+    return STMT::Type::Select;
+}
+
+STMT::Type SelectSTMT::getType()
+{
+    return STMT::Type::Select;
+}
+
+//TODO refactor: remove redundant calculatedDescription
+template <>
+CopyOnWriteString
+CopyOnWriteLazyLangList<SelectSTMT::Compound>::calculatedDescription() const
+{
+    std::string description;
+    bool space = false;
+    for (const auto &element : this->get()) {
+        if (space) {
+            description.append(" ");
+        } else {
+            space = true;
+        }
+        assert(!element.empty());
+        description.append(element.description().get());
+    }
+    return description;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

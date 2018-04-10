@@ -21,8 +21,9 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
-#include <WCDB/Error.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/HandleError.hpp>
+#include <WCDB/HandleStatement.hpp>
+#include <WCDB/Tracer.hpp>
 #include <WCDB/WINQ.h>
 #include <array>
 #include <map>
@@ -30,33 +31,26 @@
 #include <mutex>
 #include <string>
 
-typedef struct sqlite3 sqlite3;
-typedef struct sqlite3_stmt sqlite3_stmt;
-
 namespace WCDB {
 
-class Handle;
-
-//{{sql->count}, cost}
-typedef std::function<void(const std::map<const std::string, unsigned int> &,
-                           const int64_t &)>
-    PerformanceTraceCallback;
-
-typedef std::function<void(const std::string &)> SQLTraceCallback;
-
-typedef std::function<void(Handle *, int, void *)> CommittedCallback;
-
 class Handle {
+#pragma mark - Initialize
 public:
-    static std::shared_ptr<Handle> handleWithPath(const std::string &path);
-    ~Handle();
+    using Tag = HandleError::Tag;
 
+    static std::shared_ptr<Handle> handleWithPath(const std::string &path,
+                                                  Tag tag);
+    Handle() = delete;
+    Handle(const Handle &) = delete;
+    Handle &operator=(const Handle &) = delete;
+
+protected:
+    Handle(const std::string &path, Tag tag);
+    void *m_handle;
+
+#pragma mark - Path
+public:
     const std::string path;
-    std::string getSHMPath() const;
-    std::string getWALPath() const;
-    std::string getJournalPath() const;
-    std::string getBackupPath() const;
-    std::list<std::string> getPaths() const;
 
     static const std::string &getSHMSubfix();
     static const std::string &getWALSubfix();
@@ -64,70 +58,123 @@ public:
     static const std::string &getBackupSubfix();
     static const std::array<std::string, 5> &getSubfixs();
 
+#pragma mark - Basic
+public:
     void setTag(Tag tag);
     Tag getTag() const;
 
     bool open();
     void close();
+    virtual bool execute(const Statement &statement);
 
-    bool execute(const Statement &statement);
+    long long getLastInsertedRowID();
+    const char *getErrorMessage();
+    int getExtendedErrorCode();
+    int getResultCode() const;
+    int getChanges();
+    bool isReadonly();
+    bool isInTransaction();
 
-    bool prepare(const Statement &statement);
-    bool step(bool &done);
+    typedef std::function<void(Handle *, int, void *)> CommittedCallback;
+    void setCommittedHook(const CommittedCallback &onCommitted, void *info);
+
+protected:
+    typedef struct {
+        CommittedCallback onCommitted;
+        void *info;
+        Handle *handle;
+    } CommittedHookInfo;
+    CommittedHookInfo m_committedHookInfo;
+
+#pragma mark - Statement
+public:
+    virtual bool prepare(const Statement &statement);
+    virtual void finalize();
+    virtual bool step(bool &done);
+
     bool step();
-    void finalize();
+    virtual void reset();
+
     bool isStatementReadonly();
     bool isPrepared();
 
-    void reset();
+    using Integer32 = HandleStatement::Integer32;
+    using Integer64 = HandleStatement::Integer64;
+    using Text = HandleStatement::Text;
+    using Float = HandleStatement::Float;
+    using BLOB = HandleStatement::BLOB;
 
-    //bind, index begin with 1
-    void bindInteger32(
-        const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
-        int index);
-    void bindInteger64(
-        const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
-        int index);
-    void
-    bindDouble(const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value,
-               int index);
-    void bindText(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value,
-                  int index);
-    void bindBLOB(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value,
-                  int index);
-    void bindNull(int index);
+    virtual void bindInteger32(const Integer32 &value, int index);
+    virtual void bindInteger64(const Integer64 &value, int index);
+    virtual void bindDouble(const Float &value, int index);
+    void bindText(const Text &value, int index);
+    virtual void bindText(const Text &value, int length, int index);
 
-    ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
-    getInteger32(int index);
-    ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
-    getInteger64(int index);
-    ColumnTypeInfo<ColumnType::Float>::UnderlyingType getDouble(int index);
-    ColumnTypeInfo<ColumnType::Text>::UnderlyingType getText(int index);
-    ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType getBLOB(int index);
+    virtual void bindBLOB(const BLOB &value, int index);
+    virtual void bindNull(int index);
+
+    Integer32 getInteger32(int index);
+    Integer64 getInteger64(int index);
+    Float getDouble(int index);
+    Text getText(int index);
+    BLOB getBLOB(int index);
 
     ColumnType getType(int index);
-
     int getColumnCount();
     const char *getColumnName(int index);
     const char *getColumnTableName(int index);
 
+protected:
+    HandleStatement m_handleStatement;
+    bool prepare(const Statement &statement, HandleStatement &handleStatement);
+    bool step(HandleStatement &handleStatement, bool &done);
+
+#pragma mark - Convenient
+public:
+    std::pair<bool, bool> isTableExists(const TableOrSubquery &table);
+    std::pair<bool, std::list<std::string>>
+    getColumnsWithTable(const std::string &tableName);
+    std::pair<bool, std::list<std::string>> getAttachedSchemas();
+    std::pair<bool, bool> isSchemaExists(const std::string &schemaName);
+
+    typedef std::function<bool(Handle *)> TransactionCallback;
+
+    bool beginTransaction();
+    bool commitOrRollbackTransaction();
+    void rollbackTransaction();
+    bool runTransaction(const TransactionCallback &transaction);
+
+    bool beginNestedTransaction();
+    bool commitOrRollbackNestedTransaction();
+    void rollbackNestedTransaction();
+    bool runNestedTransaction(const TransactionCallback &transaction);
+
+protected:
+    void discardableExecute(const Statement &statement);
+    std::pair<bool, std::list<std::string>>
+    getPragmaValues(const StatementPragma &statement, int index);
+    static const std::string s_savepointPrefix;
+    int m_nestedLevel;
+
+#pragma mark - Cipher
+public:
     bool setCipherKey(const void *data, int size);
 
-    long long getLastInsertedRowID();
+#pragma mark - Trace
+public:
+    typedef std::function<void(
+        Tag, const Tracer::Footprints &, const int64_t &)>
+        PerformanceTraceCallback;
+    void tracePerformance(const PerformanceTraceCallback &trace);
 
-    const char *getErrorMessage();
-    int getExtendedErrorCode();
-    int getResultCode() const;
+    using SQLTraceCallback = Tracer::SQLTraceCallback;
+    void traceSQL(const SQLTraceCallback &trace);
 
-    int getChanges();
+protected:
+    Tracer m_tracer;
 
-    bool isReadonly();
-
-    bool isInTransaction();
-
-    void setPerformanceTrace(const PerformanceTraceCallback &trace);
-    void setSQLTrace(const SQLTraceCallback &trace);
-
+#pragma mark - Repair Kit
+public:
     bool backup(const void *key = nullptr, unsigned int length = 0);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,
@@ -136,46 +183,15 @@ public:
                          const void *databaseKey,
                          unsigned int databaseKeyLength);
 
-    void setCommittedHook(const CommittedCallback &onCommitted,
-                               void *info);
-
-    const Error &getError();
-    void resetError();
-    void skipError(bool skip);
+#pragma mark - Error
+public:
+    const HandleError &getError() const;
 
 protected:
-    Handle(const std::string &path);
-    Handle(const Handle &) = delete;
-    Handle &operator=(const Handle &) = delete;
-
-    sqlite3 *m_handle;
-    sqlite3_stmt *m_stmt;
-
-    Error m_error; // error will be set only for those bool returned interface
-    bool m_skipError;
-    void setupError(Error &error);
-    void setupAndReportError(Error &error);
-    void setupAndReportErrorWithSQL(Error &error, const std::string &sql);
-    void setupAndReportErrorWithPath(Error &error, const std::string &path);
-
-    void reportPerformance();
-    void addPerformanceTrace(const std::string &sql, const int64_t &cost);
-    bool shouldPerformanceAggregation() const;
-    void reportSQL(const std::string &sql);
-
-    typedef struct {
-        CommittedCallback onCommitted;
-        void *info;
-        Handle *handle;
-    } CommittedHookInfo;
-    CommittedHookInfo m_committedHookInfo;
-
-    void setupTrace();
-    PerformanceTraceCallback m_performanceTrace;
-    SQLTraceCallback m_sqlTrace;
-    std::map<const std::string, unsigned int> m_footprint;
-    int64_t m_cost;
-    bool m_aggregation;
+    using Error = HandleError;
+    using Operation = HandleError::Operation;
+    void setupError();
+    HandleError m_error;
 };
 
 } //namespace WCDB

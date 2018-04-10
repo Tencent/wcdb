@@ -27,4 +27,6 @@
 
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database;
 
+- (const std::shared_ptr<WCDB::Database> &)database;
+
 @end

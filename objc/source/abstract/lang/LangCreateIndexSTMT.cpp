@@ -53,6 +53,16 @@ CopyOnWriteString CreateIndexSTMT::SQL() const
     return description;
 }
 
+STMT::Type CreateIndexSTMT::getSTMTType() const
+{
+    return STMT::Type::CreateIndex;
+}
+
+STMT::Type CreateIndexSTMT::getType()
+{
+    return STMT::Type::CreateIndex;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

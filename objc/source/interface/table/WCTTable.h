@@ -20,16 +20,41 @@
 
 #import <WCDB/WCTCore.h>
 
-@interface WCTTable : WCTCore
+@protocol WCTTable
 
-/**
+- (BOOL)isTableExists:(nonnull NSString *)tableName;
+
+- (BOOL)isTableExists:(nonnull NSString *)tableName
+            withError:(WCTError *_Nullable *_Nullable)error;
+
+- (BOOL)createTableAndIndexes:(nonnull NSString *)tableName
+                    withClass:(nonnull Class<WCTTableCoding>)cls;
+
+- (nonnull WCTTable *)getTable:(nonnull NSString *)tableName
+                     withClass:(nonnull Class<WCTTableCoding>)cls;
+
+- (BOOL)createVirtualTable:(nonnull NSString *)tableName
+                 withClass:(nonnull Class<WCTTableCoding>)cls;
+
+- (BOOL)dropTable:(nonnull NSString *)tableName;
+
+- (BOOL)dropIndex:(nonnull NSString *)indexName;
+
+@end
+
+@interface WCTTable < ObjectType : NSObject <WCTTableCoding>
+* > : WCTCore
+
+      /**
  The name of the table.
  */
-@property(nonatomic, readonly) NSString *tableName;
+      @property(nonatomic, readonly) NSString *_Nonnull tableName;
 
 /**
  The class binding to this table.
  */
-@property(nonatomic, readonly) Class cls;
+@property(nonatomic, readonly) Class _Nonnull cls;
+
+- (nullable WCTDatabase *)getDatabase;
 
 @end

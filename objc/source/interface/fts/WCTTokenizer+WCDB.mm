@@ -19,8 +19,7 @@
  */
 
 #import <CoreFoundation/CoreFoundation.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTTokenizer+WCDB.h>
+#import <WCDB/Interface.h>
 
 namespace WCDB {
 

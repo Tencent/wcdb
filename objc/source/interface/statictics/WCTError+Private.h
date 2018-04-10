@@ -18,14 +18,12 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/Error.hpp>
 #import <WCDB/WCTError.h>
 
 @interface WCTError ()
 
 + (instancetype)errorWithWCDBError:(const WCDB::Error &)error;
 
-- (instancetype)initWithWCDBError:(const WCDB::Error &)error;
+- (instancetype)initWithWCDBError:(const WCDB::Error *)error;
 
 @end

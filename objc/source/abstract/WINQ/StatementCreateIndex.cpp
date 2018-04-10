@@ -68,7 +68,7 @@ StatementCreateIndex &
 StatementCreateIndex::indexedBy(const IndexedColumn &indexedColumn)
 {
     Lang::CreateIndexSTMT &lang = getMutableLang();
-    lang.indexedColumns.append(indexedColumn.getLang());
+    lang.indexedColumns.append(indexedColumn.getCOWLang());
     return *this;
 }
 
@@ -77,7 +77,7 @@ StatementCreateIndex::indexedBy(const std::list<IndexedColumn> &indexedColumns)
 {
     Lang::CreateIndexSTMT &lang = getMutableLang();
     for (const IndexedColumn &indexedColumn : indexedColumns) {
-        lang.indexedColumns.append(indexedColumn.getLang());
+        lang.indexedColumns.append(indexedColumn.getCOWLang());
     }
     return *this;
 }
@@ -85,13 +85,8 @@ StatementCreateIndex::indexedBy(const std::list<IndexedColumn> &indexedColumns)
 StatementCreateIndex &StatementCreateIndex::where(const Expression &condition)
 {
     Lang::CreateIndexSTMT &lang = getMutableLang();
-    lang.expr.assign(condition.getLang());
+    lang.expr.assign(condition.getCOWLang());
     return *this;
-}
-
-Statement::Type StatementCreateIndex::getType() const
-{
-    return Statement::Type::CreateIndex;
 }
 
 } // namespace WCDB

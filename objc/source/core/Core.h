@@ -25,8 +25,16 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/Database.hpp>
+#include <WCDB/Error.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/HandlePools.hpp>
 #include <WCDB/RecyclableHandle.hpp>
+#include <WCDB/RecyclableHandlePool.hpp>
 #include <WCDB/Tokenizer.hpp>
+
+#include <WCDB/MigrationDatabase.hpp>
+#include <WCDB/MigrationHandle.hpp>
+#include <WCDB/MigrationHandlePool.hpp>
+#include <WCDB/MigrationInfo.hpp>
 
 #endif /* Core_h */

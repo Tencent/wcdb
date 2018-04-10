@@ -28,18 +28,16 @@ namespace WCDB {
 class BindParameter : public DescribableWithLang<Lang::BindParameter>,
                       public Redirectable {
 public:
-    static const BindParameter default_;
+    static std::list<Expression> bindParameters(int count);
+    //    enum class Type : int {
+    //        Colon = (int) Lang::BindParameter::Type::Colon,           //:AAAA
+    //        At = (int) Lang::BindParameter::Type::At,                 //@AAAA
+    //        DollarSign = (int) Lang::BindParameter::Type::DollarSign, //$AAAA
+    //    };
 
-    enum class Type : int {
-        Colon = (int) Lang::BindParameter::Type::Colon,           //:AAAA
-        At = (int) Lang::BindParameter::Type::At,                 //@AAAA
-        DollarSign = (int) Lang::BindParameter::Type::DollarSign, //$AAAA
-    };
-
-    BindParameter();               // ?
     explicit BindParameter(int n); // ?NNN
-    explicit BindParameter(const std::string &name,
-                           const Type &type = Type::Colon);
+    //    explicit BindParameter(const std::string &name,
+    //                           const Type &type = Type::Colon);
 
 protected:
     virtual Expression getRedirectSource() const override;

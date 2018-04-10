@@ -51,6 +51,11 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
     return description;
 }
 
+TableOrSubqueryBase::Type TableOrSubqueryTable::getType() const
+{
+    return TableOrSubqueryBase::Type::Table;
+}
+
 TableOrSubqueryTable::TableOrSubqueryTable()
     : indexSwitcher(IndexSwitch::NotSet)
 {
@@ -75,10 +80,20 @@ CopyOnWriteString TableOrSubqueryTableFunction::SQL() const
     return description;
 }
 
+TableOrSubqueryBase::Type TableOrSubqueryTableFunction::getType() const
+{
+    return TableOrSubqueryBase::Type::TableFunction;
+}
+
 CopyOnWriteString TableOrSubqueryJoinClause::SQL() const
 {
     assert(!joinClause.empty());
     return "(" + joinClause.description().get() + ")";
+}
+
+TableOrSubqueryBase::Type TableOrSubqueryJoinClause::getType() const
+{
+    return TableOrSubqueryBase::Type::JoinClause;
 }
 
 CopyOnWriteString TableOrSubquerySelect::SQL() const
@@ -92,38 +107,53 @@ CopyOnWriteString TableOrSubquerySelect::SQL() const
     return description;
 }
 
+TableOrSubqueryBase::Type TableOrSubquerySelect::getType() const
+{
+    return TableOrSubqueryBase::Type::Select;
+}
+
 CopyOnWriteString TableOrSubqueryList::SQL() const
 {
     assert(!tableOrSubquerys.empty());
     return "(" + tableOrSubquerys.description().get() + ")";
 }
 
-TableOrSubquery::TableOrSubquery() : switcher(Switch::NotSet)
+TableOrSubqueryBase::Type TableOrSubqueryList::getType() const
+{
+    return TableOrSubqueryBase::Type::List;
+}
+
+TableOrSubquery::TableOrSubquery() : type(Type::NotSet)
 {
 }
 
 CopyOnWriteString TableOrSubquery::SQL() const
 {
-    switch (switcher) {
-        case Switch::Table:
+    switch (type) {
+        case Type::Table:
             assert(!tableOrSubqueryTable.empty());
             return tableOrSubqueryTable.description();
-        case Switch::TableFunction:
+        case Type::TableFunction:
             assert(!tableOrSubqueryTableFunction.empty());
             return tableOrSubqueryTableFunction.description();
-        case Switch::JoinClause:
+        case Type::JoinClause:
             assert(!tableOrSubqueryJoinClause.empty());
             return tableOrSubqueryJoinClause.description();
-        case Switch::Select:
+        case Type::Select:
             assert(!tableOrSubquerySelect.empty());
             return tableOrSubquerySelect.description();
-        case Switch::List:
+        case Type::List:
             assert(!tableOrSubqueryList.empty());
             return tableOrSubqueryList.description();
         default:
             assert(false);
             break;
     }
+}
+
+TableOrSubqueryBase::Type TableOrSubquery::getType() const
+{
+    return TableOrSubqueryBase::Type::TableOrSubquery;
 }
 
 } // namespace Lang

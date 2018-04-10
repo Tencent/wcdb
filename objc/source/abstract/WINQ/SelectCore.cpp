@@ -33,7 +33,7 @@ SelectCore &SelectCore::select(const ResultColumn &resultColumn)
 {
     Lang::SelectCore &lang = getMutableLang();
     lang.switcher = Lang::SelectCore::Switch::Select;
-    lang.resultColumns.append(resultColumn.getLang());
+    lang.resultColumns.append(resultColumn.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::select(const std::list<ResultColumn> &resultColumns)
@@ -41,7 +41,7 @@ SelectCore &SelectCore::select(const std::list<ResultColumn> &resultColumns)
     Lang::SelectCore &lang = getMutableLang();
     lang.switcher = Lang::SelectCore::Switch::Select;
     for (const ResultColumn &resultColumn : resultColumns) {
-        lang.resultColumns.append(resultColumn.getLang());
+        lang.resultColumns.append(resultColumn.getCOWLang());
     }
     return *this;
 }
@@ -49,14 +49,14 @@ SelectCore &SelectCore::from(const JoinClause &joinClause)
 {
     Lang::SelectCore &lang = getMutableLang();
     lang.fromSwitcher = Lang::SelectCore::FromSwitch::JoinClause;
-    lang.joinClause.assign(joinClause.getLang());
+    lang.joinClause.assign(joinClause.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::from(const TableOrSubquery &tableOrSubquery)
 {
     Lang::SelectCore &lang = getMutableLang();
     lang.fromSwitcher = Lang::SelectCore::FromSwitch::TableOrSubquery;
-    lang.tableOrSubquerys.append(tableOrSubquery.getLang());
+    lang.tableOrSubquerys.append(tableOrSubquery.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::from(const std::list<TableOrSubquery> &tableOrSubquerys)
@@ -64,41 +64,41 @@ SelectCore &SelectCore::from(const std::list<TableOrSubquery> &tableOrSubquerys)
     Lang::SelectCore &lang = getMutableLang();
     lang.fromSwitcher = Lang::SelectCore::FromSwitch::TableOrSubquery;
     for (const TableOrSubquery &tableOrSubquery : tableOrSubquerys) {
-        lang.tableOrSubquerys.append(tableOrSubquery.getLang());
+        lang.tableOrSubquerys.append(tableOrSubquery.getCOWLang());
     }
     return *this;
 }
 SelectCore &SelectCore::where(const Expression &condition)
 {
     Lang::SelectCore &lang = getMutableLang();
-    lang.condition.assign(condition.getLang());
+    lang.condition.assign(condition.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::groupBy(const Expression &group)
 {
     Lang::SelectCore &lang = getMutableLang();
-    lang.groups.append(group.getLang());
+    lang.groups.append(group.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::groupBy(const std::list<Expression> &groups)
 {
     Lang::SelectCore &lang = getMutableLang();
     for (const Expression &group : groups) {
-        lang.groups.append(group.getLang());
+        lang.groups.append(group.getCOWLang());
     }
     return *this;
 }
 SelectCore &SelectCore::having(const Expression &having)
 {
     Lang::SelectCore &lang = getMutableLang();
-    lang.having.assign(having.getLang());
+    lang.having.assign(having.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::values(const Expression &value)
 {
     Lang::SelectCore &lang = getMutableLang();
     lang.switcher = Lang::SelectCore::Switch::Values;
-    lang.values.append(value.getLang());
+    lang.values.append(value.getCOWLang());
     return *this;
 }
 SelectCore &SelectCore::values(const std::list<Expression> &values)
@@ -106,7 +106,7 @@ SelectCore &SelectCore::values(const std::list<Expression> &values)
     Lang::SelectCore &lang = getMutableLang();
     lang.switcher = Lang::SelectCore::Switch::Values;
     for (const Expression &value : values) {
-        lang.values.append(value.getLang());
+        lang.values.append(value.getCOWLang());
     }
     return *this;
 }

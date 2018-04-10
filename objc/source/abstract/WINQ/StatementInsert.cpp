@@ -25,7 +25,7 @@ namespace WCDB {
 StatementInsert &StatementInsert::with(const WithClause &withClause)
 {
     Lang::InsertSTMT &lang = getMutableLang();
-    lang.withClause.assign(withClause.getLang());
+    lang.withClause.assign(withClause.getCOWLang());
     return *this;
 }
 
@@ -79,7 +79,7 @@ StatementInsert &StatementInsert::withSchema(const std::string &schemaName)
 StatementInsert &StatementInsert::on(const Column &column)
 {
     Lang::InsertSTMT &lang = getMutableLang();
-    lang.columns.append(column.getLang());
+    lang.columns.append(column.getCOWLang());
     return *this;
 }
 
@@ -87,7 +87,7 @@ StatementInsert &StatementInsert::on(const std::list<Column> &columns)
 {
     Lang::InsertSTMT &lang = getMutableLang();
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
     return *this;
 }
@@ -96,7 +96,7 @@ StatementInsert &StatementInsert::values(const Expression &value)
 {
     Lang::InsertSTMT &lang = getMutableLang();
     lang.switcher = Lang::InsertSTMT::Switch::Values;
-    lang.exprs.append(value.getLang());
+    lang.exprs.append(value.getCOWLang());
     return *this;
 }
 
@@ -105,7 +105,7 @@ StatementInsert &StatementInsert::values(const std::list<Expression> &values)
     Lang::InsertSTMT &lang = getMutableLang();
     lang.switcher = Lang::InsertSTMT::Switch::Values;
     for (const Expression &value : values) {
-        lang.exprs.append(value.getLang());
+        lang.exprs.append(value.getCOWLang());
     }
     return *this;
 }
@@ -114,7 +114,7 @@ StatementInsert &StatementInsert::values(const StatementSelect &selectSTMT)
 {
     Lang::InsertSTMT &lang = getMutableLang();
     lang.switcher = Lang::InsertSTMT::Switch::Select;
-    lang.selectSTMT.assign(selectSTMT.getLang());
+    lang.selectSTMT.assign(selectSTMT.getCOWLang());
     return *this;
 }
 
@@ -125,11 +125,6 @@ StatementInsert &StatementInsert::defaultValues()
     return *this;
 }
 
-Statement::Type StatementInsert::getType() const
-{
-    return Statement::Type::Insert;
-}
-
 void StatementInsert::insertInto(const std::string &tableName,
                                  const Lang::InsertSTMT::Type &type)
 {
@@ -137,5 +132,33 @@ void StatementInsert::insertInto(const std::string &tableName,
     lang.type = type;
     lang.tableName.assign(tableName);
 }
+
+bool StatementInsert::isValuesNotSet() const
+{
+    const Lang::InsertSTMT &lang = getCOWLang().get<Lang::InsertSTMT>();
+    switch (lang.switcher) {
+        case Lang::InsertSTMT::Switch::Values:
+            return lang.exprs.empty();
+        case Lang::InsertSTMT::Switch::NotSet:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool StatementInsert::isReplace() const
+{
+    const Lang::InsertSTMT &lang = getCOWLang().get<Lang::InsertSTMT>();
+    return lang.type == Lang::InsertSTMT::Type::InsertOrReplace;
+}
+
+#ifdef DEBUG
+const Lang::CopyOnWriteLazyLangList<Lang::Column> &
+StatementInsert::getSpecifiedColumns() const
+{
+    const Lang::InsertSTMT &lang = getCOWLang().get<Lang::InsertSTMT>();
+    return lang.columns;
+}
+#endif
 
 } // namespace WCDB

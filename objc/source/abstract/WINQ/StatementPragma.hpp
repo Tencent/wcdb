@@ -31,9 +31,7 @@ class StatementPragma : public StatementWithLang<Lang::PragmaSTMT> {
 public:
     StatementPragma &withSchema(const std::string &schemaName);
     StatementPragma &pragma(const Pragma &pragmaName);
-    StatementPragma &pragma(const Pragma &pragmaName,
-                            const LiteralValue &pragmaValue);
-    virtual Type getType() const override;
+    StatementPragma &to(const LiteralValue &pragmaValue);
 };
 
 } // namespace WCDB

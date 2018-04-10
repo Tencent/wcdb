@@ -35,7 +35,7 @@ public:
     RecyclableHandle(const std::nullptr_t &);
     RecyclableHandle();
 
-    constexpr Handle *operator->() { return m_handle; }
+    constexpr Handle *operator->() const { return m_handle; }
     Handle *getHandle() const;
 
 protected:

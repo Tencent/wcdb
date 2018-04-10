@@ -18,24 +18,20 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#import <WCDB/Interface.h>
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
-
-@interface NSObject (WCTColumnCoding) <WCTColumnCoding>
-@end
-
-@implementation NSObject (WCTColumnCoding)
+@implementation NSObject (ColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value.length > 0 ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    assert([self.class conformsToProtocol:@protocol(NSCoding)]);
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
 }
 
 - (NSData *)archivedWCTValue
 {
     //Class should conform to either [WCTColumnCoding] or [NSCoding] protocol or it may crash here.
+    assert([self.class conformsToProtocol:@protocol(NSCoding)]);
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
@@ -45,5 +41,3 @@
 }
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

@@ -31,7 +31,7 @@ IndexedColumn::IndexedColumn(const Column &column)
 {
     Lang::IndexedColumn &lang = getMutableLang();
     lang.switcher = Lang::IndexedColumn::Switch::Column;
-    lang.column.assign(column.getLang());
+    lang.column.assign(column.getCOWLang());
 }
 
 IndexedColumn &IndexedColumn::withCollate(const std::string &collationName)
@@ -52,7 +52,7 @@ void IndexedColumn::setupWithExpression(const Expression &expression)
 {
     Lang::IndexedColumn &lang = getMutableLang();
     lang.switcher = Lang::IndexedColumn::Switch::Expr;
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
 }
 
 } // namespace WCDB

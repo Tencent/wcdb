@@ -50,7 +50,7 @@ stringByReplacingOccurrencesOfString(const CopyOnWriteString &cowOrigin,
         output.append(replacement);
         last = found + targetLength;
     } while ((found = origin.find(target, last)) != std::string::npos);
-    output += origin.substr(last, -1);
+    output.append(origin.substr(last, -1));
     return cowOutput;
 }
 

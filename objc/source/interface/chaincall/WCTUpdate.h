@@ -18,56 +18,56 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTUnsafeHandle.h>
 
 /**
  Not Thread-safe
  */
-@interface WCTUpdate : WCTHandle
+@interface WCTUpdate <ObjectType> : WCTUnsafeHandle
 
-- (instancetype)table:(NSString *)tableName;
+- (nonnull instancetype)table:(nonnull NSString *)tableName;
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties;
-
-- (instancetype)onProperty:(const WCTProperty &)property;
+- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
 
 /**
  @brief WINQ interface for SQL.
  @param condition condition
  @return self
  */
-- (instancetype)where:(const WCDB::Expression &)condition;
+- (nonnull instancetype)where:(const WCDB::Expression &)condition;
 
 /**
  @brief WINQ interface for SQL.
  @param orders order list
  @return self
  */
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nonnull instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
 /**
  @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
-- (instancetype)limit:(const WCDB::Expression &)limit;
+- (nonnull instancetype)limit:(const WCDB::Expression &)limit;
 
 /**
  @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
-- (instancetype)offset:(const WCDB::Expression &)offset;
+- (nonnull instancetype)offset:(const WCDB::Expression &)offset;
 
 /**
  @brief Execute the update SQL with objects.
  @param object Template object to be used to update table. 
  @return YES if no error occurs. See [error] also.
  */
-- (BOOL)executeWithObject:(WCTObject *)object;
+- (BOOL)executeWithObject:(nonnull ObjectType)object;
 
-- (BOOL)executeWithValue:(WCTValue *)value;
+- (BOOL)executeWithValue:(nonnull WCTColumnCodingValue *)value;
 
-- (BOOL)executeWithRow:(WCTOneRow *)row;
+- (BOOL)executeWithRow:(nonnull WCTColumnCodingRow *)row;
+
+- (WCDB::StatementUpdate &)statement;
 
 @end

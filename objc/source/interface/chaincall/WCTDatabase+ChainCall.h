@@ -18,20 +18,11 @@
  * limitations under the License.
  */
 
-#import <WCTDatabase.h>
+#import <WCDB/WCTChainCall.h>
+#import <WCDB/WCTDatabase.h>
 
-@interface WCTDatabase (ChainCall)
+@interface WCTDatabase (ChainCall) <WCTChainCall>
 
-- (WCTInsert *)prepareInsert;
-
-- (WCTDelete *)prepareDelete;
-
-- (WCTUpdate *)prepareUpdate;
-
-- (WCTSelect *)prepareSelect;
-
-- (WCTRowSelect *)prepareRowSelect;
-
-- (WCTMultiSelect *)prepareMultiSelect;
+- (nonnull WCTMultiSelect *)prepareMultiSelect;
 
 @end

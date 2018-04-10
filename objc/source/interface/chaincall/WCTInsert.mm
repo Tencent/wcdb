@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
@@ -27,6 +27,14 @@
     WCTPropertyList _properties;
     WCDB::StatementInsert _statement;
     BOOL _replace;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _finalizeLevel = WCTFinalizeLevelDatabase;
+    }
+    return self;
 }
 
 - (instancetype)orReplace
@@ -49,7 +57,8 @@
 - (instancetype)onProperties:(const WCTPropertyList &)properties
 {
     _properties = properties;
-    _statement.on(properties);
+    _statement.on(properties)
+        .values(WCDB::BindParameter::bindParameters((int) properties.size()));
     return self;
 }
 
@@ -59,11 +68,21 @@
         return YES;
     }
 
-    if (!_handle->prepare(_statement)) {
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (!handle) {
         return NO;
     }
 
     const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+
+    if (_statement.isValuesNotSet()) {
+        _statement.values(WCDB::BindParameter::bindParameters((int) properties.size()));
+    }
+
+    if (!handle->prepare(_statement)) {
+        [self finalizeHandleIfGeneratedAndKeepError:YES];
+        return NO;
+    }
 
     std::vector<bool> autoIncrements;
     for (const WCTProperty &property : properties) {
@@ -83,17 +102,17 @@
                       ofObject:object
                        toIndex:index];
         } else {
-            _handle->bindNull(index);
+            handle->bindNull(index);
         }
         ++index;
     }
-    bool result = _handle->step();
+    bool result = handle->step();
     if (result) {
         if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
-            object.lastInsertedRowID = _handle->getLastInsertedRowID();
+            object.lastInsertedRowID = handle->getLastInsertedRowID();
         }
     }
-    _handle->finalize();
+    [self doAutoFinalize:!result];
     return result;
 }
 
@@ -103,17 +122,24 @@
         return YES;
     }
 
-    bool isBegan = false;
-    if (!_handle->isInTransaction()) {
-        if (!_handle->execute(WCDB::StatementBegin::immediate)) {
-            return NO;
-        }
-        isBegan = true;
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (!handle) {
+        return NO;
     }
 
-    bool failed = false;
-    if (_handle->prepare(_statement)) {
+    BOOL committed = handle->runNestedTransaction([self, objects](WCDB::Handle *handle) -> bool {
+
         const WCTPropertyList &properties = _properties.empty() ? [objects[0].class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+
+        if (_statement.isValuesNotSet()) {
+            _statement.values(WCDB::BindParameter::bindParameters((int) properties.size()));
+        }
+
+        if (!handle->prepare(_statement)) {
+            return false;
+        }
+
+        bool commit = true;
 
         std::vector<bool> autoIncrements;
         for (const WCTProperty &property : properties) {
@@ -132,37 +158,30 @@
                               ofObject:object
                                toIndex:index];
                 } else {
-                    _handle->bindNull(index);
+                    handle->bindNull(index);
                 }
                 ++index;
             }
-            if (!_handle->step()) {
-                failed = true;
+            if (!handle->step()) {
+                commit = false;
                 break;
             }
             if (!_replace && canFillLastInsertedRowID && object.isAutoIncrement) {
-                object.lastInsertedRowID = _handle->getLastInsertedRowID();
+                object.lastInsertedRowID = handle->getLastInsertedRowID();
             }
-            _handle->reset();
+            handle->reset();
         }
-        _handle->finalize();
-    }
+        handle->finalize();
+        return commit;
+    });
 
-    if (!isBegan) {
-        if (!failed) {
-            return YES;
-        }
-    } else {
-        if (!failed) {
-            if (_handle->execute(WCDB::StatementCommit::default_)) {
-                return YES;
-            }
-        }
-        _handle->skipError(true);
-        _handle->execute(WCDB::StatementRollback::default_);
-        _handle->skipError(false);
-    }
-    return NO;
+    [self doAutoFinalize:!committed];
+    return committed;
+}
+
+- (WCDB::StatementInsert &)getStatement
+{
+    return _statement;
 }
 
 @end

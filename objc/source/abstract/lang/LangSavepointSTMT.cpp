@@ -32,6 +32,16 @@ CopyOnWriteString SavepointSTMT::SQL() const
     return description;
 }
 
+STMT::Type SavepointSTMT::getSTMTType() const
+{
+    return STMT::Type::Savepoint;
+}
+
+STMT::Type SavepointSTMT::getType()
+{
+    return STMT::Type::Savepoint;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

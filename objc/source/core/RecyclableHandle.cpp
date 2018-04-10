@@ -22,7 +22,6 @@
 
 namespace WCDB {
 
-#pragma mark - RecyclableHandle
 RecyclableHandle::RecyclableHandle(
     const std::shared_ptr<ConfiguredHandle> &value,
     const Super::OnRecycled &onRecycled)

@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Lang {
 
-class SelectSTMT : public CRUDLang {
+class SelectSTMT : public CRUDSTMT {
 public:
     SelectSTMT();
 
@@ -65,7 +65,14 @@ public:
     CopyOnWriteLazyLang<Expr> limitParameter;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
+
+template <>
+CopyOnWriteString
+CopyOnWriteLazyLangList<SelectSTMT::Compound>::calculatedDescription() const;
 
 } // namespace Lang
 

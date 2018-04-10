@@ -24,30 +24,30 @@
 #include <assert.h>
 #include <memory>
 
-template <typename T>
+template <typename Type, typename StorageType = Type>
 class CopyOnWrite {
 public:
     CopyOnWrite() : m_shared(nullptr) {}
 
-    CopyOnWrite(const T &t) : m_shared(new T(t)) {}
+    CopyOnWrite(const Type &t) : m_shared(new Type(t)) {}
 
-    void assign(const T &t)
+    template <typename OtherType, typename OtherStorageType = OtherType>
+    CopyOnWrite(const CopyOnWrite<OtherType, OtherStorageType> &o)
+        : m_shared(std::static_pointer_cast<StorageType>(o.m_shared))
     {
-        willProbablyChange();
-        m_shared.reset(new T(t));
     }
 
-    void assign(const CopyOnWrite<T> &t)
+    void assign(const Type &t)
     {
         willProbablyChange();
-        m_shared = t.m_shared;
+        m_shared.reset(new Type(t));
     }
 
-    template <typename U>
-    void assign(const CopyOnWrite<U> &u)
+    template <typename OtherType, typename OtherStorageType = OtherType>
+    void assign(const CopyOnWrite<OtherType, OtherStorageType> &o)
     {
         willProbablyChange();
-        m_shared = std::static_pointer_cast<T>(u.m_shared);
+        m_shared = std::static_pointer_cast<StorageType>(o.m_shared);
     }
 
     void clear()
@@ -58,26 +58,50 @@ public:
 
     bool empty() const { return m_shared == nullptr; }
 
-    const T &get() const
+    template <typename OtherType>
+    const OtherType *get_pointer() const
     {
-        assert(!empty());
-        return *(m_shared.get());
+        return (OtherType *) m_shared.get();
     }
 
-    T &get_or_copy()
+    const Type *get_pointer() const { return get_pointer<Type>(); }
+
+    template <typename OtherType>
+    const OtherType &get() const
+    {
+        assert(!empty());
+        return *(OtherType *) m_shared.get();
+    }
+
+    const Type &get() const
+    {
+        assert(!empty());
+        return *(Type *) m_shared.get();
+    }
+
+    template <typename OtherType>
+    OtherType &get_or_copy()
     {
         willProbablyChange();
         if (!m_shared.unique()) {
             if (empty()) {
-                m_shared.reset(new T);
+                m_shared.reset(new OtherType);
             } else {
-                m_shared.reset(new T(*m_shared.get()));
+                m_shared.reset(new OtherType(*(OtherType *) m_shared.get()));
             }
         }
-        return *(m_shared.get());
+        return *(OtherType *) m_shared.get();
     }
 
-    bool equal(const CopyOnWrite<T> &other) const
+    Type &get_or_copy() { return get_or_copy<Type>(); }
+
+    bool equal(const CopyOnWrite<Type, StorageType> &other) const
+    {
+        return m_shared.get() == other.m_shared.get();
+    }
+
+    template <typename OtherType, typename OtherStorageType = OtherType>
+    bool equal(const CopyOnWrite<OtherType, OtherStorageType> &other) const
     {
         return m_shared.get() == other.m_shared.get();
     }
@@ -86,9 +110,9 @@ protected:
     virtual void willProbablyChange(){};
 
 private:
-    std::shared_ptr<T> m_shared;
+    std::shared_ptr<StorageType> m_shared;
 
-    template <typename D>
+    template <typename OtherType, typename OtherStorageType>
     friend class CopyOnWrite;
 };
 

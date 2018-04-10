@@ -18,21 +18,12 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTTable.h>
 
 /**
  Thread-safe
  */
-@interface WCTTable (ChainCall)
-
-- (WCTInsert *)prepareInsert;
-
-- (WCTDelete *)prepareDelete;
-
-- (WCTUpdate *)prepareUpdate;
-
-- (WCTSelect *)prepareSelect;
-
-- (WCTRowSelect *)prepareRowSelect;
+@interface WCTTable (ChainCall) <WCTChainCall>
 
 @end

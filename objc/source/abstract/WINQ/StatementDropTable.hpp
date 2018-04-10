@@ -33,7 +33,6 @@ public:
     StatementDropTable &dropTable(const std::string &tableName);
     StatementDropTable &withSchema(const std::string &schemaName);
     StatementDropTable &ifExists(bool ifExists = true);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

@@ -27,11 +27,14 @@ namespace WCDB {
 
 namespace Lang {
 
-class RollbackSTMT : public Lang {
+class RollbackSTMT : public STMT {
 public:
     CopyOnWriteString savepointName;
 
     virtual CopyOnWriteString SQL() const override;
+
+    virtual STMT::Type getSTMTType() const override;
+    static STMT::Type getType();
 };
 
 } // namespace Lang

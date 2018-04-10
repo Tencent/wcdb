@@ -22,6 +22,10 @@
 
 namespace WCDB {
 
+OrderingTerm::OrderingTerm()
+{
+}
+
 OrderingTerm::OrderingTerm(const Expression &expression)
 {
     setupWithExpression(expression);
@@ -44,7 +48,7 @@ OrderingTerm &OrderingTerm::withOrder(const Order &order)
 void OrderingTerm::setupWithExpression(const Expression &expression)
 {
     Lang::OrderingTerm &lang = getMutableLang();
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
 }
 
 OrderingTerm::operator std::list<OrderingTerm>() const

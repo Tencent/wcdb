@@ -18,29 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTSelectable+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTRowSelect
-
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-             andRecyclableHandle:(const WCDB::RecyclableHandle &)handle
-{
-    if (self = [super initWithDatabase:database
-                   andRecyclableHandle:handle]) {
-        _statement.select(WCDB::ResultColumn::All);
-    }
-    return self;
-}
-
-- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn
-{
-    _statement.select(resultColumn);
-    return self;
-}
 
 - (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
 {
@@ -67,56 +50,69 @@
 - (WCTColumnsXRows *)allRows
 {
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
-    NSMutableArray *rows = [NSMutableArray array];
-    bool done;
-    while (_handle->step(done) && !done) {
-        [rows addObject:[self getRow]];
-    }
-    _handle->finalize();
-    return done ? rows : nil;
+    WCTColumnsXRows *rows = [super allRows];
+    [self doAutoFinalize:!rows];
+    return rows;
 }
 
 - (WCTOneRow *)nextRow
 {
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
-    bool done;
-    if (!_handle->step(done) || done) {
-        _handle->finalize();
-        return nil;
+    BOOL done;
+    WCTOneRow *row = [self nextRowOrDone:done];
+    if (!row || _finalizeImmediately) {
+        [self doAutoFinalize:!done];
     }
-    return [self getRow];
+    return row;
 }
 
 - (WCTOneColumn *)allValues
 {
+    return [self allValuesAtIndex:0];
+}
+
+- (WCTOneColumn *)allValuesAtIndex:(int)index
+{
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
-    NSMutableArray *columns = [[NSMutableArray alloc] init];
-    bool done;
-    while (_handle->step(done) && !done) {
-        NSObject *value = [self getValueAtIndex:0];
-        [columns addObject:value ? value : [NSNull null]];
-    }
-    _handle->finalize();
-    return done ? columns : nil;
+    WCTOneColumn *column = [super allValuesAtIndex:index];
+    [self doAutoFinalize:!column];
+    return column;
 }
 
 - (WCTValue *)nextValue
 {
+    return [self nextValueAtIndex:0];
+}
+
+- (WCTValue *)nextValueAtIndex:(int)index
+{
     if (![self lazyPrepare]) {
+        [self doAutoFinalize:YES];
         return nil;
     }
-    bool done;
-    if (!_handle->step(done) || done) {
-        _handle->finalize();
-        return nil;
+    BOOL done;
+    WCTValue *value = [self nextValueAtIndex:index orDone:done];
+    if (!value || _finalizeImmediately) {
+        [self doAutoFinalize:!done];
     }
-    return [self getValueAtIndex:0];
+    return value;
+}
+
+- (BOOL)lazyPrepare
+{
+    if (_statement.isResultColumnsNotSet()) {
+        _statement.select(WCDB::ResultColumn::All);
+    }
+    return [super lazyPrepare];
 }
 
 @end

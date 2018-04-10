@@ -25,7 +25,7 @@ namespace WCDB {
 JoinClause::JoinClause(const TableOrSubquery &tableOrSubquery)
 {
     Lang::JoinClause &lang = getMutableLang();
-    lang.tableOrSubquery.assign(tableOrSubquery.getLang());
+    lang.tableOrSubquery.assign(tableOrSubquery.getCOWLang());
 }
 
 JoinClause &JoinClause::with(const TableOrSubquery &tableOrSubquery,
@@ -42,8 +42,8 @@ JoinClause &JoinClause::with(const TableOrSubquery &tableOrSubquery,
         joinOperator.join = false;
 
         joinOperand.joinOperator.assign(joinOperator);
-        joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
-        joinOperand.joinConstraint.assign(joinConstraint.getLang());
+        joinOperand.tableOrSubquery.assign(tableOrSubquery.getCOWLang());
+        joinOperand.joinConstraint.assign(joinConstraint.getCOWLang());
     }
 
     lang.joinOperands.append(cowJoinOperand);
@@ -144,7 +144,7 @@ JoinClause &JoinClause::with(const TableOrSubquery &tableOrSubquery)
         joinOperator.join = false;
 
         joinOperand.joinOperator.assign(joinOperator);
-        joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
+        joinOperand.tableOrSubquery.assign(tableOrSubquery.getCOWLang());
     }
 
     lang.joinOperands.append(cowJoinOperand);
@@ -232,8 +232,8 @@ void JoinClause::appendJoinOperand(bool natural,
         joinOperator.type = type;
 
         joinOperand.joinOperator.assign(joinOperator);
-        joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
-        joinOperand.joinConstraint.assign(joinConstraint.getLang());
+        joinOperand.tableOrSubquery.assign(tableOrSubquery.getCOWLang());
+        joinOperand.joinConstraint.assign(joinConstraint.getCOWLang());
     }
 
     lang.joinOperands.append(cowJoinOperand);
@@ -256,7 +256,7 @@ void JoinClause::appendJoinOperand(bool natural,
         joinOperator.type = type;
 
         joinOperand.joinOperator.assign(joinOperator);
-        joinOperand.tableOrSubquery.assign(tableOrSubquery.getLang());
+        joinOperand.tableOrSubquery.assign(tableOrSubquery.getCOWLang());
     }
 
     lang.joinOperands.append(cowJoinOperand);

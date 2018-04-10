@@ -84,6 +84,16 @@ constexpr const char *InsertSTMT::TypeName(const Type &type)
     }
 }
 
+STMT::Type InsertSTMT::getSTMTType() const
+{
+    return STMT::Type::Insert;
+}
+
+STMT::Type InsertSTMT::getType()
+{
+    return STMT::Type::Insert;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

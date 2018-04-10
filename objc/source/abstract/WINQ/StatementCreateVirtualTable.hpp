@@ -38,7 +38,6 @@ public:
     StatementCreateVirtualTable &on(const ModuleArgument &moduleArgument);
     StatementCreateVirtualTable &
     on(const std::list<ModuleArgument> &moduleArguments);
-    virtual Type getType() const override;
 };
 
 } // namespace WCDB

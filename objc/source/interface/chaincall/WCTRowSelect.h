@@ -28,13 +28,11 @@
  */
 @interface WCTRowSelect : WCTSelectable
 
-- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn;
+- (nonnull instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns;
 
-- (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns;
+- (nonnull instancetype)fromTable:(nonnull NSString *)tableName;
 
-- (instancetype)fromTable:(NSString *)tableName;
-
-- (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
+- (nonnull instancetype)fromTables:(nonnull NSArray<NSString *> *)tableNames;
 
 /**
  @brief Get next selected row. You can do an iteration using it.
@@ -52,7 +50,7 @@
          The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.
  */
-- (WCTOneRow *)nextRow;
+- (nullable WCTOneRow *)nextRow;
 
 /**
  @brief Get all selected row.
@@ -70,7 +68,7 @@
          The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.         
  */
-- (WCTColumnsXRows *)allRows;
+- (nullable WCTColumnsXRows *)allRows;
 
 /**
  @brief Get next selected value. You can do an iteration using it.
@@ -91,7 +89,9 @@
  @return The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.
  */
-- (WCTValue *)nextValue;
+- (nullable WCTValue *)nextValue;
+
+- (nullable WCTValue *)nextValueAtIndex:(int)index;
 
 /**
  @brief Get all selected values.
@@ -112,6 +112,8 @@
          The real type of WCTValue depends on your selection, which can be NSString, NSNumber, NSData or NSNull.
          See the example above.         
  */
-- (WCTOneColumn *)allValues;
+- (nullable WCTOneColumn *)allValues;
+
+- (nullable WCTOneColumn *)allValuesAtIndex:(int)index;
 
 @end

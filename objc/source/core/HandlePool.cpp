@@ -18,119 +18,111 @@
  * limitations under the License.
  */
 
-#include <WCDB/BuiltinConfig.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/Hash.hpp>
+#include <WCDB/Path.hpp>
 #include <algorithm>
 #include <thread>
 #include <unordered_map>
 
 namespace WCDB {
 
-std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
-    HandlePool::s_pools;
-std::mutex HandlePool::s_mutex;
-const int HandlePool::s_hardwareConcurrency =
-    std::thread::hardware_concurrency();
-const int HandlePool::s_maxConcurrency =
-    std::max<int>(std::thread::hardware_concurrency(), 64);
-ThreadLocal<std::unordered_map<const HandlePool *, Error>>
-    HandlePool::s_threadedErrors;
-
-RecyclableHandlePool HandlePool::GetPool(const std::string &path)
-{
-    std::shared_ptr<HandlePool> pool = nullptr;
-    std::lock_guard<std::mutex> lockGuard(s_mutex);
-    auto iter = s_pools.find(path);
-    if (iter == s_pools.end()) {
-        pool.reset(new HandlePool(path, BuiltinConfigs::defaultConfig()));
-        iter = s_pools.insert({path, {pool, 0}}).first;
-    }
-    return HandlePool::GetExistingPool(iter);
-}
-
-RecyclableHandlePool HandlePool::GetExistingPool(Tag tag)
-{
-    std::lock_guard<std::mutex> lockGuard(s_mutex);
-    auto iter = s_pools.end();
-    if (tag != Tag::Invalid) {
-        for (iter = s_pools.begin(); iter != s_pools.end(); ++iter) {
-            if (iter->second.first->tag == tag) {
-                break;
-            }
-        }
-    }
-    return HandlePool::GetExistingPool(iter);
-}
-
-RecyclableHandlePool HandlePool::GetExistingPool(const std::string &path)
-{
-    std::lock_guard<std::mutex> lockGuard(s_mutex);
-    auto iter = s_pools.begin();
-    for (; iter != s_pools.end(); ++iter) {
-        if (iter->second.first->path == path) {
-            break;
-        }
-    }
-    return HandlePool::GetExistingPool(iter);
-}
-
-RecyclableHandlePool HandlePool::GetExistingPool(
-    const std::unordered_map<
-        std::string,
-        std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
-{
-    if (iter == s_pools.end()) {
-        return RecyclableHandlePool(nullptr, nullptr);
-    }
-    ++iter->second.second;
-    const std::string path = iter->second.first->path;
-    return RecyclableHandlePool(iter->second.first, [path]() {
-        std::lock_guard<std::mutex> lockGuard(s_mutex);
-        const auto &iter = s_pools.find(path);
-        if (iter == s_pools.end()) {
-            Error::Abort("It should not be failed. If you think it's a bug, "
-                         "please report an issue to us.");
-        }
-        if (--iter->second.second == 0) {
-            s_pools.erase(iter);
-        }
-    });
-}
-
-void HandlePool::PurgeFreeHandlesInAllPool()
-{
-    std::list<std::shared_ptr<HandlePool>> handlePools;
-    {
-        std::lock_guard<std::mutex> lockGuard(s_mutex);
-        for (const auto &iter : s_pools) {
-            handlePools.push_back(iter.second.first);
-        }
-    }
-    for (const auto &handlePool : handlePools) {
-        handlePool->purgeFreeHandles();
-    }
-}
-
+#pragma mark - Initialize
 HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
     : path(thePath)
-    , tag(Tag::Invalid)
+    , tag(hash(thePath))
     , m_configs(configs)
     , m_handles(s_hardwareConcurrency)
     , m_aliveHandleCount(0)
 {
 }
 
-HandlePool::~HandlePool()
+#pragma mark - Error
+void HandlePool::setAndReportCoreError(const std::string &message)
 {
-    m_rwlock.lockWrite();
-    BuiltinConfig::removeKeyFromTimedQueue(path);
-    m_handles.clear();
-    m_rwlock.unlockWrite();
+    CoreError error;
+    error.tag = tag.load();
+    error.message = message;
+    error.code = (int) Error::Code::Error;
+    setThreadedError(error);
+    error.report();
 }
+
+std::shared_ptr<Error> &HandlePool::getThreadedErrors() const
+{
+    std::unordered_map<const HandlePool *, std::shared_ptr<Error>> *errors =
+        s_threadedErrors.get();
+    auto iter = errors->find(this);
+    if (iter == errors->end()) {
+        iter = errors->insert({this, std::shared_ptr<Error>()}).first;
+    }
+    return iter->second;
+}
+
+void HandlePool::setThreadedError(const HandleError &error) const
+{
+    getThreadedErrors().reset(new HandleError(error));
+}
+
+void HandlePool::setThreadedError(const FileError &error) const
+{
+    getThreadedErrors().reset(new FileError(error));
+}
+
+void HandlePool::setThreadedError(const CoreError &error) const
+{
+    getThreadedErrors().reset(new CoreError(error));
+}
+
+const Error &HandlePool::getThreadedError() const
+{
+    ThreadedErrors *errors = s_threadedErrors.get();
+    auto iter = errors->find(this);
+    assert(iter != errors->end());
+    return *iter->second.get();
+}
+
+#pragma mark - Config
+void HandlePool::setConfig(const std::string &name,
+                           const Config::Callback &callback)
+{
+    m_configs.setConfig(name, callback);
+}
+
+void HandlePool::setConfig(const Config &config)
+{
+    m_configs.setConfig(config);
+}
+
+#pragma mark - Handle
+const int HandlePool::s_hardwareConcurrency =
+    std::thread::hardware_concurrency();
+const int HandlePool::s_maxConcurrency =
+    std::max<int>(std::thread::hardware_concurrency(), 64);
+ThreadLocal<HandlePool::ThreadedErrors> HandlePool::s_threadedErrors;
 
 void HandlePool::blockade()
 {
     m_rwlock.lockWrite();
+}
+
+bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
+{
+    m_rwlock.lockWrite();
+    std::shared_ptr<ConfiguredHandle> configuredHandle =
+        flowOutConfiguredHandle();
+    if (!configuredHandle) {
+        configuredHandle = generateConfiguredHandle();
+    }
+    bool result = false;
+    if (configuredHandle) {
+        onBlockaded(configuredHandle->getHandle());
+        flowBack(configuredHandle);
+        result = true;
+    }
+    m_rwlock.unlockWrite();
+    return result;
 }
 
 void HandlePool::unblockade()
@@ -146,7 +138,6 @@ bool HandlePool::isBlockaded() const
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     m_rwlock.lockWrite();
-    BuiltinConfig::removeKeyFromTimedQueue(path);
     ConcurrentList<ConfiguredHandle>::ElementType handle;
     while ((handle = m_handles.popBack())) {
         handle->getHandle()->close();
@@ -171,26 +162,39 @@ bool HandlePool::isDrained()
     return m_aliveHandleCount == 0;
 }
 
+bool HandlePool::canFlowOut()
+{
+    bool result = false;
+    m_rwlock.lockRead();
+    {
+        std::shared_ptr<ConfiguredHandle> configuredHandle =
+            flowOutConfiguredHandle();
+        if (!configuredHandle) {
+            configuredHandle = generateConfiguredHandle();
+        }
+        if (configuredHandle) {
+            flowBack(configuredHandle);
+            result = true;
+        }
+    }
+    return result;
+}
+
 RecyclableHandle HandlePool::flowOut()
 {
     m_rwlock.lockRead();
-    std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
+    std::shared_ptr<ConfiguredHandle> configuredHandle =
+        flowOutConfiguredHandle();
     if (!configuredHandle) {
-        configuredHandle = generate();
+        configuredHandle = generateConfiguredHandle();
     }
-    if (configuredHandle) {
-        Configs configs = m_configs;
-        if (configuredHandle->configured(configs) ||
-            configuredHandle->configure(m_configs)) {
-            return RecyclableHandle(
-                configuredHandle,
-                [configuredHandle, this]() { flowBack(configuredHandle); });
-        }
-        setAndReportThreadedError(configuredHandle->getHandle()->getError());
+    if (!configuredHandle) {
+        m_rwlock.unlockRead();
+        return nullptr;
     }
-    --m_aliveHandleCount;
-    m_rwlock.unlockRead();
-    return RecyclableHandle(nullptr, nullptr);
+    return RecyclableHandle(configuredHandle, [configuredHandle, this]() {
+        flowBack(configuredHandle);
+    });
 }
 
 void HandlePool::flowBack(
@@ -205,97 +209,81 @@ void HandlePool::flowBack(
     }
 }
 
-std::shared_ptr<ConfiguredHandle> HandlePool::generate()
+std::shared_ptr<Handle> HandlePool::generateHandle()
 {
-    if (m_aliveHandleCount >= s_maxConcurrency) {
-        Error error;
-        error.setPath(path);
-        error.setMessage(
-            "The concurrency of database exceeds the max concurrency");
-        setAndReportThreadedError(error);
+    return Handle::handleWithPath(path, tag.load());
+}
+
+std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
+{
+    std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
+    if (!configuredHandle) {
         return nullptr;
     }
-    std::shared_ptr<ConfiguredHandle> configuredHandle =
-        ConfiguredHandle::configuredHandleWithPath(path);
-    if (configuredHandle != nullptr) {
-        ++m_aliveHandleCount;
-        if (m_aliveHandleCount > s_hardwareConcurrency) {
-            Error::Warning(
-                ("The concurrency of database:" + std::to_string(tag.load()) +
-                 " exceeds the concurrency of hardware.")
-                    .c_str());
-        }
-    } else {
-        Error error;
-        error.setPath(path);
-        error.setMessage("Out Of Memory");
-        setAndReportThreadedError(error);
+    willConfigurateHandle(configuredHandle.get()->getHandle());
+    Configs configs = m_configs;
+    if (!configuredHandle->configured(configs) &&
+        !configuredHandle->configure(configs)) {
+        setThreadedError(configuredHandle->getHandle()->getError());
+        return nullptr;
     }
     return configuredHandle;
 }
 
-bool HandlePool::fillOne()
+std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
-    m_rwlock.lockRead();
-    bool inserted = false;
-    std::shared_ptr<ConfiguredHandle> configuredHandle = generate();
-    if (configuredHandle) {
-        Configs configs = m_configs;
-        if (configuredHandle->configured(configs) ||
-            configuredHandle->configure(m_configs)) {
-            inserted = m_handles.pushBack(configuredHandle);
-            if (inserted) {
-                ++m_aliveHandleCount;
-            }
+    if (m_aliveHandleCount >= s_maxConcurrency) {
+        setAndReportCoreError(
+            "The concurrency of database exceeds the maxximum allowed: " +
+            std::to_string(s_maxConcurrency));
+        return nullptr;
+    }
+    std::shared_ptr<ConfiguredHandle> configuredHandle =
+        ConfiguredHandle::configuredHandle(generateHandle());
+    if (!configuredHandle) {
+        setAndReportCoreError("Out Of Memory");
+        return nullptr;
+    }
+    Handle *handle = configuredHandle->getHandle();
+    Configs configs = m_configs;
+
+    if (m_aliveHandleCount == 0) {
+        if (!FileManager::sharedFileManager()
+                 ->createDirectoryWithIntermediateDirectories(
+                     Path::getBaseName(path))) {
+            setThreadedError(FileManager::sharedFileManager()->getError());
+            return nullptr;
         }
     }
-    m_rwlock.unlockRead();
-    return inserted;
-}
-
-void HandlePool::setConfig(const std::string &name,
-                           const Config::Callback &callback)
-{
-    m_configs.setConfig(name, callback);
-}
-
-void HandlePool::setConfig(const Config &config)
-{
-    m_configs.setConfig(config);
-}
-
-void HandlePool::setAndReportThreadedError(const Error &error) const
-{
-    std::unordered_map<const HandlePool *, Error> *errors =
-        s_threadedErrors.get();
-    auto iter = errors->find(this);
-    if (iter == errors->end()) {
-        iter = errors->insert({this, error}).first;
-    } else {
-        iter->second = error;
+    if (!handle->open()) {
+        setThreadedError(handle->getError());
+        return nullptr;
     }
-    iter->second.setTag(tag.load());
-    iter->second.report();
-}
-
-void HandlePool::resetThreadedError() const
-{
-    std::unordered_map<const HandlePool *, Error> *errors =
-        s_threadedErrors.get();
-    auto iter = errors->find(this);
-    if (iter == errors->end()) {
-        iter = errors->insert({this, Error()}).first;
+    willConfigurateHandle(handle);
+    if (!configuredHandle->configure(configs)) {
+        setThreadedError(handle->getError());
+        return nullptr;
     }
-    iter->second.reset();
+    ++m_aliveHandleCount;
+    if (m_aliveHandleCount > s_hardwareConcurrency) {
+        CoreError error;
+        error.code = (int) Error::Code::Error;
+        error.level = Error::Level::Warning;
+        error.tag = tag.load();
+        error.path = path;
+        error.message = "The number of database concurrency exceeds the "
+                        "hardware's maximum: " +
+                        std::to_string(s_hardwareConcurrency);
+        error.report();
+    }
+    return configuredHandle;
 }
 
-const Error &HandlePool::getThreadedError() const
+void HandlePool::willConfigurateHandle(Handle *handle)
 {
-    std::unordered_map<const HandlePool *, Error> *errors =
-        s_threadedErrors.get();
-    auto iter = errors->find(this);
-    assert(iter != errors->end());
-    return iter->second;
+    if (handle->getTag() != tag.load()) {
+        handle->setTag(tag.load());
+    }
 }
 
 } //namespace WCDB

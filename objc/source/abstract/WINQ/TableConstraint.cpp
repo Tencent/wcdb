@@ -37,7 +37,7 @@ TableConstraint::withPrimaryKey(const IndexedColumn &indexedColumn)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::PrimaryKey;
-    lang.indexedColumns.append(indexedColumn.getLang());
+    lang.indexedColumns.append(indexedColumn.getCOWLang());
     return *this;
 }
 
@@ -47,7 +47,7 @@ TableConstraint::withPrimaryKey(const std::list<IndexedColumn> &indexedColumns)
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::PrimaryKey;
     for (const IndexedColumn &indexedColumn : indexedColumns) {
-        lang.indexedColumns.append(indexedColumn.getLang());
+        lang.indexedColumns.append(indexedColumn.getCOWLang());
     }
     return *this;
 }
@@ -56,7 +56,7 @@ TableConstraint &TableConstraint::withUnique(const IndexedColumn &indexedColumn)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::Unique;
-    lang.indexedColumns.append(indexedColumn.getLang());
+    lang.indexedColumns.append(indexedColumn.getCOWLang());
     return *this;
 }
 
@@ -66,7 +66,7 @@ TableConstraint::withUnique(const std::list<IndexedColumn> &indexedColumns)
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::Unique;
     for (const IndexedColumn &indexedColumn : indexedColumns) {
-        lang.indexedColumns.append(indexedColumn.getLang());
+        lang.indexedColumns.append(indexedColumn.getCOWLang());
     }
     return *this;
 }
@@ -83,7 +83,7 @@ TableConstraint &TableConstraint::withChecking(const Expression &expression)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::Check;
-    lang.expr.assign(expression.getLang());
+    lang.expr.assign(expression.getCOWLang());
     return *this;
 }
 
@@ -93,8 +93,8 @@ TableConstraint::withForeignKey(const Column &column,
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::ForeignKey;
-    lang.columns.append(column.getLang());
-    lang.foreignKeyClause.assign(foreignKeyClause.getLang());
+    lang.columns.append(column.getCOWLang());
+    lang.foreignKeyClause.assign(foreignKeyClause.getCOWLang());
     return *this;
 }
 
@@ -105,9 +105,9 @@ TableConstraint::withForeignKey(const std::list<Column> &columns,
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::ForeignKey;
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
-    lang.foreignKeyClause.assign(foreignKeyClause.getLang());
+    lang.foreignKeyClause.assign(foreignKeyClause.getCOWLang());
     return *this;
 }
 

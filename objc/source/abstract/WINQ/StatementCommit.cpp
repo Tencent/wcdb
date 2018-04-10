@@ -22,17 +22,10 @@
 
 namespace WCDB {
 
-const StatementCommit StatementCommit::default_ = StatementCommit().commit();
-
-StatementCommit &StatementCommit::commit()
-{
-    getMutableLang();
-    return *this;
-}
-
-Statement::Type StatementCommit::getType() const
-{
-    return Statement::Type::Commit;
-}
+const StatementCommit StatementCommit::commit = []() -> StatementCommit {
+    StatementCommit statement;
+    statement.getMutableLang();
+    return statement;
+}();
 
 } // namespace WCDB

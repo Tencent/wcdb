@@ -60,7 +60,7 @@ StatementCreateView &StatementCreateView::temp(bool temp)
 StatementCreateView &StatementCreateView::on(const Column &column)
 {
     Lang::CreateViewSTMT &lang = getMutableLang();
-    lang.columns.append(column.getLang());
+    lang.columns.append(column.getCOWLang());
     return *this;
 }
 
@@ -68,7 +68,7 @@ StatementCreateView &StatementCreateView::on(const std::list<Column> &columns)
 {
     Lang::CreateViewSTMT &lang = getMutableLang();
     for (const Column &column : columns) {
-        lang.columns.append(column.getLang());
+        lang.columns.append(column.getCOWLang());
     }
     return *this;
 }
@@ -76,13 +76,8 @@ StatementCreateView &StatementCreateView::on(const std::list<Column> &columns)
 StatementCreateView &StatementCreateView::as(const StatementSelect &selectSTMT)
 {
     Lang::CreateViewSTMT &lang = getMutableLang();
-    lang.selectSTMT.assign(selectSTMT.getLang());
+    lang.selectSTMT.assign(selectSTMT.getCOWLang());
     return *this;
-}
-
-Statement::Type StatementCreateView::getType() const
-{
-    return Statement::Type::CreateView;
 }
 
 } // namespace WCDB

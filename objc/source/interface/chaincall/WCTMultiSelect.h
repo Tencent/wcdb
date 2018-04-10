@@ -25,13 +25,9 @@
  */
 @interface WCTMultiSelect : WCTSelectable
 
-- (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
+- (nonnull instancetype)fromTables:(nonnull NSArray<NSString *> *)tableNames;
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties;
-
-- (instancetype)ofClasses:(NSArray<Class<WCTTableCoding>> *)classes;
-
-- (instancetype)distinct;
+- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
 
 /**
  @brief Get next selected object. You can do an iteration using it.
@@ -45,12 +41,12 @@
 
  @return See the example above
  */
-- (WCTMultiObject *)nextMultiObject;
+- (nullable WCTMultiObject *)nextMultiObject;
 
 /**
  @brief Get all selected objects. 
  @return Array with all selected objects.
  */
-- (NSArray<WCTMultiObject *> *)allMultiObjects;
+- (nullable NSArray<WCTMultiObject *> *)allMultiObjects;
 
 @end

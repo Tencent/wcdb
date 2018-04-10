@@ -18,95 +18,54 @@
  * limitations under the License.
  */
 
-#include <WCDB/File.hpp>
+#include <WCDB/ConvertibleImpl.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/Macro.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/SQLiteError.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <sqliterk/SQLiteRepairKit.h>
 
 namespace WCDB {
 
-std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path)
+#pragma mark - Initialize
+std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path, Tag tag)
 {
+    return std::shared_ptr<Handle>(new Handle(path, tag));
+}
+
+Handle::Handle(const std::string &path_, Tag tag)
+    : m_handle(nullptr), path(path_), m_nestedLevel(0)
+{
+    m_error.tag = tag;
+    m_error.path = path_;
     static std::once_flag s_flag;
     std::call_once(s_flag, []() {
         sqlite3_config(SQLITE_CONFIG_LOG,
                        [](void *userInfo, int code, const char *message) {
-                           Error error;
-                           error.setError(Error::Type::SQLiteGlobal, code);
-                           error.setMessage(message ? message : nullptr);
+                           SQLiteError error;
+                           switch (code) {
+                               case SQLITE_WARNING:
+                                   error.level = Error::Level::Warning;
+                                   break;
+                               case SQLITE_NOTICE:
+                                   error.level = Error::Level::Ignore;
+                                   break;
+                               default:
+                                   error.level = Error::Level::Debug;
+                                   break;
+                           }
+                           error.code = code;
+                           error.message = message ? message : "";
                        },
                        nullptr);
         sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
         sqlite3_config(SQLITE_CONFIG_MEMSTATUS, false);
         //    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, 0x7fff0000, 0x7fff0000);
     });
-    return std::shared_ptr<Handle>(new Handle(path));
 }
 
-Handle::Handle(const std::string &p)
-    : m_handle(nullptr)
-    , m_stmt(nullptr)
-    , path(p)
-    , m_performanceTrace(nullptr)
-    , m_sqlTrace(nullptr)
-    , m_cost(0)
-    , m_aggregation(false)
-    , m_skipError(false)
-{
-}
-
-Handle::~Handle()
-{
-    reportPerformance();
-}
-
-bool Handle::open()
-{
-    if (!File::createDirectoryWithIntermediateDirectories(
-            Path::getBaseName(path))) {
-        File::getError().report();
-    }
-    if (sqlite3_open(path.c_str(), (sqlite3 **) &m_handle) == SQLITE_OK) {
-        return true;
-    }
-    setupAndReportErrorWithPath(m_error, path);
-    return false;
-}
-
-void Handle::close()
-{
-    finalize();
-    sqlite3_close(m_handle);
-}
-
-std::string Handle::getSHMPath() const
-{
-    return Path::addExtention(path, Handle::getSHMSubfix());
-}
-
-std::string Handle::getWALPath() const
-{
-    return Path::addExtention(path, Handle::getWALSubfix());
-}
-
-std::string Handle::getJournalPath() const
-{
-    return Path::addExtention(path, Handle::getJournalSubfix());
-}
-
-std::string Handle::getBackupPath() const
-{
-    return Path::addExtention(path, Handle::getBackupSubfix());
-}
-
-std::list<std::string> Handle::getPaths() const
-{
-    return {path, getWALPath(), getSHMPath(), getJournalPath(),
-            getBackupPath()};
-}
-
+#pragma mark - Path
 const std::string &Handle::getSHMSubfix()
 {
     static const std::string s_SHMSubfix = "-shm";
@@ -143,332 +102,78 @@ const std::array<std::string, 5> &Handle::getSubfixs()
     return s_subfixs;
 }
 
-void Handle::setupTrace()
+#pragma mark - Basic
+void Handle::setTag(Tag tag)
 {
-    unsigned flag = 0;
-    if (m_sqlTrace) {
-        flag |= SQLITE_TRACE_STMT;
-    }
-    if (m_performanceTrace) {
-        flag |= SQLITE_TRACE_PROFILE;
-    }
-    if (flag > 0) {
-        sqlite3_trace_v2(
-            m_handle, flag,
-            [](unsigned int flag, void *M, void *P, void *X) -> int {
-                Handle *handle = (Handle *) M;
-                sqlite3_stmt *stmt = (sqlite3_stmt *) P;
-                switch (flag) {
-                    case SQLITE_TRACE_STMT: {
-                        const char *sql = sqlite3_sql(stmt);
-                        if (sql) {
-                            handle->reportSQL(sql);
-                        }
-                    } break;
-                    case SQLITE_TRACE_PROFILE: {
-                        sqlite3_int64 *cost = (sqlite3_int64 *) X;
-                        const char *sql = sqlite3_sql(stmt);
-
-                        //report last trace
-                        if (!handle->shouldPerformanceAggregation()) {
-                            handle->reportPerformance();
-                        }
-
-                        if (sql) {
-                            handle->addPerformanceTrace(sql, *cost);
-                        }
-                    } break;
-                    default:
-                        break;
-                }
-
-                return SQLITE_OK;
-            },
-            this);
-    } else {
-        sqlite3_trace_v2(m_handle, 0, nullptr, nullptr);
-    }
+    m_error.tag = tag;
 }
 
-void Handle::setSQLTrace(const SQLTraceCallback &trace)
+Handle::Tag Handle::getTag() const
 {
-    m_sqlTrace = trace;
-    setupTrace();
+    return m_error.tag;
 }
 
-void Handle::setPerformanceTrace(const PerformanceTraceCallback &trace)
+bool Handle::open()
 {
-    m_performanceTrace = trace;
-    setupTrace();
-}
-
-bool Handle::shouldPerformanceAggregation() const
-{
-    return m_aggregation;
-}
-
-void Handle::addPerformanceTrace(const std::string &sql, const int64_t &cost)
-{
-    auto iter = m_footprint.find(sql);
-    if (iter == m_footprint.end()) {
-        m_footprint.insert({sql, 1});
-    } else {
-        ++iter->second;
-    }
-    m_cost += cost;
-}
-
-void Handle::reportPerformance()
-{
-    if (!m_footprint.empty()) {
-        m_performanceTrace(m_footprint, m_cost);
-        m_footprint.clear();
-        m_cost = 0;
-    }
-}
-
-void Handle::reportSQL(const std::string &sql)
-{
-    if (m_sqlTrace) {
-        m_sqlTrace(sql);
-    }
-}
-
-bool Handle::prepare(const Statement &statement)
-{
-    //TODO hook step
-    if (statement.getType() == Statement::Type::Begin ||
-        statement.getType() == Statement::Type::Commit ||
-        statement.getType() == Statement::Type::Rollback) {
-        Error::Abort(
-            "[prepare] a transaction is not allowed, use [execute] instead");
-        return false;
-    }
-    if (sqlite3_prepare_v2(m_handle, statement.getDescription().c_str(), -1,
-                           &m_stmt, nullptr) == SQLITE_OK) {
+    int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
+    if (rc == SQLITE_OK) {
         return true;
     }
-    setupAndReportErrorWithSQL(m_error, statement.getDescription());
+    setupError();
+    m_error.operation = Operation::Open;
+    m_error.report();
     return false;
 }
 
-void Handle::reset()
+void Handle::close()
 {
-    sqlite3_reset(m_stmt);
+    finalize();
+    sqlite3_close((sqlite3 *) m_handle);
 }
 
 bool Handle::execute(const Statement &statement)
 {
-    int rc = sqlite3_exec(m_handle, statement.getDescription().c_str(), nullptr,
-                          nullptr, nullptr);
-    bool result = rc == SQLITE_OK;
-    switch (statement.getType()) {
-        case Statement::Type::Begin:
-            if (result) {
-                m_aggregation = true;
-            }
-            break;
-        case Statement::Type::Commit:
-            if (result) {
-                m_aggregation = false;
-            }
-            break;
-        case Statement::Type::Rollback:
-            m_aggregation = false;
-            break;
-        default:
-            break;
-    }
-    if (result) {
+    int rc =
+        sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
+                     nullptr, nullptr, nullptr);
+    if (rc == SQLITE_OK) {
         return true;
     }
-    setupAndReportErrorWithSQL(m_error, statement.getDescription());
+    setupError();
+    m_error.operation = Operation::Execute;
+    m_error.statement = statement;
+    m_error.report();
     return false;
-}
-
-bool Handle::step(bool &done)
-{
-    int rc = sqlite3_step(m_stmt);
-    bool result = rc == SQLITE_OK || rc == SQLITE_ROW || rc == SQLITE_DONE;
-    done = rc == SQLITE_DONE;
-    if (result) {
-        return true;
-    }
-    setupAndReportErrorWithSQL(m_error, sqlite3_sql(m_stmt));
-    return false;
-}
-
-bool Handle::step()
-{
-    bool unused;
-    return step(unused);
-}
-
-void Handle::finalize()
-{
-    if (m_stmt) {
-        sqlite3_finalize(m_stmt);
-        m_stmt = nullptr;
-    }
 }
 
 int Handle::getExtendedErrorCode()
 {
-    return sqlite3_extended_errcode(m_handle);
+    return sqlite3_extended_errcode((sqlite3 *) m_handle);
 }
 
 long long Handle::getLastInsertedRowID()
 {
-    return sqlite3_last_insert_rowid(m_handle);
+    return sqlite3_last_insert_rowid((sqlite3 *) m_handle);
 }
 
 int Handle::getResultCode() const
 {
-    return sqlite3_errcode(m_handle);
+    return sqlite3_errcode((sqlite3 *) m_handle);
 }
 
 const char *Handle::getErrorMessage()
 {
-    return sqlite3_errmsg(m_handle);
+    return sqlite3_errmsg((sqlite3 *) m_handle);
 }
 
-int Handle::getColumnCount()
-{
-    return sqlite3_column_count(m_stmt);
-}
-
-const char *Handle::getColumnName(int index)
-{
-    return sqlite3_column_name(m_stmt, index);
-}
-
-const char *Handle::getColumnTableName(int index)
-{
-    return sqlite3_column_table_name(m_stmt, index);
-}
-
-ColumnType Handle::getType(int index)
-{
-    switch (sqlite3_column_type(m_stmt, index)) {
-        case SQLITE_INTEGER:
-            return ColumnType::Integer64;
-        case SQLITE_FLOAT:
-            return ColumnType::Float;
-        case SQLITE_BLOB:
-            return ColumnType::BLOB;
-        case SQLITE_TEXT:
-            return ColumnType::Text;
-        default:
-            return ColumnType::Null;
-    }
-}
-
-void Handle::bindInteger32(
-    const ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType &value,
-    int index)
-{
-    sqlite3_bind_int(m_stmt, index, value);
-}
-
-void Handle::bindInteger64(
-    const ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType &value,
-    int index)
-{
-    sqlite3_bind_int64(m_stmt, index, value);
-}
-
-void Handle::bindDouble(
-    const ColumnTypeInfo<ColumnType::Float>::UnderlyingType &value, int index)
-{
-    sqlite3_bind_double(m_stmt, index, value);
-}
-
-void Handle::bindText(
-    const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &value, int index)
-{
-    sqlite3_bind_text(m_stmt, index, value, -1, SQLITE_TRANSIENT);
-}
-
-void Handle::bindBLOB(
-    const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &value, int index)
-{
-    sqlite3_bind_blob(m_stmt, index, value.data, (int) value.size,
-                      SQLITE_TRANSIENT);
-}
-
-void Handle::bindNull(int index)
-{
-    sqlite3_bind_null(m_stmt, index);
-}
-
-ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
-Handle::getInteger32(int index)
-{
-    return (typename ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType)
-        sqlite3_column_int(m_stmt, index);
-}
-
-ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
-Handle::getInteger64(int index)
-{
-    return (typename ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType)
-        sqlite3_column_int64(m_stmt, index);
-}
-
-ColumnTypeInfo<ColumnType::Float>::UnderlyingType Handle::getDouble(int index)
-{
-    return (typename ColumnTypeInfo<ColumnType::Float>::UnderlyingType)
-        sqlite3_column_double(m_stmt, index);
-}
-
-ColumnTypeInfo<ColumnType::Text>::UnderlyingType Handle::getText(int index)
-{
-    return (typename ColumnTypeInfo<ColumnType::Text>::UnderlyingType)
-        sqlite3_column_text(m_stmt, index);
-}
-
-ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType Handle::getBLOB(int index)
-{
-    int size = sqlite3_column_bytes(m_stmt, index);
-    const unsigned char *data =
-        (const unsigned char *) sqlite3_column_blob(m_stmt, index);
-    return ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType(data, size);
-}
-
-bool Handle::setCipherKey(const void *data, int size)
-{
-#ifdef SQLITE_HAS_CODEC
-    int rc = sqlite3_key(m_handle, data, size);
-    if (rc == SQLITE_OK) {
-        return true;
-    }
-    setupAndReportError(m_error);
-    return false;
-#else  //SQLITE_HAS_CODEC
-    Error::Abort("[sqlite3_key] is not supported for current config");
-    return false;
-#endif //SQLITE_HAS_CODEC
-}
-
-bool Handle::isStatementReadonly()
-{
-    return sqlite3_stmt_readonly(m_stmt);
-}
-
-bool Handle::isPrepared()
-{
-    return m_stmt != nullptr;
-}
-
-void Handle::setCommittedHook(const CommittedCallback &onCommitted,
-                                   void *info)
+void Handle::setCommittedHook(const CommittedCallback &onCommitted, void *info)
 {
     m_committedHookInfo.onCommitted = onCommitted;
     m_committedHookInfo.info = info;
     m_committedHookInfo.handle = this;
     if (m_committedHookInfo.onCommitted) {
         sqlite3_wal_hook(
-            m_handle,
+            (sqlite3 *) m_handle,
             [](void *p, sqlite3 *, const char *, int pages) -> int {
                 CommittedHookInfo *committedHookInfo = (CommittedHookInfo *) p;
                 committedHookInfo->onCommitted(committedHookInfo->handle, pages,
@@ -477,21 +182,360 @@ void Handle::setCommittedHook(const CommittedCallback &onCommitted,
             },
             &m_committedHookInfo);
     } else {
-        sqlite3_wal_hook(m_handle, nullptr, nullptr);
+        sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
     }
 }
 
+int Handle::getChanges()
+{
+    return sqlite3_changes((sqlite3 *) m_handle);
+}
+
+bool Handle::isReadonly()
+{
+    return sqlite3_db_readonly((sqlite3 *) m_handle, NULL) == 1;
+}
+
+bool Handle::isInTransaction()
+{
+    return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
+}
+
+#pragma mark - Statement
+bool Handle::prepare(const Statement &statement)
+{
+    return prepare(statement, m_handleStatement);
+}
+
+bool Handle::prepare(const Statement &statement,
+                     HandleStatement &handleStatement)
+{
+    sqlite3_stmt *stmt;
+    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle,
+                                statement.getDescription().c_str(), -1,
+                                (sqlite3_stmt **) &stmt, nullptr);
+    if (rc == SQLITE_OK) {
+        handleStatement.setup(statement, stmt);
+        return true;
+    }
+    setupError();
+    m_error.operation = Operation::Prepare;
+    m_error.statement = statement;
+    m_error.report();
+    return false;
+}
+
+void Handle::reset()
+{
+    m_handleStatement.reset();
+}
+
+bool Handle::step(bool &done)
+{
+    return step(m_handleStatement, done);
+}
+
+bool Handle::step()
+{
+    bool unused;
+    return step(unused);
+}
+
+bool Handle::step(HandleStatement &handleStatement, bool &done)
+{
+    if (handleStatement.step(done)) {
+        return true;
+    }
+    setupError();
+    m_error.operation = Operation::Step;
+    m_error.statement = handleStatement.getStatement();
+    m_error.report();
+    return false;
+}
+
+int Handle::getColumnCount()
+{
+    return m_handleStatement.getColumnCount();
+}
+
+const char *Handle::getColumnName(int index)
+{
+    return m_handleStatement.getColumnName(index);
+}
+
+const char *Handle::getColumnTableName(int index)
+{
+    return m_handleStatement.getColumnTableName(index);
+}
+
+ColumnType Handle::getType(int index)
+{
+    return m_handleStatement.getType(index);
+}
+
+void Handle::bindInteger32(const Integer32 &value, int index)
+{
+    m_handleStatement.bindInteger32(value, index);
+}
+
+void Handle::bindInteger64(const Integer64 &value, int index)
+{
+    m_handleStatement.bindInteger64(value, index);
+}
+
+void Handle::bindDouble(const Float &value, int index)
+{
+    m_handleStatement.bindDouble(value, index);
+}
+
+void Handle::bindText(const Text &value, int index)
+{
+    bindText(value, -1, index);
+}
+
+void Handle::bindText(const Text &value, int length, int index)
+{
+    m_handleStatement.bindText(value, length, index);
+}
+
+void Handle::bindBLOB(const BLOB &value, int index)
+{
+    m_handleStatement.bindBLOB(value, index);
+}
+
+void Handle::bindNull(int index)
+{
+    m_handleStatement.bindNull(index);
+}
+
+Handle::Integer32 Handle::getInteger32(int index)
+{
+    return m_handleStatement.getInteger32(index);
+}
+
+Handle::Integer64 Handle::getInteger64(int index)
+{
+    return m_handleStatement.getInteger64(index);
+}
+
+Handle::Float Handle::getDouble(int index)
+{
+    return m_handleStatement.getDouble(index);
+}
+
+Handle::Text Handle::getText(int index)
+{
+    return m_handleStatement.getText(index);
+}
+
+Handle::BLOB Handle::getBLOB(int index)
+{
+    return m_handleStatement.getBLOB(index);
+}
+
+void Handle::finalize()
+{
+    m_handleStatement.finalize();
+}
+
+bool Handle::isStatementReadonly()
+{
+    return m_handleStatement.isReadonly();
+}
+
+bool Handle::isPrepared()
+{
+    return m_handleStatement.isPrepared();
+}
+
+#pragma mark - Convenient
+std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
+{
+    static const StatementSelect s_statementSelect =
+        StatementSelect().select(1).limit(0);
+    StatementSelect statementSelect = s_statementSelect;
+    statementSelect.from(table);
+    m_error.level = Error::Level::Ignore;
+    bool result = Handle::prepare(statementSelect) && step();
+    m_error.level = Error::Level::Error;
+    return {result || getResultCode() == SQLITE_ERROR, result};
+}
+
+std::pair<bool, std::list<std::string>>
+Handle::getColumnsWithTable(const std::string &tableName)
+{
+    return getPragmaValues(
+        StatementPragma().pragma(Pragma::TableInfo).to(tableName), 1);
+}
+
+std::pair<bool, std::list<std::string>> Handle::getAttachedSchemas()
+{
+    return getPragmaValues(StatementPragma().pragma(Pragma::DatabaseList), 1);
+}
+
+std::pair<bool, bool> Handle::isSchemaExists(const std::string &schemaName)
+{
+    std::pair<bool, std::list<std::string>> pair = getAttachedSchemas();
+    if (!pair.first) {
+        return {false, false};
+    }
+    for (const std::string &schema : pair.second) {
+        if (schema == schemaName) {
+            return {true, true};
+        }
+    }
+    return {true, false};
+}
+
+std::pair<bool, std::list<std::string>>
+Handle::getPragmaValues(const StatementPragma &statement, int index)
+{
+    if (prepare(statement)) {
+        bool done;
+        std::list<std::string> values;
+        while (step(done) && !done) {
+            values.push_back(getText(index));
+        }
+        finalize();
+        if (done) {
+            return {true, values};
+        }
+    }
+    return {false, {}};
+}
+
+const std::string Handle::s_savepointPrefix("WCDBSavepoint_");
+
+bool Handle::beginNestedTransaction()
+{
+    if (!isInTransaction()) {
+        return beginTransaction();
+    }
+    std::string savepointName =
+        s_savepointPrefix + std::to_string(++m_nestedLevel);
+    return execute(StatementSavepoint().savepoint(savepointName));
+}
+
+bool Handle::commitOrRollbackNestedTransaction()
+{
+    if (m_nestedLevel == 0) {
+        return commitOrRollbackTransaction();
+    }
+    std::string savepointName =
+        s_savepointPrefix + std::to_string(m_nestedLevel--);
+    if (!execute(StatementRelease().release(savepointName))) {
+        discardableExecute(StatementRollback().rollbackTo(savepointName));
+        return false;
+    }
+    return true;
+}
+
+void Handle::rollbackNestedTransaction()
+{
+    if (m_nestedLevel == 0) {
+        return rollbackTransaction();
+    }
+    std::string savepointName =
+        s_savepointPrefix + std::to_string(m_nestedLevel--);
+    discardableExecute(StatementRollback().rollbackTo(savepointName));
+}
+
+bool Handle::runNestedTransaction(const TransactionCallback &transaction)
+{
+    if (!beginNestedTransaction()) {
+        return false;
+    }
+    if (transaction(this)) {
+        return commitOrRollbackNestedTransaction();
+    }
+    rollbackNestedTransaction();
+    return false;
+}
+
+bool Handle::beginTransaction()
+{
+    return execute(StatementBegin::immediate);
+}
+
+bool Handle::commitOrRollbackTransaction()
+{
+    m_nestedLevel = 0;
+    if (!execute(StatementCommit::commit)) {
+        discardableExecute(StatementRollback::rollback);
+        return false;
+    }
+    return true;
+}
+
+void Handle::rollbackTransaction()
+{
+    m_nestedLevel = 0;
+    discardableExecute(StatementRollback::rollback);
+}
+
+bool Handle::runTransaction(const TransactionCallback &transaction)
+{
+    if (!beginTransaction()) {
+        return false;
+    }
+    if (transaction(this)) {
+        return commitOrRollbackTransaction();
+    }
+    rollbackTransaction();
+    return false;
+}
+
+void Handle::discardableExecute(const Statement &statement)
+{
+    sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
+                 nullptr, nullptr, nullptr);
+}
+
+#pragma mark - Cipher
+bool Handle::setCipherKey(const void *data, int size)
+{
+#ifdef SQLITE_HAS_CODEC
+    if (sqlite3_key((sqlite3 *) m_handle, data, size) == SQLITE_OK) {
+        return true;
+    }
+    setupError();
+    m_error.operation = Operation::Cipher;
+    m_error.report();
+    return false;
+#else  //SQLITE_HAS_CODEC
+    Error::fatal("[sqlite3_key] is not supported for current config");
+    return false;
+#endif //SQLITE_HAS_CODEC
+}
+
+#pragma mark - Trace
+void Handle::traceSQL(const SQLTraceCallback &trace)
+{
+    m_tracer.traceSQL(m_handle, trace);
+}
+
+void Handle::tracePerformance(const PerformanceTraceCallback &trace)
+{
+    m_tracer.tracePerformance(
+        m_handle,
+        [this, trace](const Tracer::Footprints &footprints, int64_t cost) {
+            trace(getTag(), footprints, cost);
+        });
+}
+
+#pragma mark - Repair Kit
 bool Handle::backup(const void *key, unsigned int length)
 {
-    std::string backupPath = getBackupPath();
-    int rc = sqliterk_save_master(m_handle, backupPath.c_str(), key, length);
+    std::string backupPath = Path::addExtention(path, getBackupSubfix());
+    int rc = sqliterk_save_master((sqlite3 *) m_handle, backupPath.c_str(), key,
+                                  length);
     if (rc == SQLITERK_OK) {
         return true;
     }
-    m_error.clear();
-    m_error.setError(WCDB::Error::Type::RepairKit, rc);
-    m_error.setOperation(Error::Operation::RepairKitBackup);
-    m_error.setPath(backupPath);
+    m_error.reset();
+    m_error.code = rc;
+    m_error.operation = Operation::Backup;
+    m_error.report();
     return false;
 }
 
@@ -529,85 +573,31 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
             break;
         }
 
-        rc = sqliterk_output(rk, m_handle, info, SQLITERK_OUTPUT_ALL_TABLES);
+        rc = sqliterk_output(rk, (sqlite3 *) m_handle, info,
+                             SQLITERK_OUTPUT_ALL_TABLES);
     } while (false);
     if (rc == SQLITERK_OK) {
         return true;
     }
-    m_error.clear();
-    m_error.setError(WCDB::Error::Type::RepairKit, rc);
-    m_error.setOperation(Error::Operation::RepairKitRepair);
-    m_error.setPath(corruptedDBPath);
+    m_error.reset();
+    m_error.code = rc;
+    m_error.operation = Operation::Repair;
+    m_error.report();
     return false;
 }
 
-int Handle::getChanges()
-{
-    return sqlite3_changes(m_handle);
-}
-
-bool Handle::isReadonly()
-{
-    return sqlite3_db_readonly(m_handle, NULL) == 1;
-}
-
-void Handle::resetError()
-{
-    m_error.reset();
-}
-
-void Handle::skipError(bool skip)
-{
-    m_skipError = skip;
-}
-
-void Handle::setupAndReportError(Error &error)
-{
-    if (!m_skipError) {
-        setupError(error);
-        error.report();
-    }
-}
-
-void Handle::setupAndReportErrorWithSQL(Error &error, const std::string &sql)
-{
-    if (!m_skipError) {
-        setupError(error);
-        error.setSQL(sql);
-        error.report();
-    }
-}
-
-void Handle::setupAndReportErrorWithPath(Error &error, const std::string &path)
-{
-    if (!m_skipError) {
-        setupError(error);
-        error.setPath(path);
-        error.report();
-    }
-}
-
-void Handle::setupError(Error &error)
-{
-    error.clear();
-    error.setError(WCDB::Error::Type::SQLite, sqlite3_errcode(m_handle));
-    if (!error.isOK()) {
-        const char *message = sqlite3_errmsg(m_handle);
-        if (message) {
-            error.setMessage(message);
-        }
-        error.setExtendedCode(sqlite3_extended_errcode(m_handle));
-    }
-}
-
-bool Handle::isInTransaction()
-{
-    return sqlite3_get_autocommit(m_handle) == 0;
-}
-
-const Error &Handle::getError()
+#pragma mark - Error
+const HandleError &Handle::getError() const
 {
     return m_error;
+}
+
+void Handle::setupError()
+{
+    m_error.reset();
+    m_error.code = getResultCode();
+    m_error.message = getErrorMessage();
+    m_error.extendedCode = getExtendedErrorCode();
 }
 
 } //namespace WCDB

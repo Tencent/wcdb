@@ -25,7 +25,7 @@ namespace WCDB {
 ColumnDef::ColumnDef(const Column &column)
 {
     Lang::ColumnDef &lang = getMutableLang();
-    lang.column.assign(column.getLang());
+    lang.column.assign(column.getCOWLang());
 }
 
 ColumnDef &ColumnDef::withType(const ColumnType &columnType)
@@ -39,7 +39,7 @@ ColumnDef &ColumnDef::withType(const ColumnType &columnType)
 ColumnDef &
 ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
 {
-    getMutableLang().columnConstraints.append(columnConstraint.getLang());
+    getMutableLang().columnConstraints.append(columnConstraint.getCOWLang());
     return *this;
 }
 
@@ -48,18 +48,19 @@ ColumnDef &ColumnDef::byAddingConstraints(
 {
     Lang::ColumnDef &lang = getMutableLang();
     for (const ColumnConstraint &columnConstraint : columnConstraints) {
-        lang.columnConstraints.append(columnConstraint.getLang());
+        lang.columnConstraints.append(columnConstraint.getCOWLang());
     }
     return *this;
 }
 
 bool ColumnDef::isAutoIncrement() const
 {
-    const auto &lang = getLang();
+    const auto &lang = getCOWLang();
     if (lang.empty()) {
         return false;
     }
-    const auto &columnConstraints = lang.get().columnConstraints;
+    const auto &columnConstraints =
+        lang.get<Lang::ColumnDef>().columnConstraints;
     if (columnConstraints.empty()) {
         return false;
     }
@@ -73,11 +74,12 @@ bool ColumnDef::isAutoIncrement() const
 
 bool ColumnDef::isPrimary() const
 {
-    const auto &lang = getLang();
+    const auto &lang = getCOWLang();
     if (lang.empty()) {
         return false;
     }
-    const auto &columnConstraints = lang.get().columnConstraints;
+    const auto &columnConstraints =
+        lang.get<Lang::ColumnDef>().columnConstraints;
     if (columnConstraints.empty()) {
         return false;
     }
@@ -92,9 +94,9 @@ bool ColumnDef::isPrimary() const
 
 const std::string &ColumnDef::getColumnName() const
 {
-    const auto &lang = getLang();
+    const auto &lang = getCOWLang();
     assert(!lang.empty());
-    const auto &column = lang.get().column;
+    const auto &column = lang.get<Lang::ColumnDef>().column;
     assert(!column.empty());
     const auto &name = column.get().name;
     assert(!name.empty());

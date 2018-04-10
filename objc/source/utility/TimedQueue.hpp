@@ -36,11 +36,9 @@ template <typename Key, typename Info>
 class TimedQueue {
 public:
     TimedQueue(double delay)
-        : m_delay(std::chrono::microseconds((long long) (delay * 1000000)))
-        , m_stop(false)
-        , m_running(false){};
+        : m_delay(std::chrono::microseconds((long long) (delay * 1000000))){};
 
-    typedef std::function<void(const Key &, const Info &)> OnExpired;
+    typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
     void reQueue(const Key &key, const Info &info)
     {
@@ -49,7 +47,11 @@ public:
             std::lock_guard<std::mutex> lockGuard(m_mutex);
             notify = m_list.empty();
 
-            unsafeRemove(key);
+            auto iter = m_map.find(key);
+            if (iter != m_map.end()) {
+                m_list.erase(iter->second);
+                m_map.erase(iter);
+            }
 
             //delay
             std::shared_ptr<Element> element(new Element(
@@ -63,48 +65,31 @@ public:
         }
     }
 
-    void remove(const Key &key)
-    {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
-        unsafeRemove(key);
-    }
-
     void stop()
     {
-        {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
-            m_stop = true;
-        }
+        std::lock_guard<std::mutex> lockGuard(m_mutex);
         m_cond.notify_one();
     }
 
-    void loop(const OnExpired &onExpired)
+    void waitUntilExpired(const ExpiredCallback &onExpired)
     {
-        m_running = true;
-        {
-            std::unique_lock<std::mutex> lockGuard(m_mutex);
-            while (!m_stop) {
-                if (m_list.empty()) {
-                    m_cond.wait(lockGuard);
-                    continue;
-                }
-                std::shared_ptr<Element> element = m_list.back();
-                Time now = std::chrono::steady_clock::now();
-                if (now < element->expired) {
-                    m_cond.wait_for(lockGuard, element->expired - now);
-                    continue;
-                }
-                m_list.pop_back();
-                m_map.erase(element->key);
-                lockGuard.unlock();
-                onExpired(element->key, element->info);
-                lockGuard.lock();
-            }
+        std::unique_lock<std::mutex> lockGuard(m_mutex);
+        if (m_list.empty()) {
+            m_cond.wait(lockGuard);
+            return;
         }
-        m_running = false;
+        std::shared_ptr<Element> element = m_list.back();
+        Time now = std::chrono::steady_clock::now();
+        if (now < element->expired) {
+            m_cond.wait_for(lockGuard, element->expired - now);
+            return;
+        }
+        m_list.pop_back();
+        m_map.erase(element->key);
+        lockGuard.unlock();
+        onExpired(element->key, element->info);
+        lockGuard.lock();
     }
-
-    bool running() const { return m_running; }
 
 protected:
     using Time = std::chrono::steady_clock::time_point;
@@ -118,6 +103,7 @@ protected:
         Info info;
     };
     typedef struct Element Element;
+    //TODO refactor
     using List = std::list<std::shared_ptr<Element>>;
     using Map = std::unordered_map<Key, typename List::iterator>;
     Map m_map;
@@ -125,17 +111,6 @@ protected:
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::chrono::microseconds m_delay;
-    bool m_stop;
-    std::atomic<bool> m_running;
-
-    void unsafeRemove(const Key &key)
-    {
-        auto iter = m_map.find(key);
-        if (iter != m_map.end()) {
-            m_list.erase(iter->second);
-            m_map.erase(iter);
-        }
-    }
 };
 
 } //namespace WCDB

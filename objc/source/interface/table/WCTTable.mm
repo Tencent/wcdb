@@ -24,6 +24,9 @@
 
 @implementation WCTTable
 
+@synthesize tableName = _tableName;
+@synthesize cls = _class;
+
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
                     andTableName:(NSString *)tableName
                         andClass:(Class<WCTTableCoding>)cls
@@ -39,6 +42,11 @@
 - (NSString *)tableName
 {
     return _tableName;
+}
+
+- (WCTDatabase *)getDatabase
+{
+    return [[WCTDatabase alloc] initWithDatabase:_database];
 }
 
 @end

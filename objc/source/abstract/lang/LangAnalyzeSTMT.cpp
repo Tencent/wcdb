@@ -36,6 +36,16 @@ CopyOnWriteString AnalyzeSTMT::SQL() const
     return description;
 }
 
+STMT::Type AnalyzeSTMT::getSTMTType() const
+{
+    return STMT::Type::Analyze;
+}
+
+STMT::Type AnalyzeSTMT::getType()
+{
+    return STMT::Type::Analyze;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

@@ -29,6 +29,16 @@ const char *DropViewSTMT::getInternalName() const
     return "VIEW";
 }
 
+STMT::Type DropViewSTMT::getSTMTType() const
+{
+    return STMT::Type::DropView;
+}
+
+STMT::Type DropViewSTMT::getType()
+{
+    return STMT::Type::DropView;
+}
+
 } // namespace Lang
 
 } // namespace WCDB

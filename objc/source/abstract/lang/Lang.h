@@ -40,6 +40,7 @@
 #include <WCDB/LangModuleArgument.hpp>
 #include <WCDB/LangOrder.hpp>
 #include <WCDB/LangOrderingTerm.hpp>
+#include <WCDB/LangPragma.hpp>
 #include <WCDB/LangQualifiedTableName.hpp>
 #include <WCDB/LangRaiseFunction.hpp>
 #include <WCDB/LangResultColumn.hpp>
