@@ -18,32 +18,33 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface RaiseFunctionTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation RaiseFunctionTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testRaiseFunction
+{
+    std::string errorMessage = "testError";
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withIgnore(),
+                    @"RAISE(IGNORE)");
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withRollback(errorMessage),
+                    @"RAISE(ROLLBACK, testError)");
+
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withAbort(errorMessage),
+                    @"RAISE(ABORT, testError)");
+
+    WINQAssertEqual(WCDB::RaiseFunction()
+                        .withFail(errorMessage),
+                    @"RAISE(FAIL, testError)");
+}
+
 @end

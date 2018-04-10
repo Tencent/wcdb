@@ -18,32 +18,33 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "BenchmarkObject.h"
+#import "BenchmarkObject+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface BenchmarkObject ()
+@property(nonatomic, assign) int64_t key;
+@property(nonatomic, retain) NSData *value;
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation BenchmarkObject
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_IMPLEMENTATION(BenchmarkObject)
+WCDB_SYNTHESIZE(BenchmarkObject, key)
+WCDB_SYNTHESIZE(BenchmarkObject, value)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+- (instancetype)initWithKey:(int64_t)key andValue:(NSData *)value
+{
+    if (self = [super init]) {
+        _key = key;
+        _value = value;
+    }
+    return self;
+}
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
++ (NSString *)name
+{
+    return NSStringFromClass(BenchmarkObject.class);
+}
+
 @end

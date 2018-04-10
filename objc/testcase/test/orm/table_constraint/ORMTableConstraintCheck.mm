@@ -18,32 +18,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMTableConstraintCheck.h"
+#import "ORMTableConstraintCheck+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMTableConstraintCheck
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMTableConstraintCheck)
+WCDB_SYNTHESIZE(ORMTableConstraintCheck, variable)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_CHECK(ORMTableConstraintCheck, "ORMTableConstraintCheck", ORMTableConstraintCheck.variable > 2)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

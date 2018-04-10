@@ -18,32 +18,39 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "BaseBenchmark.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface BaselineReadBenchmark : BaseBenchmark
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation BaselineReadBenchmark
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)setUp
+{
+    [super setUp];
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    [self setUpWithPreCreateTable];
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    [self setUpWithPreInsertObjects:self.config.readCount];
+}
+
+- (void)testBaselineRead
+{
+    __block NSArray<BenchmarkObject *> *results = nil;
+    __block NSString *tableName = [self getTableName];
+
+    [self mesasure:^{
+        results = nil;
+
+        [self tearDownDatabaseCache];
+
+        [self setUpDatabaseCache];
+    } for:^{
+        results = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName];
+    } checkCorrectness:^{
+        XCTAssertEqual(results.count, self.config.readCount);
+    }];
+}
+
 @end

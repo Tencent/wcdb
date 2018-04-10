@@ -57,3 +57,64 @@
     return reversedArray;
 }
 @end
+
+@implementation NSMutableArray (Reverse)
+
+- (NSMutableArray *)sorted
+{
+    return [NSMutableArray arrayWithArray:[self sortedArrayUsingComparator:NSObject.Comparator]];
+}
+
+- (NSMutableArray *)reversed
+{
+    NSMutableArray *reversedArray = [[NSMutableArray alloc] initWithCapacity:self.count];
+    NSEnumerator *reversedEnum = self.reverseObjectEnumerator;
+    NSObject *object = nil;
+    while (object = [reversedEnum nextObject]) {
+        [reversedArray addObject:object];
+    }
+    return reversedArray;
+}
+@end
+
+@implementation NSData (Random)
+
++ (NSData *)randomData
+{
+    int length = rand() % 256;
+    NSMutableData *data = [NSMutableData data];
+    for (int i = 0; i < length; ++i) {
+        unsigned char random = rand() % sizeof(unsigned char);
+        [data appendBytes:&random length:sizeof(unsigned char)];
+    }
+    return data;
+}
+
++ (NSData *)randomDataOtherThan:(NSData *)other
+{
+    NSData *data;
+    do {
+        data = [self randomData];
+    } while ([data isEqualToData:other]);
+    return data;
+}
+
+@end
+
+@implementation NSString (Random)
+
++ (NSString *)randomString
+{
+    int length = rand() % 256;
+    static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+    NSMutableString *randomString = [NSMutableString string];
+    for (int i = 0; i < length; ++i) {
+        [randomString appendFormat:@"%c", alphanum[rand() % (sizeof(alphanum) - 1)]];
+    }
+    return randomString;
+}
+
+@end

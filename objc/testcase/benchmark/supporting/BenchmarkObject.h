@@ -20,30 +20,13 @@
 
 #import <Foundation/Foundation.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@interface BenchmarkObject : NSObject
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@property(class, readonly) NSString *name;
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (instancetype)initWithKey:(int64_t)key andValue:(NSData *)value;
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+@property(nonatomic, readonly) int64_t key;
+@property(nonatomic, readonly) NSData *value;
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

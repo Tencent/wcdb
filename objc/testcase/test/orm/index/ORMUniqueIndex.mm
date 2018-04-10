@@ -18,32 +18,19 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMUniqueIndex.h"
+#import "ORMUniqueIndex+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMUniqueIndex
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMUniqueIndex)
+WCDB_SYNTHESIZE(ORMUniqueIndex, variable1)
+WCDB_SYNTHESIZE(ORMUniqueIndex, variable2)
+WCDB_SYNTHESIZE(ORMUniqueIndex, variable3)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_UNIQUE_INDEX(ORMUniqueIndex, "_index_1", variable1)
+WCDB_UNIQUE_INDEX_ASC(ORMUniqueIndex, "_index_2", variable2)
+WCDB_UNIQUE_INDEX_DESC(ORMUniqueIndex, "_index_3", variable3)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

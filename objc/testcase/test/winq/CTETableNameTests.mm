@@ -18,32 +18,25 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface CTETableNameTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation CTETableNameTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testCTETableName
+{
+    WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
+                        .byAddingColumn(self.class.column),
+                    @"testTable(testColumn)");
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
+                        .byAddingColumns(self.class.columns),
+                    @"testTable(testColumn, testColumn2)");
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WINQAssertEqual(WCDB::CTETableName(self.class.tableName), @"testTable");
+}
+
 @end

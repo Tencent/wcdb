@@ -18,32 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMTableConstraintMultiPrimary.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@interface ORMTableConstraintMultiPrimary (WCTTableCoding) <WCTTableCoding>
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_PROPERTY(variable1)
+WCDB_PROPERTY(variable2)
+WCDB_PROPERTY(variable3)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
-
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

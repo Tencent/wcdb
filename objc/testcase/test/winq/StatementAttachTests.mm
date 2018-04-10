@@ -18,32 +18,24 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface StatementAttachTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation StatementAttachTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testStatementAttach
+{
+    XCTAssertEqual(WCDB::StatementAttach().getType(), WCDB::Statement::Type::Attach);
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WCDB::Expression expr = WCDB::Expression(self.class.column);
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WINQAssertEqual(WCDB::StatementAttach()
+                        .attach(expr)
+                        .as(self.class.schemaName),
+                    @"ATTACH testColumn AS testSchema");
+}
+
 @end

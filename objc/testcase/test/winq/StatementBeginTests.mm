@@ -18,32 +18,24 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface StatementBeginTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation StatementBeginTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testStatementBegin
+{
+    XCTAssertEqual(WCDB::StatementBegin().getType(), WCDB::Statement::Type::Begin);
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WINQAssertEqual(WCDB::StatementBegin::deferred,
+                    @"BEGIN DEFERRED");
+    WINQAssertEqual(WCDB::StatementBegin::immediate,
+                    @"BEGIN IMMEDIATE");
+    WINQAssertEqual(WCDB::StatementBegin::exclusive,
+                    @"BEGIN EXCLUSIVE");
+}
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

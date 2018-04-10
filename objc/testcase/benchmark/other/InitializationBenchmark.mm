@@ -18,32 +18,31 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "BaseBenchmark.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface InitializationBenchmark : BaseBenchmark
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation InitializationBenchmark
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)setUp
+{
+    [super setUp];
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    [self setUpWithPreCreateTable:self.config.tableCount];
+}
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+- (void)testInitialization
+{
+    [self mesasure:^{
+        [self tearDownDatabaseCache];
+    } for:^{
+        XCTAssertTrue(self.database.canOpen);
+    } checkCorrectness:^{
+        NSNumber *count = [self.database getValueOnResult:WCTMaster.AllResults.count() fromTable:WCTMaster.TableName];
+        XCTAssertEqual(count.intValue, self.config.tableCount);
+    }];
+}
+
 @end

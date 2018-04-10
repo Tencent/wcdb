@@ -18,32 +18,25 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface StatementVacuumTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation StatementVacuumTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testStatementVacuum
+{
+    XCTAssertEqual(WCDB::StatementVacuum().getType(), WCDB::Statement::Type::Vacuum);
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WINQAssertEqual(WCDB::StatementVacuum()
+                        .vacuum(),
+                    @"VACUUM");
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WINQAssertEqual(WCDB::StatementVacuum()
+                        .vacuum(self.class.schemaName),
+                    @"VACUUM testSchema");
+}
+
 @end

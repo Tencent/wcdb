@@ -18,32 +18,22 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMProperty+WCTTableCoding.h"
+#import "ORMProperty.h"
+#import "ORMTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface ORMTests_Property : ORMTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation ORMTests_Property
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)test
+{
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(property1 INTEGER, renamedProperty2 REAL, property3 TEXT DEFAULT 'defaultString', renamedProperty4 REAL DEFAULT 1.1)", _tableName];
+    [_expectedSQLs addObject:expectedSQL];
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMProperty.class]);
+}
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

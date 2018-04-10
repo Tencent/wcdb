@@ -20,30 +20,21 @@
 
 #import <Foundation/Foundation.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@interface ORMColumnCoding : NSObject
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@property(nonatomic, assign) int32_t int32Value;
+@property(nonatomic, assign) int64_t int64Value;
+@property(nonatomic, assign) uint32_t uint32Value;
+@property(nonatomic, assign) uint64_t uint64Value;
+@property(nonatomic, assign) float floatValue;
+@property(nonatomic, assign) double doubleValue;
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+@property(nonatomic, retain) NSString *stringValue;
+@property(nonatomic, retain) NSNumber *numberValue;
+@property(nonatomic, retain) NSDate *dateValue;
+@property(nonatomic, retain) NSData *dataValue;
+@property(nonatomic, retain) NSArray *arrayValue;
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+- (BOOL)isEqualToObject:(ORMColumnCoding *)object;
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

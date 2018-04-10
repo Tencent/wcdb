@@ -18,32 +18,18 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "TestCaseIndexedObject.h"
+#import "TestCaseIndexedObject+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation TestCaseIndexedObject
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(TestCaseIndexedObject)
+WCDB_SYNTHESIZE(TestCaseIndexedObject, variable1)
+WCDB_SYNTHESIZE(TestCaseIndexedObject, variable2)
+WCDB_SYNTHESIZE(TestCaseIndexedObject, variable3)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseIndexedObject, variable1)
+WCDB_INDEX(TestCaseIndexedObject, "_index", variable2)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

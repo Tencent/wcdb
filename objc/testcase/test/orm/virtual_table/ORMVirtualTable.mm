@@ -18,32 +18,16 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMVirtualTable.h"
+#import "ORMVirtualTable+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMVirtualTable
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMVirtualTable)
+WCDB_SYNTHESIZE(ORMVirtualTable, variable)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_VIRTUAL_TABLE_ARGUMENT(ORMVirtualTable, "tokenize", "WCDB")
+WCDB_VIRTUAL_TABLE_MODULE(ORMVirtualTable, "fts3")
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

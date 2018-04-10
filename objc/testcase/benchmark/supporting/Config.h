@@ -20,30 +20,18 @@
 
 #import <Foundation/Foundation.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@interface Config : NSObject
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@property(class, readonly) Config *defaultConfig;
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+@property(readonly) int valueLength;
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+@property(readonly) int randomSeed;
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+@property(readonly) int readCount;
+@property(readonly) int writeCount;
+@property(readonly) int batchWriteCount;
+
+@property(readonly) int tableCount;
+
 @end

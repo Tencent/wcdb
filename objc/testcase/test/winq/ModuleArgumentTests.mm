@@ -18,32 +18,21 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface ModuleArgumentTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation ModuleArgumentTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testModuleArgument
+{
+    WINQAssertEqual(WCDB::ModuleArgument(self.class.columnDef), @"testColumn INTEGER");
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WINQAssertEqual(WCDB::ModuleArgument(self.class.tableConstraint), @"CONSTRAINT testConstraint PRIMARY KEY(testColumn)");
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WINQAssertEqual(WCDB::ModuleArgument("tokenize", "WCDB"), @"tokenize=WCDB");
+}
+
 @end

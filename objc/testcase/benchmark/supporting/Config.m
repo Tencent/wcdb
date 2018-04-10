@@ -18,32 +18,33 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "Config.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation Config
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
++ (Config *)defaultConfig
+{
+    static Config *s_default = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      s_default = [[Config alloc] init];
+    });
+    return s_default;
+}
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _valueLength = 100;
+        _randomSeed = 0;
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+        _batchWriteCount = 1000000;
+        _readCount = 2000000;
+        _writeCount = 100000;
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+        _tableCount = 50000;
+    }
+    return self;
+}
+
 @end

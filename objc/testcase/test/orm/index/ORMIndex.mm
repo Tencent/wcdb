@@ -18,32 +18,19 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMIndex.h"
+#import "ORMIndex+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMIndex
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMIndex)
+WCDB_SYNTHESIZE(ORMIndex, variable1)
+WCDB_SYNTHESIZE(ORMIndex, variable2)
+WCDB_SYNTHESIZE(ORMIndex, variable3)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_INDEX(ORMIndex, "_index_1", variable1)
+WCDB_INDEX_ASC(ORMIndex, "_index_2", variable2)
+WCDB_INDEX_DESC(ORMIndex, "_index_3", variable3)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

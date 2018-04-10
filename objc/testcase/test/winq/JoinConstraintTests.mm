@@ -18,32 +18,29 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "WINQTestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
+@interface JoinConstraintTests : WINQTestCase
+
 @end
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+@implementation JoinConstraintTests
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+- (void)testJoinConstraint
+{
+    WINQAssertEqual(WCDB::JoinConstraint()
+                        .on(self.class.condition),
+                    @"ON testColumn NOTNULL");
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WINQAssertEqual(WCDB::JoinConstraint()
+                        .usingColumn(self.class.column),
+                    @"USING(testColumn)");
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WINQAssertEqual(WCDB::JoinConstraint()
+                        .usingColumns(self.class.columns),
+                    @"USING(testColumn, testColumn2)");
+
+    WINQAssertEqual(WCDB::JoinConstraint(), @"");
+}
+
 @end

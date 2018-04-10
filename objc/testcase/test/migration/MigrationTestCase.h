@@ -18,32 +18,26 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "TestCase.h"
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@interface MigrationTestCase : TestCase {
+@protected
+    WCTDatabase *_database;
+    NSArray<TestCaseObject *> *_preInserted;
+    NSString *_tableName;
+    Class _cls;
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+    WCDB::Expression _greaterThan0Condition;
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+    WCDB::Expression _removeBothEndCondition;
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
+    WCDB::OrderingTerm _ascendingOrder;
 
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
+    WCDB::OrderingTerm _descendingOrder;
+
+    WCDB::Expression _limit1;
+
+    WCDB::Expression _offset1;
+}
+
 @end

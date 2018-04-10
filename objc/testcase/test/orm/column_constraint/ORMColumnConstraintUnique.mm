@@ -18,32 +18,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMColumnConstraintUnique.h"
+#import "ORMColumnConstraintUnique+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMColumnConstraintUnique
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMColumnConstraintUnique)
+WCDB_SYNTHESIZE(ORMColumnConstraintUnique, variable)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_UNIQUE(ORMColumnConstraintUnique, variable)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

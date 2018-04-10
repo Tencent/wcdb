@@ -18,32 +18,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMColumnConstraintPrimaryAscAutoIncrement.h"
+#import "ORMColumnConstraintPrimaryAscAutoIncrement+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMColumnConstraintPrimaryAscAutoIncrement
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMColumnConstraintPrimaryAscAutoIncrement)
+WCDB_SYNTHESIZE(ORMColumnConstraintPrimaryAscAutoIncrement, variable)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(ORMColumnConstraintPrimaryAscAutoIncrement, variable)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

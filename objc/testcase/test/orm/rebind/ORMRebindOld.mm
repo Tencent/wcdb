@@ -18,32 +18,17 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMRebindOld.h"
+#import "ORMRebindOld+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMRebindOld
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMRebindOld)
+WCDB_SYNTHESIZE(ORMRebindOld, variable1)
+WCDB_SYNTHESIZE(ORMRebindOld, variable2)
+WCDB_SYNTHESIZE(ORMRebindOld, variable3)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_INDEX(ORMRebindOld, "_index_1", variable1)
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

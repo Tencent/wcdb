@@ -18,32 +18,14 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMProperty.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@interface ORMProperty (WCTTableCoding) <WCTTableCoding>
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_PROPERTY(property1)
+WCDB_PROPERTY(property2)
+WCDB_PROPERTY(property3)
+WCDB_PROPERTY(property4)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
-
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end

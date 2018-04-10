@@ -18,32 +18,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "ORMTableConstraintForeignKey.h"
+#import "ORMTableConstraintForeignKey+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-#pragma mark - NSArray
-@interface NSArray (Reverse)
-- (NSArray *)reversed;
-- (NSArray *)sorted;
-@end
+@implementation ORMTableConstraintForeignKey
 
-#pragma mark - NSObject
-@interface NSObject (Comparator)
-+ (NSComparator)Comparator;
-@end
+WCDB_IMPLEMENTATION(ORMTableConstraintForeignKey)
+WCDB_SYNTHESIZE(ORMTableConstraintForeignKey, variable)
 
-#pragma mark - NSMutableArray
-@interface NSMutableArray (Reverse)
-- (NSMutableArray *)reversed;
-- (NSMutableArray *)sorted;
-@end
+WCDB_FOREIGN_KEY(ORMTableConstraintForeignKey, "ORMTableConstraintForeignKey", {WCDB::Column("variable")}, WCDB::ForeignKeyClause("otherTable").onDeleteSetNull())
 
-#pragma mark - NSData
-@interface NSData (Random)
-+ (NSData *)randomData;
-+ (NSData *)randomDataOtherThan:(NSData *)other;
-@end
-
-#pragma mark - NSString
-@interface NSString (Random)
-+ (NSString *)randomString;
 @end
