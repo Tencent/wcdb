@@ -32,6 +32,11 @@
     return NSStringFromClass(self.class);
 }
 
+- (NSString *)className
+{
+    return self.class.className;
+}
+
 + (NSString *)baseDirectory
 {
     return [NSTemporaryDirectory() stringByAppendingPathComponent:TestCase.className];
@@ -39,12 +44,12 @@
 
 - (NSString *)recommendedDirectory
 {
-    return [self.class.baseDirectory stringByAppendingPathComponent:self.class.className];
+    return [self.class.baseDirectory stringByAppendingPathComponent:self.className];
 }
 
 - (NSString *)recommendedPath
 {
-    NSString *hash = [NSString stringWithFormat:@"%lu", self.class.className.hash];
+    NSString *hash = [NSString stringWithFormat:@"%lu", self.className.hash];
     return [self.recommendedDirectory stringByAppendingPathComponent:hash];
 }
 

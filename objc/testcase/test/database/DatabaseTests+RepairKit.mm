@@ -35,7 +35,7 @@
 {
     [super setUp];
 
-    _tableName = self.class.className;
+    _tableName = self.className;
 
     _cls = TestCaseObject.class;
 

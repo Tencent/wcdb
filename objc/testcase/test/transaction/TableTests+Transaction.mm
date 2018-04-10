@@ -46,7 +46,7 @@
 
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
 
-    _tableName = self.class.className;
+    _tableName = self.className;
 
     _cls = TestCaseObject.class;
 

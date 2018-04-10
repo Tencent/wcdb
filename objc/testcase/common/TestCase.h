@@ -51,4 +51,6 @@
 
 @property(class, readonly) NSString *className;
 
+@property(readonly) NSString *className;
+
 @end
