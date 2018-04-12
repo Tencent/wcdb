@@ -38,9 +38,9 @@ public:
     };
     Type type;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 
-    virtual STMT::Type getSTMTType() const override;
+    STMT::Type getSTMTType() const override;
     static STMT::Type getType();
 
 protected:

@@ -35,7 +35,7 @@ public:
     CopyOnWriteString schemaName;
     CopyOnWriteString name;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 
 protected:
     virtual const char *getInternalName() const = 0;

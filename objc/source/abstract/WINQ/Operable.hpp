@@ -144,8 +144,8 @@ public:
 
     Expression collate(const std::string &collationName) const;
 
-    virtual Expression function(const std::string &functionName,
-                                bool distinct = false) const override;
+    Expression function(const std::string &functionName,
+                        bool distinct = false) const override;
 
 protected:
     virtual Lang::CopyOnWriteLazyLang<Lang::Expr> getExpressionLang() const = 0;

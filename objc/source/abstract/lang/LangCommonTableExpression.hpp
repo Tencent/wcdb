@@ -33,7 +33,7 @@ public:
     CopyOnWriteLazyLangList<Column> columns;
     CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

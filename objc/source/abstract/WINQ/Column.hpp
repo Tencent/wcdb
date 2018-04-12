@@ -34,13 +34,12 @@ public:
     static const Column rowid;
     explicit Column(const std::string &name);
 
-    virtual Lang::CopyOnWriteLazyLang<Lang::Expr>
-    getExpressionLang() const override;
+    Lang::CopyOnWriteLazyLang<Lang::Expr> getExpressionLang() const override;
 
     Column(const Lang::CopyOnWriteLazyLang<Lang::Column> &column);
 
 protected:
-    virtual Expression getRedirectSource() const override;
+    Expression getRedirectSource() const override;
 };
 
 } // namespace WCDB

@@ -44,7 +44,7 @@ public:
 protected:
     Database(const RecyclableHandlePool &recyclableHandlePool);
 
-    virtual bool isValid() const;
+    bool isValid() const;
     RecyclableHandlePool m_pool;
 
 #pragma mark - Basic

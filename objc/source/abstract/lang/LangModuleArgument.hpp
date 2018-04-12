@@ -44,7 +44,7 @@ public:
     CopyOnWriteString left;
     CopyOnWriteString right;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

@@ -34,10 +34,7 @@ public:
     {
     }
 
-    virtual WCTAccessorType getAccessorType() const override
-    {
-        return WCTAccessorObjC;
-    }
+    WCTAccessorType getAccessorType() const override { return WCTAccessorObjC; }
 
     const Setter setObject;
     const Getter getObject;

@@ -42,7 +42,7 @@ public:
     IndexSwitch indexSwitcher;
     CopyOnWriteString indexName;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

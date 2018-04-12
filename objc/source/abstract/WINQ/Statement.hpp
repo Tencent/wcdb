@@ -39,7 +39,7 @@ public:
     using Statement::Statement;
 
     static Statement::Type getType() { return T::getType(); }
-    virtual Statement::Type getStatementType() const override
+    Statement::Type getStatementType() const override
     {
         if (!m_cowLang.empty()) {
             return Statement::getStatementType();
@@ -62,7 +62,7 @@ public:
     using CRUDStatement::CRUDStatement;
 
     static Statement::Type getType() { return T::getType(); }
-    virtual Statement::Type getStatementType() const override
+    Statement::Type getStatementType() const override
     {
         Statement::Type type = Statement::getStatementType();
         if (type == Statement::Type::NotSet) {
@@ -72,8 +72,7 @@ public:
     };
     T &getMutableLang() { return this->m_cowLang.template get_or_copy<T>(); }
 
-    virtual Lang::CopyOnWriteLazyLang<Lang::CRUDSTMT>
-    getCRUDSTMT() const override
+    Lang::CopyOnWriteLazyLang<Lang::CRUDSTMT> getCRUDSTMT() const override
     {
         return m_cowLang;
     }

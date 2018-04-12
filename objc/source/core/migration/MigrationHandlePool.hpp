@@ -49,7 +49,7 @@ protected:
 #pragma mark - Override
 protected:
     bool willConfigurateHandle(Handle *handle) override;
-    virtual std::shared_ptr<Handle> generateHandle() override;
+    std::shared_ptr<Handle> generateHandle() override;
 };
 
 } //namespace WCDB

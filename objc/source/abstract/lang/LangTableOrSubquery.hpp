@@ -62,8 +62,8 @@ public:
     IndexSwitch indexSwitcher;
     CopyOnWriteString indexName;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class TableOrSubqueryTableFunction : public TableOrSubqueryBase {
@@ -73,16 +73,16 @@ public:
     CopyOnWriteString tableAlias;
     CopyOnWriteLazyLangList<Expr> exprs;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class TableOrSubqueryJoinClause : public TableOrSubqueryBase {
 public:
     CopyOnWriteLazyLang<JoinClause> joinClause;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class TableOrSubquerySelect : public TableOrSubqueryBase {
@@ -90,16 +90,16 @@ public:
     CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
     CopyOnWriteString tableAlias;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class TableOrSubqueryList : public TableOrSubqueryBase {
 public:
     CopyOnWriteLazyLangList<TableOrSubqueryBase> tableOrSubquerys;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class TableOrSubquery : public TableOrSubqueryBase {
@@ -114,8 +114,8 @@ public:
     CopyOnWriteLazyLang<TableOrSubquerySelect> tableOrSubquerySelect;
     CopyOnWriteLazyLang<TableOrSubqueryList> tableOrSubqueryList;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 } // namespace Lang

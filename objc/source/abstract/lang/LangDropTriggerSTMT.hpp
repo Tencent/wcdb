@@ -29,11 +29,11 @@ namespace Lang {
 
 class DropTriggerSTMT : public DropInternalSTMT {
 public:
-    virtual STMT::Type getSTMTType() const override;
+    STMT::Type getSTMTType() const override;
     static STMT::Type getType();
 
 protected:
-    virtual const char *getInternalName() const override;
+    const char *getInternalName() const override;
 };
 
 } // namespace Lang

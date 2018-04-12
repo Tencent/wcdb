@@ -49,7 +49,7 @@ public:
         Operation operation;
         CopyOnWriteString name;
 
-        virtual CopyOnWriteString SQL() const override;
+        CopyOnWriteString SQL() const override;
 
     protected:
         static constexpr const char *OperationName(const Operation &operation);
@@ -66,7 +66,7 @@ public:
     };
     InitiallySwitch initiallySwitcher;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *

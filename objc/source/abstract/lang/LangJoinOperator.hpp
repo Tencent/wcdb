@@ -42,7 +42,7 @@ public:
     };
     Type type;
 
-    virtual CopyOnWriteString SQL() const;
+    CopyOnWriteString SQL() const override;
 
 protected:
     static constexpr const char *JoinTypeName(const Type &type);

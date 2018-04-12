@@ -48,7 +48,7 @@ public:
     CopyOnWriteLazyLangList<Column> columns;
     CopyOnWriteLazyLang<ForeignKeyClause> foreignKeyClause;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

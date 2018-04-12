@@ -41,8 +41,8 @@ public:
     };
     Operation operation;
     std::string path;
-    virtual std::string getDescription() const override;
-    virtual size_t getHashedTypeid() const override;
+    std::string getDescription() const override;
+    size_t getHashedTypeid() const override;
 };
 
 class FileManager {

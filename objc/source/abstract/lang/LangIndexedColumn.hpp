@@ -41,7 +41,7 @@ public:
     CopyOnWriteString collationName;
     Order order;
 
-    virtual CopyOnWriteString SQL() const;
+    CopyOnWriteString SQL() const;
 };
 
 } // namespace Lang

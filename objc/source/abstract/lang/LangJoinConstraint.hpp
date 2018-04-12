@@ -40,7 +40,7 @@ public:
     CopyOnWriteLazyLang<Expr> expr;
     CopyOnWriteLazyLangList<Column> columns;
 
-    virtual CopyOnWriteString SQL() const;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

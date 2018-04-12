@@ -66,7 +66,7 @@ public:
     bool isResultColumnsNotSet() const;
 
 protected:
-    virtual Expression getRedirectSource() const override;
+    Expression getRedirectSource() const override;
 
     void compound(const Lang::SelectSTMT::Compound::Operator &compoundOperator,
                   const SelectCore &selectCore);

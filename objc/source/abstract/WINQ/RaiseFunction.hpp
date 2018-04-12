@@ -34,7 +34,7 @@ public:
     RaiseFunction &withFail(const std::string &errorMessage);
 
 protected:
-    virtual Expression getRedirectSource() const override;
+    Expression getRedirectSource() const override;
 };
 
 } // namespace WCDB

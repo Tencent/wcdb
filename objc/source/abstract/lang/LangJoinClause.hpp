@@ -37,11 +37,11 @@ public:
         CopyOnWriteLazyLang<TableOrSubquery> tableOrSubquery;
         CopyOnWriteLazyLang<JoinConstraint> joinConstraint;
 
-        virtual CopyOnWriteString SQL() const override;
+        CopyOnWriteString SQL() const override;
     };
     CopyOnWriteLazyLangList<Operand> joinOperands;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 template <>

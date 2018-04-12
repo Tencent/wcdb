@@ -50,7 +50,7 @@ public:
     CopyOnWriteString stringValue;
     CopyOnWriteData dataValue;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 
 protected:
     static CopyOnWriteString

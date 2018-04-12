@@ -57,7 +57,7 @@ protected:
         CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
         return characterSetRef;
     }
-    virtual int isSymbol(UnicodeChar theChar, bool *result) override
+    int isSymbol(UnicodeChar theChar, bool *result) override
     {
         if (m_symbolCharacterSet) {
             *result = CFCharacterSetIsCharacterMember(m_symbolCharacterSet, theChar);
@@ -65,7 +65,7 @@ protected:
         }
         return SQLITE_NOMEM;
     }
-    virtual int lemmatization(const char *input, int inputLength) override
+    int lemmatization(const char *input, int inputLength) override
     {
         int rc = WCDBCursorInfo::lemmatization(input, inputLength);
         if (rc != SQLITE_OK) {

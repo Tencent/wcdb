@@ -50,9 +50,9 @@ public:
     operator std::list<WCDB::OrderingTerm>() const;
 
 protected:
-    virtual WCDB::Expression getRedirectSource() const override;
+    WCDB::Expression getRedirectSource() const override;
 
-    virtual WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>
+    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>
     getExpressionLang() const override;
 
     std::shared_ptr<WCTColumnBinding> m_columnBinding;

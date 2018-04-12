@@ -39,7 +39,7 @@ public:
     Type type;
     CopyOnWriteString errorMessage;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

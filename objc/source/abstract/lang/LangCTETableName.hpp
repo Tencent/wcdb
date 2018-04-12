@@ -32,7 +32,7 @@ public:
     CopyOnWriteString tableName;
     CopyOnWriteLazyLangList<Column> columns;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

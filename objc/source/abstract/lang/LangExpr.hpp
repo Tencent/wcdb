@@ -73,8 +73,8 @@ public:
     CopyOnWriteString tableName;
     CopyOnWriteLazyLang<Column> column;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprUnaryOperation : public ExprBase {
@@ -88,8 +88,8 @@ public:
     Operator unaryOperator;
     CopyOnWriteLazyLang<ExprBase> expr;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 
 private:
     static constexpr const char *OperatorName(const Operator &unaryOpeartor);
@@ -123,8 +123,8 @@ public:
     CopyOnWriteLazyLang<ExprBase> right;
     Operator binaryOperator;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 
 private:
     static constexpr const char *OperatorName(const Operator &binaryOpeartor);
@@ -142,16 +142,16 @@ public:
     Type type;
     CopyOnWriteLazyLangList<ExprBase> exprs;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual ExprBase::Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    ExprBase::Type getType() const override;
 };
 
 class ExprList : public ExprBase {
 public:
     CopyOnWriteLazyLangList<ExprBase> exprs;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprCast : public ExprBase {
@@ -159,8 +159,8 @@ public:
     CopyOnWriteLazyLang<ExprBase> expr;
     ColumnType type;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprCollate : public ExprBase {
@@ -168,8 +168,8 @@ public:
     CopyOnWriteLazyLang<ExprBase> expr;
     CopyOnWriteString collationName;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprPattern : public ExprBase {
@@ -186,8 +186,8 @@ public:
     CopyOnWriteLazyLang<ExprBase> right;
     CopyOnWriteLazyLang<ExprBase> escape;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual ExprBase::Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    ExprBase::Type getType() const override;
 
 protected:
     static constexpr const char *TypeName(const Type &type);
@@ -198,8 +198,8 @@ public:
     CopyOnWriteLazyLang<ExprBase> expr;
     bool isNull;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprBetween : public ExprBase {
@@ -209,8 +209,8 @@ public:
     CopyOnWriteLazyLang<ExprBase> left;
     CopyOnWriteLazyLang<ExprBase> right;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprIn : public ExprBase {
@@ -232,8 +232,8 @@ public:
     CopyOnWriteString schemaName;
     CopyOnWriteString tableNameOrFunction;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprExists : public ExprBase {
@@ -242,8 +242,8 @@ public:
     bool isNot;
     CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 class ExprCase : public ExprBase {
@@ -255,15 +255,15 @@ public:
         CopyOnWriteLazyLang<ExprBase> when;
         CopyOnWriteLazyLang<ExprBase> then;
 
-        virtual CopyOnWriteString SQL() const override;
+        CopyOnWriteString SQL() const override;
     };
 
     CopyOnWriteLazyLangList<Pair> pairs;
 
     CopyOnWriteLazyLang<ExprBase> exprElse;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 template <>
@@ -293,8 +293,8 @@ public:
     CopyOnWriteLazyLang<ExprCase> exprCase;
     CopyOnWriteLazyLang<RaiseFunction> raiseFunction;
 
-    virtual CopyOnWriteString SQL() const override;
-    virtual Type getType() const override;
+    CopyOnWriteString SQL() const override;
+    Type getType() const override;
 };
 
 } // namespace Lang

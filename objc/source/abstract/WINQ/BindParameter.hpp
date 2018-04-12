@@ -40,7 +40,7 @@ public:
     //                           const Type &type = Type::Colon);
 
 protected:
-    virtual Expression getRedirectSource() const override;
+    Expression getRedirectSource() const override;
 };
 
 } // namespace WCDB

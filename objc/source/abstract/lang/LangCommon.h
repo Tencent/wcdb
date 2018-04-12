@@ -53,7 +53,7 @@ public:
     }
 
 protected:
-    virtual CopyOnWriteString calculatedDescription() const override
+    CopyOnWriteString calculatedDescription() const override
     {
         return this->get().SQL();
     }
@@ -92,7 +92,7 @@ public:
     }
 
 protected:
-    virtual CopyOnWriteString calculatedDescription() const override
+    CopyOnWriteString calculatedDescription() const override
     {
         std::string description;
         bool comma = false;

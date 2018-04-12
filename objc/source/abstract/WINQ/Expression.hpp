@@ -61,9 +61,8 @@ public:
                 public FunctionOperable {
     public:
         static const Expression::All default_;
-        virtual Expression
-        function(const std::string &functionName,
-                 __unused bool distinct = false) const override;
+        Expression function(const std::string &functionName,
+                            __unused bool distinct = false) const override;
     };
 
     Expression(const std::list<Expression> &expressions);
@@ -110,10 +109,9 @@ protected:
     Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprExists> &exprExists);
     Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprCollate> &exprCollate);
 
-    virtual Lang::CopyOnWriteLazyLang<Lang::Expr>
-    getExpressionLang() const override;
+    Lang::CopyOnWriteLazyLang<Lang::Expr> getExpressionLang() const override;
 
-    virtual Expression getRedirectSource() const override;
+    Expression getRedirectSource() const override;
 
     void setLiteralValue(const LiteralValue &literalValue);
 };

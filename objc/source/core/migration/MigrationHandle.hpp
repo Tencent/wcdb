@@ -41,18 +41,18 @@ protected:
 
 #pragma mark - Override
 public:
-    virtual bool execute(const Statement &statement) override;
-    virtual bool prepare(const Statement &statement) override;
-    virtual bool step(bool &done) override;
+    bool execute(const Statement &statement) override;
+    bool prepare(const Statement &statement) override;
+    bool step(bool &done) override;
     void reset() override;
     using Handle::step;
-    virtual void finalize() override;
-    virtual void bindInteger32(const Integer32 &value, int index) override;
-    virtual void bindInteger64(const Integer64 &value, int index) override;
-    virtual void bindDouble(const Float &value, int index) override;
-    virtual void bindText(const Text &value, int length, int index) override;
-    virtual void bindBLOB(const BLOB &value, int index) override;
-    virtual void bindNull(int index) override;
+    void finalize() override;
+    void bindInteger32(const Integer32 &value, int index) override;
+    void bindInteger64(const Integer64 &value, int index) override;
+    void bindDouble(const Float &value, int index) override;
+    void bindText(const Text &value, int length, int index) override;
+    void bindBLOB(const BLOB &value, int index) override;
+    void bindNull(int index) override;
 
 #pragma mark - Migration
 public:

@@ -42,7 +42,7 @@ public:
     int n;
     //    CopyOnWriteString name;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

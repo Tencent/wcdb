@@ -42,11 +42,8 @@ public:
     {
     }
 
-    virtual WCDB::ColumnType getColumnType() const override { return t; };
-    virtual WCTAccessorType getAccessorType() const override
-    {
-        return WCTAccessorCpp;
-    }
+    WCDB::ColumnType getColumnType() const override { return t; };
+    WCTAccessorType getAccessorType() const override { return WCTAccessorCpp; }
 
     const Setter setValue;
     const Getter getValue;

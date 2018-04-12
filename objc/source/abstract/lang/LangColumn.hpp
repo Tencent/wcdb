@@ -31,7 +31,7 @@ class Column : public Lang {
 public:
     CopyOnWriteString name;
 
-    virtual CopyOnWriteString SQL() const;
+    CopyOnWriteString SQL() const;
 };
 
 } // namespace Lang

@@ -36,7 +36,7 @@ public:
     ColumnType type;
     CopyOnWriteLazyLangList<ColumnConstraint> columnConstraints;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang

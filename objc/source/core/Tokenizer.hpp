@@ -48,11 +48,11 @@ public:
                    int inputLength,
                    TokenizerInfoBase *tokenizerInfo);
 
-    virtual int step(const char **ppToken,
-                     int *pnBytes,
-                     int *piStartOffset,
-                     int *piEndOffset,
-                     int *piPosition) override;
+    int step(const char **ppToken,
+             int *pnBytes,
+             int *piStartOffset,
+             int *piEndOffset,
+             int *piPosition) override;
 
 protected:
     const char *m_input;

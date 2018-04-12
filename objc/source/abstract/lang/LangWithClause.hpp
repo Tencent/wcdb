@@ -38,11 +38,11 @@ public:
         CopyOnWriteLazyLang<CTETableName> cteTableName;
         CopyOnWriteLazyLang<SelectSTMT> selectSTMT;
 
-        virtual CopyOnWriteString SQL() const override;
+        CopyOnWriteString SQL() const override;
     };
     CopyOnWriteLazyLangList<Pair> pairs;
 
-    virtual CopyOnWriteString SQL() const override;
+    CopyOnWriteString SQL() const override;
 };
 
 } // namespace Lang
