@@ -81,7 +81,7 @@ void SharedLock::lock()
 void SharedLock::unlock()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (--m_writer) {
+    if (--m_writer == 0) {
         m_id = std::thread::id();
         m_cond.notify_all();
     }
