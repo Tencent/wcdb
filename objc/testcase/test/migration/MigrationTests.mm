@@ -73,7 +73,7 @@
         WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList) atIndex:1];
         XCTAssertEqual(schemas.count, 2);
         XCTAssertTrue([schemas[0].stringValue isEqualToString:@"main"]);
-        XCTAssertTrue([schemas[1].stringValue isEqualToString:@"WCDBMigration"]);
+        XCTAssertTrue([schemas[1].stringValue isEqualToString:[self schemaNameForPath:_database.path]]);
     }
 
     //migration
@@ -103,7 +103,7 @@
 
     __block BOOL tested = NO;
     [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@.%@ VALUES(?1, ?2, ?3)", @"WCDBMigration", _tableName];
+      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@.%@ VALUES(?1, ?2, ?3)", [self schemaNameForPath:_database.path], _tableName];
       if ([sql isEqualToString:expectedSQL]) {
           tested = YES;
       }

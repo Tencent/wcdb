@@ -40,4 +40,6 @@
     WCDB::Expression _offset1;
 }
 
+- (NSString *)schemaNameForPath:(NSString *)path;
+
 @end

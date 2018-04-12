@@ -74,4 +74,9 @@
     [super tearDown];
 }
 
+- (NSString *)schemaNameForPath:(NSString *)path
+{
+    return [NSString stringWithFormat:@"WCDBMigration_%zu", std::hash<std::string>{}(path.UTF8String)];
+}
+
 @end
