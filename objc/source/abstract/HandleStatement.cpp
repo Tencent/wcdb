@@ -149,8 +149,9 @@ HandleStatement::Float HandleStatement::getDouble(int index)
 
 HandleStatement::Text HandleStatement::getText(int index)
 {
-    return reinterpret_cast<Text>(
+    Text text = reinterpret_cast<Text>(
         sqlite3_column_text((sqlite3_stmt *) m_stmt, index));
+    return text ? text : "";
 }
 
 HandleStatement::BLOB HandleStatement::getBLOB(int index)

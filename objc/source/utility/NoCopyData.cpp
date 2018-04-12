@@ -23,7 +23,8 @@
 namespace WCDB {
 
 NoCopyData::NoCopyData(const unsigned char *data_, const size_t &size_)
-    : data(data_), size(size_)
+    : data(data_ ? data_ : reinterpret_cast<const unsigned char *>(""))
+    , size(size_)
 {
 }
 
