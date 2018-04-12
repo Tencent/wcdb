@@ -105,7 +105,7 @@ public:
 
 #pragma mark - Handle
 public:
-    RecyclableHandle flowOut();
+    RecyclableHandle getHandle();
     bool execute(const Statement &statement);
     std::pair<bool, bool> isTableExists(const TableOrSubquery &table);
 

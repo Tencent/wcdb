@@ -23,7 +23,8 @@
 
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/MigrationInfo.hpp>
+#include <WCDB/MigrationHandle.hpp>
+#include <WCDB/MigrationInfos.hpp>
 
 namespace WCDB {
 
@@ -33,16 +34,11 @@ public:
         Migration = -1,
     };
 
-    static const Config
-    autoAttachWithInfo(const std::shared_ptr<MigrationInfo> &info);
-
-    static const Config autoDetach();
-
-    static Configs
-    defaultConfigsWithMigrationInfo(const std::shared_ptr<MigrationInfo> &info);
+    static const Config autoAttachAndDetachWithInfos(MigrationInfos *infos);
 
 protected:
-    static bool autoDetachCallback(Handle *handle);
+    static bool doAutoAttachAndDetachWithInfos(MigrationHandle *handle,
+                                               MigrationInfos *infos);
 };
 
 } //namespace WCDB

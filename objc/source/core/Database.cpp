@@ -259,7 +259,7 @@ std::list<std::string> Database::getPaths() const
 #pragma mark - Repair Kit
 bool Database::backup(const void *key, unsigned int length)
 {
-    RecyclableHandle handle = flowOut();
+    RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
         return false;
     }
@@ -277,7 +277,7 @@ bool Database::recoverFromPath(const std::string &corruptedDBPath,
                                const void *databaseKey,
                                unsigned int databaseKeyLength)
 {
-    RecyclableHandle handle = flowOut();
+    RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
         return false;
     }
@@ -295,7 +295,7 @@ ThreadLocal<
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>>
     Database::s_threadedHandles;
 
-RecyclableHandle Database::flowOut()
+RecyclableHandle Database::getHandle()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
     if (recyclableHandle == nullptr) {
@@ -316,7 +316,7 @@ RecyclableHandle Database::flowOutThreadedHandle()
 
 bool Database::execute(const Statement &statement)
 {
-    RecyclableHandle handle = flowOut();
+    RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
         if (statement.getStatementType() == Statement::Type::Rollback) {
             releaseThreadedHandle();
@@ -342,7 +342,7 @@ bool Database::execute(const Statement &statement)
 
 std::pair<bool, bool> Database::isTableExists(const TableOrSubquery &table)
 {
-    RecyclableHandle handle = flowOut();
+    RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
         auto pair = handle->isTableExists(table);
         if (!pair.first) {
@@ -383,7 +383,7 @@ void Database::releaseThreadedHandle() const
 
 bool Database::beginTransaction()
 {
-    RecyclableHandle recyclableHandle = flowOut();
+    RecyclableHandle recyclableHandle = getHandle();
     if (recyclableHandle == nullptr) {
         return false;
     }

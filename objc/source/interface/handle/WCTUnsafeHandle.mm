@@ -72,7 +72,7 @@
 - (void)generateIfNeeded
 {
     if (_handle == nullptr) {
-        _recyclableHandle = _database->flowOut();
+        _recyclableHandle = _database->getHandle();
         if (_recyclableHandle != nullptr) {
             _handle = _recyclableHandle.getHandle();
         } else {

@@ -26,39 +26,46 @@ namespace WCDB {
 MigrationHandlePool::MigrationHandlePool(
     const std::string &path,
     const Configs &configs,
-    const std::shared_ptr<MigrationInfo> &migrationInfo)
-    : HandlePool(path, configs), m_info(migrationInfo)
+    const std::shared_ptr<MigrationInfos> &migrationInfos)
+    : HandlePool(path, configs), m_infos(migrationInfos)
 {
-    assert(migrationInfo == nullptr ||
-           migrationInfo->isSameDatabaseMigration() ||
-           migrationInfo->getSourceDatabasePath() != path);
+    assert(debugCheckInfosLegal());
 }
+
+#ifdef DEBUG
+bool MigrationHandlePool::debugCheckInfosLegal()
+{
+    if (!m_infos) {
+        return false;
+    }
+    if (!m_infos->isSameDatabaseMigration()) {
+        for (const auto &info : m_infos->getInfos()) {
+            if (info.second->sourceDatabasePath == path) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+#endif
 
 #pragma mark - Migration
-MigrationInfo *MigrationHandlePool::getMigrationInfo() const
+MigrationInfos *MigrationHandlePool::getMigrationInfos() const
 {
-    return m_info.get();
-}
-
-void MigrationHandlePool::clearMigrationInfo()
-{
-    m_info = nullptr;
+    return m_infos.get();
 }
 
 #pragma mark - Override
 std::shared_ptr<Handle> MigrationHandlePool::generateHandle()
 {
-    return MigrationHandle::handleWithPath(path, tag);
+    return MigrationHandle::handleWithPath(path, tag, m_infos);
 }
 
-RecyclableHandle MigrationHandlePool::flowOut()
+bool MigrationHandlePool::willConfigurateHandle(Handle *handle)
 {
-    RecyclableHandle recyclableHandle = HandlePool::flowOut();
-    if (recyclableHandle != nullptr) {
-        static_cast<MigrationHandle *>(recyclableHandle.getHandle())
-            ->setMigrationInfo(m_info);
-    }
-    return recyclableHandle;
+    HandlePool::willConfigurateHandle(handle);
+    MigrationHandle *migrationHandle = static_cast<MigrationHandle *>(handle);
+    return migrationHandle->lazySetupVeryFirstMigratingInfo();
 }
 
 } //namespace WCDB

@@ -21,7 +21,7 @@
 #ifndef Tokenize_hpp
 #define Tokenize_hpp
 
-#include <WCDB/Spin.hpp>
+#include <WCDB/Lock.hpp>
 #include <sqlcipher/fts3_tokenizer.h>
 #include <sqlcipher/sqlite3.h>
 #include <stdlib.h>
@@ -35,7 +35,7 @@ namespace FTS {
 
 class Modules {
 public:
-    static Modules *SharedModules();
+    static Modules *sharedModules();
 
     void addModule(const std::string &name,
                    const std::shared_ptr<void> &module);
@@ -44,7 +44,7 @@ public:
 
 protected:
     std::unordered_map<std::string, std::shared_ptr<void>> m_modules;
-    mutable Spin m_spin;
+    mutable SpinLock m_spin;
 };
 
 class TokenizerInfoBase {
@@ -206,7 +206,7 @@ public:
         std::shared_ptr<void> module(new sqlite3_tokenizer_module({
             0, Create, Destroy, Open, Close, Next,
         }));
-        Modules::SharedModules()->addModule(name, module);
+        Modules::sharedModules()->addModule(name, module);
     }
 };
 

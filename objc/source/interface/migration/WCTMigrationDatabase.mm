@@ -28,9 +28,27 @@
 }
 
 - (instancetype)initWithPath:(NSString *)path
+                    andInfos:(NSArray<WCTMigrationInfo *> *)infos
+{
+    std::list<std::shared_ptr<WCDB::MigrationInfo>> infoList;
+    for (WCTMigrationInfo *info in infos) {
+        infoList.push_back([info getWCDBMigrationInfo]);
+    }
+    auto migrationInfos = WCDB::MigrationInfos::infos(infoList);
+    if (!migrationInfos) {
+        return nil;
+    }
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, migrationInfos)];
+}
+
+- (instancetype)initWithPath:(NSString *)path
                      andInfo:(WCTMigrationInfo *)info
 {
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, [info getWCDBMigrationInfo])];
+    auto infos = WCDB::MigrationInfos::infos({[info getWCDBMigrationInfo]});
+    if (!infos) {
+        return nil;
+    }
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, infos)];
 }
 
 - (instancetype)initWithPath:(NSString *)path
@@ -54,11 +72,6 @@
 - (BOOL)stepMigration:(BOOL &)done
 {
     return _migrationDatabase->stepMigration((bool &) done);
-}
-
-- (const WCDB::MigrationInfo *)getWCDBMigrationInfo
-{
-    return _migrationDatabase->getMigrationInfo();
 }
 
 - (void)finalizeDatabase

@@ -103,12 +103,12 @@ ThreadLocal<HandlePool::ThreadedErrors> HandlePool::s_threadedErrors;
 
 void HandlePool::blockade()
 {
-    m_rwlock.lockWrite();
+    m_sharedLock.lock();
 }
 
 bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 {
-    m_rwlock.lockWrite();
+    LockGuard lockGuard(m_sharedLock);
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         flowOutConfiguredHandle();
     if (!configuredHandle) {
@@ -120,23 +120,22 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
         flowBack(configuredHandle);
         result = true;
     }
-    m_rwlock.unlockWrite();
     return result;
 }
 
 void HandlePool::unblockade()
 {
-    m_rwlock.unlockWrite();
+    m_sharedLock.unlock();
 }
 
 bool HandlePool::isBlockaded() const
 {
-    return m_rwlock.isWriting();
+    return m_sharedLock.isLocked();
 }
 
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
-    m_rwlock.lockWrite();
+    LockGuard lockGuard(m_sharedLock);
     ConcurrentList<ConfiguredHandle>::ElementType handle;
     while ((handle = m_handles.popBack())) {
         handle->getHandle()->close();
@@ -145,15 +144,13 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
     if (onDrained) {
         onDrained();
     }
-    m_rwlock.unlockWrite();
 }
 
 void HandlePool::purgeFreeHandles()
 {
-    m_rwlock.lockRead();
+    SharedLockGuard lockGuard(m_sharedLock);
     int size = (int) m_handles.clear();
     m_aliveHandleCount -= size;
-    m_rwlock.unlockRead();
 }
 
 bool HandlePool::isDrained()
@@ -164,7 +161,7 @@ bool HandlePool::isDrained()
 bool HandlePool::canFlowOut()
 {
     bool result = false;
-    m_rwlock.lockRead();
+    m_sharedLock.lockShared();
     {
         std::shared_ptr<ConfiguredHandle> configuredHandle =
             flowOutConfiguredHandle();
@@ -181,14 +178,14 @@ bool HandlePool::canFlowOut()
 
 RecyclableHandle HandlePool::flowOut()
 {
-    m_rwlock.lockRead();
+    m_sharedLock.lockShared();
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         flowOutConfiguredHandle();
     if (!configuredHandle) {
         configuredHandle = generateConfiguredHandle();
     }
     if (!configuredHandle) {
-        m_rwlock.unlockRead();
+        m_sharedLock.unlockShared();
         return nullptr;
     }
     return RecyclableHandle(configuredHandle, [configuredHandle, this]() {
@@ -201,7 +198,7 @@ void HandlePool::flowBack(
 {
     if (configuredHandle) {
         bool inserted = m_handles.pushBack(configuredHandle);
-        m_rwlock.unlockRead();
+        m_sharedLock.unlockShared();
         if (!inserted) {
             --m_aliveHandleCount;
         }
@@ -277,11 +274,12 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     return configuredHandle;
 }
 
-void HandlePool::willConfigurateHandle(Handle *handle)
+bool HandlePool::willConfigurateHandle(Handle *handle)
 {
     if (handle->getTag() != tag.load()) {
         handle->setTag(tag.load());
     }
+    return true;
 }
 
 } //namespace WCDB

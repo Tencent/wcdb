@@ -21,7 +21,7 @@
 #ifndef ConcurrentList_hpp
 #define ConcurrentList_hpp
 
-#include <WCDB/Spin.hpp>
+#include <WCDB/Lock.hpp>
 #include <list>
 
 namespace WCDB {
@@ -34,13 +34,13 @@ public:
 
     size_t getCapacityCap() const
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         return m_capacityCap;
     }
 
     bool pushBack(const ElementType &value)
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         if (m_list.size() < m_capacityCap) {
             m_list.push_back(value);
             return true;
@@ -50,7 +50,7 @@ public:
 
     bool pushFront(const ElementType &value)
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         if (m_list.size() < m_capacityCap) {
             m_list.push_front(value);
             return true;
@@ -60,7 +60,7 @@ public:
 
     ElementType popBack()
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         if (m_list.empty()) {
             return nullptr;
         }
@@ -71,7 +71,7 @@ public:
 
     ElementType popFront()
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         if (m_list.empty()) {
             return nullptr;
         }
@@ -82,19 +82,19 @@ public:
 
     bool isEmpty() const
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         return m_list.empty();
     }
 
     size_t size() const
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         return m_list.size();
     }
 
     size_t clear()
     {
-        SpinLockGuard<Spin> lockGuard(m_spin);
+        LockGuard lockGuard(m_spin);
         size_t size = m_list.size();
         m_list.clear();
         return size;
@@ -103,7 +103,7 @@ public:
 protected:
     std::list<ElementType> m_list;
     size_t m_capacityCap;
-    mutable Spin m_spin;
+    mutable SpinLock m_spin;
 };
 
 } //namespace WCDB

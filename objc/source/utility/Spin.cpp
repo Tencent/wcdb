@@ -17,20 +17,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#include <WCDB/Spin.hpp>
-
-namespace WCDB {
-
-void Spin::lock()
-{
-    while (locked.test_and_set(std::memory_order_acquire))
-        ;
-}
-
-void Spin::unlock()
-{
-    locked.clear(std::memory_order_release);
-}
-
-} //namespace WCDB

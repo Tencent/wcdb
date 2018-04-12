@@ -22,7 +22,7 @@
 #define MigrationHandlePool_hpp
 
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/MigrationInfo.hpp>
+#include <WCDB/MigrationInfos.hpp>
 
 namespace WCDB {
 
@@ -32,22 +32,23 @@ public:
     friend class MigrationHandlePools;
     MigrationHandlePool(const std::string &path,
                         const Configs &configs,
-                        const std::shared_ptr<MigrationInfo> &migrationInfo);
+                        const std::shared_ptr<MigrationInfos> &migrationInfos);
+
+protected:
+#ifdef DEBUG
+    bool debugCheckInfosLegal();
+#endif
 
 #pragma mark - Migration
 public:
-    //TODO remove it
-    void clearMigrationInfo();
-    MigrationInfo *getMigrationInfo() const;
+    MigrationInfos *getMigrationInfos() const;
 
 protected:
-    std::shared_ptr<MigrationInfo> m_info;
+    std::shared_ptr<MigrationInfos> m_infos;
 
 #pragma mark - Override
-public:
-    virtual RecyclableHandle flowOut() override;
-
 protected:
+    bool willConfigurateHandle(Handle *handle) override;
     virtual std::shared_ptr<Handle> generateHandle() override;
 };
 

@@ -22,18 +22,22 @@
 #define MigrationHandle_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/MigrationInfo.hpp>
+#include <WCDB/MigrationInfos.hpp>
 
 namespace WCDB {
 
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    static std::shared_ptr<Handle> handleWithPath(const std::string &path,
-                                                  Tag tag);
+    static std::shared_ptr<Handle>
+    handleWithPath(const std::string &path,
+                   Tag tag,
+                   const std::shared_ptr<MigrationInfos> &infos);
 
 protected:
-    MigrationHandle(const std::string &path, Tag tag);
+    MigrationHandle(const std::string &path,
+                    Tag tag,
+                    const std::shared_ptr<MigrationInfos> &infos);
 
 #pragma mark - Override
 public:
@@ -52,8 +56,7 @@ public:
 
 #pragma mark - Migration
 public:
-    void setMigrationInfo(const std::shared_ptr<MigrationInfo> &info);
-
+    bool lazySetupVeryFirstMigratingInfo();
     bool executeWithoutTampering(const Statement &statement);
     bool prepareWithoutTampering(const Statement &statement);
 
@@ -61,7 +64,7 @@ protected:
 #ifdef DEBUG
     void debugCheckStatementLegal(const Statement &statement);
 #endif
-    std::shared_ptr<MigrationInfo> m_info;
+    std::shared_ptr<MigrationInfos> m_infos;
 
 #pragma mark - Multiple Statements
 protected:

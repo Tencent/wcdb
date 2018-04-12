@@ -32,14 +32,17 @@
 {
     std::shared_ptr<WCDB::MigrationInfo> info = WCDB::MigrationInfo::info(targetTable.UTF8String,
                                                                           sourceTable.UTF8String,
-                                                                          sourceDatabasePath ? sourceDatabasePath.UTF8String : "");
+                                                                          sourceDatabasePath.UTF8String);
     return [self initWithWCDBMigrationInfo:info];
 }
 
 - (instancetype)initWithTargetTable:(NSString *)targetTable
                     fromSourceTable:(NSString *)sourceTable
 {
-    std::shared_ptr<WCDB::MigrationInfo> info = WCDB::MigrationInfo::info(targetTable.UTF8String, sourceTable.UTF8String);
+    std::shared_ptr<WCDB::MigrationInfo> info =
+        WCDB::MigrationInfo::info(targetTable.UTF8String,
+                                  sourceTable.UTF8String,
+                                  "");
     return [self initWithWCDBMigrationInfo:info];
 }
 
@@ -59,17 +62,17 @@
 
 - (nonnull NSString *)targetTable
 {
-    return @(_info->getTargetTableName().c_str());
+    return @(_info->targetTable.c_str());
 }
 
 - (nonnull NSString *)sourceTable
 {
-    return @(_info->getSourceTableName().c_str());
+    return @(_info->sourceTable.c_str());
 }
 
 - (nullable NSString *)sourceDatabasePath
 {
-    const std::string &path = _info->getSourceDatabasePath();
+    const std::string &path = _info->sourceDatabasePath;
     if (path.empty()) {
         return nil;
     }

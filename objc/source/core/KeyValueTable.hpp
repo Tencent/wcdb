@@ -18,35 +18,37 @@
  * limitations under the License.
  */
 
-#ifndef RWLock_hpp
-#define RWLock_hpp
+#ifndef KeyValueTable_hpp
+#define KeyValueTable_hpp
 
-#include <condition_variable>
-#include <mutex>
-
-//TODO std::shared_mutex is supported from C++17
+#include <WCDB/Abstract.h>
 
 namespace WCDB {
 
-class RWLock {
+class KeyValueTable {
 public:
-    RWLock();
-    void lockRead();
-    void unlockRead();
+    KeyValueTable(Handle *handle);
 
-    void lockWrite();
-    void unlockWrite();
+    KeyValueTable() = delete;
+    KeyValueTable(const KeyValueTable &) = delete;
+    KeyValueTable &operator=(const KeyValueTable &) = delete;
 
-    bool isWriting() const;
+    enum class Key {
+        Migrating = -1,
+    };
+
+    std::pair<bool, bool> isTableExists();
+    bool createTable();
+    std::pair<bool, std::string> getTextValue(const Key &key);
+    bool setTextValue(const Key &key, const std::string &value);
 
 protected:
-    mutable std::mutex m_mutex;
-    std::condition_variable m_cond;
-    int m_reader;
-    int m_writer;
-    int m_pending;
+    Handle *m_handle;
+    static const std::string s_table;
+    static const Column s_key;
+    static const Column s_value;
 };
 
 } //namespace WCDB
 
-#endif /* RWLock_hpp */
+#endif /* KeyValueTable_hpp */

@@ -18,32 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef Spin_hpp
-#define Spin_hpp
+#ifndef SpinLock_hpp
+#define SpinLock_hpp
 
-#include <atomic>
-
-namespace WCDB {
-
-class Spin {
-public:
-    void lock();
-    void unlock();
-
-protected:
-    std::atomic_flag locked = ATOMIC_FLAG_INIT;
-};
-
-template <typename Spin>
-class SpinLockGuard {
-public:
-    SpinLockGuard(Spin &spin) : m_spin(spin) { m_spin.lock(); }
-    ~SpinLockGuard() { m_spin.unlock(); }
-
-protected:
-    Spin &m_spin;
-};
-
-} //namespace WCDB
-
-#endif /* Spin_hpp */
+#endif /* SpinLock_hpp */

@@ -36,5 +36,6 @@
 #include <WCDB/MigrationHandle.hpp>
 #include <WCDB/MigrationHandlePool.hpp>
 #include <WCDB/MigrationInfo.hpp>
+#include <WCDB/MigrationInfos.hpp>
 
 #endif /* Core_h */

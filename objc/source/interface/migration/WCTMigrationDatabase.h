@@ -25,6 +25,9 @@
 - (instancetype)initWithPath:(NSString *)path
                      andInfo:(WCTMigrationInfo *)info;
 
+- (instancetype)initWithPath:(NSString *)path
+                    andInfos:(NSArray<WCTMigrationInfo *> *)infos;
+
 - (BOOL)stepMigration:(BOOL &)done;
 
 @end

@@ -36,7 +36,7 @@ public:
 
     static std::shared_ptr<Database>
     databaseWithPath(const std::string &path,
-                     const std::shared_ptr<MigrationInfo> &migrationInfo);
+                     const std::shared_ptr<MigrationInfos> &migrationInfos);
     static std::shared_ptr<Database>
     databaseWithExistingPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
@@ -44,18 +44,16 @@ public:
 protected:
     MigrationDatabase(const RecyclableHandlePool &pool);
 
-    void setupMigrationPool();
-
 #pragma mark - Migration
 public:
-    const MigrationInfo *getMigrationInfo() const;
-
     bool stepMigration(bool &done);
 
 protected:
-    bool startMigration();
-    void clearMigrationInfo();
+    bool startMigration(bool &done);
     MigrationHandlePool *m_migrationPool;
+#ifdef DEBUG
+    pthread_t m_migratingThread;
+#endif
 };
 
 } //namespace WCDB

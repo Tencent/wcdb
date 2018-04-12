@@ -18,51 +18,58 @@
  * limitations under the License.
  */
 
+#include <WCDB/KeyValueTable.hpp>
 #include <WCDB/MigrationHandle.hpp>
 
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<Handle> MigrationHandle::handleWithPath(const std::string &path,
-                                                        Tag tag)
+std::shared_ptr<Handle>
+MigrationHandle::handleWithPath(const std::string &path,
+                                Tag tag,
+                                const std::shared_ptr<MigrationInfos> &infos)
 {
-    return std::shared_ptr<Handle>(new MigrationHandle(path, tag));
+    return std::shared_ptr<Handle>(new MigrationHandle(path, tag, infos));
 }
 
-MigrationHandle::MigrationHandle(const std::string &path, Tag tag)
-    : Handle(path, tag)
+MigrationHandle::MigrationHandle(const std::string &path,
+                                 Tag tag,
+                                 const std::shared_ptr<MigrationInfos> &infos)
+    : Handle(path, tag), m_infos(infos)
 {
 }
+
 #pragma mark - Override
 bool MigrationHandle::execute(const Statement &statement)
 {
-    if (m_info) {
+    if (m_infos) {
+        //Avoid migration info and source table changed
+        SharedLockGuard lockGuard(m_infos->getSharedLock());
         Statement tamperedStatement(statement);
-        bool tampered = false;
-        bool migrating = m_info->isMigrating();
-        if (!migrating &&
-            statement.getStatementType() == Statement::Type::Insert) {
-            tampered = m_info->tamperInsertStatementForUnstartedMigration(
-                tamperedStatement);
-        } else {
-            tampered = m_info->tamper(tamperedStatement);
-        }
-        if (tampered) {
+        if (m_infos->tamper(tamperedStatement)) {
 #ifdef DEBUG
             debugCheckStatementLegal(statement);
 #endif
-            // Since UPDATE and DELETE statements will execute on both migration table and migrated table, multiple statements should be run.
+            // Since UPDATE, DELETE, DROPTABLE statements will execute on both migration table and migrated table, multiple statements should be run.
+            // INSERT statement will execute on both migration table and migrated table if and only if it's the migrating table. Or it will be executed on origin table only.
             switch (statement.getStatementType()) {
                 case Statement::Type::Update:
                 case Statement::Type::Delete:
                 case Statement::Type::DropTable:
                     return executeWithMultipleStatements(statement,
                                                          tamperedStatement);
-                case Statement::Type::Insert:
-                    return migrating
-                               ? executeWithMultipleStatements(
-                                     statement, tamperedStatement)
-                               : executeWithoutTampering(tamperedStatement);
+                case Statement::Type::Insert: {
+                    StatementInsert statementInsert = statement.getCOWLang();
+                    if (m_infos->getMigratingInfo() &&
+                        m_infos->getMigratingInfo()->targetTable ==
+                            statementInsert.getCOWLang()
+                                .get<Lang::InsertSTMT>()
+                                .tableName.get()) {
+                        return executeWithMultipleStatements(statement,
+                                                             tamperedStatement);
+                    }
+                    return executeWithoutTampering(tamperedStatement);
+                }
                 default:
                     return executeWithoutTampering(tamperedStatement);
             }
@@ -73,37 +80,38 @@ bool MigrationHandle::execute(const Statement &statement)
 
 bool MigrationHandle::prepare(const Statement &statement)
 {
-    if (m_info) {
+    if (m_infos) {
+        m_infos->getSharedLock().lockShared();
         Statement tamperedStatement(statement);
-        bool tampered = false;
-        bool migrating = m_info->isMigrating();
-        if (!migrating &&
-            statement.getStatementType() == Statement::Type::Insert) {
-            tampered = m_info->tamperInsertStatementForUnstartedMigration(
-                tamperedStatement);
-        } else {
-            tampered = m_info->tamper(tamperedStatement);
-        }
-        if (tampered) {
+        if (m_infos->tamper(tamperedStatement)) {
 #ifdef DEBUG
             debugCheckStatementLegal(statement);
 #endif
-            // Since UPDATE and DELETE statements will execute on both migration table and migrated table, multiple statements should be run.
+            // Since UPDATE, DELETE, DROPTABLE statements will execute on both migration table and migrated table, multiple statements should be run.
+            // INSERT statement will execute on both migration table and migrated table if and only if it's the migrating table. Or it will be executed on origin table only.
             switch (statement.getStatementType()) {
                 case Statement::Type::Update:
                 case Statement::Type::Delete:
                 case Statement::Type::DropTable:
                     return prepareWithMultipleStatements(statement,
                                                          tamperedStatement);
-                case Statement::Type::Insert:
-                    return migrating
-                               ? prepareWithMultipleStatements(
-                                     statement, tamperedStatement)
-                               : prepareWithoutTampering(tamperedStatement);
+                case Statement::Type::Insert: {
+                    StatementInsert statementInsert = statement.getCOWLang();
+                    if (m_infos->getMigratingInfo() &&
+                        m_infos->getMigratingInfo()->targetTable ==
+                            statementInsert.getCOWLang()
+                                .get<Lang::InsertSTMT>()
+                                .tableName.get()) {
+                        return prepareWithMultipleStatements(statement,
+                                                             tamperedStatement);
+                    }
+                    return prepareWithoutTampering(tamperedStatement);
+                }
                 default:
                     return prepareWithoutTampering(tamperedStatement);
             }
         }
+        m_infos->getSharedLock().unlockShared();
     }
     return prepareWithoutTampering(statement);
 }
@@ -189,9 +197,48 @@ void MigrationHandle::finalize()
 {
     Handle::finalize();
     m_tamperedHandleStatement.finalize();
+    m_infos->getSharedLock().unlockShared();
 }
 
 #pragma mark - Migration
+bool MigrationHandle::lazySetupVeryFirstMigratingInfo()
+{
+    if (m_infos->didMigratingStart()) {
+        return true;
+    }
+    LockGuard lockGuard(m_infos->getSharedLock());
+    if (m_infos->didMigratingStart()) {
+        return true;
+    }
+    std::pair<bool, std::string> migratingTable = {false, {}};
+    runNestedTransaction([&migratingTable, this](Handle *handle) -> bool {
+        do {
+            MigrationHandle *migrationHandle =
+                static_cast<MigrationHandle *>(handle);
+            KeyValueTable kvTable(migrationHandle);
+            auto exists = kvTable.isTableExists();
+            if (!exists.first) {
+                break;
+            }
+            if (!exists.second) {
+                migratingTable.first = true;
+                break;
+            }
+            migratingTable =
+                kvTable.getTextValue(KeyValueTable::Key::Migrating);
+        } while (false);
+        if (migratingTable.first) {
+            if (!migratingTable.second.empty()) {
+                m_infos->markAsMigrating(migratingTable.second);
+            } else {
+                m_infos->markAsMigrationStarted();
+            }
+        }
+        return false;
+    });
+    return migratingTable.first;
+}
+
 bool MigrationHandle::executeWithMultipleStatements(
     const Statement &statement, const Statement &tamperedStatement)
 {
@@ -224,14 +271,6 @@ bool MigrationHandle::prepareWithoutTampering(const Statement &statement)
     return Handle::prepare(statement);
 }
 
-void MigrationHandle::setMigrationInfo(
-    const std::shared_ptr<MigrationInfo> &info)
-{
-    if (m_info.get() != info.get()) {
-        m_info = info;
-    }
-}
-
 #ifdef DEBUG
 void MigrationHandle::debugCheckStatementLegal(const Statement &statement)
 {
@@ -246,12 +285,13 @@ void MigrationHandle::debugCheckStatementLegal(const Statement &statement)
         } break;
         case Statement::Type::Insert: {
             StatementInsert statementInsert(statement.getCOWLang());
-            if (!statementInsert.getCOWLang()
-                     .get<Lang::InsertSTMT>()
-                     .tableName.equal(m_info->getTargetTableName())) {
+            auto iter = m_infos->getInfos().find(statementInsert.getCOWLang()
+                                                     .get<Lang::InsertSTMT>()
+                                                     .tableName.get());
+            if (iter == m_infos->getInfos().end()) {
                 return;
             }
-            auto pair = getColumnsWithTable(m_info->getTargetTableName());
+            auto pair = getColumnsWithTable(iter->second->targetTable);
             assert(pair.first);
             auto columns = pair.second;
             const auto &specifiedColumns =

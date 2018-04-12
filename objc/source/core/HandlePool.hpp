@@ -27,7 +27,7 @@
 #include <WCDB/CoreError.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
-#include <WCDB/RWLock.hpp>
+#include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -43,6 +43,7 @@ public:
     HandlePool() = delete;
     HandlePool(const HandlePool &) = delete;
     HandlePool &operator=(const HandlePool &) = delete;
+
     HandlePool(const std::string &path, const Configs &configs);
 
 #pragma mark - Basic
@@ -75,7 +76,7 @@ protected:
 
 #pragma mark - Handle
 public:
-    virtual RecyclableHandle flowOut();
+    RecyclableHandle flowOut();
     bool canFlowOut();
 
     /**
@@ -94,12 +95,12 @@ public:
     void purgeFreeHandles();
 
 protected:
-    void willConfigurateHandle(Handle *handle);
+    virtual bool willConfigurateHandle(Handle *handle);
     std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
     std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
     virtual std::shared_ptr<Handle> generateHandle();
 
-    RWLock m_rwlock;
+    SharedLock m_sharedLock;
 
     void flowBack(const std::shared_ptr<ConfiguredHandle> &handleWrap);
 
