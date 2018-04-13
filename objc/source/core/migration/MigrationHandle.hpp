@@ -62,7 +62,7 @@ public:
 
 protected:
 #ifdef DEBUG
-    void debugCheckStatementLegal(const Statement &statement);
+    void debug_checkStatementLegal(const Statement &statement);
 #endif
     std::shared_ptr<MigrationInfos> m_infos;
 
@@ -74,6 +74,7 @@ protected:
                                        const Statement &tamperedStatement);
 
     HandleStatement m_tamperedHandleStatement;
+    bool m_unlockShared;
 };
 
 } //namespace WCDB

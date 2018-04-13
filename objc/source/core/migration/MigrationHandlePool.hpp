@@ -36,7 +36,7 @@ public:
 
 protected:
 #ifdef DEBUG
-    bool debugCheckInfosLegal();
+    bool debug_checkInfosLegal();
 #endif
 
 #pragma mark - Migration

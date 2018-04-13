@@ -59,6 +59,7 @@ bool MigrationInfos::isSameDatabaseMigration() const
 const std::map<std::string, std::pair<std::string, int>> &
 MigrationInfos::getSchemasForAttaching() const
 {
+    assert(m_lock.debug_isSharedLocked());
     return m_schemas;
 }
 
@@ -80,11 +81,13 @@ bool MigrationInfos::didMigratingStart() const
 
 void MigrationInfos::markAsMigrationStarted()
 {
+    assert(m_lock.isLocked());
     m_migratingStarted.store(true);
 }
 
 void MigrationInfos::markAsMigrationStarted(const std::string &table)
 {
+    assert(m_lock.isLocked());
     m_migratingStarted.store(true);
     assert(!table.empty());
     auto iter = m_infos.find(table);
@@ -92,9 +95,9 @@ void MigrationInfos::markAsMigrationStarted(const std::string &table)
     m_migratingInfo = iter->second;
 }
 
-//TODO assertion for locking status
 void MigrationInfos::markAsMigrating(const std::string &table)
 {
+    assert(m_lock.isLocked());
     m_migratingStarted.store(true);
     assert(!table.empty());
     auto iter = m_infos.find(table);
@@ -105,16 +108,18 @@ void MigrationInfos::markAsMigrating(const std::string &table)
 
 void MigrationInfos::markAsMigrated(bool &schemasChanged)
 {
+    assert(m_lock.isLocked());
     assert(m_migratingInfo != nullptr);
     auto iter = m_infos.find(m_migratingInfo->targetTable);
     assert(iter != m_infos.end());
-    auto schemaIter = m_schemas.find(iter->second->schema);
-    assert(schemaIter != m_schemas.end());
-    if (--schemaIter->second.second == 0) {
-        m_schemas.erase(schemaIter);
-        schemasChanged = true;
-    } else {
-        schemasChanged = false;
+    schemasChanged = false;
+    if (!iter->second->isSameDatabaseMigration()) {
+        auto schemaIter = m_schemas.find(iter->second->schema);
+        assert(schemaIter != m_schemas.end());
+        if (--schemaIter->second.second == 0) {
+            m_schemas.erase(schemaIter);
+            schemasChanged = true;
+        }
     }
     m_infos.erase(iter);
     m_migratingInfo = nullptr;
@@ -134,6 +139,7 @@ SharedLock &MigrationInfos::getSharedLock()
 
 bool MigrationInfos::tamper(Statement &statement)
 {
+    assert(m_lock.debug_isSharedLocked());
     if (m_infos.empty()) {
         return false;
     }
@@ -774,7 +780,9 @@ bool MigrationInfos::tamperTableName(CopyOnWriteString &tableName)
 bool MigrationInfos::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                                               CopyOnWriteString &schemaName)
 {
-    if (schemaName.empty()) {
+    if ((schemaName.empty() 
+         || schemaName.get() == "main") 
+        && !tableName.empty()) {
         auto iter = m_infos.find(tableName.get());
         if (iter != m_infos.end()) {
             tableName.assign(iter->second->sourceTable);

@@ -53,12 +53,18 @@ void SharedLock::lockShared()
             m_cond.wait(lock);
         }
     }
+#ifdef DEBUG
+    debug_threadedLockShared();
+#endif
     ++m_reader;
 }
 
 void SharedLock::unlockShared()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
+#ifdef DEBUG
+    debug_threadedUnlockShared();
+#endif    
     if (--m_reader == 0 && !isThreadedLocked()) {
         m_cond.notify_all();
     }
@@ -73,7 +79,7 @@ void SharedLock::lock()
             m_cond.wait(lock);
         }
         --m_pending;
-        m_id = std::this_thread::get_id();
+        m_lockingThread = std::this_thread::get_id();
     }
     ++m_writer;
 }
@@ -82,7 +88,7 @@ void SharedLock::unlock()
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
     if (--m_writer == 0) {
-        m_id = std::thread::id();
+        m_lockingThread = std::thread::id();
         m_cond.notify_all();
     }
 }
@@ -95,8 +101,39 @@ bool SharedLock::isLocked() const
 
 bool SharedLock::isThreadedLocked() const
 {
-    return m_id == std::this_thread::get_id();
+    return m_lockingThread == std::this_thread::get_id();
 }
+    
+#ifdef DEBUG    
+bool SharedLock::debug_isSharedLocked() const
+{
+    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
+    std::map<std::thread::id, int>* lockingSharedThread = debug_m_lockingSharedThread.get(); 
+    return lockingSharedThread->find(std::this_thread::get_id()) != lockingSharedThread->end(); 
+}
+
+void SharedLock::debug_threadedLockShared()
+{
+    std::map<std::thread::id, int>* lockingSharedThread = debug_m_lockingSharedThread.get(); 
+    std::thread::id current = std::this_thread::get_id();
+    auto iter = lockingSharedThread->find(current);
+    if (iter == lockingSharedThread->end()) {
+        iter = lockingSharedThread->insert({current, 0}).first;
+    }
+    ++iter->second;
+}
+
+void SharedLock::debug_threadedUnlockShared()
+{
+    std::map<std::thread::id, int>* lockingSharedThread = debug_m_lockingSharedThread.get(); 
+    std::thread::id current = std::this_thread::get_id();
+    auto iter = lockingSharedThread->find(current);
+    assert(iter != lockingSharedThread->end());
+    if (--iter->second == 0) {
+        lockingSharedThread->erase(iter);
+    }    
+}
+#endif
 
 LockGuard::LockGuard(Lock &lock) : m_lock(lock)
 {

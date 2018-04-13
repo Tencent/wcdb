@@ -84,6 +84,7 @@ MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
     , m_migrationPool(pool != nullptr ? dynamic_cast<MigrationHandlePool *>(
                                             pool.getHandlePool())
                                       : nullptr)
+    , m_migratingThread(nullptr)
 {
     assert(pool == nullptr || m_migrationPool != nullptr);
 }

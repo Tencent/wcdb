@@ -35,7 +35,7 @@ MigrationHandle::handleWithPath(const std::string &path,
 MigrationHandle::MigrationHandle(const std::string &path,
                                  Tag tag,
                                  const std::shared_ptr<MigrationInfos> &infos)
-    : Handle(path, tag), m_infos(infos)
+    : Handle(path, tag), m_infos(infos), m_unlockShared(false)
 {
 }
 
@@ -48,7 +48,7 @@ bool MigrationHandle::execute(const Statement &statement)
         Statement tamperedStatement(statement);
         if (m_infos->tamper(tamperedStatement)) {
 #ifdef DEBUG
-            debugCheckStatementLegal(statement);
+            debug_checkStatementLegal(statement);
 #endif
             // Since UPDATE, DELETE, DROPTABLE statements will execute on both migration table and migrated table, multiple statements should be run.
             // INSERT statement will execute on both migration table and migrated table if and only if it's the migrating table. Or it will be executed on origin table only.
@@ -84,8 +84,9 @@ bool MigrationHandle::prepare(const Statement &statement)
         m_infos->getSharedLock().lockShared();
         Statement tamperedStatement(statement);
         if (m_infos->tamper(tamperedStatement)) {
+            m_unlockShared = true;
 #ifdef DEBUG
-            debugCheckStatementLegal(statement);
+            debug_checkStatementLegal(statement);
 #endif
             // Since UPDATE, DELETE, DROPTABLE statements will execute on both migration table and migrated table, multiple statements should be run.
             // INSERT statement will execute on both migration table and migrated table if and only if it's the migrating table. Or it will be executed on origin table only.
@@ -197,7 +198,10 @@ void MigrationHandle::finalize()
 {
     Handle::finalize();
     m_tamperedHandleStatement.finalize();
-    m_infos->getSharedLock().unlockShared();
+    if (m_unlockShared) {
+        m_unlockShared = false;
+        m_infos->getSharedLock().unlockShared();
+    }
 }
 
 #pragma mark - Migration
@@ -272,7 +276,7 @@ bool MigrationHandle::prepareWithoutTampering(const Statement &statement)
 }
 
 #ifdef DEBUG
-void MigrationHandle::debugCheckStatementLegal(const Statement &statement)
+void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
 {
     switch (statement.getStatementType()) {
         case Statement::Type::Update: {

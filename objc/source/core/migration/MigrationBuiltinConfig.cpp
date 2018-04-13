@@ -41,6 +41,7 @@ MigrationBuiltinConfig::autoAttachAndDetachWithInfos(MigrationInfos *infos)
 bool MigrationBuiltinConfig::doAutoAttachAndDetachWithInfos(
     MigrationHandle *handle, MigrationInfos *infos)
 {
+    SharedLockGuard lockGuard(infos->getSharedLock());    
     auto pair = handle->getAttachedSchemas();
     if (!pair.first) {
         return false;
