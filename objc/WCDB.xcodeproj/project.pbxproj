@@ -370,7 +370,6 @@
 		239775AA202AECD3000A681C /* LangWithClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774E5202AECD3000A681C /* LangWithClause.cpp */; };
 		239775AB202AECD3000A681C /* LangWithClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774E6202AECD3000A681C /* LangWithClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776DA202AF2E3000A681C /* CopyOnWriteString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776BE202AF2E1000A681C /* CopyOnWriteString.cpp */; };
-		239776DC202AF2E3000A681C /* Spin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776BF202AF2E1000A681C /* Spin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776E0202AF2E3000A681C /* CopyOnWriteLazyDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C1202AF2E1000A681C /* CopyOnWriteLazyDescribable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776E4202AF2E3000A681C /* String.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C3202AF2E2000A681C /* String.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776EA202AF2E3000A681C /* CopyOnWriteData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776C6202AF2E2000A681C /* CopyOnWriteData.cpp */; };
@@ -387,7 +386,6 @@
 		23977704202AF2E3000A681C /* ConcurrentList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D3202AF2E2000A681C /* ConcurrentList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23977708202AF2E3000A681C /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776D5202AF2E3000A681C /* Path.cpp */; };
 		2397770A202AF2E3000A681C /* CopyOnWrite.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D6202AF2E3000A681C /* CopyOnWrite.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2397770C202AF2E3000A681C /* Spin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776D7202AF2E3000A681C /* Spin.cpp */; };
 		23A2C19A204647590026D3C5 /* NoCopyData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A2C198204647590026D3C5 /* NoCopyData.cpp */; };
 		23A2C19B204647590026D3C5 /* NoCopyData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A2C199204647590026D3C5 /* NoCopyData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -840,7 +838,6 @@
 		239774E5202AECD3000A681C /* LangWithClause.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LangWithClause.cpp; sourceTree = "<group>"; };
 		239774E6202AECD3000A681C /* LangWithClause.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LangWithClause.hpp; sourceTree = "<group>"; };
 		239776BE202AF2E1000A681C /* CopyOnWriteString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CopyOnWriteString.cpp; sourceTree = "<group>"; };
-		239776BF202AF2E1000A681C /* Spin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Spin.hpp; sourceTree = "<group>"; };
 		239776C1202AF2E1000A681C /* CopyOnWriteLazyDescribable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CopyOnWriteLazyDescribable.hpp; sourceTree = "<group>"; };
 		239776C3202AF2E2000A681C /* String.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = String.hpp; sourceTree = "<group>"; };
 		239776C6202AF2E2000A681C /* CopyOnWriteData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CopyOnWriteData.cpp; sourceTree = "<group>"; };
@@ -857,7 +854,6 @@
 		239776D3202AF2E2000A681C /* ConcurrentList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ConcurrentList.hpp; sourceTree = "<group>"; };
 		239776D5202AF2E3000A681C /* Path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Path.cpp; sourceTree = "<group>"; };
 		239776D6202AF2E3000A681C /* CopyOnWrite.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CopyOnWrite.hpp; sourceTree = "<group>"; };
-		239776D7202AF2E3000A681C /* Spin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Spin.cpp; sourceTree = "<group>"; };
 		23A2C198204647590026D3C5 /* NoCopyData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NoCopyData.cpp; sourceTree = "<group>"; };
 		23A2C199204647590026D3C5 /* NoCopyData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NoCopyData.hpp; sourceTree = "<group>"; };
 		23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Convenient.h"; sourceTree = "<group>"; };
@@ -1262,8 +1258,6 @@
 				239776D5202AF2E3000A681C /* Path.cpp */,
 				239776C7202AF2E2000A681C /* Path.hpp */,
 				239776CA202AF2E2000A681C /* Recyclable.hpp */,
-				239776D7202AF2E3000A681C /* Spin.cpp */,
-				239776BF202AF2E1000A681C /* Spin.hpp */,
 				232DCE08207F81FD00AC2CD0 /* Lock.cpp */,
 				232DCE09207F81FD00AC2CD0 /* Lock.hpp */,
 				239776C9202AF2E2000A681C /* ThreadLocal.hpp */,
@@ -1721,7 +1715,6 @@
 				23E1FD8A206C966E006C6C8E /* NSData+WCTColumnCoding.h in Headers */,
 				23977588202AECD3000A681C /* LangLiteralValue.hpp in Headers */,
 				2397758A202AECD3000A681C /* LangModuleArgument.hpp in Headers */,
-				239776DC202AF2E3000A681C /* Spin.hpp in Headers */,
 				2397758B202AECD3000A681C /* LangOrder.hpp in Headers */,
 				2397758D202AECD3000A681C /* LangOrderingTerm.hpp in Headers */,
 				23B94F16204E3AF500E2032D /* Interface.h in Headers */,
@@ -2125,7 +2118,6 @@
 				2397752F202AECD3000A681C /* StatementInsert.cpp in Sources */,
 				2397752D202AECD3000A681C /* StatementDropView.cpp in Sources */,
 				239774FA202AECD3000A681C /* JoinClause.cpp in Sources */,
-				2397770C202AF2E3000A681C /* Spin.cpp in Sources */,
 				23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */,
 				23977537202AECD3000A681C /* StatementRollback.cpp in Sources */,
 				2397756F202AECD3000A681C /* LangDropIndexSTMT.cpp in Sources */,
