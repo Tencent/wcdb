@@ -93,8 +93,8 @@
     XCTAssertNil(error);
 
     //all data are migrated
-    NSArray *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName];
-    XCTAssertTrue([objects.sorted isEqualToTestCaseObjects:_preInserted.sorted]);
+    NSArray *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects isEqualToTestCaseObjects:_preInserted]);
 }
 
 - (void)test_insert_auto_increment_before_started
