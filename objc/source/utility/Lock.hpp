@@ -64,9 +64,9 @@ public:
 
     void lockShared();
     void unlockShared();
-    
+
     bool isLocked() const;
-    
+
 protected:
     bool isThreadedLocked() const;
     mutable std::mutex m_mutex;
@@ -75,12 +75,14 @@ protected:
     int m_writer;
     int m_pending;
     std::thread::id m_lockingThread;
-    
+
 #ifdef DEBUG
 public:
     bool debug_isSharedLocked() const;
+
 protected:
-    mutable ThreadLocal<std::map<std::thread::id, int>> debug_m_lockingSharedThread;
+    mutable ThreadLocal<std::map<std::thread::id, int>>
+        debug_m_lockingSharedThread;
     void debug_threadedLockShared();
     void debug_threadedUnlockShared();
 #endif

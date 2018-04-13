@@ -54,9 +54,9 @@
     NSArray<NSString *> *expectedPaths = @[ path, [path stringByAppendingString:@"-wal"], [path stringByAppendingString:@"-shm"], [path stringByAppendingString:@"-journal"], [path stringByAppendingString:@"-backup"] ];
     //Then
     XCTAssertTrue(([_database.paths isEqualToObjects:expectedPaths
-                                             withComparator:^BOOL(NSString *lhs, NSString *rhs) {
-                                               return [lhs isEqualToString:rhs];
-                                             }]));
+                                      withComparator:^BOOL(NSString *lhs, NSString *rhs) {
+                                        return [lhs isEqualToString:rhs];
+                                      }]));
 }
 
 - (void)test_remove_files

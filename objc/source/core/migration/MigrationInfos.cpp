@@ -780,9 +780,8 @@ bool MigrationInfos::tamperTableName(CopyOnWriteString &tableName)
 bool MigrationInfos::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                                               CopyOnWriteString &schemaName)
 {
-    if ((schemaName.empty() 
-         || schemaName.get() == "main") 
-        && !tableName.empty()) {
+    if ((schemaName.empty() || schemaName.get() == "main") &&
+        !tableName.empty()) {
         auto iter = m_infos.find(tableName.get());
         if (iter != m_infos.end()) {
             tableName.assign(iter->second->sourceTable);

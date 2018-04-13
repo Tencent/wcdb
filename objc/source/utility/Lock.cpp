@@ -64,7 +64,7 @@ void SharedLock::unlockShared()
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
 #ifdef DEBUG
     debug_threadedUnlockShared();
-#endif    
+#endif
     if (--m_reader == 0 && !isThreadedLocked()) {
         m_cond.notify_all();
     }
@@ -103,18 +103,21 @@ bool SharedLock::isThreadedLocked() const
 {
     return m_lockingThread == std::this_thread::get_id();
 }
-    
-#ifdef DEBUG    
+
+#ifdef DEBUG
 bool SharedLock::debug_isSharedLocked() const
 {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    std::map<std::thread::id, int>* lockingSharedThread = debug_m_lockingSharedThread.get(); 
-    return lockingSharedThread->find(std::this_thread::get_id()) != lockingSharedThread->end(); 
+    std::map<std::thread::id, int> *lockingSharedThread =
+        debug_m_lockingSharedThread.get();
+    return lockingSharedThread->find(std::this_thread::get_id()) !=
+           lockingSharedThread->end();
 }
 
 void SharedLock::debug_threadedLockShared()
 {
-    std::map<std::thread::id, int>* lockingSharedThread = debug_m_lockingSharedThread.get(); 
+    std::map<std::thread::id, int> *lockingSharedThread =
+        debug_m_lockingSharedThread.get();
     std::thread::id current = std::this_thread::get_id();
     auto iter = lockingSharedThread->find(current);
     if (iter == lockingSharedThread->end()) {
@@ -125,13 +128,14 @@ void SharedLock::debug_threadedLockShared()
 
 void SharedLock::debug_threadedUnlockShared()
 {
-    std::map<std::thread::id, int>* lockingSharedThread = debug_m_lockingSharedThread.get(); 
+    std::map<std::thread::id, int> *lockingSharedThread =
+        debug_m_lockingSharedThread.get();
     std::thread::id current = std::this_thread::get_id();
     auto iter = lockingSharedThread->find(current);
     assert(iter != lockingSharedThread->end());
     if (--iter->second == 0) {
         lockingSharedThread->erase(iter);
-    }    
+    }
 }
 #endif
 
