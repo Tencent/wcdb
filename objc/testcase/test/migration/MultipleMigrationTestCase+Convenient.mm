@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import "MigrationTestCase.h"
+#import "MultipleMigrationTestCase.h"
 
-@interface MigrationTests_Multiple_Convenient : MigrationTestCase
+@interface MultipleMigrationTestCase_Convenient : MultipleMigrationTestCase
 
 @end
 
-@implementation MigrationTests_Multiple_Convenient
+@implementation MultipleMigrationTestCase_Convenient
 
 - (void)setUp
 {
