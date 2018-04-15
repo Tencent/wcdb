@@ -21,22 +21,23 @@
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 
-NSString *const WCTModuleNameFTS3 = @"fts3";
-
 @implementation WCTDatabase (FTS)
 
-- (void)setTokenizer:(NSString *)tokenizeName
++ (void)initialize
 {
-    if (tokenizeName) {
-        _database->setTokenizes({tokenizeName.UTF8String});
-    }
+    [WCTTokenizer enroll];
 }
 
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames
+- (void)setTokenizer:(NSString *)tokenizerName
+{
+    _database->setTokenizes({tokenizerName.UTF8String});
+}
+
+- (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
     std::list<std::string> theTokenizeNames;
-    for (NSString *tokenizeName in tokenizeNames) {
-        theTokenizeNames.push_back(tokenizeName.UTF8String);
+    for (NSString *tokenizerName in tokenizerNames) {
+        theTokenizeNames.push_back(tokenizerName.UTF8String);
     }
     _database->setTokenizes(theTokenizeNames);
 }

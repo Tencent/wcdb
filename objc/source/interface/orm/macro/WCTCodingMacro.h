@@ -167,10 +167,10 @@
 
 #define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)                   \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize",                   \
-                                      WCTTokenizerNameWCDB.UTF8String)
+                                      WCTTokenizer.name.UTF8String)
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName)                       \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)
 
 #define WCDB_VIRTUAL_TABLE_MODULE_FTS3(className)                              \
-    __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, WCTModuleNameFTS3.UTF8String)
+    __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, "fts3")

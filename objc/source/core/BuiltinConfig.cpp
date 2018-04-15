@@ -204,7 +204,7 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
                   [names](Handle *handle) -> bool {
                       for (const std::string &name : names) {
                           const unsigned char *address =
-                              FTS::Modules::sharedModules()->getAddress(name);
+                              FTS::Modules::shared()->getAddress(name);
                           NoCopyData data((unsigned char *) &address,
                                           sizeof(unsigned char *));
 

@@ -38,7 +38,7 @@
 {
     [super setUp];
 
-    [_database setTokenizer:WCTTokenizerNameWCDB];
+    [_database setTokenizer:WCTTokenizer.name];
 
     NSString *expectedSQL = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE IF NOT EXISTS %@ USING fts3(tokenize=WCDB, variable INTEGER)", _tableName];
     [_expectedSQLs addObject:expectedSQL];

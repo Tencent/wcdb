@@ -20,4 +20,12 @@
 
 #import <WCDB/WCTCommon.h>
 
-WCDB_EXTERN NSString *const WCTTokenizerNameWCDB;
+@interface WCTTokenizer : NSObject
+
++ (NSString *)name;
+
++ (unsigned char *)address;
+
++ (void)enroll;
+
+@end

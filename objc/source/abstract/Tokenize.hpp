@@ -33,20 +33,6 @@ namespace WCDB {
 
 namespace FTS {
 
-class Modules {
-public:
-    static Modules *sharedModules();
-
-    void addModule(const std::string &name,
-                   const std::shared_ptr<void> &module);
-
-    unsigned char *getAddress(const std::string &name) const;
-
-protected:
-    std::unordered_map<std::string, std::shared_ptr<void>> m_modules;
-    mutable SpinLock m_spin;
-};
-
 class TokenizerInfoBase {
 public:
     TokenizerInfoBase(int argc, const char *const *argv);
@@ -68,8 +54,10 @@ protected:
     TokenizerInfoBase *m_tokenizerInfo;
 };
 
-template <const char name[],
-          typename TokenizerInfo /* = TokenizerInfoBase */,
+class ModuleBase {
+};
+
+template <typename TokenizerInfo /* = TokenizerInfoBase */,
           typename CursorInfo /* = CursorInfoBase */>
 class Module {
 public:
@@ -201,13 +189,29 @@ public:
         return SQLITE_NOMEM;
     }
 
-    static void Register()
+    static unsigned char *address()
     {
-        std::shared_ptr<void> module(new sqlite3_tokenizer_module({
-            0, Create, Destroy, Open, Close, Next,
-        }));
-        Modules::sharedModules()->addModule(name, module);
+        static sqlite3_tokenizer_module s_module(
+            {0, Module<TokenizerInfo, CursorInfo>::Create,
+             Module<TokenizerInfo, CursorInfo>::Destroy,
+             Module<TokenizerInfo, CursorInfo>::Open,
+             Module<TokenizerInfo, CursorInfo>::Close,
+             Module<TokenizerInfo, CursorInfo>::Next});
+        return (unsigned char *) &s_module;
     }
+};
+
+class Modules {
+public:
+    static Modules *shared();
+
+    void addAddress(const std::string &name, unsigned char *address);
+
+    unsigned char *getAddress(const std::string &name) const;
+
+protected:
+    std::unordered_map<std::string, unsigned char *> m_modules;
+    mutable SharedLock m_lock;
 };
 
 } // namespace FTS

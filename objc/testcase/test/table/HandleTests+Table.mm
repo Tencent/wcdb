@@ -133,7 +133,7 @@
 
 - (void)test_create_virtual_table
 {
-    [[_handle getDatabase] setTokenizer:WCTTokenizerNameWCDB];
+    [[_handle getDatabase] setTokenizer:WCTTokenizer.name];
     XCTAssertTrue([_handle createVirtualTable:_tableName withClass:TestCaseVirtualObject.class]);
 
     WCTValue *value = [_handle getValueOnResult:WCTMaster.sql fromTable:WCTMaster.TableName where:WCTMaster.name == _tableName];

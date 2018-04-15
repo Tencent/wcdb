@@ -19,22 +19,12 @@
  */
 
 #import <WCDB/WCTCommon.h>
-
-WCDB_EXTERN NSString *const WCTModuleNameFTS3;
+#import <WCDB/WCTTokenizer.h>
 
 @interface WCTDatabase (FTS)
 
-/**
- @brief Setup tokenizer with name for current database
- @param tokenizeName registed tokenizeName. You can use builtin tokenizer named WCTTokenizerNameWCDB or WCTTokenizerNameApple while WCTTokenizerNameWCDB is recommended.
- */
-- (void)setTokenizer:(NSString *)tokenizeName;
+- (void)setTokenizer:(NSString *)tokenizerName;
 
-/**
- @brief Setup multiple tokenizers with names for current database
- @see setTokenizer:
- @param tokenizeNames registed tokenizeNames. You can use builtin tokenizer named WCTTokenizerNameWCDB or WCTTokenizerNameApple while WCTTokenizerNameWCDB is recommended.
- */
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizeNames;
+- (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames;
 
 @end

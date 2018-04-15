@@ -25,27 +25,26 @@ namespace WCDB {
 
 namespace FTS {
 
-Modules *Modules::sharedModules()
+Modules *Modules::shared()
 {
     static Modules s_modules;
     return &s_modules;
 }
 
-void Modules::addModule(const std::string &name,
-                        const std::shared_ptr<void> &module)
+void Modules::addAddress(const std::string &name, unsigned char *module)
 {
-    LockGuard lockGuard(m_spin);
+    LockGuard lockGuard(m_lock);
     m_modules.insert({name, module});
 }
 
 unsigned char *Modules::getAddress(const std::string &name) const
 {
-    LockGuard lockGuard(m_spin);
+    SharedLockGuard lockGuard(m_lock);
     auto iter = m_modules.find(name);
     if (iter == m_modules.end()) {
         WCDB::Error::fatal("Tokenize name is not registered");
     }
-    return (unsigned char *) iter->second.get();
+    return iter->second;
 }
 
 TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)

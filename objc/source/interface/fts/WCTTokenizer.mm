@@ -25,7 +25,6 @@ namespace WCDB {
 
 namespace FTS {
 
-#pragma mark - Cursor
 class WCTCursorInfo : public WCDBCursorInfo {
 public:
     WCTCursorInfo(const char *input,
@@ -35,6 +34,9 @@ public:
         , m_symbolCharacterSet(GenerateSymbolCharacterSet())
     {
     }
+
+    WCTCursorInfo(const WCTCursorInfo &) = delete;
+    WCTCursorInfo &operator=(const WCTCursorInfo &) = delete;
 
     ~WCTCursorInfo()
     {
@@ -57,6 +59,7 @@ protected:
         CFCharacterSetUnion(characterSetRef, CFCharacterSetGetPredefined(kCFCharacterSetIllegal));
         return characterSetRef;
     }
+
     int isSymbol(UnicodeChar theChar, bool *result) override
     {
         if (m_symbolCharacterSet) {
@@ -65,6 +68,7 @@ protected:
         }
         return SQLITE_NOMEM;
     }
+
     int lemmatization(const char *input, int inputLength) override
     {
         int rc = WCDBCursorInfo::lemmatization(input, inputLength);
@@ -93,26 +97,25 @@ protected:
     }
 };
 
-#pragma mark - Module
-class WCTModule {
-public:
-    constexpr static const char Name[] = "WCDB";
-
-private:
-    static const std::nullptr_t s_register;
-};
-
-#pragma mark - Module
-constexpr const char WCTModule::Name[];
-
-const std::nullptr_t WCTModule::s_register = []() {
-    Module<WCTModule::Name, void,
-           WCTCursorInfo>::Register();
-    return nullptr;
-}();
+} //namespace FTS
 
 } //namespace WCDB
 
-} //namespace FTS
+@implementation WCTTokenizer
 
-NSString *const WCTTokenizerNameWCDB = @(WCDB::FTS::WCTModule::Name);
++ (NSString *)name
+{
+    return @"WCDB";
+}
+
++ (unsigned char *)address
+{
+    return WCDB::FTS::Module<void, WCDB::FTS::WCTCursorInfo>::address();
+}
+
++ (void)enroll
+{
+    WCDB::FTS::Modules::shared()->addAddress(self.name.UTF8String, self.address);
+}
+
+@end
