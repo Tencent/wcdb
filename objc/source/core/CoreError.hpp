@@ -28,6 +28,7 @@ namespace WCDB {
 
 class CoreError : public Error {
 public:
+    CoreError();
     using Tag = HandleError::Tag;
     Tag tag;
     std::string path;

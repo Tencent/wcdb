@@ -22,6 +22,10 @@
 
 namespace WCDB {
 
+CoreError::CoreError() : Error(), tag(HandleError::invalidTag)
+{
+}
+
 std::string CoreError::getDescription() const
 {
     std::string description = Error::getDescription();

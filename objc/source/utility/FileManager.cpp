@@ -27,6 +27,10 @@
 
 namespace WCDB {
 
+FileError::FileError() : Error(), operation(Operation::NotSet)
+{
+}
+
 std::string FileError::getDescription() const
 {
     std::string description = Error::getDescription();

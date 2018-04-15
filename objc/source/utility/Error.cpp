@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-Error::Error() : level(Level::Error)
+Error::Error() : level(Level::Error), code(0)
 {
 }
 

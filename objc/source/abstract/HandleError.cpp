@@ -23,6 +23,11 @@
 
 namespace WCDB {
 
+HandleError::HandleError()
+    : Error(), extendedCode(0), tag(invalidTag), operation(Operation::NotSet)
+{
+}
+
 size_t HandleError::getHashedTypeid() const
 {
     return typeid(HandleError).hash_code();

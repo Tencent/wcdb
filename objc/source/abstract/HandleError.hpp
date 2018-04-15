@@ -28,7 +28,9 @@ namespace WCDB {
 
 class HandleError : public Error {
 public:
+    HandleError();
     typedef int64_t Tag;
+    static constexpr const Tag invalidTag = INT64_MIN;
 
     enum Operation {
         NotSet = 0,

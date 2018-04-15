@@ -30,6 +30,7 @@ namespace WCDB {
 
 class FileError : public Error {
 public:
+    FileError();
     enum Operation {
         NotSet = 0,
         Lstat = 1,
