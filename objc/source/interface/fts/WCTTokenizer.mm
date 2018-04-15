@@ -20,17 +20,14 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <WCDB/Interface.h>
+#import <WCDB/WCTError+Private.h>
 
-namespace WCDB {
-
-namespace FTS {
-
-class WCTCursorInfo : public WCDBCursorInfo {
+class WCTCursorInfo : public WCDB::FTS::WCDBCursorInfo {
 public:
     WCTCursorInfo(const char *input,
                   int inputLength,
-                  TokenizerInfoBase *tokenizerInfo)
-        : WCDBCursorInfo(input, inputLength, tokenizerInfo)
+                  WCDB::FTS::TokenizerInfoBase *tokenizerInfo)
+        : WCDB::FTS::WCDBCursorInfo(input, inputLength, tokenizerInfo)
         , m_symbolCharacterSet(GenerateSymbolCharacterSet())
     {
     }
@@ -60,7 +57,7 @@ protected:
         return characterSetRef;
     }
 
-    int isSymbol(UnicodeChar theChar, bool *result) override
+    int isSymbol(WCDB::FTS::UnicodeChar theChar, bool *result) override
     {
         if (m_symbolCharacterSet) {
             *result = CFCharacterSetIsCharacterMember(m_symbolCharacterSet, theChar);
@@ -71,7 +68,7 @@ protected:
 
     int lemmatization(const char *input, int inputLength) override
     {
-        int rc = WCDBCursorInfo::lemmatization(input, inputLength);
+        int rc = WCDB::FTS::WCDBCursorInfo::lemmatization(input, inputLength);
         if (rc != SQLITE_OK) {
             return rc;
         }
@@ -97,11 +94,54 @@ protected:
     }
 };
 
-} //namespace FTS
+@implementation WCTTokenizer {
+    std::shared_ptr<WCTCursorInfo> _info;
+    NSString *_source;
+    WCDB::SQLiteError _error;
+}
 
-} //namespace WCDB
+- (instancetype)initWithString:(NSString *)string
+{
+    assert(string != nil);
+    if (self = [super init]) {
+        _source = [string copy];
+        _info = std::shared_ptr<WCTCursorInfo>(new WCTCursorInfo(_source.UTF8String, (int) _source.length, nullptr));
+        if (!_info) {
+            return nil;
+        }
+    }
+    return self;
+}
 
-@implementation WCTTokenizer
+- (NSArray<NSString *> *)allTokens
+{
+    NSMutableArray<NSString *> *tokens = [[NSMutableArray<NSString *> alloc] init];
+    NSString *token;
+    while ((token = [self nextToken])) {
+        [tokens addObject:token];
+    }
+    return _error.isOK() ? tokens : nil;
+}
+
+- (NSString *)nextToken
+{
+    const char *token;
+    int bytes;
+    int startOffset;
+    int endOffset;
+    int position;
+    _error.code = _info->step(&token, &bytes, &startOffset, &endOffset, &position);
+    if (_error.code != SQLITE_OK) {
+        return nil;
+    }
+    return [[NSString alloc] initWithBytes:token length:bytes encoding:NSUTF8StringEncoding];
+    ;
+}
+
+- (WCTSQLiteError *)error
+{
+    return [[WCTSQLiteError alloc] initWithWCDBError:&_error];
+}
 
 + (NSString *)name
 {
@@ -110,7 +150,7 @@ protected:
 
 + (unsigned char *)address
 {
-    return WCDB::FTS::Module<void, WCDB::FTS::WCTCursorInfo>::address();
+    return WCDB::FTS::Module<void, WCTCursorInfo>::address();
 }
 
 + (void)enroll

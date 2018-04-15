@@ -22,6 +22,14 @@
 
 @interface WCTTokenizer : NSObject
 
+- (instancetype)initWithString:(NSString *)string;
+
+- (WCTSQLiteError *)error;
+
+- (NSArray<NSString *> *)allTokens;
+
+- (NSString *)nextToken;
+
 + (NSString *)name;
 
 + (unsigned char *)address;
