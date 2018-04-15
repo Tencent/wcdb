@@ -53,10 +53,11 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
 
 RecyclableHandlePool HandlePools::getExistingPool(HandlePool::Tag tag)
 {
+    assert(tag != HandleError::invalidTag);
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     auto iter = m_pools.end();
     for (iter = m_pools.begin(); iter != m_pools.end(); ++iter) {
-        if (iter->second.first->tag.load() == tag) {
+        if (iter->second.first->getTag() == tag) {
             break;
         }
     }

@@ -30,18 +30,30 @@ namespace WCDB {
 #pragma mark - Initialize
 HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
     : path(thePath)
-    , tag(std::hash<std::string>{}(thePath))
+    , m_tag(HandleError::invalidTag)
     , m_configs(configs)
     , m_handles(s_hardwareConcurrency)
     , m_aliveHandleCount(0)
 {
 }
 
+#pragma mark - Basic
+void HandlePool::setTag(const Tag &tag)
+{
+    assert(tag != HandleError::invalidTag);
+    m_tag.store(tag);
+}
+
+HandlePool::Tag HandlePool::getTag() const
+{
+    return m_tag.load();
+}
+
 #pragma mark - Error
 void HandlePool::setAndReportCoreError(const std::string &message)
 {
     CoreError error;
-    error.tag = tag.load();
+    error.tag = getTag();
     error.message = message;
     error.code = (int) Error::Code::Error;
     setThreadedError(error);
@@ -207,7 +219,7 @@ void HandlePool::flowBack(
 
 std::shared_ptr<Handle> HandlePool::generateHandle()
 {
-    return Handle::handleWithPath(path, tag.load());
+    return Handle::handleWithPath(path, getTag());
 }
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
@@ -264,7 +276,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         CoreError error;
         error.code = (int) Error::Code::Error;
         error.level = Error::Level::Warning;
-        error.tag = tag.load();
+        error.tag = getTag();
         error.path = path;
         error.message = "The number of database concurrency exceeds the "
                         "hardware's maximum: " +
@@ -276,8 +288,8 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 
 bool HandlePool::willConfigurateHandle(Handle *handle)
 {
-    if (handle->getTag() != tag.load()) {
-        handle->setTag(tag.load());
+    if (handle->getTag() != getTag()) {
+        handle->setTag(getTag());
     }
     return true;
 }

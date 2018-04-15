@@ -79,12 +79,12 @@ bool Database::isValid() const
 
 void Database::setTag(const Tag &tag)
 {
-    m_pool->tag = tag;
+    m_pool->setTag(tag);
 }
 
 Database::Tag Database::getTag() const
 {
-    return m_pool->tag.load();
+    return m_pool->getTag();
 }
 
 bool Database::canOpen()

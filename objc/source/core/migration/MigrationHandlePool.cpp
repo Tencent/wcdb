@@ -58,7 +58,7 @@ MigrationInfos *MigrationHandlePool::getMigrationInfos() const
 #pragma mark - Override
 std::shared_ptr<Handle> MigrationHandlePool::generateHandle()
 {
-    return MigrationHandle::handleWithPath(path, tag, m_infos);
+    return MigrationHandle::handleWithPath(path, getTag(), m_infos);
 }
 
 bool MigrationHandlePool::willConfigurateHandle(Handle *handle)

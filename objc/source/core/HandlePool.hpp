@@ -49,8 +49,12 @@ public:
 #pragma mark - Basic
 public:
     using Tag = Handle::Tag;
-    std::atomic<Tag> tag;
+    void setTag(const Tag &tag);
+    Tag getTag() const;
     const std::string path;
+
+protected:
+    std::atomic<Tag> m_tag;
 
 #pragma mark - Error
 public:
