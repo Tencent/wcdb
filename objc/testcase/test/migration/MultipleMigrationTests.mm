@@ -58,4 +58,25 @@
     XCTAssertTrue([migratingTable isEqualToString:_table1] || [migratingTable isEqualToString:_migratedTable2] || [migratingTable isEqualToString:_migratedTable3]);
 }
 
+- (void)test_check_table_migration_done
+{
+    BOOL done;
+    __block BOOL tested = NO;
+    __block NSMutableSet *tables = [NSMutableSet setWithObjects:_table1, _migratedTable2, _migratedTable3, nil];
+    //start
+    XCTAssertTrue([_migrated stepMigration:done onTableMigrated:nil]);
+    while ([_migrated stepMigration:done
+                    onTableMigrated:^(WCTMigrationInfo *info) {
+                      XCTAssertTrue([tables containsObject:info.targetTable]);
+                      [tables removeObject:info.targetTable];
+                      if (tables.count == 0) {
+                          tested = YES;
+                      }
+                    }] &&
+           !done)
+        ;
+    XCTAssertTrue(done);
+    XCTAssertTrue(tested);
+}
+
 @end
