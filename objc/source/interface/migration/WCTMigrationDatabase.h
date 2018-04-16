@@ -20,19 +20,31 @@
 
 #import <WCDB/WCTDatabase.h>
 
-typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
+typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *_Nullable);
+
+typedef BOOL (^WCTMigrationSteppedBlock)(WCTMigrationInfo *_Nullable, BOOL);
+
+typedef void (^WCTMigrationCompletedBlock)(BOOL);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
-- (instancetype)initWithPath:(NSString *)path
-                     andInfo:(WCTMigrationInfo *)info;
+- (nullable instancetype)initWithPath:(nonnull NSString *)path
+                              andInfo:(nonnull WCTMigrationInfo *)info;
 
-- (instancetype)initWithPath:(NSString *)path
-                    andInfos:(NSArray<WCTMigrationInfo *> *)infos;
+- (nullable instancetype)initWithPath:(nonnull NSString *)path
+                             andInfos:(nonnull NSArray<WCTMigrationInfo *> *)infos;
 
 - (BOOL)stepMigration:(BOOL &)done;
 
 - (BOOL)stepMigration:(BOOL &)done
-      onTableMigrated:(WCTTableMigratedBlock)block;
+      onTableMigrated:(nullable WCTTableMigratedBlock)block;
+
+- (void)asyncMigration:(double)interval
+       onTableMigrated:(nullable WCTTableMigratedBlock)onTableMigrated
+           onCompleted:(nullable WCTMigrationCompletedBlock)onMigrationCompleted;
+
+- (void)asyncMigrationOnStepped:(nullable WCTMigrationSteppedBlock)onStepped
+                onTableMigrated:(nullable WCTTableMigratedBlock)onTableMigrated
+                    onCompleted:(nullable WCTMigrationCompletedBlock)onMigrationCompleted;
 
 @end

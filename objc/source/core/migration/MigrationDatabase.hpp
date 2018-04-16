@@ -46,18 +46,18 @@ protected:
 
 #pragma mark - Migration
 public:
-    typedef std::function<void(const MigrationInfo *)>
+    typedef std::function<void(const std::shared_ptr<MigrationInfo> &)>
         MigratingCompleteCallback;
+
     bool stepMigration(
         bool &done,
         const MigratingCompleteCallback &onMigratingCompleted = nullptr);
 
+    std::shared_ptr<MigrationInfo> getMigrationInfo() const;
+
 protected:
     bool startMigration(bool &done);
     MigrationHandlePool *m_migrationPool;
-#ifdef DEBUG
-    pthread_t m_migratingThread;
-#endif
 };
 
 } //namespace WCDB

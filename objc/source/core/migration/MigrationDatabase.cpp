@@ -25,6 +25,7 @@
 #include <WCDB/MigrationBuiltinConfig.hpp>
 #include <WCDB/MigrationDatabase.hpp>
 #include <WCDB/MigrationHandle.hpp>
+#include <future>
 
 namespace WCDB {
 
@@ -86,7 +87,6 @@ MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
     , m_migrationPool(pool != nullptr ? dynamic_cast<MigrationHandlePool *>(
                                             pool.getHandlePool())
                                       : nullptr)
-    , m_migratingThread(nullptr)
 {
     assert(pool == nullptr || m_migrationPool != nullptr);
 }
@@ -108,7 +108,7 @@ bool MigrationDatabase::startMigration(bool &done)
         return false;
     }
     LockGuard lockGuard(infos->getSharedLock());
-    MigrationInfo *info = infos->getMigratingInfo();
+    std::shared_ptr<MigrationInfo> info = infos->getMigratingInfo();
     if (info != nullptr) {
         return true;
     }
@@ -117,17 +117,16 @@ bool MigrationDatabase::startMigration(bool &done)
         return true;
     }
     //pick one info to migrate
-    info = infos->getInfos().begin()->second.get();
+    info = infos->getInfos().begin()->second;
     if (info->isSameDatabaseMigration()) {
         //cross database migration first
         for (const auto &infoToBePicked : infos->getInfos()) {
             if (!infoToBePicked.second->isSameDatabaseMigration()) {
-                info = infoToBePicked.second.get();
+                info = infoToBePicked.second;
                 break;
             }
         }
     }
-    info->prepareForMigrating();
     bool commited = runTransaction([info](Handle *handle) -> bool {
         //save migrating value
         KeyValueTable keyValueTable(handle);
@@ -195,18 +194,13 @@ bool MigrationDatabase::startMigration(bool &done)
 bool MigrationDatabase::stepMigration(
     bool &done, const MigratingCompleteCallback &onMigratingCompleted)
 {
-#ifdef DEBUG
-    if (m_migratingThread == nullptr) {
-        m_migratingThread = pthread_self();
-    }
-    assert(m_migratingThread == pthread_self());
-#endif
+    //TODO debug check migrating thread
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
     if (infos->didMigrationDone()) {
         done = true;
         return true;
     }
-    MigrationInfo *migratingInfo = infos->getMigratingInfo();
+    std::shared_ptr<MigrationInfo> migratingInfo = infos->getMigratingInfo();
     if (migratingInfo == nullptr) {
         return startMigration(done);
     }
@@ -262,6 +256,9 @@ bool MigrationDatabase::stepMigration(
     return true;
 }
 
-//TODO async migration
+std::shared_ptr<MigrationInfo> MigrationDatabase::getMigrationInfo() const
+{
+    return m_migrationPool->getMigrationInfos()->getMigratingInfo();
+}
 
 } //namespace WCDB

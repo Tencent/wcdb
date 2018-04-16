@@ -70,9 +70,9 @@ MigrationInfos::getInfos() const
     return m_infos;
 }
 
-MigrationInfo *MigrationInfos::getMigratingInfo()
+std::shared_ptr<MigrationInfo> MigrationInfos::getMigratingInfo()
 {
-    return m_migratingInfo.get();
+    return m_migratingInfo;
 }
 
 bool MigrationInfos::didMigratingStart() const

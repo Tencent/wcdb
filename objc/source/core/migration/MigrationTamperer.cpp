@@ -66,7 +66,8 @@ void MigrationTamperer::tamperWithStatement(const Statement &statement)
     bool sourceShouldBeTampered = true;
     switch (statement.getStatementType()) {
         case Statement::Type::Insert: {
-            MigrationInfo *migratingInfo = m_migrationInfos->getMigratingInfo();
+            std::shared_ptr<MigrationInfo> migratingInfo =
+                m_migrationInfos->getMigratingInfo();
             const auto cowLang =
                 m_tamperedSourceStatement.getCOWLang().get<Lang::InsertSTMT>();
             if (!migratingInfo) {

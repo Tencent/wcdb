@@ -41,6 +41,7 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
     , sourceDatabasePath(sourceDatabasePath_)
     , schema(MigrationInfo::resolvedSchema(sourceDatabasePath_))
 {
+    prepareForMigrating();
 }
 
 #pragma mark - Basic

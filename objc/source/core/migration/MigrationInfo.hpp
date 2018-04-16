@@ -136,9 +136,9 @@ public:
     StatementSelect
     getStatementForMergedSequence(const StatementSelect &statementSelect);
 
+protected:
     void prepareForMigrating();
 
-protected:
     StatementInsert m_statementForMigration;
     StatementDelete m_statementForDeleteingMigratedRow;
     StatementSelect m_statementForCheckingSourceTableEmpty;

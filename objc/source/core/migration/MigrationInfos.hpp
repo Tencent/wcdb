@@ -46,7 +46,7 @@ public:
     getSchemasForAttaching() const;
     const std::map<std::string, std::shared_ptr<MigrationInfo>> &
     getInfos() const;
-    MigrationInfo *getMigratingInfo();
+    std::shared_ptr<MigrationInfo> getMigratingInfo();
     void markAsMigrationStarted();
     void markAsMigrationStarted(const std::string &table);
     void markAsMigrating(const std::string &table);
