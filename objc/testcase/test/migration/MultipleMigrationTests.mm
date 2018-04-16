@@ -130,7 +130,7 @@
     XCTAssertTrue(succeed);
     NSDate *after = [NSDate date];
     NSTimeInterval interval = [after timeIntervalSinceDate:before];
-    XCTAssertGreaterThan(interval, 10);
+    XCTAssertGreaterThan(interval, 3.0);
 }
 
 - (void)test_async_migration
