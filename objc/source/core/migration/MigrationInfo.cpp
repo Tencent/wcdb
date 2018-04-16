@@ -80,7 +80,7 @@ void MigrationInfo::prepareForMigrating()
 {
     //setup reusable statement
     OrderingTerm order = OrderingTerm(Column::rowid).withOrder(Order::DESC);
-    Expression limit = 1; //TODO opti the step of migration
+    Expression limit = 10; //TODO opti the step of migration
 
     m_statementForMigration = StatementInsert()
                                   .insertOrIgnoreInto(targetTable)
