@@ -26,9 +26,9 @@
 {
     [super setUp];
 
-    int count = 5;
+    _count = 100;
 
-    int max = count - 1;
+    int max = _count - 1;
 
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
 
@@ -36,7 +36,7 @@
 
     _tableName = self.className;
 
-    _preInserted = [TestCaseObject objectsWithCount:count];
+    _preInserted = [TestCaseObject objectsWithCount:_count];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:_cls]);
 

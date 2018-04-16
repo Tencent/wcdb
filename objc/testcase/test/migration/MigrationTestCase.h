@@ -22,6 +22,7 @@
 
 @interface MigrationTestCase : TestCase {
 @protected
+    int _count;
     WCTDatabase *_database;
     NSArray<TestCaseObject *> *_preInserted;
     NSString *_tableName;
