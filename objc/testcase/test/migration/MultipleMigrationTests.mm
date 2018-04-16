@@ -79,4 +79,91 @@
     XCTAssertTrue(tested);
 }
 
+- (void)check_migrated
+{
+    //already detached
+    {
+        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList)];
+        XCTAssertEqual(schemas.count, 1);
+    }
+
+    //old table is already dropped
+    WCTError *error;
+    XCTAssertFalse([_database1 isTableExists:_table1 withError:&error]);
+    XCTAssertNil(error);
+    XCTAssertFalse([_database2 isTableExists:_table2 withError:&error]);
+    XCTAssertNil(error);
+    XCTAssertFalse([_migrated isTableExists:_table3 withError:&error]);
+    XCTAssertNil(error);
+
+    //all data are migrated
+    NSArray *objects1 = [_migrated getObjectsOfClass:_cls fromTable:_table1 orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects1 isEqualToTestCaseObjects:_preInsertObjects1]);
+
+    NSArray *objects2 = [_migrated getObjectsOfClass:_cls fromTable:_migratedTable2 orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects2 isEqualToTestCaseObjects:_preInsertObjects2]);
+
+    NSArray *objects3 = [_migrated getObjectsOfClass:_cls fromTable:_migratedTable3 orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects3 isEqualToTestCaseObjects:_preInsertObjects3]);
+}
+
+- (void)test_async_migration_with_interval
+{
+    __block BOOL done = NO;
+    __block BOOL succeed = NO;
+    NSDate *before = [NSDate date];
+    __block NSCondition *condition = [[NSCondition alloc] init];
+    [_migrated asyncMigration:1.0
+              onTableMigrated:nil
+                  onCompleted:^(BOOL result) {
+                    succeed = result;
+                    [condition lock];
+                    done = YES;
+                    [condition signal];
+                    [condition unlock];
+                  }];
+    [condition lock];
+    while (!done) {
+        [condition wait];
+    }
+    [condition unlock];
+    XCTAssertTrue(succeed);
+    NSDate *after = [NSDate date];
+    NSTimeInterval interval = [after timeIntervalSinceDate:before];
+    XCTAssertGreaterThan(interval, 10);
+}
+
+- (void)test_async_migration
+{
+    __block BOOL tested = NO;
+    __block BOOL done = NO;
+    __block BOOL succeed = NO;
+    __block NSCondition *condition = [[NSCondition alloc] init];
+    __block NSMutableSet *tables = [NSMutableSet setWithObjects:_table1, _migratedTable2, _migratedTable3, nil];
+    [_migrated asyncMigrationOnStepped:^BOOL(WCTMigrationInfo *_Nullable, BOOL) {
+      return YES;
+    }
+        onTableMigrated:^(WCTMigrationInfo *info) {
+          XCTAssertTrue([tables containsObject:info.targetTable]);
+          [tables removeObject:info.targetTable];
+          if (tables.count == 0) {
+              tested = YES;
+          }
+        }
+        onCompleted:^(BOOL result) {
+          succeed = result;
+          [condition lock];
+          done = YES;
+          [condition signal];
+          [condition unlock];
+        }];
+    [condition lock];
+    while (!done) {
+        [condition wait];
+    }
+    [condition unlock];
+    XCTAssertTrue(succeed);
+    XCTAssertTrue(tested);
+}
+
 @end
