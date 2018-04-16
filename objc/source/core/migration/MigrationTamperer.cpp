@@ -774,7 +774,7 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                                                  CopyOnWriteString &schemaName)
 {
     if (m_fillingSchema) {
-        if (schemaName.empty() &&
+        if (schemaName.empty() && !tableName.empty() &&
             !m_migrationInfos->isSameDatabaseMigration()) {
             schemaName.assign(StatementAttach::getMainSchema());
             return true;
