@@ -22,12 +22,14 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTTokenizer.h>
 
 @implementation WCTDatabase
 
-#if TARGET_OS_IPHONE
 + (void)initialize
 {
+    [WCTTokenizer enroll];
+#if TARGET_OS_IPHONE
     WCDB::SQLiteGlobal::shared()->hookVFSDidFileCreated([](const char *path) {
         if (!path) {
             return;
@@ -65,8 +67,8 @@
             fileError.report();
         }
     });
-}
 #endif //TARGET_OS_IPHONE
+}
 
 - (instancetype)initWithPath:(NSString *)path
 {

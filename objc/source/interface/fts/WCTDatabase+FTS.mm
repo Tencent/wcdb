@@ -23,11 +23,6 @@
 
 @implementation WCTDatabase (FTS)
 
-+ (void)initialize
-{
-    [WCTTokenizer enroll];
-}
-
 - (void)setTokenizer:(NSString *)tokenizerName
 {
     _database->setTokenizes({tokenizerName.UTF8String});

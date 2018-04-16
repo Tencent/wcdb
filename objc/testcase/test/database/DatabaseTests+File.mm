@@ -180,6 +180,7 @@
 }
 
 #if TARGET_OS_IPHONE
+#ifdef DEBUG
 - (void)test_file_protection
 {
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
@@ -196,6 +197,7 @@
         XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:expectedSQL]);
     }
 }
+#endif
 #endif
 
 @end
