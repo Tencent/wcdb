@@ -342,7 +342,7 @@ std::pair<bool, std::list<std::string>>
 Handle::getColumnsWithTable(const std::string &tableName)
 {
     return getPragmaValues(
-        StatementPragma().pragma(Pragma::TableInfo).to(tableName), 1);
+        StatementPragma().pragma(Pragma::TableInfo).with(tableName), 1);
 }
 
 std::pair<bool, std::list<std::string>> Handle::getAttachedSchemas()

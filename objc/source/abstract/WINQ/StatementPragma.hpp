@@ -31,6 +31,7 @@ class StatementPragma : public StatementWithLang<Lang::PragmaSTMT> {
 public:
     StatementPragma &withSchema(const std::string &schemaName);
     StatementPragma &pragma(const Pragma &pragmaName);
+    StatementPragma &with(const LiteralValue &pragmaValue);
     StatementPragma &to(const LiteralValue &pragmaValue);
 };
 

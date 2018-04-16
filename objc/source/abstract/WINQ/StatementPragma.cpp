@@ -37,6 +37,11 @@ StatementPragma &StatementPragma::pragma(const Pragma &pragmaName)
     return *this;
 }
 
+StatementPragma &StatementPragma::with(const LiteralValue &pragmaValue)
+{
+    return to(pragmaValue);
+}
+
 StatementPragma &StatementPragma::to(const LiteralValue &pragmaValue)
 {
     Lang::PragmaSTMT &lang = getMutableLang();
