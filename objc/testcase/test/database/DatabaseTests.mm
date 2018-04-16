@@ -62,6 +62,7 @@
 
 - (void)test_existing_tag
 {
+    _database.tag = rand();
     WCTDatabase *database2 = [[WCTDatabase alloc] initWithExistingTag:_database.tag];
     XCTAssertNotNil(database2);
     XCTAssertTrue([_database.path isEqualToString:database2.path]);

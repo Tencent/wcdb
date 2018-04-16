@@ -28,13 +28,17 @@
 
 - (BOOL)isTableExists:(NSString *)tableName
 {
-    return _database->isTableExists(tableName.UTF8String).second;
+    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.UTF8String)
+                                      .withSchema(WCDB::StatementAttach::getMainSchema());
+    return _database->isTableExists(table).second;
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
             withError:(WCTError **)error
 {
-    auto result = _database->isTableExists(tableName.UTF8String);
+    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.UTF8String)
+                                      .withSchema(WCDB::StatementAttach::getMainSchema());
+    auto result = _database->isTableExists(table);
     if (error) {
         if (result.first) {
             *error = nil;

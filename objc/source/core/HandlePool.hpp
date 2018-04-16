@@ -102,6 +102,8 @@ protected:
     virtual bool willConfigurateHandle(Handle *handle);
     std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
     std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
+    void flowBackConfiguredHandle(
+        const std::shared_ptr<ConfiguredHandle> &configuredHandle);
     virtual std::shared_ptr<Handle> generateHandle();
 
     SharedLock m_sharedLock;

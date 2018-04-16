@@ -129,7 +129,7 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
     bool result = false;
     if (configuredHandle) {
         onBlockaded(configuredHandle->getHandle());
-        flowBack(configuredHandle);
+        flowBackConfiguredHandle(configuredHandle);
         result = true;
     }
     return result;
@@ -137,6 +137,7 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 
 void HandlePool::unblockade()
 {
+    assert(m_sharedLock.isLocked());
     m_sharedLock.unlock();
 }
 
@@ -172,20 +173,17 @@ bool HandlePool::isDrained()
 
 bool HandlePool::canFlowOut()
 {
-    bool result = false;
-    m_sharedLock.lockShared();
-    {
-        std::shared_ptr<ConfiguredHandle> configuredHandle =
-            flowOutConfiguredHandle();
-        if (!configuredHandle) {
-            configuredHandle = generateConfiguredHandle();
-        }
-        if (configuredHandle) {
-            flowBack(configuredHandle);
-            result = true;
-        }
+    SharedLockGuard lockGuard(m_sharedLock);
+    std::shared_ptr<ConfiguredHandle> configuredHandle =
+        flowOutConfiguredHandle();
+    if (!configuredHandle) {
+        configuredHandle = generateConfiguredHandle();
     }
-    return result;
+    if (configuredHandle) {
+        flowBackConfiguredHandle(configuredHandle);
+        return true;
+    }
+    return false;
 }
 
 RecyclableHandle HandlePool::flowOut()
@@ -196,25 +194,20 @@ RecyclableHandle HandlePool::flowOut()
     if (!configuredHandle) {
         configuredHandle = generateConfiguredHandle();
     }
-    if (!configuredHandle) {
-        m_sharedLock.unlockShared();
-        return nullptr;
+    if (configuredHandle) {
+        return RecyclableHandle(configuredHandle, [configuredHandle, this]() {
+            flowBack(configuredHandle);
+        });
     }
-    return RecyclableHandle(configuredHandle, [configuredHandle, this]() {
-        flowBack(configuredHandle);
-    });
+    m_sharedLock.unlockShared();
+    return nullptr;
 }
 
 void HandlePool::flowBack(
     const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
-    if (configuredHandle) {
-        bool inserted = m_handles.pushBack(configuredHandle);
-        m_sharedLock.unlockShared();
-        if (!inserted) {
-            --m_aliveHandleCount;
-        }
-    }
+    flowBackConfiguredHandle(configuredHandle);
+    m_sharedLock.unlockShared();
 }
 
 std::shared_ptr<Handle> HandlePool::generateHandle()
@@ -224,6 +217,7 @@ std::shared_ptr<Handle> HandlePool::generateHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 {
+    assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
     std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
     if (!configuredHandle) {
         return nullptr;
@@ -240,6 +234,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
+    assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
     if (m_aliveHandleCount >= s_maxConcurrency) {
         setAndReportCoreError(
             "The concurrency of database exceeds the maxximum allowed: " +
@@ -284,6 +279,16 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         error.report();
     }
     return configuredHandle;
+}
+
+void HandlePool::flowBackConfiguredHandle(
+    const std::shared_ptr<ConfiguredHandle> &configuredHandle)
+{
+    assert(configuredHandle != nullptr);
+    assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
+    if (!m_handles.pushBack(configuredHandle)) {
+        --m_aliveHandleCount;
+    }
 }
 
 bool HandlePool::willConfigurateHandle(Handle *handle)

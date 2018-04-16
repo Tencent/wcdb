@@ -53,7 +53,7 @@ const std::string MigrationInfo::schemaPrefix()
 std::string MigrationInfo::resolvedSchema(const std::string &path)
 {
     if (path.empty()) {
-        return "";
+        return StatementAttach::getMainSchema();
     }
     return MigrationInfo::schemaPrefix() +
            std::to_string(std::hash<std::string>{}(path));
@@ -61,25 +61,17 @@ std::string MigrationInfo::resolvedSchema(const std::string &path)
 
 bool MigrationInfo::isSameDatabaseMigration() const
 {
-    return schema.empty();
+    return schema == StatementAttach::getMainSchema();
 }
 
 TableOrSubquery MigrationInfo::getSourceTable() const
 {
-    TableOrSubquery table(sourceTable);
-    if (!isSameDatabaseMigration()) {
-        table.withSchema(schema);
-    }
-    return table;
+    return TableOrSubquery(sourceTable).withSchema(schema);
 }
 
 QualifiedTableName MigrationInfo::getQualifiedSourceTable() const
 {
-    QualifiedTableName table(sourceTable);
-    if (!isSameDatabaseMigration()) {
-        table.withSchema(schema);
-    }
-    return table;
+    return QualifiedTableName(sourceTable).withSchema(schema);
 }
 
 #pragma mark - Statement
@@ -91,6 +83,7 @@ void MigrationInfo::prepareForMigrating()
 
     m_statementForMigration = StatementInsert()
                                   .insertOrIgnoreInto(targetTable)
+                                  .withSchema(StatementAttach::getMainSchema())
                                   .values(StatementSelect()
                                               .select(ResultColumn::All)
                                               .from(getSourceTable())
@@ -104,7 +97,7 @@ void MigrationInfo::prepareForMigrating()
             .limit(limit);
 
     m_statementForCheckingSourceTableEmpty =
-        StatementSelect().select(1).from(sourceTable).limit(1);
+        StatementSelect().select(1).from(getSourceTable()).limit(1);
 }
 
 const StatementInsert &MigrationInfo::getStatementForMigration() const
@@ -126,12 +119,10 @@ MigrationInfo::getStatementForCheckingSourceTableEmpty() const
 
 StatementDropTable MigrationInfo::getStatementForDroppingOldTable() const
 {
-    StatementDropTable statementForDroppingOldTable =
-        StatementDropTable().dropTable(sourceTable).ifExists();
-    if (!isSameDatabaseMigration()) {
-        statementForDroppingOldTable.withSchema(schema);
-    }
-    return statementForDroppingOldTable;
+    return StatementDropTable()
+        .dropTable(sourceTable)
+        .withSchema(schema)
+        .ifExists();
 }
 
 StatementSelect MigrationInfo::getStatementForGettingMaxRowID() const
@@ -139,21 +130,18 @@ StatementSelect MigrationInfo::getStatementForGettingMaxRowID() const
     Expression maxRowID = Column("rowid").max();
     StatementSelect statementSelect =
         StatementSelect().select(maxRowID).from(getSourceTable());
-    SelectCore selectionTargetMaxRowID =
-        SelectCore().select(maxRowID).from(targetTable);
+    SelectCore selectionTargetMaxRowID = SelectCore().select(maxRowID).from(
+        TableOrSubquery(targetTable)
+            .withSchema(StatementAttach::getMainSchema()));
     statementSelect.union_(selectionTargetMaxRowID);
     return statementSelect;
 }
 
 SelectCore MigrationInfo::getSelectionForGettingSourceSequence() const
 {
-    TableOrSubquery table("sqlite_sequence");
-    if (!isSameDatabaseMigration()) {
-        table.withSchema(schema);
-    }
     return SelectCore()
         .select(Column("seq"))
-        .from(table)
+        .from(TableOrSubquery("sqlite_sequence").withSchema(schema))
         .where(Column("name") == sourceTable);
 }
 
@@ -161,7 +149,8 @@ SelectCore MigrationInfo::getSelectionForGettingTargetSequence() const
 {
     return SelectCore()
         .select(Column("seq"))
-        .from("sqlite_sequence")
+        .from(TableOrSubquery("sqlite_sequence")
+                  .withSchema(StatementAttach::getMainSchema()))
         .where(Column("name") == targetTable);
 }
 
@@ -170,6 +159,7 @@ MigrationInfo::getStatementForInsertingSequence(int sequence) const
 {
     return StatementInsert()
         .insertInto("sqlite_sequence")
+        .withSchema(StatementAttach::getMainSchema())
         .values({targetTable, sequence});
 }
 
@@ -177,7 +167,8 @@ StatementUpdate
 MigrationInfo::getStatementForUpdatingSequence(int sequence) const
 {
     return StatementUpdate()
-        .update("sqlite_sequence")
+        .update(QualifiedTableName("sqlite_sequence")
+                    .withSchema(StatementAttach::getMainSchema()))
         .set(Column("seq"), sequence)
         .where(Column("name") == targetTable);
 }

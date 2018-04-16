@@ -22,6 +22,12 @@
 
 namespace WCDB {
 
+const std::string &StatementAttach::getMainSchema()
+{
+    static const std::string s_mainSchema("main");
+    return s_mainSchema;
+}
+
 StatementAttach &StatementAttach::attach(const Expression &expression)
 {
     Lang::AttachSTMT &lang = getMutableLang();

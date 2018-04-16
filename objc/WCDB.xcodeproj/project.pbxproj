@@ -129,6 +129,8 @@
 		2349F7711EA0D6680021EFA7 /* WCTDatabase+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */; };
 		2349F7741EA0D6680021EFA7 /* WCTTable+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */; };
 		2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6BA1EA0D6680021EFA7 /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		234D391D20833BC2005FD3CF /* MigrationTamperer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 234D391B20833BC2005FD3CF /* MigrationTamperer.cpp */; };
+		234D391E20833BC2005FD3CF /* MigrationTamperer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234D391C20833BC2005FD3CF /* MigrationTamperer.hpp */; };
 		234DBCF32064DD0C000E31E8 /* WCTDatabase+Handle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCEC2064DD0B000E31E8 /* WCTDatabase+Handle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234DBCF42064DD0C000E31E8 /* WCTDatabase+Handle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCED2064DD0B000E31E8 /* WCTDatabase+Handle.mm */; };
 		234DBCF52064DD0C000E31E8 /* WCTHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCEE2064DD0B000E31E8 /* WCTHandle.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -596,6 +598,8 @@
 		2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Table.mm"; sourceTree = "<group>"; };
 		2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Private.h"; sourceTree = "<group>"; };
 		2349F6BA1EA0D6680021EFA7 /* WCDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
+		234D391B20833BC2005FD3CF /* MigrationTamperer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationTamperer.cpp; sourceTree = "<group>"; };
+		234D391C20833BC2005FD3CF /* MigrationTamperer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationTamperer.hpp; sourceTree = "<group>"; };
 		234DBCEC2064DD0B000E31E8 /* WCTDatabase+Handle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Handle.h"; sourceTree = "<group>"; };
 		234DBCED2064DD0B000E31E8 /* WCTDatabase+Handle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Handle.mm"; sourceTree = "<group>"; };
 		234DBCEE2064DD0B000E31E8 /* WCTHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTHandle.h; sourceTree = "<group>"; };
@@ -1555,6 +1559,8 @@
 				23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */,
 				23BFE30B207CE3E200A4BD81 /* MigrationInfos.cpp */,
 				23BFE30C207CE3E200A4BD81 /* MigrationInfos.hpp */,
+				234D391B20833BC2005FD3CF /* MigrationTamperer.cpp */,
+				234D391C20833BC2005FD3CF /* MigrationTamperer.hpp */,
 				23D96B9D2050E9A500DB5E93 /* MigrationHandlePool.cpp */,
 				23D96B9E2050E9A500DB5E93 /* MigrationHandlePool.hpp */,
 				23D96BA12050EB8500DB5E93 /* MigrationHandle.cpp */,
@@ -1678,6 +1684,7 @@
 				23977556202AECD3000A681C /* LangColumnConstraint.hpp in Headers */,
 				239776E0202AF2E3000A681C /* CopyOnWriteLazyDescribable.hpp in Headers */,
 				239776FE202AF2E3000A681C /* Macro.hpp in Headers */,
+				234D391E20833BC2005FD3CF /* MigrationTamperer.hpp in Headers */,
 				23977558202AECD3000A681C /* LangColumnDef.hpp in Headers */,
 				23977559202AECD3000A681C /* LangColumnType.hpp in Headers */,
 				232DCE0B207F81FD00AC2CD0 /* Lock.hpp in Headers */,
@@ -2122,6 +2129,7 @@
 				23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */,
 				23977537202AECD3000A681C /* StatementRollback.cpp in Sources */,
 				2397756F202AECD3000A681C /* LangDropIndexSTMT.cpp in Sources */,
+				234D391D20833BC2005FD3CF /* MigrationTamperer.cpp in Sources */,
 				23977551202AECD3000A681C /* LangBeginSTMT.cpp in Sources */,
 				23977598202AECD3000A681C /* LangResultColumn.cpp in Sources */,
 				23977589202AECD3000A681C /* LangModuleArgument.cpp in Sources */,

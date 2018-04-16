@@ -35,9 +35,9 @@
     {
         WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList) atIndex:1];
         XCTAssertEqual(schemas.count, 3);
-        XCTAssertTrue([schemas[0].stringValue isEqualToString:@"main"]);
-        XCTAssertTrue([schemas[1].stringValue isEqualToString:[self schemaNameForPath:_database1.path]]);
-        XCTAssertTrue([schemas[2].stringValue isEqualToString:[self schemaNameForPath:_database2.path]]);
+        NSSet *schemaSet = [NSSet setWithObjects:schemas[0].stringValue, schemas[1].stringValue, schemas[2].stringValue, nil];
+        NSSet *expectedSchemaSet = [NSSet setWithObjects:@"main", [self schemaNameForPath:_database1.path], [self schemaNameForPath:_database2.path], nil];
+        XCTAssertTrue([schemaSet isEqualToSet:expectedSchemaSet]);
     }
 
     //migration

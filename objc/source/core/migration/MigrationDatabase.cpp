@@ -59,6 +59,7 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
     const HandlePools::Generator s_generator =
         [&migrationInfos](
             const std::string &path) -> std::shared_ptr<HandlePool> {
+        assert(migrationInfos != nullptr);
         if (migrationInfos->isSameDatabaseMigration()) {
             return std::shared_ptr<HandlePool>(new MigrationHandlePool(
                 path, BuiltinConfig::defaultConfigs(), migrationInfos));
@@ -94,7 +95,7 @@ bool MigrationDatabase::startMigration(bool &done)
 {
     done = false;
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
-    assert(infos != nullptr && !infos->getInfos().empty());
+    assert(!infos->getInfos().empty());
     RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
         return false;
@@ -198,7 +199,7 @@ bool MigrationDatabase::stepMigration(bool &done)
     assert(m_migratingThread == pthread_self());
 #endif
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
-    if (infos == nullptr || infos->getInfos().empty()) {
+    if (infos->didMigrationDone()) {
         done = true;
         return true;
     }

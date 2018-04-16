@@ -20,6 +20,7 @@
 
 #include <WCDB/KeyValueTable.hpp>
 #include <WCDB/MigrationHandle.hpp>
+#include <WCDB/MigrationTamperer.hpp>
 
 namespace WCDB {
 
@@ -42,79 +43,46 @@ MigrationHandle::MigrationHandle(const std::string &path,
 #pragma mark - Override
 bool MigrationHandle::execute(const Statement &statement)
 {
-    if (m_infos) {
-        //Avoid migration info and source table changed
-        SharedLockGuard lockGuard(m_infos->getSharedLock());
-        Statement tamperedStatement(statement);
-        if (m_infos->tamper(tamperedStatement)) {
-#ifdef DEBUG
-            debug_checkStatementLegal(statement);
-#endif
-            // Since UPDATE, DELETE, DROPTABLE statements will execute on both migration table and migrated table, multiple statements should be run.
-            // INSERT statement will execute on both migration table and migrated table if and only if it's the migrating table. Or it will be executed on origin table only.
-            switch (statement.getStatementType()) {
-                case Statement::Type::Update:
-                case Statement::Type::Delete:
-                case Statement::Type::DropTable:
-                    return executeWithMultipleStatements(statement,
-                                                         tamperedStatement);
-                case Statement::Type::Insert: {
-                    StatementInsert statementInsert = statement.getCOWLang();
-                    if (m_infos->getMigratingInfo() &&
-                        m_infos->getMigratingInfo()->targetTable ==
-                            statementInsert.getCOWLang()
-                                .get<Lang::InsertSTMT>()
-                                .tableName.get()) {
-                        return executeWithMultipleStatements(statement,
-                                                             tamperedStatement);
-                    }
-                    return executeWithoutTampering(tamperedStatement);
-                }
-                default:
-                    return executeWithoutTampering(tamperedStatement);
-            }
-        }
+    if (m_infos->didMigrationDone()) {
+        return executeWithoutTampering(statement);
     }
-    return executeWithoutTampering(statement);
+#ifdef DEBUG
+    debug_checkStatementLegal(statement);
+#endif
+    //Avoid migration info and source table changed
+    SharedLockGuard lockGuard(m_infos->getSharedLock());
+    MigrationTamperer tamperer(m_infos.get(), statement);
+    const Statement &source = tamperer.didSourceTampered()
+                                  ? tamperer.getTamperedSourceStatement()
+                                  : statement;
+    if (!tamperer.didTampered()) {
+        return executeWithoutTampering(source);
+    }
+    return executeWithMultipleStatements(source,
+                                         tamperer.getTamperedStatement());
 }
 
 bool MigrationHandle::prepare(const Statement &statement)
 {
-    if (m_infos) {
-        m_infos->getSharedLock().lockShared();
-        Statement tamperedStatement(statement);
-        if (m_infos->tamper(tamperedStatement)) {
-            m_unlockShared = true;
-#ifdef DEBUG
-            debug_checkStatementLegal(statement);
-#endif
-            // Since UPDATE, DELETE, DROPTABLE statements will execute on both migration table and migrated table, multiple statements should be run.
-            // INSERT statement will execute on both migration table and migrated table if and only if it's the migrating table. Or it will be executed on origin table only.
-            switch (statement.getStatementType()) {
-                case Statement::Type::Update:
-                case Statement::Type::Delete:
-                case Statement::Type::DropTable:
-                    return prepareWithMultipleStatements(statement,
-                                                         tamperedStatement);
-                case Statement::Type::Insert: {
-                    StatementInsert statementInsert = statement.getCOWLang();
-                    if (m_infos->getMigratingInfo() &&
-                        m_infos->getMigratingInfo()->targetTable ==
-                            statementInsert.getCOWLang()
-                                .get<Lang::InsertSTMT>()
-                                .tableName.get()) {
-                        return prepareWithMultipleStatements(statement,
-                                                             tamperedStatement);
-                    }
-                    return prepareWithoutTampering(tamperedStatement);
-                }
-                default:
-                    return prepareWithoutTampering(tamperedStatement);
-            }
-        }
-        m_infos->getSharedLock().unlockShared();
+    if (m_infos->didMigrationDone()) {
+        return prepareWithoutTampering(statement);
     }
-    return prepareWithoutTampering(statement);
+#ifdef DEBUG
+    debug_checkStatementLegal(statement);
+#endif
+    //Avoid migration info and source table changed
+    SharedLockGuard lockGuard(m_infos->getSharedLock());
+    MigrationTamperer tamperer(m_infos.get(), statement);
+    const Statement &source = tamperer.didSourceTampered()
+                                  ? tamperer.getTamperedSourceStatement()
+                                  : statement;
+    if (!tamperer.didTampered()) {
+        return prepareWithoutTampering(source);
+    }
+    m_unlockShared = true;
+    m_infos->getSharedLock().lockShared();
+    return prepareWithMultipleStatements(source,
+                                         tamperer.getTamperedStatement());
 }
 
 bool MigrationHandle::step(bool &done)
