@@ -71,37 +71,6 @@
 
 - (void)tearDown
 {
-    BOOL done = NO;
-    //migration
-    while ([_migrated stepMigration:done] && !done)
-        ;
-    XCTAssertTrue(done);
-
-    //already detached
-    {
-        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList)];
-        XCTAssertEqual(schemas.count, 1);
-    }
-
-    //old table is already dropped
-    WCTError *error;
-    XCTAssertFalse([_database1 isTableExists:_table1 withError:&error]);
-    XCTAssertNil(error);
-    XCTAssertFalse([_database2 isTableExists:_table2 withError:&error]);
-    XCTAssertNil(error);
-    XCTAssertFalse([_migrated isTableExists:_table3 withError:&error]);
-    XCTAssertNil(error);
-
-    //all data are migrated
-    NSArray *objects1 = [_migrated getObjectsOfClass:_cls fromTable:_table1 orderBy:TestCaseObject.variable1];
-    XCTAssertTrue([objects1 isEqualToTestCaseObjects:_preInsertObjects1]);
-
-    NSArray *objects2 = [_migrated getObjectsOfClass:_cls fromTable:_migratedTable2 orderBy:TestCaseObject.variable1];
-    XCTAssertTrue([objects2 isEqualToTestCaseObjects:_preInsertObjects2]);
-
-    NSArray *objects3 = [_migrated getObjectsOfClass:_cls fromTable:_migratedTable3 orderBy:TestCaseObject.variable1];
-    XCTAssertTrue([objects3 isEqualToTestCaseObjects:_preInsertObjects3]);
-
     XCTAssertTrue([_database1 dropTable:_table1]);
     [_database1 close:^{
       XCTAssertTrue([_database1 removeFiles]);
@@ -116,6 +85,7 @@
     [_migrated close:^{
       XCTAssertTrue([_migrated removeFiles]);
     }];
+    [_migrated finalizeDatabase];
 
     [super tearDown];
 }

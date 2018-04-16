@@ -54,6 +54,7 @@
     [_migrated close:^{
       XCTAssertTrue([_migrated removeFiles]);
     }];
+    [_migrated finalizeDatabase];
 
     _migrated = nil;
 

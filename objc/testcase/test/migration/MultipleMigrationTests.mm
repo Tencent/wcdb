@@ -41,4 +41,21 @@
     }
 }
 
+- (void)test_interrupt
+{
+    BOOL done;
+    //start
+    XCTAssertTrue([_migrated stepMigration:done]);
+    XCTAssertTrue([_migrated stepMigration:done]);
+    XCTAssertTrue([_migrated stepMigration:done]);
+
+    [_migrated close];
+    [_migrated finalizeDatabase];
+    _migrated = nil;
+
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath andInfos:_infos];
+    NSString *migratingTable = [_migrated getValueOnResult:WCDB::Column("value") fromTable:@"WCDBKV" where:WCDB::Column("key") == "WCDBMigrating"].stringValue;
+    XCTAssertTrue([migratingTable isEqualToString:_table1] || [migratingTable isEqualToString:_migratedTable2] || [migratingTable isEqualToString:_migratedTable3]);
+}
+
 @end

@@ -107,7 +107,7 @@
 {
     WCTValue *rowValue = [_database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.TableName.UTF8String).where(WCTMaster.name == indexName)];
     XCTAssertNotNil(rowValue);
-    return rowValue.integer32Value > 0;
+    return rowValue.boolValue;
 }
 
 - (void)test_drop_index

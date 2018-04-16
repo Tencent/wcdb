@@ -88,8 +88,7 @@
     [_migrated close:^{
       XCTAssertTrue([_migrated removeFiles]);
     }];
-
-    //    [_migrated finalizeDatabase];
+    [_migrated finalizeDatabase];
 
     _migrated = nil;
 
@@ -110,6 +109,27 @@
     XCTAssertNil(error);
     XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
     XCTAssertNil(error);
+}
+
+#pragma mark - Create Index
+- (BOOL)isIndexExists:(NSString *)indexName
+{
+    WCTValue *rowValue = [_migrated getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.TableName.UTF8String).where(WCTMaster.name == indexName)];
+    XCTAssertNotNil(rowValue);
+    return rowValue.boolValue;
+}
+
+- (void)test_create_index
+{
+    NSString *indexName = @"test_create_index";
+    XCTAssertFalse([self isIndexExists:indexName]);
+    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName.UTF8String).ifNotExists().indexedBy(TestCaseObject.variable3.asIndex()).on(_migratedTableName.UTF8String);
+    XCTAssertTrue([_migrated execute:statement]);
+    BOOL done;
+    while ([_migrated stepMigration:done] && !done)
+        ;
+    XCTAssertTrue(done);
+    XCTAssertTrue([self isIndexExists:indexName]);
 }
 
 #pragma mark - Get Object
@@ -1061,10 +1081,6 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     XCTAssertTrue([_migrated insertOrReplaceObject:object intoTable:_migratedTableName]);
-    [_migrated purge];
-    [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-      NSLog(@" sql %@", sql);
-    }];
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_migrated getObjectsOfClass:_cls fromTable:_migratedTableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[0] = object;

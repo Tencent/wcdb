@@ -1068,10 +1068,6 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     XCTAssertTrue([_migrated insertOrReplaceObject:object intoTable:_migratedTableName]);
-    [_migrated purge];
-    [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-      NSLog(@" sql %@", sql);
-    }];
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_migrated getObjectsOfClass:_cls fromTable:_migratedTableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[0] = object;

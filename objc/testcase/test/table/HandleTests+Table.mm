@@ -68,13 +68,6 @@
     }
 
     {
-        //        WCTDatabase* database = [_handle getDatabase];
-        //        [_handle finalizeHandle];
-        //        [database purge];
-        //        _handle = [database getHandle];
-        //        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-        //            NSLog(@"sql %@", sql);
-        //        }];
         NSString *indexName = [_tableName stringByAppendingString:@"_index"];
         WCTValue *value = [_handle getValueOnResult:WCTMaster.sql fromTable:WCTMaster.TableName where:WCTMaster.name == indexName];
         NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX %@_index ON %@(variable2)", _tableName, _tableName];
@@ -118,7 +111,7 @@
 {
     WCTValue *rowValue = [_handle getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.TableName.UTF8String).where(WCTMaster.name == indexName)];
     XCTAssertNotNil(rowValue);
-    return rowValue.integer32Value > 0;
+    return rowValue.boolValue;
 }
 
 - (void)test_drop_index
