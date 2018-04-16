@@ -35,7 +35,8 @@
     _table1 = [self.className stringByAppendingString:@"_table1"];
     _table2 = [self.className stringByAppendingString:@"_table2"];
     _table3 = [self.className stringByAppendingString:@"_table3"];
-    _migratedTable = [self.className stringByAppendingString:@"_migrated"];
+    _migratedTable2 = [self.className stringByAppendingString:@"_migrated2"];
+    _migratedTable3 = [self.className stringByAppendingString:@"_migrated3"];
 
     _count = 5;
     _preInsertObjects1 = [TestCaseObject objectsWithCount:_count];
@@ -59,29 +60,59 @@
     [database3 finalizeDatabase];
 
     WCTMigrationInfo *info1 = [[WCTMigrationInfo alloc] initWithTargetTable:_table1 fromSourceTable:_table1 ofDatabase:_path1];
-    WCTMigrationInfo *info2 = [[WCTMigrationInfo alloc] initWithTargetTable:_table2 fromSourceTable:_table2 ofDatabase:_path2];
-    WCTMigrationInfo *info3 = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTable fromSourceTable:_table3];
+    WCTMigrationInfo *info2 = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTable2 fromSourceTable:_table2 ofDatabase:_path2];
+    WCTMigrationInfo *info3 = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTable3 fromSourceTable:_table3];
     _infos = @[ info1, info2, info3 ];
     _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath andInfos:_infos];
     XCTAssertTrue([_migrated createTableAndIndexes:_table1 withClass:_cls]);
-    XCTAssertTrue([_migrated createTableAndIndexes:_table2 withClass:_cls]);
-    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTable withClass:_cls]);
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTable2 withClass:_cls]);
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTable3 withClass:_cls]);
 }
 
 - (void)tearDown
 {
+    BOOL done = NO;
+    //migration
+    while ([_migrated stepMigration:done] && !done)
+        ;
+    XCTAssertTrue(done);
+
+    //already detached
+    {
+        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList)];
+        XCTAssertEqual(schemas.count, 1);
+    }
+
+    //old table is already dropped
+    WCTError *error;
+    XCTAssertFalse([_database1 isTableExists:_table1 withError:&error]);
+    XCTAssertNil(error);
+    XCTAssertFalse([_database2 isTableExists:_table2 withError:&error]);
+    XCTAssertNil(error);
+    XCTAssertFalse([_migrated isTableExists:_table3 withError:&error]);
+    XCTAssertNil(error);
+
+    //all data are migrated
+    NSArray *objects1 = [_migrated getObjectsOfClass:_cls fromTable:_table1 orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects1 isEqualToTestCaseObjects:_preInsertObjects1]);
+
+    NSArray *objects2 = [_migrated getObjectsOfClass:_cls fromTable:_migratedTable2 orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects2 isEqualToTestCaseObjects:_preInsertObjects2]);
+
+    NSArray *objects3 = [_migrated getObjectsOfClass:_cls fromTable:_migratedTable3 orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects3 isEqualToTestCaseObjects:_preInsertObjects3]);
+
     XCTAssertTrue([_database1 dropTable:_table1]);
     [_database1 close:^{
       XCTAssertTrue([_database1 removeFiles]);
     }];
 
-    XCTAssertTrue([_database2 dropTable:_table2]);
+    XCTAssertTrue([_database2 dropTable:_migratedTable2]);
     [_database2 close:^{
       XCTAssertTrue([_database2 removeFiles]);
     }];
 
-    XCTAssertTrue([_migrated dropTable:_table3]);
-    XCTAssertTrue([_migrated dropTable:_migratedTable]);
+    XCTAssertTrue([_migrated dropTable:_migratedTable3]);
     [_migrated close:^{
       XCTAssertTrue([_migrated removeFiles]);
     }];

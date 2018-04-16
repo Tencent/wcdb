@@ -21,8 +21,8 @@
 #import "TestCase.h"
 
 //database1.table1 -> migrated.table1
-//database2.table2 -> migrated.table2
-//migrated.table3 -> migrated.migratedTable
+//database2.table2 -> migrated.migratedTable2
+//migrated.table3 -> migrated.migratedTable3
 @interface MultipleMigrationTestCase : TestCase {
     int _count;
     Class _cls;
@@ -36,12 +36,13 @@
     WCTDatabase *_database2;
     NSString *_table2;
     NSArray<TestCaseObject *> *_preInsertObjects2;
+    NSString *_migratedTable2;
 
     NSString *_table3;
     NSArray<TestCaseObject *> *_preInsertObjects3;
+    NSString *_migratedTable3;
 
     WCTMigrationDatabase *_migrated;
-    NSString *_migratedTable;
     NSString *_migratedPath;
 
     NSArray<WCTMigrationInfo *> *_infos;
