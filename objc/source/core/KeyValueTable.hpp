@@ -33,20 +33,21 @@ public:
     KeyValueTable(const KeyValueTable &) = delete;
     KeyValueTable &operator=(const KeyValueTable &) = delete;
 
-    enum class Key {
-        Migrating = -1,
-    };
-
     std::pair<bool, bool> isTableExists();
     bool createTable();
-    std::pair<bool, std::string> getTextValue(const Key &key);
-    bool setTextValue(const Key &key, const std::string &value);
+
+    std::pair<bool, std::string> getMigratingValue();
+    bool setMigratingValue(const std::string &value);
+
+    static const Column getKey();
+    static const Column getValue();
+    static const std::string getTable();
 
 protected:
+    std::pair<bool, std::string> getTextValue(const std::string &key);
+    bool setTextValue(const std::string &key, const std::string &value);
+
     Handle *m_handle;
-    static const std::string s_table;
-    static const Column s_key;
-    static const Column s_value;
 };
 
 } //namespace WCDB

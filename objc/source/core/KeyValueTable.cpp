@@ -22,10 +22,6 @@
 
 namespace WCDB {
 
-const std::string KeyValueTable::s_table("WCDBKV");
-const Column KeyValueTable::s_key("key");
-const Column KeyValueTable::s_value("value");
-
 KeyValueTable::KeyValueTable(Handle *handle) : m_handle(handle)
 {
     assert(m_handle != nullptr);
@@ -33,32 +29,47 @@ KeyValueTable::KeyValueTable(Handle *handle) : m_handle(handle)
 
 std::pair<bool, bool> KeyValueTable::isTableExists()
 {
-    return m_handle->Handle::isTableExists(s_table);
+    return m_handle->Handle::isTableExists(KeyValueTable::getTable());
 }
 
 bool KeyValueTable::createTable()
 {
     //CREATE TABLE IF NOT EXISTS WCDBReserved(key INTEGER PRIMARY KEY, value TEXT)
     static const StatementCreateTable s_statement =
-        StatementCreateTable().createTable(s_table).ifNotExists().define(
-            {ColumnDef(s_key)
-                 .withType(ColumnType::Integer32)
-                 .byAddingConstraint(ColumnConstraint().withPrimaryKey()),
-             ColumnDef(s_value).withType(ColumnType::Text)});
+        StatementCreateTable()
+            .createTable(KeyValueTable::getTable())
+            .ifNotExists()
+            .define(
+                {ColumnDef(KeyValueTable::getKey())
+                     .withType(ColumnType::Text)
+                     .byAddingConstraint(ColumnConstraint().withPrimaryKey()),
+                 ColumnDef(KeyValueTable::getValue())});
     return m_handle->execute(s_statement);
 }
 
-std::pair<bool, std::string> KeyValueTable::getTextValue(const Key &key)
+std::pair<bool, std::string> KeyValueTable::getMigratingValue()
+{
+    return getTextValue("WCDBMigrating");
+}
+
+bool KeyValueTable::setMigratingValue(const std::string &value)
+{
+    return setTextValue("WCDBMigrating", value);
+}
+
+std::pair<bool, std::string> KeyValueTable::getTextValue(const std::string &key)
 {
     static const StatementSelect s_statement =
-        StatementSelect().select(s_value).from(s_table).where(s_key ==
-                                                              BindParameter(1));
+        StatementSelect()
+            .select(KeyValueTable::getValue())
+            .from(KeyValueTable::getTable())
+            .where(KeyValueTable::getKey() == BindParameter(1));
     std::pair<bool, Handle::Text> result = {false, {}};
     if (!m_handle->prepare(s_statement)) {
         return result;
     }
     bool done;
-    m_handle->bindInteger32((int) key, 1);
+    m_handle->bindText(key.c_str(), (int) key.length(), 1);
     if (m_handle->step(done)) {
         result.first = true;
         if (!done) {
@@ -69,19 +80,39 @@ std::pair<bool, std::string> KeyValueTable::getTextValue(const Key &key)
     return result;
 }
 
-bool KeyValueTable::setTextValue(const Key &key, const std::string &value)
+bool KeyValueTable::setTextValue(const std::string &key,
+                                 const std::string &value)
 {
     static const StatementInsert s_statement =
-        StatementInsert().insertOrReplaceInto(s_table).values(
-            BindParameter::bindParameters(2));
+        StatementInsert()
+            .insertOrReplaceInto(KeyValueTable::getTable())
+            .values(BindParameter::bindParameters(2));
     if (!m_handle->prepare(s_statement)) {
         return false;
     }
-    m_handle->Handle::bindInteger32((int) key, 1);
+    m_handle->Handle::bindText(key.c_str(), (int) key.length(), 1);
     m_handle->Handle::bindText(value.c_str(), (int) value.length(), 2);
     bool result = m_handle->step();
     m_handle->Handle::finalize();
     return result;
+}
+
+const Column KeyValueTable::getKey()
+{
+    static const Column s_key("key");
+    return s_key;
+}
+
+const Column KeyValueTable::getValue()
+{
+    static const Column s_value("value");
+    return s_value;
+}
+
+const std::string KeyValueTable::getTable()
+{
+    static const std::string s_table("WCDBKV");
+    return s_table;
 }
 
 } //namespace WCDB

@@ -196,8 +196,7 @@ bool MigrationHandle::lazySetupVeryFirstMigratingInfo()
                 migratingTable.first = true;
                 break;
             }
-            migratingTable =
-                kvTable.getTextValue(KeyValueTable::Key::Migrating);
+            migratingTable = kvTable.getMigratingValue();
         } while (false);
         if (migratingTable.first) {
             if (!migratingTable.second.empty()) {
@@ -247,19 +246,40 @@ bool MigrationHandle::prepareWithoutTampering(const Statement &statement)
 void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
 {
     switch (statement.getStatementType()) {
+        case Statement::Type::AlterTable: {
+            //Alter statement is not allowed
+            const Lang::AlterTableSTMT &lang =
+                statement.getCOWLang().get<Lang::AlterTableSTMT>();
+            if (!lang.schemaName.empty() ||
+                !lang.schemaName.equal(StatementAttach::getMainSchema())) {
+                return;
+            }
+            auto iter = m_infos->getInfos().find(lang.tableName.get());
+            assert(iter == m_infos->getInfos().end());
+        } break;
         case Statement::Type::Update: {
+            //Update statement with orderBy/limit/offset is not allowed.
             StatementUpdate statementUpdate(statement.getCOWLang());
             assert(!statementUpdate.isLimited());
         } break;
         case Statement::Type::Delete: {
+            //Delete statement with orderBy/limit/offset is not allowed.
             StatementDelete statementDelete(statement.getCOWLang());
             assert(!statementDelete.isLimited());
         } break;
         case Statement::Type::Insert: {
+            //Partial replace statement not allowed.
             StatementInsert statementInsert(statement.getCOWLang());
-            auto iter = m_infos->getInfos().find(statementInsert.getCOWLang()
-                                                     .get<Lang::InsertSTMT>()
-                                                     .tableName.get());
+            if (!statementInsert.isReplace()) {
+                return;
+            }
+            const Lang::InsertSTMT &lang =
+                statementInsert.getCOWLang().get<Lang::InsertSTMT>();
+            if (!lang.schemaName.empty() ||
+                !lang.schemaName.equal(StatementAttach::getMainSchema())) {
+                return;
+            }
+            auto iter = m_infos->getInfos().find(lang.tableName.get());
             if (iter == m_infos->getInfos().end()) {
                 return;
             }

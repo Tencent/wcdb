@@ -163,6 +163,15 @@ bool MigrationTamperer::doTamper(Statement &statement)
             }
             return false;
         }
+        case Statement::Type::CreateIndex: {
+            Lang::CopyOnWriteLazyLang<Lang::CreateIndexSTMT> stmt(
+                statement.getCOWLang());
+            if (tamper(stmt)) {
+                statement.getCOWLang().assign(stmt);
+                return true;
+            }
+            return false;
+        }
         default:
             break;
     }
@@ -259,6 +268,13 @@ bool MigrationTamperer::tamper(
             break;
     }
     return result;
+}
+
+bool MigrationTamperer::tamper(
+    Lang::CopyOnWriteLazyLang<Lang::CreateIndexSTMT> &cowLang)
+{
+    TAMPER_PREPARE(cowLang);
+    return tamperSchemaName(lang.schemaName);
 }
 
 #pragma mark - Lang

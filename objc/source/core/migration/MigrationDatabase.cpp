@@ -21,6 +21,7 @@
 #include <WCDB/AsyncLoop.hpp>
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/HandlePools.hpp>
+#include <WCDB/KeyValueTable.hpp>
 #include <WCDB/MigrationBuiltinConfig.hpp>
 #include <WCDB/MigrationDatabase.hpp>
 #include <WCDB/MigrationHandle.hpp>
@@ -127,17 +128,21 @@ bool MigrationDatabase::startMigration(bool &done)
         }
     }
     info->prepareForMigrating();
-    bool result = false;
-    bool needCommit = false;
-    bool commited = runTransaction([&result, &needCommit,
-                                    info](Handle *handle) -> bool {
+    bool commited = runTransaction([info](Handle *handle) -> bool {
+        //save migrating value
+        KeyValueTable keyValueTable(handle);
+        if (!keyValueTable.createTable() ||
+            !keyValueTable.setMigratingValue(info->targetTable)) {
+            return false;
+        }
+        //sync sequence
         MigrationHandle *migrationHandle =
             static_cast<MigrationHandle *>(handle);
         auto targetSequenceExists =
             migrationHandle->isTableExists("sqlite_sequence");
         if (!targetSequenceExists.second) {
-            result = targetSequenceExists.first;
-            return false;
+            //failed or sqlite_sequence not exists
+            return targetSequenceExists.first;
         }
         //sync sequence if sqlite_sequence exists in target database
         auto sourceSequenceExists =
@@ -159,14 +164,12 @@ bool MigrationDatabase::startMigration(bool &done)
         }
         bool done;
         if (!migrationHandle->step(done) || done) {
-            result = done;
+            //failed or empty
             migrationHandle->finalize();
-            return false;
+            return done;
         }
         int sequence = migrationHandle->getInteger32(0);
         migrationHandle->finalize();
-
-        needCommit = true;
 
         //Update sequence
         if (!migrationHandle->executeWithoutTampering(
@@ -180,10 +183,9 @@ bool MigrationDatabase::startMigration(bool &done)
                 info->getStatementForInsertingSequence(sequence))) {
             return false;
         }
-        result = true;
         return true;
     });
-    if ((needCommit && !commited) || !result) {
+    if (!commited) {
         return false;
     }
     infos->markAsMigrationStarted(info->targetTable);
@@ -208,54 +210,41 @@ bool MigrationDatabase::stepMigration(bool &done)
         return startMigration(done);
     }
     //Migration infos will be changed only in migrating thread expect the lazy init migrating info. So no lock is needed.
-    bool migrated = false;
-    bool needDropTable = false;
-    bool needCommit = false;
-    bool committed = runTransaction([this, migratingInfo, &needCommit,
-                                     &needDropTable,
-                                     &migrated](Handle *handle) -> bool {
-        MigrationHandle *migrationHandle =
-            static_cast<MigrationHandle *>(handle);
-        std::pair<bool, bool> sourceTableExists =
-            handle->isTableExists(migratingInfo->getSourceTable());
-        if (!sourceTableExists.second) {
-            migrated = true;
-            return false;
-        }
-        //migration
-        if (!migrationHandle->executeWithoutTampering(
-                migratingInfo->getStatementForMigration())) {
-            m_migrationPool->setThreadedError(handle->getError());
-            return false;
-        }
-        if (migrationHandle->getChanges() == 0) {
-            //nothing to migrate
-            needDropTable = true;
-            return false;
-        }
-        needCommit = true;
-        if (!migrationHandle->executeWithoutTampering(
-                migratingInfo->getStatementForDeleteingMigratedRow())) {
-            return false;
-        }
-
-        if (migrationHandle->prepareWithoutTampering(
-                migratingInfo->getStatementForCheckingSourceTableEmpty())) {
-            //`done == true` will be returned if there is no row to select, which indicates the source table is about to be dropped.
-            //The result can be discarded since it will be re-run in next step.
-            migrationHandle->step(needDropTable);
-            migrationHandle->finalize();
-        }
-        return true;
-    });
-    if (!needDropTable && !migrated) {
-        return !needCommit || committed;
+    bool dropped = false;
+    bool empty = false;
+    bool committed = runTransaction(
+        [this, migratingInfo, &dropped, &empty](Handle *handle) -> bool {
+            MigrationHandle *migrationHandle =
+                static_cast<MigrationHandle *>(handle);
+            std::pair<bool, bool> sourceTableExists =
+                handle->isTableExists(migratingInfo->getSourceTable());
+            if (!sourceTableExists.first) {
+                return false;
+            }
+            if (!sourceTableExists.second) {
+                dropped = true;
+                return false;
+            }
+            //migration
+            if (!migrationHandle->executeWithoutTampering(
+                    migratingInfo->getStatementForMigration())) {
+                m_migrationPool->setThreadedError(handle->getError());
+                return false;
+            }
+            if (migrationHandle->getChanges() == 0) {
+                //nothing to migrate
+                empty = true;
+                return false;
+            }
+            return migrationHandle->executeWithoutTampering(
+                migratingInfo->getStatementForDeleteingMigratedRow());
+        });
+    if (!dropped && !empty) {
+        return committed;
     }
-    //The result can be discarded since it will be re-run in next step.
     LockGuard lockGuard(infos->getSharedLock());
-    if (needDropTable &&
-        !execute(migratingInfo->getStatementForDroppingOldTable())) {
-        return true;
+    if (empty && !execute(migratingInfo->getStatementForDroppingOldTable())) {
+        return false;
     }
     bool schemaChanged = false;
     infos->markAsMigrated(schemaChanged);

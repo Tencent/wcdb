@@ -65,6 +65,7 @@ protected:
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::InsertSTMT> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::CreateTableSTMT> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> &cowLang);
+    bool tamper(Lang::CopyOnWriteLazyLang<Lang::CreateIndexSTMT> &cowLang);
 #pragma mark - Lang
 protected:
     bool
