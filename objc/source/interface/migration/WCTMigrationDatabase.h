@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTDatabase.h>
 
+typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
+
 @interface WCTMigrationDatabase : WCTDatabase
 
 - (instancetype)initWithPath:(NSString *)path
@@ -29,5 +31,8 @@
                     andInfos:(NSArray<WCTMigrationInfo *> *)infos;
 
 - (BOOL)stepMigration:(BOOL &)done;
+
+- (BOOL)stepMigration:(BOOL &)done
+      onTableMigrated:(WCTTableMigratedBlock)block;
 
 @end

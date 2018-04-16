@@ -74,6 +74,22 @@
     return _migrationDatabase->stepMigration((bool &) done);
 }
 
+- (BOOL)stepMigration:(BOOL &)done
+      onTableMigrated:(WCTTableMigratedBlock)block
+{
+    if (block) {
+        return _migrationDatabase->stepMigration((bool &) done, [block](const WCDB::MigrationInfo *info) {
+            NSString *targetTable = @(info->targetTable.c_str());
+            NSString *sourceTable = @(info->sourceTable.c_str());
+            NSString *sourceDatabasePath = @(info->sourceDatabasePath.c_str());
+            WCTMigrationInfo *migrationInfo = [[WCTMigrationInfo alloc] initWithTargetTable:targetTable fromSourceTable:sourceTable ofDatabase:sourceDatabasePath];
+            block(migrationInfo);
+        });
+    } else {
+        return _migrationDatabase->stepMigration((bool &) done);
+    }
+}
+
 - (void)finalizeDatabase
 {
     _migrationDatabase = nullptr;

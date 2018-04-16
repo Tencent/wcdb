@@ -46,7 +46,11 @@ protected:
 
 #pragma mark - Migration
 public:
-    bool stepMigration(bool &done);
+    typedef std::function<void(const MigrationInfo *)>
+        MigratingCompleteCallback;
+    bool stepMigration(
+        bool &done,
+        const MigratingCompleteCallback &onMigratingCompleted = nullptr);
 
 protected:
     bool startMigration(bool &done);

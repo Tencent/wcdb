@@ -192,7 +192,8 @@ bool MigrationDatabase::startMigration(bool &done)
     return true;
 }
 
-bool MigrationDatabase::stepMigration(bool &done)
+bool MigrationDatabase::stepMigration(
+    bool &done, const MigratingCompleteCallback &onMigratingCompleted)
 {
 #ifdef DEBUG
     if (m_migratingThread == nullptr) {
@@ -242,14 +243,21 @@ bool MigrationDatabase::stepMigration(bool &done)
     if (!dropped && !empty) {
         return committed;
     }
-    LockGuard lockGuard(infos->getSharedLock());
-    if (empty && !execute(migratingInfo->getStatementForDroppingOldTable())) {
-        return false;
+    {
+        LockGuard lockGuard(infos->getSharedLock());
+        if (empty &&
+            !execute(migratingInfo->getStatementForDroppingOldTable())) {
+            return false;
+        }
+        bool schemaChanged = false;
+        infos->markAsMigrated(schemaChanged);
+        if (schemaChanged) {
+            setConfig(
+                MigrationBuiltinConfig::autoAttachAndDetachWithInfos(infos));
+        }
     }
-    bool schemaChanged = false;
-    infos->markAsMigrated(schemaChanged);
-    if (schemaChanged) {
-        setConfig(MigrationBuiltinConfig::autoAttachAndDetachWithInfos(infos));
+    if (onMigratingCompleted) {
+        onMigratingCompleted(migratingInfo);
     }
     return true;
 }
