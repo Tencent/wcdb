@@ -174,6 +174,7 @@ bool Database::removeFiles()
     }
     FileManager *fileManager = FileManager::shared();
     if (fileManager->removeFiles(getPaths())) {
+        //TODO reset memory while removed
         return true;
     }
     m_pool->setThreadedError(fileManager->getError());
