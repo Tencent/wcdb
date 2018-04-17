@@ -29,12 +29,9 @@ namespace WCDB {
 
 class Describable {
 public:
-    Describable() {}
+    Describable();
 
-    Describable(const Lang::CopyOnWriteLazyLang<Lang::Lang> &cowLang)
-        : m_cowLang(cowLang)
-    {
-    }
+    Describable(const Lang::CopyOnWriteLazyLang<Lang::Lang> &cowLang);
 
     template <typename T>
     Describable(const Lang::CopyOnWriteLazyLang<T> &cowLang)
@@ -42,19 +39,13 @@ public:
     {
     }
 
-    const std::string &getDescription() const
-    {
-        if (!m_cowLang.empty()) {
-            return m_cowLang.description().get();
-        }
-        return Describable::s_empty;
-    }
+    const std::string &getDescription() const;
 
-    Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang() { return m_cowLang; }
-    const Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang() const
-    {
-        return m_cowLang;
-    }
+    Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang();
+
+    const Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang() const;
+
+    bool isEmpty() const;
 
 protected:
     static const std::string s_empty;

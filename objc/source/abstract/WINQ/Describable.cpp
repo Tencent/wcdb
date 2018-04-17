@@ -24,4 +24,36 @@ namespace WCDB {
 
 const std::string Describable::s_empty("");
 
+Describable::Describable()
+{
+}
+
+Describable::Describable(const Lang::CopyOnWriteLazyLang<Lang::Lang> &cowLang)
+    : m_cowLang(cowLang)
+{
+}
+
+const std::string &Describable::getDescription() const
+{
+    if (!m_cowLang.empty()) {
+        return m_cowLang.description().get();
+    }
+    return Describable::s_empty;
+}
+
+Lang::CopyOnWriteLazyLang<Lang::Lang> &Describable::getCOWLang()
+{
+    return m_cowLang;
+}
+
+const Lang::CopyOnWriteLazyLang<Lang::Lang> &Describable::getCOWLang() const
+{
+    return m_cowLang;
+}
+
+bool Describable::isEmpty() const
+{
+    return m_cowLang.empty();
+}
+
 } // namespace WCDB
