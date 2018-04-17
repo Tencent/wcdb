@@ -42,7 +42,7 @@
 - (NSString *)description
 {
     NSMutableString *desc = [[NSMutableString alloc] initWithString:[super description]];
-    [desc appendFormat:@"Tag: %lld", _tag];
+    [desc appendFormat:@"Tag: %d", _tag];
     [desc appendFormat:@"Path: %@", _path];
     return desc;
 }

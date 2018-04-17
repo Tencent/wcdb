@@ -25,13 +25,12 @@
 
 #include <WCDB/WINQ.h>
 
-#include <WCDB/ColumnType.hpp>
-#include <WCDB/ConvertibleImpl.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/HandleError.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/SQLiteError.hpp>
 #include <WCDB/SQLiteGlobal.hpp>
 #include <WCDB/Tracer.hpp>
+#include <WCDB/Tokenize.hpp>
 
 #endif /* Abstract_h */

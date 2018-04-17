@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Error.hpp>
-#include <WCDB/Tokenize.hpp>
+#include <WCDB/Abstract.h>
 
 namespace WCDB {
 

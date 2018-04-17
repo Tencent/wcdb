@@ -21,6 +21,14 @@
 #import <WCDB/Interface.h>
 #import <WCDB/WCTError+Private.h>
 
+static_assert((int)WCTFileOperationNotSet == (int)WCDB::FileError::Operation::NotSet, "");
+static_assert((int)WCTFileOperationLstat == (int)WCDB::FileError::Operation::Lstat, "");
+static_assert((int)WCTFileOperationAccess == (int)WCDB::FileError::Operation::Access, "");
+static_assert((int)WCTFileOperationLink == (int)WCDB::FileError::Operation::Link, "");
+static_assert((int)WCTFileOperationUnlink == (int)WCDB::FileError::Operation::Unlink, "");
+static_assert((int)WCTFileOperationRemove == (int)WCDB::FileError::Operation::Remove, "");
+static_assert((int)WCTFileOperationMkdir == (int)WCDB::FileError::Operation::Mkdir, "");
+
 @implementation WCTFileError
 
 - (instancetype)initWithWCDBError:(const WCDB::Error *)error

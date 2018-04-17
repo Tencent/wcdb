@@ -18,11 +18,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/ConvertibleImpl.hpp>
-#include <WCDB/Handle.hpp>
+#include <WCDB/Abstract.h>
 #include <WCDB/Macro.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/SQLiteError.hpp>
 #include <sqlcipher/sqlite3.h>
 #include <sqliterk/SQLiteRepairKit.h>
 

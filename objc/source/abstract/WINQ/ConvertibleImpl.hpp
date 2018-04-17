@@ -21,7 +21,12 @@
 #ifndef ConvertibleImpl_hpp
 #define ConvertibleImpl_hpp
 
-#include <WCDB/WINQ.h>
+#include <WCDB/Expression.hpp>
+#include <WCDB/LiteralValue.hpp>
+#include <WCDB/ColumnType.hpp>
+#include <WCDB/RaiseFunction.hpp>
+#include <WCDB/Column.hpp>
+#include <WCDB/BindParameter.hpp>
 
 namespace WCDB {
 

@@ -22,34 +22,29 @@
 
 namespace WCDB {
 
-template <>
 Expression
 ExpressionConvertible<LiteralValue>::as(const LiteralValue &literalValue)
 {
     return literalValue;
 }
 
-template <>
 Expression ExpressionConvertible<Column>::as(const Column &column)
 {
     return column;
 }
 
-template <>
 Expression
 ExpressionConvertible<BindParameter>::as(const BindParameter &bindParameter)
 {
     return bindParameter;
 }
 
-template <>
 Expression
 ExpressionConvertible<RaiseFunction>::as(const RaiseFunction &raiseFunction)
 {
     return raiseFunction;
 }
 
-template <>
 Expression ExpressionConvertible<StatementSelect>::as(
     const StatementSelect &statementSelect)
 {

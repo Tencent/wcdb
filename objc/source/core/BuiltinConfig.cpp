@@ -19,12 +19,10 @@
  */
 
 #include <WCDB/AsyncLoop.hpp>
-#include <WCDB/BuiltinConfig.hpp>
-#include <WCDB/Database.hpp>
+#include <WCDB/Core.h>
 #include <WCDB/Macro.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/TimedQueue.hpp>
-#include <WCDB/Tokenize.hpp>
 #include <queue>
 #include <vector>
 

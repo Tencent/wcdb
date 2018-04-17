@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/BuiltinConfig.hpp>
-#include <WCDB/HandlePools.hpp>
+#include <WCDB/Core.h>
 
 namespace WCDB {
 

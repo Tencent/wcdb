@@ -21,20 +21,20 @@
 #ifndef Core_h
 #define Core_h
 
+#include <WCDB/Abstract.h>
+
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/Database.hpp>
-#include <WCDB/Error.hpp>
+#include <WCDB/CoreError.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/HandlePools.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
+#include <WCDB/Tokenizer.hpp>
+#include <WCDB/KeyValueTable.hpp>
 
-#include <WCDB/MigrationDatabase.hpp>
-#include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationHandlePool.hpp>
-#include <WCDB/MigrationInfo.hpp>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/Migration.h>
 
 #endif /* Core_h */

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCore.h>
+#import <WCDB/Interface.h>
 
 @interface WCTCore () {
 @protected

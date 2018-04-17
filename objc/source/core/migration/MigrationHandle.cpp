@@ -18,9 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/KeyValueTable.hpp>
-#include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationTamperer.hpp>
+#include <WCDB/Core.h>
 
 namespace WCDB {
 

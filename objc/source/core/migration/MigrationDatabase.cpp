@@ -19,12 +19,7 @@
  */
 
 #include <WCDB/AsyncLoop.hpp>
-#include <WCDB/BuiltinConfig.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/KeyValueTable.hpp>
-#include <WCDB/MigrationBuiltinConfig.hpp>
-#include <WCDB/MigrationDatabase.hpp>
-#include <WCDB/MigrationHandle.hpp>
+#include <WCDB/Core.h>
 #include <future>
 
 namespace WCDB {

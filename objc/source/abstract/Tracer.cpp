@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Tracer.hpp>
-#include <sqlite3.h>
+#include <WCDB/Abstract.h>
+#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 

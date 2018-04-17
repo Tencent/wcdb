@@ -101,4 +101,8 @@
 #include <WCDB/StatementUpdate.hpp>
 #include <WCDB/StatementVacuum.hpp>
 
+#include <WCDB/ColumnType.hpp>
+
+#include <WCDB/ConvertibleImpl.hpp>
+
 #endif /* WINQ_h */

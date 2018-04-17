@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/FileManager.hpp>
-#include <WCDB/HandlePool.hpp>
+#include <WCDB/Core.h>
 #include <WCDB/Path.hpp>
 #include <algorithm>
 #include <thread>

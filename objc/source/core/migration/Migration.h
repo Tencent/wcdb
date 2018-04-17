@@ -18,37 +18,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
-#import <WCDB/Error.hpp>
+#ifndef Migration_h
+#define Migration_h
 
-/**
- It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.
- */
-typedef NS_ENUM(int, WCTErrorType) {
-    WCTErrorTypeError,
-    WCTErrorTypeSQLite,
-    WCTErrorTypeHandle,
-    WCTErrorTypeCore,
-    WCTErrorTypeFile,
-};
+#include <WCDB/MigrationDatabase.hpp>
+#include <WCDB/MigrationHandle.hpp>
+#include <WCDB/MigrationHandlePool.hpp>
+#include <WCDB/MigrationInfo.hpp>
+#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationTamperer.hpp>
+#include <WCDB/MigrationBuiltinConfig.hpp>
 
-typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
-    WCTErrorLevelIgnore,
-    WCTErrorLevelDebug,
-    WCTErrorLevelWarning,
-    WCTErrorLevelError,
-    WCTErrorLevelFatal,
-};
-
-/**
- Detailed error
- */
-@interface WCTError : NSError
-
-- (WCTErrorType)type;
-
-@property(nonatomic, readonly) WCTErrorLevel level;
-
-@property(nonatomic, readonly) NSString *message;
-
-@end
+#endif /* Migration_h */

@@ -21,15 +21,15 @@
 #import <WCDB/WCTError.h>
 
 typedef NS_ENUM(NSUInteger, WCTFileOperation) {
-    WCTFileOperationNotSet = WCDB::FileError::Operation::NotSet,
-    WCTFileOperationLstat = WCDB::FileError::Operation::Lstat,
-    WCTFileOperationAccess = WCDB::FileError::Operation::Access,
-    WCTFileOperationLink = WCDB::FileError::Operation::Link,
-    WCTFileOperationUnlink = WCDB::FileError::Operation::Unlink,
-    WCTFileOperationRemove = WCDB::FileError::Operation::Remove,
-    WCTFileOperationMkdir = WCDB::FileError::Operation::Mkdir,
-    WCTFileOperationGetAttribute,
-    WCTFileOperationSetAttribute,
+    WCTFileOperationNotSet = 0,
+    WCTFileOperationLstat = 1,
+    WCTFileOperationAccess = 2,
+    WCTFileOperationLink = 3,
+    WCTFileOperationUnlink = 4,
+    WCTFileOperationRemove = 5,
+    WCTFileOperationMkdir = 6,
+    WCTFileOperationGetAttribute = 7,
+    WCTFileOperationSetAttribute = 8,
 };
 
 @interface WCTFileError : WCTError

@@ -19,8 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/Abstract.h>
-#import <WCDB/Core.h>
+#import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call
 @class WCTInsert;
@@ -33,7 +32,7 @@
 
 #pragma mark - Database
 @class WCTDatabase;
-typedef WCDB::Database::Tag WCTTag;
+typedef int32_t WCTTag;
 
 #pragma mark - Table
 @class WCTTable;

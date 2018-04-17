@@ -21,14 +21,14 @@
 #import <WCDB/WCTError.h>
 
 typedef NS_ENUM(NSUInteger, WCTHandleOperation) {
-    WCTHandleOperationNotSet = WCDB::HandleError::Operation::NotSet,
-    WCTHandleOperationPrepare = WCDB::HandleError::Operation::Prepare,
-    WCTHandleOperationExecute = WCDB::HandleError::Operation::Execute,
-    WCTHandleOperationOpen = WCDB::HandleError::Operation::Open,
-    WCTHandleOperationStep = WCDB::HandleError::Operation::Step,
-    WCTHandleOperationCipher = WCDB::HandleError::Operation::Cipher,
-    WCTHandleOperationRepair = WCDB::HandleError::Operation::Repair,
-    WCTHandleOperationBackup = WCDB::HandleError::Operation::Backup,
+    WCTHandleOperationNotSet = 0,
+    WCTHandleOperationPrepare = 1,
+    WCTHandleOperationExecute = 2,
+    WCTHandleOperationOpen = 3,
+    WCTHandleOperationStep = 4,
+    WCTHandleOperationCipher = 5,
+    WCTHandleOperationRepair = 6,
+    WCTHandleOperationBackup = 7,
 };
 
 @interface WCTHandleError : WCTError

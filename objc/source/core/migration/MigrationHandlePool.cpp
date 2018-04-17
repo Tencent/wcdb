@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationHandlePool.hpp>
+#include <WCDB/Core.h>
 
 namespace WCDB {
 #pragma mark - Initialize
