@@ -28,7 +28,7 @@
     WCTMigrationDatabase *_migrated;
     NSString *_migratedTableName;
     WCTMigrationInfo *_info;
-    
+
     int _preStepCount;
 }
 
@@ -60,7 +60,7 @@
         XCTAssertTrue([_migrated stepMigration:done]);
         XCTAssertFalse(done);
     }
-    
+
     [self checkIfWithinMigration];
 }
 

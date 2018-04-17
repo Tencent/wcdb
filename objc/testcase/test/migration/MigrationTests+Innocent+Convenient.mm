@@ -30,7 +30,7 @@
     WCTMigrationInfo *_info;
 
     NSString *_innocentTableName;
-    
+
     int _preStepCount;
 }
 
