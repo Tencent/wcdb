@@ -47,6 +47,19 @@ public:
 
     bool empty() const;
 
+    template <typename T>
+    static std::string getDescription(const std::list<T> &list)
+    {
+        std::string output;
+        for (const Describable &element : list) {
+            if (!output.empty()) {
+                output.append(", ");
+            }
+            output.append(element.getDescription().c_str());
+        }
+        return output;
+    }
+
 protected:
     static const std::string s_empty;
     Lang::CopyOnWriteLazyLang<Lang::Lang> m_cowLang;
