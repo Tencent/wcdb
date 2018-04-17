@@ -29,7 +29,9 @@ MigrationHandlePool::MigrationHandlePool(
     const std::shared_ptr<MigrationInfos> &migrationInfos)
     : HandlePool(path, configs), m_infos(migrationInfos)
 {
+#ifdef DEBUG
     assert(debug_checkInfosLegal());
+#endif
 }
 
 #ifdef DEBUG

@@ -217,7 +217,9 @@ std::shared_ptr<Handle> HandlePool::generateHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 {
+#ifdef DEBUG
     assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
+#endif
     std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
     if (!configuredHandle) {
         return nullptr;
@@ -234,7 +236,9 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
+#ifdef DEBUG
     assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
+#endif
     if (m_aliveHandleCount >= s_maxConcurrency) {
         setAndReportCoreError(
             "The concurrency of database exceeds the maxximum allowed: " +
@@ -285,7 +289,9 @@ void HandlePool::flowBackConfiguredHandle(
     const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     assert(configuredHandle != nullptr);
+#ifdef DEBUG
     assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
+#endif
     if (!m_handles.pushBack(configuredHandle)) {
         --m_aliveHandleCount;
     }
