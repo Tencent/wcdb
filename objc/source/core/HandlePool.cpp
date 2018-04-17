@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/FileManager.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
 #include <algorithm>
 #include <thread>

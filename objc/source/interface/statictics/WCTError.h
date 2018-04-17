@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
 #import <WCDB/Error.hpp>
+#import <WCDB/WCTCommon.h>
 
 /**
  It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.

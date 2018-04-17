@@ -22,10 +22,10 @@
 #define WCTBinding_hpp
 
 #import <WCDB/SequantialIncreasingMap.hpp>
+#import <WCDB/String.hpp>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/String.hpp>
 
 class WCTBinding {
 public:

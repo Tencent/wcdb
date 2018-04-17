@@ -21,14 +21,14 @@
 #import <WCDB/Interface.h>
 #import <WCDB/WCTError+Private.h>
 
-static_assert((int)WCTHandleOperationNotSet == (int)WCDB::HandleError::Operation::NotSet, "");
-static_assert((int)WCTHandleOperationPrepare == (int)WCDB::HandleError::Operation::Prepare, "");
-static_assert((int)WCTHandleOperationExecute == (int)WCDB::HandleError::Operation::Execute, "");
-static_assert((int)WCTHandleOperationOpen == (int)WCDB::HandleError::Operation::Open, "");
-static_assert((int)WCTHandleOperationStep == (int)WCDB::HandleError::Operation::Step, "");
-static_assert((int)WCTHandleOperationCipher == (int)WCDB::HandleError::Operation::Cipher, "");
-static_assert((int)WCTHandleOperationRepair == (int)WCDB::HandleError::Operation::Repair, "");
-static_assert((int)WCTHandleOperationBackup == (int)WCDB::HandleError::Operation::Backup, "");
+static_assert((int) WCTHandleOperationNotSet == (int) WCDB::HandleError::Operation::NotSet, "");
+static_assert((int) WCTHandleOperationPrepare == (int) WCDB::HandleError::Operation::Prepare, "");
+static_assert((int) WCTHandleOperationExecute == (int) WCDB::HandleError::Operation::Execute, "");
+static_assert((int) WCTHandleOperationOpen == (int) WCDB::HandleError::Operation::Open, "");
+static_assert((int) WCTHandleOperationStep == (int) WCDB::HandleError::Operation::Step, "");
+static_assert((int) WCTHandleOperationCipher == (int) WCDB::HandleError::Operation::Cipher, "");
+static_assert((int) WCTHandleOperationRepair == (int) WCDB::HandleError::Operation::Repair, "");
+static_assert((int) WCTHandleOperationBackup == (int) WCDB::HandleError::Operation::Backup, "");
 
 @implementation WCTHandleError
 

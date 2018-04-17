@@ -28,13 +28,13 @@ namespace WCDB {
 template <typename T, typename Enable = void>
 class ExpressionConvertible : public std::false_type {
 public:
-//    static Expression as(const T &t);
+    //    static Expression as(const T &t);
 };
 
 template <typename T, typename Enable = void>
 class LiteralValueConvertible : public std::false_type {
 public:
-//    static LiteralValue as(const T &t);
+    //    static LiteralValue as(const T &t);
 };
 
 } // namespace WCDB

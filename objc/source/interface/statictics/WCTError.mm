@@ -20,11 +20,11 @@
 
 #import <WCDB/Interface.h>
 
-static_assert((int)WCTErrorLevelIgnore == (int)WCDB::Error::Level::Ignore, "");
-static_assert((int)WCTErrorLevelDebug == (int)WCDB::Error::Level::Debug, "");
-static_assert((int)WCTErrorLevelWarning == (int)WCDB::Error::Level::Warning, "");
-static_assert((int)WCTErrorLevelError == (int)WCDB::Error::Level::Error, "");
-static_assert((int)WCTErrorLevelFatal == (int)WCDB::Error::Level::Fatal, "");
+static_assert((int) WCTErrorLevelIgnore == (int) WCDB::Error::Level::Ignore, "");
+static_assert((int) WCTErrorLevelDebug == (int) WCDB::Error::Level::Debug, "");
+static_assert((int) WCTErrorLevelWarning == (int) WCDB::Error::Level::Warning, "");
+static_assert((int) WCTErrorLevelError == (int) WCDB::Error::Level::Error, "");
+static_assert((int) WCTErrorLevelFatal == (int) WCDB::Error::Level::Fatal, "");
 
 @implementation WCTError
 

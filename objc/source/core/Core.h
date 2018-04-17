@@ -26,14 +26,14 @@
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/Database.hpp>
 #include <WCDB/CoreError.hpp>
+#include <WCDB/Database.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/HandlePools.hpp>
+#include <WCDB/KeyValueTable.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
 #include <WCDB/Tokenizer.hpp>
-#include <WCDB/KeyValueTable.hpp>
 
 #include <WCDB/Migration.h>
 
