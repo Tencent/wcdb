@@ -47,7 +47,7 @@
         if (result.first) {
             *error = nil;
         } else {
-            *error = [self getError];
+            *error = [self error];
         }
     }
     return result.second;

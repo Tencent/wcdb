@@ -352,7 +352,7 @@
 
 #pragma mark - Error
 
-- (NSError *)getError
+- (NSError *)error
 {
     if (_handle) {
         return [WCTError errorWithWCDBError:_handle->getError()];

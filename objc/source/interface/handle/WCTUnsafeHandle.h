@@ -28,6 +28,6 @@
 
 #pragma mark - Error
 
-- (nullable WCTError *)getError;
+- (nullable WCTError *)error;
 
 @end
