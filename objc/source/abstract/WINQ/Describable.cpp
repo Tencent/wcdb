@@ -51,7 +51,7 @@ const Lang::CopyOnWriteLazyLang<Lang::Lang> &Describable::getCOWLang() const
     return m_cowLang;
 }
 
-bool Describable::isEmpty() const
+bool Describable::empty() const
 {
     return m_cowLang.empty();
 }

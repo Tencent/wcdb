@@ -45,7 +45,7 @@ public:
 
     const Lang::CopyOnWriteLazyLang<Lang::Lang> &getCOWLang() const;
 
-    bool isEmpty() const;
+    bool empty() const;
 
 protected:
     static const std::string s_empty;
