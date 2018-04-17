@@ -24,7 +24,7 @@
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
 #define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
-    static const WCTProperty &_s_##propertyName##_property =                   \
+    static const WCTProperty &_s_##className##_##propertyName##_property =     \
         __WCDB_BINDING(className)                                              \
             .addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>(  \
                 WCDB_STRINGIFY(propertyName), columnName);                     \
