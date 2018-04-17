@@ -29,6 +29,7 @@
 {
     if (self = [super init]) {
         _type = WCTColumnTypeNull;
+        _value = nil;
     }
     return self;
 }
@@ -56,7 +57,7 @@
     return self;
 }
 
-- (instancetype)initWithString:(const char *)value
+- (instancetype)initWithCString:(const char *)value
 {
     if (self = [super init]) {
         _type = WCTColumnTypeString;
@@ -79,6 +80,43 @@
     if (self = [super init]) {
         _type = WCTColumnTypeFloat;
         _value = [NSNumber numberWithDouble:value];
+    }
+    return self;
+}
+
+- (instancetype)initWithNumber:(NSNumber *)value
+{
+    if (self = [super init]) {
+        _value = value;
+        if (!value) {
+            _type = WCTColumnTypeNull;
+        } else if (CFNumberIsFloatType((CFNumberRef) value)) {
+            _type = WCTColumnTypeFloat;
+        } else {
+            if (CFNumberGetByteSize((CFNumberRef) value) <= 4) {
+                _type = WCTColumnTypeInteger32;
+            } else {
+                _type = WCTColumnTypeInteger64;
+            }
+        }
+    }
+    return self;
+}
+
+- (instancetype)initWithString:(NSString *)value
+{
+    if (self = [super init]) {
+        _value = value;
+        _type = value ? WCTColumnTypeString : WCTColumnTypeNull;
+    }
+    return self;
+}
+
+- (instancetype)initWithData:(NSData *)value
+{
+    if (self = [super init]) {
+        _value = value;
+        _type = value ? WCTColumnTypeBinary : WCTColumnTypeNull;
     }
     return self;
 }
@@ -159,6 +197,41 @@
         default:
             return 0;
     }
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector
+{
+    return _value;
+}
+
++ (NSArray *)fundanmentalArrayFromValues:(NSArray<WCTValue *> *)values
+{
+    if (!values) {
+        return nil;
+    }
+    NSMutableArray *fundamentalValues = [NSMutableArray array];
+    for (WCTValue *value in values) {
+        NSObject *fundamentalValue = nil;
+        switch (value.type) {
+            case WCTColumnTypeInteger32:
+            case WCTColumnTypeInteger64:
+            case WCTColumnTypeFloat:
+                fundamentalValue = value.numberValue;
+                break;
+            case WCTColumnTypeString:
+                fundamentalValue = value.stringValue;
+                break;
+            case WCTColumnTypeBinary:
+                fundamentalValue = value.dataValue;
+                break;
+            default:
+                break;
+        }
+        if (fundamentalValue) {
+            [fundamentalValues addObject:fundamentalValue];
+        }
+    }
+    return fundamentalValues;
 }
 
 @end

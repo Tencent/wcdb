@@ -29,7 +29,7 @@
 
 - (instancetype)initWithInteger64:(int64_t)value;
 
-- (instancetype)initWithString:(const char *)value;
+- (instancetype)initWithCString:(const char *)value;
 
 - (instancetype)initWithNoCopyData:(const WCDB::NoCopyData &)value;
 

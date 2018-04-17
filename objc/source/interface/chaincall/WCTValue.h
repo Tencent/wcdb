@@ -22,6 +22,12 @@
 
 @interface WCTValue : NSObject
 
+- (nullable instancetype)initWithNumber:(nullable NSNumber *)value;
+
+- (nullable instancetype)initWithString:(nullable NSString *)value;
+
+- (nullable instancetype)initWithData:(nullable NSData *)value;
+
 @property(nonatomic, readonly) WCTColumnType type;
 
 - (BOOL)boolValue;
@@ -32,10 +38,12 @@
 
 - (double)doubleValue;
 
-- (NSString *)stringValue;
+- (nullable NSString *)stringValue;
 
-- (NSNumber *)numberValue;
+- (nullable NSNumber *)numberValue;
 
-- (NSData *)dataValue;
+- (nullable NSData *)dataValue;
+
++ (nullable NSArray *)fundanmentalArrayFromValues:(nullable NSArray<WCTValue *> *)values;
 
 @end

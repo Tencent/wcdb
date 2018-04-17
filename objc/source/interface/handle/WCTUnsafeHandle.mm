@@ -316,7 +316,7 @@
         case WCDB::ColumnType::Float:
             return [[WCTValue alloc] initWithDouble:_handle->getDouble(index)];
         case WCDB::ColumnType::Text:
-            return [[WCTValue alloc] initWithString:_handle->getText(index)];
+            return [[WCTValue alloc] initWithCString:_handle->getText(index)];
         case WCDB::ColumnType::BLOB:
             return [[WCTValue alloc] initWithNoCopyData:_handle->getBLOB(index)];
         case WCDB::ColumnType::Null:
