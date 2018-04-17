@@ -116,6 +116,8 @@
 		237B4D2D20691E4E00AB79CA /* DatabaseTests+RepairKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2C20691E4E00AB79CA /* DatabaseTests+RepairKit.mm */; };
 		237B4D2F20691E5700AB79CA /* DatabaseTests+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */; };
 		237B4D3120691E5D00AB79CA /* DatabaseTests+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */; };
+		23885F7B208640A80085FA1E /* DatabaseTests+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */; };
+		23885F80208642910085FA1E /* FTSTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7D208642910085FA1E /* FTSTestCaseObject.mm */; };
 		23A3AF22206CDBE300D05634 /* HandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF21206CDBE300D05634 /* HandleTests+ChainCall.mm */; };
 		23A3AF24206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */; };
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
@@ -343,6 +345,10 @@
 		237B4D2C20691E4E00AB79CA /* DatabaseTests+RepairKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+RepairKit.mm"; sourceTree = "<group>"; };
 		237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Config.mm"; sourceTree = "<group>"; };
 		237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Memory.mm"; sourceTree = "<group>"; };
+		23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+FTS.mm"; sourceTree = "<group>"; };
+		23885F7D208642910085FA1E /* FTSTestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTSTestCaseObject.mm; sourceTree = "<group>"; };
+		23885F7E208642910085FA1E /* FTSTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FTSTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23885F7F208642910085FA1E /* FTSTestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTSTestCaseObject.h; sourceTree = "<group>"; };
 		23A3AF21206CDBE300D05634 /* HandleTests+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "HandleTests+ChainCall.mm"; sourceTree = "<group>"; };
 		23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "UnsafeHandleTests+ChainCall.mm"; sourceTree = "<group>"; };
 		23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "TableTests+ChainCall.mm"; sourceTree = "<group>"; };
@@ -768,6 +774,10 @@
 		23CB20EA206DD6CE000EFB02 /* fts */ = {
 			isa = PBXGroup;
 			children = (
+				23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */,
+				23885F7D208642910085FA1E /* FTSTestCaseObject.mm */,
+				23885F7E208642910085FA1E /* FTSTestCaseObject+WCTTableCoding.h */,
+				23885F7F208642910085FA1E /* FTSTestCaseObject.h */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -970,6 +980,7 @@
 				2338622A207B4F05004CAC6F /* ORMColumnConstraintPrimaryImpl.mm in Sources */,
 				234DBD802064EB6C000E31E8 /* StatementReindexTests.mm in Sources */,
 				23386212207B4A3C004CAC6F /* ORMTestCase.mm in Sources */,
+				23885F7B208640A80085FA1E /* DatabaseTests+FTS.mm in Sources */,
 				23A3AF24206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm in Sources */,
 				23E58B59200F577400E0CECE /* Convenience.m in Sources */,
 				23CB2106206DDBB7000EFB02 /* MigrationTests.mm in Sources */,
@@ -1009,6 +1020,7 @@
 				234DBD7B2064EB6C000E31E8 /* StatementDropTableTests.mm in Sources */,
 				234DBD682064EB6C000E31E8 /* OrderingTermTests.mm in Sources */,
 				2338620F207B48F9004CAC6F /* ORMProperty.mm in Sources */,
+				23885F80208642910085FA1E /* FTSTestCaseObject.mm in Sources */,
 				234DBD852064EB6C000E31E8 /* StatementUpdateTests.mm in Sources */,
 				2338620A207B48DF004CAC6F /* ORMTests+ColumnCoding.mm in Sources */,
 				234DBD6B2064EB6C000E31E8 /* RaiseFunctionTests.mm in Sources */,

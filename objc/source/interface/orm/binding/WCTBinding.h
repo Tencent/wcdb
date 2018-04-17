@@ -23,6 +23,7 @@
 
 #import <WCDB/SequantialIncreasingMap.hpp>
 #import <WCDB/String.hpp>
+#import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
@@ -75,6 +76,8 @@ public:
     generateCreateIndexStatements(const std::string &tableName) const;
 
     const WCTPropertyList &getAllProperties() const;
+
+    static WCTColumnNamed getColumnGenerator();
 
 protected:
     const WCTProperty &

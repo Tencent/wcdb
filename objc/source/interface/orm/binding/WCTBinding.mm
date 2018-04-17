@@ -125,3 +125,12 @@ const WCTProperty &WCTBinding::addColumnBinding(const std::string &columnName,
     m_properties.push_back(property);
     return m_properties.back();
 }
+
+WCTColumnNamed WCTBinding::getColumnGenerator()
+{
+    static WCTColumnNamed s_columnNamed = ^WCDB::Column(NSString *name)
+    {
+        return WCDB::Column(name ? name.UTF8String : "");
+    };
+    return s_columnNamed;
+}

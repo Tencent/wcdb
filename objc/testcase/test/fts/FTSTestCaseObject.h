@@ -19,25 +19,17 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTCommon.h>
-#import <WCDB/WCTProperty.h>
 
-typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
+@interface FTSTestCaseObject : NSObject
 
-@protocol WCTTableCoding
-@required
-+ (nonnull const WCTBinding *)objectRelationalMappingForWCDB;
-+ (const WCTPropertyList &)AllProperties;
-+ (const WCDB::Expression::All &)AllResults;
-+ (nonnull WCTColumnNamed)ColumnNamed;
-@optional
-@property(nonatomic, assign) long long lastInsertedRowID;
-@property(nonatomic, assign) BOOL isAutoIncrement;
-@end
+- (instancetype)initWithMessage:(NSString *)message;
 
-@protocol WCTColumnCoding
-@required
-+ (nullable instancetype)unarchiveWithWCTValue:(nullable id /* NSData*, NSString*, NSNumber*, nil */)value;
-- (nullable id /* NSData*, NSString*, NSNumber*, nil */)archivedWCTValue;
-+ (WCDB::ColumnType)columnTypeForWCDB;
+- (instancetype)initWithMessage:(NSString *)message
+                   andExtension:(NSString *)extension;
+
+- (BOOL)isEqualToObject:(FTSTestCaseObject *)object;
+
+@property(nonatomic, retain) NSString *message;
+@property(nonatomic, retain) NSString *extension;
+
 @end
