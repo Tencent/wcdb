@@ -20,6 +20,7 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <WCDB/Interface.h>
+#import <WCDB/Tokenizer.hpp>
 #import <WCDB/WCTError+Private.h>
 
 class WCTCursorInfo : public WCDB::FTS::WCDBCursorInfo {

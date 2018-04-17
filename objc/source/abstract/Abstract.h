@@ -32,7 +32,6 @@
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/SQLiteError.hpp>
 #include <WCDB/SQLiteGlobal.hpp>
-#include <WCDB/Tokenize.hpp>
 #include <WCDB/Tracer.hpp>
 
 #endif /* Abstract_h */

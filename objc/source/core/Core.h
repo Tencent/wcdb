@@ -30,7 +30,6 @@
 #include <WCDB/HandlePools.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/Tokenizer.hpp>
 
 #include <WCDB/MigrationDatabase.hpp>
 #include <WCDB/MigrationHandle.hpp>

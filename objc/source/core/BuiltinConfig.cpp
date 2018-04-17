@@ -24,6 +24,7 @@
 #include <WCDB/Macro.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/TimedQueue.hpp>
+#include <WCDB/Tokenize.hpp>
 #include <queue>
 #include <vector>
 

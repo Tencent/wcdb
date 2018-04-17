@@ -21,8 +21,8 @@
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
 #import <WCDB/WCTTokenizer.h>
+#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDatabase
 
