@@ -55,4 +55,26 @@ Expression ExpressionConvertible<NSObject *>::as(NSObject *const &t)
     return Expression(LiteralValueConvertible<NSObject *>::as(t));
 }
 
+Expression ExpressionConvertible<WCTProperty>::as(const WCTProperty &property)
+{
+    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(property.getCOWLang());
+    return Expression(cowLang);
+}
+
+ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+ColumnIsTextType<NSString *>::asUnderlyingType(NSString *text)
+{
+    return text.UTF8String;
+}
+
+LiteralValue LiteralValueConvertible<NSString *>::as(NSString *const &t)
+{
+    return LiteralValue(t.UTF8String);
+}
+
+Expression ExpressionConvertible<NSString *>::as(NSString *const &t)
+{
+    return Expression(LiteralValue(t.UTF8String));
+}
+
 } //namespace WCDB

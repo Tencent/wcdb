@@ -27,6 +27,7 @@ namespace WCDB {
 
 class TableOrSubquery : public DescribableWithLang<Lang::TableOrSubquery> {
 public:
+    //TODO accept ColumnTextType for all text-based WINQ interfaces
     template <typename T>
     TableOrSubquery(
         const T &t,

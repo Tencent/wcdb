@@ -201,10 +201,7 @@ template <>
 struct ColumnIsNullType<std::nullptr_t> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Null>::UnderlyingType
-    asUnderlyingType(const std::nullptr_t &)
-    {
-        return nullptr;
-    }
+    asUnderlyingType(const std::nullptr_t &);
 };
 
 //Float
@@ -256,20 +253,14 @@ template <>
 struct ColumnIsTextType<const char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const char *text)
-    {
-        return text;
-    }
+    asUnderlyingType(const char *text);
 };
 
 template <>
 struct ColumnIsTextType<char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const char *text)
-    {
-        return text;
-    }
+    asUnderlyingType(const char *text);
 };
 
 template <int size>
@@ -296,10 +287,7 @@ template <>
 struct ColumnIsTextType<std::string> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const std::string &text)
-    {
-        return text.c_str();
-    }
+    asUnderlyingType(const std::string &text);
 };
 
 //BLOB
@@ -307,20 +295,14 @@ template <>
 struct ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-    asUnderlyingType(const std::vector<unsigned char> &blob)
-    {
-        return NoCopyData(blob.data(), blob.size());
-    }
+    asUnderlyingType(const std::vector<unsigned char> &blob);
 };
 
 template <>
 struct ColumnIsBLOBType<NoCopyData> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-    asUnderlyingType(const NoCopyData &blob)
-    {
-        return blob;
-    }
+    asUnderlyingType(const NoCopyData &blob);
 };
 
 } //namespace WCDB

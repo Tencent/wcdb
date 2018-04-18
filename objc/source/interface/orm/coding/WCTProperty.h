@@ -76,13 +76,3 @@ public:
     operator std::list<WCDB::OrderingTerm>() const;
     operator std::list<WCDB::IndexedColumn>() const;
 };
-
-namespace WCDB {
-
-template <>
-class ExpressionConvertible<WCTProperty> : public std::true_type {
-public:
-    static Expression as(const WCTProperty &property);
-};
-
-} //namespace WCDB

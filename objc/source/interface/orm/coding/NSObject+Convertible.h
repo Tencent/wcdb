@@ -65,4 +65,31 @@ LiteralValue LiteralValueConvertible<
     return LiteralValueConvertible<NSObject *>::as(t);
 }
 
+//WCTProperty
+template <>
+class ExpressionConvertible<WCTProperty> : public std::true_type {
+public:
+    static Expression as(const WCTProperty &property);
+};
+
+//NSString
+template <>
+struct ColumnIsTextType<NSString *> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+    asUnderlyingType(NSString *text);
+};
+
+template <>
+class LiteralValueConvertible<NSString *> : public std::true_type {
+public:
+    static LiteralValue as(NSString *const &t);
+};
+
+template <>
+class ExpressionConvertible<NSString *> : public std::true_type {
+public:
+    static Expression as(NSString *const &t);
+};
+
 } //namespace WCDB

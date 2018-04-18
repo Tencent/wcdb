@@ -31,7 +31,7 @@ public:
         const std::string &pn,
         const std::string &cn,
         T * = nullptr,
-        typename std::enable_if<ColumnIsCppType<T>::value>::type * = nullptr)
+        typename std::enable_if<!WCDB::IsObjCType<T>::value>::type * = nullptr)
         : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
         , m_class(cls)
         , columnDef(WCDB::Column(cn))

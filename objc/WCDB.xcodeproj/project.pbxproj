@@ -412,6 +412,7 @@
 		23BFE309207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE307207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23BFE30D207CE3E200A4BD81 /* MigrationInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE30B207CE3E200A4BD81 /* MigrationInfos.cpp */; };
 		23BFE30E207CE3E200A4BD81 /* MigrationInfos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE30C207CE3E200A4BD81 /* MigrationInfos.hpp */; };
+		23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
 		23C5ABAD207DA9C100BEF3C6 /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */; };
 		23C5ABAE207DA9C100BEF3C6 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */; };
 		23D18635205A66000001A6CE /* MigrationBuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */; };
@@ -883,6 +884,7 @@
 		23BFE307207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNull+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		23BFE30B207CE3E200A4BD81 /* MigrationInfos.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfos.cpp; sourceTree = "<group>"; };
 		23BFE30C207CE3E200A4BD81 /* MigrationInfos.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfos.hpp; sourceTree = "<group>"; };
+		23C43BB0208720CA00AB186D /* ColumnType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnType.cpp; sourceTree = "<group>"; };
 		23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
 		23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationBuiltinConfig.cpp; sourceTree = "<group>"; };
@@ -1331,6 +1333,7 @@
 				23000F17203EDFDC00ED8008 /* Column.cpp */,
 				23000F18203EDFDC00ED8008 /* Column.hpp */,
 				23D4DA472085A98F00AE6D90 /* ColumnType.hpp */,
+				23C43BB0208720CA00AB186D /* ColumnType.cpp */,
 				23977423202AECD2000A681C /* ColumnConstraint.cpp */,
 				23977424202AECD2000A681C /* ColumnConstraint.hpp */,
 				23977425202AECD2000A681C /* ColumnDef.cpp */,
@@ -2141,6 +2144,7 @@
 				23977577202AECD3000A681C /* LangDropViewSTMT.cpp in Sources */,
 				2397753B202AECD3000A681C /* StatementSelect.cpp in Sources */,
 				2361C43B206358EE00A9966A /* SQLiteError.cpp in Sources */,
+				23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */,
 				2397750F202AECD3000A681C /* StatementAlterTable.cpp in Sources */,
 				238341B020634FA600F47486 /* WCTSQLiteError.mm in Sources */,
 				23BFE30D207CE3E200A4BD81 /* MigrationInfos.cpp in Sources */,

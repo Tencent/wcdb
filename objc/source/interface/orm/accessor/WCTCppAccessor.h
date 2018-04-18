@@ -20,16 +20,6 @@
 
 #import <WCDB/WCTBaseAccessor.h>
 
-template <typename T, typename Enable = void>
-struct ColumnIsCppType : public std::false_type {
-};
-template <typename T>
-struct ColumnIsCppType<T,
-                       typename std::enable_if<WCDB::ColumnInfo<T>::type !=
-                                               WCDB::ColumnType::Null>::type>
-    : public std::true_type {
-};
-
 template <WCDB::ColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {
 public:

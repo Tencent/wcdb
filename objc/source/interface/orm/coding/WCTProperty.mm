@@ -181,13 +181,3 @@ WCTPropertyList::operator std::list<WCDB::IndexedColumn>() const
 {
     return std::list<WCDB::IndexedColumn>(begin(), end());
 }
-
-namespace WCDB {
-
-Expression ExpressionConvertible<WCTProperty>::as(const WCTProperty &property)
-{
-    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(property.getCOWLang());
-    return Expression(cowLang);
-}
-
-} //namespace WCDB
