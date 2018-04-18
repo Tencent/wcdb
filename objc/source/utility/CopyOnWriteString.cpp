@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/CopyOnWriteString.hpp>
+#include <WCDB/String.hpp>
 
 CopyOnWriteString::CopyOnWriteString() : Super()
 {
@@ -29,7 +30,7 @@ CopyOnWriteString::CopyOnWriteString(const std::string &string) : Super(string)
 }
 
 CopyOnWriteString::CopyOnWriteString(const char *string)
-    : Super(string ? string : "")
+    : Super(string ? string : WCDB::String::empty())
 {
 }
 
@@ -62,4 +63,12 @@ bool CopyOnWriteString::equal(const std::string &other) const
         return false;
     }
     return get() == other;
+}
+
+const std::string &CopyOnWriteString::get() const
+{
+    if (!empty()) {
+        return CopyOnWrite<std::string>::get();
+    }
+    return WCDB::String::empty();
 }

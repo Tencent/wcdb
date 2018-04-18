@@ -130,7 +130,7 @@ WCTColumnNamed WCTBinding::getColumnGenerator()
 {
     static WCTColumnNamed s_columnNamed = ^WCDB::Column(NSString *name)
     {
-        return WCDB::Column(name ? name.UTF8String : "");
+        return WCDB::Column(name ? name.UTF8String : WCDB::String::empty());
     };
     return s_columnNamed;
 }

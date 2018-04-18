@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Abstract.h>
+#include <WCDB/String.hpp>
 #include <fcntl.h>
 #include <sqlcipher/sqlite3.h>
 
@@ -75,7 +76,7 @@ void SQLiteGlobal::log(void *userInfo, int code, const char *message)
             break;
     }
     error.code = code;
-    error.message = message ? message : "";
+    error.message = message ? message : String::empty();
 }
 
 } //namespace WCDB

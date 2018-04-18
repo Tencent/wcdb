@@ -41,6 +41,8 @@ public:
     bool empty() const;
 
     bool equal(const std::string &other) const;
+
+    const std::string &get() const;
 };
 
 #endif /* CopyOnWriteString_hpp */

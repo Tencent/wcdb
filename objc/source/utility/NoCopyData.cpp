@@ -19,11 +19,14 @@
  */
 
 #include <WCDB/NoCopyData.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
 NoCopyData::NoCopyData(const unsigned char *data_, const size_t &size_)
-    : data(data_ ? data_ : reinterpret_cast<const unsigned char *>(""))
+    : data(data_ ? data_
+                 : reinterpret_cast<const unsigned char *>(
+                       String::empty().data()))
     , size(size_)
 {
 }

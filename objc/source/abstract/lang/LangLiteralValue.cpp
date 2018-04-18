@@ -43,14 +43,12 @@ CopyOnWriteString LiteralValue::SQL() const
             description.append(os.str());
         } break;
         case Type::BLOB:
-            assert(!dataValue.empty());
             description.append("'");
             description.append(
                 LiteralValue::stringByAntiInjecting(dataValue).get());
             description.append("'");
             break;
         case Type::String:
-            assert(!stringValue.empty());
             description.append("'");
             description.append(
                 LiteralValue::stringByAntiInjecting(stringValue).get());

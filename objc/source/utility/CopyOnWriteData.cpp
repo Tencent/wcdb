@@ -44,3 +44,12 @@ bool CopyOnWriteData::empty() const
 {
     return CopyOnWrite<std::vector<unsigned char>>::empty() || get().empty();
 }
+
+const std::vector<unsigned char> &CopyOnWriteData::get() const
+{
+    if (!empty()) {
+        return CopyOnWrite<std::vector<unsigned char>>::get();
+    }
+    static const std::vector<unsigned char> s_empty = {};
+    return s_empty;
+}

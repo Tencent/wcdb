@@ -31,6 +31,8 @@ public:
 
     bool empty() const;
 
+    const std::vector<unsigned char> &get() const;
+
 private:
     using CopyOnWrite<std::vector<unsigned char>>::get_or_copy;
 };

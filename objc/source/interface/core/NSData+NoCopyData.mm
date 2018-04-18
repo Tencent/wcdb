@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/NSData+NoCopyData.h>
+#import <WCDB/String.hpp>
 
 @implementation NSData (NoCopyData)
 
@@ -29,7 +30,7 @@
 
 - (const WCDB::NoCopyData)noCopyData
 {
-    static const unsigned char *s_empty_data = (const unsigned char *) "";
+    static const unsigned char *s_empty_data = (const unsigned char *) WCDB::String::empty().data();
     const unsigned char *bytes = (const unsigned char *) self.bytes;
     return WCDB::NoCopyData(bytes ? bytes : s_empty_data, self.length);
 }

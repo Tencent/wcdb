@@ -61,7 +61,6 @@ public:
     }
 
 protected:
-    static const std::string s_empty;
     Lang::CopyOnWriteLazyLang<Lang::Lang> m_cowLang;
 };
 

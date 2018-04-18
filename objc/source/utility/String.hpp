@@ -28,6 +28,8 @@ namespace WCDB {
 
 namespace String {
 
+const std::string &empty();
+
 struct CaseInsensiveComparator {
     bool operator()(const std::string &lhs, const std::string &rhs) const;
 };

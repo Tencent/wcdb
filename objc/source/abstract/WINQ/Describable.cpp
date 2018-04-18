@@ -18,11 +18,10 @@
  * limitations under the License.
  */
 
+#include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 
 namespace WCDB {
-
-const std::string Describable::s_empty("");
 
 Describable::Describable()
 {
@@ -38,7 +37,7 @@ const std::string &Describable::getDescription() const
     if (!m_cowLang.empty()) {
         return m_cowLang.description().get();
     }
-    return Describable::s_empty;
+    return String::empty();
 }
 
 Lang::CopyOnWriteLazyLang<Lang::Lang> &Describable::getCOWLang()

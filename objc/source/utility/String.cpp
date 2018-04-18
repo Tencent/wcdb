@@ -24,6 +24,12 @@ namespace WCDB {
 
 namespace String {
 
+const std::string &empty()
+{
+    static const std::string s_empty("");
+    return s_empty;
+}
+
 bool CaseInsensiveComparator::operator()(const std::string &lhs,
                                          const std::string &rhs) const
 {

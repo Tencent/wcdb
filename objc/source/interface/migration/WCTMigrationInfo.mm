@@ -42,7 +42,7 @@
     std::shared_ptr<WCDB::MigrationInfo> info =
         WCDB::MigrationInfo::info(targetTable.UTF8String,
                                   sourceTable.UTF8String,
-                                  "");
+                                  WCDB::String::empty());
     return [self initWithWCDBMigrationInfo:info];
 }
 
