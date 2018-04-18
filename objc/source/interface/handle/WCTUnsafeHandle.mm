@@ -180,7 +180,7 @@
                     }
                     case WCDB::ColumnType::Text: {
                         NSString *string = (NSString *) value;
-                        _handle->bindText(string.UTF8String, (int) string.length, index);
+                        _handle->bindText(string.UTF8String, index);
                         break;
                     }
                     case WCDB::ColumnType::BLOB: {
@@ -221,7 +221,7 @@
         _handle->bindBLOB(data.noCopyData, index);
     } else if ([value isKindOfClass:NSString.class]) {
         NSString *string = (NSString *) value;
-        _handle->bindText(string.UTF8String, (int) string.length, index);
+        _handle->bindText(string.UTF8String, index);
     } else if ([value isKindOfClass:NSNumber.class]) {
         NSNumber *number = (NSNumber *) value;
         if (CFNumberIsFloatType((CFNumberRef) number)) {

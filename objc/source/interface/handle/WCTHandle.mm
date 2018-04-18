@@ -111,7 +111,7 @@
 - (void)bindString:(NSString *)value toIndex:(int)index
 {
     NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
-    _handle->bindText(value.UTF8String, (int) value.length, index);
+    _handle->bindText(value.UTF8String, index);
 }
 
 - (void)bindBLOB:(NSData *)value toIndex:(int)index
