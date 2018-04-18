@@ -59,76 +59,74 @@ int WCDBCursorInfo::step(const char **ppToken,
         }
     }
 
-    if (m_lemmaBufferLength == 0) {
-        if (m_subTokensLengthArray.empty()) {
-            if (m_cursorTokenType == TokenType::None) {
-                return SQLITE_DONE;
-            }
+    if (m_subTokensLengthArray.empty()) {
+        if (m_cursorTokenType == TokenType::None) {
+            return SQLITE_DONE;
+        }
 
-            //Skip symbol
-            while (m_cursorTokenType ==
-                   TokenType::BasicMultilingualPlaneSymbol) {
-                rc = cursorStep();
+        //Skip symbol
+        while (m_cursorTokenType == TokenType::BasicMultilingualPlaneSymbol) {
+            rc = cursorStep();
+            if (rc != SQLITE_OK) {
+                return rc;
+            }
+        }
+
+        if (m_cursorTokenType == TokenType::None) {
+            return SQLITE_DONE;
+        }
+
+        TokenType type = m_cursorTokenType;
+        switch (type) {
+            case TokenType::BasicMultilingualPlaneLetter:
+            case TokenType::BasicMultilingualPlaneDigit:
+                m_startOffset = m_cursor;
+                while (((rc = cursorStep()) == SQLITE_OK) &&
+                       m_cursorTokenType == type)
+                    ;
                 if (rc != SQLITE_OK) {
                     return rc;
                 }
-            }
-
-            if (m_cursorTokenType == TokenType::None) {
-                return SQLITE_DONE;
-            }
-
-            TokenType type = m_cursorTokenType;
-            switch (type) {
-                case TokenType::BasicMultilingualPlaneLetter:
-                case TokenType::BasicMultilingualPlaneDigit:
-                    m_startOffset = m_cursor;
-                    while (((rc = cursorStep()) == SQLITE_OK) &&
-                           m_cursorTokenType == type)
-                        ;
-                    if (rc != SQLITE_OK) {
-                        return rc;
-                    }
-                    m_endOffset = m_cursor;
-                    m_bufferLength = m_endOffset - m_startOffset;
-                    break;
-                case TokenType::BasicMultilingualPlaneOther:
-                case TokenType::AuxiliaryPlaneOther:
+                m_endOffset = m_cursor;
+                m_bufferLength = m_endOffset - m_startOffset;
+                break;
+            case TokenType::BasicMultilingualPlaneOther:
+            case TokenType::AuxiliaryPlaneOther:
+                m_subTokensLengthArray.push_back(m_cursorTokenLength);
+                m_subTokensCursor = m_cursor;
+                m_subTokensDoubleChar = true;
+                while (((rc = cursorStep()) == SQLITE_OK) &&
+                       m_cursorTokenType == type) {
                     m_subTokensLengthArray.push_back(m_cursorTokenLength);
-                    m_subTokensCursor = m_cursor;
-                    m_subTokensDoubleChar = true;
-                    while (((rc = cursorStep()) == SQLITE_OK) &&
-                           m_cursorTokenType == type) {
-                        m_subTokensLengthArray.push_back(m_cursorTokenLength);
-                    }
-                    if (rc != SQLITE_OK) {
-                        return rc;
-                    }
-                    subTokensStep();
-                    break;
-                default:
-                    break;
-            }
-            if (type == TokenType::BasicMultilingualPlaneLetter) {
-                rc = lemmatization(m_input + m_startOffset, m_bufferLength);
+                }
                 if (rc != SQLITE_OK) {
                     return rc;
                 }
-            } else {
-                if (m_bufferLength > m_buffer.capacity()) {
-                    m_buffer.resize(m_bufferLength);
-                }
-                memcpy(m_buffer.data(), m_input + m_startOffset,
-                       m_bufferLength);
+                subTokensStep();
+                break;
+            default:
+                break;
+        }
+        if (type == TokenType::BasicMultilingualPlaneLetter) {
+            rc = lemmatization(m_input + m_startOffset, m_bufferLength);
+            if (rc != SQLITE_OK) {
+                return rc;
             }
         } else {
-            subTokensStep();
             if (m_bufferLength > m_buffer.capacity()) {
                 m_buffer.resize(m_bufferLength);
             }
             memcpy(m_buffer.data(), m_input + m_startOffset, m_bufferLength);
         }
+    } else {
+        subTokensStep();
+        if (m_bufferLength > m_buffer.capacity()) {
+            m_buffer.resize(m_bufferLength);
+        }
+        memcpy(m_buffer.data(), m_input + m_startOffset, m_bufferLength);
+    }
 
+    if (m_lemmaBufferLength == 0) {
         *ppToken = m_buffer.data();
         *pnBytes = m_bufferLength;
     } else {
