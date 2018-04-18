@@ -114,6 +114,7 @@
 {
     //"is" can be matched
     [self searching_test:"are" expectedObject:_englishObject];
+    [self searching_test:"are*" expectedObject:_englishObject];
 }
 
 - (void)test_digit
