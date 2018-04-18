@@ -65,9 +65,7 @@ TableOrSubquery &TableOrSubquery::withSchema(const std::string &schemaName)
                 schemaName);
             break;
         default:
-            assert(false);
-            ;
-            break;
+            WINQDebugFatal();
     }
     return *this;
 }
@@ -89,8 +87,7 @@ TableOrSubquery &TableOrSubquery::as(const std::string &tableAlias)
                 tableAlias);
             break;
         default:
-            assert(false);
-            break;
+            WINQDebugFatal();
     }
     return *this;
 }
@@ -98,7 +95,7 @@ TableOrSubquery &TableOrSubquery::as(const std::string &tableAlias)
 TableOrSubquery &TableOrSubquery::indexedBy(const std::string &indexName)
 {
     Lang::TableOrSubquery &lang = getMutableLang();
-    assert(lang.type == Lang::TableOrSubquery::Type::Table);
+    WINQDebugAssert(lang.type == Lang::TableOrSubquery::Type::Table);
     Lang::TableOrSubqueryTable &langTable =
         lang.tableOrSubqueryTable.get_or_copy();
     langTable.indexSwitcher = Lang::TableOrSubqueryTable::IndexSwitch::Indexed;
@@ -108,7 +105,7 @@ TableOrSubquery &TableOrSubquery::indexedBy(const std::string &indexName)
 TableOrSubquery &TableOrSubquery::notIndexed()
 {
     Lang::TableOrSubquery &lang = getMutableLang();
-    assert(lang.type == Lang::TableOrSubquery::Type::Table);
+    WINQDebugAssert(lang.type == Lang::TableOrSubquery::Type::Table);
     lang.tableOrSubqueryTable.get_or_copy().indexSwitcher =
         Lang::TableOrSubqueryTable::IndexSwitch::NotIndexed;
     return *this;

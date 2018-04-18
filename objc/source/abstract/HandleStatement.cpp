@@ -29,7 +29,6 @@ HandleStatement::HandleStatement() : m_stmt(nullptr)
 
 void HandleStatement::setup(const Statement &statement, void *stmt)
 {
-    assert(stmt != nullptr);
     m_stmt = stmt;
     m_statement = statement;
 }
@@ -42,7 +41,6 @@ void HandleStatement::reset()
 bool HandleStatement::step(bool &done)
 {
     int rc = sqlite3_step((sqlite3_stmt *) m_stmt);
-    assert(rc != SQLITE_MISUSE);
     done = rc == SQLITE_DONE;
     return rc == SQLITE_OK || rc == SQLITE_ROW || rc == SQLITE_DONE;
 }

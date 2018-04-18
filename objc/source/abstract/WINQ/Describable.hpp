@@ -25,6 +25,10 @@
 #include <WCDB/Convertible.hpp>
 #include <WCDB/Lang.h>
 
+#define WINQDebugAssert(cond) WCTDebugAssert(cond, "Misuse", return *this;)
+
+#define WINQDebugFatal() WCTDebugFatal("Misuse", return *this;)
+
 namespace WCDB {
 
 class Describable {
