@@ -69,35 +69,35 @@ CopyOnWriteString ColumnConstraint::SQL() const
             }
             break;
         case Type::Check:
-            assert(!expr.empty());
+            LangDebugAssert(!expr.empty());
             description.append("CHECK(" + expr.description().get() + ")");
             break;
         case Type::Default:
             description.append("DEFAULT");
             switch (defaultSwitcher) {
                 case DefaultSwitch::LiteralValue:
-                    assert(!literalValue.empty());
+                    LangDebugAssert(!literalValue.empty());
                     description.append(" " + literalValue.description().get());
                     break;
                 case DefaultSwitch::Expr:
-                    assert(!expr.empty());
+                    LangDebugAssert(!expr.empty());
                     description.append("(" + expr.description().get() + ")");
                     break;
                 default:
-                    assert(false);
+                    LangDebugFatalError();
                     break;
             }
             break;
         case Type::Collate:
-            assert(!collationName.empty());
+            LangDebugAssert(!collationName.empty());
             description.append("COLLATE " + collationName.get());
             break;
         case Type::ForeignKeyClause:
-            assert(!foreignKeyClause.empty());
+            LangDebugAssert(!foreignKeyClause.empty());
             description.append(foreignKeyClause.description().get());
             break;
         default:
-            assert(false);
+            LangDebugFatalError();
             break;
     }
     return description;
@@ -115,7 +115,7 @@ CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const
         } else {
             space = true;
         }
-        assert(!element.empty());
+        LangDebugAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

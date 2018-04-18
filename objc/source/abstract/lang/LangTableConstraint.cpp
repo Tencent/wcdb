@@ -37,7 +37,7 @@ CopyOnWriteString TableConstraint::SQL() const
     }
     switch (type) {
         case Type::PrimaryKey:
-            assert(!indexedColumns.empty());
+            LangDebugAssert(!indexedColumns.empty());
             description.append("PRIMARY KEY(" +
                                indexedColumns.description().get() + ")");
             if (conflictClause != ConflictClause::NotSet) {
@@ -46,7 +46,7 @@ CopyOnWriteString TableConstraint::SQL() const
             }
             break;
         case Type::Unique:
-            assert(!indexedColumns.empty());
+            LangDebugAssert(!indexedColumns.empty());
             description.append("UNIQUE(" + indexedColumns.description().get() +
                                ")");
             if (conflictClause != ConflictClause::NotSet) {
@@ -55,17 +55,17 @@ CopyOnWriteString TableConstraint::SQL() const
             }
             break;
         case Type::Check:
-            assert(!expr.empty());
+            LangDebugAssert(!expr.empty());
             description.append("CHECK(" + expr.description().get() + ")");
             break;
         case Type::ForeignKey:
-            assert(!columns.empty());
-            assert(!foreignKeyClause.empty());
+            LangDebugAssert(!columns.empty());
+            LangDebugAssert(!foreignKeyClause.empty());
             description.append("FOREIGN KEY(" + columns.description().get() +
                                ") " + foreignKeyClause.description().get());
             break;
         default:
-            assert(false);
+            LangDebugFatalError();
             break;
     }
     return description;

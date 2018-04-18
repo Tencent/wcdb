@@ -34,7 +34,7 @@ CopyOnWriteString AlterTableSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    assert(!tableName.empty());
+    LangDebugAssert(!tableName.empty());
     description.append(tableName.get());
     switch (switcher) {
         case Switch::Rename:
@@ -44,7 +44,7 @@ CopyOnWriteString AlterTableSTMT::SQL() const
             description.append(" ADD COLUMN " + columnDef.description().get());
             break;
         default:
-            assert(false);
+            LangDebugFatalError();
             break;
     }
     return description;

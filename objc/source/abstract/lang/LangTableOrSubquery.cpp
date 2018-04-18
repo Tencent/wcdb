@@ -30,7 +30,7 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    assert(!tableName.empty());
+    LangDebugAssert(!tableName.empty());
     description.append(tableName.get());
     if (!tableAlias.empty()) {
         description.append(" AS " + tableAlias.get());
@@ -38,7 +38,7 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
     if (indexSwitcher != IndexSwitch::NotSet) {
         switch (indexSwitcher) {
             case IndexSwitch::Indexed:
-                assert(!indexName.empty());
+                LangDebugAssert(!indexName.empty());
                 description.append(" INDEXED BY " + indexName.get());
                 break;
             case IndexSwitch::NotIndexed:
@@ -67,7 +67,7 @@ CopyOnWriteString TableOrSubqueryTableFunction::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    assert(!tableFunctionName.empty());
+    LangDebugAssert(!tableFunctionName.empty());
     description.append(tableFunctionName.get());
     description.append("(");
     if (!exprs.empty()) {
@@ -87,7 +87,7 @@ TableOrSubqueryBase::Type TableOrSubqueryTableFunction::getType() const
 
 CopyOnWriteString TableOrSubqueryJoinClause::SQL() const
 {
-    assert(!joinClause.empty());
+    LangDebugAssert(!joinClause.empty());
     return "(" + joinClause.description().get() + ")";
 }
 
@@ -99,7 +99,7 @@ TableOrSubqueryBase::Type TableOrSubqueryJoinClause::getType() const
 CopyOnWriteString TableOrSubquerySelect::SQL() const
 {
     std::string description;
-    assert(!selectSTMT.empty());
+    LangDebugAssert(!selectSTMT.empty());
     description.append("(" + selectSTMT.description().get() + ")");
     if (!tableAlias.empty()) {
         description.append(" AS " + tableAlias.get());
@@ -114,7 +114,7 @@ TableOrSubqueryBase::Type TableOrSubquerySelect::getType() const
 
 CopyOnWriteString TableOrSubqueryList::SQL() const
 {
-    assert(!tableOrSubquerys.empty());
+    LangDebugAssert(!tableOrSubquerys.empty());
     return "(" + tableOrSubquerys.description().get() + ")";
 }
 
@@ -131,23 +131,22 @@ CopyOnWriteString TableOrSubquery::SQL() const
 {
     switch (type) {
         case Type::Table:
-            assert(!tableOrSubqueryTable.empty());
+            LangDebugAssert(!tableOrSubqueryTable.empty());
             return tableOrSubqueryTable.description();
         case Type::TableFunction:
-            assert(!tableOrSubqueryTableFunction.empty());
+            LangDebugAssert(!tableOrSubqueryTableFunction.empty());
             return tableOrSubqueryTableFunction.description();
         case Type::JoinClause:
-            assert(!tableOrSubqueryJoinClause.empty());
+            LangDebugAssert(!tableOrSubqueryJoinClause.empty());
             return tableOrSubqueryJoinClause.description();
         case Type::Select:
-            assert(!tableOrSubquerySelect.empty());
+            LangDebugAssert(!tableOrSubquerySelect.empty());
             return tableOrSubquerySelect.description();
         case Type::List:
-            assert(!tableOrSubqueryList.empty());
+            LangDebugAssert(!tableOrSubqueryList.empty());
             return tableOrSubqueryList.description();
         default:
-            assert(false);
-            break;
+            WCTDebugFatalError("", return "";);
     }
 }
 

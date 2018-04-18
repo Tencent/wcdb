@@ -33,19 +33,19 @@ CopyOnWriteString ModuleArgument::SQL() const
     std::string description;
     switch (type) {
         case Type::TableConstraint:
-            assert(!tableConstraint.empty());
+            LangDebugAssert(!tableConstraint.empty());
             description.append(tableConstraint.description().get());
             break;
         case Type::ColumnDef:
-            assert(!columnDef.empty());
+            LangDebugAssert(!columnDef.empty());
             description.append(columnDef.description().get());
             break;
         case Type::LeftRight:
-            assert(!left.empty() && !right.empty());
+            LangDebugAssert(!left.empty() && !right.empty());
             description.append(left.get() + "=" + right.get());
             break;
         default:
-            assert(false);
+            LangDebugFatalError();
             break;
     }
     return description;

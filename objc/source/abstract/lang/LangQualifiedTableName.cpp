@@ -34,11 +34,11 @@ CopyOnWriteString QualifiedTableName::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    assert(!tableName.empty());
+    LangDebugAssert(!tableName.empty());
     description.append(tableName.get());
     switch (indexSwitcher) {
         case IndexSwitch::Indexed:
-            assert(!indexName.empty());
+            LangDebugAssert(!indexName.empty());
             description.append(" INDEXED BY " + indexName.get());
             break;
         case IndexSwitch::NotIndexed:

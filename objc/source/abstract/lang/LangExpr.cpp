@@ -33,7 +33,7 @@ CopyOnWriteString ExprColumn::SQL() const
     if (!tableName.empty()) {
         description.append(tableName.get() + ".");
     }
-    assert(!column.empty());
+    LangDebugAssert(!column.empty());
     description.append(column.description().get());
     return description;
 }
@@ -45,7 +45,7 @@ ExprBase::Type ExprColumn::getType() const
 
 CopyOnWriteString ExprUnaryOperation::SQL() const
 {
-    assert(!expr.empty());
+    LangDebugAssert(!expr.empty());
     return ExprUnaryOperation::OperatorName(unaryOperator) +
            expr.description().get();
 }
@@ -72,8 +72,8 @@ ExprUnaryOperation::OperatorName(const Operator &unaryOpeartor)
 
 CopyOnWriteString ExprBinaryOperation::SQL() const
 {
-    assert(!left.empty());
-    assert(!right.empty());
+    LangDebugAssert(!left.empty());
+    LangDebugAssert(!right.empty());
     return left.description().get() +
            ExprBinaryOperation::OperatorName(binaryOperator) +
            right.description().get();
@@ -134,14 +134,14 @@ ExprBinaryOperation::OperatorName(const Operator &binaryOpeartor)
 CopyOnWriteString ExprFunction::SQL() const
 {
     std::string description;
-    assert(!functionName.empty());
+    LangDebugAssert(!functionName.empty());
     description.append(functionName.get() + "(");
     switch (type) {
         case Type::DistinctExpr:
             description.append("DISTINCT ");
         // fallthrough
         case Type::Expr:
-            assert(!exprs.empty());
+            LangDebugAssert(!exprs.empty());
             description.append(exprs.description().get());
             break;
         case Type::Star:
@@ -161,7 +161,7 @@ ExprBase::Type ExprFunction::getType() const
 
 CopyOnWriteString ExprList::SQL() const
 {
-    assert(!exprs.empty());
+    LangDebugAssert(!exprs.empty());
     return "(" + exprs.description().get() + ")";
 }
 
@@ -173,7 +173,7 @@ ExprBase::Type ExprList::getType() const
 CopyOnWriteString ExprCast::SQL() const
 {
     std::string description("CAST(");
-    assert(!expr.empty());
+    LangDebugAssert(!expr.empty());
     description.append(expr.description().get());
     description.append(" AS ");
     description.append(ColumnTypeName(type));
@@ -199,13 +199,13 @@ ExprBase::Type ExprCollate::getType() const
 CopyOnWriteString ExprPattern::SQL() const
 {
     std::string description;
-    assert(!left.empty());
+    LangDebugAssert(!left.empty());
     description.append(left.description().get() + " ");
     if (isNot) {
         description.append("NOT ");
     }
     description.append(ExprPattern::TypeName(type));
-    assert(!right.empty());
+    LangDebugAssert(!right.empty());
     description.append(" " + right.description().get());
     if (!escape.empty()) {
         description.append(" ESCAPE " + escape.description().get());
@@ -234,7 +234,7 @@ constexpr const char *ExprPattern::TypeName(const Type &pattern)
 
 CopyOnWriteString ExprNull::SQL() const
 {
-    assert(!expr.empty());
+    LangDebugAssert(!expr.empty());
     if (isNull) {
         return expr.description().get() + " ISNULL";
     } else {
@@ -250,12 +250,12 @@ ExprBase::Type ExprNull::getType() const
 CopyOnWriteString ExprBetween::SQL() const
 {
     std::string description;
-    assert(!expr.empty());
+    LangDebugAssert(!expr.empty());
     description.append(expr.description().get());
     if (isNot) {
         description.append(" NOT");
     }
-    assert(!left.empty() && !right.empty());
+    LangDebugAssert(!left.empty() && !right.empty());
     description.append(" BETWEEN " + left.description().get() + " AND " +
                        right.description().get());
     return description;
@@ -269,7 +269,7 @@ ExprBase::Type ExprBetween::getType() const
 CopyOnWriteString ExprIn::SQL() const
 {
     std::string description;
-    assert(!expr.empty());
+    LangDebugAssert(!expr.empty());
     description.append(expr.description().get());
     if (isNot) {
         description.append(" NOT");
@@ -280,11 +280,11 @@ CopyOnWriteString ExprIn::SQL() const
             description.append("()");
             break;
         case Switch::Select:
-            assert(!selectSTMT.empty());
+            LangDebugAssert(!selectSTMT.empty());
             description.append("(" + selectSTMT.description().get() + ")");
             break;
         case Switch::Expr:
-            assert(!exprs.empty());
+            LangDebugAssert(!exprs.empty());
             description.append("(" + exprs.description().get() + ")");
             break;
         case Switch::Table:
@@ -292,7 +292,7 @@ CopyOnWriteString ExprIn::SQL() const
             if (!schemaName.empty()) {
                 description.append(schemaName.get() + ".");
             }
-            assert(!tableNameOrFunction.empty());
+            LangDebugAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get());
             break;
         case Switch::Function:
@@ -300,7 +300,7 @@ CopyOnWriteString ExprIn::SQL() const
             if (!schemaName.empty()) {
                 description.append(schemaName.get() + ".");
             }
-            assert(!tableNameOrFunction.empty());
+            LangDebugAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get() + "(");
             if (!exprs.empty()) {
                 description.append(exprs.description().get());
@@ -328,7 +328,7 @@ CopyOnWriteString ExprExists::SQL() const
         }
         description.append("EXISTS");
     }
-    assert(!selectSTMT.empty());
+    LangDebugAssert(!selectSTMT.empty());
     description.append("(" + selectSTMT.description().get() + ")");
     return description;
 }
@@ -344,7 +344,7 @@ CopyOnWriteString ExprCase::SQL() const
     if (!exprCase.empty()) {
         description.append(exprCase.description().get() + " ");
     }
-    assert(!pairs.empty());
+    LangDebugAssert(!pairs.empty());
     description.append(pairs.description().get());
     if (!exprElse.empty()) {
         description.append(" ELSE " + exprElse.description().get());
@@ -376,7 +376,7 @@ CopyOnWriteLazyLangList<ExprCase::Pair>::calculatedDescription() const
         } else {
             space = true;
         }
-        assert(!element.empty());
+        LangDebugAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;
@@ -390,56 +390,55 @@ CopyOnWriteString Expr::SQL() const
 {
     switch (type) {
         case Type::LiteralValue:
-            assert(!literalValue.empty());
+            LangDebugAssert(!literalValue.empty());
             return literalValue.description();
         case Type::BindParameter:
-            assert(!bindParamter.empty());
+            LangDebugAssert(!bindParamter.empty());
             return bindParamter.description();
         case Type::Column:
-            assert(!exprColumn.empty());
+            LangDebugAssert(!exprColumn.empty());
             return exprColumn.description();
         case Type::UnaryOperator:
-            assert(!exprUnaryOperator.empty());
+            LangDebugAssert(!exprUnaryOperator.empty());
             return exprUnaryOperator.description();
         case Type::BinaryOperator:
-            assert(!exprBinaryOperator.empty());
+            LangDebugAssert(!exprBinaryOperator.empty());
             return exprBinaryOperator.description();
         case Type::Function:
-            assert(!exprFunction.empty());
+            LangDebugAssert(!exprFunction.empty());
             return exprFunction.description();
         case Type::List:
-            assert(!exprList.empty());
+            LangDebugAssert(!exprList.empty());
             return exprList.description();
         case Type::Cast:
-            assert(!exprCast.empty());
+            LangDebugAssert(!exprCast.empty());
             return exprCast.description();
         case Type::Collate:
-            assert(!exprCollate.empty());
+            LangDebugAssert(!exprCollate.empty());
             return exprCollate.description();
         case Type::Pattern:
-            assert(!exprPattern.empty());
+            LangDebugAssert(!exprPattern.empty());
             return exprPattern.description();
         case Type::Null:
-            assert(!exprNull.empty());
+            LangDebugAssert(!exprNull.empty());
             return exprNull.description();
         case Type::Between:
-            assert(!exprBetween.empty());
+            LangDebugAssert(!exprBetween.empty());
             return exprBetween.description();
         case Type::In:
-            assert(!exprIn.empty());
+            LangDebugAssert(!exprIn.empty());
             return exprIn.description();
         case Type::Exists:
-            assert(!exprExists.empty());
+            LangDebugAssert(!exprExists.empty());
             return exprExists.description();
         case Type::Case:
-            assert(!exprCase.empty());
+            LangDebugAssert(!exprCase.empty());
             return exprCase.description();
         case Type::RaiseFunction:
-            assert(!raiseFunction.empty());
+            LangDebugAssert(!raiseFunction.empty());
             return raiseFunction.description();
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 

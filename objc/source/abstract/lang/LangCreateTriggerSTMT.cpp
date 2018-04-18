@@ -46,7 +46,7 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    assert(!triggerName.empty());
+    LangDebugAssert(!triggerName.empty());
     description.append(triggerName.get() + " ");
     if (type != CreateTriggerSTMT::Type::NotSet) {
         description.append(CreateTriggerSTMT::TypeName(type));
@@ -64,7 +64,7 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
         description.append(" WHEN " + expr.description().get());
     }
     description.append(" BEGIN ");
-    assert(!STMTs.empty());
+    LangDebugAssert(!STMTs.empty());
     description.append(STMTs.description().get());
     description.append(" END");
     return description;
@@ -80,8 +80,7 @@ constexpr const char *CreateTriggerSTMT::TypeName(const Type &type)
         case Type::InsteadOf:
             return "INSTEAD OF";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 
@@ -96,8 +95,7 @@ CreateTriggerSTMT::OperationName(const Operation &operation)
         case Operation::Update:
             return "UPDATE";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 
@@ -113,7 +111,7 @@ CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const
         } else {
             space = true;
         }
-        assert(!element.empty());
+        LangDebugAssert(!element.empty());
         description.append(element.description().get() + ";");
     }
     return description;

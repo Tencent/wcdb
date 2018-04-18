@@ -21,7 +21,7 @@
 #ifndef LangCommon_h
 #define LangCommon_h
 
-#include <assert.h>
+#include <WCDB/Error.hpp>
 #include <list>
 
 #include <WCDB/CopyOnWriteData.hpp>
@@ -31,6 +31,11 @@
 #include <WCDB/LangColumnType.hpp>
 #include <WCDB/LangConflictClause.hpp>
 #include <WCDB/LangOrder.hpp>
+
+#define LangDebugAssert(cond)                                                  \
+    WCTDebugAssert(cond, "WINQ expression is not complete", return description;)
+#define LangDebugFatalError()                                                  \
+    WCTDebugFatalError("WINQ expression is not complete", return description;)
 
 namespace WCDB {
 
@@ -102,7 +107,7 @@ protected:
             } else {
                 comma = true;
             }
-            assert(!element.empty());
+            LangDebugAssert(!element.empty());
             description.append(element.description().get());
         }
         return description;

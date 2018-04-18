@@ -34,15 +34,15 @@ CopyOnWriteString WithClause::SQL() const
     if (recursive) {
         description.append("RECURSIVE ");
     }
-    assert(!pairs.empty());
+    LangDebugAssert(!pairs.empty());
     description.append(pairs.description().get());
     return description;
 }
 
 CopyOnWriteString WithClause::Pair::SQL() const
 {
-    assert(!cteTableName.empty());
-    assert(!selectSTMT.empty());
+    LangDebugAssert(!cteTableName.empty());
+    LangDebugAssert(!selectSTMT.empty());
     return cteTableName.description().get() + " AS(" +
            selectSTMT.description().get() + ")";
 }

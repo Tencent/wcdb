@@ -33,7 +33,7 @@ CopyOnWriteString ResultColumn::SQL() const
     std::string description;
     switch (type) {
         case Type::Expr:
-            assert(!expr.empty());
+            LangDebugAssert(!expr.empty());
             description.append(expr.description().get());
             if (!columnAlias.empty()) {
                 description.append(" AS " + columnAlias.description().get());
@@ -46,7 +46,7 @@ CopyOnWriteString ResultColumn::SQL() const
             description.append("*");
             break;
         default:
-            assert(false);
+            LangDebugFatalError();
             break;
     }
     return description;

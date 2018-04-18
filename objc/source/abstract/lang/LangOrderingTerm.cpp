@@ -31,7 +31,7 @@ OrderingTerm::OrderingTerm() : order(Order::NotSet)
 CopyOnWriteString OrderingTerm::SQL() const
 {
     std::string description;
-    assert(!expr.empty());
+    LangDebugAssert(!expr.empty());
     description.append(expr.description().get());
     if (!collationName.empty()) {
         description.append(" COLLATE " + collationName.get());

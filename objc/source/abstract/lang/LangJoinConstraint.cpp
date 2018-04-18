@@ -33,11 +33,11 @@ CopyOnWriteString JoinConstraint::SQL() const
     std::string description;
     switch (type) {
         case Type::On:
-            assert(!expr.empty());
+            LangDebugAssert(!expr.empty());
             description.append("ON " + expr.description().get());
             break;
         case Type::Using:
-            assert(!columns.empty());
+            LangDebugAssert(!columns.empty());
             description.append("USING(" + columns.description().get() + ")");
             break;
         default:

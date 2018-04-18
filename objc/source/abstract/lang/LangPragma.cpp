@@ -26,7 +26,7 @@ namespace Lang {
 
 CopyOnWriteString Pragma::SQL() const
 {
-    assert(!name.empty());
+    LangDebugAssert(!name.empty());
     return name;
 }
 

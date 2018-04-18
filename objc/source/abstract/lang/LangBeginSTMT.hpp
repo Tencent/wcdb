@@ -31,7 +31,6 @@ class BeginSTMT : public STMT {
 public:
     BeginSTMT();
     enum class Type : int {
-        NotSet,
         Deferred,
         Immediate,
         Exclusive,

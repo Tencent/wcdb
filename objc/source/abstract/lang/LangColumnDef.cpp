@@ -31,7 +31,7 @@ ColumnDef::ColumnDef() : typed(false), type(ColumnType::Null)
 CopyOnWriteString ColumnDef::SQL() const
 {
     std::string description;
-    assert(!column.empty());
+    LangDebugAssert(!column.empty());
     description.append(column.description().get());
     if (typed) {
         description.append(" ");

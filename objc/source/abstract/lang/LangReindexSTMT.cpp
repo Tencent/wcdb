@@ -33,7 +33,7 @@ CopyOnWriteString ReindexSTMT::SQL() const
     std::string description("REINDEX");
     switch (switcher) {
         case Switch::Collation:
-            assert(!collationName.empty());
+            LangDebugAssert(!collationName.empty());
             description.append(" " + collationName.get());
             break;
         case Switch::TableOrIndex:
@@ -41,7 +41,7 @@ CopyOnWriteString ReindexSTMT::SQL() const
             if (!schemaName.empty()) {
                 description.append(schemaName.get() + ".");
             }
-            assert(!tableOrIndexName.empty());
+            LangDebugAssert(!tableOrIndexName.empty());
             description.append(tableOrIndexName.get());
             break;
         default:

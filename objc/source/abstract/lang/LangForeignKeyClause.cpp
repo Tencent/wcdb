@@ -40,8 +40,7 @@ ForeignKeyClause::InitiallySwitchName(const InitiallySwitch &initiallySwitcher)
         case InitiallySwitch::Immediate:
             return "INITIALLY IMMEDIATE";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 
@@ -65,15 +64,14 @@ ForeignKeyClause::Trigger::OperationName(const Operation &operation)
         case Operation::NoAction:
             return "NO ACTION";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 
 CopyOnWriteString ForeignKeyClause::SQL() const
 {
     std::string description("REFERENCES ");
-    assert(!foreignTable.empty());
+    LangDebugAssert(!foreignTable.empty());
     description.append(foreignTable.get());
     if (!columns.empty()) {
         description.append("(" + columns.description().get() + ")");
@@ -99,7 +97,7 @@ CopyOnWriteString ForeignKeyClause::Trigger::SQL() const
 {
     std::string description;
     if (match) {
-        assert(!name.empty());
+        LangDebugAssert(!name.empty());
         description.append("MATCH " + name.get());
     } else {
         description.append("ON ");
@@ -126,7 +124,7 @@ CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription()
         } else {
             space = true;
         }
-        assert(!element.empty());
+        LangDebugAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

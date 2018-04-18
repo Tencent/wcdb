@@ -89,6 +89,8 @@ void Error::fatal(const std::string &message)
     error.code = (int) Code::Error;
     error.message = message;
     error.report();
+    while (true)
+        ;
 }
 
 Error::Report::Callback

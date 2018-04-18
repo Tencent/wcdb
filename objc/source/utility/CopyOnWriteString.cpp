@@ -54,7 +54,8 @@ CopyOnWriteString::CopyOnWriteString(const char *string)
 
 bool CopyOnWriteString::empty() const
 {
-    return CopyOnWrite<std::string>::empty() || CopyOnWrite<std::string>::get().empty();
+    return CopyOnWrite<std::string>::empty() ||
+           CopyOnWrite<std::string>::get().empty();
 }
 
 bool CopyOnWriteString::equal(const std::string &other) const

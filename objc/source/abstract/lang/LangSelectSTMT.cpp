@@ -90,8 +90,7 @@ SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
         case Operator::Except:
             return "EXCEPT";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 
@@ -118,7 +117,7 @@ CopyOnWriteLazyLangList<SelectSTMT::Compound>::calculatedDescription() const
         } else {
             space = true;
         }
-        assert(!element.empty());
+        LangDebugAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

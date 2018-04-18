@@ -36,10 +36,10 @@ CopyOnWriteString UpdateSTMT::SQL() const
     }
     description.append(UpdateSTMT::TypeName(type));
     description.append(" ");
-    assert(!qualifiedTableName.empty());
+    LangDebugAssert(!qualifiedTableName.empty());
     description.append(qualifiedTableName.description().get());
 
-    assert(!keyValues.empty());
+    LangDebugAssert(!keyValues.empty());
     description.append(" SET ");
     description.append(keyValues.description().get());
 
@@ -48,7 +48,7 @@ CopyOnWriteString UpdateSTMT::SQL() const
     }
     if (!orderingTerms.empty()) {
         description.append(" ORDER BY " + orderingTerms.description().get());
-        assert(!limit.empty());
+        LangDebugAssert(!limit.empty());
     }
     if (!limit.empty()) {
         description.append(" LIMIT " + limit.description().get());
@@ -80,8 +80,7 @@ constexpr const char *UpdateSTMT::TypeName(const Type &type)
         case Type::UpdateOrIgnore:
             return "UPDATE OR IGNORE";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 

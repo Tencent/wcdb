@@ -24,6 +24,31 @@
 #include <functional>
 #include <string>
 
+#define WCTAssert(cond, message)                                               \
+    if (!(cond)) {                                                             \
+        WCDB::Error::fatal(message);                                           \
+    }
+
+#ifdef DEBUG
+#define WCTDebugAssert(cond, message, remedial) WCTAssert(cond, message)
+#else //DEBUG
+#define WCTDebugAssert(cond, message, remedial)                                \
+    if (!(cond)) {                                                             \
+        remedial                                                               \
+    }
+#endif //DEBUG
+
+#define WCTFatalError(message) WCDB::Error::fatal(message)
+
+#ifdef DEBUG
+#define WCTDebugFatalError(message, remedial) WCTFatalError(message)
+#else
+#define WCTDebugFatalError(message, remedial)                                  \
+    do {                                                                       \
+        remedial                                                               \
+    } while (false);
+#endif
+
 namespace WCDB {
 
 class Error {
@@ -84,7 +109,7 @@ public:
     };
 
     static void warning(const std::string &message);
-    static void fatal(const std::string &message);
+    static void fatal(const std::string &message) __attribute__((noreturn));
 
 protected:
     void addToDescription(std::string &description,

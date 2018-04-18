@@ -58,8 +58,7 @@ constexpr const char *JoinOperator::JoinTypeName(const Type &type)
         case Type::Cross:
             return "CROSS";
         default:
-            assert(false);
-            break;
+            return "";
     }
 }
 

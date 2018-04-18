@@ -27,7 +27,7 @@ namespace Lang {
 CopyOnWriteString SavepointSTMT::SQL() const
 {
     std::string description("SAVEPOINT ");
-    assert(!savepointName.empty());
+    LangDebugAssert(!savepointName.empty());
     description.append(savepointName.get());
     return description;
 }
