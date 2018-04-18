@@ -234,4 +234,9 @@
     return fundamentalValues;
 }
 
+- (NSString *)description
+{
+    return [_value description];
+}
+
 @end
