@@ -413,6 +413,7 @@
 		23BFE30D207CE3E200A4BD81 /* MigrationInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE30B207CE3E200A4BD81 /* MigrationInfos.cpp */; };
 		23BFE30E207CE3E200A4BD81 /* MigrationInfos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE30C207CE3E200A4BD81 /* MigrationInfos.hpp */; };
 		23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
+		23C43BCE2087435800AB186D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		23C5ABAD207DA9C100BEF3C6 /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */; };
 		23C5ABAE207DA9C100BEF3C6 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */; };
 		23D18635205A66000001A6CE /* MigrationBuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */; };
@@ -885,6 +886,7 @@
 		23BFE30B207CE3E200A4BD81 /* MigrationInfos.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfos.cpp; sourceTree = "<group>"; };
 		23BFE30C207CE3E200A4BD81 /* MigrationInfos.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfos.hpp; sourceTree = "<group>"; };
 		23C43BB0208720CA00AB186D /* ColumnType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnType.cpp; sourceTree = "<group>"; };
+		23C43BCC2087435800AB186D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
 		23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationBuiltinConfig.cpp; sourceTree = "<group>"; };
@@ -929,6 +931,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23C43BCE2087435800AB186D /* libz.tbd in Frameworks */,
 				232124442017287C008146EF /* sqlcipher.framework in Frameworks */,
 				232124452017287C008146EF /* sqliterk.framework in Frameworks */,
 			);
@@ -1594,6 +1597,7 @@
 		23B5F93E1E111CB100E58396 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23C43BCC2087435800AB186D /* libz.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
