@@ -45,6 +45,8 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
  */
 @interface WCTError : NSError
 
++ (WCTTag)invalidTag;
+
 - (WCTErrorType)type;
 
 @property(nonatomic, readonly) WCTErrorLevel level;

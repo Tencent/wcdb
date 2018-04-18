@@ -28,6 +28,11 @@ static_assert((int) WCTErrorLevelFatal == (int) WCDB::Error::Level::Fatal, "");
 
 @implementation WCTError
 
++ (WCTTag)invalidTag
+{
+    return WCDB::HandleError::invalidTag;
+}
+
 + (instancetype)errorWithWCDBError:(const WCDB::Error *)error
 {
     if (!error) {
