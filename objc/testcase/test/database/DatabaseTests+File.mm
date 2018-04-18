@@ -188,8 +188,8 @@
                                          withClass:TestCaseObject.class]);
     NSArray<NSString *> *paths = @[
         _database.path,
-        [_database.path stringByAppendingString:@(WCDB::Handle::getSHMSubfix().c_str())],
-        [_database.path stringByAppendingString:@(WCDB::Handle::getWALSubfix().c_str())],
+        [_database.path stringByAppendingString:@"-shm"],
+        [_database.path stringByAppendingString:@"-wal"],
     ];
     for (NSString *path in paths) {
         //file protection is not available on simulator
