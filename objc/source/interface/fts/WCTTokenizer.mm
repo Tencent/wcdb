@@ -95,54 +95,7 @@ protected:
     }
 };
 
-@implementation WCTTokenizer {
-    std::shared_ptr<WCTCursorInfo> _info;
-    NSString *_source;
-    WCDB::SQLiteError _error;
-}
-
-- (instancetype)initWithString:(NSString *)string
-{
-    assert(string != nil);
-    if (self = [super init]) {
-        _source = [string copy];
-        _info = std::shared_ptr<WCTCursorInfo>(new WCTCursorInfo(_source.UTF8String, (int) _source.length, nullptr));
-        if (!_info) {
-            return nil;
-        }
-    }
-    return self;
-}
-
-- (NSArray<NSString *> *)allTokens
-{
-    NSMutableArray<NSString *> *tokens = [[NSMutableArray<NSString *> alloc] init];
-    NSString *token;
-    while ((token = [self nextToken])) {
-        [tokens addObject:token];
-    }
-    return _error.isOK() ? tokens : nil;
-}
-
-- (NSString *)nextToken
-{
-    const char *token;
-    int bytes;
-    int startOffset;
-    int endOffset;
-    int position;
-    _error.code = _info->step(&token, &bytes, &startOffset, &endOffset, &position);
-    if (_error.code != SQLITE_OK) {
-        return nil;
-    }
-    return [[NSString alloc] initWithBytes:token length:bytes encoding:NSUTF8StringEncoding];
-    ;
-}
-
-- (WCTSQLiteError *)error
-{
-    return [[WCTSQLiteError alloc] initWithWCDBError:&_error];
-}
+@implementation WCTTokenizer
 
 + (NSString *)name
 {
