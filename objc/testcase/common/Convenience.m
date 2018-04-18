@@ -84,7 +84,7 @@
     int length = rand() % 256;
     NSMutableData *data = [NSMutableData data];
     for (int i = 0; i < length; ++i) {
-        unsigned char random = rand() % sizeof(unsigned char);
+        unsigned char random = rand() % sizeof(unsigned char) + 1;
         [data appendBytes:&random length:sizeof(unsigned char)];
     }
     return data;
