@@ -119,8 +119,8 @@
 - (void)test_digit
 {
     [self searching_test:"123" expectedObject:_digitObject];
-    [self searching_test:"45" expectedObject:_digitObject];
-    [self searching_test_failed:"7"];
+    [self searching_test:"45*" expectedObject:_digitObject];
+    [self searching_test_failed:"7*"];
 }
 
 - (void)test_table_search

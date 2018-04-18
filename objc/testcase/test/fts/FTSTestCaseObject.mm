@@ -28,8 +28,8 @@ WCDB_IMPLEMENTATION(FTSTestCaseObject)
 WCDB_SYNTHESIZE(FTSTestCaseObject, message)
 WCDB_SYNTHESIZE(FTSTestCaseObject, extension)
 
-WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
 WCDB_VIRTUAL_TABLE_MODULE_FTS3(FTSTestCaseObject)
+WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
 
 - (instancetype)initWithMessage:(NSString *)message
 {
