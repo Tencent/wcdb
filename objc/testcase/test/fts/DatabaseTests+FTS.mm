@@ -49,7 +49,7 @@
 
     _englishObject = [[FTSTestCaseObject alloc] initWithMessage:@"WCDB is a cross-platform database framework developed by WeChat."];
 
-    _digitObject = [[FTSTestCaseObject alloc] initWithMessage:@"abc123efg456" andExtension:@"WeChat"];
+    _digitObject = [[FTSTestCaseObject alloc] initWithMessage:@"abc123efg456" andExtension:@"digit"];
 
     [_database setTokenizer:WCTTokenizer.name];
 
@@ -127,7 +127,73 @@
 - (void)test_table_search
 {
     NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:FTSTestCaseObject.ColumnNamed(_tableName).match("WeChat")];
-    XCTAssertEqual(objects.count, 3);
+    XCTAssertEqual(objects.count, 2);
+}
+
+- (void)searching_offset_test:(NSString *)keyword
+         expectedColumnNumber:(int)expectedColumnNumber
+                   termNumber:(int)expectedtermNumber
+                       string:(NSString *)expectedString
+                       object:(FTSTestCaseObject *)object
+{
+    WCTOneColumn *column = [_database getColumnOnResult:FTSTestCaseObject.ColumnNamed(_tableName).offsets() fromTable:_tableName where:FTSTestCaseObject.ColumnNamed(_tableName).match(keyword.UTF8String)];
+    XCTAssertEqual(column.count, 1);
+
+    NSArray<NSString *> *components = [column[0].stringValue componentsSeparatedByString:@" "];
+    XCTAssertEqual(components.count, 4);
+
+    int columnNumber = components[0].intValue;
+    XCTAssertEqual(columnNumber, expectedColumnNumber);
+
+    int termNumber = components[1].intValue;
+    XCTAssertEqual(termNumber, expectedtermNumber);
+
+    int offset = components[2].intValue;
+    int size = components[3].intValue;
+
+    NSString *expectedFullString;
+    switch (expectedColumnNumber) {
+        case 0:
+            expectedFullString = object.message;
+            break;
+        case 1:
+            expectedFullString = object.extension;
+            break;
+        default:
+            XCTFail(@"");
+            break;
+    }
+
+    NSData *data = [[expectedFullString dataUsingEncoding:NSUTF8StringEncoding] subdataWithRange:NSMakeRange(offset, size)];
+    NSString *matchedString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    XCTAssertTrue([matchedString compare:expectedString options:NSCaseInsensitiveSearch] == NSOrderedSame);
+}
+
+- (void)test_offset_chinese
+{
+    [self searching_offset_test:@"果树"
+           expectedColumnNumber:0
+                     termNumber:0
+                         string:@"果树"
+                         object:_chineseObject];
+}
+
+- (void)test_offset_english
+{
+    [self searching_offset_test:@"framework*"
+           expectedColumnNumber:0
+                     termNumber:0
+                         string:@"framework"
+                         object:_englishObject];
+}
+
+- (void)test_offset_multiple_terms
+{
+    [self searching_offset_test:@"数字 OR DIGIT"
+           expectedColumnNumber:1
+                     termNumber:1
+                         string:@"DIGIT"
+                         object:_digitObject];
 }
 
 @end
