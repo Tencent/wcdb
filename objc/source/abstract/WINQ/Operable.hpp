@@ -48,6 +48,11 @@ public:
     Expression min(bool distinct = false) const;
     Expression total(bool distinct = false) const;
     Expression sum(bool distinct = false) const;
+
+    //FTS Functions
+    Expression offsets() const;
+    Expression snippet() const;
+    Expression matchinfo() const;
 };
 
 class Operable : public FunctionOperable {

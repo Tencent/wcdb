@@ -93,6 +93,21 @@ Expression FunctionOperable::sum(bool distinct) const
     return function("sum", distinct);
 }
 
+Expression FunctionOperable::offsets() const
+{
+    return function("offsets");
+}
+
+Expression FunctionOperable::snippet() const
+{
+    return function("snippet");
+}
+
+Expression FunctionOperable::matchinfo() const
+{
+    return function("matchinfo");
+}
+
 Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> Operable::unaryOperation(
     const Lang::ExprUnaryOperation::Operator &unaryOperator) const
 {
