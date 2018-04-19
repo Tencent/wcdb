@@ -137,8 +137,8 @@
 		23DD428F20050F4D00330946 /* WTCMultithreadReadReadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428320050EDD00330946 /* WTCMultithreadReadReadBenchmark.mm */; };
 		23E58B59200F577400E0CECE /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
 		23EABBE2206D07C200241F3B /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23EABBE1206D07C200241F3B /* HandleTests.mm */; };
-		23F5BE1E20888096000CCD37 /* WCDB for Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */; };
-		23F5BE21208880A0000CCD37 /* WCDB for Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */; };
+		23F5BE2420888397000CCD37 /* WCDB for Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */; };
+		23F5BE27208883A1000CCD37 /* WCDB for Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */; };
 		23FEC482206B961C001E7A3B /* InsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC481206B961C001E7A3B /* InsertTests.mm */; };
 		23FEC484206B9620001E7A3B /* UpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC483206B9620001E7A3B /* UpdateTests.mm */; };
 		23FEC486206B9627001E7A3B /* DeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC485206B9627001E7A3B /* DeleteTests.mm */; };
@@ -163,14 +163,14 @@
 			remoteGlobalIDString = 23F5BE0120887FD3000CCD37;
 			remoteInfo = "WCDB for Test";
 		};
-		23F5BE1C20888091000CCD37 /* PBXContainerItemProxy */ = {
+		23F5BE222088838F000CCD37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 23F5BC4220887FD3000CCD37;
 			remoteInfo = "WCDB for Test";
 		};
-		23F5BE1F2088809D000CCD37 /* PBXContainerItemProxy */ = {
+		23F5BE252088839C000CCD37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
 			proxyType = 1;
@@ -394,7 +394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F5BE1E20888096000CCD37 /* WCDB for Test.framework in Frameworks */,
+				23F5BE27208883A1000CCD37 /* WCDB for Test.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +402,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F5BE21208880A0000CCD37 /* WCDB for Test.framework in Frameworks */,
+				23F5BE2420888397000CCD37 /* WCDB for Test.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,7 +861,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				23F5BE1D20888091000CCD37 /* PBXTargetDependency */,
+				23F5BE262088839C000CCD37 /* PBXTargetDependency */,
 			);
 			name = "All Testcases";
 			productName = testcaseTests;
@@ -879,7 +879,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				23F5BE202088809D000CCD37 /* PBXTargetDependency */,
+				23F5BE232088838F000CCD37 /* PBXTargetDependency */,
 			);
 			name = "All Benchmark";
 			productName = testcaseTests;
@@ -1119,15 +1119,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		23F5BE1D20888091000CCD37 /* PBXTargetDependency */ = {
+		23F5BE232088838F000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "WCDB for Test";
-			targetProxy = 23F5BE1C20888091000CCD37 /* PBXContainerItemProxy */;
+			targetProxy = 23F5BE222088838F000CCD37 /* PBXContainerItemProxy */;
 		};
-		23F5BE202088809D000CCD37 /* PBXTargetDependency */ = {
+		23F5BE262088839C000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "WCDB for Test";
-			targetProxy = 23F5BE1F2088809D000CCD37 /* PBXContainerItemProxy */;
+			targetProxy = 23F5BE252088839C000CCD37 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

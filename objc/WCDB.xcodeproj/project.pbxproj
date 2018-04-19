@@ -1399,7 +1399,7 @@
 		23F340DD204D3482007DB8AB /* WCTDatabase+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+ChainCall.mm"; sourceTree = "<group>"; };
 		23F4EF7820567F4B0088DE3D /* LangPragma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LangPragma.cpp; sourceTree = "<group>"; };
 		23F4EF7920567F4B0088DE3D /* LangPragma.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LangPragma.hpp; sourceTree = "<group>"; };
-		23F5BE0120887FD3000CCD37 /* WCDB for Test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "WCDB for Test.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23F5BE0120887FD3000CCD37 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2082,7 +2082,7 @@
 			isa = PBXGroup;
 			children = (
 				239326611E836D7300D677CC /* WCDB.framework */,
-				23F5BE0120887FD3000CCD37 /* WCDB for Test.framework */,
+				23F5BE0120887FD3000CCD37 /* WCDB.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2636,7 +2636,7 @@
 			);
 			name = "WCDB for Test";
 			productName = "WCDB framework";
-			productReference = 23F5BE0120887FD3000CCD37 /* WCDB for Test.framework */;
+			productReference = 23F5BE0120887FD3000CCD37 /* WCDB.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -3210,7 +3210,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -3247,7 +3247,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -3426,7 +3426,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "WCDB copy-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -3445,7 +3445,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_MODULE_NAME = WCDB;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3463,7 +3463,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "WCDB copy-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -3482,7 +3482,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_MODULE_NAME = WCDB;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
