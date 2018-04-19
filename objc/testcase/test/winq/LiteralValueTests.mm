@@ -50,6 +50,9 @@
     WINQAssertEqual(WCDB::LiteralValue(INT64_MAX), @"9223372036854775807");
     WINQAssertEqual(WCDB::LiteralValue(UINT32_MAX), @"4294967295");
     WINQAssertEqual(WCDB::LiteralValue(UINT64_MAX), @"18446744073709551615");
+
+    NSString *nilValue = nil;
+    WINQAssertEqual(WCDB::LiteralValue(nilValue), @"''");
 }
 
 - (void)testAnitInjection

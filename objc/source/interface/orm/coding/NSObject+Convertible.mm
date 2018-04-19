@@ -64,17 +64,17 @@ Expression ExpressionConvertible<WCTProperty>::as(const WCTProperty &property)
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<NSString *>::asUnderlyingType(NSString *text)
 {
-    return text.UTF8String;
+    return text ? text.UTF8String : String::empty().c_str();
 }
 
 LiteralValue LiteralValueConvertible<NSString *>::as(NSString *const &t)
 {
-    return LiteralValue(t.UTF8String);
+    return LiteralValue(t ? t.UTF8String : String::empty());
 }
 
 Expression ExpressionConvertible<NSString *>::as(NSString *const &t)
 {
-    return Expression(LiteralValue(t.UTF8String));
+    return Expression(LiteralValueConvertible<NSString *>::as(t));
 }
 
 } //namespace WCDB
