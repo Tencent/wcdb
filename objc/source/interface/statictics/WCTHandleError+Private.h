@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Abstract.h>
+#import <WCDB/WCTHandleError.h>
 
-namespace WCDB {
+@interface WCTHandleError ()
 
-int SQLiteError::getType() const
-{
-    return SQLiteError::type;
-}
+- (instancetype)initWithHandleError:(const WCDB::HandleError &)handleError;
 
-} //namespace WCDB
+@end

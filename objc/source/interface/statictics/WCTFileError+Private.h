@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/Abstract.h>
+#import <WCDB/WCTFileError.h>
 
-namespace WCDB {
+@interface WCTFileError ()
 
-int SQLiteError::getType() const
-{
-    return SQLiteError::type;
-}
+- (instancetype)initWithFileError:(const WCDB::FileError &)fileError;
 
-} //namespace WCDB
+@end

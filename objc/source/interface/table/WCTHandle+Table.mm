@@ -36,7 +36,7 @@
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTError **)error
+            withError:(WCTCoreError **)error
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
     std::pair<bool, bool> result(true, false);

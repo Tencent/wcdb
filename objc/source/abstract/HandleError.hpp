@@ -29,6 +29,9 @@ namespace WCDB {
 class HandleError : public Error {
 public:
     HandleError();
+
+    static constexpr int type = 2;
+
     typedef int32_t Tag;
     static constexpr const Tag invalidTag = INT32_MIN;
 
@@ -50,9 +53,10 @@ public:
     Operation operation;
 
     std::string getDescription() const override;
-    size_t getHashedTypeid() const override;
 
     void reset();
+
+    int getType() const override;
 };
 
 } //namespace WCDB

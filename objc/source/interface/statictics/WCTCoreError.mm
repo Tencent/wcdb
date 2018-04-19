@@ -19,32 +19,18 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTHandleError+Private.h>
 
 @implementation WCTCoreError
 
-- (instancetype)initWithWCDBError:(const WCDB::Error *)error
+- (instancetype)initWithCoreError:(const WCDB::CoreError &)coreError
 {
-    if (self = [super initWithWCDBError:error]) {
-        assert(error->getHashedTypeid() == typeid(WCDB::CoreError).hash_code());
-        const WCDB::CoreError *coreError = static_cast<const WCDB::CoreError *>(error);
-        _tag = coreError->tag;
-        _path = @(coreError->path.c_str());
-    }
-    return self;
+    return [super initWithHandleError:coreError];
 }
 
 - (WCTErrorType)type
 {
     return WCTErrorTypeCore;
-}
-
-- (NSString *)description
-{
-    NSMutableString *desc = [[NSMutableString alloc] initWithString:[super description]];
-    [desc appendFormat:@"Tag: %d", _tag];
-    [desc appendFormat:@"Path: %@", _path];
-    return desc;
 }
 
 @end

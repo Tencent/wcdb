@@ -25,7 +25,7 @@
 - (BOOL)isTableExists:(nonnull NSString *)tableName;
 
 - (BOOL)isTableExists:(nonnull NSString *)tableName
-            withError:(WCTError *_Nullable *_Nullable)error;
+            withError:(WCTCoreError *_Nullable *_Nullable)error;
 
 - (BOOL)createTableAndIndexes:(nonnull NSString *)tableName
                     withClass:(nonnull Class<WCTTableCoding>)cls;

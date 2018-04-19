@@ -27,7 +27,8 @@ namespace WCDB {
 
 class SQLiteError : public Error {
 public:
-    size_t getHashedTypeid() const override;
+    static constexpr int type = 1;
+    int getType() const override;
 };
 
 } //namespace WCDB

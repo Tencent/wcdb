@@ -26,8 +26,4 @@
 
 - (void)finalizeHandle;
 
-#pragma mark - Error
-
-- (nullable WCTError *)error;
-
 @end

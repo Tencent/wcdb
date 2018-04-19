@@ -122,6 +122,4 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
  */
 - (BOOL)isBlockaded;
 
-- (WCTError *)error;
-
 @end

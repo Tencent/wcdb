@@ -28,11 +28,6 @@ HandleError::HandleError()
 {
 }
 
-size_t HandleError::getHashedTypeid() const
-{
-    return typeid(HandleError).hash_code();
-}
-
 void HandleError::reset()
 {
     code = SQLITE_OK;
@@ -49,7 +44,7 @@ std::string HandleError::getDescription() const
     if (extendedCode != 0) {
         addToDescription(description, "ExtCode", extendedCode);
     }
-    if (!statement.getCOWLang().empty()) {
+    if (!statement.empty()) {
         addToDescription(description, "SQL",
                          statement.getDescription().c_str());
     }
@@ -57,6 +52,11 @@ std::string HandleError::getDescription() const
         addToDescription(description, "Op", operation);
     }
     return description;
+}
+
+int HandleError::getType() const
+{
+    return HandleError::type;
 }
 
 } //namespace WCDB

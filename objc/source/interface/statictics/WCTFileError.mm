@@ -31,13 +31,11 @@ static_assert((int) WCTFileOperationMkdir == (int) WCDB::FileError::Operation::M
 
 @implementation WCTFileError
 
-- (instancetype)initWithWCDBError:(const WCDB::Error *)error
+- (instancetype)initWithFileError:(const WCDB::FileError &)fileError
 {
-    if (self = [super initWithWCDBError:error]) {
-        assert(error->getHashedTypeid() == typeid(WCDB::FileError).hash_code());
-        const WCDB::FileError *fileError = static_cast<const WCDB::FileError *>(error);
-        _operation = (WCTFileOperation) fileError->operation;
-        _path = @(fileError->path.c_str());
+    if (self = [super initWithError:fileError]) {
+        _operation = (WCTFileOperation) fileError.operation;
+        _path = @(fileError.path.c_str());
     }
     return self;
 }
@@ -49,10 +47,7 @@ static_assert((int) WCTFileOperationMkdir == (int) WCDB::FileError::Operation::M
 
 - (NSString *)description
 {
-    NSMutableString *desc = [[NSMutableString alloc] initWithString:[super description]];
-    [desc appendFormat:@"Tag: %lu", (unsigned long) _operation];
-    [desc appendFormat:@"Path: %@", _path];
-    return desc;
+    return [NSString stringWithFormat:@"%@, Op: %lu, Path: %@", [super description], _operation, _path];
 }
 
 @end

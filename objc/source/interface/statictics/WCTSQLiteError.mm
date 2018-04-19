@@ -23,12 +23,9 @@
 
 @implementation WCTSQLiteError
 
-- (instancetype)initWithWCDBError:(const WCDB::Error *)error
+- (instancetype)initWithSQLiteError:(const WCDB::SQLiteError &)sqliteError
 {
-    if (self = [super initWithWCDBError:error]) {
-        assert(error->getHashedTypeid() == typeid(WCDB::SQLiteError).hash_code());
-    }
-    return self;
+    return [super initWithError:sqliteError];
 }
 
 - (WCTErrorType)type

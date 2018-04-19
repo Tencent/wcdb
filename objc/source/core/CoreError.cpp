@@ -22,21 +22,27 @@
 
 namespace WCDB {
 
-CoreError::CoreError() : Error(), tag(HandleError::invalidTag)
+CoreError::CoreError(const HandleError &handleError) : HandleError(handleError)
 {
 }
 
-std::string CoreError::getDescription() const
+CoreError::CoreError(const Tag &tag_, const std::string &message_)
+    : HandleError()
 {
-    std::string description = Error::getDescription();
-    addToDescription(description, "Tag", tag);
-    addToDescription(description, "Path", path);
-    return description;
+    code = (int) Error::Code::Error;
+    tag = tag_;
+    message = message_;
 }
 
-size_t CoreError::getHashedTypeid() const
+CoreError &CoreError::operator=(const HandleError &handleError)
 {
-    return typeid(CoreError).hash_code();
+    HandleError::operator=(handleError);
+    return *this;
+}
+
+int CoreError::getType() const
+{
+    return CoreError::type;
 }
 
 } //namespace WCDB

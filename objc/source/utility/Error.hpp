@@ -55,7 +55,8 @@ class Error {
 public:
     Error();
 
-    virtual size_t getHashedTypeid() const;
+    static constexpr int type = 0;
+    virtual int getType() const;
 
     enum class Level : int {
         Ignore,
@@ -69,15 +70,15 @@ public:
     {
         switch (level) {
             case Level::Ignore:
-                return "[IGNORE]";
+                return "IGNORE";
             case Level::Debug:
-                return "[DEBUG]";
+                return "DEBUG";
             case Level::Warning:
-                return "[WARNING]";
+                return "WARNING";
             case Level::Error:
-                return "[ERROR]";
+                return "ERROR";
             case Level::Fatal:
-                return "[FATAL]";
+                return "FATAL";
         }
     }
 

@@ -33,6 +33,8 @@ typedef NS_ENUM(NSUInteger, WCTHandleOperation) {
 
 @interface WCTHandleError : WCTError
 
+@property(class, readonly) WCTTag invalidTag;
+
 @property(nonatomic, readonly) WCTTag tag;
 
 @property(nonatomic, readonly) int extendedCode;

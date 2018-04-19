@@ -21,7 +21,8 @@
 #import <WCDB/Interface.h>
 #import <WCDB/NSData+noCopyData.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTCoreError+Private.h>
+#import <WCDB/WCTHandleError+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 #import <WCDB/WCTValue+Private.h>
 
@@ -76,7 +77,7 @@
         if (_recyclableHandle != nullptr) {
             _handle = _recyclableHandle.getHandle();
         } else {
-            _nonHandleError = [WCTError errorWithWCDBError:_database->getError()];
+            _nonHandleError = [[WCTCoreError alloc] initWithCoreError:_database->getError()];
         }
     }
 }
@@ -94,7 +95,7 @@
     }
     if (_recyclableHandle != nullptr) {
         if (keepError) {
-            _nonHandleError = [WCTError errorWithWCDBError:_handle->getError()];
+            _nonHandleError = [[WCTCoreError alloc] initWithHandleError:_handle->getError()];
         } else {
             _nonHandleError = nil;
         }
@@ -352,10 +353,10 @@
 
 #pragma mark - Error
 
-- (NSError *)error
+- (WCTCoreError *)error
 {
     if (_handle) {
-        return [WCTError errorWithWCDBError:_handle->getError()];
+        return [[WCTCoreError alloc] initWithHandleError:_handle->getError()];
     }
     return _nonHandleError;
 }

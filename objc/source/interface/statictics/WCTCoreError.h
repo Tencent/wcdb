@@ -18,12 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTError.h>
+#import <WCDB/WCTHandleError.h>
 
-@interface WCTCoreError : WCTError
-
-@property(nonatomic, readonly) WCTTag tag;
-
-@property(nonatomic, readonly) NSString *path;
+@interface WCTCoreError : WCTHandleError
 
 @end

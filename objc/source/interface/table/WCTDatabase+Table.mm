@@ -34,7 +34,7 @@
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTError **)error
+            withError:(WCTCoreError **)error
 {
     WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.UTF8String)
                                       .withSchema(WCDB::StatementAttach::getMainSchema());
@@ -43,7 +43,7 @@
         if (result.first) {
             *error = nil;
         } else {
-            *error = [WCTError errorWithWCDBError:_database->getError()];
+            *error = [[WCTCoreError alloc] initWithError:_database->getError()];
         }
     }
     return result.second;

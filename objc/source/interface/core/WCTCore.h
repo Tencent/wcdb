@@ -44,8 +44,10 @@
 
  @return path
  */
-- (NSString *)path;
+- (nonnull NSString *)path;
 
 - (void)finalizeDatabase;
+
+- (nullable WCTCoreError *)error;
 
 @end

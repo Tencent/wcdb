@@ -52,46 +52,34 @@ HandlePool::Tag HandlePool::getTag() const
 #pragma mark - Error
 void HandlePool::setAndReportCoreError(const std::string &message)
 {
-    CoreError error;
-    error.tag = getTag();
-    error.message = message;
-    error.code = (int) Error::Code::Error;
+    CoreError error(getTag(), message);
     setThreadedError(error);
     error.report();
 }
 
-std::shared_ptr<Error> &HandlePool::getThreadedErrors() const
-{
-    std::unordered_map<const HandlePool *, std::shared_ptr<Error>> *errors =
-        s_threadedErrors.get();
-    auto iter = errors->find(this);
-    if (iter == errors->end()) {
-        iter = errors->insert({this, std::shared_ptr<Error>()}).first;
-    }
-    return iter->second;
-}
-
 void HandlePool::setThreadedError(const HandleError &error) const
 {
-    getThreadedErrors().reset(new HandleError(error));
-}
-
-void HandlePool::setThreadedError(const FileError &error) const
-{
-    getThreadedErrors().reset(new FileError(error));
+    setThreadedError(CoreError(error));
 }
 
 void HandlePool::setThreadedError(const CoreError &error) const
 {
-    getThreadedErrors().reset(new CoreError(error));
+    std::unordered_map<const HandlePool *, CoreError> *errors =
+        s_threadedErrors.get();
+    auto iter = errors->find(this);
+    if (iter != errors->end()) {
+        iter->second = error;
+    } else {
+        errors->insert({this, error});
+    }
 }
 
-const Error &HandlePool::getThreadedError() const
+const CoreError &HandlePool::getThreadedError() const
 {
     ThreadedErrors *errors = s_threadedErrors.get();
     auto iter = errors->find(this);
     assert(iter != errors->end());
-    return *iter->second.get();
+    return iter->second;
 }
 
 #pragma mark - Config
@@ -255,11 +243,8 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     Configs configs = m_configs;
 
     if (m_aliveHandleCount == 0) {
-        if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
-                Path::getBaseName(path))) {
-            setThreadedError(FileManager::shared()->getError());
-            return nullptr;
-        }
+        FileManager::shared()->createDirectoryWithIntermediateDirectories(
+            Path::getBaseName(path));
     }
     if (!handle->open()) {
         setThreadedError(handle->getError());
@@ -271,17 +256,6 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         return nullptr;
     }
     ++m_aliveHandleCount;
-    if (m_aliveHandleCount > s_hardwareConcurrency) {
-        CoreError error;
-        error.code = (int) Error::Code::Error;
-        error.level = Error::Level::Warning;
-        error.tag = getTag();
-        error.path = path;
-        error.message = "The number of database concurrency exceeds the "
-                        "hardware's maximum: " +
-                        std::to_string(s_hardwareConcurrency);
-        error.report();
-    }
     return configuredHandle;
 }
 

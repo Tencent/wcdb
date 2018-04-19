@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Error.hpp>
+#include <WCDB/Macro.hpp>
 #include <iostream>
 
 namespace WCDB {
@@ -27,9 +28,9 @@ Error::Error() : level(Level::Error), code(0)
 {
 }
 
-size_t Error::getHashedTypeid() const
+int Error::getType() const
 {
-    return typeid(Error).hash_code();
+    return Error::type;
 }
 
 bool Error::isOK() const
@@ -39,7 +40,9 @@ bool Error::isOK() const
 
 std::string Error::getDescription() const
 {
-    std::string description(Error::LevelName(level));
+    std::string description("[");
+    description.append(Error::LevelName(level));
+    description.append("]");
     if (level != Level::Warning && level != Level::Fatal) {
         addToDescription(description, "Code", code);
     }

@@ -30,6 +30,8 @@ namespace WCDB {
 
 class FileError : public Error {
 public:
+    static constexpr int type = 4;
+
     FileError();
     enum Operation {
         NotSet = 0,
@@ -43,7 +45,7 @@ public:
     Operation operation;
     std::string path;
     std::string getDescription() const override;
-    size_t getHashedTypeid() const override;
+    int getType() const override;
 };
 
 class FileManager {

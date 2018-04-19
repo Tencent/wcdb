@@ -28,38 +28,13 @@ static_assert((int) WCTErrorLevelFatal == (int) WCDB::Error::Level::Fatal, "");
 
 @implementation WCTError
 
-+ (WCTTag)invalidTag
+- (instancetype)initWithError:(const WCDB::Error &)error
 {
-    return WCDB::HandleError::invalidTag;
-}
-
-+ (instancetype)errorWithWCDBError:(const WCDB::Error *)error
-{
-    if (!error) {
-        return nil;
-    }
-    size_t hash = error->getHashedTypeid();
-    if (hash == typeid(WCDB::SQLiteError).hash_code()) {
-        return [[WCTSQLiteError alloc] initWithWCDBError:error];
-    } else if (hash == typeid(WCDB::HandleError).hash_code()) {
-        return [[WCTHandleError alloc] initWithWCDBError:error];
-    } else if (hash == typeid(WCDB::CoreError).hash_code()) {
-        return [[WCTCoreError alloc] initWithWCDBError:error];
-    } else if (hash == typeid(WCDB::FileError).hash_code()) {
-        return [[WCTFileError alloc] initWithWCDBError:error];
-    }
-    assert(hash == typeid(WCDB::Error).hash_code());
-    return [[WCTError alloc] initWithWCDBError:error];
-}
-
-- (instancetype)initWithWCDBError:(const WCDB::Error *)error
-{
-    assert(error != nullptr);
     if (self = [super initWithDomain:@"WCDB"
-                                code:error->code
+                                code:error.code
                             userInfo:nil]) {
-        _message = @(error->message.c_str());
-        _level = (WCTErrorLevel) error->level;
+        _message = @(error.message.c_str());
+        _level = (WCTErrorLevel) error.level;
     }
     return self;
 }
@@ -71,10 +46,7 @@ static_assert((int) WCTErrorLevelFatal == (int) WCDB::Error::Level::Fatal, "");
 
 - (NSString *)description
 {
-    NSMutableString *desc = [[NSMutableString alloc] initWithUTF8String:WCDB::Error::LevelName((WCDB::Error::Level) _level)];
-    [desc appendFormat:@"Code: %ld", (long) self.code];
-    [desc appendFormat:@"Msg: %@", _message];
-    return desc;
+    return [NSString stringWithFormat:@"[%s]Code: %ld, Msg: %@", WCDB::Error::LevelName((WCDB::Error::Level) _level), (long) self.code, self.message];
 }
 
 @end

@@ -26,15 +26,19 @@
 
 namespace WCDB {
 
-class CoreError : public Error {
+class CoreError : public HandleError {
 public:
-    CoreError();
-    using Tag = HandleError::Tag;
-    Tag tag;
-    std::string path;
+    static constexpr int type = 3;
 
-    std::string getDescription() const override;
-    size_t getHashedTypeid() const override;
+    using HandleError::HandleError;
+    using Tag = HandleError::Tag;
+
+    CoreError(const HandleError &);
+    CoreError(const Tag &tag, const std::string &message);
+
+    CoreError &operator=(const HandleError &);
+
+    int getType() const override;
 };
 
 } //namespace WCDB

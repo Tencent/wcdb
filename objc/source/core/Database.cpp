@@ -119,7 +119,7 @@ bool Database::isOpened() const
     return !m_pool->isDrained();
 }
 
-const Error &Database::getError() const
+const CoreError &Database::getError() const
 {
     return m_pool->getThreadedError();
 }
@@ -174,7 +174,6 @@ bool Database::removeFiles()
         //TODO reset memory while removed
         return true;
     }
-    m_pool->setThreadedError(fileManager->getError());
     return false;
 }
 
@@ -184,12 +183,12 @@ std::pair<bool, size_t> Database::getFilesSize()
         Error::warning("Getting files size on an opened database may get "
                        "incorrect results");
     }
-    FileManager *fileManager = FileManager::shared();
-    auto ret = fileManager->getFilesSize(getPaths());
-    if (!ret.first) {
-        m_pool->setThreadedError(fileManager->getError());
-    }
-    return ret;
+    return FileManager::shared()->getFilesSize(getPaths());
+}
+
+const FileError &Database::getFileError() const
+{
+    return FileManager::shared()->getError();
 }
 
 bool Database::moveFiles(const std::string &directory)
@@ -198,12 +197,7 @@ bool Database::moveFiles(const std::string &directory)
         Error::warning("Moving files on an opened database may cause a "
                        "corrupted database");
     }
-    FileManager *fileManager = FileManager::shared();
-    if (fileManager->moveFiles(getPaths(), directory)) {
-        return true;
-    }
-    m_pool->setThreadedError(fileManager->getError());
-    return false;
+    return FileManager::shared()->moveFiles(getPaths(), directory);
 }
 
 bool Database::moveFilesToDirectoryWithExtraFiles(
@@ -215,12 +209,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     }
     std::list<std::string> paths = getPaths();
     paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
-    FileManager *fileManager = FileManager::shared();
-    if (fileManager->moveFiles(paths, directory)) {
-        return true;
-    }
-    m_pool->setThreadedError(fileManager->getError());
-    return false;
+    return FileManager::shared()->moveFiles(paths, directory);
 }
 
 const std::string &Database::getPath() const

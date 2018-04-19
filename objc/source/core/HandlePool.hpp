@@ -58,17 +58,14 @@ protected:
 
 #pragma mark - Error
 public:
-    const Error &getThreadedError() const;
+    const CoreError &getThreadedError() const;
     void setThreadedError(const HandleError &error) const;
-    void setThreadedError(const FileError &error) const;
     void setThreadedError(const CoreError &error) const;
 
 protected:
     void setAndReportCoreError(const std::string &message);
-    using ThreadedErrors =
-        std::unordered_map<const HandlePool *, std::shared_ptr<Error>>;
+    using ThreadedErrors = std::unordered_map<const HandlePool *, CoreError>;
     static ThreadLocal<ThreadedErrors> s_threadedErrors;
-    std::shared_ptr<Error> &getThreadedErrors() const;
 
 #pragma mark - Config
 public:

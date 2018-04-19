@@ -31,17 +31,17 @@ FileError::FileError() : Error(), operation(Operation::NotSet)
 {
 }
 
+int FileError::getType() const
+{
+    return FileError::type;
+}
+
 std::string FileError::getDescription() const
 {
     std::string description = Error::getDescription();
     addToDescription(description, "Op", operation);
     addToDescription(description, "Path", path);
     return description;
-}
-
-size_t FileError::getHashedTypeid() const
-{
-    return typeid(FileError).hash_code();
 }
 
 FileManager::FileManager()

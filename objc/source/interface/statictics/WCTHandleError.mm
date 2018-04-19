@@ -32,16 +32,19 @@ static_assert((int) WCTHandleOperationBackup == (int) WCDB::HandleError::Operati
 
 @implementation WCTHandleError
 
-- (instancetype)initWithWCDBError:(const WCDB::Error *)error
++ (WCTTag)invalidTag
 {
-    if (self = [super initWithWCDBError:error]) {
-        assert(error->getHashedTypeid() == typeid(WCDB::HandleError).hash_code());
-        const WCDB::HandleError *handleError = static_cast<const WCDB::HandleError *>(error);
-        _tag = handleError->tag;
-        _extendedCode = handleError->extendedCode;
-        _path = @(handleError->path.c_str());
-        _statement = handleError->statement;
-        _operation = (WCTHandleOperation) handleError->operation;
+    return WCDB::HandleError::invalidTag;
+}
+
+- (instancetype)initWithHandleError:(const WCDB::HandleError &)handleError
+{
+    if (self = [super initWithError:handleError]) {
+        _tag = handleError.tag;
+        _extendedCode = handleError.extendedCode;
+        _path = @(handleError.path.c_str());
+        _statement = handleError.statement;
+        _operation = (WCTHandleOperation) handleError.operation;
     }
     return self;
 }
@@ -53,12 +56,20 @@ static_assert((int) WCTHandleOperationBackup == (int) WCDB::HandleError::Operati
 
 - (NSString *)description
 {
-    NSMutableString *desc = [[NSMutableString alloc] initWithString:[super description]];
-    [desc appendFormat:@"Tag: %d", _tag];
-    [desc appendFormat:@"ExtCode: %d", _extendedCode];
-    [desc appendFormat:@"Path: %@", _path];
-    [desc appendFormat:@"SQL: %s", _statement.getDescription().c_str()];
-    [desc appendFormat:@"Opeartion: %lu", (unsigned long) _operation];
+    NSMutableString *desc = [NSMutableString stringWithString:[super description]];
+    if (self.tag != [WCTHandleError invalidTag]) {
+        [desc appendFormat:@", Tag: %d", self.tag];
+    }
+    if (self.extendedCode != 0) {
+        [desc appendFormat:@", ExtCode: %d", self.extendedCode];
+    }
+    [desc appendFormat:@", Path: %@", self.path];
+    if (!self.statement.empty()) {
+        [desc appendFormat:@", SQL: %s", self.statement.getDescription().c_str()];
+    }
+    if (self.operation != WCTHandleOperationNotSet) {
+        [desc appendFormat:@", Op: %lu", self.operation];
+    }
     return desc;
 }
 

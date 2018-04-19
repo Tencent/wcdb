@@ -62,7 +62,7 @@ public:
     void unblockade();
     bool isBlockaded();
 
-    const Error &getError() const;
+    const CoreError &getError() const;
 
     static void closeAllDatabases();
 
@@ -92,6 +92,7 @@ public:
         const std::string &directory, const std::list<std::string> &extraFiles);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
+    const FileError &getFileError() const;
 
 #pragma mark - Repair Kit
 public:

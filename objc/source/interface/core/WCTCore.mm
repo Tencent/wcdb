@@ -55,4 +55,9 @@
     _database = nullptr;
 }
 
+- (nullable WCTCoreError *)error
+{
+    return nil;
+}
+
 @end

@@ -60,4 +60,6 @@
  */
 - (NSUInteger)getFilesSize;
 
+- (nullable WCTFileError *)getFileError;
+
 @end
