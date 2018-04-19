@@ -49,7 +49,7 @@
 
 - (NSString *)recommendedPath
 {
-    NSString *hash = [NSString stringWithFormat:@"%lu", self.className.hash];
+    NSString *hash = [NSString stringWithFormat:@"%lu", (unsigned long) self.className.hash];
     return [self.recommendedDirectory stringByAppendingPathComponent:hash];
 }
 

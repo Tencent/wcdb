@@ -47,7 +47,7 @@ static_assert((int) WCTFileOperationMkdir == (int) WCDB::FileError::Operation::M
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@, Op: %lu, Path: %@", [super description], _operation, _path];
+    return [NSString stringWithFormat:@"%@, Op: %lu, Path: %@", [super description], (unsigned long) _operation, _path];
 }
 
 @end

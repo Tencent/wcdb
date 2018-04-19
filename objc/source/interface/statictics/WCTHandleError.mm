@@ -68,7 +68,7 @@ static_assert((int) WCTHandleOperationBackup == (int) WCDB::HandleError::Operati
         [desc appendFormat:@", SQL: %s", self.statement.getDescription().c_str()];
     }
     if (self.operation != WCTHandleOperationNotSet) {
-        [desc appendFormat:@", Op: %lu", self.operation];
+        [desc appendFormat:@", Op: %lu", (unsigned long) self.operation];
     }
     return desc;
 }
