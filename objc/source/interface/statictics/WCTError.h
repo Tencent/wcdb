@@ -25,11 +25,11 @@
  It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.
  */
 typedef NS_ENUM(int, WCTErrorType) {
-    WCTErrorTypeError,
-    WCTErrorTypeSQLite,
-    WCTErrorTypeHandle,
-    WCTErrorTypeCore,
-    WCTErrorTypeFile,
+    WCTErrorTypeError = 1,
+    WCTErrorTypeSQLite = 2,
+    WCTErrorTypeHandle = 3,
+    WCTErrorTypeCore = 4,
+    WCTErrorTypeFile = 5,
 };
 
 typedef NS_ENUM(NSUInteger, WCTErrorLevel) {

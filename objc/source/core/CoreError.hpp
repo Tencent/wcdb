@@ -28,7 +28,7 @@ namespace WCDB {
 
 class CoreError : public HandleError {
 public:
-    static constexpr int type = 3;
+    static constexpr int type = 4;
 
     using HandleError::HandleError;
     using Tag = HandleError::Tag;

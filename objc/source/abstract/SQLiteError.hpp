@@ -27,7 +27,7 @@ namespace WCDB {
 
 class SQLiteError : public Error {
 public:
-    static constexpr int type = 1;
+    static constexpr int type = 2;
     int getType() const override;
 };
 

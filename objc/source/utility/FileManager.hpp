@@ -30,7 +30,7 @@ namespace WCDB {
 
 class FileError : public Error {
 public:
-    static constexpr int type = 4;
+    static constexpr int type = 5;
 
     FileError();
     enum Operation {

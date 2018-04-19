@@ -66,7 +66,7 @@ class Error {
 public:
     Error();
 
-    static constexpr int type = 0;
+    static constexpr int type = 1;
     virtual int getType() const;
 
     enum class Level : int {

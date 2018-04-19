@@ -30,7 +30,7 @@ class HandleError : public Error {
 public:
     HandleError();
 
-    static constexpr int type = 2;
+    static constexpr int type = 3;
 
     typedef int32_t Tag;
     static constexpr const Tag invalidTag = INT32_MIN;

@@ -20,6 +20,13 @@
 
 #import <WCDB/Interface.h>
 
+static_assert((int) WCTErrorTypeError == WCDB::Error::type, "");
+static_assert((int) WCTErrorTypeSQLite == WCDB::SQLiteError::type, "");
+static_assert((int) WCTErrorTypeHandle == WCDB::HandleError::type, "");
+static_assert((int) WCTErrorTypeCore == WCDB::CoreError::type, "");
+static_assert((int) WCTErrorTypeFile == WCDB::FileError::type, "");
+static_assert(((1 << WCDB::Error::type) & (1 << WCDB::SQLiteError::type) & (1 << WCDB::HandleError::type) & (1 << WCDB::CoreError::type) & (1 << WCDB::FileError::type)) == 0, "");
+
 static_assert((int) WCTErrorLevelIgnore == (int) WCDB::Error::Level::Ignore, "");
 static_assert((int) WCTErrorLevelDebug == (int) WCDB::Error::Level::Debug, "");
 static_assert((int) WCTErrorLevelWarning == (int) WCDB::Error::Level::Warning, "");
