@@ -27,6 +27,7 @@
 		233032681FB9437F00101373 /* sqliterk_util.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032551FB9437F00101373 /* sqliterk_util.h */; };
 		233032691FB9437F00101373 /* sqliterk_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 233032561FB9437F00101373 /* sqliterk_values.c */; };
 		2330326A1FB9437F00101373 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032571FB9437F00101373 /* sqliterk_values.h */; };
+		23C01EDB20884D020008CE06 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330326C1FB9452800101373 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23C01EDB20884D020008CE06 /* libz.tbd in Frameworks */,
 				2321242A201727E6008146EF /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,7 +425,6 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
@@ -444,7 +445,6 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;

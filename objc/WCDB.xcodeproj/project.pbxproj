@@ -417,7 +417,6 @@
 		23C01D0820882B4F0008CE06 /* WCTCoreError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23C01D0620882B4F0008CE06 /* WCTCoreError+Private.h */; };
 		23C01D0C20882B580008CE06 /* WCTSQLiteError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23C01D0A20882B580008CE06 /* WCTSQLiteError+Private.h */; };
 		23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
-		23C43BCE2087435800AB186D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		23C5ABAD207DA9C100BEF3C6 /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */; };
 		23C5ABAE207DA9C100BEF3C6 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */; };
 		23D18635205A66000001A6CE /* MigrationBuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */; };
@@ -939,7 +938,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23C43BCE2087435800AB186D /* libz.tbd in Frameworks */,
 				232124442017287C008146EF /* sqlcipher.framework in Frameworks */,
 				232124452017287C008146EF /* sqliterk.framework in Frameworks */,
 			);
