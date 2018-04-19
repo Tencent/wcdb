@@ -32,8 +32,6 @@
 		23036A3F205F9BF100ADF01A /* WCTMigrationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 23036A3D205F9BF100ADF01A /* WCTMigrationInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23036A40205F9BF100ADF01A /* WCTMigrationInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23036A3E205F9BF100ADF01A /* WCTMigrationInfo.mm */; };
 		23036A43205F9CAC00ADF01A /* WCTMigrationInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23036A41205F9CAC00ADF01A /* WCTMigrationInfo+Private.h */; };
-		232124442017287C008146EF /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243E20172865008146EF /* sqlcipher.framework */; };
-		232124452017287C008146EF /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243620172859008146EF /* sqliterk.framework */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		232DCDF2207F044B00AC2CD0 /* KeyValueTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCDF0207F044B00AC2CD0 /* KeyValueTable.cpp */; };
@@ -453,6 +451,442 @@
 		23F340DF204D3482007DB8AB /* WCTDatabase+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F340DD204D3482007DB8AB /* WCTDatabase+ChainCall.mm */; };
 		23F4EF7A20567F4B0088DE3D /* LangPragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F4EF7820567F4B0088DE3D /* LangPragma.cpp */; };
 		23F4EF7B20567F4B0088DE3D /* LangPragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F4EF7920567F4B0088DE3D /* LangPragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BC4A20887FD3000CCD37 /* LangCreateViewSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774A0202AECD3000A681C /* LangCreateViewSTMT.cpp */; };
+		23F5BC4B20887FD3000CCD37 /* StatementCreateView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977459202AECD3000A681C /* StatementCreateView.cpp */; };
+		23F5BC4C20887FD3000CCD37 /* LangColumnDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977492202AECD3000A681C /* LangColumnDef.cpp */; };
+		23F5BC4D20887FD3000CCD37 /* CoreError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A057B20621B3900F1A212 /* CoreError.cpp */; };
+		23F5BC4E20887FD3000CCD37 /* WCTDatabase+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD002064DE04000E31E8 /* WCTDatabase+Transaction.mm */; };
+		23F5BC4F20887FD3000CCD37 /* StatementDropTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977463202AECD3000A681C /* StatementDropTable.cpp */; };
+		23F5BC5020887FD3000CCD37 /* LangAttachSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397748A202AECD3000A681C /* LangAttachSTMT.cpp */; };
+		23F5BC5120887FD3000CCD37 /* Column.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23000F17203EDFDC00ED8008 /* Column.cpp */; };
+		23F5BC5220887FD3000CCD37 /* StatementCommit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977451202AECD3000A681C /* StatementCommit.cpp */; };
+		23F5BC5320887FD3000CCD37 /* LangWithClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774E5202AECD3000A681C /* LangWithClause.cpp */; };
+		23F5BC5420887FD3000CCD37 /* StatementDetach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397745F202AECD3000A681C /* StatementDetach.cpp */; };
+		23F5BC5520887FD3000CCD37 /* ConfiguredHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */; };
+		23F5BC5620887FD3000CCD37 /* StatementAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397744B202AECD3000A681C /* StatementAnalyze.cpp */; };
+		23F5BC5720887FD3000CCD37 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2361C43E2063872100A9966A /* Tracer.cpp */; };
+		23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774DB202AECD3000A681C /* LangSelectSTMT.cpp */; };
+		23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397744F202AECD3000A681C /* StatementBegin.cpp */; };
+		23F5BC5A20887FD3000CCD37 /* RecyclableHandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B952050E53600DB5E93 /* RecyclableHandlePool.cpp */; };
+		23F5BC5B20887FD3000CCD37 /* NSDate+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F62E1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm */; };
+		23F5BC5C20887FD3000CCD37 /* LangJoinClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774BC202AECD3000A681C /* LangJoinClause.cpp */; };
+		23F5BC5D20887FD3000CCD37 /* WCTDatabase+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */; };
+		23F5BC5E20887FD3000CCD37 /* WCTTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F340D9204D32C2007DB8AB /* WCTTable.mm */; };
+		23F5BC5F20887FD3000CCD37 /* RecyclableHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */; };
+		23F5BC6020887FD3000CCD37 /* CopyOnWriteString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776BE202AF2E1000A681C /* CopyOnWriteString.cpp */; };
+		23F5BC6120887FD3000CCD37 /* StatementSavepoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977473202AECD3000A681C /* StatementSavepoint.cpp */; };
+		23F5BC6220887FD3000CCD37 /* NSNull+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE305207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm */; };
+		23F5BC6320887FD3000CCD37 /* LangReleaseSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774D1202AECD3000A681C /* LangReleaseSTMT.cpp */; };
+		23F5BC6420887FD3000CCD37 /* ColumnDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977425202AECD2000A681C /* ColumnDef.cpp */; };
+		23F5BC6520887FD3000CCD37 /* StatementDropTrigger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977465202AECD3000A681C /* StatementDropTrigger.cpp */; };
+		23F5BC6620887FD3000CCD37 /* TableConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397747B202AECD3000A681C /* TableConstraint.cpp */; };
+		23F5BC6720887FD3000CCD37 /* WCTTable+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */; };
+		23F5BC6820887FD3000CCD37 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776D1202AF2E2000A681C /* String.cpp */; };
+		23F5BC6920887FD3000CCD37 /* NSObject+Convertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* NSObject+Convertible.mm */; };
+		23F5BC6A20887FD3000CCD37 /* Statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237098052059028C00E768B4 /* Statement.cpp */; };
+		23F5BC6B20887FD3000CCD37 /* LangJoinConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774BE202AECD3000A681C /* LangJoinConstraint.cpp */; };
+		23F5BC6C20887FD3000CCD37 /* WCTCoreError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238341AA20634F9F00F47486 /* WCTCoreError.mm */; };
+		23F5BC6D20887FD3000CCD37 /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776D2202AF2E2000A681C /* FileManager.cpp */; };
+		23F5BC6E20887FD3000CCD37 /* Pragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397743E202AECD3000A681C /* Pragma.cpp */; };
+		23F5BC6F20887FD3000CCD37 /* WCTUnsafeHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */; };
+		23F5BC7020887FD3000CCD37 /* LangForeignKeyClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774B6202AECD3000A681C /* LangForeignKeyClause.cpp */; };
+		23F5BC7120887FD3000CCD37 /* WCTRowSelect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F64A1EA0D6680021EFA7 /* WCTRowSelect.mm */; };
+		23F5BC7220887FD3000CCD37 /* CopyOnWriteData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776C6202AF2E2000A681C /* CopyOnWriteData.cpp */; };
+		23F5BC7320887FD3000CCD37 /* CommonTableExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977427202AECD2000A681C /* CommonTableExpression.cpp */; };
+		23F5BC7420887FD3000CCD37 /* StatementUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977477202AECD3000A681C /* StatementUpdate.cpp */; };
+		23F5BC7520887FD3000CCD37 /* MigrationBuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18633205A66000001A6CE /* MigrationBuiltinConfig.cpp */; };
+		23F5BC7620887FD3000CCD37 /* LangIndexedColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774B8202AECD3000A681C /* LangIndexedColumn.cpp */; };
+		23F5BC7720887FD3000CCD37 /* WCTHandleError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238341A520634F9900F47486 /* WCTHandleError.mm */; };
+		23F5BC7820887FD3000CCD37 /* StatementVacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977479202AECD3000A681C /* StatementVacuum.cpp */; };
+		23F5BC7920887FD3000CCD37 /* Describable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397742C202AECD3000A681C /* Describable.cpp */; };
+		23F5BC7A20887FD3000CCD37 /* LangInsertSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774BA202AECD3000A681C /* LangInsertSTMT.cpp */; };
+		23F5BC7B20887FD3000CCD37 /* WCTHandle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCEF2064DD0B000E31E8 /* WCTHandle.mm */; };
+		23F5BC7C20887FD3000CCD37 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
+		23F5BC7D20887FD3000CCD37 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		23F5BC7E20887FD3000CCD37 /* LangAnalyzeSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977488202AECD3000A681C /* LangAnalyzeSTMT.cpp */; };
+		23F5BC7F20887FD3000CCD37 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		23F5BC8020887FD3000CCD37 /* WCTFileError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238341B220634FB200F47486 /* WCTFileError.mm */; };
+		23F5BC8120887FD3000CCD37 /* BuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233D0F112045032700DDB462 /* BuiltinConfig.cpp */; };
+		23F5BC8220887FD3000CCD37 /* WCTUnsafeHandle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCF22064DD0B000E31E8 /* WCTUnsafeHandle.mm */; };
+		23F5BC8320887FD3000CCD37 /* WCTCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F65E1EA0D6680021EFA7 /* WCTCore.mm */; };
+		23F5BC8420887FD3000CCD37 /* RaiseFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977442202AECD3000A681C /* RaiseFunction.cpp */; };
+		23F5BC8520887FD3000CCD37 /* HandlePools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* HandlePools.cpp */; };
+		23F5BC8620887FD3000CCD37 /* NSString+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6341EA0D6680021EFA7 /* NSString+WCTColumnCoding.mm */; };
+		23F5BC8720887FD3000CCD37 /* IndexedColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977432202AECD3000A681C /* IndexedColumn.cpp */; };
+		23F5BC8820887FD3000CCD37 /* WCTHandle+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */; };
+		23F5BC8920887FD3000CCD37 /* LangDeleteSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774A6202AECD3000A681C /* LangDeleteSTMT.cpp */; };
+		23F5BC8A20887FD3000CCD37 /* StatementCreateTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977455202AECD3000A681C /* StatementCreateTable.cpp */; };
+		23F5BC8B20887FD3000CCD37 /* NSNumber+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6321EA0D6680021EFA7 /* NSNumber+WCTColumnCoding.mm */; };
+		23F5BC8C20887FD3000CCD37 /* LangCreateIndexSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397749A202AECD3000A681C /* LangCreateIndexSTMT.cpp */; };
+		23F5BC8D20887FD3000CCD37 /* Expression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397742E202AECD3000A681C /* Expression.cpp */; };
+		23F5BC8E20887FD3000CCD37 /* LangDetachSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774A8202AECD3000A681C /* LangDetachSTMT.cpp */; };
+		23F5BC8F20887FD3000CCD37 /* LangCreateTriggerSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397749E202AECD3000A681C /* LangCreateTriggerSTMT.cpp */; };
+		23F5BC9020887FD3000CCD37 /* LangOrderingTerm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774C7202AECD3000A681C /* LangOrderingTerm.cpp */; };
+		23F5BC9120887FD3000CCD37 /* WCTDatabase+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2B02049576D00C4CBB6 /* WCTDatabase+Memory.mm */; };
+		23F5BC9220887FD3000CCD37 /* LangDropTriggerSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774B0202AECD3000A681C /* LangDropTriggerSTMT.cpp */; };
+		23F5BC9320887FD3000CCD37 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6161EA0D6680021EFA7 /* Config.cpp */; };
+		23F5BC9420887FD3000CCD37 /* Handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DC306D202AFF8B000F7895 /* Handle.cpp */; };
+		23F5BC9520887FD3000CCD37 /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */; };
+		23F5BC9620887FD3000CCD37 /* OrderingTerm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397743C202AECD3000A681C /* OrderingTerm.cpp */; };
+		23F5BC9720887FD3000CCD37 /* StatementCreateTrigger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977457202AECD3000A681C /* StatementCreateTrigger.cpp */; };
+		23F5BC9820887FD3000CCD37 /* ModuleArgument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397743A202AECD3000A681C /* ModuleArgument.cpp */; };
+		23F5BC9920887FD3000CCD37 /* JoinConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977436202AECD3000A681C /* JoinConstraint.cpp */; };
+		23F5BC9A20887FD3000CCD37 /* HandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6221EA0D6680021EFA7 /* HandlePool.cpp */; };
+		23F5BC9B20887FD3000CCD37 /* CTETableName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977429202AECD3000A681C /* CTETableName.cpp */; };
+		23F5BC9C20887FD3000CCD37 /* ColumnConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977423202AECD2000A681C /* ColumnConstraint.cpp */; };
+		23F5BC9D20887FD3000CCD37 /* StatementRelease.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397746F202AECD3000A681C /* StatementRelease.cpp */; };
+		23F5BC9E20887FD3000CCD37 /* WithClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977480202AECD3000A681C /* WithClause.cpp */; };
+		23F5BC9F20887FD3000CCD37 /* LangJoinOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774C0202AECD3000A681C /* LangJoinOperator.cpp */; };
+		23F5BCA020887FD3000CCD37 /* WCTDatabase+File.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F66C1EA0D6680021EFA7 /* WCTDatabase+File.mm */; };
+		23F5BCA120887FD3000CCD37 /* StatementAttach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397744D202AECD3000A681C /* StatementAttach.cpp */; };
+		23F5BCA220887FD3000CCD37 /* LangDropInternalSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774AC202AECD3000A681C /* LangDropInternalSTMT.cpp */; };
+		23F5BCA320887FD3000CCD37 /* LangAlterTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977486202AECD3000A681C /* LangAlterTableSTMT.cpp */; };
+		23F5BCA420887FD3000CCD37 /* LangCTETableName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774A4202AECD3000A681C /* LangCTETableName.cpp */; };
+		23F5BCA520887FD3000CCD37 /* WCTMultiSelect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6481EA0D6680021EFA7 /* WCTMultiSelect.mm */; };
+		23F5BCA620887FD3000CCD37 /* ResultColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977444202AECD3000A681C /* ResultColumn.cpp */; };
+		23F5BCA720887FD3000CCD37 /* LangQualifiedTableName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774CB202AECD3000A681C /* LangQualifiedTableName.cpp */; };
+		23F5BCA820887FD3000CCD37 /* KeyValueTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCDF0207F044B00AC2CD0 /* KeyValueTable.cpp */; };
+		23F5BCA920887FD3000CCD37 /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61B1EA0D6680021EFA7 /* Database.cpp */; };
+		23F5BCAA20887FD3000CCD37 /* LangColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23000F10203EC89700ED8008 /* LangColumn.cpp */; };
+		23F5BCAB20887FD3000CCD37 /* MigrationHandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B9D2050E9A500DB5E93 /* MigrationHandlePool.cpp */; };
+		23F5BCAC20887FD3000CCD37 /* Tokenize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DC3077202B0066000F7895 /* Tokenize.cpp */; };
+		23F5BCAD20887FD3000CCD37 /* WCTInsert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6441EA0D6680021EFA7 /* WCTInsert.mm */; };
+		23F5BCAE20887FD3000CCD37 /* LangDropTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774AE202AECD3000A681C /* LangDropTableSTMT.cpp */; };
+		23F5BCAF20887FD3000CCD37 /* WCTDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6601EA0D6680021EFA7 /* WCTDatabase.mm */; };
+		23F5BCB020887FD3000CCD37 /* StatementPragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397746B202AECD3000A681C /* StatementPragma.cpp */; };
+		23F5BCB120887FD3000CCD37 /* WCTValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B94E6D2068A06200197358 /* WCTValue.mm */; };
+		23F5BCB220887FD3000CCD37 /* LangBindParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397748E202AECD3000A681C /* LangBindParameter.cpp */; };
+		23F5BCB320887FD3000CCD37 /* WCTColumnBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6871EA0D6680021EFA7 /* WCTColumnBinding.mm */; };
+		23F5BCB420887FD3000CCD37 /* WCTSelect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F64D1EA0D6680021EFA7 /* WCTSelect.mm */; };
+		23F5BCB520887FD3000CCD37 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
+		23F5BCB620887FD3000CCD37 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
+		23F5BCB720887FD3000CCD37 /* LangLiteralValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774C2202AECD3000A681C /* LangLiteralValue.cpp */; };
+		23F5BCB820887FD3000CCD37 /* NSData+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F62D1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm */; };
+		23F5BCB920887FD3000CCD37 /* LangRaiseFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774CD202AECD3000A681C /* LangRaiseFunction.cpp */; };
+		23F5BCBA20887FD3000CCD37 /* HandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2370980820590CA700E768B4 /* HandleStatement.cpp */; };
+		23F5BCBB20887FD3000CCD37 /* WCTBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6851EA0D6680021EFA7 /* WCTBinding.mm */; };
+		23F5BCBC20887FD3000CCD37 /* WCTDatabase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6581EA0D6680021EFA7 /* WCTDatabase+Convenient.mm */; };
+		23F5BCBD20887FD3000CCD37 /* LangCommonTableExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977497202AECD3000A681C /* LangCommonTableExpression.cpp */; };
+		23F5BCBE20887FD3000CCD37 /* StatementDropIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977461202AECD3000A681C /* StatementDropIndex.cpp */; };
+		23F5BCBF20887FD3000CCD37 /* LangExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774B4202AECD3000A681C /* LangExpr.cpp */; };
+		23F5BCC020887FD3000CCD37 /* LangCreateVirtualTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774A2202AECD3000A681C /* LangCreateVirtualTableSTMT.cpp */; };
+		23F5BCC120887FD3000CCD37 /* ForeignKeyClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977430202AECD3000A681C /* ForeignKeyClause.cpp */; };
+		23F5BCC220887FD3000CCD37 /* WCTDatabase+Handle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCED2064DD0B000E31E8 /* WCTDatabase+Handle.mm */; };
+		23F5BCC320887FD3000CCD37 /* LangUpdateSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774E1202AECD3000A681C /* LangUpdateSTMT.cpp */; };
+		23F5BCC420887FD3000CCD37 /* MigrationDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A870E4204F82AE00273A98 /* MigrationDatabase.cpp */; };
+		23F5BCC520887FD3000CCD37 /* WCTTable+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F65A1EA0D6680021EFA7 /* WCTTable+Convenient.mm */; };
+		23F5BCC620887FD3000CCD37 /* NoCopyData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A2C198204647590026D3C5 /* NoCopyData.cpp */; };
+		23F5BCC720887FD3000CCD37 /* StatementCreateIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977453202AECD3000A681C /* StatementCreateIndex.cpp */; };
+		23F5BCC820887FD3000CCD37 /* WCTHandle+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */; };
+		23F5BCC920887FD3000CCD37 /* LangCreateTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397749C202AECD3000A681C /* LangCreateTableSTMT.cpp */; };
+		23F5BCCA20887FD3000CCD37 /* WCTHandle+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23EABBE5206D08EC00241F3B /* WCTHandle+Table.mm */; };
+		23F5BCCB20887FD3000CCD37 /* SelectCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977446202AECD3000A681C /* SelectCore.cpp */; };
+		23F5BCCC20887FD3000CCD37 /* LangColumnConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977490202AECD3000A681C /* LangColumnConstraint.cpp */; };
+		23F5BCCD20887FD3000CCD37 /* LangSelectCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774D9202AECD3000A681C /* LangSelectCore.cpp */; };
+		23F5BCCE20887FD3000CCD37 /* TableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397747D202AECD3000A681C /* TableOrSubquery.cpp */; };
+		23F5BCCF20887FD3000CCD37 /* WCTSequence.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F63A1EA0D6680021EFA7 /* WCTSequence.mm */; };
+		23F5BCD020887FD3000CCD37 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A056F20611A5500F1A212 /* Error.cpp */; };
+		23F5BCD120887FD3000CCD37 /* LangVacuumSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774E3202AECD3000A681C /* LangVacuumSTMT.cpp */; };
+		23F5BCD220887FD3000CCD37 /* WCTUpdate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6551EA0D6680021EFA7 /* WCTUpdate.mm */; };
+		23F5BCD320887FD3000CCD37 /* StatementCreateVirtualTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397745B202AECD3000A681C /* StatementCreateVirtualTable.cpp */; };
+		23F5BCD420887FD3000CCD37 /* LangTableConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774DD202AECD3000A681C /* LangTableConstraint.cpp */; };
+		23F5BCD520887FD3000CCD37 /* LangRollbackSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774D5202AECD3000A681C /* LangRollbackSTMT.cpp */; };
+		23F5BCD620887FD3000CCD37 /* LangCommitSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977495202AECD3000A681C /* LangCommitSTMT.cpp */; };
+		23F5BCD720887FD3000CCD37 /* WCTStatistics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3BF1ED442E2000B72F6 /* WCTStatistics.mm */; };
+		23F5BCD820887FD3000CCD37 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCE08207F81FD00AC2CD0 /* Lock.cpp */; };
+		23F5BCD920887FD3000CCD37 /* BindParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977421202AECD2000A681C /* BindParameter.cpp */; };
+		23F5BCDA20887FD3000CCD37 /* HandleError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A057320612F8500F1A212 /* HandleError.cpp */; };
+		23F5BCDB20887FD3000CCD37 /* WCTMigrationDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23036A3A205F9A4700ADF01A /* WCTMigrationDatabase.mm */; };
+		23F5BCDC20887FD3000CCD37 /* QualifiedTableName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977440202AECD3000A681C /* QualifiedTableName.cpp */; };
+		23F5BCDD20887FD3000CCD37 /* SQLiteGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */; };
+		23F5BCDE20887FD3000CCD37 /* WCTSelectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6501EA0D6680021EFA7 /* WCTSelectable.mm */; };
+		23F5BCDF20887FD3000CCD37 /* StatementReindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397746D202AECD3000A681C /* StatementReindex.cpp */; };
+		23F5BCE020887FD3000CCD37 /* LangSavepointSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774D7202AECD3000A681C /* LangSavepointSTMT.cpp */; };
+		23F5BCE120887FD3000CCD37 /* LiteralValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977438202AECD3000A681C /* LiteralValue.cpp */; };
+		23F5BCE220887FD3000CCD37 /* WCTProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6911EA0D6680021EFA7 /* WCTProperty.mm */; };
+		23F5BCE320887FD3000CCD37 /* WCTMigrationInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23036A3E205F9BF100ADF01A /* WCTMigrationInfo.mm */; };
+		23F5BCE420887FD3000CCD37 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
+		23F5BCE520887FD3000CCD37 /* MigrationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96BA12050EB8500DB5E93 /* MigrationHandle.cpp */; };
+		23F5BCE620887FD3000CCD37 /* StatementInsert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977469202AECD3000A681C /* StatementInsert.cpp */; };
+		23F5BCE720887FD3000CCD37 /* StatementDropView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977467202AECD3000A681C /* StatementDropView.cpp */; };
+		23F5BCE820887FD3000CCD37 /* JoinClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977434202AECD3000A681C /* JoinClause.cpp */; };
+		23F5BCE920887FD3000CCD37 /* Operable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B8F5642043A2CE00EC571D /* Operable.cpp */; };
+		23F5BCEA20887FD3000CCD37 /* StatementRollback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977471202AECD3000A681C /* StatementRollback.cpp */; };
+		23F5BCEB20887FD3000CCD37 /* LangDropIndexSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774AA202AECD3000A681C /* LangDropIndexSTMT.cpp */; };
+		23F5BCEC20887FD3000CCD37 /* MigrationTamperer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 234D391B20833BC2005FD3CF /* MigrationTamperer.cpp */; };
+		23F5BCED20887FD3000CCD37 /* LangBeginSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397748C202AECD3000A681C /* LangBeginSTMT.cpp */; };
+		23F5BCEE20887FD3000CCD37 /* LangResultColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774D3202AECD3000A681C /* LangResultColumn.cpp */; };
+		23F5BCEF20887FD3000CCD37 /* LangModuleArgument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774C4202AECD3000A681C /* LangModuleArgument.cpp */; };
+		23F5BCF020887FD3000CCD37 /* LangReindexSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774CF202AECD3000A681C /* LangReindexSTMT.cpp */; };
+		23F5BCF120887FD3000CCD37 /* WCTRedirectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234591F020440A0200DC7D34 /* WCTRedirectable.mm */; };
+		23F5BCF220887FD3000CCD37 /* LangTableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774DF202AECD3000A681C /* LangTableOrSubquery.cpp */; };
+		23F5BCF320887FD3000CCD37 /* ConvertibleImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D4DA482085A99000AE6D90 /* ConvertibleImpl.cpp */; };
+		23F5BCF420887FD3000CCD37 /* LangPragmaSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774C9202AECD3000A681C /* LangPragmaSTMT.cpp */; };
+		23F5BCF520887FD3000CCD37 /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
+		23F5BCF620887FD3000CCD37 /* WCTDatabase+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2AC2049565600C4CBB6 /* WCTDatabase+Config.mm */; };
+		23F5BCF720887FD3000CCD37 /* WCTMaster.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6381EA0D6680021EFA7 /* WCTMaster.mm */; };
+		23F5BCF820887FD3000CCD37 /* NSData+NoCopyData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2982049434D00C4CBB6 /* NSData+NoCopyData.mm */; };
+		23F5BCF920887FD3000CCD37 /* WCTDatabase+RepairKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F66F1EA0D6680021EFA7 /* WCTDatabase+RepairKit.mm */; };
+		23F5BCFA20887FD3000CCD37 /* LangDropViewSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774B2202AECD3000A681C /* LangDropViewSTMT.cpp */; };
+		23F5BCFB20887FD3000CCD37 /* StatementSelect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977475202AECD3000A681C /* StatementSelect.cpp */; };
+		23F5BCFC20887FD3000CCD37 /* SQLiteError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2361C43A206358EE00A9966A /* SQLiteError.cpp */; };
+		23F5BCFD20887FD3000CCD37 /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
+		23F5BCFE20887FD3000CCD37 /* StatementAlterTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977449202AECD3000A681C /* StatementAlterTable.cpp */; };
+		23F5BCFF20887FD3000CCD37 /* WCTSQLiteError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238341AE20634FA600F47486 /* WCTSQLiteError.mm */; };
+		23F5BD0020887FD3000CCD37 /* MigrationInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BFE30B207CE3E200A4BD81 /* MigrationInfos.cpp */; };
+		23F5BD0120887FD3000CCD37 /* StatementDelete.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397745D202AECD3000A681C /* StatementDelete.cpp */; };
+		23F5BD0220887FD3000CCD37 /* WCTTable+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6521EA0D6680021EFA7 /* WCTTable+ChainCall.mm */; };
+		23F5BD0320887FD3000CCD37 /* WCTTokenizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTTokenizer.mm */; };
+		23F5BD0420887FD3000CCD37 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776D5202AF2E3000A681C /* Path.cpp */; };
+		23F5BD0520887FD3000CCD37 /* LangPragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F4EF7820567F4B0088DE3D /* LangPragma.cpp */; };
+		23F5BD0620887FD3000CCD37 /* WCTDelete.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6411EA0D6680021EFA7 /* WCTDelete.mm */; };
+		23F5BD0720887FD3000CCD37 /* WCTDatabase+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F340DD204D3482007DB8AB /* WCTDatabase+ChainCall.mm */; };
+		23F5BD0920887FD3000CCD37 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243E20172865008146EF /* sqlcipher.framework */; };
+		23F5BD0A20887FD3000CCD37 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2321243620172859008146EF /* sqliterk.framework */; };
+		23F5BD0C20887FD3000CCD37 /* BindParameter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977422202AECD2000A681C /* BindParameter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD0D20887FD3000CCD37 /* CopyOnWrite.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D6202AF2E3000A681C /* CopyOnWrite.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD0E20887FD3000CCD37 /* ColumnConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977424202AECD2000A681C /* ColumnConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD0F20887FD3000CCD37 /* NSNull+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE307207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1020887FD3000CCD37 /* Handle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306E202AFF8B000F7895 /* Handle.hpp */; };
+		23F5BD1120887FD3000CCD37 /* MigrationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96BA22050EB8500DB5E93 /* MigrationHandle.hpp */; };
+		23F5BD1220887FD3000CCD37 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.h */; };
+		23F5BD1320887FD3000CCD37 /* ColumnDef.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977426202AECD2000A681C /* ColumnDef.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1420887FD3000CCD37 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1520887FD3000CCD37 /* CommonTableExpression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977428202AECD3000A681C /* CommonTableExpression.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1620887FD3000CCD37 /* CTETableName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397742A202AECD3000A681C /* CTETableName.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1720887FD3000CCD37 /* Describable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397742D202AECD3000A681C /* Describable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1820887FD3000CCD37 /* Expression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397742F202AECD3000A681C /* Expression.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1920887FD3000CCD37 /* ForeignKeyClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977431202AECD3000A681C /* ForeignKeyClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1A20887FD3000CCD37 /* MigrationHandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B9E2050E9A500DB5E93 /* MigrationHandlePool.hpp */; };
+		23F5BD1B20887FD3000CCD37 /* WCTCoreError.h in Headers */ = {isa = PBXBuildFile; fileRef = 238341A920634F9F00F47486 /* WCTCoreError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1C20887FD3000CCD37 /* IndexedColumn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977433202AECD3000A681C /* IndexedColumn.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1D20887FD3000CCD37 /* JoinClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977435202AECD3000A681C /* JoinClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1E20887FD3000CCD37 /* Error.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A057020611A5500F1A212 /* Error.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD1F20887FD3000CCD37 /* JoinConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977437202AECD3000A681C /* JoinConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2020887FD3000CCD37 /* LiteralValue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977439202AECD3000A681C /* LiteralValue.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2120887FD3000CCD37 /* ModuleArgument.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397743B202AECD3000A681C /* ModuleArgument.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2220887FD3000CCD37 /* OrderingTerm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397743D202AECD3000A681C /* OrderingTerm.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2320887FD3000CCD37 /* Pragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397743F202AECD3000A681C /* Pragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2420887FD3000CCD37 /* WCTMigrationInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23036A41205F9CAC00ADF01A /* WCTMigrationInfo+Private.h */; };
+		23F5BD2520887FD3000CCD37 /* QualifiedTableName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977441202AECD3000A681C /* QualifiedTableName.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2620887FD3000CCD37 /* MigrationInfos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE30C207CE3E200A4BD81 /* MigrationInfos.hpp */; };
+		23F5BD2720887FD3000CCD37 /* NSDate+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD7C206C963C006C6C8E /* NSDate+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2820887FD3000CCD37 /* RaiseFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977443202AECD3000A681C /* RaiseFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2920887FD3000CCD37 /* ResultColumn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977445202AECD3000A681C /* ResultColumn.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2A20887FD3000CCD37 /* SelectCore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977447202AECD3000A681C /* SelectCore.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2B20887FD3000CCD37 /* KeyValueTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232DCDF1207F044B00AC2CD0 /* KeyValueTable.hpp */; };
+		23F5BD2C20887FD3000CCD37 /* Statement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977448202AECD3000A681C /* Statement.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2D20887FD3000CCD37 /* StatementAlterTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397744A202AECD3000A681C /* StatementAlterTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2E20887FD3000CCD37 /* StatementAnalyze.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397744C202AECD3000A681C /* StatementAnalyze.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD2F20887FD3000CCD37 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */; };
+		23F5BD3020887FD3000CCD37 /* StatementAttach.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397744E202AECD3000A681C /* StatementAttach.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3120887FD3000CCD37 /* StatementBegin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977450202AECD3000A681C /* StatementBegin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3220887FD3000CCD37 /* StatementCommit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977452202AECD3000A681C /* StatementCommit.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3320887FD3000CCD37 /* StatementCreateIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977454202AECD3000A681C /* StatementCreateIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3420887FD3000CCD37 /* StatementCreateTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977456202AECD3000A681C /* StatementCreateTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3520887FD3000CCD37 /* StatementCreateTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977458202AECD3000A681C /* StatementCreateTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3620887FD3000CCD37 /* StatementCreateView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397745A202AECD3000A681C /* StatementCreateView.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3720887FD3000CCD37 /* StatementCreateVirtualTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397745C202AECD3000A681C /* StatementCreateVirtualTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3820887FD3000CCD37 /* WCTSQLiteError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23C01D0A20882B580008CE06 /* WCTSQLiteError+Private.h */; };
+		23F5BD3920887FD3000CCD37 /* StatementDelete.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397745E202AECD3000A681C /* StatementDelete.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3A20887FD3000CCD37 /* StatementDetach.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977460202AECD3000A681C /* StatementDetach.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3B20887FD3000CCD37 /* WCTFileError.h in Headers */ = {isa = PBXBuildFile; fileRef = 238341B120634FB200F47486 /* WCTFileError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3C20887FD3000CCD37 /* StatementDropIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977462202AECD3000A681C /* StatementDropIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3D20887FD3000CCD37 /* StatementDropTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977464202AECD3000A681C /* StatementDropTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3E20887FD3000CCD37 /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977466202AECD3000A681C /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD3F20887FD3000CCD37 /* FileManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C8202AF2E2000A681C /* FileManager.hpp */; };
+		23F5BD4020887FD3000CCD37 /* StatementDropView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977468202AECD3000A681C /* StatementDropView.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4120887FD3000CCD37 /* StatementInsert.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397746A202AECD3000A681C /* StatementInsert.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4220887FD3000CCD37 /* StatementPragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397746C202AECD3000A681C /* StatementPragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4320887FD3000CCD37 /* StatementReindex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397746E202AECD3000A681C /* StatementReindex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4420887FD3000CCD37 /* StatementRelease.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977470202AECD3000A681C /* StatementRelease.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4520887FD3000CCD37 /* StatementRollback.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977472202AECD3000A681C /* StatementRollback.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4620887FD3000CCD37 /* StatementSavepoint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977474202AECD3000A681C /* StatementSavepoint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4720887FD3000CCD37 /* StatementSelect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977476202AECD3000A681C /* StatementSelect.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4820887FD3000CCD37 /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4920887FD3000CCD37 /* WCTTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD072064DE23000E31E8 /* WCTTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4A20887FD3000CCD37 /* CopyOnWriteData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CC202AF2E2000A681C /* CopyOnWriteData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4B20887FD3000CCD37 /* StatementUpdate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977478202AECD3000A681C /* StatementUpdate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4C20887FD3000CCD37 /* StatementVacuum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397747A202AECD3000A681C /* StatementVacuum.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4D20887FD3000CCD37 /* TableConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397747C202AECD3000A681C /* TableConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4E20887FD3000CCD37 /* TableOrSubquery.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397747E202AECD3000A681C /* TableOrSubquery.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD4F20887FD3000CCD37 /* WCTValue+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B94E702068A16D00197358 /* WCTValue+Private.h */; };
+		23F5BD5020887FD3000CCD37 /* WCTCoreError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23C01D0620882B4F0008CE06 /* WCTCoreError+Private.h */; };
+		23F5BD5120887FD3000CCD37 /* WithClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977481202AECD3000A681C /* WithClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5220887FD3000CCD37 /* WCTTable+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 235F5D58207A377E00B440CA /* WCTTable+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5320887FD3000CCD37 /* LangAlterTableSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977487202AECD3000A681C /* LangAlterTableSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5420887FD3000CCD37 /* LangAnalyzeSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977489202AECD3000A681C /* LangAnalyzeSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5520887FD3000CCD37 /* LangAttachSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397748B202AECD3000A681C /* LangAttachSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5620887FD3000CCD37 /* LangBeginSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397748D202AECD3000A681C /* LangBeginSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5720887FD3000CCD37 /* LangBindParameter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397748F202AECD3000A681C /* LangBindParameter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5820887FD3000CCD37 /* WCTHandle+Table.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EABBE4206D08EC00241F3B /* WCTHandle+Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5920887FD3000CCD37 /* LangColumnConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977491202AECD3000A681C /* LangColumnConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5A20887FD3000CCD37 /* CopyOnWriteLazyDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C1202AF2E1000A681C /* CopyOnWriteLazyDescribable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5B20887FD3000CCD37 /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D0202AF2E2000A681C /* Macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5C20887FD3000CCD37 /* MigrationTamperer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234D391C20833BC2005FD3CF /* MigrationTamperer.hpp */; };
+		23F5BD5D20887FD3000CCD37 /* LangColumnDef.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977493202AECD3000A681C /* LangColumnDef.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5E20887FD3000CCD37 /* LangColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977494202AECD3000A681C /* LangColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD5F20887FD3000CCD37 /* Lock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232DCE09207F81FD00AC2CD0 /* Lock.hpp */; };
+		23F5BD6020887FD3000CCD37 /* LangCommitSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977496202AECD3000A681C /* LangCommitSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6120887FD3000CCD37 /* LangCommonTableExpression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977498202AECD3000A681C /* LangCommonTableExpression.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6220887FD3000CCD37 /* LangConflictClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23977499202AECD3000A681C /* LangConflictClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6320887FD3000CCD37 /* LangCreateIndexSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397749B202AECD3000A681C /* LangCreateIndexSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6420887FD3000CCD37 /* WCTHandleError.h in Headers */ = {isa = PBXBuildFile; fileRef = 238341A420634F9900F47486 /* WCTHandleError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6520887FD3000CCD37 /* LangCreateTableSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397749D202AECD3000A681C /* LangCreateTableSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6620887FD3000CCD37 /* MigrationBuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D18634205A66000001A6CE /* MigrationBuiltinConfig.hpp */; };
+		23F5BD6720887FD3000CCD37 /* LangCreateTriggerSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2397749F202AECD3000A681C /* LangCreateTriggerSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6820887FD3000CCD37 /* LangCreateViewSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774A1202AECD3000A681C /* LangCreateViewSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6920887FD3000CCD37 /* LangCreateVirtualTableSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774A3202AECD3000A681C /* LangCreateVirtualTableSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6A20887FD3000CCD37 /* LangCTETableName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774A5202AECD3000A681C /* LangCTETableName.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774A7202AECD3000A681C /* LangDeleteSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6C20887FD3000CCD37 /* LangDetachSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774A9202AECD3000A681C /* LangDetachSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6D20887FD3000CCD37 /* LangDropIndexSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774AB202AECD3000A681C /* LangDropIndexSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6E20887FD3000CCD37 /* LangDropInternalSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774AD202AECD3000A681C /* LangDropInternalSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD6F20887FD3000CCD37 /* LangDropTableSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774AF202AECD3000A681C /* LangDropTableSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7020887FD3000CCD37 /* LangDropTriggerSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774B1202AECD3000A681C /* LangDropTriggerSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7120887FD3000CCD37 /* SQLiteError.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A05782061355900F1A212 /* SQLiteError.hpp */; };
+		23F5BD7220887FD3000CCD37 /* LangDropViewSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774B3202AECD3000A681C /* LangDropViewSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7320887FD3000CCD37 /* LangExpr.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774B5202AECD3000A681C /* LangExpr.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7420887FD3000CCD37 /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CA202AF2E2000A681C /* Recyclable.hpp */; };
+		23F5BD7520887FD3000CCD37 /* WCTDatabase+Config.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2AB2049565600C4CBB6 /* WCTDatabase+Config.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7620887FD3000CCD37 /* LangForeignKeyClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774B7202AECD3000A681C /* LangForeignKeyClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7720887FD3000CCD37 /* LangIndexedColumn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774B9202AECD3000A681C /* LangIndexedColumn.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7820887FD3000CCD37 /* LangInsertSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774BB202AECD3000A681C /* LangInsertSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7920887FD3000CCD37 /* LangJoinClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774BD202AECD3000A681C /* LangJoinClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7A20887FD3000CCD37 /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA442085A3D300AE6D90 /* Interface.h */; };
+		23F5BD7B20887FD3000CCD37 /* WCTTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F340D8204D32C2007DB8AB /* WCTTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7C20887FD3000CCD37 /* LangJoinConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774BF202AECD3000A681C /* LangJoinConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7D20887FD3000CCD37 /* LangJoinOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774C1202AECD3000A681C /* LangJoinOperator.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7E20887FD3000CCD37 /* NSData+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD88206C966E006C6C8E /* NSData+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD7F20887FD3000CCD37 /* LangLiteralValue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774C3202AECD3000A681C /* LangLiteralValue.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8020887FD3000CCD37 /* LangModuleArgument.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774C5202AECD3000A681C /* LangModuleArgument.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8120887FD3000CCD37 /* LangOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774C6202AECD3000A681C /* LangOrder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8220887FD3000CCD37 /* LangOrderingTerm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774C8202AECD3000A681C /* LangOrderingTerm.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8320887FD3000CCD37 /* ThreadLocal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C9202AF2E2000A681C /* ThreadLocal.hpp */; };
+		23F5BD8420887FD3000CCD37 /* NSString+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD84206C9649006C6C8E /* NSString+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8520887FD3000CCD37 /* LangPragmaSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774CA202AECD3000A681C /* LangPragmaSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8620887FD3000CCD37 /* WCTUnsafeHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCF12064DD0B000E31E8 /* WCTUnsafeHandle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8720887FD3000CCD37 /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8820887FD3000CCD37 /* Column.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23000F18203EDFDC00ED8008 /* Column.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8920887FD3000CCD37 /* WCTValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B94E6C2068A06200197358 /* WCTValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8A20887FD3000CCD37 /* Tracer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2361C43F2063872100A9966A /* Tracer.hpp */; };
+		23F5BD8B20887FD3000CCD37 /* WCTHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCEE2064DD0B000E31E8 /* WCTHandle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8C20887FD3000CCD37 /* LangQualifiedTableName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774CC202AECD3000A681C /* LangQualifiedTableName.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8D20887FD3000CCD37 /* WCTRedirectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F120440A0200DC7D34 /* WCTRedirectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8E20887FD3000CCD37 /* CopyOnWriteString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CD202AF2E2000A681C /* CopyOnWriteString.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD8F20887FD3000CCD37 /* LangRaiseFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774CE202AECD3000A681C /* LangRaiseFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9020887FD3000CCD37 /* LangReindexSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774D0202AECD3000A681C /* LangReindexSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9120887FD3000CCD37 /* WCTDatabase+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F340DC204D3482007DB8AB /* WCTDatabase+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9220887FD3000CCD37 /* LangReleaseSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774D2202AECD3000A681C /* LangReleaseSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9320887FD3000CCD37 /* MigrationDatabase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A870E5204F82AE00273A98 /* MigrationDatabase.hpp */; };
+		23F5BD9420887FD3000CCD37 /* WCTHandleError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23C01D0220882B3D0008CE06 /* WCTHandleError+Private.h */; };
+		23F5BD9520887FD3000CCD37 /* LangResultColumn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774D4202AECD3000A681C /* LangResultColumn.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9620887FD3000CCD37 /* LangRollbackSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774D6202AECD3000A681C /* LangRollbackSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9720887FD3000CCD37 /* LangSavepointSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774D8202AECD3000A681C /* LangSavepointSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9820887FD3000CCD37 /* LangSelectCore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774DA202AECD3000A681C /* LangSelectCore.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9920887FD3000CCD37 /* LangSelectSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774DC202AECD3000A681C /* LangSelectSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9A20887FD3000CCD37 /* LangTableConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774DE202AECD3000A681C /* LangTableConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9B20887FD3000CCD37 /* LangTableOrSubquery.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774E0202AECD3000A681C /* LangTableOrSubquery.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9C20887FD3000CCD37 /* LangUpdateSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774E2202AECD3000A681C /* LangUpdateSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9D20887FD3000CCD37 /* CopyOnWriteList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A7B35A2044F52000775DB8 /* CopyOnWriteList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9E20887FD3000CCD37 /* LangVacuumSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774E4202AECD3000A681C /* LangVacuumSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BD9F20887FD3000CCD37 /* SQLiteGlobal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */; };
+		23F5BDA020887FD3000CCD37 /* WCTDatabase+Handle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCEC2064DD0B000E31E8 /* WCTDatabase+Handle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA120887FD3000CCD37 /* LangWithClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774E6202AECD3000A681C /* LangWithClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA220887FD3000CCD37 /* WCTCodingMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6931EA0D6680021EFA7 /* WCTCodingMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA320887FD3000CCD37 /* RecyclableHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */; };
+		23F5BDA420887FD3000CCD37 /* WCTTable+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6511EA0D6680021EFA7 /* WCTTable+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA520887FD3000CCD37 /* LangCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 23977485202AECD3000A681C /* LangCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA620887FD3000CCD37 /* ConvertibleImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA492085A99000AE6D90 /* ConvertibleImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA720887FD3000CCD37 /* WCTConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6951EA0D6680021EFA7 /* WCTConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA820887FD3000CCD37 /* Operable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F5652043A2CE00EC571D /* Operable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDA920887FD3000CCD37 /* WCTCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F68D1EA0D6680021EFA7 /* WCTCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDAA20887FD3000CCD37 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDAB20887FD3000CCD37 /* WCTInsert.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6431EA0D6680021EFA7 /* WCTInsert.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDAC20887FD3000CCD37 /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA472085A98F00AE6D90 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDAD20887FD3000CCD37 /* WCTIndexMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6961EA0D6680021EFA7 /* WCTIndexMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDAE20887FD3000CCD37 /* WCTMaster+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 236DB4B61F209D100091FC79 /* WCTMaster+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDAF20887FD3000CCD37 /* String.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C3202AF2E2000A681C /* String.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB020887FD3000CCD37 /* Database.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F61C1EA0D6680021EFA7 /* Database.hpp */; };
+		23F5BDB120887FD3000CCD37 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
+		23F5BDB220887FD3000CCD37 /* WCTSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6391EA0D6680021EFA7 /* WCTSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB320887FD3000CCD37 /* WCTCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F65D1EA0D6680021EFA7 /* WCTCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB420887FD3000CCD37 /* WCTRowSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6491EA0D6680021EFA7 /* WCTRowSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB520887FD3000CCD37 /* WCTDelete.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6401EA0D6680021EFA7 /* WCTDelete.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB620887FD3000CCD37 /* WCTColumnBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6861EA0D6680021EFA7 /* WCTColumnBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB720887FD3000CCD37 /* WCTBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6841EA0D6680021EFA7 /* WCTBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB820887FD3000CCD37 /* WCTDatabase+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6571EA0D6680021EFA7 /* WCTDatabase+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDB920887FD3000CCD37 /* WCTSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F64C1EA0D6680021EFA7 /* WCTSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDBA20887FD3000CCD37 /* SequantialIncreasingMap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2340426F204110F4005EB12C /* SequantialIncreasingMap.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDBB20887FD3000CCD37 /* WCTMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6371EA0D6680021EFA7 /* WCTMaster.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDBC20887FD3000CCD37 /* WCTUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6541EA0D6680021EFA7 /* WCTUpdate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6231EA0D6680021EFA7 /* HandlePool.hpp */; };
+		23F5BDBE20887FD3000CCD37 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* Tokenizer.hpp */; };
+		23F5BDBF20887FD3000CCD37 /* Path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C7202AF2E2000A681C /* Path.hpp */; };
+		23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6BA1EA0D6680021EFA7 /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6471EA0D6680021EFA7 /* WCTMultiSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC220887FD3000CCD37 /* WCTStatistics.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3BE1ED442E2000B72F6 /* WCTStatistics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2301DA61203F016200C3B52A /* Convertible.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC420887FD3000CCD37 /* Tokenize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC3078202B0066000F7895 /* Tokenize.hpp */; };
+		23F5BDC520887FD3000CCD37 /* Abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* Abstract.h */; };
+		23F5BDC620887FD3000CCD37 /* WCTDatabase+Table.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69A1EA0D6680021EFA7 /* WCTDatabase+Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC720887FD3000CCD37 /* WCTSelectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F64F1EA0D6680021EFA7 /* WCTSelectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC820887FD3000CCD37 /* WCTRuntimeObjCAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6811EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDC920887FD3000CCD37 /* WCTRuntimeCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6801EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDCA20887FD3000CCD37 /* HandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2370980920590CA700E768B4 /* HandleStatement.hpp */; };
+		23F5BDCB20887FD3000CCD37 /* WCTCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDCC20887FD3000CCD37 /* WCTDatabase+RepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F66E1EA0D6680021EFA7 /* WCTDatabase+RepairKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDCD20887FD3000CCD37 /* RecyclableHandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B962050E53600DB5E93 /* RecyclableHandlePool.hpp */; };
+		23F5BDCE20887FD3000CCD37 /* ConcurrentList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D3202AF2E2000A681C /* ConcurrentList.hpp */; };
+		23F5BDCF20887FD3000CCD37 /* WINQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 2397747F202AECD3000A681C /* WINQ.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD020887FD3000CCD37 /* HandleError.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A057420612F8500F1A212 /* HandleError.hpp */; };
+		23F5BDD120887FD3000CCD37 /* WCTTable+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6591EA0D6680021EFA7 /* WCTTable+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD220887FD3000CCD37 /* WCTMacroHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6971EA0D6680021EFA7 /* WCTMacroHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD320887FD3000CCD37 /* WCTTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD420887FD3000CCD37 /* WCTBaseAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67B1EA0D6680021EFA7 /* WCTBaseAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD520887FD3000CCD37 /* WCTObjCAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67D1EA0D6680021EFA7 /* WCTObjCAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD620887FD3000CCD37 /* WCTProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6901EA0D6680021EFA7 /* WCTProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD720887FD3000CCD37 /* WCTCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67C1EA0D6680021EFA7 /* WCTCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD820887FD3000CCD37 /* LangPragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F4EF7920567F4B0088DE3D /* LangPragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDD920887FD3000CCD37 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDDA20887FD3000CCD37 /* Config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6171EA0D6680021EFA7 /* Config.hpp */; };
+		23F5BDDB20887FD3000CCD37 /* WCTPropertyMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6941EA0D6680021EFA7 /* WCTPropertyMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDDC20887FD3000CCD37 /* WCTORM.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6981EA0D6680021EFA7 /* WCTORM.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDDD20887FD3000CCD37 /* WCTDatabase+File.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F66B1EA0D6680021EFA7 /* WCTDatabase+File.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDDE20887FD3000CCD37 /* NSObject+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD77206C962E006C6C8E /* NSObject+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDDF20887FD3000CCD37 /* Redirectable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F56D2043FD1E00EC571D /* Redirectable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE020887FD3000CCD37 /* WCTChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD0B2064E045000E31E8 /* WCTChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE120887FD3000CCD37 /* WCTMigrationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 23036A3D205F9BF100ADF01A /* WCTMigrationInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE220887FD3000CCD37 /* CoreError.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A057C20621B3900F1A212 /* CoreError.hpp */; };
+		23F5BDE320887FD3000CCD37 /* WCTMigrationDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 23036A39205F9A4700ADF01A /* WCTMigrationDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE420887FD3000CCD37 /* WCTDatabase+Memory.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2AF2049576D00C4CBB6 /* WCTDatabase+Memory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE520887FD3000CCD37 /* WCTFileError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23C01CFD20882A790008CE06 /* WCTFileError+Private.h */; };
+		23F5BDE620887FD3000CCD37 /* AsyncLoop.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23036A30205F65A300ADF01A /* AsyncLoop.hpp */; };
+		23F5BDE720887FD3000CCD37 /* WCTRuntimeBaseAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67E1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE820887FD3000CCD37 /* Lang.h in Headers */ = {isa = PBXBuildFile; fileRef = 23977484202AECD3000A681C /* Lang.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDE920887FD3000CCD37 /* WCTUnsafeHandle+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCF02064DD0B000E31E8 /* WCTUnsafeHandle+Private.h */; };
+		23F5BDEA20887FD3000CCD37 /* WCTDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F65F1EA0D6680021EFA7 /* WCTDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDEB20887FD3000CCD37 /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
+		23F5BDEC20887FD3000CCD37 /* NSObject+Convertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* NSObject+Convertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDED20887FD3000CCD37 /* WCTTable+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */; };
+		23F5BDEE20887FD3000CCD37 /* Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA432085A2CA00AE6D90 /* Migration.h */; };
+		23F5BDEF20887FD3000CCD37 /* BuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F122045032700DDB462 /* BuiltinConfig.hpp */; };
+		23F5BDF020887FD3000CCD37 /* HandlePools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* HandlePools.hpp */; };
+		23F5BDF120887FD3000CCD37 /* ConfiguredHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */; };
+		23F5BDF220887FD3000CCD37 /* WCTSQLiteError.h in Headers */ = {isa = PBXBuildFile; fileRef = 238341AD20634FA600F47486 /* WCTSQLiteError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDF320887FD3000CCD37 /* WCTDatabase+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCFF2064DE04000E31E8 /* WCTDatabase+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDF420887FD3000CCD37 /* WCTHandle+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD012064DE04000E31E8 /* WCTHandle+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDF520887FD3000CCD37 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDF620887FD3000CCD37 /* WCTSelectable+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F64E1EA0D6680021EFA7 /* WCTSelectable+Private.h */; };
+		23F5BDF720887FD3000CCD37 /* LangColumn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23000F11203EC89700ED8008 /* LangColumn.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDF820887FD3000CCD37 /* NSNumber+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD80206C9644006C6C8E /* NSNumber+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDF920887FD3000CCD37 /* WCTCore+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F65C1EA0D6680021EFA7 /* WCTCore+Private.h */; };
+		23F5BDFA20887FD3000CCD37 /* NSData+NoCopyData.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2972049434D00C4CBB6 /* NSData+NoCopyData.h */; };
+		23F5BDFB20887FD3000CCD37 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BDFC20887FD3000CCD37 /* NoCopyData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A2C199204647590026D3C5 /* NoCopyData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F5BE1120888008000CCD37 /* sqlcipher static.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher static.framework */; };
+		23F5BE1220888008000CCD37 /* sqliterk static.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0920887FD4000CCD37 /* sqliterk static.framework */; };
+		23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -471,26 +905,61 @@
 			remoteGlobalIDString = 239325C81E836A7700D677CC;
 			remoteInfo = sqlcipher;
 		};
-		2321244020172876008146EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239325C71E836A7700D677CC;
-			remoteInfo = sqlcipher;
-		};
-		2321244220172876008146EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 233032381FB9435700101373;
-			remoteInfo = sqliterk;
-		};
 		2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2349FC171FDF8648005230E8;
 			remoteInfo = "Install file template";
+		};
+		23F5BC4420887FD3000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 239325C71E836A7700D677CC;
+			remoteInfo = sqlcipher;
+		};
+		23F5BC4620887FD3000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 233032381FB9435700101373;
+			remoteInfo = sqliterk;
+		};
+		23F5BC4820887FD3000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2349FC171FDF8648005230E8;
+			remoteInfo = "Install file template";
+		};
+		23F5BE0520887FD4000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 23F5BC4020887FAB000CCD37;
+			remoteInfo = "sqlcipher static";
+		};
+		23F5BE0820887FD4000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 23F5BBCC20887F7B000CCD37;
+			remoteInfo = "sqliterk static";
+		};
+		23F5BE0D20887FFF000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
+			remoteInfo = "sqlcipher static";
+		};
+		23F5BE0F20887FFF000CCD37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A747C520039675003CECFA /* sqliterk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 23F5BBAD20887F7B000CCD37;
+			remoteInfo = "sqliterk static";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -930,6 +1399,7 @@
 		23F340DD204D3482007DB8AB /* WCTDatabase+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+ChainCall.mm"; sourceTree = "<group>"; };
 		23F4EF7820567F4B0088DE3D /* LangPragma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LangPragma.cpp; sourceTree = "<group>"; };
 		23F4EF7920567F4B0088DE3D /* LangPragma.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LangPragma.hpp; sourceTree = "<group>"; };
+		23F5BE0120887FD3000CCD37 /* WCDB for Test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "WCDB for Test.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -938,8 +1408,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				232124442017287C008146EF /* sqlcipher.framework in Frameworks */,
-				232124452017287C008146EF /* sqliterk.framework in Frameworks */,
+				23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */,
+				23F5BE1120888008000CCD37 /* sqlcipher static.framework in Frameworks */,
+				23F5BE1220888008000CCD37 /* sqliterk static.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23F5BD0820887FD3000CCD37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23F5BD0920887FD3000CCD37 /* sqlcipher.framework in Frameworks */,
+				23F5BD0A20887FD3000CCD37 /* sqliterk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -962,6 +1442,7 @@
 			isa = PBXGroup;
 			children = (
 				2321243620172859008146EF /* sqliterk.framework */,
+				23F5BE0920887FD4000CCD37 /* sqliterk static.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -970,6 +1451,7 @@
 			isa = PBXGroup;
 			children = (
 				2321243E20172865008146EF /* sqlcipher.framework */,
+				23F5BE0620887FD4000CCD37 /* sqlcipher static.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1600,6 +2082,7 @@
 			isa = PBXGroup;
 			children = (
 				239326611E836D7300D677CC /* WCDB.framework */,
+				23F5BE0120887FD3000CCD37 /* WCDB for Test.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1863,6 +2346,254 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		23F5BD0B20887FD3000CCD37 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23F5BD0C20887FD3000CCD37 /* BindParameter.hpp in Headers */,
+				23F5BD0D20887FD3000CCD37 /* CopyOnWrite.hpp in Headers */,
+				23F5BD0E20887FD3000CCD37 /* ColumnConstraint.hpp in Headers */,
+				23F5BD0F20887FD3000CCD37 /* NSNull+WCTColumnCoding.h in Headers */,
+				23F5BD1020887FD3000CCD37 /* Handle.hpp in Headers */,
+				23F5BD1120887FD3000CCD37 /* MigrationHandle.hpp in Headers */,
+				23F5BD1220887FD3000CCD37 /* Core.h in Headers */,
+				23F5BD1320887FD3000CCD37 /* ColumnDef.hpp in Headers */,
+				23F5BD1420887FD3000CCD37 /* WCTHandle+ChainCall.h in Headers */,
+				23F5BD1520887FD3000CCD37 /* CommonTableExpression.hpp in Headers */,
+				23F5BD1620887FD3000CCD37 /* CTETableName.hpp in Headers */,
+				23F5BD1720887FD3000CCD37 /* Describable.hpp in Headers */,
+				23F5BD1820887FD3000CCD37 /* Expression.hpp in Headers */,
+				23F5BD1920887FD3000CCD37 /* ForeignKeyClause.hpp in Headers */,
+				23F5BD1A20887FD3000CCD37 /* MigrationHandlePool.hpp in Headers */,
+				23F5BD1B20887FD3000CCD37 /* WCTCoreError.h in Headers */,
+				23F5BD1C20887FD3000CCD37 /* IndexedColumn.hpp in Headers */,
+				23F5BD1D20887FD3000CCD37 /* JoinClause.hpp in Headers */,
+				23F5BD1E20887FD3000CCD37 /* Error.hpp in Headers */,
+				23F5BD1F20887FD3000CCD37 /* JoinConstraint.hpp in Headers */,
+				23F5BD2020887FD3000CCD37 /* LiteralValue.hpp in Headers */,
+				23F5BD2120887FD3000CCD37 /* ModuleArgument.hpp in Headers */,
+				23F5BD2220887FD3000CCD37 /* OrderingTerm.hpp in Headers */,
+				23F5BD2320887FD3000CCD37 /* Pragma.hpp in Headers */,
+				23F5BD2420887FD3000CCD37 /* WCTMigrationInfo+Private.h in Headers */,
+				23F5BD2520887FD3000CCD37 /* QualifiedTableName.hpp in Headers */,
+				23F5BD2620887FD3000CCD37 /* MigrationInfos.hpp in Headers */,
+				23F5BD2720887FD3000CCD37 /* NSDate+WCTColumnCoding.h in Headers */,
+				23F5BD2820887FD3000CCD37 /* RaiseFunction.hpp in Headers */,
+				23F5BD2920887FD3000CCD37 /* ResultColumn.hpp in Headers */,
+				23F5BD2A20887FD3000CCD37 /* SelectCore.hpp in Headers */,
+				23F5BD2B20887FD3000CCD37 /* KeyValueTable.hpp in Headers */,
+				23F5BD2C20887FD3000CCD37 /* Statement.hpp in Headers */,
+				23F5BD2D20887FD3000CCD37 /* StatementAlterTable.hpp in Headers */,
+				23F5BD2E20887FD3000CCD37 /* StatementAnalyze.hpp in Headers */,
+				23F5BD2F20887FD3000CCD37 /* MigrationInfo.hpp in Headers */,
+				23F5BD3020887FD3000CCD37 /* StatementAttach.hpp in Headers */,
+				23F5BD3120887FD3000CCD37 /* StatementBegin.hpp in Headers */,
+				23F5BD3220887FD3000CCD37 /* StatementCommit.hpp in Headers */,
+				23F5BD3320887FD3000CCD37 /* StatementCreateIndex.hpp in Headers */,
+				23F5BD3420887FD3000CCD37 /* StatementCreateTable.hpp in Headers */,
+				23F5BD3520887FD3000CCD37 /* StatementCreateTrigger.hpp in Headers */,
+				23F5BD3620887FD3000CCD37 /* StatementCreateView.hpp in Headers */,
+				23F5BD3720887FD3000CCD37 /* StatementCreateVirtualTable.hpp in Headers */,
+				23F5BD3820887FD3000CCD37 /* WCTSQLiteError+Private.h in Headers */,
+				23F5BD3920887FD3000CCD37 /* StatementDelete.hpp in Headers */,
+				23F5BD3A20887FD3000CCD37 /* StatementDetach.hpp in Headers */,
+				23F5BD3B20887FD3000CCD37 /* WCTFileError.h in Headers */,
+				23F5BD3C20887FD3000CCD37 /* StatementDropIndex.hpp in Headers */,
+				23F5BD3D20887FD3000CCD37 /* StatementDropTable.hpp in Headers */,
+				23F5BD3E20887FD3000CCD37 /* StatementDropTrigger.hpp in Headers */,
+				23F5BD3F20887FD3000CCD37 /* FileManager.hpp in Headers */,
+				23F5BD4020887FD3000CCD37 /* StatementDropView.hpp in Headers */,
+				23F5BD4120887FD3000CCD37 /* StatementInsert.hpp in Headers */,
+				23F5BD4220887FD3000CCD37 /* StatementPragma.hpp in Headers */,
+				23F5BD4320887FD3000CCD37 /* StatementReindex.hpp in Headers */,
+				23F5BD4420887FD3000CCD37 /* StatementRelease.hpp in Headers */,
+				23F5BD4520887FD3000CCD37 /* StatementRollback.hpp in Headers */,
+				23F5BD4620887FD3000CCD37 /* StatementSavepoint.hpp in Headers */,
+				23F5BD4720887FD3000CCD37 /* StatementSelect.hpp in Headers */,
+				23F5BD4820887FD3000CCD37 /* WCTHandle+Convenient.h in Headers */,
+				23F5BD4920887FD3000CCD37 /* WCTTransaction.h in Headers */,
+				23F5BD4A20887FD3000CCD37 /* CopyOnWriteData.hpp in Headers */,
+				23F5BD4B20887FD3000CCD37 /* StatementUpdate.hpp in Headers */,
+				23F5BD4C20887FD3000CCD37 /* StatementVacuum.hpp in Headers */,
+				23F5BD4D20887FD3000CCD37 /* TableConstraint.hpp in Headers */,
+				23F5BD4E20887FD3000CCD37 /* TableOrSubquery.hpp in Headers */,
+				23F5BD4F20887FD3000CCD37 /* WCTValue+Private.h in Headers */,
+				23F5BD5020887FD3000CCD37 /* WCTCoreError+Private.h in Headers */,
+				23F5BD5120887FD3000CCD37 /* WithClause.hpp in Headers */,
+				23F5BD5220887FD3000CCD37 /* WCTTable+Transaction.h in Headers */,
+				23F5BD5320887FD3000CCD37 /* LangAlterTableSTMT.hpp in Headers */,
+				23F5BD5420887FD3000CCD37 /* LangAnalyzeSTMT.hpp in Headers */,
+				23F5BD5520887FD3000CCD37 /* LangAttachSTMT.hpp in Headers */,
+				23F5BD5620887FD3000CCD37 /* LangBeginSTMT.hpp in Headers */,
+				23F5BD5720887FD3000CCD37 /* LangBindParameter.hpp in Headers */,
+				23F5BD5820887FD3000CCD37 /* WCTHandle+Table.h in Headers */,
+				23F5BD5920887FD3000CCD37 /* LangColumnConstraint.hpp in Headers */,
+				23F5BD5A20887FD3000CCD37 /* CopyOnWriteLazyDescribable.hpp in Headers */,
+				23F5BD5B20887FD3000CCD37 /* Macro.hpp in Headers */,
+				23F5BD5C20887FD3000CCD37 /* MigrationTamperer.hpp in Headers */,
+				23F5BD5D20887FD3000CCD37 /* LangColumnDef.hpp in Headers */,
+				23F5BD5E20887FD3000CCD37 /* LangColumnType.hpp in Headers */,
+				23F5BD5F20887FD3000CCD37 /* Lock.hpp in Headers */,
+				23F5BD6020887FD3000CCD37 /* LangCommitSTMT.hpp in Headers */,
+				23F5BD6120887FD3000CCD37 /* LangCommonTableExpression.hpp in Headers */,
+				23F5BD6220887FD3000CCD37 /* LangConflictClause.hpp in Headers */,
+				23F5BD6320887FD3000CCD37 /* LangCreateIndexSTMT.hpp in Headers */,
+				23F5BD6420887FD3000CCD37 /* WCTHandleError.h in Headers */,
+				23F5BD6520887FD3000CCD37 /* LangCreateTableSTMT.hpp in Headers */,
+				23F5BD6620887FD3000CCD37 /* MigrationBuiltinConfig.hpp in Headers */,
+				23F5BD6720887FD3000CCD37 /* LangCreateTriggerSTMT.hpp in Headers */,
+				23F5BD6820887FD3000CCD37 /* LangCreateViewSTMT.hpp in Headers */,
+				23F5BD6920887FD3000CCD37 /* LangCreateVirtualTableSTMT.hpp in Headers */,
+				23F5BD6A20887FD3000CCD37 /* LangCTETableName.hpp in Headers */,
+				23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */,
+				23F5BD6C20887FD3000CCD37 /* LangDetachSTMT.hpp in Headers */,
+				23F5BD6D20887FD3000CCD37 /* LangDropIndexSTMT.hpp in Headers */,
+				23F5BD6E20887FD3000CCD37 /* LangDropInternalSTMT.hpp in Headers */,
+				23F5BD6F20887FD3000CCD37 /* LangDropTableSTMT.hpp in Headers */,
+				23F5BD7020887FD3000CCD37 /* LangDropTriggerSTMT.hpp in Headers */,
+				23F5BD7120887FD3000CCD37 /* SQLiteError.hpp in Headers */,
+				23F5BD7220887FD3000CCD37 /* LangDropViewSTMT.hpp in Headers */,
+				23F5BD7320887FD3000CCD37 /* LangExpr.hpp in Headers */,
+				23F5BD7420887FD3000CCD37 /* Recyclable.hpp in Headers */,
+				23F5BD7520887FD3000CCD37 /* WCTDatabase+Config.h in Headers */,
+				23F5BD7620887FD3000CCD37 /* LangForeignKeyClause.hpp in Headers */,
+				23F5BD7720887FD3000CCD37 /* LangIndexedColumn.hpp in Headers */,
+				23F5BD7820887FD3000CCD37 /* LangInsertSTMT.hpp in Headers */,
+				23F5BD7920887FD3000CCD37 /* LangJoinClause.hpp in Headers */,
+				23F5BD7A20887FD3000CCD37 /* Interface.h in Headers */,
+				23F5BD7B20887FD3000CCD37 /* WCTTable.h in Headers */,
+				23F5BD7C20887FD3000CCD37 /* LangJoinConstraint.hpp in Headers */,
+				23F5BD7D20887FD3000CCD37 /* LangJoinOperator.hpp in Headers */,
+				23F5BD7E20887FD3000CCD37 /* NSData+WCTColumnCoding.h in Headers */,
+				23F5BD7F20887FD3000CCD37 /* LangLiteralValue.hpp in Headers */,
+				23F5BD8020887FD3000CCD37 /* LangModuleArgument.hpp in Headers */,
+				23F5BD8120887FD3000CCD37 /* LangOrder.hpp in Headers */,
+				23F5BD8220887FD3000CCD37 /* LangOrderingTerm.hpp in Headers */,
+				23F5BD8320887FD3000CCD37 /* ThreadLocal.hpp in Headers */,
+				23F5BD8420887FD3000CCD37 /* NSString+WCTColumnCoding.h in Headers */,
+				23F5BD8520887FD3000CCD37 /* LangPragmaSTMT.hpp in Headers */,
+				23F5BD8620887FD3000CCD37 /* WCTUnsafeHandle.h in Headers */,
+				23F5BD8720887FD3000CCD37 /* WCTConvenient.h in Headers */,
+				23F5BD8820887FD3000CCD37 /* Column.hpp in Headers */,
+				23F5BD8920887FD3000CCD37 /* WCTValue.h in Headers */,
+				23F5BD8A20887FD3000CCD37 /* Tracer.hpp in Headers */,
+				23F5BD8B20887FD3000CCD37 /* WCTHandle.h in Headers */,
+				23F5BD8C20887FD3000CCD37 /* LangQualifiedTableName.hpp in Headers */,
+				23F5BD8D20887FD3000CCD37 /* WCTRedirectable.h in Headers */,
+				23F5BD8E20887FD3000CCD37 /* CopyOnWriteString.hpp in Headers */,
+				23F5BD8F20887FD3000CCD37 /* LangRaiseFunction.hpp in Headers */,
+				23F5BD9020887FD3000CCD37 /* LangReindexSTMT.hpp in Headers */,
+				23F5BD9120887FD3000CCD37 /* WCTDatabase+ChainCall.h in Headers */,
+				23F5BD9220887FD3000CCD37 /* LangReleaseSTMT.hpp in Headers */,
+				23F5BD9320887FD3000CCD37 /* MigrationDatabase.hpp in Headers */,
+				23F5BD9420887FD3000CCD37 /* WCTHandleError+Private.h in Headers */,
+				23F5BD9520887FD3000CCD37 /* LangResultColumn.hpp in Headers */,
+				23F5BD9620887FD3000CCD37 /* LangRollbackSTMT.hpp in Headers */,
+				23F5BD9720887FD3000CCD37 /* LangSavepointSTMT.hpp in Headers */,
+				23F5BD9820887FD3000CCD37 /* LangSelectCore.hpp in Headers */,
+				23F5BD9920887FD3000CCD37 /* LangSelectSTMT.hpp in Headers */,
+				23F5BD9A20887FD3000CCD37 /* LangTableConstraint.hpp in Headers */,
+				23F5BD9B20887FD3000CCD37 /* LangTableOrSubquery.hpp in Headers */,
+				23F5BD9C20887FD3000CCD37 /* LangUpdateSTMT.hpp in Headers */,
+				23F5BD9D20887FD3000CCD37 /* CopyOnWriteList.hpp in Headers */,
+				23F5BD9E20887FD3000CCD37 /* LangVacuumSTMT.hpp in Headers */,
+				23F5BD9F20887FD3000CCD37 /* SQLiteGlobal.hpp in Headers */,
+				23F5BDA020887FD3000CCD37 /* WCTDatabase+Handle.h in Headers */,
+				23F5BDA120887FD3000CCD37 /* LangWithClause.hpp in Headers */,
+				23F5BDA220887FD3000CCD37 /* WCTCodingMacro.h in Headers */,
+				23F5BDA320887FD3000CCD37 /* RecyclableHandle.hpp in Headers */,
+				23F5BDA420887FD3000CCD37 /* WCTTable+ChainCall.h in Headers */,
+				23F5BDA520887FD3000CCD37 /* LangCommon.h in Headers */,
+				23F5BDA620887FD3000CCD37 /* ConvertibleImpl.hpp in Headers */,
+				23F5BDA720887FD3000CCD37 /* WCTConstraintMacro.h in Headers */,
+				23F5BDA820887FD3000CCD37 /* Operable.hpp in Headers */,
+				23F5BDA920887FD3000CCD37 /* WCTCoding.h in Headers */,
+				23F5BDAA20887FD3000CCD37 /* WCTSequence+WCTTableCoding.h in Headers */,
+				23F5BDAB20887FD3000CCD37 /* WCTInsert.h in Headers */,
+				23F5BDAC20887FD3000CCD37 /* ColumnType.hpp in Headers */,
+				23F5BDAD20887FD3000CCD37 /* WCTIndexMacro.h in Headers */,
+				23F5BDAE20887FD3000CCD37 /* WCTMaster+WCTTableCoding.h in Headers */,
+				23F5BDAF20887FD3000CCD37 /* String.hpp in Headers */,
+				23F5BDB020887FD3000CCD37 /* Database.hpp in Headers */,
+				23F5BDB120887FD3000CCD37 /* WCTError+Private.h in Headers */,
+				23F5BDB220887FD3000CCD37 /* WCTSequence.h in Headers */,
+				23F5BDB320887FD3000CCD37 /* WCTCore.h in Headers */,
+				23F5BDB420887FD3000CCD37 /* WCTRowSelect.h in Headers */,
+				23F5BDB520887FD3000CCD37 /* WCTDelete.h in Headers */,
+				23F5BDB620887FD3000CCD37 /* WCTColumnBinding.h in Headers */,
+				23F5BDB720887FD3000CCD37 /* WCTBinding.h in Headers */,
+				23F5BDB820887FD3000CCD37 /* WCTDatabase+Convenient.h in Headers */,
+				23F5BDB920887FD3000CCD37 /* WCTSelect.h in Headers */,
+				23F5BDBA20887FD3000CCD37 /* SequantialIncreasingMap.hpp in Headers */,
+				23F5BDBB20887FD3000CCD37 /* WCTMaster.h in Headers */,
+				23F5BDBC20887FD3000CCD37 /* WCTUpdate.h in Headers */,
+				23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */,
+				23F5BDBE20887FD3000CCD37 /* Tokenizer.hpp in Headers */,
+				23F5BDBF20887FD3000CCD37 /* Path.hpp in Headers */,
+				23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */,
+				23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */,
+				23F5BDC220887FD3000CCD37 /* WCTStatistics.h in Headers */,
+				23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */,
+				23F5BDC420887FD3000CCD37 /* Tokenize.hpp in Headers */,
+				23F5BDC520887FD3000CCD37 /* Abstract.h in Headers */,
+				23F5BDC620887FD3000CCD37 /* WCTDatabase+Table.h in Headers */,
+				23F5BDC720887FD3000CCD37 /* WCTSelectable.h in Headers */,
+				23F5BDC820887FD3000CCD37 /* WCTRuntimeObjCAccessor.h in Headers */,
+				23F5BDC920887FD3000CCD37 /* WCTRuntimeCppAccessor.h in Headers */,
+				23F5BDCA20887FD3000CCD37 /* HandleStatement.hpp in Headers */,
+				23F5BDCB20887FD3000CCD37 /* WCTCommon.h in Headers */,
+				23F5BDCC20887FD3000CCD37 /* WCTDatabase+RepairKit.h in Headers */,
+				23F5BDCD20887FD3000CCD37 /* RecyclableHandlePool.hpp in Headers */,
+				23F5BDCE20887FD3000CCD37 /* ConcurrentList.hpp in Headers */,
+				23F5BDCF20887FD3000CCD37 /* WINQ.h in Headers */,
+				23F5BDD020887FD3000CCD37 /* HandleError.hpp in Headers */,
+				23F5BDD120887FD3000CCD37 /* WCTTable+Convenient.h in Headers */,
+				23F5BDD220887FD3000CCD37 /* WCTMacroHelper.h in Headers */,
+				23F5BDD320887FD3000CCD37 /* WCTTokenizer.h in Headers */,
+				23F5BDD420887FD3000CCD37 /* WCTBaseAccessor.h in Headers */,
+				23F5BDD520887FD3000CCD37 /* WCTObjCAccessor.h in Headers */,
+				23F5BDD620887FD3000CCD37 /* WCTProperty.h in Headers */,
+				23F5BDD720887FD3000CCD37 /* WCTCppAccessor.h in Headers */,
+				23F5BDD820887FD3000CCD37 /* LangPragma.hpp in Headers */,
+				23F5BDD920887FD3000CCD37 /* WCTDatabase+FTS.h in Headers */,
+				23F5BDDA20887FD3000CCD37 /* Config.hpp in Headers */,
+				23F5BDDB20887FD3000CCD37 /* WCTPropertyMacro.h in Headers */,
+				23F5BDDC20887FD3000CCD37 /* WCTORM.h in Headers */,
+				23F5BDDD20887FD3000CCD37 /* WCTDatabase+File.h in Headers */,
+				23F5BDDE20887FD3000CCD37 /* NSObject+WCTColumnCoding.h in Headers */,
+				23F5BDDF20887FD3000CCD37 /* Redirectable.hpp in Headers */,
+				23F5BDE020887FD3000CCD37 /* WCTChainCall.h in Headers */,
+				23F5BDE120887FD3000CCD37 /* WCTMigrationInfo.h in Headers */,
+				23F5BDE220887FD3000CCD37 /* CoreError.hpp in Headers */,
+				23F5BDE320887FD3000CCD37 /* WCTMigrationDatabase.h in Headers */,
+				23F5BDE420887FD3000CCD37 /* WCTDatabase+Memory.h in Headers */,
+				23F5BDE520887FD3000CCD37 /* WCTFileError+Private.h in Headers */,
+				23F5BDE620887FD3000CCD37 /* AsyncLoop.hpp in Headers */,
+				23F5BDE720887FD3000CCD37 /* WCTRuntimeBaseAccessor.h in Headers */,
+				23F5BDE820887FD3000CCD37 /* Lang.h in Headers */,
+				23F5BDE920887FD3000CCD37 /* WCTUnsafeHandle+Private.h in Headers */,
+				23F5BDEA20887FD3000CCD37 /* WCTDatabase.h in Headers */,
+				23F5BDEB20887FD3000CCD37 /* TimedQueue.hpp in Headers */,
+				23F5BDEC20887FD3000CCD37 /* NSObject+Convertible.h in Headers */,
+				23F5BDED20887FD3000CCD37 /* WCTTable+Private.h in Headers */,
+				23F5BDEE20887FD3000CCD37 /* Migration.h in Headers */,
+				23F5BDEF20887FD3000CCD37 /* BuiltinConfig.hpp in Headers */,
+				23F5BDF020887FD3000CCD37 /* HandlePools.hpp in Headers */,
+				23F5BDF120887FD3000CCD37 /* ConfiguredHandle.hpp in Headers */,
+				23F5BDF220887FD3000CCD37 /* WCTSQLiteError.h in Headers */,
+				23F5BDF320887FD3000CCD37 /* WCTDatabase+Transaction.h in Headers */,
+				23F5BDF420887FD3000CCD37 /* WCTHandle+Transaction.h in Headers */,
+				23F5BDF520887FD3000CCD37 /* WCTError.h in Headers */,
+				23F5BDF620887FD3000CCD37 /* WCTSelectable+Private.h in Headers */,
+				23F5BDF720887FD3000CCD37 /* LangColumn.hpp in Headers */,
+				23F5BDF820887FD3000CCD37 /* NSNumber+WCTColumnCoding.h in Headers */,
+				23F5BDF920887FD3000CCD37 /* WCTCore+Private.h in Headers */,
+				23F5BDFA20887FD3000CCD37 /* NSData+NoCopyData.h in Headers */,
+				23F5BDFB20887FD3000CCD37 /* WCTPerformanceFootprint.h in Headers */,
+				23F5BDFC20887FD3000CCD37 /* NoCopyData.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1878,13 +2609,34 @@
 			buildRules = (
 			);
 			dependencies = (
-				2321244120172876008146EF /* PBXTargetDependency */,
-				2321244320172876008146EF /* PBXTargetDependency */,
+				23F5BE0E20887FFF000CCD37 /* PBXTargetDependency */,
+				23F5BE1020887FFF000CCD37 /* PBXTargetDependency */,
 				2349FC1E1FDF8665005230E8 /* PBXTargetDependency */,
 			);
 			name = WCDB;
 			productName = "WCDB framework";
 			productReference = 239326611E836D7300D677CC /* WCDB.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		23F5BC4220887FD3000CCD37 /* WCDB for Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23F5BDFE20887FD3000CCD37 /* Build configuration list for PBXNativeTarget "WCDB for Test" */;
+			buildPhases = (
+				23F5BC4920887FD3000CCD37 /* Sources */,
+				23F5BD0820887FD3000CCD37 /* Frameworks */,
+				23F5BD0B20887FD3000CCD37 /* Headers */,
+				23F5BDFD20887FD3000CCD37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23F5BC4320887FD3000CCD37 /* PBXTargetDependency */,
+				23F5BC4520887FD3000CCD37 /* PBXTargetDependency */,
+				23F5BC4720887FD3000CCD37 /* PBXTargetDependency */,
+			);
+			name = "WCDB for Test";
+			productName = "WCDB framework";
+			productReference = 23F5BE0120887FD3000CCD37 /* WCDB for Test.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -1929,6 +2681,7 @@
 			projectRoot = "";
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
+				23F5BC4220887FD3000CCD37 /* WCDB for Test */,
 				2349FC171FDF8648005230E8 /* Install templates */,
 			);
 		};
@@ -1949,10 +2702,31 @@
 			remoteRef = 2321243D20172865008146EF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		23F5BE0620887FD4000CCD37 /* sqlcipher static.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "sqlcipher static.framework";
+			remoteRef = 23F5BE0520887FD4000CCD37 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		23F5BE0920887FD4000CCD37 /* sqliterk static.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "sqliterk static.framework";
+			remoteRef = 23F5BE0820887FD4000CCD37 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2393265F1E836D7300D677CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23F5BDFD20887FD3000CCD37 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2176,23 +2950,235 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		23F5BC4920887FD3000CCD37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23F5BC4A20887FD3000CCD37 /* LangCreateViewSTMT.cpp in Sources */,
+				23F5BC4B20887FD3000CCD37 /* StatementCreateView.cpp in Sources */,
+				23F5BC4C20887FD3000CCD37 /* LangColumnDef.cpp in Sources */,
+				23F5BC4D20887FD3000CCD37 /* CoreError.cpp in Sources */,
+				23F5BC4E20887FD3000CCD37 /* WCTDatabase+Transaction.mm in Sources */,
+				23F5BC4F20887FD3000CCD37 /* StatementDropTable.cpp in Sources */,
+				23F5BC5020887FD3000CCD37 /* LangAttachSTMT.cpp in Sources */,
+				23F5BC5120887FD3000CCD37 /* Column.cpp in Sources */,
+				23F5BC5220887FD3000CCD37 /* StatementCommit.cpp in Sources */,
+				23F5BC5320887FD3000CCD37 /* LangWithClause.cpp in Sources */,
+				23F5BC5420887FD3000CCD37 /* StatementDetach.cpp in Sources */,
+				23F5BC5520887FD3000CCD37 /* ConfiguredHandle.cpp in Sources */,
+				23F5BC5620887FD3000CCD37 /* StatementAnalyze.cpp in Sources */,
+				23F5BC5720887FD3000CCD37 /* Tracer.cpp in Sources */,
+				23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */,
+				23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */,
+				23F5BC5A20887FD3000CCD37 /* RecyclableHandlePool.cpp in Sources */,
+				23F5BC5B20887FD3000CCD37 /* NSDate+WCTColumnCoding.mm in Sources */,
+				23F5BC5C20887FD3000CCD37 /* LangJoinClause.cpp in Sources */,
+				23F5BC5D20887FD3000CCD37 /* WCTDatabase+Table.mm in Sources */,
+				23F5BC5E20887FD3000CCD37 /* WCTTable.mm in Sources */,
+				23F5BC5F20887FD3000CCD37 /* RecyclableHandle.cpp in Sources */,
+				23F5BC6020887FD3000CCD37 /* CopyOnWriteString.cpp in Sources */,
+				23F5BC6120887FD3000CCD37 /* StatementSavepoint.cpp in Sources */,
+				23F5BC6220887FD3000CCD37 /* NSNull+WCTColumnCoding.mm in Sources */,
+				23F5BC6320887FD3000CCD37 /* LangReleaseSTMT.cpp in Sources */,
+				23F5BC6420887FD3000CCD37 /* ColumnDef.cpp in Sources */,
+				23F5BC6520887FD3000CCD37 /* StatementDropTrigger.cpp in Sources */,
+				23F5BC6620887FD3000CCD37 /* TableConstraint.cpp in Sources */,
+				23F5BC6720887FD3000CCD37 /* WCTTable+Transaction.mm in Sources */,
+				23F5BC6820887FD3000CCD37 /* String.cpp in Sources */,
+				23F5BC6920887FD3000CCD37 /* NSObject+Convertible.mm in Sources */,
+				23F5BC6A20887FD3000CCD37 /* Statement.cpp in Sources */,
+				23F5BC6B20887FD3000CCD37 /* LangJoinConstraint.cpp in Sources */,
+				23F5BC6C20887FD3000CCD37 /* WCTCoreError.mm in Sources */,
+				23F5BC6D20887FD3000CCD37 /* FileManager.cpp in Sources */,
+				23F5BC6E20887FD3000CCD37 /* Pragma.cpp in Sources */,
+				23F5BC6F20887FD3000CCD37 /* WCTUnsafeHandle+ChainCall.mm in Sources */,
+				23F5BC7020887FD3000CCD37 /* LangForeignKeyClause.cpp in Sources */,
+				23F5BC7120887FD3000CCD37 /* WCTRowSelect.mm in Sources */,
+				23F5BC7220887FD3000CCD37 /* CopyOnWriteData.cpp in Sources */,
+				23F5BC7320887FD3000CCD37 /* CommonTableExpression.cpp in Sources */,
+				23F5BC7420887FD3000CCD37 /* StatementUpdate.cpp in Sources */,
+				23F5BC7520887FD3000CCD37 /* MigrationBuiltinConfig.cpp in Sources */,
+				23F5BC7620887FD3000CCD37 /* LangIndexedColumn.cpp in Sources */,
+				23F5BC7720887FD3000CCD37 /* WCTHandleError.mm in Sources */,
+				23F5BC7820887FD3000CCD37 /* StatementVacuum.cpp in Sources */,
+				23F5BC7920887FD3000CCD37 /* Describable.cpp in Sources */,
+				23F5BC7A20887FD3000CCD37 /* LangInsertSTMT.cpp in Sources */,
+				23F5BC7B20887FD3000CCD37 /* WCTHandle.mm in Sources */,
+				23F5BC7C20887FD3000CCD37 /* Tokenizer.cpp in Sources */,
+				23F5BC7D20887FD3000CCD37 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
+				23F5BC7E20887FD3000CCD37 /* LangAnalyzeSTMT.cpp in Sources */,
+				23F5BC7F20887FD3000CCD37 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
+				23F5BC8020887FD3000CCD37 /* WCTFileError.mm in Sources */,
+				23F5BC8120887FD3000CCD37 /* BuiltinConfig.cpp in Sources */,
+				23F5BC8220887FD3000CCD37 /* WCTUnsafeHandle.mm in Sources */,
+				23F5BC8320887FD3000CCD37 /* WCTCore.mm in Sources */,
+				23F5BC8420887FD3000CCD37 /* RaiseFunction.cpp in Sources */,
+				23F5BC8520887FD3000CCD37 /* HandlePools.cpp in Sources */,
+				23F5BC8620887FD3000CCD37 /* NSString+WCTColumnCoding.mm in Sources */,
+				23F5BC8720887FD3000CCD37 /* IndexedColumn.cpp in Sources */,
+				23F5BC8820887FD3000CCD37 /* WCTHandle+Convenient.mm in Sources */,
+				23F5BC8920887FD3000CCD37 /* LangDeleteSTMT.cpp in Sources */,
+				23F5BC8A20887FD3000CCD37 /* StatementCreateTable.cpp in Sources */,
+				23F5BC8B20887FD3000CCD37 /* NSNumber+WCTColumnCoding.mm in Sources */,
+				23F5BC8C20887FD3000CCD37 /* LangCreateIndexSTMT.cpp in Sources */,
+				23F5BC8D20887FD3000CCD37 /* Expression.cpp in Sources */,
+				23F5BC8E20887FD3000CCD37 /* LangDetachSTMT.cpp in Sources */,
+				23F5BC8F20887FD3000CCD37 /* LangCreateTriggerSTMT.cpp in Sources */,
+				23F5BC9020887FD3000CCD37 /* LangOrderingTerm.cpp in Sources */,
+				23F5BC9120887FD3000CCD37 /* WCTDatabase+Memory.mm in Sources */,
+				23F5BC9220887FD3000CCD37 /* LangDropTriggerSTMT.cpp in Sources */,
+				23F5BC9320887FD3000CCD37 /* Config.cpp in Sources */,
+				23F5BC9420887FD3000CCD37 /* Handle.cpp in Sources */,
+				23F5BC9520887FD3000CCD37 /* MigrationInfo.cpp in Sources */,
+				23F5BC9620887FD3000CCD37 /* OrderingTerm.cpp in Sources */,
+				23F5BC9720887FD3000CCD37 /* StatementCreateTrigger.cpp in Sources */,
+				23F5BC9820887FD3000CCD37 /* ModuleArgument.cpp in Sources */,
+				23F5BC9920887FD3000CCD37 /* JoinConstraint.cpp in Sources */,
+				23F5BC9A20887FD3000CCD37 /* HandlePool.cpp in Sources */,
+				23F5BC9B20887FD3000CCD37 /* CTETableName.cpp in Sources */,
+				23F5BC9C20887FD3000CCD37 /* ColumnConstraint.cpp in Sources */,
+				23F5BC9D20887FD3000CCD37 /* StatementRelease.cpp in Sources */,
+				23F5BC9E20887FD3000CCD37 /* WithClause.cpp in Sources */,
+				23F5BC9F20887FD3000CCD37 /* LangJoinOperator.cpp in Sources */,
+				23F5BCA020887FD3000CCD37 /* WCTDatabase+File.mm in Sources */,
+				23F5BCA120887FD3000CCD37 /* StatementAttach.cpp in Sources */,
+				23F5BCA220887FD3000CCD37 /* LangDropInternalSTMT.cpp in Sources */,
+				23F5BCA320887FD3000CCD37 /* LangAlterTableSTMT.cpp in Sources */,
+				23F5BCA420887FD3000CCD37 /* LangCTETableName.cpp in Sources */,
+				23F5BCA520887FD3000CCD37 /* WCTMultiSelect.mm in Sources */,
+				23F5BCA620887FD3000CCD37 /* ResultColumn.cpp in Sources */,
+				23F5BCA720887FD3000CCD37 /* LangQualifiedTableName.cpp in Sources */,
+				23F5BCA820887FD3000CCD37 /* KeyValueTable.cpp in Sources */,
+				23F5BCA920887FD3000CCD37 /* Database.cpp in Sources */,
+				23F5BCAA20887FD3000CCD37 /* LangColumn.cpp in Sources */,
+				23F5BCAB20887FD3000CCD37 /* MigrationHandlePool.cpp in Sources */,
+				23F5BCAC20887FD3000CCD37 /* Tokenize.cpp in Sources */,
+				23F5BCAD20887FD3000CCD37 /* WCTInsert.mm in Sources */,
+				23F5BCAE20887FD3000CCD37 /* LangDropTableSTMT.cpp in Sources */,
+				23F5BCAF20887FD3000CCD37 /* WCTDatabase.mm in Sources */,
+				23F5BCB020887FD3000CCD37 /* StatementPragma.cpp in Sources */,
+				23F5BCB120887FD3000CCD37 /* WCTValue.mm in Sources */,
+				23F5BCB220887FD3000CCD37 /* LangBindParameter.cpp in Sources */,
+				23F5BCB320887FD3000CCD37 /* WCTColumnBinding.mm in Sources */,
+				23F5BCB420887FD3000CCD37 /* WCTSelect.mm in Sources */,
+				23F5BCB520887FD3000CCD37 /* WCTPerformanceFootprint.mm in Sources */,
+				23F5BCB620887FD3000CCD37 /* WCTDatabase+FTS.mm in Sources */,
+				23F5BCB720887FD3000CCD37 /* LangLiteralValue.cpp in Sources */,
+				23F5BCB820887FD3000CCD37 /* NSData+WCTColumnCoding.mm in Sources */,
+				23F5BCB920887FD3000CCD37 /* LangRaiseFunction.cpp in Sources */,
+				23F5BCBA20887FD3000CCD37 /* HandleStatement.cpp in Sources */,
+				23F5BCBB20887FD3000CCD37 /* WCTBinding.mm in Sources */,
+				23F5BCBC20887FD3000CCD37 /* WCTDatabase+Convenient.mm in Sources */,
+				23F5BCBD20887FD3000CCD37 /* LangCommonTableExpression.cpp in Sources */,
+				23F5BCBE20887FD3000CCD37 /* StatementDropIndex.cpp in Sources */,
+				23F5BCBF20887FD3000CCD37 /* LangExpr.cpp in Sources */,
+				23F5BCC020887FD3000CCD37 /* LangCreateVirtualTableSTMT.cpp in Sources */,
+				23F5BCC120887FD3000CCD37 /* ForeignKeyClause.cpp in Sources */,
+				23F5BCC220887FD3000CCD37 /* WCTDatabase+Handle.mm in Sources */,
+				23F5BCC320887FD3000CCD37 /* LangUpdateSTMT.cpp in Sources */,
+				23F5BCC420887FD3000CCD37 /* MigrationDatabase.cpp in Sources */,
+				23F5BCC520887FD3000CCD37 /* WCTTable+Convenient.mm in Sources */,
+				23F5BCC620887FD3000CCD37 /* NoCopyData.cpp in Sources */,
+				23F5BCC720887FD3000CCD37 /* StatementCreateIndex.cpp in Sources */,
+				23F5BCC820887FD3000CCD37 /* WCTHandle+Transaction.mm in Sources */,
+				23F5BCC920887FD3000CCD37 /* LangCreateTableSTMT.cpp in Sources */,
+				23F5BCCA20887FD3000CCD37 /* WCTHandle+Table.mm in Sources */,
+				23F5BCCB20887FD3000CCD37 /* SelectCore.cpp in Sources */,
+				23F5BCCC20887FD3000CCD37 /* LangColumnConstraint.cpp in Sources */,
+				23F5BCCD20887FD3000CCD37 /* LangSelectCore.cpp in Sources */,
+				23F5BCCE20887FD3000CCD37 /* TableOrSubquery.cpp in Sources */,
+				23F5BCCF20887FD3000CCD37 /* WCTSequence.mm in Sources */,
+				23F5BCD020887FD3000CCD37 /* Error.cpp in Sources */,
+				23F5BCD120887FD3000CCD37 /* LangVacuumSTMT.cpp in Sources */,
+				23F5BCD220887FD3000CCD37 /* WCTUpdate.mm in Sources */,
+				23F5BCD320887FD3000CCD37 /* StatementCreateVirtualTable.cpp in Sources */,
+				23F5BCD420887FD3000CCD37 /* LangTableConstraint.cpp in Sources */,
+				23F5BCD520887FD3000CCD37 /* LangRollbackSTMT.cpp in Sources */,
+				23F5BCD620887FD3000CCD37 /* LangCommitSTMT.cpp in Sources */,
+				23F5BCD720887FD3000CCD37 /* WCTStatistics.mm in Sources */,
+				23F5BCD820887FD3000CCD37 /* Lock.cpp in Sources */,
+				23F5BCD920887FD3000CCD37 /* BindParameter.cpp in Sources */,
+				23F5BCDA20887FD3000CCD37 /* HandleError.cpp in Sources */,
+				23F5BCDB20887FD3000CCD37 /* WCTMigrationDatabase.mm in Sources */,
+				23F5BCDC20887FD3000CCD37 /* QualifiedTableName.cpp in Sources */,
+				23F5BCDD20887FD3000CCD37 /* SQLiteGlobal.cpp in Sources */,
+				23F5BCDE20887FD3000CCD37 /* WCTSelectable.mm in Sources */,
+				23F5BCDF20887FD3000CCD37 /* StatementReindex.cpp in Sources */,
+				23F5BCE020887FD3000CCD37 /* LangSavepointSTMT.cpp in Sources */,
+				23F5BCE120887FD3000CCD37 /* LiteralValue.cpp in Sources */,
+				23F5BCE220887FD3000CCD37 /* WCTProperty.mm in Sources */,
+				23F5BCE320887FD3000CCD37 /* WCTMigrationInfo.mm in Sources */,
+				23F5BCE420887FD3000CCD37 /* WCTError.mm in Sources */,
+				23F5BCE520887FD3000CCD37 /* MigrationHandle.cpp in Sources */,
+				23F5BCE620887FD3000CCD37 /* StatementInsert.cpp in Sources */,
+				23F5BCE720887FD3000CCD37 /* StatementDropView.cpp in Sources */,
+				23F5BCE820887FD3000CCD37 /* JoinClause.cpp in Sources */,
+				23F5BCE920887FD3000CCD37 /* Operable.cpp in Sources */,
+				23F5BCEA20887FD3000CCD37 /* StatementRollback.cpp in Sources */,
+				23F5BCEB20887FD3000CCD37 /* LangDropIndexSTMT.cpp in Sources */,
+				23F5BCEC20887FD3000CCD37 /* MigrationTamperer.cpp in Sources */,
+				23F5BCED20887FD3000CCD37 /* LangBeginSTMT.cpp in Sources */,
+				23F5BCEE20887FD3000CCD37 /* LangResultColumn.cpp in Sources */,
+				23F5BCEF20887FD3000CCD37 /* LangModuleArgument.cpp in Sources */,
+				23F5BCF020887FD3000CCD37 /* LangReindexSTMT.cpp in Sources */,
+				23F5BCF120887FD3000CCD37 /* WCTRedirectable.mm in Sources */,
+				23F5BCF220887FD3000CCD37 /* LangTableOrSubquery.cpp in Sources */,
+				23F5BCF320887FD3000CCD37 /* ConvertibleImpl.cpp in Sources */,
+				23F5BCF420887FD3000CCD37 /* LangPragmaSTMT.cpp in Sources */,
+				23F5BCF520887FD3000CCD37 /* NSObject+WCTColumnCoding.mm in Sources */,
+				23F5BCF620887FD3000CCD37 /* WCTDatabase+Config.mm in Sources */,
+				23F5BCF720887FD3000CCD37 /* WCTMaster.mm in Sources */,
+				23F5BCF820887FD3000CCD37 /* NSData+NoCopyData.mm in Sources */,
+				23F5BCF920887FD3000CCD37 /* WCTDatabase+RepairKit.mm in Sources */,
+				23F5BCFA20887FD3000CCD37 /* LangDropViewSTMT.cpp in Sources */,
+				23F5BCFB20887FD3000CCD37 /* StatementSelect.cpp in Sources */,
+				23F5BCFC20887FD3000CCD37 /* SQLiteError.cpp in Sources */,
+				23F5BCFD20887FD3000CCD37 /* ColumnType.cpp in Sources */,
+				23F5BCFE20887FD3000CCD37 /* StatementAlterTable.cpp in Sources */,
+				23F5BCFF20887FD3000CCD37 /* WCTSQLiteError.mm in Sources */,
+				23F5BD0020887FD3000CCD37 /* MigrationInfos.cpp in Sources */,
+				23F5BD0120887FD3000CCD37 /* StatementDelete.cpp in Sources */,
+				23F5BD0220887FD3000CCD37 /* WCTTable+ChainCall.mm in Sources */,
+				23F5BD0320887FD3000CCD37 /* WCTTokenizer.mm in Sources */,
+				23F5BD0420887FD3000CCD37 /* Path.cpp in Sources */,
+				23F5BD0520887FD3000CCD37 /* LangPragma.cpp in Sources */,
+				23F5BD0620887FD3000CCD37 /* WCTDelete.mm in Sources */,
+				23F5BD0720887FD3000CCD37 /* WCTDatabase+ChainCall.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2321244120172876008146EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = sqlcipher;
-			targetProxy = 2321244020172876008146EF /* PBXContainerItemProxy */;
-		};
-		2321244320172876008146EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = sqliterk;
-			targetProxy = 2321244220172876008146EF /* PBXContainerItemProxy */;
-		};
 		2349FC1E1FDF8665005230E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2349FC171FDF8648005230E8 /* Install templates */;
 			targetProxy = 2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */;
+		};
+		23F5BC4320887FD3000CCD37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqlcipher;
+			targetProxy = 23F5BC4420887FD3000CCD37 /* PBXContainerItemProxy */;
+		};
+		23F5BC4520887FD3000CCD37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqliterk;
+			targetProxy = 23F5BC4620887FD3000CCD37 /* PBXContainerItemProxy */;
+		};
+		23F5BC4720887FD3000CCD37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2349FC171FDF8648005230E8 /* Install templates */;
+			targetProxy = 23F5BC4820887FD3000CCD37 /* PBXContainerItemProxy */;
+		};
+		23F5BE0E20887FFF000CCD37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "sqlcipher static";
+			targetProxy = 23F5BE0D20887FFF000CCD37 /* PBXContainerItemProxy */;
+		};
+		23F5BE1020887FFF000CCD37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "sqliterk static";
+			targetProxy = 23F5BE0F20887FFF000CCD37 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2242,6 +3228,7 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
+				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2278,6 +3265,7 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
+				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2427,6 +3415,80 @@
 			};
 			name = Release;
 		};
+		23F5BDFF20887FD3000CCD37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "WCDB copy-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				MACH_O_TYPE = mh_dylib;
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-framework",
+					UIKit,
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-framework",
+					UIKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
+				PRODUCT_MODULE_NAME = WCDB;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		23F5BE0020887FD3000CCD37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "WCDB copy-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				MACH_O_TYPE = mh_dylib;
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-framework",
+					UIKit,
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-framework",
+					UIKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
+				PRODUCT_MODULE_NAME = WCDB;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2453,6 +3515,15 @@
 			buildConfigurations = (
 				23B5F7681E1111C100E58396 /* Debug */,
 				23B5F7691E1111C100E58396 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23F5BDFE20887FD3000CCD37 /* Build configuration list for PBXNativeTarget "WCDB for Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23F5BDFF20887FD3000CCD37 /* Debug */,
+				23F5BE0020887FD3000CCD37 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
