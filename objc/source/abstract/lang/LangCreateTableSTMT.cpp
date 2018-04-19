@@ -45,11 +45,11 @@ CopyOnWriteString CreateTableSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     switch (switcher) {
         case Switch::ColumnDef:
-            LangDebugAssert(!columnDefs.empty());
+            LangRemedialAssert(!columnDefs.empty());
             description.append("(" + columnDefs.description().get());
             if (!tableConstraints.empty()) {
                 description.append(", " + tableConstraints.description().get());
@@ -60,11 +60,11 @@ CopyOnWriteString CreateTableSTMT::SQL() const
             }
             break;
         case Switch::Select:
-            LangDebugAssert(!selectSTMT.empty());
+            LangRemedialAssert(!selectSTMT.empty());
             description.append(" AS " + selectSTMT.description().get());
             break;
         default:
-            LangDebugFatalError();
+            LangRemedialFatalError();
             break;
     }
     return description;

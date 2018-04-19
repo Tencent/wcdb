@@ -48,7 +48,7 @@
 
 - (BOOL)lazyPrepare
 {
-    NSAssert(_class != nil || !_properties.empty(), @"");
+    WCTAssert(_class != nil || !_properties.empty(), "Class or properties is not specificed.");
     if (_statement.isResultColumnsNotSet()) {
         _statement.select(!_properties.empty() ? _properties : [_class objectRelationalMappingForWCDB]->getAllProperties());
     }

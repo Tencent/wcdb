@@ -71,7 +71,7 @@ ForeignKeyClause::Trigger::OperationName(const Operation &operation)
 CopyOnWriteString ForeignKeyClause::SQL() const
 {
     std::string description("REFERENCES ");
-    LangDebugAssert(!foreignTable.empty());
+    LangRemedialAssert(!foreignTable.empty());
     description.append(foreignTable.get());
     if (!columns.empty()) {
         description.append("(" + columns.description().get() + ")");
@@ -97,7 +97,7 @@ CopyOnWriteString ForeignKeyClause::Trigger::SQL() const
 {
     std::string description;
     if (match) {
-        LangDebugAssert(!name.empty());
+        LangRemedialAssert(!name.empty());
         description.append("MATCH " + name.get());
     } else {
         description.append("ON ");
@@ -124,7 +124,7 @@ CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription()
         } else {
             space = true;
         }
-        LangDebugAssert(!element.empty());
+        LangRemedialAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

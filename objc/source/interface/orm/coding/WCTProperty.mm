@@ -24,7 +24,7 @@
 WCTProperty::WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding)
     : m_columnBinding(columnBinding)
 {
-    assert(columnBinding != nullptr);
+    WCTInnerAssert(columnBinding != nullptr);
     WCDB::Lang::Expr &lang = getMutableLang();
     lang.type = WCDB::Lang::ExprBase::Type::Column;
     lang.exprColumn.get_or_copy().column.assign(m_columnBinding->columnDef.getCOWLang().get<WCDB::Lang::ColumnDef>().column);
@@ -35,7 +35,7 @@ WCTProperty::WCTProperty(const WCDB::Expression &expression,
     : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getCOWLang())
     , m_columnBinding(columnBinding)
 {
-    assert(columnBinding != nullptr);
+    WCTInnerAssert(columnBinding != nullptr);
 }
 
 WCTProperty::operator WCDB::Column() const

@@ -53,10 +53,10 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
     const std::string &path,
     const std::shared_ptr<MigrationInfos> &migrationInfos)
 {
+    WCTAssert(migrationInfos, "Migration infos must not be null");
     const HandlePools::Generator s_generator =
         [&migrationInfos](
             const std::string &path) -> std::shared_ptr<HandlePool> {
-        assert(migrationInfos != nullptr);
         if (migrationInfos->isSameDatabaseMigration()) {
             return std::shared_ptr<HandlePool>(new MigrationHandlePool(
                 path, BuiltinConfig::defaultConfigs(), migrationInfos));
@@ -83,7 +83,7 @@ MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
                                             pool.getHandlePool())
                                       : nullptr)
 {
-    assert(pool == nullptr || m_migrationPool != nullptr);
+    WCTInnerAssert(pool == nullptr || m_migrationPool != nullptr);
 }
 
 #pragma mark - Migration
@@ -91,7 +91,7 @@ bool MigrationDatabase::startMigration(bool &done)
 {
     done = false;
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
-    assert(!infos->getInfos().empty());
+    WCTInnerAssert(!infos->getInfos().empty());
     RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
         return false;

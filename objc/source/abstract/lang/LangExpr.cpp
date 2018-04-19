@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Lang.h>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -33,7 +34,7 @@ CopyOnWriteString ExprColumn::SQL() const
     if (!tableName.empty()) {
         description.append(tableName.get() + ".");
     }
-    LangDebugAssert(!column.empty());
+    LangRemedialAssert(!column.empty());
     description.append(column.description().get());
     return description;
 }
@@ -45,9 +46,10 @@ ExprBase::Type ExprColumn::getType() const
 
 CopyOnWriteString ExprUnaryOperation::SQL() const
 {
-    LangDebugAssert(!expr.empty());
-    return ExprUnaryOperation::OperatorName(unaryOperator) +
-           expr.description().get();
+    std::string description(ExprUnaryOperation::OperatorName(unaryOperator));
+    LangRemedialAssert(!expr.empty());
+    description.append(expr.description().get());
+    return description;
 }
 
 ExprBase::Type ExprUnaryOperation::getType() const
@@ -72,11 +74,13 @@ ExprUnaryOperation::OperatorName(const Operator &unaryOpeartor)
 
 CopyOnWriteString ExprBinaryOperation::SQL() const
 {
-    LangDebugAssert(!left.empty());
-    LangDebugAssert(!right.empty());
-    return left.description().get() +
-           ExprBinaryOperation::OperatorName(binaryOperator) +
-           right.description().get();
+    std::string description;
+    LangRemedialAssert(!left.empty());
+    description.append(left.description().get());
+    description.append(ExprBinaryOperation::OperatorName(binaryOperator));
+    LangRemedialAssert(!right.empty());
+    description.append(right.description().get());
+    return description;
 }
 
 ExprBase::Type ExprBinaryOperation::getType() const
@@ -134,14 +138,14 @@ ExprBinaryOperation::OperatorName(const Operator &binaryOpeartor)
 CopyOnWriteString ExprFunction::SQL() const
 {
     std::string description;
-    LangDebugAssert(!functionName.empty());
+    LangRemedialAssert(!functionName.empty());
     description.append(functionName.get() + "(");
     switch (type) {
         case Type::DistinctExpr:
             description.append("DISTINCT ");
         // fallthrough
         case Type::Expr:
-            LangDebugAssert(!exprs.empty());
+            LangRemedialAssert(!exprs.empty());
             description.append(exprs.description().get());
             break;
         case Type::Star:
@@ -161,8 +165,11 @@ ExprBase::Type ExprFunction::getType() const
 
 CopyOnWriteString ExprList::SQL() const
 {
-    LangDebugAssert(!exprs.empty());
-    return "(" + exprs.description().get() + ")";
+    std::string description("(");
+    LangRemedialAssert(!exprs.empty());
+    description.append(exprs.description().get());
+    description.append(")");
+    return description;
 }
 
 ExprBase::Type ExprList::getType() const
@@ -173,7 +180,7 @@ ExprBase::Type ExprList::getType() const
 CopyOnWriteString ExprCast::SQL() const
 {
     std::string description("CAST(");
-    LangDebugAssert(!expr.empty());
+    LangRemedialAssert(!expr.empty());
     description.append(expr.description().get());
     description.append(" AS ");
     description.append(ColumnTypeName(type));
@@ -199,13 +206,13 @@ ExprBase::Type ExprCollate::getType() const
 CopyOnWriteString ExprPattern::SQL() const
 {
     std::string description;
-    LangDebugAssert(!left.empty());
+    LangRemedialAssert(!left.empty());
     description.append(left.description().get() + " ");
     if (isNot) {
         description.append("NOT ");
     }
     description.append(ExprPattern::TypeName(type));
-    LangDebugAssert(!right.empty());
+    LangRemedialAssert(!right.empty());
     description.append(" " + right.description().get());
     if (!escape.empty()) {
         description.append(" ESCAPE " + escape.description().get());
@@ -234,12 +241,15 @@ constexpr const char *ExprPattern::TypeName(const Type &pattern)
 
 CopyOnWriteString ExprNull::SQL() const
 {
-    LangDebugAssert(!expr.empty());
+    std::string description;
+    LangRemedialAssert(!expr.empty());
+    description.append(expr.description().get());
     if (isNull) {
-        return expr.description().get() + " ISNULL";
+        description.append(" ISNULL");
     } else {
-        return expr.description().get() + " NOTNULL";
+        description.append(" NOTNULL");
     }
+    return description;
 }
 
 ExprBase::Type ExprNull::getType() const
@@ -250,12 +260,12 @@ ExprBase::Type ExprNull::getType() const
 CopyOnWriteString ExprBetween::SQL() const
 {
     std::string description;
-    LangDebugAssert(!expr.empty());
+    LangRemedialAssert(!expr.empty());
     description.append(expr.description().get());
     if (isNot) {
         description.append(" NOT");
     }
-    LangDebugAssert(!left.empty() && !right.empty());
+    LangRemedialAssert(!left.empty() && !right.empty());
     description.append(" BETWEEN " + left.description().get() + " AND " +
                        right.description().get());
     return description;
@@ -269,7 +279,7 @@ ExprBase::Type ExprBetween::getType() const
 CopyOnWriteString ExprIn::SQL() const
 {
     std::string description;
-    LangDebugAssert(!expr.empty());
+    LangRemedialAssert(!expr.empty());
     description.append(expr.description().get());
     if (isNot) {
         description.append(" NOT");
@@ -280,11 +290,11 @@ CopyOnWriteString ExprIn::SQL() const
             description.append("()");
             break;
         case Switch::Select:
-            LangDebugAssert(!selectSTMT.empty());
+            LangRemedialAssert(!selectSTMT.empty());
             description.append("(" + selectSTMT.description().get() + ")");
             break;
         case Switch::Expr:
-            LangDebugAssert(!exprs.empty());
+            LangRemedialAssert(!exprs.empty());
             description.append("(" + exprs.description().get() + ")");
             break;
         case Switch::Table:
@@ -292,7 +302,7 @@ CopyOnWriteString ExprIn::SQL() const
             if (!schemaName.empty()) {
                 description.append(schemaName.get() + ".");
             }
-            LangDebugAssert(!tableNameOrFunction.empty());
+            LangRemedialAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get());
             break;
         case Switch::Function:
@@ -300,7 +310,7 @@ CopyOnWriteString ExprIn::SQL() const
             if (!schemaName.empty()) {
                 description.append(schemaName.get() + ".");
             }
-            LangDebugAssert(!tableNameOrFunction.empty());
+            LangRemedialAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get() + "(");
             if (!exprs.empty()) {
                 description.append(exprs.description().get());
@@ -328,7 +338,7 @@ CopyOnWriteString ExprExists::SQL() const
         }
         description.append("EXISTS");
     }
-    LangDebugAssert(!selectSTMT.empty());
+    LangRemedialAssert(!selectSTMT.empty());
     description.append("(" + selectSTMT.description().get() + ")");
     return description;
 }
@@ -344,7 +354,7 @@ CopyOnWriteString ExprCase::SQL() const
     if (!exprCase.empty()) {
         description.append(exprCase.description().get() + " ");
     }
-    LangDebugAssert(!pairs.empty());
+    LangRemedialAssert(!pairs.empty());
     description.append(pairs.description().get());
     if (!exprElse.empty()) {
         description.append(" ELSE " + exprElse.description().get());
@@ -376,7 +386,7 @@ CopyOnWriteLazyLangList<ExprCase::Pair>::calculatedDescription() const
         } else {
             space = true;
         }
-        LangDebugAssert(!element.empty());
+        LangRemedialAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;
@@ -388,57 +398,58 @@ Expr::Expr() : type(Type::NotSet)
 
 CopyOnWriteString Expr::SQL() const
 {
+    std::string description = String::empty();
     switch (type) {
         case Type::LiteralValue:
-            LangDebugAssert(!literalValue.empty());
+            LangRemedialAssert(!literalValue.empty());
             return literalValue.description();
         case Type::BindParameter:
-            LangDebugAssert(!bindParamter.empty());
+            LangRemedialAssert(!bindParamter.empty());
             return bindParamter.description();
         case Type::Column:
-            LangDebugAssert(!exprColumn.empty());
+            LangRemedialAssert(!exprColumn.empty());
             return exprColumn.description();
         case Type::UnaryOperator:
-            LangDebugAssert(!exprUnaryOperator.empty());
+            LangRemedialAssert(!exprUnaryOperator.empty());
             return exprUnaryOperator.description();
         case Type::BinaryOperator:
-            LangDebugAssert(!exprBinaryOperator.empty());
+            LangRemedialAssert(!exprBinaryOperator.empty());
             return exprBinaryOperator.description();
         case Type::Function:
-            LangDebugAssert(!exprFunction.empty());
+            LangRemedialAssert(!exprFunction.empty());
             return exprFunction.description();
         case Type::List:
-            LangDebugAssert(!exprList.empty());
+            LangRemedialAssert(!exprList.empty());
             return exprList.description();
         case Type::Cast:
-            LangDebugAssert(!exprCast.empty());
+            LangRemedialAssert(!exprCast.empty());
             return exprCast.description();
         case Type::Collate:
-            LangDebugAssert(!exprCollate.empty());
+            LangRemedialAssert(!exprCollate.empty());
             return exprCollate.description();
         case Type::Pattern:
-            LangDebugAssert(!exprPattern.empty());
+            LangRemedialAssert(!exprPattern.empty());
             return exprPattern.description();
         case Type::Null:
-            LangDebugAssert(!exprNull.empty());
+            LangRemedialAssert(!exprNull.empty());
             return exprNull.description();
         case Type::Between:
-            LangDebugAssert(!exprBetween.empty());
+            LangRemedialAssert(!exprBetween.empty());
             return exprBetween.description();
         case Type::In:
-            LangDebugAssert(!exprIn.empty());
+            LangRemedialAssert(!exprIn.empty());
             return exprIn.description();
         case Type::Exists:
-            LangDebugAssert(!exprExists.empty());
+            LangRemedialAssert(!exprExists.empty());
             return exprExists.description();
         case Type::Case:
-            LangDebugAssert(!exprCase.empty());
+            LangRemedialAssert(!exprCase.empty());
             return exprCase.description();
         case Type::RaiseFunction:
-            LangDebugAssert(!raiseFunction.empty());
+            LangRemedialAssert(!raiseFunction.empty());
             return raiseFunction.description();
         default:
-            return "";
+            LangRemedialFatalError();
     }
 }
 

@@ -40,16 +40,16 @@ CopyOnWriteString SelectCore::SQL() const
             if (distinct) {
                 description.append("DISTINCT ");
             }
-            LangDebugAssert(!resultColumns.empty());
+            LangRemedialAssert(!resultColumns.empty());
             description.append(resultColumns.description().get());
             switch (fromSwitcher) {
                 case FromSwitch::TableOrSubquery:
-                    LangDebugAssert(!tableOrSubquerys.empty());
+                    LangRemedialAssert(!tableOrSubquerys.empty());
                     description.append(" FROM " +
                                        tableOrSubquerys.description().get());
                     break;
                 case FromSwitch::JoinClause:
-                    LangDebugAssert(!joinClause.empty());
+                    LangRemedialAssert(!joinClause.empty());
                     description.append(" FROM " +
                                        joinClause.description().get());
                     break;
@@ -67,11 +67,11 @@ CopyOnWriteString SelectCore::SQL() const
             }
             break;
         case Switch::Values:
-            LangDebugAssert(!values.empty());
+            LangRemedialAssert(!values.empty());
             description.append("VALUES(" + values.description().get() + ")");
             break;
         default:
-            LangDebugFatalError();
+            LangRemedialFatalError();
             break;
     }
     return description;

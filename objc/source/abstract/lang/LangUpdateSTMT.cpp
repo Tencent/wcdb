@@ -36,10 +36,10 @@ CopyOnWriteString UpdateSTMT::SQL() const
     }
     description.append(UpdateSTMT::TypeName(type));
     description.append(" ");
-    LangDebugAssert(!qualifiedTableName.empty());
+    LangRemedialAssert(!qualifiedTableName.empty());
     description.append(qualifiedTableName.description().get());
 
-    LangDebugAssert(!keyValues.empty());
+    LangRemedialAssert(!keyValues.empty());
     description.append(" SET ");
     description.append(keyValues.description().get());
 
@@ -48,7 +48,7 @@ CopyOnWriteString UpdateSTMT::SQL() const
     }
     if (!orderingTerms.empty()) {
         description.append(" ORDER BY " + orderingTerms.description().get());
-        LangDebugAssert(!limit.empty());
+        LangRemedialAssert(!limit.empty());
     }
     if (!limit.empty()) {
         description.append(" LIMIT " + limit.description().get());

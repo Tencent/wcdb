@@ -34,17 +34,21 @@ CopyOnWriteString WithClause::SQL() const
     if (recursive) {
         description.append("RECURSIVE ");
     }
-    LangDebugAssert(!pairs.empty());
+    LangRemedialAssert(!pairs.empty());
     description.append(pairs.description().get());
     return description;
 }
 
 CopyOnWriteString WithClause::Pair::SQL() const
 {
-    LangDebugAssert(!cteTableName.empty());
-    LangDebugAssert(!selectSTMT.empty());
-    return cteTableName.description().get() + " AS(" +
-           selectSTMT.description().get() + ")";
+    std::string description;
+    LangRemedialAssert(!cteTableName.empty());
+    description.append(cteTableName.description().get());
+    description.append(" AS(");
+    LangRemedialAssert(!selectSTMT.empty());
+    description.append(selectSTMT.description().get());
+    description.append(")");
+    return description;
 }
 
 } // namespace Lang

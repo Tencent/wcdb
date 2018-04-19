@@ -27,7 +27,7 @@ namespace Lang {
 CopyOnWriteString DetachSTMT::SQL() const
 {
     std::string description("DETACH ");
-    LangDebugAssert(!schemaName.empty());
+    LangRemedialAssert(!schemaName.empty());
     description.append(schemaName.get());
     return description;
 }

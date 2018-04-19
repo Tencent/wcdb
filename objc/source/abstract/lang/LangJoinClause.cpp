@@ -27,7 +27,7 @@ namespace Lang {
 CopyOnWriteString JoinClause::SQL() const
 {
     std::string description;
-    LangDebugAssert(!tableOrSubquery.empty());
+    LangRemedialAssert(!tableOrSubquery.empty());
     description.append(tableOrSubquery.description().get());
     if (!joinOperands.empty()) {
         if (joinOperands.get().front().get().joinOperator.get().join) {
@@ -41,8 +41,8 @@ CopyOnWriteString JoinClause::SQL() const
 CopyOnWriteString JoinClause::Operand::SQL() const
 {
     std::string description;
-    LangDebugAssert(!joinOperator.empty());
-    LangDebugAssert(!tableOrSubquery.empty());
+    LangRemedialAssert(!joinOperator.empty());
+    LangRemedialAssert(!tableOrSubquery.empty());
     description.append(joinOperator.description().get() + " " +
                        tableOrSubquery.description().get());
     if (!joinConstraint.empty()) {
@@ -63,7 +63,7 @@ CopyOnWriteLazyLangList<JoinClause::Operand>::calculatedDescription() const
         } else {
             space = true;
         }
-        LangDebugAssert(!element.empty());
+        LangRemedialAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

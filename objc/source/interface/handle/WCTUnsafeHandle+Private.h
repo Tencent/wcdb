@@ -21,6 +21,8 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTUnsafeHandle.h>
 
+#define WCTHandleAssert(remedial) WCTRemedialAssert(_handle != nullptr, "[prepare] or [execute] should be called before this.", remedial)
+
 typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
     WCTFinalizeLevelStatement = 0,
     WCTFinalizeLevelHandle,

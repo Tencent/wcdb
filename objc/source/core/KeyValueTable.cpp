@@ -24,7 +24,7 @@ namespace WCDB {
 
 KeyValueTable::KeyValueTable(Handle *handle) : m_handle(handle)
 {
-    assert(m_handle != nullptr);
+    WCTInnerAssert(m_handle != nullptr);
 }
 
 std::pair<bool, bool> KeyValueTable::isTableExists()

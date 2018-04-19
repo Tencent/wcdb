@@ -41,11 +41,11 @@ CopyOnWriteString CreateIndexSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!indexName.empty());
+    LangRemedialAssert(!indexName.empty());
     description.append(indexName.get());
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(" ON " + tableName.get());
-    LangDebugAssert(!indexedColumns.empty());
+    LangRemedialAssert(!indexedColumns.empty());
     description.append("(" + indexedColumns.description().get() + ")");
     if (!expr.empty()) {
         description.append(" WHERE " + expr.description().get());

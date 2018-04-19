@@ -60,7 +60,7 @@ typedef struct MultiInfo MultiInfo;
 
 - (void)lazyInitMultiInfo
 {
-    assert(_handle != nullptr);
+    WCTInnerAssert(_handle != nullptr);
     if (_infos.empty()) {
         int index = 0;
         for (const WCTProperty &property : _properties) {
@@ -97,7 +97,7 @@ typedef struct MultiInfo MultiInfo;
         return nil;
     }
 
-    assert(_handle != nullptr);
+    WCTInnerAssert(_handle != nullptr);
     bool done;
     if (!_handle->step(done) || done) {
         [self doAutoFinalize:!done];
@@ -120,7 +120,7 @@ typedef struct MultiInfo MultiInfo;
         return nil;
     }
 
-    assert(_handle != nullptr);
+    WCTInnerAssert(_handle != nullptr);
     bool done;
     if (!_handle->step(done) || done) {
         [self doAutoFinalize:!done];

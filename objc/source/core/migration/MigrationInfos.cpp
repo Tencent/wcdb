@@ -33,7 +33,7 @@ MigrationInfos::MigrationInfos(
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
     : m_migratingStarted(false)
 {
-    assert(!infos.empty());
+    WCTAssert(!infos.empty(), "Migration infos must not be empty.");
     for (const auto &info : infos) {
         if (!info->isSameDatabaseMigration()) {
             auto iter = m_schemas.find(info->schema);
@@ -45,7 +45,9 @@ MigrationInfos::MigrationInfos(
             }
             ++iter->second.second;
         }
-        assert(m_infos.find(info->targetTable) == m_infos.end());
+        WCTAssert(
+            m_infos.find(info->targetTable) == m_infos.end(),
+            "Migrating multiple tables to the same table is not allowed.");
         m_infos.insert({info->targetTable, info});
     }
 }
@@ -59,9 +61,7 @@ bool MigrationInfos::isSameDatabaseMigration() const
 const std::map<std::string, std::pair<std::string, int>> &
 MigrationInfos::getSchemasForAttaching() const
 {
-#ifdef DEBUG
-    assert(m_lock.debug_isSharedLocked());
-#endif
+    WCTInnerAssert(m_lock.debug_isSharedLocked());
     return m_schemas;
 }
 
@@ -88,25 +88,25 @@ bool MigrationInfos::didMigrationDone() const
 
 void MigrationInfos::markAsMigrationStarted()
 {
-    assert(m_lock.isLocked());
+    WCTInnerAssert(m_lock.isLocked());
     m_migratingStarted.store(true);
 }
 
 void MigrationInfos::markAsMigrationStarted(const std::string &table)
 {
-    assert(m_lock.isLocked());
+    WCTInnerAssert(m_lock.isLocked());
     m_migratingStarted.store(true);
-    assert(!table.empty());
     auto iter = m_infos.find(table);
-    assert(iter != m_infos.end());
-    m_migratingInfo = iter->second;
+    WCTInnerAssert(iter != m_infos.end());
+    if (iter != m_infos.end()) {
+        m_migratingInfo = iter->second;
+    }
 }
 
 void MigrationInfos::markAsMigrating(const std::string &table)
 {
-    assert(m_lock.isLocked());
+    WCTInnerAssert(m_lock.isLocked());
     m_migratingStarted.store(true);
-    assert(!table.empty());
     auto iter = m_infos.find(table);
     if (iter != m_infos.end()) {
         m_migratingInfo = iter->second;
@@ -115,14 +115,14 @@ void MigrationInfos::markAsMigrating(const std::string &table)
 
 void MigrationInfos::markAsMigrated(bool &schemasChanged)
 {
-    assert(m_lock.isLocked());
-    assert(m_migratingInfo != nullptr);
+    WCTInnerAssert(m_lock.isLocked());
+    WCTInnerAssert(m_migratingInfo != nullptr);
     auto iter = m_infos.find(m_migratingInfo->targetTable);
-    assert(iter != m_infos.end());
+    WCTInnerAssert(iter != m_infos.end());
     schemasChanged = false;
     if (!iter->second->isSameDatabaseMigration()) {
         auto schemaIter = m_schemas.find(iter->second->schema);
-        assert(schemaIter != m_schemas.end());
+        WCTInnerAssert(schemaIter != m_schemas.end());
         if (--schemaIter->second.second == 0) {
             m_schemas.erase(schemaIter);
             schemasChanged = true;

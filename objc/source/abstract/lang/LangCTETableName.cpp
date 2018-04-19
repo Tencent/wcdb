@@ -27,7 +27,7 @@ namespace Lang {
 CopyOnWriteString CTETableName::SQL() const
 {
     std::string description;
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     if (!columns.empty()) {
         description.append("(" + columns.description().get() + ")");

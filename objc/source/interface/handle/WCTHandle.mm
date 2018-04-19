@@ -32,19 +32,19 @@
 #pragma mark - Info
 - (long long)getLastInsertedRowID
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return 0;);
     return _handle->getLastInsertedRowID();
 }
 
 - (int)getChanges
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return 0;);
     return _handle->getChanges();
 }
 
 - (BOOL)isStatementReadonly
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return NO;);
     return _handle->isStatementReadonly();
 }
 
@@ -62,19 +62,19 @@
 #pragma mark - Stepping
 - (BOOL)step:(BOOL &)done
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return NO;);
     return _handle->step((bool &) done);
 }
 
 - (BOOL)step
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return NO;);
     return _handle->step();
 }
 
 - (void)reset
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->reset();
 }
 
@@ -86,43 +86,43 @@
 
 - (void)bindBool:(BOOL)value toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindInteger32(value ? 1 : 0, index);
 }
 
 - (void)bindInteger32:(const int32_t &)value toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindInteger32(value, index);
 }
 
 - (void)bindInteger64:(const int64_t &)value toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindInteger64(value, index);
 }
 
 - (void)bindDouble:(const double &)value toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindDouble(value, index);
 }
 
 - (void)bindString:(NSString *)value toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindText(value.UTF8String, index);
 }
 
 - (void)bindBLOB:(NSData *)value toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindBLOB(value.noCopyData, index);
 }
 
 - (void)bindNullToIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     _handle->bindNull(index);
 }
 
@@ -154,43 +154,43 @@
 
 - (BOOL)getBoolAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return NO;);
     return _handle->getInteger32(index) != 0;
 }
 
 - (int32_t)getInteger32AtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return 0;);
     return _handle->getInteger32(index);
 }
 
 - (int64_t)getInteger64AtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return 0;);
     return _handle->getInteger64(index);
 }
 
 - (double)getDouble:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return 0;);
     return _handle->getDouble(index);
 }
 
 - (NSString *)getTextAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     return @(_handle->getText(index));
 }
 
 - (NSData *)getBLOB:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     return [NSData dataWithNoCopyData:_handle->getBLOB(index)];
 }
 
 - (WCDB::ColumnType)getColumnTypeAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return WCDB::ColumnType::Null;);
     return _handle->getType(index);
 }
 
@@ -217,19 +217,19 @@
 
 - (int)getColumnCount
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return 0;);
     return _handle->getColumnCount();
 }
 
 - (NSString *)getColumnNameAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     return @(_handle->getColumnName(index));
 }
 
 - (NSString *)getColumnTableNameAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     return @(_handle->getColumnTableName(index));
 }
 

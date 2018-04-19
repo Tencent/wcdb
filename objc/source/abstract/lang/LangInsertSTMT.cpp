@@ -39,25 +39,25 @@ CopyOnWriteString InsertSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     if (!columns.empty()) {
         description.append("(" + columns.description().get() + ")");
     }
     switch (switcher) {
         case Switch::Values:
-            LangDebugAssert(!exprs.empty());
+            LangRemedialAssert(!exprs.empty());
             description.append(" VALUES(" + exprs.description().get() + ")");
             break;
         case Switch::Select:
-            LangDebugAssert(!selectSTMT.empty());
+            LangRemedialAssert(!selectSTMT.empty());
             description.append(" " + selectSTMT.description().get());
             break;
         case Switch::DefaultValues:
             description.append(" DEFAULT VALUES");
             break;
         default:
-            LangDebugFatalError();
+            LangRemedialFatalError();
             break;
     }
     return description;

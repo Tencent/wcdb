@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Lang.h>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -30,7 +31,7 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     if (!tableAlias.empty()) {
         description.append(" AS " + tableAlias.get());
@@ -38,7 +39,7 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
     if (indexSwitcher != IndexSwitch::NotSet) {
         switch (indexSwitcher) {
             case IndexSwitch::Indexed:
-                LangDebugAssert(!indexName.empty());
+                LangRemedialAssert(!indexName.empty());
                 description.append(" INDEXED BY " + indexName.get());
                 break;
             case IndexSwitch::NotIndexed:
@@ -67,7 +68,7 @@ CopyOnWriteString TableOrSubqueryTableFunction::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!tableFunctionName.empty());
+    LangRemedialAssert(!tableFunctionName.empty());
     description.append(tableFunctionName.get());
     description.append("(");
     if (!exprs.empty()) {
@@ -87,8 +88,11 @@ TableOrSubqueryBase::Type TableOrSubqueryTableFunction::getType() const
 
 CopyOnWriteString TableOrSubqueryJoinClause::SQL() const
 {
-    LangDebugAssert(!joinClause.empty());
-    return "(" + joinClause.description().get() + ")";
+    std::string description("(");
+    LangRemedialAssert(!joinClause.empty());
+    description.append(joinClause.description().get());
+    description.append(")");
+    return description;
 }
 
 TableOrSubqueryBase::Type TableOrSubqueryJoinClause::getType() const
@@ -99,7 +103,7 @@ TableOrSubqueryBase::Type TableOrSubqueryJoinClause::getType() const
 CopyOnWriteString TableOrSubquerySelect::SQL() const
 {
     std::string description;
-    LangDebugAssert(!selectSTMT.empty());
+    LangRemedialAssert(!selectSTMT.empty());
     description.append("(" + selectSTMT.description().get() + ")");
     if (!tableAlias.empty()) {
         description.append(" AS " + tableAlias.get());
@@ -114,8 +118,11 @@ TableOrSubqueryBase::Type TableOrSubquerySelect::getType() const
 
 CopyOnWriteString TableOrSubqueryList::SQL() const
 {
-    LangDebugAssert(!tableOrSubquerys.empty());
-    return "(" + tableOrSubquerys.description().get() + ")";
+    std::string description("(");
+    LangRemedialAssert(!tableOrSubquerys.empty());
+    description.append(tableOrSubquerys.description().get());
+    description.append(")");
+    return description;
 }
 
 TableOrSubqueryBase::Type TableOrSubqueryList::getType() const
@@ -129,24 +136,25 @@ TableOrSubquery::TableOrSubquery() : type(Type::NotSet)
 
 CopyOnWriteString TableOrSubquery::SQL() const
 {
+    std::string description = String::empty();
     switch (type) {
         case Type::Table:
-            LangDebugAssert(!tableOrSubqueryTable.empty());
+            LangRemedialAssert(!tableOrSubqueryTable.empty());
             return tableOrSubqueryTable.description();
         case Type::TableFunction:
-            LangDebugAssert(!tableOrSubqueryTableFunction.empty());
+            LangRemedialAssert(!tableOrSubqueryTableFunction.empty());
             return tableOrSubqueryTableFunction.description();
         case Type::JoinClause:
-            LangDebugAssert(!tableOrSubqueryJoinClause.empty());
+            LangRemedialAssert(!tableOrSubqueryJoinClause.empty());
             return tableOrSubqueryJoinClause.description();
         case Type::Select:
-            LangDebugAssert(!tableOrSubquerySelect.empty());
+            LangRemedialAssert(!tableOrSubquerySelect.empty());
             return tableOrSubquerySelect.description();
         case Type::List:
-            LangDebugAssert(!tableOrSubqueryList.empty());
+            LangRemedialAssert(!tableOrSubqueryList.empty());
             return tableOrSubqueryList.description();
         default:
-            WCTDebugFatalError("", return "";);
+            LangRemedialFatalError();
     }
 }
 

@@ -50,7 +50,7 @@
                        andHandle:(WCDB::Handle *)handle
 {
     //Unsafe
-    assert(handle != nullptr);
+    WCTInnerAssert(handle != nullptr);
     if (self = [super initWithDatabase:database]) {
         _handle = handle;
     }
@@ -108,7 +108,6 @@
 
 - (void)finalizeStatement
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
     if (_handle) {
         _handle->finalize();
     }
@@ -124,7 +123,7 @@
             ofObject:(WCTObject *)object
              toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
     const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding->accessor;
     switch (accessor->getAccessorType()) {
@@ -215,7 +214,7 @@
 - (void)bindValue:(WCTColumnCodingValue *)value
           toIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     value = [value archivedWCTValue];
     if ([value isKindOfClass:NSData.class]) {
         NSData *data = (NSData *) value;
@@ -244,7 +243,7 @@
                  toProperty:(const WCTProperty &)property
                    ofObject:(WCTObject *)object
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return;);
     const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
     const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding->accessor;
     switch (accessor->getAccessorType()) {
@@ -308,7 +307,7 @@
 
 - (WCTValue *)getValueAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     switch (_handle->getType(index)) {
         case WCDB::ColumnType::Integer32:
             return [[WCTValue alloc] initWithInteger32:_handle->getInteger32(index)];
@@ -327,7 +326,7 @@
 
 - (WCTOneRow *)getRow
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     NSMutableArray<WCTValue *> *row = [[NSMutableArray<WCTValue *> alloc] init];
     for (int i = 0; i < _handle->getColumnCount(); ++i) {
         [row addObject:[self getValueAtIndex:i]];
@@ -382,7 +381,7 @@
 
 - (WCTValue *)nextValueAtIndex:(int)index orDone:(BOOL &)isDone
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     if (_handle->step((bool &) isDone) && !isDone) {
         return [self getValueAtIndex:index];
     }
@@ -392,7 +391,7 @@
 
 - (WCTOneColumn *)allValuesAtIndex:(int)index
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     NSMutableArray<WCTValue *> *values = [[NSMutableArray<WCTValue *> alloc] init];
     bool done;
     while (_handle->step(done) && !done) {
@@ -404,7 +403,7 @@
 
 - (WCTOneRow *)nextRowOrDone:(BOOL &)isDone
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     if (_handle->step((bool &) isDone) && !isDone) {
         return [self getRow];
     }
@@ -414,7 +413,7 @@
 
 - (WCTColumnsXRows *)allRows
 {
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTHandleAssert(return nil;);
     NSMutableArray<WCTOneRow *> *rows = [[NSMutableArray<WCTOneRow *> alloc] init];
     bool done;
     while (_handle->step(done) && !done) {
@@ -440,7 +439,7 @@
 
 - (id /* WCTObject* */)nextObjectOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties orDone:(BOOL)isDone
 {
-    NSAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], @"%@ should conforms to WCTTableCoding protocol", cls);
+    WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
     if (_handle->step((bool &) isDone) && !isDone) {
         return [self getObjectOfClass:cls onProperties:properties];
     }
@@ -464,8 +463,8 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties
 {
-    NSAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], @"%@ should conforms to WCTTableCoding protocol", cls);
-    NSAssert(_handle != nullptr, @"[prepare] or [execute] should be called before this.");
+    WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
+    WCTHandleAssert(return nil;);
     NSMutableArray<WCTObject *> *objects = [[NSMutableArray<WCTObject *> alloc] init];
     bool done;
     while (_handle->step(done) && !done) {
@@ -479,7 +478,7 @@
      withObject:(WCTObject *)object
 {
     Class cls = object.class;
-    NSAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], @"%@ should conforms to WCTTableCoding protocol", cls);
+    WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
     const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB]->getAllProperties();
     return [self execute:statement
               withObject:object

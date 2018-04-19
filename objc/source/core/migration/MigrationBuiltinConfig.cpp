@@ -25,7 +25,7 @@ namespace WCDB {
 const Config
 MigrationBuiltinConfig::autoAttachAndDetachWithInfos(MigrationInfos *infos)
 {
-    assert(infos != nullptr);
+    WCTInnerAssert(infos != nullptr);
     return Config(
         "migration",
         [infos](Handle *handle) -> bool {

@@ -33,15 +33,15 @@ CopyOnWriteString IndexedColumn::SQL() const
     std::string description;
     switch (switcher) {
         case Switch::Column:
-            LangDebugAssert(!column.empty());
+            LangRemedialAssert(!column.empty());
             description.append(column.description().get());
             break;
         case Switch::Expr:
-            LangDebugAssert(!expr.empty());
+            LangRemedialAssert(!expr.empty());
             description.append(expr.description().get());
             break;
         default:
-            LangDebugFatalError();
+            LangRemedialFatalError();
             break;
     }
     if (!collationName.empty()) {

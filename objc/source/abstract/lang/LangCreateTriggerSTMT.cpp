@@ -46,7 +46,7 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!triggerName.empty());
+    LangRemedialAssert(!triggerName.empty());
     description.append(triggerName.get() + " ");
     if (type != CreateTriggerSTMT::Type::NotSet) {
         description.append(CreateTriggerSTMT::TypeName(type));
@@ -64,7 +64,7 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
         description.append(" WHEN " + expr.description().get());
     }
     description.append(" BEGIN ");
-    LangDebugAssert(!STMTs.empty());
+    LangRemedialAssert(!STMTs.empty());
     description.append(STMTs.description().get());
     description.append(" END");
     return description;
@@ -111,7 +111,7 @@ CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const
         } else {
             space = true;
         }
-        LangDebugAssert(!element.empty());
+        LangRemedialAssert(!element.empty());
         description.append(element.description().get() + ";");
     }
     return description;

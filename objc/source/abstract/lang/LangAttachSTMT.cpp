@@ -27,9 +27,9 @@ namespace Lang {
 CopyOnWriteString AttachSTMT::SQL() const
 {
     std::string description("ATTACH ");
-    LangDebugAssert(!expr.empty());
+    LangRemedialAssert(!expr.empty());
     description.append(expr.description().get());
-    LangDebugAssert(!schemaName.empty());
+    LangRemedialAssert(!schemaName.empty());
     description.append(" AS " + schemaName.get());
     return description;
 }

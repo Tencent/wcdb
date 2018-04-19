@@ -117,7 +117,7 @@ CopyOnWriteLazyLangList<SelectSTMT::Compound>::calculatedDescription() const
         } else {
             space = true;
         }
-        LangDebugAssert(!element.empty());
+        LangRemedialAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

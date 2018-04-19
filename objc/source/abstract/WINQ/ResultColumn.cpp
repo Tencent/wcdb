@@ -48,7 +48,7 @@ ResultColumn::ResultColumn(const Expression &expression)
 ResultColumn &ResultColumn::withTable(const std::string &tableName)
 {
     Lang::ResultColumn &lang = getMutableLang();
-    WINQDebugAssert(lang.type == Lang::ResultColumn::Type::Star);
+    WINQRemedialAssert(lang.type == Lang::ResultColumn::Type::Star);
     lang.tableName.assign(tableName);
     return *this;
 }
@@ -56,7 +56,7 @@ ResultColumn &ResultColumn::withTable(const std::string &tableName)
 ResultColumn &ResultColumn::as(const Column &columnAlias)
 {
     Lang::ResultColumn &lang = getMutableLang();
-    WINQDebugAssert(lang.type == Lang::ResultColumn::Type::Expr);
+    WINQRemedialAssert(lang.type == Lang::ResultColumn::Type::Expr);
     lang.columnAlias.assign(columnAlias.getCOWLang());
     return *this;
 }

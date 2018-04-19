@@ -69,35 +69,35 @@ CopyOnWriteString ColumnConstraint::SQL() const
             }
             break;
         case Type::Check:
-            LangDebugAssert(!expr.empty());
+            LangRemedialAssert(!expr.empty());
             description.append("CHECK(" + expr.description().get() + ")");
             break;
         case Type::Default:
             description.append("DEFAULT");
             switch (defaultSwitcher) {
                 case DefaultSwitch::LiteralValue:
-                    LangDebugAssert(!literalValue.empty());
+                    LangRemedialAssert(!literalValue.empty());
                     description.append(" " + literalValue.description().get());
                     break;
                 case DefaultSwitch::Expr:
-                    LangDebugAssert(!expr.empty());
+                    LangRemedialAssert(!expr.empty());
                     description.append("(" + expr.description().get() + ")");
                     break;
                 default:
-                    LangDebugFatalError();
+                    LangRemedialFatalError();
                     break;
             }
             break;
         case Type::Collate:
-            LangDebugAssert(!collationName.empty());
+            LangRemedialAssert(!collationName.empty());
             description.append("COLLATE " + collationName.get());
             break;
         case Type::ForeignKeyClause:
-            LangDebugAssert(!foreignKeyClause.empty());
+            LangRemedialAssert(!foreignKeyClause.empty());
             description.append(foreignKeyClause.description().get());
             break;
         default:
-            LangDebugFatalError();
+            LangRemedialFatalError();
             break;
     }
     return description;
@@ -115,7 +115,7 @@ CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const
         } else {
             space = true;
         }
-        LangDebugAssert(!element.empty());
+        LangRemedialAssert(!element.empty());
         description.append(element.description().get());
     }
     return description;

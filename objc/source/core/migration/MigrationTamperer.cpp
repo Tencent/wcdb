@@ -31,7 +31,7 @@ MigrationTamperer::MigrationTamperer(MigrationInfos *infos,
     , m_fillingSchema(true)
     , m_infosMap(infos->getInfos())
 {
-    assert(m_migrationInfos != nullptr);
+    WCTInnerAssert(m_migrationInfos != nullptr);
     tamperWithStatement(statement);
 }
 

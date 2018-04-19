@@ -36,14 +36,14 @@
 - (BOOL)commitOrRollbackTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    assert(handle != nullptr);
+    WCTRemedialAssert(handle != nullptr, "Commit or rollback transaction should be called only after beginTransaction called.", return NO;);
     return handle->commitOrRollbackTransaction();
 }
 
 - (void)rollbackTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    assert(handle != nullptr);
+    WCTRemedialAssert(handle != nullptr, "Rollback transaction should be called only after beginTransaction called.", return;);
     handle->rollbackTransaction();
 }
 
@@ -72,14 +72,14 @@
 - (BOOL)commitOrRollbackNestedTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    assert(handle != nullptr);
+    WCTRemedialAssert(handle != nullptr, "Commit or rollback transaction should be called only after beginTransaction called.", return NO;);
     return handle->commitOrRollbackNestedTransaction();
 }
 
 - (void)rollbackNestedTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    assert(handle != nullptr);
+    WCTRemedialAssert(handle != nullptr, "Rollback transaction should be called only after beginTransaction called.", return;);
     return handle->rollbackNestedTransaction();
 }
 

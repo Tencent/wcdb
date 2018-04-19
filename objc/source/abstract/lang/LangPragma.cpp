@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Lang.h>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -26,7 +27,8 @@ namespace Lang {
 
 CopyOnWriteString Pragma::SQL() const
 {
-    LangDebugAssert(!name.empty());
+    std::string description = String::empty();
+    LangRemedialAssert(!name.empty());
     return name;
 }
 

@@ -27,7 +27,7 @@ namespace Lang {
 CopyOnWriteString ReleaseSTMT::SQL() const
 {
     std::string description("RELEASE ");
-    LangDebugAssert(!savepointName.empty());
+    LangRemedialAssert(!savepointName.empty());
     description.append(savepointName.get());
     return description;
 }

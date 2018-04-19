@@ -28,7 +28,11 @@ MigrationInfo::info(const std::string &targetTable,
                     const std::string &sourceTable,
                     const std::string &sourceDatabasePath)
 {
-    assert(!sourceDatabasePath.empty() || targetTable != sourceTable);
+    WCTAssert(
+        !sourceDatabasePath.empty() || targetTable != sourceTable,
+        "Migrating the same name database to the same table is meaningless.");
+    WCTAssert(!targetTable.empty() && !sourceTable.empty(),
+              "Migrating table name must not be empty.");
     return std::shared_ptr<MigrationInfo>(
         new MigrationInfo(targetTable, sourceTable, sourceDatabasePath));
 }

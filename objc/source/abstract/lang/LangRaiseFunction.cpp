@@ -36,15 +36,15 @@ CopyOnWriteString RaiseFunction::SQL() const
             description.append("IGNORE");
             break;
         case Type::Rollback:
-            LangDebugAssert(!errorMessage.empty());
+            LangRemedialAssert(!errorMessage.empty());
             description.append("ROLLBACK, " + errorMessage.get());
             break;
         case Type::Abort:
-            LangDebugAssert(!errorMessage.empty());
+            LangRemedialAssert(!errorMessage.empty());
             description.append("ABORT, " + errorMessage.get());
             break;
         case Type::Fail:
-            LangDebugAssert(!errorMessage.empty());
+            LangRemedialAssert(!errorMessage.empty());
             description.append("FAIL, " + errorMessage.get());
             break;
     }

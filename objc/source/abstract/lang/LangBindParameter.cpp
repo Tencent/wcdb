@@ -37,19 +37,19 @@ CopyOnWriteString BindParameter::SQL() const
     description.assign("?" + std::to_string(n));
     //            break;
     //        case Type::Colon:
-    //            LangDebugAssert(!name.empty());
+    //            LangRemedialAssert(!name.empty());
     //            description.append(":" + name.get());
     //            break;
     //        case Type::At:
-    //            LangDebugAssert(!name.empty());
+    //            LangRemedialAssert(!name.empty());
     //            description.append("@" + name.get());
     //            break;
     //        case Type::DollarSign:
-    //            LangDebugAssert(!name.empty());
+    //            LangRemedialAssert(!name.empty());
     //            description.append("$" + name.get());
     //            break;
     //        default:
-    //            LangDebugFatalError();
+    //            LangRemedialFatalError();
     //            ;
     //    }
     return description;

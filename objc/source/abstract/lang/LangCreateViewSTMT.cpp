@@ -41,12 +41,12 @@ CopyOnWriteString CreateViewSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!viewName.empty());
+    LangRemedialAssert(!viewName.empty());
     description.append(viewName.get());
     if (!columns.empty()) {
         description.append("(" + columns.description().get() + ")");
     }
-    LangDebugAssert(!selectSTMT.empty());
+    LangRemedialAssert(!selectSTMT.empty());
     description.append(" AS " + selectSTMT.description().get());
     return description;
 }

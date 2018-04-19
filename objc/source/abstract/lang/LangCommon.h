@@ -32,10 +32,13 @@
 #include <WCDB/LangConflictClause.hpp>
 #include <WCDB/LangOrder.hpp>
 
-#define LangDebugAssert(cond)                                                  \
-    WCTDebugAssert(cond, "WINQ expression is not complete", return description;)
-#define LangDebugFatalError()                                                  \
-    WCTDebugFatalError("WINQ expression is not complete", return description;)
+#define LangRemedialAssert(cond)                                               \
+    WCTRemedialAssert(cond, "WINQ expression is not complete",                 \
+                      return description;)
+
+#define LangRemedialFatalError()                                               \
+    WCTRemedialFatalError("WINQ expression is not complete",                   \
+                          return description;)
 
 namespace WCDB {
 
@@ -107,7 +110,7 @@ protected:
             } else {
                 comma = true;
             }
-            LangDebugAssert(!element.empty());
+            LangRemedialAssert(!element.empty());
             description.append(element.description().get());
         }
         return description;

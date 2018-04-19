@@ -37,10 +37,10 @@ CopyOnWriteString CreateVirtualTableSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     description.append(" USING ");
-    LangDebugAssert(!moduleName.empty());
+    LangRemedialAssert(!moduleName.empty());
     description.append(moduleName.get());
     if (!moduleArguments.empty()) {
         description.append("(" + moduleArguments.description().get() + ")");

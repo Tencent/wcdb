@@ -27,12 +27,12 @@ namespace Lang {
 CopyOnWriteString CommonTableExpression::SQL() const
 {
     std::string description;
-    LangDebugAssert(!tableName.empty());
+    LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     if (!columns.empty()) {
         description.append("(" + columns.description().get() + ")");
     }
-    LangDebugAssert(!selectSTMT.empty());
+    LangRemedialAssert(!selectSTMT.empty());
     description.append(" AS(" + selectSTMT.description().get() + ")");
     return description;
 }

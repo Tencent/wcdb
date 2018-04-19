@@ -91,12 +91,13 @@ bool MigrationHandle::step(bool &done)
         if (!beginNestedTransaction()) {
             return false;
         }
-        assert(m_tamperedHandleStatement.getStatement().getStatementType() ==
-                   Statement::Type::Update ||
-               m_tamperedHandleStatement.getStatement().getStatementType() ==
-                   Statement::Type::Delete ||
-               m_tamperedHandleStatement.getStatement().getStatementType() ==
-                   Statement::Type::Insert);
+        WCTInnerAssert(
+            m_tamperedHandleStatement.getStatement().getStatementType() ==
+                Statement::Type::Update ||
+            m_tamperedHandleStatement.getStatement().getStatementType() ==
+                Statement::Type::Delete ||
+            m_tamperedHandleStatement.getStatement().getStatementType() ==
+                Statement::Type::Insert);
         if (Handle::step(done) &&
             Handle::step(m_tamperedHandleStatement, done)) {
             return commitOrRollbackNestedTransaction();
@@ -253,17 +254,23 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
                 return;
             }
             auto iter = m_infos->getInfos().find(lang.tableName.get());
-            assert(iter == m_infos->getInfos().end());
+            WCTAssert(iter == m_infos->getInfos().end(),
+                      "Executing Alter Table Statement on a migrating table is "
+                      "not allowed yet.");
         } break;
         case Statement::Type::Update: {
             //Update statement with orderBy/limit/offset is not allowed.
             StatementUpdate statementUpdate(statement.getCOWLang());
-            assert(!statementUpdate.isLimited());
+            WCTAssert(!statementUpdate.isLimited(),
+                      "Executing Update Statement with OrderBy/Limit/Offset on "
+                      "a migrating table is not allowed yet.");
         } break;
         case Statement::Type::Delete: {
             //Delete statement with orderBy/limit/offset is not allowed.
             StatementDelete statementDelete(statement.getCOWLang());
-            assert(!statementDelete.isLimited());
+            WCTAssert(!statementDelete.isLimited(),
+                      "Executing Delete Statement with OrderBy/Limit/Offset on "
+                      "a migrating table is not allowed yet.");
         } break;
         case Statement::Type::Insert: {
             //Partial replace statement not allowed.
@@ -282,7 +289,9 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
                 return;
             }
             auto pair = getColumnsWithTable(iter->second->targetTable);
-            assert(pair.first);
+            if (!pair.first) {
+                return;
+            }
             auto columns = pair.second;
             const auto &specifiedColumns =
                 statementInsert.getSpecifiedColumns();
@@ -295,7 +304,10 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
                     }
                 }
                 //all columns should be specific
-                assert(columns.empty());
+                WCTAssert(columns.empty(), "Executing Insert Statement by "
+                                           "replacing without all columns "
+                                           "specificed is not allowed yet. You "
+                                           "can use Update Statement instead.");
                 break;
             }
         } break;

@@ -24,30 +24,41 @@
 #include <functional>
 #include <string>
 
+#ifdef DEBUG
+
+//debug assert
 #define WCTAssert(cond, message)                                               \
     if (!(cond)) {                                                             \
         WCDB::Error::fatal(message);                                           \
     }
 
-#ifdef DEBUG
-#define WCTDebugAssert(cond, message, remedial) WCTAssert(cond, message)
-#else //DEBUG
-#define WCTDebugAssert(cond, message, remedial)                                \
+//remedial assert
+#define WCTRemedialAssert(cond, message, remedial) WCTAssert(cond, message)
+
+//remedial fatal error
+#define WCTRemedialFatalError(message, remedial) WCDB::Error::fatal(message)
+
+#else //ELSE
+
+#define WCTAssert(cond, message)
+
+//remedial assert
+#define WCTRemedialAssert(cond, message, remedial)                             \
     if (!(cond)) {                                                             \
         remedial                                                               \
     }
-#endif //DEBUG
 
-#define WCTFatalError(message) WCDB::Error::fatal(message)
-
-#ifdef DEBUG
-#define WCTDebugFatalError(message, remedial) WCTFatalError(message)
-#else
-#define WCTDebugFatalError(message, remedial)                                  \
+//remedial fatal error
+#define WCTRemedialFatalError(message, remedial)                               \
     do {                                                                       \
         remedial                                                               \
     } while (false);
-#endif
+
+#endif //DEBUG
+
+#define WCTInnerAssert(cond)                                                   \
+    WCTAssert(cond,                                                            \
+              "If you think it's a bug caused by WCDB, please report to us.")
 
 namespace WCDB {
 

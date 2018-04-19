@@ -68,7 +68,7 @@ void WCTBinding::addColumnConstraint(const WCDB::ColumnConstraint &columnConstra
 {
     const auto &map = m_columnBindings.getMap();
     auto iter = map.find(property.getDescription());
-    assert(iter != map.end());
+    WCTInnerAssert(iter != map.end());
     iter->second->columnDef.byAddingConstraint(columnConstraint);
 }
 
@@ -96,7 +96,7 @@ std::shared_ptr<WCTColumnBinding> WCTBinding::getColumnBinding(const WCTProperty
 {
     const auto &map = m_columnBindings.getMap();
     auto iter = map.find(property.getDescription());
-    assert(iter != map.end());
+    WCTInnerAssert(iter != map.end());
     return iter->second;
 }
 

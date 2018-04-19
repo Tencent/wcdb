@@ -48,7 +48,7 @@ Expression::Expression(const Column &column)
 Expression &Expression::withTable(const std::string &tableName)
 {
     Lang::Expr &lang = getMutableLang();
-    WINQDebugAssert(lang.type == Lang::ExprBase::Type::Column);
+    WINQRemedialAssert(lang.type == Lang::ExprBase::Type::Column);
     lang.exprColumn.get_or_copy().tableName.assign(tableName);
     return *this;
 }
@@ -56,7 +56,7 @@ Expression &Expression::withTable(const std::string &tableName)
 Expression &Expression::withSchema(const std::string &schemaName)
 {
     Lang::Expr &lang = getMutableLang();
-    WINQDebugAssert(lang.type == Lang::ExprBase::Type::Column);
+    WINQRemedialAssert(lang.type == Lang::ExprBase::Type::Column);
     lang.exprColumn.get_or_copy().schemaName.assign(schemaName);
     return *this;
 }
@@ -169,8 +169,8 @@ Expression::Expression(
 
 Expression &Expression::withEscape(const Expression &expr)
 {
-    WINQDebugAssert(getCOWLang().get<Lang::Expr>().type ==
-                    Lang::ExprBase::Type::Pattern);
+    WINQRemedialAssert(getCOWLang().get<Lang::Expr>().type ==
+                       Lang::ExprBase::Type::Pattern);
     Lang::Expr &lang = getMutableLang();
     lang.exprPattern.get_or_copy().escape.assign(expr.getCOWLang());
     return *this;

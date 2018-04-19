@@ -31,7 +31,7 @@
                     andTableName:(NSString *)tableName
                         andClass:(Class<WCTTableCoding>)cls
 {
-    assert(tableName.length > 0 && cls != nil);
+    WCTRemedialAssert(tableName.length > 0 && cls != nil, "Class and table should not be nil.", return nil;);
     if (self = [super initWithDatabase:database]) {
         _tableName = tableName;
         _class = cls;

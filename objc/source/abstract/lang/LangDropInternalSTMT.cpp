@@ -39,7 +39,7 @@ CopyOnWriteString DropInternalSTMT::SQL() const
     if (!schemaName.empty()) {
         description.append(schemaName.get() + ".");
     }
-    LangDebugAssert(!name.empty());
+    LangRemedialAssert(!name.empty());
     description.append(name.get());
     return description;
 }

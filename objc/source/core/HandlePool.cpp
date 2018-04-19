@@ -40,7 +40,7 @@ HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
 #pragma mark - Basic
 void HandlePool::setTag(const Tag &tag)
 {
-    assert(tag != HandleError::invalidTag);
+    WCTAssert(tag != HandleError::invalidTag, "Tag invalid");
     m_tag.store(tag);
 }
 
@@ -78,7 +78,11 @@ const CoreError &HandlePool::getThreadedError() const
 {
     ThreadedErrors *errors = s_threadedErrors.get();
     auto iter = errors->find(this);
-    assert(iter != errors->end());
+    WCTRemedialAssert(
+        iter != errors->end(),
+        "Error should be obtained if and only if a interface return false.",
+        static const CoreError s_coreError;
+        return s_coreError;);
     return iter->second;
 }
 
@@ -125,7 +129,8 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 
 void HandlePool::unblockade()
 {
-    assert(m_sharedLock.isLocked());
+    WCTAssert(m_sharedLock.isLocked(),
+              "Unblockade should not be called without blockaded.");
     m_sharedLock.unlock();
 }
 
@@ -205,9 +210,8 @@ std::shared_ptr<Handle> HandlePool::generateHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 {
-#ifdef DEBUG
-    assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
-#endif
+    WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
+                   m_sharedLock.isLocked());
     std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
     if (!configuredHandle) {
         return nullptr;
@@ -224,9 +228,8 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
-#ifdef DEBUG
-    assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
-#endif
+    WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
+                   m_sharedLock.isLocked());
     if (m_aliveHandleCount >= s_maxConcurrency) {
         setAndReportCoreError(
             "The concurrency of database exceeds the maxximum allowed: " +
@@ -262,10 +265,9 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 void HandlePool::flowBackConfiguredHandle(
     const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
-    assert(configuredHandle != nullptr);
-#ifdef DEBUG
-    assert(m_sharedLock.debug_isSharedLocked() || m_sharedLock.isLocked());
-#endif
+    WCTInnerAssert(configuredHandle != nullptr);
+    WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
+                   m_sharedLock.isLocked());
     if (!m_handles.pushBack(configuredHandle)) {
         --m_aliveHandleCount;
     }

@@ -346,8 +346,9 @@ void Database::retainThreadedHandle(
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = s_threadedHandles.get();
     auto iter = threadHandles->find(m_pool.getHandlePool());
-    assert(iter == threadHandles->end() ||
-           recyclableHandle.getHandle() == iter->second.first.getHandle());
+    WCTInnerAssert(iter == threadHandles->end() ||
+                   recyclableHandle.getHandle() ==
+                       iter->second.first.getHandle());
     if (iter == threadHandles->end()) {
         threadHandles->insert({m_pool.getHandlePool(), {recyclableHandle, 1}});
     } else {
@@ -360,7 +361,7 @@ void Database::releaseThreadedHandle() const
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = s_threadedHandles.get();
     auto iter = threadHandles->find(m_pool.getHandlePool());
-    assert(iter != threadHandles->end());
+    WCTInnerAssert(iter != threadHandles->end());
     if (--iter->second.second == 0) {
         threadHandles->erase(iter);
     }
@@ -385,7 +386,7 @@ bool Database::beginTransaction()
 bool Database::commitOrRollbackTransaction()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
     bool result = recyclableHandle->commitOrRollbackTransaction();
     releaseThreadedHandle();
     return result;
@@ -394,7 +395,7 @@ bool Database::commitOrRollbackTransaction()
 void Database::rollbackTransaction()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
     recyclableHandle->rollbackTransaction();
     releaseThreadedHandle();
 }
@@ -405,7 +406,7 @@ bool Database::runTransaction(const TransactionCallback &transaction)
         return false;
     }
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
     if (transaction(recyclableHandle.getHandle())) {
         return commitOrRollbackTransaction();
     }
@@ -420,7 +421,7 @@ bool Database::beginNestedTransaction()
     }
 
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
 
     if (recyclableHandle->beginNestedTransaction()) {
         retainThreadedHandle(recyclableHandle);
@@ -432,7 +433,7 @@ bool Database::beginNestedTransaction()
 bool Database::commitOrRollbackNestedTransaction()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
 
     bool result = recyclableHandle->commitOrRollbackNestedTransaction();
     releaseThreadedHandle();
@@ -442,7 +443,7 @@ bool Database::commitOrRollbackNestedTransaction()
 void Database::rollbackNestedTransaction()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
     recyclableHandle->rollbackNestedTransaction();
     releaseThreadedHandle();
 }
@@ -453,7 +454,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
         return false;
     }
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    assert(recyclableHandle != nullptr);
+    WCTInnerAssert(recyclableHandle != nullptr);
     if (transaction(recyclableHandle.getHandle())) {
         return commitOrRollbackNestedTransaction();
     }
