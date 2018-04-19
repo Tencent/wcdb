@@ -22,6 +22,7 @@
 #define LiteralValue_hpp
 
 #include <WCDB/Describable.hpp>
+#include <sstream>
 
 namespace WCDB {
 
@@ -43,7 +44,9 @@ public:
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::NumbericFloat;
-        lang.floatValue = (double) ColumnIsFloatType<T>::asUnderlyingType(t);
+        std::ostringstream os;
+        os << t;
+        lang.stringValue.assign(os.str());
     }
 
     template <typename T>
@@ -53,8 +56,7 @@ public:
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::NumbericInteger;
-        lang.integerValue =
-            (int64_t) ColumnIsInteger32Type<T>::asUnderlyingType(t);
+        lang.stringValue.assign(std::to_string(t));
     }
 
     template <typename T>
@@ -64,8 +66,7 @@ public:
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::NumbericInteger;
-        lang.integerValue =
-            (int64_t) ColumnIsInteger64Type<T>::asUnderlyingType(t);
+        lang.stringValue.assign(std::to_string(t));
     }
 
     template <typename T>

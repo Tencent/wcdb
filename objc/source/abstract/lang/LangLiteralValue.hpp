@@ -43,10 +43,6 @@ public:
         CurrentTimestamp,
     };
     Type type;
-    union {
-        int64_t integerValue;
-        double floatValue;
-    };
     CopyOnWriteString stringValue;
     CopyOnWriteData dataValue;
 

@@ -20,13 +20,12 @@
 
 #include <WCDB/Lang.h>
 #include <WCDB/String.hpp>
-#include <sstream>
 
 namespace WCDB {
 
 namespace Lang {
 
-LiteralValue::LiteralValue() : type(Type::NotSet), integerValue(0)
+LiteralValue::LiteralValue() : type(Type::NotSet)
 {
 }
 
@@ -35,23 +34,20 @@ CopyOnWriteString LiteralValue::SQL() const
     std::string description;
     switch (type) {
         case Type::NumbericInteger:
-            description.append(std::to_string(integerValue));
-            break;
-        case Type::NumbericFloat: {
-            std::ostringstream os;
-            os << floatValue;
-            description.append(os.str());
-        } break;
-        case Type::BLOB:
-            description.append("'");
-            description.append(
-                LiteralValue::stringByAntiInjecting(dataValue).get());
-            description.append("'");
+        case Type::NumbericFloat:
+            //TODO use integer to store number
+            description.append(stringValue.get());
             break;
         case Type::String:
             description.append("'");
             description.append(
                 LiteralValue::stringByAntiInjecting(stringValue).get());
+            description.append("'");
+            break;
+        case Type::BLOB:
+            description.append("'");
+            description.append(
+                LiteralValue::stringByAntiInjecting(dataValue).get());
             description.append("'");
             break;
         case Type::Null:

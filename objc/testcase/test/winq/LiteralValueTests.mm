@@ -45,6 +45,11 @@
     WINQAssertEqual(WCDB::LiteralValue::CurrentTime, @"CURRENT_TIME");
     WINQAssertEqual(WCDB::LiteralValue::CurrentDate, @"CURRENT_DATE");
     WINQAssertEqual(WCDB::LiteralValue::CurrentTimestamp, @"CURRENT_TIMESTAMP");
+
+    WINQAssertEqual(WCDB::LiteralValue(INT32_MAX), @"2147483647");
+    WINQAssertEqual(WCDB::LiteralValue(INT64_MAX), @"9223372036854775807");
+    WINQAssertEqual(WCDB::LiteralValue(UINT32_MAX), @"4294967295");
+    WINQAssertEqual(WCDB::LiteralValue(UINT64_MAX), @"18446744073709551615");
 }
 
 - (void)testAnitInjection
