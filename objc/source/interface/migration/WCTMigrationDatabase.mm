@@ -115,19 +115,21 @@
     static dispatch_queue_t s_migrationQueue = dispatch_queue_create("com.Tencent.WCDB.Migration", DISPATCH_QUEUE_CONCURRENT);
     __weak id weakSelf = self;
     dispatch_async(s_migrationQueue, ^{
-      id strongSelf = weakSelf;
-      if (!strongSelf) {
-          return;
-      }
       bool done = false;
       while (!done) {
-          bool result = self->_migrationDatabase->stepMigration(done, onTableMigratedCallback);
-          if (onStepped) {
-              WCTMigrationInfo *migrationInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:self->_migrationDatabase->getMigrationInfo()];
-              result = onStepped(migrationInfo, result) || result;
-          }
-          if (!result) {
-              break;
+          @autoreleasepool{
+              id strongSelf = weakSelf;
+              if (!strongSelf) {
+                  return;
+              }
+              bool result = self->_migrationDatabase->stepMigration(done, onTableMigratedCallback);
+              if (onStepped) {
+                  WCTMigrationInfo *migrationInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:self->_migrationDatabase->getMigrationInfo()];
+                  result = onStepped(migrationInfo, result) || result;
+              }
+              if (!result) {
+                  break;
+              }
           }
       }
       if (onMigrationCompleted) {
