@@ -78,7 +78,7 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
     if (![object isKindOfClass:self.class]) {
         return NO;
     }
-    return self.variable1 == object.variable1 && [self.variable2 isEqualToString:self.variable2] && self.variable3 == object.variable3;
+    return self.variable1 == object.variable1 && [self.variable2 isEqualToString:object.variable2] && self.variable3 == object.variable3;
 }
 
 - (NSUInteger)hash
