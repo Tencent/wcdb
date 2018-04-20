@@ -88,10 +88,10 @@
 {
     WCDB::Expression expression = WCDB::Expression(self.class.column);
 
-    WINQAssertEqual(!expression, @"NOT testColumn");
-    WINQAssertEqual(~expression, @"~testColumn");
-    WINQAssertEqual(+expression, @"+testColumn");
-    WINQAssertEqual(-expression, @"-testColumn");
+    WINQAssertEqual(!expression, @"(NOT testColumn)");
+    WINQAssertEqual(~expression, @"(~testColumn)");
+    WINQAssertEqual(+expression, @"(+testColumn)");
+    WINQAssertEqual(-expression, @"(-testColumn)");
 }
 
 - (void)testBinaryOperation
@@ -99,26 +99,26 @@
     WCDB::Expression expression1 = WCDB::Expression(self.class.column);
     WCDB::Expression expression2 = self.class.literalValue;
 
-    WINQAssertEqual(expression1.concat(expression2), @"testColumn || 1");
-    WINQAssertEqual(expression1 * expression2, @"testColumn * 1");
-    WINQAssertEqual(expression1 / expression2, @"testColumn / 1");
-    WINQAssertEqual(expression1 % expression2, @"testColumn % 1");
-    WINQAssertEqual(expression1 + expression2, @"testColumn + 1");
-    WINQAssertEqual(expression1 - expression2, @"testColumn - 1");
-    WINQAssertEqual(expression1 << expression2, @"testColumn << 1");
-    WINQAssertEqual(expression1 >> expression2, @"testColumn >> 1");
-    WINQAssertEqual(expression1 & expression2, @"testColumn & 1");
-    WINQAssertEqual(expression1 | expression2, @"testColumn | 1");
-    WINQAssertEqual(expression1 < expression2, @"testColumn < 1");
-    WINQAssertEqual(expression1 <= expression2, @"testColumn <= 1");
-    WINQAssertEqual(expression1 > expression2, @"testColumn > 1");
-    WINQAssertEqual(expression1 >= expression2, @"testColumn >= 1");
-    WINQAssertEqual(expression1 == expression2, @"testColumn == 1");
-    WINQAssertEqual(expression1 != expression2, @"testColumn != 1");
-    WINQAssertEqual(expression1.is(expression2), @"testColumn IS 1");
-    WINQAssertEqual(expression1.isNot(expression2), @"testColumn IS NOT 1");
-    WINQAssertEqual(expression1 && expression2, @"testColumn AND 1");
-    WINQAssertEqual(expression1 || expression2, @"testColumn OR 1");
+    WINQAssertEqual(expression1.concat(expression2), @"(testColumn || 1)");
+    WINQAssertEqual(expression1 * expression2, @"(testColumn * 1)");
+    WINQAssertEqual(expression1 / expression2, @"(testColumn / 1)");
+    WINQAssertEqual(expression1 % expression2, @"(testColumn % 1)");
+    WINQAssertEqual(expression1 + expression2, @"(testColumn + 1)");
+    WINQAssertEqual(expression1 - expression2, @"(testColumn - 1)");
+    WINQAssertEqual(expression1 << expression2, @"(testColumn << 1)");
+    WINQAssertEqual(expression1 >> expression2, @"(testColumn >> 1)");
+    WINQAssertEqual(expression1 & expression2, @"(testColumn & 1)");
+    WINQAssertEqual(expression1 | expression2, @"(testColumn | 1)");
+    WINQAssertEqual(expression1 < expression2, @"(testColumn < 1)");
+    WINQAssertEqual(expression1 <= expression2, @"(testColumn <= 1)");
+    WINQAssertEqual(expression1 > expression2, @"(testColumn > 1)");
+    WINQAssertEqual(expression1 >= expression2, @"(testColumn >= 1)");
+    WINQAssertEqual(expression1 == expression2, @"(testColumn == 1)");
+    WINQAssertEqual(expression1 != expression2, @"(testColumn != 1)");
+    WINQAssertEqual(expression1.is(expression2), @"(testColumn IS 1)");
+    WINQAssertEqual(expression1.isNot(expression2), @"(testColumn IS NOT 1)");
+    WINQAssertEqual(expression1 && expression2, @"(testColumn AND 1)");
+    WINQAssertEqual(expression1 || expression2, @"(testColumn OR 1)");
 }
 
 - (void)testFunction
@@ -372,20 +372,20 @@
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case(caseExpression)
                                          .whenAndThen(when1, then1)
                                          .else_(elseExpression)),
-                    @"CASE testColumn WHEN testColumn2 > 0 THEN 1 ELSE 3 END");
+                    @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 ELSE 3 END");
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case(caseExpression)
                                          .whenAndThen(when1, then1)),
-                    @"CASE testColumn WHEN testColumn2 > 0 THEN 1 END");
+                    @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 END");
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case(caseExpression)
                                          .whenAndThen(when1, then1)
                                          .whenAndThen(when2, then2)),
-                    @"CASE testColumn WHEN testColumn2 > 0 THEN 1 WHEN testColumn3 < 0 THEN 2 END");
+                    @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 WHEN (testColumn3 < 0) THEN 2 END");
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case()
                                          .whenAndThen(when1, then1)),
-                    @"CASE WHEN testColumn2 > 0 THEN 1 END");
+                    @"CASE WHEN (testColumn2 > 0) THEN 1 END");
 }
 
 @end

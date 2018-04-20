@@ -46,9 +46,11 @@ ExprBase::Type ExprColumn::getType() const
 
 CopyOnWriteString ExprUnaryOperation::SQL() const
 {
-    std::string description(ExprUnaryOperation::OperatorName(unaryOperator));
+    std::string description("(");
+    description.append(ExprUnaryOperation::OperatorName(unaryOperator));
     LangRemedialAssert(!expr.empty());
     description.append(expr.description().get());
+    description.append(")");
     return description;
 }
 
@@ -74,12 +76,13 @@ ExprUnaryOperation::OperatorName(const Operator &unaryOpeartor)
 
 CopyOnWriteString ExprBinaryOperation::SQL() const
 {
-    std::string description;
+    std::string description("(");
     LangRemedialAssert(!left.empty());
     description.append(left.description().get());
     description.append(ExprBinaryOperation::OperatorName(binaryOperator));
     LangRemedialAssert(!right.empty());
     description.append(right.description().get());
+    description.append(")");
     return description;
 }
 

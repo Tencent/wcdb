@@ -53,7 +53,7 @@
 - (void)test_check
 {
     NSString *constraintName = NSStringFromClass(ORMTableConstraintCheck.class);
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER, CONSTRAINT %@ CHECK(variable > 2))", _tableName, constraintName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER, CONSTRAINT %@ CHECK((variable > 2)))", _tableName, constraintName];
     [_expectedSQLs addObject:expectedSQL];
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMTableConstraintCheck.class]);
 }
