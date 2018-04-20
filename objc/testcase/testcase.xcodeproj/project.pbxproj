@@ -120,6 +120,8 @@
 		23A3AF24206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */; };
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
 		23A3AF2C206CF24400D05634 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF2B206CF24400D05634 /* TestCaseVirtualObject.mm */; };
+		23C5C6142089DBF700C828AE /* ORMInheritedTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */; };
+		23C5C61C2089DCD200C828AE /* ORMTests+Inherited.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */; };
 		23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */; };
 		23CB2106206DDBB7000EFB02 /* MigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2105206DDBB7000EFB02 /* MigrationTests.mm */; };
 		23CB210B206DDBCE000EFB02 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */; };
@@ -137,8 +139,8 @@
 		23DD428F20050F4D00330946 /* WTCMultithreadReadReadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DD428320050EDD00330946 /* WTCMultithreadReadReadBenchmark.mm */; };
 		23E58B59200F577400E0CECE /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
 		23EABBE2206D07C200241F3B /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23EABBE1206D07C200241F3B /* HandleTests.mm */; };
-		23F5BE2420888397000CCD37 /* WCDB for Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */; };
-		23F5BE27208883A1000CCD37 /* WCDB for Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */; };
+		23F5BE2420888397000CCD37 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB.framework */; };
+		23F5BE27208883A1000CCD37 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE1B2088808E000CCD37 /* WCDB.framework */; };
 		23FEC482206B961C001E7A3B /* InsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC481206B961C001E7A3B /* InsertTests.mm */; };
 		23FEC484206B9620001E7A3B /* UpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC483206B9620001E7A3B /* UpdateTests.mm */; };
 		23FEC486206B9627001E7A3B /* DeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC485206B9627001E7A3B /* DeleteTests.mm */; };
@@ -362,6 +364,10 @@
 		23A3AF29206CF24400D05634 /* TestCaseVirtualObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseVirtualObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23A3AF2A206CF24400D05634 /* TestCaseVirtualObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseVirtualObject.h; sourceTree = "<group>"; };
 		23A3AF2B206CF24400D05634 /* TestCaseVirtualObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseVirtualObject.mm; sourceTree = "<group>"; };
+		23C5C6112089DBF700C828AE /* ORMInheritedTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ORMInheritedTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23C5C6122089DBF700C828AE /* ORMInheritedTestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMInheritedTestCaseObject.h; sourceTree = "<group>"; };
+		23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMInheritedTestCaseObject.mm; sourceTree = "<group>"; };
+		23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "ORMTests+Inherited.mm"; sourceTree = "<group>"; };
 		23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "MigrationTests+SameDatabase.mm"; sourceTree = "<group>"; };
 		23CB2105206DDBB7000EFB02 /* MigrationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTests.mm; sourceTree = "<group>"; };
 		23CB2109206DDBCE000EFB02 /* MigrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationTestCase.h; sourceTree = "<group>"; };
@@ -394,7 +400,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F5BE27208883A1000CCD37 /* WCDB for Test.framework in Frameworks */,
+				23F5BE27208883A1000CCD37 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +408,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F5BE2420888397000CCD37 /* WCDB for Test.framework in Frameworks */,
+				23F5BE2420888397000CCD37 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +663,7 @@
 			isa = PBXGroup;
 			children = (
 				23698A8120045F4A00C0291C /* WCDB.framework */,
-				23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */,
+				23F5BE1B2088808E000CCD37 /* WCDB.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -779,6 +785,14 @@
 			path = table;
 			sourceTree = "<group>";
 		};
+		23C5C6172089DC6A00C828AE /* inherited */ = {
+			isa = PBXGroup;
+			children = (
+				23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */,
+			);
+			path = inherited;
+			sourceTree = "<group>";
+		};
 		23CB20EA206DD6CE000EFB02 /* fts */ = {
 			isa = PBXGroup;
 			children = (
@@ -803,6 +817,7 @@
 		23CB20ED206DD6CE000EFB02 /* orm */ = {
 			isa = PBXGroup;
 			children = (
+				23C5C6172089DC6A00C828AE /* inherited */,
 				2338626B207B8A2B004CAC6F /* rebind */,
 				23386202207B48DF004CAC6F /* column_coding */,
 				23386200207B48DF004CAC6F /* column_constraint */,
@@ -812,6 +827,9 @@
 				233861FC207B48DE004CAC6F /* virtual_table */,
 				23386210207B4A3C004CAC6F /* ORMTestCase.h */,
 				23386211207B4A3C004CAC6F /* ORMTestCase.mm */,
+				23C5C6112089DBF700C828AE /* ORMInheritedTestCaseObject+WCTTableCoding.h */,
+				23C5C6122089DBF700C828AE /* ORMInheritedTestCaseObject.h */,
+				23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */,
 			);
 			path = orm;
 			sourceTree = "<group>";
@@ -938,10 +956,10 @@
 			remoteRef = 23698A8020045F4A00C0291C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		23F5BE1B2088808E000CCD37 /* WCDB for Test.framework */ = {
+		23F5BE1B2088808E000CCD37 /* WCDB.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = "WCDB for Test.framework";
+			path = WCDB.framework;
 			remoteRef = 23F5BE1A2088808E000CCD37 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -988,6 +1006,7 @@
 				2338626F207B8A42004CAC6F /* ORMRebindOld.mm in Sources */,
 				2338624A207B595A004CAC6F /* ORMIndex.mm in Sources */,
 				237B4D2F20691E5700AB79CA /* DatabaseTests+Config.mm in Sources */,
+				23C5C61C2089DCD200C828AE /* ORMTests+Inherited.mm in Sources */,
 				234DBD6E2064EB6C000E31E8 /* StatementAlterTableTests.mm in Sources */,
 				234DBD632064EB6C000E31E8 /* IndexedColumnTests.mm in Sources */,
 				23FEC486206B9627001E7A3B /* DeleteTests.mm in Sources */,
@@ -1082,6 +1101,7 @@
 				234DBD5D2064EB6C000E31E8 /* CommonTableExpressionTests.mm in Sources */,
 				23FEC484206B9620001E7A3B /* UpdateTests.mm in Sources */,
 				23386273207B8A47004CAC6F /* ORMRebindNew.mm in Sources */,
+				23C5C6142089DBF700C828AE /* ORMInheritedTestCaseObject.mm in Sources */,
 				2338621E207B4EE6004CAC6F /* ORMColumnConstraintPrimaryDesc.mm in Sources */,
 				234DBD732064EB6C000E31E8 /* StatementCreateIndexTests.mm in Sources */,
 				234DBD672064EB6C000E31E8 /* ModuleArgumentTests.mm in Sources */,
