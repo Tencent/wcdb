@@ -55,6 +55,21 @@
     WINQAssertEqual(WCDB::Expression(raiseFunction), @"RAISE(IGNORE)");
 }
 
+- (void)testBound
+{
+    WINQAssertEqual(WCDB::Expression(0), @"0");
+    WINQAssertEqual(WCDB::Expression(nullptr), @"NULL");
+    WINQAssertEqual(WCDB::Expression(NULL), @"0");
+
+    WINQAssertEqual(WCDB::Expression(INT32_MIN), @"-2147483648");
+    WINQAssertEqual(WCDB::Expression(INT64_MIN), @"-9223372036854775808");
+
+    WINQAssertEqual(WCDB::Expression(INT32_MAX), @"2147483647");
+    WINQAssertEqual(WCDB::Expression(INT64_MAX), @"9223372036854775807");
+    WINQAssertEqual(WCDB::Expression(UINT32_MAX), @"4294967295");
+    WINQAssertEqual(WCDB::Expression(UINT64_MAX), @"18446744073709551615");
+}
+
 - (void)testColumn
 {
     WINQAssertEqual(WCDB::Expression(self.class.column), @"testColumn");

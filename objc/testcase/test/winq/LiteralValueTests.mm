@@ -45,6 +45,16 @@
     WINQAssertEqual(WCDB::LiteralValue::CurrentTime, @"CURRENT_TIME");
     WINQAssertEqual(WCDB::LiteralValue::CurrentDate, @"CURRENT_DATE");
     WINQAssertEqual(WCDB::LiteralValue::CurrentTimestamp, @"CURRENT_TIMESTAMP");
+}
+
+- (void)testBound
+{
+    WINQAssertEqual(WCDB::LiteralValue(0), @"0");
+    WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
+    WINQAssertEqual(WCDB::LiteralValue(NULL), @"0");
+
+    WINQAssertEqual(WCDB::LiteralValue(INT32_MIN), @"-2147483648");
+    WINQAssertEqual(WCDB::LiteralValue(INT64_MIN), @"-9223372036854775808");
 
     WINQAssertEqual(WCDB::LiteralValue(INT32_MAX), @"2147483647");
     WINQAssertEqual(WCDB::LiteralValue(INT64_MAX), @"9223372036854775807");
