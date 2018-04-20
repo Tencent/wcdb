@@ -46,6 +46,7 @@ public:
     StatementInsert &defaultValues();
 
     bool isValuesNotSet() const;
+    bool isColumnsNotSet() const;
     bool isReplace() const;
 #ifdef DEBUG
     const Lang::CopyOnWriteLazyLangList<Lang::Column> &

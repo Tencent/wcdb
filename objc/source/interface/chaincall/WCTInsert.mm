@@ -75,6 +75,10 @@
 
     const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
 
+    if (_statement.isColumnsNotSet()) {
+        _statement.on(properties);
+    }
+
     if (_statement.isValuesNotSet()) {
         _statement.values(WCDB::BindParameter::bindParameters((int) properties.size()));
     }
@@ -130,6 +134,10 @@
     BOOL committed = handle->runNestedTransaction([self, objects](WCDB::Handle *handle) -> bool {
 
         const WCTPropertyList &properties = _properties.empty() ? [objects[0].class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+
+        if (_statement.isColumnsNotSet()) {
+            _statement.on(properties);
+        }
 
         if (_statement.isValuesNotSet()) {
             _statement.values(WCDB::BindParameter::bindParameters((int) properties.size()));

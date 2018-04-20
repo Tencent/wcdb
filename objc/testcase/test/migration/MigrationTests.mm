@@ -104,7 +104,7 @@
 
     __block BOOL tested = NO;
     [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@.%@ VALUES(?1, ?2, ?3)", [self schemaNameForPath:_database.path], _tableName];
+      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@.%@(variable1, variable2, variable3) VALUES(?1, ?2, ?3)", [self schemaNameForPath:_database.path], _tableName];
       if ([sql isEqualToString:expectedSQL]) {
           tested = YES;
       }
@@ -143,7 +143,7 @@
     [_migrated purge];
     __block BOOL tested = NO;
     [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO main.%@ VALUES(?1, ?2, ?3)", _migratedTableName];
+      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO main.%@(variable1, variable2, variable3) VALUES(?1, ?2, ?3)", _migratedTableName];
       if ([sql isEqualToString:expectedSQL]) {
           tested = YES;
       }

@@ -146,6 +146,11 @@ bool StatementInsert::isValuesNotSet() const
     }
 }
 
+bool StatementInsert::isColumnsNotSet() const
+{
+    return getCOWLang().get<Lang::InsertSTMT>().columns.empty();
+}
+
 bool StatementInsert::isReplace() const
 {
     const Lang::InsertSTMT &lang = getCOWLang().get<Lang::InsertSTMT>();
