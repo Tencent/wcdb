@@ -47,7 +47,7 @@
 		23F5BBC520887F7B000CCD37 /* sqliterk_crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330324E1FB9437F00101373 /* sqliterk_crypto.h */; };
 		23F5BBC620887F7B000CCD37 /* sqliterk_column.h in Headers */ = {isa = PBXBuildFile; fileRef = 2330324C1FB9437F00101373 /* sqliterk_column.h */; };
 		23F5BBC720887F7B000CCD37 /* sqliterk_values.h in Headers */ = {isa = PBXBuildFile; fileRef = 233032571FB9437F00101373 /* sqliterk_values.h */; };
-		23F5BE162088802E000CCD37 /* sqlcipher static.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0C20887FE0000CCD37 /* sqlcipher static.framework */; };
+		23F5BE162088802E000CCD37 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0C20887FE0000CCD37 /* sqlcipher.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,7 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F5BE162088802E000CCD37 /* sqlcipher static.framework in Frameworks */,
+				23F5BE162088802E000CCD37 /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				232124232017279C008146EF /* sqlcipher.framework */,
-				23F5BE0C20887FE0000CCD37 /* sqlcipher static.framework */,
+				23F5BE0C20887FE0000CCD37 /* sqlcipher.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -316,10 +316,10 @@
 			remoteRef = 232124222017279C008146EF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		23F5BE0C20887FE0000CCD37 /* sqlcipher static.framework */ = {
+		23F5BE0C20887FE0000CCD37 /* sqlcipher.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = "sqlcipher static.framework";
+			path = sqlcipher.framework;
 			remoteRef = 23F5BE0B20887FE0000CCD37 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -538,9 +538,11 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -549,6 +551,7 @@
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 			};
 			name = Debug;
 		};
@@ -558,9 +561,11 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -569,6 +574,7 @@
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 			};
 			name = Release;
 		};
@@ -581,6 +587,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -602,6 +609,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

@@ -884,8 +884,8 @@
 		23F5BDFA20887FD3000CCD37 /* NSData+NoCopyData.h in Headers */ = {isa = PBXBuildFile; fileRef = 23BBE2972049434D00C4CBB6 /* NSData+NoCopyData.h */; };
 		23F5BDFB20887FD3000CCD37 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDFC20887FD3000CCD37 /* NoCopyData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A2C199204647590026D3C5 /* NoCopyData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F5BE1120888008000CCD37 /* sqlcipher static.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher static.framework */; };
-		23F5BE1220888008000CCD37 /* sqliterk static.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0920887FD4000CCD37 /* sqliterk static.framework */; };
+		23F5BE1120888008000CCD37 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
+		23F5BE1220888008000CCD37 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0920887FD4000CCD37 /* sqliterk.framework */; };
 		23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -1409,8 +1409,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */,
-				23F5BE1120888008000CCD37 /* sqlcipher static.framework in Frameworks */,
-				23F5BE1220888008000CCD37 /* sqliterk static.framework in Frameworks */,
+				23F5BE1120888008000CCD37 /* sqlcipher.framework in Frameworks */,
+				23F5BE1220888008000CCD37 /* sqliterk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1442,7 +1442,7 @@
 			isa = PBXGroup;
 			children = (
 				2321243620172859008146EF /* sqliterk.framework */,
-				23F5BE0920887FD4000CCD37 /* sqliterk static.framework */,
+				23F5BE0920887FD4000CCD37 /* sqliterk.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1451,7 +1451,7 @@
 			isa = PBXGroup;
 			children = (
 				2321243E20172865008146EF /* sqlcipher.framework */,
-				23F5BE0620887FD4000CCD37 /* sqlcipher static.framework */,
+				23F5BE0620887FD4000CCD37 /* sqlcipher.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2702,17 +2702,17 @@
 			remoteRef = 2321243D20172865008146EF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		23F5BE0620887FD4000CCD37 /* sqlcipher static.framework */ = {
+		23F5BE0620887FD4000CCD37 /* sqlcipher.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = "sqlcipher static.framework";
+			path = sqlcipher.framework;
 			remoteRef = 23F5BE0520887FD4000CCD37 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		23F5BE0920887FD4000CCD37 /* sqliterk static.framework */ = {
+		23F5BE0920887FD4000CCD37 /* sqliterk.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = "sqliterk static.framework";
+			path = sqliterk.framework;
 			remoteRef = 23F5BE0820887FD4000CCD37 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -3187,6 +3187,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				ENABLE_BITCODE = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -3195,6 +3196,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				ENABLE_BITCODE = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -3206,9 +3208,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3231,6 +3235,7 @@
 				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3243,9 +3248,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3268,6 +3275,7 @@
 				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3425,6 +3433,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3462,6 +3471,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
