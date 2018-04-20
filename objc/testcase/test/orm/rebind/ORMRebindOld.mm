@@ -29,6 +29,7 @@ WCDB_SYNTHESIZE(ORMRebindOld, variable1)
 WCDB_SYNTHESIZE(ORMRebindOld, variable2)
 WCDB_SYNTHESIZE(ORMRebindOld, variable3)
 
-WCDB_INDEX(ORMRebindOld, "_index_1", variable1)
+WCDB_PRIMARY(ORMRebindOld, variable1)
+WCDB_INDEX(ORMRebindOld, "_index_1", variable3)
 
 @end

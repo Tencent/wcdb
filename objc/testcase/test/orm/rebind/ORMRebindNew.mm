@@ -31,4 +31,9 @@ WCDB_SYNTHESIZE(ORMRebindNew, variable4)
 
 WCDB_INDEX(ORMRebindNew, "_index_2", variable4)
 
+- (BOOL)isEqualToObject:(ORMRebindNew *)object
+{
+    return self.variable1 == object.variable1 && self.renamedVariable2 == object.renamedVariable2 && [self.variable4 isEqualToString:object.variable4];
+}
+
 @end

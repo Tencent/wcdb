@@ -30,14 +30,14 @@
 
 @implementation ORMTests_Rebind
 
-- (void)test
+- (void)test_create_table
 {
     {
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable1 INTEGER, variable2 REAL, variable3 TEXT)", _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable1 INTEGER PRIMARY KEY, variable2 REAL, variable3 TEXT)", _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@_index_1 ON %@(variable1)", _tableName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@_index_1 ON %@(variable3)", _tableName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
@@ -52,6 +52,34 @@
                                          withClass:ORMRebindOld.class]);
     XCTAssertTrue([_database createTableAndIndexes:_tableName
                                          withClass:ORMRebindNew.class]);
+}
+
+- (void)test_insert
+{
+    XCTAssertTrue([_database createTableAndIndexes:_tableName
+                                         withClass:ORMRebindOld.class]);
+
+    ORMRebindOld *oldObject = [[ORMRebindOld alloc] init];
+    oldObject.variable1 = 1;
+    oldObject.variable2 = 1.0;
+    oldObject.variable3 = @"oldObject";
+    XCTAssertTrue([_database insertObject:oldObject intoTable:_tableName]);
+
+    XCTAssertTrue([_database createTableAndIndexes:_tableName
+                                         withClass:ORMRebindNew.class]);
+
+    ORMRebindNew *newObject = [[ORMRebindNew alloc] init];
+    newObject.variable1 = 1;
+    newObject.renamedVariable2 = 2.0;
+    newObject.variable4 = @"newObject";
+
+    NSString *expectedSQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(variable1, variable2, variable4) VALUES(?1, ?2, ?3)", _tableName];
+    [_expectedSQLs addObject:expectedSQL];
+
+    XCTAssertTrue([_database insertOrReplaceObject:newObject intoTable:_tableName]);
+
+    ORMRebindNew *result = [_database getObjectOfClass:ORMRebindNew.class fromTable:_tableName];
+    XCTAssertTrue([result isEqualToObject:newObject]);
 }
 
 @end

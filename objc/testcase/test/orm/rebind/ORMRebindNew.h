@@ -26,4 +26,6 @@
 @property(nonatomic, assign) float renamedVariable2;
 @property(nonatomic, retain) NSString *variable4;
 
+- (BOOL)isEqualToObject:(ORMRebindNew *)object;
+
 @end
