@@ -72,11 +72,13 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
         HandlePools::defaultPools()->getPool(path, s_generator)));
     if (database &&
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
+#ifdef DEBUG
         WCTAssert(static_cast<MigrationDatabase *>(database.get())
                           ->m_migrationPool->getMigrationInfos()
                           ->hash == migrationInfos->hash,
                   "Migration info can't be changed after the very first "
                   "initialization.");
+#endif
         return database;
     }
     return nullptr;

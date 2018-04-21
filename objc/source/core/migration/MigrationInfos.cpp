@@ -78,7 +78,9 @@ bool MigrationInfos::isSameDatabaseMigration() const
 const std::map<std::string, std::pair<std::string, int>> &
 MigrationInfos::getSchemasForAttaching() const
 {
+#ifdef DEBUG
     WCTInnerAssert(m_lock.debug_isSharedLocked());
+#endif
     return m_schemas;
 }
 

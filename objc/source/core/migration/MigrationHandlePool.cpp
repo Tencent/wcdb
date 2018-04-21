@@ -28,7 +28,9 @@ MigrationHandlePool::MigrationHandlePool(
     const std::shared_ptr<MigrationInfos> &migrationInfos)
     : HandlePool(path, configs), m_infos(migrationInfos)
 {
+#ifdef DEBUG
     WCTInnerAssert(debug_checkInfosLegal());
+#endif
 }
 
 #ifdef DEBUG
