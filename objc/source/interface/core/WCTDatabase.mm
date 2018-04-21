@@ -37,7 +37,7 @@
         WCTFileOperation operation;
         NSError *error = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *nsPath = @(path);
+        NSString *nsPath = [NSString stringWithUTF8String:path];
         operation = WCTFileOperationGetAttribute;
         NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&error];
         if (attributes) {
@@ -63,7 +63,7 @@
             fileError.path = path;
             fileError.level = WCDB::Error::Level::Error;
             fileError.code = (int) error.code;
-            fileError.message = error.description.UTF8String;
+            fileError.message = error.description.cppString;
             fileError.report();
         }
     });
@@ -72,7 +72,7 @@
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    if (self = [super initWithDatabase:WCDB::Database::databaseWithPath(path.UTF8String)]) {
+    if (self = [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)]) {
     }
     return self;
 }

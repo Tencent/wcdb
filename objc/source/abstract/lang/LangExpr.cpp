@@ -454,6 +454,7 @@ CopyOnWriteString Expr::SQL() const
         default:
             LangRemedialFatalError();
     }
+    return description;
 }
 
 ExprBase::Type Expr::getType() const

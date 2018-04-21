@@ -20,11 +20,15 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTSequence : NSObject
 
-+ (NSString *)TableName;
+@property(class, nonatomic, readonly) NSString *tableName;
 
-@property(nonatomic, retain) NSString *name;
+@property(nonatomic, retain, nullable) NSString *name;
 @property(nonatomic, assign) int seq;
 
 @end
+
+NS_ASSUME_NONNULL_END

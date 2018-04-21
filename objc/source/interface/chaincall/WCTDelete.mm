@@ -25,17 +25,10 @@
     WCDB::StatementDelete _statement;
 }
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _finalizeLevel = WCTFinalizeLevelDatabase;
-    }
-    return self;
-}
-
 - (instancetype)fromTable:(NSString *)tableName
 {
-    _statement.deleteFrom(tableName.UTF8String);
+    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
+    _statement.deleteFrom(tableName.cppString);
     return self;
 }
 

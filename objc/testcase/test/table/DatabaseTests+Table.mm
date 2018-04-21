@@ -59,13 +59,13 @@
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:TestCaseIndexedObject.class]);
 
     {
-        WCTValue *value = [_database getValueOnResult:WCTMaster.sql fromTable:WCTMaster.TableName where:WCTMaster.name == _tableName];
+        WCTValue *value = [_database getValueOnResult:WCTMaster.sql fromTable:WCTMaster.tableName where:WCTMaster.name == _tableName];
         NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE %@(variable1 INTEGER PRIMARY KEY ASC AUTOINCREMENT, variable2 TEXT, variable3 REAL)", _tableName];
         XCTAssertTrue([value.stringValue isEqualToString:expectedSQL]);
     }
 
     {
-        WCTValue *value = [_database getValueOnResult:WCTMaster.sql fromTable:WCTMaster.TableName where:WCTMaster.name == [_tableName stringByAppendingString:@"_index"]];
+        WCTValue *value = [_database getValueOnResult:WCTMaster.sql fromTable:WCTMaster.tableName where:WCTMaster.name == [_tableName stringByAppendingString:@"_index"]];
         NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX %@_index ON %@(variable2)", _tableName, _tableName];
         XCTAssertTrue([value.stringValue isEqualToString:expectedSQL]);
     }
@@ -105,7 +105,7 @@
 
 - (BOOL)isIndexExists:(NSString *)indexName
 {
-    WCTValue *rowValue = [_database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.TableName.UTF8String).where(WCTMaster.name == indexName)];
+    WCTValue *rowValue = [_database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.tableName.UTF8String).where(WCTMaster.name == indexName)];
     XCTAssertNotNil(rowValue);
     return rowValue.boolValue;
 }
@@ -125,7 +125,7 @@
     [_database setTokenizer:WCTTokenizer.name];
     XCTAssertTrue([_database createVirtualTable:_tableName withClass:TestCaseVirtualObject.class]);
 
-    WCTValue *value = [_database getValueOnResult:WCTMaster.sql fromTable:WCTMaster.TableName where:WCTMaster.name == _tableName];
+    WCTValue *value = [_database getValueOnResult:WCTMaster.sql fromTable:WCTMaster.tableName where:WCTMaster.name == _tableName];
     NSString *expectedSQL = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE %@ USING fts3(tokenize=WCDB, variable1 INTEGER PRIMARY KEY ASC AUTOINCREMENT, variable2 TEXT)", _tableName];
     XCTAssertTrue([value.stringValue isEqualToString:expectedSQL]);
 }

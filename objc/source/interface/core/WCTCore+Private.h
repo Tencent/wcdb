@@ -25,7 +25,7 @@
     std::shared_ptr<WCDB::Database> _database;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database NS_DESIGNATED_INITIALIZER;
 
 - (const std::shared_ptr<WCDB::Database> &)database;
 

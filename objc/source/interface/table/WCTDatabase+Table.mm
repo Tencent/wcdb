@@ -28,7 +28,8 @@
 
 - (BOOL)isTableExists:(NSString *)tableName
 {
-    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.UTF8String)
+    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
+    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.cppString)
                                       .withSchema(WCDB::StatementAttach::getMainSchema());
     return _database->isTableExists(table).second;
 }
@@ -36,7 +37,8 @@
 - (BOOL)isTableExists:(NSString *)tableName
             withError:(WCTCoreError **)error
 {
-    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.UTF8String)
+    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
+    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.cppString)
                                       .withSchema(WCDB::StatementAttach::getMainSchema());
     auto result = _database->isTableExists(table);
     if (error) {
@@ -52,6 +54,7 @@
 - (BOOL)createTableAndIndexes:(NSString *)tableName
                     withClass:(Class<WCTTableCoding>)cls
 {
+    WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
       return [handle rebindTable:tableName toClass:cls];
     }];
@@ -60,6 +63,7 @@
 - (WCTTable *)getTable:(NSString *)tableName
              withClass:(Class<WCTTableCoding>)cls
 {
+    WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return nil;);
     return [[WCTTable alloc] initWithDatabase:_database
                                  andTableName:tableName
                                      andClass:cls];
@@ -68,17 +72,20 @@
 - (BOOL)createVirtualTable:(NSString *)tableName
                  withClass:(Class<WCTTableCoding>)cls
 {
-    return _database->execute([cls objectRelationalMappingForWCDB]->generateVirtualCreateTableStatement(tableName.UTF8String));
+    WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
+    return _database->execute([cls objectRelationalMappingForWCDB]->generateVirtualCreateTableStatement(tableName.cppString));
 }
 
 - (BOOL)dropTable:(NSString *)tableName
 {
-    return _database->execute(WCDB::StatementDropTable().dropTable(tableName.UTF8String));
+    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
+    return _database->execute(WCDB::StatementDropTable().dropTable(tableName.cppString));
 }
 
 - (BOOL)dropIndex:(NSString *)indexName
 {
-    return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName.UTF8String));
+    WCTRemedialAssert(indexName, "Index name can't be null.", return NO;);
+    return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName.cppString));
 }
 
 @end

@@ -45,7 +45,7 @@ typedef struct MultiInfo MultiInfo;
 {
     std::list<WCDB::TableOrSubquery> tables;
     for (NSString *tableName in tableNames) {
-        tables.push_back(tableName.UTF8String);
+        tables.push_back(tableName.cppString);
     }
     _statement.from(tables);
     return self;
@@ -65,8 +65,15 @@ typedef struct MultiInfo MultiInfo;
         int index = 0;
         for (const WCTProperty &property : _properties) {
             const char *tableName = _handle->getColumnTableName(index);
+            NSString *nsTableName = nil;
+            if (tableName) {
+                nsTableName = [NSString stringWithUTF8String:tableName];
+            }
+            if (!nsTableName) {
+                nsTableName = @"";
+            }
             Class cls = property.getColumnBinding()->getClass();
-            _infos.push_back(MultiInfo(property, @(tableName), cls));
+            _infos.push_back(MultiInfo(property, nsTableName, cls));
             ++index;
         }
     }

@@ -27,17 +27,10 @@
     WCTPropertyList _properties;
 }
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _finalizeLevel = WCTFinalizeLevelDatabase;
-    }
-    return self;
-}
-
 - (instancetype)table:(NSString *)tableName
 {
-    _statement.update(tableName.UTF8String);
+    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
+    _statement.update(tableName.cppString);
     return self;
 }
 

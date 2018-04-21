@@ -127,7 +127,7 @@
 - (void)test_insert_auto_increment_after_started
 {
     {
-        WCTSequence *seq = [_database getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.TableName where:WCTSequence.name == _tableName];
+        WCTSequence *seq = [_database getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.tableName where:WCTSequence.name == _tableName];
         XCTAssertEqual(seq.seq, _preInserted.count - 1);
     }
 
@@ -136,7 +136,7 @@
     XCTAssertTrue([_migrated stepMigration:done]);
 
     {
-        WCTSequence *seq = [_migrated getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.TableName where:WCTSequence.name == _migratedTableName];
+        WCTSequence *seq = [_migrated getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.tableName where:WCTSequence.name == _migratedTableName];
         XCTAssertEqual(seq.seq, _preInserted.count - 1);
     }
 

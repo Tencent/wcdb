@@ -30,7 +30,8 @@
 
 - (instancetype)fromTable:(NSString *)tableName
 {
-    _statement.from(tableName.UTF8String);
+    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
+    _statement.from(tableName.cppString);
     return self;
 }
 
@@ -48,7 +49,7 @@
 
 - (BOOL)lazyPrepare
 {
-    WCTAssert(_class != nil || !_properties.empty(), "Class or properties is not specificed.");
+    WCTRemedialAssert(_class != nil || !_properties.empty(), "Class or properties is not specificed.", return NO;);
     if (_statement.isResultColumnsNotSet()) {
         _statement.select(!_properties.empty() ? _properties : [_class objectRelationalMappingForWCDB]->getAllProperties());
     }

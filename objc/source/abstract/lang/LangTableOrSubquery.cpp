@@ -156,6 +156,7 @@ CopyOnWriteString TableOrSubquery::SQL() const
         default:
             LangRemedialFatalError();
     }
+    return description;
 }
 
 TableOrSubqueryBase::Type TableOrSubquery::getType() const

@@ -25,14 +25,15 @@
 
 - (void)setTokenizer:(NSString *)tokenizerName
 {
-    _database->setTokenizes({tokenizerName.UTF8String});
+    WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
+        _database->setTokenizes({tokenizerName.cppString});
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
     std::list<std::string> theTokenizeNames;
     for (NSString *tokenizerName in tokenizerNames) {
-        theTokenizeNames.push_back(tokenizerName.UTF8String);
+        theTokenizeNames.push_back(tokenizerName.cppString);
     }
     _database->setTokenizes(theTokenizeNames);
 }

@@ -18,19 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#import <WCDB/NSString+CppString.h>
+#import <WCDB/String.hpp>
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation NSString (CppString)
 
-@interface WCTPerformanceFootprint : NSObject
++ (instancetype)stringWithCppString:(const std::string &)cppString
+{
+    NSString *string = [NSString stringWithUTF8String:cppString.c_str()];
+    return string ? string : @"";
+}
 
-- (instancetype)initWithSQL:(NSString *)sql
-               andFrequency:(unsigned int)frequency;
-
-@property(nonatomic, readonly) NSString *sql;
-
-@property(nonatomic, readonly) unsigned int frequency;
+- (std::string)cppString
+{
+    const char *utf8String = self.UTF8String;
+    return utf8String ? utf8String : WCDB::String::empty();
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

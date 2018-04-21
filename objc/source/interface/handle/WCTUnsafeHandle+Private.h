@@ -23,6 +23,8 @@
 
 #define WCTHandleAssert(remedial) WCTRemedialAssert(_handle != nullptr, "[prepare] or [execute] should be called before this.", remedial)
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
     WCTFinalizeLevelStatement = 0,
     WCTFinalizeLevelHandle,
@@ -38,11 +40,14 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 }
 
 #pragma mark - Initialize
-- (nullable instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                      andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle;
 
-- (nullable instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                                andHandle:(nonnull WCDB::Handle *)handle;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+             andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+                       andHandle:(nonnull WCDB::Handle *)handle NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Safety
 
@@ -59,16 +64,16 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 #pragma mark - Convenient
 - (void)extractValueAtIndex:(int)index
                  toProperty:(const WCTProperty &)property
-                   ofObject:(nonnull WCTObject *)object;
+                   ofObject:(WCTObject *)object;
 
 - (void)bindProperty:(const WCTProperty &)property
-            ofObject:(nonnull WCTObject *)object
+            ofObject:(WCTObject *)object
              toIndex:(int)index;
 
 - (void)bindProperties:(const WCTPropertyList &)properties
-              ofObject:(nonnull WCTObject *)object;
+              ofObject:(WCTObject *)object;
 
-- (void)bindValue:(nonnull WCTColumnCodingValue *)value
+- (void)bindValue:(nullable WCTColumnCodingValue *)value
           toIndex:(int)index;
 
 - (nullable WCTObject *)getObjectOfClass:(nonnull Class)cls
@@ -99,24 +104,26 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 - (nullable NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTPropertyList &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-     withObject:(nonnull WCTObject *)object;
+     withObject:(WCTObject *)object;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withObject:(nonnull WCTObject *)object
+      withObject:(WCTObject *)object
     onProperties:(const WCTPropertyList &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withValue:(nonnull WCTColumnCodingValue *)value;
+      withValue:(WCTColumnCodingValue *)value;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-        withRow:(nonnull WCTOneRow *)row;
+        withRow:(WCTOneRow *)row;
 
-- (BOOL)rebindTable:(nonnull NSString *)tableName toClass:(nonnull Class<WCTTableCoding>)cls;
+- (BOOL)rebindTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls;
 
-- (nonnull instancetype)autoFinalizeStatement;
-- (nonnull instancetype)autoFinalizeHandle;
-- (nonnull instancetype)autoFinalizeDatabase;
+- (instancetype)autoFinalizeStatement;
+- (instancetype)autoFinalizeHandle;
+- (instancetype)autoFinalizeDatabase;
 - (void)finalizeDatabase:(BOOL)keepError;
 - (void)doAutoFinalize:(BOOL)keepError;
 
 @end
+
+NS_ASSUME_NONNULL_END

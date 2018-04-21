@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
+#import <WCDB/NSString+CppString.h>
 
 static_assert((int) WCTErrorTypeError == WCDB::Error::type, "");
 static_assert((int) WCTErrorTypeSQLite == WCDB::SQLiteError::type, "");
@@ -40,7 +41,7 @@ static_assert((int) WCTErrorLevelFatal == (int) WCDB::Error::Level::Fatal, "");
     if (self = [super initWithDomain:@"WCDB"
                                 code:error.code
                             userInfo:nil]) {
-        _message = @(error.message.c_str());
+        _message = [NSString stringWithCppString:error.message];
         _level = (WCTErrorLevel) error.level;
     }
     return self;

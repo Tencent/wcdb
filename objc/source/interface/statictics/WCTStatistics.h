@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Trigger when error occurs
  */
@@ -50,7 +52,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @param block block
  @see WCTErrorReportBlock
  */
-+ (void)SetGlobalErrorReport:(WCTErrorReportBlock)block;
++ (void)SetGlobalErrorReport:(nullable WCTErrorReportBlock)block;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
@@ -75,7 +77,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @see WCTPerformanceTraceBlock
  @see [WCTDatabase setPerformanceTrace:]
  */
-+ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceBlock)trace;
++ (void)SetGlobalPerformanceTrace:(nullable WCTPerformanceTraceBlock)trace;
 
 /**
  @brief You can register a tracer to monitor the execution of all SQLs.
@@ -90,7 +92,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @see WCTSQLTraceBlock
  @param trace trace
  */
-+ (void)SetGlobalSQLTrace:(WCTSQLTraceBlock)trace;
++ (void)SetGlobalSQLTrace:(nullable WCTSQLTraceBlock)trace;
 
 /**
  @brief Reset to builtin error reporter. 
@@ -98,3 +100,5 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
 + (void)ResetGlobalErrorReport;
 
 @end
+
+NS_ASSUME_NONNULL_END

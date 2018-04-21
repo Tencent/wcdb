@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTDatabase.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTDatabase (File)
 
 /**
@@ -37,7 +39,7 @@
  @param extraFiles extraFiles
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(nonnull NSString *)directory
+- (BOOL)moveFilesToDirectory:(NSString *)directory
               withExtraFiles:(nullable NSArray<NSString *> *)extraFiles;
 
 /**
@@ -45,13 +47,13 @@
  @param directory destination
  @return YES if all files are moved.
  */
-- (BOOL)moveFilesToDirectory:(nonnull NSString *)directory;
+- (BOOL)moveFilesToDirectory:(NSString *)directory;
 
 /**
  @brief Paths to all database-related files.
  @return paths
  */
-- (nonnull NSArray<NSString *> *)paths;
+- (NSArray<NSString *> *)paths;
 
 /**
  @brief Get the space used by the database files.
@@ -60,6 +62,8 @@
  */
 - (NSUInteger)getFilesSize;
 
-- (nullable WCTFileError *)getFileError;
+- (WCTFileError *)getFileError;
 
 @end
+
+NS_ASSUME_NONNULL_END

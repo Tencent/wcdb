@@ -46,7 +46,7 @@ public:
                                         NSString *columnName)
     {
         return addColumnBinding<T>(propertyName, columnName
-                                                     ? columnName.UTF8String
+                                                     ? columnName.cppString
                                                      : WCDB::String::empty());
     }
 

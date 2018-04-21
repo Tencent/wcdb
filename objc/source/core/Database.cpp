@@ -152,9 +152,9 @@ void Database::setConfig(const std::string &name,
     m_pool->setConfig(name, callback);
 }
 
-void Database::setCipher(const void *key, int keySize, int pageSize)
+void Database::setCipher(const NoCopyData &cipher, int pageSize)
 {
-    m_pool->setConfig(BuiltinConfig::cipherWithKey(key, keySize, pageSize));
+    m_pool->setConfig(BuiltinConfig::cipherWithKey(cipher, pageSize));
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
@@ -244,13 +244,13 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair Kit
-bool Database::backup(const void *key, unsigned int length)
+bool Database::backup(const NoCopyData &data)
 {
     RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
         return false;
     }
-    if (handle->backup(key, length)) {
+    if (handle->backup(data)) {
         return true;
     }
     m_pool->setThreadedError(handle->getError());
@@ -259,18 +259,15 @@ bool Database::backup(const void *key, unsigned int length)
 
 bool Database::recoverFromPath(const std::string &corruptedDBPath,
                                int pageSize,
-                               const void *backupKey,
-                               unsigned int backupKeyLength,
-                               const void *databaseKey,
-                               unsigned int databaseKeyLength)
+                               const NoCopyData &backupCipher,
+                               const NoCopyData &databaseCipher)
 {
     RecyclableHandle handle = getHandle();
     if (handle == nullptr) {
         return false;
     }
-    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupKey,
-                                backupKeyLength, databaseKey,
-                                databaseKeyLength)) {
+    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
+                                databaseCipher)) {
         return true;
     }
     m_pool->setThreadedError(handle->getError());

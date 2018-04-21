@@ -75,7 +75,7 @@ public:
 public:
     void setConfig(const Config &config);
     void setConfig(const std::string &name, const Config::Callback &callback);
-    void setCipher(const void *key, int keySize, int pageSize = 4096);
+    void setCipher(const NoCopyData &cipher, int pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 
 #pragma mark - File
@@ -96,13 +96,11 @@ public:
 
 #pragma mark - Repair Kit
 public:
-    bool backup(const void *key, unsigned int length);
+    bool backup(const NoCopyData &data);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,
-                         const void *backupKey,
-                         unsigned int backupKeyLength,
-                         const void *databaseKey,
-                         unsigned int databaseKeyLength);
+                         const NoCopyData &backupCipher,
+                         const NoCopyData &databaseCipher);
 
 #pragma mark - Handle
 public:

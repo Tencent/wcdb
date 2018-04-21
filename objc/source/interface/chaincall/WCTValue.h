@@ -20,13 +20,15 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTValue : NSObject
 
-- (nullable instancetype)initWithNumber:(nullable NSNumber *)value;
+- (instancetype)initWithNumber:(nullable NSNumber *)value;
 
-- (nullable instancetype)initWithString:(nullable NSString *)value;
+- (instancetype)initWithString:(nullable NSString *)value;
 
-- (nullable instancetype)initWithData:(nullable NSData *)value;
+- (instancetype)initWithData:(nullable NSData *)value;
 
 @property(nonatomic, readonly) WCTColumnType type;
 
@@ -47,3 +49,5 @@
 + (nullable NSArray *)fundanmentalArrayFromValues:(nullable NSArray<WCTValue *> *)values;
 
 @end
+
+NS_ASSUME_NONNULL_END

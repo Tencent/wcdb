@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTUnsafeHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Not Thread-safe
  */
@@ -27,11 +29,11 @@
 
 @property(nonatomic, readonly) WCDB::StatementInsert& statement;
 
-- (nonnull instancetype)orReplace;
+- (instancetype)orReplace;
 
-- (nonnull instancetype)intoTable:(nonnull NSString *)tableName;
+- (instancetype)intoTable:(NSString *)tableName;
 
-- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
+- (instancetype)onProperties:(const WCTPropertyList &)properties;
 
 /**
  @brief Execute the insert SQL with objects.
@@ -40,8 +42,10 @@
  @param objects Objects to be inserted into WCDB.
  @return YES if no error occurs.
  */
-- (BOOL)executeWithObjects:(nonnull NSArray<ObjectType> *)objects;
+- (BOOL)executeWithObjects:(NSArray<ObjectType> *)objects;
 
-- (BOOL)executeWithObject:(nonnull ObjectType)object;
+- (BOOL)executeWithObject:(ObjectType)object;
 
 @end
+
+NS_ASSUME_NONNULL_END

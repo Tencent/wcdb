@@ -18,40 +18,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/Error.hpp>
+#import <WCDB/NoCopyData.hpp>
 #import <WCDB/WCTCommon.h>
-
-/**
- It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.
- */
-typedef NS_ENUM(int, WCTErrorType) {
-    WCTErrorTypeError = 1,
-    WCTErrorTypeSQLite = 2,
-    WCTErrorTypeHandle = 3,
-    WCTErrorTypeCore = 4,
-    WCTErrorTypeFile = 5,
-};
-
-typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
-    WCTErrorLevelIgnore = 1,
-    WCTErrorLevelDebug = 2,
-    WCTErrorLevelWarning = 3,
-    WCTErrorLevelError = 4,
-    WCTErrorLevelFatal = 5,
-};
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- Detailed error
- */
-@interface WCTError : NSError
+@interface NSData (NoCopyData)
 
-- (WCTErrorType)type;
++ (instancetype)dataWithNoCopyData:(const WCDB::NoCopyData &)noCopyData;
 
-@property(nonatomic, readonly) WCTErrorLevel level;
-
-@property(nonatomic, readonly) NSString *message;
+- (const WCDB::NoCopyData)noCopyData;
 
 @end
 

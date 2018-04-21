@@ -29,9 +29,9 @@
 
 + (void)SetGlobalErrorReport:(WCTErrorReportBlock)block
 {
-    WCDB::Error::Report *report = WCDB::Error::Report::sharedReport();
-    if (report) {
-        report->setCallback([block](const WCDB::Error &error) {
+    WCDB::Error::Report::Callback callback = nullptr;
+    if (block) {
+        callback = [block](const WCDB::Error &error) {
             WCTError *nsError = nil;
             switch (error.getType()) {
                 case WCDB::HandleError::type:
@@ -51,41 +51,41 @@
                     break;
             }
             block(nsError);
-        });
-    } else {
-        report->setCallback(nullptr);
+        };
     }
+    WCDB::Error::Report::shared()->setCallback(callback);
 }
 
 + (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceBlock)trace
 {
+    WCDB::Handle::PerformanceTraceCallback callback = nullptr;
     if (trace) {
-        WCDB::BuiltinConfig::SetGlobalPerformanceTrace([trace](WCDB::Database::Tag tag, const WCDB::Tracer::Footprints &footprints, const int64_t &cost) {
+        callback = [trace](WCDB::Database::Tag tag, const WCDB::Tracer::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
-                [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:@(footprint.sql.c_str()) andFrequency:footprint.frequency]];
+                NSString *sql = [NSString stringWithCppString:footprint.sql];
+                [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
             }
             trace(tag, array, (NSUInteger) cost);
-        });
-    } else {
-        WCDB::BuiltinConfig::SetGlobalPerformanceTrace(nullptr);
+        };
     }
+    WCDB::BuiltinConfig::SetGlobalPerformanceTrace(callback);
 }
 
 + (void)SetGlobalSQLTrace:(WCTSQLTraceBlock)trace
 {
+    WCDB::Handle::SQLTraceCallback callback = nullptr;
     if (trace) {
-        WCDB::BuiltinConfig::SetGlobalSQLTrace([trace](const std::string &sql) {
-            trace(@(sql.c_str()));
-        });
-    } else {
-        WCDB::BuiltinConfig::SetGlobalSQLTrace(nullptr);
+        callback = [trace](const std::string &sql) {
+            trace([NSString stringWithCppString:sql]);
+        };
     }
+    WCDB::BuiltinConfig::SetGlobalSQLTrace(callback);
 }
 
 + (void)ResetGlobalErrorReport
 {
-    WCDB::Error::Report::sharedReport()->resetCallback();
+    WCDB::Error::Report::shared()->setCallback(WCDB::Error::Report::defaultCallback);
 }
 
 @end

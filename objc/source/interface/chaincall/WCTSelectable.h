@@ -20,6 +20,7 @@
 
 #import <WCDB/WCTUnsafeHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
@@ -80,3 +81,5 @@
 - (instancetype)autoFinalizeImmediately;
 
 @end
+
+NS_ASSUME_NONNULL_END

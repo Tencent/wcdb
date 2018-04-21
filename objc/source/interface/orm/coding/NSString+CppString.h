@@ -18,13 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/NoCopyData.hpp>
-#import <WCDB/WCTCommon.h>
+#import <Foundation/Foundation.h>
+#import <string>
 
-@interface NSData (NoCopyData)
+NS_ASSUME_NONNULL_BEGIN
 
-+ (instancetype)dataWithNoCopyData:(const WCDB::NoCopyData &)noCopyData;
+@interface NSString (CppString)
 
-- (const WCDB::NoCopyData)noCopyData;
++ (instancetype)stringWithCppString:(const std::string &)cppString;
+
+- (std::string)cppString;
 
 @end
+
+NS_ASSUME_NONNULL_END

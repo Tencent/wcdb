@@ -20,17 +20,21 @@
 
 #import <Foundation/Foundation.h>
 
-typedef BOOL (^WCTTransactionBlock)(WCTHandle *_Nonnull);
+NS_ASSUME_NONNULL_BEGIN
+
+typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
 
 @protocol WCTTransaction
 @required
 - (BOOL)beginTransaction;
 - (BOOL)commitOrRollbackTransaction;
 - (void)rollbackTransaction;
-- (BOOL)runTransaction:(nonnull WCTTransactionBlock)inTransaction;
+- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
 
 - (BOOL)beginNestedTransaction;
 - (BOOL)commitOrRollbackNestedTransaction;
 - (void)rollbackNestedTransaction;
-- (BOOL)runNestedTransaction:(nonnull WCTTransactionBlock)inTransaction;
+- (BOOL)runNestedTransaction:(WCTTransactionBlock)inTransaction;
 @end
+
+NS_ASSUME_NONNULL_END

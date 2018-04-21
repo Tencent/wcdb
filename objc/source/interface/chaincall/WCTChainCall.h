@@ -20,11 +20,15 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol WCTChainCall
 @required
-- (nonnull WCTInsert *)prepareInsert;
-- (nonnull WCTDelete *)prepareDelete;
-- (nonnull WCTSelect *)prepareSelect;
-- (nonnull WCTRowSelect *)prepareRowSelect;
-- (nonnull WCTUpdate *)prepareUpdate;
+- (WCTInsert *)prepareInsert;
+- (WCTDelete *)prepareDelete;
+- (WCTSelect *)prepareSelect;
+- (WCTRowSelect *)prepareRowSelect;
+- (WCTUpdate *)prepareUpdate;
 @end
+
+NS_ASSUME_NONNULL_END

@@ -32,8 +32,11 @@ MigrationInfos::infos(const std::list<std::shared_ptr<MigrationInfo>> &infos)
 MigrationInfos::MigrationInfos(
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
     : m_migratingStarted(false)
+#ifdef DEBUG
+    , hash(hashedInfos(infos))
+#endif
 {
-    WCTAssert(!infos.empty(), "Migration infos must not be empty.");
+    WCTAssert(!infos.empty(), "Migration infos can't be empty.");
     for (const auto &info : infos) {
         if (!info->isSameDatabaseMigration()) {
             auto iter = m_schemas.find(info->schema);
@@ -51,6 +54,20 @@ MigrationInfos::MigrationInfos(
         m_infos.insert({info->targetTable, info});
     }
 }
+
+#ifdef DEBUG
+int64_t MigrationInfos::hashedInfos(
+    const std::list<std::shared_ptr<MigrationInfo>> &infos) const
+{
+    std::string hashSource;
+    for (const auto &info : infos) {
+        hashSource.append(info->targetTable);
+        hashSource.append(info->sourceTable);
+        hashSource.append(info->sourceDatabasePath);
+    }
+    return std::hash<std::string>{}(hashSource);
+}
+#endif
 
 #pragma mark - Basic
 bool MigrationInfos::isSameDatabaseMigration() const

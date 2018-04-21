@@ -61,7 +61,7 @@
 {
     if (self = [super init]) {
         _type = WCTColumnTypeString;
-        _value = [NSString stringWithUTF8String:value];
+        _value = value ? [NSString stringWithUTF8String:value] : nil;
     }
     return self;
 }

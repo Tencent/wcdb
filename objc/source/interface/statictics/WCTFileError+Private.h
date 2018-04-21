@@ -22,6 +22,6 @@
 
 @interface WCTFileError ()
 
-- (instancetype)initWithFileError:(const WCDB::FileError &)fileError;
+- (nullable instancetype)initWithFileError:(const WCDB::FileError &)fileError;
 
 @end

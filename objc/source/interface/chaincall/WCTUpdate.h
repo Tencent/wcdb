@@ -20,54 +20,58 @@
 
 #import <WCDB/WCTUnsafeHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Not Thread-safe
  */
 @interface WCTUpdate <ObjectType> : WCTUnsafeHandle
 
-- (nonnull instancetype)table:(nonnull NSString *)tableName;
+- (instancetype)table:(NSString *)tableName;
 
-- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
+- (instancetype)onProperties:(const WCTPropertyList &)properties;
 
 /**
  @brief WINQ interface for SQL.
  @param condition condition
  @return self
  */
-- (nonnull instancetype)where:(const WCDB::Expression &)condition;
+- (instancetype)where:(const WCDB::Expression &)condition;
 
 /**
  @brief WINQ interface for SQL.
  @param orders order list
  @return self
  */
-- (nonnull instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
 /**
  @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
-- (nonnull instancetype)limit:(const WCDB::Expression &)limit;
+- (instancetype)limit:(const WCDB::Expression &)limit;
 
 /**
  @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
-- (nonnull instancetype)offset:(const WCDB::Expression &)offset;
+- (instancetype)offset:(const WCDB::Expression &)offset;
 
 /**
  @brief Execute the update SQL with objects.
  @param object Template object to be used to update table. 
  @return YES if no error occurs. See [error] also.
  */
-- (BOOL)executeWithObject:(nonnull ObjectType)object;
+- (BOOL)executeWithObject:(ObjectType)object;
 
-- (BOOL)executeWithValue:(nonnull WCTColumnCodingValue *)value;
+- (BOOL)executeWithValue:(WCTColumnCodingValue *)value;
 
-- (BOOL)executeWithRow:(nonnull WCTColumnCodingRow *)row;
+- (BOOL)executeWithRow:(WCTColumnCodingRow *)row;
 
 - (WCDB::StatementUpdate &)statement;
 
 @end
+
+NS_ASSUME_NONNULL_END

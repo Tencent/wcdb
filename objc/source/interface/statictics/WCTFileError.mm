@@ -35,7 +35,7 @@ static_assert((int) WCTFileOperationMkdir == (int) WCDB::FileError::Operation::M
 {
     if (self = [super initWithError:fileError]) {
         _operation = (WCTFileOperation) fileError.operation;
-        _path = @(fileError.path.c_str());
+        _path = [NSString stringWithCppString:fileError.path];
     }
     return self;
 }

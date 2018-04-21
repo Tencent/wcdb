@@ -29,16 +29,18 @@
 @implementation WCTUnsafeHandle
 
 #pragma mark - Initialize
-//Safe
-//- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database;
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+{
+    if (self = [super initWithDatabase:database]) {
+        _finalizeLevel = WCTFinalizeLevelDatabase;
+    }
+    return self;
+}
 
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
              andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle
 {
-    //Safe
-    if (recyclableHandle == nullptr) {
-        return nil;
-    }
+    WCTInnerAssert(recyclableHandle != nullptr);
     if (self = [super initWithDatabase:database]) {
         _recyclableHandle = recyclableHandle;
         _handle = recyclableHandle.getHandle();
@@ -528,11 +530,12 @@
 
 - (BOOL)rebindTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
 {
+    WCTInnerAssert(tableName && cls);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
     }
-    std::string table = tableName.UTF8String;
+    std::string table = tableName.cppString;
     const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
     std::pair<bool, bool> isTableExists = handle->isTableExists(table);
     if (!isTableExists.first) {
@@ -549,7 +552,7 @@
         for (const std::string &columnName : columnNames) {
             auto iter = columnBindingMap.find(columnName);
             if (iter == columnBindingMap.end()) {
-                WCDB::Error::warning([NSString stringWithFormat:@"Skip column named [%s] for table [%s]", columnName.c_str(), tableName.UTF8String].UTF8String);
+                WCDB::Error::warning([NSString stringWithFormat:@"Skip column named [%s] for table [%@]", columnName.c_str(), tableName].cppString);
             } else {
                 columnBindingMap.erase(iter);
             }
@@ -561,7 +564,7 @@
             }
         }
     } else {
-        if (!handle->execute(binding->generateCreateTableStatement(tableName.UTF8String))) {
+        if (!handle->execute(binding->generateCreateTableStatement(tableName.cppString))) {
             return NO;
         }
     }

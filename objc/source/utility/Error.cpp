@@ -73,76 +73,73 @@ void Error::addToDescription(std::string &description,
 
 void Error::report()
 {
-    Report::sharedReport()->report(*this);
+    Report::shared()->report(*this);
+}
+
+void Error::error(const std::string &message)
+{
+    log(message, Error::Level::Error);
 }
 
 void Error::warning(const std::string &message)
 {
-    Error error;
-    error.level = Level::Warning;
-    error.code = (int) Code::Error;
-    error.message = message;
-    error.report();
+    log(message, Error::Level::Warning);
 }
 
 void Error::fatal(const std::string &message)
 {
+    log(message, Error::Level::Fatal);
+}
+
+void Error::log(const std::string &message, Level level)
+{
     Error error;
-    error.level = Level::Fatal;
+    error.level = level;
     error.code = (int) Code::Error;
     error.message = message;
     error.report();
-    while (true)
-        ;
 }
 
-Error::Report::Callback
-    Error::Report::s_defaultCallback([](const Error &error) {
-        switch (error.level) {
-            case Level::Ignore:
-                break;
-            case Level::Debug:
-#ifdef DEBUG
-                std::cout << error.getDescription() << std::endl;
-#endif
-                break;
-            case Level::Warning:
-            case Level::Error:
-                std::cout << error.getDescription() << std::endl;
-                break;
-            case Level::Fatal:
-                std::cout << error.getDescription() << std::endl;
-                abort();
-                break;
-        }
-    });
-
-Error::Report *Error::Report::sharedReport()
+Error::Report *Error::Report::shared()
 {
-    static Report report(s_defaultCallback);
+    static Report report;
     return &report;
+}
+
+void Error::Report::defaultCallback(const Error &error)
+{
+    switch (error.level) {
+        case Level::Ignore:
+            break;
+        case Level::Debug:
+#ifdef DEBUG
+            std::cout << error.getDescription() << std::endl;
+#endif
+            break;
+        case Level::Warning:
+        case Level::Error:
+            std::cout << error.getDescription() << std::endl;
+            break;
+        case Level::Fatal:
+            std::cout << error.getDescription() << std::endl;
+            abort();
+            break;
+    }
 }
 
 void Error::Report::setCallback(const Callback &callback)
 {
-    m_callback.reset(new Callback(callback));
+    m_callback = callback;
 }
 
-Error::Report::Report(const Callback &callback)
-    : m_callback(new Callback(callback))
+Error::Report::Report() : m_callback(Report::defaultCallback)
 {
-}
-
-void Error::Report::resetCallback()
-{
-    setCallback(s_defaultCallback);
 }
 
 void Error::Report::report(const Error &error)
 {
-    std::shared_ptr<Callback> callback = m_callback;
-    if (callback) {
-        (*callback.get())(error);
+    if (m_callback) {
+        m_callback(error);
     }
 }
 

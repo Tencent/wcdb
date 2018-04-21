@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTMigrationInfo+Private.h>
 
@@ -30,20 +31,15 @@
                     fromSourceTable:(NSString *)sourceTable
                          ofDatabase:(NSString *)sourceDatabasePath
 {
-    std::shared_ptr<WCDB::MigrationInfo> info = WCDB::MigrationInfo::info(targetTable.UTF8String,
-                                                                          sourceTable.UTF8String,
-                                                                          sourceDatabasePath.UTF8String);
+    WCTRemedialAssert(targetTable && sourceTable, "Table name can't be null.", return nil;);
+    std::shared_ptr<WCDB::MigrationInfo> info = WCDB::MigrationInfo::info(targetTable.cppString, sourceTable.cppString, sourceDatabasePath ? sourceDatabasePath.cppString : WCDB::String::empty());
     return [self initWithWCDBMigrationInfo:info];
 }
 
 - (instancetype)initWithTargetTable:(NSString *)targetTable
                     fromSourceTable:(NSString *)sourceTable
 {
-    std::shared_ptr<WCDB::MigrationInfo> info =
-        WCDB::MigrationInfo::info(targetTable.UTF8String,
-                                  sourceTable.UTF8String,
-                                  WCDB::String::empty());
-    return [self initWithWCDBMigrationInfo:info];
+    return [self initWithTargetTable:targetTable fromSourceTable:sourceTable ofDatabase:nil];
 }
 
 - (instancetype)initWithWCDBMigrationInfo:(const std::shared_ptr<WCDB::MigrationInfo> &)info
@@ -62,12 +58,12 @@
 
 - (nonnull NSString *)targetTable
 {
-    return @(_info->targetTable.c_str());
+    return [NSString stringWithCppString:_info->targetTable];
 }
 
 - (nonnull NSString *)sourceTable
 {
-    return @(_info->sourceTable.c_str());
+    return [NSString stringWithCppString:_info->sourceTable];
 }
 
 - (nullable NSString *)sourceDatabasePath
@@ -76,7 +72,7 @@
     if (path.empty()) {
         return nil;
     }
-    return @(path.c_str());
+    return [NSString stringWithCppString:path];
 }
 
 @end

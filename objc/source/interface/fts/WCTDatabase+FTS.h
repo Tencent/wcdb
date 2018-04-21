@@ -21,6 +21,8 @@
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTTokenizer.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTDatabase (FTS)
 
 - (void)setTokenizer:(NSString *)tokenizerName;
@@ -28,3 +30,5 @@
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames;
 
 @end
+
+NS_ASSUME_NONNULL_END

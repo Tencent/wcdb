@@ -117,7 +117,7 @@
 #pragma mark - Create Index
 - (BOOL)isIndexExists:(NSString *)indexName
 {
-    WCTValue *rowValue = [_migrated getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.TableName.UTF8String).where(WCTMaster.name == indexName)];
+    WCTValue *rowValue = [_migrated getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.AllResults.count()).from(WCTMaster.tableName.UTF8String).where(WCTMaster.name == indexName)];
     XCTAssertNotNil(rowValue);
     return rowValue.boolValue;
 }

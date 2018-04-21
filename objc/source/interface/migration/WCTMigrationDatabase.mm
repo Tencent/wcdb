@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Error.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTMigrationInfo+Private.h>
@@ -30,6 +31,8 @@
 - (instancetype)initWithPath:(NSString *)path
                     andInfos:(NSArray<WCTMigrationInfo *> *)infos
 {
+    WCTRemedialAssert(path, "Path can't be null.", return nil;);
+    WCTRemedialAssert(infos.count > 0, "Migration infos can't be null or empty. If you want to refer a inited migration database, use [initWithExistingPath:] instead.", return nil;);
     std::list<std::shared_ptr<WCDB::MigrationInfo>> infoList;
     for (WCTMigrationInfo *info in infos) {
         infoList.push_back([info getWCDBMigrationInfo]);
@@ -38,27 +41,35 @@
     if (!migrationInfos) {
         return nil;
     }
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, migrationInfos)];
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, migrationInfos)];
 }
 
 - (instancetype)initWithPath:(NSString *)path
                      andInfo:(WCTMigrationInfo *)info
 {
+    WCTRemedialAssert(info, "Migration info can't be null. If you want to refer a inited migration database, use [initWithPath:] instead.", return nil;);
+    WCTRemedialAssert(path, "Path can't be null.", return nil;);
     auto infos = WCDB::MigrationInfos::infos({[info getWCDBMigrationInfo]});
     if (!infos) {
         return nil;
     }
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, infos)];
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, infos)];
 }
 
-- (instancetype)initWithPath:(NSString *)path
+- (instancetype)initWithExistingPath:(nonnull NSString *)path
 {
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.UTF8String, nullptr)];
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithExistingPath(path.cppString)];
 }
 
 - (instancetype)initWithExistingTag:(WCTTag)tag
 {
     return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithExistingTag(tag)];
+}
+
+- (instancetype)initWithPath:(NSString *)path
+{
+    WCTFatalError("Use [initWithExistingPath:] instead.");
+    return nil;
 }
 
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
@@ -117,7 +128,7 @@
     dispatch_async(s_migrationQueue, ^{
       bool done = false;
       while (!done) {
-          @autoreleasepool{
+          @autoreleasepool {
               id strongSelf = weakSelf;
               if (!strongSelf) {
                   return;

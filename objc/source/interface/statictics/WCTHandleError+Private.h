@@ -22,6 +22,6 @@
 
 @interface WCTHandleError ()
 
-- (instancetype)initWithHandleError:(const WCDB::HandleError &)handleError;
+- (nullable instancetype)initWithHandleError:(const WCDB::HandleError &)handleError;
 
 @end

@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
 
@@ -77,7 +78,7 @@ WCTProperty WCTProperty::inTable(NSString *tableName) const
 {
     WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(getCOWLang());
     WCDB::Expression expression(cowLang);
-    expression.withTable(tableName.UTF8String);
+    expression.withTable(tableName.cppString);
     return WCTProperty(expression, m_columnBinding);
 }
 
@@ -85,7 +86,7 @@ WCTProperty WCTProperty::inSchema(NSString *schemaName) const
 {
     WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(getCOWLang());
     WCDB::Expression expression(cowLang);
-    expression.withSchema(schemaName.UTF8String);
+    expression.withSchema(schemaName.cppString);
     return WCTProperty(expression, m_columnBinding);
 }
 

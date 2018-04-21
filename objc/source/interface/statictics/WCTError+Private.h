@@ -22,6 +22,6 @@
 
 @interface WCTError ()
 
-- (instancetype)initWithError:(const WCDB::Error &)error;
+- (nullable instancetype)initWithError:(const WCDB::Error &)error;
 
 @end

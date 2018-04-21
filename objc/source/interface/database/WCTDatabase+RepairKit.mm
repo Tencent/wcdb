@@ -25,7 +25,7 @@
 
 - (BOOL)backupWithCipher:(NSData *)key
 {
-    return _database->backup(key.bytes, (unsigned int) key.length);
+    return _database->backup(key.noCopyData);
 }
 
 - (BOOL)backup
@@ -38,12 +38,10 @@
            backupCipher:(NSData *)backupCipher
          databaseCipher:(NSData *)databaseCipher
 {
-    return _database->recoverFromPath(corruptedDBPath.UTF8String,
+    return _database->recoverFromPath(corruptedDBPath.cppString,
                                       pageSize,
-                                      backupCipher.bytes,
-                                      (unsigned int) backupCipher.length,
-                                      databaseCipher.bytes,
-                                      (unsigned int) databaseCipher.length);
+                                      backupCipher.noCopyData,
+                                      databaseCipher.noCopyData);
 }
 
 @end

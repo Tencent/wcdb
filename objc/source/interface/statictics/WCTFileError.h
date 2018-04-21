@@ -32,6 +32,8 @@ typedef NS_ENUM(NSUInteger, WCTFileOperation) {
     WCTFileOperationSetAttribute = 8,
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTFileError : WCTError
 
 @property(nonatomic, readonly) WCTFileOperation operation;
@@ -39,3 +41,5 @@ typedef NS_ENUM(NSUInteger, WCTFileOperation) {
 @property(nonatomic, readonly) NSString *path;
 
 @end
+
+NS_ASSUME_NONNULL_END

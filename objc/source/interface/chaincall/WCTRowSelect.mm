@@ -33,15 +33,17 @@
 
 - (instancetype)fromTable:(NSString *)tableName
 {
-    _statement.from(tableName.UTF8String);
+    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
+    _statement.from(tableName.cppString);
     return self;
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
 {
+    WCTRemedialAssert(tableNames, "Table names can't be null.", return self;);
     std::list<WCDB::TableOrSubquery> tables;
     for (NSString *tableName in tableNames) {
-        tables.push_back(tableName.UTF8String);
+        tables.push_back(tableName.cppString);
     }
     _statement.from(tables);
     return self;

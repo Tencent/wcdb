@@ -35,22 +35,32 @@
 //remedial assert
 #define WCTRemedialAssert(cond, message, remedial) WCTAssert(cond, message)
 
+//fatal error
+#define WCTFatalError(message) WCDB::Error::fatal(message)
+
 //remedial fatal error
-#define WCTRemedialFatalError(message, remedial) WCDB::Error::fatal(message)
+#define WCTRemedialFatalError(message, remedial) WCTFatalError(message)
 
 #else //ELSE
 
-#define WCTAssert(cond, message)
+#define WCTAssert(cond, message)                                               \
+    if (!(cond)) {                                                             \
+        WCDB::Error::error(message);                                           \
+    }
 
 //remedial assert
 #define WCTRemedialAssert(cond, message, remedial)                             \
     if (!(cond)) {                                                             \
+        WCDB::Error::error(message);                                           \
         remedial                                                               \
     }
+
+#define WCTFatalError(message)
 
 //remedial fatal error
 #define WCTRemedialFatalError(message, remedial)                               \
     do {                                                                       \
+        WCDB::Error::error(message);                                           \
         remedial                                                               \
     } while (false);
 
@@ -70,11 +80,11 @@ public:
     virtual int getType() const;
 
     enum class Level : int {
-        Ignore,
-        Debug,
-        Warning,
-        Error,
-        Fatal,
+        Ignore = 1,
+        Debug = 2,
+        Warning = 3,
+        Error = 4,
+        Fatal = 5,
     };
     Level level;
     static constexpr const char *LevelName(const Level &level)
@@ -108,22 +118,23 @@ public:
     class Report {
     public:
         typedef std::function<void(const Error &)> Callback;
-        static Report *sharedReport();
+        static Report *shared();
 
         void report(const Error &error);
         void setCallback(const Callback &callback);
-        void resetCallback();
+        static void defaultCallback(const Error &error);
 
     protected:
-        Report(const Callback &callback);
-        static Callback s_defaultCallback;
-        std::shared_ptr<Callback> m_callback;
+        Report();
+        Callback m_callback;
     };
 
+    static void error(const std::string &message);
     static void warning(const std::string &message);
-    static void fatal(const std::string &message) __attribute__((noreturn));
+    static void fatal(const std::string &message);
 
 protected:
+    static void log(const std::string &message, Level level);
     void addToDescription(std::string &description,
                           const char *key,
                           int64_t value) const;

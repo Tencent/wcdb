@@ -26,45 +26,44 @@
 
 - (void)setCipherKey:(NSData *)cipherKey
 {
-    _database->setCipher(cipherKey.bytes, (int) cipherKey.length);
+    _database->setCipher(cipherKey.noCopyData);
 }
 
 - (void)setCipherKey:(NSData *)cipherKey
     andCipherPageSize:(int)cipherPageSize
 {
-    _database->setCipher(cipherKey.bytes, (int) cipherKey.length, cipherPageSize);
+    _database->setCipher(cipherKey.noCopyData, cipherPageSize);
 }
 
 - (void)setConfig:(WCTConfigBlock)invoke
           forName:(NSString *)name
         withOrder:(int)order
 {
+    WCDB::Config::Callback callback = nullptr;
     if (invoke) {
-        _database->setConfig(WCDB::Config(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {
+        callback = [invoke, self](WCDB::Handle *handle) -> bool {
             WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
             BOOL result = invoke(unsafeHandle);
             [unsafeHandle finalizeDatabase];
             return result;
-        },
-                                          order));
-    } else {
-        _database->setConfig(WCDB::Config(name.UTF8String, nullptr, order));
+        };
     }
+    _database->setConfig(WCDB::Config(name.cppString, callback, order));
 }
 
 - (void)setConfig:(WCTConfigBlock)invoke
           forName:(NSString *)name
 {
+    WCDB::Config::Callback callback = nullptr;
     if (invoke) {
-        _database->setConfig(name.UTF8String, [invoke, self](WCDB::Handle *handle) -> bool {
+        callback = [invoke, self](WCDB::Handle *handle) -> bool {
             WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
             BOOL result = invoke(unsafeHandle);
             [unsafeHandle finalizeDatabase];
             return result;
-        });
-    } else {
-        _database->setConfig(name.UTF8String, nullptr);
+        };
     }
+    _database->setConfig(name.cppString, callback);
 }
 
 @end

@@ -33,7 +33,7 @@ LiteralValue LiteralValueConvertible<NSObject *>::as(NSObject *const &t)
         return LiteralValue(data.noCopyData);
     } else if ([value isKindOfClass:NSString.class]) {
         NSString *string = (NSString *) value;
-        return LiteralValue(string.UTF8String);
+        return LiteralValue(string.cppString);
     } else if ([value isKindOfClass:NSNumber.class]) {
         NSNumber *number = (NSNumber *) value;
         if (CFNumberIsFloatType((CFNumberRef) number)) {
@@ -69,7 +69,7 @@ ColumnIsTextType<NSString *>::asUnderlyingType(NSString *text)
 
 LiteralValue LiteralValueConvertible<NSString *>::as(NSString *const &t)
 {
-    return LiteralValue(t ? t.UTF8String : String::empty());
+    return LiteralValue(t ? t.cppString : String::empty());
 }
 
 Expression ExpressionConvertible<NSString *>::as(NSString *const &t)

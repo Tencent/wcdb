@@ -56,6 +56,12 @@ public:
 
     SharedLock &getSharedLock();
 
+#ifdef DEBUG
+    const int64_t hash;
+    int64_t
+    hashedInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos) const;
+#endif
+
 protected:
     SharedLock m_lock;
     std::atomic<bool> m_migratingStarted;

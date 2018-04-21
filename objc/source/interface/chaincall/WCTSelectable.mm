@@ -25,14 +25,6 @@
 
 @implementation WCTSelectable
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _finalizeLevel = WCTFinalizeLevelDatabase;
-    }
-    return self;
-}
-
 - (BOOL)lazyPrepare
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];

@@ -22,7 +22,7 @@
 
 @interface WCTMigrationInfo ()
 
-- (instancetype)initWithWCDBMigrationInfo:(const std::shared_ptr<WCDB::MigrationInfo> &)info;
+- (nullable instancetype)initWithWCDBMigrationInfo:(const std::shared_ptr<WCDB::MigrationInfo> &)info;
 
 - (const std::shared_ptr<WCDB::MigrationInfo> &)getWCDBMigrationInfo;
 

@@ -29,14 +29,6 @@
     BOOL _replace;
 }
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _finalizeLevel = WCTFinalizeLevelDatabase;
-    }
-    return self;
-}
-
 - (instancetype)orReplace
 {
     _statement.getMutableLang().type = WCDB::Lang::InsertSTMT::Type::InsertOrReplace;
@@ -47,9 +39,9 @@
 - (instancetype)intoTable:(NSString *)tableName
 {
     if (!_replace) {
-        _statement.insertInto(tableName.UTF8String);
+        _statement.insertInto(tableName.cppString);
     } else {
-        _statement.insertOrReplaceInto(tableName.UTF8String);
+        _statement.insertOrReplaceInto(tableName.cppString);
     }
     return self;
 }

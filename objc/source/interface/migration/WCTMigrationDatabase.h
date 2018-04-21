@@ -20,19 +20,23 @@
 
 #import <WCDB/WCTDatabase.h>
 
-typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *_Nullable);
+NS_ASSUME_NONNULL_BEGIN
 
-typedef BOOL (^WCTMigrationSteppedBlock)(WCTMigrationInfo *_Nullable, BOOL);
+typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
+
+typedef BOOL (^WCTMigrationSteppedBlock)(WCTMigrationInfo *, BOOL);
 
 typedef void (^WCTMigrationCompletedBlock)(BOOL);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
-- (nullable instancetype)initWithPath:(nonnull NSString *)path
-                              andInfo:(nonnull WCTMigrationInfo *)info;
+- (nullable instancetype)initWithPath:(NSString *)path
+                              andInfo:(WCTMigrationInfo *)info;
 
-- (nullable instancetype)initWithPath:(nonnull NSString *)path
-                             andInfos:(nonnull NSArray<WCTMigrationInfo *> *)infos;
+- (nullable instancetype)initWithPath:(NSString *)path
+                             andInfos:(NSArray<WCTMigrationInfo *> *)infos;
+
+- (nullable instancetype)initWithExistingPath:(NSString *)path;
 
 - (BOOL)stepMigration:(BOOL &)done;
 
@@ -48,3 +52,5 @@ typedef void (^WCTMigrationCompletedBlock)(BOOL);
                     onCompleted:(nullable WCTMigrationCompletedBlock)onMigrationCompleted;
 
 @end
+
+NS_ASSUME_NONNULL_END

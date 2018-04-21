@@ -20,16 +20,17 @@
 
 #import <WCDB/WCTSelectable.h>
 
+NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
 @interface WCTSelect <ObjectType> : WCTSelectable
 
-- (nonnull instancetype)fromTable:(nonnull NSString *)tableName;
+- (instancetype)fromTable:(NSString *)tableName;
 
-- (nonnull instancetype)onProperties:(const WCTPropertyList &)properties;
+- (instancetype)onProperties:(const WCTPropertyList &)properties;
 
-- (nonnull instancetype)ofClass:(nonnull Class<WCTTableCoding>)cls;
+- (instancetype)ofClass:(Class<WCTTableCoding>)cls;
 
 /**
  @brief Get next selected object. You can do an iteration using it.
@@ -51,3 +52,5 @@
 - (nullable NSArray<ObjectType> *)allObjects;
 
 @end
+
+NS_ASSUME_NONNULL_END

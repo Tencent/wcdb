@@ -34,21 +34,21 @@
 {
     std::list<std::string> files;
     for (NSString *extraFile in extraFiles) {
-        files.push_back(extraFile.UTF8String);
+        files.push_back(extraFile.cppString);
     }
-    return _database->moveFilesToDirectoryWithExtraFiles(directory.UTF8String, files);
+    return _database->moveFilesToDirectoryWithExtraFiles(directory.cppString, files);
 }
 
 - (BOOL)moveFilesToDirectory:(NSString *)directory
 {
-    return _database->moveFiles(directory.UTF8String);
+    return _database->moveFiles(directory.cppString);
 }
 
 - (NSArray<NSString *> *)paths
 {
     NSMutableArray *paths = [NSMutableArray array];
     for (const auto &path : _database->getPaths()) {
-        [paths addObject:@(path.c_str())];
+        [paths addObject:[NSString stringWithCppString:path]];
     }
     return paths;
 }

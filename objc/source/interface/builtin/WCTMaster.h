@@ -20,14 +20,18 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTMaster : NSObject
 
-+ (NSString *)TableName;
+@property(class, nonatomic, readonly) NSString *tableName;
 
-@property(nonatomic, retain) NSString *type;
-@property(nonatomic, retain) NSString *name;
-@property(nonatomic, retain) NSString *tableName;
+@property(nonatomic, retain, nullable) NSString *type;
+@property(nonatomic, retain, nullable) NSString *name;
+@property(nonatomic, retain, nullable) NSString *tblName;
 @property(nonatomic, assign) int rootpage;
-@property(nonatomic, retain) NSString *sql;
+@property(nonatomic, retain, nullable) NSString *sql;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -32,7 +32,7 @@ MigrationInfo::info(const std::string &targetTable,
         !sourceDatabasePath.empty() || targetTable != sourceTable,
         "Migrating the same name database to the same table is meaningless.");
     WCTAssert(!targetTable.empty() && !sourceTable.empty(),
-              "Migrating table name must not be empty.");
+              "Migrating table name can't not be empty.");
     return std::shared_ptr<MigrationInfo>(
         new MigrationInfo(targetTable, sourceTable, sourceDatabasePath));
 }

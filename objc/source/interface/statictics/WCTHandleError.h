@@ -31,6 +31,8 @@ typedef NS_ENUM(NSUInteger, WCTHandleOperation) {
     WCTHandleOperationBackup = 7,
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTHandleError : WCTError
 
 @property(class, readonly) WCTTag invalidTag;
@@ -39,10 +41,12 @@ typedef NS_ENUM(NSUInteger, WCTHandleOperation) {
 
 @property(nonatomic, readonly) int extendedCode;
 
-@property(nonatomic, readonly) NSString *path;
+@property(nonatomic, readonly, nonnull) NSString *path;
 
 @property(nonatomic, readonly) WCDB::Statement statement;
 
 @property(nonatomic, readonly) WCTHandleOperation operation;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -132,16 +132,16 @@ const Config BuiltinConfig::trace(
     },
     Order::Trace);
 
-const Config
-BuiltinConfig::cipherWithKey(const void *key, int keySize, int pageSize)
+const Config BuiltinConfig::cipherWithKey(const NoCopyData &cipher,
+                                          int pageSize)
 {
-    std::shared_ptr<std::vector<unsigned char>> keys(
-        new std::vector<unsigned char>((unsigned char *) key,
-                                       (unsigned char *) key + keySize));
+    std::vector<unsigned char> keys((unsigned char *) cipher.data,
+                                    (unsigned char *) cipher.data +
+                                        cipher.size);
     return Config("cipher",
                   [keys, pageSize](Handle *handle) -> bool {
-                      return handle->setCipherKey(keys->data(),
-                                                  (int) keys->size()) &&
+                      return handle->setCipherKey(keys.data(),
+                                                  (int) keys.size()) &&
                              handle->execute(StatementPragma()
                                                  .pragma(Pragma::CipherPageSize)
                                                  .to(pageSize));

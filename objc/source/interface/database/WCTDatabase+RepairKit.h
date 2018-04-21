@@ -22,6 +22,8 @@
 
 @interface WCTDatabase (RepairKit)
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  @brief Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.
 
@@ -52,9 +54,11 @@
  @param databaseCipher The cipher key for corrupeted database
  @return YES only if it's successfully recovered.
  */
-- (BOOL)recoverFromPath:(nonnull NSString *)corruptedDBPath
+- (BOOL)recoverFromPath:(NSString *)corruptedDBPath
            withPageSize:(const int)pageSize
            backupCipher:(nullable NSData *)backupCipher
          databaseCipher:(nullable NSData *)databaseCipher;
 
 @end
+
+NS_ASSUME_NONNULL_END

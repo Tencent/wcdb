@@ -22,6 +22,6 @@
 
 @interface WCTSQLiteError ()
 
-- (instancetype)initWithSQLiteError:(const WCDB::SQLiteError &)sqliteError;
+- (nullable instancetype)initWithSQLiteError:(const WCDB::SQLiteError &)sqliteError;
 
 @end

@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTDatabase.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Configuration
  */
@@ -31,7 +33,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @brief This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];
  @param cipherKey Cipher key.
  */
-- (void)setCipherKey:(nonnull NSData *)cipherKey;
+- (void)setCipherKey:(nullable NSData *)cipherKey;
 
 /**
  @brief Set cipher key for a database. 
@@ -40,7 +42,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @param cipherKey Cipher key.
  @param cipherPageSize Cipher Page Size
  */
-- (void)setCipherKey:(nonnull NSData *)cipherKey
+- (void)setCipherKey:(nullable NSData *)cipherKey
     andCipherPageSize:(int)cipherPageSize;
 
 /**
@@ -56,7 +58,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @param order The smaller number is called first
  */
 - (void)setConfig:(nullable WCTConfigBlock)config
-          forName:(nonnull NSString *)name
+          forName:(NSString *)name
         withOrder:(int)order;
 
 /**
@@ -66,6 +68,8 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @param name The Identifier for this config
  */
 - (void)setConfig:(nullable WCTConfigBlock)config
-          forName:(nonnull NSString *)name;
+          forName:(NSString *)name;
 
 @end
+
+NS_ASSUME_NONNULL_END

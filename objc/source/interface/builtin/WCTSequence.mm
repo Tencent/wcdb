@@ -26,7 +26,7 @@ WCDB_IMPLEMENTATION(WCTSequence)
 WCDB_SYNTHESIZE(WCTSequence, name)
 WCDB_SYNTHESIZE(WCTSequence, seq)
 
-+ (NSString *)TableName
++ (NSString *)tableName
 {
     return @"sqlite_sequence";
 }

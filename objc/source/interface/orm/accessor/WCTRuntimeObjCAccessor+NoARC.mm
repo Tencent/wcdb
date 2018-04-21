@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Error.hpp>
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
 #if __has_feature(objc_arc)
@@ -31,9 +32,7 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::s
     , m_columnType(GetColumnType(instanceClass, propertyName))
 {
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
-    if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
-        WCDB::Error::fatal([NSString stringWithFormat:@"Class %@ should conforms to protocol WCTColumnCoding", NSStringFromClass(propertyClass)].UTF8String);
-    }
+    WCTAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], "Class %@ should conforms to protocol WCTColumnCoding.");
 }
 
 WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const std::string &propertyName)

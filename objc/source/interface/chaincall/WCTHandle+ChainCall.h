@@ -21,8 +21,12 @@
 #import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTHandle (ChainCall) <WCTChainCall>
 
-- (nonnull WCTMultiSelect *)prepareMultiSelect;
+- (WCTMultiSelect *)prepareMultiSelect;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTSelectable.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Not Thread-safe
 
@@ -28,11 +30,11 @@
  */
 @interface WCTRowSelect : WCTSelectable
 
-- (nonnull instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns;
+- (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns;
 
-- (nonnull instancetype)fromTable:(nonnull NSString *)tableName;
+- (instancetype)fromTable:(NSString *)tableName;
 
-- (nonnull instancetype)fromTables:(nonnull NSArray<NSString *> *)tableNames;
+- (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
 
 /**
  @brief Get next selected row. You can do an iteration using it.
@@ -117,3 +119,5 @@
 - (nullable WCTOneColumn *)allValuesAtIndex:(int)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -20,6 +20,7 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <WCDB/Interface.h>
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/Tokenizer.hpp>
 #import <WCDB/WCTError+Private.h>
 
@@ -89,7 +90,7 @@ protected:
             if (m_lemmaBufferLength > m_lemmaBuffer.capacity()) {
                 m_lemmaBuffer.resize(lemma.length);
             }
-            memcpy(m_lemmaBuffer.data(), lemma.UTF8String, m_lemmaBufferLength);
+            memcpy(m_lemmaBuffer.data(), lemma.cppString.data(), m_lemmaBufferLength);
         }
         return rc;
     }
@@ -109,7 +110,7 @@ protected:
 
 + (void)enroll
 {
-    WCDB::FTS::Modules::shared()->addAddress(self.name.UTF8String, self.address);
+    WCDB::FTS::Modules::shared()->addAddress(self.name.cppString, self.address);
 }
 
 @end

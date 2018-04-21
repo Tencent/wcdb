@@ -25,11 +25,11 @@
 WCDB_IMPLEMENTATION(WCTMaster)
 WCDB_SYNTHESIZE(WCTMaster, type)
 WCDB_SYNTHESIZE(WCTMaster, name)
-WCDB_SYNTHESIZE_COLUMN(WCTMaster, tableName, "tbl_name")
+WCDB_SYNTHESIZE_COLUMN(WCTMaster, tblName, "tbl_name")
 WCDB_SYNTHESIZE(WCTMaster, rootpage)
 WCDB_SYNTHESIZE(WCTMaster, sql)
 
-+ (NSString *)TableName
++ (NSString *)tableName
 {
     return @"sqlite_master";
 }

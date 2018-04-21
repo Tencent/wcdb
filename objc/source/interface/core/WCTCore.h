@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Thread-safe
  */
@@ -44,10 +46,12 @@
 
  @return path
  */
-- (nonnull NSString *)path;
+- (NSString *)path;
 
 - (void)finalizeDatabase;
 
-- (nullable WCTCoreError *)error;
+- (WCTCoreError *)error;
 
 @end
+
+NS_ASSUME_NONNULL_END

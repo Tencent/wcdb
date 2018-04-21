@@ -20,40 +20,42 @@
 
 #import <WCDB/WCTUnsafeHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Not Thread-safe
  */
 @interface WCTDelete : WCTUnsafeHandle
 
-- (nonnull instancetype)fromTable:(nonnull NSString *)tableName;
+- (instancetype)fromTable:(NSString *)tableName;
 
 /**
  @brief WINQ interface for SQL.
  @param expr expr
  @return self
  */
-- (nonnull instancetype)where:(const WCDB::Expression &)expr;
+- (instancetype)where:(const WCDB::Expression &)expr;
 
 /**
  @brief WINQ interface for SQL.
  @param orders order list
  @return self
  */
-- (nonnull instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
 /**
  @brief WINQ interface for SQL.
  @param limit limit
  @return self
  */
-- (nonnull instancetype)limit:(const WCDB::Expression &)limit;
+- (instancetype)limit:(const WCDB::Expression &)limit;
 
 /**
  @brief WINQ interface for SQL.
  @param offset offset
  @return self
  */
-- (nonnull instancetype)offset:(const WCDB::Expression &)offset;
+- (instancetype)offset:(const WCDB::Expression &)offset;
 
 /**
  @brief Execute the delete SQL.
@@ -64,3 +66,5 @@
 - (WCDB::StatementDelete &)statement;
 
 @end
+
+NS_ASSUME_NONNULL_END

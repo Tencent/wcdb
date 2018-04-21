@@ -24,12 +24,17 @@
 
 @implementation WCTCore
 
+- (instancetype)init
+{
+    return [self initWithDatabase:nullptr];
+}
+
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
 {
     if (database == nullptr) {
         return nil;
     }
-    if (self = [self init]) {
+    if (self = [super init]) {
         _database = database;
     }
     return self;
@@ -47,7 +52,7 @@
 
 - (NSString *)path
 {
-    return @(_database->getPath().c_str());
+    return [NSString stringWithCppString:_database->getPath()];
 }
 
 - (void)finalizeDatabase
@@ -55,7 +60,7 @@
     _database = nullptr;
 }
 
-- (nullable WCTCoreError *)error
+- (WCTCoreError *)error
 {
     return nil;
 }

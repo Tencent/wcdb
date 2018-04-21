@@ -43,8 +43,7 @@ public:
         const Handle::PerformanceTraceCallback &globalTrace);
     static void SetGlobalSQLTrace(const Handle::SQLTraceCallback &globalTrace);
 
-    static const Config
-    cipherWithKey(const void *key, int keySize, int pageSize);
+    static const Config cipherWithKey(const NoCopyData &cipher, int pageSize);
 
     static const Config checkpoint;
 

@@ -20,19 +20,23 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTMigrationInfo : NSObject
 
-- (nonnull NSString *)targetTable;
+- (NSString *)targetTable;
 
-- (nonnull NSString *)sourceTable;
+- (NSString *)sourceTable;
 
 - (nullable NSString *)sourceDatabasePath;
 
-- (nullable instancetype)initWithTargetTable:(nonnull NSString *)targetTable
-                             fromSourceTable:(nonnull NSString *)sourceTable
+- (nullable instancetype)initWithTargetTable:(NSString *)targetTable
+                             fromSourceTable:(NSString *)sourceTable
                                   ofDatabase:(nullable NSString *)sourceDatabasePath;
 
-- (nullable instancetype)initWithTargetTable:(nonnull NSString *)targetTable
-                             fromSourceTable:(nonnull NSString *)sourceTable;
+- (nullable instancetype)initWithTargetTable:(NSString *)targetTable
+                             fromSourceTable:(NSString *)sourceTable;
 
 @end
+
+NS_ASSUME_NONNULL_END

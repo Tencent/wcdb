@@ -24,6 +24,14 @@
 
 @implementation WCTHandle
 
+- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+{
+    if (self = [super initWithDatabase:database]) {
+        _finalizeLevel = WCTFinalizeLevelStatement;
+    }
+    return self;
+}
+
 - (WCTDatabase *)getDatabase
 {
     return [[WCTDatabase alloc] initWithDatabase:_database];
@@ -179,7 +187,7 @@
 - (NSString *)getTextAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return @(_handle->getText(index));
+    return [NSString stringWithUTF8String:_handle->getText(index)];
 }
 
 - (NSData *)getBLOB:(int)index
@@ -224,13 +232,21 @@
 - (NSString *)getColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return @(_handle->getColumnName(index));
+    const char *columnName = _handle->getColumnName(index);
+    if (columnName) {
+        return [NSString stringWithUTF8String:columnName];
+    }
+    return nil;
 }
 
 - (NSString *)getColumnTableNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return @(_handle->getColumnTableName(index));
+    const char *tableName = _handle->getColumnTableName(index);
+    if (tableName) {
+        return [NSString stringWithUTF8String:tableName];
+    }
+    return nil;
 }
 
 #pragma mark - Execute

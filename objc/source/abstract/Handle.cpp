@@ -499,11 +499,11 @@ void Handle::tracePerformance(const PerformanceTraceCallback &trace)
 }
 
 #pragma mark - Repair Kit
-bool Handle::backup(const void *key, unsigned int length)
+bool Handle::backup(const NoCopyData &data)
 {
     std::string backupPath = Path::addExtention(path, getBackupSubfix());
-    int rc = sqliterk_save_master((sqlite3 *) m_handle, backupPath.c_str(), key,
-                                  length);
+    int rc = sqliterk_save_master((sqlite3 *) m_handle, backupPath.c_str(),
+                                  data.data, (int) data.size);
     if (rc == SQLITERK_OK) {
         return true;
     }
@@ -516,10 +516,8 @@ bool Handle::backup(const void *key, unsigned int length)
 
 bool Handle::recoverFromPath(const std::string &corruptedDBPath,
                              int pageSize,
-                             const void *backupKey,
-                             unsigned int backupKeyLength,
-                             const void *databaseKey,
-                             unsigned int databaseKeyLength)
+                             const NoCopyData &backupCipher,
+                             const NoCopyData &databaseCipher)
 {
     int rc = SQLITERK_OK;
     do {
@@ -528,16 +526,17 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
         sqliterk_master_info *info;
         unsigned char kdfSalt[16];
         memset(kdfSalt, 0, 16);
-        rc = sqliterk_load_master(backupPath.c_str(), backupKey,
-                                  backupKeyLength, nullptr, 0, &info, kdfSalt);
+        rc = sqliterk_load_master(backupPath.c_str(), backupCipher.data,
+                                  (int) backupCipher.size, nullptr, 0, &info,
+                                  kdfSalt);
         if (rc != SQLITERK_OK) {
             break;
         }
 
         sqliterk_cipher_conf conf;
         memset(&conf, 0, sizeof(sqliterk_cipher_conf));
-        conf.key = databaseKey;
-        conf.key_len = databaseKeyLength;
+        conf.key = databaseCipher.data;
+        conf.key_len = (int) databaseCipher.size;
         conf.page_size = pageSize;
         conf.kdf_salt = kdfSalt;
         conf.use_hmac = true;

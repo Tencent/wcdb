@@ -22,6 +22,6 @@
 
 @interface WCTCoreError ()
 
-- (instancetype)initWithCoreError:(const WCDB::CoreError &)coreError;
+- (nullable instancetype)initWithCoreError:(const WCDB::CoreError &)coreError;
 
 @end

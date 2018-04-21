@@ -20,25 +20,27 @@
 
 #import <WCDB/WCTCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol WCTTable
 
-- (BOOL)isTableExists:(nonnull NSString *)tableName;
+- (BOOL)isTableExists:(NSString *)tableName;
 
-- (BOOL)isTableExists:(nonnull NSString *)tableName
+- (BOOL)isTableExists:(NSString *)tableName
             withError:(WCTCoreError *_Nullable *_Nullable)error;
 
-- (BOOL)createTableAndIndexes:(nonnull NSString *)tableName
-                    withClass:(nonnull Class<WCTTableCoding>)cls;
+- (BOOL)createTableAndIndexes:(NSString *)tableName
+                    withClass:(Class<WCTTableCoding>)cls;
 
-- (nonnull WCTTable *)getTable:(nonnull NSString *)tableName
-                     withClass:(nonnull Class<WCTTableCoding>)cls;
+- (WCTTable *)getTable:(NSString *)tableName
+             withClass:(Class<WCTTableCoding>)cls;
 
-- (BOOL)createVirtualTable:(nonnull NSString *)tableName
-                 withClass:(nonnull Class<WCTTableCoding>)cls;
+- (BOOL)createVirtualTable:(NSString *)tableName
+                 withClass:(Class<WCTTableCoding>)cls;
 
-- (BOOL)dropTable:(nonnull NSString *)tableName;
+- (BOOL)dropTable:(NSString *)tableName;
 
-- (BOOL)dropIndex:(nonnull NSString *)indexName;
+- (BOOL)dropIndex:(NSString *)indexName;
 
 @end
 
@@ -48,13 +50,15 @@
       /**
  The name of the table.
  */
-      @property(nonatomic, readonly) NSString *_Nonnull tableName;
+      @property(nonatomic, readonly) NSString *tableName;
 
 /**
  The class binding to this table.
  */
 @property(nonatomic, readonly) Class _Nonnull cls;
 
-- (nullable WCTDatabase *)getDatabase;
+- (WCTDatabase *)getDatabase;
 
 @end
+
+NS_ASSUME_NONNULL_END

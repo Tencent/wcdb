@@ -53,10 +53,10 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
     const std::string &path,
     const std::shared_ptr<MigrationInfos> &migrationInfos)
 {
-    WCTAssert(migrationInfos, "Migration infos must not be null");
     const HandlePools::Generator s_generator =
         [&migrationInfos](
             const std::string &path) -> std::shared_ptr<HandlePool> {
+        WCTAssert(migrationInfos, "Migration infos can't be null");
         if (migrationInfos->isSameDatabaseMigration()) {
             return std::shared_ptr<HandlePool>(new MigrationHandlePool(
                 path, BuiltinConfig::defaultConfigs(), migrationInfos));
@@ -72,6 +72,11 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
         HandlePools::defaultPools()->getPool(path, s_generator)));
     if (database &&
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
+        WCTAssert(static_cast<MigrationDatabase *>(database.get())
+                          ->m_migrationPool->getMigrationInfos()
+                          ->hash == migrationInfos->hash,
+                  "Migration info can't be changed after the very first "
+                  "initialization.");
         return database;
     }
     return nullptr;

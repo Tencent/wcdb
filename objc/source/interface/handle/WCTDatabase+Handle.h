@@ -20,10 +20,14 @@
 
 #import <WCDB/WCTDatabase.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTDatabase (Handle)
 
-- (nullable WCTHandle *)getHandle;
+- (WCTHandle *)getHandle;
 
 - (BOOL)execute:(const WCDB::Statement &)statement;
 
 @end
+
+NS_ASSUME_NONNULL_END

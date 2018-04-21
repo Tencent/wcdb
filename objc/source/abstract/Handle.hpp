@@ -175,13 +175,11 @@ protected:
 
 #pragma mark - Repair Kit
 public:
-    bool backup(const void *key = nullptr, unsigned int length = 0);
+    bool backup(const NoCopyData &data);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,
-                         const void *backupKey,
-                         unsigned int backupKeyLength,
-                         const void *databaseKey,
-                         unsigned int databaseKeyLength);
+                         const NoCopyData &backupCipher,
+                         const NoCopyData &databaseCipher);
 
 #pragma mark - Error
 public:

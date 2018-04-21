@@ -20,404 +20,406 @@
 
 #import <WCDB/WCTCommon.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol WCTConvenientSelect
 #pragma mark - Get Object
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                           where:(const WCDB::Expression &)condition;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                         orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                 offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                          offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
-                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                           where:(const WCDB::Expression &)condition
+                                         orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
-                                 offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                           where:(const WCDB::Expression &)condition
+                                          offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                 offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                         orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                          offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
-                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                 offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                       fromTable:(NSString *)tableName
+                                           where:(const WCDB::Expression &)condition
+                                         orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                          offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Objects
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     where:(const WCDB::Expression &)condition;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                          orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                   orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                          orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     where:(const WCDB::Expression &)condition
+                                                   orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                            limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     where:(const WCDB::Expression &)condition
+                                                     limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                          orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                            limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                   orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                     limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     limit:(const WCDB::Expression &)limit
+                                                    offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                          orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                            limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     where:(const WCDB::Expression &)condition
+                                                   orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                     limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     where:(const WCDB::Expression &)condition
+                                                     limit:(const WCDB::Expression &)limit
+                                                    offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                          orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                   orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                     limit:(const WCDB::Expression &)limit
+                                                    offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                          orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                                 fromTable:(NSString *)tableName
+                                                     where:(const WCDB::Expression &)condition
+                                                   orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                     limit:(const WCDB::Expression &)limit
+                                                    offset:(const WCDB::Expression &)offset;
 @end
 
 #pragma mark -
 @protocol WCTConvenientPartialSelect
 #pragma mark - Get Part Of Object
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                       where:(const WCDB::Expression &)condition;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                                where:(const WCDB::Expression &)condition;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                      offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                               offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                       where:(const WCDB::Expression &)condition
-                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                                where:(const WCDB::Expression &)condition
+                                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                       where:(const WCDB::Expression &)condition
-                                      offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                                where:(const WCDB::Expression &)condition
+                                               offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                      offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                               offset:(const WCDB::Expression &)offset;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                                   fromTable:(NSString *)tableName
-                                       where:(const WCDB::Expression &)condition
-                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                      offset:(const WCDB::Expression &)offset;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                            fromTable:(NSString *)tableName
+                                                where:(const WCDB::Expression &)condition
+                                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                               offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Part Of Objects
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 where:(const WCDB::Expression &)condition;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                               orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                        orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 where:(const WCDB::Expression &)condition
-                                               orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                        orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 where:(const WCDB::Expression &)condition
-                                                 limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                          limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                               orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                                 limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                        orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                          limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 limit:(const WCDB::Expression &)limit
-                                                offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          limit:(const WCDB::Expression &)limit
+                                                         offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 where:(const WCDB::Expression &)condition
-                                               orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                                 limit:(const WCDB::Expression &)limit;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                        orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                          limit:(const WCDB::Expression &)limit;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 where:(const WCDB::Expression &)condition
-                                                 limit:(const WCDB::Expression &)limit
-                                                offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                          limit:(const WCDB::Expression &)limit
+                                                         offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                               orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                                 limit:(const WCDB::Expression &)limit
-                                                offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                        orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                          limit:(const WCDB::Expression &)limit
+                                                         offset:(const WCDB::Expression &)offset;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                             fromTable:(NSString *)tableName
-                                                 where:(const WCDB::Expression &)condition
-                                               orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                                 limit:(const WCDB::Expression &)limit
-                                                offset:(const WCDB::Expression &)offset;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                        orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                                          limit:(const WCDB::Expression &)limit
+                                                         offset:(const WCDB::Expression &)offset;
 @end
 
 #pragma mark -
 @protocol WCTConvenientRowSelect
 #pragma mark - Get One Row
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneRow *)getRowOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                 offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Column
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       where:(const WCDB::Expression &)condition;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                            orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              limit:(const WCDB::Expression &)limit;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                            orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       where:(const WCDB::Expression &)condition
+                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                              limit:(const WCDB::Expression &)limit;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       where:(const WCDB::Expression &)condition
+                                       limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                            orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                              limit:(const WCDB::Expression &)limit;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                       limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       limit:(const WCDB::Expression &)limit
+                                      offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                            orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                              limit:(const WCDB::Expression &)limit;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       where:(const WCDB::Expression &)condition
+                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                       limit:(const WCDB::Expression &)limit;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       where:(const WCDB::Expression &)condition
+                                       limit:(const WCDB::Expression &)limit
+                                      offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                            orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                       limit:(const WCDB::Expression &)limit
+                                      offset:(const WCDB::Expression &)offset;
 
-- (WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                            orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset;
+- (nullable WCTOneColumn *)getColumnOnResult:(const WCDB::ResultColumn &)resultColumn
+                                   fromTable:(NSString *)tableName
+                                       where:(const WCDB::Expression &)condition
+                                     orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                       limit:(const WCDB::Expression &)limit
+                                      offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Value
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                 offset:(const WCDB::Expression &)offset;
 
-- (WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
-                     fromTable:(NSString *)tableName
-                         where:(const WCDB::Expression &)condition
-                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                        offset:(const WCDB::Expression &)offset;
+- (nullable WCTValue *)getValueOnResult:(const WCDB::ResultColumn &)resultColumn
+                              fromTable:(NSString *)tableName
+                                  where:(const WCDB::Expression &)condition
+                                orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                 offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                where:(const WCDB::Expression &)condition;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                limit:(const WCDB::Expression &)limit;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                where:(const WCDB::Expression &)condition
-                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                where:(const WCDB::Expression &)condition
-                                limit:(const WCDB::Expression &)limit;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                limit:(const WCDB::Expression &)limit;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                where:(const WCDB::Expression &)condition
-                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                limit:(const WCDB::Expression &)limit;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                         limit:(const WCDB::Expression &)limit;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                where:(const WCDB::Expression &)condition
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
-- (WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
-                            fromTable:(NSString *)tableName
-                                where:(const WCDB::Expression &)condition
-                              orderBy:(const std::list<WCDB::OrderingTerm> &)orders
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset;
+- (nullable WCTColumnsXRows *)getRowsOnResults:(const std::list<WCDB::ResultColumn> &)resultColumns
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCDB::Expression &)condition
+                                       orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+                                         limit:(const WCDB::Expression &)limit
+                                        offset:(const WCDB::Expression &)offset;
 
 @end
 
@@ -743,3 +745,5 @@
         withRow:(WCTOneRow *)row;
 
 @end
+
+NS_ASSUME_NONNULL_END

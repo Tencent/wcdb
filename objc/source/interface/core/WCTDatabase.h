@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Close block
  */
@@ -123,3 +125,4 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
 - (BOOL)isBlockaded;
 
 @end
+NS_ASSUME_NONNULL_END

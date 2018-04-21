@@ -20,9 +20,11 @@
 
 #import <WCDB/WCTUnsafeHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTHandle : WCTUnsafeHandle
 
-- (nullable WCTDatabase *)getDatabase;
+- (WCTDatabase *)getDatabase;
 
 #pragma mark - Info
 - (long long)getLastInsertedRowID;
@@ -54,9 +56,9 @@
 
 - (void)bindDouble:(const double &)value toIndex:(int)index;
 
-- (void)bindString:(nonnull NSString *)value toIndex:(int)index;
+- (void)bindString:(NSString *)value toIndex:(int)index;
 
-- (void)bindBLOB:(nonnull NSData *)value toIndex:(int)index;
+- (void)bindBLOB:(NSData *)value toIndex:(int)index;
 
 - (void)bindNullToIndex:(int)index;
 
@@ -108,13 +110,15 @@
      withObject:(nonnull WCTObject *)object;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withObject:(nonnull WCTObject *)object
+      withObject:(WCTObject *)object
     onProperties:(const WCTPropertyList &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
       withValue:(nullable WCTColumnCodingValue *)value;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-        withRow:(nonnull WCTOneRow *)row;
+        withRow:(WCTOneRow *)row;
 
 @end
+
+NS_ASSUME_NONNULL_END

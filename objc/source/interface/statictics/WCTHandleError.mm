@@ -42,7 +42,7 @@ static_assert((int) WCTHandleOperationBackup == (int) WCDB::HandleError::Operati
     if (self = [super initWithError:handleError]) {
         _tag = handleError.tag;
         _extendedCode = handleError.extendedCode;
-        _path = @(handleError.path.c_str());
+        _path = [NSString stringWithCppString:handleError.path];
         _statement = handleError.statement;
         _operation = (WCTHandleOperation) handleError.operation;
     }
