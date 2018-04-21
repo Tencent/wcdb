@@ -78,6 +78,7 @@
 
 - (int64_t)getInteger64AtIndex:(int)index;
 
+//TODO AtIndex subfix fixed. Add bindValue, bindNumber, getValue, getNumber. Refactor
 - (double)getDouble:(int)index;
 
 - (nullable NSString *)getTextAtIndex:(int)index;
