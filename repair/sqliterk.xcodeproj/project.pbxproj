@@ -228,9 +228,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		233032381FB9435700101373 /* sqliterk */ = {
+		233032381FB9435700101373 /* sqliterk for Test */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk" */;
+			buildConfigurationList = 233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk for Test" */;
 			buildPhases = (
 				233032341FB9435700101373 /* Sources */,
 				233032351FB9435700101373 /* Frameworks */,
@@ -242,14 +242,14 @@
 			dependencies = (
 				23212427201727E1008146EF /* PBXTargetDependency */,
 			);
-			name = sqliterk;
+			name = "sqliterk for Test";
 			productName = sqliterk;
 			productReference = 233032391FB9435700101373 /* sqliterk.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		23F5BBAD20887F7B000CCD37 /* sqliterk static */ = {
+		23F5BBAD20887F7B000CCD37 /* sqliterk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 23F5BBC920887F7B000CCD37 /* Build configuration list for PBXNativeTarget "sqliterk static" */;
+			buildConfigurationList = 23F5BBC920887F7B000CCD37 /* Build configuration list for PBXNativeTarget "sqliterk" */;
 			buildPhases = (
 				23F5BBB020887F7B000CCD37 /* Sources */,
 				23F5BBBB20887F7B000CCD37 /* Frameworks */,
@@ -261,7 +261,7 @@
 			dependencies = (
 				23F5BE1520888026000CCD37 /* PBXTargetDependency */,
 			);
-			name = "sqliterk static";
+			name = sqliterk;
 			productName = sqliterk;
 			productReference = 23F5BBCC20887F7B000CCD37 /* sqliterk.framework */;
 			productType = "com.apple.product-type.framework";
@@ -302,8 +302,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				233032381FB9435700101373 /* sqliterk */,
-				23F5BBAD20887F7B000CCD37 /* sqliterk static */,
+				23F5BBAD20887F7B000CCD37 /* sqliterk */,
+				233032381FB9435700101373 /* sqliterk for Test */,
 			);
 		};
 /* End PBXProject section */
@@ -646,7 +646,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk" */ = {
+		233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk for Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				233032421FB9435700101373 /* Debug */,
@@ -655,7 +655,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23F5BBC920887F7B000CCD37 /* Build configuration list for PBXNativeTarget "sqliterk static" */ = {
+		23F5BBC920887F7B000CCD37 /* Build configuration list for PBXNativeTarget "sqliterk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23F5BBCA20887F7B000CCD37 /* Debug */,
