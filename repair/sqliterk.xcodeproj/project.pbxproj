@@ -584,8 +584,6 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -595,12 +593,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
 				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
 			};
 			name = Debug;
 		};
@@ -610,8 +606,6 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -621,12 +615,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
 				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
 			};
 			name = Release;
 		};

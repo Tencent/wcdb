@@ -3219,7 +3219,6 @@
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -3236,18 +3235,14 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
-				"OTHER_LDFLAGS[sdk=macosx*]" = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
@@ -3264,7 +3259,6 @@
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -3281,18 +3275,14 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
-				"OTHER_LDFLAGS[sdk=macosx*]" = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
