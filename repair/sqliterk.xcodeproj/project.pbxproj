@@ -581,6 +581,7 @@
 		23F5BBCA20887F7B000CCD37 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -593,6 +594,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
+				OTHER_CFLAGS = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
@@ -603,6 +605,7 @@
 		23F5BBCB20887F7B000CCD37 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -615,6 +618,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
+				OTHER_CFLAGS = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
