@@ -41,15 +41,6 @@ public:
         return addColumnBinding(columnName, columnBinding);
     }
 
-    template <typename T>
-    const WCTProperty &addColumnBinding(const std::string &propertyName,
-                                        NSString *columnName)
-    {
-        return addColumnBinding<T>(propertyName, columnName
-                                                     ? columnName.cppString
-                                                     : WCDB::String::empty());
-    }
-
     std::shared_ptr<WCTColumnBinding>
     getColumnBinding(const WCTProperty &property) const;
 
