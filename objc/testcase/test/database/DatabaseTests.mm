@@ -121,12 +121,12 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
     {
-        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:walPath error:nil] fileSize];
+        unsigned long long fileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
         XCTAssertGreaterThan(fileSize, 5000 * 4 * 1024);
     }
     [NSThread sleepForTimeInterval:5];
     {
-        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:walPath error:nil] fileSize];
+        unsigned long long fileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
         XCTAssertEqual(fileSize, 0);
     }
 }
