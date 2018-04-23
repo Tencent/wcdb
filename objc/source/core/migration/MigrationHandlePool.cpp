@@ -34,6 +34,14 @@ MigrationHandlePool::MigrationHandlePool(
 }
 
 #ifdef DEBUG
+bool MigrationHandlePool::debug_checkMigratingThread()
+{
+    if (debug_m_migratingThreadId == std::thread::id()) {
+        debug_m_migratingThreadId = std::this_thread::get_id();
+    }
+    return debug_m_migratingThreadId == std::this_thread::get_id();
+}
+
 bool MigrationHandlePool::debug_checkInfosLegal()
 {
     if (!m_infos) {

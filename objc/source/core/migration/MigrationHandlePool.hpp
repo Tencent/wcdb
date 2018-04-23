@@ -36,8 +36,12 @@ public:
                         const Configs &configs,
                         const std::shared_ptr<MigrationInfos> &migrationInfos);
 
-protected:
 #ifdef DEBUG
+public:
+    bool debug_checkMigratingThread();
+
+protected:
+    std::atomic<std::thread::id> debug_m_migratingThreadId;
     bool debug_checkInfosLegal();
 #endif
 
