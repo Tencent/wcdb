@@ -53,7 +53,7 @@ std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
     static const HandlePools::Generator s_generator =
         [](const std::string &path) -> std::shared_ptr<HandlePool> {
         return std::shared_ptr<HandlePool>(
-            new HandlePool(path, BuiltinConfig::defaultConfigs()));
+            new HandlePool(path, BuiltinConfig::shared()->defaultConfigs));
     };
     std::shared_ptr<Database> database(
         new Database(HandlePools::defaultPools()->getPool(path, s_generator)));
@@ -154,12 +154,13 @@ void Database::setConfig(const std::string &name,
 
 void Database::setCipher(const NoCopyData &cipher, int pageSize)
 {
-    m_pool->setConfig(BuiltinConfig::cipherWithKey(cipher, pageSize));
+    m_pool->setConfig(BuiltinConfig::shared()->cipherWithKey(cipher, pageSize));
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
-    m_pool->setConfig(BuiltinConfig::tokenizeWithNames(tokenizeNames));
+    m_pool->setConfig(
+        BuiltinConfig::shared()->tokenizeWithNames(tokenizeNames));
 }
 
 #pragma mark - File

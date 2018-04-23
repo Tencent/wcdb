@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/AsyncLoop.hpp>
 #include <WCDB/Core.h>
 #include <future>
 
@@ -57,11 +56,12 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
         [&migrationInfos](
             const std::string &path) -> std::shared_ptr<HandlePool> {
         WCTAssert(migrationInfos, "Migration infos can't be null");
+        BuiltinConfig *builtinConfig = BuiltinConfig::shared();
         if (migrationInfos->isSameDatabaseMigration()) {
             return std::shared_ptr<HandlePool>(new MigrationHandlePool(
-                path, BuiltinConfig::defaultConfigs(), migrationInfos));
+                path, builtinConfig->defaultConfigs, migrationInfos));
         }
-        Configs configs = BuiltinConfig::defaultConfigs();
+        Configs configs = builtinConfig->defaultConfigs;
         configs.setConfig(MigrationBuiltinConfig::autoAttachAndDetachWithInfos(
             migrationInfos.get()));
         return std::shared_ptr<HandlePool>(

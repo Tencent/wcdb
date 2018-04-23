@@ -110,4 +110,25 @@
     XCTAssertTrue(result);
 }
 
+- (void)test_checkpoint
+{
+    NSString *tableName = NSStringFromSelector(_cmd);
+    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    for (int i = 0; i < 5000; ++i) {
+        TestCaseObject *object = [TestCaseObject objectWithId:i];
+        XCTAssertTrue([_database insertObject:object intoTable:tableName]);
+    }
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
+    {
+        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:walPath error:nil] fileSize];
+        XCTAssertGreaterThan(fileSize, 5000 * 4 * 1024);
+    }
+    [NSThread sleepForTimeInterval:5];
+    {
+        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:walPath error:nil] fileSize];
+        XCTAssertEqual(fileSize, 0);
+    }
+}
+
 @end

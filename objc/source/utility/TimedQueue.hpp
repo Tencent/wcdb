@@ -38,7 +38,8 @@ template <typename Key, typename Info>
 class TimedQueue {
 public:
     TimedQueue(double delay)
-        : m_delay(std::chrono::microseconds((long long) (delay * 1000000))){};
+        : m_delay(std::chrono::microseconds((long long) (delay * 1000000)))
+        , m_stop(false){};
 
     typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
@@ -47,6 +48,10 @@ public:
         bool notify = false;
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
+            if (m_stop) {
+                return;
+            }
+
             notify = m_list.empty();
 
             auto iter = m_map.find(key);
@@ -69,28 +74,36 @@ public:
 
     void stop()
     {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        {
+            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            m_stop = true;
+        }
         m_cond.notify_one();
     }
 
-    void waitUntilExpired(const ExpiredCallback &onExpired)
+    void loop(const ExpiredCallback &onElementExpired)
     {
-        std::unique_lock<std::mutex> lockGuard(m_mutex);
-        if (m_list.empty()) {
-            m_cond.wait(lockGuard);
-            return;
+        while (true) {
+            std::unique_lock<std::mutex> lockGuard(m_mutex);
+            if (m_stop) {
+                break;
+            }
+            if (m_list.empty()) {
+                m_cond.wait(lockGuard);
+                continue;
+            }
+            std::shared_ptr<Element> element = m_list.back();
+            Time now = std::chrono::steady_clock::now();
+            if (now < element->expired) {
+                m_cond.wait_for(lockGuard, element->expired - now);
+                continue;
+            }
+            m_list.pop_back();
+            m_map.erase(element->key);
+            lockGuard.unlock();
+            onElementExpired(element->key, element->info);
+            lockGuard.lock();
         }
-        std::shared_ptr<Element> element = m_list.back();
-        Time now = std::chrono::steady_clock::now();
-        if (now < element->expired) {
-            m_cond.wait_for(lockGuard, element->expired - now);
-            return;
-        }
-        m_list.pop_back();
-        m_map.erase(element->key);
-        lockGuard.unlock();
-        onExpired(element->key, element->info);
-        lockGuard.lock();
     }
 
 protected:
@@ -113,6 +126,7 @@ protected:
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::chrono::microseconds m_delay;
+    bool m_stop;
 };
 
 } //namespace WCDB

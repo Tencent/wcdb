@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/AsyncLoop.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/Dispatch.hpp>
 #include <WCDB/Macro.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/TimedQueue.hpp>
@@ -28,112 +28,175 @@
 
 namespace WCDB {
 
-const Config BuiltinConfig::basic(
-    "basic",
-    [](Handle *handle) -> bool {
-        static const StatementPragma s_getJournalMode =
-            StatementPragma().pragma(Pragma::JournalMode);
-        do {
-#ifdef DEBUG
-            if (handle->isReadonly()) {
-                //Get Journal Mode
-                WCDB_BREAK_IF_NOT(handle->prepare(s_getJournalMode));
-                WCDB_BREAK_IF_NOT(handle->step());
-                std::string journalMode = handle->getText(0);
-                handle->finalize();
+BuiltinConfig *BuiltinConfig::shared()
+{
+    static BuiltinConfig s_builtinConfig;
+    return &s_builtinConfig;
+}
 
-                if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
-                    // See also: http://www.sqlite.org/wal.html#readonly
-                    Error::fatal("It is not possible to open read-only WAL "
-                                 "databases.");
-                    return false;
+BuiltinConfig::BuiltinConfig()
+    : basic("basic", BuiltinConfig::basicConfig, Order::Basic)
+    , trace("trace", BuiltinConfig::traceConfig, Order::Trace)
+    , checkpoint(
+          "checkpoint", BuiltinConfig::checkpointConfig, Order::Checkpoint)
+    , m_timedQueue(2)
+    , defaultConfigs({trace, basic, checkpoint})
+{
+    Dispatch::async(
+        "com.Tencent.WCDB.Checkpoint",
+        [](const std::atomic<bool> &stop) {
+            BuiltinConfig *config = BuiltinConfig::shared();
+            TimedQueue<std::string, const int> &timedQueue =
+                config->m_timedQueue;
+            if (stop.load()) {
+                return;
+            }
+            timedQueue.loop([&stop](const std::string &path, const int &pages) {
+                std::shared_ptr<Database> database =
+                    Database::databaseWithExistingPath(path);
+                if (database == nullptr || !database->isOpened()) {
+                    return;
                 }
-                return true;
-            }
-#endif //DEBUG
+                static const StatementPragma s_checkpointPassive =
+                    StatementPragma()
+                        .pragma(Pragma::WalCheckpoint)
+                        .to("PASSIVE");
 
-            //Get Locking Mode
-            static const StatementPragma s_getLockingMode =
-                StatementPragma().pragma(Pragma::LockingMode);
-            WCDB_BREAK_IF_NOT(handle->prepare(s_getLockingMode));
-            WCDB_BREAK_IF_NOT(handle->step());
-            std::string lockingMode = handle->getText(0);
-            handle->finalize();
-            if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
-                //Set Locking Mode Normal
-                static const StatementPragma s_setLockingModeNormal =
-                    StatementPragma().pragma(Pragma::LockingMode).to("NORMAL");
-                WCDB_BREAK_IF_NOT(handle->execute(s_setLockingModeNormal));
-            }
+                if (stop.load()) {
+                    return;
+                }
+                bool result = database->execute(s_checkpointPassive);
+                if (result && pages > 5000 && !stop.load()) {
+                    //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
+                    //As a result, checkpoint process will not block the database too long.
+                    static const StatementPragma s_checkpointTruncate =
+                        StatementPragma()
+                            .pragma(Pragma::WalCheckpoint)
+                            .to("TRUNCATE");
 
-            //Set Synchronous Normal
-            static const StatementPragma s_setSynchronousNormal =
-                StatementPragma().pragma(Pragma::Synchronous).to("NORMAL");
-            WCDB_BREAK_IF_NOT(handle->execute(s_setSynchronousNormal));
+                    database->execute(s_checkpointTruncate);
+                }
+            });
+        },
+        []() {
+            //Since Dispatch::async will wait until the callback done, it's not need to wait here.
+            BuiltinConfig::shared()->m_timedQueue.stop();
+        });
+}
 
+bool BuiltinConfig::basicConfig(Handle *handle)
+{
+    static const StatementPragma s_getJournalMode =
+        StatementPragma().pragma(Pragma::JournalMode);
+
+    do {
+#ifdef DEBUG
+        if (handle->isReadonly()) {
             //Get Journal Mode
             WCDB_BREAK_IF_NOT(handle->prepare(s_getJournalMode));
             WCDB_BREAK_IF_NOT(handle->step());
             std::string journalMode = handle->getText(0);
             handle->finalize();
-            if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
-                //Set Journal Mode WAL
-                static const StatementPragma s_setJournalModeWAL =
-                    StatementPragma().pragma(Pragma::JournalMode).to("WAL");
-                WCDB_BREAK_IF_NOT(handle->execute(s_setJournalModeWAL));
+
+            if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
+                // See also: http://www.sqlite.org/wal.html#readonly
+                Error::fatal("It is not possible to open read-only WAL "
+                             "databases.");
+                return false;
             }
-
-            //Enable Fullfsync
-            static const StatementPragma s_setFullFSync =
-                StatementPragma().pragma(Pragma::Fullfsync).to(true);
-            WCDB_BREAK_IF_NOT(handle->execute(s_setFullFSync));
-
             return true;
-        } while (false);
+        }
+#endif //DEBUG
+
+        //Get Locking Mode
+        static const StatementPragma s_getLockingMode =
+            StatementPragma().pragma(Pragma::LockingMode);
+        WCDB_BREAK_IF_NOT(handle->prepare(s_getLockingMode));
+        WCDB_BREAK_IF_NOT(handle->step());
+        std::string lockingMode = handle->getText(0);
         handle->finalize();
-        return false;
-    },
-    Order::Basic);
+        if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
+            //Set Locking Mode Normal
+            static const StatementPragma s_setLockingModeNormal =
+                StatementPragma().pragma(Pragma::LockingMode).to("NORMAL");
+            WCDB_BREAK_IF_NOT(handle->execute(s_setLockingModeNormal));
+        }
 
-std::shared_ptr<Handle::PerformanceTraceCallback>
-    BuiltinConfig::s_globalPerformanceTrace;
-std::shared_ptr<Handle::SQLTraceCallback> BuiltinConfig::s_globalSQLTrace;
+        //Set Synchronous Normal
+        static const StatementPragma s_setSynchronousNormal =
+            StatementPragma().pragma(Pragma::Synchronous).to("NORMAL");
+        WCDB_BREAK_IF_NOT(handle->execute(s_setSynchronousNormal));
 
-void BuiltinConfig::SetGlobalPerformanceTrace(
+        //Get Journal Mode
+        WCDB_BREAK_IF_NOT(handle->prepare(s_getJournalMode));
+        WCDB_BREAK_IF_NOT(handle->step());
+        std::string journalMode = handle->getText(0);
+        handle->finalize();
+        if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
+            //Set Journal Mode WAL
+            static const StatementPragma s_setJournalModeWAL =
+                StatementPragma().pragma(Pragma::JournalMode).to("WAL");
+            WCDB_BREAK_IF_NOT(handle->execute(s_setJournalModeWAL));
+        }
+
+        //Enable Fullfsync
+        static const StatementPragma s_setFullFSync =
+            StatementPragma().pragma(Pragma::Fullfsync).to(true);
+        WCDB_BREAK_IF_NOT(handle->execute(s_setFullFSync));
+
+        return true;
+    } while (false);
+    handle->finalize();
+    return false;
+}
+
+bool BuiltinConfig::traceConfig(Handle *handle)
+{
+    BuiltinConfig *builtinConfig = BuiltinConfig::shared();
+    {
+        std::shared_ptr<Handle::PerformanceTraceCallback> trace =
+            builtinConfig->m_globalPerformanceTrace;
+        if (trace) {
+            handle->tracePerformance(*trace.get());
+        }
+    }
+    {
+        std::shared_ptr<Handle::SQLTraceCallback> trace =
+            builtinConfig->m_globalSQLTrace;
+        if (trace) {
+            handle->traceSQL(*trace.get());
+        }
+    }
+    return true;
+}
+
+bool BuiltinConfig::checkpointConfig(Handle *handle)
+{
+    handle->setCommittedHook(
+        [](Handle *handle, int pages, void *) {
+            if (pages > 1000) {
+                BuiltinConfig::shared()->m_timedQueue.reQueue(handle->path,
+                                                              pages);
+            }
+        },
+        nullptr);
+    return true;
+}
+
+void BuiltinConfig::setGlobalPerformanceTrace(
     const Handle::PerformanceTraceCallback &globalTrace)
 {
-    s_globalPerformanceTrace.reset(
+    m_globalPerformanceTrace.reset(
         new Handle::PerformanceTraceCallback(globalTrace));
 }
 
-void BuiltinConfig::SetGlobalSQLTrace(
+void BuiltinConfig::setGlobalSQLTrace(
     const Handle::SQLTraceCallback &globalTrace)
 {
-    s_globalSQLTrace.reset(new Handle::SQLTraceCallback(globalTrace));
+    m_globalSQLTrace.reset(new Handle::SQLTraceCallback(globalTrace));
 }
 
-const Config BuiltinConfig::trace(
-    "trace",
-    [](Handle *handle) -> bool {
-        {
-            std::shared_ptr<Handle::PerformanceTraceCallback> trace =
-                s_globalPerformanceTrace;
-            if (trace) {
-                handle->tracePerformance(*trace.get());
-            }
-        }
-        {
-            std::shared_ptr<Handle::SQLTraceCallback> trace = s_globalSQLTrace;
-            if (trace) {
-                handle->traceSQL(*trace.get());
-            }
-        }
-        return true;
-    },
-    Order::Trace);
-
-const Config BuiltinConfig::cipherWithKey(const NoCopyData &cipher,
-                                          int pageSize)
+Config BuiltinConfig::cipherWithKey(const NoCopyData &cipher, int pageSize)
 {
     std::vector<unsigned char> keys((unsigned char *) cipher.data,
                                     (unsigned char *) cipher.data +
@@ -149,55 +212,7 @@ const Config BuiltinConfig::cipherWithKey(const NoCopyData &cipher,
                   Order::Cipher);
 }
 
-const Config BuiltinConfig::checkpoint(
-    "checkpoint",
-    [](Handle *handle) -> bool {
-        AsyncRunloopOnce(
-            "com.Tencent.WCDB.Checkpoint", ([](std::atomic<bool> &stop) {
-                //loop
-                s_timedQueue.waitUntilExpired([](const std::string &path,
-                                                 const int &pages) {
-                    std::shared_ptr<Database> database =
-                        Database::databaseWithExistingPath(path);
-                    if (database != nullptr && database->isOpened()) {
-                        static const StatementPragma s_checkpointPassive =
-                            StatementPragma()
-                                .pragma(Pragma::WalCheckpoint)
-                                .to("PASSIVE");
-
-                        database->execute(s_checkpointPassive);
-                        if (pages > 5000) {
-                            //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
-                            //As a result, checkpoint process will not block the database too long.
-                            static const StatementPragma s_checkpointTruncate =
-                                StatementPragma()
-                                    .pragma(Pragma::WalCheckpoint)
-                                    .to("TRUNCATE");
-
-                            database->execute(s_checkpointTruncate);
-                        }
-                    }
-                });
-            }),
-            ([]() {
-                //at exit
-                s_timedQueue.stop();
-            }));
-        handle->setCommittedHook(
-            [](Handle *handle, int pages, void *) {
-                if (pages > 1000) {
-                    s_timedQueue.reQueue(handle->path, pages);
-                }
-            },
-            nullptr);
-        return true;
-    },
-    Order::Checkpoint);
-
-TimedQueue<std::string, const int> BuiltinConfig::s_timedQueue(2);
-
-const Config
-BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
+Config BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
 {
     return Config("tokenize",
                   [names](Handle *handle) -> bool {
@@ -223,13 +238,6 @@ BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
                       return true;
                   },
                   Order::Tokenize);
-}
-
-const Configs &BuiltinConfig::defaultConfigs()
-{
-    static const Configs s_default({BuiltinConfig::trace, BuiltinConfig::basic,
-                                    BuiltinConfig::checkpoint});
-    return s_default;
 }
 
 } //namespace WCDB

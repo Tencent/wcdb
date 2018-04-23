@@ -30,6 +30,8 @@ namespace WCDB {
 
 class BuiltinConfig {
 public:
+    static BuiltinConfig *shared();
+
     enum Order : int {
         Trace = 1,
         Cipher,
@@ -38,26 +40,35 @@ public:
         Tokenize,
     };
 
-    static const Config basic;
+    const Config basic;
 
-    static const Config trace;
-    static void SetGlobalPerformanceTrace(
+    const Config trace;
+
+    const Config checkpoint;
+
+    const Configs defaultConfigs;
+
+    void setGlobalPerformanceTrace(
         const Handle::PerformanceTraceCallback &globalTrace);
-    static void SetGlobalSQLTrace(const Handle::SQLTraceCallback &globalTrace);
 
-    static const Config cipherWithKey(const NoCopyData &cipher, int pageSize);
+    void setGlobalSQLTrace(const Handle::SQLTraceCallback &globalTrace);
 
-    static const Config checkpoint;
+    Config cipherWithKey(const NoCopyData &cipher, int pageSize);
 
-    static const Config tokenizeWithNames(const std::list<std::string> &names);
-
-    static const Configs &defaultConfigs();
+    Config tokenizeWithNames(const std::list<std::string> &names);
 
 protected:
-    static TimedQueue<std::string, const int> s_timedQueue;
-    static std::shared_ptr<Handle::PerformanceTraceCallback>
-        s_globalPerformanceTrace;
-    static std::shared_ptr<Handle::SQLTraceCallback> s_globalSQLTrace;
+    BuiltinConfig();
+
+    TimedQueue<std::string, const int> m_timedQueue;
+
+    std::shared_ptr<Handle::PerformanceTraceCallback> m_globalPerformanceTrace;
+
+    std::shared_ptr<Handle::SQLTraceCallback> m_globalSQLTrace;
+
+    static bool basicConfig(Handle *handle);
+    static bool traceConfig(Handle *handle);
+    static bool checkpointConfig(Handle *handle);
 };
 
 } //namespace WCDB
