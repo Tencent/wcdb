@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Core.h>
+#include <WCDB/Dispatch.hpp>
 #include <future>
 
 namespace WCDB {
@@ -194,8 +195,12 @@ bool MigrationDatabase::startMigration(bool &done)
 }
 
 bool MigrationDatabase::stepMigration(
-    bool &done, const MigratingCompleteCallback &onMigratingCompleted)
+    bool &done, const TableMigratedCallback &onMigratingCompleted)
 {
+#ifdef DEBUG
+    WCTAssert(m_migrationPool->debug_checkMigratingThread(),
+              "Migration stepping is not thread-safe.");
+#endif
     //TODO debug check migrating thread
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
     if (infos->didMigrationDone()) {
@@ -258,9 +263,42 @@ bool MigrationDatabase::stepMigration(
     return true;
 }
 
-std::shared_ptr<MigrationInfo> MigrationDatabase::getMigrationInfo() const
+void MigrationDatabase::asyncMigration(
+    const SteppedCallback &onStepped,
+    const TableMigratedCallback &onTableMigrated,
+    const MigratedCallback &onMigrated)
 {
-    return m_migrationPool->getMigrationInfos()->getMigratingInfo();
+    std::string name("com.Tencent.WCDB.Migration.");
+    name.append(std::to_string(getTag()));
+    std::string path = getPath();
+    Dispatch::async(name, [path, onStepped, onTableMigrated,
+                           onMigrated](const std::atomic<bool> &stop) {
+        bool done = false;
+        while (!done && !stop.load()) {
+            std::shared_ptr<Database> database =
+                MigrationDatabase::databaseWithExistingPath(path);
+            if (!database) {
+                break;
+            }
+            MigrationDatabase *migrationDatabase =
+                static_cast<MigrationDatabase *>(database.get());
+            bool result =
+                migrationDatabase->stepMigration(done, onTableMigrated);
+            if (onStepped) {
+                result = onStepped(migrationDatabase->m_migrationPool
+                                       ->getMigrationInfos()
+                                       ->getMigratingInfo(),
+                                   result) ||
+                         result;
+            }
+            if (!result) {
+                break;
+            }
+        }
+        if (onMigrated) {
+            onMigrated(done);
+        }
+    });
 }
 
 } //namespace WCDB

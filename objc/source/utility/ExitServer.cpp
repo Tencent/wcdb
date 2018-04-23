@@ -31,7 +31,9 @@ ExitServer *ExitServer::shared()
 
 ExitServer::Token ExitServer::enroll(const std::function<void(void)> &onExit)
 {
-    assert(!m_exiting.load());
+    if (m_exiting.load()) {
+        return invalidToken();
+    }
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     ++m_token;
     m_listeners.insert({m_token, onExit});
@@ -51,12 +53,19 @@ ExitServer::ExitServer() : m_token(0), m_exiting(false)
 {
 }
 
+int ExitServer::invalidToken() const
+{
+    return 0;
+}
+
 void ExitServer::notify()
 {
     m_exiting.store(true);
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     for (const auto &iter : m_listeners) {
-        iter.second();
+        if (iter.second) {
+            iter.second();
+        }
     }
     m_listeners.clear();
 }

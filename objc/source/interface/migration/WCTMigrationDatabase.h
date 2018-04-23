@@ -22,11 +22,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
-
 typedef BOOL (^WCTMigrationSteppedBlock)(WCTMigrationInfo *, BOOL);
 
-typedef void (^WCTMigrationCompletedBlock)(BOOL);
+typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
+
+typedef void (^WCTMigratedBlock)(BOOL);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
@@ -43,13 +43,13 @@ typedef void (^WCTMigrationCompletedBlock)(BOOL);
 - (BOOL)stepMigration:(BOOL &)done
       onTableMigrated:(nullable WCTTableMigratedBlock)block;
 
-- (void)asyncMigration:(double)interval
-       onTableMigrated:(nullable WCTTableMigratedBlock)onTableMigrated
-           onCompleted:(nullable WCTMigrationCompletedBlock)onMigrationCompleted;
+- (void)asyncMigrationWithInterval:(double)seconds
+                   onTableMigrated:(nullable WCTTableMigratedBlock)onTableMigrated
+                        onMigrated:(nullable WCTMigratedBlock)onMigrated;
 
 - (void)asyncMigrationOnStepped:(nullable WCTMigrationSteppedBlock)onStepped
                 onTableMigrated:(nullable WCTTableMigratedBlock)onTableMigrated
-                    onCompleted:(nullable WCTMigrationCompletedBlock)onMigrationCompleted;
+                     onMigrated:(nullable WCTMigratedBlock)onMigrated;
 
 @end
 

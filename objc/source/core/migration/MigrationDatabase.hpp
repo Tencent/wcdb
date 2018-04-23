@@ -48,14 +48,24 @@ protected:
 
 #pragma mark - Migration
 public:
+    // completed migration info
     typedef std::function<void(const std::shared_ptr<MigrationInfo> &)>
-        MigratingCompleteCallback;
+        TableMigratedCallback;
 
-    bool stepMigration(
-        bool &done,
-        const MigratingCompleteCallback &onMigratingCompleted = nullptr);
+    bool
+    stepMigration(bool &done,
+                  const TableMigratedCallback &onMigratingCompleted = nullptr);
 
-    std::shared_ptr<MigrationInfo> getMigrationInfo() const;
+    // migration info, step result -> continue or stop
+    typedef std::function<bool(const std::shared_ptr<MigrationInfo> &, bool)>
+        SteppedCallback;
+
+    // migration succeed or fail
+    typedef std::function<void(bool)> MigratedCallback;
+
+    void asyncMigration(const SteppedCallback &onStepped = nullptr,
+                        const TableMigratedCallback &onTableMigrated = nullptr,
+                        const MigratedCallback &onCompleted = nullptr);
 
 protected:
     bool startMigration(bool &done);

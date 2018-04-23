@@ -33,7 +33,9 @@ class ExitServer {
 public:
     static ExitServer *shared();
 
-    typedef int Token;
+    typedef unsigned int Token;
+
+    int invalidToken() const;
 
     Token enroll(const std::function<void(void)> &onExit);
     void disenroll(const Token &token);
@@ -42,7 +44,7 @@ protected:
     ExitServer();
     void notify();
 
-    int m_token;
+    Token m_token;
     std::map<int, std::function<void(void)>> m_listeners;
     std::mutex m_mutex;
     std::atomic<bool> m_exiting;

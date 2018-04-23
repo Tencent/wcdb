@@ -98,55 +98,46 @@
     return _migrationDatabase->stepMigration((bool &) done, callback);
 }
 
-- (void)asyncMigration:(double)interval
-       onTableMigrated:(WCTTableMigratedBlock)onTableMigrated
-           onCompleted:(WCTMigrationCompletedBlock)onMigrationCompleted
+- (void)asyncMigrationWithInterval:(double)seconds
+                   onTableMigrated:(WCTTableMigratedBlock)onTableMigrated
+                        onMigrated:(WCTMigratedBlock)onMigrated
 {
-    //TODO add exitable threading and move this code to core layer
-    [self asyncMigrationOnStepped:^BOOL(WCTMigrationInfo *_Nullable, BOOL) {
-      [NSThread sleepForTimeInterval:interval];
+    [self asyncMigrationOnStepped:^BOOL(WCTMigrationInfo *_Nonnull, BOOL) {
+      [NSThread sleepForTimeInterval:seconds];
       return YES;
     }
                   onTableMigrated:onTableMigrated
-                      onCompleted:onMigrationCompleted];
+                       onMigrated:onMigrated];
 }
 
 - (void)asyncMigrationOnStepped:(WCTMigrationSteppedBlock)onStepped
                 onTableMigrated:(WCTTableMigratedBlock)onTableMigrated
-                    onCompleted:(WCTMigrationCompletedBlock)onMigrationCompleted
+                     onMigrated:(WCTMigratedBlock)onMigrated
 {
-    //TODO using template to refactor block/closure convertion
-    std::function<void(const std::shared_ptr<WCDB::MigrationInfo> &)> onTableMigratedCallback = nullptr;
-    if (onTableMigrated) {
-        onTableMigratedCallback = [onTableMigrated](const std::shared_ptr<WCDB::MigrationInfo> &info) {
-            WCTMigrationInfo *migrationInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
-            return onTableMigrated(migrationInfo);
+    WCDB::MigrationDatabase::SteppedCallback steppedCallback = nullptr;
+    if (onStepped) {
+        steppedCallback = [onStepped](const std::shared_ptr<WCDB::MigrationInfo> &info, bool result) -> bool {
+            WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
+            return onStepped(nsInfo, result);
         };
     }
-    static dispatch_queue_t s_migrationQueue = dispatch_queue_create("com.Tencent.WCDB.Migration", DISPATCH_QUEUE_CONCURRENT);
-    __weak id weakSelf = self;
-    dispatch_async(s_migrationQueue, ^{
-      bool done = false;
-      while (!done) {
-          @autoreleasepool {
-              id strongSelf = weakSelf;
-              if (!strongSelf) {
-                  return;
-              }
-              bool result = self->_migrationDatabase->stepMigration(done, onTableMigratedCallback);
-              if (onStepped) {
-                  WCTMigrationInfo *migrationInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:self->_migrationDatabase->getMigrationInfo()];
-                  result = onStepped(migrationInfo, result) || result;
-              }
-              if (!result) {
-                  break;
-              }
-          }
-      }
-      if (onMigrationCompleted) {
-          onMigrationCompleted(done);
-      }
-    });
+
+    WCDB::MigrationDatabase::TableMigratedCallback tableMigratedCallback = nullptr;
+    if (onTableMigrated) {
+        tableMigratedCallback = [onTableMigrated](const std::shared_ptr<WCDB::MigrationInfo> &info) {
+            WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
+            onTableMigrated(nsInfo);
+        };
+    }
+
+    WCDB::MigrationDatabase::MigratedCallback migratedCallback = nullptr;
+    if (onMigrated) {
+        migratedCallback = [onMigrated](bool result) {
+            onMigrated(result);
+        };
+    }
+
+    _migrationDatabase->asyncMigration(steppedCallback, tableMigratedCallback, migratedCallback);
 }
 
 - (void)finalizeDatabase
