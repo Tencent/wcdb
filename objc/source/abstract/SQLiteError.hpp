@@ -23,6 +23,8 @@
 
 #include <WCDB/Error.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class SQLiteError : public Error {
@@ -32,5 +34,7 @@ public:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* SQLiteError_hpp */

@@ -1499,10 +1499,10 @@
 				2361C43F2063872100A9966A /* Tracer.hpp */,
 				2370980820590CA700E768B4 /* HandleStatement.cpp */,
 				2370980920590CA700E768B4 /* HandleStatement.hpp */,
-				233A05782061355900F1A212 /* SQLiteError.hpp */,
 				2361C43A206358EE00A9966A /* SQLiteError.cpp */,
-				233A057420612F8500F1A212 /* HandleError.hpp */,
+				233A05782061355900F1A212 /* SQLiteError.hpp */,
 				233A057320612F8500F1A212 /* HandleError.cpp */,
+				233A057420612F8500F1A212 /* HandleError.hpp */,
 				23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */,
 				23BFE2FC207C602600A4BD81 /* SQLiteGlobal.hpp */,
 			);

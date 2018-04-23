@@ -31,6 +31,8 @@
 #include <mutex>
 #include <string>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class Handle {
@@ -193,5 +195,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Handle_hpp */

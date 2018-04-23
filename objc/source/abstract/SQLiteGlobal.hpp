@@ -23,6 +23,8 @@
 
 #include <functional>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class SQLiteGlobal {
@@ -44,5 +46,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* SQLiteGlobal_hpp */

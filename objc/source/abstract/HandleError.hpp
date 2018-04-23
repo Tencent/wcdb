@@ -24,6 +24,8 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/WINQ.h>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class HandleError : public Error {
@@ -60,5 +62,7 @@ public:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* HandleError_hpp */

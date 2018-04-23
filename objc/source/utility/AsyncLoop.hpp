@@ -26,6 +26,8 @@
 #include <string>
 #include <thread>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 template <int id>
@@ -74,5 +76,7 @@ public:
     AsyncLoop<__COUNTER__>::once((name), (closure), (atExit))
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Dispatch_hpp */

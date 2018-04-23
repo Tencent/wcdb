@@ -23,6 +23,8 @@
 
 #include <functional>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 template <typename T>
@@ -129,5 +131,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Recyclable_hpp */

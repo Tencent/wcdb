@@ -24,6 +24,8 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/TimedQueue.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class BuiltinConfig {
@@ -59,5 +61,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* BuiltinConfig_hpp */

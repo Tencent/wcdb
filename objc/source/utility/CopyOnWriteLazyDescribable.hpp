@@ -35,7 +35,9 @@ public:
     template <typename OtherType, typename OtherStorageType = OtherType>
     CopyOnWriteLazyDescribable(
         const CopyOnWriteLazyDescribable<OtherType, OtherStorageType> &o)
-        : CopyOnWrite<Type, StorageType>(o), m_calculated(o.m_calculated)
+        : CopyOnWrite<Type, StorageType>(o)
+        , m_calculated(o.m_calculated)
+        , m_description(o.m_description)
     {
     }
 

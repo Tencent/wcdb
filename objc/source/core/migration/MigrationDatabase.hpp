@@ -25,6 +25,8 @@
 #include <WCDB/MigrationHandlePool.hpp>
 #include <WCDB/MigrationInfo.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class MigrationDatabase : public Database {
@@ -61,5 +63,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* MigrationDatabase_hpp */

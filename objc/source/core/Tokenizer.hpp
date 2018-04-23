@@ -26,6 +26,8 @@
 #include <cstddef>
 #include <vector>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 namespace FTS {
@@ -88,5 +90,7 @@ protected:
 } //namespace FTS
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Tokenizer_hpp */

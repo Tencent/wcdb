@@ -26,6 +26,8 @@
 #include <list>
 #include <string>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class FileError : public Error {
@@ -86,5 +88,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* FileManager_hpp */

@@ -25,6 +25,8 @@
 #include <WCDB/MigrationInfo.hpp>
 #include <set>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class MigrationInfos {
@@ -73,5 +75,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* MigrationInfos_hpp */

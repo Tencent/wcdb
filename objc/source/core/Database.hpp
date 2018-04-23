@@ -25,6 +25,8 @@
 #include <WCDB/RecyclableHandlePool.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class Database {
@@ -136,5 +138,7 @@ public:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* database_hpp */

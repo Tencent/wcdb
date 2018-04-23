@@ -24,6 +24,8 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/Error.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class CoreError : public HandleError {
@@ -42,5 +44,7 @@ public:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* CoreError_hpp */

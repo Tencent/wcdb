@@ -24,6 +24,8 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/Config.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class ConfiguredHandle {
@@ -47,5 +49,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* ConfiguredHandle_hpp */

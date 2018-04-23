@@ -24,6 +24,8 @@
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/Recyclable.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class RecyclableHandlePool : public Recyclable<std::shared_ptr<HandlePool>> {
@@ -39,5 +41,7 @@ public:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* RecyclableHandlePool_hpp */

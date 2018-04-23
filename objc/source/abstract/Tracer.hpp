@@ -25,6 +25,8 @@
 #include <list>
 #include <string>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class Handle;
@@ -65,5 +67,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Tracer_hpp */

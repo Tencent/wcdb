@@ -23,6 +23,8 @@
 
 #include <WCDB/WINQ.h>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class HandleStatement {
@@ -78,5 +80,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* HandleStatement_hpp */

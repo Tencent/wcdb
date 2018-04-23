@@ -23,6 +23,8 @@
 
 #include <WCDB/RecyclableHandlePool.hpp>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class HandlePools {
@@ -60,5 +62,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* HandlePools_hpp */

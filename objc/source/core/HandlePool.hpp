@@ -33,6 +33,8 @@
 #include <WCDB/ThreadLocal.hpp>
 #include <unordered_map>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class HandlePool {
@@ -114,5 +116,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* HandlePool_hpp */

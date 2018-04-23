@@ -29,6 +29,8 @@
 #include <list>
 #include <memory>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class Config {
@@ -63,5 +65,7 @@ public:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Config_hpp */

@@ -23,6 +23,8 @@
 
 #include <string>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 namespace Path {
@@ -35,5 +37,7 @@ std::string getBaseName(const std::string &base);
 } //namespace Path
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Path_hpp */

@@ -30,6 +30,8 @@
 #include <thread>
 #include <unordered_map>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 template <typename Key, typename Info>
@@ -114,5 +116,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* TimedQueue_hpp */

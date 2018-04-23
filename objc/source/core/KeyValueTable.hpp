@@ -23,6 +23,8 @@
 
 #include <WCDB/Abstract.h>
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class KeyValueTable {
@@ -51,5 +53,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* KeyValueTable_hpp */

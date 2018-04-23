@@ -29,6 +29,8 @@
 #include <map>
 #endif
 
+#pragma GCC visibility push(hidden)
+
 namespace WCDB {
 
 class Lock {
@@ -115,5 +117,7 @@ protected:
 };
 
 } //namespace WCDB
+
+#pragma GCC visibility pop
 
 #endif /* Lock_hpp */
