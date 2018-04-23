@@ -143,4 +143,16 @@
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:longPath]);
 }
 
+- (void)test_remove_and_recreated
+{
+    //TODO add FSEvent to fix it
+    NSString *tableName = NSStringFromSelector(_cmd);
+    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
+    XCTAssertTrue([_database removeFiles]);
+    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
+    [_database createTableAndIndexes:tableName withClass:TestCaseObject.class];
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
+}
+
 @end
