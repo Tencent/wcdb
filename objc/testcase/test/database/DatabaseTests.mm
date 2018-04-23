@@ -131,4 +131,16 @@
     }
 }
 
+- (void)test_create_intermediate_directories
+{
+    NSString *longPath = self.recommendedDirectory;
+    for (int i = 0; i < 10; ++i) {
+        NSString *intermediate = [NSString stringWithFormat:@"%d", i];
+        longPath = [longPath stringByAppendingPathComponent:intermediate];
+    }
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:longPath];
+    XCTAssertTrue([database canOpen]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:longPath]);
+}
+
 @end
