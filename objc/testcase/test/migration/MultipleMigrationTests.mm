@@ -113,15 +113,15 @@
     __block BOOL succeed = NO;
     NSDate *before = [NSDate date];
     __block NSCondition *condition = [[NSCondition alloc] init];
-    [_migrated asyncMigration:1.0
-              onTableMigrated:nil
-                  onCompleted:^(BOOL result) {
-                    succeed = result;
-                    [condition lock];
-                    done = YES;
-                    [condition signal];
-                    [condition unlock];
-                  }];
+    [_migrated asyncMigrationWithInterval:1.0
+                          onTableMigrated:nil
+                               onMigrated:^(BOOL result) {
+                                 succeed = result;
+                                 [condition lock];
+                                 done = YES;
+                                 [condition signal];
+                                 [condition unlock];
+                               }];
     [condition lock];
     while (!done) {
         [condition wait];
@@ -150,7 +150,7 @@
               tested = YES;
           }
         }
-        onCompleted:^(BOOL result) {
+        onMigrated:^(BOOL result) {
           succeed = result;
           [condition lock];
           done = YES;
