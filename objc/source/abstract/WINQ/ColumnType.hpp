@@ -28,8 +28,6 @@
 #include <type_traits>
 #include <vector>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 typedef Lang::ColumnType ColumnType;
@@ -308,7 +306,5 @@ public:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* ColumnType_hpp */
