@@ -166,13 +166,12 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 #pragma mark - File
 bool Database::removeFiles()
 {
-    if (!isBlockaded() || isOpened()) {
-        Error::warning(
-            "Removing files on an opened database may cause undefined results");
-    }
+    WCTRemedialAssert(
+        isBlockaded() && !isOpened(),
+        "Removing files on an opened database may cause undefined results.",
+        return false;);
     FileManager *fileManager = FileManager::shared();
     if (fileManager->removeFiles(getPaths())) {
-        //TODO reset memory while removed
         return true;
     }
     return false;
@@ -182,7 +181,7 @@ std::pair<bool, size_t> Database::getFilesSize()
 {
     if (!isBlockaded() || isOpened()) {
         Error::warning("Getting files size on an opened database may get "
-                       "incorrect results");
+                       "incorrect results.");
     }
     return FileManager::shared()->getFilesSize(getPaths());
 }
