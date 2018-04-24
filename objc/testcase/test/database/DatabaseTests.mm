@@ -149,9 +149,12 @@
     NSString *tableName = NSStringFromSelector(_cmd);
     XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
-    XCTAssertTrue([_database removeFiles]);
-    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
-    [_database createTableAndIndexes:tableName withClass:TestCaseObject.class];
+
+    //remove whole directory
+    XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:[_database.path stringByDeletingLastPathComponent] error:nil]);
+
+    _database = [[WCTDatabase alloc] initWithPath:_database.path];
+    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
 }
 
