@@ -47,7 +47,7 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
         if (!pair.first) {
             return nullptr;
         }
-        if (!pair.second) {
+        if (!pair.second && !iter->second.first->isDrained()) {
             m_pools.erase(iter);
             generate = true;
         }
