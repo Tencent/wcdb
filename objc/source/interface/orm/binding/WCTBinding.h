@@ -30,7 +30,7 @@
 
 class WCTBinding {
 public:
-    WCTBinding(Class cls);
+    static WCTBinding *bindingWithClass(Class cls);
 
     template <typename T>
     const WCTProperty &addColumnBinding(const std::string &propertyName,
@@ -72,6 +72,8 @@ public:
     static WCTColumnNamed getColumnGenerator();
 
 protected:
+    WCTBinding(Class cls);
+
     const WCTProperty &
     addColumnBinding(const std::string &columnName,
                      const std::shared_ptr<WCTColumnBinding> &columnBinding);

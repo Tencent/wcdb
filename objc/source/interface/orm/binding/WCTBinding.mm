@@ -25,6 +25,18 @@
 #import <WCDB/WCTProperty.h>
 #import <objc/runtime.h>
 
+WCTBinding *WCTBinding::bindingWithClass(Class cls)
+{
+    static std::map<Class, WCTBinding> s_bindings;
+    static std::mutex s_mutex;
+    std::lock_guard<std::mutex> lockGuard(s_mutex);
+    auto iter = s_bindings.find(cls);
+    if (iter == s_bindings.end()) {
+        iter = s_bindings.insert({cls, WCTBinding(cls)}).first;
+    }
+    return &iter->second;
+}
+
 WCTBinding::WCTBinding(Class cls)
     : m_cls(cls)
 {
