@@ -29,7 +29,7 @@ namespace WCDB {
 class StatementRollback : public StatementWithLang<Lang::RollbackSTMT> {
 
 public:
-    static const StatementRollback rollback;
+    static const StatementRollback &rollback();
 
     StatementRollback &rollbackTo(const std::string &savepointName);
 };

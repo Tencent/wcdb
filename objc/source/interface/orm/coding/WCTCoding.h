@@ -28,10 +28,10 @@ typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
 
 @protocol WCTTableCoding
 @required
-+ (nonnull const WCTBinding *)objectRelationalMappingForWCDB;
-+ (const WCTPropertyList &)AllProperties;
-+ (const WCDB::Expression::All &)AllResults;
-+ (nonnull WCTColumnNamed)ColumnNamed;
++ (nonnull WCTBinding *)objectRelationalMappingForWCDB;
++ (const WCTPropertyList &)allProperties;
++ (const WCDB::Expression::All &)allResults;
++ (nonnull WCTColumnNamed)columnNamed;
 @optional
 @property(nonatomic, assign) long long lastInsertedRowID;
 @property(nonatomic, assign) BOOL isAutoIncrement;

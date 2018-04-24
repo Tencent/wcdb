@@ -30,7 +30,7 @@
 {
     XCTAssertEqual(WCDB::StatementCommit().getType(), WCDB::Statement::Type::Commit);
 
-    WINQAssertEqual(WCDB::StatementCommit::commit,
+    WINQAssertEqual(WCDB::StatementCommit::commit(),
                     @"COMMIT");
 }
 

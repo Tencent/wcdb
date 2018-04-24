@@ -3257,7 +3257,10 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
+				OTHER_CFLAGS = (
+					"-fno-profile-instr-generate",
+					"$(inherited)",
+				);
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -3303,7 +3306,10 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
+				OTHER_CFLAGS = (
+					"-fno-profile-instr-generate",
+					"$(inherited)",
+				);
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -3389,6 +3395,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "-Wglobal-constructors";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				VALID_ARCHS = "x86_64 arm64 armv7";
@@ -3420,7 +3427,10 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "-fno-profile-instr-generate";
+				OTHER_CFLAGS = (
+					"-fno-profile-instr-generate",
+					"$(inherited)",
+				);
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -3464,6 +3474,7 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -3557,6 +3568,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-Wglobal-constructors";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				VALID_ARCHS = "x86_64 arm64 armv7";
@@ -3626,6 +3638,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "-Wglobal-constructors";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				VALID_ARCHS = "x86_64 arm64 armv7";
@@ -3653,6 +3666,7 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -3691,6 +3705,7 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,

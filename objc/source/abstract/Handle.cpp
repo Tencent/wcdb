@@ -340,12 +340,12 @@ std::pair<bool, std::list<std::string>>
 Handle::getColumnsWithTable(const std::string &tableName)
 {
     return getPragmaValues(
-        StatementPragma().pragma(Pragma::TableInfo).with(tableName), 1);
+        StatementPragma().pragma(Pragma::tableInfo()).with(tableName), 1);
 }
 
 std::pair<bool, std::list<std::string>> Handle::getAttachedSchemas()
 {
-    return getPragmaValues(StatementPragma().pragma(Pragma::DatabaseList), 1);
+    return getPragmaValues(StatementPragma().pragma(Pragma::databaseList()), 1);
 }
 
 std::pair<bool, bool> Handle::isSchemaExists(const std::string &schemaName)
@@ -379,7 +379,11 @@ Handle::getPragmaValues(const StatementPragma &statement, int index)
     return {false, {}};
 }
 
-const std::string Handle::s_savepointPrefix("WCDBSavepoint_");
+const std::string &Handle::savepointPrefix()
+{
+    static const std::string s_savepointPrefix("WCDBSavepoint_");
+    return s_savepointPrefix;
+}
 
 bool Handle::beginNestedTransaction()
 {
@@ -387,7 +391,7 @@ bool Handle::beginNestedTransaction()
         return beginTransaction();
     }
     std::string savepointName =
-        s_savepointPrefix + std::to_string(++m_nestedLevel);
+        Handle::savepointPrefix() + std::to_string(++m_nestedLevel);
     return execute(StatementSavepoint().savepoint(savepointName));
 }
 
@@ -397,7 +401,7 @@ bool Handle::commitOrRollbackNestedTransaction()
         return commitOrRollbackTransaction();
     }
     std::string savepointName =
-        s_savepointPrefix + std::to_string(m_nestedLevel--);
+        Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
     if (!execute(StatementRelease().release(savepointName))) {
         discardableExecute(StatementRollback().rollbackTo(savepointName));
         return false;
@@ -411,7 +415,7 @@ void Handle::rollbackNestedTransaction()
         return rollbackTransaction();
     }
     std::string savepointName =
-        s_savepointPrefix + std::to_string(m_nestedLevel--);
+        Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
     discardableExecute(StatementRollback().rollbackTo(savepointName));
 }
 
@@ -429,14 +433,14 @@ bool Handle::runNestedTransaction(const TransactionCallback &transaction)
 
 bool Handle::beginTransaction()
 {
-    return execute(StatementBegin::immediate);
+    return execute(StatementBegin::immediate());
 }
 
 bool Handle::commitOrRollbackTransaction()
 {
     m_nestedLevel = 0;
-    if (!execute(StatementCommit::commit)) {
-        discardableExecute(StatementRollback::rollback);
+    if (!execute(StatementCommit::commit())) {
+        discardableExecute(StatementRollback::rollback());
         return false;
     }
     return true;
@@ -445,7 +449,7 @@ bool Handle::commitOrRollbackTransaction()
 void Handle::rollbackTransaction()
 {
     m_nestedLevel = 0;
-    discardableExecute(StatementRollback::rollback);
+    discardableExecute(StatementRollback::rollback());
 }
 
 bool Handle::runTransaction(const TransactionCallback &transaction)

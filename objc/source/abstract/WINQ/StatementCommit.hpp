@@ -28,7 +28,7 @@ namespace WCDB {
 class StatementCommit : public StatementWithLang<Lang::CommitSTMT> {
 
 public:
-    static const StatementCommit commit;
+    static const StatementCommit &commit();
 };
 
 } // namespace WCDB

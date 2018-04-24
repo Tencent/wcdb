@@ -22,10 +22,14 @@
 
 namespace WCDB {
 
-const StatementCommit StatementCommit::commit = []() -> StatementCommit {
-    StatementCommit statement;
-    statement.getMutableLang();
-    return statement;
-}();
+const StatementCommit &StatementCommit::commit()
+{
+    static const StatementCommit s_commit = []() -> StatementCommit {
+        StatementCommit statement;
+        statement.getMutableLang();
+        return statement;
+    }();
+    return s_commit;
+}
 
 } // namespace WCDB

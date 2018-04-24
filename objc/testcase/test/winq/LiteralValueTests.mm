@@ -42,9 +42,9 @@
     WINQAssertEqual(WCDB::LiteralValue("3"), @"'3'");
     WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
 
-    WINQAssertEqual(WCDB::LiteralValue::CurrentTime, @"CURRENT_TIME");
-    WINQAssertEqual(WCDB::LiteralValue::CurrentDate, @"CURRENT_DATE");
-    WINQAssertEqual(WCDB::LiteralValue::CurrentTimestamp, @"CURRENT_TIMESTAMP");
+    WINQAssertEqual(WCDB::LiteralValue::currentTime(), @"CURRENT_TIME");
+    WINQAssertEqual(WCDB::LiteralValue::currentDate(), @"CURRENT_DATE");
+    WINQAssertEqual(WCDB::LiteralValue::currentTimestamp(), @"CURRENT_TIMESTAMP");
 }
 
 - (void)testBound

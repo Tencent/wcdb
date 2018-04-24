@@ -126,7 +126,7 @@
 
 - (void)test_table_search
 {
-    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:FTSTestCaseObject.ColumnNamed(_tableName).match("WeChat")];
+    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:FTSTestCaseObject.columnNamed(_tableName).match("WeChat")];
     XCTAssertEqual(objects.count, 2);
 }
 
@@ -136,7 +136,7 @@
                        string:(NSString *)expectedString
                        object:(FTSTestCaseObject *)object
 {
-    WCTOneColumn *column = [_database getColumnOnResult:FTSTestCaseObject.ColumnNamed(_tableName).offsets() fromTable:_tableName where:FTSTestCaseObject.ColumnNamed(_tableName).match(keyword.UTF8String)];
+    WCTOneColumn *column = [_database getColumnOnResult:FTSTestCaseObject.columnNamed(_tableName).offsets() fromTable:_tableName where:FTSTestCaseObject.columnNamed(_tableName).match(keyword.UTF8String)];
     XCTAssertEqual(column.count, 1);
 
     NSArray<NSString *> *components = [column[0].stringValue componentsSeparatedByString:@" "];

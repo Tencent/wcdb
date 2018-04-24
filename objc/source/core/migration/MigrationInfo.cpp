@@ -83,14 +83,14 @@ QualifiedTableName MigrationInfo::getQualifiedSourceTable() const
 void MigrationInfo::prepareForMigrating()
 {
     //setup reusable statement
-    OrderingTerm order = OrderingTerm(Column::rowid).withOrder(Order::DESC);
+    OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::DESC);
     Expression limit = 10; //TODO opti the step of migration
 
     m_statementForMigration = StatementInsert()
                                   .insertOrIgnoreInto(targetTable)
                                   .withSchema(StatementAttach::getMainSchema())
                                   .values(StatementSelect()
-                                              .select(ResultColumn::All)
+                                              .select(ResultColumn::all())
                                               .from(getSourceTable())
                                               .orderBy(order)
                                               .limit(limit));

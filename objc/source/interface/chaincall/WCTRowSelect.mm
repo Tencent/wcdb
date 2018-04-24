@@ -112,7 +112,7 @@
 - (BOOL)lazyPrepare
 {
     if (_statement.isResultColumnsNotSet()) {
-        _statement.select(WCDB::ResultColumn::All);
+        _statement.select(WCDB::ResultColumn::all());
     }
     return [super lazyPrepare];
 }

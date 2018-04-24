@@ -31,7 +31,7 @@ class Column : public DescribableWithLang<Lang::Column>,
                public Operable,
                public Redirectable {
 public:
-    static const Column rowid;
+    static const Column &rowid();
     explicit Column(const std::string &name);
 
     Lang::CopyOnWriteLazyLang<Lang::Expr> getExpressionLang() const override;

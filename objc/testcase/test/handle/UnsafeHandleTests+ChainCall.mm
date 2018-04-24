@@ -187,8 +187,8 @@
                           withObjects:(NSArray<TestCaseObject *> *)preInserted2
                              andTable:(NSString *)tableName2
 {
-    WCTPropertyList properties = [_cls AllProperties].inTable(_tableName);
-    properties.addProperties([_cls AllProperties].inTable(tableName2));
+    WCTPropertyList properties = [_cls allProperties].inTable(_tableName);
+    properties.addProperties([_cls allProperties].inTable(tableName2));
 
     WCTMultiSelect *multiSelect = [[[[handle prepareMultiSelect] onProperties:properties] fromTables:@[ _tableName, tableName2 ]] where:TestCaseObject.variable1.inTable(_tableName) == TestCaseObject.variable1.inTable(tableName2)];
 

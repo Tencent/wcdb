@@ -28,8 +28,8 @@
 
 #define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
     static const WCTProperty &__WCDB_PROPERTY_NAME(className, propertyName) =  \
-        __WCDB_BINDING(className)                                              \
-            .addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>(  \
+        [className objectRelationalMappingForWCDB]                             \
+            ->addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>( \
                 WCDB_STRINGIFY(propertyName), columnName);                     \
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
@@ -39,9 +39,9 @@
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
                                       defaultValue)                            \
     __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = [](WCTBinding *binding) {      \
-        binding->addColumnConstraint(                                          \
+    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
+        [className objectRelationalMappingForWCDB]->addColumnConstraint(       \
             WCDB::ColumnConstraint().withDefaultValue(defaultValue),           \
             className.propertyName);                                           \
         return nullptr;                                                        \
-    }(&__WCDB_BINDING(className));
+    }();

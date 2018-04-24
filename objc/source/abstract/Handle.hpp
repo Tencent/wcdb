@@ -155,7 +155,7 @@ protected:
     void discardableExecute(const Statement &statement);
     std::pair<bool, std::list<std::string>>
     getPragmaValues(const StatementPragma &statement, int index);
-    static const std::string s_savepointPrefix;
+    static const std::string &savepointPrefix();
     int m_nestedLevel;
 
 #pragma mark - Cipher

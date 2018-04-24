@@ -62,7 +62,7 @@
 
     XCTAssertTrue([_database insertObjects:_preInserted intoTable:_tableName]);
 
-    WCDB::StatementPragma pragma = WCDB::StatementPragma().pragma(WCDB::Pragma::PageSize);
+    WCDB::StatementPragma pragma = WCDB::StatementPragma().pragma(WCDB::Pragma::pageSize());
     WCTValue *value = [_database getValueFromStatement:pragma];
     XCTAssertNotNil(value);
     _pageSize = value.integer32Value;

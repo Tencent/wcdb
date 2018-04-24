@@ -22,7 +22,11 @@
 
 namespace WCDB {
 
-const Column Column::rowid("rowid");
+const Column &Column::rowid()
+{
+    static const Column s_rowid("rowid");
+    return s_rowid;
+}
 
 Column::Column(const std::string &name)
 {

@@ -275,9 +275,12 @@ bool Database::recoverFromPath(const std::string &corruptedDBPath,
 }
 
 #pragma mark - Handle
-ThreadLocal<
-    std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>>
-    Database::s_threadedHandles;
+
+ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
+{
+    static ThreadLocal<ThreadedHandles> s_threadedHandles;
+    return s_threadedHandles;
+}
 
 RecyclableHandle Database::getHandle()
 {
@@ -290,7 +293,7 @@ RecyclableHandle Database::getHandle()
 
 RecyclableHandle Database::flowOutThreadedHandle()
 {
-    ThreadedHandles *threadedHandle = s_threadedHandles.get();
+    ThreadedHandles *threadedHandle = Database::threadedHandles().get();
     const auto iter = threadedHandle->find(m_pool.getHandlePool());
     if (iter != threadedHandle->end()) {
         return iter->second.first;
@@ -341,7 +344,7 @@ void Database::retainThreadedHandle(
     const RecyclableHandle &recyclableHandle) const
 {
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
-        *threadHandles = s_threadedHandles.get();
+        *threadHandles = Database::threadedHandles().get();
     auto iter = threadHandles->find(m_pool.getHandlePool());
     WCTInnerAssert(iter == threadHandles->end() ||
                    recyclableHandle.getHandle() ==
@@ -356,7 +359,7 @@ void Database::retainThreadedHandle(
 void Database::releaseThreadedHandle() const
 {
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
-        *threadHandles = s_threadedHandles.get();
+        *threadHandles = Database::threadedHandles().get();
     auto iter = threadHandles->find(m_pool.getHandlePool());
     WCTInnerAssert(iter != threadHandles->end());
     if (--iter->second.second == 0) {
@@ -461,7 +464,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 
 bool Database::isInThreadedTransaction() const
 {
-    ThreadedHandles *threadedHandle = s_threadedHandles.get();
+    ThreadedHandles *threadedHandle = Database::threadedHandles().get();
     return threadedHandle->find(m_pool.getHandlePool()) !=
            threadedHandle->end();
 }

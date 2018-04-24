@@ -28,7 +28,7 @@ namespace WCDB {
 
 class ResultColumn : public DescribableWithLang<Lang::ResultColumn> {
 public:
-    static const ResultColumn All;
+    static const ResultColumn &all();
 
     template <typename T>
     ResultColumn(const T &t,

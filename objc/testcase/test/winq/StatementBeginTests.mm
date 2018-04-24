@@ -30,11 +30,11 @@
 {
     XCTAssertEqual(WCDB::StatementBegin().getType(), WCDB::Statement::Type::Begin);
 
-    WINQAssertEqual(WCDB::StatementBegin::deferred,
+    WINQAssertEqual(WCDB::StatementBegin::deferred(),
                     @"BEGIN DEFERRED");
-    WINQAssertEqual(WCDB::StatementBegin::immediate,
+    WINQAssertEqual(WCDB::StatementBegin::immediate(),
                     @"BEGIN IMMEDIATE");
-    WINQAssertEqual(WCDB::StatementBegin::exclusive,
+    WINQAssertEqual(WCDB::StatementBegin::exclusive(),
                     @"BEGIN EXCLUSIVE");
 }
 

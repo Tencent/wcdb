@@ -60,7 +60,7 @@ public:
     class All : public DescribableWithLang<Lang::ExprFunction>,
                 public FunctionOperable {
     public:
-        static const Expression::All default_;
+        static const Expression::All &default_();
         Expression function(const std::string &functionName,
                             __unused bool distinct = false) const override;
     };

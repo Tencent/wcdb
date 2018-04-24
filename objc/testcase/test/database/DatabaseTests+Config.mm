@@ -33,11 +33,11 @@
 - (void)setUp
 {
     [super setUp];
-    _isSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete);
+    _isSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete());
 
-    _doSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete).to(YES);
+    _doSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(YES);
 
-    _doNotSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete).to(NO);
+    _doNotSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(NO);
 }
 
 - (void)test_config_failed

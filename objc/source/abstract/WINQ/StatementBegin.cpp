@@ -22,12 +22,26 @@
 
 namespace WCDB {
 
-const StatementBegin StatementBegin::deferred =
-    StatementBegin().begin(Lang::BeginSTMT::Type::Deferred);
-const StatementBegin StatementBegin::immediate =
-    StatementBegin().begin(Lang::BeginSTMT::Type::Immediate);
-const StatementBegin StatementBegin::exclusive =
-    StatementBegin().begin(Lang::BeginSTMT::Type::Exclusive);
+const StatementBegin &StatementBegin::deferred()
+{
+    static const StatementBegin s_deferred =
+        StatementBegin().begin(Lang::BeginSTMT::Type::Deferred);
+    return s_deferred;
+}
+
+const StatementBegin &StatementBegin::immediate()
+{
+    static const StatementBegin s_immediate =
+        StatementBegin().begin(Lang::BeginSTMT::Type::Immediate);
+    return s_immediate;
+}
+
+const StatementBegin &StatementBegin::exclusive()
+{
+    static const StatementBegin s_exclusive =
+        StatementBegin().begin(Lang::BeginSTMT::Type::Exclusive);
+    return s_exclusive;
+}
 
 StatementBegin &StatementBegin::begin(Lang::BeginSTMT::Type type)
 {

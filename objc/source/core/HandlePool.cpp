@@ -32,7 +32,7 @@ HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
     : path(thePath)
     , m_tag(HandleError::invalidTag)
     , m_configs(configs)
-    , m_handles(s_hardwareConcurrency)
+    , m_handles(HandlePool::hardwareConcurrency())
     , m_aliveHandleCount(0)
 {
 }
@@ -65,7 +65,7 @@ void HandlePool::setThreadedError(const HandleError &error) const
 void HandlePool::setThreadedError(const CoreError &error) const
 {
     std::unordered_map<const HandlePool *, CoreError> *errors =
-        s_threadedErrors.get();
+        HandlePool::threadedErrors().get();
     auto iter = errors->find(this);
     if (iter != errors->end()) {
         iter->second = error;
@@ -76,7 +76,7 @@ void HandlePool::setThreadedError(const CoreError &error) const
 
 const CoreError &HandlePool::getThreadedError() const
 {
-    ThreadedErrors *errors = s_threadedErrors.get();
+    ThreadedErrors *errors = HandlePool::threadedErrors().get();
     auto iter = errors->find(this);
     WCTRemedialAssert(
         iter != errors->end(),
@@ -99,11 +99,25 @@ void HandlePool::setConfig(const Config &config)
 }
 
 #pragma mark - Handle
-const int HandlePool::s_hardwareConcurrency =
-    std::thread::hardware_concurrency();
-const int HandlePool::s_maxConcurrency =
-    std::max<int>(std::thread::hardware_concurrency(), 64);
-ThreadLocal<HandlePool::ThreadedErrors> HandlePool::s_threadedErrors;
+int HandlePool::hardwareConcurrency()
+{
+    static const int s_hardwareConcurrency =
+        std::thread::hardware_concurrency();
+    return s_hardwareConcurrency;
+}
+
+int HandlePool::maxConcurrency()
+{
+    static int s_maxConcurrency =
+        std::max<int>(HandlePool::hardwareConcurrency(), 64);
+    return s_maxConcurrency;
+}
+
+ThreadLocal<HandlePool::ThreadedErrors> &HandlePool::threadedErrors()
+{
+    static ThreadLocal<ThreadedErrors> s_threadedErrors;
+    return s_threadedErrors;
+}
 
 void HandlePool::blockade()
 {
@@ -234,10 +248,10 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
                    m_sharedLock.isLocked());
 #endif
-    if (m_aliveHandleCount >= s_maxConcurrency) {
+    if (m_aliveHandleCount >= HandlePool::maxConcurrency()) {
         setAndReportCoreError(
             "The concurrency of database exceeds the maxximum allowed: " +
-            std::to_string(s_maxConcurrency));
+            std::to_string(HandlePool::maxConcurrency()));
         return nullptr;
     }
     std::shared_ptr<ConfiguredHandle> configuredHandle =

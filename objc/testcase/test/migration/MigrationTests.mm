@@ -71,7 +71,7 @@
     XCTAssertTrue([_migrated stepMigration:done]);
     //already attached
     {
-        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList) atIndex:1];
+        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::databaseList()) atIndex:1];
         XCTAssertEqual(schemas.count, 2);
         XCTAssertTrue([schemas[0].stringValue isEqualToString:@"main"]);
         XCTAssertTrue([schemas[1].stringValue isEqualToString:[self schemaNameForPath:_database.path]]);
@@ -84,7 +84,7 @@
 
     //already detached
     {
-        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::DatabaseList)];
+        WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::databaseList())];
         XCTAssertEqual(schemas.count, 1);
     }
 

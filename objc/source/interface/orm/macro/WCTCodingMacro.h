@@ -24,26 +24,23 @@
 #import <WCDB/WCTMacroHelper.h>
 #import <WCDB/WCTPropertyMacro.h>
 
-#define __WCDB_BINDING(className) _s_##className##_binding
-
 #define WCDB_IMPLEMENTATION(className)                                         \
-    static WCTBinding __WCDB_BINDING(className)(className.class);              \
-    +(const WCTBinding *) objectRelationalMappingForWCDB                       \
+    +(WCTBinding *) objectRelationalMappingForWCDB                             \
     {                                                                          \
-        if (self.class != className.class) {                                   \
-            WCDB::Error::fatal("Inheritance is not supported for ORM");        \
-        }                                                                      \
-        return &__WCDB_BINDING(className);                                     \
+        static WCTBinding s_binding(className.class);                          \
+        WCTAssert(self.class == className.class,                               \
+                  "Inheritance is not supported for ORM");                     \
+        return &s_binding;                                                     \
     }                                                                          \
-    +(const WCTPropertyList &) AllProperties                                   \
+    +(const WCTPropertyList &) allProperties                                   \
     {                                                                          \
-        return __WCDB_BINDING(className).getAllProperties();                   \
+        return [className objectRelationalMappingForWCDB]->getAllProperties(); \
     }                                                                          \
-    +(const WCDB::Expression::All &) AllResults                                \
+    +(const WCDB::Expression::All &) allResults                                \
     {                                                                          \
-        return WCDB::Expression::All::default_;                                \
+        return WCDB::Expression::All::default_();                              \
     }                                                                          \
-    +(WCTColumnNamed) ColumnNamed { return WCTBinding::getColumnGenerator(); }
+    +(WCTColumnNamed) columnNamed { return WCTBinding::getColumnGenerator(); }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)

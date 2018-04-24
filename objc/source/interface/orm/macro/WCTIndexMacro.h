@@ -20,22 +20,25 @@
 
 #define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order,      \
                          isUnique)                                             \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = [](WCTBinding *binding) {      \
+    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
+        WCTBinding *binding = [className objectRelationalMappingForWCDB];      \
         binding->getOrCreateIndex(indexSubfixName)                             \
             ->indexedBy(className.propertyName.asIndex(order));                \
         WCDB_IF(isUnique,                                                      \
                 binding->getOrCreateIndex(indexSubfixName)->unique();)         \
         return nullptr;                                                        \
-    }(&__WCDB_BINDING(className));
+    }();
 
 #define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = [](WCTBinding *binding) {      \
-        binding->statementVirtualTable.on(WCDB::ModuleArgument(left, right));  \
+    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
+        [className objectRelationalMappingForWCDB]->statementVirtualTable.on(  \
+            WCDB::ModuleArgument(left, right));                                \
         return nullptr;                                                        \
-    }(&__WCDB_BINDING(className));
+    }();
 
 #define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = [](WCTBinding *binding) {      \
-        binding->statementVirtualTable.usingModule(moduleName);                \
+    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
+        [className objectRelationalMappingForWCDB]                             \
+            ->statementVirtualTable.usingModule(moduleName);                   \
         return nullptr;                                                        \
-    }(&__WCDB_BINDING(className));
+    }();

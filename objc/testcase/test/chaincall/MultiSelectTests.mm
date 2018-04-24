@@ -42,8 +42,8 @@
 
     XCTAssertTrue([_database insertObjects:_preInserted2 intoTable:_tableName2]);
 
-    WCTPropertyList properties = [_cls AllProperties].inTable(_tableName);
-    properties.addProperties([_cls AllProperties].inTable(_tableName2));
+    WCTPropertyList properties = [_cls allProperties].inTable(_tableName);
+    properties.addProperties([_cls allProperties].inTable(_tableName2));
 
     _multiSelect = [[[[_database prepareMultiSelect] onProperties:properties] fromTables:@[ _tableName, _tableName2 ]] where:TestCaseObject.variable1.inTable(_tableName) == TestCaseObject.variable1.inTable(_tableName2)];
 

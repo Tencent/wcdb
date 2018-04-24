@@ -29,9 +29,9 @@ namespace WCDB {
 class StatementBegin : public StatementWithLang<Lang::BeginSTMT> {
 
 public:
-    static const StatementBegin deferred;
-    static const StatementBegin immediate;
-    static const StatementBegin exclusive;
+    static const StatementBegin &deferred();
+    static const StatementBegin &immediate();
+    static const StatementBegin &exclusive();
 
 protected:
     StatementBegin &begin(Lang::BeginSTMT::Type type);

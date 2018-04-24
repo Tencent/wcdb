@@ -46,7 +46,7 @@
 - (void)test_statement
 {
     WCDB::StatementSelect &statement = _select.statement;
-    statement.select(WCDB::ResultColumn::All);
+    statement.select(WCDB::ResultColumn::all());
     NSString *expectedSQL = [NSString stringWithFormat:@"SELECT * FROM %@", _tableName];
     XCTAssertEqual(statement.getDescription(), expectedSQL.UTF8String);
 }

@@ -129,7 +129,11 @@ Expression Expression::Function(const std::string &functionName,
     return cowLang;
 }
 
-const Expression::All Expression::All::default_;
+const Expression::All &Expression::All::default_()
+{
+    static const Expression::All s_default;
+    return s_default;
+}
 
 Expression Expression::All::function(const std::string &functionName,
                                      __unused bool distinct) const

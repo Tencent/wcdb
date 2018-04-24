@@ -34,7 +34,7 @@
                         .rollbackTo(self.class.savepointName),
                     @"ROLLBACK TO testSavepoint");
 
-    WINQAssertEqual(WCDB::StatementRollback::rollback,
+    WINQAssertEqual(WCDB::StatementRollback::rollback(),
                     @"ROLLBACK");
 }
 

@@ -59,7 +59,7 @@ BuiltinConfig::BuiltinConfig()
                 }
                 static const StatementPragma s_checkpointPassive =
                     StatementPragma()
-                        .pragma(Pragma::WalCheckpoint)
+                        .pragma(Pragma::walCheckpoint())
                         .to("PASSIVE");
 
                 if (stop.load()) {
@@ -71,7 +71,7 @@ BuiltinConfig::BuiltinConfig()
                     //As a result, checkpoint process will not block the database too long.
                     static const StatementPragma s_checkpointTruncate =
                         StatementPragma()
-                            .pragma(Pragma::WalCheckpoint)
+                            .pragma(Pragma::walCheckpoint())
                             .to("TRUNCATE");
 
                     database->execute(s_checkpointTruncate);
@@ -87,7 +87,7 @@ BuiltinConfig::BuiltinConfig()
 bool BuiltinConfig::basicConfig(Handle *handle)
 {
     static const StatementPragma s_getJournalMode =
-        StatementPragma().pragma(Pragma::JournalMode);
+        StatementPragma().pragma(Pragma::journalMode());
 
     do {
 #ifdef DEBUG
@@ -110,7 +110,7 @@ bool BuiltinConfig::basicConfig(Handle *handle)
 
         //Get Locking Mode
         static const StatementPragma s_getLockingMode =
-            StatementPragma().pragma(Pragma::LockingMode);
+            StatementPragma().pragma(Pragma::lockingMode());
         WCDB_BREAK_IF_NOT(handle->prepare(s_getLockingMode));
         WCDB_BREAK_IF_NOT(handle->step());
         std::string lockingMode = handle->getText(0);
@@ -118,13 +118,13 @@ bool BuiltinConfig::basicConfig(Handle *handle)
         if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
             //Set Locking Mode Normal
             static const StatementPragma s_setLockingModeNormal =
-                StatementPragma().pragma(Pragma::LockingMode).to("NORMAL");
+                StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL");
             WCDB_BREAK_IF_NOT(handle->execute(s_setLockingModeNormal));
         }
 
         //Set Synchronous Normal
         static const StatementPragma s_setSynchronousNormal =
-            StatementPragma().pragma(Pragma::Synchronous).to("NORMAL");
+            StatementPragma().pragma(Pragma::synchronous()).to("NORMAL");
         WCDB_BREAK_IF_NOT(handle->execute(s_setSynchronousNormal));
 
         //Get Journal Mode
@@ -135,13 +135,13 @@ bool BuiltinConfig::basicConfig(Handle *handle)
         if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
             //Set Journal Mode WAL
             static const StatementPragma s_setJournalModeWAL =
-                StatementPragma().pragma(Pragma::JournalMode).to("WAL");
+                StatementPragma().pragma(Pragma::journalMode()).to("WAL");
             WCDB_BREAK_IF_NOT(handle->execute(s_setJournalModeWAL));
         }
 
         //Enable Fullfsync
         static const StatementPragma s_setFullFSync =
-            StatementPragma().pragma(Pragma::Fullfsync).to(true);
+            StatementPragma().pragma(Pragma::fullfsync()).to(true);
         WCDB_BREAK_IF_NOT(handle->execute(s_setFullFSync));
 
         return true;
@@ -201,15 +201,15 @@ Config BuiltinConfig::cipherWithKey(const NoCopyData &cipher, int pageSize)
     std::vector<unsigned char> keys((unsigned char *) cipher.data,
                                     (unsigned char *) cipher.data +
                                         cipher.size);
-    return Config("cipher",
-                  [keys, pageSize](Handle *handle) -> bool {
-                      return handle->setCipherKey(keys.data(),
-                                                  (int) keys.size()) &&
-                             handle->execute(StatementPragma()
-                                                 .pragma(Pragma::CipherPageSize)
-                                                 .to(pageSize));
-                  },
-                  Order::Cipher);
+    return Config(
+        "cipher",
+        [keys, pageSize](Handle *handle) -> bool {
+            return handle->setCipherKey(keys.data(), (int) keys.size()) &&
+                   handle->execute(StatementPragma()
+                                       .pragma(Pragma::cipherPageSize())
+                                       .to(pageSize));
+        },
+        Order::Cipher);
 }
 
 Config BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)

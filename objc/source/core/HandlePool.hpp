@@ -67,7 +67,7 @@ public:
 protected:
     void setAndReportCoreError(const std::string &message);
     using ThreadedErrors = std::unordered_map<const HandlePool *, CoreError>;
-    static ThreadLocal<ThreadedErrors> s_threadedErrors;
+    static ThreadLocal<ThreadedErrors> &threadedErrors();
 
 #pragma mark - Config
 public:
@@ -111,8 +111,8 @@ protected:
 
     ConcurrentList<ConfiguredHandle> m_handles;
     std::atomic<int> m_aliveHandleCount;
-    static const int s_hardwareConcurrency;
-    static const int s_maxConcurrency;
+    static int hardwareConcurrency();
+    static int maxConcurrency();
 };
 
 } //namespace WCDB

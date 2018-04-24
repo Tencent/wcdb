@@ -22,12 +22,15 @@
 
 namespace WCDB {
 
-const StatementRollback StatementRollback::rollback =
-    []() -> StatementRollback {
-    StatementRollback statement;
-    statement.getMutableLang();
-    return statement;
-}();
+const StatementRollback &StatementRollback::rollback()
+{
+    static const StatementRollback s_rollback = []() -> StatementRollback {
+        StatementRollback statement;
+        statement.getMutableLang();
+        return statement;
+    }();
+    return s_rollback;
+}
 
 StatementRollback &
 StatementRollback::rollbackTo(const std::string &savepointName)

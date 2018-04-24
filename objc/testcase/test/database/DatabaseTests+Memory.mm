@@ -38,7 +38,7 @@
     XCTAssertFalse([database isOpened]);
 
     WCTHandle *handle = [database getHandle];
-    [handle execute:WCDB::StatementBegin::deferred];
+    [handle execute:WCDB::StatementBegin::deferred()];
     XCTAssertNotNil(handle);
     [database purge];
     XCTAssertTrue([database isOpened]);
@@ -59,7 +59,7 @@
     XCTAssertFalse([database2 isOpened]);
 
     WCTHandle *handle = [database1 getHandle];
-    [handle execute:WCDB::StatementBegin::deferred];
+    [handle execute:WCDB::StatementBegin::deferred()];
     XCTAssertTrue([database2 canOpen]);
     [WCTDatabase PurgeInAllDatabases];
     XCTAssertTrue([database1 isOpened]);
@@ -84,7 +84,7 @@
     XCTAssertFalse([database2 isOpened]);
 
     WCTHandle *handle = [database1 getHandle];
-    [handle execute:WCDB::StatementBegin::deferred];
+    [handle execute:WCDB::StatementBegin::deferred()];
     XCTAssertTrue([database2 canOpen]);
     [notificationCenter postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     XCTAssertTrue([database1 isOpened]);
