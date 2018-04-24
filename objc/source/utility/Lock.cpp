@@ -41,7 +41,8 @@ void SpinLock::unlock()
     m_locked.clear(std::memory_order_release);
 }
 
-SharedLock::SharedLock() : m_reader(0), m_writer(0), m_pending(0)
+SharedLock::SharedLock()
+    : m_reader(0), m_writer(0), m_pending(0), m_lockingThread(std::thread::id())
 {
 }
 

@@ -29,6 +29,7 @@ MigrationHandlePool::MigrationHandlePool(
     : HandlePool(path, configs), m_infos(migrationInfos)
 {
 #ifdef DEBUG
+    debug_m_migratingThreadId = std::thread::id();
     WCTInnerAssert(debug_checkInfosLegal());
 #endif
 }
