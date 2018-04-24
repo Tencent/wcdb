@@ -78,31 +78,6 @@
     }
 }
 
-- (void)test_unsafe_remove_files
-{
-    __block BOOL tested = NO;
-    [WCTStatistics SetGlobalErrorReport:^(WCTError *error) {
-      if (error.type == WCTErrorTypeError && error.level == WCTErrorLevelWarning) {
-          tested = YES;
-      }
-    }];
-    //Give
-    for (NSString *path in _database.paths) {
-        if ([self.fileManager fileExistsAtPath:path]) {
-            XCTAssertTrue([self.fileManager removeItemAtPath:path error:nil]);
-        }
-        XCTAssertTrue([self.fileManager createFileAtPath:path contents:nil attributes:nil]);
-    }
-    //When
-    XCTAssertTrue([_database removeFiles]);
-    //Then
-    for (NSString *path in _database.paths) {
-        XCTAssertFalse([self.fileManager fileExistsAtPath:path]);
-    }
-    [WCTStatistics ResetGlobalErrorReport];
-    XCTAssertTrue(tested);
-}
-
 - (void)test_move_files
 {
     //Give
