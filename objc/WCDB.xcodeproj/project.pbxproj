@@ -118,7 +118,6 @@
 		2349F76B1EA0D6680021EFA7 /* WCTPropertyMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6941EA0D6680021EFA7 /* WCTPropertyMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F76C1EA0D6680021EFA7 /* WCTConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6951EA0D6680021EFA7 /* WCTConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6961EA0D6680021EFA7 /* WCTIndexMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F76E1EA0D6680021EFA7 /* WCTMacroHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6971EA0D6680021EFA7 /* WCTMacroHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F76F1EA0D6680021EFA7 /* WCTORM.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6981EA0D6680021EFA7 /* WCTORM.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69A1EA0D6680021EFA7 /* WCTDatabase+Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7711EA0D6680021EFA7 /* WCTDatabase+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */; };
@@ -853,7 +852,6 @@
 		23F5BDCF20887FD3000CCD37 /* WINQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 2397747F202AECD3000A681C /* WINQ.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDD020887FD3000CCD37 /* HandleError.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A057420612F8500F1A212 /* HandleError.hpp */; };
 		23F5BDD120887FD3000CCD37 /* WCTTable+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6591EA0D6680021EFA7 /* WCTTable+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F5BDD220887FD3000CCD37 /* WCTMacroHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6971EA0D6680021EFA7 /* WCTMacroHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDD320887FD3000CCD37 /* WCTTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDD420887FD3000CCD37 /* WCTBaseAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67B1EA0D6680021EFA7 /* WCTBaseAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDD520887FD3000CCD37 /* WCTObjCAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67D1EA0D6680021EFA7 /* WCTObjCAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1072,7 +1070,6 @@
 		2349F6941EA0D6680021EFA7 /* WCTPropertyMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTPropertyMacro.h; sourceTree = "<group>"; };
 		2349F6951EA0D6680021EFA7 /* WCTConstraintMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTConstraintMacro.h; sourceTree = "<group>"; };
 		2349F6961EA0D6680021EFA7 /* WCTIndexMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTIndexMacro.h; sourceTree = "<group>"; };
-		2349F6971EA0D6680021EFA7 /* WCTMacroHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTMacroHelper.h; sourceTree = "<group>"; };
 		2349F6981EA0D6680021EFA7 /* WCTORM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTORM.h; sourceTree = "<group>"; };
 		2349F69A1EA0D6680021EFA7 /* WCTDatabase+Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Table.h"; sourceTree = "<group>"; };
 		2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Table.mm"; sourceTree = "<group>"; };
@@ -1731,7 +1728,6 @@
 				2349F6941EA0D6680021EFA7 /* WCTPropertyMacro.h */,
 				2349F6951EA0D6680021EFA7 /* WCTConstraintMacro.h */,
 				2349F6961EA0D6680021EFA7 /* WCTIndexMacro.h */,
-				2349F6971EA0D6680021EFA7 /* WCTMacroHelper.h */,
 			);
 			path = macro;
 			sourceTree = "<group>";
@@ -2324,7 +2320,6 @@
 				23977545202AECD3000A681C /* WINQ.h in Headers */,
 				233A057620612F8500F1A212 /* HandleError.hpp in Headers */,
 				2349F7381EA0D6680021EFA7 /* WCTTable+Convenient.h in Headers */,
-				2349F76E1EA0D6680021EFA7 /* WCTMacroHelper.h in Headers */,
 				23577F791F74F4E800D31C05 /* WCTTokenizer.h in Headers */,
 				2349F7551EA0D6680021EFA7 /* WCTBaseAccessor.h in Headers */,
 				2349F7571EA0D6680021EFA7 /* WCTObjCAccessor.h in Headers */,
@@ -2574,7 +2569,6 @@
 				23F5BDCF20887FD3000CCD37 /* WINQ.h in Headers */,
 				23F5BDD020887FD3000CCD37 /* HandleError.hpp in Headers */,
 				23F5BDD120887FD3000CCD37 /* WCTTable+Convenient.h in Headers */,
-				23F5BDD220887FD3000CCD37 /* WCTMacroHelper.h in Headers */,
 				23F5BDD320887FD3000CCD37 /* WCTTokenizer.h in Headers */,
 				23F5BDD420887FD3000CCD37 /* WCTBaseAccessor.h in Headers */,
 				23F5BDD520887FD3000CCD37 /* WCTObjCAccessor.h in Headers */,

@@ -21,7 +21,6 @@
 #import <WCDB/Macro.hpp>
 #import <WCDB/WCTConstraintMacro.h>
 #import <WCDB/WCTIndexMacro.h>
-#import <WCDB/WCTMacroHelper.h>
 #import <WCDB/WCTPropertyMacro.h>
 
 #define WCDB_IMPLEMENTATION(className)                                         \
