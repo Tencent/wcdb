@@ -51,9 +51,3 @@
 
 #define _WCDB_STRINGIFY(str) #str
 #define WCDB_STRINGIFY(str) _WCDB_STRINGIFY(str)
-
-#ifdef __cplusplus
-#define WCDB_EXTERN extern "C" __attribute__((visibility("default")))
-#else
-#define WCDB_EXTERN extern __attribute__((visibility("default")))
-#endif
