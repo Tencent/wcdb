@@ -23,7 +23,7 @@
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
-#include <set>
+#include <map>
 
 #pragma GCC visibility push(hidden)
 
