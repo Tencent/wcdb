@@ -123,7 +123,7 @@
 
     WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
                         .byAddingColumn(self.class.column)
-                        .byMatching(matchName)
+                        .match(matchName)
                         .notDeferrable()
                         .initiallyDeferred(),
                     @"REFERENCES testForeignTable(testColumn) MATCH testMatchName NOT DEFERRABLE INITIALLY DEFERRED");
@@ -131,7 +131,7 @@
     WINQAssertEqual(WCDB::ForeignKeyClause(foreignTableName)
                         .byAddingColumn(self.class.column)
                         .onDeleteSetNull()
-                        .byMatching(matchName)
+                        .match(matchName)
                         .notDeferrable()
                         .initiallyDeferred(),
                     @"REFERENCES testForeignTable(testColumn) ON DELETE SET NULL MATCH testMatchName NOT DEFERRABLE INITIALLY DEFERRED");

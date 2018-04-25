@@ -24,52 +24,6 @@
 #include <functional>
 #include <string>
 
-#ifdef DEBUG
-
-//debug assert
-#define WCTAssert(cond, message)                                               \
-    if (!(cond)) {                                                             \
-        WCDB::Error::fatal(message);                                           \
-    }
-
-//remedial assert
-#define WCTRemedialAssert(cond, message, remedial) WCTAssert(cond, message)
-
-//fatal error
-#define WCTFatalError(message) WCDB::Error::fatal(message)
-
-//remedial fatal error
-#define WCTRemedialFatalError(message, remedial) WCTFatalError(message)
-
-#else //ELSE
-
-#define WCTAssert(cond, message)                                               \
-    if (!(cond)) {                                                             \
-        WCDB::Error::error(message);                                           \
-    }
-
-//remedial assert
-#define WCTRemedialAssert(cond, message, remedial)                             \
-    if (!(cond)) {                                                             \
-        WCDB::Error::error(message);                                           \
-        remedial                                                               \
-    }
-
-#define WCTFatalError(message)
-
-//remedial fatal error
-#define WCTRemedialFatalError(message, remedial)                               \
-    do {                                                                       \
-        WCDB::Error::error(message);                                           \
-        remedial                                                               \
-    } while (false);
-
-#endif //DEBUG
-
-#define WCTInnerAssert(cond)                                                   \
-    WCTAssert(cond,                                                            \
-              "If you think it's a bug caused by WCDB, please report to us.")
-
 namespace WCDB {
 
 class Error {
@@ -112,26 +66,6 @@ public:
     std::string message;
 
     virtual std::string getDescription() const;
-
-    void report();
-
-    class Report {
-    public:
-        typedef std::function<void(const Error &)> Callback;
-        static Report *shared();
-
-        void report(const Error &error);
-        void setCallback(const Callback &callback);
-        static void defaultCallback(const Error &error);
-
-    protected:
-        Report();
-        Callback m_callback;
-    };
-
-    static void error(const std::string &message);
-    static void warning(const std::string &message);
-    static void fatal(const std::string &message);
 
 protected:
     static void log(const std::string &message, Level level);

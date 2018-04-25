@@ -293,7 +293,7 @@
 
 - (void)testRaiseFunction
 {
-    WCDB::RaiseFunction raiseFunction = WCDB::RaiseFunction().withIgnore();
+    WCDB::RaiseFunction raiseFunction = WCDB::RaiseFunction().ignore();
 
     //To IndexedColumn
     WINQAssertEqual(WCDB::StatementCreateIndex()

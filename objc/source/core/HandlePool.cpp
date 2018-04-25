@@ -54,7 +54,7 @@ void HandlePool::setAndReportCoreError(const std::string &message)
 {
     CoreError error(getTag(), message);
     setThreadedError(error);
-    error.report();
+    Reporter::shared()->report(error);
 }
 
 void HandlePool::setThreadedError(const HandleError &error) const

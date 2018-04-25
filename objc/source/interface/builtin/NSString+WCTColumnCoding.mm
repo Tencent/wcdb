@@ -32,7 +32,7 @@
     return [NSString stringWithString:self];
 }
 
-+ (WCDB::ColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnType
 {
     return WCDB::ColumnType::Text;
 }

@@ -21,7 +21,7 @@
 #ifndef LangCommon_h
 #define LangCommon_h
 
-#include <WCDB/Error.hpp>
+#include <WCDB/Assertion.hpp>
 #include <list>
 
 #include <WCDB/CopyOnWriteData.hpp>

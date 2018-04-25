@@ -25,11 +25,11 @@
 #import <WCDB/WCTHandleError+Private.h>
 #import <WCDB/WCTSQLiteError+Private.h>
 
-@implementation WCTStatistics
+@implementation WCTDatabase (Trace)
 
-+ (void)SetGlobalErrorReport:(WCTErrorReportBlock)block
++ (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    WCDB::Error::Report::Callback callback = nullptr;
+    WCDB::Reporter::Callback callback = nullptr;
     if (block) {
         callback = [block](const WCDB::Error &error) {
             WCTError *nsError = nil;
@@ -53,10 +53,10 @@
             block(nsError);
         };
     }
-    WCDB::Error::Report::shared()->setCallback(callback);
+    WCDB::Reporter::shared()->setCallback(callback);
 }
 
-+ (void)SetGlobalPerformanceTrace:(WCTPerformanceTraceBlock)trace
++ (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
 {
     WCDB::Handle::PerformanceTraceCallback callback = nullptr;
     if (trace) {
@@ -72,7 +72,7 @@
     WCDB::BuiltinConfig::shared()->setGlobalPerformanceTrace(callback);
 }
 
-+ (void)SetGlobalSQLTrace:(WCTSQLTraceBlock)trace
++ (void)globalTraceSQL:(WCTSQLTraceBlock)trace
 {
     WCDB::Handle::SQLTraceCallback callback = nullptr;
     if (trace) {
@@ -83,9 +83,11 @@
     WCDB::BuiltinConfig::shared()->setGlobalSQLTrace(callback);
 }
 
-+ (void)ResetGlobalErrorReport
++ (WCTErrorTraceBlock)defaultErrorTracer
 {
-    WCDB::Error::Report::shared()->setCallback(WCDB::Error::Report::defaultCallback);
+    return ^(WCTError *error) {
+      WCDB::Reporter::logger((WCDB::Error::Level) error.level, error.description.cppString);
+    };
 }
 
 @end

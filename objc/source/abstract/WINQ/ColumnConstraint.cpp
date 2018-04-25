@@ -65,7 +65,7 @@ ColumnConstraint::onConflict(const ConflictClause &conflictClause)
     return *this;
 }
 
-ColumnConstraint &ColumnConstraint::withChecking(const Expression &expression)
+ColumnConstraint &ColumnConstraint::check(const Expression &expression)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Check;
@@ -93,8 +93,7 @@ ColumnConstraint::withDefaultExpression(const Expression &expression)
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::withCollate(const std::string &collationName)
+ColumnConstraint &ColumnConstraint::collate(const std::string &collationName)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Collate;

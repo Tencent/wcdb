@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/Error.hpp>
+#import <WCDB/Assertion.hpp>
+#import <WCDB/NSString+cppString.h>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
 #import <string>
@@ -67,9 +68,12 @@ Class WCTRuntimeBaseAccessor::GetPropertyClass(Class cls, const std::string &pro
     if (splitAttributes.count > 0) {
         NSString *encodeType = splitAttributes[0];
         NSArray *splitEncodeTypes = [encodeType componentsSeparatedByString:@"\""];
+#ifdef DEBUG
         if (splitEncodeTypes.count <= 1) {
-            WCDB::Error::fatal(("Failed to parse the type of [" + propertyName + "]").c_str());
+            NSString *message = [NSString stringWithFormat:@"Failed to parse the type of [%s].", propertyName.c_str()];
+            WCTFatalError(message.cppString);
         }
+#endif
         NSString *className = splitEncodeTypes[1];
         return NSClassFromString(className);
     }

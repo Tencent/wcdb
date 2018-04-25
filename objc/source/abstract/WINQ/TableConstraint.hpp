@@ -39,7 +39,7 @@ public:
 
     TableConstraint &onConflict(const ConflictClause &conflictClause);
 
-    TableConstraint &withChecking(const Expression &expression);
+    TableConstraint &check(const Expression &expression);
 
     TableConstraint &withForeignKey(const Column &column,
                                     const ForeignKeyClause &foreignKeyClause);

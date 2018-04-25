@@ -91,7 +91,7 @@ public:
     Expression notGlob(const Expression &expr) const;
     Expression notRegexp(const Expression &expr) const;
     Expression notMatch(const Expression &expr) const;
-    Expression withEscape(const Expression &expr) const;
+    Expression escape(const Expression &expr) const;
 
     Expression isNull() const;
     Expression notNull() const;

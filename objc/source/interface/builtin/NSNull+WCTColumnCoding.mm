@@ -35,7 +35,7 @@
     return nil;
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCTColumnType)columnType
 {
     return WCTColumnTypeNull;
 }

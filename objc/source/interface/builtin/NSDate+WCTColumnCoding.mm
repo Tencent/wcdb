@@ -55,7 +55,7 @@ static BOOL s_compatible_for_1_0_x = NO;
     }
 }
 
-+ (WCDB::ColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnType
 {
     if (!s_compatible_for_1_0_x) {
         return WCTColumnTypeFloat;

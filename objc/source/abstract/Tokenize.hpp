@@ -74,14 +74,14 @@ public:
     typedef struct Cursor Cursor;
 
     static int
-    Create(int argc, const char *const *argv, sqlite3_tokenizer **ppTokenizer)
+    create(int argc, const char *const *argv, sqlite3_tokenizer **ppTokenizer)
     {
         Tokenizer *tokenizer = (Tokenizer *) sqlite3_malloc(sizeof(Tokenizer));
         if (!tokenizer) {
             return SQLITE_NOMEM;
         }
         memset(tokenizer, 0, sizeof(Tokenizer));
-        int rc = CreateTokenizerInfo<TokenizerInfo>(tokenizer, argc, argv);
+        int rc = createTokenizerInfo<TokenizerInfo>(tokenizer, argc, argv);
         if (rc != SQLITE_OK) {
             return rc;
         }
@@ -89,11 +89,11 @@ public:
         return SQLITE_OK;
     }
 
-    static int Destroy(sqlite3_tokenizer *pTokenizer)
+    static int destroy(sqlite3_tokenizer *pTokenizer)
     {
         if (pTokenizer) {
             Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
-            DestroyTokenizerInfo<TokenizerInfo>(tokenizer);
+            destroyTokenizerInfo<TokenizerInfo>(tokenizer);
             sqlite3_free(pTokenizer);
         }
         return SQLITE_OK;
@@ -101,7 +101,7 @@ public:
 
     template <typename T /* = TokenizerInfo */>
     static typename std::enable_if<!std::is_same<T, void>::value, int>::type
-    CreateTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
+    createTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
     {
         tokenizer->info = new TokenizerInfo(argc, argv);
         if (!tokenizer->info) {
@@ -112,14 +112,14 @@ public:
 
     template <typename T /* = void */>
     static typename std::enable_if<std::is_same<T, void>::value, int>::type
-    CreateTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
+    createTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
     {
         return SQLITE_OK;
     }
 
     template <typename T /* = TokenizerInfo */>
     static typename std::enable_if<!std::is_same<T, void>::value, void>::type
-    DestroyTokenizerInfo(Tokenizer *tokenizer)
+    destroyTokenizerInfo(Tokenizer *tokenizer)
     {
         if (tokenizer->info) {
             delete tokenizer->info;
@@ -129,11 +129,11 @@ public:
 
     template <typename T /* = void */>
     static typename std::enable_if<std::is_same<T, void>::value, void>::type
-    DestroyTokenizerInfo(Tokenizer *tokenizer)
+    destroyTokenizerInfo(Tokenizer *tokenizer)
     {
     }
 
-    static int Open(sqlite3_tokenizer *pTokenizer,
+    static int open(sqlite3_tokenizer *pTokenizer,
                     const char *pInput,
                     int nBytes,
                     sqlite3_tokenizer_cursor **ppCursor)
@@ -159,7 +159,7 @@ public:
         return SQLITE_OK;
     }
 
-    static int Close(sqlite3_tokenizer_cursor *pCursor)
+    static int close(sqlite3_tokenizer_cursor *pCursor)
     {
         if (pCursor) {
             Cursor *cursor = (Cursor *) pCursor;
@@ -172,7 +172,7 @@ public:
         return SQLITE_OK;
     }
 
-    static int Next(sqlite3_tokenizer_cursor *pCursor,
+    static int next(sqlite3_tokenizer_cursor *pCursor,
                     const char **ppToken,
                     int *pnBytes,
                     int *piStartOffset,
@@ -192,11 +192,11 @@ public:
     static unsigned char *address()
     {
         static sqlite3_tokenizer_module s_module(
-            {0, Module<TokenizerInfo, CursorInfo>::Create,
-             Module<TokenizerInfo, CursorInfo>::Destroy,
-             Module<TokenizerInfo, CursorInfo>::Open,
-             Module<TokenizerInfo, CursorInfo>::Close,
-             Module<TokenizerInfo, CursorInfo>::Next});
+            {0, Module<TokenizerInfo, CursorInfo>::create,
+             Module<TokenizerInfo, CursorInfo>::destroy,
+             Module<TokenizerInfo, CursorInfo>::open,
+             Module<TokenizerInfo, CursorInfo>::close,
+             Module<TokenizerInfo, CursorInfo>::next});
         return (unsigned char *) &s_module;
     }
 };

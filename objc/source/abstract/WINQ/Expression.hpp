@@ -67,7 +67,7 @@ public:
 
     Expression(const std::list<Expression> &expressions);
 
-    Expression &withEscape(const Expression &expr);
+    Expression &escape(const Expression &expr);
 
     static Expression Exists(const StatementSelect &selectSTMT);
     static Expression NotExists(const StatementSelect &selectSTMT);
@@ -79,12 +79,13 @@ public:
     public:
         CaseInternal();
         CaseInternal(const Expression &expression);
+        //TODO refactor -> when(...).then(...)
         CaseInternal &whenAndThen(const Expression &when,
                                   const Expression &then);
         CaseInternal &else_(const Expression &expression);
     };
-    static Expression::CaseInternal Case(const Expression &expression);
-    static Expression::CaseInternal Case();
+    static Expression::CaseInternal case_(const Expression &expression);
+    static Expression::CaseInternal case_();
     Expression(const CaseInternal &expressionCase);
 
     Expression(const RaiseFunction &raiseFunction);

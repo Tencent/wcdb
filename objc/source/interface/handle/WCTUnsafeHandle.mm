@@ -564,7 +564,7 @@
         }
         for (const std::string &columnName : columnNames) {
             NSString *warning = [NSString stringWithFormat:@"Skip column named [%s] for table [%@]", columnName.c_str(), tableName];
-            WCDB::Error::warning(warning.cppString);
+            WCTWarning(warning.cppString);
         }
         //Add new column
         for (const WCTColumnBinding *columnBinding : columnBindingsToAdded) {

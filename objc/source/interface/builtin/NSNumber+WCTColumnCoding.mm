@@ -32,7 +32,7 @@
     return self;
 }
 
-+ (WCDB::ColumnType)columnTypeForWCDB
++ (WCDB::ColumnType)columnType
 {
     return WCDB::ColumnType::Float;
 }

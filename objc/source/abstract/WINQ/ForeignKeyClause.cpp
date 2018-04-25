@@ -99,7 +99,7 @@ ForeignKeyClause &ForeignKeyClause::onUpdateNoAction()
     return *this;
 }
 
-ForeignKeyClause &ForeignKeyClause::byMatching(const std::string &name)
+ForeignKeyClause &ForeignKeyClause::match(const std::string &name)
 {
     addTriggerForMatching(name);
     return *this;

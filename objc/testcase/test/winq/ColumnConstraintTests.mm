@@ -116,7 +116,7 @@
 {
     WINQAssertEqual(WCDB::ColumnConstraint()
                         .named(self.class.constraintName)
-                        .withChecking(self.class.condition),
+                        .check(self.class.condition),
                     @"CONSTRAINT testConstraint CHECK(testColumn NOTNULL)");
 }
 
@@ -137,7 +137,7 @@
 {
     WINQAssertEqual(WCDB::ColumnConstraint()
                         .named(self.class.constraintName)
-                        .withCollate(self.class.collationName),
+                        .collate(self.class.collationName),
                     @"CONSTRAINT testConstraint COLLATE testCollation");
 }
 

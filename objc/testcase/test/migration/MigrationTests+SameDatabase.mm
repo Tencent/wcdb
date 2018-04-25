@@ -92,7 +92,7 @@
     [_migrated purge];
 
     __block BOOL tested = NO;
-    [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+    [WCTDatabase globalTraceSQL:^(NSString *sql) {
       NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@(variable1, variable2, variable3) VALUES(?1, ?2, ?3)", _tableName];
       if ([sql isEqualToString:expectedSQL]) {
           tested = YES;
@@ -104,7 +104,7 @@
     XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
 
     XCTAssertTrue(tested);
-    [WCTStatistics SetGlobalSQLTrace:nil];
+    [WCTDatabase globalTraceSQL:nil];
 
     NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName];
     XCTAssertEqual(objects.count, _preInserted.count + 1);
@@ -131,7 +131,7 @@
 
     [_migrated purge];
     __block BOOL tested = NO;
-    [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+    [WCTDatabase globalTraceSQL:^(NSString *sql) {
       NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@(variable1, variable2, variable3) VALUES(?1, ?2, ?3)", _migratedTableName];
       if ([sql isEqualToString:expectedSQL]) {
           tested = YES;
@@ -143,7 +143,7 @@
     XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
 
     XCTAssertTrue(tested);
-    [WCTStatistics SetGlobalSQLTrace:nil];
+    [WCTDatabase globalTraceSQL:nil];
 
     NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName];
     XCTAssertEqual(objects.count, _preInserted.count + 1);

@@ -58,7 +58,7 @@
                     @"CONSTRAINT testConstraint UNIQUE(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withChecking(self.class.condition),
+                        .check(self.class.condition),
                     @"CONSTRAINT testConstraint CHECK(testColumn NOTNULL)");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)

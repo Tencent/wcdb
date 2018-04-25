@@ -79,7 +79,7 @@
 #define __WCDB_CHECK_IMP(className, constraintName, expr)                      \
     +(void) WCDB_ORM(className, check)                                         \
     {                                                                          \
-        binding.getOrCreateTableConstraint(constraintName).withChecking(expr); \
+        binding.getOrCreateTableConstraint(constraintName).check(expr);        \
     }
 
 #define __WCDB_FOREIGN_KEY_IMP(className, constraintName, columns, foreignKey) \

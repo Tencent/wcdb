@@ -40,12 +40,12 @@ public:
 
     ColumnConstraint &onConflict(const ConflictClause &conflictClause);
 
-    ColumnConstraint &withChecking(const Expression &expression);
+    ColumnConstraint &check(const Expression &expression);
 
     ColumnConstraint &withDefaultValue(const LiteralValue &literalValue);
     ColumnConstraint &withDefaultExpression(const Expression &expression);
 
-    ColumnConstraint &withCollate(const std::string &collationName);
+    ColumnConstraint &collate(const std::string &collationName);
 
     ColumnConstraint &
     withForeignKeyClause(const ForeignKeyClause &foreignKeyClause);

@@ -45,7 +45,7 @@
                     @"testColumn DESC");
 
     WINQAssertEqual(WCDB::OrderingTerm(expression)
-                        .withCollate(self.class.collationName),
+                        .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 }
 

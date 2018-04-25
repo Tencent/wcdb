@@ -171,7 +171,7 @@ Expression::Expression(
     lang.exprPattern.assign(exprPattern);
 }
 
-Expression &Expression::withEscape(const Expression &expr)
+Expression &Expression::escape(const Expression &expr)
 {
     WINQRemedialAssert(getCOWLang().get<Lang::Expr>().type ==
                        Lang::ExprBase::Type::Pattern);
@@ -232,12 +232,12 @@ Expression::Expression(const CaseInternal &expressionCase)
     lang.exprCase.assign(expressionCase.getCOWLang());
 }
 
-Expression::CaseInternal Expression::Case()
+Expression::CaseInternal Expression::case_()
 {
     return Expression::CaseInternal();
 }
 
-Expression::CaseInternal Expression::Case(const Expression &expression)
+Expression::CaseInternal Expression::case_(const Expression &expression)
 {
     return Expression::CaseInternal(expression);
 }

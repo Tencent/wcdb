@@ -43,7 +43,7 @@
                     @"testColumn DESC");
 
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                        .withCollate(self.class.collationName),
+                        .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 
     WCDB::Expression column = WCDB::Expression(self.class.column);

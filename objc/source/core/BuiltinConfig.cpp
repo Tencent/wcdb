@@ -98,12 +98,11 @@ bool BuiltinConfig::basicConfig(Handle *handle)
             std::string journalMode = handle->getText(0);
             handle->finalize();
 
-            if (strcasecmp(journalMode.c_str(), "WAL") == 0) {
-                // See also: http://www.sqlite.org/wal.html#readonly
-                Error::fatal("It is not possible to open read-only WAL "
-                             "databases.");
-                return false;
-            }
+            // See also: http://www.sqlite.org/wal.html#readonly
+            WCTRemedialAssert(
+                strcasecmp(journalMode.c_str(), "WAL") != 0,
+                "It is not possible to open read-only WAL databases.",
+                return false;);
             return true;
         }
 #endif //DEBUG

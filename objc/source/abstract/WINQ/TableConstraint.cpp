@@ -79,7 +79,7 @@ TableConstraint::onConflict(const ConflictClause &conflictClause)
     return *this;
 }
 
-TableConstraint &TableConstraint::withChecking(const Expression &expression)
+TableConstraint &TableConstraint::check(const Expression &expression)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::Check;

@@ -38,7 +38,7 @@ public:
     }
 
     OrderingTerm(const Expression &expression);
-    OrderingTerm &withCollate(const std::string &collateName);
+    OrderingTerm &collate(const std::string &collateName);
     OrderingTerm &withOrder(const Order &order);
 
     operator std::list<OrderingTerm>() const;

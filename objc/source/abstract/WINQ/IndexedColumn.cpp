@@ -34,7 +34,7 @@ IndexedColumn::IndexedColumn(const Column &column)
     lang.column.assign(column.getCOWLang());
 }
 
-IndexedColumn &IndexedColumn::withCollate(const std::string &collationName)
+IndexedColumn &IndexedColumn::collate(const std::string &collationName)
 {
     Lang::IndexedColumn &lang = getMutableLang();
     lang.collationName.assign(collationName);

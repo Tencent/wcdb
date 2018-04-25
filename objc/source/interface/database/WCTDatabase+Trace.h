@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTDatabase.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Trigger when error occurs
  */
-typedef void (^WCTErrorReportBlock)(WCTError *);
+typedef void (^WCTErrorTraceBlock)(WCTError *);
 
 /**
  Trigger when a transaction or a normal sql ends.
@@ -37,67 +37,61 @@ typedef void (^WCTPerformanceTraceBlock)(WCTTag, NSArray<WCTPerformanceFootprint
  */
 typedef void (^WCTSQLTraceBlock)(NSString *);
 
-/**
- Statistics
- */
-@interface WCTStatistics : NSObject
+@interface WCTDatabase (Trace)
 
 /**
  @brief You can register a reporter to monitor all errors.
  
-     [WCTStatistics SetGlobalErrorReport:^(WCTError* error) {
-        NSLog(@"%@", error);
-     }];
+ [WCTStatisticsglobalTraceError:^(WCTError* error) {
+ NSLog(@"%@", error);
+ }];
  
  @param block block
- @see WCTErrorReportBlock
+ @see WCTErrorTraceBlock
  */
-+ (void)SetGlobalErrorReport:(nullable WCTErrorReportBlock)block;
++ (void)globalTraceError:(nullable WCTErrorTraceBlock)block;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
-        It returns 
-        1. The collection of SQLs and the executions count of each SQL.
-        2. Time consuming in nanoseconds.
-        3. Tag of database.
-        Note that:
-        1. You should register trace before all db operations. 
-        2. Global tracer will be recovered by db tracer.
+ It returns 
+ 1. The collection of SQLs and the executions count of each SQL.
+ 2. Time consuming in nanoseconds.
+ 3. Tag of database.
+ Note that:
+ 1. You should register trace before all db operations. 
+ 2. Global tracer will be recovered by db tracer.
  
-    [WCTStatistics SetGlobalPerformanceTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
-        NSLog(@"Tag: %d", tag);
-        [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
-            NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
-        }];
-        NSLog(@"Total cost %ld nanoseconds", (long)cost);
-    }];
+ [WCTDatabase globalTracePerformance:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+ NSLog(@"Tag: %d", tag);
+ [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
+ NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
+ }];
+ NSLog(@"Total cost %ld nanoseconds", (long)cost);
+ }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
  @see WCTPerformanceTraceBlock
  @see [WCTDatabase setPerformanceTrace:]
  */
-+ (void)SetGlobalPerformanceTrace:(nullable WCTPerformanceTraceBlock)trace;
++ (void)globalTracePerformance:(nullable WCTPerformanceTraceBlock)trace;
 
 /**
  @brief You can register a tracer to monitor the execution of all SQLs.
-        It returns a prepared or executed SQL.
-        Note that you should register trace before all db operations. 
+ It returns a prepared or executed SQL.
+ Note that you should register trace before all db operations. 
  
-    [WCTStatistics SetGlobalSQLTrace:^(NSString* sql) {
-        NSLog(@"SQL: %@", sql);
-    }];
+ [WCTDatabase globalTraceSQL:^(NSString* sql) {
+ NSLog(@"SQL: %@", sql);
+ }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @see WCTSQLTraceBlock
  @param trace trace
  */
-+ (void)SetGlobalSQLTrace:(nullable WCTSQLTraceBlock)trace;
++ (void)globalTraceSQL:(nullable WCTSQLTraceBlock)trace;
 
-/**
- @brief Reset to builtin error reporter. 
- */
-+ (void)ResetGlobalErrorReport;
++ (WCTErrorTraceBlock)defaultErrorTracer;
 
 @end
 

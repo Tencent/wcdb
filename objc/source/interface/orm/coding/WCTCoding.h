@@ -43,7 +43,7 @@ typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
 @required
 + (nullable instancetype)unarchiveWithWCTValue:(nullable id /* NSData*, NSString*, NSNumber*, nil */)value;
 - (nullable id /* NSData*, NSString*, NSNumber*, nil */)archivedWCTValue;
-+ (WCDB::ColumnType)columnTypeForWCDB;
++ (WCDB::ColumnType)columnType;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -41,9 +41,7 @@ unsigned char *Modules::getAddress(const std::string &name) const
 {
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_modules.find(name);
-    if (iter == m_modules.end()) {
-        WCDB::Error::fatal("Tokenize name is not registered");
-    }
+    WCTAssert(iter != m_modules.end(), "Tokenize name is not registered.");
     return iter->second;
 }
 

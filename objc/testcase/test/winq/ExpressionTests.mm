@@ -51,7 +51,7 @@
 
     WINQAssertEqual(WCDB::Expression(self.class.statementSelect, true), @"NOT(SELECT testColumn FROM testTable)");
 
-    WCDB::RaiseFunction raiseFunction = WCDB::RaiseFunction().withIgnore();
+    WCDB::RaiseFunction raiseFunction = WCDB::RaiseFunction().ignore();
     WINQAssertEqual(WCDB::Expression(raiseFunction), @"RAISE(IGNORE)");
 }
 
@@ -166,7 +166,7 @@
 
     WINQAssertEqual(expression1
                         .notLike(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn NOT LIKE 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -175,7 +175,7 @@
 
     WINQAssertEqual(expression1
                         .notGlob(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn NOT GLOB 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -184,7 +184,7 @@
 
     WINQAssertEqual(expression1
                         .notRegexp(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn NOT REGEXP 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -193,7 +193,7 @@
 
     WINQAssertEqual(expression1
                         .notMatch(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn NOT MATCH 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -202,7 +202,7 @@
 
     WINQAssertEqual(expression1
                         .like(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn LIKE 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -211,7 +211,7 @@
 
     WINQAssertEqual(expression1
                         .glob(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn GLOB 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -220,7 +220,7 @@
 
     WINQAssertEqual(expression1
                         .regexp(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn REGEXP 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
@@ -229,7 +229,7 @@
 
     WINQAssertEqual(expression1
                         .match(expression2)
-                        .withEscape(expression3),
+                        .escape(expression3),
                     @"testColumn MATCH 'a%' ESCAPE ?1");
 }
 
@@ -369,21 +369,21 @@
     WCDB::Expression then2 = WCDB::LiteralValue(2);
     WCDB::Expression elseExpression = WCDB::LiteralValue(3);
 
-    WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case(caseExpression)
+    WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_(caseExpression)
                                          .whenAndThen(when1, then1)
                                          .else_(elseExpression)),
                     @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 ELSE 3 END");
 
-    WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case(caseExpression)
+    WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_(caseExpression)
                                          .whenAndThen(when1, then1)),
                     @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 END");
 
-    WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case(caseExpression)
+    WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_(caseExpression)
                                          .whenAndThen(when1, then1)
                                          .whenAndThen(when2, then2)),
                     @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 WHEN (testColumn3 < 0) THEN 2 END");
 
-    WINQAssertEqual(WCDB::Expression(WCDB::Expression::Case()
+    WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_()
                                          .whenAndThen(when1, then1)),
                     @"CASE WHEN (testColumn2 > 0) THEN 1 END");
 }

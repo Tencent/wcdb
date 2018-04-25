@@ -180,8 +180,8 @@ bool Database::removeFiles()
 std::pair<bool, size_t> Database::getFilesSize()
 {
     if (!isBlockaded() || isOpened()) {
-        Error::warning("Getting files size on an opened database may get "
-                       "incorrect results.");
+        WCTWarning("Getting files size on an opened database may get "
+                   "incorrect results.");
     }
     return FileManager::shared()->getFilesSize(getPaths());
 }
@@ -193,20 +193,20 @@ const FileError &Database::getFileError() const
 
 bool Database::moveFiles(const std::string &directory)
 {
-    if (!isBlockaded() || isOpened()) {
-        Error::warning("Moving files on an opened database may cause a "
-                       "corrupted database");
-    }
+    WCTRemedialAssert(
+        isBlockaded() && !isOpened(),
+        "Moving files on an opened database may cause a corrupted database.",
+        return false;);
     return FileManager::shared()->moveFiles(getPaths(), directory);
 }
 
 bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
-    if (!isBlockaded() || isOpened()) {
-        Error::warning("Moving files on an opened database may cause a "
-                       "corrupted database");
-    }
+    WCTRemedialAssert(
+        isBlockaded() && !isOpened(),
+        "Moving files on an opened database may cause a corrupted database.",
+        return false;);
     std::list<std::string> paths = getPaths();
     paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
     return FileManager::shared()->moveFiles(paths, directory);

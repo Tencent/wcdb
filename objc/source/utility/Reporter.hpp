@@ -18,25 +18,36 @@
  * limitations under the License.
  */
 
-#ifndef RaiseFunction_hpp
-#define RaiseFunction_hpp
+#ifndef Reporter_hpp
+#define Reporter_hpp
 
-#include <WCDB/Describable.hpp>
+#include <WCDB/Error.hpp>
 
 namespace WCDB {
 
-class RaiseFunction : public DescribableWithLang<Lang::RaiseFunction>,
-                      public Redirectable {
+class Reporter {
 public:
-    RaiseFunction &ignore();
-    RaiseFunction &rollback(const std::string &errorMessage);
-    RaiseFunction &abort(const std::string &errorMessage);
-    RaiseFunction &fail(const std::string &errorMessage);
+    typedef std::function<void(const Error &)> Callback;
+    static Reporter *shared();
+
+    void report(const Error &error);
+    void setCallback(const Callback &callback);
+
+    static void defaultCallback(const Error &error);
+    static void logger(const Error::Level &level,
+                       const std::string &description);
+
+    void error(const std::string &message);
+    void warning(const std::string &message);
+    void fatal(const std::string &message);
 
 protected:
-    Expression getRedirectSource() const override;
+    void report(Error::Level level, const std::string &message);
+
+    Reporter();
+    Callback m_callback;
 };
 
-} // namespace WCDB
+} //namespace WCDB
 
-#endif /* RaiseFunction_hpp */
+#endif /* Reporter_hpp */

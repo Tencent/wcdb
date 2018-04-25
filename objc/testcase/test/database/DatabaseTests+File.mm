@@ -102,7 +102,9 @@
     }
 
     //When
-    XCTAssertTrue([_database moveFilesToDirectory:newDirectory withExtraFiles:@[ extraFile ]]);
+    [_database close:^{
+      XCTAssertTrue([_database moveFilesToDirectory:newDirectory withExtraFiles:@[ extraFile ]]);
+    }];
     //Then
     for (NSString *path in newPaths) {
         XCTAssertTrue([self.fileManager fileExistsAtPath:path]);
@@ -133,7 +135,7 @@
 - (void)test_unsafe_get_files_size
 {
     __block BOOL tested = NO;
-    [WCTStatistics SetGlobalErrorReport:^(WCTError *error) {
+    [WCTDatabase globalTraceError:^(WCTError *error) {
       if (error.type == WCTErrorTypeError && error.level == WCTErrorLevelWarning) {
           tested = YES;
       }
@@ -150,7 +152,7 @@
     //Then
     NSUInteger filesSize = [_database getFilesSize];
     XCTAssertEqual(filesSize, expectedFilesSize);
-    [WCTStatistics ResetGlobalErrorReport];
+    [WCTDatabase globalTraceError:[WCTDatabase defaultErrorTracer]];
     XCTAssertTrue(tested);
 }
 

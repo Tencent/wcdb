@@ -20,7 +20,6 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/Macro.hpp>
-#include <iostream>
 
 namespace WCDB {
 
@@ -69,78 +68,6 @@ void Error::addToDescription(std::string &description,
     description.append(key);
     description.append(": ");
     description.append(value);
-}
-
-void Error::report()
-{
-    Report::shared()->report(*this);
-}
-
-void Error::error(const std::string &message)
-{
-    log(message, Error::Level::Error);
-}
-
-void Error::warning(const std::string &message)
-{
-    log(message, Error::Level::Warning);
-}
-
-void Error::fatal(const std::string &message)
-{
-    log(message, Error::Level::Fatal);
-}
-
-void Error::log(const std::string &message, Level level)
-{
-    Error error;
-    error.level = level;
-    error.code = (int) Code::Error;
-    error.message = message;
-    error.report();
-}
-
-Error::Report *Error::Report::shared()
-{
-    static Report report;
-    return &report;
-}
-
-void Error::Report::defaultCallback(const Error &error)
-{
-    switch (error.level) {
-        case Level::Ignore:
-            break;
-        case Level::Debug:
-#ifdef DEBUG
-            std::cout << error.getDescription() << std::endl;
-#endif
-            break;
-        case Level::Warning:
-        case Level::Error:
-            std::cout << error.getDescription() << std::endl;
-            break;
-        case Level::Fatal:
-            std::cout << error.getDescription() << std::endl;
-            abort();
-            break;
-    }
-}
-
-void Error::Report::setCallback(const Callback &callback)
-{
-    m_callback = callback;
-}
-
-Error::Report::Report() : m_callback(Report::defaultCallback)
-{
-}
-
-void Error::Report::report(const Error &error)
-{
-    if (m_callback) {
-        m_callback(error);
-    }
 }
 
 } //namespace WCDB

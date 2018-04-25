@@ -45,7 +45,7 @@ public:
     ForeignKeyClause &onUpdateRestrict();
     ForeignKeyClause &onUpdateNoAction();
 
-    ForeignKeyClause &byMatching(const std::string &name);
+    ForeignKeyClause &match(const std::string &name);
 
     ForeignKeyClause &deferrable();
     ForeignKeyClause &notDeferrable();

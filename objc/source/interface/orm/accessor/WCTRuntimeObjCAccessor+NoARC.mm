@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
 #import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
@@ -66,11 +67,14 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
 
 WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string &propertyName)
 {
-    static const SEL ColumnTypeSelector = NSSelectorFromString(@"columnTypeForWCDB");
+    static const SEL ColumnTypeSelector = NSSelectorFromString(@"columnType");
     Class propertyClass = GetPropertyClass(instanceClass, propertyName);
+#ifdef DEBUG
     if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
-        WCDB::Error::fatal([NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()].UTF8String);
+        NSString *message = [NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()];
+        WCTFatalError(message.cppString);
     }
+#endif
     IMP implementation = GetClassMethodImplementation(propertyClass, ColumnTypeSelector);
     using GetColumnTyper = WCDB::ColumnType (*)(Class, SEL);
     return ((GetColumnTyper) implementation)(propertyClass, ColumnTypeSelector);

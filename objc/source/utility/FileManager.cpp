@@ -20,6 +20,7 @@
 
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/Reporter.hpp>
 #include <WCDB/String.hpp>
 #include <errno.h>
 #include <sys/stat.h>
@@ -198,7 +199,7 @@ void FileManager::setupAndReportError(FileError::Operation operation,
     error->operation = operation;
     error->path = path;
     error->message = strerror(errno);
-    error->report();
+    Reporter::shared()->report(*error);
 }
 
 const FileError &FileManager::getError()

@@ -31,7 +31,7 @@ OrderingTerm::OrderingTerm(const Expression &expression)
     setupWithExpression(expression);
 }
 
-OrderingTerm &OrderingTerm::withCollate(const std::string &collateName)
+OrderingTerm &OrderingTerm::collate(const std::string &collateName)
 {
     Lang::OrderingTerm &lang = getMutableLang();
     lang.collationName.assign(collateName);

@@ -38,7 +38,7 @@ public:
     IndexedColumn(const Expression &expression);
     IndexedColumn(const Column &column);
 
-    IndexedColumn &withCollate(const std::string &collationName);
+    IndexedColumn &collate(const std::string &collationName);
 
     IndexedColumn &withOrder(const Order &order = Order::NotSet);
 

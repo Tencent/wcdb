@@ -95,7 +95,7 @@ bool Handle::open()
     }
     setupError();
     m_error.operation = Operation::Open;
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 }
 
@@ -116,7 +116,7 @@ bool Handle::execute(const Statement &statement)
     setupError();
     m_error.operation = Operation::Execute;
     m_error.statement = statement;
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 }
 
@@ -195,7 +195,7 @@ bool Handle::prepare(const Statement &statement,
     setupError();
     m_error.operation = Operation::Prepare;
     m_error.statement = statement;
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 }
 
@@ -223,7 +223,7 @@ bool Handle::step(HandleStatement &handleStatement, bool &done)
     setupError();
     m_error.operation = Operation::Step;
     m_error.statement = handleStatement.getStatement();
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 }
 
@@ -496,7 +496,7 @@ bool Handle::setCipherKey(const void *data, int size)
     }
     setupError();
     m_error.operation = Operation::Cipher;
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 #else  //SQLITE_HAS_CODEC
     Error::fatal("[sqlite3_key] is not supported for current config");
@@ -531,7 +531,7 @@ bool Handle::backup(const NoCopyData &data)
     m_error.reset();
     m_error.code = rc;
     m_error.operation = Operation::Backup;
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 }
 
@@ -577,7 +577,7 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
     m_error.reset();
     m_error.code = rc;
     m_error.operation = Operation::Repair;
-    m_error.report();
+    Reporter::shared()->report(m_error);
     return false;
 }
 

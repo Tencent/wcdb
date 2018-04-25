@@ -64,7 +64,7 @@
             fileError.level = WCDB::Error::Level::Error;
             fileError.code = (int) error.code;
             fileError.message = error.description.cppString;
-            fileError.report();
+            WCDB::Reporter::shared()->report(fileError);
         }
     });
 #endif //TARGET_OS_IPHONE
