@@ -65,7 +65,7 @@
         return NO;
     }
 
-    const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+    const WCTPropertyList &properties = _properties.empty() ? [object.class objectRelationalMappingForWCDB].getAllProperties() : _properties;
 
     if (_statement.isColumnsNotSet()) {
         _statement.on(properties);
@@ -82,16 +82,16 @@
 
     std::vector<bool> autoIncrements;
     for (const WCTProperty &property : properties) {
-        const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-        autoIncrements.push_back(!_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement());
+        const WCTColumnBinding &columnBinding = property.getColumnBinding();
+        autoIncrements.push_back(!_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement());
     }
 
     BOOL canFillLastInsertedRowID = [object respondsToSelector:@selector(lastInsertedRowID)];
 
     int index = 1;
     for (const WCTProperty &property : properties) {
-        const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-        bool isAutoIncrement = !_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement();
+        const WCTColumnBinding &columnBinding = property.getColumnBinding();
+        bool isAutoIncrement = !_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement();
 
         if (!isAutoIncrement || !object.isAutoIncrement) {
             [self bindProperty:property
@@ -125,7 +125,7 @@
 
     BOOL committed = handle->runNestedTransaction([self, objects](WCDB::Handle *handle) -> bool {
 
-        const WCTPropertyList &properties = _properties.empty() ? [objects[0].class objectRelationalMappingForWCDB]->getAllProperties() : _properties;
+        const WCTPropertyList &properties = _properties.empty() ? [objects[0].class objectRelationalMappingForWCDB].getAllProperties() : _properties;
 
         if (_statement.isColumnsNotSet()) {
             _statement.on(properties);
@@ -143,8 +143,8 @@
 
         std::vector<bool> autoIncrements;
         for (const WCTProperty &property : properties) {
-            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-            autoIncrements.push_back(!_replace && columnBinding->columnDef.isPrimary() && columnBinding->columnDef.isAutoIncrement());
+            const WCTColumnBinding &columnBinding = property.getColumnBinding();
+            autoIncrements.push_back(!_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement());
         }
 
         BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];

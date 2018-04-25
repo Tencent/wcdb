@@ -288,7 +288,7 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
             if (iter == m_infos->getInfos().end()) {
                 return;
             }
-            auto pair = getColumnsWithTable(iter->second->targetTable);
+            auto pair = getUnorderedColumnsWithTable(iter->second->targetTable);
             if (!pair.first) {
                 return;
             }
@@ -297,8 +297,8 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
                 statementInsert.getSpecifiedColumns();
             if (!specifiedColumns.empty()) {
                 for (const auto &specifiedColumn : specifiedColumns.get()) {
-                    auto iter = std::find(columns.begin(), columns.end(),
-                                          specifiedColumn.description().get());
+                    auto iter =
+                        columns.find(specifiedColumn.description().get());
                     if (iter != columns.end()) {
                         columns.erase(iter);
                     }

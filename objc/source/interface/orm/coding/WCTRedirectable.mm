@@ -26,7 +26,7 @@ namespace WCDB {
 template <>
 WCTProperty Redirectable::redirect(const WCTProperty &property) const
 {
-    return WCTProperty(getRedirectSource(), property.getColumnBinding());
+    return WCTProperty(getRedirectSource(), &property.getColumnBinding());
 }
 
 } //namespace WCDB

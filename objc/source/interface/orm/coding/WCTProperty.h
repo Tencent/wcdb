@@ -27,9 +27,9 @@ class WCTProperty : public WCDB::Operable,
                     public WCDB::DescribableWithLang<WCDB::Lang::Expr>,
                     public WCDB::Redirectable {
 public:
-    WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding);
+    WCTProperty(const WCTColumnBinding *columnBinding);
     WCTProperty(const WCDB::Expression &expression,
-                const std::shared_ptr<WCTColumnBinding> &columnBinding);
+                const WCTColumnBinding *columnBinding);
 
     WCTProperty inTable(NSString *tableName) const;
     WCTProperty inSchema(NSString *schemaName) const;
@@ -39,7 +39,7 @@ public:
 
     const WCDB::ColumnDef &getColumnDef() const;
 
-    const std::shared_ptr<WCTColumnBinding> &getColumnBinding() const;
+    const WCTColumnBinding &getColumnBinding() const;
 
     operator WCDB::Column() const;
     operator WCDB::Expression() const;
@@ -49,13 +49,15 @@ public:
     operator std::list<WCDB::ResultColumn>() const;
     operator std::list<WCDB::OrderingTerm>() const;
 
+    bool isSameColumnBinding(const WCTProperty &property) const;
+
 protected:
     WCDB::Expression getRedirectSource() const override;
 
     WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>
     getExpressionLang() const override;
 
-    std::shared_ptr<WCTColumnBinding> m_columnBinding;
+    const WCTColumnBinding *m_columnBinding;
 };
 
 class WCTPropertyList : public std::list<WCTProperty> {
@@ -75,4 +77,8 @@ public:
     operator std::list<WCDB::ResultColumn>() const;
     operator std::list<WCDB::OrderingTerm>() const;
     operator std::list<WCDB::IndexedColumn>() const;
+
+#ifdef DEBUG
+    bool debug_checkSameClass(Class expected = nil) const;
+#endif
 };

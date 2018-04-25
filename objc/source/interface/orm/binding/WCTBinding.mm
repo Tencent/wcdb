@@ -25,7 +25,7 @@
 #import <WCDB/WCTProperty.h>
 #import <objc/runtime.h>
 
-WCTBinding *WCTBinding::bindingWithClass(Class cls)
+WCTBinding &WCTBinding::bindingWithClass(Class cls)
 {
     static std::map<Class, WCTBinding> s_bindings;
     static std::mutex s_mutex;
@@ -34,7 +34,7 @@ WCTBinding *WCTBinding::bindingWithClass(Class cls)
     if (iter == s_bindings.end()) {
         iter = s_bindings.insert({cls, WCTBinding(cls)}).first;
     }
-    return &iter->second;
+    return iter->second;
 }
 
 WCTBinding::WCTBinding(Class cls)
@@ -48,18 +48,18 @@ WCTBinding::WCTBinding(Class cls)
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::string &tableName) const
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName);
-    for (const auto &columnBinding : m_columnBindings.getList()) {
-        statement.define(columnBinding->columnDef);
+    for (const auto &columnBinding : m_columnBindings) {
+        statement.define(columnBinding.second.columnDef);
     }
-    for (const auto &constraint : m_constraints.getList()) {
-        statement.addTableConstraint(*constraint.get());
+    for (const auto &constraint : m_constraints) {
+        statement.addTableConstraint(constraint.second);
     }
     return statement;
 }
 
-const std::map<std::string, std::shared_ptr<WCTColumnBinding>, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindingMap() const
+const std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
 {
-    return m_columnBindings.getMap();
+    return m_columnBindings;
 }
 
 WCDB::StatementCreateVirtualTable
@@ -67,48 +67,44 @@ WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName) co
 {
     WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
     statement.createVirtualTable(tableName);
-    for (const auto &columnBinding : m_columnBindings.getList()) {
-        statement.on(columnBinding->columnDef);
+    for (const auto &columnBinding : m_columnBindings) {
+        statement.on(columnBinding.second.columnDef);
     }
-    for (const auto &tableConstraint : m_constraints.getList()) {
-        statement.on(*tableConstraint.get());
+    for (const auto &tableConstraint : m_constraints) {
+        statement.on(tableConstraint.second);
     }
     return statement;
 }
 
-void WCTBinding::addColumnConstraint(const WCDB::ColumnConstraint &columnConstraint, const WCTProperty &property) const
+void WCTBinding::addColumnConstraint(const WCDB::ColumnConstraint &columnConstraint, const WCTProperty &property)
 {
-    const auto &map = m_columnBindings.getMap();
-    auto iter = map.find(property.getDescription());
-    WCTInnerAssert(iter != map.end());
-    iter->second->columnDef.byAddingConstraint(columnConstraint);
+    auto iter = m_columnBindings.find(property.getDescription());
+    WCTInnerAssert(iter != m_columnBindings.end());
+    iter->second.columnDef.byAddingConstraint(columnConstraint);
 }
 
-std::shared_ptr<WCDB::TableConstraint> WCTBinding::getOrCreateTableConstraint(const std::string &name)
+WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const std::string &name)
 {
-    const auto &map = m_constraints.getMap();
-    if (map.find(name) == map.end()) {
-        std::shared_ptr<WCDB::TableConstraint> tableConstraint(new WCDB::TableConstraint(name));
-        m_constraints.append(name, tableConstraint);
+    auto iter = m_constraints.find(name);
+    if (iter == m_constraints.end()) {
+        iter = m_constraints.insert({name, WCDB::TableConstraint(name)}).first;
     }
-    return map.at(name);
+    return iter->second;
 }
 
-std::shared_ptr<WCDB::StatementCreateIndex> WCTBinding::getOrCreateIndex(const std::string &subfix)
+WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const std::string &subfix)
 {
-    const auto &map = m_indexes.getMap();
-    if (map.find(subfix) == map.end()) {
-        std::shared_ptr<WCDB::StatementCreateIndex> statementCreateIndex(new WCDB::StatementCreateIndex());
-        m_indexes.append(subfix, statementCreateIndex);
+    auto iter = m_indexes.find(subfix);
+    if (iter == m_indexes.end()) {
+        iter = m_indexes.insert({subfix, WCDB::StatementCreateIndex()}).first;
     }
-    return map.at(subfix);
+    return iter->second;
 }
 
-std::shared_ptr<WCTColumnBinding> WCTBinding::getColumnBinding(const WCTProperty &property) const
+const WCTColumnBinding &WCTBinding::getColumnBinding(const WCTProperty &property) const
 {
-    const auto &map = m_columnBindings.getMap();
-    auto iter = map.find(property.getDescription());
-    WCTInnerAssert(iter != map.end());
+    auto iter = m_columnBindings.find(property.getDescription());
+    WCTInnerAssert(iter != m_columnBindings.end());
     return iter->second;
 }
 
@@ -116,9 +112,9 @@ std::list<WCDB::StatementCreateIndex>
 WCTBinding::generateCreateIndexStatements(const std::string &tableName) const
 {
     std::list<WCDB::StatementCreateIndex> statementCreateIndexs;
-    for (const auto &pair : m_indexes.getMap()) {
-        WCDB::StatementCreateIndex statementCreateIndex = *pair.second.get();
-        statementCreateIndex.createIndex(tableName + pair.first).on(tableName);
+    for (const auto &iter : m_indexes) {
+        WCDB::StatementCreateIndex statementCreateIndex = iter.second;
+        statementCreateIndex.createIndex(tableName + iter.first).on(tableName);
         statementCreateIndexs.push_back(statementCreateIndex);
     }
     return statementCreateIndexs;
@@ -130,10 +126,10 @@ const WCTPropertyList &WCTBinding::getAllProperties() const
 }
 
 const WCTProperty &WCTBinding::addColumnBinding(const std::string &columnName,
-                                                const std::shared_ptr<WCTColumnBinding> &columnBinding)
+                                                WCTColumnBinding &columnBinding)
 {
-    m_columnBindings.append(columnName, columnBinding);
-    WCTProperty property(columnBinding);
+    auto iter = m_columnBindings.insert({columnName, std::move(columnBinding)}).first;
+    WCTProperty property(&iter->second);
     m_properties.push_back(property);
     return m_properties.back();
 }

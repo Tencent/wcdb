@@ -26,9 +26,9 @@
 #include <WCDB/Tracer.hpp>
 #include <WCDB/WINQ.h>
 #include <array>
-#include <map>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <string>
 
 #pragma GCC visibility push(hidden)
@@ -134,8 +134,8 @@ protected:
 #pragma mark - Convenient
 public:
     std::pair<bool, bool> isTableExists(const TableOrSubquery &table);
-    std::pair<bool, std::list<std::string>>
-    getColumnsWithTable(const std::string &tableName);
+    std::pair<bool, std::set<std::string>>
+    getUnorderedColumnsWithTable(const std::string &tableName);
     std::pair<bool, std::list<std::string>> getAttachedSchemas();
     std::pair<bool, bool> isSchemaExists(const std::string &schemaName);
 
@@ -154,7 +154,9 @@ public:
 protected:
     void discardableExecute(const Statement &statement);
     std::pair<bool, std::list<std::string>>
-    getPragmaValues(const StatementPragma &statement, int index);
+    getValues(const Statement &statement, int index);
+    std::pair<bool, std::set<std::string>>
+    getUnorderedValues(const Statement &statement, int index);
     static const std::string &savepointPrefix();
     int m_nestedLevel;
 

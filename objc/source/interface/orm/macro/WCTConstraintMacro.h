@@ -24,7 +24,7 @@
     WCDB_IF(autoIncrement, @synthesize isAutoIncrement;)                       \
     WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)                     \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB]->addColumnConstraint(       \
+        [className objectRelationalMappingForWCDB].addColumnConstraint(        \
             WCDB::ColumnConstraint()                                           \
                 .withPrimaryKey(order, autoIncrement)                          \
                 .onConflict(conflictClause),                                   \
@@ -34,14 +34,14 @@
 
 #define __WCDB_NOT_NULL_IMP(className, propertyName)                           \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB]->addColumnConstraint(       \
+        [className objectRelationalMappingForWCDB].addColumnConstraint(        \
             WCDB::ColumnConstraint().withNotNull(), className.propertyName);   \
         return nullptr;                                                        \
     }();
 
 #define __WCDB_UNIQUE_IMP(className, propertyName)                             \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB]->addColumnConstraint(       \
+        [className objectRelationalMappingForWCDB].addColumnConstraint(        \
             WCDB::ColumnConstraint().withUnique(), className.propertyName);    \
         return nullptr;                                                        \
     }();
@@ -51,16 +51,16 @@
                                  order)                                        \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->getOrCreateTableConstraint(constraintName)                       \
-            ->withPrimaryKey(className.propertyName.asIndex(order));           \
+            .getOrCreateTableConstraint(constraintName)                        \
+            .withPrimaryKey(className.propertyName.asIndex(order));            \
         return nullptr;                                                        \
     }();
 
 #define __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, conflict) \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->getOrCreateTableConstraint(constraintName)                       \
-            ->onConflict(conflict);                                            \
+            .getOrCreateTableConstraint(constraintName)                        \
+            .onConflict(conflict);                                             \
         return nullptr;                                                        \
     }();
 
@@ -68,31 +68,31 @@
                                 order)                                         \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->getOrCreateTableConstraint(constraintName)                       \
-            ->withUnique(className.propertyName.asIndex(order));               \
+            .getOrCreateTableConstraint(constraintName)                        \
+            .withUnique(className.propertyName.asIndex(order));                \
         return nullptr;                                                        \
     }();
 
 #define __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, conflict)  \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->getOrCreateTableConstraint(constraintName)                       \
-            ->onConflict(conflict);                                            \
+            .getOrCreateTableConstraint(constraintName)                        \
+            .onConflict(conflict);                                             \
         return nullptr;                                                        \
     }();
 
 #define __WCDB_CHECK_IMP(className, constraintName, expr)                      \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->getOrCreateTableConstraint(constraintName)                       \
-            ->withChecking(expr);                                              \
+            .getOrCreateTableConstraint(constraintName)                        \
+            .withChecking(expr);                                               \
         return nullptr;                                                        \
     }();
 
 #define __WCDB_FOREIGN_KEY_IMP(className, constraintName, columns, foreignKey) \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->getOrCreateTableConstraint(constraintName)                       \
-            ->withForeignKey(columns, foreignKey);                             \
+            .getOrCreateTableConstraint(constraintName)                        \
+            .withForeignKey(columns, foreignKey);                              \
         return nullptr;                                                        \
     }();

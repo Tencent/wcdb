@@ -22,7 +22,7 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
 
-WCTProperty::WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding)
+WCTProperty::WCTProperty(const WCTColumnBinding *columnBinding)
     : m_columnBinding(columnBinding)
 {
     WCTInnerAssert(columnBinding != nullptr);
@@ -32,7 +32,7 @@ WCTProperty::WCTProperty(const std::shared_ptr<WCTColumnBinding> &columnBinding)
 }
 
 WCTProperty::WCTProperty(const WCDB::Expression &expression,
-                         const std::shared_ptr<WCTColumnBinding> &columnBinding)
+                         const WCTColumnBinding *columnBinding)
     : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getCOWLang())
     , m_columnBinding(columnBinding)
 {
@@ -90,9 +90,14 @@ WCTProperty WCTProperty::inSchema(NSString *schemaName) const
     return WCTProperty(expression, m_columnBinding);
 }
 
-const std::shared_ptr<WCTColumnBinding> &WCTProperty::getColumnBinding() const
+const WCTColumnBinding &WCTProperty::getColumnBinding() const
 {
-    return m_columnBinding;
+    return *m_columnBinding;
+}
+
+bool WCTProperty::isSameColumnBinding(const WCTProperty &property) const
+{
+    return m_columnBinding == property.m_columnBinding;
 }
 
 WCDB::IndexedColumn WCTProperty::asIndex(WCDB::Order order) const
@@ -182,3 +187,21 @@ WCTPropertyList::operator std::list<WCDB::IndexedColumn>() const
 {
     return std::list<WCDB::IndexedColumn>(begin(), end());
 }
+
+#ifdef DEBUG
+bool WCTPropertyList::debug_checkSameClass(Class expected) const
+{
+    if (empty()) {
+        return true;
+    }
+    if (expected == nil) {
+        expected = front().getColumnBinding().getClass();
+    }
+    for (const auto &property : *this) {
+        if (expected != property.getColumnBinding().getClass()) {
+            return false;
+        }
+    }
+    return true;
+}
+#endif

@@ -21,17 +21,16 @@
 #define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order,      \
                          isUnique)                                             \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        WCTBinding *binding = [className objectRelationalMappingForWCDB];      \
-        binding->getOrCreateIndex(indexSubfixName)                             \
-            ->indexedBy(className.propertyName.asIndex(order));                \
-        WCDB_IF(isUnique,                                                      \
-                binding->getOrCreateIndex(indexSubfixName)->unique();)         \
+        WCTBinding &binding = [className objectRelationalMappingForWCDB];      \
+        binding.getOrCreateIndex(indexSubfixName)                              \
+            .indexedBy(className.propertyName.asIndex(order));                 \
+        WCDB_IF(isUnique, binding.getOrCreateIndex(indexSubfixName).unique();) \
         return nullptr;                                                        \
     }();
 
 #define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB]->statementVirtualTable.on(  \
+        [className objectRelationalMappingForWCDB].statementVirtualTable.on(   \
             WCDB::ModuleArgument(left, right));                                \
         return nullptr;                                                        \
     }();
@@ -39,6 +38,6 @@
 #define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
     static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
         [className objectRelationalMappingForWCDB]                             \
-            ->statementVirtualTable.usingModule(moduleName);                   \
+            .statementVirtualTable.usingModule(moduleName);                    \
         return nullptr;                                                        \
     }();

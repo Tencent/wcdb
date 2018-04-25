@@ -126,8 +126,8 @@
              toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding->accessor;
+    const WCTColumnBinding &columnBinding = property.getColumnBinding();
+    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding.accessor;
     switch (accessor->getAccessorType()) {
         case WCTAccessorCpp: {
             switch (accessor->getColumnType()) {
@@ -246,8 +246,8 @@
                    ofObject:(WCTObject *)object
 {
     WCTHandleAssert(return;);
-    const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding->accessor;
+    const WCTColumnBinding &columnBinding = property.getColumnBinding();
+    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding.accessor;
     switch (accessor->getAccessorType()) {
         case WCTAccessorCpp: {
             switch (accessor->getColumnType()) {
@@ -342,6 +342,9 @@
     if (!object) {
         return nil;
     }
+#ifdef DEBUG
+    WCTAssert(properties.debug_checkSameClass(cls), "WCTSelect expects all properties with same class.");
+#endif
     int index = 0;
     for (const WCTProperty &property : properties) {
         [self extractValueAtIndex:index
@@ -427,7 +430,7 @@
 
 - (id /* WCTObject* */)nextObjectOfClass:(Class)cls orDone:(BOOL &)isDone
 {
-    return [self nextObjectOfClass:cls onProperties:[cls objectRelationalMappingForWCDB]->getAllProperties() orDone:isDone];
+    return [self nextObjectOfClass:cls onProperties:[cls objectRelationalMappingForWCDB].getAllProperties() orDone:isDone];
 }
 
 - (id /* WCTObject* */)nextObjectOnProperties:(const WCTPropertyList &)properties orDone:(BOOL &)isDone
@@ -435,7 +438,7 @@
     if (properties.empty()) {
         return nil;
     }
-    Class cls = properties.front().getColumnBinding()->getClass();
+    Class cls = properties.front().getColumnBinding().getClass();
     return [self nextObjectOfClass:cls onProperties:properties orDone:isDone];
 }
 
@@ -451,7 +454,7 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls
 {
-    return [self allObjectsOfClass:cls onProperties:[cls objectRelationalMappingForWCDB]->getAllProperties()];
+    return [self allObjectsOfClass:cls onProperties:[cls objectRelationalMappingForWCDB].getAllProperties()];
 }
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTPropertyList &)properties
@@ -459,7 +462,7 @@
     if (properties.empty()) {
         return nil;
     }
-    Class cls = properties.front().getColumnBinding()->getClass();
+    Class cls = properties.front().getColumnBinding().getClass();
     return [self allObjectsOfClass:cls onProperties:properties];
 }
 
@@ -481,7 +484,7 @@
 {
     Class cls = object.class;
     WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
-    const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB]->getAllProperties();
+    const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB].getAllProperties();
     return [self execute:statement
               withObject:object
             onProperties:properties];
@@ -536,39 +539,44 @@
         return NO;
     }
     std::string table = tableName.cppString;
-    const WCTBinding *binding = [cls objectRelationalMappingForWCDB];
+    const WCTBinding &binding = [cls objectRelationalMappingForWCDB];
     std::pair<bool, bool> isTableExists = handle->isTableExists(table);
     if (!isTableExists.first) {
         return NO;
     }
     if (isTableExists.second) {
-        auto pair = handle->getColumnsWithTable(table);
+        auto pair = handle->getUnorderedColumnsWithTable(table);
         if (!pair.first) {
             return NO;
         }
-        const std::list<std::string> &columnNames = pair.second;
+        std::set<std::string> &columnNames = pair.second;
+        std::list<const WCTColumnBinding *> columnBindingsToAdded;
         //Check whether the column names exists
-        std::map<std::string, std::shared_ptr<WCTColumnBinding>, WCDB::String::CaseInsensiveComparator> columnBindingMap = binding->getColumnBindingMap();
-        for (const std::string &columnName : columnNames) {
-            auto iter = columnBindingMap.find(columnName);
-            if (iter == columnBindingMap.end()) {
-                WCDB::Error::warning([NSString stringWithFormat:@"Skip column named [%s] for table [%@]", columnName.c_str(), tableName].cppString);
+        const auto &columnBindings = binding.getColumnBindings();
+        for (const auto &columnBinding : columnBindings) {
+            auto iter = columnNames.find(columnBinding.first);
+            if (iter == columnNames.end()) {
+                columnBindingsToAdded.push_back(&columnBinding.second);
             } else {
-                columnBindingMap.erase(iter);
+                columnNames.erase(iter);
             }
         }
+        for (const std::string &columnName : columnNames) {
+            NSString *warning = [NSString stringWithFormat:@"Skip column named [%s] for table [%@]", columnName.c_str(), tableName];
+            WCDB::Error::warning(warning.cppString);
+        }
         //Add new column
-        for (const auto &iter : columnBindingMap) {
-            if (!handle->execute(WCDB::StatementAlterTable().alterTable(table).addColumn(iter.second->columnDef))) {
+        for (const WCTColumnBinding *columnBinding : columnBindingsToAdded) {
+            if (!handle->execute(WCDB::StatementAlterTable().alterTable(table).addColumn(columnBinding->columnDef))) {
                 return NO;
             }
         }
     } else {
-        if (!handle->execute(binding->generateCreateTableStatement(tableName.cppString))) {
+        if (!handle->execute(binding.generateCreateTableStatement(tableName.cppString))) {
             return NO;
         }
     }
-    for (const WCDB::StatementCreateIndex &statementCreateIndex : binding->generateCreateIndexStatements(table)) {
+    for (const WCDB::StatementCreateIndex &statementCreateIndex : binding.generateCreateIndexStatements(table)) {
         if (!handle->execute(statementCreateIndex)) {
             return NO;
         }

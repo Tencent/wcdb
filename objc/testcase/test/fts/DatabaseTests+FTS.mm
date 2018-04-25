@@ -131,7 +131,7 @@
 }
 
 - (void)searching_offset_test:(NSString *)keyword
-         expectedColumnNumber:(int)expectedColumnNumber
+             expectedProperty:(const WCTProperty &)expectedProperty
                    termNumber:(int)expectedtermNumber
                        string:(NSString *)expectedString
                        object:(FTSTestCaseObject *)object
@@ -142,6 +142,8 @@
     NSArray<NSString *> *components = [column[0].stringValue componentsSeparatedByString:@" "];
     XCTAssertEqual(components.count, 4);
 
+    int expectedColumnNumber = [FTSTestCaseObject indexOfProperty:expectedProperty];
+    XCTAssertNotEqual(expectedColumnNumber, -1);
     int columnNumber = components[0].intValue;
     XCTAssertEqual(columnNumber, expectedColumnNumber);
 
@@ -152,16 +154,12 @@
     int size = components[3].intValue;
 
     NSString *expectedFullString;
-    switch (expectedColumnNumber) {
-        case 0:
-            expectedFullString = object.message;
-            break;
-        case 1:
-            expectedFullString = object.extension;
-            break;
-        default:
-            XCTFail(@"");
-            break;
+    if (expectedProperty.isSameColumnBinding(FTSTestCaseObject.message)) {
+        expectedFullString = object.message;
+    } else if (expectedProperty.isSameColumnBinding(FTSTestCaseObject.extension)) {
+        expectedFullString = object.extension;
+    } else {
+        XCTFail(@"");
     }
 
     NSData *data = [[expectedFullString dataUsingEncoding:NSUTF8StringEncoding] subdataWithRange:NSMakeRange(offset, size)];
@@ -172,7 +170,7 @@
 - (void)test_offset_chinese
 {
     [self searching_offset_test:@"果树"
-           expectedColumnNumber:0
+               expectedProperty:FTSTestCaseObject.message
                      termNumber:0
                          string:@"果树"
                          object:_chineseObject];
@@ -181,7 +179,7 @@
 - (void)test_offset_english
 {
     [self searching_offset_test:@"framework*"
-           expectedColumnNumber:0
+               expectedProperty:FTSTestCaseObject.message
                      termNumber:0
                          string:@"framework"
                          object:_englishObject];
@@ -190,7 +188,7 @@
 - (void)test_offset_multiple_terms
 {
     [self searching_offset_test:@"数字 OR DIGIT"
-           expectedColumnNumber:1
+               expectedProperty:FTSTestCaseObject.extension
                      termNumber:1
                          string:@"DIGIT"
                          object:_digitObject];

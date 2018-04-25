@@ -24,14 +24,16 @@
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
 
 @protocol WCTTableCoding
 @required
-+ (nonnull WCTBinding *)objectRelationalMappingForWCDB;
++ (WCTBinding &)objectRelationalMappingForWCDB;
 + (const WCTPropertyList &)allProperties;
 + (const WCDB::Expression::All &)allResults;
-+ (nonnull WCTColumnNamed)columnNamed;
++ (WCTColumnNamed)columnNamed;
 @optional
 @property(nonatomic, assign) long long lastInsertedRowID;
 @property(nonatomic, assign) BOOL isAutoIncrement;
@@ -43,3 +45,5 @@ typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
 - (nullable id /* NSData*, NSString*, NSNumber*, nil */)archivedWCTValue;
 + (WCDB::ColumnType)columnTypeForWCDB;
 @end
+
+NS_ASSUME_NONNULL_END

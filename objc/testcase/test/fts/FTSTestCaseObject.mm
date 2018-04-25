@@ -58,4 +58,14 @@ WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
     return object.extension == nil;
 }
 
++ (int)indexOfProperty:(const WCTProperty &)property
+{
+    const auto &columnBindings = [self objectRelationalMappingForWCDB].getColumnBindings();
+    auto iter = columnBindings.find(property.getColumnBinding().columnDef.getColumnName());
+    if (iter == columnBindings.end()) {
+        return -1;
+    }
+    return (int) std::distance(columnBindings.begin(), iter);
+}
+
 @end

@@ -51,10 +51,10 @@
 {
     WCTRemedialAssert(_class != nil || !_properties.empty(), "Class or properties is not specificed.", return NO;);
     if (_statement.isResultColumnsNotSet()) {
-        _statement.select(!_properties.empty() ? _properties : [_class objectRelationalMappingForWCDB]->getAllProperties());
+        _statement.select(!_properties.empty() ? _properties : [_class objectRelationalMappingForWCDB].getAllProperties());
     }
     if (!_class) {
-        _class = _properties.front().getColumnBinding()->getClass();
+        _class = _properties.front().getColumnBinding().getClass();
     }
     return [super lazyPrepare];
 }

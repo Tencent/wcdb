@@ -96,15 +96,15 @@ bool ColumnDef::isPrimary() const
 const std::string &ColumnDef::getColumnName() const
 {
     const auto &lang = getCOWLang();
-    if (!lang.empty()) {
+    if (lang.empty()) {
         return String::empty();
     }
     const auto &column = lang.get<Lang::ColumnDef>().column;
-    if (!column.empty()) {
+    if (column.empty()) {
         return String::empty();
     }
     const auto &name = column.get().name;
-    if (!name.empty()) {
+    if (name.empty()) {
         return String::empty();
     }
     return name.get();

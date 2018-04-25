@@ -213,13 +213,13 @@
 
 - (WCTObject *)getObjectOfClass:(Class)cls
 {
-    const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB]->getAllProperties();
+    const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB].getAllProperties();
     return [self getObjectOfClass:cls onProperties:properties];
 }
 
 - (WCTObject *)getObjectOnProperties:(const WCTPropertyList &)properties
 {
-    Class cls = properties.front().getColumnBinding()->getClass();
+    Class cls = properties.front().getColumnBinding().getClass();
     return [self getObjectOfClass:cls onProperties:properties];
 }
 

@@ -336,16 +336,16 @@ std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
     return {result || getResultCode() == SQLITE_ERROR, result};
 }
 
-std::pair<bool, std::list<std::string>>
-Handle::getColumnsWithTable(const std::string &tableName)
+std::pair<bool, std::set<std::string>>
+Handle::getUnorderedColumnsWithTable(const std::string &tableName)
 {
-    return getPragmaValues(
+    return getUnorderedValues(
         StatementPragma().pragma(Pragma::tableInfo()).with(tableName), 1);
 }
 
 std::pair<bool, std::list<std::string>> Handle::getAttachedSchemas()
 {
-    return getPragmaValues(StatementPragma().pragma(Pragma::databaseList()), 1);
+    return getValues(StatementPragma().pragma(Pragma::databaseList()), 1);
 }
 
 std::pair<bool, bool> Handle::isSchemaExists(const std::string &schemaName)
@@ -363,7 +363,7 @@ std::pair<bool, bool> Handle::isSchemaExists(const std::string &schemaName)
 }
 
 std::pair<bool, std::list<std::string>>
-Handle::getPragmaValues(const StatementPragma &statement, int index)
+Handle::getValues(const Statement &statement, int index)
 {
     if (prepare(statement)) {
         bool done;
@@ -373,7 +373,24 @@ Handle::getPragmaValues(const StatementPragma &statement, int index)
         }
         finalize();
         if (done) {
-            return {true, values};
+            return {true, std::move(values)};
+        }
+    }
+    return {false, {}};
+}
+
+std::pair<bool, std::set<std::string>>
+Handle::getUnorderedValues(const Statement &statement, int index)
+{
+    if (prepare(statement)) {
+        bool done;
+        std::set<std::string> values;
+        while (step(done) && !done) {
+            values.insert(getText(index));
+        }
+        finalize();
+        if (done) {
+            return {true, std::move(values)};
         }
     }
     return {false, {}};

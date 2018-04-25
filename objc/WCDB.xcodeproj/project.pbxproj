@@ -49,7 +49,6 @@
 		233A058C2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */; };
 		233D0F132045032700DDB462 /* BuiltinConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233D0F112045032700DDB462 /* BuiltinConfig.cpp */; };
 		233D0F142045032700DDB462 /* BuiltinConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233D0F122045032700DDB462 /* BuiltinConfig.hpp */; };
-		23404271204110F4005EB12C /* SequantialIncreasingMap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2340426F204110F4005EB12C /* SequantialIncreasingMap.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		234591F220440A0200DC7D34 /* WCTRedirectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234591F020440A0200DC7D34 /* WCTRedirectable.mm */; };
 		234591F320440A0200DC7D34 /* WCTRedirectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F120440A0200DC7D34 /* WCTRedirectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234591F6204433E200DC7D34 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.h */; };
@@ -828,7 +827,6 @@
 		23F5BDB720887FD3000CCD37 /* WCTBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6841EA0D6680021EFA7 /* WCTBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDB820887FD3000CCD37 /* WCTDatabase+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6571EA0D6680021EFA7 /* WCTDatabase+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDB920887FD3000CCD37 /* WCTSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F64C1EA0D6680021EFA7 /* WCTSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F5BDBA20887FD3000CCD37 /* SequantialIncreasingMap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2340426F204110F4005EB12C /* SequantialIncreasingMap.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDBB20887FD3000CCD37 /* WCTMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6371EA0D6680021EFA7 /* WCTMaster.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDBC20887FD3000CCD37 /* WCTUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6541EA0D6680021EFA7 /* WCTUpdate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6231EA0D6680021EFA7 /* HandlePool.hpp */; };
@@ -1001,7 +999,6 @@
 		233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTUnsafeHandle+ChainCall.mm"; sourceTree = "<group>"; };
 		233D0F112045032700DDB462 /* BuiltinConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BuiltinConfig.cpp; sourceTree = "<group>"; };
 		233D0F122045032700DDB462 /* BuiltinConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuiltinConfig.hpp; sourceTree = "<group>"; };
-		2340426F204110F4005EB12C /* SequantialIncreasingMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SequantialIncreasingMap.hpp; sourceTree = "<group>"; };
 		234591F020440A0200DC7D34 /* WCTRedirectable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRedirectable.mm; sourceTree = "<group>"; };
 		234591F120440A0200DC7D34 /* WCTRedirectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTRedirectable.h; sourceTree = "<group>"; };
 		234591F5204432E400DC7D34 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -1769,7 +1766,6 @@
 				239776CE202AF2E2000A681C /* TimedQueue.hpp */,
 				239776D1202AF2E2000A681C /* String.cpp */,
 				239776C3202AF2E2000A681C /* String.hpp */,
-				2340426F204110F4005EB12C /* SequantialIncreasingMap.hpp */,
 				23A2C198204647590026D3C5 /* NoCopyData.cpp */,
 				23A2C199204647590026D3C5 /* NoCopyData.hpp */,
 				23C40CF4208DBCDD007B1648 /* Dispatch.cpp */,
@@ -2296,7 +2292,6 @@
 				2349F75D1EA0D6680021EFA7 /* WCTBinding.h in Headers */,
 				2349F7361EA0D6680021EFA7 /* WCTDatabase+Convenient.h in Headers */,
 				2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */,
-				23404271204110F4005EB12C /* SequantialIncreasingMap.hpp in Headers */,
 				2349F7181EA0D6680021EFA7 /* WCTMaster.h in Headers */,
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
 				2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */,
@@ -2545,7 +2540,6 @@
 				23F5BDB720887FD3000CCD37 /* WCTBinding.h in Headers */,
 				23F5BDB820887FD3000CCD37 /* WCTDatabase+Convenient.h in Headers */,
 				23F5BDB920887FD3000CCD37 /* WCTSelect.h in Headers */,
-				23F5BDBA20887FD3000CCD37 /* SequantialIncreasingMap.hpp in Headers */,
 				23F5BDBB20887FD3000CCD37 /* WCTMaster.h in Headers */,
 				23F5BDBC20887FD3000CCD37 /* WCTUpdate.h in Headers */,
 				23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */,

@@ -61,9 +61,9 @@ public:
             }
 
             //delay
-            std::shared_ptr<Element> element(new Element(
-                key, std::chrono::steady_clock::now() + m_delay, info));
-            m_list.push_front(element);
+            Element element(key, std::chrono::steady_clock::now() + m_delay,
+                            info);
+            m_list.push_front(std::move(element));
             auto last = m_list.begin();
             m_map.insert({key, last});
         }
@@ -92,16 +92,17 @@ public:
                 m_cond.wait(lockGuard);
                 continue;
             }
-            std::shared_ptr<Element> element = m_list.back();
+            Element &element = m_list.back();
             Time now = std::chrono::steady_clock::now();
-            if (now < element->expired) {
-                m_cond.wait_for(lockGuard, element->expired - now);
+            if (now < element.expired) {
+                m_cond.wait_for(lockGuard, element.expired - now);
                 continue;
             }
+            Element expired = std::move(element);
             m_list.pop_back();
-            m_map.erase(element->key);
+            m_map.erase(expired.key);
             lockGuard.unlock();
-            onElementExpired(element->key, element->info);
+            onElementExpired(expired.key, expired.info);
             lockGuard.lock();
         }
     }
@@ -119,7 +120,7 @@ protected:
     };
     typedef struct Element Element;
     //TODO refactor
-    using List = std::list<std::shared_ptr<Element>>;
+    using List = std::list<Element>;
     using Map = std::unordered_map<Key, typename List::iterator>;
     Map m_map;
     List m_list;

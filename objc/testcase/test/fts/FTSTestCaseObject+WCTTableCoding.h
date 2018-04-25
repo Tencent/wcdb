@@ -26,4 +26,6 @@
 WCDB_PROPERTY(message)
 WCDB_PROPERTY(extension)
 
++ (int)indexOfProperty:(const WCTProperty &)property;
+
 @end

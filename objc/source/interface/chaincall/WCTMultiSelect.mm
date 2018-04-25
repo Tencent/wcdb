@@ -72,7 +72,7 @@ typedef struct MultiInfo MultiInfo;
             if (!nsTableName) {
                 nsTableName = @"";
             }
-            Class cls = property.getColumnBinding()->getClass();
+            Class cls = property.getColumnBinding().getClass();
             _infos.push_back(MultiInfo(property, nsTableName, cls));
             ++index;
         }
