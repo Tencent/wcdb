@@ -136,7 +136,7 @@ WCTPropertyList WCTPropertyList::inTable(NSString *tableName) const
     for (const WCTProperty &property : *this) {
         properties.push_back(property.inTable(tableName));
     }
-    return properties;
+    return std::move(properties);
 }
 
 WCTPropertyList WCTPropertyList::inSchema(NSString *schemaName) const
@@ -145,7 +145,7 @@ WCTPropertyList WCTPropertyList::inSchema(NSString *schemaName) const
     for (const WCTProperty &property : *this) {
         properties.push_back(property.inSchema(schemaName));
     }
-    return properties;
+    return std::move(properties);
 }
 
 void WCTPropertyList::addProperties(const WCTPropertyList &properties)
@@ -159,7 +159,7 @@ WCTPropertyList WCTPropertyList::byAddingProperties(const WCTPropertyList &prope
 {
     WCTPropertyList newProperties = *this;
     newProperties.addProperties(properties);
-    return newProperties;
+    return std::move(newProperties);
 }
 
 WCTPropertyList::operator std::list<WCDB::Column>() const
