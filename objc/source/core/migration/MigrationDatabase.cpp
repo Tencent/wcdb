@@ -201,7 +201,6 @@ bool MigrationDatabase::stepMigration(
     WCTAssert(m_migrationPool->debug_checkMigratingThread(),
               "Migration stepping is not thread-safe.");
 #endif
-    //TODO debug check migrating thread
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
     if (infos->didMigrationDone()) {
         done = true;
