@@ -30,7 +30,7 @@ typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
 
 @protocol WCTTableCoding
 @required
-+ (WCTBinding &)objectRelationalMappingForWCDB;
++ (const WCTBinding &)objectRelationalMapping;
 + (const WCTPropertyList &)allProperties;
 + (const WCDB::Expression::All &)allResults;
 + (WCTColumnNamed)columnNamed;

@@ -31,4 +31,5 @@
 
 #import <WCDB/WCTCodingMacro.h>
 #import <WCDB/WCTIndexMacro.h>
+#import <WCDB/WCTMacro.h>
 #import <WCDB/WCTPropertyMacro.h>

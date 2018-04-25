@@ -20,24 +20,21 @@
 
 #define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order,      \
                          isUnique)                                             \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        WCTBinding &binding = [className objectRelationalMappingForWCDB];      \
+    +(void) WCDB_ORM(className, index)                                         \
+    {                                                                          \
         binding.getOrCreateIndex(indexSubfixName)                              \
             .indexedBy(className.propertyName.asIndex(order));                 \
         WCDB_IF(isUnique, binding.getOrCreateIndex(indexSubfixName).unique();) \
-        return nullptr;                                                        \
-    }();
+    }
 
 #define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB].statementVirtualTable.on(   \
-            WCDB::ModuleArgument(left, right));                                \
-        return nullptr;                                                        \
-    }();
+    +(void) WCDB_ORM(className, virtual_table_argument)                        \
+    {                                                                          \
+        binding.statementVirtualTable.on(WCDB::ModuleArgument(left, right));   \
+    }
 
 #define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB]                             \
-            .statementVirtualTable.usingModule(moduleName);                    \
-        return nullptr;                                                        \
-    }();
+    +(void) WCDB_ORM(className, virtual_table_module)                          \
+    {                                                                          \
+        binding.statementVirtualTable.usingModule(moduleName);                 \
+    }

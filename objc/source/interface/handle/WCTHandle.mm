@@ -213,7 +213,7 @@
 
 - (WCTObject *)getObjectOfClass:(Class)cls
 {
-    const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB].getAllProperties();
+    const WCTPropertyList &properties = [cls allProperties];
     return [self getObjectOfClass:cls onProperties:properties];
 }
 

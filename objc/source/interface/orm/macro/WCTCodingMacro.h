@@ -23,18 +23,21 @@
 #import <WCDB/WCTIndexMacro.h>
 #import <WCDB/WCTPropertyMacro.h>
 
+//TODO support Inheritance
 #define WCDB_IMPLEMENTATION(className)                                         \
-    +(WCTBinding &) objectRelationalMappingForWCDB                             \
+    +(const WCTBinding &) objectRelationalMapping                              \
     {                                                                          \
         static WCTBinding &s_binding =                                         \
             WCTBinding::bindingWithClass(className.class);                     \
         WCTAssert(self.class == className.class,                               \
-                  "Inheritance is not supported for ORM");                     \
+                  "Inheritance is not supported for ORM yet.");                \
         return s_binding;                                                      \
     }                                                                          \
     +(const WCTPropertyList &) allProperties                                   \
     {                                                                          \
-        return [className objectRelationalMappingForWCDB].getAllProperties();  \
+        static const WCTPropertyList &s_properties =                           \
+            WCTBinding::bindingWithClass(className.class).getAllProperties();  \
+        return s_properties;                                                   \
     }                                                                          \
     +(const WCDB::Expression::All &) allResults                                \
     {                                                                          \

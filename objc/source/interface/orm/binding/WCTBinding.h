@@ -33,18 +33,18 @@ public:
     static WCTBinding &bindingWithClass(Class cls);
 
     template <typename T>
-    const WCTProperty &addColumnBinding(const std::string &propertyName,
-                                        const std::string &columnName)
+    void addColumnBinding(const std::string &propertyName,
+                          const std::string &columnName)
     {
         WCTColumnBinding columnBinding(m_cls, propertyName, columnName,
                                        (T *) nullptr);
-        return addColumnBinding(columnName, columnBinding);
+        addColumnBinding(columnName, columnBinding);
     }
 
-    const WCTColumnBinding &getColumnBinding(const WCTProperty &property) const;
+    const WCTColumnBinding &
+    getColumnBinding(const std::string &columnName) const;
 
-    void addColumnConstraint(const WCDB::ColumnConstraint &columnConstraint,
-                             const WCTProperty &property);
+    WCDB::ColumnDef &getColumnDef(const std::string &columnName);
 
     WCDB::TableConstraint &getOrCreateTableConstraint(const std::string &name);
 
@@ -71,8 +71,10 @@ public:
 protected:
     WCTBinding(Class cls);
 
-    const WCTProperty &addColumnBinding(const std::string &columnName,
-                                        WCTColumnBinding &columnBinding);
+    void initialize();
+
+    void addColumnBinding(const std::string &columnName,
+                          WCTColumnBinding &columnBinding);
 
     WCTPropertyList m_properties;
 

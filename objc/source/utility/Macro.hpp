@@ -58,7 +58,7 @@
 #define WCDB_CONCAT_(a, b) a##b
 #define WCDB_CONCAT(a, b) WCDB_CONCAT_(a, b)
 
-#define WCDB_UNUSED_UNIQUE_NAME WCDB_CONCAT(_unused, __COUNTER__)
+#define WCDB_UNIQUE_ID __COUNTER__
 
 #define WCDB_BREAK_IF(cond)                                                    \
     if (cond) {                                                                \

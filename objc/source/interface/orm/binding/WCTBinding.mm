@@ -19,20 +19,24 @@
  */
 
 #import <WCDB/Error.hpp>
+#import <WCDB/Macro.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
+#import <WCDB/WCTMacro.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
 WCTBinding &WCTBinding::bindingWithClass(Class cls)
 {
     static std::map<Class, WCTBinding> s_bindings;
-    static std::mutex s_mutex;
-    std::lock_guard<std::mutex> lockGuard(s_mutex);
+    static std::recursive_mutex s_mutex;
+    std::lock_guard<std::recursive_mutex> lockGuard(s_mutex);
     auto iter = s_bindings.find(cls);
     if (iter == s_bindings.end()) {
         iter = s_bindings.insert({cls, WCTBinding(cls)}).first;
+        iter->second.initialize();
     }
     return iter->second;
 }
@@ -42,6 +46,46 @@ WCTBinding::WCTBinding(Class cls)
 {
     if (!class_conformsToProtocol(m_cls, @protocol(WCTTableCoding))) {
         class_addProtocol(m_cls, @protocol(WCTTableCoding));
+    }
+}
+
+void WCTBinding::initialize()
+{
+    NSString *prefix = [NSString stringWithFormat:@"%s_%@_", WCDB_STRINGIFY(WCDB_ORM_PREFIX), NSStringFromClass(m_cls)];
+    NSString *synthesizePrefix = @WCDB_STRINGIFY(WCDB_SYNTHESIZE_PREFIX);
+    NSRange synthesizeRange = NSMakeRange(prefix.length, synthesizePrefix.length);
+
+    NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> array];
+    NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> array];
+
+    unsigned int methodCount = 0;
+    Method *methods = class_copyMethodList(object_getClass(m_cls), &methodCount);
+
+    for (unsigned int i = 0; i < methodCount; i++) {
+        Method method = methods[i];
+        NSString *selName = [NSString stringWithUTF8String:sel_getName(method_getName(method))];
+        if (![selName hasPrefix:prefix]) {
+            continue;
+        }
+        if ([selName compare:synthesizePrefix
+                     options:0
+                       range:synthesizeRange] == NSOrderedSame) {
+            NSLog(@" property %@", selName);
+            [synthesizations addObject:selName];
+        } else {
+            NSLog(@" other %@", selName);
+            [others addObject:selName];
+        }
+    }
+    for (NSString *selName in synthesizations) {
+        SEL selector = NSSelectorFromString(selName);
+        IMP imp = [m_cls methodForSelector:selector];
+        ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
+    }
+    for (NSString *selName in others) {
+        SEL selector = NSSelectorFromString(selName);
+        IMP imp = [m_cls methodForSelector:selector];
+        ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
     }
 }
 
@@ -76,11 +120,11 @@ WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName) co
     return statement;
 }
 
-void WCTBinding::addColumnConstraint(const WCDB::ColumnConstraint &columnConstraint, const WCTProperty &property)
+WCDB::ColumnDef &WCTBinding::getColumnDef(const std::string &columnName)
 {
-    auto iter = m_columnBindings.find(property.getDescription());
+    auto iter = m_columnBindings.find(columnName);
     WCTInnerAssert(iter != m_columnBindings.end());
-    iter->second.columnDef.byAddingConstraint(columnConstraint);
+    return iter->second.columnDef;
 }
 
 WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const std::string &name)
@@ -101,9 +145,9 @@ WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const std::string &subf
     return iter->second;
 }
 
-const WCTColumnBinding &WCTBinding::getColumnBinding(const WCTProperty &property) const
+const WCTColumnBinding &WCTBinding::getColumnBinding(const std::string &columnName) const
 {
-    auto iter = m_columnBindings.find(property.getDescription());
+    auto iter = m_columnBindings.find(columnName);
     WCTInnerAssert(iter != m_columnBindings.end());
     return iter->second;
 }
@@ -125,13 +169,15 @@ const WCTPropertyList &WCTBinding::getAllProperties() const
     return m_properties;
 }
 
-const WCTProperty &WCTBinding::addColumnBinding(const std::string &columnName,
-                                                WCTColumnBinding &columnBinding)
+void WCTBinding::addColumnBinding(const std::string &columnName,
+                                  WCTColumnBinding &columnBinding)
 {
+#ifdef DEBUG
+    WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
+#endif
     auto iter = m_columnBindings.insert({columnName, std::move(columnBinding)}).first;
-    WCTProperty property(&iter->second);
+    WCTProperty property(iter->second);
     m_properties.push_back(property);
-    return m_properties.back();
 }
 
 WCTColumnNamed WCTBinding::getColumnGenerator()

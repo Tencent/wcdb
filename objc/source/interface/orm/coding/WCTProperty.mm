@@ -22,21 +22,19 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
 
-WCTProperty::WCTProperty(const WCTColumnBinding *columnBinding)
-    : m_columnBinding(columnBinding)
+WCTProperty::WCTProperty(const WCTColumnBinding &columnBinding)
+    : m_columnBinding(&columnBinding)
 {
-    WCTInnerAssert(columnBinding != nullptr);
     WCDB::Lang::Expr &lang = getMutableLang();
     lang.type = WCDB::Lang::ExprBase::Type::Column;
     lang.exprColumn.get_or_copy().column.assign(m_columnBinding->columnDef.getCOWLang().get<WCDB::Lang::ColumnDef>().column);
 }
 
 WCTProperty::WCTProperty(const WCDB::Expression &expression,
-                         const WCTColumnBinding *columnBinding)
+                         const WCTColumnBinding &columnBinding)
     : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getCOWLang())
-    , m_columnBinding(columnBinding)
+    , m_columnBinding(&columnBinding)
 {
-    WCTInnerAssert(columnBinding != nullptr);
 }
 
 WCTProperty::operator WCDB::Column() const
@@ -79,7 +77,7 @@ WCTProperty WCTProperty::inTable(NSString *tableName) const
     WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(getCOWLang());
     WCDB::Expression expression(cowLang);
     expression.withTable(tableName.cppString);
-    return WCTProperty(expression, m_columnBinding);
+    return WCTProperty(expression, *m_columnBinding);
 }
 
 WCTProperty WCTProperty::inSchema(NSString *schemaName) const
@@ -87,7 +85,7 @@ WCTProperty WCTProperty::inSchema(NSString *schemaName) const
     WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr> cowLang(getCOWLang());
     WCDB::Expression expression(cowLang);
     expression.withSchema(schemaName.cppString);
-    return WCTProperty(expression, m_columnBinding);
+    return WCTProperty(expression, *m_columnBinding);
 }
 
 const WCTColumnBinding &WCTProperty::getColumnBinding() const
@@ -136,7 +134,7 @@ WCTPropertyList WCTPropertyList::inTable(NSString *tableName) const
     for (const WCTProperty &property : *this) {
         properties.push_back(property.inTable(tableName));
     }
-    return std::move(properties);
+    return properties;
 }
 
 WCTPropertyList WCTPropertyList::inSchema(NSString *schemaName) const
@@ -145,7 +143,7 @@ WCTPropertyList WCTPropertyList::inSchema(NSString *schemaName) const
     for (const WCTProperty &property : *this) {
         properties.push_back(property.inSchema(schemaName));
     }
-    return std::move(properties);
+    return properties;
 }
 
 void WCTPropertyList::addProperties(const WCTPropertyList &properties)
@@ -159,13 +157,12 @@ WCTPropertyList WCTPropertyList::byAddingProperties(const WCTPropertyList &prope
 {
     WCTPropertyList newProperties = *this;
     newProperties.addProperties(properties);
-    return std::move(newProperties);
+    return newProperties;
 }
 
 WCTPropertyList::operator std::list<WCDB::Column>() const
 {
     return std::list<WCDB::Column>(begin(), end());
-    ;
 }
 
 WCTPropertyList::operator std::list<WCDB::Expression>() const

@@ -23,25 +23,29 @@
 
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
-#define __WCDB_PROPERTY_NAME(className, propertyName)                          \
-    _s_##className##_##propertyName##_property
+#define WCDB_SYNTHESIZE_PREFIX synthesize
 
 #define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)             \
-    static const WCTProperty &__WCDB_PROPERTY_NAME(className, propertyName) =  \
-        [className objectRelationalMappingForWCDB]                             \
+    +(void) WCDB_ORM(className, WCDB_SYNTHESIZE_PREFIX)                        \
+    {                                                                          \
+        binding                                                                \
             .addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>(  \
                 WCDB_STRINGIFY(propertyName), columnName);                     \
+    }                                                                          \
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
-        return __WCDB_PROPERTY_NAME(className, propertyName);                  \
+        static const WCTProperty s_property(                                   \
+            WCTBinding::bindingWithClass(className.class)                      \
+                .getColumnBinding(columnName));                                \
+        return s_property;                                                     \
     }
 
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \
                                       defaultValue)                            \
     __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
-    static const auto WCDB_UNUSED_UNIQUE_NAME = []() {                         \
-        [className objectRelationalMappingForWCDB].addColumnConstraint(        \
-            WCDB::ColumnConstraint().withDefaultValue(defaultValue),           \
-            className.propertyName);                                           \
-        return nullptr;                                                        \
-    }();
+    +(void) WCDB_ORM(className, default)                                       \
+    {                                                                          \
+        binding.getColumnDef(columnName)                                       \
+            .byAddingConstraint(                                               \
+                WCDB::ColumnConstraint().withDefaultValue(defaultValue));      \
+    }

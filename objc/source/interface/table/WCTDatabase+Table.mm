@@ -73,7 +73,7 @@
                  withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
-    return _database->execute([cls objectRelationalMappingForWCDB].generateVirtualCreateTableStatement(tableName.cppString));
+    return _database->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName.cppString));
 }
 
 - (BOOL)dropTable:(NSString *)tableName

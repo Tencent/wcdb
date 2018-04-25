@@ -81,7 +81,7 @@
     if (!handle) {
         return NO;
     }
-    return handle->execute([cls objectRelationalMappingForWCDB].generateVirtualCreateTableStatement(tableName.cppString));
+    return handle->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName.cppString));
 }
 
 - (BOOL)dropTable:(NSString *)tableName

@@ -27,9 +27,9 @@ class WCTProperty : public WCDB::Operable,
                     public WCDB::DescribableWithLang<WCDB::Lang::Expr>,
                     public WCDB::Redirectable {
 public:
-    WCTProperty(const WCTColumnBinding *columnBinding);
+    WCTProperty(const WCTColumnBinding &columnBinding);
     WCTProperty(const WCDB::Expression &expression,
-                const WCTColumnBinding *columnBinding);
+                const WCTColumnBinding &columnBinding);
 
     WCTProperty inTable(NSString *tableName) const;
     WCTProperty inSchema(NSString *schemaName) const;

@@ -430,7 +430,7 @@
 
 - (id /* WCTObject* */)nextObjectOfClass:(Class)cls orDone:(BOOL &)isDone
 {
-    return [self nextObjectOfClass:cls onProperties:[cls objectRelationalMappingForWCDB].getAllProperties() orDone:isDone];
+    return [self nextObjectOfClass:cls onProperties:[cls allProperties] orDone:isDone];
 }
 
 - (id /* WCTObject* */)nextObjectOnProperties:(const WCTPropertyList &)properties orDone:(BOOL &)isDone
@@ -454,7 +454,7 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls
 {
-    return [self allObjectsOfClass:cls onProperties:[cls objectRelationalMappingForWCDB].getAllProperties()];
+    return [self allObjectsOfClass:cls onProperties:[cls allProperties]];
 }
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTPropertyList &)properties
@@ -484,7 +484,7 @@
 {
     Class cls = object.class;
     WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
-    const WCTPropertyList &properties = [cls objectRelationalMappingForWCDB].getAllProperties();
+    const WCTPropertyList &properties = [cls allProperties];
     return [self execute:statement
               withObject:object
             onProperties:properties];
@@ -539,7 +539,7 @@
         return NO;
     }
     std::string table = tableName.cppString;
-    const WCTBinding &binding = [cls objectRelationalMappingForWCDB];
+    const WCTBinding &binding = [cls objectRelationalMapping];
     std::pair<bool, bool> isTableExists = handle->isTableExists(table);
     if (!isTableExists.first) {
         return NO;

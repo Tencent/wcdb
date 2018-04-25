@@ -60,7 +60,7 @@ WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
 
 + (int)indexOfProperty:(const WCTProperty &)property
 {
-    const auto &columnBindings = [self objectRelationalMappingForWCDB].getColumnBindings();
+    const auto &columnBindings = [self objectRelationalMapping].getColumnBindings();
     auto iter = columnBindings.find(property.getColumnBinding().columnDef.getColumnName());
     if (iter == columnBindings.end()) {
         return -1;
