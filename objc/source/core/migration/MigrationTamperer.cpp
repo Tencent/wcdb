@@ -215,7 +215,7 @@ bool MigrationTamperer::tamper(
 {
     TAMPER_PREPARE(cowLang);
     bool result = tamper(lang.withClause);
-    result = tamper(lang.qualifiedTableName);
+    result = tamper(lang.qualifiedTableName) || result;
     result = tamperList(lang.keyValues) || result;
     result = tamper(lang.condition) || result;
     result = tamperList(lang.orderingTerms) || result;
@@ -229,7 +229,7 @@ bool MigrationTamperer::tamper(
 {
     TAMPER_PREPARE(cowLang);
     bool result = tamper(lang.withClause);
-    result = tamper(lang.qualifiedTableName);
+    result = tamper(lang.qualifiedTableName) || result;
     result = tamper(lang.condition) || result;
     result = tamperList(lang.orderingTerms) || result;
     result = tamper(lang.limit) || result;

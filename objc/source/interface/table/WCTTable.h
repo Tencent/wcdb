@@ -59,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTDatabase *)getDatabase;
 
+- (WCTCoreError *)error;
+
 @end
 
 NS_ASSUME_NONNULL_END

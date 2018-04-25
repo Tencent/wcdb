@@ -60,9 +60,4 @@
     _database = nullptr;
 }
 
-- (WCTCoreError *)error
-{
-    return nil;
-}
-
 @end

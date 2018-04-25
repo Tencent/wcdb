@@ -95,7 +95,8 @@
     if (_handle) {
         _handle->finalize();
     }
-    if (_recyclableHandle != nullptr) {
+    //Actually, _handle will not be null if _recyclableHandle is not null.
+    if (_recyclableHandle != nullptr && _handle) {
         if (keepError) {
             _nonHandleError = [[WCTCoreError alloc] initWithHandleError:_handle->getError()];
         } else {

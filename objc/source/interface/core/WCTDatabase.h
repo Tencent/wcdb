@@ -124,5 +124,7 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
  */
 - (BOOL)isBlockaded;
 
+- (WCTCoreError *)error;
+
 @end
 NS_ASSUME_NONNULL_END

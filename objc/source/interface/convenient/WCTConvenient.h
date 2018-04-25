@@ -707,29 +707,29 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 @protocol WCTConvenientStatement
 #pragma mark - Statement
-- (WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement;
+- (nullable WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement;
 
-- (WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement atIndex:(int)index;
+- (nullable WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement atIndex:(int)index;
 
-- (WCTOneRow *)getRowFromStatement:(const WCDB::Statement &)statement;
+- (nullable WCTOneRow *)getRowFromStatement:(const WCDB::Statement &)statement;
 
-- (WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement;
+- (nullable WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement;
 
-- (WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement atIndex:(int)index;
+- (nullable WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement atIndex:(int)index;
 
-- (WCTColumnsXRows *)getRowsFromStatement:(const WCDB::Statement &)statement;
+- (nullable WCTColumnsXRows *)getRowsFromStatement:(const WCDB::Statement &)statement;
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                          fromStatement:(const WCDB::Statement &)statement;
+- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
+                                   fromStatement:(const WCDB::Statement &)statement;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                    fromStatement:(const WCDB::Statement &)statement;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                             fromStatement:(const WCDB::Statement &)statement;
 
-- (id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
-                               fromStatement:(const WCDB::Statement &)statement;
+- (nullable id /* WCTObject* */)getObjectOnProperties:(const WCTPropertyList &)properties
+                                        fromStatement:(const WCDB::Statement &)statement;
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
-                                         fromStatement:(const WCDB::Statement &)statement;
+- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnProperties:(const WCTPropertyList &)properties
+                                                  fromStatement:(const WCDB::Statement &)statement;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
      withObject:(WCTObject *)object;

@@ -22,6 +22,8 @@
 
 @interface WCTUnsafeHandle : WCTCore
 
+- (WCTCoreError *)error;
+
 #pragma mark - Life Cycle
 
 - (void)finalizeHandle;
