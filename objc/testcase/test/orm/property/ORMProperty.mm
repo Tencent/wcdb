@@ -30,4 +30,6 @@ WCDB_SYNTHESIZE_COLUMN(ORMProperty, property2, "renamedProperty2")
 WCDB_SYNTHESIZE_DEFAULT(ORMProperty, property3, "defaultString")
 WCDB_SYNTHESIZE_COLUMN_DEFAULT(ORMProperty, property4, "renamedProperty4", 1.1)
 
+WCDB_PRIMARY(ORMProperty, property1)
+
 @end

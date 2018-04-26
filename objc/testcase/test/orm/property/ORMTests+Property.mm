@@ -30,7 +30,12 @@
 
 - (void)test
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(property1 INTEGER, property3 TEXT DEFAULT 'defaultString', renamedProperty2 REAL, renamedProperty4 REAL DEFAULT 1.1)", _tableName];
+    XCTAssertEqual(ORMProperty.property1.getDescription(), "property1");
+    XCTAssertEqual(ORMProperty.property2.getDescription(), "renamedProperty2");
+    XCTAssertEqual(ORMProperty.property3.getDescription(), "property3");
+    XCTAssertEqual(ORMProperty.property4.getDescription(), "renamedProperty4");
+
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(property1 INTEGER PRIMARY KEY, property3 TEXT DEFAULT 'defaultString', renamedProperty2 REAL, renamedProperty4 REAL DEFAULT 1.1)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMProperty.class]);
