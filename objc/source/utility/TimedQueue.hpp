@@ -63,8 +63,9 @@ public:
             //delay
             Element element(key, std::chrono::steady_clock::now() + m_delay,
                             info);
-            m_list.push_front(std::move(element));
-            auto last = m_list.begin();
+            m_list.push_back(std::move(element));
+            auto last = m_list.end();
+            std::advance(last, -1);
             m_map.insert({key, last});
         }
         if (notify) {
@@ -92,14 +93,14 @@ public:
                 m_cond.wait(lockGuard);
                 continue;
             }
-            Element &element = m_list.back();
+            Element &element = m_list.front();
             Time now = std::chrono::steady_clock::now();
             if (now < element.expired) {
                 m_cond.wait_for(lockGuard, element.expired - now);
                 continue;
             }
             Element expired = std::move(element);
-            m_list.pop_back();
+            m_list.pop_front();
             m_map.erase(expired.key);
             lockGuard.unlock();
             onElementExpired(expired.key, expired.info);
