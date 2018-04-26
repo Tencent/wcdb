@@ -30,7 +30,7 @@
 
 class WCTBinding {
 public:
-    static WCTBinding &bindingWithClass(Class cls);
+    static const WCTBinding &bindingWithClass(Class cls);
 
     template <typename T>
     void addColumnBinding(const std::string &propertyName,
@@ -83,15 +83,9 @@ protected:
              WCDB::String::CaseInsensiveComparator>
         m_columnBindings;
 
-    std::map<std::string,
-             WCDB::TableConstraint,
-             WCDB::String::CaseInsensiveComparator>
-        m_constraints;
+    std::map<std::string, WCDB::TableConstraint> m_constraints;
 
-    std::map<std::string,
-             WCDB::StatementCreateIndex,
-             WCDB::String::CaseInsensiveComparator>
-        m_indexes;
+    std::map<std::string, WCDB::StatementCreateIndex> m_indexes;
 
     Class m_cls;
 };

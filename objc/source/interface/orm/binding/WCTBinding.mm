@@ -28,7 +28,7 @@
 #import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
-WCTBinding &WCTBinding::bindingWithClass(Class cls)
+const WCTBinding &WCTBinding::bindingWithClass(Class cls)
 {
     static std::map<Class, WCTBinding> s_bindings;
     static std::recursive_mutex s_mutex;

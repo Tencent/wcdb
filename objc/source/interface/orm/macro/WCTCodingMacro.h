@@ -27,7 +27,7 @@
 #define WCDB_IMPLEMENTATION(className)                                         \
     +(const WCTBinding &) objectRelationalMapping                              \
     {                                                                          \
-        static WCTBinding &s_binding =                                         \
+        static const WCTBinding &s_binding =                                   \
             WCTBinding::bindingWithClass(className.class);                     \
         WCTAssert(self.class == className.class,                               \
                   "Inheritance is not supported for ORM yet.");                \
