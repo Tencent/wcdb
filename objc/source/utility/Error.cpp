@@ -39,16 +39,12 @@ bool Error::isOK() const
 
 std::string Error::getDescription() const
 {
-    std::string description("[");
-    description.append(Error::LevelName(level));
-    description.append("]");
-    if (level != Level::Warning && level != Level::Fatal) {
-        addToDescription(description, "Code", code);
-    }
+    std::string description;
+    addToDescription(description, "Code", code);
     if (!message.empty()) {
         addToDescription(description, "Msg", message);
     }
-    return description;
+    return "[" + std::string(Error::LevelName(level)) + "]" + description;
 }
 
 void Error::addToDescription(std::string &description,

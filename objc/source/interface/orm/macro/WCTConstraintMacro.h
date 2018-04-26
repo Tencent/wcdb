@@ -25,24 +25,33 @@
     WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)                     \
     +(void) WCDB_ORM(className, primary)                                       \
     {                                                                          \
-        binding.getColumnDef(className.propertyName.getDescription())          \
-            .byAddingConstraint(WCDB::ColumnConstraint()                       \
-                                    .withPrimaryKey(order, autoIncrement)      \
-                                    .onConflict(conflictClause));              \
+        WCDB_COMPILE_TIME_CHECK(className.propertyName);                       \
+        const WCTProperty &property =                                          \
+            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
+        binding.getColumnDef(property).byAddingConstraint(                     \
+            WCDB::ColumnConstraint()                                           \
+                .withPrimaryKey(order, autoIncrement)                          \
+                .onConflict(conflictClause));                                  \
     }
 
 #define __WCDB_NOT_NULL_IMP(className, propertyName)                           \
     +(void) WCDB_ORM(className, not_null)                                      \
     {                                                                          \
-        binding.getColumnDef(className.propertyName.getDescription())          \
-            .byAddingConstraint(WCDB::ColumnConstraint().withNotNull());       \
+        WCDB_COMPILE_TIME_CHECK(className.propertyName);                       \
+        const WCTProperty &property =                                          \
+            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
+        binding.getColumnDef(property).byAddingConstraint(                     \
+            WCDB::ColumnConstraint().withNotNull());                           \
     }
 
 #define __WCDB_UNIQUE_IMP(className, propertyName)                             \
     +(void) WCDB_ORM(className, unique)                                        \
     {                                                                          \
-        binding.getColumnDef(className.propertyName.getDescription())          \
-            .byAddingConstraint(WCDB::ColumnConstraint().withUnique());        \
+        WCDB_COMPILE_TIME_CHECK(className.propertyName);                       \
+        const WCTProperty &property =                                          \
+            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
+        binding.getColumnDef(property).byAddingConstraint(                     \
+            WCDB::ColumnConstraint().withUnique());                            \
     }
 
 //Table Constraint
@@ -50,8 +59,11 @@
                                  order)                                        \
     +(void) WCDB_ORM(className, multi_primary)                                 \
     {                                                                          \
+        WCDB_COMPILE_TIME_CHECK(className.propertyName);                       \
+        const WCTProperty &property =                                          \
+            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
         binding.getOrCreateTableConstraint(constraintName)                     \
-            .withPrimaryKey(className.propertyName.asIndex(order));            \
+            .withPrimaryKey(property.asIndex(order));                          \
     }
 
 #define __WCDB_MULTI_PRIMARY_CONFLICT_IMP(className, constraintName, conflict) \
@@ -65,8 +77,11 @@
                                 order)                                         \
     +(void) WCDB_ORM(className, multi_unique)                                  \
     {                                                                          \
+        WCDB_COMPILE_TIME_CHECK(className.propertyName);                       \
+        const WCTProperty &property =                                          \
+            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
         binding.getOrCreateTableConstraint(constraintName)                     \
-            .withUnique(className.propertyName.asIndex(order));                \
+            .withUnique(property.asIndex(order));                              \
     }
 
 #define __WCDB_MULTI_UNIQUE_CONFLICT_IMP(className, constraintName, conflict)  \

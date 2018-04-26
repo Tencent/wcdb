@@ -38,13 +38,15 @@ public:
     {
         WCTColumnBinding columnBinding(m_cls, propertyName, columnName,
                                        (T *) nullptr);
-        addColumnBinding(columnName, columnBinding);
+        addColumnBinding(columnName, std::move(columnBinding));
     }
+
+    const WCTProperty &getProperty(const std::string &propertyName) const;
 
     const WCTColumnBinding &
     getColumnBinding(const std::string &columnName) const;
 
-    WCDB::ColumnDef &getColumnDef(const std::string &columnName);
+    WCDB::ColumnDef &getColumnDef(const WCTProperty &property);
 
     WCDB::TableConstraint &getOrCreateTableConstraint(const std::string &name);
 
@@ -74,9 +76,10 @@ protected:
     void initialize();
 
     void addColumnBinding(const std::string &columnName,
-                          WCTColumnBinding &columnBinding);
+                          const WCTColumnBinding &columnBinding);
 
     WCTPropertyList m_properties;
+    std::map<std::string, WCTPropertyList::iterator> m_mappedProperties;
 
     std::map<std::string,
              WCTColumnBinding,

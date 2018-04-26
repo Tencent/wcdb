@@ -45,7 +45,8 @@
     __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                 \
     +(void) WCDB_ORM(className, default)                                       \
     {                                                                          \
-        binding.getColumnDef(columnName)                                       \
-            .byAddingConstraint(                                               \
-                WCDB::ColumnConstraint().withDefaultValue(defaultValue));      \
+        const WCTProperty &property =                                          \
+            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
+        binding.getColumnDef(property).byAddingConstraint(                     \
+            WCDB::ColumnConstraint().withDefaultValue(defaultValue));          \
     }

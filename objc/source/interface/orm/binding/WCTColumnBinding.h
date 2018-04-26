@@ -33,6 +33,7 @@ public:
         T * = nullptr,
         typename std::enable_if<!WCDB::IsObjCType<T>::value>::type * = nullptr)
         : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
+        , propertyName(pn)
         , m_class(cls)
         , columnDef(WCDB::Column(cn))
     {
@@ -47,6 +48,7 @@ public:
         T * = nullptr,
         typename std::enable_if<WCDB::IsObjCType<T>::value>::type * = nullptr)
         : accessor(new WCTRuntimeObjCAccessor(cls, pn))
+        , propertyName(pn)
         , m_class(cls)
         , columnDef(WCDB::Column(cn))
     {
@@ -57,6 +59,7 @@ public:
     const std::shared_ptr<WCTBaseAccessor> accessor;
 
     WCDB::ColumnDef columnDef;
+    const std::string propertyName;
 
 protected:
     Class m_class;

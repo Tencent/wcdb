@@ -70,4 +70,8 @@
         break;                                                                 \
     }
 
+#define WCDB_COMPILE_TIME_CHECK(type_or_expression)                            \
+    static_assert(sizeof(type_or_expression) > 0,                              \
+                  WCDB_STRINGIFY(type_or_expression) "is not exists.")
+
 #endif /* Macro_hpp */

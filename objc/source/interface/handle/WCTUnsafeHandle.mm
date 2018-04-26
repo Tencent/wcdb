@@ -445,7 +445,6 @@
 
 - (id /* WCTObject* */)nextObjectOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties orDone:(BOOL)isDone
 {
-    WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
     if (_handle->step((bool &) isDone) && !isDone) {
         return [self getObjectOfClass:cls onProperties:properties];
     }
@@ -469,7 +468,6 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties
 {
-    WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
     WCTHandleAssert(return nil;);
     NSMutableArray<WCTObject *> *objects = [[NSMutableArray<WCTObject *> alloc] init];
     bool done;
@@ -484,7 +482,6 @@
      withObject:(WCTObject *)object
 {
     Class cls = object.class;
-    WCTAssert([cls conformsToProtocol:@protocol(WCTTableCoding)], "Class should conforms to WCTTableCoding protocol");
     const WCTPropertyList &properties = [cls allProperties];
     return [self execute:statement
               withObject:object

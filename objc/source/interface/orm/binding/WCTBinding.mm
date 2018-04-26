@@ -44,9 +44,6 @@ const WCTBinding &WCTBinding::bindingWithClass(Class cls)
 WCTBinding::WCTBinding(Class cls)
     : m_cls(cls)
 {
-#ifdef DEBUG
-    WCTAssert(class_conformsToProtocol(m_cls, @protocol(WCTTableCoding)), "And ORM class should conform to @protocol(WCTTableCoding).");
-#endi
 }
 
 void WCTBinding::initialize()
@@ -75,12 +72,12 @@ void WCTBinding::initialize()
             [others addObject:selName];
         }
     }
-    for (NSString *selName in synthesizations) {
+    for (NSString *selName in [synthesizations sortedArrayUsingSelector:@selector(compare:)]) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
         ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
     }
-    for (NSString *selName in others) {
+    for (NSString *selName in [others sortedArrayUsingSelector:@selector(compare:)]) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
         ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
@@ -118,9 +115,9 @@ WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName) co
     return statement;
 }
 
-WCDB::ColumnDef &WCTBinding::getColumnDef(const std::string &columnName)
+WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
 {
-    auto iter = m_columnBindings.find(columnName);
+    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.getColumnName());
     WCTInnerAssert(iter != m_columnBindings.end());
     return iter->second.columnDef;
 }
@@ -167,15 +164,26 @@ const WCTPropertyList &WCTBinding::getAllProperties() const
     return m_properties;
 }
 
+const WCTProperty &WCTBinding::getProperty(const std::string &propertyName) const
+{
+    auto iter = m_mappedProperties.find(propertyName);
+#ifdef DEBUG
+    WCTInnerAssert(iter != m_mappedProperties.end());
+#endif
+    return *iter->second;
+}
+
 void WCTBinding::addColumnBinding(const std::string &columnName,
-                                  WCTColumnBinding &columnBinding)
+                                  const WCTColumnBinding &columnBinding)
 {
 #ifdef DEBUG
     WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
 #endif
-    auto iter = m_columnBindings.insert({columnName, std::move(columnBinding)}).first;
-    WCTProperty property(iter->second);
-    m_properties.push_back(property);
+    auto iter = m_columnBindings.insert({columnName, columnBinding}).first;
+    m_properties.push_back(iter->second);
+    auto listIter = m_properties.end();
+    std::advance(listIter, -1);
+    m_mappedProperties.insert({iter->second.propertyName, listIter});
 }
 
 WCTColumnNamed WCTBinding::getColumnGenerator()
