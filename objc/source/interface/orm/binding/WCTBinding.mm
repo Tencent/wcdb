@@ -44,9 +44,9 @@ const WCTBinding &WCTBinding::bindingWithClass(Class cls)
 WCTBinding::WCTBinding(Class cls)
     : m_cls(cls)
 {
-    if (!class_conformsToProtocol(m_cls, @protocol(WCTTableCoding))) {
-        class_addProtocol(m_cls, @protocol(WCTTableCoding));
-    }
+#ifdef DEBUG
+    WCTAssert(class_conformsToProtocol(m_cls, @protocol(WCTTableCoding)), "And ORM class should conform to @protocol(WCTTableCoding).");
+#endi
 }
 
 void WCTBinding::initialize()
