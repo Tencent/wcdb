@@ -70,10 +70,8 @@ void WCTBinding::initialize()
         if ([selName compare:synthesizePrefix
                      options:0
                        range:synthesizeRange] == NSOrderedSame) {
-            NSLog(@" property %@", selName);
             [synthesizations addObject:selName];
         } else {
-            NSLog(@" other %@", selName);
             [others addObject:selName];
         }
     }
