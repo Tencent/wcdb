@@ -49,13 +49,14 @@ public:
     Expression &withTable(const std::string &tableName);
     Expression &withSchema(const std::string &schemaName);
 
-    static Expression Function(const std::string &functionName);
-    static Expression Function(const std::string &functionName,
+    static Expression function(const std::string &functionName);
+    static Expression function(const std::string &functionName,
                                const Expression &parameter,
                                bool distinct = false);
-    static Expression Function(const std::string &functionName,
+    static Expression function(const std::string &functionName,
                                const std::list<Expression> &parameters,
                                bool distinct = false);
+    static const Expression &lastInsertedRowid();
 
     class All : public DescribableWithLang<Lang::ExprFunction>,
                 public FunctionOperable {

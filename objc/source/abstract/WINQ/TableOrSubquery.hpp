@@ -47,10 +47,10 @@ public:
     TableOrSubquery &indexedBy(const std::string &indexName);
     TableOrSubquery &notIndexed();
 
-    static TableOrSubquery Function(const std::string &functionName);
-    static TableOrSubquery Function(const std::string &functionName,
+    static TableOrSubquery function(const std::string &functionName);
+    static TableOrSubquery function(const std::string &functionName,
                                     const Expression &expression);
-    static TableOrSubquery Function(const std::string &functionName,
+    static TableOrSubquery function(const std::string &functionName,
                                     const std::list<Expression> &expressions);
 
 protected:

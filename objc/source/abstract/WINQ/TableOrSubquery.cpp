@@ -111,14 +111,14 @@ TableOrSubquery &TableOrSubquery::notIndexed()
     return *this;
 }
 
-TableOrSubquery TableOrSubquery::Function(const std::string &functionName)
+TableOrSubquery TableOrSubquery::function(const std::string &functionName)
 {
     Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction> cowLang;
     cowLang.get_or_copy().tableFunctionName.assign(functionName);
     return cowLang;
 }
 
-TableOrSubquery TableOrSubquery::Function(const std::string &functionName,
+TableOrSubquery TableOrSubquery::function(const std::string &functionName,
                                           const Expression &expression)
 {
     Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction> cowLang;
@@ -129,7 +129,7 @@ TableOrSubquery TableOrSubquery::Function(const std::string &functionName,
 }
 
 TableOrSubquery
-TableOrSubquery::Function(const std::string &functionName,
+TableOrSubquery::function(const std::string &functionName,
                           const std::list<Expression> &expressions)
 {
     Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction> cowLang;

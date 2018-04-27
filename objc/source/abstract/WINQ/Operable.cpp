@@ -688,7 +688,7 @@ Expression Operable::collate(const std::string &collationName) const
 Expression Operable::function(const std::string &functionName,
                               bool distinct) const
 {
-    return Expression::Function(functionName, getExpressionLang(), distinct);
+    return Expression::function(functionName, getExpressionLang(), distinct);
 }
 
 } // namespace WCDB

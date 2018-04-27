@@ -86,7 +86,13 @@ Expression::Expression(
     lang.exprFunction.assign(exprFunction);
 }
 
-Expression Expression::Function(const std::string &functionName)
+const Expression &Expression::lastInsertedRowid()
+{
+    static const Expression s_lastInsertedRowid("last_insert_rowid");
+    return s_lastInsertedRowid;
+}
+
+Expression Expression::function(const std::string &functionName)
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
     Lang::ExprFunction &lang = cowLang.get_or_copy();
@@ -95,7 +101,7 @@ Expression Expression::Function(const std::string &functionName)
     return cowLang;
 }
 
-Expression Expression::Function(const std::string &functionName,
+Expression Expression::function(const std::string &functionName,
                                 const Expression &parameter,
                                 bool distinct)
 {
@@ -111,7 +117,7 @@ Expression Expression::Function(const std::string &functionName,
     return cowLang;
 }
 
-Expression Expression::Function(const std::string &functionName,
+Expression Expression::function(const std::string &functionName,
                                 const std::list<Expression> &parameters,
                                 bool distinct)
 {

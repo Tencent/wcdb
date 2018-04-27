@@ -223,7 +223,7 @@ Config BuiltinConfig::tokenizeWithNames(const std::list<std::string> &names)
 
                           //Setup Tokenize
                           static const StatementSelect s_fts3Tokenizer =
-                              StatementSelect().select(Expression::Function(
+                              StatementSelect().select(Expression::function(
                                   "fts3_tokenizer",
                                   {BindParameter(1), BindParameter(2)}));
                           if (handle->prepare(s_fts3Tokenizer)) {
