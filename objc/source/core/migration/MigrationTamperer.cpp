@@ -28,7 +28,6 @@ MigrationTamperer::MigrationTamperer(MigrationInfos *infos,
     , m_lockGuard(infos->getSharedLock())
     , m_didSourceTampered(false)
     , m_didTampered(false)
-    , m_fillingSchema(true)
     , m_infosMap(infos->getInfos())
     , m_tamperingSelect(false)
 {
@@ -58,44 +57,20 @@ const Statement &MigrationTamperer::getTamperedStatement() const
 
 void MigrationTamperer::tamperWithStatement(const Statement &statement)
 {
-    if (m_migrationInfos->isMigrated()) {
-        return;
-    }
     m_tamperedSourceStatement = statement.getCOWLang();
-    m_didSourceTampered = doTamper(m_tamperedSourceStatement);
-    m_fillingSchema = false;
     bool sourceShouldBeTampered = true;
     switch (statement.getStatementType()) {
-        case Statement::Type::Insert: {
-            //TODO
-            //            std::shared_ptr<MigrationInfo> migratingInfo =
-            //                m_migrationInfos->getMigratingInfo();
-            //            const auto cowLang =
-            //                m_tamperedSourceStatement.getCOWLang().get<Lang::InsertSTMT>();
-            //            if (!migratingInfo) {
-            //                break;
-            //            }
-            //            if ((cowLang.schemaName.empty() ||
-            //                 cowLang.schemaName.equal(
-            //                     StatementAttach::getMainSchema())) //right schema
-            //                && cowLang.tableName.equal(
-            //                       migratingInfo->targetTable) //right table name
-            //                ) {
-            //                sourceShouldBeTampered = false;
-            //            }
-            break;
-        }
         case Statement::Type::Update:
         case Statement::Type::Delete:
         case Statement::Type::DropTable:
+            //mutiple execution
             sourceShouldBeTampered = false;
             break;
         default:
             break;
     }
     if (sourceShouldBeTampered) {
-        m_didSourceTampered =
-            doTamper(m_tamperedSourceStatement) || m_didSourceTampered;
+        m_didSourceTampered = doTamper(m_tamperedSourceStatement);
     } else {
         m_tamperedStatement = m_tamperedSourceStatement.getCOWLang();
         m_didTampered = doTamper(m_tamperedStatement);
@@ -159,15 +134,6 @@ bool MigrationTamperer::doTamper(Statement &statement)
         }
         case Statement::Type::DropTable: {
             Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> stmt(
-                statement.getCOWLang());
-            if (tamper(stmt)) {
-                statement.getCOWLang().assign(stmt);
-                return true;
-            }
-            return false;
-        }
-        case Statement::Type::CreateIndex: {
-            Lang::CopyOnWriteLazyLang<Lang::CreateIndexSTMT> stmt(
                 statement.getCOWLang());
             if (tamper(stmt)) {
                 statement.getCOWLang().assign(stmt);
@@ -257,21 +223,13 @@ bool MigrationTamperer::tamper(
     Lang::CopyOnWriteLazyLang<Lang::CreateTableSTMT> &cowLang)
 {
     TAMPER_PREPARE(cowLang);
-    bool result = tamperSchemaName(lang.schemaName);
     switch (lang.switcher) {
         case Lang::CreateTableSTMT::Switch::Select:
-            result = tamper(lang.selectSTMT) || result;
+            return tamper(lang.selectSTMT);
         default:
             break;
     }
-    return result;
-}
-
-bool MigrationTamperer::tamper(
-    Lang::CopyOnWriteLazyLang<Lang::CreateIndexSTMT> &cowLang)
-{
-    TAMPER_PREPARE(cowLang);
-    return tamperSchemaName(lang.schemaName);
+    return false;
 }
 
 #pragma mark - Lang
@@ -762,9 +720,6 @@ bool MigrationTamperer::tamper(
 
 bool MigrationTamperer::tamperTableName(CopyOnWriteString &tableName)
 {
-    if (m_fillingSchema) {
-        return false;
-    }
     auto iter = m_infosMap.find(tableName.get());
     if (iter != m_infosMap.end()) {
         tableName.assign(iter->second->sourceTable);
@@ -773,40 +728,21 @@ bool MigrationTamperer::tamperTableName(CopyOnWriteString &tableName)
     return false;
 }
 
-bool MigrationTamperer::tamperSchemaName(CopyOnWriteString &schemaName)
-{
-    if (m_fillingSchema && schemaName.empty() &&
-        !m_migrationInfos->isSameDatabaseMigration()) {
-        schemaName.assign(StatementAttach::getMainSchema());
-        return true;
-    }
-    return false;
-}
-
 bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                                                  CopyOnWriteString &schemaName)
 {
-    if (m_fillingSchema) {
-        if (schemaName.empty() && !tableName.empty() &&
-            !m_migrationInfos->isSameDatabaseMigration()) {
-            schemaName.assign(StatementAttach::getMainSchema());
-            return true;
-        }
-    } else {
-        if ((schemaName.empty() ||
-             schemaName.get() == StatementAttach::getMainSchema()) &&
-            !tableName.empty()) {
-            auto iter = m_infosMap.find(tableName.get());
-            if (m_tamperingSelect) {
-                tableName.assign(iter->second->unionedViewName);
-            } else {
-                if (iter != m_infosMap.end()) {
-                    tableName.assign(iter->second->sourceTable);
-                    if (!iter->second->isSameDatabaseMigration()) {
-                        schemaName.assign(iter->second->schema);
-                    }
-                    return true;
+    if ((schemaName.empty() || schemaName.get() == Lang::mainSchema()) &&
+        !tableName.empty()) {
+        auto iter = m_infosMap.find(tableName.get());
+        if (m_tamperingSelect) {
+            tableName.assign(iter->second->unionedViewName);
+        } else {
+            if (iter != m_infosMap.end()) {
+                tableName.assign(iter->second->sourceTable);
+                if (!iter->second->isSameDatabaseMigration()) {
+                    schemaName.assign(iter->second->schema);
                 }
+                return true;
             }
         }
     }

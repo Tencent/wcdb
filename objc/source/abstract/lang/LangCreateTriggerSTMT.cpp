@@ -43,9 +43,8 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
     if (ifNotExists) {
         description.append("IF NOT EXISTS ");
     }
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     LangRemedialAssert(!triggerName.empty());
     description.append(triggerName.get() + " ");
     if (type != CreateTriggerSTMT::Type::NotSet) {

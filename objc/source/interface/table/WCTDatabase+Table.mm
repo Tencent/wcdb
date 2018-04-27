@@ -29,18 +29,14 @@
 - (BOOL)isTableExists:(NSString *)tableName
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.cppString)
-                                      .withSchema(WCDB::StatementAttach::getMainSchema());
-    return _database->isTableExists(table).second;
+    return _database->isTableExists(tableName.cppString).second;
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
             withError:(WCTCoreError **)error
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    WCDB::TableOrSubquery table = WCDB::TableOrSubquery(tableName.cppString)
-                                      .withSchema(WCDB::StatementAttach::getMainSchema());
-    auto result = _database->isTableExists(table);
+    auto result = _database->isTableExists(tableName.cppString);
     if (error) {
         if (result.first) {
             *error = nil;

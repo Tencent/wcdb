@@ -38,9 +38,9 @@ CopyOnWriteString ReindexSTMT::SQL() const
             break;
         case Switch::TableOrIndex:
             description.append(" ");
-            if (!schemaName.empty()) {
-                description.append(schemaName.get() + ".");
-            }
+            description.append(schemaName.empty() ? mainSchema()
+                                                  : schemaName.get());
+            description.append(".");
             LangRemedialAssert(!tableOrIndexName.empty());
             description.append(tableOrIndexName.get());
             break;

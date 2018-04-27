@@ -21,7 +21,7 @@
 #ifndef LangTableOrSubquery_hpp
 #define LangTableOrSubquery_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

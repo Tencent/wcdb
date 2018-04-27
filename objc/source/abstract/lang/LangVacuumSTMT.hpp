@@ -21,7 +21,7 @@
 #ifndef LangVacuumSTMT_hpp
 #define LangVacuumSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

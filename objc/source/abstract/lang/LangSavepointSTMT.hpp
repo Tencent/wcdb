@@ -21,7 +21,7 @@
 #ifndef LangSavepointSTMT_hpp
 #define LangSavepointSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

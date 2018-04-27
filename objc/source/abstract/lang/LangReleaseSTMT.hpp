@@ -21,7 +21,7 @@
 #ifndef LangReleaseSTMT_hpp
 #define LangReleaseSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

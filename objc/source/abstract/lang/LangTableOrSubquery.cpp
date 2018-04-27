@@ -28,9 +28,8 @@ namespace Lang {
 CopyOnWriteString TableOrSubqueryTable::SQL() const
 {
     std::string description;
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     if (!tableAlias.empty()) {
@@ -65,9 +64,8 @@ TableOrSubqueryTable::TableOrSubqueryTable()
 CopyOnWriteString TableOrSubqueryTableFunction::SQL() const
 {
     std::string description;
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     LangRemedialAssert(!tableFunctionName.empty());
     description.append(tableFunctionName.get());
     description.append("(");

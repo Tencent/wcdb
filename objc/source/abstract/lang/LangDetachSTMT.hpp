@@ -21,7 +21,7 @@
 #ifndef LangDetachSTMT_hpp
 #define LangDetachSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

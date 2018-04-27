@@ -53,7 +53,6 @@ protected:
     Statement m_tamperedStatement;
     bool m_didTampered;
 
-    bool m_fillingSchema;
     bool m_tamperingSelect;
 
     MigrationInfos *m_migrationInfos;
@@ -68,7 +67,6 @@ protected:
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::InsertSTMT> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::CreateTableSTMT> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> &cowLang);
-    bool tamper(Lang::CopyOnWriteLazyLang<Lang::CreateIndexSTMT> &cowLang);
 #pragma mark - Lang
 protected:
     bool
@@ -111,7 +109,6 @@ protected:
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::WithClause> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::WithClause::Pair> &cowLang);
 
-    bool tamperSchemaName(CopyOnWriteString &schemaName);
     bool tamperTableName(CopyOnWriteString &tableName);
     bool tamperTableAndSchemaName(CopyOnWriteString &tableName,
                                   CopyOnWriteString &schemaName);

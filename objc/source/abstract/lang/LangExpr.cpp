@@ -28,9 +28,8 @@ namespace Lang {
 CopyOnWriteString ExprColumn::SQL() const
 {
     std::string description;
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     if (!tableName.empty()) {
         description.append(tableName.get() + ".");
     }
@@ -302,17 +301,17 @@ CopyOnWriteString ExprIn::SQL() const
             break;
         case Switch::Table:
             description.append(" ");
-            if (!schemaName.empty()) {
-                description.append(schemaName.get() + ".");
-            }
+            description.append(schemaName.empty() ? mainSchema()
+                                                  : schemaName.get());
+            description.append(".");
             LangRemedialAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get());
             break;
         case Switch::Function:
             description.append(" ");
-            if (!schemaName.empty()) {
-                description.append(schemaName.get() + ".");
-            }
+            description.append(schemaName.empty() ? mainSchema()
+                                                  : schemaName.get());
+            description.append(".");
             LangRemedialAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get() + "(");
             if (!exprs.empty()) {

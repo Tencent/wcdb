@@ -31,9 +31,8 @@ AlterTableSTMT::AlterTableSTMT() : switcher(Switch::NotSet)
 CopyOnWriteString AlterTableSTMT::SQL() const
 {
     std::string description("ALTER TABLE ");
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     switch (switcher) {

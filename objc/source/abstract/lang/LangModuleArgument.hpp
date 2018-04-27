@@ -21,7 +21,7 @@
 #ifndef LangModuleArgument_hpp
 #define LangModuleArgument_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

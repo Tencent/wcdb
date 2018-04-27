@@ -21,7 +21,7 @@
 #ifndef LangLiteralValue_hpp
 #define LangLiteralValue_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

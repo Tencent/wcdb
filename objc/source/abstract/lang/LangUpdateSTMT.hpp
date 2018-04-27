@@ -21,7 +21,7 @@
 #ifndef LangUpdateSTMT_hpp
 #define LangUpdateSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

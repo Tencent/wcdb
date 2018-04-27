@@ -21,7 +21,7 @@
 #ifndef LangWithClause_hpp
 #define LangWithClause_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

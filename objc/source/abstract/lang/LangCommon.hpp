@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef LangCommon_h
-#define LangCommon_h
+#ifndef LangCommon_hpp
+#define LangCommon_hpp
 
 #include <WCDB/Assertion.hpp>
 #include <list>
@@ -43,6 +43,8 @@
 namespace WCDB {
 
 namespace Lang {
+
+const std::string &mainSchema();
 
 class Lang {
 public:
@@ -205,4 +207,4 @@ class VacuumSTMT;
 
 } // namespace WCDB
 
-#endif /* LangCommon_h */
+#endif /* LangCommon_hpp */

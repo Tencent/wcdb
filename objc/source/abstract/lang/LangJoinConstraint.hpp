@@ -21,7 +21,7 @@
 #ifndef LangJoinConstraint_hpp
 #define LangJoinConstraint_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

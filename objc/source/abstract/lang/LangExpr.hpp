@@ -21,7 +21,7 @@
 #ifndef LangExpr_hpp
 #define LangExpr_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

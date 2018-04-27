@@ -21,7 +21,7 @@
 #ifndef LangAnalyzeSTMT_hpp
 #define LangAnalyzeSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

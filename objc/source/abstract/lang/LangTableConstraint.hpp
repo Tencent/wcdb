@@ -21,7 +21,7 @@
 #ifndef LangTableConstraint_hpp
 #define LangTableConstraint_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

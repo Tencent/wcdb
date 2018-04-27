@@ -21,7 +21,7 @@
 #ifndef LangBindParameter_hpp
 #define LangBindParameter_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

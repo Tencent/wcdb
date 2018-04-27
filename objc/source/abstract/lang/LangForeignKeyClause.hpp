@@ -21,7 +21,7 @@
 #ifndef LangForeignKeyClause_hpp
 #define LangForeignKeyClause_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

@@ -18,36 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef LangResultColumn_hpp
-#define LangResultColumn_hpp
-
 #include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 
 namespace Lang {
 
-class ResultColumn : public Lang {
-public:
-    ResultColumn();
+const std::string &mainSchema()
+{
+    static const std::string s_mainSchema("main");
+    return s_mainSchema;
+}
 
-    enum class Type : int {
-        NotSet,
-        Expr,
-        Star,
-    };
-    Type type;
+} //namespace Lang
 
-    CopyOnWriteLazyLang<Expr> expr;
-    CopyOnWriteLazyLang<Column> columnAlias;
-
-    CopyOnWriteString tableName;
-
-    CopyOnWriteString SQL() const override;
-};
-
-} // namespace Lang
-
-} // namespace WCDB
-
-#endif /* LangResultColumn_hpp */
+} //namespace WCDB

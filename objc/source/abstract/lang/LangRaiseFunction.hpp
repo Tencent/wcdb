@@ -21,7 +21,7 @@
 #ifndef LangRaiseFunction_hpp
 #define LangRaiseFunction_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

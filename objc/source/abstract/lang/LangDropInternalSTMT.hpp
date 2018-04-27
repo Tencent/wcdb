@@ -21,7 +21,7 @@
 #ifndef LangDropInternalSTMT_hpp
 #define LangDropInternalSTMT_hpp
 
-#include <WCDB/LangCommon.h>
+#include <WCDB/LangCommon.hpp>
 
 namespace WCDB {
 

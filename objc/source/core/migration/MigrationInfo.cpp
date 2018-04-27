@@ -47,7 +47,37 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
     , unionedViewName(getUnionedViewPrefix() + "_" + targetTable + "_" +
                       sourceTable)
 {
-    prepareForMigrating();
+    //setup reusable statement
+    OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::DESC);
+    Expression limit = 10; //TODO opti the step of migration
+
+    m_statementForMigration = StatementInsert()
+                                  .insertOrIgnoreInto(targetTable)
+                                  .values(StatementSelect()
+                                              .select(ResultColumn::all())
+                                              .from(getSourceTable())
+                                              .orderBy(order)
+                                              .limit(limit));
+
+    m_statementForDeletingMigratedRow =
+        StatementDelete()
+            .deleteFrom(getQualifiedSourceTable())
+            .orderBy(order)
+            .limit(limit);
+
+    m_statementForDeletingMigratedRow =
+        StatementDelete()
+            .deleteFrom(getQualifiedSourceTable())
+            .where(Column::rowid() == BindParameter(1));
+
+    m_statementForInsertingLastInsertedSourceIntoTargetTable =
+        StatementInsert()
+            .insertInto(targetTable)
+            .values(
+                StatementSelect()
+                    .select(ResultColumn::all())
+                    .from(getSourceTable())
+                    .where(Column::rowid() == Expression::lastInsertedRowid()));
 }
 
 #pragma mark - Basic
@@ -60,7 +90,7 @@ const std::string MigrationInfo::schemaPrefix()
 std::string MigrationInfo::resolvedSchema(const std::string &path)
 {
     if (path.empty()) {
-        return StatementAttach::getMainSchema();
+        return String::empty();
     }
     return MigrationInfo::schemaPrefix() +
            std::to_string(std::hash<std::string>{}(path));
@@ -68,7 +98,7 @@ std::string MigrationInfo::resolvedSchema(const std::string &path)
 
 bool MigrationInfo::isSameDatabaseMigration() const
 {
-    return schema == StatementAttach::getMainSchema();
+    return schema.empty();
 }
 
 TableOrSubquery MigrationInfo::getSourceTable() const
@@ -82,28 +112,6 @@ QualifiedTableName MigrationInfo::getQualifiedSourceTable() const
 }
 
 #pragma mark - Statement
-void MigrationInfo::prepareForMigrating()
-{
-    //setup reusable statement
-    OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::DESC);
-    Expression limit = 10; //TODO opti the step of migration
-
-    m_statementForMigration = StatementInsert()
-                                  .insertOrIgnoreInto(targetTable)
-                                  .withSchema(StatementAttach::getMainSchema())
-                                  .values(StatementSelect()
-                                              .select(ResultColumn::all())
-                                              .from(getSourceTable())
-                                              .orderBy(order)
-                                              .limit(limit));
-
-    m_statementForDeleteingMigratedRow =
-        StatementDelete()
-            .deleteFrom(getQualifiedSourceTable())
-            .orderBy(order)
-            .limit(limit);
-}
-
 const StatementInsert &MigrationInfo::getStatementForMigration() const
 {
     return m_statementForMigration;
@@ -112,7 +120,7 @@ const StatementInsert &MigrationInfo::getStatementForMigration() const
 const StatementDelete &
 MigrationInfo::getStatementForDeleteingMigratedRow() const
 {
-    return m_statementForDeleteingMigratedRow;
+    return m_statementForDeletingMigratedRow;
 }
 
 StatementDropTable MigrationInfo::getStatementForDroppingOldTable() const
@@ -145,6 +153,23 @@ StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const
 StatementDropView MigrationInfo::getStatementForDroppingUnionedView() const
 {
     return StatementDropView().dropView(unionedViewName).ifExists();
+}
+
+const StatementDelete &
+MigrationInfo::getStatementForDeletingLastInsertedSourceRow() const
+{
+    return m_statementForDeletingMigratedRow;
+}
+
+StatementInsert
+MigrationInfo::getStatementForInsertingLastInsertedSourceIntoTargetTable(
+    const StatementInsert &origin) const
+{
+    StatementInsert statement =
+        m_statementForInsertingLastInsertedSourceIntoTargetTable;
+    statement.getCOWLang().get_or_copy<Lang::InsertSTMT>().type =
+        origin.getCOWLang().get<Lang::InsertSTMT>().type;
+    return statement;
 }
 
 } //namespace WCDB

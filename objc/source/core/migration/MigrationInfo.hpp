@@ -102,13 +102,30 @@ public:
 
     const std::string unionedViewName;
 
-protected:
-    void prepareForMigrating();
+    /**
+     DELETE FROM [sourceTable] WHERE rowid = ?
 
+     @return StatementDelete
+     */
+    const StatementDelete &getStatementForDeletingLastInsertedSourceRow() const;
+
+    /**
+     INSERT [CONFLICT TYPE depends on the origin insertion] INTO [targetTable]
+     SELECT * FROM [sourceTable] WHERE rowid = ?
+
+     @param origin origin insertion
+     @return StatementInsert; 
+     */
+    StatementInsert getStatementForInsertingLastInsertedSourceIntoTargetTable(
+        const StatementInsert &origin) const;
+
+protected:
     static const std::string &getUnionedViewPrefix();
 
     StatementInsert m_statementForMigration;
-    StatementDelete m_statementForDeleteingMigratedRow;
+    StatementDelete m_statementForDeletingMigratedRow;
+    StatementDelete m_statementForDeletingLastInsertedSourceRow;
+    StatementInsert m_statementForInsertingLastInsertedSourceIntoTargetTable;
 
     std::string m_unionedViewName;
 };

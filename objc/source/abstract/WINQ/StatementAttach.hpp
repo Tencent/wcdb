@@ -29,7 +29,6 @@ namespace WCDB {
 class StatementAttach : public StatementWithLang<Lang::AttachSTMT> {
 
 public:
-    static const std::string &getMainSchema();
     StatementAttach &attach(const Expression &expression);
     StatementAttach &as(const std::string &schemaName);
 };

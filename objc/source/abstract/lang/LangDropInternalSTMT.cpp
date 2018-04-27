@@ -36,9 +36,8 @@ CopyOnWriteString DropInternalSTMT::SQL() const
     if (ifExists) {
         description.append("IF EXISTS ");
     }
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     LangRemedialAssert(!name.empty());
     description.append(name.get());
     return description;

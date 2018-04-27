@@ -27,9 +27,8 @@ namespace Lang {
 CopyOnWriteString PragmaSTMT::SQL() const
 {
     std::string description("PRAGMA ");
-    if (!schemaName.empty()) {
-        description.append(schemaName.get() + ".");
-    }
+    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(".");
     if (!pragmaName.empty()) {
         description.append(pragmaName.get());
     }
