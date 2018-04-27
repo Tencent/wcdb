@@ -209,7 +209,10 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
 {
     switch (statement.getStatementType()) {
         case Statement::Type::AlterTable: {
-            //Alter statement is not allowed
+            if (((const StatementAlterTable &) statement)
+                    .isAlteringDefaultValueColumn()) {
+                return;
+            }
             const Lang::AlterTableSTMT &lang =
                 statement.getCOWLang().get<Lang::AlterTableSTMT>();
             if (!lang.schemaName.empty() ||
@@ -217,8 +220,9 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
                 return;
             }
             auto iter = m_infos->getInfos().find(lang.tableName.get());
-            WCTAssert(iter == m_infos->getInfos().end(),
-                      "Executing Alter Table Statement on a migrating table is "
+            WCTAssert(iter == m_infos->getInfos().end() || iter->,
+                      "Altering a column without default value on a migrating "
+                      "table is "
                       "not allowed yet.");
         } break;
         case Statement::Type::Update: {
@@ -234,45 +238,6 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
             WCTAssert(!statementDelete.isLimited(),
                       "Executing Delete Statement with OrderBy/Limit/Offset on "
                       "a migrating table is not allowed yet.");
-        } break;
-        case Statement::Type::Insert: {
-            //Partial replace statement not allowed.
-            StatementInsert statementInsert(statement.getCOWLang());
-            if (!statementInsert.isReplace()) {
-                return;
-            }
-            const Lang::InsertSTMT &lang =
-                statementInsert.getCOWLang().get<Lang::InsertSTMT>();
-            if (!lang.schemaName.empty() ||
-                !lang.schemaName.equal(StatementAttach::getMainSchema())) {
-                return;
-            }
-            auto iter = m_infos->getInfos().find(lang.tableName.get());
-            if (iter == m_infos->getInfos().end()) {
-                return;
-            }
-            auto pair = getUnorderedColumnsWithTable(iter->second->targetTable);
-            if (!pair.first) {
-                return;
-            }
-            auto columns = pair.second;
-            const auto &specifiedColumns =
-                statementInsert.getSpecifiedColumns();
-            if (!specifiedColumns.empty()) {
-                for (const auto &specifiedColumn : specifiedColumns.get()) {
-                    auto iter =
-                        columns.find(specifiedColumn.description().get());
-                    if (iter != columns.end()) {
-                        columns.erase(iter);
-                    }
-                }
-                //all columns should be specific
-                WCTAssert(columns.empty(), "Executing Insert Statement by "
-                                           "replacing without all columns "
-                                           "specificed is not allowed yet. You "
-                                           "can use Update Statement instead.");
-                break;
-            }
         } break;
         default:
             break;
