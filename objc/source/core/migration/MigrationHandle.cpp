@@ -49,6 +49,9 @@ bool MigrationHandle::execute(const Statement &statement)
 #endif
     //Avoid migration info and source table changed
     SharedLockGuard lockGuard(m_infos->getSharedLock());
+    if (m_infos->isMigrated()) {
+        return executeWithoutTampering(statement);
+    }
     MigrationTamperer tamperer(m_infos.get(), statement);
     const Statement &source = tamperer.didSourceTampered()
                                   ? tamperer.getTamperedSourceStatement()
@@ -70,6 +73,9 @@ bool MigrationHandle::prepare(const Statement &statement)
 #endif
     //Avoid migration info and source table changed
     SharedLockGuard lockGuard(m_infos->getSharedLock());
+    if (m_infos->isMigrated()) {
+        return executeWithoutTampering(statement);
+    }
     MigrationTamperer tamperer(m_infos.get(), statement);
     const Statement &source = tamperer.didSourceTampered()
                                   ? tamperer.getTamperedSourceStatement()
@@ -207,6 +213,7 @@ bool MigrationHandle::prepareWithoutTampering(const Statement &statement)
 #ifdef DEBUG
 void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
 {
+    SharedLockGuard lockGuard(m_infos->getSharedLock());
     switch (statement.getStatementType()) {
         case Statement::Type::AlterTable: {
             if (((const StatementAlterTable &) statement)
@@ -216,27 +223,42 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
             const Lang::AlterTableSTMT &lang =
                 statement.getCOWLang().get<Lang::AlterTableSTMT>();
             if (!lang.schemaName.empty() ||
-                !lang.schemaName.equal(StatementAttach::getMainSchema())) {
+                !lang.schemaName.equal(Lang::mainSchema())) {
                 return;
             }
             auto iter = m_infos->getInfos().find(lang.tableName.get());
-            WCTAssert(iter == m_infos->getInfos().end() || iter->,
+            WCTAssert(iter == m_infos->getInfos().end(),
                       "Altering a column without default value on a migrating "
-                      "table is "
-                      "not allowed yet.");
+                      "table is not allowed yet.");
         } break;
         case Statement::Type::Update: {
             //Update statement with orderBy/limit/offset is not allowed.
             StatementUpdate statementUpdate(statement.getCOWLang());
-            WCTAssert(!statementUpdate.isLimited(),
-                      "Executing Update Statement with OrderBy/Limit/Offset on "
+            if (!statementUpdate.isLimited()) {
+                return;
+            }
+            auto iter = m_infos->getInfos().find(
+                statementUpdate.getCOWLang()
+                    .get<Lang::UpdateSTMT>()
+                    .qualifiedTableName.get<Lang::QualifiedTableName>()
+                    .tableName.get());
+            WCTAssert(iter == m_infos->getInfos().end(),
+                      "Updating with OrderBy/Limit/Offset on "
                       "a migrating table is not allowed yet.");
         } break;
         case Statement::Type::Delete: {
             //Delete statement with orderBy/limit/offset is not allowed.
             StatementDelete statementDelete(statement.getCOWLang());
-            WCTAssert(!statementDelete.isLimited(),
-                      "Executing Delete Statement with OrderBy/Limit/Offset on "
+            if (!statementDelete.isLimited()) {
+                return;
+            }
+            auto iter = m_infos->getInfos().find(
+                statementDelete.getCOWLang()
+                    .get<Lang::DeleteSTMT>()
+                    .qualifiedTableName.get<Lang::QualifiedTableName>()
+                    .tableName.get());
+            WCTAssert(iter == m_infos->getInfos().end(),
+                      "Deleting with OrderBy/Limit/Offset on "
                       "a migrating table is not allowed yet.");
         } break;
         default:
