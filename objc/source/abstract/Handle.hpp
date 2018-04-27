@@ -136,8 +136,7 @@ public:
     std::pair<bool, bool> isTableExists(const TableOrSubquery &table);
     std::pair<bool, std::set<std::string>>
     getUnorderedColumnsWithTable(const std::string &tableName);
-    std::pair<bool, std::list<std::string>> getAttachedSchemas();
-    std::pair<bool, bool> isSchemaExists(const std::string &schemaName);
+    std::pair<bool, std::set<std::string>> getUnorderedAttachedSchemas();
 
     typedef std::function<bool(Handle *)> TransactionCallback;
 
@@ -153,8 +152,6 @@ public:
 
 protected:
     void discardableExecute(const Statement &statement);
-    std::pair<bool, std::list<std::string>>
-    getValues(const Statement &statement, int index);
     std::pair<bool, std::set<std::string>>
     getUnorderedValues(const Statement &statement, int index);
     static const std::string &savepointPrefix();

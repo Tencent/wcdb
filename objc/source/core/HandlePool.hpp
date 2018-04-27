@@ -98,7 +98,7 @@ public:
     void purgeFreeHandles();
 
 protected:
-    virtual bool willConfigurateHandle(Handle *handle);
+    bool willConfigurateHandle(Handle *handle);
     std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
     std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
     void flowBackConfiguredHandle(

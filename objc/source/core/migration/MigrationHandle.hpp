@@ -58,7 +58,6 @@ public:
 
 #pragma mark - Migration
 public:
-    bool lazySetupVeryFirstMigratingInfo();
     bool executeWithoutTampering(const Statement &statement);
     bool prepareWithoutTampering(const Statement &statement);
 

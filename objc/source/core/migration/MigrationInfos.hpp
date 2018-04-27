@@ -32,8 +32,12 @@ namespace WCDB {
 class MigrationInfos {
 #pragma mark - Initialize
 public:
+    typedef std::function<void(const MigrationInfo *)> MigratedCallback;
+
     static std::shared_ptr<MigrationInfos>
     infos(const std::list<std::shared_ptr<MigrationInfo>> &infos);
+
+    void setMigratedCallback(const MigratedCallback &onMigrated);
 
 protected:
     MigrationInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos);
@@ -48,13 +52,12 @@ public:
     getSchemasForAttaching() const;
     const std::map<std::string, std::shared_ptr<MigrationInfo>> &
     getInfos() const;
-    std::shared_ptr<MigrationInfo> getMigratingInfo();
-    void markAsMigrationStarted();
-    void markAsMigrationStarted(const std::string &table);
-    void markAsMigrating(const std::string &table);
-    void markAsMigrated(bool &schemasChanged);
-    bool didMigratingStart() const;
-    bool didMigrationDone() const;
+    void markAsStarted();
+    //return true to indicate schemas changed
+    bool markAsMigrated(const std::string &table);
+    bool isStarted() const;
+    bool isMigrated() const;
+    const std::shared_ptr<MigrationInfo> &pickUpForMigration() const;
 
     SharedLock &getSharedLock();
 
@@ -65,13 +68,16 @@ public:
 #endif
 
 protected:
-    SharedLock m_lock;
-    std::atomic<bool> m_migratingStarted;
-    std::shared_ptr<MigrationInfo> m_migratingInfo;
+    mutable SharedLock m_lock;
+    std::atomic<bool> m_started;
     //schema -> {path, reference}
     std::map<std::string, std::pair<std::string, int>> m_schemas;
     //target table -> infos
     std::map<std::string, std::shared_ptr<MigrationInfo>> m_infos;
+
+    std::shared_ptr<MigrationInfo> m_migratingInfo;
+
+    MigratedCallback m_onMigrated;
 };
 
 } //namespace WCDB

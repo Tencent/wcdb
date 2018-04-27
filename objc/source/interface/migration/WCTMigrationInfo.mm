@@ -23,8 +23,12 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTMigrationInfo+Private.h>
 
-@implementation WCTMigrationInfo {
-    std::shared_ptr<WCDB::MigrationInfo> _info;
+@implementation WCTMigrationInfo
+
+- (instancetype)init
+{
+    WCTFatalError("Use [initWithTargetTable:fromSourceTable:ofDatabase:] instead.");
+    return [self initWithWCDBMigrationInfo:nullptr];
 }
 
 - (instancetype)initWithTargetTable:(NSString *)targetTable
@@ -32,47 +36,40 @@
                          ofDatabase:(NSString *)sourceDatabasePath
 {
     WCTRemedialAssert(targetTable && sourceTable, "Table name can't be null.", return nil;);
-    std::shared_ptr<WCDB::MigrationInfo> info = WCDB::MigrationInfo::info(targetTable.cppString, sourceTable.cppString, sourceDatabasePath ? sourceDatabasePath.cppString : WCDB::String::empty());
-    return [self initWithWCDBMigrationInfo:info];
+    if (self = [super init]) {
+        _targetTable = targetTable;
+        _sourceTable = sourceTable;
+        _sourceDatabasePath = sourceDatabasePath;
+    }
+    return self;
 }
 
 - (instancetype)initWithTargetTable:(NSString *)targetTable
                     fromSourceTable:(NSString *)sourceTable
 {
-    return [self initWithTargetTable:targetTable fromSourceTable:sourceTable ofDatabase:nil];
+    return [self initWithTargetTable:targetTable
+                     fromSourceTable:sourceTable
+                          ofDatabase:nil];
 }
 
-- (instancetype)initWithWCDBMigrationInfo:(const std::shared_ptr<WCDB::MigrationInfo> &)info
+- (instancetype)initWithWCDBMigrationInfo:(const WCDB::MigrationInfo *)info
 {
-    if ((self = [super init]) && info != nullptr) {
-        _info = info;
-        return self;
-    }
-    return nil;
-}
-
-- (const std::shared_ptr<WCDB::MigrationInfo> &)getWCDBMigrationInfo
-{
-    return _info;
-}
-
-- (nonnull NSString *)targetTable
-{
-    return [NSString stringWithCppString:_info->targetTable];
-}
-
-- (nonnull NSString *)sourceTable
-{
-    return [NSString stringWithCppString:_info->sourceTable];
-}
-
-- (nullable NSString *)sourceDatabasePath
-{
-    const std::string &path = _info->sourceDatabasePath;
-    if (path.empty()) {
+    if (info == nullptr) {
         return nil;
     }
-    return [NSString stringWithCppString:path];
+    NSString *targetTable = [NSString stringWithCppString:info->targetTable];
+    NSString *sourceTable = [NSString stringWithCppString:info->targetTable];
+    NSString *sourceDatabasePath = info->sourceDatabasePath.empty() ? nil : [NSString stringWithCppString:info->sourceDatabasePath];
+    return [self initWithTargetTable:targetTable
+                     fromSourceTable:sourceTable
+                          ofDatabase:sourceDatabasePath];
+}
+
+- (std::shared_ptr<WCDB::MigrationInfo>)getWCDBMigrationInfo
+{
+    return WCDB::MigrationInfo::info(_targetTable.cppString,
+                                     _sourceTable.cppString,
+                                     _sourceDatabasePath ? _sourceDatabasePath.cppString : WCDB::String::empty());
 }
 
 @end

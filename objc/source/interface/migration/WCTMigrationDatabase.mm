@@ -85,59 +85,13 @@
     return _migrationDatabase->stepMigration((bool &) done);
 }
 
-- (BOOL)stepMigration:(BOOL &)done
-      onTableMigrated:(WCTTableMigratedBlock)block
+- (void)setMigratedCallback:(WCTMigratedBlock)onMigrated
 {
-    std::function<void(const std::shared_ptr<WCDB::MigrationInfo> &)> callback = nullptr;
-    if (block) {
-        callback = [block](const std::shared_ptr<WCDB::MigrationInfo> info) {
-            WCTMigrationInfo *migrationInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
-            block(migrationInfo);
-        };
-    }
-    return _migrationDatabase->stepMigration((bool &) done, callback);
-}
-
-- (void)asyncMigrationWithInterval:(double)seconds
-                   onTableMigrated:(WCTTableMigratedBlock)onTableMigrated
-                        onMigrated:(WCTMigratedBlock)onMigrated
-{
-    [self asyncMigrationOnStepped:^BOOL(WCTMigrationInfo *_Nonnull, BOOL) {
-      [NSThread sleepForTimeInterval:seconds];
-      return YES;
-    }
-                  onTableMigrated:onTableMigrated
-                       onMigrated:onMigrated];
-}
-
-- (void)asyncMigrationOnStepped:(WCTMigrationSteppedBlock)onStepped
-                onTableMigrated:(WCTTableMigratedBlock)onTableMigrated
-                     onMigrated:(WCTMigratedBlock)onMigrated
-{
-    WCDB::MigrationDatabase::SteppedCallback steppedCallback = nullptr;
-    if (onStepped) {
-        steppedCallback = [onStepped](const std::shared_ptr<WCDB::MigrationInfo> &info, bool result) -> bool {
-            WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
-            return onStepped(nsInfo, result);
-        };
-    }
-
-    WCDB::MigrationDatabase::TableMigratedCallback tableMigratedCallback = nullptr;
-    if (onTableMigrated) {
-        tableMigratedCallback = [onTableMigrated](const std::shared_ptr<WCDB::MigrationInfo> &info) {
-            WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
-            onTableMigrated(nsInfo);
-        };
-    }
-
-    WCDB::MigrationDatabase::MigratedCallback migratedCallback = nullptr;
-    if (onMigrated) {
-        migratedCallback = [onMigrated](bool result) {
-            onMigrated(result);
-        };
-    }
-
-    _migrationDatabase->asyncMigration(steppedCallback, tableMigratedCallback, migratedCallback);
+    auto callback = [onMigrated](const WCDB::MigrationInfo *info) {
+        WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
+        onMigrated(nsInfo);
+    };
+    _migrationDatabase->setMigratedCallback(callback);
 }
 
 - (void)finalizeDatabase

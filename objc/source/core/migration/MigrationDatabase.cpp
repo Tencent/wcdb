@@ -63,8 +63,8 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
                 path, builtinConfig->defaultConfigs, migrationInfos));
         }
         Configs configs = builtinConfig->defaultConfigs;
-        configs.setConfig(MigrationBuiltinConfig::autoAttachAndDetachWithInfos(
-            migrationInfos.get()));
+        configs.setConfig(
+            MigrationBuiltinConfig::migrationPreset(migrationInfos.get()));
         return std::shared_ptr<HandlePool>(
             new MigrationHandlePool(path, configs, migrationInfos));
     };
@@ -95,183 +95,73 @@ MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
 }
 
 #pragma mark - Migration
-bool MigrationDatabase::startMigration(bool &done)
-{
-    done = false;
-    MigrationInfos *infos = m_migrationPool->getMigrationInfos();
-    WCTInnerAssert(!infos->getInfos().empty());
-    RecyclableHandle handle = getHandle();
-    if (handle == nullptr) {
-        return false;
-    }
-    //continue last unfinished migration
-    MigrationHandle *migrationHandle =
-        static_cast<MigrationHandle *>(handle.getHandle());
-    if (!migrationHandle->lazySetupVeryFirstMigratingInfo()) {
-        return false;
-    }
-    LockGuard lockGuard(infos->getSharedLock());
-    std::shared_ptr<MigrationInfo> info = infos->getMigratingInfo();
-    if (info != nullptr) {
-        return true;
-    }
-    if (infos->getInfos().empty()) {
-        done = true;
-        return true;
-    }
-    //pick one info to migrate
-    info = infos->getInfos().begin()->second;
-    if (info->isSameDatabaseMigration()) {
-        //cross database migration first
-        for (const auto &infoToBePicked : infos->getInfos()) {
-            if (!infoToBePicked.second->isSameDatabaseMigration()) {
-                info = infoToBePicked.second;
-                break;
-            }
-        }
-    }
-    bool commited = runTransaction([info](Handle *handle) -> bool {
-        //save migrating value
-        KeyValueTable keyValueTable(handle);
-        if (!keyValueTable.createTable() ||
-            !keyValueTable.setMigratingValue(info->targetTable)) {
-            return false;
-        }
-        //sync sequence
-        MigrationHandle *migrationHandle =
-            static_cast<MigrationHandle *>(handle);
-        auto targetSequenceExists =
-            migrationHandle->isTableExists("sqlite_sequence");
-        if (!targetSequenceExists.second) {
-            //failed or sqlite_sequence not exists
-            return targetSequenceExists.first;
-        }
-        //sync sequence if sqlite_sequence exists in target database
-        auto sourceSequenceExists =
-            migrationHandle->isTableExists(info->getSourceTable());
-        if (!sourceSequenceExists.first) {
-            return false;
-        }
-        //Get expected sequence
-        StatementSelect unionStatement = info->getStatementForGettingMaxRowID();
-        unionStatement.union_(info->getSelectionForGettingTargetSequence());
-        if (sourceSequenceExists.second) {
-            unionStatement.union_(info->getSelectionForGettingSourceSequence());
-        }
-        StatementSelect statementForMergedSequence =
-            info->getStatementForMergedSequence(unionStatement);
-        if (!migrationHandle->prepareWithoutTampering(
-                statementForMergedSequence)) {
-            return false;
-        }
-        bool done;
-        if (!migrationHandle->step(done) || done) {
-            //failed or empty
-            migrationHandle->finalize();
-            return done;
-        }
-        int sequence = migrationHandle->getInteger32(0);
-        migrationHandle->finalize();
-
-        //Update sequence
-        if (!migrationHandle->executeWithoutTampering(
-                info->getStatementForUpdatingSequence(sequence))) {
-            return false;
-        }
-
-        //Or insert sequence
-        if (migrationHandle->getChanges() == 0 &&
-            !migrationHandle->executeWithoutTampering(
-                info->getStatementForInsertingSequence(sequence))) {
-            return false;
-        }
-        return true;
-    });
-    if (!commited) {
-        return false;
-    }
-    infos->markAsMigrationStarted(info->targetTable);
-    return true;
-}
-
-bool MigrationDatabase::stepMigration(
-    bool &done, const TableMigratedCallback &onMigratingCompleted)
+bool MigrationDatabase::stepMigration(bool &done)
 {
 #ifdef DEBUG
     WCTAssert(m_migrationPool->debug_checkMigratingThread(),
               "Migration stepping is not thread-safe.");
 #endif
+    done = false;
     MigrationInfos *infos = m_migrationPool->getMigrationInfos();
-    if (infos->didMigrationDone()) {
-        done = true;
-        return true;
-    }
-    std::shared_ptr<MigrationInfo> migratingInfo = infos->getMigratingInfo();
-    if (migratingInfo == nullptr) {
-        return startMigration(done);
-    }
-    //Migration infos will be changed only in migrating thread expect the lazy init migrating info. So no lock is needed.
-    bool dropped = false;
-    bool empty = false;
-    bool committed = runTransaction(
-        [this, migratingInfo, &dropped, &empty](Handle *handle) -> bool {
-            MigrationHandle *migrationHandle =
-                static_cast<MigrationHandle *>(handle);
-            std::pair<bool, bool> sourceTableExists =
-                handle->isTableExists(migratingInfo->getSourceTable());
-            if (!sourceTableExists.first) {
-                return false;
-            }
-            if (!sourceTableExists.second) {
-                dropped = true;
-                return false;
-            }
-            //migration
-            if (!migrationHandle->executeWithoutTampering(
-                    migratingInfo->getStatementForMigration())) {
-                m_migrationPool->setThreadedError(handle->getError());
-                return false;
-            }
-            if (migrationHandle->getChanges() == 0) {
-                //nothing to migrate
-                empty = true;
-                return false;
-            }
-            return migrationHandle->executeWithoutTampering(
-                migratingInfo->getStatementForDeleteingMigratedRow());
-        });
-    if (!dropped && !empty) {
-        return committed;
+    std::shared_ptr<MigrationInfo> info;
+    bool migratedEve = false;
+    {
+        SharedLockGuard lockGuard(infos->getSharedLock());
+        if (infos->isMigrated()) {
+            done = true;
+            return true;
+        }
+        info = infos->pickUpForMigration();
+        bool isMigrated = false;
+        bool committed = runTransaction(
+            [this, &migratedEve, &isMigrated, &info](Handle *handle) -> bool {
+                MigrationHandle *migrationHandle =
+                    static_cast<MigrationHandle *>(handle);
+                std::pair<bool, bool> sourceTableExists =
+                    migrationHandle->isTableExists(info->getSourceTable());
+                if (!sourceTableExists.first || !sourceTableExists.second) {
+                    isMigrated = sourceTableExists.first;
+                    return false;
+                }
+                //migration
+                if (!migrationHandle->executeWithoutTampering(
+                        info->getStatementForMigration())) {
+                    m_migrationPool->setThreadedError(handle->getError());
+                    return false;
+                }
+                if (migrationHandle->getChanges() == 0) {
+                    //nothing to migrate
+                    migratedEve = true;
+                    return false;
+                }
+                return migrationHandle->executeWithoutTampering(
+                    info->getStatementForDeleteingMigratedRow());
+            });
+        migratedEve = migratedEve && committed;
+        if (!isMigrated && !migratedEve) {
+            return committed;
+        }
     }
     {
         LockGuard lockGuard(infos->getSharedLock());
-        if (empty &&
-            !execute(migratingInfo->getStatementForDroppingOldTable())) {
+        if (migratedEve && !execute(info->getStatementForDroppingOldTable())) {
             return false;
         }
-        bool schemaChanged = false;
-        infos->markAsMigrated(schemaChanged);
-        if (schemaChanged) {
-            setConfig(
-                MigrationBuiltinConfig::autoAttachAndDetachWithInfos(infos));
+        if (infos->markAsMigrated(info->targetTable)) {
+            //schema changed
+            setConfig(MigrationBuiltinConfig::migrationPreset(infos));
         }
-    }
-    if (onMigratingCompleted) {
-        onMigratingCompleted(migratingInfo);
+        done = infos->isMigrated();
     }
     return true;
 }
 
-void MigrationDatabase::asyncMigration(
-    const SteppedCallback &onStepped,
-    const TableMigratedCallback &onTableMigrated,
-    const MigratedCallback &onMigrated)
+void MigrationDatabase::asyncMigration()
 {
     std::string name("com.Tencent.WCDB.Migration.");
     name.append(std::to_string(getTag()));
     std::string path = getPath();
-    Dispatch::async(name, [path, onStepped, onTableMigrated,
-                           onMigrated](const std::atomic<bool> &stop) {
+    Dispatch::async(name, [path](const std::atomic<bool> &stop) {
         bool done = false;
         while (!done && !stop.load()) {
             std::shared_ptr<Database> database =
@@ -281,23 +171,18 @@ void MigrationDatabase::asyncMigration(
             }
             MigrationDatabase *migrationDatabase =
                 static_cast<MigrationDatabase *>(database.get());
-            bool result =
-                migrationDatabase->stepMigration(done, onTableMigrated);
-            if (onStepped) {
-                result = onStepped(migrationDatabase->m_migrationPool
-                                       ->getMigrationInfos()
-                                       ->getMigratingInfo(),
-                                   result) ||
-                         result;
-            }
+            bool result = migrationDatabase->stepMigration(done);
+            //todo control stepping
             if (!result) {
                 break;
             }
         }
-        if (onMigrated) {
-            onMigrated(done);
-        }
     });
+}
+
+void MigrationDatabase::setMigratedCallback(const MigratedCallback &onMigrated)
+{
+    m_migrationPool->getMigrationInfos()->setMigratedCallback(onMigrated);
 }
 
 } //namespace WCDB

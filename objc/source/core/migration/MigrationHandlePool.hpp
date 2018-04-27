@@ -54,7 +54,6 @@ protected:
 
 #pragma mark - Override
 protected:
-    bool willConfigurateHandle(Handle *handle) override;
     std::shared_ptr<Handle> generateHandle() override;
 };
 

@@ -23,7 +23,7 @@
 
 #include <WCDB/Database.hpp>
 #include <WCDB/MigrationHandlePool.hpp>
-#include <WCDB/MigrationInfo.hpp>
+#include <WCDB/MigrationInfos.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -48,27 +48,14 @@ protected:
 
 #pragma mark - Migration
 public:
-    // completed migration info
-    typedef std::function<void(const std::shared_ptr<MigrationInfo> &)>
-        TableMigratedCallback;
+    bool stepMigration(bool &done);
 
-    bool
-    stepMigration(bool &done,
-                  const TableMigratedCallback &onMigratingCompleted = nullptr);
+    void asyncMigration();
 
-    // migration info, step result -> continue or stop
-    typedef std::function<bool(const std::shared_ptr<MigrationInfo> &, bool)>
-        SteppedCallback;
-
-    // migration succeed or fail
-    typedef std::function<void(bool)> MigratedCallback;
-
-    void asyncMigration(const SteppedCallback &onStepped = nullptr,
-                        const TableMigratedCallback &onTableMigrated = nullptr,
-                        const MigratedCallback &onCompleted = nullptr);
+    using MigratedCallback = MigrationInfos::MigratedCallback;
+    void setMigratedCallback(const MigratedCallback &onMigrated);
 
 protected:
-    bool startMigration(bool &done);
     MigrationHandlePool *m_migrationPool;
 };
 

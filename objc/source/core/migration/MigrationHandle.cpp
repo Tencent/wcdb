@@ -41,7 +41,7 @@ MigrationHandle::MigrationHandle(const std::string &path,
 #pragma mark - Override
 bool MigrationHandle::execute(const Statement &statement)
 {
-    if (m_infos->didMigrationDone()) {
+    if (m_infos->isMigrated()) {
         return executeWithoutTampering(statement);
     }
 #ifdef DEBUG
@@ -62,7 +62,7 @@ bool MigrationHandle::execute(const Statement &statement)
 
 bool MigrationHandle::prepare(const Statement &statement)
 {
-    if (m_infos->didMigrationDone()) {
+    if (m_infos->isMigrated()) {
         return prepareWithoutTampering(statement);
     }
 #ifdef DEBUG
@@ -172,43 +172,6 @@ void MigrationHandle::finalize()
 }
 
 #pragma mark - Migration
-bool MigrationHandle::lazySetupVeryFirstMigratingInfo()
-{
-    if (m_infos->didMigratingStart()) {
-        return true;
-    }
-    LockGuard lockGuard(m_infos->getSharedLock());
-    if (m_infos->didMigratingStart()) {
-        return true;
-    }
-    std::pair<bool, std::string> migratingTable = {false, {}};
-    runNestedTransaction([&migratingTable, this](Handle *handle) -> bool {
-        do {
-            MigrationHandle *migrationHandle =
-                static_cast<MigrationHandle *>(handle);
-            KeyValueTable kvTable(migrationHandle);
-            auto exists = kvTable.isTableExists();
-            if (!exists.first) {
-                break;
-            }
-            if (!exists.second) {
-                migratingTable.first = true;
-                break;
-            }
-            migratingTable = kvTable.getMigratingValue();
-        } while (false);
-        if (migratingTable.first) {
-            if (!migratingTable.second.empty()) {
-                m_infos->markAsMigrating(migratingTable.second);
-            } else {
-                m_infos->markAsMigrationStarted();
-            }
-        }
-        return false;
-    });
-    return migratingTable.first;
-}
-
 bool MigrationHandle::executeWithMultipleStatements(
     const Statement &statement, const Statement &tamperedStatement)
 {

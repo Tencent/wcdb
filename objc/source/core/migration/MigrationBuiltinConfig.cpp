@@ -22,8 +22,7 @@
 
 namespace WCDB {
 
-const Config
-MigrationBuiltinConfig::autoAttachAndDetachWithInfos(MigrationInfos *infos)
+const Config MigrationBuiltinConfig::migrationPreset(MigrationInfos *infos)
 {
     WCTInnerAssert(infos != nullptr);
     return Config(
@@ -31,44 +30,98 @@ MigrationBuiltinConfig::autoAttachAndDetachWithInfos(MigrationInfos *infos)
         [infos](Handle *handle) -> bool {
             MigrationHandle *migrationHandle =
                 static_cast<MigrationHandle *>(handle);
-            return MigrationBuiltinConfig::doAutoAttachAndDetachWithInfos(
-                migrationHandle, infos);
+            bool schemaChanged = false;
+            if (!doAttachSchema(migrationHandle, infos) ||
+                !doCreateView(migrationHandle, infos, schemaChanged)) {
+                return false;
+            }
+            return schemaChanged ? doAttachSchema(migrationHandle, infos)
+                                 : true;
         },
         MigrationBuiltinConfig::Order::Migration);
 }
 
-bool MigrationBuiltinConfig::doAutoAttachAndDetachWithInfos(
-    MigrationHandle *handle, MigrationInfos *infos)
+bool MigrationBuiltinConfig::doCreateView(MigrationHandle *handle,
+                                          MigrationInfos *infos,
+                                          bool &schemaChanged)
+{
+    schemaChanged = false;
+    if (infos->isStarted()) {
+        return true;
+    }
+    LockGuard lockGuard(infos->getSharedLock());
+    if (infos->isStarted()) {
+        return true;
+    }
+    std::list<std::shared_ptr<MigrationInfo>> migratedInfos;
+    if (handle->runTransaction(
+            [&handle, &migratedInfos, infos](Handle *) -> bool {
+                for (const auto &info : infos->getInfos()) {
+                    auto pair =
+                        handle->isTableExists(info.second->getSourceTable());
+                    if (!pair.first) {
+                        return false;
+                    }
+                    //Create view
+                    bool result = false;
+                    if (pair.second) {
+                        result = handle->executeWithoutTampering(
+                            info.second->getStatementForCreatingUnionedView());
+                    } else {
+                        result = handle->executeWithoutTampering(
+                            info.second->getStatementForDroppingUnionedView());
+                        migratedInfos.push_back(info.second);
+                    }
+                    if (!result) {
+                        return false;
+                    }
+                }
+                return true;
+            })) {
+        for (const auto &info : migratedInfos) {
+            if (infos->markAsMigrated(info->targetTable)) {
+                schemaChanged = true;
+            }
+        }
+        infos->markAsStarted();
+        return true;
+    }
+    return false;
+}
+
+bool MigrationBuiltinConfig::doAttachSchema(MigrationHandle *handle,
+                                            MigrationInfos *infos)
 {
     SharedLockGuard lockGuard(infos->getSharedLock());
-    auto pair = handle->getAttachedSchemas();
-    if (!pair.first) {
+    auto attacheds = handle->getUnorderedAttachedSchemas();
+    if (!attacheds.first) {
         return false;
     }
-    std::map<std::string, std::pair<std::string, int>> toAttacheds =
-        infos->getSchemasForAttaching();
-    const std::string &schemaPrefix = MigrationInfo::schemaPrefix();
-    for (const auto &schema : pair.second) {
-        if (schema.compare(0, schemaPrefix.length(), schemaPrefix) == 0) {
-            //WCDBMigration_ schema
-            auto iter = toAttacheds.find(schema);
-            if (iter != toAttacheds.end()) {
-                //already attached
-                toAttacheds.erase(iter);
-            } else {
-                //detach
-                WCDB::StatementDetach statement =
-                    WCDB::StatementDetach().detach(schema);
-                if (!handle->executeWithoutTampering(statement)) {
-                    return false;
-                }
+
+    auto &toDetachs = attacheds.second;
+    for (const auto &schemas : infos->getSchemasForAttaching()) {
+        auto iter = toDetachs.find(schemas.first);
+        if (iter != toDetachs.end()) {
+            //necessary
+            toDetachs.erase(iter);
+        } else {
+            WCDB::StatementAttach statement = WCDB::StatementAttach()
+                                                  .attach(schemas.second.first)
+                                                  .as(schemas.first);
+            if (!handle->executeWithoutTampering(statement)) {
+                return false;
             }
         }
     }
-    for (const auto &toAttached : toAttacheds) {
-        WCDB::StatementAttach statement = WCDB::StatementAttach()
-                                              .attach(toAttached.second.first)
-                                              .as(toAttached.first);
+
+    const std::string &schemaPrefix = MigrationInfo::schemaPrefix();
+    for (const auto &toDetach : toDetachs) {
+        if (toDetach.compare(0, schemaPrefix.length(), schemaPrefix) != 0) {
+            continue;
+        }
+        //detach unnecessary WCDBMigration_ schema
+        WCDB::StatementDetach statement =
+            WCDB::StatementDetach().detach(toDetach);
         if (!handle->executeWithoutTampering(statement)) {
             return false;
         }

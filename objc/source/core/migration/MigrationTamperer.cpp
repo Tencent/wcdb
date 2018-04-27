@@ -30,6 +30,7 @@ MigrationTamperer::MigrationTamperer(MigrationInfos *infos,
     , m_didTampered(false)
     , m_fillingSchema(true)
     , m_infosMap(infos->getInfos())
+    , m_tamperingSelect(false)
 {
     WCTInnerAssert(m_migrationInfos != nullptr);
     tamperWithStatement(statement);
@@ -57,7 +58,7 @@ const Statement &MigrationTamperer::getTamperedStatement() const
 
 void MigrationTamperer::tamperWithStatement(const Statement &statement)
 {
-    if (m_migrationInfos->didMigrationDone()) {
+    if (m_migrationInfos->isMigrated()) {
         return;
     }
     m_tamperedSourceStatement = statement.getCOWLang();
@@ -66,21 +67,22 @@ void MigrationTamperer::tamperWithStatement(const Statement &statement)
     bool sourceShouldBeTampered = true;
     switch (statement.getStatementType()) {
         case Statement::Type::Insert: {
-            std::shared_ptr<MigrationInfo> migratingInfo =
-                m_migrationInfos->getMigratingInfo();
-            const auto cowLang =
-                m_tamperedSourceStatement.getCOWLang().get<Lang::InsertSTMT>();
-            if (!migratingInfo) {
-                break;
-            }
-            if ((cowLang.schemaName.empty() ||
-                 cowLang.schemaName.equal(
-                     StatementAttach::getMainSchema())) //right schema
-                && cowLang.tableName.equal(
-                       migratingInfo->targetTable) //right table name
-                ) {
-                sourceShouldBeTampered = false;
-            }
+            //TODO
+            //            std::shared_ptr<MigrationInfo> migratingInfo =
+            //                m_migrationInfos->getMigratingInfo();
+            //            const auto cowLang =
+            //                m_tamperedSourceStatement.getCOWLang().get<Lang::InsertSTMT>();
+            //            if (!migratingInfo) {
+            //                break;
+            //            }
+            //            if ((cowLang.schemaName.empty() ||
+            //                 cowLang.schemaName.equal(
+            //                     StatementAttach::getMainSchema())) //right schema
+            //                && cowLang.tableName.equal(
+            //                       migratingInfo->targetTable) //right table name
+            //                ) {
+            //                sourceShouldBeTampered = false;
+            //            }
             break;
         }
         case Statement::Type::Update:
@@ -193,20 +195,14 @@ bool MigrationTamperer::tamper(
     TAMPER_PREPARE(cowLang);
     Lang::CopyOnWriteLazyLang<Lang::SelectCore> copy = lang.selectCore;
 
+    m_tamperingSelect = true;
     bool result = tamperList(lang.commonTableExpressions);
     result = tamper(lang.selectCore) || result;
     result = tamperList(lang.compoundCores) || result;
     result = tamperList(lang.orderingTerms) || result;
     result = tamper(lang.limit) || result;
     result = tamper(lang.limitParameter) || result;
-    if (result && !m_fillingSchema) {
-        Lang::CopyOnWriteLazyLang<Lang::SelectSTMT::Compound> compoundCore;
-        Lang::SelectSTMT::Compound &compound = compoundCore.get_or_copy();
-        compound.compoundOperator = Lang::SelectSTMT::Compound::Operator::Union;
-        compound.selectCore.assign(copy.get());
-
-        lang.compoundCores.append(compoundCore);
-    }
+    m_tamperingSelect = false;
     return result;
 }
 

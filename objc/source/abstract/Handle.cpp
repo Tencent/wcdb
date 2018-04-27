@@ -343,40 +343,10 @@ Handle::getUnorderedColumnsWithTable(const std::string &tableName)
         StatementPragma().pragma(Pragma::tableInfo()).with(tableName), 1);
 }
 
-std::pair<bool, std::list<std::string>> Handle::getAttachedSchemas()
+std::pair<bool, std::set<std::string>> Handle::getUnorderedAttachedSchemas()
 {
-    return getValues(StatementPragma().pragma(Pragma::databaseList()), 1);
-}
-
-std::pair<bool, bool> Handle::isSchemaExists(const std::string &schemaName)
-{
-    std::pair<bool, std::list<std::string>> pair = getAttachedSchemas();
-    if (!pair.first) {
-        return {false, false};
-    }
-    for (const std::string &schema : pair.second) {
-        if (schema == schemaName) {
-            return {true, true};
-        }
-    }
-    return {true, false};
-}
-
-std::pair<bool, std::list<std::string>>
-Handle::getValues(const Statement &statement, int index)
-{
-    if (prepare(statement)) {
-        bool done;
-        std::list<std::string> values;
-        while (step(done) && !done) {
-            values.push_back(getText(index));
-        }
-        finalize();
-        if (done) {
-            return {true, std::move(values)};
-        }
-    }
-    return {false, {}};
+    return getUnorderedValues(StatementPragma().pragma(Pragma::databaseList()),
+                              1);
 }
 
 std::pair<bool, std::set<std::string>>

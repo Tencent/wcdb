@@ -79,71 +79,38 @@ public:
     const StatementDelete &getStatementForDeleteingMigratedRow() const;
 
     /**
-     SELECT 1 FROM [sourceTable] LIMIT 1
-     
-     @return StatementSelect
-     */
-    const StatementSelect &getStatementForCheckingSourceTableEmpty() const;
-
-    /**
      DROP TABLE IF EXISTS [sourceTable]
      
      @return StatementDropTable
      */
     StatementDropTable getStatementForDroppingOldTable() const;
 
-    /**     
-     SELECT max(rowid) FROM [sourceTable] 
-     UNION
-     SELECT max(rowid) FROM [targetTable] 
-     
-     @return StatementSelect
-     */
-    StatementSelect getStatementForGettingMaxRowID() const;
+    /**
+     CREATE VIEW IF NOT EXISTS [unionedView] 
+     AS(SELECT * FROM [sourceTable] UNION SELECT * FROM [targetTable])
 
-    /**     
-     SELECT seq FROM sqlite_sequence WHERE name = [sourceTable]
-     
-     @return SelectCore
+     @return StatementCreateView
      */
-    SelectCore getSelectionForGettingSourceSequence() const;
+    StatementCreateView getStatementForCreatingUnionedView() const;
 
-    /**     
-     SELECT seq FROM sqlite_sequence WHERE name = [targetTable]
-     
-     @return SelectCore
-     */
-    SelectCore getSelectionForGettingTargetSequence() const;
+    /**
+     DROP VIEW IF EXISTS [unionedView]
 
-    /**     
-     INSERT INTO sqlite_sequence VALUES([targetTable], [sequence])
-     
-     @return StatementInsert
+     @return StatementDropView
      */
-    StatementInsert getStatementForInsertingSequence(int sequence) const;
+    StatementDropView getStatementForDroppingUnionedView() const;
 
-    /**     
-     UPDATE sqlite_sequence SET seq = [sequence] WHERE name = [targetTable]
-     
-     @return StatementUpdate
-     */
-    StatementUpdate getStatementForUpdatingSequence(int sequence) const;
-
-    /**     
-     WITH merged(seq) AS SELECT XXXX
-     SELECT max(seq) FROM merged
-     
-     @return StatementSelect
-     */
-    StatementSelect
-    getStatementForMergedSequence(const StatementSelect &statementSelect);
+    const std::string unionedViewName;
 
 protected:
     void prepareForMigrating();
 
+    static const std::string &getUnionedViewPrefix();
+
     StatementInsert m_statementForMigration;
     StatementDelete m_statementForDeleteingMigratedRow;
-    StatementSelect m_statementForCheckingSourceTableEmpty;
+
+    std::string m_unionedViewName;
 };
 
 } //namespace WCDB

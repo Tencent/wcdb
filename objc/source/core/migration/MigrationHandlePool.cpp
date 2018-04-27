@@ -71,11 +71,4 @@ std::shared_ptr<Handle> MigrationHandlePool::generateHandle()
     return MigrationHandle::handleWithPath(path, getTag(), m_infos);
 }
 
-bool MigrationHandlePool::willConfigurateHandle(Handle *handle)
-{
-    HandlePool::willConfigurateHandle(handle);
-    MigrationHandle *migrationHandle = static_cast<MigrationHandle *>(handle);
-    return migrationHandle->lazySetupVeryFirstMigratingInfo();
-}
-
 } //namespace WCDB

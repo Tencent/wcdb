@@ -54,6 +54,7 @@ protected:
     bool m_didTampered;
 
     bool m_fillingSchema;
+    bool m_tamperingSelect;
 
     MigrationInfos *m_migrationInfos;
     const std::map<std::string, std::shared_ptr<MigrationInfo>> &m_infosMap;

@@ -36,11 +36,15 @@ public:
         Migration = -1,
     };
 
-    static const Config autoAttachAndDetachWithInfos(MigrationInfos *infos);
+    // 1. Attach necessary schemas and detach unnecessary schemas
+    // 2. Create necessary views and drop unnecessary views
+    static const Config migrationPreset(MigrationInfos *infos);
 
 protected:
-    static bool doAutoAttachAndDetachWithInfos(MigrationHandle *handle,
-                                               MigrationInfos *infos);
+    static bool doCreateView(MigrationHandle *handle,
+                             MigrationInfos *infos,
+                             bool &schemaChanged);
+    static bool doAttachSchema(MigrationHandle *handle, MigrationInfos *infos);
 };
 
 } //namespace WCDB

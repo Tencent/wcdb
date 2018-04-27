@@ -31,7 +31,9 @@ MigrationInfos::infos(const std::list<std::shared_ptr<MigrationInfo>> &infos)
 
 MigrationInfos::MigrationInfos(
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
-    : m_migratingStarted(false)
+    : m_started(false)
+    , m_onMigrated(nullptr)
+    , m_migratingInfo(nullptr)
 #ifdef DEBUG
     , hash(hashedInfos(infos))
 #endif
@@ -72,12 +74,14 @@ int64_t MigrationInfos::hashedInfos(
 #pragma mark - Basic
 bool MigrationInfos::isSameDatabaseMigration() const
 {
+    SharedLockGuard lockGuard(m_lock);
     return m_schemas.empty();
 }
 
 const std::map<std::string, std::pair<std::string, int>> &
 MigrationInfos::getSchemasForAttaching() const
 {
+//TODO refactor
 #ifdef DEBUG
     WCTInnerAssert(m_lock.debug_isSharedLocked());
 #endif
@@ -87,58 +91,36 @@ MigrationInfos::getSchemasForAttaching() const
 const std::map<std::string, std::shared_ptr<MigrationInfo>> &
 MigrationInfos::getInfos() const
 {
+//TODO refactor
+#ifdef DEBUG
+    WCTInnerAssert(m_lock.debug_isSharedLocked());
+#endif
     return m_infos;
 }
 
-std::shared_ptr<MigrationInfo> MigrationInfos::getMigratingInfo()
+bool MigrationInfos::isStarted() const
 {
-    return m_migratingInfo;
+    return m_started.load();
 }
 
-bool MigrationInfos::didMigratingStart() const
+bool MigrationInfos::isMigrated() const
 {
-    return m_migratingStarted.load();
-}
-
-bool MigrationInfos::didMigrationDone() const
-{
+    SharedLockGuard lockGuard(m_lock);
     return m_infos.empty();
 }
 
-void MigrationInfos::markAsMigrationStarted()
+void MigrationInfos::markAsStarted()
 {
-    WCTInnerAssert(m_lock.isLocked());
-    m_migratingStarted.store(true);
+    LockGuard lockGuard(m_lock);
+    m_started.store(true);
 }
 
-void MigrationInfos::markAsMigrationStarted(const std::string &table)
+bool MigrationInfos::markAsMigrated(const std::string &table)
 {
-    WCTInnerAssert(m_lock.isLocked());
-    m_migratingStarted.store(true);
+    LockGuard lockGuard(m_lock);
     auto iter = m_infos.find(table);
     WCTInnerAssert(iter != m_infos.end());
-    if (iter != m_infos.end()) {
-        m_migratingInfo = iter->second;
-    }
-}
-
-void MigrationInfos::markAsMigrating(const std::string &table)
-{
-    WCTInnerAssert(m_lock.isLocked());
-    m_migratingStarted.store(true);
-    auto iter = m_infos.find(table);
-    if (iter != m_infos.end()) {
-        m_migratingInfo = iter->second;
-    }
-}
-
-void MigrationInfos::markAsMigrated(bool &schemasChanged)
-{
-    WCTInnerAssert(m_lock.isLocked());
-    WCTInnerAssert(m_migratingInfo != nullptr);
-    auto iter = m_infos.find(m_migratingInfo->targetTable);
-    WCTInnerAssert(iter != m_infos.end());
-    schemasChanged = false;
+    bool schemasChanged = false;
     if (!iter->second->isSameDatabaseMigration()) {
         auto schemaIter = m_schemas.find(iter->second->schema);
         WCTInnerAssert(schemaIter != m_schemas.end());
@@ -147,8 +129,31 @@ void MigrationInfos::markAsMigrated(bool &schemasChanged)
             schemasChanged = true;
         }
     }
+    std::shared_ptr<MigrationInfo> info = iter->second;
     m_infos.erase(iter);
-    m_migratingInfo = nullptr;
+    if (m_onMigrated) {
+        m_onMigrated(info.get());
+        if (m_infos.empty()) {
+            //done
+            m_onMigrated(nullptr);
+        }
+    }
+    return schemasChanged;
+}
+
+const std::shared_ptr<MigrationInfo> &MigrationInfos::pickUpForMigration() const
+{
+#ifdef DEBUG
+    WCTInnerAssert(m_lock.debug_isSharedLocked());
+#endif
+    WCTInnerAssert(!m_infos.empty());
+    return m_infos.begin()->second;
+}
+
+void MigrationInfos::setMigratedCallback(const MigratedCallback &onMigrated)
+{
+    LockGuard lockGuard(m_lock);
+    m_onMigrated = onMigrated;
 }
 
 SharedLock &MigrationInfos::getSharedLock()

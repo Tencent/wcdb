@@ -90,6 +90,7 @@ protected:
 #endif
 };
 
+//TODO make shared lock scalable
 class SharedLockGuard {
 public:
     SharedLockGuard(SharedLock &lock);

@@ -44,6 +44,8 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
     , sourceTable(sourceTable_)
     , sourceDatabasePath(sourceDatabasePath_)
     , schema(MigrationInfo::resolvedSchema(sourceDatabasePath_))
+    , unionedViewName(getUnionedViewPrefix() + "_" + targetTable + "_" +
+                      sourceTable)
 {
     prepareForMigrating();
 }
@@ -100,9 +102,6 @@ void MigrationInfo::prepareForMigrating()
             .deleteFrom(getQualifiedSourceTable())
             .orderBy(order)
             .limit(limit);
-
-    m_statementForCheckingSourceTableEmpty =
-        StatementSelect().select(1).from(getSourceTable()).limit(1);
 }
 
 const StatementInsert &MigrationInfo::getStatementForMigration() const
@@ -116,12 +115,6 @@ MigrationInfo::getStatementForDeleteingMigratedRow() const
     return m_statementForDeleteingMigratedRow;
 }
 
-const StatementSelect &
-MigrationInfo::getStatementForCheckingSourceTableEmpty() const
-{
-    return m_statementForCheckingSourceTableEmpty;
-}
-
 StatementDropTable MigrationInfo::getStatementForDroppingOldTable() const
 {
     return StatementDropTable()
@@ -130,62 +123,28 @@ StatementDropTable MigrationInfo::getStatementForDroppingOldTable() const
         .ifExists();
 }
 
-StatementSelect MigrationInfo::getStatementForGettingMaxRowID() const
+const std::string &MigrationInfo::getUnionedViewPrefix()
 {
-    Expression maxRowID = Column("rowid").max();
-    StatementSelect statementSelect =
-        StatementSelect().select(maxRowID).from(getSourceTable());
-    SelectCore selectionTargetMaxRowID = SelectCore().select(maxRowID).from(
-        TableOrSubquery(targetTable)
-            .withSchema(StatementAttach::getMainSchema()));
-    statementSelect.union_(selectionTargetMaxRowID);
-    return statementSelect;
+    static const std::string s_unionedViewPrefix("WCDBUnioned");
+    return s_unionedViewPrefix;
 }
 
-SelectCore MigrationInfo::getSelectionForGettingSourceSequence() const
+StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const
 {
-    return SelectCore()
-        .select(Column("seq"))
-        .from(TableOrSubquery("sqlite_sequence").withSchema(schema))
-        .where(Column("name") == sourceTable);
+    return StatementCreateView()
+        .createView(unionedViewName)
+        .ifNotExists()
+        .as(StatementSelect()
+                .select(ResultColumn::all())
+                .from(targetTable)
+                .union_(SelectCore()
+                            .select(ResultColumn::all())
+                            .from(getSourceTable())));
 }
 
-SelectCore MigrationInfo::getSelectionForGettingTargetSequence() const
+StatementDropView MigrationInfo::getStatementForDroppingUnionedView() const
 {
-    return SelectCore()
-        .select(Column("seq"))
-        .from(TableOrSubquery("sqlite_sequence")
-                  .withSchema(StatementAttach::getMainSchema()))
-        .where(Column("name") == targetTable);
-}
-
-StatementInsert
-MigrationInfo::getStatementForInsertingSequence(int sequence) const
-{
-    return StatementInsert()
-        .insertInto("sqlite_sequence")
-        .withSchema(StatementAttach::getMainSchema())
-        .values({targetTable, sequence});
-}
-
-StatementUpdate
-MigrationInfo::getStatementForUpdatingSequence(int sequence) const
-{
-    return StatementUpdate()
-        .update(QualifiedTableName("sqlite_sequence")
-                    .withSchema(StatementAttach::getMainSchema()))
-        .set(Column("seq"), sequence)
-        .where(Column("name") == targetTable);
-}
-
-StatementSelect MigrationInfo::getStatementForMergedSequence(
-    const StatementSelect &statementSelect)
-{
-    Column seq("seq");
-    std::string table = "merged";
-    CommonTableExpression cte =
-        CommonTableExpression(table).byAddingColumn(seq).as(statementSelect);
-    return StatementSelect().with(cte).select(seq.max()).from(table);
+    return StatementDropView().dropView(unionedViewName).ifExists();
 }
 
 } //namespace WCDB

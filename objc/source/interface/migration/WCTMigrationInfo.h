@@ -24,18 +24,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTMigrationInfo : NSObject
 
-- (NSString *)targetTable;
+@property(nonatomic, readonly) NSString *targetTable;
 
-- (NSString *)sourceTable;
+@property(nonatomic, readonly) NSString *sourceTable;
 
-- (nullable NSString *)sourceDatabasePath;
+@property(nonatomic, readonly, nullable) NSString *sourceDatabasePath;
 
-- (nullable instancetype)initWithTargetTable:(NSString *)targetTable
-                             fromSourceTable:(NSString *)sourceTable
-                                  ofDatabase:(nullable NSString *)sourceDatabasePath;
+- (instancetype)initWithTargetTable:(NSString *)targetTable
+                    fromSourceTable:(NSString *)sourceTable
+                         ofDatabase:(nullable NSString *)sourceDatabasePath NS_DESIGNATED_INITIALIZER;
 
-- (nullable instancetype)initWithTargetTable:(NSString *)targetTable
-                             fromSourceTable:(NSString *)sourceTable;
+- (instancetype)initWithTargetTable:(NSString *)targetTable
+                    fromSourceTable:(NSString *)sourceTable;
 
 @end
 
