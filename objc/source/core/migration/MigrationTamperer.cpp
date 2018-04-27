@@ -797,12 +797,16 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
              schemaName.get() == StatementAttach::getMainSchema()) &&
             !tableName.empty()) {
             auto iter = m_infosMap.find(tableName.get());
-            if (iter != m_infosMap.end()) {
-                tableName.assign(iter->second->sourceTable);
-                if (!iter->second->isSameDatabaseMigration()) {
-                    schemaName.assign(iter->second->schema);
+            if (m_tamperingSelect) {
+                tableName.assign(iter->second->unionedViewName);
+            } else {
+                if (iter != m_infosMap.end()) {
+                    tableName.assign(iter->second->sourceTable);
+                    if (!iter->second->isSameDatabaseMigration()) {
+                        schemaName.assign(iter->second->schema);
+                    }
+                    return true;
                 }
-                return true;
             }
         }
     }
