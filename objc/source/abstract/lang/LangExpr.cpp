@@ -28,9 +28,11 @@ namespace Lang {
 CopyOnWriteString ExprColumn::SQL() const
 {
     std::string description;
-    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
-    description.append(".");
     if (!tableName.empty()) {
+        //adding main schema for empty schema is unnecessary for ExprColumn.
+        if (!schemaName.empty()) {
+            description.append(schemaName.get() + ".");
+        }
         description.append(tableName.get() + ".");
     }
     LangRemedialAssert(!column.empty());
@@ -301,17 +303,21 @@ CopyOnWriteString ExprIn::SQL() const
             break;
         case Switch::Table:
             description.append(" ");
-            description.append(schemaName.empty() ? mainSchema()
-                                                  : schemaName.get());
-            description.append(".");
+            if (schemaName.isNull()) {
+                description.append(mainSchema() + ".");
+            } else if (!schemaName.get().empty()) {
+                description.append(schemaName.get() + ".");
+            }
             LangRemedialAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get());
             break;
         case Switch::Function:
             description.append(" ");
-            description.append(schemaName.empty() ? mainSchema()
-                                                  : schemaName.get());
-            description.append(".");
+            if (schemaName.isNull()) {
+                description.append(mainSchema() + ".");
+            } else if (!schemaName.get().empty()) {
+                description.append(schemaName.get() + ".");
+            }
             LangRemedialAssert(!tableNameOrFunction.empty());
             description.append(tableNameOrFunction.get() + "(");
             if (!exprs.empty()) {

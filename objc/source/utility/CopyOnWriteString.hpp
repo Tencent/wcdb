@@ -40,6 +40,8 @@ public:
 
     bool empty() const;
 
+    bool isNull() const;
+
     bool equal(const std::string &other) const;
 
     const std::string &get() const;

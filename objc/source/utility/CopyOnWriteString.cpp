@@ -58,6 +58,11 @@ bool CopyOnWriteString::empty() const
            CopyOnWrite<std::string>::get().empty();
 }
 
+bool CopyOnWriteString::isNull() const
+{
+    return CopyOnWrite<std::string>::empty();
+}
+
 bool CopyOnWriteString::equal(const std::string &other) const
 {
     if (CopyOnWrite<std::string>::empty()) {

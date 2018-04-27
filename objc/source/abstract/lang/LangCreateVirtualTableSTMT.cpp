@@ -34,8 +34,11 @@ CopyOnWriteString CreateVirtualTableSTMT::SQL() const
     if (ifNotExists) {
         description.append("IF NOT EXISTS ");
     }
-    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
-    description.append(".");
+    if (schemaName.isNull()) {
+        description.append(mainSchema() + ".");
+    } else if (!schemaName.get().empty()) {
+        description.append(schemaName.get() + ".");
+    }
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     description.append(" USING ");

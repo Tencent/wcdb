@@ -36,8 +36,11 @@ CopyOnWriteString InsertSTMT::SQL() const
     }
     description.append(InsertSTMT::TypeName(type));
     description.append(" INTO ");
-    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
-    description.append(".");
+    if (schemaName.isNull()) {
+        description.append(mainSchema() + ".");
+    } else if (!schemaName.get().empty()) {
+        description.append(schemaName.get() + ".");
+    }
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     if (!columns.empty()) {

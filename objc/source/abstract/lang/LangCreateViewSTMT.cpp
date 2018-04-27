@@ -38,8 +38,11 @@ CopyOnWriteString CreateViewSTMT::SQL() const
     if (ifNotExists) {
         description.append("IF NOT EXISTS ");
     }
-    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
-    description.append(".");
+    if (schemaName.isNull()) {
+        description.append(mainSchema() + ".");
+    } else if (!schemaName.get().empty()) {
+        description.append(schemaName.get() + ".");
+    }
     LangRemedialAssert(!viewName.empty());
     description.append(viewName.get());
     if (!columns.empty()) {

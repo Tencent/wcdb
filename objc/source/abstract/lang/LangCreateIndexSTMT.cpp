@@ -38,7 +38,7 @@ CopyOnWriteString CreateIndexSTMT::SQL() const
     if (ifNotExists) {
         description.append("IF NOT EXISTS ");
     }
-    description.append(schemaName.empty() ? mainSchema() : schemaName.get());
+    description.append(schemaName.isNull() ? mainSchema() : schemaName.get());
     description.append(".");
     LangRemedialAssert(!indexName.empty());
     description.append(indexName.get());
