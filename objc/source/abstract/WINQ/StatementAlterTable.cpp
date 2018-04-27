@@ -58,4 +58,29 @@ StatementAlterTable &StatementAlterTable::addColumn(const ColumnDef &columnDef)
     return *this;
 }
 
+bool StatementAlterTable::isAlteringDefaultValueColumn() const
+{
+    const auto &lang = getCOWLang();
+    if (lang.empty()) {
+        return false;
+    }
+    const auto &langColumnDef = lang.get<Lang::AlterTableSTMT>().columnDef;
+    if (langColumnDef.empty()) {
+        return false;
+    }
+    const auto &langColumnConstraints =
+        langColumnDef.get<Lang::ColumnDef>().columnConstraints;
+    if (langColumnConstraints.empty()) {
+        return false;
+    }
+    for (const auto &langColumnConstraint : langColumnConstraints.get()) {
+        if (!langColumnConstraint.empty() &&
+            langColumnConstraint.get<Lang::ColumnConstraint>().type ==
+                Lang::ColumnConstraint::Type::Default) {
+            return true;
+        }
+    }
+    return false;
+}
+
 } // namespace WCDB

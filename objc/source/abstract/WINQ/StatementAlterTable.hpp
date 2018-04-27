@@ -34,6 +34,8 @@ public:
     StatementAlterTable &alterTable(const std::string &tableName);
     StatementAlterTable &renameTo(const std::string &newTableName);
     StatementAlterTable &addColumn(const ColumnDef &columnDef);
+
+    bool isAlteringDefaultValueColumn() const;
 };
 
 } // namespace WCDB
