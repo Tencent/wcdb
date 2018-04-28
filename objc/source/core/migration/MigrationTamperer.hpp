@@ -29,7 +29,7 @@ namespace WCDB {
 
 class MigrationTamperer {
 public:
-    MigrationTamperer(MigrationInfos *infos, const Statement &statement);
+    MigrationTamperer(MigrationInfos *infos);
 
     MigrationTamperer() = delete;
     MigrationTamperer(const MigrationTamperer &) = delete;
@@ -37,26 +37,30 @@ public:
 
 #pragma mark - Tamper
 public:
-    bool didSourceTampered() const;
+    //return true to indicate source statement is tampered
+    bool tamper(const Statement &statement);
+
     const Statement &getTamperedSourceStatement() const;
 
-    bool didTampered() const;
+    bool isTampered() const;
     const Statement &getTamperedStatement() const;
 
+    const std::shared_ptr<MigrationInfo> &getAssociatedInfo() const;
+
 protected:
-    void tamperWithStatement(const Statement &statement);
     bool doTamper(Statement &statement);
 
-    bool m_didSourceTampered;
     Statement m_tamperedSourceStatement;
 
     Statement m_tamperedStatement;
-    bool m_didTampered;
+    bool m_isTampered;
 
-    bool m_tamperingSelect;
+    bool m_isSelectTampering;
+    bool m_isSourceTampering;
 
     MigrationInfos *m_migrationInfos;
     const std::map<std::string, std::shared_ptr<MigrationInfo>> &m_infosMap;
+    std::shared_ptr<MigrationInfo> m_associatedInfo;
     SharedLockGuard m_lockGuard;
 
 #pragma mark - Tamper STMT

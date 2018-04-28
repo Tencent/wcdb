@@ -22,22 +22,14 @@
 
 namespace WCDB {
 
-MigrationTamperer::MigrationTamperer(MigrationInfos *infos,
-                                     const Statement &statement)
+MigrationTamperer::MigrationTamperer(MigrationInfos *infos)
     : m_migrationInfos(infos)
     , m_lockGuard(infos->getSharedLock())
-    , m_didSourceTampered(false)
-    , m_didTampered(false)
+    , m_isTampered(false)
     , m_infosMap(infos->getInfos())
-    , m_tamperingSelect(false)
+    , m_associatedInfo(nullptr)
 {
     WCTInnerAssert(m_migrationInfos != nullptr);
-    tamperWithStatement(statement);
-}
-
-bool MigrationTamperer::didSourceTampered() const
-{
-    return m_didSourceTampered;
 }
 
 const Statement &MigrationTamperer::getTamperedSourceStatement() const
@@ -45,9 +37,9 @@ const Statement &MigrationTamperer::getTamperedSourceStatement() const
     return m_tamperedSourceStatement;
 }
 
-bool MigrationTamperer::didTampered() const
+bool MigrationTamperer::isTampered() const
 {
-    return m_didTampered;
+    return m_isTampered;
 }
 
 const Statement &MigrationTamperer::getTamperedStatement() const
@@ -55,26 +47,51 @@ const Statement &MigrationTamperer::getTamperedStatement() const
     return m_tamperedStatement;
 }
 
-void MigrationTamperer::tamperWithStatement(const Statement &statement)
+const std::shared_ptr<MigrationInfo> &
+MigrationTamperer::getAssociatedInfo() const
 {
+    return m_associatedInfo;
+}
+
+bool MigrationTamperer::tamper(const Statement &statement)
+{
+    //reset
+    m_isTampered = false;
+    m_isSourceTampering = true;
+    m_associatedInfo = nullptr;
+
     m_tamperedSourceStatement = statement.getCOWLang();
-    bool sourceShouldBeTampered = true;
+    bool isSourceTampered = doTamper(m_tamperedSourceStatement);
+    m_isSourceTampering = false;
     switch (statement.getStatementType()) {
         case Statement::Type::Update:
         case Statement::Type::Delete:
         case Statement::Type::DropTable:
-            //mutiple execution
-            sourceShouldBeTampered = false;
+            m_tamperedStatement = m_tamperedSourceStatement.getCOWLang();
+            m_isTampered = doTamper(m_tamperedStatement);
             break;
+        case Statement::Type::Insert: {
+            const StatementInsert &statementInsert =
+                (const StatementInsert &) m_tamperedSourceStatement;
+            const Lang::InsertSTMT &stmt =
+                statementInsert.getCOWLang().get<Lang::InsertSTMT>();
+            if ((stmt.schemaName.isNull() ||
+                 stmt.schemaName.get() == Schema::main()) &&
+                !stmt.tableName.empty()) {
+                auto iter = m_infosMap.find(stmt.tableName.get());
+                if (iter != m_infosMap.end()) {
+                    m_tamperedStatement =
+                        iter->second
+                            ->getStatementForInsertingLastInsertedSourceIntoTargetTable(
+                                statementInsert);
+                    m_isTampered = true;
+                }
+            }
+        } break;
         default:
             break;
     }
-    if (sourceShouldBeTampered) {
-        m_didSourceTampered = doTamper(m_tamperedSourceStatement);
-    } else {
-        m_tamperedStatement = m_tamperedSourceStatement.getCOWLang();
-        m_didTampered = doTamper(m_tamperedStatement);
-    }
+    return isSourceTampered;
 }
 
 #pragma mark - Tamper
@@ -151,6 +168,9 @@ bool MigrationTamperer::doTamper(Statement &statement)
 bool MigrationTamperer::tamper(
     Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> &cowLang)
 {
+    if (m_isSourceTampering) {
+        return false;
+    }
     TAMPER_PREPARE(cowLang);
     return tamperTableAndSchemaName(lang.name, lang.schemaName);
 }
@@ -161,14 +181,14 @@ bool MigrationTamperer::tamper(
     TAMPER_PREPARE(cowLang);
     Lang::CopyOnWriteLazyLang<Lang::SelectCore> copy = lang.selectCore;
 
-    m_tamperingSelect = true;
+    m_isSelectTampering = true;
     bool result = tamperList(lang.commonTableExpressions);
     result = tamper(lang.selectCore) || result;
     result = tamperList(lang.compoundCores) || result;
     result = tamperList(lang.orderingTerms) || result;
     result = tamper(lang.limit) || result;
     result = tamper(lang.limitParameter) || result;
-    m_tamperingSelect = false;
+    m_isSelectTampering = false;
     return result;
 }
 
@@ -177,7 +197,9 @@ bool MigrationTamperer::tamper(
 {
     TAMPER_PREPARE(cowLang);
     bool result = tamper(lang.withClause);
-    result = tamper(lang.qualifiedTableName) || result;
+    if (!m_isSourceTampering) {
+        result = tamper(lang.qualifiedTableName) || result;
+    }
     result = tamperList(lang.keyValues) || result;
     result = tamper(lang.condition) || result;
     result = tamperList(lang.orderingTerms) || result;
@@ -191,7 +213,9 @@ bool MigrationTamperer::tamper(
 {
     TAMPER_PREPARE(cowLang);
     bool result = tamper(lang.withClause);
-    result = tamper(lang.qualifiedTableName) || result;
+    if (!m_isSourceTampering) {
+        result = tamper(lang.qualifiedTableName) || result;
+    }
     result = tamper(lang.condition) || result;
     result = tamperList(lang.orderingTerms) || result;
     result = tamper(lang.limit) || result;
@@ -204,8 +228,10 @@ bool MigrationTamperer::tamper(
 {
     TAMPER_PREPARE(cowLang);
     bool result = tamper(lang.withClause);
-    result =
-        tamperTableAndSchemaName(lang.tableName, lang.schemaName) || result;
+    if (!m_isSourceTampering) {
+        result =
+            tamperTableAndSchemaName(lang.tableName, lang.schemaName) || result;
+    }
     switch (lang.switcher) {
         case Lang::InsertSTMT::Switch::Select:
             result = tamper(lang.selectSTMT) || result;
@@ -731,10 +757,10 @@ bool MigrationTamperer::tamperTableName(CopyOnWriteString &tableName)
 bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                                                  CopyOnWriteString &schemaName)
 {
-    if ((schemaName.empty() || schemaName.get() == Lang::mainSchema()) &&
+    if ((schemaName.isNull() || schemaName.get() == Schema::main()) &&
         !tableName.empty()) {
         auto iter = m_infosMap.find(tableName.get());
-        if (m_tamperingSelect) {
+        if (m_isSelectTampering) {
             tableName.assign(iter->second->unionedViewName);
         } else {
             if (iter != m_infosMap.end()) {

@@ -34,7 +34,10 @@ MigrationHandle::handleWithPath(const std::string &path,
 MigrationHandle::MigrationHandle(const std::string &path,
                                  Tag tag,
                                  const std::shared_ptr<MigrationInfos> &infos)
-    : Handle(path, tag), m_infos(infos), m_unlockShared(false)
+    : Handle(path, tag)
+    , m_infos(infos)
+    , m_unlockShared(false)
+    , m_tamperer(m_infos.get())
 {
 }
 
@@ -52,15 +55,34 @@ bool MigrationHandle::execute(const Statement &statement)
     if (m_infos->isMigrated()) {
         return executeWithoutTampering(statement);
     }
-    MigrationTamperer tamperer(m_infos.get(), statement);
-    const Statement &source = tamperer.didSourceTampered()
-                                  ? tamperer.getTamperedSourceStatement()
+    const Statement &source = m_tamperer.tamper(statement)
+                                  ? m_tamperer.getTamperedSourceStatement()
                                   : statement;
-    if (!tamperer.didTampered()) {
+    if (!m_tamperer.isTampered()) {
         return executeWithoutTampering(source);
     }
-    return executeWithMultipleStatements(source,
-                                         tamperer.getTamperedStatement());
+    if (!beginNestedTransaction()) {
+        return false;
+    }
+    bool result = false;
+    switch (source.getStatementType()) {
+        case Statement::Type::Insert:
+            result = executeWithoutTampering(source) &&
+                     migrateWithRowID(getLastInsertedRowID(),
+                                      m_tamperer.getAssociatedInfo());
+            m_extraHandleStatement.finalize();
+            m_tamperedHandleStatement.finalize();
+            break;
+        default:
+            result = executeWithoutTampering(source) &&
+                     executeWithoutTampering(m_tamperer.getTamperedStatement());
+            break;
+    }
+    if (result) {
+        return commitOrRollbackNestedTransaction();
+    }
+    rollbackNestedTransaction();
+    return false;
 }
 
 bool MigrationHandle::prepare(const Statement &statement)
@@ -76,37 +98,46 @@ bool MigrationHandle::prepare(const Statement &statement)
     if (m_infos->isMigrated()) {
         return executeWithoutTampering(statement);
     }
-    MigrationTamperer tamperer(m_infos.get(), statement);
-    const Statement &source = tamperer.didSourceTampered()
-                                  ? tamperer.getTamperedSourceStatement()
+    const Statement &source = m_tamperer.tamper(statement)
+                                  ? m_tamperer.getTamperedSourceStatement()
                                   : statement;
-    if (!tamperer.didTampered()) {
+    if (!m_tamperer.isTampered()) {
         return prepareWithoutTampering(source);
     }
     m_unlockShared = true;
     m_infos->getSharedLock().lockShared();
-    return prepareWithMultipleStatements(source,
-                                         tamperer.getTamperedStatement());
+    if (!prepareWithoutTampering(source)) {
+        return false;
+    }
+    if (source.getStatementType() != Statement::Type::Insert &&
+        Handle::prepare(m_tamperer.getTamperedStatement(),
+                        m_tamperedHandleStatement)) {
+        m_handleStatement.finalize();
+        return false;
+    }
+    return true;
 }
 
 bool MigrationHandle::step(bool &done)
 {
-    if (!m_tamperedHandleStatement.isPrepared()) {
+    if (!m_tamperer.isTampered()) {
         return Handle::step(done);
     } else {
         if (!beginNestedTransaction()) {
             return false;
         }
-        WCTInnerAssert(
-            m_tamperedHandleStatement.getStatement().getStatementType() ==
-                Statement::Type::Update ||
-            m_tamperedHandleStatement.getStatement().getStatementType() ==
-                Statement::Type::Delete ||
-            m_tamperedHandleStatement.getStatement().getStatementType() ==
-                Statement::Type::Insert);
-        if (Handle::step(done) &&
-            Handle::step(m_tamperedHandleStatement, done)) {
-            return commitOrRollbackNestedTransaction();
+        if (m_tamperer.getTamperedStatement().getStatementType() ==
+            Statement::Type::Insert) {
+            if (Handle::step(done) &&
+                migrateWithRowID(getLastInsertedRowID(),
+                                 m_tamperer.getAssociatedInfo())) {
+                return commitOrRollbackNestedTransaction();
+            }
+        } else {
+            if (Handle::step(done) &&
+                Handle::step(m_tamperedHandleStatement, done)) {
+                return commitOrRollbackNestedTransaction();
+            }
         }
         rollbackNestedTransaction();
         return false;
@@ -171,6 +202,7 @@ void MigrationHandle::finalize()
 {
     Handle::finalize();
     m_tamperedHandleStatement.finalize();
+    m_extraHandleStatement.finalize();
     if (m_unlockShared) {
         m_unlockShared = false;
         m_infos->getSharedLock().unlockShared();
@@ -178,25 +210,33 @@ void MigrationHandle::finalize()
 }
 
 #pragma mark - Migration
-bool MigrationHandle::executeWithMultipleStatements(
-    const Statement &statement, const Statement &tamperedStatement)
+bool MigrationHandle::migrateWithRowID(
+    const long long &rowid, const std::shared_ptr<MigrationInfo> &info)
 {
-    if (!beginNestedTransaction()) {
-        return false;
-    }
-    if (executeWithoutTampering(statement) &&
-        executeWithoutTampering(tamperedStatement)) {
-        return commitOrRollbackNestedTransaction();
-    }
-    rollbackNestedTransaction();
-    return false;
+#ifdef DEBUG
+    WCTInnerAssert(info != nullptr && m_tamperer.isTampered() &&
+                   isInTransaction());
+#endif
+    return _migrateWithRowID(
+               rowid, info->getStatementForDeletingLastInsertedSourceRow(),
+               m_tamperedHandleStatement) &&
+           _migrateWithRowID(rowid, m_tamperer.getTamperedStatement(),
+                             m_extraHandleStatement);
 }
 
-bool MigrationHandle::prepareWithMultipleStatements(
-    const Statement &statement, const Statement &tamperedStatement)
+bool MigrationHandle::_migrateWithRowID(const long long &rowid,
+                                        const Statement &statement,
+                                        HandleStatement &handleStatement)
 {
-    return prepareWithoutTampering(statement) &&
-           Handle::prepare(tamperedStatement, m_tamperedHandleStatement);
+    if (!handleStatement.isPrepared() &&
+        !Handle::prepare(statement, handleStatement)) {
+        return false;
+    }
+    handleStatement.bindInteger64(rowid, 1);
+    bool done;
+    bool result = handleStatement.step(done);
+    handleStatement.finalize();
+    return result;
 }
 
 #pragma mark - Migration

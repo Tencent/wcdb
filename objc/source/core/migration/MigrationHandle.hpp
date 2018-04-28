@@ -23,6 +23,7 @@
 
 #include <WCDB/Abstract.h>
 #include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationTamperer.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -69,13 +70,20 @@ protected:
 
 #pragma mark - Multiple Statements
 protected:
-    bool executeWithMultipleStatements(const Statement &statement,
-                                       const Statement &tamperedStatement);
     bool prepareWithMultipleStatements(const Statement &statement,
                                        const Statement &tamperedStatement);
+    bool migrateWithRowID(const long long &rowid,
+                          const std::shared_ptr<MigrationInfo> &info);
+    bool _migrateWithRowID(const long long &rowid,
+                           const Statement &statement,
+                           HandleStatement &handleStatement);
 
     HandleStatement m_tamperedHandleStatement;
     bool m_unlockShared;
+
+    HandleStatement m_extraHandleStatement;
+
+    MigrationTamperer m_tamperer;
 };
 
 } //namespace WCDB
