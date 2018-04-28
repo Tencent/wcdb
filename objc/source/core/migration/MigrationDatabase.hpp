@@ -23,7 +23,7 @@
 
 #include <WCDB/Database.hpp>
 #include <WCDB/MigrationHandlePool.hpp>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationSetting.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -38,7 +38,7 @@ public:
 
     static std::shared_ptr<Database>
     databaseWithPath(const std::string &path,
-                     const std::shared_ptr<MigrationInfos> &migrationInfos);
+                     const std::shared_ptr<MigrationSetting> &migrationInfos);
     static std::shared_ptr<Database>
     databaseWithExistingPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
@@ -52,8 +52,7 @@ public:
 
     void asyncMigration();
 
-    using MigratedCallback = MigrationInfos::MigratedCallback;
-    void setMigratedCallback(const MigratedCallback &onMigrated);
+    MigrationSetting *getMigrationSetting();
 
 protected:
     MigrationHandlePool *m_migrationPool;

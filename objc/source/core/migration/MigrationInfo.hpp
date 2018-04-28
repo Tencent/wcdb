@@ -55,13 +55,12 @@ public:
 
     static const std::string schemaPrefix();
 
-protected:
     static std::string resolvedSchema(const std::string &path);
 
 #pragma mark - Statement
 public:
     /**
-     INSERT OR FAIL INTO [targetTable]
+     INSERT INTO [targetTable]
      SELECT *
      FROM [sourceTable]
      LIMIT 1
@@ -71,12 +70,20 @@ public:
     const StatementInsert &getStatementForMigration() const;
 
     /**
+     SELECT rowid FROM [sourceTable]
+     LIMIT 1
+
+     @return StatementSelect
+     */
+    const StatementSelect &getStatementForPickingRowIDs() const;
+
+    /**
      DELETE FROM [sourceTable]
      LIMIT 1
      
      @return StatementDelete
      */
-    const StatementDelete &getStatementForDeleteingMigratedRow() const;
+    const StatementDelete &getStatementForDeletingMigratedRow() const;
 
     /**
      DROP TABLE IF EXISTS [sourceTable]
@@ -103,29 +110,21 @@ public:
     const std::string unionedViewName;
 
     /**
-     DELETE FROM [sourceTable] WHERE rowid = ?
-
-     @return StatementDelete
-     */
-    const StatementDelete &getStatementForDeletingLastInsertedSourceRow() const;
-
-    /**
      INSERT [CONFLICT TYPE depends on the origin insertion] INTO [targetTable]
      SELECT * FROM [sourceTable] WHERE rowid = ?
 
-     @param origin origin insertion
+     @param type type
      @return StatementInsert; 
      */
-    StatementInsert getStatementForInsertingLastInsertedSourceIntoTargetTable(
-        const StatementInsert &origin) const;
+    StatementInsert getStatementForTamperingConflictType(
+        const Lang::InsertSTMT::Type &type) const;
 
 protected:
     static const std::string &getUnionedViewPrefix();
 
     StatementInsert m_statementForMigration;
     StatementDelete m_statementForDeletingMigratedRow;
-    StatementDelete m_statementForDeletingLastInsertedSourceRow;
-    StatementInsert m_statementForInsertingLastInsertedSourceIntoTargetTable;
+    StatementSelect m_statementForPickingRowIDs;
 
     std::string m_unionedViewName;
 };

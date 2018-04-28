@@ -22,19 +22,19 @@
 
 namespace WCDB {
 
-MigrationTamperer::MigrationTamperer(MigrationInfos *infos)
-    : m_migrationInfos(infos)
-    , m_lockGuard(infos->getSharedLock())
+MigrationTamperer::MigrationTamperer(MigrationSetting *setting)
+    : m_setting(setting)
+    , m_lockGuard(setting->getSharedLock())
     , m_isTampered(false)
-    , m_infosMap(infos->getInfos())
+    , m_infos(setting->getInfos())
     , m_associatedInfo(nullptr)
 {
-    WCTInnerAssert(m_migrationInfos != nullptr);
+    WCTInnerAssert(m_setting != nullptr);
 }
 
-const Statement &MigrationTamperer::getTamperedSourceStatement() const
+const Statement &MigrationTamperer::getSourceStatement() const
 {
-    return m_tamperedSourceStatement;
+    return m_sourceStatement;
 }
 
 bool MigrationTamperer::isTampered() const
@@ -53,45 +53,40 @@ MigrationTamperer::getAssociatedInfo() const
     return m_associatedInfo;
 }
 
-bool MigrationTamperer::tamper(const Statement &statement)
+void MigrationTamperer::tamper(const Statement &statement)
 {
     //reset
     m_isTampered = false;
     m_isSourceTampering = true;
     m_associatedInfo = nullptr;
 
-    m_tamperedSourceStatement = statement.getCOWLang();
-    bool isSourceTampered = doTamper(m_tamperedSourceStatement);
+    m_sourceStatement = statement.getCOWLang();
+    doTamper(m_sourceStatement);
     m_isSourceTampering = false;
     switch (statement.getStatementType()) {
         case Statement::Type::Update:
         case Statement::Type::Delete:
         case Statement::Type::DropTable:
-            m_tamperedStatement = m_tamperedSourceStatement.getCOWLang();
+            m_tamperedStatement = m_sourceStatement.getCOWLang();
             m_isTampered = doTamper(m_tamperedStatement);
             break;
         case Statement::Type::Insert: {
             const StatementInsert &statementInsert =
-                (const StatementInsert &) m_tamperedSourceStatement;
+                (const StatementInsert &) m_sourceStatement;
             const Lang::InsertSTMT &stmt =
                 statementInsert.getCOWLang().get<Lang::InsertSTMT>();
             if ((stmt.schemaName.isNull() ||
                  stmt.schemaName.get() == Schema::main()) &&
                 !stmt.tableName.empty()) {
-                auto iter = m_infosMap.find(stmt.tableName.get());
-                if (iter != m_infosMap.end()) {
-                    m_tamperedStatement =
-                        iter->second
-                            ->getStatementForInsertingLastInsertedSourceIntoTargetTable(
-                                statementInsert);
-                    m_isTampered = true;
+                auto iter = m_infos.find(stmt.tableName.get());
+                if (iter != m_infos.end()) {
+                    m_associatedInfo = iter->second;
                 }
             }
         } break;
         default:
             break;
     }
-    return isSourceTampered;
 }
 
 #pragma mark - Tamper
@@ -746,8 +741,8 @@ bool MigrationTamperer::tamper(
 
 bool MigrationTamperer::tamperTableName(CopyOnWriteString &tableName)
 {
-    auto iter = m_infosMap.find(tableName.get());
-    if (iter != m_infosMap.end()) {
+    auto iter = m_infos.find(tableName.get());
+    if (iter != m_infos.end()) {
         tableName.assign(iter->second->sourceTable);
         return true;
     }
@@ -759,11 +754,11 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
 {
     if ((schemaName.isNull() || schemaName.get() == Schema::main()) &&
         !tableName.empty()) {
-        auto iter = m_infosMap.find(tableName.get());
+        auto iter = m_infos.find(tableName.get());
         if (m_isSelectTampering) {
             tableName.assign(iter->second->unionedViewName);
         } else {
-            if (iter != m_infosMap.end()) {
+            if (iter != m_infos.end()) {
                 tableName.assign(iter->second->sourceTable);
                 if (!iter->second->isSameDatabaseMigration()) {
                     schemaName.assign(iter->second->schema);

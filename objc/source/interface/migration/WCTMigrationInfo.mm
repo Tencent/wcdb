@@ -72,4 +72,12 @@
                                      _sourceDatabasePath ? _sourceDatabasePath.cppString : WCDB::String::empty());
 }
 
+- (NSString *)schema;
+{
+    if (_sourceDatabasePath) {
+        return [NSString stringWithCppString:WCDB::MigrationInfo::resolvedSchema(_sourceDatabasePath.cppString)];
+    }
+    return nil;
+}
+
 @end

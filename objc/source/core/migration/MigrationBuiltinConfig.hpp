@@ -24,7 +24,7 @@
 #include <WCDB/BuiltinConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationSetting.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -38,13 +38,13 @@ public:
 
     // 1. Attach necessary schemas and detach unnecessary schemas
     // 2. Create necessary views and drop unnecessary views
-    static const Config migrationPreset(MigrationInfos *infos);
+    static const Config migrationWithSetting(MigrationSetting *setting);
 
 protected:
-    static bool doCreateView(MigrationHandle *handle,
-                             MigrationInfos *infos,
+    static bool doCreateView(Handle *handle,
+                             MigrationSetting *setting,
                              bool &schemaChanged);
-    static bool doAttachSchema(MigrationHandle *handle, MigrationInfos *infos);
+    static bool doAttachSchema(Handle *handle, MigrationSetting *setting);
 };
 
 } //namespace WCDB

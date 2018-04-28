@@ -25,7 +25,7 @@ namespace WCDB {
 MigrationHandlePool::MigrationHandlePool(
     const std::string &path,
     const Configs &configs,
-    const std::shared_ptr<MigrationInfos> &migrationInfos)
+    const std::shared_ptr<MigrationSetting> &migrationInfos)
     : HandlePool(path, configs), m_infos(migrationInfos)
 {
 #ifdef DEBUG
@@ -60,7 +60,7 @@ bool MigrationHandlePool::debug_checkInfosLegal()
 #endif
 
 #pragma mark - Migration
-MigrationInfos *MigrationHandlePool::getMigrationInfos() const
+MigrationSetting *MigrationHandlePool::getMigrationSetting() const
 {
     return m_infos.get();
 }

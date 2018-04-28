@@ -37,7 +37,7 @@
     for (WCTMigrationInfo *info in infos) {
         infoList.push_back([info getWCDBMigrationInfo]);
     }
-    auto migrationInfos = WCDB::MigrationInfos::infos(infoList);
+    auto migrationInfos = WCDB::MigrationSetting::setting(infoList);
     if (!migrationInfos) {
         return nil;
     }
@@ -49,7 +49,7 @@
 {
     WCTRemedialAssert(info, "Migration info can't be null. If you want to refer an inited migration database, use [initWithExistingPath:] instead.", return nil;);
     WCTRemedialAssert(path, "Path can't be null.", return nil;);
-    auto infos = WCDB::MigrationInfos::infos({[info getWCDBMigrationInfo]});
+    auto infos = WCDB::MigrationSetting::setting({[info getWCDBMigrationInfo]});
     if (!infos) {
         return nil;
     }
@@ -85,13 +85,35 @@
     return _migrationDatabase->stepMigration((bool &) done);
 }
 
+- (void)asyncMigration
+{
+    _migrationDatabase->asyncMigration();
+}
+
 - (void)setMigratedCallback:(WCTMigratedBlock)onMigrated
 {
     auto callback = [onMigrated](const WCDB::MigrationInfo *info) {
         WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
         onMigrated(nsInfo);
     };
-    _migrationDatabase->setMigratedCallback(callback);
+    _migrationDatabase->getMigrationSetting()->setMigratedCallback(callback);
+}
+
+- (void)setMigrateRowPerStep:(int)row
+{
+    _migrationDatabase->getMigrationSetting()->setMigrateRowPerStep(row);
+}
+
+- (void)setConflictCallback:(WCTMigrationConflictBlock)onConflict
+{
+    WCDB::MigrationSetting::ConflictCallback callback = nullptr;
+    if (onConflict) {
+        callback = [onConflict](const WCDB::MigrationInfo *info, const long long &rowid) -> bool {
+            WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
+            return onConflict(nsInfo, rowid);
+        };
+    }
+    _migrationDatabase->getMigrationSetting()->setConflictCallback(callback);
 }
 
 - (void)finalizeDatabase

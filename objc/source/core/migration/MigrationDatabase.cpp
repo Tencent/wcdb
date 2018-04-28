@@ -51,7 +51,7 @@ MigrationDatabase::databaseWithExistingPath(const std::string &path)
 
 std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
     const std::string &path,
-    const std::shared_ptr<MigrationInfos> &migrationInfos)
+    const std::shared_ptr<MigrationSetting> &migrationInfos)
 {
     const HandlePools::Generator s_generator =
         [&migrationInfos](
@@ -64,7 +64,7 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
         }
         Configs configs = builtinConfig->defaultConfigs;
         configs.setConfig(
-            MigrationBuiltinConfig::migrationPreset(migrationInfos.get()));
+            MigrationBuiltinConfig::migrationWithSetting(migrationInfos.get()));
         return std::shared_ptr<HandlePool>(
             new MigrationHandlePool(path, configs, migrationInfos));
     };
@@ -75,7 +75,7 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
 #ifdef DEBUG
         WCTAssert(static_cast<MigrationDatabase *>(database.get())
-                          ->m_migrationPool->getMigrationInfos()
+                          ->m_migrationPool->getMigrationSetting()
                           ->hash == migrationInfos->hash,
                   "Migration info can't be changed after the very first "
                   "initialization.");
@@ -102,56 +102,90 @@ bool MigrationDatabase::stepMigration(bool &done)
               "Migration stepping is not thread-safe.");
 #endif
     done = false;
-    MigrationInfos *infos = m_migrationPool->getMigrationInfos();
+    MigrationSetting *setting = m_migrationPool->getMigrationSetting();
     std::shared_ptr<MigrationInfo> info;
     bool migratedEve = false;
     {
-        SharedLockGuard lockGuard(infos->getSharedLock());
-        if (infos->isMigrated()) {
+        SharedLockGuard lockGuard(setting->getSharedLock());
+        if (setting->isMigrated()) {
             done = true;
             return true;
         }
-        info = infos->pickUpForMigration();
+        info = setting->pickUpForMigration();
         bool isMigrated = false;
-        bool committed = runTransaction(
-            [this, &migratedEve, &isMigrated, &info](Handle *handle) -> bool {
-                MigrationHandle *migrationHandle =
-                    static_cast<MigrationHandle *>(handle);
+        bool committed = runTransaction([this, &migratedEve, &isMigrated, &info,
+                                         setting](Handle *handle) -> bool {
+            MigrationHandle *migrationHandle =
+                static_cast<MigrationHandle *>(handle);
+            {
+                //check if source table exists
                 std::pair<bool, bool> sourceTableExists =
                     migrationHandle->isTableExists(info->getSourceTable());
                 if (!sourceTableExists.first || !sourceTableExists.second) {
                     isMigrated = sourceTableExists.first;
                     return false;
                 }
-                //migration
-                if (!migrationHandle->executeWithoutTampering(
-                        info->getStatementForMigration())) {
-                    m_migrationPool->setThreadedError(handle->getError());
+            }
+            int rowPerStep = setting->getMigrationRowPerStep();
+            std::list<long long> rowids;
+            {
+                //pick up row ids
+                if (!migrationHandle->prepare(
+                        info->getStatementForPickingRowIDs())) {
                     return false;
                 }
-                if (migrationHandle->getChanges() == 0) {
-                    //nothing to migrate
-                    migratedEve = true;
+                migrationHandle->bindInteger64(rowPerStep, 1);
+                bool done = false;
+                while (migrationHandle->step(done) && !done) {
+                    rowids.push_back(migrationHandle->getInteger64(0));
+                }
+                migrationHandle->finalize();
+                if (!done) {
                     return false;
                 }
-                return migrationHandle->executeWithoutTampering(
-                    info->getStatementForDeleteingMigratedRow());
-            });
+            }
+            //migration
+            bool result = true;
+            for (const auto &rowid : rowids) {
+                if (migrationHandle->migrateWithRowID(
+                        rowid, info, Lang::InsertSTMT::Type::Insert)) {
+                    continue;
+                }
+                //handle failure
+                if (migrationHandle->getResultCode() != SQLITE_CONSTRAINT) {
+                    result = false;
+                } else if (setting->invokeConflictCallback(info.get(), rowid)) {
+                    //override
+                    result = migrationHandle->migrateWithRowID(
+                        rowid, info, Lang::InsertSTMT::Type::InsertOrReplace);
+                } //ignore conflict
+                if (!result) {
+                    break;
+                }
+            }
+            migrationHandle->finalize();
+            if (result) {
+                migratedEve = rowids.size() < rowPerStep;
+            } else {
+                m_migrationPool->setThreadedError(migrationHandle->getError());
+            }
+            return result;
+        });
         migratedEve = migratedEve && committed;
         if (!isMigrated && !migratedEve) {
             return committed;
         }
     }
     {
-        LockGuard lockGuard(infos->getSharedLock());
+        LockGuard lockGuard(setting->getSharedLock());
         if (migratedEve && !execute(info->getStatementForDroppingOldTable())) {
             return false;
         }
-        if (infos->markAsMigrated(info->targetTable)) {
+        if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
-            setConfig(MigrationBuiltinConfig::migrationPreset(infos));
+            setConfig(MigrationBuiltinConfig::migrationWithSetting(setting));
         }
-        done = infos->isMigrated();
+        done = setting->isMigrated();
     }
     return true;
 }
@@ -180,9 +214,9 @@ void MigrationDatabase::asyncMigration()
     });
 }
 
-void MigrationDatabase::setMigratedCallback(const MigratedCallback &onMigrated)
+MigrationSetting *MigrationDatabase::getMigrationSetting()
 {
-    m_migrationPool->getMigrationInfos()->setMigratedCallback(onMigrated);
+    return m_migrationPool->getMigrationSetting();
 }
 
 } //namespace WCDB

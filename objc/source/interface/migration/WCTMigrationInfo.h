@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, readonly, nullable) NSString *sourceDatabasePath;
 
+- (nullable NSString *)schema;
+
 - (instancetype)initWithTargetTable:(NSString *)targetTable
                     fromSourceTable:(NSString *)sourceTable
                          ofDatabase:(nullable NSString *)sourceDatabasePath NS_DESIGNATED_INITIALIZER;

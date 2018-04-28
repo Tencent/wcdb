@@ -22,7 +22,7 @@
 #define MigrationHandlePool_hpp
 
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationSetting.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -32,9 +32,10 @@ class MigrationHandlePool : public HandlePool {
 #pragma mark - Initialize
 public:
     friend class MigrationHandlePools;
-    MigrationHandlePool(const std::string &path,
-                        const Configs &configs,
-                        const std::shared_ptr<MigrationInfos> &migrationInfos);
+    MigrationHandlePool(
+        const std::string &path,
+        const Configs &configs,
+        const std::shared_ptr<MigrationSetting> &migrationInfos);
 
 #ifdef DEBUG
 public:
@@ -47,10 +48,10 @@ protected:
 
 #pragma mark - Migration
 public:
-    MigrationInfos *getMigrationInfos() const;
+    MigrationSetting *getMigrationSetting() const;
 
 protected:
-    std::shared_ptr<MigrationInfos> m_infos;
+    std::shared_ptr<MigrationSetting> m_infos;
 
 #pragma mark - Override
 protected:

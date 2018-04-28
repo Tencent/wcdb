@@ -22,7 +22,7 @@
 #define MigrationHandle_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationSetting.hpp>
 #include <WCDB/MigrationTamperer.hpp>
 
 #pragma GCC visibility push(hidden)
@@ -35,12 +35,12 @@ public:
     static std::shared_ptr<Handle>
     handleWithPath(const std::string &path,
                    Tag tag,
-                   const std::shared_ptr<MigrationInfos> &infos);
+                   const std::shared_ptr<MigrationSetting> &infos);
 
 protected:
     MigrationHandle(const std::string &path,
                     Tag tag,
-                    const std::shared_ptr<MigrationInfos> &infos);
+                    const std::shared_ptr<MigrationSetting> &infos);
 
 #pragma mark - Override
 public:
@@ -59,21 +59,23 @@ public:
 
 #pragma mark - Migration
 public:
+    bool migrateWithRowID(const long long &rowid,
+                          const std::shared_ptr<MigrationInfo> &info,
+                          const Lang::InsertSTMT::Type &onConflict);
+
+protected:
     bool executeWithoutTampering(const Statement &statement);
     bool prepareWithoutTampering(const Statement &statement);
 
-protected:
 #ifdef DEBUG
     void debug_checkStatementLegal(const Statement &statement);
 #endif
-    std::shared_ptr<MigrationInfos> m_infos;
+    std::shared_ptr<MigrationSetting> m_infos;
 
 #pragma mark - Multiple Statements
 protected:
     bool prepareWithMultipleStatements(const Statement &statement,
                                        const Statement &tamperedStatement);
-    bool migrateWithRowID(const long long &rowid,
-                          const std::shared_ptr<MigrationInfo> &info);
     bool _migrateWithRowID(const long long &rowid,
                            const Statement &statement,
                            HandleStatement &handleStatement);
@@ -81,7 +83,8 @@ protected:
     HandleStatement m_tamperedHandleStatement;
     bool m_unlockShared;
 
-    HandleStatement m_extraHandleStatement;
+    HandleStatement m_extraHandleStatement1;
+    HandleStatement m_extraHandleStatement2;
 
     MigrationTamperer m_tamperer;
 };

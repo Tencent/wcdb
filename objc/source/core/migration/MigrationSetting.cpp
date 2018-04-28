@@ -23,17 +23,18 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<MigrationInfos>
-MigrationInfos::infos(const std::list<std::shared_ptr<MigrationInfo>> &infos)
+std::shared_ptr<MigrationSetting> MigrationSetting::setting(
+    const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    return std::shared_ptr<MigrationInfos>(new MigrationInfos(infos));
+    return std::shared_ptr<MigrationSetting>(new MigrationSetting(infos));
 }
 
-MigrationInfos::MigrationInfos(
+MigrationSetting::MigrationSetting(
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
     : m_started(false)
     , m_onMigrated(nullptr)
-    , m_migratingInfo(nullptr)
+    , m_rowPerStep(10)
+    , m_onConflict(nullptr)
 #ifdef DEBUG
     , hash(hashedInfos(infos))
 #endif
@@ -58,7 +59,7 @@ MigrationInfos::MigrationInfos(
 }
 
 #ifdef DEBUG
-int64_t MigrationInfos::hashedInfos(
+int64_t MigrationSetting::hashedInfos(
     const std::list<std::shared_ptr<MigrationInfo>> &infos) const
 {
     std::string hashSource;
@@ -72,14 +73,14 @@ int64_t MigrationInfos::hashedInfos(
 #endif
 
 #pragma mark - Basic
-bool MigrationInfos::isSameDatabaseMigration() const
+bool MigrationSetting::isSameDatabaseMigration() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_schemas.empty();
 }
 
 const std::map<std::string, std::pair<std::string, int>> &
-MigrationInfos::getSchemasForAttaching() const
+MigrationSetting::getSchemasForAttaching() const
 {
 //TODO refactor
 #ifdef DEBUG
@@ -89,7 +90,7 @@ MigrationInfos::getSchemasForAttaching() const
 }
 
 const std::map<std::string, std::shared_ptr<MigrationInfo>> &
-MigrationInfos::getInfos() const
+MigrationSetting::getInfos() const
 {
 //TODO refactor
 #ifdef DEBUG
@@ -98,24 +99,24 @@ MigrationInfos::getInfos() const
     return m_infos;
 }
 
-bool MigrationInfos::isStarted() const
+bool MigrationSetting::isStarted() const
 {
     return m_started.load();
 }
 
-bool MigrationInfos::isMigrated() const
+bool MigrationSetting::isMigrated() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_infos.empty();
 }
 
-void MigrationInfos::markAsStarted()
+void MigrationSetting::markAsStarted()
 {
     LockGuard lockGuard(m_lock);
     m_started.store(true);
 }
 
-bool MigrationInfos::markAsMigrated(const std::string &table)
+bool MigrationSetting::markAsMigrated(const std::string &table)
 {
     LockGuard lockGuard(m_lock);
     auto iter = m_infos.find(table);
@@ -141,7 +142,8 @@ bool MigrationInfos::markAsMigrated(const std::string &table)
     return schemasChanged;
 }
 
-const std::shared_ptr<MigrationInfo> &MigrationInfos::pickUpForMigration() const
+const std::shared_ptr<MigrationInfo> &
+MigrationSetting::pickUpForMigration() const
 {
 #ifdef DEBUG
     WCTInnerAssert(m_lock.debug_isSharedLocked());
@@ -150,15 +152,40 @@ const std::shared_ptr<MigrationInfo> &MigrationInfos::pickUpForMigration() const
     return m_infos.begin()->second;
 }
 
-void MigrationInfos::setMigratedCallback(const MigratedCallback &onMigrated)
+void MigrationSetting::setMigratedCallback(const MigratedCallback &onMigrated)
 {
     LockGuard lockGuard(m_lock);
     m_onMigrated = onMigrated;
 }
 
-SharedLock &MigrationInfos::getSharedLock()
+SharedLock &MigrationSetting::getSharedLock()
 {
     return m_lock;
+}
+
+void MigrationSetting::setMigrateRowPerStep(int row)
+{
+    LockGuard lockGuard(m_lock);
+    m_rowPerStep = row;
+}
+
+int MigrationSetting::getMigrationRowPerStep() const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_rowPerStep;
+}
+
+void MigrationSetting::setConflictCallback(const ConflictCallback &callback)
+{
+    LockGuard lockGuard(m_lock);
+    m_onConflict = callback;
+}
+
+bool MigrationSetting::invokeConflictCallback(const MigrationInfo *info,
+                                              const long long &rowid) const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_onConflict ? m_onConflict(info, rowid) : false;
 }
 
 } //namespace WCDB

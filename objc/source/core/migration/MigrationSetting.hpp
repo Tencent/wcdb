@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef MigrationInfos_hpp
-#define MigrationInfos_hpp
+#ifndef MigrationSetting_hpp
+#define MigrationSetting_hpp
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
@@ -29,21 +29,21 @@
 
 namespace WCDB {
 
-class MigrationInfos {
+class MigrationSetting {
 #pragma mark - Initialize
 public:
     typedef std::function<void(const MigrationInfo *)> MigratedCallback;
 
-    static std::shared_ptr<MigrationInfos>
-    infos(const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    static std::shared_ptr<MigrationSetting>
+    setting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
 
     void setMigratedCallback(const MigratedCallback &onMigrated);
 
 protected:
-    MigrationInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos);
-    MigrationInfos() = delete;
-    MigrationInfos(const MigrationInfos &) = delete;
-    MigrationInfos &operator=(const MigrationInfos &) = delete;
+    MigrationSetting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    MigrationSetting() = delete;
+    MigrationSetting(const MigrationSetting &) = delete;
+    MigrationSetting &operator=(const MigrationSetting &) = delete;
 
 #pragma mark - Basic
 public:
@@ -61,6 +61,15 @@ public:
 
     SharedLock &getSharedLock();
 
+    void setMigrateRowPerStep(int row);
+    int getMigrationRowPerStep() const;
+
+    //info, rowid -> return true to replace and false to ignore
+    typedef std::function<bool(const MigrationInfo *, const long long &)>
+        ConflictCallback;
+    void setConflictCallback(const ConflictCallback &callback);
+    bool invokeConflictCallback(const MigrationInfo *, const long long &) const;
+
 #ifdef DEBUG
     const int64_t hash;
     int64_t
@@ -75,13 +84,13 @@ protected:
     //target table -> infos
     std::map<std::string, std::shared_ptr<MigrationInfo>> m_infos;
 
-    std::shared_ptr<MigrationInfo> m_migratingInfo;
-
     MigratedCallback m_onMigrated;
+    ConflictCallback m_onConflict;
+    int m_rowPerStep;
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* MigrationInfos_hpp */
+#endif /* MigrationSetting_hpp */

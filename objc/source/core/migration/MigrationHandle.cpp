@@ -26,14 +26,14 @@ namespace WCDB {
 std::shared_ptr<Handle>
 MigrationHandle::handleWithPath(const std::string &path,
                                 Tag tag,
-                                const std::shared_ptr<MigrationInfos> &infos)
+                                const std::shared_ptr<MigrationSetting> &infos)
 {
     return std::shared_ptr<Handle>(new MigrationHandle(path, tag, infos));
 }
 
 MigrationHandle::MigrationHandle(const std::string &path,
                                  Tag tag,
-                                 const std::shared_ptr<MigrationInfos> &infos)
+                                 const std::shared_ptr<MigrationSetting> &infos)
     : Handle(path, tag)
     , m_infos(infos)
     , m_unlockShared(false)
@@ -55,9 +55,8 @@ bool MigrationHandle::execute(const Statement &statement)
     if (m_infos->isMigrated()) {
         return executeWithoutTampering(statement);
     }
-    const Statement &source = m_tamperer.tamper(statement)
-                                  ? m_tamperer.getTamperedSourceStatement()
-                                  : statement;
+    m_tamperer.tamper(statement);
+    const Statement &source = m_tamperer.getSourceStatement();
     if (!m_tamperer.isTampered()) {
         return executeWithoutTampering(source);
     }
@@ -68,10 +67,11 @@ bool MigrationHandle::execute(const Statement &statement)
     switch (source.getStatementType()) {
         case Statement::Type::Insert:
             result = executeWithoutTampering(source) &&
-                     migrateWithRowID(getLastInsertedRowID(),
-                                      m_tamperer.getAssociatedInfo());
-            m_extraHandleStatement.finalize();
-            m_tamperedHandleStatement.finalize();
+                     migrateWithRowID(
+                         getLastInsertedRowID(), m_tamperer.getAssociatedInfo(),
+                         source.getCOWLang().get<Lang::InsertSTMT>().type);
+            m_extraHandleStatement1.finalize();
+            m_extraHandleStatement2.finalize();
             break;
         default:
             result = executeWithoutTampering(source) &&
@@ -98,23 +98,22 @@ bool MigrationHandle::prepare(const Statement &statement)
     if (m_infos->isMigrated()) {
         return executeWithoutTampering(statement);
     }
-    const Statement &source = m_tamperer.tamper(statement)
-                                  ? m_tamperer.getTamperedSourceStatement()
-                                  : statement;
+    m_tamperer.tamper(statement);
     if (!m_tamperer.isTampered()) {
-        return prepareWithoutTampering(source);
+        return prepareWithoutTampering(m_tamperer.getSourceStatement());
     }
-    m_unlockShared = true;
-    m_infos->getSharedLock().lockShared();
+    const Statement &source = m_tamperer.getSourceStatement();
     if (!prepareWithoutTampering(source)) {
         return false;
     }
     if (source.getStatementType() != Statement::Type::Insert &&
-        Handle::prepare(m_tamperer.getTamperedStatement(),
-                        m_tamperedHandleStatement)) {
+        !Handle::prepare(m_tamperer.getTamperedStatement(),
+                         m_tamperedHandleStatement)) {
         m_handleStatement.finalize();
         return false;
     }
+    m_unlockShared = true;
+    m_infos->getSharedLock().lockShared();
     return true;
 }
 
@@ -126,11 +125,12 @@ bool MigrationHandle::step(bool &done)
         if (!beginNestedTransaction()) {
             return false;
         }
-        if (m_tamperer.getTamperedStatement().getStatementType() ==
-            Statement::Type::Insert) {
+        const Statement &source = m_tamperer.getSourceStatement();
+        if (source.getStatementType() == Statement::Type::Insert) {
             if (Handle::step(done) &&
-                migrateWithRowID(getLastInsertedRowID(),
-                                 m_tamperer.getAssociatedInfo())) {
+                migrateWithRowID(
+                    getLastInsertedRowID(), m_tamperer.getAssociatedInfo(),
+                    source.getCOWLang().get<Lang::InsertSTMT>().type)) {
                 return commitOrRollbackNestedTransaction();
             }
         } else {
@@ -202,7 +202,8 @@ void MigrationHandle::finalize()
 {
     Handle::finalize();
     m_tamperedHandleStatement.finalize();
-    m_extraHandleStatement.finalize();
+    m_extraHandleStatement1.finalize();
+    m_extraHandleStatement2.finalize();
     if (m_unlockShared) {
         m_unlockShared = false;
         m_infos->getSharedLock().unlockShared();
@@ -211,17 +212,19 @@ void MigrationHandle::finalize()
 
 #pragma mark - Migration
 bool MigrationHandle::migrateWithRowID(
-    const long long &rowid, const std::shared_ptr<MigrationInfo> &info)
+    const long long &rowid,
+    const std::shared_ptr<MigrationInfo> &info,
+    const Lang::InsertSTMT::Type &onConflict)
 {
 #ifdef DEBUG
     WCTInnerAssert(info != nullptr && m_tamperer.isTampered() &&
                    isInTransaction());
 #endif
-    return _migrateWithRowID(
-               rowid, info->getStatementForDeletingLastInsertedSourceRow(),
-               m_tamperedHandleStatement) &&
-           _migrateWithRowID(rowid, m_tamperer.getTamperedStatement(),
-                             m_extraHandleStatement);
+    return _migrateWithRowID(rowid, info->getStatementForDeletingMigratedRow(),
+                             m_extraHandleStatement1) &&
+           _migrateWithRowID(
+               rowid, info->getStatementForTamperingConflictType(onConflict),
+               m_extraHandleStatement2);
 }
 
 bool MigrationHandle::_migrateWithRowID(const long long &rowid,
@@ -235,7 +238,7 @@ bool MigrationHandle::_migrateWithRowID(const long long &rowid,
     handleStatement.bindInteger64(rowid, 1);
     bool done;
     bool result = handleStatement.step(done);
-    handleStatement.finalize();
+    handleStatement.reset();
     return result;
 }
 

@@ -21,7 +21,7 @@
 #ifndef MigrationTamperer_hpp
 #define MigrationTamperer_hpp
 
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/MigrationSetting.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -29,7 +29,7 @@ namespace WCDB {
 
 class MigrationTamperer {
 public:
-    MigrationTamperer(MigrationInfos *infos);
+    MigrationTamperer(MigrationSetting *infos);
 
     MigrationTamperer() = delete;
     MigrationTamperer(const MigrationTamperer &) = delete;
@@ -37,10 +37,9 @@ public:
 
 #pragma mark - Tamper
 public:
-    //return true to indicate source statement is tampered
-    bool tamper(const Statement &statement);
+    void tamper(const Statement &statement);
 
-    const Statement &getTamperedSourceStatement() const;
+    const Statement &getSourceStatement() const;
 
     bool isTampered() const;
     const Statement &getTamperedStatement() const;
@@ -50,7 +49,7 @@ public:
 protected:
     bool doTamper(Statement &statement);
 
-    Statement m_tamperedSourceStatement;
+    Statement m_sourceStatement;
 
     Statement m_tamperedStatement;
     bool m_isTampered;
@@ -58,8 +57,8 @@ protected:
     bool m_isSelectTampering;
     bool m_isSourceTampering;
 
-    MigrationInfos *m_migrationInfos;
-    const std::map<std::string, std::shared_ptr<MigrationInfo>> &m_infosMap;
+    MigrationSetting *m_setting;
+    const std::map<std::string, std::shared_ptr<MigrationInfo>> &m_infos;
     std::shared_ptr<MigrationInfo> m_associatedInfo;
     SharedLockGuard m_lockGuard;
 

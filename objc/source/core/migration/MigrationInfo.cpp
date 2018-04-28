@@ -48,36 +48,27 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
                       sourceTable)
 {
     //setup reusable statement
-    OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::DESC);
-    Expression limit = 10; //TODO opti the step of migration
+    OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::ASC);
 
-    m_statementForMigration = StatementInsert()
-                                  .insertOrIgnoreInto(targetTable)
-                                  .values(StatementSelect()
-                                              .select(ResultColumn::all())
-                                              .from(getSourceTable())
-                                              .orderBy(order)
-                                              .limit(limit));
+    m_statementForPickingRowIDs = StatementSelect()
+                                      .select(Column::rowid())
+                                      .from(getSourceTable())
+                                      .limit(BindParameter(1));
 
-    m_statementForDeletingMigratedRow =
-        StatementDelete()
-            .deleteFrom(getQualifiedSourceTable())
-            .orderBy(order)
-            .limit(limit);
-
-    m_statementForDeletingMigratedRow =
-        StatementDelete()
-            .deleteFrom(getQualifiedSourceTable())
-            .where(Column::rowid() == BindParameter(1));
-
-    m_statementForInsertingLastInsertedSourceIntoTargetTable =
+    m_statementForMigration =
         StatementInsert()
             .insertInto(targetTable)
-            .values(
-                StatementSelect()
-                    .select(ResultColumn::all())
-                    .from(getSourceTable())
-                    .where(Column::rowid() == Expression::lastInsertedRowid()));
+            .values(StatementSelect()
+                        .select(ResultColumn::all())
+                        .from(getSourceTable())
+                        .where(Column::rowid() == BindParameter(1))
+                        .limit(1));
+
+    m_statementForDeletingMigratedRow =
+        StatementDelete()
+            .deleteFrom(getQualifiedSourceTable())
+            .where(Column::rowid() == BindParameter(1))
+            .limit(1);
 }
 
 #pragma mark - Basic
@@ -112,13 +103,17 @@ QualifiedTableName MigrationInfo::getQualifiedSourceTable() const
 }
 
 #pragma mark - Statement
+const StatementSelect &MigrationInfo::getStatementForPickingRowIDs() const
+{
+    return m_statementForPickingRowIDs;
+}
+
 const StatementInsert &MigrationInfo::getStatementForMigration() const
 {
     return m_statementForMigration;
 }
 
-const StatementDelete &
-MigrationInfo::getStatementForDeleteingMigratedRow() const
+const StatementDelete &MigrationInfo::getStatementForDeletingMigratedRow() const
 {
     return m_statementForDeletingMigratedRow;
 }
@@ -155,20 +150,11 @@ StatementDropView MigrationInfo::getStatementForDroppingUnionedView() const
     return StatementDropView().dropView(unionedViewName).ifExists();
 }
 
-const StatementDelete &
-MigrationInfo::getStatementForDeletingLastInsertedSourceRow() const
+StatementInsert MigrationInfo::getStatementForTamperingConflictType(
+    const Lang::InsertSTMT::Type &type) const
 {
-    return m_statementForDeletingMigratedRow;
-}
-
-StatementInsert
-MigrationInfo::getStatementForInsertingLastInsertedSourceIntoTargetTable(
-    const StatementInsert &origin) const
-{
-    StatementInsert statement =
-        m_statementForInsertingLastInsertedSourceIntoTargetTable;
-    statement.getCOWLang().get_or_copy<Lang::InsertSTMT>().type =
-        origin.getCOWLang().get<Lang::InsertSTMT>().type;
+    StatementInsert statement = m_statementForMigration;
+    statement.getCOWLang().get_or_copy<Lang::InsertSTMT>().type = type;
     return statement;
 }
 
