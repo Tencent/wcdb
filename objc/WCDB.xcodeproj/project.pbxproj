@@ -899,6 +899,10 @@
 		23F5BE1120888008000CCD37 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
 		23F5BE1220888008000CCD37 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0920887FD4000CCD37 /* sqliterk.framework */; };
 		23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
+		23F670EB209428CE00DB2E28 /* Schema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F670E9209428CE00DB2E28 /* Schema.cpp */; };
+		23F670EC209428CE00DB2E28 /* Schema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F670E9209428CE00DB2E28 /* Schema.cpp */; };
+		23F670ED209428CE00DB2E28 /* Schema.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F670EA209428CE00DB2E28 /* Schema.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F670EE209428CE00DB2E28 /* Schema.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F670EA209428CE00DB2E28 /* Schema.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -1418,6 +1422,8 @@
 		23F4EF7820567F4B0088DE3D /* LangPragma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LangPragma.cpp; sourceTree = "<group>"; };
 		23F4EF7920567F4B0088DE3D /* LangPragma.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LangPragma.hpp; sourceTree = "<group>"; };
 		23F5BE0120887FD3000CCD37 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		23F670E9209428CE00DB2E28 /* Schema.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Schema.cpp; sourceTree = "<group>"; };
+		23F670EA209428CE00DB2E28 /* Schema.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Schema.hpp; sourceTree = "<group>"; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1946,6 +1952,8 @@
 				23977478202AECD3000A681C /* StatementUpdate.hpp */,
 				23977479202AECD3000A681C /* StatementVacuum.cpp */,
 				2397747A202AECD3000A681C /* StatementVacuum.hpp */,
+				23F670E9209428CE00DB2E28 /* Schema.cpp */,
+				23F670EA209428CE00DB2E28 /* Schema.hpp */,
 				2397747B202AECD3000A681C /* TableConstraint.cpp */,
 				2397747C202AECD3000A681C /* TableConstraint.hpp */,
 				2397747D202AECD3000A681C /* TableOrSubquery.cpp */,
@@ -2311,6 +2319,7 @@
 				2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */,
 				23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */,
 				239776EC202AF2E3000A681C /* Path.hpp in Headers */,
+				23F670ED209428CE00DB2E28 /* Schema.hpp in Headers */,
 				2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2301DA63203F016200C3B52A /* Convertible.hpp in Headers */,
@@ -2561,6 +2570,7 @@
 				23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */,
 				23F5BDBE20887FD3000CCD37 /* Tokenizer.hpp in Headers */,
 				23F5BDBF20887FD3000CCD37 /* Path.hpp in Headers */,
+				23F670EE209428CE00DB2E28 /* Schema.hpp in Headers */,
 				23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */,
 				23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */,
 				23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */,
@@ -2910,6 +2920,7 @@
 				239774F6202AECD3000A681C /* ForeignKeyClause.cpp in Sources */,
 				234DBCF42064DD0C000E31E8 /* WCTDatabase+Handle.mm in Sources */,
 				239775A6202AECD3000A681C /* LangUpdateSTMT.cpp in Sources */,
+				23F670EB209428CE00DB2E28 /* Schema.cpp in Sources */,
 				23A870E6204F82AE00273A98 /* MigrationDatabase.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
 				23A2C19A204647590026D3C5 /* NoCopyData.cpp in Sources */,
@@ -3111,6 +3122,7 @@
 				23F5BCC120887FD3000CCD37 /* ForeignKeyClause.cpp in Sources */,
 				23F5BCC220887FD3000CCD37 /* WCTDatabase+Handle.mm in Sources */,
 				23F5BCC320887FD3000CCD37 /* LangUpdateSTMT.cpp in Sources */,
+				23F670EC209428CE00DB2E28 /* Schema.cpp in Sources */,
 				23F5BCC420887FD3000CCD37 /* MigrationDatabase.cpp in Sources */,
 				23F5BCC520887FD3000CCD37 /* WCTTable+Convenient.mm in Sources */,
 				23F5BCC620887FD3000CCD37 /* NoCopyData.cpp in Sources */,

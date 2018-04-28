@@ -35,7 +35,25 @@ CopyOnWriteString DeleteSTMT::SQL() const
         description.append(withClause.description().get() + " ");
     }
     LangRemedialAssert(!qualifiedTableName.empty());
-    description.append("DELETE FROM " + qualifiedTableName.description().get());
+    auto qualified = qualifiedTableName;
+    if (!withClause.empty() && !withClause.get().pairs.empty() &&
+        !qualified.get().tableName.empty() &&
+        qualified.get().schemaName.isNull()) {
+        const CopyOnWriteString &tableName = qualified.get().tableName;
+        for (const auto &pair : withClause.get().pairs.get()) {
+            if (pair.empty()) {
+                continue;
+            }
+            const CopyOnWriteLazyLang<CTETableName> &cteTableName =
+                pair.get().cteTableName;
+            if (!cteTableName.empty() &&
+                cteTableName.get().tableName.equal(tableName.get())) {
+                //set schema to empty string to avoid default main schema.x
+                qualified.get_or_copy().schemaName.assign(anySchema());
+            }
+        }
+    }
+    description.append("DELETE FROM " + qualified.description().get());
     if (!condition.empty()) {
         description.append(" WHERE " + condition.description().get());
     }

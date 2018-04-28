@@ -29,7 +29,6 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
 {
     std::string description;
     if (schemaName.isNull()) {
-        //TODO filter with clause cte
         description.append(mainSchema() + ".");
     } else if (!schemaName.get().empty()) {
         description.append(schemaName.get() + ".");

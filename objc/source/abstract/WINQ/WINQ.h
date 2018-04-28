@@ -70,6 +70,7 @@
 #include <WCDB/QualifiedTableName.hpp>
 #include <WCDB/RaiseFunction.hpp>
 #include <WCDB/ResultColumn.hpp>
+#include <WCDB/Schema.hpp>
 #include <WCDB/SelectCore.hpp>
 #include <WCDB/TableConstraint.hpp>
 #include <WCDB/TableOrSubquery.hpp>

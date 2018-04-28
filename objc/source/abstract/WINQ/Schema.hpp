@@ -18,24 +18,19 @@
  * limitations under the License.
  */
 
-#include <WCDB/LangCommon.hpp>
-#include <WCDB/String.hpp>
+#ifndef Schema_hpp
+#define Schema_hpp
+
+#include <WCDB/Describable.hpp>
 
 namespace WCDB {
 
-namespace Lang {
+class Schema {
+public:
+    static const std::string &main();
+    static const std::string &any();
+};
 
-const std::string &mainSchema()
-{
-    static const std::string s_mainSchema("main");
-    return s_mainSchema;
-}
+} // namespace WCDB
 
-const std::string &anySchema()
-{
-    return String::empty();
-}
-
-} //namespace Lang
-
-} //namespace WCDB
+#endif /* Schema_hpp */

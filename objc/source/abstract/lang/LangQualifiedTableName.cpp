@@ -31,7 +31,6 @@ QualifiedTableName::QualifiedTableName() : indexSwitcher(IndexSwitch::NotSet)
 CopyOnWriteString QualifiedTableName::SQL() const
 {
     std::string description;
-    //TODO filter with clause cte
     if (schemaName.isNull()) {
         description.append(mainSchema() + ".");
     } else if (!schemaName.get().empty()) {

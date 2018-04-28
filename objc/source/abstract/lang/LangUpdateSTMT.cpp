@@ -37,7 +37,26 @@ CopyOnWriteString UpdateSTMT::SQL() const
     description.append(UpdateSTMT::TypeName(type));
     description.append(" ");
     LangRemedialAssert(!qualifiedTableName.empty());
-    description.append(qualifiedTableName.description().get());
+
+    auto qualified = qualifiedTableName;
+    if (!withClause.empty() && !withClause.get().pairs.empty() &&
+        !qualified.get().tableName.empty() &&
+        qualified.get().schemaName.isNull()) {
+        const CopyOnWriteString &tableName = qualified.get().tableName;
+        for (const auto &pair : withClause.get().pairs.get()) {
+            if (pair.empty()) {
+                continue;
+            }
+            const CopyOnWriteLazyLang<CTETableName> &cteTableName =
+                pair.get().cteTableName;
+            if (!cteTableName.empty() &&
+                cteTableName.get().tableName.equal(tableName.get())) {
+                //set schema to empty string to avoid default main schema.x
+                qualified.get_or_copy().schemaName.assign(anySchema());
+            }
+        }
+    }
+    description.append(qualified.description().get());
 
     LangRemedialAssert(!keyValues.empty());
     description.append(" SET ");

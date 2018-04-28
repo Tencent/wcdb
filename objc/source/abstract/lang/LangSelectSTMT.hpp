@@ -68,6 +68,17 @@ public:
 
     STMT::Type getSTMTType() const override;
     static STMT::Type getType();
+
+protected:
+    void resolveTableOrSubquerys(
+        CopyOnWriteLazyLangList<TableOrSubquery> &tableOrSubquerys) const;
+    void resolveTableOrSubqueryBases(
+        CopyOnWriteLazyLangList<TableOrSubqueryBase> &tableOrSubquerys) const;
+    void resolveTableOrSubquery(
+        CopyOnWriteLazyLang<TableOrSubquery> &tableOrSubquery) const;
+    void resolveTable(CopyOnWriteLazyLang<TableOrSubqueryTable> &table) const;
+    void resolveTableOrSubqueryList(
+        CopyOnWriteLazyLang<TableOrSubqueryList> &tableOrSubqueryList) const;
 };
 
 template <>

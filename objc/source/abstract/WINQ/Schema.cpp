@@ -18,24 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/LangCommon.hpp>
-#include <WCDB/String.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
-namespace Lang {
-
-const std::string &mainSchema()
+const std::string &Schema::main()
 {
-    static const std::string s_mainSchema("main");
-    return s_mainSchema;
+    return Lang::mainSchema();
 }
 
-const std::string &anySchema()
+const std::string &Schema::any()
 {
-    return String::empty();
+    return Lang::anySchema();
 }
 
-} //namespace Lang
-
-} //namespace WCDB
+} // namespace WCDB
