@@ -28,15 +28,15 @@
 
 - (void)testCTETableName
 {
-    WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
+    WINQAssertEqual(WCDB::CTETableName(self.class.cteTableName)
                         .byAddingColumn(self.class.column),
-                    @"testTable(testColumn)");
+                    @"testCTETable(testColumn)");
 
-    WINQAssertEqual(WCDB::CTETableName(self.class.tableName)
+    WINQAssertEqual(WCDB::CTETableName(self.class.cteTableName)
                         .byAddingColumns(self.class.columns),
-                    @"testTable(testColumn, testColumn2)");
+                    @"testCTETable(testColumn, testColumn2)");
 
-    WINQAssertEqual(WCDB::CTETableName(self.class.tableName), @"testTable");
+    WINQAssertEqual(WCDB::CTETableName(self.class.cteTableName), @"testCTETable");
 }
 
 @end

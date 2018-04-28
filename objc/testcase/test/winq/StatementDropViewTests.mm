@@ -39,7 +39,7 @@
     WINQAssertEqual(WCDB::StatementDropView()
                         .dropView(self.class.viewName)
                         .ifExists(true),
-                    @"DROP VIEW IF EXISTS testView");
+                    @"DROP VIEW IF EXISTS main.testView");
 
     WINQAssertEqual(WCDB::StatementDropView()
                         .dropView(self.class.viewName)

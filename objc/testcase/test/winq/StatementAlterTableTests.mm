@@ -43,7 +43,7 @@
     WINQAssertEqual(WCDB::StatementAlterTable()
                         .alterTable(self.class.tableName)
                         .renameTo("testNewTable"),
-                    @"ALTER TABLE testTable RENAME TO testNewTable");
+                    @"ALTER TABLE main.testTable RENAME TO testNewTable");
 }
 
 @end

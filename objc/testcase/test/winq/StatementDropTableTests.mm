@@ -39,7 +39,7 @@
     WINQAssertEqual(WCDB::StatementDropTable()
                         .dropTable(self.class.tableName)
                         .ifExists(true),
-                    @"DROP TABLE IF EXISTS testTable");
+                    @"DROP TABLE IF EXISTS main.testTable");
 
     WINQAssertEqual(WCDB::StatementDropTable()
                         .dropTable(self.class.tableName)

@@ -73,13 +73,13 @@
                         .ifNotExists(false)
                         .withSchema(self.class.schemaName)
                         .as(self.class.statementSelect),
-                    @"CREATE TABLE testSchema.testTable AS SELECT testColumn FROM testTable");
+                    @"CREATE TABLE testSchema.testTable AS SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
                         .createTable(self.class.tableName)
                         .ifNotExists(false)
                         .define(self.class.columnDef),
-                    @"CREATE TABLE testTable(testColumn INTEGER)");
+                    @"CREATE TABLE main.testTable(testColumn INTEGER)");
 
     WINQAssertEqual(WCDB::StatementCreateTable()
                         .createTable(self.class.tableName)

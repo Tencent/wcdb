@@ -28,19 +28,19 @@
 
 - (void)testTableOrSubquery
 {
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName), @"testTable");
+    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName), @"main.testTable");
 
     WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
                         .indexedBy(self.class.indexName),
-                    @"testTable INDEXED BY testIndex");
+                    @"main.testTable INDEXED BY testIndex");
 
     WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
                         .notIndexed(),
-                    @"testTable NOT INDEXED");
+                    @"main.testTable NOT INDEXED");
 
     WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
                         .as("testTableAlias"),
-                    @"testTable AS testTableAlias");
+                    @"main.testTable AS testTableAlias");
 
     WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
                         .withSchema(self.class.schemaName),
@@ -49,35 +49,35 @@
 
 - (void)testTableOrSubqueryWithTableFunction
 {
-    WINQAssertEqual(WCDB::TableOrSubquery::Function(self.class.functionName, self.class.value), @"testFunction(1)");
+    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.value), @"main.testFunction(1)");
 
-    WINQAssertEqual(WCDB::TableOrSubquery::Function(self.class.functionName, self.class.value)
+    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.value)
                         .as("testTableAlias"),
-                    @"testFunction(1) AS testTableAlias");
+                    @"main.testFunction(1) AS testTableAlias");
 
-    WINQAssertEqual(WCDB::TableOrSubquery::Function(self.class.functionName, self.class.values), @"testFunction(1, 'testValue')");
+    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.values), @"main.testFunction(1, 'testValue')");
 
-    WINQAssertEqual(WCDB::TableOrSubquery::Function(self.class.functionName), @"testFunction()");
+    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName), @"main.testFunction()");
 
-    WINQAssertEqual(WCDB::TableOrSubquery::Function(self.class.functionName, self.class.value)
+    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.value)
                         .withSchema(self.class.schemaName),
                     @"testSchema.testFunction(1)");
 }
 
 - (void)testTableOrSubqueryWithListOrJoinClause
 {
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableOrSubquerys), @"(testTable, testTable2)");
+    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableOrSubquerys), @"(main.testTable, main.testTable2)");
 
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.joinClause), @"(testTable)");
+    WINQAssertEqual(WCDB::TableOrSubquery(self.class.joinClause), @"(main.testTable)");
 }
 
 - (void)testTableOrSubqueryWithStatementSelect
 {
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.statementSelect), @"(SELECT testColumn FROM testTable)");
+    WINQAssertEqual(WCDB::TableOrSubquery(self.class.statementSelect), @"(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(WCDB::TableOrSubquery(self.class.statementSelect)
                         .as("testTableAlias"),
-                    @"(SELECT testColumn FROM testTable) AS testTableAlias");
+                    @"(SELECT testColumn FROM main.testTable) AS testTableAlias");
 }
 
 @end

@@ -38,6 +38,11 @@
     return "testTable";
 }
 
++ (std::string)cteTableName
+{
+    return "testCTETable";
+}
+
 + (std::string)indexName
 {
     return "testIndex";
@@ -117,7 +122,7 @@
 
 + (WCDB::WithClause)withClause
 {
-    WCDB::CTETableName cteTableName(self.class.tableName);
+    WCDB::CTETableName cteTableName(self.class.cteTableName);
     return WCDB::WithClause()
         .with(cteTableName, self.class.statementSelect);
 }
@@ -216,13 +221,13 @@
 
 + (WCDB::CommonTableExpression)commonTableExpression
 {
-    return WCDB::CommonTableExpression(self.class.tableName).as(self.class.statementSelect);
+    return WCDB::CommonTableExpression(self.class.cteTableName).as(self.class.statementSelect);
 }
 
 + (std::list<WCDB::CommonTableExpression>)commonTableExpressions
 {
     WCDB::CommonTableExpression commonTableExpression1 = self.class.commonTableExpression;
-    WCDB::CommonTableExpression commonTableExpression2 = WCDB::CommonTableExpression("testTable2").as(self.class.statementSelect);
+    WCDB::CommonTableExpression commonTableExpression2 = WCDB::CommonTableExpression("testCTETable2").as(self.class.statementSelect);
     return {commonTableExpression1, commonTableExpression2};
 }
 
@@ -309,9 +314,9 @@
     };
 }
 
-+ (WCDB::CTETableName)cteTableName
++ (WCDB::CTETableName)cteTable
 {
-    return WCDB::CTETableName(self.class.tableName);
+    return WCDB::CTETableName(self.class.cteTableName);
 }
 
 @end

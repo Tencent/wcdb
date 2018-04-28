@@ -60,7 +60,7 @@
                         .ifNotExists(false)
                         .on(self.class.tableName)
                         .indexedBy(self.class.indexedColumn),
-                    @"CREATE INDEX testIndex ON testTable(testColumn)");
+                    @"CREATE INDEX main.testIndex ON testTable(testColumn)");
 
     WINQAssertEqual(WCDB::StatementCreateIndex()
                         .createIndex(self.class.indexName)

@@ -43,13 +43,13 @@
                         .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 
-    WINQAssertEqual(WCDB::Expression::Exists(self.class.statementSelect), @"EXISTS(SELECT testColumn FROM testTable)");
+    WINQAssertEqual(WCDB::Expression::Exists(self.class.statementSelect), @"EXISTS(SELECT testColumn FROM main.testTable)");
 
-    WINQAssertEqual(WCDB::Expression::NotExists(self.class.statementSelect), @"NOT EXISTS(SELECT testColumn FROM testTable)");
+    WINQAssertEqual(WCDB::Expression::NotExists(self.class.statementSelect), @"NOT EXISTS(SELECT testColumn FROM main.testTable)");
 
-    WINQAssertEqual(WCDB::Expression(self.class.statementSelect), @"(SELECT testColumn FROM testTable)");
+    WINQAssertEqual(WCDB::Expression(self.class.statementSelect), @"(SELECT testColumn FROM main.testTable)");
 
-    WINQAssertEqual(WCDB::Expression(self.class.statementSelect, true), @"NOT(SELECT testColumn FROM testTable)");
+    WINQAssertEqual(WCDB::Expression(self.class.statementSelect, true), @"NOT(SELECT testColumn FROM main.testTable)");
 
     WCDB::RaiseFunction raiseFunction = WCDB::RaiseFunction().ignore();
     WINQAssertEqual(WCDB::Expression(raiseFunction), @"RAISE(IGNORE)");
@@ -127,22 +127,22 @@
     WCDB::Expression expression2 = WCDB::Expression(self.class.column2);
     std::list<WCDB::Expression> expressions = {expression1, expression2};
 
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expression1, true), @"testFunction(DISTINCT testColumn)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1, true), @"testFunction(DISTINCT testColumn)");
 
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expressions, true), @"testFunction(DISTINCT testColumn, testColumn2)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expressions, true), @"testFunction(DISTINCT testColumn, testColumn2)");
 
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expression1, false), @"testFunction(testColumn)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1, false), @"testFunction(testColumn)");
 
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expressions, false), @"testFunction(testColumn, testColumn2)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expressions, false), @"testFunction(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::Expression::All().function(self.class.functionName), @"testFunction(*)");
 
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName), @"testFunction()");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName), @"testFunction()");
 
     //Default
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expression1), @"testFunction(testColumn)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1), @"testFunction(testColumn)");
 
-    WINQAssertEqual(WCDB::Expression::Function(self.class.functionName, expressions), @"testFunction(testColumn, testColumn2)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expressions), @"testFunction(testColumn, testColumn2)");
 }
 
 - (void)testList
@@ -269,7 +269,7 @@
 
     WINQAssertEqual(expression
                         .notIn(self.class.statementSelect),
-                    @"testColumn NOT IN(SELECT testColumn FROM testTable)");
+                    @"testColumn NOT IN(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(expression
                         .notIn(expression1),
@@ -285,7 +285,7 @@
 
     WINQAssertEqual(expression
                         .in(self.class.statementSelect),
-                    @"testColumn IN(SELECT testColumn FROM testTable)");
+                    @"testColumn IN(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(expression
                         .in(expression1),
@@ -297,7 +297,7 @@
 
     WINQAssertEqual(expression
                         .notIn(self.class.tableName),
-                    @"testColumn NOT IN testTable");
+                    @"testColumn NOT IN main.testTable");
 
     WINQAssertEqual(expression
                         .notIn(self.class.schemaName, self.class.tableName),
@@ -305,7 +305,7 @@
 
     WINQAssertEqual(expression
                         .in(self.class.tableName),
-                    @"testColumn IN testTable");
+                    @"testColumn IN main.testTable");
 
     WINQAssertEqual(expression
                         .in(self.class.schemaName, self.class.tableName),
@@ -313,7 +313,7 @@
 
     WINQAssertEqual(expression
                         .notInFunction(self.class.functionName),
-                    @"testColumn NOT IN testFunction()");
+                    @"testColumn NOT IN main.testFunction()");
 
     WINQAssertEqual(expression
                         .notInFunction(self.class.schemaName, self.class.functionName),
@@ -321,11 +321,11 @@
 
     WINQAssertEqual(expression
                         .notInFunction(self.class.functionName, expression1),
-                    @"testColumn NOT IN testFunction(1)");
+                    @"testColumn NOT IN main.testFunction(1)");
 
     WINQAssertEqual(expression
                         .notInFunction(self.class.functionName, expressions),
-                    @"testColumn NOT IN testFunction(1, 2)");
+                    @"testColumn NOT IN main.testFunction(1, 2)");
 
     WINQAssertEqual(expression
                         .notInFunction(self.class.schemaName, self.class.functionName, expression1),
@@ -337,7 +337,7 @@
 
     WINQAssertEqual(expression
                         .inFunction(self.class.functionName),
-                    @"testColumn IN testFunction()");
+                    @"testColumn IN main.testFunction()");
 
     WINQAssertEqual(expression
                         .inFunction(self.class.schemaName, self.class.functionName),
@@ -345,11 +345,11 @@
 
     WINQAssertEqual(expression
                         .inFunction(self.class.functionName, expression1),
-                    @"testColumn IN testFunction(1)");
+                    @"testColumn IN main.testFunction(1)");
 
     WINQAssertEqual(expression
                         .inFunction(self.class.functionName, expressions),
-                    @"testColumn IN testFunction(1, 2)");
+                    @"testColumn IN main.testFunction(1, 2)");
 
     WINQAssertEqual(expression
                         .inFunction(self.class.schemaName, self.class.functionName, expression1),

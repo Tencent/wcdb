@@ -60,7 +60,7 @@
                         .ifNotExists(false)
                         .usingModule(moduleName)
                         .on(self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE testTable USING fts3(tokenize=WCDB)");
+                    @"CREATE VIRTUAL TABLE main.testTable USING fts3(tokenize=WCDB)");
 
     WINQAssertEqual(WCDB::StatementCreateVirtualTable()
                         .createVirtualTable(self.class.tableName)

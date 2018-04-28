@@ -29,23 +29,24 @@
 - (void)testWithClause
 {
     WINQAssertEqual(WCDB::WithClause()
-                        .with(self.class.cteTableName, self.class.statementSelect),
-                    @"WITH testTable AS(SELECT testColumn FROM testTable)");
+                        .with(self.class.cteTable, self.class.statementSelect),
+                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable)");
 
     std::string tableName2 = "testTable2";
-    WCDB::CTETableName cteTableName2(tableName2);
+    std::string tableCTEName2 = "testCTETable2";
+    WCDB::CTETableName cteTableName2(tableCTEName2);
     WCDB::StatementSelect statementSelect2 = WCDB::StatementSelect()
                                                  .select(self.class.resultColumn)
                                                  .from(WCDB::TableOrSubquery(tableName2));
 
     WINQAssertEqual(WCDB::WithClause()
-                        .with(self.class.cteTableName, self.class.statementSelect)
+                        .with(self.class.cteTable, self.class.statementSelect)
                         .with(cteTableName2, statementSelect2),
-                    @"WITH testTable AS(SELECT testColumn FROM testTable), testTable2 AS(SELECT testColumn FROM testTable2)");
+                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable), testCTETable2 AS(SELECT testColumn FROM main.testTable2)");
 
     WINQAssertEqual(WCDB::WithClause()
-                        .withRecursive(self.class.cteTableName, self.class.statementSelect),
-                    @"WITH RECURSIVE testTable AS(SELECT testColumn FROM testTable)");
+                        .withRecursive(self.class.cteTable, self.class.statementSelect),
+                    @"WITH RECURSIVE testCTETable AS(SELECT testColumn FROM main.testTable)");
 }
 
 @end

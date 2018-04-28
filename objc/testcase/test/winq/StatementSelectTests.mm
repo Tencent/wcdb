@@ -39,7 +39,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -49,7 +49,7 @@
                         .having(self.class.having)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit, self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -59,7 +59,7 @@
                         .having(self.class.having)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -68,7 +68,7 @@
                         .groupBy(self.class.group)
                         .having(self.class.having)
                         .orderBy(self.class.orderingTerm),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -79,7 +79,7 @@
                         .orderBy(self.class.orderingTerms)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -89,7 +89,7 @@
                         .having(self.class.having)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -99,7 +99,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -110,7 +110,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn, testColumn2 HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn, testColumn2 HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -119,7 +119,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -129,7 +129,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -140,7 +140,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable, testTable2 WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable, main.testTable2 WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -151,7 +151,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumns)
@@ -162,7 +162,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn, testColumn2 FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn, testColumn2 FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -174,7 +174,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT DISTINCT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT DISTINCT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .with(self.class.commonTableExpression)
@@ -186,7 +186,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH testTable AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .with(self.class.commonTableExpressions)
@@ -198,7 +198,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH testTable AS(SELECT testColumn FROM testTable), testTable2 AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable), testCTETable2 AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .withRecursive(self.class.commonTableExpression)
@@ -210,7 +210,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH RECURSIVE testTable AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH RECURSIVE testCTETable AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .withRecursive(self.class.commonTableExpressions)
@@ -222,7 +222,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH RECURSIVE testTable AS(SELECT testColumn FROM testTable), testTable2 AS(SELECT testColumn FROM testTable) SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH RECURSIVE testCTETable AS(SELECT testColumn FROM main.testTable), testCTETable2 AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 
 - (void)testValues
@@ -250,7 +250,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL UNION SELECT testColumn FROM testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL UNION SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -262,7 +262,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL UNION ALL SELECT testColumn FROM testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL UNION ALL SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -274,7 +274,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL INTERSECT SELECT testColumn FROM testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL INTERSECT SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
                         .select(self.class.resultColumn)
@@ -286,7 +286,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL EXCEPT SELECT testColumn FROM testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL EXCEPT SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 
 @end

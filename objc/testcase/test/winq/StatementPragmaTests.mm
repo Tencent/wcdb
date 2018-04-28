@@ -46,7 +46,7 @@
 
     WINQAssertEqual(WCDB::StatementPragma()
                         .pragma(pragmaName),
-                    @"PRAGMA journal_mode");
+                    @"PRAGMA main.journal_mode");
 }
 
 @end

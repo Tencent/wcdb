@@ -34,14 +34,14 @@
                         .where(self.class.condition)
                         .groupBy(self.class.group)
                         .having(self.class.having),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
                         .where(self.class.condition)
                         .groupBy(self.class.group),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
@@ -49,20 +49,20 @@
                         .where(self.class.condition)
                         .groupBy(self.class.groups)
                         .having(self.class.having),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn, testColumn2 HAVING testColumn NOTNULL");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn, testColumn2 HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
                         .where(self.class.condition),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
                         .from(self.class.tableOrSubquery)
                         .groupBy(self.class.group)
                         .having(self.class.having),
-                    @"SELECT testColumn FROM testTable GROUP BY testColumn HAVING testColumn NOTNULL");
+                    @"SELECT testColumn FROM main.testTable GROUP BY testColumn HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
@@ -70,7 +70,7 @@
                         .where(self.class.condition)
                         .groupBy(self.class.group)
                         .having(self.class.having),
-                    @"SELECT testColumn FROM testTable, testTable2 WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
+                    @"SELECT testColumn FROM main.testTable, main.testTable2 WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
@@ -78,7 +78,7 @@
                         .where(self.class.condition)
                         .groupBy(self.class.group)
                         .having(self.class.having),
-                    @"SELECT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
+                    @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
@@ -93,7 +93,7 @@
                         .where(self.class.condition)
                         .groupBy(self.class.group)
                         .having(self.class.having),
-                    @"SELECT testColumn, testColumn2 FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
+                    @"SELECT testColumn, testColumn2 FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .select(self.class.resultColumn)
@@ -102,7 +102,7 @@
                         .where(self.class.condition)
                         .groupBy(self.class.group)
                         .having(self.class.having),
-                    @"SELECT DISTINCT testColumn FROM testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
+                    @"SELECT DISTINCT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::SelectCore()
                         .values(self.class.value),

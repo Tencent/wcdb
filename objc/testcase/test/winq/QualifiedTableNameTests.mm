@@ -42,7 +42,7 @@
                         .notIndexed(),
                     @"testSchema.testTable NOT INDEXED");
 
-    WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName), @"testTable");
+    WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName), @"main.testTable");
 }
 
 @end

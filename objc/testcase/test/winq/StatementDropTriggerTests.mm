@@ -39,7 +39,7 @@
     WINQAssertEqual(WCDB::StatementDropTrigger()
                         .dropTrigger(self.class.triggerName)
                         .ifExists(true),
-                    @"DROP TRIGGER IF EXISTS testTrigger");
+                    @"DROP TRIGGER IF EXISTS main.testTrigger");
 
     WINQAssertEqual(WCDB::StatementDropTrigger()
                         .dropTrigger(self.class.triggerName)

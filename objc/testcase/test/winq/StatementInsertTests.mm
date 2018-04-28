@@ -49,7 +49,7 @@
                         .withSchema(self.class.schemaName)
                         .on(self.class.column)
                         .values(self.class.statementSelect),
-                    @"INSERT INTO testSchema.testTable(testColumn) SELECT testColumn FROM testTable");
+                    @"INSERT INTO testSchema.testTable(testColumn) SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementInsert()
                         .insertInto(self.class.tableName)
@@ -75,7 +75,7 @@
                         .insertInto(self.class.tableName)
                         .on(self.class.column)
                         .values(self.class.value),
-                    @"INSERT INTO testTable(testColumn) VALUES(1)");
+                    @"INSERT INTO main.testTable(testColumn) VALUES(1)");
 
     WINQAssertEqual(WCDB::StatementInsert()
                         .insertOrReplaceInto(self.class.tableName)
@@ -118,7 +118,7 @@
                         .withSchema(self.class.schemaName)
                         .on(self.class.column)
                         .values(self.class.value),
-                    @"WITH testTable AS(SELECT testColumn FROM testTable) INSERT INTO testSchema.testTable(testColumn) VALUES(1)");
+                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable) INSERT INTO testSchema.testTable(testColumn) VALUES(1)");
 }
 
 @end

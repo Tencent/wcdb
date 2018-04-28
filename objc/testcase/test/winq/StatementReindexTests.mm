@@ -50,7 +50,7 @@
 
     WINQAssertEqual(WCDB::StatementReindex()
                         .reindex(self.class.tableName),
-                    @"REINDEX testTable");
+                    @"REINDEX main.testTable");
 }
 
 @end

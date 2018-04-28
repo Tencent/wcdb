@@ -33,6 +33,7 @@
 @property(class, readonly) std::string savepointName;
 @property(class, readonly) std::string constraintName;
 @property(class, readonly) std::string functionName;
+@property(class, readonly) std::string cteTableName;
 
 @property(class, readonly) WCDB::Column column;
 @property(class, readonly) WCDB::Column column2;
@@ -75,6 +76,6 @@
 @property(class, readonly) std::list<WCDB::IndexedColumn> indexedColumns;
 @property(class, readonly) WCDB::ModuleArgument moduleArgument;
 @property(class, readonly) std::list<WCDB::ModuleArgument> moduleArguments;
-@property(class, readonly) WCDB::CTETableName cteTableName;
+@property(class, readonly) WCDB::CTETableName cteTable;
 
 @end

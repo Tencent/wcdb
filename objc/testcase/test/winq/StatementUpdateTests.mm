@@ -37,7 +37,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -45,7 +45,7 @@
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit, self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
+                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -53,7 +53,7 @@
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit),
-                    @"UPDATE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1");
+                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -61,7 +61,7 @@
                         .where(self.class.condition)
                         .orderBy(self.class.orderingTerms)
                         .limit(self.class.limit, self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1, 2");
+                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1, 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -69,7 +69,7 @@
                         .where(self.class.condition)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn = 1 WHERE testColumn NOTNULL LIMIT 1 OFFSET 2");
+                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -77,7 +77,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn = 1 ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE main.testTable SET testColumn = 1 ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -86,7 +86,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn, testColumn2 = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE main.testTable SET testColumn, testColumn2 = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .update(self.class.qualifiedTableName)
@@ -96,7 +96,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE testTable SET testColumn = 1, testColumn2 = 'testValue' WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE main.testTable SET testColumn = 1, testColumn2 = 'testValue' WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrRollback(self.class.qualifiedTableName)
@@ -105,7 +105,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE OR ROLLBACK testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE OR ROLLBACK main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrAbort(self.class.qualifiedTableName)
@@ -114,7 +114,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE OR ABORT testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE OR ABORT main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrReplace(self.class.qualifiedTableName)
@@ -123,7 +123,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE OR REPLACE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE OR REPLACE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrFail(self.class.qualifiedTableName)
@@ -132,7 +132,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE OR FAIL testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE OR FAIL main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .updateOrIgnore(self.class.qualifiedTableName)
@@ -141,7 +141,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"UPDATE OR IGNORE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"UPDATE OR IGNORE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementUpdate()
                         .with(self.class.withClause)
@@ -151,7 +151,7 @@
                         .orderBy(self.class.orderingTerm)
                         .limit(self.class.limit)
                         .offset(self.class.limitParameter),
-                    @"WITH testTable AS(SELECT testColumn FROM testTable) UPDATE testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable) UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 
 @end

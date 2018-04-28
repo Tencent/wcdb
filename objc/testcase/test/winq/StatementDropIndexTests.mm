@@ -39,7 +39,7 @@
     WINQAssertEqual(WCDB::StatementDropIndex()
                         .dropIndex(self.class.indexName)
                         .ifExists(true),
-                    @"DROP INDEX IF EXISTS testIndex");
+                    @"DROP INDEX IF EXISTS main.testIndex");
 
     WINQAssertEqual(WCDB::StatementDropIndex()
                         .dropIndex(self.class.indexName)

@@ -35,7 +35,7 @@
     WCDB::StatementSelect statementSelect = WCDB::StatementSelect()
                                                 .select(self.class.resultColumn)
                                                 .from(self.class.tableOrSubquery);
-    WINQAssertEqual(statementSelect, @"SELECT testColumn FROM testTable");
+    WINQAssertEqual(statementSelect, @"SELECT testColumn FROM main.testTable");
     statementSelect = WCDB::StatementSelect();
     WINQAssertEqual(statementSelect, @"");
 }
