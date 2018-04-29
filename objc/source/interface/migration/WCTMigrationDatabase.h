@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTMigrationConflictBlock)(WCTMigrationInfo *, long long);
 
-typedef void (^WCTMigratedBlock)(WCTMigrationInfo *);
+typedef void (^WCTMigratedBlock)(WCTMigrationInfo *_Nullable);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
