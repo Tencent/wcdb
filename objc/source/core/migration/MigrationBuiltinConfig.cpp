@@ -22,6 +22,19 @@
 
 namespace WCDB {
 
+static_assert((int) MigrationBuiltinConfig::Order::Migration >
+                  (int) BuiltinConfig::Order::Trace,
+              "");
+static_assert((int) MigrationBuiltinConfig::Order::Migration >
+                  (int) BuiltinConfig::Order::Basic,
+              "");
+static_assert((int) MigrationBuiltinConfig::Order::Migration >
+                  (int) BuiltinConfig::Order::Cipher,
+              "");
+static_assert((int) MigrationBuiltinConfig::Order::Migration >
+                  (int) BuiltinConfig::Order::Tokenize,
+              "");
+
 const Config
 MigrationBuiltinConfig::migrationWithSetting(MigrationSetting *setting)
 {

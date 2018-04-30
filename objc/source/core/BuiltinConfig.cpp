@@ -42,46 +42,17 @@ BuiltinConfig::BuiltinConfig()
     , m_timedQueue(2)
     , defaultConfigs({trace, basic, checkpoint})
 {
-    Dispatch::async(
-        "com.Tencent.WCDB.Checkpoint",
-        [](const std::atomic<bool> &stop) {
-            BuiltinConfig *config = BuiltinConfig::shared();
-            TimedQueue<std::string, const int> &timedQueue =
-                config->m_timedQueue;
-            if (stop.load()) {
-                return;
-            }
-            timedQueue.loop([&stop](const std::string &path, const int &pages) {
-                std::shared_ptr<Database> database =
-                    Database::databaseWithExistingPath(path);
-                if (database == nullptr || !database->isOpened()) {
-                    return;
-                }
-                static const StatementPragma s_checkpointPassive =
-                    StatementPragma()
-                        .pragma(Pragma::walCheckpoint())
-                        .to("PASSIVE");
-
-                if (stop.load()) {
-                    return;
-                }
-                bool result = database->execute(s_checkpointPassive);
-                if (result && pages > 5000 && !stop.load()) {
-                    //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
-                    //As a result, checkpoint process will not block the database too long.
-                    static const StatementPragma s_checkpointTruncate =
-                        StatementPragma()
-                            .pragma(Pragma::walCheckpoint())
-                            .to("TRUNCATE");
-
-                    database->execute(s_checkpointTruncate);
-                }
-            });
-        },
-        []() {
-            //Since Dispatch::async will wait until the callback done, it's not need to wait here.
-            BuiltinConfig::shared()->m_timedQueue.stop();
-        });
+    Dispatch::async("com.Tencent.WCDB.Checkpoint",
+                    [](const std::atomic<bool> &stop) {
+                        if (stop.load()) {
+                            return;
+                        }
+                        BuiltinConfig::shared()->loopTimedQueue(stop);
+                    },
+                    []() {
+                        //Since Dispatch::async will wait until the callback done, it's not need to wait here.
+                        BuiltinConfig::shared()->stopTimedQueue();
+                    });
 }
 
 bool BuiltinConfig::basicConfig(Handle *handle)
@@ -180,6 +151,39 @@ bool BuiltinConfig::checkpointConfig(Handle *handle)
         },
         nullptr);
     return true;
+}
+
+void BuiltinConfig::stopTimedQueue()
+{
+    m_timedQueue.stop();
+}
+
+void BuiltinConfig::loopTimedQueue(const std::atomic<bool> &stop)
+{
+    m_timedQueue.loop([&stop](const std::string &path, const int &pages) {
+        std::shared_ptr<Database> database =
+            Database::databaseWithExistingPath(path);
+        if (database == nullptr || !database->isOpened()) {
+            return;
+        }
+        static const StatementPragma s_checkpointPassive =
+            StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE");
+
+        if (stop.load()) {
+            return;
+        }
+        bool result = database->execute(s_checkpointPassive);
+        if (result && pages > 5000 && !stop.load()) {
+            //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
+            //As a result, checkpoint process will not block the database too long.
+            static const StatementPragma s_checkpointTruncate =
+                StatementPragma()
+                    .pragma(Pragma::walCheckpoint())
+                    .to("TRUNCATE");
+
+            database->execute(s_checkpointTruncate);
+        }
+    });
 }
 
 void BuiltinConfig::setGlobalPerformanceTrace(

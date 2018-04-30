@@ -33,11 +33,11 @@ public:
     static BuiltinConfig *shared();
 
     enum Order : int {
-        Trace = 1,
-        Cipher,
-        Basic,
-        Checkpoint,
-        Tokenize,
+        Trace = INT_MIN,
+        Cipher = INT_MIN + 1,
+        Basic = INT_MIN + 2,
+        Tokenize = INT_MIN + 3,
+        Checkpoint = 1,
     };
 
     const Config basic;
@@ -69,6 +69,9 @@ protected:
     static bool basicConfig(Handle *handle);
     static bool traceConfig(Handle *handle);
     static bool checkpointConfig(Handle *handle);
+
+    void stopTimedQueue();
+    void loopTimedQueue(const std::atomic<bool> &stop);
 };
 
 } //namespace WCDB

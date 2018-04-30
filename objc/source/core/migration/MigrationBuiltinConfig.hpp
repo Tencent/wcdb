@@ -33,7 +33,7 @@ namespace WCDB {
 class MigrationBuiltinConfig {
 public:
     enum Order : int {
-        Migration = -1,
+        Migration = INT_MIN + 4,
     };
 
     // 1. Attach necessary schemas and detach unnecessary schemas
