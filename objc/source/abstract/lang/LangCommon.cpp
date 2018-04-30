@@ -31,6 +31,12 @@ const std::string &mainSchema()
     return s_mainSchema;
 }
 
+const std::string &tempSchema()
+{
+    static const std::string s_tempSchema("temp");
+    return s_tempSchema;
+}
+
 const std::string &anySchema()
 {
     return String::empty();

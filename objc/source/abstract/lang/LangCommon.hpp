@@ -45,6 +45,7 @@ namespace WCDB {
 namespace Lang {
 
 const std::string &mainSchema();
+const std::string &tempSchema();
 const std::string &anySchema();
 
 class Lang {
