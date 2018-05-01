@@ -120,6 +120,8 @@
 		23A3AF24206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */; };
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
 		23A3AF2C206CF24400D05634 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF2B206CF24400D05634 /* TestCaseVirtualObject.mm */; };
+		23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
+		23AA166C2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
 		23BA6AD3208CE0DE005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23BA6AE0208CE101005CAFB7 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD9220652096000E31E8 /* TestCaseObject.mm */; };
 		23BA6AE1208CE101005CAFB7 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D412079AE6300B440CA /* TestCaseIndexedObject.mm */; };
@@ -622,6 +624,9 @@
 		23A3AF29206CF24400D05634 /* TestCaseVirtualObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseVirtualObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23A3AF2A206CF24400D05634 /* TestCaseVirtualObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseVirtualObject.h; sourceTree = "<group>"; };
 		23A3AF2B206CF24400D05634 /* TestCaseVirtualObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseVirtualObject.mm; sourceTree = "<group>"; };
+		23AA16682098C46F0013912B /* TestCaseConflictObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseConflictObject.mm; sourceTree = "<group>"; };
+		23AA16692098C46F0013912B /* TestCaseConflictObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseConflictObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23AA166A2098C46F0013912B /* TestCaseConflictObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseConflictObject.h; sourceTree = "<group>"; };
 		23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1197,6 +1202,9 @@
 			children = (
 				23CB2109206DDBCE000EFB02 /* MigrationTestCase.h */,
 				23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */,
+				23AA16682098C46F0013912B /* TestCaseConflictObject.mm */,
+				23AA16692098C46F0013912B /* TestCaseConflictObject+WCTTableCoding.h */,
+				23AA166A2098C46F0013912B /* TestCaseConflictObject.h */,
 				23CB2105206DDBB7000EFB02 /* MigrationTests.mm */,
 				23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */,
 				235F5D432079BCAB00B440CA /* MigrationTests+Convenient.mm */,
@@ -1651,6 +1659,7 @@
 				234DBD742064EB6C000E31E8 /* StatementCreateTableTests.mm in Sources */,
 				237B4D3120691E5D00AB79CA /* DatabaseTests+Memory.mm in Sources */,
 				234DBD722064EB6C000E31E8 /* StatementCommitTests.mm in Sources */,
+				23AA166C2098C46F0013912B /* TestCaseConflictObject.mm in Sources */,
 				2338626F207B8A42004CAC6F /* ORMRebindOld.mm in Sources */,
 				2338624A207B595A004CAC6F /* ORMIndex.mm in Sources */,
 				237B4D2F20691E5700AB79CA /* DatabaseTests+Config.mm in Sources */,
@@ -1809,6 +1818,7 @@
 				23BA6BB2208CE26A005CAFB7 /* MigrationTests+SameDatabase.mm in Sources */,
 				23BA6AEC208CE12D005CAFB7 /* TestCaseObject.mm in Sources */,
 				23BA6BB4208CE26A005CAFB7 /* MigrationTests+SameDatabase+Convenient.mm in Sources */,
+				23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */,
 				23BA6BB8208CE26A005CAFB7 /* MultipleMigrationTestCase+Convenient.mm in Sources */,
 				23BA6BB7208CE26A005CAFB7 /* MultipleMigrationTests.mm in Sources */,
 				23BA6AED208CE12D005CAFB7 /* Convenience.m in Sources */,

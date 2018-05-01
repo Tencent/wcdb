@@ -19,6 +19,8 @@
  */
 
 #import "MigrationTestCase.h"
+#import "TestCaseConflictObject+WCTTableCoding.h"
+#import "TestCaseConflictObject.h"
 
 @interface MigrationTests : MigrationTestCase
 
@@ -43,8 +45,6 @@
 
     _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath
                                                    andInfo:_info];
-
-    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
 }
 
 - (void)tearDown
@@ -66,6 +66,8 @@
 
 - (void)test_migration
 {
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
     //view created
     {
         NSString *viewName = [NSString stringWithFormat:@"WCDBUnioned_%@_%@", _migratedTableName, _tableName];
@@ -121,6 +123,8 @@
 
 - (void)test_insert_auto_increment
 {
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
     int expectedInsertedRowID = (int) _preInserted.count;
     {
         WCTSequence *seq = [_database getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.tableName where:WCTSequence.name == _tableName];
@@ -140,6 +144,8 @@
 
 - (void)test_migration_row_per_step
 {
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
     int rowPerStep = rand() % 10;
     [_migrated setMigrateRowPerStep:rowPerStep];
     XCTAssertEqual(_migrated.migrateRowPerStep, rowPerStep);
@@ -151,6 +157,38 @@
 
     int count = [_database getValueOnResult:TestCaseObject.allResults.count() fromTable:_tableName].integer32Value;
     XCTAssertEqual(count, _preInserted.count - rowPerStep);
+}
+
+- (void)test_on_conflict_replace
+{
+    _cls = TestCaseConflictObject.class;
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
+    NSString *expected = @"expected";
+    int index = rand() % _preInserted.count;
+    __block long long conflictRowID = -1;
+
+    TestCaseConflictObject *object = [[TestCaseConflictObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.variable2 = expected;
+    object.variable3 = _preInserted[index].variable3;
+    XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
+
+    [_migrated setConflictCallback:^BOOL(WCTMigrationInfo *info, long long rowid) {
+      conflictRowID = rowid;
+      return YES;
+    }];
+
+    BOOL done = NO;
+    while ([_migrated stepMigration:done] && !done)
+        ;
+    XCTAssertTrue(done);
+
+    XCTAssertEqual(conflictRowID, _preInserted[index].variable1);
+
+    TestCaseConflictObject *result = [_migrated getObjectOfClass:TestCaseConflictObject.class fromTable:_migratedTableName where:WCDB::Column::rowid() == conflictRowID];
+    XCTAssertEqual(result.variable1, _preInserted[index].variable1);
+    XCTAssertTrue([result.variable2 isEqualToString:expected]);
 }
 
 @end
