@@ -52,10 +52,8 @@ public:
     getSchemasForAttaching() const;
     const std::map<std::string, std::shared_ptr<MigrationInfo>> &
     getInfos() const;
-    void markAsStarted();
     //return true to indicate schemas changed
     bool markAsMigrated(const std::string &table);
-    bool isStarted() const;
     bool isMigrated() const;
     const std::shared_ptr<MigrationInfo> &pickUpForMigration() const;
 
@@ -78,7 +76,6 @@ public:
 
 protected:
     mutable SharedLock m_lock;
-    std::atomic<bool> m_started;
     //schema -> {path, reference}
     std::map<std::string, std::pair<std::string, int>> m_schemas;
     //target table -> infos
