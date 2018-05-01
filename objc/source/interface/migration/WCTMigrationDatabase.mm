@@ -84,10 +84,13 @@
 
 - (void)setMigratedCallback:(WCTMigratedBlock)onMigrated
 {
-    auto callback = [onMigrated](const WCDB::MigrationInfo *info) {
-        WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
-        onMigrated(nsInfo);
-    };
+    WCDB::MigrationSetting::MigratedCallback callback = nullptr;
+    if (onMigrated) {
+        callback = [onMigrated](const WCDB::MigrationInfo *info) {
+            WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
+            onMigrated(nsInfo);
+        };
+    }
     _migrationDatabase->getMigrationSetting()->setMigratedCallback(callback);
 }
 
@@ -111,6 +114,11 @@
         };
     }
     _migrationDatabase->getMigrationSetting()->setConflictCallback(callback);
+}
+
+- (void)asyncMigrationWithInterval:(double)interval
+{
+    _migrationDatabase->asyncMigration(interval);
 }
 
 - (void)finalizeDatabase

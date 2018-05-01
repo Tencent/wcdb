@@ -50,7 +50,7 @@ protected:
 public:
     bool stepMigration(bool &done);
 
-    void asyncMigration();
+    void asyncMigration(double interval = 3.0);
 
     MigrationSetting *getMigrationSetting();
 

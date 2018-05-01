@@ -36,17 +36,19 @@ typedef void (^WCTMigratedBlock)(WCTMigrationInfo *_Nullable);
 
 - (nullable instancetype)initWithExistingPath:(NSString *)path;
 
-- (void)setMigratedCallback:(WCTMigratedBlock)onMigrated;
+- (void)setMigratedCallback:(nullable WCTMigratedBlock)onMigrated;
 
 - (void)setMigrateRowPerStep:(int)row;
 
 - (int)migrateRowPerStep;
 
-- (void)setConflictCallback:(WCTMigrationConflictBlock)onConflict;
+- (void)setConflictCallback:(nullable WCTMigrationConflictBlock)onConflict;
 
 - (BOOL)stepMigration:(BOOL &)done;
 
 - (void)asyncMigration;
+
+- (void)asyncMigrationWithInterval:(double)interval;
 
 @end
 
