@@ -330,7 +330,8 @@ std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
     StatementSelect statementSelect = s_statementSelect;
     statementSelect.from(table);
     m_error.level = Error::Level::Ignore;
-    bool result = Handle::prepare(statementSelect) && step();
+    bool unused;
+    bool result = Handle::prepare(statementSelect) && Handle::step(unused);
     m_error.level = Error::Level::Error;
     finalize();
     return {result || getResultCode() == SQLITE_ERROR, result};
@@ -355,7 +356,7 @@ Handle::getUnorderedValues(const Statement &statement, int index)
     if (Handle::prepare(statement)) {
         bool done;
         std::set<std::string> values;
-        while (step(done) && !done) {
+        while (Handle::step(done) && !done) {
             values.insert(getText(index));
         }
         finalize();
