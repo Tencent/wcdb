@@ -42,7 +42,9 @@ public:
     static const std::string &migrationConfigName();
 
 protected:
-    static bool doCreateView(Handle *handle, MigrationSetting *setting);
+    static bool doCreateView(Handle *handle,
+                             MigrationSetting *setting,
+                             bool &schemaChanged);
     static bool doAttachSchema(Handle *handle, MigrationSetting *setting);
 };
 

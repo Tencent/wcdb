@@ -47,15 +47,22 @@ MigrationBuiltinConfig::migrationWithSetting(MigrationSetting *setting)
     WCTInnerAssert(setting != nullptr);
     return Config(MigrationBuiltinConfig::migrationConfigName(),
                   [setting](Handle *handle) -> bool {
-                      return doCreateView(handle, setting) &&
-                             doAttachSchema(handle, setting);
+                      bool schemaChanged = false;
+                      if (!doAttachSchema(handle, setting) ||
+                          !doCreateView(handle, setting, schemaChanged)) {
+                          return false;
+                      }
+                      return schemaChanged ? doAttachSchema(handle, setting)
+                                           : true;
                   },
                   MigrationBuiltinConfig::Order::Migration);
 }
 
 bool MigrationBuiltinConfig::doCreateView(Handle *handle,
-                                          MigrationSetting *setting)
+                                          MigrationSetting *setting,
+                                          bool &schemaChanged)
 {
+    schemaChanged = false;
     std::list<std::shared_ptr<MigrationInfo>> infos;
     {
         SharedLockGuard lockGuard(setting->getSharedLock());
@@ -96,7 +103,8 @@ bool MigrationBuiltinConfig::doCreateView(Handle *handle,
             return false;
         }
         for (const auto &info : infos) {
-            setting->markAsMigrated(info->targetTable);
+            schemaChanged =
+                setting->markAsMigrated(info->targetTable) || schemaChanged;
         }
     }
     return true;
