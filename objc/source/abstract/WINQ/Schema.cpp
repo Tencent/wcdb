@@ -32,4 +32,9 @@ const std::string &Schema::any()
     return Lang::anySchema();
 }
 
+const std::string &Schema::temp()
+{
+    return Lang::tempSchema();
+}
+
 } // namespace WCDB

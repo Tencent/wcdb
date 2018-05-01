@@ -34,4 +34,9 @@ WCDB_SYNTHESIZE(WCTMaster, sql)
     return @"sqlite_master";
 }
 
++ (NSString *)tempTableName
+{
+    return @"sqlite_temp_master";
+}
+
 @end

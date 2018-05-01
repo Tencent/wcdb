@@ -29,6 +29,7 @@ class Schema {
 public:
     static const std::string &main();
     static const std::string &any();
+    static const std::string &temp();
 };
 
 } // namespace WCDB
