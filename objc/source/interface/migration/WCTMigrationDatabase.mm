@@ -96,6 +96,11 @@
     _migrationDatabase->getMigrationSetting()->setMigrateRowPerStep(row);
 }
 
+- (int)migrateRowPerStep
+{
+    return _migrationDatabase->getMigrationSetting()->getMigrationRowPerStep();
+}
+
 - (void)setConflictCallback:(WCTMigrationConflictBlock)onConflict
 {
     WCDB::MigrationSetting::ConflictCallback callback = nullptr;

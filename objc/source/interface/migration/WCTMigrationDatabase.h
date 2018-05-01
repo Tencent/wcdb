@@ -40,6 +40,8 @@ typedef void (^WCTMigratedBlock)(WCTMigrationInfo *_Nullable);
 
 - (void)setMigrateRowPerStep:(int)row;
 
+- (int)migrateRowPerStep;
+
 - (void)setConflictCallback:(WCTMigrationConflictBlock)onConflict;
 
 - (BOOL)stepMigration:(BOOL &)done;
