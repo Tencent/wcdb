@@ -41,9 +41,7 @@ public:
     static const Config migrationWithSetting(MigrationSetting *setting);
 
 protected:
-    static bool doCreateView(Handle *handle,
-                             MigrationSetting *setting,
-                             bool &schemaChanged);
+    static bool doCreateView(Handle *handle, MigrationSetting *setting);
     static bool doAttachSchema(Handle *handle, MigrationSetting *setting);
 };
 

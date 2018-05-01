@@ -41,20 +41,14 @@ MigrationBuiltinConfig::migrationWithSetting(MigrationSetting *setting)
     WCTInnerAssert(setting != nullptr);
     return Config("migration",
                   [setting](Handle *handle) -> bool {
-                      bool schemaChanged = false;
-                      if (!doAttachSchema(handle, setting) ||
-                          !doCreateView(handle, setting, schemaChanged)) {
-                          return false;
-                      }
-                      return schemaChanged ? doAttachSchema(handle, setting)
-                                           : true;
+                      return doCreateView(handle, setting) &&
+                             doAttachSchema(handle, setting);
                   },
                   MigrationBuiltinConfig::Order::Migration);
 }
 
 bool MigrationBuiltinConfig::doCreateView(Handle *handle,
-                                          MigrationSetting *setting,
-                                          bool &schemaChanged)
+                                          MigrationSetting *setting)
 {
     schemaChanged = false;
     std::list<std::shared_ptr<MigrationInfo>> infos;
