@@ -66,18 +66,29 @@
 
 - (void)test_migration
 {
-    BOOL done;
-    //start
-    XCTAssertTrue([_migrated stepMigration:done]);
+    //view created
+    {
+        NSString *viewName = [NSString stringWithFormat:@"WCDBUnioned_%@_%@", _migratedTableName, _tableName];
+        WCTRowSelect *rowSelect = [[[_migrated prepareRowSelect] onResultColumn:WCTMaster.allResults.count() > 0] where:WCTMaster.name == viewName];
+        WCDB::TableOrSubquery tempTable = WCDB::TableOrSubquery(WCTMaster.tempTableName).withSchema(WCDB::Schema::temp());
+        rowSelect.statement.from(tempTable);
+        WCTValue *count = rowSelect.nextValue;
+        XCTAssertTrue(count.boolValue);
+    }
+
     //already attached
     {
         WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::databaseList()) atIndex:1];
-        XCTAssertEqual(schemas.count, 2);
-        XCTAssertTrue([schemas[0].stringValue isEqualToString:@"main"]);
-        XCTAssertTrue([schemas[1].stringValue isEqualToString:[self schemaNameForPath:_database.path]]);
+        NSMutableSet<NSString *> *schemaSet = [[NSMutableSet<NSString *> alloc] init];
+        for (WCTValue *schema in schemas) {
+            [schemaSet addObject:schema.stringValue];
+        }
+        XCTAssertEqual(schemaSet.count, 3);
+        XCTAssertTrue([schemaSet containsObject:[self schemaNameForPath:_database.path]]);
     }
 
     //migration
+    BOOL done;
     while ([_migrated stepMigration:done] && !done)
         ;
     XCTAssertTrue(done);
@@ -85,7 +96,7 @@
     //already detached
     {
         WCTOneColumn *schemas = [_migrated getColumnFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::databaseList())];
-        XCTAssertEqual(schemas.count, 1);
+        XCTAssertEqual(schemas.count, 2);
     }
 
     //old table is already dropped
@@ -93,74 +104,38 @@
     XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
     XCTAssertNil(error);
 
+    //view is already dropped
+    {
+        NSString *viewName = [NSString stringWithFormat:@"WCDBUnioned_%@_%@", _migratedTableName, _tableName];
+        WCTRowSelect *rowSelect = [[[_migrated prepareRowSelect] onResultColumn:WCTMaster.allResults.count() == 0] where:WCTMaster.name == viewName];
+        WCDB::TableOrSubquery tempTable = WCDB::TableOrSubquery(WCTMaster.tempTableName).withSchema(WCDB::Schema::temp());
+        rowSelect.statement.from(tempTable);
+        WCTValue *count = rowSelect.nextValue;
+        XCTAssertTrue(count.boolValue);
+    }
+
     //all data are migrated
     NSArray *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName orderBy:TestCaseObject.variable1];
     XCTAssertTrue([objects isEqualToTestCaseObjects:_preInserted]);
 }
 
-- (void)test_insert_auto_increment_before_started
+- (void)test_insert_auto_increment
 {
-    [_migrated purge];
-
-    __block BOOL tested = NO;
-    [WCTDatabase globalTraceSQL:^(NSString *sql) {
-      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@.%@(variable1, variable2, variable3) VALUES(?1, ?2, ?3)", [self schemaNameForPath:_database.path], _tableName];
-      if ([sql isEqualToString:expectedSQL]) {
-          tested = YES;
-      }
-    }];
-
-    TestCaseObject *object = [TestCaseObject objectWithId:(int) _preInserted.count];
-    object.isAutoIncrement = YES;
-    XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
-
-    XCTAssertTrue(tested);
-    [WCTDatabase globalTraceSQL:nil];
-
-    NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName];
-    XCTAssertEqual(objects.count, _preInserted.count + 1);
-    NSArray<TestCaseObject *> *subobjects = [objects subarrayWithRange:NSMakeRange(0, _preInserted.count)];
-    XCTAssertTrue([subobjects isEqualToTestCaseObjects:_preInserted]);
-    XCTAssertTrue([objects[_preInserted.count] isEqualToObject:object]);
-}
-
-- (void)test_insert_auto_increment_after_started
-{
+    int expectedInsertedRowID = (int) _preInserted.count;
     {
         WCTSequence *seq = [_database getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.tableName where:WCTSequence.name == _tableName];
-        XCTAssertEqual(seq.seq, _preInserted.count - 1);
+        XCTAssertEqual(seq.seq, expectedInsertedRowID - 1);
     }
 
-    //start
     BOOL done;
+    //step but do not finish it.
     XCTAssertTrue([_migrated stepMigration:done]);
-
-    {
-        WCTSequence *seq = [_migrated getObjectOnProperties:WCTSequence.seq fromTable:WCTSequence.tableName where:WCTSequence.name == _migratedTableName];
-        XCTAssertEqual(seq.seq, _preInserted.count - 1);
-    }
-
-    [_migrated purge];
-    __block BOOL tested = NO;
-    [WCTDatabase globalTraceSQL:^(NSString *sql) {
-      NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO main.%@(variable1, variable2, variable3) VALUES(?1, ?2, ?3)", _migratedTableName];
-      if ([sql isEqualToString:expectedSQL]) {
-          tested = YES;
-      }
-    }];
+    XCTAssertFalse(done);
 
     TestCaseObject *object = [TestCaseObject objectWithId:(int) _preInserted.count];
     object.isAutoIncrement = YES;
     XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
-
-    XCTAssertTrue(tested);
-    [WCTDatabase globalTraceSQL:nil];
-
-    NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName];
-    XCTAssertEqual(objects.count, _preInserted.count + 1);
-    NSArray<TestCaseObject *> *subobjects = [objects subarrayWithRange:NSMakeRange(0, _preInserted.count)];
-    XCTAssertTrue([subobjects isEqualToTestCaseObjects:_preInserted]);
-    XCTAssertTrue([objects[_preInserted.count] isEqualToObject:object]);
+    XCTAssertEqual(object.lastInsertedRowID, expectedInsertedRowID);
 }
 
 @end
