@@ -148,7 +148,10 @@ StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const
 
 StatementDropView MigrationInfo::getStatementForDroppingUnionedView() const
 {
-    return StatementDropView().dropView(unionedViewName).ifExists();
+    return StatementDropView()
+        .dropView(unionedViewName)
+        .ifExists()
+        .withSchema(Schema::temp());
 }
 
 StatementInsert MigrationInfo::getStatementForTamperingConflictType(
