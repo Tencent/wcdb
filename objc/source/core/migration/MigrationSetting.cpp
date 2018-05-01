@@ -134,6 +134,7 @@ MigrationSetting::pickUpForMigration() const
     WCTInnerAssert(m_lock.debug_isSharedLocked());
 #endif
     WCTInnerAssert(!m_infos.empty());
+    //TODO cross table migration first
     return m_infos.begin()->second;
 }
 
