@@ -136,6 +136,7 @@ StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const
 {
     return StatementCreateView()
         .createView(unionedViewName)
+        .temp()
         .ifNotExists()
         .as(StatementSelect()
                 .select(ResultColumn::all())
