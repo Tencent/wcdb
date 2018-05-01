@@ -37,11 +37,7 @@
     for (WCTMigrationInfo *info in infos) {
         infoList.push_back([info getWCDBMigrationInfo]);
     }
-    auto migrationInfos = WCDB::MigrationSetting::setting(infoList);
-    if (!migrationInfos) {
-        return nil;
-    }
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, migrationInfos)];
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, infoList)];
 }
 
 - (instancetype)initWithPath:(NSString *)path
@@ -49,11 +45,7 @@
 {
     WCTRemedialAssert(info, "Migration info can't be null. If you want to refer an inited migration database, use [initWithExistingPath:] instead.", return nil;);
     WCTRemedialAssert(path, "Path can't be null.", return nil;);
-    auto infos = WCDB::MigrationSetting::setting({[info getWCDBMigrationInfo]});
-    if (!infos) {
-        return nil;
-    }
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, infos)];
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, {[info getWCDBMigrationInfo]})];
 }
 
 - (instancetype)initWithExistingPath:(nonnull NSString *)path

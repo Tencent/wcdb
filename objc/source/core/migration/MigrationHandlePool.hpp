@@ -31,10 +31,16 @@ namespace WCDB {
 class MigrationHandlePool : public HandlePool {
 #pragma mark - Initialize
 public:
-    friend class MigrationHandlePools;
+    static std::shared_ptr<HandlePool>
+    pool(const std::string &path,
+         const Configs &configs,
+         const std::list<std::shared_ptr<MigrationInfo>> &infos);
+
+protected:
     MigrationHandlePool(const std::string &path,
                         const Configs &configs,
-                        const std::shared_ptr<MigrationSetting> &setting);
+                        const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    void initialize();
 
 #ifdef DEBUG
 public:
@@ -47,10 +53,10 @@ protected:
 
 #pragma mark - Migration
 public:
-    MigrationSetting *getMigrationSetting() const;
+    MigrationSetting *getMigrationSetting();
 
 protected:
-    std::shared_ptr<MigrationSetting> m_setting;
+    MigrationSetting m_setting;
 
 #pragma mark - Override
 protected:

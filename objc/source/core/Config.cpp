@@ -70,22 +70,9 @@ void Configs::setConfig(const Config &config)
             break;
         }
     }
-    configs.insert(iter, config);
-}
-
-void Configs::setConfig(const std::string &name,
-                        const Config::Callback &callback)
-{
-    auto &configs = m_configs.get_or_copy();
-    int order = 0;
-    for (auto iter = configs.begin(); iter != configs.end(); ++iter) {
-        order = iter->get().order;
-        if (iter->get().name == name) {
-            iter->assign(Config(name, callback, order));
-            return;
-        }
+    if (config.callback != nullptr) {
+        configs.insert(iter, config);
     }
-    configs.push_back(Config(name, callback, order + 1));
 }
 
 bool Configs::equal(const Configs &other) const

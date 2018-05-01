@@ -29,7 +29,8 @@ namespace WCDB {
 
 class MigrationTamperer {
 public:
-    MigrationTamperer(MigrationSetting *setting);
+    MigrationTamperer(
+        const std::map<std::string, std::shared_ptr<MigrationInfo>> &infos);
 
     MigrationTamperer() = delete;
     MigrationTamperer(const MigrationTamperer &) = delete;
@@ -58,7 +59,6 @@ protected:
     bool m_isInsertTampering;
     bool m_isSourceTampering;
 
-    MigrationSetting *m_setting;
     const std::map<std::string, std::shared_ptr<MigrationInfo>> &m_infos;
     std::shared_ptr<MigrationInfo> m_associatedInfo;
 

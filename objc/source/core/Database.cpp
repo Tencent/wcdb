@@ -146,12 +146,6 @@ void Database::setConfig(const Config &config)
     m_pool->setConfig(config);
 }
 
-void Database::setConfig(const std::string &name,
-                         const Config::Callback &callback)
-{
-    m_pool->setConfig(name, callback);
-}
-
 void Database::setCipher(const NoCopyData &cipher, int pageSize)
 {
     m_pool->setConfig(BuiltinConfig::shared()->cipherWithKey(cipher, pageSize));

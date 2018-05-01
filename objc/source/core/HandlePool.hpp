@@ -40,13 +40,13 @@ namespace WCDB {
 class HandlePool {
 #pragma mark - Initialize
 public:
-    friend class HandlePools;
-
     HandlePool() = delete;
     HandlePool(const HandlePool &) = delete;
     HandlePool &operator=(const HandlePool &) = delete;
 
     HandlePool(const std::string &path, const Configs &configs);
+
+    virtual ~HandlePool();
 
 #pragma mark - Basic
 public:
@@ -71,7 +71,6 @@ protected:
 
 #pragma mark - Config
 public:
-    void setConfig(const std::string &name, const Config::Callback &callback);
     void setConfig(const Config &config);
 
 protected:

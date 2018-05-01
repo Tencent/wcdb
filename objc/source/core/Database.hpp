@@ -76,7 +76,6 @@ public:
 #pragma mark - Config
 public:
     void setConfig(const Config &config);
-    void setConfig(const std::string &name, const Config::Callback &callback);
     void setCipher(const NoCopyData &cipher, int pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 

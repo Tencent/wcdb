@@ -26,12 +26,14 @@
 
 - (void)setCipherKey:(NSData *)cipherKey
 {
+    WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setCipher(cipherKey.noCopyData);
 }
 
 - (void)setCipherKey:(NSData *)cipherKey
     andCipherPageSize:(int)cipherPageSize
 {
+    WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setCipher(cipherKey.noCopyData, cipherPageSize);
 }
 
@@ -39,6 +41,7 @@
           forName:(NSString *)name
         withOrder:(int)order
 {
+    WCTRemedialAssert(name, "Config name can't be null.", return;);
     WCDB::Config::Callback callback = nullptr;
     if (invoke) {
         callback = [invoke, self](WCDB::Handle *handle) -> bool {
@@ -54,6 +57,7 @@
 - (void)setConfig:(WCTConfigBlock)invoke
           forName:(NSString *)name
 {
+    WCTRemedialAssert(name, "Config name can't be null.", return;);
     WCDB::Config::Callback callback = nullptr;
     if (invoke) {
         callback = [invoke, self](WCDB::Handle *handle) -> bool {
@@ -63,7 +67,7 @@
             return result;
         };
     }
-    _database->setConfig(name.cppString, callback);
+    _database->setConfig(WCDB::Config(name.cppString, callback));
 }
 
 @end

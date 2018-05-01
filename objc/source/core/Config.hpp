@@ -38,8 +38,8 @@ public:
     using Callback = std::function<bool(Handle *)>;
 
     Config(const std::string &theName,
-           const Callback &theCallback,
-           int theOrder); //Small numbers in front
+           const Callback &theCallback = nullptr,
+           int theOrder = 0); //Small numbers in front
 
     bool invoke(Handle *handle) const;
 
@@ -54,7 +54,6 @@ public:
     Configs(const std::list<Config> &configs);
 
     void setConfig(const Config &config);
-    void setConfig(const std::string &name, const Config::Callback &callback);
 
     bool invoke(Handle *handle) const;
 

@@ -23,12 +23,6 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<MigrationSetting> MigrationSetting::setting(
-    const std::list<std::shared_ptr<MigrationInfo>> &infos)
-{
-    return std::shared_ptr<MigrationSetting>(new MigrationSetting(infos));
-}
-
 MigrationSetting::MigrationSetting(
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
     : m_onMigrated(nullptr)
@@ -55,6 +49,11 @@ MigrationSetting::MigrationSetting(
             "Migrating multiple tables to the same table is not allowed.");
         m_infos.insert({info->targetTable, info});
     }
+}
+
+void MigrationSetting::associate(MigrationHandlePool *pool)
+{
+    m_pool = pool;
 }
 
 #ifdef DEBUG
@@ -122,6 +121,9 @@ bool MigrationSetting::markAsMigrated(const std::string &table)
         if (m_infos.empty()) {
             //done
             m_onMigrated(nullptr);
+            //remove migration config
+            m_pool->setConfig(
+                Config(MigrationBuiltinConfig::migrationConfigName()));
         }
     }
     return schemasChanged;

@@ -37,6 +37,13 @@ HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
 {
 }
 
+HandlePool::~HandlePool()
+{
+    //wait until all handles back.
+    blockade();
+    unblockade();
+}
+
 #pragma mark - Basic
 void HandlePool::setTag(const Tag &tag)
 {
@@ -87,12 +94,6 @@ const CoreError &HandlePool::getThreadedError() const
 }
 
 #pragma mark - Config
-void HandlePool::setConfig(const std::string &name,
-                           const Config::Callback &callback)
-{
-    m_configs.setConfig(name, callback);
-}
-
 void HandlePool::setConfig(const Config &config)
 {
     m_configs.setConfig(config);

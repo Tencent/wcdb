@@ -22,13 +22,10 @@
 
 namespace WCDB {
 
-MigrationTamperer::MigrationTamperer(MigrationSetting *setting)
-    : m_setting(setting)
-    , m_isTampered(false)
-    , m_infos(setting->getInfos())
-    , m_associatedInfo(nullptr)
+MigrationTamperer::MigrationTamperer(
+    const std::map<std::string, std::shared_ptr<MigrationInfo>> &infos)
+    : m_isTampered(false), m_infos(infos), m_associatedInfo(nullptr)
 {
-    WCTInnerAssert(m_setting != nullptr);
 }
 
 const Statement &MigrationTamperer::getSourceStatement() const

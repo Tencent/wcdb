@@ -39,6 +39,7 @@ public:
     // 1. Attach necessary schemas and detach unnecessary schemas
     // 2. Create necessary views and drop unnecessary views
     static const Config migrationWithSetting(MigrationSetting *setting);
+    static const std::string &migrationConfigName();
 
 protected:
     static bool doCreateView(Handle *handle, MigrationSetting *setting);

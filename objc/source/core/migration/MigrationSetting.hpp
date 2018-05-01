@@ -29,21 +29,23 @@
 
 namespace WCDB {
 
+class MigrationHandlePool;
+
 class MigrationSetting {
 #pragma mark - Initialize
 public:
     typedef std::function<void(const MigrationInfo *)> MigratedCallback;
 
-    static std::shared_ptr<MigrationSetting>
-    setting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
-
-    void setMigratedCallback(const MigratedCallback &onMigrated);
+    MigrationSetting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
 
 protected:
-    MigrationSetting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
     MigrationSetting() = delete;
     MigrationSetting(const MigrationSetting &) = delete;
     MigrationSetting &operator=(const MigrationSetting &) = delete;
+
+    friend class MigrationHandlePool;
+    void associate(MigrationHandlePool *pool);
+    MigrationHandlePool *m_pool;
 
 #pragma mark - Basic
 public:
@@ -58,6 +60,8 @@ public:
     const std::shared_ptr<MigrationInfo> &pickUpForMigration() const;
 
     SharedLock &getSharedLock();
+
+    void setMigratedCallback(const MigratedCallback &onMigrated);
 
     void setMigrateRowPerStep(int row);
     int getMigrationRowPerStep() const;

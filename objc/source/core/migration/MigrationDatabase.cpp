@@ -50,34 +50,27 @@ MigrationDatabase::databaseWithExistingPath(const std::string &path)
 }
 
 std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
-    const std::string &path, const std::shared_ptr<MigrationSetting> &setting)
+    const std::string &path,
+    const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
     const HandlePools::Generator s_generator =
-        [&setting](const std::string &path) -> std::shared_ptr<HandlePool> {
-        WCTAssert(setting, "Migration setting can't be null");
-        BuiltinConfig *builtinConfig = BuiltinConfig::shared();
-        if (setting->isSameDatabaseMigration()) {
-            return std::shared_ptr<HandlePool>(new MigrationHandlePool(
-                path, builtinConfig->defaultConfigs, setting));
+        [&infos](const std::string &path) -> std::shared_ptr<HandlePool> {
+        std::shared_ptr<HandlePool> pool = MigrationHandlePool::pool(
+            path, BuiltinConfig::shared()->defaultConfigs, infos);
+        if (pool) {
+            MigrationHandlePool *migrationHandlePool =
+                static_cast<MigrationHandlePool *>(pool.get());
+            migrationHandlePool->setConfig(
+                MigrationBuiltinConfig::migrationWithSetting(
+                    migrationHandlePool->getMigrationSetting()));
         }
-        Configs configs = builtinConfig->defaultConfigs;
-        configs.setConfig(
-            MigrationBuiltinConfig::migrationWithSetting(setting.get()));
-        return std::shared_ptr<HandlePool>(
-            new MigrationHandlePool(path, configs, setting));
+        return pool;
     };
 
     std::shared_ptr<Database> database(new MigrationDatabase(
         HandlePools::defaultPools()->getPool(path, s_generator)));
     if (database &&
         static_cast<MigrationDatabase *>(database.get())->isValid()) {
-#ifdef DEBUG
-        WCTAssert(static_cast<MigrationDatabase *>(database.get())
-                          ->m_migrationPool->getMigrationSetting()
-                          ->hash == setting->hash,
-                  "Migration info can't be changed after the very first "
-                  "initialization.");
-#endif
         return database;
     }
     return nullptr;
