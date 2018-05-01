@@ -58,6 +58,7 @@ void MigrationTamperer::tamper(const Statement &statement)
     m_isTampered = false;
     m_isSourceTampering = true;
     m_associatedInfo = nullptr;
+    m_isInsertTampering = false;
 
     m_sourceStatement = statement;
     doTamper(m_sourceStatement);
@@ -70,18 +71,7 @@ void MigrationTamperer::tamper(const Statement &statement)
             m_isTampered = doTamper(m_tamperedStatement);
             break;
         case Statement::Type::Insert: {
-            const StatementInsert &statementInsert =
-                (const StatementInsert &) m_sourceStatement;
-            const Lang::InsertSTMT &stmt =
-                statementInsert.getCOWLang().get<Lang::InsertSTMT>();
-            if ((stmt.schemaName.isNull() ||
-                 stmt.schemaName.get() == Schema::main()) &&
-                !stmt.tableName.empty()) {
-                auto iter = m_infos.find(stmt.tableName.get());
-                if (iter != m_infos.end()) {
-                    m_associatedInfo = iter->second;
-                }
-            }
+            m_isTampered = doTamper(m_sourceStatement);
         } break;
         default:
             break;
@@ -223,8 +213,10 @@ bool MigrationTamperer::tamper(
     TAMPER_PREPARE(cowLang);
     bool result = tamper(lang.withClause);
     if (!m_isSourceTampering) {
+        m_isInsertTampering = true;
         result =
             tamperTableAndSchemaName(lang.tableName, lang.schemaName) || result;
+        m_isInsertTampering = false;
     }
     switch (lang.switcher) {
         case Lang::InsertSTMT::Switch::Select:
@@ -761,6 +753,9 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                 tableName.assign(iter->second->sourceTable);
                 if (!iter->second->isSameDatabaseMigration()) {
                     schemaName.assign(iter->second->schema);
+                }
+                if (m_isInsertTampering) {
+                    m_associatedInfo = iter->second;
                 }
             }
             return true;

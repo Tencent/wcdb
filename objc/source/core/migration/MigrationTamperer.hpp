@@ -55,6 +55,7 @@ protected:
     bool m_isTampered;
 
     bool m_isSelectTampering;
+    bool m_isInsertTampering;
     bool m_isSourceTampering;
 
     MigrationSetting *m_setting;
