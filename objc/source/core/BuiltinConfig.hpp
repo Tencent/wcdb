@@ -28,6 +28,7 @@
 
 namespace WCDB {
 
+//TODO refactor: classify each config. make Configs support inheritance
 class BuiltinConfig {
 public:
     static BuiltinConfig *shared();
