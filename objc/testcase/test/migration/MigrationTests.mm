@@ -138,4 +138,19 @@
     XCTAssertEqual(object.lastInsertedRowID, expectedInsertedRowID);
 }
 
+- (void)test_migration_row_per_step
+{
+    int rowPerStep = rand() % 10;
+    [_migrated setMigrateRowPerStep:rowPerStep];
+    XCTAssertEqual(_migrated.migrateRowPerStep, rowPerStep);
+
+    //migration
+    BOOL done;
+    XCTAssertTrue([_migrated stepMigration:done]);
+    XCTAssertFalse(done);
+
+    int count = [_database getValueOnResult:TestCaseObject.allResults.count() fromTable:_tableName].integer32Value;
+    XCTAssertEqual(count, _preInserted.count - rowPerStep);
+}
+
 @end
