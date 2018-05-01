@@ -745,6 +745,7 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
         auto iter = m_infos.find(tableName.get());
         if (iter != m_infos.end()) {
             if (m_isSelectTampering) {
+                schemaName.assign(Schema::temp());
                 tableName.assign(iter->second->unionedViewName);
             } else {
                 tableName.assign(iter->second->sourceTable);
