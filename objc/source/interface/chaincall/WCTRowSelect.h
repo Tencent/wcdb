@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns;
 
+- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn;
+
 - (instancetype)fromTable:(NSString *)tableName;
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames;

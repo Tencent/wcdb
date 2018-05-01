@@ -31,6 +31,12 @@
     return self;
 }
 
+- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn
+{
+    _statement.select(resultColumn);
+    return self;
+}
+
 - (instancetype)fromTable:(NSString *)tableName
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
