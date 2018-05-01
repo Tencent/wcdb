@@ -30,8 +30,6 @@
     WCTMigrationInfo *_info;
 
     NSString *_innocentTableName;
-
-    int _preStepCount;
 }
 
 - (void)setUp
@@ -59,45 +57,7 @@
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
 
     BOOL done;
-    //start
     XCTAssertTrue([_migrated stepMigration:done]);
-    //step
-    _preStepCount = 2;
-    for (int i = 0; i < _preStepCount; ++i) {
-        XCTAssertTrue([_migrated stepMigration:done]);
-        XCTAssertFalse(done);
-    }
-
-    [self checkIfWithinMigration];
-}
-
-- (void)checkIfWithinMigration
-{
-    [_migrated close];
-    [_migrated finalizeDatabase];
-    _migrated = nil;
-
-    WCTDatabase *unmigratedDatabase = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
-
-    NSArray<TestCaseObject *> *unmigratedObjects = [unmigratedDatabase getObjectsOfClass:_cls fromTable:_tableName];
-    NSArray<TestCaseObject *> *expectedUnmigratedObjects = [_preInserted subarrayWithRange:NSMakeRange(0, _count - _preStepCount * 10)];
-    XCTAssertTrue([unmigratedObjects isEqualToTestCaseObjects:expectedUnmigratedObjects]);
-
-    WCTDatabase *migratedDatabase = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
-    NSArray<TestCaseObject *> *migratedObjects = [migratedDatabase getObjectsOfClass:_cls fromTable:_migratedTableName];
-    NSArray<TestCaseObject *> *expectedMigratedObjects = [_preInserted subarrayWithRange:NSMakeRange(_count - _preStepCount * 10, _preStepCount * 10)];
-    XCTAssertTrue([migratedObjects isEqualToTestCaseObjects:expectedMigratedObjects]);
-
-    [migratedDatabase close];
-    [migratedDatabase finalizeDatabase];
-    migratedDatabase = nil;
-    [unmigratedDatabase close];
-    [unmigratedDatabase finalizeDatabase];
-    unmigratedDatabase = nil;
-
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath
-                                                   andInfo:_info];
-    _database = _migrated;
 }
 
 - (void)tearDown
