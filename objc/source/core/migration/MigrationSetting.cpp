@@ -31,8 +31,7 @@ std::shared_ptr<MigrationSetting> MigrationSetting::setting(
 
 MigrationSetting::MigrationSetting(
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
-    : m_started(false)
-    , m_onMigrated(nullptr)
+    : m_onMigrated(nullptr)
     , m_rowPerStep(10)
     , m_onConflict(nullptr)
 #ifdef DEBUG
@@ -96,21 +95,10 @@ MigrationSetting::getInfos() const
     return m_infos;
 }
 
-bool MigrationSetting::isStarted() const
-{
-    return m_started.load();
-}
-
 bool MigrationSetting::isMigrated() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_infos.empty();
-}
-
-void MigrationSetting::markAsStarted()
-{
-    LockGuard lockGuard(m_lock);
-    m_started.store(true);
 }
 
 bool MigrationSetting::markAsMigrated(const std::string &table)

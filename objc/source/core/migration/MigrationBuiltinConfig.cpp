@@ -57,46 +57,52 @@ bool MigrationBuiltinConfig::doCreateView(Handle *handle,
                                           bool &schemaChanged)
 {
     schemaChanged = false;
-    if (setting->isStarted()) {
-        return true;
-    }
-    LockGuard lockGuard(setting->getSharedLock());
-    if (setting->isStarted()) {
-        return true;
-    }
     std::list<std::shared_ptr<MigrationInfo>> infos;
-    if (handle->runTransaction([&handle, &infos, setting](Handle *) -> bool {
-            for (const auto &info : setting->getInfos()) {
-                auto pair =
-                    handle->isTableExists(info.second->getSourceTable());
-                if (!pair.first) {
-                    return false;
+    {
+        SharedLockGuard lockGuard(setting->getSharedLock());
+        if (!handle->runTransaction([&infos, setting](Handle *handle) -> bool {
+                for (const auto &info : setting->getInfos()) {
+                    auto pair =
+                        handle->isTableExists(info.second->getSourceTable());
+                    if (!pair.first) {
+                        return false;
+                    }
+                    if (pair.second) {
+                        //Create view
+                        if (!handle->execute(
+                                info.second
+                                    ->getStatementForCreatingUnionedView())) {
+                            return false;
+                        }
+                    } else {
+                        infos.push_back(info.second);
+                    }
                 }
-                //Create view
-                bool result = false;
-                if (pair.second) {
-                    result = handle->execute(
-                        info.second->getStatementForCreatingUnionedView());
-                } else {
-                    result = handle->execute(
-                        info.second->getStatementForDroppingUnionedView());
-                    infos.push_back(info.second);
+                return true;
+            })) {
+            return false;
+        }
+    }
+    if (!infos.empty()) {
+        LockGuard lockGuard(setting->getSharedLock());
+        if (!handle->runTransaction([&infos](Handle *handle) {
+                for (const auto &info : infos) {
+                    if (!handle->execute(
+                            info->getStatementForDroppingUnionedView())) {
+                        return false;
+                    }
                 }
-                if (!result) {
-                    return false;
-                }
-            }
-            return true;
-        })) {
+                return true;
+            })) {
+            return false;
+        }
         for (const auto &info : infos) {
             if (setting->markAsMigrated(info->targetTable)) {
                 schemaChanged = true;
             }
         }
-        setting->markAsStarted();
-        return true;
     }
-    return false;
+    return true;
 }
 
 bool MigrationBuiltinConfig::doAttachSchema(Handle *handle,
