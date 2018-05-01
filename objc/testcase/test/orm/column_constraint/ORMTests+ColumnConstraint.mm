@@ -44,7 +44,7 @@
 
 - (void)test_primary
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER PRIMARY KEY)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER PRIMARY KEY)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintPrimary.class]);
@@ -52,7 +52,7 @@
 
 - (void)test_primary_asc
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER PRIMARY KEY ASC)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER PRIMARY KEY ASC)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintPrimaryAsc.class]);
@@ -60,7 +60,7 @@
 
 - (void)test_primary_desc
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER PRIMARY KEY DESC)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER PRIMARY KEY DESC)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintPrimaryDesc.class]);
@@ -68,7 +68,7 @@
 
 - (void)test_primary_auto_increment
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER PRIMARY KEY AUTOINCREMENT)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER PRIMARY KEY AUTOINCREMENT)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintPrimaryAutoIncrement.class]);
@@ -76,7 +76,7 @@
 
 - (void)test_primary_asc_auto_increment
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER PRIMARY KEY ASC AUTOINCREMENT)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER PRIMARY KEY ASC AUTOINCREMENT)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintPrimaryAscAutoIncrement.class]);
@@ -84,7 +84,7 @@
 
 - (void)test_primary_impl
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER PRIMARY KEY ASC ON CONFLICT REPLACE AUTOINCREMENT)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER PRIMARY KEY ASC ON CONFLICT REPLACE AUTOINCREMENT)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintPrimaryImpl.class]);
@@ -92,7 +92,7 @@
 
 - (void)test_not_null
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER NOT NULL)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER NOT NULL)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintNotNull.class]);
@@ -100,7 +100,7 @@
 
 - (void)test_unique
 {
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER UNIQUE)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER UNIQUE)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMColumnConstraintUnique.class]);

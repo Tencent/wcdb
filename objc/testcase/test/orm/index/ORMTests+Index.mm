@@ -36,17 +36,17 @@
 {
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index_1"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@(variable1)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@(variable1)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index_2"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@(variable2 ASC)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@(variable2 ASC)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index_3"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@(variable3 DESC)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@(variable3 DESC)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMIndex.class]);
@@ -56,7 +56,7 @@
 {
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@(variable1, variable2 ASC, variable3 DESC)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@(variable1, variable2 ASC, variable3 DESC)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMMultiIndex.class]);
@@ -66,17 +66,17 @@
 {
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index_1"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE UNIQUE INDEX IF NOT EXISTS %@ ON %@(variable1)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE UNIQUE INDEX IF NOT EXISTS main.%@ ON %@(variable1)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index_2"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE UNIQUE INDEX IF NOT EXISTS %@ ON %@(variable2 ASC)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE UNIQUE INDEX IF NOT EXISTS main.%@ ON %@(variable2 ASC)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
         NSString *indexName = [_tableName stringByAppendingString:@"_index_3"];
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE UNIQUE INDEX IF NOT EXISTS %@ ON %@(variable3 DESC)", indexName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE UNIQUE INDEX IF NOT EXISTS main.%@ ON %@(variable3 DESC)", indexName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMUniqueIndex.class]);

@@ -68,7 +68,7 @@
                         .temp()
                         .ifNotExists(false)
                         .as(self.class.statementSelect),
-                    @"CREATE TEMP VIEW main.testView AS SELECT testColumn FROM main.testTable");
+                    @"CREATE TEMP VIEW temp.testView AS SELECT testColumn FROM main.testTable");
 
     //Default
     WINQAssertEqual(WCDB::StatementCreateView()

@@ -58,9 +58,9 @@
 
 - (void)test_inherited
 {
-    NSString *createTableSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable1 INTEGER, variable2 TEXT, variable3 REAL, variable4 TEXT, variable5 REAL)", _tableName];
+    NSString *createTableSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable1 INTEGER, variable2 TEXT, variable3 REAL, variable4 TEXT, variable5 REAL)", _tableName];
     [_expectedSQLs addObject:createTableSQL];
-    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO %@(variable1, variable2, variable3, variable4, variable5) VALUES(?1, ?2, ?3, ?4, ?5)", _tableName];
+    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO main.%@(variable1, variable2, variable3, variable4, variable5) VALUES(?1, ?2, ?3, ?4, ?5)", _tableName];
     [_expectedSQLs addObject:insertSQL];
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:_cls]);

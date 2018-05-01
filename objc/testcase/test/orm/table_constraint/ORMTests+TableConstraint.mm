@@ -37,7 +37,7 @@
 - (void)test_multi_primary
 {
     NSString *constraintName = NSStringFromClass(ORMTableConstraintMultiPrimary.class);
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable1 TEXT, variable2 INTEGER, variable3 REAL, CONSTRAINT %@ PRIMARY KEY(variable1, variable2 ASC, variable3 DESC) ON CONFLICT REPLACE)", _tableName, constraintName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable1 TEXT, variable2 INTEGER, variable3 REAL, CONSTRAINT %@ PRIMARY KEY(variable1, variable2 ASC, variable3 DESC) ON CONFLICT REPLACE)", _tableName, constraintName];
     [_expectedSQLs addObject:expectedSQL];
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMTableConstraintMultiPrimary.class]);
 }
@@ -45,7 +45,7 @@
 - (void)test_multi_unique
 {
     NSString *constraintName = NSStringFromClass(ORMTableConstraintMultiUnique.class);
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable1 TEXT, variable2 INTEGER, variable3 REAL, CONSTRAINT %@ UNIQUE(variable1, variable2 ASC, variable3 DESC) ON CONFLICT ABORT)", _tableName, constraintName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable1 TEXT, variable2 INTEGER, variable3 REAL, CONSTRAINT %@ UNIQUE(variable1, variable2 ASC, variable3 DESC) ON CONFLICT ABORT)", _tableName, constraintName];
     [_expectedSQLs addObject:expectedSQL];
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMTableConstraintMultiUnique.class]);
 }
@@ -53,7 +53,7 @@
 - (void)test_check
 {
     NSString *constraintName = NSStringFromClass(ORMTableConstraintCheck.class);
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER, CONSTRAINT %@ CHECK((variable > 2)))", _tableName, constraintName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER, CONSTRAINT %@ CHECK((variable > 2)))", _tableName, constraintName];
     [_expectedSQLs addObject:expectedSQL];
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMTableConstraintCheck.class]);
 }
@@ -61,7 +61,7 @@
 - (void)test_foreign_key
 {
     NSString *constraintName = NSStringFromClass(ORMTableConstraintForeignKey.class);
-    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable INTEGER, CONSTRAINT %@ FOREIGN KEY(variable) REFERENCES otherTable ON DELETE SET NULL)", _tableName, constraintName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable INTEGER, CONSTRAINT %@ FOREIGN KEY(variable) REFERENCES otherTable ON DELETE SET NULL)", _tableName, constraintName];
     [_expectedSQLs addObject:expectedSQL];
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:ORMTableConstraintForeignKey.class]);
 }

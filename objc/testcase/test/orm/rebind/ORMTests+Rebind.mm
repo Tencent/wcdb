@@ -33,19 +33,19 @@
 - (void)test_create_table
 {
     {
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(variable1 INTEGER PRIMARY KEY, variable2 REAL, variable3 TEXT)", _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@(variable1 INTEGER PRIMARY KEY, variable2 REAL, variable3 TEXT)", _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@_index_1 ON %@(variable3)", _tableName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@_index_1 ON %@(variable3)", _tableName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
-        NSString *expectedSQL = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN variable4 TEXT", _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN variable4 TEXT", _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     {
-        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@_index_2 ON %@(variable4)", _tableName, _tableName];
+        NSString *expectedSQL = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@_index_2 ON %@(variable4)", _tableName, _tableName];
         [_expectedSQLs addObject:expectedSQL];
     }
     XCTAssertTrue([_database createTableAndIndexes:_tableName
@@ -73,7 +73,7 @@
     newObject.renamedVariable2 = 2.0;
     newObject.variable4 = @"newObject";
 
-    NSString *expectedSQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(variable1, variable2, variable4) VALUES(?1, ?2, ?3)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.%@(variable1, variable2, variable4) VALUES(?1, ?2, ?3)", _tableName];
     [_expectedSQLs addObject:expectedSQL];
 
     XCTAssertTrue([_database insertOrReplaceObject:newObject intoTable:_tableName]);

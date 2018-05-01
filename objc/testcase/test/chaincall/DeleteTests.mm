@@ -44,7 +44,7 @@
 - (void)test_statement
 {
     WCDB::StatementDelete &statement = _delete.statement;
-    NSString *expectedSQL = [NSString stringWithFormat:@"DELETE FROM %@", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"DELETE FROM main.%@", _tableName];
     XCTAssertEqual(statement.getDescription(), expectedSQL.UTF8String);
 }
 

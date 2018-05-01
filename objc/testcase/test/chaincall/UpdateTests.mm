@@ -48,7 +48,7 @@
 - (void)test_statement
 {
     WCDB::StatementUpdate &statement = [_update onProperties:TestCaseObject.variable1].statement;
-    NSString *expectedSQL = [NSString stringWithFormat:@"UPDATE %@ SET variable1 = ?1", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"UPDATE main.%@ SET variable1 = ?1", _tableName];
     XCTAssertEqual(statement.getDescription(), expectedSQL.UTF8String);
 }
 

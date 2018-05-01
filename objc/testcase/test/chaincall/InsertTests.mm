@@ -46,7 +46,7 @@
 - (void)test_statement
 {
     WCDB::StatementInsert &statement = [_insert onProperties:TestCaseObject.variable1].statement;
-    NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO %@(variable1) VALUES(?1)", _tableName];
+    NSString *expectedSQL = [NSString stringWithFormat:@"INSERT INTO main.%@(variable1) VALUES(?1)", _tableName];
     XCTAssertEqual(statement.getDescription(), expectedSQL.UTF8String);
 }
 
