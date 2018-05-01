@@ -330,7 +330,7 @@ std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
     StatementSelect statementSelect = s_statementSelect;
     statementSelect.from(table);
     m_error.level = Error::Level::Ignore;
-    bool result = prepare(statementSelect) && step();
+    bool result = Handle::prepare(statementSelect) && step();
     m_error.level = Error::Level::Error;
     finalize();
     return {result || getResultCode() == SQLITE_ERROR, result};
@@ -352,7 +352,7 @@ std::pair<bool, std::set<std::string>> Handle::getUnorderedAttachedSchemas()
 std::pair<bool, std::set<std::string>>
 Handle::getUnorderedValues(const Statement &statement, int index)
 {
-    if (prepare(statement)) {
+    if (Handle::prepare(statement)) {
         bool done;
         std::set<std::string> values;
         while (step(done) && !done) {
@@ -379,7 +379,7 @@ bool Handle::beginNestedTransaction()
     }
     std::string savepointName =
         Handle::savepointPrefix() + std::to_string(++m_nestedLevel);
-    return execute(StatementSavepoint().savepoint(savepointName));
+    return Handle::execute(StatementSavepoint().savepoint(savepointName));
 }
 
 bool Handle::commitOrRollbackNestedTransaction()
@@ -389,7 +389,7 @@ bool Handle::commitOrRollbackNestedTransaction()
     }
     std::string savepointName =
         Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
-    if (!execute(StatementRelease().release(savepointName))) {
+    if (!Handle::execute(StatementRelease().release(savepointName))) {
         discardableExecute(StatementRollback().rollbackTo(savepointName));
         return false;
     }
@@ -420,13 +420,13 @@ bool Handle::runNestedTransaction(const TransactionCallback &transaction)
 
 bool Handle::beginTransaction()
 {
-    return execute(StatementBegin::immediate());
+    return Handle::execute(StatementBegin::immediate());
 }
 
 bool Handle::commitOrRollbackTransaction()
 {
     m_nestedLevel = 0;
-    if (!execute(StatementCommit::commit())) {
+    if (!Handle::execute(StatementCommit::commit())) {
         discardableExecute(StatementRollback::rollback());
         return false;
     }

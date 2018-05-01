@@ -59,14 +59,14 @@ void MigrationTamperer::tamper(const Statement &statement)
     m_isSourceTampering = true;
     m_associatedInfo = nullptr;
 
-    m_sourceStatement = statement.getCOWLang();
+    m_sourceStatement = statement;
     doTamper(m_sourceStatement);
     m_isSourceTampering = false;
     switch (statement.getStatementType()) {
         case Statement::Type::Update:
         case Statement::Type::Delete:
         case Statement::Type::DropTable:
-            m_tamperedStatement = m_sourceStatement.getCOWLang();
+            m_tamperedStatement = m_sourceStatement;
             m_isTampered = doTamper(m_tamperedStatement);
             break;
         case Statement::Type::Insert: {
