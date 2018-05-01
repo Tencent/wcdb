@@ -220,11 +220,11 @@ bool MigrationHandle::migrateWithRowID(
 #ifdef DEBUG
     WCTInnerAssert(info != nullptr && isInTransaction());
 #endif
-    return _migrateWithRowID(rowid, info->getStatementForDeletingMigratedRow(),
-                             m_extraHandleStatement1) &&
-           _migrateWithRowID(
+    return _migrateWithRowID(
                rowid, info->getStatementForTamperingConflictType(onConflict),
-               m_extraHandleStatement2);
+               m_extraHandleStatement2) &&
+           _migrateWithRowID(rowid, info->getStatementForDeletingMigratedRow(),
+                             m_extraHandleStatement1);
 }
 
 bool MigrationHandle::_migrateWithRowID(const long long &rowid,
