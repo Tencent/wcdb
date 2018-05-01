@@ -49,13 +49,17 @@ MigrationTamperer::getAssociatedInfo() const
     return m_associatedInfo;
 }
 
-void MigrationTamperer::tamper(const Statement &statement)
+void MigrationTamperer::reset()
 {
-    //reset
     m_isTampered = false;
     m_isSourceTampering = true;
     m_associatedInfo = nullptr;
     m_isInsertTampering = false;
+}
+
+void MigrationTamperer::tamper(const Statement &statement)
+{
+    reset();
 
     m_sourceStatement = statement;
     doTamper(m_sourceStatement);

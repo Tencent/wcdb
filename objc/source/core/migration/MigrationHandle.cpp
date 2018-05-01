@@ -55,32 +55,37 @@ bool MigrationHandle::execute(const Statement &statement)
     }
     m_tamperer.tamper(statement);
     const Statement &source = m_tamperer.getSourceStatement();
-    if (!m_tamperer.isTampered()) {
-        return executeWithoutTampering(source);
-    }
-    if (!beginNestedTransaction()) {
-        return false;
-    }
     bool result = false;
-    switch (source.getStatementType()) {
-        case Statement::Type::Insert:
-            result = executeWithoutTampering(source) &&
-                     migrateWithRowID(
-                         getLastInsertedRowID(), m_tamperer.getAssociatedInfo(),
-                         source.getCOWLang().get<Lang::InsertSTMT>().type);
-            m_extraHandleStatement1.finalize();
-            m_extraHandleStatement2.finalize();
-            break;
-        default:
-            result = executeWithoutTampering(source) &&
-                     executeWithoutTampering(m_tamperer.getTamperedStatement());
-            break;
+    if (m_tamperer.isTampered()) {
+        if (beginNestedTransaction()) {
+            switch (source.getStatementType()) {
+                case Statement::Type::Insert:
+                    result =
+                        executeWithoutTampering(source) &&
+                        migrateWithRowID(
+                            getLastInsertedRowID(),
+                            m_tamperer.getAssociatedInfo(),
+                            source.getCOWLang().get<Lang::InsertSTMT>().type);
+                    m_extraHandleStatement1.finalize();
+                    m_extraHandleStatement2.finalize();
+                    break;
+                default:
+                    result = executeWithoutTampering(source) &&
+                             executeWithoutTampering(
+                                 m_tamperer.getTamperedStatement());
+                    break;
+            }
+            if (result) {
+                result = commitOrRollbackNestedTransaction();
+            } else {
+                rollbackNestedTransaction();
+            }
+        }
+    } else {
+        result = executeWithoutTampering(source);
     }
-    if (result) {
-        return commitOrRollbackNestedTransaction();
-    }
-    rollbackNestedTransaction();
-    return false;
+    m_tamperer.reset();
+    return result;
 }
 
 bool MigrationHandle::prepare(const Statement &statement)
@@ -202,6 +207,7 @@ void MigrationHandle::finalize()
     m_tamperedHandleStatement.finalize();
     m_extraHandleStatement1.finalize();
     m_extraHandleStatement2.finalize();
+    m_tamperer.reset();
     if (m_unlockShared) {
         m_unlockShared = false;
         m_setting.getSharedLock().unlockShared();

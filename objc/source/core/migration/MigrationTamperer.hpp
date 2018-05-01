@@ -38,6 +38,7 @@ public:
 
 #pragma mark - Tamper
 public:
+    void reset();
     void tamper(const Statement &statement);
 
     const Statement &getSourceStatement() const;
