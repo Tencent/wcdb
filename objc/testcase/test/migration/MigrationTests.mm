@@ -72,8 +72,8 @@
         WCTRowSelect *rowSelect = [[[_migrated prepareRowSelect] onResultColumn:WCTMaster.allResults.count() > 0] where:WCTMaster.name == viewName];
         WCDB::TableOrSubquery tempTable = WCDB::TableOrSubquery(WCTMaster.tempTableName).withSchema(WCDB::Schema::temp());
         rowSelect.statement.from(tempTable);
-        WCTValue *count = rowSelect.nextValue;
-        XCTAssertTrue(count.boolValue);
+        WCTValue *exists = rowSelect.nextValue;
+        XCTAssertTrue(exists.boolValue);
     }
 
     //already attached
@@ -110,8 +110,8 @@
         WCTRowSelect *rowSelect = [[[_migrated prepareRowSelect] onResultColumn:WCTMaster.allResults.count() == 0] where:WCTMaster.name == viewName];
         WCDB::TableOrSubquery tempTable = WCDB::TableOrSubquery(WCTMaster.tempTableName).withSchema(WCDB::Schema::temp());
         rowSelect.statement.from(tempTable);
-        WCTValue *count = rowSelect.nextValue;
-        XCTAssertTrue(count.boolValue);
+        WCTValue *unexists = rowSelect.nextValue;
+        XCTAssertTrue(unexists.boolValue);
     }
 
     //all data are migrated
