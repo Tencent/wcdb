@@ -41,24 +41,18 @@
 - (void)setUp
 {
     [super setUp];
+
     //Three tables: 1. migrating 2. migrated 3. not started
+    [_migrated setMigrateRowPerStep:1];
+    __block BOOL migrated = NO;
+    [_migrated setMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
+      migrated = YES;
+    }];
     BOOL done;
     XCTAssertTrue([_migrated stepMigration:done]);
-    NSString *migratingTable = [_migrated getValueOnResult:WCDB::Column("value") fromTable:@"WCDBKV" where:WCDB::Column("key") == "WCDBMigrating"].stringValue;
-    XCTAssertTrue([migratingTable isEqualToString:_table1] || [migratingTable isEqualToString:_migratedTable2] || [migratingTable isEqualToString:_migratedTable3]);
-    while (YES) {
-        WCTError *error;
-        if (![_migrated isTableExists:migratingTable withError:&error]) {
-            XCTAssertNil(error);
-            break;
-        }
-        XCTAssertTrue([_migrated stepMigration:done]);
-        if (done) {
-            break;
-        }
-    }
-    XCTAssertTrue([_migrated stepMigration:done]);
-    XCTAssertTrue([_migrated stepMigration:done]);
+    XCTAssertFalse(done);
+    XCTAssertFalse(migrated);
+    [_migrated setMigratedCallback:nil];
 
     _greaterThan0Condition = TestCaseObject.variable1 > 0;
 
