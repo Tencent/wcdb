@@ -50,23 +50,21 @@ MigrationDatabase::databaseWithExistingPath(const std::string &path)
 }
 
 std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
-    const std::string &path,
-    const std::shared_ptr<MigrationSetting> &migrationInfos)
+    const std::string &path, const std::shared_ptr<MigrationSetting> &setting)
 {
     const HandlePools::Generator s_generator =
-        [&migrationInfos](
-            const std::string &path) -> std::shared_ptr<HandlePool> {
-        WCTAssert(migrationInfos, "Migration infos can't be null");
+        [&setting](const std::string &path) -> std::shared_ptr<HandlePool> {
+        WCTAssert(setting, "Migration setting can't be null");
         BuiltinConfig *builtinConfig = BuiltinConfig::shared();
-        if (migrationInfos->isSameDatabaseMigration()) {
+        if (setting->isSameDatabaseMigration()) {
             return std::shared_ptr<HandlePool>(new MigrationHandlePool(
-                path, builtinConfig->defaultConfigs, migrationInfos));
+                path, builtinConfig->defaultConfigs, setting));
         }
         Configs configs = builtinConfig->defaultConfigs;
         configs.setConfig(
-            MigrationBuiltinConfig::migrationWithSetting(migrationInfos.get()));
+            MigrationBuiltinConfig::migrationWithSetting(setting.get()));
         return std::shared_ptr<HandlePool>(
-            new MigrationHandlePool(path, configs, migrationInfos));
+            new MigrationHandlePool(path, configs, setting));
     };
 
     std::shared_ptr<Database> database(new MigrationDatabase(
@@ -76,7 +74,7 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
 #ifdef DEBUG
         WCTAssert(static_cast<MigrationDatabase *>(database.get())
                           ->m_migrationPool->getMigrationSetting()
-                          ->hash == migrationInfos->hash,
+                          ->hash == setting->hash,
                   "Migration info can't be changed after the very first "
                   "initialization.");
 #endif
@@ -100,6 +98,8 @@ bool MigrationDatabase::stepMigration(bool &done)
 #ifdef DEBUG
     WCTAssert(m_migrationPool->debug_checkMigratingThread(),
               "Migration stepping is not thread-safe.");
+    WCTAssert(!isInThreadedTransaction(),
+              "Migration can't run in a transaction.");
 #endif
     done = false;
     MigrationSetting *setting = m_migrationPool->getMigrationSetting();
@@ -178,7 +178,11 @@ bool MigrationDatabase::stepMigration(bool &done)
     }
     {
         LockGuard lockGuard(setting->getSharedLock());
-        if (migratedEve && !execute(info->getStatementForDroppingOldTable())) {
+        if (migratedEve &&
+            !runTransaction([this, &info](Handle *handle) -> bool {
+                return execute(info->getStatementForDroppingOldTable()) &&
+                       execute(info->getStatementForDroppingUnionedView());
+            })) {
             return false;
         }
         if (setting->markAsMigrated(info->targetTable)) {

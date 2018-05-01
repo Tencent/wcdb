@@ -35,12 +35,12 @@ public:
     static std::shared_ptr<Handle>
     handleWithPath(const std::string &path,
                    Tag tag,
-                   const std::shared_ptr<MigrationSetting> &infos);
+                   const std::shared_ptr<MigrationSetting> &setting);
 
 protected:
     MigrationHandle(const std::string &path,
                     Tag tag,
-                    const std::shared_ptr<MigrationSetting> &infos);
+                    const std::shared_ptr<MigrationSetting> &setting);
 
 #pragma mark - Override
 public:
@@ -70,7 +70,7 @@ protected:
 #ifdef DEBUG
     void debug_checkStatementLegal(const Statement &statement);
 #endif
-    std::shared_ptr<MigrationSetting> m_infos;
+    std::shared_ptr<MigrationSetting> m_setting;
 
 #pragma mark - Multiple Statements
 protected:

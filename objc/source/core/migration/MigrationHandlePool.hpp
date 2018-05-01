@@ -32,10 +32,9 @@ class MigrationHandlePool : public HandlePool {
 #pragma mark - Initialize
 public:
     friend class MigrationHandlePools;
-    MigrationHandlePool(
-        const std::string &path,
-        const Configs &configs,
-        const std::shared_ptr<MigrationSetting> &migrationInfos);
+    MigrationHandlePool(const std::string &path,
+                        const Configs &configs,
+                        const std::shared_ptr<MigrationSetting> &setting);
 
 #ifdef DEBUG
 public:
@@ -43,7 +42,7 @@ public:
 
 protected:
     std::atomic<std::thread::id> debug_m_migratingThreadId;
-    bool debug_checkInfosLegal();
+    bool debug_checkSettingLegal();
 #endif
 
 #pragma mark - Migration
@@ -51,7 +50,7 @@ public:
     MigrationSetting *getMigrationSetting() const;
 
 protected:
-    std::shared_ptr<MigrationSetting> m_infos;
+    std::shared_ptr<MigrationSetting> m_setting;
 
 #pragma mark - Override
 protected:

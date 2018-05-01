@@ -23,36 +23,37 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<Handle>
-MigrationHandle::handleWithPath(const std::string &path,
-                                Tag tag,
-                                const std::shared_ptr<MigrationSetting> &infos)
+std::shared_ptr<Handle> MigrationHandle::handleWithPath(
+    const std::string &path,
+    Tag tag,
+    const std::shared_ptr<MigrationSetting> &setting)
 {
-    return std::shared_ptr<Handle>(new MigrationHandle(path, tag, infos));
+    return std::shared_ptr<Handle>(new MigrationHandle(path, tag, setting));
 }
 
-MigrationHandle::MigrationHandle(const std::string &path,
-                                 Tag tag,
-                                 const std::shared_ptr<MigrationSetting> &infos)
+MigrationHandle::MigrationHandle(
+    const std::string &path,
+    Tag tag,
+    const std::shared_ptr<MigrationSetting> &setting)
     : Handle(path, tag)
-    , m_infos(infos)
+    , m_setting(setting)
     , m_unlockShared(false)
-    , m_tamperer(m_infos.get())
+    , m_tamperer(m_setting.get())
 {
 }
 
 #pragma mark - Override
 bool MigrationHandle::execute(const Statement &statement)
 {
-    if (m_infos->isMigrated()) {
+    if (m_setting->isMigrated()) {
         return executeWithoutTampering(statement);
     }
 #ifdef DEBUG
     debug_checkStatementLegal(statement);
 #endif
     //Avoid migration info and source table changed
-    SharedLockGuard lockGuard(m_infos->getSharedLock());
-    if (m_infos->isMigrated()) {
+    SharedLockGuard lockGuard(m_setting->getSharedLock());
+    if (m_setting->isMigrated()) {
         return executeWithoutTampering(statement);
     }
     m_tamperer.tamper(statement);
@@ -87,15 +88,15 @@ bool MigrationHandle::execute(const Statement &statement)
 
 bool MigrationHandle::prepare(const Statement &statement)
 {
-    if (m_infos->isMigrated()) {
+    if (m_setting->isMigrated()) {
         return prepareWithoutTampering(statement);
     }
 #ifdef DEBUG
     debug_checkStatementLegal(statement);
 #endif
     //Avoid migration info and source table changed
-    SharedLockGuard lockGuard(m_infos->getSharedLock());
-    if (m_infos->isMigrated()) {
+    SharedLockGuard lockGuard(m_setting->getSharedLock());
+    if (m_setting->isMigrated()) {
         return executeWithoutTampering(statement);
     }
     m_tamperer.tamper(statement);
@@ -113,7 +114,7 @@ bool MigrationHandle::prepare(const Statement &statement)
         return false;
     }
     m_unlockShared = true;
-    m_infos->getSharedLock().lockShared();
+    m_setting->getSharedLock().lockShared();
     return true;
 }
 
@@ -206,7 +207,7 @@ void MigrationHandle::finalize()
     m_extraHandleStatement2.finalize();
     if (m_unlockShared) {
         m_unlockShared = false;
-        m_infos->getSharedLock().unlockShared();
+        m_setting->getSharedLock().unlockShared();
     }
 }
 
@@ -217,8 +218,7 @@ bool MigrationHandle::migrateWithRowID(
     const Lang::InsertSTMT::Type &onConflict)
 {
 #ifdef DEBUG
-    WCTInnerAssert(info != nullptr && m_tamperer.isTampered() &&
-                   isInTransaction());
+    WCTInnerAssert(info != nullptr && isInTransaction());
 #endif
     return _migrateWithRowID(rowid, info->getStatementForDeletingMigratedRow(),
                              m_extraHandleStatement1) &&
@@ -256,7 +256,7 @@ bool MigrationHandle::prepareWithoutTampering(const Statement &statement)
 #ifdef DEBUG
 void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
 {
-    SharedLockGuard lockGuard(m_infos->getSharedLock());
+    SharedLockGuard lockGuard(m_setting->getSharedLock());
     switch (statement.getStatementType()) {
         case Statement::Type::AlterTable: {
             if (((const StatementAlterTable &) statement)
@@ -269,8 +269,8 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
                 !lang.schemaName.equal(Lang::mainSchema())) {
                 return;
             }
-            auto iter = m_infos->getInfos().find(lang.tableName.get());
-            WCTAssert(iter == m_infos->getInfos().end(),
+            auto iter = m_setting->getInfos().find(lang.tableName.get());
+            WCTAssert(iter == m_setting->getInfos().end(),
                       "Altering a column without default value on a migrating "
                       "table is not allowed yet.");
         } break;
@@ -280,12 +280,12 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
             if (!statementUpdate.isLimited()) {
                 return;
             }
-            auto iter = m_infos->getInfos().find(
+            auto iter = m_setting->getInfos().find(
                 statementUpdate.getCOWLang()
                     .get<Lang::UpdateSTMT>()
                     .qualifiedTableName.get<Lang::QualifiedTableName>()
                     .tableName.get());
-            WCTAssert(iter == m_infos->getInfos().end(),
+            WCTAssert(iter == m_setting->getInfos().end(),
                       "Updating with OrderBy/Limit/Offset on "
                       "a migrating table is not allowed yet.");
         } break;
@@ -295,12 +295,12 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
             if (!statementDelete.isLimited()) {
                 return;
             }
-            auto iter = m_infos->getInfos().find(
+            auto iter = m_setting->getInfos().find(
                 statementDelete.getCOWLang()
                     .get<Lang::DeleteSTMT>()
                     .qualifiedTableName.get<Lang::QualifiedTableName>()
                     .tableName.get());
-            WCTAssert(iter == m_infos->getInfos().end(),
+            WCTAssert(iter == m_setting->getInfos().end(),
                       "Deleting with OrderBy/Limit/Offset on "
                       "a migrating table is not allowed yet.");
         } break;

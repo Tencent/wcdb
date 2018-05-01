@@ -92,10 +92,7 @@ MigrationSetting::getSchemasForAttaching() const
 const std::map<std::string, std::shared_ptr<MigrationInfo>> &
 MigrationSetting::getInfos() const
 {
-//TODO refactor
-#ifdef DEBUG
-    WCTInnerAssert(m_lock.debug_isSharedLocked());
-#endif
+    //TODO refactor
     return m_infos;
 }
 

@@ -24,7 +24,6 @@ namespace WCDB {
 
 MigrationTamperer::MigrationTamperer(MigrationSetting *setting)
     : m_setting(setting)
-    , m_lockGuard(setting->getSharedLock())
     , m_isTampered(false)
     , m_infos(setting->getInfos())
     , m_associatedInfo(nullptr)
@@ -755,16 +754,16 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
     if ((schemaName.isNull() || schemaName.get() == Schema::main()) &&
         !tableName.empty()) {
         auto iter = m_infos.find(tableName.get());
-        if (m_isSelectTampering) {
-            tableName.assign(iter->second->unionedViewName);
-        } else {
-            if (iter != m_infos.end()) {
+        if (iter != m_infos.end()) {
+            if (m_isSelectTampering) {
+                tableName.assign(iter->second->unionedViewName);
+            } else {
                 tableName.assign(iter->second->sourceTable);
                 if (!iter->second->isSameDatabaseMigration()) {
                     schemaName.assign(iter->second->schema);
                 }
-                return true;
             }
+            return true;
         }
     }
     return false;

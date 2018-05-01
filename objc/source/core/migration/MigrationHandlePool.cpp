@@ -25,12 +25,12 @@ namespace WCDB {
 MigrationHandlePool::MigrationHandlePool(
     const std::string &path,
     const Configs &configs,
-    const std::shared_ptr<MigrationSetting> &migrationInfos)
-    : HandlePool(path, configs), m_infos(migrationInfos)
+    const std::shared_ptr<MigrationSetting> &setting)
+    : HandlePool(path, configs), m_setting(setting)
 {
 #ifdef DEBUG
     debug_m_migratingThreadId = std::thread::id();
-    WCTInnerAssert(debug_checkInfosLegal());
+    WCTInnerAssert(debug_checkSettingLegal());
 #endif
 }
 
@@ -43,13 +43,13 @@ bool MigrationHandlePool::debug_checkMigratingThread()
     return debug_m_migratingThreadId == std::this_thread::get_id();
 }
 
-bool MigrationHandlePool::debug_checkInfosLegal()
+bool MigrationHandlePool::debug_checkSettingLegal()
 {
-    if (!m_infos) {
+    if (!m_setting) {
         return false;
     }
-    if (!m_infos->isSameDatabaseMigration()) {
-        for (const auto &info : m_infos->getInfos()) {
+    if (!m_setting->isSameDatabaseMigration()) {
+        for (const auto &info : m_setting->getInfos()) {
             if (info.second->sourceDatabasePath == path) {
                 return false;
             }
@@ -62,13 +62,13 @@ bool MigrationHandlePool::debug_checkInfosLegal()
 #pragma mark - Migration
 MigrationSetting *MigrationHandlePool::getMigrationSetting() const
 {
-    return m_infos.get();
+    return m_setting.get();
 }
 
 #pragma mark - Override
 std::shared_ptr<Handle> MigrationHandlePool::generateHandle()
 {
-    return MigrationHandle::handleWithPath(path, getTag(), m_infos);
+    return MigrationHandle::handleWithPath(path, getTag(), m_setting);
 }
 
 } //namespace WCDB
