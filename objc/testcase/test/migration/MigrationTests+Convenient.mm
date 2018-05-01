@@ -1182,4 +1182,10 @@
     XCTAssertTrue([results isEqualToTestCaseObjects:expected]);
 }
 
+- (void)test_aggregate
+{
+    WCTValue *count = [_migrated getValueOnResult:TestCaseObject.allResults.count() fromTable:_migratedTableName];
+    XCTAssertEqual(count.integer32Value, _preInserted.count);
+}
+
 @end

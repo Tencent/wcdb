@@ -417,4 +417,18 @@
     [self delete_where_test:_migratedTable3 withPreInsertedObjects:_preInsertObjects3];
 }
 
+- (void)get_aggregate_with_table:(NSString *)tableName
+                        expected:(unsigned long)expected
+{
+    WCTValue *count = [_migrated getValueOnResult:TestCaseObject.allResults.count() fromTable:tableName];
+    XCTAssertEqual(count.integer32Value, expected);
+}
+
+- (void)test_aggregate
+{
+    [self get_aggregate_with_table:_table1 expected:_preInsertObjects1.count];
+    [self get_aggregate_with_table:_migratedTable2 expected:_preInsertObjects2.count];
+    [self get_aggregate_with_table:_migratedTable3 expected:_preInsertObjects3.count];
+}
+
 @end
