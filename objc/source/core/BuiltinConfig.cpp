@@ -42,19 +42,20 @@ BuiltinConfig::BuiltinConfig()
     , m_timedQueue(2)
     , defaultConfigs({trace, basic, checkpoint})
 {
-    Dispatch::async(
-        "com.Tencent.WCDB.Checkpoint",
-        [](const std::atomic<bool> &stop) {
-            if (stop.load()) {
-                return;
-            }
-            BuiltinConfig::shared()->loopTimedQueue(stop);
-        },
-        []() {
-            //TODO: find out why it crashs sometimes while exiting.
-            //Since Dispatch::async will wait until the callback done, it's no need to wait here.
-            BuiltinConfig::shared()->stopTimedQueue();
-        });
+    Dispatch::async("com.Tencent.WCDB.Checkpoint",
+                    [](const std::atomic<bool> &stop) {
+                        if (stop.load()) {
+                            return;
+                        }
+                        BuiltinConfig::shared()->loopTimedQueue(stop);
+                    },
+                    []() { BuiltinConfig::shared()->stopTimedQueue(); });
+}
+
+BuiltinConfig::~BuiltinConfig()
+{
+    stopTimedQueue();
+    m_timedQueue.waitUntilDone();
 }
 
 bool BuiltinConfig::basicConfig(Handle *handle)

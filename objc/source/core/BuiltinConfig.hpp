@@ -60,6 +60,7 @@ public:
 
 protected:
     BuiltinConfig();
+    ~BuiltinConfig();
 
     TimedQueue<std::string, const int> m_timedQueue;
 

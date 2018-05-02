@@ -42,6 +42,7 @@ public:
 
 protected:
     ExitServer();
+    ~ExitServer();
     void notify();
 
     Token m_token;
