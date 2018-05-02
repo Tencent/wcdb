@@ -26,11 +26,7 @@ ExitServer *ExitServer::shared()
 {
     static ExitServer s_exitSender;
     static std::once_flag s_flag;
-    std::call_once(s_flag, []() {
-        atexit([]() {
-            s_exitSender.notify();
-        });
-    });
+    std::call_once(s_flag, []() { atexit([]() { s_exitSender.notify(); }); });
     return &s_exitSender;
 }
 
