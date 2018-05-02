@@ -147,7 +147,7 @@ bool BuiltinConfig::checkpointConfig(Handle *handle)
 {
     handle->setCommittedHook(
         [](Handle *handle, int pages, void *) {
-            if (pages > 1000) {
+            if (pages > 100) {
                 BuiltinConfig::shared()->m_timedQueue.reQueue(handle->path,
                                                               pages);
             }
@@ -176,7 +176,7 @@ void BuiltinConfig::loopTimedQueue(const std::atomic<bool> &stop)
             return;
         }
         bool result = database->execute(s_checkpointPassive);
-        if (result && pages > 5000 && !stop.load()) {
+        if (result && pages > 1000 && !stop.load()) {
             //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
             //As a result, checkpoint process will not block the database too long.
             static const StatementPragma s_checkpointTruncate =
