@@ -82,8 +82,15 @@ public:
         m_cond.notify_one();
     }
 
+    void waitUntilDone()
+    {
+        while (m_running.load())
+            ;
+    }
+
     void loop(const ExpiredCallback &onElementExpired)
     {
+        m_running.store(true);
         while (true) {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
             if (m_stop) {
@@ -106,6 +113,7 @@ public:
             onElementExpired(expired.key, expired.info);
             lockGuard.lock();
         }
+        m_running.store(false);
     }
 
 protected:
@@ -129,6 +137,7 @@ protected:
     std::mutex m_mutex;
     std::chrono::microseconds m_delay;
     bool m_stop;
+    std::atomic<bool> m_running;
 };
 
 } //namespace WCDB
