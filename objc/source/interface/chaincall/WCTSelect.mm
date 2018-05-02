@@ -81,8 +81,8 @@
         [self doAutoFinalize:YES];
         return nil;
     }
-    BOOL done;
-    id object;
+    BOOL done = NO;
+    id object = nil;
     if (!_properties.empty()) {
         object = [self nextObjectOnProperties:_properties orDone:done];
     } else {

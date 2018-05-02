@@ -1091,7 +1091,7 @@
     if (![self prepare:statement]) {
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     WCTValue *value = [self nextValueAtIndex:0 orDone:done];
     [self finalizeStatement];
     return value;
@@ -1102,7 +1102,7 @@
     if (![self prepare:statement]) {
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     WCTOneRow *row = [self nextRowOrDone:done];
     [self finalizeStatement];
     return row;
@@ -1121,7 +1121,7 @@
     if (![self prepare:statement]) {
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     WCTValue *value = [self nextValueAtIndex:index orDone:done];
     [self finalizeStatement];
     return value;
@@ -1149,7 +1149,7 @@
     if (![self prepare:statement]) {
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     id object = [self nextObjectOfClass:cls orDone:done];
     [self finalizeStatement];
     return object;
@@ -1170,7 +1170,7 @@
     if (![self prepare:statement]) {
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     id object = [self nextObjectOnProperties:properties orDone:done];
     [self finalizeStatement];
     return object;

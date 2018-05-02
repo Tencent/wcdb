@@ -55,6 +55,7 @@ void MigrationTamperer::reset()
     m_isSourceTampering = true;
     m_associatedInfo = nullptr;
     m_isInsertTampering = false;
+    m_isSelectTampering = false;
 }
 
 void MigrationTamperer::tamper(const Statement &statement)

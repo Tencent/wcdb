@@ -105,7 +105,7 @@ typedef struct MultiInfo MultiInfo;
     }
 
     WCTInnerAssert(_handle != nullptr);
-    bool done;
+    bool done = false;
     if (!_handle->step(done) || done) {
         [self doAutoFinalize:!done];
         return nil;
@@ -128,7 +128,7 @@ typedef struct MultiInfo MultiInfo;
     }
 
     WCTInnerAssert(_handle != nullptr);
-    bool done;
+    bool done = false;
     if (!_handle->step(done) || done) {
         [self doAutoFinalize:!done];
         return nil;

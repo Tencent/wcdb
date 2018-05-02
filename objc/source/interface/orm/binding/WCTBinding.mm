@@ -60,7 +60,7 @@ void WCTBinding::initialize()
 
     for (unsigned int i = 0; i < methodCount; i++) {
         Method method = methods[i];
-        NSString *selName = [NSString stringWithUTF8String:sel_getName(method_getName(method))];
+        NSString *selName = NSStringFromSelector(method_getName(method));
         if (![selName hasPrefix:prefix]) {
             continue;
         }

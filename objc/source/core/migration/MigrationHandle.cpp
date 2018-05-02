@@ -251,7 +251,7 @@ bool MigrationHandle::_migrateWithRowID(const long long &rowid,
                                         HandleStatement &handleStatement)
 {
     handleStatement.bindInteger64(rowid, 1);
-    bool done;
+    bool done = false;
     bool result = Handle::step(handleStatement, done);
     handleStatement.reset();
     return result;

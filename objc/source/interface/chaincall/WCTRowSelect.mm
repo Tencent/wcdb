@@ -72,7 +72,7 @@
         [self doAutoFinalize:YES];
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     WCTOneRow *row = [self nextRowOrDone:done];
     if (!row || _finalizeImmediately) {
         [self doAutoFinalize:!done];
@@ -107,7 +107,7 @@
         [self doAutoFinalize:YES];
         return nil;
     }
-    BOOL done;
+    BOOL done = NO;
     WCTValue *value = [self nextValueAtIndex:index orDone:done];
     if (!value || _finalizeImmediately) {
         [self doAutoFinalize:!done];

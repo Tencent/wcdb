@@ -398,7 +398,7 @@
 {
     WCTHandleAssert(return nil;);
     NSMutableArray<WCTValue *> *values = [[NSMutableArray<WCTValue *> alloc] init];
-    bool done;
+    bool done = false;
     while (_handle->step(done) && !done) {
         [values addObject:[self getValueAtIndex:index]];
     }
@@ -420,7 +420,7 @@
 {
     WCTHandleAssert(return nil;);
     NSMutableArray<WCTOneRow *> *rows = [[NSMutableArray<WCTOneRow *> alloc] init];
-    bool done;
+    bool done = false;
     while (_handle->step(done) && !done) {
         [rows addObject:[self getRow]];
     }
@@ -469,7 +469,7 @@
 {
     WCTHandleAssert(return nil;);
     NSMutableArray<WCTObject *> *objects = [[NSMutableArray<WCTObject *> alloc] init];
-    bool done;
+    bool done = false;
     while (_handle->step(done) && !done) {
         [objects addObject:[self getObjectOfClass:cls onProperties:properties]];
     }

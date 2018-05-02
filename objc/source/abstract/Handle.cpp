@@ -354,7 +354,7 @@ std::pair<bool, std::set<std::string>>
 Handle::getUnorderedValues(const Statement &statement, int index)
 {
     if (Handle::prepare(statement)) {
-        bool done;
+        bool done = false;
         std::set<std::string> values;
         while (Handle::step(done) && !done) {
             values.insert(getText(index));
