@@ -82,16 +82,16 @@
     _migrationDatabase->asyncMigration();
 }
 
-- (void)setMigratedCallback:(WCTMigratedBlock)onMigrated
+- (void)setTableMigratedCallback:(WCTTableMigratedBlock)onMigrated
 {
-    WCDB::MigrationSetting::MigratedCallback callback = nullptr;
+    WCDB::MigrationSetting::TableMigratedCallback callback = nullptr;
     if (onMigrated) {
         callback = [onMigrated](const WCDB::MigrationInfo *info) {
             WCTMigrationInfo *nsInfo = [[WCTMigrationInfo alloc] initWithWCDBMigrationInfo:info];
             onMigrated(nsInfo);
         };
     }
-    _migrationDatabase->getMigrationSetting()->setMigratedCallback(callback);
+    _migrationDatabase->getMigrationSetting()->setTableMigratedCallback(callback);
 }
 
 - (void)setMigrateRowPerStep:(int)row
@@ -116,9 +116,21 @@
     _migrationDatabase->getMigrationSetting()->setConflictCallback(callback);
 }
 
-- (void)asyncMigrationWithInterval:(double)interval
+- (void)asyncMigrationWhenStepped:(nonnull WCTSteppedBlock)onStepped
 {
-    _migrationDatabase->asyncMigration(interval);
+    WCDB::MigrationDatabase::SteppedCallback callback = nullptr;
+    if (onStepped) {
+        callback = [onStepped](bool result, bool done) -> bool {
+            return onStepped(result, done);
+        };
+    }
+    _migrationDatabase->asyncMigration(callback);
+}
+
+- (void)asyncMigrationWithInterval:(double)interval
+                     andRetryTimes:(int)retryTimes
+{
+    _migrationDatabase->asyncMigration(interval, retryTimes);
 }
 
 - (void)finalizeDatabase

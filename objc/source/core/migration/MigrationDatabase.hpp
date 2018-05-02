@@ -50,7 +50,9 @@ protected:
 public:
     bool stepMigration(bool &done);
 
-    void asyncMigration(double interval = 3.0);
+    typedef std::function<bool(bool, bool)> SteppedCallback;
+    void asyncMigration(double interval = 3.0, int retryTimes = 10);
+    void asyncMigration(const SteppedCallback &callback);
 
     MigrationSetting *getMigrationSetting();
 

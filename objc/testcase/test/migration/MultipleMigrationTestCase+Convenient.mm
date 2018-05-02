@@ -45,14 +45,14 @@
     //Three tables: 1. migrating 2. migrated 3. not started
     [_migrated setMigrateRowPerStep:1];
     __block BOOL migrated = NO;
-    [_migrated setMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
+    [_migrated setTableMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
       migrated = YES;
     }];
     BOOL done;
     XCTAssertTrue([_migrated stepMigration:done]);
     XCTAssertFalse(done);
     XCTAssertFalse(migrated);
-    [_migrated setMigratedCallback:nil];
+    [_migrated setTableMigratedCallback:nil];
 
     _greaterThan0Condition = TestCaseObject.variable1 > 0;
 

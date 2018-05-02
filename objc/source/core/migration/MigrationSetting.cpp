@@ -119,8 +119,6 @@ bool MigrationSetting::markAsMigrated(const std::string &table)
     if (m_onMigrated) {
         m_onMigrated(info.get());
         if (m_infos.empty()) {
-            //done
-            m_onMigrated(nullptr);
             //remove migration config
             m_pool->setConfig(
                 Config(MigrationBuiltinConfig::migrationConfigName()));
@@ -140,7 +138,8 @@ MigrationSetting::pickUpForMigration() const
     return m_infos.begin()->second;
 }
 
-void MigrationSetting::setMigratedCallback(const MigratedCallback &onMigrated)
+void MigrationSetting::setTableMigratedCallback(
+    const TableMigratedCallback &onMigrated)
 {
     LockGuard lockGuard(m_lock);
     m_onMigrated = onMigrated;

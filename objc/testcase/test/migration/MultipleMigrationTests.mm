@@ -69,22 +69,16 @@
 {
     BOOL done;
     __block BOOL tableTested = NO;
-    __block BOOL finishTested = NO;
     NSMutableSet *tables = [NSMutableSet setWithObjects:_table1, _migratedTable2, _migratedTable3, nil];
-    [_migrated setMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
-      if (info) {
-          if ([tables containsObject:info.targetTable]) {
-              tableTested = YES;
-          }
-      } else {
-          finishTested = YES;
+    [_migrated setTableMigratedCallback:^(WCTMigrationInfo *info) {
+      if ([tables containsObject:info.targetTable]) {
+          tableTested = YES;
       }
     }];
     while ([_migrated stepMigration:done] && !done)
         ;
     XCTAssertTrue(done);
     XCTAssertTrue(tableTested);
-    XCTAssertTrue(finishTested);
 }
 
 - (void)check_migrated
@@ -117,23 +111,32 @@
 
 - (void)test_async_migration
 {
-    __block BOOL done = NO;
+    __block NSMutableSet *expectedMigratedTable = [NSMutableSet setWithObjects:_table1, _migratedTable2, _migratedTable3, nil];
+    __block BOOL migrated = NO;
+
     __block NSCondition *condition = [[NSCondition alloc] init];
-    [condition lock];
-    [_migrated setMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
-      if (info == nil) {
+    [_migrated setTableMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
+      [condition lock];
+      [expectedMigratedTable removeObject:info.targetTable];
+      [condition unlock];
+    }];
+
+    [_migrated asyncMigrationWhenStepped:^BOOL(BOOL result, BOOL done) {
+      if (done) {
           [condition lock];
-          done = YES;
+          migrated = YES;
           [condition signal];
           [condition unlock];
       }
+      return YES;
     }];
-    [_migrated asyncMigrationWithInterval:0.1];
-    while (!done) {
+    [condition lock];
+    while (!migrated) {
         [condition waitUntilDate:[NSDate distantFuture]];
     }
     [condition unlock];
-    XCTAssertTrue(done);
+    XCTAssertTrue(migrated);
+    XCTAssertEqual(expectedMigratedTable.count, 0);
     [self check_migrated];
 }
 

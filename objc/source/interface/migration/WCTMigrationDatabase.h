@@ -24,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTMigrationConflictBlock)(WCTMigrationInfo *, long long);
 
-typedef void (^WCTMigratedBlock)(WCTMigrationInfo *_Nullable);
+typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
+
+typedef BOOL (^WCTSteppedBlock)(BOOL, BOOL);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
@@ -36,7 +38,7 @@ typedef void (^WCTMigratedBlock)(WCTMigrationInfo *_Nullable);
 
 - (nullable instancetype)initWithExistingPath:(NSString *)path;
 
-- (void)setMigratedCallback:(nullable WCTMigratedBlock)onMigrated;
+- (void)setTableMigratedCallback:(nullable WCTTableMigratedBlock)onMigrated;
 
 - (void)setMigrateRowPerStep:(int)row;
 
@@ -46,9 +48,10 @@ typedef void (^WCTMigratedBlock)(WCTMigrationInfo *_Nullable);
 
 - (BOOL)stepMigration:(BOOL &)done;
 
-- (void)asyncMigration;
+- (void)asyncMigrationWhenStepped:(nonnull WCTSteppedBlock)onStepped;
 
-- (void)asyncMigrationWithInterval:(double)interval;
+- (void)asyncMigrationWithInterval:(double)interval
+                     andRetryTimes:(int)retryTimes;
 
 @end
 

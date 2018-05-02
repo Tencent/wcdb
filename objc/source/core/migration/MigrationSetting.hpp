@@ -34,7 +34,7 @@ class MigrationHandlePool;
 class MigrationSetting {
 #pragma mark - Initialize
 public:
-    typedef std::function<void(const MigrationInfo *)> MigratedCallback;
+    typedef std::function<void(const MigrationInfo *)> TableMigratedCallback;
 
     MigrationSetting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
 
@@ -61,7 +61,7 @@ public:
 
     SharedLock &getSharedLock();
 
-    void setMigratedCallback(const MigratedCallback &onMigrated);
+    void setTableMigratedCallback(const TableMigratedCallback &onMigrated);
 
     void setMigrateRowPerStep(int row);
     int getMigrationRowPerStep() const;
@@ -85,7 +85,7 @@ protected:
     //target table -> infos
     std::map<std::string, std::shared_ptr<MigrationInfo>> m_infos;
 
-    MigratedCallback m_onMigrated;
+    TableMigratedCallback m_onMigrated;
     ConflictCallback m_onConflict;
     int m_rowPerStep;
 };

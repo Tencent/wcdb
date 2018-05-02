@@ -195,16 +195,14 @@ bool MigrationDatabase::stepMigration(bool &done)
     return true;
 }
 
-void MigrationDatabase::asyncMigration(double interval)
+void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
 {
     std::string name("com.Tencent.WCDB.Migration.");
     name.append(std::to_string(getTag()));
     std::string path = getPath();
-    Dispatch::async(name, [path, interval](const std::atomic<bool> &stop) {
+    Dispatch::async(name, [path, callback](const std::atomic<bool> &stop) {
         bool done = false;
         while (!done && !stop.load()) {
-            std::this_thread::sleep_for(
-                std::chrono::microseconds((long long) (interval * 1000000)));
             std::shared_ptr<Database> database =
                 MigrationDatabase::databaseWithExistingPath(path);
             if (!database) {
@@ -212,9 +210,30 @@ void MigrationDatabase::asyncMigration(double interval)
             }
             MigrationDatabase *migrationDatabase =
                 static_cast<MigrationDatabase *>(database.get());
-            //ignore error
-            migrationDatabase->stepMigration(done);
+            bool result = migrationDatabase->stepMigration(done);
+            database = nullptr;
+            if (stop.load()) {
+                break;
+            }
+            if (callback && !callback(result, done)) {
+                break;
+            }
         }
+    });
+}
+
+void MigrationDatabase::asyncMigration(double interval, int retryTimes)
+{
+    asyncMigration([interval, retryTimes](bool result,
+                                          bool done) mutable -> bool {
+        if (!done) {
+            if (!result && --retryTimes == 0) {
+                return false;
+            }
+            std::this_thread::sleep_for(
+                std::chrono::microseconds((long long) (interval * 1000000)));
+        }
+        return true;
     });
 }
 
