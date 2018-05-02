@@ -202,6 +202,7 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
     std::string path = getPath();
     Dispatch::async(name, [path, callback](const std::atomic<bool> &stop) {
         bool done = false;
+        bool result = false;
         while (!done && !stop.load()) {
             std::shared_ptr<Database> database =
                 MigrationDatabase::databaseWithExistingPath(path);
@@ -210,14 +211,17 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
             }
             MigrationDatabase *migrationDatabase =
                 static_cast<MigrationDatabase *>(database.get());
-            bool result = migrationDatabase->stepMigration(done);
+            result = migrationDatabase->stepMigration(done);
             database = nullptr;
-            if (stop.load()) {
+            if (done || stop.load()) {
                 break;
             }
-            if (callback && !callback(result, done)) {
+            if (callback && !callback(result, false)) {
                 break;
             }
+        }
+        if (callback) {
+            callback(result, true);
         }
     });
 }
