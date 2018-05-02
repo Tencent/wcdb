@@ -164,13 +164,13 @@
     _cls = TestCaseConflictObject.class;
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
 
-    NSString *expected = @"expected";
+    NSString *newVariable2 = @"newVariable2";
     int index = rand() % _preInserted.count;
     __block long long conflictRowID = -1;
 
     TestCaseConflictObject *object = [[TestCaseConflictObject alloc] init];
     object.isAutoIncrement = YES;
-    object.variable2 = expected;
+    object.variable2 = newVariable2;
     object.variable3 = _preInserted[index].variable3;
     XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
 
@@ -188,7 +188,40 @@
 
     TestCaseConflictObject *result = [_migrated getObjectOfClass:TestCaseConflictObject.class fromTable:_migratedTableName where:WCDB::Column::rowid() == conflictRowID];
     XCTAssertEqual(result.variable1, _preInserted[index].variable1);
-    XCTAssertTrue([result.variable2 isEqualToString:expected]);
+    XCTAssertTrue([result.variable2 isEqualToString:_preInserted[index].variable2]);
+}
+
+- (void)test_on_conflict_ignore
+{
+    _cls = TestCaseConflictObject.class;
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
+    NSString *expected = @"expected";
+    int index = rand() % _preInserted.count;
+    __block long long conflictRowID = -1;
+
+    TestCaseConflictObject *object = [[TestCaseConflictObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.variable2 = expected;
+    object.variable3 = _preInserted[index].variable3;
+    XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
+
+    [_migrated setConflictCallback:^BOOL(WCTMigrationInfo *info, long long rowid) {
+      conflictRowID = rowid;
+      return NO;
+    }];
+
+    BOOL done = NO;
+    while ([_migrated stepMigration:done] && !done)
+        ;
+    XCTAssertTrue(done);
+
+    XCTAssertEqual(conflictRowID, _preInserted[index].variable1);
+
+    WCTSelect *select = [[[[_migrated prepareSelect] ofClass:TestCaseConflictObject.class] fromTable:_migratedTableName] where:WCDB::Column::rowid() == conflictRowID];
+    TestCaseConflictObject *result = select.nextObject;
+    XCTAssertNil(result);
+    XCTAssertNil(select.error);
 }
 
 @end
