@@ -115,6 +115,7 @@ bool MigrationHandle::prepare(const Statement &statement)
         m_handleStatement.finalize();
         return false;
     }
+    WCTInnerAssert(m_unlockShared == false);
     m_unlockShared = true;
     m_setting.getSharedLock().lockShared();
     return true;
