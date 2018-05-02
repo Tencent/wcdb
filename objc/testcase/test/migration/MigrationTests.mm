@@ -224,4 +224,137 @@
     XCTAssertNil(select.error);
 }
 
+- (void)test_concurrent
+{
+    _count = 10000;
+
+    _preInserted = [TestCaseObject objectsWithCount:_count];
+
+    XCTAssertTrue([_database deleteFromTable:_tableName]);
+
+    XCTAssertTrue([_database insertObjects:_preInserted intoTable:_tableName]);
+
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
+    [_migrated setMigrateRowPerStep:100];
+
+    __block BOOL migrated = NO;
+    [_migrated asyncMigrationWhenStepped:^BOOL(BOOL result, BOOL done) {
+      [NSThread sleepForTimeInterval:0.1];
+      if (done) {
+          @synchronized(self)
+          {
+              migrated = YES;
+          }
+      }
+      return true;
+    }];
+
+    srand((unsigned int) time(NULL));
+    NSMutableArray *inserted = [[NSMutableArray alloc] initWithArray:_preInserted];
+    int testCount = 0;
+    while (YES) {
+        @synchronized(self)
+        {
+            if (migrated) {
+                break;
+            };
+        }
+        int from = rand() % _count;
+        int to = rand() % (_count - from);
+        if (to == 0) {
+            to = 1;
+        }
+        switch (rand() % 4) {
+            case 0: {
+                //select
+                NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
+                NSArray<TestCaseObject *> *expected = [inserted subarrayWithRange:NSMakeRange(from, to)];
+                XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
+            } break;
+            case 1: {
+                //insert
+                TestCaseObject *object = [TestCaseObject objectWithId:_count];
+                ++_count;
+                XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
+                [inserted addObject:object];
+            } break;
+            case 2: {
+                //replace
+                int index = rand() % _count;
+                TestCaseObject *object = [TestCaseObject objectWithId:index];
+                XCTAssertTrue([_migrated insertOrReplaceObject:object intoTable:_migratedTableName]);
+                inserted[index] = object;
+            } break;
+            case 3: {
+                //create table
+                NSString *tableName = [NSString stringWithFormat:@"%@_%d", _migratedTableName, rand()];
+                XCTAssertTrue([_migrated createTableAndIndexes:tableName withClass:_cls]);
+            } break;
+        }
+        ++testCount;
+    }
+    XCTAssertGreaterThan(testCount, 10);
+}
+
+- (void)test_concurrent_select
+{
+    XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
+
+    __block BOOL migrated = NO;
+    [_migrated asyncMigrationWhenStepped:^BOOL(BOOL result, BOOL done) {
+      [NSThread sleepForTimeInterval:1.0];
+      if (done) {
+          @synchronized(self)
+          {
+              migrated = YES;
+          }
+      }
+      return true;
+    }];
+
+    srand((unsigned int) time(NULL));
+    int maxTasks = 10;
+    __block int tasks = 0;
+    __block int testCount = 0;
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 4;
+    while (YES) {
+        @synchronized(self)
+        {
+            if (migrated) {
+                break;
+            };
+        }
+        BOOL wait = NO;
+        @synchronized(self)
+        {
+            if (++tasks == maxTasks) {
+                wait = YES;
+            }
+        }
+        [queue waitUntilAllOperationsAreFinished];
+        [queue addOperationWithBlock:^{
+          int from = rand() % _count;
+          int to = rand() % (_count - from);
+          if (to == 0) {
+              to = 1;
+          }
+          NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
+          NSArray<TestCaseObject *> *expected = [_preInserted subarrayWithRange:NSMakeRange(from, to)];
+          XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
+          @synchronized(self)
+          {
+              ++testCount;
+              --tasks;
+          }
+        }];
+    }
+    [queue waitUntilAllOperationsAreFinished];
+    @synchronized(self)
+    {
+        XCTAssertGreaterThan(testCount, 10);
+    }
+}
+
 @end
