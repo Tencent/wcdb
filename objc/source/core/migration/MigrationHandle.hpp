@@ -75,7 +75,6 @@ protected:
     bool prepareWithMultipleStatements(const Statement &statement,
                                        const Statement &tamperedStatement);
     bool _migrateWithRowID(const long long &rowid,
-                           const Statement &statement,
                            HandleStatement &handleStatement);
 
     HandleStatement m_tamperedHandleStatement;
@@ -83,6 +82,7 @@ protected:
 
     HandleStatement m_extraHandleStatement1;
     HandleStatement m_extraHandleStatement2;
+    Lang::InsertSTMT::Type m_associatedConflictType;
 
     MigrationTamperer m_tamperer;
 };

@@ -147,11 +147,19 @@ bool MigrationDatabase::stepMigration(bool &done)
                 //handle failure
                 if (migrationHandle->getResultCode() != SQLITE_CONSTRAINT) {
                     result = false;
-                } else if (setting->invokeConflictCallback(info.get(), rowid)) {
-                    //override
-                    result = migrationHandle->migrateWithRowID(
-                        rowid, info, Lang::InsertSTMT::Type::InsertOrReplace);
-                } //ignore conflict
+                } else {
+                    if (setting->invokeConflictCallback(info.get(), rowid)) {
+                        //override
+                        result = migrationHandle->migrateWithRowID(
+                            rowid, info,
+                            Lang::InsertSTMT::Type::InsertOrReplace);
+                    } else {
+                        //ignore conflict
+                        result = migrationHandle->migrateWithRowID(
+                            rowid, info,
+                            Lang::InsertSTMT::Type::InsertOrIgnore);
+                    }
+                }
                 if (!result) {
                     break;
                 }

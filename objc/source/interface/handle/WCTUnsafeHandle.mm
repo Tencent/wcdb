@@ -94,17 +94,16 @@
 {
     if (_handle) {
         _handle->finalize();
-    }
-    //Actually, _handle will not be null if _recyclableHandle is not null.
-    if (_recyclableHandle != nullptr && _handle) {
-        if (keepError) {
+        if (keepError && _handle->getResultCode() != 0) {
             _nonHandleError = [[WCTCoreError alloc] initWithHandleError:_handle->getError()];
         } else {
             _nonHandleError = nil;
         }
-        _handle = nullptr;
-        _recyclableHandle = nullptr;
+    } else {
+        _nonHandleError = nil;
     }
+    _recyclableHandle = nullptr;
+    _handle = nullptr;
 }
 
 #pragma mark - Life Cycle

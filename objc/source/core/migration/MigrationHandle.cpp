@@ -223,24 +223,36 @@ bool MigrationHandle::migrateWithRowID(
 #ifdef DEBUG
     WCTInnerAssert(info != nullptr && isInTransaction());
 #endif
-    return _migrateWithRowID(
-               rowid, info->getStatementForTamperingConflictType(onConflict),
-               m_extraHandleStatement2) &&
-           _migrateWithRowID(rowid, info->getStatementForDeletingMigratedRow(),
-                             m_extraHandleStatement1);
+    if (!m_extraHandleStatement1.isPrepared() ||
+        m_associatedConflictType != onConflict) {
+        if (!Handle::prepare(
+                info->getStatementForTamperingConflictType(onConflict),
+                m_extraHandleStatement1)) {
+            return false;
+        }
+    }
+    if (!m_extraHandleStatement2.isPrepared()) {
+        if (!Handle::prepare(info->getStatementForDeletingMigratedRow(),
+                             m_extraHandleStatement2)) {
+            m_extraHandleStatement1.finalize();
+            return false;
+        }
+    }
+    if (!_migrateWithRowID(rowid, m_extraHandleStatement1) ||
+        !_migrateWithRowID(rowid, m_extraHandleStatement2)) {
+        m_extraHandleStatement1.finalize();
+        m_extraHandleStatement2.finalize();
+        return false;
+    }
+    return true;
 }
 
 bool MigrationHandle::_migrateWithRowID(const long long &rowid,
-                                        const Statement &statement,
                                         HandleStatement &handleStatement)
 {
-    if (!handleStatement.isPrepared() &&
-        !Handle::prepare(statement, handleStatement)) {
-        return false;
-    }
     handleStatement.bindInteger64(rowid, 1);
     bool done;
-    bool result = handleStatement.step(done);
+    bool result = Handle::step(handleStatement, done);
     handleStatement.reset();
     return result;
 }
