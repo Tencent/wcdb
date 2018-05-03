@@ -45,7 +45,8 @@ final class ColumnTypeDecoder: Decoder {
             private let size: Int
             init<T>(of type: T.Type = T.self) {
                 size = MemoryLayout<T>.size
-                pointer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: size)
+                let alignment = MemoryLayout<T>.alignment
+                pointer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: alignment)
                 memset(pointer, 0, size)
             }
             func deallocate() {
