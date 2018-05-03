@@ -29,6 +29,7 @@
 namespace WCDB {
 
 //TODO refactor: classify each config. make Configs support inheritance
+//TODO opti: reQueue while checkpoint failed. Note that bigger pages should be used
 class BuiltinConfig {
 public:
     static BuiltinConfig *shared();
