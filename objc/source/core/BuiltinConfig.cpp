@@ -64,7 +64,6 @@ bool BuiltinConfig::basicConfig(Handle *handle)
         StatementPragma().pragma(Pragma::journalMode());
 
     do {
-#ifdef DEBUG
         if (handle->isReadonly()) {
             //Get Journal Mode
             WCDB_BREAK_IF_NOT(handle->prepare(s_getJournalMode));
@@ -79,7 +78,6 @@ bool BuiltinConfig::basicConfig(Handle *handle)
                 return false;);
             return true;
         }
-#endif //DEBUG
 
         //Get Locking Mode
         static const StatementPragma s_getLockingMode =
