@@ -24,6 +24,8 @@
 @interface NSArray (Reverse)
 - (NSArray *)reversed;
 - (NSArray *)sorted;
+- (BOOL)isEqualToObjects:(NSArray *)objects
+          withComparator:(BOOL (^)(id, id))comparator;
 @end
 
 #pragma mark - NSObject
@@ -40,6 +42,7 @@
 #pragma mark - NSData
 @interface NSData (Random)
 + (NSData *)randomData;
++ (NSData *)randomDataWithLength:(NSUInteger)length;
 + (NSData *)randomDataOtherThan:(NSData *)other;
 @end
 

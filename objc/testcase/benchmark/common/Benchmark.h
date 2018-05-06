@@ -22,38 +22,36 @@
 #import "BenchmarkObject+WCTTableCoding.h"
 #import "BenchmarkObject.h"
 #import "Config.h"
-#import "RandomData.h"
-#import "WCTTestCase.h"
+#import "Convenience.h"
+#import "TestCase.h"
 
-@interface BaseBenchmark : WCTTestCase
+@interface Benchmark : TestCase
 
 @property(readonly) Config *config;
 
 @property(readonly) WCTDatabase *database;
 
-@property(readonly) RandomData *randomGenerator;
-
 @property(readonly) NSArray<BenchmarkObject *> *objects;
 
-- (NSString *)getTableName;
-- (NSString *)getTableNameWithIndex:(const int &)index;
+- (NSString *)getTableNameWithIndex:(int)index;
 
-- (void)setUpWithPreCreateTable;
-- (void)setUpWithPreCreateTable:(const int &)count;
+- (void)setUpDatabase;
 
-- (void)setUpWithPreInsertObjects:(const int &)count;
-- (void)setUpWithPreInsertObjects:(const int &)count intoIndexedTable:(const int &)index;
+- (void)tearDownDatabase;
 
-- (void)setUpWithPreCreateObject:(const int &)count;
+- (void)setUpWithPreCreateTable:(int)count;
+
+- (void)setUpWithPreInsertObjects:(NSArray<BenchmarkObject *> *)objects intoTable:(NSString *)tableName;
+
+- (void)setUpWithPreCreateObject:(int)count;
 
 - (void)setUpDatabaseCache;
 
 - (void)tearDownDatabaseCache;
 
-- (void)tearDownDatabase;
-
-- (void)mesasure:(void (^)(void))setUpBlock
-             for:(void (^)(void))block 
-checkCorrectness:(void (^)(void))correctnessBlock;
+- (void)measure:(void (^)(void))block
+               setUp:(void (^)(void))setUpBlock
+            tearDown:(void (^)(void))tearDownBlock
+    checkCorrectness:(void (^)(void))correctnessBlock;
 
 @end

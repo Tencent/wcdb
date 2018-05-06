@@ -18,16 +18,23 @@
  * limitations under the License.
  */
 
-#import "BaseMultithreadBenchmark.h"
+#import "Benchmark.h"
 
-@implementation BaseMultithreadBenchmark
+//TODO
+@interface RepairBenchmark : Benchmark
 
-- (void)setUp
+@end
+
+@implementation RepairBenchmark
+
+//Note that since backup will be run concurrently and in the background thread, test is not for the best performance but for a tolerable performance.
+- (void)test_backup
 {
-    [super setUp];
+}
 
-    _group = dispatch_group_create();
-    _queue = dispatch_queue_create(BaseMultithreadBenchmark.className.UTF8String, DISPATCH_QUEUE_CONCURRENT);
+//Note that since repair will usually be run in background thread with blocked UI, test is not for the best performance but for a tolerable performance.
+- (void)test_repair
+{
 }
 
 @end

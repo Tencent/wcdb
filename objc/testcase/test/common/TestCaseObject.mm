@@ -116,22 +116,6 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
                    }];
 }
 
-- (BOOL)isEqualToObjects:(NSArray *)objects
-          withComparator:(BOOL (^)(id, id))comparator
-{
-    if (self.count != objects.count) {
-        return NO;
-    }
-    for (int i = 0; i < self.count; ++i) {
-        id lhs = [self objectAtIndex:i];
-        id rhs = [objects objectAtIndex:i];
-        if (!comparator(lhs, rhs)) {
-            return NO;
-        }
-    }
-    return YES;
-}
-
 - (BOOL)isEqualToTestCaseObjects:(NSArray<NSObject<TestCaseObjectProtocol> *> *)objects
                     onProperties:(int)properties
 {

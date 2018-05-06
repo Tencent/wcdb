@@ -56,9 +56,6 @@ typedef NS_OPTIONS(NSUInteger, TestCaseObjectProperties) {
 
 @interface NSArray (TestCaseObject)
 
-- (BOOL)isEqualToObjects:(NSArray *)objects
-          withComparator:(BOOL (^)(id, id))comparator;
-
 - (BOOL)isEqualToTestCaseObjects:(NSArray *)objects;
 
 - (BOOL)isEqualToTestCaseObjects:(NSArray *)objects

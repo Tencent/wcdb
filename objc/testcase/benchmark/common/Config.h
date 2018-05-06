@@ -22,16 +22,12 @@
 
 @interface Config : NSObject
 
-@property(class, readonly) Config *defaultConfig;
+@property(assign) int valueLength;
 
-@property(readonly) int valueLength;
+@property(assign) int readCount;
+@property(assign) int writeCount;
+@property(assign) int batchWriteCount;
 
-@property(readonly) int randomSeed;
-
-@property(readonly) int readCount;
-@property(readonly) int writeCount;
-@property(readonly) int batchWriteCount;
-
-@property(readonly) int tableCount;
+@property(assign) int tableCount;
 
 @end

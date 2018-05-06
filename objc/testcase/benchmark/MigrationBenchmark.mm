@@ -18,33 +18,26 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject.h"
-#import "BenchmarkObject+WCTTableCoding.h"
-#import <WCDB/WCDB.h>
+#import "Benchmark.h"
 
-@interface BenchmarkObject ()
-@property(nonatomic, assign) int64_t key;
-@property(nonatomic, retain) NSData *value;
+//TODO
+@interface MigrationBenchmark : Benchmark
+
 @end
 
-@implementation BenchmarkObject
+//Note that nothing is different between a normal database and a migration database after migrated, tests here are not for the best performance but for a tolerable performance.
+@implementation MigrationBenchmark
 
-WCDB_IMPLEMENTATION(BenchmarkObject)
-WCDB_SYNTHESIZE(BenchmarkObject, key)
-WCDB_SYNTHESIZE(BenchmarkObject, value)
-
-- (instancetype)initWithKey:(int64_t)key andValue:(NSData *)value
+- (void)test_read_within_migration
 {
-    if (self = [super init]) {
-        _key = key;
-        _value = value;
-    }
-    return self;
 }
 
-+ (NSString *)name
+- (void)test_write_within_migration
 {
-    return NSStringFromClass(BenchmarkObject.class);
+}
+
+- (void)test_batch_write_within_migration
+{
 }
 
 @end

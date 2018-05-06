@@ -18,31 +18,23 @@
  * limitations under the License.
  */
 
-#import "BaseBenchmark.h"
+#import <Foundation/Foundation.h>
 
-@interface InitializationBenchmark : BaseBenchmark
+@interface BenchmarkObject : NSObject
+
+@property(class, readonly) NSString *name;
+
+- (instancetype)initWithKey:(int64_t)key andValue:(NSData *)value;
+
+@property(nonatomic, assign) int64_t key;
+@property(nonatomic, retain) NSData *value;
+
+- (BOOL)isEqualToBenchmarkObject:(BenchmarkObject *)other;
 
 @end
 
-@implementation InitializationBenchmark
+@interface NSArray (BenchmarkObject)
 
-- (void)setUp
-{
-    [super setUp];
-
-    [self setUpWithPreCreateTable:self.config.tableCount];
-}
-
-- (void)testInitialization
-{
-    [self mesasure:^{
-        [self tearDownDatabaseCache];
-    } for:^{
-        XCTAssertTrue(self.database.canOpen);
-    } checkCorrectness:^{
-        NSNumber *count = [self.database getValueOnResult:WCTMaster.AllResults.count() fromTable:WCTMaster.TableName];
-        XCTAssertEqual(count.intValue, self.config.tableCount);
-    }];
-}
+- (BOOL)isEqualToBenchmarkObjects:(NSArray<BenchmarkObject *> *)objects;
 
 @end

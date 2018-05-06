@@ -18,12 +18,6 @@
  * limitations under the License.
  */
 
-#import "TestCaseIndexedObject+WCTTableCoding.h"
-#import "TestCaseIndexedObject.h"
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
-#import "TestCaseVirtualObject+WCTTableCoding.h"
-#import "TestCaseVirtualObject.h"
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>

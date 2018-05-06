@@ -18,39 +18,8 @@
  * limitations under the License.
  */
 
-#import "BaseBenchmark.h"
+#import "Config.h"
 
-@interface BaselineReadBenchmark : BaseBenchmark
-
-@end
-
-@implementation BaselineReadBenchmark
-
-- (void)setUp
-{
-    [super setUp];
-
-    [self setUpWithPreCreateTable];
-
-    [self setUpWithPreInsertObjects:self.config.readCount];
-}
-
-- (void)testBaselineRead
-{
-    __block NSArray<BenchmarkObject *> *results = nil;
-    __block NSString *tableName = [self getTableName];
-
-    [self mesasure:^{
-        results = nil;
-
-        [self tearDownDatabaseCache];
-
-        [self setUpDatabaseCache];
-    } for:^{
-        results = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName];
-    } checkCorrectness:^{
-        XCTAssertEqual(results.count, self.config.readCount);
-    }];
-}
+@implementation Config
 
 @end

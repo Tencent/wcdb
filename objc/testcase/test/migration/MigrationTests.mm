@@ -250,7 +250,6 @@
       return true;
     }];
 
-    srand((unsigned int) time(NULL));
     NSMutableArray *inserted = [[NSMutableArray alloc] initWithArray:_preInserted];
     int testCount = 0;
     while (YES) {
@@ -313,7 +312,6 @@
       return true;
     }];
 
-    srand((unsigned int) time(NULL));
     int maxTasks = 10;
     __block int tasks = 0;
     __block int testCount = 0;

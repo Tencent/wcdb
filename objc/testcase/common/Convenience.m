@@ -56,6 +56,23 @@
     }
     return reversedArray;
 }
+
+- (BOOL)isEqualToObjects:(NSArray *)objects
+          withComparator:(BOOL (^)(id, id))comparator
+{
+    if (self.count != objects.count) {
+        return NO;
+    }
+    for (int i = 0; i < self.count; ++i) {
+        id lhs = [self objectAtIndex:i];
+        id rhs = [objects objectAtIndex:i];
+        if (!comparator(lhs, rhs)) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end
 
 @implementation NSMutableArray (Reverse)
@@ -81,13 +98,18 @@
 
 + (NSData *)randomData
 {
-    int length = rand() % 256;
-    NSMutableData *data = [NSMutableData data];
-    for (int i = 0; i < length; ++i) {
-        unsigned char random = rand() % sizeof(unsigned char) + 1;
+    return [self randomDataWithLength:256];
+}
+
++ (NSData *)randomDataWithLength:(NSUInteger)length
+{
+    static_assert(sizeof(unsigned char) == 1, "");
+    NSMutableData *data = [NSMutableData dataWithCapacity:length];
+    for (NSUInteger i = 0; i < length; ++i) {
+        unsigned char random = rand() & 0xff;
         [data appendBytes:&random length:sizeof(unsigned char)];
     }
-    return data;
+    return [NSData dataWithData:data];
 }
 
 + (NSData *)randomDataOtherThan:(NSData *)other
@@ -114,7 +136,7 @@
     for (int i = 0; i < length; ++i) {
         [randomString appendFormat:@"%c", alphanum[rand() % (sizeof(alphanum) - 1)]];
     }
-    return randomString;
+    return [NSString stringWithString:randomString];
 }
 
 @end
