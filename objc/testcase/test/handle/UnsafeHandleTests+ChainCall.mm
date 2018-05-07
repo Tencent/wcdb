@@ -37,7 +37,7 @@
 
 - (void)tearDown
 {
-    [_database setConfig:nil forName:_configName];
+    [_database removeConfigForName:_configName];
 
     [super tearDown];
 }
