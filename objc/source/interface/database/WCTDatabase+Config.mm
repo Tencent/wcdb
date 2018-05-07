@@ -42,30 +42,28 @@
         withOrder:(int)order
 {
     WCTRemedialAssert(name, "Config name can't be null.", return;);
-    if (nsInvocation) {
-        WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
-            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
-            BOOL result = nsInvocation(unsafeHandle);
-            [unsafeHandle finalizeDatabase];
-            return result;
-        };
-        _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString, order));
-    }
+    WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
+    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
+        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+        BOOL result = nsInvocation(unsafeHandle);
+        [unsafeHandle finalizeDatabase];
+        return result;
+    };
+    _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString, order));
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
           forName:(NSString *)name
 {
     WCTRemedialAssert(name, "Config name can't be null.", return;);
-    if (nsInvocation) {
-        WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
-            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
-            BOOL result = nsInvocation(unsafeHandle);
-            [unsafeHandle finalizeDatabase];
-            return result;
-        };
-        _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString));
-    }
+    WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
+    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
+        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+        BOOL result = nsInvocation(unsafeHandle);
+        [unsafeHandle finalizeDatabase];
+        return result;
+    };
+    _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString));
 }
 
 - (void)removeConfigForName:(NSString *)name
