@@ -73,6 +73,31 @@
     }
 }
 
+- (void)test_lazy_config
+{
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:NSStringFromSelector(_cmd)]];
+    __block int counter = 0;
+    {
+        WCDB::StatementPragma doSecureDelete = _doSecureDelete;
+        [database setConfig:^BOOL(WCTHandle *handle) {
+          ++counter;
+          return YES;
+        }
+                    forName:@"counter"];
+    }
+    {
+        WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
+        XCTAssertNotNil(isSecureDelete);
+        XCTAssertFalse(isSecureDelete.numberValue.boolValue);
+    }
+    {
+        WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
+        XCTAssertNotNil(isSecureDelete);
+        XCTAssertFalse(isSecureDelete.numberValue.boolValue);
+    }
+    XCTAssertEqual(counter, 1);
+}
+
 - (void)test_ordered_config
 {
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:NSStringFromSelector(_cmd)]];
