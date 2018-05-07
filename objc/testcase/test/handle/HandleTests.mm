@@ -42,7 +42,7 @@
 - (void)test_value_number
 {
     WCTValue *value = (WCTValue *) @123;
-    
+
     XCTAssertTrue([value.stringValue isEqualToString:@"123"]);
     XCTAssertTrue([value.dataValue isEqualToData:[@"123" dataUsingEncoding:NSASCIIStringEncoding]]);
     XCTAssertTrue([value.numberValue isEqualToNumber:@123]);
@@ -52,25 +52,25 @@
 {
     {
         WCTValue *value = (WCTValue *) @"123";
-        
+
         XCTAssertTrue([value.stringValue isEqualToString:@"123"]);
         XCTAssertTrue([value.dataValue isEqualToData:[@"123" dataUsingEncoding:NSASCIIStringEncoding]]);
         XCTAssertTrue([value.numberValue isEqualToNumber:@123]);
     }
     {
         NSString *string = @"123.456";
-        
+
         WCTValue *value = (WCTValue *) string;
-        
+
         XCTAssertTrue([value.stringValue isEqualToString:@"123.456"]);
         XCTAssertTrue([value.dataValue isEqualToData:[@"123.456" dataUsingEncoding:NSASCIIStringEncoding]]);
         XCTAssertTrue([value.numberValue isEqualToNumber:@123.456]);
     }
     {
         NSString *string = @"not a number";
-        
+
         WCTValue *value = (WCTValue *) string;
-        
+
         XCTAssertTrue([value.stringValue isEqualToString:@"not a number"]);
         XCTAssertTrue([value.dataValue isEqualToData:[@"not a number" dataUsingEncoding:NSASCIIStringEncoding]]);
         XCTAssertNil(value.numberValue);
@@ -80,7 +80,7 @@
 - (void)test_value_data
 {
     WCTValue *value = (WCTValue *) [@"not utf8 data" dataUsingEncoding:NSUTF32StringEncoding];
-    
+
     XCTAssertNil(value.stringValue);
     XCTAssertTrue([value.dataValue isEqualToData:[@"not utf8 data" dataUsingEncoding:NSUTF32StringEncoding]]);
     XCTAssertNil(value.numberValue);
@@ -88,15 +88,15 @@
 
 - (void)test_value_null
 {
-    WCTValue* value = (WCTValue*)[NSNull null];
-    
+    WCTValue *value = (WCTValue *) [NSNull null];
+
     XCTAssertNil(value.stringValue);
     XCTAssertNil(value.numberValue);
     XCTAssertNil(value.dataValue);
-    
-    XCTAssertEqual(((NSNumber*)value).intValue, 0);
-    XCTAssertEqual(((NSString*)value).length, 0);
-    XCTAssertEqual(((NSData*)value).length, 0);
+
+    XCTAssertEqual(((NSNumber *) value).intValue, 0);
+    XCTAssertEqual(((NSString *) value).length, 0);
+    XCTAssertEqual(((NSData *) value).length, 0);
 }
 
 @end
