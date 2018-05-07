@@ -18,36 +18,28 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
 #import <WCDB/WCTCommon.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTValue : NSObject
+@protocol WCTValueProtocol
 
-- (instancetype)initWithNumber:(nullable NSNumber *)value;
+- (WCTColumnType)valueType;
 
-- (instancetype)initWithString:(nullable NSString *)value;
+- (NSString *)stringValue;
 
-- (instancetype)initWithData:(nullable NSData *)value;
+- (NSNumber *)numberValue;
 
-@property(nonatomic, readonly) WCTColumnType type;
-
-- (BOOL)boolValue;
-
-- (int32_t)integer32Value;
-
-- (int64_t)integer64Value;
-
-- (double)doubleValue;
-
-- (nullable NSString *)stringValue;
-
-- (nullable NSNumber *)numberValue;
-
-- (nullable NSData *)dataValue;
-
-+ (nullable NSArray *)fundanmentalArrayFromValues:(nullable NSArray<WCTValue *> *)values;
+- (NSData *)dataValue;
 
 @end
+
+//It's tricky here. You can use `WCTValue` as any of `NSNumber`/`NSString`/`NSData`/`NSNull`, but it actually is a `NSProxy<WCTValueProtocol>` proxy.
+//Ones have no need to understand this difference unless he/she needs to go deep into these fundamental classes.
+typedef NSObject<WCTValueProtocol> WCTValue;
+typedef NSArray<WCTValue *> WCTOneRow;
+typedef NSArray<WCTValue *> WCTOneColumn;
+typedef NSArray<NSArray<WCTValue *> *> WCTColumnsXRows;
 
 NS_ASSUME_NONNULL_END

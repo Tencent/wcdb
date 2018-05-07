@@ -21,7 +21,7 @@
 #import <WCDB/NSData+NoCopyData.h>
 #import <WCDB/String.hpp>
 
-@implementation NSData (NoCopyData)
+@implementation NSData (WCDBNoCopyData)
 
 + (instancetype)dataWithNoCopyData:(const WCDB::NoCopyData &)noCopyData
 {

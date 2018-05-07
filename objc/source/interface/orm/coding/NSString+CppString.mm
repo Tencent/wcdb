@@ -21,7 +21,7 @@
 #import <WCDB/NSString+CppString.h>
 #import <WCDB/String.hpp>
 
-@implementation NSString (CppString)
+@implementation NSString (WCDBCppString)
 
 + (instancetype)stringWithCppString:(const std::string &)cppString
 {

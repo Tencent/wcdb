@@ -88,11 +88,6 @@ typedef NSDictionary<NSString *, WCTObject *>
 typedef NSObject<WCTColumnCoding> WCTColumnCodingValue;
 typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 
-@class WCTValue;
-typedef NSArray<WCTValue *> WCTOneRow;
-typedef NSArray<WCTValue *> WCTOneColumn;
-typedef NSArray<NSArray<WCTValue *> *> WCTColumnsXRows;
-
 #pragma mark - Error
 @class WCTError;
 @class WCTSQLiteError;

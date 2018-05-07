@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 @interface DatabaseTests_RepairKit : TestCase
 @end
@@ -65,7 +65,7 @@
     WCDB::StatementPragma pragma = WCDB::StatementPragma().pragma(WCDB::Pragma::pageSize());
     WCTValue *value = [_database getValueFromStatement:pragma];
     XCTAssertNotNil(value);
-    _pageSize = value.integer32Value;
+    _pageSize = value.numberValue.intValue;
     XCTAssertGreaterThan(_pageSize, 0);
     XCTAssertEqual(_pageSize >> 1 & _pageSize, 0);
 }

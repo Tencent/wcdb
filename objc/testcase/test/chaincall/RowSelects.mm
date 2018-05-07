@@ -51,7 +51,7 @@
                             if (lhs.count != 3) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -63,7 +63,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -86,12 +86,12 @@
     XCTAssertEqual(rows.count, _preInserted.count);
     for (int i = 0; i < rows.count; ++i) {
         XCTAssertEqual(rows[i].count, 6);
-        XCTAssertEqual(rows[i][0].integer32Value, _preInserted[i].variable1);
+        XCTAssertEqual(rows[i][0].numberValue.intValue, _preInserted[i].variable1);
         XCTAssertTrue([rows[i][1].stringValue isEqualToString:_preInserted[i].variable2]);
-        XCTAssertEqual(rows[i][2].doubleValue, _preInserted[i].variable3);
-        XCTAssertEqual(rows[i][3].integer32Value, object.variable1);
+        XCTAssertEqual(rows[i][2].numberValue.doubleValue, _preInserted[i].variable3);
+        XCTAssertEqual(rows[i][3].numberValue.intValue, object.variable1);
         XCTAssertTrue([rows[i][4].stringValue isEqualToString:object.variable2]);
-        XCTAssertEqual(rows[i][5].doubleValue, object.variable3);
+        XCTAssertEqual(rows[i][5].numberValue.doubleValue, object.variable3);
     }
 }
 
@@ -108,7 +108,7 @@
                             if (lhs.count != 3) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -117,7 +117,7 @@
     WCTOneColumn *column = [[[_rowSelect fromTable:_tableName] onResultColumns:TestCaseObject.variable3] allValues];
     XCTAssertTrue([column isEqualToObjects:_preInserted
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.doubleValue == rhs.variable3;
+                              return lhs.numberValue.doubleValue == rhs.variable3;
                             }]);
 }
 
@@ -131,7 +131,7 @@
     }
     XCTAssertTrue([column isEqualToObjects:_preInserted
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.doubleValue == rhs.variable3;
+                              return lhs.numberValue.doubleValue == rhs.variable3;
                             }]);
 }
 
@@ -145,7 +145,7 @@
     WCTOneColumn *column = [[[[[_rowSelect onResultColumns:TestCaseObject.variable3] fromTable:_tableName] groupBy:groupBy] having:having] allValues];
 
     XCTAssertEqual(column.count, 1);
-    XCTAssertEqual(column[0].doubleValue, 1);
+    XCTAssertEqual(column[0].numberValue.doubleValue, 1);
 }
 
 @end

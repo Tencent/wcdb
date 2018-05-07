@@ -20,6 +20,6 @@
 
 #import <WCDB/WCTORM.h>
 
-@interface NSObject (ColumnCoding) <WCTColumnCoding>
+@interface NSObject (WCTColumnCoding) <WCTColumnCoding>
 
 @end

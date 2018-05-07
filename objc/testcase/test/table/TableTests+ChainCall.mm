@@ -88,7 +88,7 @@
                             if (lhs.count != 3) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 

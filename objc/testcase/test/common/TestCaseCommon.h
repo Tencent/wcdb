@@ -18,21 +18,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/NSData+NoCopyData.h>
-#import <WCDB/WCTValue.h>
+#ifndef TestCaseCommon_h
+#define TestCaseCommon_h
 
-@interface WCTValue ()
+#import "CRUDTestCase.h"
+#import "TestCase.h"
+#import "TestCaseIndexedObject+WCTTableCoding.h"
+#import "TestCaseIndexedObject.h"
+#import "TestCaseObject+WCTTableCoding.h"
+#import "TestCaseObject.h"
+#import "TestCaseVirtualObject+WCTTableCoding.h"
+#import "TestCaseVirtualObject.h"
 
-- (instancetype)initWithNull;
-
-- (instancetype)initWithInteger32:(int32_t)value;
-
-- (instancetype)initWithInteger64:(int64_t)value;
-
-- (instancetype)initWithCString:(const char *)value;
-
-- (instancetype)initWithNoCopyData:(const WCDB::NoCopyData &)value;
-
-- (instancetype)initWithDouble:(double)value;
-
-@end
+#endif /* TestCaseCommon_h */

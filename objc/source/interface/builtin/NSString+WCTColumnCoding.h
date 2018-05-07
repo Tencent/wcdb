@@ -21,6 +21,6 @@
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTORM.h>
 
-@interface NSString (ColumnCoding) <WCTColumnCoding>
+@interface NSString (WCTColumnCoding) <WCTColumnCoding>
 
 @end

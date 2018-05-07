@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 @interface DatabaseTests_File : TestCase
 @end

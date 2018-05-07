@@ -18,8 +18,28 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTORM.h>
+#import <Foundation/Foundation.h>
 
-@interface NSData (WCTColumnCoding) <WCTColumnCoding>
+@interface WCTValueForwarder : NSObject
+
++ (WCTValueForwarder *)forwarder;
+
+- (BOOL)respondsToForwardSelector:(SEL)aSelector;
+
+@end
+
+@interface NSNumber (WCTValue) <WCTValueProtocol>
+
+@end
+
+@interface NSData (WCTValue) <WCTValueProtocol>
+
+@end
+
+@interface NSString (WCTValue) <WCTValueProtocol>
+
+@end
+
+@interface NSNull (WCTValue) <WCTValueProtocol>
 
 @end

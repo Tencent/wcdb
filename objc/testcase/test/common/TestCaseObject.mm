@@ -132,16 +132,14 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
 + (NSComparator)ValueComparator
 {
     return ^NSComparisonResult(WCTValue *lhs, WCTValue *rhs) {
-      assert([lhs isKindOfClass:WCTValue.class]);
-      assert([rhs isKindOfClass:WCTValue.class]);
-      if (lhs.type != rhs.type) {
-          if (lhs.type > rhs.type) {
+      if (lhs.valueType != rhs.valueType) {
+          if (lhs.valueType > rhs.valueType) {
               return NSOrderedDescending;
           } else {
               return NSOrderedAscending;
           }
       }
-      switch (lhs.type) {
+      switch (lhs.valueType) {
           case WCTColumnTypeNull:
               return NSOrderedSame;
           case WCTColumnTypeInteger32:

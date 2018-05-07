@@ -226,8 +226,8 @@
     WCTOneRow *row = [_migrated getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
                                       fromTable:_migratedTableName];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[0].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[0].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[0].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[0].variable3);
 }
 
 - (void)test_get_row_on_results_where
@@ -236,8 +236,8 @@
                                       fromTable:_migratedTableName
                                           where:_greaterThan0Condition];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[1].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[1].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[1].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[1].variable3);
 }
 
 - (void)test_get_row_on_results_orderBy
@@ -246,8 +246,8 @@
                                       fromTable:_migratedTableName
                                         orderBy:_descendingOrder];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted.lastObject.variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted.lastObject.variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted.lastObject.variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted.lastObject.variable3);
 }
 
 - (void)test_get_row_on_results_offset
@@ -256,8 +256,8 @@
                                       fromTable:_migratedTableName
                                          offset:_offset1];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[1].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[1].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[1].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[1].variable3);
 }
 
 - (void)test_get_row_on_results_where_orderBy
@@ -267,8 +267,8 @@
                                           where:_removeBothEndCondition
                                         orderBy:_descendingOrder];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[_preInserted.count - 2].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[_preInserted.count - 2].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[_preInserted.count - 2].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[_preInserted.count - 2].variable3);
 }
 
 - (void)test_get_row_on_results_where_offset
@@ -278,8 +278,8 @@
                                           where:_greaterThan0Condition
                                          offset:_offset1];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[2].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[2].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[2].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[2].variable3);
 }
 
 - (void)test_get_row_on_results_orderBy_offset
@@ -289,8 +289,8 @@
                                         orderBy:_descendingOrder
                                          offset:_offset1];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[_preInserted.count - 2].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[_preInserted.count - 2].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[_preInserted.count - 2].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[_preInserted.count - 2].variable3);
 }
 
 - (void)test_get_row_on_results_where_orderBy_offset
@@ -301,8 +301,8 @@
                                         orderBy:_descendingOrder
                                          offset:_offset1];
     XCTAssertEqual(row.count, 2);
-    XCTAssertEqual(row[0].integer32Value, _preInserted[_preInserted.count - 3].variable1);
-    XCTAssertEqual(row[1].doubleValue, _preInserted[_preInserted.count - 3].variable3);
+    XCTAssertEqual(row[0].numberValue.intValue, _preInserted[_preInserted.count - 3].variable1);
+    XCTAssertEqual(row[1].numberValue.doubleValue, _preInserted[_preInserted.count - 3].variable3);
 }
 
 #pragma mark - Get One Column
@@ -311,7 +311,7 @@
     WCTOneColumn *column = [_migrated getColumnOnResult:TestCaseObject.variable1 fromTable:_migratedTableName];
     XCTAssertTrue([column isEqualToObjects:_preInserted
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -324,7 +324,7 @@
     [result removeObjectAtIndex:0];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -336,7 +336,7 @@
     NSArray<TestCaseObject *> *result = _preInserted.reversed;
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -348,7 +348,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:[_preInserted objectAtIndex:0]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -364,7 +364,7 @@
     result = result.reversed;
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -377,7 +377,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -390,7 +390,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[_preInserted.count - 1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -403,7 +403,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -416,7 +416,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[_preInserted.count - 1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -433,7 +433,7 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -449,7 +449,7 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -468,7 +468,7 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.integer32Value == rhs.variable1;
+                              return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -477,7 +477,7 @@
 {
     WCTValue *value = [_migrated getValueOnResult:TestCaseObject.variable1
                                         fromTable:_migratedTableName];
-    XCTAssertEqual(value.integer32Value, _preInserted[0].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[0].variable1);
 }
 
 - (void)test_get_value_on_result_where
@@ -485,7 +485,7 @@
     WCTValue *value = [_migrated getValueOnResult:TestCaseObject.variable1
                                         fromTable:_migratedTableName
                                             where:_greaterThan0Condition];
-    XCTAssertEqual(value.integer32Value, _preInserted[1].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[1].variable1);
 }
 
 - (void)test_get_value_on_result_orderBy
@@ -493,7 +493,7 @@
     WCTValue *value = [_migrated getValueOnResult:TestCaseObject.variable1
                                         fromTable:_migratedTableName
                                           orderBy:_descendingOrder];
-    XCTAssertEqual(value.integer32Value, _preInserted.lastObject.variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted.lastObject.variable1);
 }
 
 - (void)test_get_value_on_result_offset
@@ -501,7 +501,7 @@
     WCTValue *value = [_migrated getValueOnResult:TestCaseObject.variable1
                                         fromTable:_migratedTableName
                                            offset:_offset1];
-    XCTAssertEqual(value.integer32Value, _preInserted[1].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[1].variable1);
 }
 
 - (void)test_get_value_on_result_where_orderBy
@@ -510,7 +510,7 @@
                                         fromTable:_migratedTableName
                                             where:_removeBothEndCondition
                                           orderBy:_descendingOrder];
-    XCTAssertEqual(value.integer32Value, _preInserted[_preInserted.count - 2].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[_preInserted.count - 2].variable1);
 }
 
 - (void)test_get_value_on_result_where_offset
@@ -519,7 +519,7 @@
                                         fromTable:_migratedTableName
                                             where:_greaterThan0Condition
                                            offset:_offset1];
-    XCTAssertEqual(value.integer32Value, _preInserted[2].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[2].variable1);
 }
 
 - (void)test_get_value_on_result_orderBy_offset
@@ -528,7 +528,7 @@
                                         fromTable:_migratedTableName
                                           orderBy:_descendingOrder
                                            offset:_offset1];
-    XCTAssertEqual(value.integer32Value, _preInserted[_preInserted.count - 2].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[_preInserted.count - 2].variable1);
 }
 
 - (void)test_get_value_on_result_where_orderBy_offset
@@ -538,7 +538,7 @@
                                             where:_removeBothEndCondition
                                           orderBy:_descendingOrder
                                            offset:_offset1];
-    XCTAssertEqual(value.integer32Value, _preInserted[_preInserted.count - 3].variable1);
+    XCTAssertEqual(value.numberValue.intValue, _preInserted[_preInserted.count - 3].variable1);
 }
 
 #pragma mark - Get Objects
@@ -812,7 +812,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -828,7 +828,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -843,7 +843,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -858,7 +858,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -877,7 +877,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -893,7 +893,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -909,7 +909,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -925,7 +925,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -941,7 +941,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -961,7 +961,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -980,7 +980,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -1002,7 +1002,7 @@
                             if (lhs.count != 2) {
                                 return NO;
                             }
-                            return lhs[0].integer32Value == rhs.variable1 && lhs[1].doubleValue == rhs.variable3;
+                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -1164,7 +1164,7 @@
 - (void)test_aggregate
 {
     WCTValue *count = [_migrated getValueOnResult:TestCaseObject.allResults.count() fromTable:_migratedTableName];
-    XCTAssertEqual(count.integer32Value, _preInserted.count);
+    XCTAssertEqual(count.numberValue.intValue, _preInserted.count);
 }
 
 @end

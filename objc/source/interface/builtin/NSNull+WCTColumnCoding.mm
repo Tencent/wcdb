@@ -20,9 +20,6 @@
 
 #import <WCDB/Interface.h>
 
-@interface NSNull (WCTColumnCoding) <WCTColumnCoding>
-@end
-
 @implementation NSNull (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(id)value

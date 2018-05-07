@@ -75,7 +75,7 @@
         WCDB::TableOrSubquery tempTable = WCDB::TableOrSubquery(WCTMaster.tempTableName).withSchema(WCDB::Schema::temp());
         rowSelect.statement.from(tempTable);
         WCTValue *exists = rowSelect.nextValue;
-        XCTAssertTrue(exists.boolValue);
+        XCTAssertTrue(exists.numberValue.boolValue);
     }
 
     //migration
@@ -96,7 +96,7 @@
         WCDB::TableOrSubquery tempTable = WCDB::TableOrSubquery(WCTMaster.tempTableName).withSchema(WCDB::Schema::temp());
         rowSelect.statement.from(tempTable);
         WCTValue *unexists = rowSelect.nextValue;
-        XCTAssertTrue(unexists.boolValue);
+        XCTAssertTrue(unexists.numberValue.boolValue);
     }
 
     //all data are migrated

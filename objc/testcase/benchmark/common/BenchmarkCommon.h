@@ -18,8 +18,12 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTORM.h>
+#ifndef BenchmarkCommon_h
+#define BenchmarkCommon_h
 
-@interface NSData (WCTColumnCoding) <WCTColumnCoding>
+#import "Benchmark.h"
+#import "BenchmarkObject+WCTTableCoding.h"
+#import "BenchmarkObject.h"
+#import "Config.h"
 
-@end
+#endif /* BenchmarkCommon_h */

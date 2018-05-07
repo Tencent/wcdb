@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import "BenchmarkCommon.h"
 
 @interface InitializationBenchmark : Benchmark
 

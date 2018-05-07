@@ -90,7 +90,7 @@
 {
     WCTValue *rowValue = [_migrated getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allResults.count()).from(WCTMaster.tableName.UTF8String).where(WCTMaster.name == indexName)];
     XCTAssertNotNil(rowValue);
-    return rowValue.boolValue;
+    return rowValue.numberValue.boolValue;
 }
 
 - (void)create_index_test:(NSString *)tableName
@@ -421,7 +421,7 @@
                         expected:(unsigned long)expected
 {
     WCTValue *count = [_migrated getValueOnResult:TestCaseObject.allResults.count() fromTable:tableName];
-    XCTAssertEqual(count.integer32Value, expected);
+    XCTAssertEqual(count.numberValue.intValue, expected);
 }
 
 - (void)test_aggregate

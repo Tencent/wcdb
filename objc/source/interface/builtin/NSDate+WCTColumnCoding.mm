@@ -22,7 +22,7 @@
 
 static BOOL s_compatible_for_1_0_x = NO;
 
-@implementation NSDate (ColumnCoding)
+@implementation NSDate (WCTColumnCoding)
 
 + (BOOL)compatible_for_1_0_x
 {

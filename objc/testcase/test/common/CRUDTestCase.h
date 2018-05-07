@@ -19,6 +19,8 @@
  */
 
 #import "TestCase.h"
+#import "TestCaseObject+WCTTableCoding.h"
+#import "TestCaseObject.h"
 
 @interface CRUDTestCase : TestCase {
 @protected

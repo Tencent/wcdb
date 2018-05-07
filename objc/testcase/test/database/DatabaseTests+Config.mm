@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 @interface DatabaseTests_Config : TestCase
 
@@ -57,7 +57,7 @@
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
         XCTAssertNotNil(isSecureDelete);
-        XCTAssertFalse(isSecureDelete.boolValue);
+        XCTAssertFalse(isSecureDelete.numberValue.boolValue);
     }
     {
         WCDB::StatementPragma doSecureDelete = _doSecureDelete;
@@ -69,7 +69,7 @@
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
         XCTAssertNotNil(isSecureDelete);
-        XCTAssertTrue(isSecureDelete.boolValue);
+        XCTAssertTrue(isSecureDelete.numberValue.boolValue);
     }
 }
 
@@ -147,7 +147,7 @@
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
         XCTAssertNotNil(isSecureDelete);
-        XCTAssertFalse(isSecureDelete.boolValue);
+        XCTAssertFalse(isSecureDelete.numberValue.boolValue);
     }
     {
         WCDB::StatementPragma doSecureDelete = _doSecureDelete;
@@ -159,7 +159,7 @@
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
         XCTAssertNotNil(isSecureDelete);
-        XCTAssertTrue(isSecureDelete.boolValue);
+        XCTAssertTrue(isSecureDelete.numberValue.boolValue);
     }
     {
         WCDB::StatementPragma doNotSecureDelete = _doNotSecureDelete;
@@ -171,7 +171,7 @@
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
         XCTAssertNotNil(isSecureDelete);
-        XCTAssertFalse(isSecureDelete.boolValue);
+        XCTAssertFalse(isSecureDelete.numberValue.boolValue);
     }
 }
 

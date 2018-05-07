@@ -58,7 +58,7 @@ WCDB_SYNTHESIZE_DEFAULT(ORMColumnCoding, arrayValue, nil)
     if (self.floatValue != object.floatValue) {
         return NO;
     }
-    if (self.doubleValue != object.doubleValue) {
+    if (self.numberValue.doubleValue != object.numberValue.doubleValue) {
         return NO;
     }
     if (self.stringValue != nil || object.stringValue != nil) {

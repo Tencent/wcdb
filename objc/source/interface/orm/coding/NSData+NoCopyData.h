@@ -23,7 +23,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSData (NoCopyData)
+@interface NSData (WCDBNoCopyData)
 
 + (instancetype)dataWithNoCopyData:(const WCDB::NoCopyData &)noCopyData;
 

@@ -23,7 +23,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSString (CppString)
+@interface NSString (WCDBCppString)
 
 + (instancetype)stringWithCppString:(const std::string &)cppString;
 

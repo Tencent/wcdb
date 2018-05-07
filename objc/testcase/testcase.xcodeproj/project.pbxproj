@@ -649,6 +649,8 @@
 		23E8283C209F48BB00807001 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23E8283E209F48C600807001 /* MigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationBenchmark.mm; sourceTree = "<group>"; };
 		23EABBE1206D07C200241F3B /* HandleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HandleTests.mm; sourceTree = "<group>"; };
+		23F70F9A20A0419000CCE3CD /* TestCaseCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseCommon.h; sourceTree = "<group>"; };
+		23F70F9C20A0421000CCE3CD /* BenchmarkCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BenchmarkCommon.h; sourceTree = "<group>"; };
 		23FEC481206B961C001E7A3B /* InsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InsertTests.mm; sourceTree = "<group>"; };
 		23FEC483206B9620001E7A3B /* UpdateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UpdateTests.mm; sourceTree = "<group>"; };
 		23FEC485206B9627001E7A3B /* DeleteTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DeleteTests.mm; sourceTree = "<group>"; };
@@ -1068,6 +1070,7 @@
 				238B509B209D5B3D00C78CC8 /* TestCaseIndexedObject+WCTTableCoding.h */,
 				238B509E209D5B3D00C78CC8 /* CRUDTestCase.h */,
 				238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */,
+				23F70F9A20A0419000CCE3CD /* TestCaseCommon.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -1082,6 +1085,7 @@
 				238B50D3209D5CDB00C78CC8 /* Config.m */,
 				238B50D6209D5CDB00C78CC8 /* Benchmark.h */,
 				238B50D2209D5CDB00C78CC8 /* Benchmark.mm */,
+				23F70F9C20A0421000CCE3CD /* BenchmarkCommon.h */,
 			);
 			path = common;
 			sourceTree = "<group>";

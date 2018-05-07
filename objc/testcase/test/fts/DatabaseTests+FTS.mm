@@ -20,7 +20,7 @@
 
 #import "FTSTestCaseObject+WCTTableCoding.h"
 #import "FTSTestCaseObject.h"
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 @interface DatabaseTests_FTS : TestCase
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 @interface DatabaseTests_Table : TestCase
 
@@ -107,7 +107,7 @@
 {
     WCTValue *rowValue = [_database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allResults.count()).from(WCTMaster.tableName.UTF8String).where(WCTMaster.name == indexName)];
     XCTAssertNotNil(rowValue);
-    return rowValue.boolValue;
+    return rowValue.numberValue.boolValue;
 }
 
 - (void)test_drop_index

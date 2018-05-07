@@ -140,3 +140,15 @@
 }
 
 @end
+
+@implementation NSNumber (Random)
+
++ (NSNumber *)randomNumber
+{
+    if (rand() % 2) {
+        return [NSNumber numberWithLongLong:rand()];
+    }
+    return [NSNumber numberWithDouble:rand() / (double) (RAND_MAX)];
+}
+
+@end

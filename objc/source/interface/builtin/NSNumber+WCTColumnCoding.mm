@@ -20,7 +20,7 @@
 
 #import <WCDB/Interface.h>
 
-@implementation NSNumber (ColumnCoding)
+@implementation NSNumber (WCTColumnCoding)
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {

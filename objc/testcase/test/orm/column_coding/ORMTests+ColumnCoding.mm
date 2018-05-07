@@ -20,7 +20,7 @@
 
 #import "ORMColumnCoding+WCTTableCoding.h"
 #import "ORMColumnCoding.h"
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 @interface ORMTests_ColumnCoding : TestCase
 

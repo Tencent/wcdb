@@ -177,7 +177,7 @@
                     }
                     case WCDB::ColumnType::Float: {
                         NSNumber *number = (NSNumber *) value;
-                        _handle->bindDouble(number.doubleValue, index);
+                        _handle->bindDouble(number.numberValue.doubleValue, index);
                         break;
                     }
                     case WCDB::ColumnType::Text: {
@@ -227,7 +227,7 @@
     } else if ([value isKindOfClass:NSNumber.class]) {
         NSNumber *number = (NSNumber *) value;
         if (CFNumberIsFloatType((CFNumberRef) number)) {
-            _handle->bindDouble(number.doubleValue, index);
+            _handle->bindDouble(number.numberValue.doubleValue, index);
         } else {
             if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
                 _handle->bindInteger32(number.intValue, index);
@@ -312,17 +312,17 @@
     WCTHandleAssert(return nil;);
     switch (_handle->getType(index)) {
         case WCDB::ColumnType::Integer32:
-            return [[WCTValue alloc] initWithInteger32:_handle->getInteger32(index)];
+            return [NSNumber numberWithInt:_handle->getInteger32(index)];
         case WCDB::ColumnType::Integer64:
-            return [[WCTValue alloc] initWithInteger64:_handle->getInteger64(index)];
+            return [NSNumber numberWithLongLong:_handle->getInteger64(index)];
         case WCDB::ColumnType::Float:
-            return [[WCTValue alloc] initWithDouble:_handle->getDouble(index)];
+            return [NSNumber numberWithDouble:_handle->getDouble(index)];
         case WCDB::ColumnType::Text:
-            return [[WCTValue alloc] initWithCString:_handle->getText(index)];
+            return [NSString stringWithUTF8String:_handle->getText(index)];
         case WCDB::ColumnType::BLOB:
-            return [[WCTValue alloc] initWithNoCopyData:_handle->getBLOB(index)];
+            return [NSData dataWithNoCopyData:_handle->getBLOB(index)];
         case WCDB::ColumnType::Null:
-            return [[WCTValue alloc] initWithNull];
+            return nil;
     }
 }
 
@@ -331,7 +331,8 @@
     WCTHandleAssert(return nil;);
     NSMutableArray<WCTValue *> *row = [[NSMutableArray<WCTValue *> alloc] init];
     for (int i = 0; i < _handle->getColumnCount(); ++i) {
-        [row addObject:[self getValueAtIndex:i]];
+        WCTValue *value = [self getValueAtIndex:i];
+        [row addObject:value ? value : [NSNull null]];
     }
     return row;
 }
@@ -400,7 +401,8 @@
     NSMutableArray<WCTValue *> *values = [[NSMutableArray<WCTValue *> alloc] init];
     bool done = false;
     while (_handle->step(done) && !done) {
-        [values addObject:[self getValueAtIndex:index]];
+        WCTValue *value = [self getValueAtIndex:index];
+        [values addObject:value ? value : [NSNull null]];
     }
     [self finalizeStatement];
     return done ? values : nil;

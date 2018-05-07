@@ -20,6 +20,6 @@
 
 #import <WCDB/WCTORM.h>
 
-@interface NSNull (ColumnCoding) <WCTColumnCoding>
+@interface NSNull (WCTColumnCoding) <WCTColumnCoding>
 
 @end

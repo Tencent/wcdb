@@ -50,3 +50,8 @@
 @interface NSString (Random)
 + (NSString *)randomString;
 @end
+
+#pragma mark - NSNumber
+@interface NSNumber (Random)
++ (NSNumber *)randomNumber;
+@end

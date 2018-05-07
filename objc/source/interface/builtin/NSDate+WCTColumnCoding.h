@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTORM.h>
 
-@interface NSDate (ColumnCoding) <WCTColumnCoding>
+@interface NSDate (WCTColumnCoding) <WCTColumnCoding>
 
 @property(class) BOOL compatible_for_1_0_x;
 

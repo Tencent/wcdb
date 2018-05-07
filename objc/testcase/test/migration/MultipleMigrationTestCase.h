@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import "TestCaseCommon.h"
 
 //database1.table1 -> migrated.table1
 //database2.table2 -> migrated.migratedTable2
