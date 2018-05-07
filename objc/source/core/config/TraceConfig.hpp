@@ -18,38 +18,36 @@
  * limitations under the License.
  */
 
-#ifndef ConfiguredHandle_hpp
-#define ConfiguredHandle_hpp
+#ifndef TraceConfig_hpp
+#define TraceConfig_hpp
 
-#include <WCDB/Abstract.h>
-#include <WCDB/Configs.hpp>
+#include <WCDB/Config.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class ConfiguredHandle {
+class TraceConfig : public Config {
 public:
-    ConfiguredHandle() = delete;
-    ConfiguredHandle(const ConfiguredHandle &) = delete;
-    ConfiguredHandle &operator=(const ConfiguredHandle &) = delete;
+    static std::shared_ptr<Config> config();
+    static constexpr const int order = INT_MIN;
 
-    static std::shared_ptr<ConfiguredHandle>
-    configuredHandle(const std::shared_ptr<Handle> &handle);
+    bool invoke(Handle *handle) const override;
 
-    bool configured(const std::shared_ptr<const Configs> &configs) const;
-    bool configure(const std::shared_ptr<const Configs> &configs);
-
-    Handle *getHandle() const;
+    void setPerformanceTrace(const Handle::PerformanceTraceCallback &trace);
+    void setSQLTrace(const Handle::SQLTraceCallback &trace);
 
 protected:
-    ConfiguredHandle(const std::shared_ptr<Handle> &handle);
-    std::shared_ptr<Handle> m_handle;
-    std::shared_ptr<const Configs> m_configs;
+    TraceConfig();
+    TraceConfig(const TraceConfig &) = delete;
+    TraceConfig &operator=(const TraceConfig &) = delete;
+
+    std::shared_ptr<Handle::PerformanceTraceCallback> m_performanceTrace;
+    std::shared_ptr<Handle::SQLTraceCallback> m_sqlTrace;
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* ConfiguredHandle_hpp */
+#endif /* TraceConfig_hpp */

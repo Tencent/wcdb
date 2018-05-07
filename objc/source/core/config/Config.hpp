@@ -18,28 +18,28 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
+#ifndef Config_hpp
+#define Config_hpp
 
 #include <WCDB/Abstract.h>
+#include <functional>
 
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreError.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
-#include <WCDB/TraceConfig.hpp>
+#pragma GCC visibility push(hidden)
 
-#include <WCDB/Migration.h>
+namespace WCDB {
 
-#endif /* Core_h */
+class Config {
+public:
+    Config(const std::string &name, int order); //Small numbers in front
+
+    virtual bool invoke(Handle *handle) const = 0;
+
+    const std::string name;
+    const int order;
+};
+
+} //namespace WCDB
+
+#pragma GCC visibility pop
+
+#endif /* Config_hpp */

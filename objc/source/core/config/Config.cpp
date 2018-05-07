@@ -18,28 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
+#include <WCDB/Core.h>
 
-#include <WCDB/Abstract.h>
+namespace WCDB {
 
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreError.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
-#include <WCDB/TraceConfig.hpp>
+Config::Config(const std::string &theName, int theOrder)
+    : name(theName), order(theOrder)
+{
+}
 
-#include <WCDB/Migration.h>
-
-#endif /* Core_h */
+} //namespace WCDB

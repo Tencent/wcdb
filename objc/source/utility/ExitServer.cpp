@@ -27,8 +27,8 @@ static bool s_exited = false;
 ExitServer *ExitServer::shared()
 {
     static ExitServer s_exitSender;
-    static std::once_flag s_flag;
-    std::call_once(s_flag, []() {
+    static std::once_flag s_once;
+    std::call_once(s_once, []() {
         atexit([]() {
             if (!s_exited) {
                 s_exitSender.notify();

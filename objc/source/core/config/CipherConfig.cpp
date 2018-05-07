@@ -18,42 +18,30 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.h>
+#include <WCDB/CipherConfig.hpp>
 
 namespace WCDB {
 
-std::shared_ptr<ConfiguredHandle>
-ConfiguredHandle::configuredHandle(const std::shared_ptr<Handle> &handle)
+std::shared_ptr<Config> CipherConfig::configWithKey(const NoCopyData &cipher,
+                                                    int pageSize)
 {
-    if (handle) {
-        return std::shared_ptr<ConfiguredHandle>(new ConfiguredHandle(handle));
-    }
-    return nullptr;
+    return std::shared_ptr<Config>(new CipherConfig(cipher, pageSize));
 }
 
-ConfiguredHandle::ConfiguredHandle(const std::shared_ptr<Handle> &handle)
-    : m_handle(handle)
+CipherConfig::CipherConfig(const NoCopyData &cipher, int pageSize)
+    : Config("cipher", CipherConfig::order)
+    , m_keys((unsigned char *) cipher.data,
+             (unsigned char *) cipher.data + cipher.size)
+    , m_pageSize(pageSize)
 {
 }
 
-bool ConfiguredHandle::configured(
-    const std::shared_ptr<const Configs> &configs) const
+bool CipherConfig::invoke(Handle *handle) const
 {
-    return m_configs->equal(configs);
-}
-
-bool ConfiguredHandle::configure(const std::shared_ptr<const Configs> &configs)
-{
-    if (configs->invoke(m_handle.get())) {
-        m_configs = configs;
-        return true;
-    }
-    return false;
-}
-
-Handle *ConfiguredHandle::getHandle() const
-{
-    return m_handle.get();
+    return handle->setCipherKey(m_keys.data(), (int) m_keys.size()) &&
+           handle->execute(StatementPragma()
+                               .pragma(Pragma::cipherPageSize())
+                               .to(m_pageSize));
 }
 
 } //namespace WCDB

@@ -120,8 +120,7 @@ bool MigrationSetting::markAsMigrated(const std::string &table)
         m_onMigrated(info.get());
         if (m_infos.empty()) {
             //remove migration config
-            m_pool->setConfig(
-                Config(MigrationBuiltinConfig::migrationConfigName()));
+            m_pool->removeConfig(MigrationConfig::name());
         }
     }
     return schemasChanged;

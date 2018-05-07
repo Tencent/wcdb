@@ -37,37 +37,41 @@
     _database->setCipher(cipherKey.noCopyData, cipherPageSize);
 }
 
-- (void)setConfig:(WCTConfigBlock)invoke
+- (void)setConfig:(WCTConfigBlock)nsInvocation
           forName:(NSString *)name
         withOrder:(int)order
 {
     WCTRemedialAssert(name, "Config name can't be null.", return;);
-    WCDB::Config::Callback callback = nullptr;
-    if (invoke) {
-        callback = [invoke, self](WCDB::Handle *handle) -> bool {
+    if (nsInvocation) {
+        WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
             WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
-            BOOL result = invoke(unsafeHandle);
+            BOOL result = nsInvocation(unsafeHandle);
             [unsafeHandle finalizeDatabase];
             return result;
         };
+        _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString, order));
     }
-    _database->setConfig(WCDB::Config(name.cppString, callback, order));
 }
 
-- (void)setConfig:(WCTConfigBlock)invoke
+- (void)setConfig:(WCTConfigBlock)nsInvocation
           forName:(NSString *)name
 {
     WCTRemedialAssert(name, "Config name can't be null.", return;);
-    WCDB::Config::Callback callback = nullptr;
-    if (invoke) {
-        callback = [invoke, self](WCDB::Handle *handle) -> bool {
+    if (nsInvocation) {
+        WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
             WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
-            BOOL result = invoke(unsafeHandle);
+            BOOL result = nsInvocation(unsafeHandle);
             [unsafeHandle finalizeDatabase];
             return result;
         };
+        _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString));
     }
-    _database->setConfig(WCDB::Config(name.cppString, callback));
+}
+
+- (void)removeConfigForName:(NSString *)name
+{
+    WCTRemedialAssert(name, "Config name can't be null.", return;);
+    _database->removeConfig(name.cppString);
 }
 
 @end

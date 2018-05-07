@@ -70,6 +70,8 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
 - (void)setConfig:(nullable WCTConfigBlock)config
           forName:(NSString *)name;
 
+- (void)removeConfigForName:(NSString *)name;
+
 @end
 
 NS_ASSUME_NONNULL_END

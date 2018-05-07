@@ -18,28 +18,46 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
-
-#include <WCDB/Abstract.h>
+#ifndef Configs_hpp
+#define Configs_hpp
 
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CipherConfig.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreError.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
 #include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
 #include <WCDB/TraceConfig.hpp>
 
-#include <WCDB/Migration.h>
+#pragma GCC visibility push(hidden)
 
-#endif /* Core_h */
+namespace WCDB {
+
+class Configs {
+public:
+    static std::shared_ptr<const Configs> default_();
+
+    static std::shared_ptr<const Configs>
+    configs(const std::list<std::shared_ptr<Config>> &configs);
+
+    std::shared_ptr<const Configs>
+    configsBySettingConfig(const std::shared_ptr<Config> &newConfig) const;
+    std::shared_ptr<const Configs>
+    configsByRemovingConfig(const std::string &names) const;
+
+    bool invoke(Handle *handle) const;
+
+    bool equal(const std::shared_ptr<const Configs> &configs) const;
+
+public:
+    Configs(const std::list<std::shared_ptr<Config>> &configs);
+    std::list<std::shared_ptr<Config>> m_configs;
+
+    void setConfig(const std::shared_ptr<Config> &config);
+    void removeConfig(const std::string &name);
+};
+
+#pragma GCC visibility pop
+
+} //namespace WCDB
+
+#endif /* Configs_hpp */

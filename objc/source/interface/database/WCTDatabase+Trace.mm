@@ -69,7 +69,7 @@
             trace(tag, array, (NSUInteger) cost);
         };
     }
-    WCDB::BuiltinConfig::shared()->setGlobalPerformanceTrace(callback);
+    static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::config().get())->setPerformanceTrace(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
@@ -80,7 +80,7 @@
             trace([NSString stringWithCppString:sql]);
         };
     }
-    WCDB::BuiltinConfig::shared()->setGlobalSQLTrace(callback);
+    static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::config().get())->setSQLTrace(callback);
 }
 
 + (WCTErrorTraceBlock)defaultErrorTracer

@@ -18,38 +18,38 @@
  * limitations under the License.
  */
 
-#ifndef ConfiguredHandle_hpp
-#define ConfiguredHandle_hpp
+#ifndef CheckpointConfig_hpp
+#define CheckpointConfig_hpp
 
-#include <WCDB/Abstract.h>
-#include <WCDB/Configs.hpp>
+#include <WCDB/Config.hpp>
+#include <WCDB/TimedQueue.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class ConfiguredHandle {
+class CheckpointConfig : public Config {
 public:
-    ConfiguredHandle() = delete;
-    ConfiguredHandle(const ConfiguredHandle &) = delete;
-    ConfiguredHandle &operator=(const ConfiguredHandle &) = delete;
+    static std::shared_ptr<Config> config();
+    static constexpr const int order = 1;
+    ~CheckpointConfig();
 
-    static std::shared_ptr<ConfiguredHandle>
-    configuredHandle(const std::shared_ptr<Handle> &handle);
-
-    bool configured(const std::shared_ptr<const Configs> &configs) const;
-    bool configure(const std::shared_ptr<const Configs> &configs);
-
-    Handle *getHandle() const;
+    bool invoke(Handle *handle) const override;
 
 protected:
-    ConfiguredHandle(const std::shared_ptr<Handle> &handle);
-    std::shared_ptr<Handle> m_handle;
-    std::shared_ptr<const Configs> m_configs;
+    CheckpointConfig();
+    CheckpointConfig(const CheckpointConfig &) = delete;
+    CheckpointConfig &operator=(const CheckpointConfig &) = delete;
+
+    TimedQueue<std::string, const int> m_timedQueue;
+
+    void loopQueue(const std::atomic<bool> &stop);
+    void reQueue(const std::string &path, int pages);
+    void blockedStopQueue();
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* ConfiguredHandle_hpp */
+#endif /* CheckpointConfig_hpp */

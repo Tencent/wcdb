@@ -18,38 +18,38 @@
  * limitations under the License.
  */
 
-#ifndef ConfiguredHandle_hpp
-#define ConfiguredHandle_hpp
+#ifndef MigrationConfig_hpp
+#define MigrationConfig_hpp
 
-#include <WCDB/Abstract.h>
-#include <WCDB/Configs.hpp>
+#include <WCDB/Config.hpp>
+#include <WCDB/MigrationSetting.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class ConfiguredHandle {
+class MigrationConfig : public Config {
 public:
-    ConfiguredHandle() = delete;
-    ConfiguredHandle(const ConfiguredHandle &) = delete;
-    ConfiguredHandle &operator=(const ConfiguredHandle &) = delete;
+    static std::shared_ptr<Config> configWithSetting(MigrationSetting *setting);
+    static constexpr const int order = INT_MIN + 4;
 
-    static std::shared_ptr<ConfiguredHandle>
-    configuredHandle(const std::shared_ptr<Handle> &handle);
+    static const std::string &name();
 
-    bool configured(const std::shared_ptr<const Configs> &configs) const;
-    bool configure(const std::shared_ptr<const Configs> &configs);
-
-    Handle *getHandle() const;
+    bool invoke(Handle *handle) const override;
 
 protected:
-    ConfiguredHandle(const std::shared_ptr<Handle> &handle);
-    std::shared_ptr<Handle> m_handle;
-    std::shared_ptr<const Configs> m_configs;
+    MigrationConfig(MigrationSetting *setting);
+    MigrationConfig(const MigrationConfig &) = delete;
+    MigrationConfig &operator=(const MigrationConfig &) = delete;
+
+    MigrationSetting *m_setting;
+
+    bool doAttachSchema(Handle *handle) const;
+    bool doCreateView(Handle *handle, bool &schemaChanged) const;
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* ConfiguredHandle_hpp */
+#endif /* MigrationConfig_hpp */

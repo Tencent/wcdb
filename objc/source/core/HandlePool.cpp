@@ -28,7 +28,8 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-HandlePool::HandlePool(const std::string &thePath, const Configs &configs)
+HandlePool::HandlePool(const std::string &thePath,
+                       const std::shared_ptr<const Configs> &configs)
     : path(thePath)
     , m_tag(HandleError::invalidTag)
     , m_configs(configs)
@@ -94,9 +95,14 @@ const CoreError &HandlePool::getThreadedError() const
 }
 
 #pragma mark - Config
-void HandlePool::setConfig(const Config &config)
+void HandlePool::setConfig(const std::shared_ptr<Config> &config)
 {
-    m_configs.setConfig(config);
+    m_configs = m_configs->configsBySettingConfig(config);
+}
+
+void HandlePool::removeConfig(const std::string &name)
+{
+    m_configs = m_configs->configsByRemovingConfig(name);
 }
 
 #pragma mark - Handle
@@ -234,7 +240,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
         return nullptr;
     }
     willConfigurateHandle(configuredHandle.get()->getHandle());
-    Configs configs = m_configs;
+    std::shared_ptr<const Configs> configs = m_configs;
     if (!configuredHandle->configured(configs) &&
         !configuredHandle->configure(configs)) {
         setThreadedError(configuredHandle->getHandle()->getError());
@@ -262,7 +268,6 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         return nullptr;
     }
     Handle *handle = configuredHandle->getHandle();
-    Configs configs = m_configs;
 
     if (m_aliveHandleCount == 0) {
         FileManager::shared()->createDirectoryWithIntermediateDirectories(
@@ -273,6 +278,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         return nullptr;
     }
     willConfigurateHandle(handle);
+    std::shared_ptr<const Configs> configs = m_configs;
     if (!configuredHandle->configure(configs)) {
         setThreadedError(handle->getError());
         return nullptr;

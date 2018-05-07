@@ -18,28 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
+#ifndef CipherConfig_hpp
+#define CipherConfig_hpp
 
-#include <WCDB/Abstract.h>
-
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreError.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
-#include <WCDB/TraceConfig.hpp>
 
-#include <WCDB/Migration.h>
+#pragma GCC visibility push(hidden)
 
-#endif /* Core_h */
+namespace WCDB {
+
+class CipherConfig : public Config {
+public:
+    static std::shared_ptr<Config> configWithKey(const NoCopyData &cipher,
+                                                 int pageSize);
+    static constexpr const int order = INT_MIN + 1;
+
+    bool invoke(Handle *handle) const override;
+
+protected:
+    CipherConfig(const NoCopyData &cipher, int pageSize);
+    CipherConfig() = delete;
+    CipherConfig(const CipherConfig &) = delete;
+    CipherConfig &operator=(const CipherConfig &) = delete;
+
+    std::vector<unsigned char> m_keys;
+    int m_pageSize;
+};
+
+} //namespace WCDB
+
+#pragma GCC visibility pop
+
+#endif /* CipherConfig_hpp */

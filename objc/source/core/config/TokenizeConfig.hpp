@@ -18,53 +18,33 @@
  * limitations under the License.
  */
 
-#ifndef Config_hpp
-#define Config_hpp
+#ifndef TokenizeConfig_hpp
+#define TokenizeConfig_hpp
 
-#include <WCDB/Abstract.h>
-#include <WCDB/CopyOnWriteList.hpp>
-#include <WCDB/Error.hpp>
-#include <WCDB/String.hpp>
-#include <functional>
-#include <list>
-#include <memory>
+#include <WCDB/Config.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class Config {
+class TokenizeConfig : public Config {
 public:
-    using Callback = std::function<bool(Handle *)>;
+    static std::shared_ptr<Config>
+    configWithName(const std::list<std::string> &names);
+    static constexpr int order = INT_MIN + 3;
 
-    Config(const std::string &theName,
-           const Callback &theCallback = nullptr,
-           int theOrder = 0); //Small numbers in front
+    bool invoke(Handle *handle) const override;
 
-    bool invoke(Handle *handle) const;
+protected:
+    TokenizeConfig(const std::list<std::string> &names);
+    TokenizeConfig(const TokenizeConfig &) = delete;
+    TokenizeConfig &operator=(const TokenizeConfig &) = delete;
 
-    const std::string name;
-    const Callback callback;
-    const int order;
-};
-
-class Configs {
-public:
-    Configs();
-    Configs(const std::list<Config> &configs);
-
-    void setConfig(const Config &config);
-
-    bool invoke(Handle *handle) const;
-
-    bool equal(const Configs &other) const;
-
-public:
-    CopyOnWriteList<Config> m_configs;
+    const std::list<std::string> m_names;
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* Config_hpp */
+#endif /* TokenizeConfig_hpp */

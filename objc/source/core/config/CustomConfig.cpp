@@ -18,28 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
-
-#include <WCDB/Abstract.h>
-
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreError.hpp>
 #include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
-#include <WCDB/TraceConfig.hpp>
 
-#include <WCDB/Migration.h>
+namespace WCDB {
 
-#endif /* Core_h */
+std::shared_ptr<Config> CustomConfig::config(const Invocation &invocation,
+                                             const std::string &name,
+                                             int order)
+{
+    return std::shared_ptr<Config>(new CustomConfig(invocation, name, order));
+}
+
+CustomConfig::CustomConfig(const Invocation &theInvocation,
+                           const std::string &theName,
+                           int theOrder)
+    : Config(theName, theOrder), invocation(theInvocation)
+{
+}
+
+bool CustomConfig::invoke(Handle *handle) const
+{
+    return invocation ? invocation(handle) : true;
+}
+
+} //namespace WCDB

@@ -18,38 +18,34 @@
  * limitations under the License.
  */
 
-#ifndef MigrationBuiltinConfig_hpp
-#define MigrationBuiltinConfig_hpp
+#ifndef CustomConfig_hpp
+#define CustomConfig_hpp
 
-#include <WCDB/BuiltinConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationSetting.hpp>
+#include <Config.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class MigrationBuiltinConfig {
+class CustomConfig : public Config {
 public:
-    enum Order : int {
-        Migration = INT_MIN + 4,
-    };
+    using Invocation = std::function<bool(Handle *)>;
 
-    // 1. Attach necessary schemas and detach unnecessary schemas
-    // 2. Create necessary views and drop unnecessary views
-    static const Config migrationWithSetting(MigrationSetting *setting);
-    static const std::string &migrationConfigName();
+    static std::shared_ptr<Config> config(const Invocation &invocation,
+                                          const std::string &name,
+                                          int order = 0);
 
-protected:
-    static bool doCreateView(Handle *handle,
-                             MigrationSetting *setting,
-                             bool &schemaChanged);
-    static bool doAttachSchema(Handle *handle, MigrationSetting *setting);
+    CustomConfig(const Invocation &invocation,
+                 const std::string &name,
+                 int order = 0);
+
+    bool invoke(Handle *handle) const override;
+
+    Invocation invocation;
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* MigrationBuiltinConfig_hpp */
+#endif /* CustomConfig_hpp */

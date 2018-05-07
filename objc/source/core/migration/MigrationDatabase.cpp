@@ -55,14 +55,13 @@ std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
 {
     const HandlePools::Generator s_generator =
         [&infos](const std::string &path) -> std::shared_ptr<HandlePool> {
-        std::shared_ptr<HandlePool> pool = MigrationHandlePool::pool(
-            path, BuiltinConfig::shared()->defaultConfigs, infos);
+        std::shared_ptr<HandlePool> pool =
+            MigrationHandlePool::pool(path, Configs::default_(), infos);
         if (pool) {
             MigrationHandlePool *migrationHandlePool =
                 static_cast<MigrationHandlePool *>(pool.get());
-            migrationHandlePool->setConfig(
-                MigrationBuiltinConfig::migrationWithSetting(
-                    migrationHandlePool->getMigrationSetting()));
+            migrationHandlePool->setConfig(MigrationConfig::configWithSetting(
+                migrationHandlePool->getMigrationSetting()));
         }
         return pool;
     };
@@ -188,7 +187,7 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
-            setConfig(MigrationBuiltinConfig::migrationWithSetting(setting));
+            setConfig(MigrationConfig::configWithSetting(setting));
         }
         done = setting->isMigrated();
     }
