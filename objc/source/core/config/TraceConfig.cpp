@@ -31,19 +31,27 @@ std::shared_ptr<Config> TraceConfig::config()
 void TraceConfig::setPerformanceTrace(
     const Handle::PerformanceTraceCallback &trace)
 {
-    std::shared_ptr<Handle::PerformanceTraceCallback> newTrace(
-        new Handle::PerformanceTraceCallback);
-    if (newTrace) {
-        m_performanceTrace = newTrace;
+    if (trace) {
+        std::shared_ptr<Handle::PerformanceTraceCallback> newTrace(
+            new Handle::PerformanceTraceCallback(trace));
+        if (newTrace) {
+            m_performanceTrace = newTrace;
+        }
+    } else {
+        m_performanceTrace = nullptr;
     }
 }
 
 void TraceConfig::setSQLTrace(const Handle::SQLTraceCallback &trace)
 {
-    std::shared_ptr<Handle::SQLTraceCallback> newTrace(
-        new Handle::SQLTraceCallback);
-    if (newTrace) {
-        m_sqlTrace = newTrace;
+    if (trace) {
+        std::shared_ptr<Handle::SQLTraceCallback> newTrace(
+            new Handle::SQLTraceCallback(trace));
+        if (newTrace) {
+            m_sqlTrace = newTrace;
+        }
+    } else {
+        m_sqlTrace = nullptr;
     }
 }
 
