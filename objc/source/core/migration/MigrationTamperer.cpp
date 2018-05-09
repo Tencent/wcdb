@@ -754,9 +754,7 @@ bool MigrationTamperer::tamperTableAndSchemaName(CopyOnWriteString &tableName,
                 tableName.assign(iter->second->unionedViewName);
             } else {
                 tableName.assign(iter->second->sourceTable);
-                if (!iter->second->isSameDatabaseMigration()) {
-                    schemaName.assign(iter->second->schema);
-                }
+                schemaName.assign(iter->second->schema);
                 if (m_isInsertTampering) {
                     m_associatedInfo = iter->second;
                 }

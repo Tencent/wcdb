@@ -57,18 +57,11 @@ public:
 
     static std::string resolvedSchema(const std::string &path);
 
+    bool isInited() const;
+    void initialize(const std::set<std::string> &columnNames);
+
 #pragma mark - Statement
 public:
-    /**
-     INSERT INTO [targetTable]
-     SELECT *
-     FROM [sourceTable]
-     LIMIT 1
-     
-     @return StatementInsert
-     */
-    const StatementInsert &getStatementForMigration() const;
-
     /**
      SELECT rowid FROM [sourceTable]
      LIMIT 1
@@ -125,8 +118,11 @@ protected:
     StatementInsert m_statementForMigration;
     StatementDelete m_statementForDeletingMigratedRow;
     StatementSelect m_statementForPickingRowIDs;
+    StatementCreateView m_statementForCreatingUnionedView;
 
     std::string m_unionedViewName;
+    SpinLock m_spin;
+    std::atomic<bool> m_inited;
 };
 
 } //namespace WCDB

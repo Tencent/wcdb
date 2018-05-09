@@ -107,6 +107,15 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
                         return false;
                     }
                     if (pair.second) {
+                        //initialize info with column names
+                        if (!info.second->isInited()) {
+                            auto pair = handle->getUnorderedColumnsWithTable(
+                                info.second->sourceTable, info.second->schema);
+                            if (!pair.first) {
+                                return false;
+                            }
+                            info.second->initialize(pair.second);
+                        }
                         //Create view
                         if (!handle->execute(
                                 info.second
