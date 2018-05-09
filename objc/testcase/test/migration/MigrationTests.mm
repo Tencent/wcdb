@@ -355,4 +355,37 @@
     }
 }
 
+- (void)test_disorder
+{
+    [WCTDatabase globalTraceSQL:^(NSString *_Nonnull sql) {
+      NSLog(@"%@", sql);
+    }];
+    WCDB::StatementCreateTable statement = WCDB::StatementCreateTable()
+                                               .createTable(_migratedTableName.UTF8String)
+                                               .define(WCDB::ColumnDef(TestCaseObject.variable3).withType(WCDB::ColumnType::Float))
+                                               .define(WCDB::ColumnDef(TestCaseObject.variable2).withType(WCDB::ColumnType::Text))
+                                               .define(WCDB::ColumnDef(TestCaseObject.variable1).withType(WCDB::ColumnType::Integer32));
+    XCTAssertTrue([_migrated execute:statement]);
+
+    //check if it's disordered
+    WCTOneColumn *columnNames = [_migrated getColumnFromStatement:WCDB::StatementPragma()
+                                                                      .pragma(WCDB::Pragma::tableInfo())
+                                                                      .with(_migratedTableName.UTF8String)
+                                                          atIndex:1];
+    XCTAssertEqual(columnNames.count, 3);
+    XCTAssertTrue([columnNames[0].stringValue isEqualToString:@"variable3"]);
+    XCTAssertTrue([columnNames[1].stringValue isEqualToString:@"variable2"]);
+    XCTAssertTrue([columnNames[2].stringValue isEqualToString:@"variable1"]);
+
+    //migration
+    BOOL done;
+    while ([_migrated stepMigration:done] && !done)
+        ;
+    XCTAssertTrue(done);
+
+    //all data are migrated
+    NSArray *objects = [_migrated getObjectsOfClass:_cls fromTable:_migratedTableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([objects isEqualToTestCaseObjects:_preInserted]);
+}
+
 @end
