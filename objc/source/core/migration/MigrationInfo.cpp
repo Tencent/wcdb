@@ -46,7 +46,30 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
     , schema(MigrationInfo::resolvedSchema(sourceDatabasePath_))
     , unionedViewName(getUnionedViewPrefix() + "_" + targetTable + "_" +
                       sourceTable)
+    , m_inited(false)
 {
+}
+
+#pragma mark - Basic
+bool MigrationInfo::isInited() const
+{
+    return m_inited.load();
+}
+
+void MigrationInfo::initialize(const std::set<std::string> &columnNames)
+{
+    LockGuard lockGuard(m_spin);
+    if (m_inited) {
+        return;
+    }
+    std::list<Column> columns;
+    std::list<ResultColumn> resultColumns;
+    for (const auto &columnName : columnNames) {
+        WCDB::Column column(columnName);
+        resultColumns.push_back(column);
+        columns.push_back(column);
+    }
+
     //setup reusable statement
     OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::ASC);
 
@@ -58,8 +81,9 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
     m_statementForMigration =
         StatementInsert()
             .insertInto(targetTable)
+            .on(columns)
             .values(StatementSelect()
-                        .select(ResultColumn::all())
+                        .select(resultColumns)
                         .from(getSourceTable())
                         .where(Column::rowid() == BindParameter(1))
                         .limit(1));
@@ -69,9 +93,22 @@ MigrationInfo::MigrationInfo(const std::string &targetTable_,
             .deleteFrom(getQualifiedSourceTable())
             .where(Column::rowid() == BindParameter(1))
             .limit(1);
+
+    m_statementForCreatingUnionedView =
+        StatementCreateView()
+            .createView(unionedViewName)
+            .temp()
+            .ifNotExists()
+            .as(StatementSelect()
+                    .select(resultColumns)
+                    .from(targetTable)
+                    .union_(SelectCore()
+                                .select(resultColumns)
+                                .from(getSourceTable())));
+
+    m_inited.store(true);
 }
 
-#pragma mark - Basic
 const std::string MigrationInfo::schemaPrefix()
 {
     static const std::string s_schemaPrefix("WCDBMigration_");
@@ -81,7 +118,7 @@ const std::string MigrationInfo::schemaPrefix()
 std::string MigrationInfo::resolvedSchema(const std::string &path)
 {
     if (path.empty()) {
-        return String::empty();
+        return Schema::main();
     }
     return MigrationInfo::schemaPrefix() +
            std::to_string(std::hash<std::string>{}(path));
@@ -89,7 +126,7 @@ std::string MigrationInfo::resolvedSchema(const std::string &path)
 
 bool MigrationInfo::isSameDatabaseMigration() const
 {
-    return schema.empty();
+    return schema == Schema::main();
 }
 
 TableOrSubquery MigrationInfo::getSourceTable() const
@@ -106,11 +143,6 @@ QualifiedTableName MigrationInfo::getQualifiedSourceTable() const
 const StatementSelect &MigrationInfo::getStatementForPickingRowIDs() const
 {
     return m_statementForPickingRowIDs;
-}
-
-const StatementInsert &MigrationInfo::getStatementForMigration() const
-{
-    return m_statementForMigration;
 }
 
 const StatementDelete &MigrationInfo::getStatementForDeletingMigratedRow() const
@@ -134,16 +166,7 @@ const std::string &MigrationInfo::getUnionedViewPrefix()
 
 StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const
 {
-    return StatementCreateView()
-        .createView(unionedViewName)
-        .temp()
-        .ifNotExists()
-        .as(StatementSelect()
-                .select(ResultColumn::all())
-                .from(targetTable)
-                .union_(SelectCore()
-                            .select(ResultColumn::all())
-                            .from(getSourceTable())));
+    return m_statementForCreatingUnionedView;
 }
 
 StatementDropView MigrationInfo::getStatementForDroppingUnionedView() const

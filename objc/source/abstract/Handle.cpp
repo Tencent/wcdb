@@ -338,10 +338,14 @@ std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
 }
 
 std::pair<bool, std::set<std::string>>
-Handle::getUnorderedColumnsWithTable(const std::string &tableName)
+Handle::getUnorderedColumnsWithTable(const std::string &tableName,
+                                     const std::string &schemaName)
 {
-    return getUnorderedValues(
-        StatementPragma().pragma(Pragma::tableInfo()).with(tableName), 1);
+    WCDB::StatementPragma statement = StatementPragma()
+                                          .withSchema(schemaName)
+                                          .pragma(Pragma::tableInfo())
+                                          .with(tableName);
+    return getUnorderedValues(statement, 1);
 }
 
 std::pair<bool, std::set<std::string>> Handle::getUnorderedAttachedSchemas()
