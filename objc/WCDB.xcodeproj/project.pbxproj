@@ -2724,9 +2724,9 @@
 			productReference = 239326611E836D7300D677CC /* WCDB.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		23F5BC4220887FD3000CCD37 /* WCDB for Coverage and Benchmark */ = {
+		23F5BC4220887FD3000CCD37 /* WCDB for Coverage */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 23F5BDFE20887FD3000CCD37 /* Build configuration list for PBXNativeTarget "WCDB for Coverage and Benchmark" */;
+			buildConfigurationList = 23F5BDFE20887FD3000CCD37 /* Build configuration list for PBXNativeTarget "WCDB for Coverage" */;
 			buildPhases = (
 				23F5BC4920887FD3000CCD37 /* Sources */,
 				23F5BD0820887FD3000CCD37 /* Frameworks */,
@@ -2740,7 +2740,7 @@
 				23F5BC4520887FD3000CCD37 /* PBXTargetDependency */,
 				23F5BC4720887FD3000CCD37 /* PBXTargetDependency */,
 			);
-			name = "WCDB for Coverage and Benchmark";
+			name = "WCDB for Coverage";
 			productName = "WCDB framework";
 			productReference = 23F5BE0120887FD3000CCD37 /* WCDB.framework */;
 			productType = "com.apple.product-type.framework";
@@ -2787,7 +2787,7 @@
 			projectRoot = "";
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
-				23F5BC4220887FD3000CCD37 /* WCDB for Coverage and Benchmark */,
+				23F5BC4220887FD3000CCD37 /* WCDB for Coverage */,
 				2349FC171FDF8648005230E8 /* Install templates */,
 			);
 		};
@@ -3332,7 +3332,6 @@
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -3355,10 +3354,7 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = (
-					"-fno-profile-instr-generate",
-					"$(inherited)",
-				);
+				OTHER_CFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -3381,7 +3377,6 @@
 		239326681E836D7300D677CC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
@@ -3404,21 +3399,15 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = (
-					"-fno-profile-instr-generate",
-					"$(inherited)",
-				);
+				OTHER_CFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
-				"OTHER_LDFLAGS[sdk=macosx*]" = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
@@ -3503,7 +3492,6 @@
 		23A2C8C0208CDC1500C6BB6B /* WithoutBitcode */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
@@ -3525,21 +3513,15 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = (
-					"-fno-profile-instr-generate",
-					"$(inherited)",
-				);
+				OTHER_CFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"-framework",
 					UIKit,
-					"-fno-profile-instr-generate",
 				);
-				"OTHER_LDFLAGS[sdk=macosx*]" = "-fno-profile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
 				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
@@ -3561,7 +3543,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3753,7 +3734,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3792,7 +3772,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3854,7 +3833,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23F5BDFE20887FD3000CCD37 /* Build configuration list for PBXNativeTarget "WCDB for Coverage and Benchmark" */ = {
+		23F5BDFE20887FD3000CCD37 /* Build configuration list for PBXNativeTarget "WCDB for Coverage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23F5BDFF20887FD3000CCD37 /* Debug */,

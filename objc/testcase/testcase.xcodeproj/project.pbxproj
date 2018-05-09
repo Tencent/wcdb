@@ -337,6 +337,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2313B68B20A2DFDE0067C211 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
 		23698A8020045F4A00C0291C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
@@ -419,13 +426,6 @@
 			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 23F5BE0120887FD3000CCD37;
-			remoteInfo = "WCDB for Test";
-		};
-		23F5BE222088838F000CCD37 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 23F5BC4220887FD3000CCD37;
 			remoteInfo = "WCDB for Test";
 		};
 		23F5BE252088839C000CCD37 /* PBXContainerItemProxy */ = {
@@ -1225,7 +1225,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				23F5BE232088838F000CCD37 /* PBXTargetDependency */,
+				2313B68C20A2DFDE0067C211 /* PBXTargetDependency */,
 			);
 			name = Benchmark;
 			productName = testcaseTests;
@@ -1490,8 +1490,8 @@
 				23BA6B52208CE13F005CAFB7 /* Database Tests */,
 				23BA6B64208CE140005CAFB7 /* Convenient Tests */,
 				23BA6B76208CE142005CAFB7 /* WINQ Tests */,
-				23698A6220045EF100C0291C /* Coverage Tests */,
 				23698B3C20047E1A00C0291C /* Benchmark */,
+				23698A6220045EF100C0291C /* Coverage Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -2003,6 +2003,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2313B68C20A2DFDE0067C211 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WCDB;
+			targetProxy = 2313B68B20A2DFDE0067C211 /* PBXContainerItemProxy */;
+		};
 		23BA6AD2208CE0D7005CAFB7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = WCDB;
@@ -2052,11 +2057,6 @@
 			isa = PBXTargetDependency;
 			name = WCDB;
 			targetProxy = 23BA6B78208CE142005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23F5BE232088838F000CCD37 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "WCDB for Test";
-			targetProxy = 23F5BE222088838F000CCD37 /* PBXContainerItemProxy */;
 		};
 		23F5BE262088839C000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
