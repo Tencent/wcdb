@@ -228,9 +228,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		233032381FB9435700101373 /* sqliterk for Coverage and Benchmark */ = {
+		233032381FB9435700101373 /* sqliterk for Coverage */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk for Coverage and Benchmark" */;
+			buildConfigurationList = 233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk for Coverage" */;
 			buildPhases = (
 				233032341FB9435700101373 /* Sources */,
 				233032351FB9435700101373 /* Frameworks */,
@@ -242,7 +242,7 @@
 			dependencies = (
 				23212427201727E1008146EF /* PBXTargetDependency */,
 			);
-			name = "sqliterk for Coverage and Benchmark";
+			name = "sqliterk for Coverage";
 			productName = sqliterk;
 			productReference = 233032391FB9435700101373 /* sqliterk.framework */;
 			productType = "com.apple.product-type.framework";
@@ -303,7 +303,7 @@
 			projectRoot = "";
 			targets = (
 				23F5BBAD20887F7B000CCD37 /* sqliterk */,
-				233032381FB9435700101373 /* sqliterk for Coverage and Benchmark */,
+				233032381FB9435700101373 /* sqliterk for Coverage */,
 			);
 		};
 /* End PBXProject section */
@@ -544,7 +544,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -568,7 +567,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -646,7 +644,6 @@
 		23A2C8BD208CDBF900C6BB6B /* WithoutBitcode */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -663,10 +660,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				OTHER_CFLAGS = (
-					"-fno-profile-instr-generate",
-					"$(inherited)",
-				);
+				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
@@ -686,7 +680,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -703,7 +696,6 @@
 		23F5BBCA20887F7B000CCD37 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -721,10 +713,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				OTHER_CFLAGS = (
-					"-fno-profile-instr-generate",
-					"$(inherited)",
-				);
+				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
@@ -737,7 +726,6 @@
 		23F5BBCB20887F7B000CCD37 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -755,10 +743,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				OTHER_CFLAGS = (
-					"-fno-profile-instr-generate",
-					"$(inherited)",
-				);
+				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.sqliterk;
 				PRODUCT_MODULE_NAME = sqliterk;
 				PRODUCT_NAME = sqliterk;
@@ -781,7 +766,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk for Coverage and Benchmark" */ = {
+		233032411FB9435700101373 /* Build configuration list for PBXNativeTarget "sqliterk for Coverage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				233032421FB9435700101373 /* Debug */,
