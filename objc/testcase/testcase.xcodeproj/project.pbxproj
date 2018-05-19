@@ -2329,8 +2329,12 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				INFOPLIST_FILE = TestHost/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/TestHost/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRINCIPAL_CLASS = "";
+				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
+				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
+				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2344,8 +2348,12 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				INFOPLIST_FILE = TestHost/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/TestHost/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRINCIPAL_CLASS = "";
+				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
+				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
+				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2358,20 +2366,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=macosx*]" = (
-					"$(ARCHS_STANDARD)",
-					x86_64,
-				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2402,7 +2396,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCFDHFMX6R;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2432,11 +2426,10 @@
 					"-framework",
 					UIKit,
 				);
-				PRINCIPAL_CLASS = "";
-				"PRINCIPAL_CLASS[sdk=appletvos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALID_ARCHS = "x86_64 arm64 armv7";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -2448,20 +2441,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"ARCHS[sdk=iphoneos*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=iphonesimulator*]" = (
-					"$(ARCHS_STANDARD)",
-					arm64,
-					armv7,
-				);
-				"ARCHS[sdk=macosx*]" = (
-					"$(ARCHS_STANDARD)",
-					x86_64,
-				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2492,7 +2471,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCFDHFMX6R;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2515,11 +2494,10 @@
 					"-framework",
 					UIKit,
 				);
-				PRINCIPAL_CLASS = "";
-				"PRINCIPAL_CLASS[sdk=appletvos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALID_ARCHS = "x86_64 arm64 armv7";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -2773,22 +2751,18 @@
 		23BA6B84208CE142005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost";
 			};
 			name = Debug;
 		};
 		23BA6B85208CE142005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost";
 			};
 			name = Release;
 		};
