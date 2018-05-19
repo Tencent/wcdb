@@ -54,11 +54,11 @@ ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
 ColumnIsBLOBType<std::vector<unsigned char>>::asUnderlyingType(
     const std::vector<unsigned char> &blob)
 {
-    return NoCopyData(blob.data(), blob.size());
+    return Data::noCopyData(blob.data(), blob.size());
 }
 
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-ColumnIsBLOBType<NoCopyData>::asUnderlyingType(const NoCopyData &blob)
+ColumnIsBLOBType<Data>::asUnderlyingType(const Data &blob)
 {
     return blob;
 }

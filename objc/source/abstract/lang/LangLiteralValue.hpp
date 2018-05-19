@@ -44,15 +44,14 @@ public:
     };
     Type type;
     CopyOnWriteString stringValue;
-    CopyOnWriteData dataValue;
+    Data dataValue;
 
     CopyOnWriteString SQL() const override;
 
 protected:
     static CopyOnWriteString
     stringByAntiInjecting(const CopyOnWriteString &origin);
-    static CopyOnWriteString
-    stringByAntiInjecting(const CopyOnWriteData &origin);
+    static CopyOnWriteString stringByAntiInjecting(const Data &origin);
 };
 
 } // namespace Lang

@@ -22,6 +22,7 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/RepairKit.h>
 #include <WCDB/String.hpp>
 
 namespace WCDB {
@@ -151,7 +152,7 @@ void Database::removeConfig(const std::string &name)
     m_pool->removeConfig(name);
 }
 
-void Database::setCipher(const NoCopyData &cipher, int pageSize)
+void Database::setCipher(const Data &cipher, int pageSize)
 {
     m_pool->setConfig(CipherConfig::configWithKey(cipher, pageSize));
 }
@@ -242,33 +243,31 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair Kit
-bool Database::backup(const NoCopyData &data)
+bool Database::backup(const Data &data)
 {
-    RecyclableHandle handle = getHandle();
-    if (handle == nullptr) {
+    Repair::Deconstructor deconstructor(getPath());
+    if (!deconstructor.work()) {
         return false;
     }
-    if (handle->backup(data)) {
-        return true;
-    }
-    m_pool->setThreadedError(handle->getError());
+    //    deconstructor.getPagerError()
+    //    m_pool->setThreadedError(handle->getError());
     return false;
 }
 
 bool Database::recoverFromPath(const std::string &corruptedDBPath,
                                int pageSize,
-                               const NoCopyData &backupCipher,
-                               const NoCopyData &databaseCipher)
+                               const Data &backupCipher,
+                               const Data &databaseCipher)
 {
-    RecyclableHandle handle = getHandle();
-    if (handle == nullptr) {
-        return false;
-    }
-    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
-                                databaseCipher)) {
-        return true;
-    }
-    m_pool->setThreadedError(handle->getError());
+    //    RecyclableHandle handle = getHandle();
+    //    if (handle == nullptr) {
+    //        return false;
+    //    }
+    //    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
+    //                                databaseCipher)) {
+    //        return true;
+    //    }
+    //    m_pool->setThreadedError(handle->getError());
     return false;
 }
 

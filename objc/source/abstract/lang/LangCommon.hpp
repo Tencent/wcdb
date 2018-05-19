@@ -24,9 +24,9 @@
 #include <WCDB/Assertion.hpp>
 #include <list>
 
-#include <WCDB/CopyOnWriteData.hpp>
 #include <WCDB/CopyOnWriteLazyDescribable.hpp>
 #include <WCDB/CopyOnWriteString.hpp>
+#include <WCDB/Data.hpp>
 
 #include <WCDB/LangColumnType.hpp>
 #include <WCDB/LangConflictClause.hpp>
@@ -37,8 +37,7 @@
                       return description;)
 
 #define LangRemedialFatalError()                                               \
-    WCTRemedialFatalError("WINQ expression is not complete",                   \
-                          return description;)
+    WCTRemedialError("WINQ expression is not complete", return description;)
 
 namespace WCDB {
 

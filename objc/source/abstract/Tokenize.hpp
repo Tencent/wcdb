@@ -207,10 +207,10 @@ public:
 
     void addAddress(const std::string &name, unsigned char *address);
 
-    unsigned char *getAddress(const std::string &name) const;
+    const Data &getAddress(const std::string &name) const;
 
 protected:
-    std::unordered_map<std::string, unsigned char *> m_modules;
+    std::unordered_map<std::string, Data> m_modules;
     mutable SharedLock m_lock;
 };
 

@@ -86,10 +86,9 @@ public:
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::BLOB;
-        const NoCopyData rawData = ColumnIsBLOBType<T>::asUnderlyingType(t);
-        std::vector<unsigned char> vector(rawData.data,
-                                          rawData.data + rawData.size);
-        lang.dataValue.assign(vector);
+        Data data = ColumnIsBLOBType<T>::asUnderlyingType(t);
+        data.makeShared();
+        lang.dataValue = data;
     }
 
     static const LiteralValue &currentTime();

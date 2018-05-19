@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/NSData+NoCopyData.h>
 #import <WCDB/WCTCore+Private.h>
 
 @implementation WCTCore

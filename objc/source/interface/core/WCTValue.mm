@@ -20,7 +20,6 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
-#import <WCDB/NSData+NoCopyData.h>
 #import <WCDB/WCTValue+Private.h>
 
 @implementation WCTValueForwarder {

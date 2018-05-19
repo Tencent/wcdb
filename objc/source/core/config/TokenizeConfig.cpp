@@ -36,8 +36,7 @@ TokenizeConfig::TokenizeConfig(const std::list<std::string> &names)
 bool TokenizeConfig::invoke(Handle *handle) const
 {
     for (const std::string &name : m_names) {
-        const unsigned char *address = FTS::Modules::shared()->getAddress(name);
-        NoCopyData data((unsigned char *) &address, sizeof(unsigned char *));
+        const Data &data = FTS::Modules::shared()->getAddress(name);
 
         //Setup Tokenize
         static const StatementSelect s_fts3Tokenizer =

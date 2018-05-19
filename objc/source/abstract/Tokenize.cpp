@@ -34,10 +34,11 @@ Modules *Modules::shared()
 void Modules::addAddress(const std::string &name, unsigned char *module)
 {
     LockGuard lockGuard(m_lock);
-    m_modules.insert({name, module});
+    m_modules.insert(
+        {name, Data::data((unsigned char *) &module, sizeof(unsigned))});
 }
 
-unsigned char *Modules::getAddress(const std::string &name) const
+const Data &Modules::getAddress(const std::string &name) const
 {
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_modules.find(name);

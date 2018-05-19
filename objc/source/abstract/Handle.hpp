@@ -160,7 +160,7 @@ protected:
 
 #pragma mark - Cipher
 public:
-    bool setCipherKey(const void *data, int size);
+    bool setCipherKey(const Data &data);
 
 #pragma mark - Trace
 public:
@@ -174,14 +174,6 @@ public:
 
 protected:
     Tracer m_tracer;
-
-#pragma mark - Repair Kit
-public:
-    bool backup(const NoCopyData &data);
-    bool recoverFromPath(const std::string &corruptedDBPath,
-                         int pageSize,
-                         const NoCopyData &backupCipher,
-                         const NoCopyData &databaseCipher);
 
 #pragma mark - Error
 public:

@@ -21,8 +21,8 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/Macro.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/RepairKit.h>
 #include <sqlcipher/sqlite3.h>
-#include <sqliterk/SQLiteRepairKit.h>
 
 namespace WCDB {
 
@@ -463,10 +463,11 @@ void Handle::discardableExecute(const Statement &statement)
 }
 
 #pragma mark - Cipher
-bool Handle::setCipherKey(const void *data, int size)
+bool Handle::setCipherKey(const Data &data)
 {
 #ifdef SQLITE_HAS_CODEC
-    if (sqlite3_key((sqlite3 *) m_handle, data, size) == SQLITE_OK) {
+    if (sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size()) ==
+        SQLITE_OK) {
         return true;
     }
     setupError();
@@ -492,68 +493,6 @@ void Handle::tracePerformance(const PerformanceTraceCallback &trace)
         [this, trace](const Tracer::Footprints &footprints, int64_t cost) {
             trace(getTag(), footprints, cost);
         });
-}
-
-#pragma mark - Repair Kit
-bool Handle::backup(const NoCopyData &data)
-{
-    std::string backupPath = Path::addExtention(path, getBackupSubfix());
-    int rc = sqliterk_save_master((sqlite3 *) m_handle, backupPath.c_str(),
-                                  data.data, (int) data.size);
-    if (rc == SQLITERK_OK) {
-        return true;
-    }
-    m_error.reset();
-    m_error.code = rc;
-    m_error.operation = Operation::Backup;
-    Reporter::shared()->report(m_error);
-    return false;
-}
-
-bool Handle::recoverFromPath(const std::string &corruptedDBPath,
-                             int pageSize,
-                             const NoCopyData &backupCipher,
-                             const NoCopyData &databaseCipher)
-{
-    int rc = SQLITERK_OK;
-    do {
-        std::string backupPath =
-            Path::addExtention(corruptedDBPath, Handle::getBackupSubfix());
-        sqliterk_master_info *info;
-        unsigned char kdfSalt[16];
-        memset(kdfSalt, 0, 16);
-        rc = sqliterk_load_master(backupPath.c_str(), backupCipher.data,
-                                  (int) backupCipher.size, nullptr, 0, &info,
-                                  kdfSalt);
-        if (rc != SQLITERK_OK) {
-            break;
-        }
-
-        sqliterk_cipher_conf conf;
-        memset(&conf, 0, sizeof(sqliterk_cipher_conf));
-        conf.key = databaseCipher.data;
-        conf.key_len = (int) databaseCipher.size;
-        conf.page_size = pageSize;
-        conf.kdf_salt = kdfSalt;
-        conf.use_hmac = true;
-
-        sqliterk *rk;
-        rc = sqliterk_open(corruptedDBPath.c_str(), &conf, &rk);
-        if (rc != SQLITERK_OK) {
-            break;
-        }
-
-        rc = sqliterk_output(rk, (sqlite3 *) m_handle, info,
-                             SQLITERK_OUTPUT_ALL_TABLES);
-    } while (false);
-    if (rc == SQLITERK_OK) {
-        return true;
-    }
-    m_error.reset();
-    m_error.code = rc;
-    m_error.operation = Operation::Repair;
-    Reporter::shared()->report(m_error);
-    return false;
 }
 
 #pragma mark - Error

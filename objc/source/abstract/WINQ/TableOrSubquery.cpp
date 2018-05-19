@@ -65,7 +65,7 @@ TableOrSubquery &TableOrSubquery::withSchema(const std::string &schemaName)
                 schemaName);
             break;
         default:
-            WINQRemedialFatal();
+            WINQRemedialError();
     }
     return *this;
 }
@@ -87,7 +87,7 @@ TableOrSubquery &TableOrSubquery::as(const std::string &tableAlias)
                 tableAlias);
             break;
         default:
-            WINQRemedialFatal();
+            WINQRemedialError();
     }
     return *this;
 }

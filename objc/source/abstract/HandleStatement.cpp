@@ -118,8 +118,8 @@ void HandleStatement::bindText(const Text &value, int length, int index)
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
 {
-    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.data,
-                      (int) value.size, SQLITE_TRANSIENT);
+    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.buffer(),
+                      (int) value.size(), SQLITE_TRANSIENT);
 }
 
 void HandleStatement::bindNull(int index)
@@ -152,12 +152,12 @@ HandleStatement::Text HandleStatement::getText(int index)
     return text ? text : "";
 }
 
-HandleStatement::BLOB HandleStatement::getBLOB(int index)
+const HandleStatement::BLOB HandleStatement::getBLOB(int index)
 {
     int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
     const unsigned char *data = (const unsigned char *) sqlite3_column_blob(
         (sqlite3_stmt *) m_stmt, index);
-    return BLOB(data, size);
+    return BLOB::noCopyData(data, size);
 }
 
 bool HandleStatement::isReadonly()

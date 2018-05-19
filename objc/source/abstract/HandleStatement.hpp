@@ -57,7 +57,7 @@ public:
     Integer64 getInteger64(int index);
     Float getDouble(int index);
     Text getText(int index);
-    BLOB getBLOB(int index);
+    const BLOB getBLOB(int index);
 
     ColumnType getType(int index);
 

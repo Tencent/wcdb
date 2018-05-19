@@ -75,13 +75,12 @@ LiteralValue::stringByAntiInjecting(const CopyOnWriteString &origin)
     return String::stringByReplacingOccurrencesOfString(origin, "'", "''");
 }
 
-CopyOnWriteString
-LiteralValue::stringByAntiInjecting(const CopyOnWriteData &origin)
+CopyOnWriteString LiteralValue::stringByAntiInjecting(const Data &origin)
 {
     //TODO use BindParameter to accept data with '\0'
-    const std::vector<unsigned char> &data = origin.get();
     CopyOnWriteString cowString;
-    cowString.assign(std::string(data.begin(), data.end()));
+    cowString.assign(std::string(
+        reinterpret_cast<const char *>(origin.buffer()), origin.size()));
     return String::stringByReplacingOccurrencesOfString(cowString, "'", "''");
 }
 

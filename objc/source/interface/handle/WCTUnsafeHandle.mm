@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/NSData+noCopyData.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTCoreError+Private.h>
 #import <WCDB/WCTHandleError+Private.h>
@@ -187,7 +186,7 @@
                     }
                     case WCDB::ColumnType::BLOB: {
                         NSData *data = (NSData *) value;
-                        _handle->bindBLOB(data.noCopyData, index);
+                        _handle->bindBLOB(WCDB::Data::noCopyData((const unsigned char *) data.bytes, (size_t) data.length), index);
                         break;
                     }
                     case WCDB::ColumnType::Null:
@@ -220,7 +219,7 @@
     value = [value archivedWCTValue];
     if ([value isKindOfClass:NSData.class]) {
         NSData *data = (NSData *) value;
-        _handle->bindBLOB(data.noCopyData, index);
+        _handle->bindBLOB(WCDB::Data::noCopyData((const unsigned char *) data.bytes, (size_t) data.length), index);
     } else if ([value isKindOfClass:NSString.class]) {
         NSString *string = (NSString *) value;
         _handle->bindText(string.UTF8String, index);
@@ -294,9 +293,10 @@
                     case WCDB::ColumnType::Text:
                         value = [NSString stringWithUTF8String:_handle->getText(index)];
                         break;
-                    case WCDB::ColumnType::BLOB:
-                        value = [NSData dataWithNoCopyData:_handle->getBLOB(index)];
-                        break;
+                    case WCDB::ColumnType::BLOB: {
+                        const WCDB::Data data = _handle->getBLOB(index);
+                        value = [NSData dataWithBytes:data.buffer() length:data.size()];
+                    } break;
                     case WCDB::ColumnType::Null:
                         value = nil;
                         break;
@@ -319,8 +319,10 @@
             return [NSNumber numberWithDouble:_handle->getDouble(index)];
         case WCDB::ColumnType::Text:
             return [NSString stringWithUTF8String:_handle->getText(index)];
-        case WCDB::ColumnType::BLOB:
-            return [NSData dataWithNoCopyData:_handle->getBLOB(index)];
+        case WCDB::ColumnType::BLOB: {
+            const WCDB::Data data = _handle->getBLOB(index);
+            return [NSData dataWithBytes:data.buffer() length:data.size()];
+        }
         case WCDB::ColumnType::Null:
             return nil;
     }

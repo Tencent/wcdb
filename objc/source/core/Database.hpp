@@ -77,7 +77,7 @@ public:
 public:
     void setConfig(const std::shared_ptr<Config> &config);
     void removeConfig(const std::string &name);
-    void setCipher(const NoCopyData &cipher, int pageSize = 4096);
+    void setCipher(const Data &cipher, int pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 
 #pragma mark - File
@@ -98,11 +98,11 @@ public:
 
 #pragma mark - Repair Kit
 public:
-    bool backup(const NoCopyData &data);
+    bool backup(const Data &data);
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,
-                         const NoCopyData &backupCipher,
-                         const NoCopyData &databaseCipher);
+                         const Data &backupCipher,
+                         const Data &databaseCipher);
 
 #pragma mark - Handle
 public:

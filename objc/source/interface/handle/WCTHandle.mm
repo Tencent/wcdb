@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/NSData+noCopyData.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTHandle
@@ -125,7 +124,7 @@
 - (void)bindBLOB:(NSData *)value toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    _handle->bindBLOB(value.noCopyData, index);
+    _handle->bindBLOB(WCDB::Data::noCopyData((const unsigned char *) value.bytes, (size_t) value.length), index);
 }
 
 - (void)bindNullToIndex:(int)index
@@ -193,7 +192,8 @@
 - (NSData *)getBLOB:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSData dataWithNoCopyData:_handle->getBLOB(index)];
+    const WCDB::Data data = _handle->getBLOB(index);
+    return [NSData dataWithBytes:data.buffer() length:data.size()];
 }
 
 - (WCDB::ColumnType)getColumnTypeAtIndex:(int)index

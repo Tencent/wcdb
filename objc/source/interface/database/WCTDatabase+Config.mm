@@ -27,14 +27,14 @@
 - (void)setCipherKey:(NSData *)cipherKey
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
-    _database->setCipher(cipherKey.noCopyData);
+    _database->setCipher(WCDB::Data::noCopyData((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length));
 }
 
 - (void)setCipherKey:(NSData *)cipherKey
     andCipherPageSize:(int)cipherPageSize
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
-    _database->setCipher(cipherKey.noCopyData, cipherPageSize);
+    _database->setCipher(WCDB::Data::noCopyData((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
