@@ -33,13 +33,6 @@ Materaial::Materaial() : walSalt1(0), walSalt2(0), walFrame(0)
 {
 }
 
-#pragma mark - Header
-size_t Materaial::getHeaderSize() const
-{
-    return sizeof(magic) + sizeof(uint32_t) + sizeof(version) +
-           sizeof(walSalt1) + sizeof(walSalt2) + sizeof(walFrame);
-}
-
 #pragma mark - Serialization
 bool Materaial::initWithData(const Data &data)
 {
@@ -48,7 +41,7 @@ bool Materaial::initWithData(const Data &data)
         return false;
     }
     Deserialization deserialization(decompressed);
-    if (!deserialization.isEnough(getHeaderSize())) {
+    if (!deserialization.isEnough(24)) {
         return false;
     }
     //Header
@@ -57,7 +50,10 @@ bool Materaial::initWithData(const Data &data)
         return false;
     }
     uint32_t checksum = deserialization.advance4BytesUInt();
-    //TODO hash
+    if (checksum != hash(decompressed.subdata(8, decompressed.size()))) {
+        return false;
+    }
+
     walSalt1 = deserialization.advance4BytesUInt();
     walSalt2 = deserialization.advance4BytesUInt();
     walFrame = deserialization.advance4BytesUInt();
@@ -114,7 +110,7 @@ Data Materaial::encodedData()
     Data compressed;
 
     Serialization serialization;
-    if (!serialization.resizeToFit(getHeaderSize())) {
+    if (!serialization.resizeToFit(24)) {
         goto WCDB_Repair_Materaial_EncodedData_End;
     }
 
@@ -148,11 +144,15 @@ Data Materaial::encodedData()
         }
     }
 
-    //TODO calculate checksum
-    serialization.seek(4);
-    serialization.put4BytesUInt(checksum);
+    {
+        const Data &finalData = serialization.finalize();
+        WCTInnerAssert(!serialization.finalize().empty());
 
-    WCTInnerAssert(!serialization.finalize().empty());
+        checksum = hash(finalData.subdata(8, finalData.size() - 8));
+        serialization.seek(4);
+        serialization.put4BytesUInt(checksum);
+    }
+
     compressed = compress(serialization.finalize());
 
 WCDB_Repair_Materaial_EncodedData_End:

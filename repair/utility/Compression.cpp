@@ -110,6 +110,11 @@ WCDB_Repair_Decompress_Failed:
     return Data::emptyData();
 }
 
+uint32_t hash(const Data &source)
+{
+    return (uint32_t) crc32(0, source.buffer(), (uint32_t) source.size());
+}
+
 } //namespace Repair
 
 } //namespace WCDB

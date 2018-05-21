@@ -21,6 +21,8 @@
 #ifndef Compression_hpp
 #define Compression_hpp
 
+#include <stdlib.h>
+
 namespace WCDB {
 
 class Data;
@@ -30,6 +32,8 @@ namespace Repair {
 Data compress(const Data &source);
 
 Data decompress(const Data &source);
+
+uint32_t hash(const Data &source);
 
 } //namespace Repair
 

@@ -46,8 +46,6 @@ public:
     uint32_t walSalt2;
     uint32_t walFrame;
 
-    size_t getHeaderSize() const;
-
 #pragma mark - Content
     class Content {
     public:
