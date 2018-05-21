@@ -37,7 +37,7 @@ public:
         , m_class(cls)
         , columnDef(WCDB::Column(cn))
     {
-        columnDef.withType(accessor->getColumnType());
+        typed();
     }
 
     template <typename T>
@@ -52,7 +52,7 @@ public:
         , m_class(cls)
         , columnDef(WCDB::Column(cn))
     {
-        columnDef.withType(accessor->getColumnType());
+        typed();
     }
 
     Class getClass() const;
@@ -62,5 +62,6 @@ public:
     const std::string propertyName;
 
 protected:
+    void typed();
     Class m_class;
 };
