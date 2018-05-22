@@ -54,6 +54,7 @@ WCDB_EXTERN WCTErrorKey const WCTErrorKeyPath;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeySQL;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeyFileOperation;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeyTag;
+WCDB_EXTERN WCTErrorKey const WCTErrorKeyExtendedCode;
 
 typedef int32_t WCTTag;
 WCDB_EXTERN WCTTag const WCTInvalidTag;
@@ -96,6 +97,12 @@ WCDB_EXTERN WCTTag const WCTInvalidTag;
 @interface WCTError (SQL)
 
 - (nullable NSString *)sql;
+
+@end
+
+@interface WCTError (ExtendedCode)
+
+- (NSInteger)extendedCode;
 
 @end
 

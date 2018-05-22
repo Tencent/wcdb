@@ -31,6 +31,7 @@ WCTErrorKey const WCTErrorKeyPath = @"Path";
 WCTErrorKey const WCTErrorKeySQL = @"SQL";
 WCTErrorKey const WCTErrorKeyFileOperation = @"Op";
 WCTErrorKey const WCTErrorKeyTag = @"Tag";
+WCTErrorKey const WCTErrorKeyExtendedCode = @"ExtCode";
 
 WCTTag const WCTInvalidTag = WCDB::Handle::invalidTag;
 
@@ -149,6 +150,15 @@ static_assert((int) WCTErrorFileOperationMkdir == (int) WCDB::FileManager::Opera
 - (NSString *)sql
 {
     return [self stringForKey:WCTErrorKeySQL];
+}
+
+@end
+
+@implementation WCTError (ExtendedCode)
+
+- (NSInteger)extendedCode
+{
+    return (NSInteger) [self integerForKey:WCTErrorKeyExtendedCode];
 }
 
 @end
