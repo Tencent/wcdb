@@ -34,7 +34,8 @@ Data::Data(const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer,
     : m_sharedBuffer(sharedBuffer), m_buffer(buffer), m_size(size)
 {
     WCTInnerAssert(m_sharedBuffer == nullptr ||
-                   m_buffer + m_size <= m_sharedBuffer->data());
+                   m_buffer + m_size <=
+                       m_sharedBuffer->data() + m_sharedBuffer->size());
 }
 
 #pragma mark - Shared
