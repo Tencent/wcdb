@@ -20,7 +20,7 @@
 
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTCoreError+Private.h>
+#import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTokenizer.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
@@ -135,9 +135,9 @@
     _database->unblockade();
 }
 
-- (WCTCoreError *)error
+- (WCTError *)error
 {
-    return [[WCTCoreError alloc] initWithCoreError:_database->getError()];
+    return [[WCTError alloc] initWithError:_database->getError()];
 }
 
 @end

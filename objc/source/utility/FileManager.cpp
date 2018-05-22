@@ -28,23 +28,6 @@
 
 namespace WCDB {
 
-FileError::FileError() : Error(), operation(Operation::NotSet)
-{
-}
-
-int FileError::getType() const
-{
-    return FileError::type;
-}
-
-std::string FileError::getDescription() const
-{
-    std::string description = Error::getDescription();
-    addToDescription(description, "Op", operation);
-    addToDescription(description, "Path", path);
-    return description;
-}
-
 FileManager::FileManager()
 {
 }
@@ -64,7 +47,7 @@ std::pair<bool, size_t> FileManager::getFileSize(const std::string &path)
     } else if (errno == ENOENT) {
         return {true, 0};
     }
-    setupAndReportError(FileError::Operation::Lstat, path);
+    error(Operation::Lstat, path);
     return {false, 0};
 }
 
@@ -75,7 +58,7 @@ std::pair<bool, bool> FileManager::isExists(const std::string &path)
     } else if (errno == ENOENT) {
         return {true, false};
     }
-    setupAndReportError(FileError::Operation::Access, path);
+    error(Operation::Access, path);
     return {false, false};
 }
 
@@ -84,7 +67,7 @@ bool FileManager::createHardLink(const std::string &from, const std::string &to)
     if (link(from.c_str(), to.c_str()) == 0) {
         return true;
     }
-    setupAndReportError(FileError::Operation::Link, to);
+    error(Operation::Link, to);
     return false;
 }
 
@@ -93,7 +76,7 @@ bool FileManager::removeHardLink(const std::string &path)
     if (unlink(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    setupAndReportError(FileError::Operation::Unlink, path);
+    error(Operation::Unlink, path);
     return false;
 }
 
@@ -102,7 +85,7 @@ bool FileManager::removeFile(const std::string &path)
     if (remove(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    setupAndReportError(FileError::Operation::Remove, path);
+    error(Operation::Remove, path);
     return false;
 }
 
@@ -111,7 +94,7 @@ bool FileManager::createDirectory(const std::string &path)
     if (mkdir(path.c_str(), 0755) == 0) {
         return true;
     }
-    setupAndReportError(FileError::Operation::Mkdir, path);
+    error(Operation::Mkdir, path);
     return false;
 }
 
@@ -191,18 +174,17 @@ bool FileManager::createDirectoryWithIntermediateDirectories(
 }
 
 #pragma mark - Error
-void FileManager::setupAndReportError(FileError::Operation operation,
-                                      const std::string &path)
+void FileManager::error(Operation operation, const std::string &path)
 {
-    FileError *error = m_errors.get();
+    Error *error = m_errors.get();
     error->code = errno;
-    error->operation = operation;
-    error->path = path;
+    error->infos.set("Op", operation);
+    error->infos.set("Path", path);
     error->message = strerror(errno);
     Reporter::shared()->report(*error);
 }
 
-const FileError &FileManager::getError()
+const Error &FileManager::getError()
 {
     return *m_errors.get();
 }

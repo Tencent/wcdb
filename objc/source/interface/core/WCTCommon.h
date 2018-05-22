@@ -19,6 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTError.h>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call
@@ -32,7 +33,6 @@
 
 #pragma mark - Database
 @class WCTDatabase;
-typedef int32_t WCTTag;
 
 #pragma mark - Table
 @class WCTTable;
@@ -90,10 +90,6 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 
 #pragma mark - Error
 @class WCTError;
-@class WCTSQLiteError;
-@class WCTHandleError;
-@class WCTFileError;
-@class WCTCoreError;
 @class WCTPerformanceFootprint;
 
 #pragma mark - Migration

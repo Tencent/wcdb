@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 @protected
     WCDB::Handle *_handle;
     WCDB::RecyclableHandle _recyclableHandle;
-    WCTCoreError *_nonHandleError;
+    WCTError *_nonHandleError;
     WCTFinalizeLevel _finalizeLevel;
 }
 

@@ -37,7 +37,7 @@
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTCoreError **)error
+            withError:(WCTError **)error
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];

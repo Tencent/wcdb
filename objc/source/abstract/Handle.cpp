@@ -27,16 +27,16 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path, Tag tag)
+std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path)
 {
-    return std::shared_ptr<Handle>(new Handle(path, tag));
+    return std::shared_ptr<Handle>(new Handle(path));
 }
 
-Handle::Handle(const std::string &path_, Tag tag)
-    : m_handle(nullptr), path(path_), m_nestedLevel(0)
+Handle::Handle(const std::string &path_)
+    : m_handle(nullptr), path(path_), m_nestedLevel(0), m_tag(invalidTag)
 {
-    m_error.tag = tag;
-    m_error.path = path_;
+    m_error.type = "Handle";
+    m_error.infos.set("Path", path);
 }
 
 #pragma mark - Path
@@ -79,12 +79,13 @@ const std::array<std::string, 5> &Handle::getSubfixs()
 #pragma mark - Basic
 void Handle::setTag(Tag tag)
 {
-    m_error.tag = tag;
+    m_tag = tag;
+    m_error.infos.set("Tag", m_tag);
 }
 
 Handle::Tag Handle::getTag() const
 {
-    return m_error.tag;
+    return m_tag;
 }
 
 bool Handle::open()
@@ -93,9 +94,7 @@ bool Handle::open()
     if (rc == SQLITE_OK) {
         return true;
     }
-    setupError();
-    m_error.operation = Operation::Open;
-    Reporter::shared()->report(m_error);
+    error(rc);
     return false;
 }
 
@@ -113,10 +112,7 @@ bool Handle::execute(const Statement &statement)
     if (rc == SQLITE_OK) {
         return true;
     }
-    setupError();
-    m_error.operation = Operation::Execute;
-    m_error.statement = statement;
-    Reporter::shared()->report(m_error);
+    error(rc, statement.getDescription());
     return false;
 }
 
@@ -192,10 +188,7 @@ bool Handle::prepare(const Statement &statement,
         handleStatement.setup(statement, stmt);
         return true;
     }
-    setupError();
-    m_error.operation = Operation::Prepare;
-    m_error.statement = statement;
-    Reporter::shared()->report(m_error);
+    error(rc, statement.getDescription());
     return false;
 }
 
@@ -220,10 +213,7 @@ bool Handle::step(HandleStatement &handleStatement, bool &done)
     if (handleStatement.step(done)) {
         return true;
     }
-    setupError();
-    m_error.operation = Operation::Step;
-    m_error.statement = handleStatement.getStatement();
-    Reporter::shared()->report(m_error);
+    error(getResultCode(), handleStatement.getStatement().getDescription());
     return false;
 }
 
@@ -466,12 +456,11 @@ void Handle::discardableExecute(const Statement &statement)
 bool Handle::setCipherKey(const void *data, int size)
 {
 #ifdef SQLITE_HAS_CODEC
-    if (sqlite3_key((sqlite3 *) m_handle, data, size) == SQLITE_OK) {
+    int rc = sqlite3_key((sqlite3 *) m_handle, data, size);
+    if (rc == SQLITE_OK) {
         return true;
     }
-    setupError();
-    m_error.operation = Operation::Cipher;
-    Reporter::shared()->report(m_error);
+    error(rc);
     return false;
 #else  //SQLITE_HAS_CODEC
     Error::fatal("[sqlite3_key] is not supported for current config");
@@ -503,10 +492,7 @@ bool Handle::backup(const NoCopyData &data)
     if (rc == SQLITERK_OK) {
         return true;
     }
-    m_error.reset();
-    m_error.code = rc;
-    m_error.operation = Operation::Backup;
-    Reporter::shared()->report(m_error);
+    error(rc);
     return false;
 }
 
@@ -549,25 +535,23 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
     if (rc == SQLITERK_OK) {
         return true;
     }
-    m_error.reset();
-    m_error.code = rc;
-    m_error.operation = Operation::Repair;
-    Reporter::shared()->report(m_error);
+    error(rc);
     return false;
 }
 
 #pragma mark - Error
-const HandleError &Handle::getError() const
+const Error &Handle::getError() const
 {
     return m_error;
 }
 
-void Handle::setupError()
+void Handle::error(int rc, const std::string &sql)
 {
-    m_error.reset();
-    m_error.code = getResultCode();
+    m_error.code = rc;
     m_error.message = getErrorMessage();
-    m_error.extendedCode = getExtendedErrorCode();
+    m_error.infos.set("ExtCode", getExtendedErrorCode());
+    m_error.infos.set("SQL", sql);
+    Reporter::shared()->report(m_error);
 }
 
 } //namespace WCDB

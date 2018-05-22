@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/ExitServer.hpp>
 
 namespace WCDB {
@@ -52,6 +53,7 @@ ExitServer::Token ExitServer::enroll(const std::function<void(void)> &onExit)
     }
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     ++m_token;
+    WCTInnerAssert(m_listeners.find(m_token) == m_listeners.end());
     m_listeners.insert({m_token, onExit});
     return m_token;
 }

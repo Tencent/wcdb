@@ -21,7 +21,6 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
-#include <WCDB/HandleError.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/Tracer.hpp>
 #include <WCDB/WINQ.h>
@@ -38,16 +37,13 @@ namespace WCDB {
 class Handle {
 #pragma mark - Initialize
 public:
-    using Tag = HandleError::Tag;
-
-    static std::shared_ptr<Handle> handleWithPath(const std::string &path,
-                                                  Tag tag);
+    static std::shared_ptr<Handle> handleWithPath(const std::string &path);
     Handle() = delete;
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
 
 protected:
-    Handle(const std::string &path, Tag tag);
+    Handle(const std::string &path);
     void *m_handle;
 
 #pragma mark - Path
@@ -60,11 +56,19 @@ public:
     static const std::string &getBackupSubfix();
     static const std::array<std::string, 5> &getSubfixs();
 
-#pragma mark - Basic
+#pragma mark - Tag
 public:
+    using Tag = int32_t;
+    static constexpr const Tag invalidTag = INT32_MIN;
+
     void setTag(Tag tag);
     Tag getTag() const;
 
+protected:
+    Tag m_tag;
+
+#pragma mark - Basic
+public:
     bool open();
     void close();
     virtual bool execute(const Statement &statement);
@@ -185,13 +189,11 @@ public:
 
 #pragma mark - Error
 public:
-    const HandleError &getError() const;
+    const Error &getError() const;
 
 protected:
-    using Error = HandleError;
-    using Operation = HandleError::Operation;
-    void setupError();
-    HandleError m_error;
+    void error(int rc, const std::string &sql = "");
+    Error m_error;
 };
 
 } //namespace WCDB

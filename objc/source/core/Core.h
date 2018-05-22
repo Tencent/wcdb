@@ -29,7 +29,6 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/Configs.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreError.hpp>
 #include <WCDB/CustomConfig.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/HandlePool.hpp>

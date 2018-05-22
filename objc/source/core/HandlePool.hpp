@@ -24,20 +24,15 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/CoreError.hpp>
-#include <WCDB/Error.hpp>
-#include <WCDB/FileManager.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/String.hpp>
-#include <WCDB/ThreadLocal.hpp>
-#include <unordered_map>
+#include <WCDB/ThreadedHandleErrorProne.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class HandlePool {
+class HandlePool : public ThreadedHandleErrorProne {
 #pragma mark - Initialize
 public:
     HandlePool() = delete;
@@ -61,14 +56,7 @@ protected:
 
 #pragma mark - Error
 public:
-    const CoreError &getThreadedError() const;
-    void setThreadedError(const HandleError &error) const;
-    void setThreadedError(const CoreError &error) const;
-
-protected:
-    void setAndReportCoreError(const std::string &message);
-    using ThreadedErrors = std::unordered_map<const HandlePool *, CoreError>;
-    static ThreadLocal<ThreadedErrors> &threadedErrors();
+    const Error &getError() const;
 
 #pragma mark - Config
 public:
@@ -114,6 +102,9 @@ protected:
     std::atomic<int> m_aliveHandleCount;
     static int hardwareConcurrency();
     static int maxConcurrency();
+
+#pragma mark - ThreadedHandleErrorProne
+    virtual const HandlePool *getErrorAssociatedHandlePool() const override;
 };
 
 } //namespace WCDB

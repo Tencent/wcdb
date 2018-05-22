@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Core.h>
+#include <WCDB/FileManager.hpp>
 
 namespace WCDB {
 
@@ -66,7 +67,7 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
 
 RecyclableHandlePool HandlePools::getExistingPool(HandlePool::Tag tag)
 {
-    WCTAssert(tag != HandleError::invalidTag, "Tag invalid");
+    WCTAssert(tag != Handle::invalidTag, "Tag invalid");
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     auto iter = m_pools.end();
     for (iter = m_pools.begin(); iter != m_pools.end(); ++iter) {

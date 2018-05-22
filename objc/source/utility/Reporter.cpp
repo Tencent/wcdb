@@ -88,10 +88,8 @@ void Reporter::fatal(const std::string &message)
 
 void Reporter::report(Error::Level level, const std::string &message)
 {
-    Error error;
+    Error error(message);
     error.level = level;
-    error.code = (int) Error::Code::Error;
-    error.message = message;
     report(error);
 }
 

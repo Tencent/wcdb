@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isTableExists:(NSString *)tableName;
 
 - (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTCoreError *_Nullable *_Nullable)error;
+            withError:(WCTError *_Nullable *_Nullable)error;
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
                     withClass:(Class<WCTTableCoding>)cls;
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTDatabase *)getDatabase;
 
-- (WCTCoreError *)error;
+- (WCTError *)error;
 
 @end
 

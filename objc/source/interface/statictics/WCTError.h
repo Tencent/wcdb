@@ -18,19 +18,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/Error.hpp>
-#import <WCDB/WCTCommon.h>
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTMacro.h>
 
-/**
- It indicates the error type for WCTError. You can see Error::report method in the source code as a practical handling way.
- */
-typedef NS_ENUM(int, WCTErrorType) {
-    WCTErrorTypeError = 1,
-    WCTErrorTypeSQLite = 2,
-    WCTErrorTypeHandle = 3,
-    WCTErrorTypeCore = 4,
-    WCTErrorTypeFile = 5,
-};
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelIgnore = 1,
@@ -40,18 +31,69 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelFatal = 5,
 };
 
-NS_ASSUME_NONNULL_BEGIN
+typedef NS_ENUM(NSUInteger, WCTErrorFileOperation) {
+    WCTErrorFileOperationNotSet = 0,
+    WCTErrorFileOperationLstat = 1,
+    WCTErrorFileOperationAccess = 2,
+    WCTErrorFileOperationLink = 3,
+    WCTErrorFileOperationUnlink = 4,
+    WCTErrorFileOperationRemove = 5,
+    WCTErrorFileOperationMkdir = 6,
+};
+
+typedef NSString *WCTErrorType;
+WCDB_EXTERN WCTErrorType const WCTErrorTypeSQLite;
+WCDB_EXTERN WCTErrorType const WCTErrorTypeHandle;
+WCDB_EXTERN WCTErrorType const WCTErrorTypeCore;
+WCDB_EXTERN WCTErrorType const WCTErrorTypeFileManager;
+
+typedef NSString *WCTErrorKey;
+WCDB_EXTERN WCTErrorKey const WCTErrorKeyPath;
+WCDB_EXTERN WCTErrorKey const WCTErrorKeySQL;
+WCDB_EXTERN WCTErrorKey const WCTErrorKeyFileOperation;
+WCDB_EXTERN WCTErrorKey const WCTErrorKeyTag;
+
+typedef int32_t WCTTag;
+WCDB_EXTERN WCTTag const WCTInvalidTag;
 
 /**
  Detailed error
  */
 @interface WCTError : NSError
 
-- (WCTErrorType)type;
-
 @property(nonatomic, readonly) WCTErrorLevel level;
 
-@property(nonatomic, readonly) NSString *message;
+@property(nonatomic, readonly, nullable) NSString *message;
+
+@property(nonatomic, readonly) WCTErrorType type;
+
+- (nullable NSString *)stringForKey:(WCTErrorKey)key;
+
+- (NSInteger)integerForKey:(WCTErrorKey)key;
+
+@end
+
+@interface WCTError (File)
+
+- (WCTErrorFileOperation)fileOperation;
+
+@end
+
+@interface WCTError (Path)
+
+- (nullable NSString *)path;
+
+@end
+
+@interface WCTError (Tag)
+
+- (WCTTag)tag;
+
+@end
+
+@interface WCTError (SQL)
+
+- (nullable NSString *)sql;
 
 @end
 

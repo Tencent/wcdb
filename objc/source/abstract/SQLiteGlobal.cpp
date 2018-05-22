@@ -63,7 +63,8 @@ int SQLiteGlobal::vfsOpen(const char *zFile, int flags, int mode)
 
 void SQLiteGlobal::log(void *userInfo, int code, const char *message)
 {
-    SQLiteError error;
+    Error error;
+    error.type = "SQLite";
     switch (code) {
         case SQLITE_WARNING:
             error.level = Error::Level::Warning;
