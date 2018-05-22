@@ -39,11 +39,15 @@ public:
 public:
     virtual bool work();
 
+    typedef std::function<bool(const std::string &)> Filter;
+    void filter(const Filter &shouldTableDeconstructed);
+
     const Materaial &getMaterail() const;
 
     using MasterCrawler::getError;
 
 protected:
+    Filter m_filter;
     Materaial m_materaial;
     int m_height;
 

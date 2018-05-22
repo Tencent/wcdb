@@ -45,6 +45,9 @@ bool Deconstructor::work()
 
     for (auto &element : m_masters) {
         Master &master = element.second;
+        if (m_filter && !m_filter(master.tableName)) {
+            continue;
+        }
 
         Materaial::Content content;
         content.tableName = std::move(master.tableName);
@@ -59,6 +62,11 @@ bool Deconstructor::work()
     }
 
     return true;
+}
+
+void Deconstructor::filter(const Filter &shouldTableDeconstructed)
+{
+    m_filter = shouldTableDeconstructed;
 }
 
 const Materaial &Deconstructor::getMaterail() const
