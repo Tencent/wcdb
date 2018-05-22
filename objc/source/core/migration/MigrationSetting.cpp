@@ -47,7 +47,7 @@ MigrationSetting::MigrationSetting(
         WCTAssert(
             m_infos.find(info->targetTable) == m_infos.end(),
             "Migrating multiple tables to the same table is not allowed.");
-        m_infos.insert({info->targetTable, info});
+        m_infos[info->targetTable] = info;
     }
 }
 
