@@ -25,7 +25,7 @@
 WCTErrorType const WCTErrorTypeSQLite = @"SQLite";
 WCTErrorType const WCTErrorTypeHandle = @"Handle";
 WCTErrorType const WCTErrorTypeCore = @"Core";
-WCTErrorType const WCTErrorTypeFileManager = @"FileManager";
+WCTErrorType const WCTErrorTypeFile = @"File";
 
 WCTErrorKey const WCTErrorKeyPath = @"Path";
 WCTErrorKey const WCTErrorKeySQL = @"SQL";
@@ -69,7 +69,7 @@ static_assert((int) WCTErrorFileOperationMkdir == (int) WCDB::FileManager::Opera
         _message = [NSString stringWithCppString:error.message];
         _level = (WCTErrorLevel) error.level;
         _type = [NSString stringWithCppString:error.type];
-        WCTInnerAssert([_type isEqualToString:WCTErrorTypeCore] || [_type isEqualToString:WCTErrorTypeSQLite] || [_type isEqualToString:WCTErrorTypeHandle] || [_type isEqualToString:WCTErrorTypeFileManager]);
+        WCTInnerAssert([_type isEqualToString:WCTErrorTypeCore] || [_type isEqualToString:WCTErrorTypeSQLite] || [_type isEqualToString:WCTErrorTypeHandle] || [_type isEqualToString:WCTErrorTypeFile]);
     }
     return self;
 }

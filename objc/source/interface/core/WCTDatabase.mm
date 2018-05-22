@@ -34,37 +34,30 @@
         if (!path) {
             return;
         }
-        WCTFileOperation operation;
-        NSError *error = nil;
+        WCTErrorFileOperation operation = WCTErrorFileOperationGetAttribute;
+        NSError *nsError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *nsPath = [NSString stringWithUTF8String:path];
-        operation = WCTFileOperationGetAttribute;
-        NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&error];
+        NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&nsError];
         if (attributes) {
             NSString *fileProtection = [attributes objectForKey:NSFileProtectionKey];
             if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
                 return;
             }
-            operation = WCTFileOperationSetAttribute;
+            operation = WCTErrorFileOperationSetAttribute;
             NSDictionary *fileProtectionAttribute = @{NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication};
             [fileManager setAttributes:fileProtectionAttribute
                           ofItemAtPath:nsPath
-                                 error:&error];
-#ifdef DEBUG
-            //only for testing
-            [fileManager createFileAtPath:[nsPath stringByAppendingString:@"-fileProtection"]
-                                 contents:[NSData data]
-                               attributes:nil];
-#endif
+                                 error:&nsError];
         }
-        if (error) {
-            WCDB::FileError fileError;
-            fileError.operation = (WCDB::FileError::Operation) operation;
-            fileError.path = path;
-            fileError.level = WCDB::Error::Level::Error;
-            fileError.code = (int) error.code;
-            fileError.message = error.description.cppString;
-            WCDB::Reporter::shared()->report(fileError);
+        if (nsError) {
+            WCDB::Error error;
+            error.type = "File";
+            error.code = (int) error.code;
+            error.message = nsError.description.cppString;
+            error.infos.set("Op", operation);
+            error.infos.set("Path", path);
+            WCDB::Reporter::shared()->report(error);
         }
     });
 #endif //TARGET_OS_IPHONE

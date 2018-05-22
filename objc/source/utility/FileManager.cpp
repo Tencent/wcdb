@@ -177,10 +177,11 @@ bool FileManager::createDirectoryWithIntermediateDirectories(
 void FileManager::error(Operation operation, const std::string &path)
 {
     Error *error = m_errors.get();
+    error->type = "File";
     error->code = errno;
+    error->message = strerror(errno);
     error->infos.set("Op", operation);
     error->infos.set("Path", path);
-    error->message = strerror(errno);
     Reporter::shared()->report(*error);
 }
 

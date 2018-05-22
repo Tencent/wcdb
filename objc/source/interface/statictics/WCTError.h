@@ -39,13 +39,15 @@ typedef NS_ENUM(NSUInteger, WCTErrorFileOperation) {
     WCTErrorFileOperationUnlink = 4,
     WCTErrorFileOperationRemove = 5,
     WCTErrorFileOperationMkdir = 6,
+    WCTErrorFileOperationGetAttribute = (1 | (1 << 8)),
+    WCTErrorFileOperationSetAttribute = (2 | (1 << 8)),
 };
 
 typedef NSString *WCTErrorType;
 WCDB_EXTERN WCTErrorType const WCTErrorTypeSQLite;
 WCDB_EXTERN WCTErrorType const WCTErrorTypeHandle;
 WCDB_EXTERN WCTErrorType const WCTErrorTypeCore;
-WCDB_EXTERN WCTErrorType const WCTErrorTypeFileManager;
+WCDB_EXTERN WCTErrorType const WCTErrorTypeFile;
 
 typedef NSString *WCTErrorKey;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeyPath;
