@@ -34,7 +34,7 @@
         if (!path) {
             return;
         }
-        WCTErrorOperationFile operation = WCTErrorOperationFileGetAttribute;
+        WCTErrorOperation operation = WCTErrorOperationFileGetAttribute;
         NSError *nsError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *nsPath = [NSString stringWithUTF8String:path];
