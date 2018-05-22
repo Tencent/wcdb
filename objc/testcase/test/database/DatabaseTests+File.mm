@@ -157,7 +157,6 @@
 }
 
 #if TARGET_OS_IPHONE
-#ifdef DEBUG
 - (void)test_file_protection
 {
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
@@ -168,13 +167,13 @@
         [_database.path stringByAppendingString:@"-shm"],
         [_database.path stringByAppendingString:@"-wal"],
     ];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     for (NSString *path in paths) {
-        //file protection is not available on simulator
-        NSString *expectedSQL = [path stringByAppendingString:@"-fileProtection"];
-        XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:expectedSQL]);
+        NSDictionary *attributes = [fileManager attributesOfItemAtPath:path error:nil];
+        NSString *fileProtection = [attributes objectForKey:NSFileProtectionKey];
+        XCTAssertTrue([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]);
     }
 }
-#endif
 #endif
 
 @end
