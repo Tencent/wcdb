@@ -77,8 +77,8 @@ constexpr const WCDB::ColumnType WCTColumnTypeInteger64 =
     WCDB::ColumnType::Integer64;
 constexpr const WCDB::ColumnType WCTColumnTypeFloat = WCDB::ColumnType::Float;
 constexpr const WCDB::ColumnType WCTColumnTypeString = WCDB::ColumnType::Text;
-constexpr const WCDB::ColumnType WCTColumnTypeBinary = WCDB::ColumnType::BLOB;
-constexpr const WCDB::ColumnType WCTColumnTypeNull = WCDB::ColumnType::Null;
+constexpr const WCDB::ColumnType WCTColumnTypeData = WCDB::ColumnType::BLOB;
+constexpr const WCDB::ColumnType WCTColumnTypeNil = WCDB::ColumnType::Null;
 
 #pragma mark - Object
 typedef NSObject<WCTTableCoding> WCTObject;

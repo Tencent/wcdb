@@ -140,7 +140,7 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
           }
       }
       switch (lhs.valueType) {
-          case WCTColumnTypeNull:
+          case WCTColumnTypeNil:
               return NSOrderedSame;
           case WCTColumnTypeInteger32:
           case WCTColumnTypeInteger64:

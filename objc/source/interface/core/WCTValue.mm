@@ -109,7 +109,7 @@
 
 - (WCTColumnType)valueType
 {
-    return WCTColumnTypeBinary;
+    return WCTColumnTypeData;
 }
 
 - (NSData *)dataValue
@@ -159,7 +159,7 @@
 
 - (WCTColumnType)valueType
 {
-    return WCTColumnTypeNull;
+    return WCTColumnTypeNil;
 }
 
 - (NSData *)dataValue

@@ -34,7 +34,7 @@
         if (!path) {
             return;
         }
-        WCTErrorFileOperation operation = WCTErrorFileOperationGetAttribute;
+        WCTErrorOperation operation = WCTErrorOperationFileGetAttribute;
         NSError *nsError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *nsPath = [NSString stringWithUTF8String:path];
@@ -44,7 +44,7 @@
             if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
                 return;
             }
-            operation = WCTErrorFileOperationSetAttribute;
+            operation = WCTErrorOperationFileSetAttribute;
             NSDictionary *fileProtectionAttribute = @{NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication};
             [fileManager setAttributes:fileProtectionAttribute
                           ofItemAtPath:nsPath
