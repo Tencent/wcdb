@@ -47,6 +47,7 @@ public:
     uint32_t walFrame;
 
 #pragma mark - Content
+public:
     class Content {
     public:
         std::string tableName;
@@ -57,6 +58,7 @@ public:
     std::list<Content> contents;
 
 #pragma mark -Serialization
+public:
     bool initWithData(const Data &data);
     Data encodedData();
 };

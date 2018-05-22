@@ -40,6 +40,7 @@ public:
     bool ended() const;
 
 protected:
+    off_t m_tail;
     off_t m_cursor;
     Data m_data;
 };
@@ -96,12 +97,13 @@ public:
     bool resizeToFit(size_t size);
 
 protected:
+    void expand(off_t newTail);
     unsigned char *pointee();
-    off_t m_upper;
 
 #pragma mark - Put
 public:
     bool putZeroTerminatedString(const std::string &value);
+    bool putBLOB(const Data &data);
     bool put4BytesUInt(uint32_t value);
     int putVarint(uint64_t value);
 };

@@ -27,18 +27,22 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - SerializeIteration
-SerializeIteration::SerializeIteration() : m_cursor(0)
+SerializeIteration::SerializeIteration() : m_cursor(0), m_tail(0)
 {
 }
 
 SerializeIteration::SerializeIteration(const Data &data)
-    : m_data(data), m_cursor(0)
+    : m_data(data), m_cursor(0), m_tail(data.size())
 {
 }
 
 void SerializeIteration::seek(off_t position)
 {
-    m_cursor = std::min(position, (off_t) m_data.size());
+    if (position < 0) {
+        m_cursor = std::min(m_tail, (off_t) m_tail + position + 1);
+    } else {
+        m_cursor = std::min(m_tail, position);
+    }
 }
 
 void SerializeIteration::advance(off_t offset)
@@ -48,17 +52,17 @@ void SerializeIteration::advance(off_t offset)
 
 bool SerializeIteration::isEnough(size_t size) const
 {
-    return m_cursor + size <= m_data.size();
+    return m_cursor + size <= m_tail;
 }
 
 bool SerializeIteration::isEnough(off_t offset, size_t size) const
 {
-    return offset + size <= m_data.size();
+    return offset + size <= m_tail;
 }
 
 bool SerializeIteration::ended() const
 {
-    return m_cursor == m_data.size();
+    return m_cursor == m_tail;
 }
 
 #pragma mark - Deserialization
@@ -71,6 +75,7 @@ void Deserialization::reset(const Data &data)
 {
     m_data = data;
     m_cursor = 0;
+    m_tail = m_data.size();
 }
 
 #pragma mark - Advance
@@ -167,7 +172,7 @@ uint32_t Deserialization::advance4BytesUInt()
 std::string Deserialization::getZeroTerminatedString(off_t offset) const
 {
     size_t size = 0;
-    while (offset + size <= m_data.size()) {
+    while (offset + size <= m_tail) {
         if (m_data.buffer()[offset + size] == '\0') {
             return std::string(
                 reinterpret_cast<const char *>(m_data.buffer() + offset), size);
@@ -452,7 +457,7 @@ const Data &Deserialization::getData() const
 }
 
 #pragma mark - Serialization
-Serialization::Serialization() : SerializeIteration(), m_upper(0)
+Serialization::Serialization() : SerializeIteration()
 {
 }
 
@@ -478,8 +483,19 @@ bool Serialization::putZeroTerminatedString(const std::string &value)
         return false;
     }
     memcpy(pointee(), value.data(), size);
+    expand(m_cursor + size);
     advance(size);
-    m_upper = std::max(m_upper, m_cursor);
+    return true;
+}
+
+bool Serialization::putBLOB(const Data &data)
+{
+    if (!resizeToFit(data.size())) {
+        return false;
+    }
+    memcpy(pointee(), data.buffer(), data.size());
+    expand(m_cursor + data.size());
+    advance(data.size());
     return true;
 }
 
@@ -493,8 +509,8 @@ bool Serialization::put4BytesUInt(uint32_t value)
     p[1] = (uint8_t)(value >> 16);
     p[2] = (uint8_t)(value >> 8);
     p[3] = (uint8_t) value;
+    expand(m_cursor + sizeof(uint32_t));
     advance(sizeof(uint32_t));
-    m_upper = std::max(m_upper, m_cursor);
     return true;
 }
 
@@ -537,14 +553,19 @@ int Serialization::putVarint(uint64_t value)
             length = n;
         }
     }
+    expand(m_cursor + length);
     advance(length);
-    m_upper = std::max(m_upper, m_cursor);
     return length;
+}
+
+void Serialization::expand(off_t newTail)
+{
+    m_tail = std::max(m_tail, newTail);
 }
 
 Data Serialization::finalize()
 {
-    return m_data.subdata(m_upper);
+    return m_data.subdata(m_cursor);
 }
 
 } //namespace Repair

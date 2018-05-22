@@ -36,11 +36,7 @@ Materaial::Materaial() : walSalt1(0), walSalt2(0), walFrame(0)
 #pragma mark - Serialization
 bool Materaial::initWithData(const Data &data)
 {
-    Data decompressed = decompress(data);
-    if (decompressed.empty()) {
-        return false;
-    }
-    Deserialization deserialization(decompressed);
+    Deserialization deserialization(data);
     if (!deserialization.isEnough(24)) {
         return false;
     }
@@ -50,13 +46,20 @@ bool Materaial::initWithData(const Data &data)
         return false;
     }
     uint32_t checksum = deserialization.advance4BytesUInt();
-    if (checksum != hash(decompressed.subdata(8, decompressed.size()))) {
-        return false;
-    }
 
     walSalt1 = deserialization.advance4BytesUInt();
     walSalt2 = deserialization.advance4BytesUInt();
     walFrame = deserialization.advance4BytesUInt();
+
+    Data decompressed = decompress(data.subdata(24, data.size() - 24));
+    if (checksum == 0 && decompressed.empty()) {
+        //empty content
+        return true;
+    }
+    if (decompressed.empty() || checksum != hash(decompressed)) {
+        return false;
+    }
+    deserialization.reset(decompressed);
 
     //Content
     Content content;
@@ -67,13 +70,7 @@ bool Materaial::initWithData(const Data &data)
         WCTInnerAssert(content.associatedSQLs.empty());
         WCTInnerAssert(content.pagenos.empty());
         content.tableName = deserialization.advanceZeroTerminatedString();
-        if (content.tableName.empty()) {
-            return false;
-        }
         content.sql = deserialization.advanceZeroTerminatedString();
-        if (content.sql.empty()) {
-            return false;
-        }
         intermediate = deserialization.advanceVarint();
         if (intermediate.first < 0) {
             return false;
@@ -81,9 +78,6 @@ bool Materaial::initWithData(const Data &data)
         for (int i = 0; i < intermediate.second; ++i) {
             std::string associatedSQL =
                 deserialization.advanceZeroTerminatedString();
-            if (associatedSQL.empty()) {
-                return false;
-            }
             content.associatedSQLs.push_back(std::move(associatedSQL));
         }
         intermediate = deserialization.advanceVarint();
@@ -101,15 +95,14 @@ bool Materaial::initWithData(const Data &data)
         }
         contents.push_back(std::move(content));
     }
-    return false;
+    return true;
 }
 
 Data Materaial::encodedData()
 {
-    uint32_t checksum = 0;
-    Data compressed;
-
     Serialization serialization;
+    uint32_t checksum = 0;
+
     if (!serialization.resizeToFit(24)) {
         goto WCDB_Repair_Materaial_EncodedData_End;
     }
@@ -117,46 +110,56 @@ Data Materaial::encodedData()
     serialization.put4BytesUInt(magic);
     serialization.put4BytesUInt(checksum);
     serialization.put4BytesUInt(version);
+
     serialization.put4BytesUInt(walSalt1);
     serialization.put4BytesUInt(walSalt2);
     serialization.put4BytesUInt(walFrame);
 
-    for (const auto &content : contents) {
-        if (!serialization.putZeroTerminatedString(
-                content.tableName)                                 // with '\0'
-            || !serialization.putZeroTerminatedString(content.sql) // with '\0'
-            || !serialization.putVarint(content.associatedSQLs.size())) {
-            goto WCDB_Repair_Materaial_EncodedData_End;
-        }
-        for (const auto &sql : content.associatedSQLs) {
-            if (serialization.putZeroTerminatedString(sql) // with '\0'
-                ) {
+    if (!contents.empty()) {
+        for (const auto &content : contents) {
+            if (!serialization.putZeroTerminatedString(
+                    content.tableName) // with '\0'
+                ||
+                !serialization.putZeroTerminatedString(content.sql) // with '\0'
+                || !serialization.putVarint(content.associatedSQLs.size())) {
                 goto WCDB_Repair_Materaial_EncodedData_End;
             }
-        }
-        if (!serialization.putVarint(content.pagenos.size())) {
-            goto WCDB_Repair_Materaial_EncodedData_End;
-        }
-        for (const auto &pageno : content.pagenos) {
-            if (!serialization.putVarint(pageno)) {
+            for (const auto &sql : content.associatedSQLs) {
+                if (serialization.putZeroTerminatedString(sql) // with '\0'
+                    ) {
+                    goto WCDB_Repair_Materaial_EncodedData_End;
+                }
+            }
+            if (!serialization.putVarint(content.pagenos.size())) {
                 goto WCDB_Repair_Materaial_EncodedData_End;
             }
+            for (const auto &pageno : content.pagenos) {
+                if (!serialization.putVarint(pageno)) {
+                    goto WCDB_Repair_Materaial_EncodedData_End;
+                }
+            }
         }
-    }
 
-    {
-        const Data &finalData = serialization.finalize();
-        WCTInnerAssert(!serialization.finalize().empty());
-
-        checksum = hash(finalData.subdata(8, finalData.size() - 8));
+        const Data &uncompressed = serialization.finalize();
+        const Data uncompressedContent =
+            uncompressed.subdata(24, uncompressed.size() - 24);
+        checksum = hash(uncompressedContent);
         serialization.seek(4);
         serialization.put4BytesUInt(checksum);
+
+        const Data compressedContent = compress(uncompressedContent);
+        if (compressedContent.empty()) {
+            goto WCDB_Repair_Materaial_EncodedData_End;
+        }
+        serialization.seek(24);
+        if (!serialization.putBLOB(compressedContent)) {
+            goto WCDB_Repair_Materaial_EncodedData_End;
+        }
+        serialization.seek(24 + compressedContent.size());
     }
 
-    compressed = compress(serialization.finalize());
-
 WCDB_Repair_Materaial_EncodedData_End:
-    return compressed;
+    return serialization.finalize();
 }
 
 } //namespace Repair
