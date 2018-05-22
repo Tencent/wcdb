@@ -31,28 +31,29 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelFatal = 5,
 };
 
-typedef NS_ENUM(NSUInteger, WCTErrorFileOperation) {
-    WCTErrorFileOperationNotSet = 0,
-    WCTErrorFileOperationLstat = 1,
-    WCTErrorFileOperationAccess = 2,
-    WCTErrorFileOperationLink = 3,
-    WCTErrorFileOperationUnlink = 4,
-    WCTErrorFileOperationRemove = 5,
-    WCTErrorFileOperationMkdir = 6,
-    WCTErrorFileOperationGetAttribute = (1 | (1 << 8)),
-    WCTErrorFileOperationSetAttribute = (2 | (1 << 8)),
+typedef NS_ENUM(NSUInteger, WCTErrorOperation) {
+    WCTErrorOperationNotSet = 0,
+    WCTErrorOperationFileLstat = 1,
+    WCTErrorOperationFileAccess = 2,
+    WCTErrorOperationFileLink = 3,
+    WCTErrorOperationFileUnlink = 4,
+    WCTErrorOperationFileRemove = 5,
+    WCTErrorOperationFileMkdir = 6,
+    WCTErrorOperationFileGetAttribute = (1 | (1 << 8)),
+    WCTErrorOperationFileSetAttribute = (2 | (1 << 8)),
 };
 
-typedef NSString *WCTErrorType;
-WCDB_EXTERN WCTErrorType const WCTErrorTypeSQLite;
-WCDB_EXTERN WCTErrorType const WCTErrorTypeHandle;
-WCDB_EXTERN WCTErrorType const WCTErrorTypeCore;
-WCDB_EXTERN WCTErrorType const WCTErrorTypeFile;
+typedef NS_ENUM(NSUInteger, WCTErrorType) {
+    WCTErrorTypeSQLite = 1,
+    WCTErrorTypeHandle = 2,
+    WCTErrorTypeCore = 3,
+    WCTErrorTypeFile = 4,
+};
 
 typedef NSString *WCTErrorKey;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeyPath;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeySQL;
-WCDB_EXTERN WCTErrorKey const WCTErrorKeyFileOperation;
+WCDB_EXTERN WCTErrorKey const WCTErrorKeyOperation;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeyTag;
 WCDB_EXTERN WCTErrorKey const WCTErrorKeyExtendedCode;
 
@@ -66,9 +67,9 @@ WCDB_EXTERN WCTTag const WCTInvalidTag;
 
 @property(nonatomic, readonly) WCTErrorLevel level;
 
-@property(nonatomic, readonly, nullable) NSString *message;
-
 @property(nonatomic, readonly) WCTErrorType type;
+
+@property(nonatomic, readonly, nullable) NSString *message;
 
 - (nullable NSString *)stringForKey:(WCTErrorKey)key;
 
@@ -76,9 +77,9 @@ WCDB_EXTERN WCTTag const WCTInvalidTag;
 
 @end
 
-@interface WCTError (File)
+@interface WCTError (Operation)
 
-- (WCTErrorFileOperation)fileOperation;
+- (WCTErrorOperation)operation;
 
 @end
 
