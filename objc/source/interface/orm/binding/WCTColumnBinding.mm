@@ -24,3 +24,8 @@ Class WCTColumnBinding::getClass() const
 {
     return m_class;
 }
+
+void WCTColumnBinding::typed()
+{
+    columnDef.withType(accessor->getColumnType());
+}

@@ -78,12 +78,8 @@
 #import <WCDB/WCTHandle+Table.h>
 #import <WCDB/WCTTable.h>
 
-#import <WCDB/WCTCoreError.h>
 #import <WCDB/WCTError.h>
-#import <WCDB/WCTFileError.h>
-#import <WCDB/WCTHandleError.h>
 #import <WCDB/WCTPerformanceFootprint.h>
-#import <WCDB/WCTSQLiteError.h>
 
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTTokenizer.h>

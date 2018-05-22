@@ -22,7 +22,7 @@
 
 @interface WCTUnsafeHandle : WCTCore
 
-- (WCTCoreError *)error;
+- (WCTError *)error;
 
 #pragma mark - Life Cycle
 

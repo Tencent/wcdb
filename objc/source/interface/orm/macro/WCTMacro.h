@@ -28,3 +28,9 @@
     __WCDB_ORM_MAKE_UNIQUE(__WCDB_ORM_CONCAT(                                  \
         __WCDB_ORM_CONCAT(WCDB_ORM_PREFIX, className), ORMType))               \
         : (WCTBinding &) binding
+
+#if defined(__cplusplus)
+#define WCDB_EXTERN extern "C"
+#else
+#define WCDB_EXTERN extern
+#endif

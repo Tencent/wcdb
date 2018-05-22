@@ -20,7 +20,6 @@
 
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTFileError+Private.h>
 
 @implementation WCTDatabase (File)
 
@@ -58,9 +57,17 @@
     return _database->getFilesSize().second;
 }
 
-- (WCTFileError *)getFileError
+- (NSUInteger)getFilesSizeWithError:(WCTError **)error
 {
-    return [[WCTFileError alloc] initWithFileError:_database->getFileError()];
+    auto result = _database->getFilesSize();
+    if (error) {
+        if (result.first) {
+            *error = nil;
+        } else {
+            *error = [self error];
+        }
+    }
+    return result.second;
 }
 
 @end

@@ -33,7 +33,7 @@
 }
 
 - (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTCoreError **)error
+            withError:(WCTError **)error
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     auto result = _database->isTableExists(tableName.cppString);
@@ -41,7 +41,7 @@
         if (result.first) {
             *error = nil;
         } else {
-            *error = [[WCTCoreError alloc] initWithError:_database->getError()];
+            *error = [[WCTError alloc] initWithError:_database->getError()];
         }
     }
     return result.second;

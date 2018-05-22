@@ -18,52 +18,91 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/Macro.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
+#pragma mark - Initialize
 Error::Error() : level(Level::Error), code(0)
 {
 }
 
-int Error::getType() const
+Error::Error(const std::string &message_, Level level_)
+    : code(Error::error), level(level_), message(message_), type("Core")
 {
-    return Error::type;
 }
 
+void Error::clear()
+{
+    type.clear();
+    code = 0;
+    level = Level::Error;
+    message.clear();
+    infos.clear();
+}
+
+#pragma mark - Code
 bool Error::isOK() const
 {
     return code == 0;
 }
 
+#pragma mark - Info
+void Error::Infos::set(const std::string &key, int64_t value)
+{
+    m_ints[key] = value;
+}
+
+void Error::Infos::set(const std::string &key, const std::string &value)
+{
+    m_strings[key] = value;
+}
+
+const std::map<std::string, int64_t> Error::Infos::getIntInfos() const
+{
+    return m_ints;
+}
+
+const std::map<std::string, std::string> Error::Infos::getStringInfos() const
+{
+    return m_strings;
+}
+
+void Error::Infos::clear()
+{
+    m_ints.clear();
+    m_strings.clear();
+}
+
 std::string Error::getDescription() const
 {
-    std::string description;
-    addToDescription(description, "Code", code);
+    if (code == 0) {
+        return String::empty();
+    }
+    std::ostringstream stream;
+    stream << "[" << Error::LevelName(level) << "]";
+
+    WCTInnerAssert(!type.empty());
+    stream << type;
+
+    if (code != Error::error) {
+        stream << ", Code: " << code;
+    }
+
     if (!message.empty()) {
-        addToDescription(description, "Msg", message);
+        stream << ", Msg: " << message;
     }
-    return "[" + std::string(Error::LevelName(level)) + "]" + description;
-}
 
-void Error::addToDescription(std::string &description,
-                             const char *key,
-                             int64_t value) const
-{
-    addToDescription(description, key, std::to_string(value));
-}
-
-void Error::addToDescription(std::string &description,
-                             const char *key,
-                             const std::string &value) const
-{
-    if (!description.empty()) {
-        description.append(", ");
+    for (const auto &info : infos.getIntInfos()) {
+        stream << ", " << info.first << ": " << info.second;
     }
-    description.append(key);
-    description.append(": ");
-    description.append(value);
+    for (const auto &info : infos.getStringInfos()) {
+        stream << ", " << info.first << ": " << info.second;
+    }
+    return stream.str();
 }
 
 } //namespace WCDB

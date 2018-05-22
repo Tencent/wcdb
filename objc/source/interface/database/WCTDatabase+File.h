@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSUInteger)getFilesSize;
 
-- (WCTFileError *)getFileError;
+- (NSUInteger)getFilesSizeWithError:(WCTError *_Nullable *_Nullable)error;
 
 @end
 

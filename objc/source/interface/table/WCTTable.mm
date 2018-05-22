@@ -20,7 +20,7 @@
 
 #import <WCDB/WCDB.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTCoreError+Private.h>
+#import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTable+Private.h>
 
 @implementation WCTTable
@@ -50,9 +50,9 @@
     return [[WCTDatabase alloc] initWithDatabase:_database];
 }
 
-- (WCTCoreError *)error
+- (WCTError *)error
 {
-    return [[WCTCoreError alloc] initWithCoreError:_database->getError()];
+    return [[WCTError alloc] initWithError:_database->getError()];
 }
 
 @end

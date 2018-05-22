@@ -167,7 +167,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             if (result) {
                 migratedEve = rowids.size() < rowPerStep;
             } else {
-                m_migrationPool->setThreadedError(migrationHandle->getError());
+                setThreadedError(migrationHandle->getError());
             }
             return result;
         });

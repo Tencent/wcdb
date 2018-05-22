@@ -30,26 +30,6 @@
 
 namespace WCDB {
 
-class FileError : public Error {
-public:
-    static constexpr int type = 5;
-
-    FileError();
-    enum Operation {
-        NotSet = 0,
-        Lstat = 1,
-        Access = 2,
-        Link = 3,
-        Unlink = 4,
-        Remove = 5,
-        Mkdir = 6,
-    };
-    Operation operation;
-    std::string path;
-    std::string getDescription() const override;
-    int getType() const override;
-};
-
 class FileManager {
 #pragma mark - Initialize
 public:
@@ -79,12 +59,21 @@ public:
 
 #pragma mark - Error
 public:
-    const FileError &getError();
+    enum Operation {
+        NotSet = 0,
+        Lstat = 1,
+        Access = 2,
+        Link = 3,
+        Unlink = 4,
+        Remove = 5,
+        Mkdir = 6,
+    };
+
+    const Error &getError();
 
 protected:
-    void setupAndReportError(FileError::Operation operation,
-                             const std::string &path);
-    ThreadLocal<FileError> m_errors;
+    void error(Operation operation, const std::string &path);
+    ThreadLocal<Error> m_errors;
 };
 
 } //namespace WCDB

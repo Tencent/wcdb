@@ -120,9 +120,9 @@ bool Database::isOpened() const
     return !m_pool->isDrained();
 }
 
-const CoreError &Database::getError() const
+const Error &Database::getError() const
 {
-    return m_pool->getThreadedError();
+    return getThreadedError();
 }
 
 void Database::closeAllDatabases()
@@ -173,6 +173,7 @@ bool Database::removeFiles()
     if (fileManager->removeFiles(getPaths())) {
         return true;
     }
+    setThreadedError(fileManager->getError());
     return false;
 }
 
@@ -182,33 +183,45 @@ std::pair<bool, size_t> Database::getFilesSize()
         WCTWarning("Getting files size on an opened database may get "
                    "incorrect results.");
     }
-    return FileManager::shared()->getFilesSize(getPaths());
-}
-
-const FileError &Database::getFileError() const
-{
-    return FileManager::shared()->getError();
+    FileManager *fileManager = FileManager::shared();
+    auto pair = fileManager->getFilesSize(getPaths());
+    if (!pair.first) {
+        setThreadedError(fileManager->getError());
+    }
+    return pair;
 }
 
 bool Database::moveFiles(const std::string &directory)
 {
-    WCTRemedialAssert(
-        isBlockaded() && !isOpened(),
-        "Moving files on an opened database may cause a corrupted database.",
-        return false;);
-    return FileManager::shared()->moveFiles(getPaths(), directory);
+    if (isBlockaded() && !isOpened()) {
+        FileManager *fileManager = FileManager::shared();
+        if (fileManager->moveFiles(getPaths(), directory)) {
+            return true;
+        }
+        setThreadedError(fileManager->getError());
+    } else {
+        error("Moving files on an opened database may cause a corrupted "
+              "database.");
+    }
+    return false;
 }
 
 bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
-    WCTRemedialAssert(
-        isBlockaded() && !isOpened(),
-        "Moving files on an opened database may cause a corrupted database.",
-        return false;);
-    std::list<std::string> paths = getPaths();
-    paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
-    return FileManager::shared()->moveFiles(paths, directory);
+    if (isBlockaded() && !isOpened()) {
+        std::list<std::string> paths = getPaths();
+        paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
+        FileManager *fileManager = FileManager::shared();
+        if (fileManager->moveFiles(paths, directory)) {
+            return true;
+        }
+        setThreadedError(fileManager->getError());
+    } else {
+        error("Moving files on an opened database may cause a corrupted "
+              "database.");
+    }
+    return false;
 }
 
 const std::string &Database::getPath() const
@@ -249,8 +262,10 @@ bool Database::backup(const Data &data)
     if (!deconstructor.work()) {
         return false;
     }
-    //    deconstructor.getPagerError()
-    //    m_pool->setThreadedError(handle->getError());
+//    if (handle->backup(data)) {
+//        return true;
+//    }
+//    setThreadedError(handle->getError());
     return false;
 }
 
@@ -259,15 +274,15 @@ bool Database::recoverFromPath(const std::string &corruptedDBPath,
                                const Data &backupCipher,
                                const Data &databaseCipher)
 {
-    //    RecyclableHandle handle = getHandle();
-    //    if (handle == nullptr) {
-    //        return false;
-    //    }
-    //    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
-    //                                databaseCipher)) {
-    //        return true;
-    //    }
-    //    m_pool->setThreadedError(handle->getError());
+//    RecyclableHandle handle = getHandle();
+//    if (handle == nullptr) {
+//        return false;
+//    }
+//    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
+//                                databaseCipher)) {
+//        return true;
+//    }
+//    setThreadedError(handle->getError());
     return false;
 }
 
@@ -319,7 +334,7 @@ bool Database::execute(const Statement &statement)
             }
             return true;
         }
-        m_pool->setThreadedError(handle->getError());
+        setThreadedError(handle->getError());
     }
     return false;
 }
@@ -330,7 +345,7 @@ std::pair<bool, bool> Database::isTableExists(const TableOrSubquery &table)
     if (handle != nullptr) {
         auto pair = handle->isTableExists(table);
         if (!pair.first) {
-            m_pool->setThreadedError(handle->getError());
+            setThreadedError(handle->getError());
         }
         return pair;
     }
@@ -464,6 +479,12 @@ bool Database::isInThreadedTransaction() const
     ThreadedHandles *threadedHandle = Database::threadedHandles().get();
     return threadedHandle->find(m_pool.getHandlePool()) !=
            threadedHandle->end();
+}
+
+#pragma mark - ThreadedHandleErrorProne
+const HandlePool *Database::getErrorAssociatedHandlePool() const
+{
+    return m_pool.getHandlePool();
 }
 
 } //namespace WCDB

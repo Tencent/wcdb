@@ -75,11 +75,7 @@
 #import <WCDB/WCTHandle+Table.h>
 #import <WCDB/WCTTable.h>
 
-#import <WCDB/WCTCoreError.h>
 #import <WCDB/WCTError.h>
-#import <WCDB/WCTFileError.h>
-#import <WCDB/WCTHandleError.h>
-#import <WCDB/WCTSQLiteError.h>
 
 #import <WCDB/WCTPerformanceFootprint.h>
 

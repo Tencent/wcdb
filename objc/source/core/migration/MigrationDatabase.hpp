@@ -24,6 +24,7 @@
 #include <WCDB/Database.hpp>
 #include <WCDB/MigrationHandlePool.hpp>
 #include <WCDB/MigrationSetting.hpp>
+#include <WCDB/ThreadedHandleErrorProne.hpp>
 
 #pragma GCC visibility push(hidden)
 

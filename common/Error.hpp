@@ -22,17 +22,15 @@
 #define Error_hpp
 
 #include <functional>
+#include <map>
+#include <sstream>
 #include <string>
 
 namespace WCDB {
 
 class Error {
+#pragma mark - Level
 public:
-    Error();
-
-    static constexpr int type = 1;
-    virtual int getType() const;
-
     enum class Level : int {
         Ignore = 1,
         Debug = 2,
@@ -57,24 +55,46 @@ public:
         }
     }
 
-    enum class Code {
-        Error = -1,
-    };
+#pragma mark - Initialize
+public:
+    Error();
+    Error(const std::string &message, Level level = Level::Error);
+
+    void clear();
+
+#pragma mark - Code
+public:
     int code;
     bool isOK() const;
 
+    static constexpr const int error = std::numeric_limits<int>::max();
+
+#pragma mark - Type
+public:
+    std::string type;
+
+#pragma mark - Info
+public:
     std::string message;
 
-    virtual std::string getDescription() const;
+    class Infos {
+    public:
+        void set(const std::string &key, int64_t value);
+        void set(const std::string &key, const std::string &value);
 
-protected:
-    static void log(const std::string &message, Level level);
-    void addToDescription(std::string &description,
-                          const char *key,
-                          int64_t value) const;
-    void addToDescription(std::string &description,
-                          const char *key,
-                          const std::string &value) const;
+        const std::map<std::string, int64_t> getIntInfos() const;
+        const std::map<std::string, std::string> getStringInfos() const;
+
+        void clear();
+
+    protected:
+        std::map<std::string, int64_t> m_ints;
+        std::map<std::string, std::string> m_strings;
+    };
+    Infos infos;
+
+#pragma mark - Description
+    std::string getDescription() const;
 };
 
 } //namespace WCDB

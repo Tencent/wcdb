@@ -18,15 +18,21 @@
  * limitations under the License.
  */
 
+#import <WCDB/FileManager.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/NSString+CppString.h>
 
-static_assert((int) WCTErrorTypeError == WCDB::Error::type, "");
-static_assert((int) WCTErrorTypeSQLite == WCDB::SQLiteError::type, "");
-static_assert((int) WCTErrorTypeHandle == WCDB::HandleError::type, "");
-static_assert((int) WCTErrorTypeCore == WCDB::CoreError::type, "");
-static_assert((int) WCTErrorTypeFile == WCDB::FileError::type, "");
-static_assert(((1 << WCDB::Error::type) & (1 << WCDB::SQLiteError::type) & (1 << WCDB::HandleError::type) & (1 << WCDB::CoreError::type) & (1 << WCDB::FileError::type)) == 0, "");
+WCTErrorType const WCTErrorTypeSQLite = @"SQLite";
+WCTErrorType const WCTErrorTypeHandle = @"Handle";
+WCTErrorType const WCTErrorTypeCore = @"Core";
+WCTErrorType const WCTErrorTypeFile = @"File";
+
+WCTErrorKey const WCTErrorKeyPath = @"Path";
+WCTErrorKey const WCTErrorKeySQL = @"SQL";
+WCTErrorKey const WCTErrorKeyFileOperation = @"Op";
+WCTErrorKey const WCTErrorKeyTag = @"Tag";
+
+WCTTag const WCTInvalidTag = WCDB::Handle::invalidTag;
 
 static_assert((int) WCTErrorLevelIgnore == (int) WCDB::Error::Level::Ignore, "");
 static_assert((int) WCTErrorLevelDebug == (int) WCDB::Error::Level::Debug, "");
@@ -34,27 +40,115 @@ static_assert((int) WCTErrorLevelWarning == (int) WCDB::Error::Level::Warning, "
 static_assert((int) WCTErrorLevelError == (int) WCDB::Error::Level::Error, "");
 static_assert((int) WCTErrorLevelFatal == (int) WCDB::Error::Level::Fatal, "");
 
+static_assert((int) WCTInvalidTag == (int) WCDB::Handle::invalidTag, "");
+static_assert(sizeof(WCTTag) == sizeof(WCDB::Handle::Tag), "");
+
+static_assert((int) WCTErrorFileOperationNotSet == (int) WCDB::FileManager::Operation::NotSet, "");
+static_assert((int) WCTErrorFileOperationLstat == (int) WCDB::FileManager::Operation::Lstat, "");
+static_assert((int) WCTErrorFileOperationAccess == (int) WCDB::FileManager::Operation::Access, "");
+static_assert((int) WCTErrorFileOperationLink == (int) WCDB::FileManager::Operation::Link, "");
+static_assert((int) WCTErrorFileOperationUnlink == (int) WCDB::FileManager::Operation::Unlink, "");
+static_assert((int) WCTErrorFileOperationRemove == (int) WCDB::FileManager::Operation::Remove, "");
+static_assert((int) WCTErrorFileOperationMkdir == (int) WCDB::FileManager::Operation::Mkdir, "");
+
 @implementation WCTError
 
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
+    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
+    for (const auto &info : error.infos.getIntInfos()) {
+        [userInfo setObject:@(info.second) forKey:[NSString stringWithCppString:info.first]];
+    }
+    for (const auto &info : error.infos.getStringInfos()) {
+        [userInfo setObject:[NSString stringWithCppString:info.second] forKey:[NSString stringWithCppString:info.first]];
+    }
+
     if (self = [super initWithDomain:@"WCDB"
                                 code:error.code
-                            userInfo:nil]) {
+                            userInfo:userInfo]) {
         _message = [NSString stringWithCppString:error.message];
         _level = (WCTErrorLevel) error.level;
+        _type = [NSString stringWithCppString:error.type];
+        WCTInnerAssert([_type isEqualToString:WCTErrorTypeCore] || [_type isEqualToString:WCTErrorTypeSQLite] || [_type isEqualToString:WCTErrorTypeHandle] || [_type isEqualToString:WCTErrorTypeFile]);
     }
     return self;
 }
 
-- (WCTErrorType)type
+- (NSString *)stringForKey:(WCTErrorKey)key
 {
-    return WCTErrorTypeError;
+    id value = [self.userInfo objectForKey:key];
+    if (value && [value isKindOfClass:NSString.class]) {
+        return value;
+    }
+    return nil;
+}
+
+- (NSInteger)integerForKey:(WCTErrorKey)key
+{
+    id value = [self.userInfo objectForKey:WCTErrorKeyTag];
+    if (value && [value isKindOfClass:NSNumber.class]) {
+        return ((NSNumber *) value).integerValue;
+    }
+    if ([key isEqualToString:WCTErrorKeyTag]) {
+        return WCTInvalidTag;
+    }
+    if ([key isEqualToString:WCTErrorKeyFileOperation]) {
+        return WCTErrorFileOperationNotSet;
+    }
+    return 0;
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"[%s]Code: %ld, Msg: %@", WCDB::Error::LevelName((WCDB::Error::Level) _level), (long) self.code, self.message];
+    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s]", WCDB::Error::LevelName((WCDB::Error::Level) self.level)];
+    WCTInnerAssert(self.type.length > 0);
+    [description appendString:self.type];
+    if (self.code != WCDB::Error::error) {
+        [description appendFormat:@", Code: %ld", (long) self.code];
+    }
+    if (self.message.length > 0) {
+        [description appendFormat:@", Msg: %@", self.message];
+    }
+    [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
+      [description appendFormat:@", %@: %@", key, obj];
+    }];
+    return description;
+}
+
+@end
+
+@implementation WCTError (File)
+
+- (WCTErrorFileOperation)fileOperation
+{
+    return (WCTErrorFileOperation) [self integerForKey:WCTErrorKeyFileOperation];
+}
+
+@end
+
+@implementation WCTError (Path)
+
+- (NSString *)path
+{
+    return [self stringForKey:WCTErrorKeyPath];
+}
+
+@end
+
+@implementation WCTError (Tag)
+
+- (WCTTag)tag
+{
+    return (WCTTag) [self integerForKey:WCTErrorKeyTag];
+}
+
+@end
+
+@implementation WCTError (SQL)
+
+- (NSString *)sql
+{
+    return [self stringForKey:WCTErrorKeySQL];
 }
 
 @end

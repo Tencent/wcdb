@@ -24,12 +24,13 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/RecyclableHandlePool.hpp>
 #include <WCDB/ThreadLocal.hpp>
+#include <WCDB/ThreadedHandleErrorProne.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class Database {
+class Database : protected ThreadedHandleErrorProne {
 #pragma mark - Initializer
 public:
     using Tag = HandlePool::Tag;
@@ -64,7 +65,7 @@ public:
     void unblockade();
     bool isBlockaded();
 
-    const CoreError &getError() const;
+    const Error &getError() const;
 
     static void closeAllDatabases();
 
@@ -94,7 +95,6 @@ public:
         const std::string &directory, const std::list<std::string> &extraFiles);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
-    const FileError &getFileError() const;
 
 #pragma mark - Repair Kit
 public:
@@ -135,6 +135,9 @@ public:
     bool runNestedTransaction(const TransactionCallback &transaction);
 
     bool isInThreadedTransaction() const;
+
+#pragma mark - ThreadedHandleErrorProne
+    const HandlePool *getErrorAssociatedHandlePool() const;
 };
 
 } //namespace WCDB

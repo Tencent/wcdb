@@ -19,11 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
-#import <WCDB/WCTCoreError+Private.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTFileError+Private.h>
-#import <WCDB/WCTHandleError+Private.h>
-#import <WCDB/WCTSQLiteError+Private.h>
 
 @implementation WCTDatabase (Trace)
 
@@ -32,24 +28,7 @@
     WCDB::Reporter::Callback callback = nullptr;
     if (block) {
         callback = [block](const WCDB::Error &error) {
-            WCTError *nsError = nil;
-            switch (error.getType()) {
-                case WCDB::HandleError::type:
-                    nsError = [[WCTHandleError alloc] initWithHandleError:(const WCDB::HandleError &) error];
-                    break;
-                case WCDB::FileError::type:
-                    nsError = [[WCTFileError alloc] initWithFileError:(const WCDB::FileError &) error];
-                    break;
-                case WCDB::CoreError::type:
-                    nsError = [[WCTCoreError alloc] initWithCoreError:(const WCDB::CoreError &) error];
-                    break;
-                case WCDB::SQLiteError::type:
-                    nsError = [[WCTSQLiteError alloc] initWithSQLiteError:(const WCDB::SQLiteError &) error];
-                    break;
-                default:
-                    nsError = [[WCTError alloc] initWithError:error];
-                    break;
-            }
+            WCTError *nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
         };
     }

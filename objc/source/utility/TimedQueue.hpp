@@ -66,7 +66,7 @@ public:
             m_list.push_back(std::move(element));
             auto last = m_list.end();
             std::advance(last, -1);
-            m_map.insert({key, last});
+            m_map[key] = last;
         }
         if (notify) {
             m_cond.notify_one();

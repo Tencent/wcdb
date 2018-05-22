@@ -26,9 +26,7 @@
 #include <WCDB/WINQ.h>
 
 #include <WCDB/Handle.hpp>
-#include <WCDB/HandleError.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/SQLiteError.hpp>
 #include <WCDB/SQLiteGlobal.hpp>
 #include <WCDB/Tokenize.hpp>
 #include <WCDB/Tracer.hpp>

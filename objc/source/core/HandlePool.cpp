@@ -31,7 +31,7 @@ namespace WCDB {
 HandlePool::HandlePool(const std::string &thePath,
                        const std::shared_ptr<const Configs> &configs)
     : path(thePath)
-    , m_tag(HandleError::invalidTag)
+    , m_tag(Handle::invalidTag)
     , m_configs(configs)
     , m_handles(HandlePool::hardwareConcurrency())
     , m_aliveHandleCount(0)
@@ -48,7 +48,7 @@ HandlePool::~HandlePool()
 #pragma mark - Basic
 void HandlePool::setTag(const Tag &tag)
 {
-    WCTAssert(tag != HandleError::invalidTag, "Tag invalid");
+    WCTAssert(tag != Handle::invalidTag, "Tag invalid");
     m_tag.store(tag);
 }
 
@@ -58,40 +58,9 @@ HandlePool::Tag HandlePool::getTag() const
 }
 
 #pragma mark - Error
-void HandlePool::setAndReportCoreError(const std::string &message)
+const Error &HandlePool::getError() const
 {
-    CoreError error(getTag(), message);
-    setThreadedError(error);
-    Reporter::shared()->report(error);
-}
-
-void HandlePool::setThreadedError(const HandleError &error) const
-{
-    setThreadedError(CoreError(error));
-}
-
-void HandlePool::setThreadedError(const CoreError &error) const
-{
-    std::unordered_map<const HandlePool *, CoreError> *errors =
-        HandlePool::threadedErrors().get();
-    auto iter = errors->find(this);
-    if (iter != errors->end()) {
-        iter->second = error;
-    } else {
-        errors->insert({this, error});
-    }
-}
-
-const CoreError &HandlePool::getThreadedError() const
-{
-    ThreadedErrors *errors = HandlePool::threadedErrors().get();
-    auto iter = errors->find(this);
-    WCTRemedialAssert(
-        iter != errors->end(),
-        "Error should be obtained if and only if a interface return false.",
-        static const CoreError s_coreError;
-        return s_coreError;);
-    return iter->second;
+    return getThreadedError();
 }
 
 #pragma mark - Config
@@ -118,12 +87,6 @@ int HandlePool::maxConcurrency()
     static int s_maxConcurrency =
         std::max<int>(HandlePool::hardwareConcurrency(), 64);
     return s_maxConcurrency;
-}
-
-ThreadLocal<HandlePool::ThreadedErrors> &HandlePool::threadedErrors()
-{
-    static ThreadLocal<ThreadedErrors> s_threadedErrors;
-    return s_threadedErrors;
 }
 
 void HandlePool::blockade()
@@ -226,7 +189,7 @@ void HandlePool::flowBack(
 
 std::shared_ptr<Handle> HandlePool::generateHandle()
 {
-    return Handle::handleWithPath(path, getTag());
+    return Handle::handleWithPath(path);
 }
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
@@ -256,15 +219,16 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
                    m_sharedLock.isLocked());
 #endif
     if (m_aliveHandleCount >= HandlePool::maxConcurrency()) {
-        setAndReportCoreError(
+        static const std::string s_concurrency(
             "The concurrency of database exceeds the maxximum allowed: " +
             std::to_string(HandlePool::maxConcurrency()));
+        error(s_concurrency);
         return nullptr;
     }
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         ConfiguredHandle::configuredHandle(generateHandle());
     if (!configuredHandle) {
-        setAndReportCoreError("Out Of Memory");
+        error("Out Of Memory");
         return nullptr;
     }
     Handle *handle = configuredHandle->getHandle();
@@ -273,11 +237,11 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         FileManager::shared()->createDirectoryWithIntermediateDirectories(
             Path::getBaseName(path));
     }
+    willConfigurateHandle(handle);
     if (!handle->open()) {
         setThreadedError(handle->getError());
         return nullptr;
     }
-    willConfigurateHandle(handle);
     std::shared_ptr<const Configs> configs = m_configs;
     if (!configuredHandle->configure(configs)) {
         setThreadedError(handle->getError());
@@ -306,6 +270,12 @@ bool HandlePool::willConfigurateHandle(Handle *handle)
         handle->setTag(getTag());
     }
     return true;
+}
+
+#pragma mark - ThreadedHandleErrorProne
+const HandlePool *HandlePool::getErrorAssociatedHandlePool() const
+{
+    return this;
 }
 
 } //namespace WCDB
