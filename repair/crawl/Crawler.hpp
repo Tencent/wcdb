@@ -25,7 +25,6 @@
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/Evaluation.hpp>
 #include <WCDB/MasterCrawler.hpp>
-#include <WCDB/RepairError.hpp>
 #include <map>
 
 namespace WCDB {
@@ -43,10 +42,10 @@ public:
 
 #pragma mark - Error
 public:
-    const RepairError &getError() const;
+    const Error &getError() const;
 
 protected:
-    RepairError m_error;
+    Error m_error;
 
 #pragma mark - Evaluation
 protected:

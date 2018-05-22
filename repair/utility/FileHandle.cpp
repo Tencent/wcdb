@@ -29,7 +29,8 @@ namespace WCDB {
 
 FileHandle::FileHandle(const std::string &path_) : path(path_), m_fd(-1)
 {
-    m_error.path = path_;
+    m_error.type = "FileHandle";
+    m_error.infos.set("Path", path_);
 }
 
 bool FileHandle::open()
@@ -68,6 +69,7 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
             }
             prior = 0;
             m_error.code = errno;
+            m_error.message = strerror(errno);
             WCDB::Reporter::shared()->report(m_error);
             break;
         } else if (got > 0) {
@@ -80,21 +82,9 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
     return got + prior;
 }
 
-const FileHandle::Error &FileHandle::getError() const
+const Error &FileHandle::getError() const
 {
     return m_error;
-}
-
-std::string FileHandle::Error::getDescription() const
-{
-    std::string description = WCDB::Error::getDescription();
-    addToDescription(description, "Path", path);
-    return description;
-}
-
-int FileHandle::Error::getType() const
-{
-    return Error::type;
 }
 
 } //namespace WCDB

@@ -34,7 +34,8 @@ Modules *Modules::shared()
 void Modules::addAddress(const std::string &name, unsigned char *module)
 {
     LockGuard lockGuard(m_lock);
-    m_modules[name] = Data::data((unsigned char *) &module, sizeof(unsigned));
+    m_modules[name] =
+        Data::data((unsigned char *) &module, sizeof(unsigned char *));
 }
 
 const Data &Modules::getAddress(const std::string &name) const

@@ -61,7 +61,7 @@ bool Assembler::isAssembling() const
     return !m_assembling.empty();
 }
 
-const RepairError &Assembler::getError() const
+const Error &Assembler::getError() const
 {
     return m_error;
 }

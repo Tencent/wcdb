@@ -45,19 +45,6 @@ public:
     void close();
     ssize_t read(unsigned char *data, off_t offset, size_t size);
 
-#pragma mark - Error
-public:
-    class Error : public WCDB::Error {
-    public:
-        //TODO
-        static constexpr const int type = 7;
-        std::string path;
-
-        std::string getDescription() const override;
-
-        int getType() const override;
-    };
-
     const Error &getError() const;
 
 protected:

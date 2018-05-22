@@ -25,6 +25,5 @@
 #include <WCDB/Deconstructor.hpp>
 #include <WCDB/Materaial.hpp>
 #include <WCDB/Mechanic.hpp>
-#include <WCDB/RepairError.hpp>
 
 #endif /* RepairKit_h */

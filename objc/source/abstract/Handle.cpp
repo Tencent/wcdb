@@ -456,7 +456,8 @@ void Handle::discardableExecute(const Statement &statement)
 bool Handle::setCipherKey(const Data &data)
 {
 #ifdef SQLITE_HAS_CODEC
-    int rc = sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());
+    int rc =
+        sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());
     if (rc == SQLITE_OK) {
         return true;
     }

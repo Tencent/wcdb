@@ -22,7 +22,6 @@
 #define Pager_hpp
 
 #include <WCDB/FileHandle.hpp>
-#include <WCDB/RepairError.hpp>
 
 namespace WCDB {
 
@@ -62,12 +61,17 @@ protected:
 
 #pragma mark - Error
 public:
+    enum Code {
+        Corrupt = 1,
+        NoMemory = 2,
+    };
     void markAsCorrupted();
     void markAsNoMemory();
-    const RepairError &getError() const;
+    const Error &getError() const;
 
 protected:
-    RepairError m_error;
+    void markAsError(Code code);
+    Error m_error;
 };
 
 } //namespace Repair

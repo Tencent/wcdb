@@ -37,10 +37,10 @@ Crawlable::Crawlable(const std::string &path, bool fatal)
 #pragma mark - Error
 bool Crawlable::isFatalError() const
 {
-    return m_fatal ? !getPagerError().isOK() : false;
+    return m_fatal ? !getError().isOK() : false;
 }
 
-const RepairError &Crawlable::getPagerError() const
+const Error &Crawlable::getError() const
 {
     return m_pager.getError();
 }

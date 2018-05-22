@@ -262,10 +262,10 @@ bool Database::backup(const Data &data)
     if (!deconstructor.work()) {
         return false;
     }
-//    if (handle->backup(data)) {
-//        return true;
-//    }
-//    setThreadedError(handle->getError());
+    //    if (handle->backup(data)) {
+    //        return true;
+    //    }
+    //    setThreadedError(handle->getError());
     return false;
 }
 
@@ -274,15 +274,15 @@ bool Database::recoverFromPath(const std::string &corruptedDBPath,
                                const Data &backupCipher,
                                const Data &databaseCipher)
 {
-//    RecyclableHandle handle = getHandle();
-//    if (handle == nullptr) {
-//        return false;
-//    }
-//    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
-//                                databaseCipher)) {
-//        return true;
-//    }
-//    setThreadedError(handle->getError());
+    //    RecyclableHandle handle = getHandle();
+    //    if (handle == nullptr) {
+    //        return false;
+    //    }
+    //    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
+    //                                databaseCipher)) {
+    //        return true;
+    //    }
+    //    setThreadedError(handle->getError());
     return false;
 }
 

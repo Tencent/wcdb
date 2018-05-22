@@ -21,7 +21,7 @@
 #ifndef Assembler_hpp
 #define Assembler_hpp
 
-#include <WCDB/RepairError.hpp>
+#include <WCDB/Error.hpp>
 #include <list>
 #include <string>
 
@@ -46,10 +46,10 @@ protected:
 
 #pragma mark - Error
 public:
-    const RepairError &getError() const;
+    const Error &getError() const;
 
 protected:
-    RepairError m_error;
+    Error m_error;
 };
 
 class CanDoAssemble {

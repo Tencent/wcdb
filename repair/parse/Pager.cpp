@@ -81,7 +81,7 @@ bool Pager::initialize()
     }
     auto fileSizePair = FileManager::shared()->getFileSize(getPath());
     if (!fileSizePair.first) {
-        m_error.setupSystemErrno(FileManager::shared()->getError().code);
+        m_error = FileManager::shared()->getError();
         return false;
     }
     m_pageCount = (int) ((fileSizePair.second + m_pageSize - 1) / m_pageSize);
@@ -126,7 +126,7 @@ Data Pager::acquireData(off_t offset, size_t size)
     if (read == size) {
         return data;
     } else if (read < 0) {
-        m_error.setupSystemErrno(m_fileHandle.getError().code);
+        m_error = m_fileHandle.getError();
     } else {
         //short read
         markAsCorrupted();
@@ -137,15 +137,23 @@ Data Pager::acquireData(off_t offset, size_t size)
 #pragma mark - Error
 void Pager::markAsCorrupted()
 {
-    m_error.setupCode(RepairError::Code::Corrupt);
+    markAsError(Code::Corrupt);
 }
 
 void Pager::markAsNoMemory()
 {
-    m_error.setupCode(RepairError::Code::NoMemory);
+    markAsError(Code::NoMemory);
 }
 
-const RepairError &Pager::getError() const
+void Pager::markAsError(Code code)
+{
+    m_error.clear();
+    m_error.type = "Repair";
+    m_error.code = code;
+    m_error.infos.set("Path", m_fileHandle.path);
+}
+
+const Error &Pager::getError() const
 {
     return m_error;
 }

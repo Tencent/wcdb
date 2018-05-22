@@ -41,7 +41,7 @@ public:
 
     const Materaial &getMaterail() const;
 
-    using MasterCrawler::getPagerError;
+    using MasterCrawler::getError;
 
 protected:
     Materaial m_materaial;

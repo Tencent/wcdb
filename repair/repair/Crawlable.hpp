@@ -43,7 +43,7 @@ protected:
 
 #pragma mark - Error
 protected:
-    const RepairError &getPagerError() const;
+    const Error &getError() const;
 
 protected:
     bool isFatalError() const;
