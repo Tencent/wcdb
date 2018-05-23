@@ -57,20 +57,12 @@ const std::string &Handle::getJournalSubfix()
     return s_journalSubfix;
 }
 
-const std::string &Handle::getBackupSubfix()
+const std::array<std::string, 4> &Handle::getSubfixs()
 {
-    static const std::string s_backupSubfix = "-backup";
-    return s_backupSubfix;
-}
-
-const std::array<std::string, 5> &Handle::getSubfixs()
-{
-    static const std::array<std::string, 5> s_subfixs = {
+    static const std::array<std::string, 4> s_subfixs = {
         "", //main db file
-        Handle::getWALSubfix(),
-        Handle::getSHMSubfix(),
+        Handle::getWALSubfix(), Handle::getSHMSubfix(),
         Handle::getJournalSubfix(),
-        Handle::getBackupSubfix(),
     };
     return s_subfixs;
 }

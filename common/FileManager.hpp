@@ -48,6 +48,7 @@ public:
     bool removeHardLink(const std::string &path);
     bool removeFile(const std::string &path);
     bool createDirectory(const std::string &path);
+    std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
 
 #pragma mark - Combination
 public:

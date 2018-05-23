@@ -87,7 +87,8 @@ public:
     std::string getSHMPath() const;
     std::string getWALPath() const;
     std::string getJournalPath() const;
-    std::string getBackupPath() const;
+    std::string getFirstBackupPath() const;
+    std::string getLastBackupPath() const;
     std::list<std::string> getPaths() const;
 
     bool moveFiles(const std::string &directory);
@@ -103,6 +104,13 @@ public:
                          int pageSize,
                          const Data &backupCipher,
                          const Data &databaseCipher);
+
+protected:
+    std::pair<bool, std::string> pickUpNewBackup();
+    std::pair<bool, std::string> pickUpOldBackup();
+    std::pair<bool, std::string> pickUpBackup(bool old);
+    static const std::string &getFirstBackupSubfix();
+    static const std::string &getLastBackupSubfix();
 
 #pragma mark - Handle
 public:

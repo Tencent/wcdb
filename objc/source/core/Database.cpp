@@ -244,21 +244,99 @@ std::string Database::getJournalPath() const
     return Path::addExtention(getPath(), Handle::getJournalSubfix());
 }
 
-std::string Database::getBackupPath() const
+std::string Database::getFirstBackupPath() const
 {
-    return Path::addExtention(getPath(), Handle::getBackupSubfix());
+    return Path::addExtention(getPath(), Database::getLastBackupPath());
+}
+
+std::string Database::getLastBackupPath() const
+{
+    return Path::addExtention(getPath(), Database::getFirstBackupPath());
 }
 
 std::list<std::string> Database::getPaths() const
 {
-    return {getPath(), getWALPath(), getSHMPath(), getJournalPath(),
-            getBackupPath()};
+    return {getPath(),        getWALPath(),         getSHMPath(),
+            getJournalPath(), getFirstBackupPath(), getLastBackupPath()};
 }
 
 #pragma mark - Repair Kit
+const std::string &Database::getFirstBackupSubfix()
+{
+    static const std::string s_firstBackupSubfix("-first.material");
+    return s_firstBackupSubfix;
+}
+
+const std::string &Database::getLastBackupSubfix()
+{
+    static const std::string s_lastBackupSubfix("-last.material");
+    return s_lastBackupSubfix;
+}
+
+std::pair<bool, std::string> Database::pickUpOldBackup()
+{
+    return pickUpBackup(true);
+}
+
+std::pair<bool, std::string> Database::pickUpNewBackup()
+{
+    return pickUpBackup(false);
+}
+
+std::pair<bool, std::string> Database::pickUpBackup(bool old)
+{
+    FileManager *fileManager = FileManager::shared();
+
+    bool first = false;
+    bool result = true;
+    std::string firstBackupPath = getFirstBackupPath();
+    std::string lastBackupPath = getLastBackupPath();
+    do {
+        std::pair<bool, bool> exists = fileManager->isExists(firstBackupPath);
+        if (!exists.first) {
+            result = false;
+            break;
+        }
+        if (!exists.second) {
+            first = old;
+            break;
+        }
+
+        exists = fileManager->isExists(lastBackupPath);
+        if (!exists.first) {
+            result = false;
+            break;
+        }
+        if (!exists.second) {
+            first = !old;
+            break;
+        }
+
+        //get the old one
+        auto firstBackupTime =
+            fileManager->getFileModifiedTime(firstBackupPath);
+        auto lastBackupTime = fileManager->getFileModifiedTime(lastBackupPath);
+        if (!firstBackupTime.first || !lastBackupTime.second) {
+            result = false;
+            break;
+        }
+        first = (firstBackupTime.second > lastBackupTime.second) ^ old;
+    } while (false);
+
+    if (!result) {
+        setThreadedError(fileManager->getError());
+        return {false, String::empty()};
+    }
+    return {true, first ? firstBackupPath : lastBackupPath};
+}
+
 bool Database::backup(const Data &data)
 {
-    //TODO crypt
+    auto backupPath = pickUpOldBackup();
+    if (!backupPath.first) {
+        return false;
+    }
+
     Repair::Deconstructor deconstructor(getPath());
     if (!deconstructor.work()) {
         setThreadedError(deconstructor.getError());
@@ -269,8 +347,8 @@ bool Database::backup(const Data &data)
         error(Error(Error::Code::NoMemory));
         return false;
     }
-    //TODO pick up backup file
-    FileHandle fileHandle("TODO");
+
+    FileHandle fileHandle(backupPath.second);
     bool result = true;
     if (!fileHandle.open() ||
         !fileHandle.write(materail.buffer(), 0, materail.size())) {

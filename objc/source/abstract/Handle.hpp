@@ -53,8 +53,7 @@ public:
     static const std::string &getSHMSubfix();
     static const std::string &getWALSubfix();
     static const std::string &getJournalSubfix();
-    static const std::string &getBackupSubfix();
-    static const std::array<std::string, 5> &getSubfixs();
+    static const std::array<std::string, 4> &getSubfixs();
 
 #pragma mark - Tag
 public:

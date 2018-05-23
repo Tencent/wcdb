@@ -98,6 +98,17 @@ bool FileManager::createDirectory(const std::string &path)
     return false;
 }
 
+std::pair<bool, time_t>
+FileManager::getFileModifiedTime(const std::string &path)
+{
+    struct stat result;
+    if (stat(path.c_str(), &result) == 0) {
+        return {true, result.st_mtime};
+    }
+    error(path);
+    return {false, 0};
+}
+
 #pragma mark - Combination
 std::pair<bool, size_t>
 FileManager::getFilesSize(const std::list<std::string> &paths)
