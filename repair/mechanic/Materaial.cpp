@@ -98,7 +98,7 @@ bool Materaial::initWithData(const Data &data)
     return true;
 }
 
-Data Materaial::encodedData()
+Data Materaial::encodedData() const
 {
     Serialization serialization;
     uint32_t checksum = 0;

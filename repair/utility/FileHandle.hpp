@@ -43,7 +43,8 @@ protected:
 public:
     bool open();
     void close();
-    ssize_t read(unsigned char *data, off_t offset, size_t size);
+    ssize_t read(unsigned char *buffer, off_t offset, size_t size);
+    ssize_t write(unsigned char *buffer, off_t offset, size_t size);
 
     const Error &getError() const;
 

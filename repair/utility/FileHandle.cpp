@@ -82,6 +82,30 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
     return got + prior;
 }
 
+ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
+{
+    ssize_t wrote;
+    ssize_t prior = 0;
+    do {
+        wrote = pwrite(m_fd, buffer, size, offset);
+        if (wrote == size) {
+            break;
+        }
+        if (wrote < 0) {
+            if (errno == EINTR) {
+                wrote = 1;
+                continue;
+            }
+        } else if (wrote > 0) {
+            size -= wrote;
+            offset += wrote;
+            prior += wrote;
+            buffer = wrote + buffer;
+        }
+    } while (wrote > 0);
+    return wrote + prior;
+}
+
 const Error &FileHandle::getError() const
 {
     return m_error;

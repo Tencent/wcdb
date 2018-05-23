@@ -258,15 +258,27 @@ std::list<std::string> Database::getPaths() const
 #pragma mark - Repair Kit
 bool Database::backup(const Data &data)
 {
+    //TODO crypt
     Repair::Deconstructor deconstructor(getPath());
     if (!deconstructor.work()) {
+        setThreadedError(deconstructor.getError());
         return false;
     }
-    //    if (handle->backup(data)) {
-    //        return true;
-    //    }
-    //    setThreadedError(handle->getError());
-    return false;
+    Data materail = deconstructor.getMaterail().encodedData();
+    if (materail.empty()) {
+        error("Out Of Memory");
+        return false;
+    }
+    //TODO pick up backup file
+    FileHandle fileHandle("TODO");
+    bool result = true;
+    if (!fileHandle.open() ||
+        !fileHandle.write(materail.buffer(), 0, materail.size())) {
+        setThreadedError(fileHandle.getError());
+        result = false;
+    }
+    fileHandle.close();
+    return result;
 }
 
 bool Database::recoverFromPath(const std::string &corruptedDBPath,

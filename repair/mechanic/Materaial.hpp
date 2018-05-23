@@ -60,7 +60,7 @@ public:
 #pragma mark -Serialization
 public:
     bool initWithData(const Data &data);
-    Data encodedData();
+    Data encodedData() const;
 };
 
 } //namespace Repair
