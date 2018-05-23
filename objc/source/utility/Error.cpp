@@ -30,46 +30,13 @@ Error::Error() : level(Level::Error), m_code(Code::OK)
 {
 }
 
-Error Error::warning(const std::string &message, const char *file, int line)
+Error::Error(Code code) : level(Level::Error), m_code(code)
 {
-    return Error::error(Level::Warning, Code::Warning, message, file, line);
 }
 
-Error Error::error(const std::string &message, const char *file, int line)
+Error::Error(Code code, const std::string &message_)
+    : level(Level::Error), m_code(code), message(message_)
 {
-    return Error::error(Level::Error, Code::Misuse, message, file, line);
-}
-
-Error Error::fatal(const std::string &message, const char *file, int line)
-{
-    return Error::error(Level::Fatal, Code::Misuse, message, file, line);
-}
-
-Error Error::error(const std::string &message)
-{
-    Error error;
-    error.setCode(Code::Misuse);
-    error.message = message;
-    error.infos.set("Msg", message);
-    return error;
-}
-
-Error Error::error(Level level,
-                   Code code,
-                   const std::string &message,
-                   const char *file,
-                   int line)
-{
-    Error error;
-    error.level = level;
-    error.setCode(code);
-    error.message = message;
-    error.infos.set("Msg", message);
-    if (file) {
-        error.infos.set("File", file);
-    }
-    error.infos.set("Line", line);
-    return error;
 }
 
 void Error::clear()

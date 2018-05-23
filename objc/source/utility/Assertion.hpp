@@ -25,54 +25,38 @@
 
 #ifdef DEBUG
 
-//debug assert
-#define WCTAssert(cond, message)                                               \
-    if (!(cond)) {                                                             \
-        WCDB::Reporter::shared()->report(                                      \
-            WCDB::Error::fatal((message), __FILE__, __LINE__));                \
-    }
-
-//remedial assert
-#define WCTRemedialAssert(cond, message, remedial) WCTAssert((cond), (message))
-
-//fatal error
-#define WCTFatalError(message) WCTAssert(false, (message))
-
-//remedial fatal error
-#define WCTRemedialFatalError(message, remedial) WCTFatalError(message)
-
-#else //ELSE
-
-#define WCTAssert(cond, message)                                               \
-    if (!(cond)) {                                                             \
-        WCDB::Reporter::shared()->report(                                      \
-            WCDB::Error::error((message), __FILE__, __LINE__));                \
-    }
-
-//remedial assert
 #define WCTRemedialAssert(cond, message, remedial)                             \
     if (!(cond)) {                                                             \
-        WCDB::Reporter::shared()->report(                                      \
-            WCDB::Error::error((message), __FILE__, __LINE__));                \
+        WCDB::Reporter::fatal((message), __FILE__, __LINE__);                  \
         remedial                                                               \
     }
 
-#define WCTFatalError(message) WCTAssert(false, (message))
-
-//remedial fatal error
-#define WCTRemedialFatalError(message, remedial)                               \
-    WCTRemedialAssert(false, (message), remedial)
-
-#endif //DEBUG
-
-#ifdef DEBUG
 #define WCTInnerAssert(cond)                                                   \
     WCTAssert((cond),                                                          \
               "If you think it's a bug caused by WCDB, please report to us.")
+
+#else // DEBUG
+
+#define WCTRemedialAssert(cond, message, remedial)                             \
+    if (!(cond)) {                                                             \
+        WCDB::Reporter::error((message), __FILE__, __LINE__);                  \
+        remedial                                                               \
+    }
+
+#define WCTInnerAssert(cond)
+
 #endif // DEBUG
 
+#define WCTAssert(cond, message) WCTRemedialAssert((cond), (message), ;)
+
+#define WCTFatalError(message) WCTAssert(false, (message))
+
+#define WCTRemedialFatalError(message, remedial)                               \
+    WCTRemedialAssert(false, (message), remedial)
+
+#define WCTInnerFatalError() WCTInnerAssert(false);
+
 #define WCTWarning(message)                                                    \
-    WCDB::Reporter::shared()->report(                                          \
-        WCDB::Error::warning((message), __FILE__, __LINE__))
+    WCDB::Reporter::warning((message), __FILE__, __LINE__)
 
 #endif /* Assertion_hpp */

@@ -35,7 +35,7 @@ protected:
     void setThreadedError(Error &&error) const;
     const Error &getThreadedError() const;
     virtual const HandlePool *getErrorAssociatedHandlePool() const = 0;
-    void error(const std::string &message) const;
+    void error(Error &&error) const;
 
 private:
     using ThreadedErrors = std::unordered_map<const HandlePool *, Error>;

@@ -58,28 +58,29 @@ public:
 #pragma mark - Code
 public:
     enum class Code : int {
-        OK = 0,          /* Successful result */
-        Error = 1,       /* SQL error, missing database or unknown error */
-        Internal = 2,    /* Internal logic error */
-        Permission = 3,  /* Access permission denied */
-        Abort = 4,       /* Callback routine requested an abort */
-        Busy = 5,        /* The database file is locked */
-        Locked = 6,      /* A table in the database is locked */
-        NoMemory = 7,    /* Out of memory */
-        Readonly = 8,    /* Attempt to write a readonly file */
-        Interrupt = 9,   /* Operation terminated by sqlite3_interrupt()*/
-        IOError = 10,    /* Some kind of disk I/O error occurred */
-        Corrupt = 11,    /* The database disk image is malformed */
-        NotFound = 12,   /* Unknown opcode in sqlite3_file_control() */
-        Full = 13,       /* Insertion failed because database is full */
-        CantOpen = 14,   /* Unable to open the database file */
-        Protocol = 15,   /* Database lock protocol error */
-        Empty = 16,      /* Database is empty */
-        Schema = 17,     /* The database schema changed */
-        Toobig = 18,     /* String, BLOB or File exceeds size limit */
-        Constraint = 19, /* Abort due to constraint violation */
-        Mismatch = 20,   /* Data type mismatch */
-        Misuse = 21,     /* WCDB or SQLite used incorrectly */
+        OK = 0,         /* Successful result */
+        Error = 1,      /* SQL error or missing database */
+        Internal = 2,   /* Internal logic error */
+        Permission = 3, /* Access permission denied */
+        Abort = 4,      /* Callback routine requested an abort */
+        Busy = 5,       /* The database file is locked or system call busy */
+        Locked = 6,     /* A table in the database is locked */
+        NoMemory = 7,   /* Out of memory */
+        Readonly = 8,   /* Attempt to write a readonly file */
+        Interrupt = 9,  /* Operation terminated by sqlite3_interrupt()*/
+        IOError = 10,   /* Some kind of disk I/O error occurred */
+        Corrupt =
+            11, /* The data(database, memory or other files) acquired is malformed */
+        NotFound = 12, /* Unknown opcode in sqlite3_file_control() */
+        Full = 13,     /* Disk is full */
+        CantOpen = 14, /* Unable to open the database file */
+        Protocol = 15, /* Database lock protocol error */
+        Empty = 16,    /* Database is empty */
+        Schema = 17,   /* The database schema changed */
+        Exceed = 18,   /* String, BLOB, File, Concurrency exceeds size limit */
+        Constraint = 19,         /* Abort due to constraint violation */
+        Mismatch = 20,           /* Data type mismatch */
+        Misuse = 21,             /* WCDB or SQLite used incorrectly */
         NoLargeFileSupport = 22, /* Uses OS features not supported on host */
         Authorization = 23,      /* Authorization denied */
         Format = 24,             /* Auxiliary database format error */
@@ -128,8 +129,8 @@ public:
                 return "Empty";
             case Code::Schema:
                 return "Schema";
-            case Code::Toobig:
-                return "Toobig";
+            case Code::Exceed:
+                return "Exceed";
             case Code::Constraint:
                 return "Constraint";
             case Code::Mismatch:
@@ -167,20 +168,10 @@ protected:
 #pragma mark - Initialize
 public:
     Error();
-    static Error
-    warning(const std::string &message, const char *file, int line);
-    static Error error(const std::string &message, const char *file, int line);
-    static Error fatal(const std::string &message, const char *file, int line);
-    static Error error(const std::string &message);
+    Error(Code code);
+    Error(Code code, const std::string &message);
 
     void clear();
-
-protected:
-    static Error error(Level level,
-                       Code code,
-                       const std::string &message,
-                       const char *file,
-                       int line);
 
 #pragma mark - Info
 public:

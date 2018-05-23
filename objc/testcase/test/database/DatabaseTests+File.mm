@@ -136,9 +136,10 @@
 {
     __block BOOL tested = NO;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-      if (error.code == WCTErrorCodeWarning && error.level == WCTErrorLevelWarning) {
+      if (error.code == WCTErrorCodeMisuse && error.level == WCTErrorLevelWarning) {
           tested = YES;
       }
+      NSLog(@"%@", error);
     }];
     //Give
     NSData *data = [@"testGetFilesSize" dataUsingEncoding:NSASCIIStringEncoding];

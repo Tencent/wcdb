@@ -40,6 +40,17 @@ public:
 protected:
     Reporter();
     Callback m_callback;
+
+public:
+    static void fatal(const std::string &message, const char *file, int line);
+    static void error(const std::string &message, const char *file, int line);
+    static void warning(const std::string &message, const char *file, int line);
+
+protected:
+    static void error(Error::Level level,
+                      const std::string &message,
+                      const char *file,
+                      int line);
 };
 
 } //namespace WCDB

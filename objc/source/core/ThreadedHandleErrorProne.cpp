@@ -46,16 +46,15 @@ const Error &ThreadedHandleErrorProne::getThreadedError() const
     return (*threadedErrors()->get())[getErrorAssociatedHandlePool()];
 }
 
-void ThreadedHandleErrorProne::error(const std::string &message) const
+void ThreadedHandleErrorProne::error(Error &&error) const
 {
     const HandlePool *handlePool = getErrorAssociatedHandlePool();
-    Error error = Error::error(message);
     if (handlePool->getTag() != Handle::invalidTag) {
         error.infos.set("Tag", handlePool->getTag());
     }
     error.infos.set("Path", handlePool->path);
     Reporter::shared()->report(error);
-    (*threadedErrors()->get())[handlePool] = std::move(error);
+    setThreadedError(std::move(error));
 }
 
 } //namespace WCDB

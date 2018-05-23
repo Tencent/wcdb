@@ -199,8 +199,8 @@ bool Database::moveFiles(const std::string &directory)
         }
         setThreadedError(fileManager->getError());
     } else {
-        error("Moving files on an opened database may cause a corrupted "
-              "database.");
+        error(Error(Error::Code::Misuse, "Moving files on an opened database "
+                                         "may cause a corrupted database."));
     }
     return false;
 }
@@ -217,8 +217,8 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         }
         setThreadedError(fileManager->getError());
     } else {
-        error("Moving files on an opened database may cause a corrupted "
-              "database.");
+        error(Error(Error::Code::Misuse, "Moving files on an opened database "
+                                         "may cause a corrupted database."));
     }
     return false;
 }
