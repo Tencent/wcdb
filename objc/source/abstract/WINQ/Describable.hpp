@@ -28,7 +28,7 @@
 #define WINQRemedialAssert(cond)                                               \
     WCTRemedialAssert(cond, "Misuse", return *this;)
 
-#define WINQRemedialError() WCTRemedialError("Misuse", return *this;)
+#define WINQRemedialError() WCTRemedialFatalError("Misuse", return *this;)
 
 namespace WCDB {
 

@@ -37,7 +37,8 @@
                       return description;)
 
 #define LangRemedialFatalError()                                               \
-    WCTRemedialError("WINQ expression is not complete", return description;)
+    WCTRemedialFatalError("WINQ expression is not complete",                   \
+                          return description;)
 
 namespace WCDB {
 

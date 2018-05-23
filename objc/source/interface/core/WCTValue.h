@@ -27,11 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTColumnType)valueType;
 
-- (NSString *)stringValue;
+- (nullable NSString *)stringValue;
 
-- (NSNumber *)numberValue;
+- (nullable NSNumber *)numberValue;
 
-- (NSData *)dataValue;
+- (nullable NSData *)dataValue;
 
 @end
 

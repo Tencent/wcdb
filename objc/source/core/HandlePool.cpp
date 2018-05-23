@@ -222,13 +222,13 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         static const std::string s_concurrency(
             "The concurrency of database exceeds the maxximum allowed: " +
             std::to_string(HandlePool::maxConcurrency()));
-        error(s_concurrency);
+        error(Error(Error::Code::Exceed, s_concurrency));
         return nullptr;
     }
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         ConfiguredHandle::configuredHandle(generateHandle());
     if (!configuredHandle) {
-        error("Out Of Memory");
+        error(Error(Error::Code::NoMemory));
         return nullptr;
     }
     Handle *handle = configuredHandle->getHandle();

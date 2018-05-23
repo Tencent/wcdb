@@ -36,7 +36,7 @@ constexpr WCTTag const WCTInvalidTag = 0;
 
 typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeOK = 0,                  /* Successful result */
-    WCTErrorCodeError = 1,               /* SQL error, missing database or unknown error */
+    WCTErrorCodeError = 1,               /* SQL error or missing database */
     WCTErrorCodeInternal = 2,            /* Internal logic error */
     WCTErrorCodePermission = 3,          /* Access permission denied */
     WCTErrorCodeAbort = 4,               /* Callback routine requested an abort */
@@ -46,14 +46,14 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeReadonly = 8,            /* Attempt to write a readonly file */
     WCTErrorCodeInterrupt = 9,           /* Operation terminated by sqlite3_interrupt()*/
     WCTErrorCodeIOError = 10,            /* Some kind of disk I/O error occurred */
-    WCTErrorCodeCorrupt = 11,            /* The database disk image is malformed */
+    WCTErrorCodeCorrupt = 11,            /* The data(database, memory or other files) acquired is malformed */
     WCTErrorCodeNotFound = 12,           /* Unknown opcode in sqlite3_file_control() */
     WCTErrorCodeFull = 13,               /* Insertion failed because database is full */
     WCTErrorCodeCantOpen = 14,           /* Unable to open the database file */
     WCTErrorCodeProtocol = 15,           /* Database lock protocol error */
     WCTErrorCodeEmpty = 16,              /* Database is empty */
     WCTErrorCodeSchema = 17,             /* The database schema changed */
-    WCTErrorCodeToobig = 18,             /* String, BLOB or File exceeds size limit */
+    WCTErrorCodeExceed = 18,             /* String, BLOB, File, Concurrency exceeds size limit */
     WCTErrorCodeConstraint = 19,         /* Abort due to constraint violation */
     WCTErrorCodeMismatch = 20,           /* Data type mismatch */
     WCTErrorCodeMisuse = 21,             /* WCDB or SQLite used incorrectly */
