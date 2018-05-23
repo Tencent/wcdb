@@ -39,7 +39,8 @@ class TimedQueue {
 public:
     TimedQueue(double delay)
         : m_delay(std::chrono::microseconds((long long) (delay * 1000000)))
-        , m_stop(false){};
+        , m_stop(false)
+        , m_running(false){};
 
     typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
