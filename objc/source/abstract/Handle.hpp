@@ -59,7 +59,7 @@ public:
 #pragma mark - Tag
 public:
     using Tag = int32_t;
-    static constexpr const Tag invalidTag = INT32_MIN;
+    static constexpr const Tag invalidTag = 0;
 
     void setTag(Tag tag);
     Tag getTag() const;

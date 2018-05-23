@@ -137,19 +137,18 @@ Data Pager::acquireData(off_t offset, size_t size)
 #pragma mark - Error
 void Pager::markAsCorrupted()
 {
-    markAsError(Code::Corrupt);
+    markAsError(Error::Code::Corrupt);
 }
 
 void Pager::markAsNoMemory()
 {
-    markAsError(Code::NoMemory);
+    markAsError(Error::Code::NoMemory);
 }
 
-void Pager::markAsError(Code code)
+void Pager::markAsError(Error::Code code)
 {
     m_error.clear();
-    m_error.type = "Repair";
-    m_error.code = code;
+    m_error.setCode(code);
     m_error.infos.set("Path", m_fileHandle.path);
 }
 

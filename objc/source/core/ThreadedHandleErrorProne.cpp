@@ -48,8 +48,8 @@ const Error &ThreadedHandleErrorProne::getThreadedError() const
 
 void ThreadedHandleErrorProne::error(const std::string &message) const
 {
-    Error error(message);
     const HandlePool *handlePool = getErrorAssociatedHandlePool();
+    Error error = Error::error(message);
     if (handlePool->getTag() != Handle::invalidTag) {
         error.infos.set("Tag", handlePool->getTag());
     }

@@ -35,7 +35,6 @@ std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path)
 Handle::Handle(const std::string &path_)
     : m_handle(nullptr), path(path_), m_nestedLevel(0), m_tag(invalidTag)
 {
-    m_error.type = "Handle";
     m_error.infos.set("Path", path);
 }
 
@@ -492,9 +491,8 @@ const Error &Handle::getError() const
 
 void Handle::error(int rc, const std::string &sql)
 {
-    m_error.code = rc;
+    m_error.setSQLiteCode(rc, getExtendedErrorCode());
     m_error.message = getErrorMessage();
-    m_error.infos.set("ExtCode", getExtendedErrorCode());
     m_error.infos.set("SQL", sql);
     Reporter::shared()->report(m_error);
 }

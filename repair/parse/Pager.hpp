@@ -61,16 +61,12 @@ protected:
 
 #pragma mark - Error
 public:
-    enum Code {
-        Corrupt = 1,
-        NoMemory = 2,
-    };
     void markAsCorrupted();
     void markAsNoMemory();
     const Error &getError() const;
 
 protected:
-    void markAsError(Code code);
+    void markAsError(Error::Code code);
     Error m_error;
 };
 

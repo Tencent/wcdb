@@ -31,55 +31,46 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelFatal = 5,
 };
 
-typedef NS_ENUM(NSUInteger, WCTErrorOperation) {
-    WCTErrorOperationNotSet = 0,
-    WCTErrorOperationFileLstat = 1,
-    WCTErrorOperationFileAccess = 2,
-    WCTErrorOperationFileLink = 3,
-    WCTErrorOperationFileUnlink = 4,
-    WCTErrorOperationFileRemove = 5,
-    WCTErrorOperationFileMkdir = 6,
-    WCTErrorOperationFileGetAttribute = (1 | (1 << 8)),
-    WCTErrorOperationFileSetAttribute = (2 | (1 << 8)),
-};
-
-typedef NS_ENUM(NSUInteger, WCTErrorType) {
-    WCTErrorTypeSQLite = 1,
-    WCTErrorTypeHandle = 2,
-    WCTErrorTypeCore = 3,
-    WCTErrorTypeFile = 4,
-};
-
-typedef NSString *WCTErrorKey;
-WCDB_EXTERN WCTErrorKey const WCTErrorKeyPath;
-WCDB_EXTERN WCTErrorKey const WCTErrorKeySQL;
-WCDB_EXTERN WCTErrorKey const WCTErrorKeyOperation;
-WCDB_EXTERN WCTErrorKey const WCTErrorKeyTag;
-WCDB_EXTERN WCTErrorKey const WCTErrorKeyExtendedCode;
-
 typedef int32_t WCTTag;
-WCDB_EXTERN WCTTag const WCTInvalidTag;
+constexpr WCTTag const WCTInvalidTag = 0;
 
-/**
- Detailed error
- */
+typedef NS_ENUM(NSUInteger, WCTErrorCode) {
+    WCTErrorCodeOK = 0,                  /* Successful result */
+    WCTErrorCodeError = 1,               /* SQL error, missing database or unknown error */
+    WCTErrorCodeInternal = 2,            /* Internal logic error */
+    WCTErrorCodePermission = 3,          /* Access permission denied */
+    WCTErrorCodeAbort = 4,               /* Callback routine requested an abort */
+    WCTErrorCodeBusy = 5,                /* The database file is locked */
+    WCTErrorCodeLocked = 6,              /* A table in the database is locked */
+    WCTErrorCodeNoMemory = 7,            /* Out of memory */
+    WCTErrorCodeReadonly = 8,            /* Attempt to write a readonly file */
+    WCTErrorCodeInterrupt = 9,           /* Operation terminated by sqlite3_interrupt()*/
+    WCTErrorCodeIOError = 10,            /* Some kind of disk I/O error occurred */
+    WCTErrorCodeCorrupt = 11,            /* The database disk image is malformed */
+    WCTErrorCodeNotFound = 12,           /* Unknown opcode in sqlite3_file_control() */
+    WCTErrorCodeFull = 13,               /* Insertion failed because database is full */
+    WCTErrorCodeCantOpen = 14,           /* Unable to open the database file */
+    WCTErrorCodeProtocol = 15,           /* Database lock protocol error */
+    WCTErrorCodeEmpty = 16,              /* Database is empty */
+    WCTErrorCodeSchema = 17,             /* The database schema changed */
+    WCTErrorCodeToobig = 18,             /* String, BLOB or File exceeds size limit */
+    WCTErrorCodeConstraint = 19,         /* Abort due to constraint violation */
+    WCTErrorCodeMismatch = 20,           /* Data type mismatch */
+    WCTErrorCodeMisuse = 21,             /* WCDB or SQLite used incorrectly */
+    WCTErrorCodeNoLargeFileSupport = 22, /* Uses OS features not supported on host */
+    WCTErrorCodeAuthorization = 23,      /* Authorization denied */
+    WCTErrorCodeFormat = 24,             /* Auxiliary database format error */
+    WCTErrorCodeRange = 25,              /* 2nd parameter to sqlite3_bind out of range or System call result too large */
+    WCTErrorCodeNotADatabase = 26,       /* File opened that is not a database file */
+    WCTErrorCodeNotice = 27,             /* Notifications */
+    WCTErrorCodeWarning = 28,            /* Warnings */
+};
+
 @interface WCTError : NSError
 
 @property(nonatomic, readonly) WCTErrorLevel level;
 
-@property(nonatomic, readonly) WCTErrorType type;
-
 @property(nonatomic, readonly, nullable) NSString *message;
-
-- (nullable NSString *)stringForKey:(WCTErrorKey)key;
-
-- (NSInteger)integerForKey:(WCTErrorKey)key;
-
-@end
-
-@interface WCTError (Operation)
-
-- (WCTErrorOperation)operation;
 
 @end
 
@@ -104,6 +95,12 @@ WCDB_EXTERN WCTTag const WCTInvalidTag;
 @interface WCTError (ExtendedCode)
 
 - (NSInteger)extendedCode;
+
+@end
+
+@interface WCTError (Source)
+
+- (nullable NSString *)source;
 
 @end
 

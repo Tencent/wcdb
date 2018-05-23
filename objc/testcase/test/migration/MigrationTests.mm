@@ -357,9 +357,6 @@
 
 - (void)test_disorder
 {
-    [WCTDatabase globalTraceSQL:^(NSString *_Nonnull sql) {
-      NSLog(@"%@", sql);
-    }];
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable()
                                                .createTable(_migratedTableName.UTF8String)
                                                .define(WCDB::ColumnDef(TestCaseObject.variable3).withType(WCDB::ColumnType::Float))

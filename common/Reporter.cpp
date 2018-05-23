@@ -71,26 +71,4 @@ void Reporter::report(const Error &error)
     }
 }
 
-void Reporter::error(const std::string &message)
-{
-    report(Error::Level::Error, message);
-}
-
-void Reporter::warning(const std::string &message)
-{
-    report(Error::Level::Warning, message);
-}
-
-void Reporter::fatal(const std::string &message)
-{
-    report(Error::Level::Fatal, message);
-}
-
-void Reporter::report(Error::Level level, const std::string &message)
-{
-    Error error(message);
-    error.level = level;
-    report(error);
-}
-
 } //namespace WCDB

@@ -47,7 +47,7 @@ std::pair<bool, size_t> FileManager::getFileSize(const std::string &path)
     } else if (errno == ENOENT) {
         return {true, 0};
     }
-    error(Operation::Lstat, path);
+    error(path);
     return {false, 0};
 }
 
@@ -58,7 +58,7 @@ std::pair<bool, bool> FileManager::isExists(const std::string &path)
     } else if (errno == ENOENT) {
         return {true, false};
     }
-    error(Operation::Access, path);
+    error(path);
     return {false, false};
 }
 
@@ -67,7 +67,7 @@ bool FileManager::createHardLink(const std::string &from, const std::string &to)
     if (link(from.c_str(), to.c_str()) == 0) {
         return true;
     }
-    error(Operation::Link, to);
+    error(to);
     return false;
 }
 
@@ -76,7 +76,7 @@ bool FileManager::removeHardLink(const std::string &path)
     if (unlink(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    error(Operation::Unlink, path);
+    error(path);
     return false;
 }
 
@@ -85,7 +85,7 @@ bool FileManager::removeFile(const std::string &path)
     if (remove(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    error(Operation::Remove, path);
+    error(path);
     return false;
 }
 
@@ -94,7 +94,7 @@ bool FileManager::createDirectory(const std::string &path)
     if (mkdir(path.c_str(), 0755) == 0) {
         return true;
     }
-    error(Operation::Mkdir, path);
+    error(path);
     return false;
 }
 
@@ -174,13 +174,11 @@ bool FileManager::createDirectoryWithIntermediateDirectories(
 }
 
 #pragma mark - Error
-void FileManager::error(Operation operation, const std::string &path)
+void FileManager::error(const std::string &path)
 {
     Error *error = m_errors.get();
-    error->type = "File";
-    error->code = errno;
+    error->setSystemCode(errno, Error::Code::IOError);
     error->message = strerror(errno);
-    error->infos.set("Op", operation);
     error->infos.set("Path", path);
     Reporter::shared()->report(*error);
 }

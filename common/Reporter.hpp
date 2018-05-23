@@ -37,13 +37,7 @@ public:
     static void logger(const Error::Level &level,
                        const std::string &description);
 
-    void error(const std::string &message);
-    void warning(const std::string &message);
-    void fatal(const std::string &message);
-
 protected:
-    void report(Error::Level level, const std::string &message);
-
     Reporter();
     Callback m_callback;
 };

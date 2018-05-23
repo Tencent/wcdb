@@ -26,28 +26,115 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Error::Error() : level(Level::Error), code(0)
+Error::Error() : level(Level::Error), m_code(Code::OK)
 {
 }
 
-Error::Error(const std::string &message_, Level level_)
-    : code(Error::error), level(level_), message(message_), type("Core")
+Error Error::warning(const std::string &message, const char *file, int line)
 {
+    return Error::error(Level::Warning, Code::Warning, message, file, line);
+}
+
+Error Error::error(const std::string &message, const char *file, int line)
+{
+    return Error::error(Level::Error, Code::Misuse, message, file, line);
+}
+
+Error Error::fatal(const std::string &message, const char *file, int line)
+{
+    return Error::error(Level::Fatal, Code::Misuse, message, file, line);
+}
+
+Error Error::error(const std::string &message)
+{
+    Error error;
+    error.setCode(Code::Misuse);
+    error.message = message;
+    error.infos.set("Msg", message);
+    return error;
+}
+
+Error Error::error(Level level,
+                   Code code,
+                   const std::string &message,
+                   const char *file,
+                   int line)
+{
+    Error error;
+    error.level = level;
+    error.setCode(code);
+    error.message = message;
+    error.infos.set("Msg", message);
+    if (file) {
+        error.infos.set("File", file);
+    }
+    error.infos.set("Line", line);
+    return error;
 }
 
 void Error::clear()
 {
-    type.clear();
-    code = 0;
+    m_code = Code::OK;
     level = Level::Error;
     message.clear();
     infos.clear();
 }
 
 #pragma mark - Code
+void Error::setCode(Code code)
+{
+    m_code = code;
+}
+
+void Error::setSystemCode(int systemCode, Code codeIfUnresolve)
+{
+    switch (systemCode) {
+        case EIO:
+            m_code = Code::IOError;
+            break;
+        case ENOMEM:
+            m_code = Code::NoMemory;
+            break;
+        case EACCES:
+            m_code = Code::Permission;
+            break;
+        case EBUSY:
+            m_code = Code::Busy;
+            break;
+        case ENOSPC:
+            m_code = Code::Full;
+            break;
+        case EAUTH:
+            m_code = Code::Authorization;
+            break;
+        default:
+            m_code = codeIfUnresolve;
+            break;
+    }
+    infos.set("ExtCode", systemCode);
+    infos.set("Source", "System");
+}
+
+void Error::setSQLiteCode(int code)
+{
+    m_code = (Code) code;
+    infos.set("Source", "SQLite");
+}
+
+void Error::setSQLiteCode(int code, int extendedCode)
+{
+    setSQLiteCode(code);
+    infos.set("ExtCode", extendedCode);
+}
+
+Error::Code Error::code() const
+{
+    return m_code;
+}
+
 bool Error::isOK() const
 {
-    return code == 0;
+    return m_code == Code::OK;
 }
 
 #pragma mark - Info
@@ -79,27 +166,34 @@ void Error::Infos::clear()
 
 std::string Error::getDescription() const
 {
-    if (code == 0) {
+    if (m_code == Code::OK) {
         return String::empty();
     }
     std::ostringstream stream;
-    stream << "[" << Error::LevelName(level) << "]";
-
-    WCTInnerAssert(!type.empty());
-    stream << type;
-
-    if (code != Error::error) {
-        stream << ", Code: " << code;
-    }
-
+    stream << "[" << Error::LevelName(level) << ": ";
+    stream << (int) m_code << ", ";
     if (!message.empty()) {
-        stream << ", Msg: " << message;
+        stream << message;
+    } else {
+        stream << Error::CodeName(m_code);
     }
+    stream << "]";
 
+    bool comma = false;
     for (const auto &info : infos.getIntInfos()) {
-        stream << ", " << info.first << ": " << info.second;
+        if (comma) {
+            stream << ", ";
+        } else {
+            comma = true;
+        }
+        stream << info.first << ": " << info.second;
     }
     for (const auto &info : infos.getStringInfos()) {
+        if (comma) {
+            stream << ", ";
+        } else {
+            comma = true;
+        }
         stream << ", " << info.first << ": " << info.second;
     }
     return stream.str();
