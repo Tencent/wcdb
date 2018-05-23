@@ -136,7 +136,7 @@
 {
     __block BOOL tested = NO;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-      if (error.type == WCTErrorTypeCore && error.level == WCTErrorLevelWarning) {
+      if (error.code == WCTErrorCodeWarning && error.level == WCTErrorLevelWarning) {
           tested = YES;
       }
     }];

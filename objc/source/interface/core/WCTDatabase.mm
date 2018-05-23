@@ -34,7 +34,6 @@
         if (!path) {
             return;
         }
-        WCTErrorOperation operation = WCTErrorOperationFileGetAttribute;
         NSError *nsError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *nsPath = [NSString stringWithUTF8String:path];
@@ -44,7 +43,6 @@
             if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
                 return;
             }
-            operation = WCTErrorOperationFileSetAttribute;
             NSDictionary *fileProtectionAttribute = @{NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication};
             [fileManager setAttributes:fileProtectionAttribute
                           ofItemAtPath:nsPath
@@ -52,11 +50,14 @@
         }
         if (nsError) {
             WCDB::Error error;
-            error.type = "File";
-            error.code = (int) error.code;
-            error.message = nsError.description.cppString;
-            error.infos.set("Op", operation);
+            error.setCode(WCDB::Error::Code::IOError);
+            if (nsError.description.length > 0) {
+                error.message = nsError.description.cppString;
+            } else {
+                error.message = WCDB::Error::CodeName(WCDB::Error::Code::IOError);
+            }
             error.infos.set("Path", path);
+            error.infos.set("ExtCode", nsError.code);
             WCDB::Reporter::shared()->report(error);
         }
     });

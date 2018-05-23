@@ -59,20 +59,10 @@ public:
 
 #pragma mark - Error
 public:
-    enum Operation {
-        NotSet = 0,
-        Lstat = 1,
-        Access = 2,
-        Link = 3,
-        Unlink = 4,
-        Remove = 5,
-        Mkdir = 6,
-    };
-
     const Error &getError();
 
 protected:
-    void error(Operation operation, const std::string &path);
+    void error(const std::string &path);
     ThreadLocal<Error> m_errors;
 };
 
