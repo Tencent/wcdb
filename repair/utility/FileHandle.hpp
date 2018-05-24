@@ -23,10 +23,11 @@
 
 #include <WCDB/Error.hpp>
 #include <stdio.h>
+#include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 
-class FileHandle {
+class FileHandle : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     FileHandle(const std::string &path);
@@ -45,11 +46,10 @@ public:
     void close();
     ssize_t read(unsigned char *buffer, off_t offset, size_t size);
     ssize_t write(unsigned char *buffer, off_t offset, size_t size);
-
-    const Error &getError() const;
-
+    
+#pragma mark - Error
 protected:
-    Error m_error;
+    void setupThreadedError();
 };
 
 } //namespace WCDB

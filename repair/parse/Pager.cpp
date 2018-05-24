@@ -127,7 +127,7 @@ Data Pager::acquireData(off_t offset, size_t size)
     if (read == size) {
         return data;
     } else if (read < 0) {
-        m_error = m_fileHandle.getError();
+        m_error = ThreadedErrors::shared()->getThreadedError();
     } else {
         //short read
         markAsCorrupted();

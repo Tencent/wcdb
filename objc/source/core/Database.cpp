@@ -350,7 +350,7 @@ bool Database::backup(const Data &data)
     bool result = true;
     if (!fileHandle.open() ||
         !fileHandle.write(materail.buffer(), 0, materail.size())) {
-        setThreadedError(fileHandle.getError());
+        setThreadedError(ThreadedErrors::shared()->getThreadedError());
         result = false;
     }
     fileHandle.close();
