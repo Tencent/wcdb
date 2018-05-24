@@ -53,6 +53,12 @@ void Error::setCode(Code code)
     m_code = code;
 }
 
+void Error::setCode(Code code, const std::string &source)
+{
+    m_code = code;
+    infos.set("Source", source);
+}
+
 void Error::setSystemCode(int systemCode, Code codeIfUnresolve)
 {
     switch (systemCode) {

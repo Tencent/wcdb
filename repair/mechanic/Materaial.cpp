@@ -34,15 +34,25 @@ Materaial::Materaial() : walSalt1(0), walSalt2(0), walFrame(0)
 }
 
 #pragma mark - Serialization
+void Materaial::markAsCorrupt()
+{
+    Error error;
+    error.setCode(Error::Code::Corrupt, "Repair");
+    error.message = "Materaial is corrupted";
+    setThreadedError(std::move(error));
+}
+
 bool Materaial::initWithData(const Data &data)
 {
     Deserialization deserialization(data);
     if (!deserialization.isEnough(24)) {
+        markAsCorrupt();
         return false;
     }
     //Header
     uint32_t magic = deserialization.advance4BytesUInt();
     if (magic != Materaial::magic) {
+        markAsCorrupt();
         return false;
     }
     uint32_t checksum = deserialization.advance4BytesUInt();
@@ -52,11 +62,11 @@ bool Materaial::initWithData(const Data &data)
     walFrame = deserialization.advance4BytesUInt();
 
     Data decompressed = decompress(data.subdata(24, data.size() - 24));
-    if (checksum == 0 && decompressed.empty()) {
-        //empty content
-        return true;
+    if (decompressed.empty()) {
+        return checksum == 0;
     }
-    if (decompressed.empty() || checksum != hash(decompressed)) {
+    if (checksum != hash(decompressed)) {
+        markAsCorrupt();
         return false;
     }
     deserialization.reset(decompressed);
@@ -72,7 +82,8 @@ bool Materaial::initWithData(const Data &data)
         content.tableName = deserialization.advanceZeroTerminatedString();
         content.sql = deserialization.advanceZeroTerminatedString();
         intermediate = deserialization.advanceVarint();
-        if (intermediate.first < 0) {
+        if (intermediate.first <= 0) {
+            markAsCorrupt();
             return false;
         }
         for (int i = 0; i < intermediate.second; ++i) {
@@ -81,14 +92,16 @@ bool Materaial::initWithData(const Data &data)
             content.associatedSQLs.push_back(std::move(associatedSQL));
         }
         intermediate = deserialization.advanceVarint();
-        if (intermediate.first < 0) {
+        if (intermediate.first <= 0) {
+            markAsCorrupt();
             return false;
         }
         int pageCount = (int) intermediate.second;
         content.pagenos.resize(pageCount);
         for (int i = 0; i < pageCount; ++i) {
             intermediate = deserialization.advanceVarint();
-            if (intermediate.first < 0) {
+            if (intermediate.first <= 0) {
+                markAsCorrupt();
                 return false;
             }
             content.pagenos[i] = (uint32_t) intermediate.second;
@@ -104,7 +117,7 @@ Data Materaial::encodedData() const
     uint32_t checksum = 0;
 
     if (!serialization.resizeToFit(24)) {
-        goto WCDB_Repair_Materaial_EncodedData_End;
+        goto WCDB_Repair_Materaial_EncodedData_Failed;
     }
 
     serialization.put4BytesUInt(magic);
@@ -122,20 +135,20 @@ Data Materaial::encodedData() const
                 ||
                 !serialization.putZeroTerminatedString(content.sql) // with '\0'
                 || !serialization.putVarint(content.associatedSQLs.size())) {
-                goto WCDB_Repair_Materaial_EncodedData_End;
+                goto WCDB_Repair_Materaial_EncodedData_Failed;
             }
             for (const auto &sql : content.associatedSQLs) {
                 if (serialization.putZeroTerminatedString(sql) // with '\0'
                     ) {
-                    goto WCDB_Repair_Materaial_EncodedData_End;
+                    goto WCDB_Repair_Materaial_EncodedData_Failed;
                 }
             }
             if (!serialization.putVarint(content.pagenos.size())) {
-                goto WCDB_Repair_Materaial_EncodedData_End;
+                goto WCDB_Repair_Materaial_EncodedData_Failed;
             }
             for (const auto &pageno : content.pagenos) {
                 if (!serialization.putVarint(pageno)) {
-                    goto WCDB_Repair_Materaial_EncodedData_End;
+                    goto WCDB_Repair_Materaial_EncodedData_Failed;
                 }
             }
         }
@@ -149,17 +162,19 @@ Data Materaial::encodedData() const
 
         const Data compressedContent = compress(uncompressedContent);
         if (compressedContent.empty()) {
-            goto WCDB_Repair_Materaial_EncodedData_End;
+            goto WCDB_Repair_Materaial_EncodedData_Failed;
         }
         serialization.seek(24);
         if (!serialization.putBLOB(compressedContent)) {
-            goto WCDB_Repair_Materaial_EncodedData_End;
+            goto WCDB_Repair_Materaial_EncodedData_Failed;
         }
         serialization.seek(24 + compressedContent.size());
     }
 
-WCDB_Repair_Materaial_EncodedData_End:
     return serialization.finalize();
+
+WCDB_Repair_Materaial_EncodedData_Failed:
+    return Data::emptyData();
 }
 
 } //namespace Repair

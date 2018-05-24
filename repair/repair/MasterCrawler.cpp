@@ -46,14 +46,14 @@ bool MasterCrawler::onCellCrawled(const Cell &cell)
         cell.getValueType(2) != Cell::Type::Text ||
         cell.getValueType(3) != Cell::Type::Integer32 ||
         cell.getValueType(4) != Cell::Type::Text) {
-        m_pager.markAsCorrupted();
+        markAsCorrupted();
         return !isFatalError();
     }
     std::string name = cell.stringValue(1);
     std::string tblName = cell.stringValue(2);
     std::string sql = cell.stringValue(4);
     if (tblName.empty() || sql.empty() || name.empty()) {
-        m_pager.markAsCorrupted();
+        markAsCorrupted();
         return !isFatalError();
     }
 

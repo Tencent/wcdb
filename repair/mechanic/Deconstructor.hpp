@@ -44,8 +44,6 @@ public:
 
     const Materaial &getMaterail() const;
 
-    using MasterCrawler::getError;
-
 protected:
     Filter m_filter;
     Materaial m_materaial;

@@ -30,26 +30,32 @@ namespace Repair {
 
 #pragma mark - Initialize
 Crawlable::Crawlable(const std::string &path, bool fatal)
-    : m_pager(path), m_fatal(fatal)
+    : m_pager(path), m_fatal(fatal), m_error(false)
 {
 }
 
 #pragma mark - Error
 bool Crawlable::isFatalError() const
 {
-    return m_fatal ? !getError().isOK() : false;
+    return m_fatal && m_error;
 }
 
-const Error &Crawlable::getError() const
+void Crawlable::markAsError()
 {
-    return m_pager.getError();
+    m_error = true;
+}
+
+void Crawlable::markAsCorrupted()
+{
+    m_pager.markAsCorrupted();
+    markAsError();
 }
 
 bool Crawlable::crawl(int rootpageno)
 {
     std::set<int> crawledInteriorPages;
     safeCrawl(rootpageno, crawledInteriorPages, 1);
-    return !isFatalError();
+    return isFatalError();
 }
 
 void Crawlable::safeCrawl(int rootpageno,
@@ -57,7 +63,11 @@ void Crawlable::safeCrawl(int rootpageno,
                           int height)
 {
     Page rootpage(rootpageno, m_pager);
-    if (!rootpage.initialize() || !onPageCrawled(rootpage, height)) {
+    if (!rootpage.initialize()) {
+        markAsError();
+        return;
+    }
+    if (!onPageCrawled(rootpage, height)) {
         return;
     }
     switch (rootpage.getType()) {
@@ -65,26 +75,33 @@ void Crawlable::safeCrawl(int rootpageno,
             if (crawledInteriorPages.find(rootpageno) !=
                 crawledInteriorPages.end()) {
                 //avoid dead loop
-                m_pager.markAsCorrupted();
+                markAsCorrupted();
                 return;
             }
             crawledInteriorPages.insert(rootpageno);
             for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
+                if (isFatalError()) {
+                    break;
+                }
                 auto pair = rootpage.getSubPageno(i);
                 if (pair.first) {
                     safeCrawl(pair.second, crawledInteriorPages, height + 1);
                 } else {
-                    m_pager.markAsCorrupted();
-                }
-                if (isFatalError()) {
-                    break;
+                    markAsCorrupted();
                 }
             }
             break;
         case Page::Type::LeafTable:
             for (int i = 0; i < rootpage.getCellCount(); ++i) {
+                if (isFatalError()) {
+                    break;
+                }
                 Cell cell = rootpage.getCell(i);
-                if (cell.initialize() && !onCellCrawled(cell)) {
+                if (!cell.initialize()) {
+                    markAsError();
+                    continue;
+                }
+                if (!onCellCrawled(cell)) {
                     break;
                 }
             }

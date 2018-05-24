@@ -172,7 +172,7 @@ bool Database::removeFiles()
     if (FileManager::shared()->removeFiles(getPaths())) {
         return true;
     }
-    setThreadedError(ThreadedErrors::shared()->getThreadedError());
+    setThreadedError(std::move(ThreadedErrors::shared()->moveThreadedError()));
     return false;
 }
 
@@ -184,7 +184,8 @@ std::pair<bool, size_t> Database::getFilesSize()
     }
     auto pair = FileManager::shared()->getFilesSize(getPaths());
     if (!pair.first) {
-        setThreadedError(ThreadedErrors::shared()->getThreadedError());
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
     }
     return pair;
 }
@@ -195,7 +196,8 @@ bool Database::moveFiles(const std::string &directory)
         if (FileManager::shared()->moveFiles(getPaths(), directory)) {
             return true;
         }
-        setThreadedError(ThreadedErrors::shared()->getThreadedError());
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
     } else {
         setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
                                                     "database may cause a "
@@ -213,7 +215,8 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         if (FileManager::shared()->moveFiles(paths, directory)) {
             return true;
         }
-        setThreadedError(ThreadedErrors::shared()->getThreadedError());
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
     } else {
         setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
                                                     "database may cause a "
@@ -322,7 +325,8 @@ std::pair<bool, std::string> Database::pickUpBackup(bool old)
     } while (false);
 
     if (!result) {
-        setThreadedError(ThreadedErrors::shared()->getThreadedError());
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
         return {false, String::empty()};
     }
     return {true, first ? firstBackupPath : lastBackupPath};
@@ -337,12 +341,14 @@ bool Database::backup(const Data &data)
 
     Repair::Deconstructor deconstructor(getPath());
     if (!deconstructor.work()) {
-        setThreadedError(deconstructor.getError());
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
         return false;
     }
     Data materail = deconstructor.getMaterail().encodedData();
     if (materail.empty()) {
-        setThreadedError(Error(Error::Code::NoMemory));
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
         return false;
     }
 
@@ -350,7 +356,8 @@ bool Database::backup(const Data &data)
     bool result = true;
     if (!fileHandle.open() ||
         !fileHandle.write(materail.buffer(), 0, materail.size())) {
-        setThreadedError(ThreadedErrors::shared()->getThreadedError());
+        setThreadedError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
         result = false;
     }
     fileHandle.close();

@@ -92,7 +92,7 @@ void Reporter::error(Error::Level level,
                      int line)
 {
     Error error;
-    error.setCode(Error::Code::Misuse);
+    error.setCode(Error::Code::Misuse, "Assertion");
     error.level = level;
     error.message = message;
     if (file) {

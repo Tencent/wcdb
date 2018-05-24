@@ -21,6 +21,7 @@
 #ifndef Materaial_hpp
 #define Materaial_hpp
 
+#include <WCDB/ThreadedErrorProne.hpp>
 #include <list>
 #include <stdlib.h>
 #include <string>
@@ -32,7 +33,7 @@ class Data;
 
 namespace Repair {
 
-class Materaial {
+class Materaial : protected SharedThreadedErrorProne {
 #pragma mark - Initialiazation
 public:
     Materaial();
@@ -57,10 +58,13 @@ public:
     };
     std::list<Content> contents;
 
-#pragma mark -Serialization
+#pragma mark - Serialization
 public:
     bool initWithData(const Data &data);
     Data encodedData() const;
+
+protected:
+    void markAsCorrupt();
 };
 
 } //namespace Repair

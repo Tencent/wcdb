@@ -22,6 +22,7 @@
 #define Pager_hpp
 
 #include <WCDB/FileHandle.hpp>
+#include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 
@@ -29,7 +30,7 @@ class Data;
 
 namespace Repair {
 
-class Pager {
+class Pager : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     Pager(const std::string &path);
@@ -62,12 +63,6 @@ protected:
 #pragma mark - Error
 public:
     void markAsCorrupted();
-    void markAsNoMemory();
-    const Error &getError() const;
-
-protected:
-    void markAsError(Error::Code code);
-    Error m_error;
 };
 
 } //namespace Repair

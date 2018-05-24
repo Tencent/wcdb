@@ -23,6 +23,7 @@
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
+#include <WCDB/CriticalErrorOnly.hpp>
 #include <WCDB/Evaluation.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <map>
@@ -31,7 +32,10 @@ namespace WCDB {
 
 namespace Repair {
 
-class Crawler : public MasterCrawler, public CanDoAssemble, public Evaluation {
+class Crawler : public MasterCrawler,
+                public CanDoAssemble,
+                public Evaluation,
+                public CriticalErrorOnly {
 #pragma mark - Initialize
 public:
     Crawler(const std::string &source);
@@ -39,13 +43,6 @@ public:
 #pragma mark - Repair
 public:
     void work();
-
-#pragma mark - Error
-public:
-    const Error &getError() const;
-
-protected:
-    Error m_error;
 
 #pragma mark - Evaluation
 protected:

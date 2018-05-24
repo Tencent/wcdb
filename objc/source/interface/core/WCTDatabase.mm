@@ -50,7 +50,7 @@
         }
         if (nsError) {
             WCDB::Error error;
-            error.setCode(WCDB::Error::Code::IOError);
+            error.setCode(WCDB::Error::Code::IOError, "Native");
             if (nsError.description.length > 0) {
                 error.message = nsError.description.cppString;
             } else {

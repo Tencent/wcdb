@@ -82,7 +82,6 @@ bool Pager::initialize()
     }
     auto fileSizePair = FileManager::shared()->getFileSize(getPath());
     if (!fileSizePair.first) {
-        m_error = ThreadedErrors::shared()->getThreadedError();
         return false;
     }
     m_pageCount = (int) ((fileSizePair.second + m_pageSize - 1) / m_pageSize);
@@ -120,14 +119,13 @@ Data Pager::acquireData(off_t offset, size_t size)
 {
     Data data(size);
     if (data.empty()) {
-        markAsNoMemory();
         return data;
     }
     ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
     if (read == size) {
         return data;
     } else if (read < 0) {
-        m_error = ThreadedErrors::shared()->getThreadedError();
+        //file handle error
     } else {
         //short read
         markAsCorrupted();
@@ -138,24 +136,10 @@ Data Pager::acquireData(off_t offset, size_t size)
 #pragma mark - Error
 void Pager::markAsCorrupted()
 {
-    markAsError(Error::Code::Corrupt);
-}
-
-void Pager::markAsNoMemory()
-{
-    markAsError(Error::Code::NoMemory);
-}
-
-void Pager::markAsError(Error::Code code)
-{
-    m_error.clear();
-    m_error.setCode(code);
-    m_error.infos.set("Path", m_fileHandle.path);
-}
-
-const Error &Pager::getError() const
-{
-    return m_error;
+    Error error;
+    error.setCode(Error::Code::Corrupt, "Repair");
+    error.infos.set("Path", m_fileHandle.path);
+    setThreadedError(std::move(error));
 }
 
 } //namespace Repair

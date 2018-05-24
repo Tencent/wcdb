@@ -43,10 +43,10 @@ protected:
 
 #pragma mark - Error
 protected:
-    const Error &getError() const;
-
-protected:
     bool isFatalError() const;
+    void markAsCorrupted();
+    void markAsError();
+    bool m_error;
 
 #pragma mark - Crawlable
 protected:

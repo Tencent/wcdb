@@ -59,7 +59,7 @@ public:
 public:
     enum class Code : int {
         OK = 0,         /* Successful result */
-        Error = 1,      /* SQL error or missing database */
+        Error = 1,      /* SQL error, missing database or other error */
         Internal = 2,   /* Internal logic error */
         Permission = 3, /* Access permission denied */
         Abort = 4,      /* Callback routine requested an abort */
@@ -161,6 +161,7 @@ public:
     void setSQLiteCode(int code);
     void setSQLiteCode(int code, int extendedCode);
     void setCode(Code code);
+    void setCode(Code code, const std::string &source);
 
 protected:
     Code m_code;

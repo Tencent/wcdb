@@ -22,6 +22,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Crawler.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
@@ -53,10 +54,14 @@ void Crawler::work()
                 m_assembler->assembleTableAssociated(master.associatedSQLs)) {
                 crawl(master.rootpage);
             } else {
-                m_error = m_assembler->getError();
+                tryUpgradeError(
+                    std::move(ThreadedErrors::shared()->moveThreadedError()));
             }
             m_assembler->markAsAssembled();
         }
+    } else {
+        tryUpgradeError(
+            std::move(ThreadedErrors::shared()->moveThreadedError()));
     }
 
     if (m_score != 0 && m_parsedLeafPageCount != 0) {

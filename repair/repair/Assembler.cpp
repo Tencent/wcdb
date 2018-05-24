@@ -61,11 +61,6 @@ bool Assembler::isAssembling() const
     return !m_assembling.empty();
 }
 
-const Error &Assembler::getError() const
-{
-    return m_error;
-}
-
 CanDoAssemble::CanDoAssemble() : m_assembler(nullptr)
 {
 }

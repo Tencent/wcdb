@@ -18,46 +18,28 @@
  * limitations under the License.
  */
 
-#ifndef Assembler_hpp
-#define Assembler_hpp
+#ifndef CriticalErrorOnly_hpp
+#define CriticalErrorOnly_hpp
 
 #include <WCDB/Error.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
-#include <list>
-#include <string>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Cell;
-
-class Assembler : protected SharedThreadedErrorProne {
+class CriticalErrorOnly {
 public:
-    virtual void markAsAssembling(const std::string &tableName);
-    virtual void markAsAssembled();
-    bool isAssembling() const;
-
-    virtual bool assembleTable(const std::string &sql);
-    virtual bool assembleTableAssociated(const std::list<std::string> &sqls);
-    virtual bool assembleCell(const Cell &cell);
+    const Error &getCriticalError() const;
 
 protected:
-    std::string m_assembling;
-};
-
-class CanDoAssemble {
-public:
-    CanDoAssemble();
-
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
-
-protected:
-    std::shared_ptr<Assembler> m_assembler;
+    int criticalLevel(const Error &error);
+    void tryUpgradeError(const Error &newError);
+    void tryUpgradeError(Error &&newError);
+    Error m_criticalError;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Assembler_hpp */
+#endif /* CriticalErrorOnly_hpp */

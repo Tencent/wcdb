@@ -18,13 +18,43 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Compression.hpp>
 #include <WCDB/Data.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 #include <zlib.h>
 
 namespace WCDB {
 
 namespace Repair {
+
+static void setThreadedError(int zCode, const char *msg)
+{
+    Error error;
+    Error::Code code;
+    WCTInnerAssert(zCode != Z_OK && zCode != Z_STREAM_END);
+    switch (zCode) {
+        case Z_MEM_ERROR:
+            code = Error::Code::NoMemory;
+            break;
+        case Z_DATA_ERROR:
+            code = Error::Code::Corrupt;
+            break;
+        case Z_STREAM_ERROR:
+            code = Error::Code::IOError;
+            break;
+        default:
+            code = Error::Code::Error;
+            break;
+    }
+    error.setCode(code, "Zlib");
+    if (msg != nullptr) {
+        error.message = msg;
+    }
+    error.infos.set("ExtCode", zCode);
+    ThreadedErrors::shared()->setThreadedError(std::move(error));
+}
 
 Data compress(const Data &source)
 {
@@ -33,12 +63,13 @@ Data compress(const Data &source)
 
     int step = getpagesize();
     int offset = 0;
-    int ret = Z_OK;
-    size_t total;
+    size_t total = 0;
     Data destination;
 
-    if (deflateInit(&zs, Z_BEST_COMPRESSION) != Z_OK) {
-        goto WCDB_Repair_Compress_Failed;
+    int ret = deflateInit(&zs, Z_BEST_COMPRESSION);
+    if (ret != Z_OK) {
+        setThreadedError(ret, zs.msg);
+        goto WCDB_Repair_Compress_End;
     }
 
     zs.next_in = reinterpret_cast<const Bytef *>(source.buffer());
@@ -46,7 +77,8 @@ Data compress(const Data &source)
 
     do {
         if (!destination.resize(step + offset)) {
-            goto WCDB_Repair_Compress_Failed;
+            total = 0;
+            goto WCDB_Repair_Compress_End;
         }
         zs.next_out = reinterpret_cast<Bytef *>(destination.buffer() + offset);
         zs.avail_out = step;
@@ -56,16 +88,16 @@ Data compress(const Data &source)
         total = zs.total_out;
     } while (ret == Z_OK);
 
-    deflateEnd(&zs);
-
     if (ret != Z_STREAM_END) {
-        goto WCDB_Repair_Compress_Failed;
+        total = 0;
+        setThreadedError(ret, zs.msg);
+        goto WCDB_Repair_Compress_End;
     }
 
-    return destination.subdata(total);
-
-WCDB_Repair_Compress_Failed:
-    return Data::emptyData();
+WCDB_Repair_Compress_End:
+    deflateEnd(&zs);
+    return total > 0 ? destination.subdata(total) : Data::emptyData();
+    ;
 }
 
 Data decompress(const Data &source)
@@ -75,12 +107,13 @@ Data decompress(const Data &source)
 
     int step = getpagesize();
     int offset = 0;
-    int ret = Z_OK;
-    size_t total;
+    size_t total = 0;
     Data destination;
 
-    if (inflateInit(&zs) != Z_OK) {
-        goto WCDB_Repair_Decompress_Failed;
+    int ret = inflateInit(&zs);
+    if (ret != Z_OK) {
+        setThreadedError(ret, zs.msg);
+        goto WCDB_Repair_Decompress_End;
     }
 
     zs.next_in = reinterpret_cast<const Bytef *>(source.buffer());
@@ -88,7 +121,8 @@ Data decompress(const Data &source)
 
     do {
         if (!destination.resize(step + offset)) {
-            goto WCDB_Repair_Decompress_Failed;
+            total = 0;
+            goto WCDB_Repair_Decompress_End;
         }
         zs.next_out = reinterpret_cast<Bytef *>(destination.buffer() + offset);
         zs.avail_out = step;
@@ -98,16 +132,15 @@ Data decompress(const Data &source)
         total = zs.total_out;
     } while (ret == Z_OK);
 
-    inflateEnd(&zs);
-
     if (ret != Z_STREAM_END) {
-        goto WCDB_Repair_Decompress_Failed;
+        total = 0;
+        setThreadedError(ret, zs.msg);
+        goto WCDB_Repair_Decompress_End;
     }
 
-    return destination.subdata(total);
-
-WCDB_Repair_Decompress_Failed:
-    return Data::emptyData();
+WCDB_Repair_Decompress_End:
+    inflateEnd(&zs);
+    return total > 0 ? destination.subdata(total) : Data::emptyData();
 }
 
 uint32_t hash(const Data &source)

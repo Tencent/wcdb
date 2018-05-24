@@ -36,7 +36,7 @@ constexpr WCTTag const WCTInvalidTag = 0;
 
 typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeOK = 0,                  /* Successful result */
-    WCTErrorCodeError = 1,               /* SQL error or missing database */
+    WCTErrorCodeError = 1,               /* SQL error, missing database or other error */
     WCTErrorCodeInternal = 2,            /* Internal logic error */
     WCTErrorCodePermission = 3,          /* Access permission denied */
     WCTErrorCodeAbort = 4,               /* Callback routine requested an abort */
