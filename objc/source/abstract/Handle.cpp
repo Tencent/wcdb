@@ -85,7 +85,7 @@ bool Handle::open()
     if (rc == SQLITE_OK) {
         return true;
     }
-    error(rc);
+    setError(rc);
     return false;
 }
 
@@ -103,7 +103,7 @@ bool Handle::execute(const Statement &statement)
     if (rc == SQLITE_OK) {
         return true;
     }
-    error(rc, statement.getDescription());
+    setError(rc, statement.getDescription());
     return false;
 }
 
@@ -176,10 +176,10 @@ bool Handle::prepare(const Statement &statement,
                                 statement.getDescription().c_str(), -1,
                                 (sqlite3_stmt **) &stmt, nullptr);
     if (rc == SQLITE_OK) {
-        handleStatement.setup(statement, stmt);
+        handleStatement.setup(this, statement, stmt);
         return true;
     }
-    error(rc, statement.getDescription());
+    setError(rc, statement.getDescription());
     return false;
 }
 
@@ -201,11 +201,7 @@ bool Handle::step()
 
 bool Handle::step(HandleStatement &handleStatement, bool &done)
 {
-    if (handleStatement.step(done)) {
-        return true;
-    }
-    error(getResultCode(), handleStatement.getStatement().getDescription());
-    return false;
+    return handleStatement.step(done);
 }
 
 int Handle::getColumnCount()
@@ -452,7 +448,7 @@ bool Handle::setCipherKey(const Data &data)
     if (rc == SQLITE_OK) {
         return true;
     }
-    error(rc);
+    setError(rc);
     return false;
 #else  //SQLITE_HAS_CODEC
     Error::fatal("[sqlite3_key] is not supported for current config");
@@ -481,7 +477,7 @@ const Error &Handle::getError() const
     return m_error;
 }
 
-void Handle::error(int rc, const std::string &sql)
+void Handle::setError(int rc, const std::string &sql)
 {
     m_error.setSQLiteCode(rc, getExtendedErrorCode());
     m_error.message = getErrorMessage();

@@ -27,11 +27,13 @@
 
 namespace WCDB {
 
+class Handle;
+
 class HandleStatement {
 public:
     HandleStatement();
 
-    void setup(const Statement &statement, void *stmt);
+    void setup(Handle *handle, const Statement &statement, void *stmt);
 
     bool step(bool &done);
     bool step();
@@ -74,6 +76,8 @@ public:
 
 protected:
     friend class Handle;
+    void setError(int rc, const std::string &sql);
+    Handle *m_handle;
 
     Statement m_statement;
     void *m_stmt;

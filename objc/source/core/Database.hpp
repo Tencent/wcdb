@@ -149,6 +149,7 @@ public:
 #pragma mark - HandlePoolThreadedErrorProne
 protected:
     HandlePool *getHandlePool() override;
+    void assignWithSharedThreadedError();
 };
 
 } //namespace WCDB

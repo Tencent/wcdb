@@ -132,17 +132,29 @@ bool FileManager::moveFiles(const std::list<std::string> &paths,
     if (!createDirectoryWithIntermediateDirectories(directory)) {
         return false;
     }
+    std::list<std::pair<std::string, std::string>> pairedPaths;
+    for (const auto &path : paths) {
+        const std::string fileName = Path::getFileName(path);
+        std::string newPath = Path::addComponent(directory, fileName);
+        pairedPaths.push_back({path, newPath});
+    }
+    return moveFiles(pairedPaths);
+}
+
+bool FileManager::moveFiles(
+    const std::list<std::pair<std::string, std::string>> &pairedPaths)
+{
     bool result = true;
     std::list<std::string> recovers;
-    for (const auto &path : paths) {
-        std::pair<bool, bool> ret = isExists(path);
+    for (const auto &pairedPath : pairedPaths) {
+        std::pair<bool, bool> ret = isExists(pairedPath.first);
         if (!ret.first) {
             break;
         }
         if (ret.second) {
-            const std::string fileName = Path::getFileName(path);
-            std::string newPath = Path::addComponent(directory, fileName);
-            if (!removeFile(newPath) || !createHardLink(path, newPath)) {
+            const std::string &newPath = pairedPath.second;
+            if (!removeFile(newPath) ||
+                !createHardLink(pairedPath.first, pairedPath.second)) {
                 result = false;
                 break;
             }
@@ -150,7 +162,11 @@ bool FileManager::moveFiles(const std::list<std::string> &paths,
         }
     }
     if (result) {
-        removeFiles(paths);
+        for (const auto &pairedPath : pairedPaths) {
+            if (!removeFile(pairedPath.first)) {
+                return false;
+            }
+        }
     } else {
         for (const auto &recover : recovers) {
             removeHardLink(recover.c_str());

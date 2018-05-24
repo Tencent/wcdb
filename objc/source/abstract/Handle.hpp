@@ -181,9 +181,10 @@ protected:
 #pragma mark - Error
 public:
     const Error &getError() const;
+    friend void HandleStatement::setError(int rc, const std::string &sql);
 
 protected:
-    void error(int rc, const std::string &sql = "");
+    void setError(int rc, const std::string &sql = "");
     Error m_error;
 };
 

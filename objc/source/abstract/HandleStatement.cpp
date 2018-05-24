@@ -23,12 +23,15 @@
 
 namespace WCDB {
 
-HandleStatement::HandleStatement() : m_stmt(nullptr)
+HandleStatement::HandleStatement() : m_stmt(nullptr), m_handle(nullptr)
 {
 }
 
-void HandleStatement::setup(const Statement &statement, void *stmt)
+void HandleStatement::setup(Handle *handle,
+                            const Statement &statement,
+                            void *stmt)
 {
+    m_handle = handle;
     m_stmt = stmt;
     m_statement = statement;
 }
@@ -42,7 +45,11 @@ bool HandleStatement::step(bool &done)
 {
     int rc = sqlite3_step((sqlite3_stmt *) m_stmt);
     done = rc == SQLITE_DONE;
-    return rc == SQLITE_OK || rc == SQLITE_ROW || rc == SQLITE_DONE;
+    if (rc == SQLITE_OK || rc == SQLITE_ROW || rc == SQLITE_DONE) {
+        return true;
+    }
+    setError(rc, m_statement.getDescription());
+    return false;
 }
 
 bool HandleStatement::step()
@@ -178,6 +185,12 @@ const char *HandleStatement::getSQL()
 const Statement &HandleStatement::getStatement()
 {
     return m_statement;
+}
+
+void HandleStatement::setError(int rc, const std::string &sql)
+{
+    WCTInnerAssert(m_handle != nullptr);
+    m_handle->setError(rc, sql);
 }
 
 } //namespace WCDB
