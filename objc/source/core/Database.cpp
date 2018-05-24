@@ -254,8 +254,13 @@ std::string Database::getLastBackupPath() const
 
 std::list<std::string> Database::getPaths() const
 {
-    return {getPath(),        getWALPath(),         getSHMPath(),
-            getJournalPath(), getFirstBackupPath(), getLastBackupPath()};
+    return {getPath(),
+            getWALPath(),
+            getSHMPath(),
+            getJournalPath(),
+            getFirstBackupPath(),
+            getLastBackupPath(),
+            getMaterialsDirectory()};
 }
 
 #pragma mark - Repair Kit
