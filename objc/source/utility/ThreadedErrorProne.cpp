@@ -18,35 +18,10 @@
  * limitations under the License.
  */
 
-#include <WCDB/ThreadedError.hpp>
+#include <WCDB/ThreadedErrorProne.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
-
-ThreadedErrors *ThreadedErrors::shared()
-{
-    static ThreadedErrors s_threadedErrors;
-    return &s_threadedErrors;
-}
-
-const Error &ThreadedErrors::getThreadedError()
-{
-    return *(m_errors.get());
-}
-
-Error &&ThreadedErrors::moveThreadedError()
-{
-    return std::move(*(m_errors.get()));
-}
-
-void ThreadedErrors::setThreadedError(const Error &error)
-{
-    *m_errors.get() = error;
-}
-
-void ThreadedErrors::setThreadedError(Error &&error)
-{
-    *m_errors.get() = std::move(error);
-}
 
 void ThreadedErrorProne::setThreadedError(const Error &error)
 {

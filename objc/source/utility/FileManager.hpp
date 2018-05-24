@@ -22,7 +22,7 @@
 #define FileManager_hpp
 
 #include <WCDB/Error.hpp>
-#include <WCDB/ThreadedError.hpp>
+#include <WCDB/ThreadedErrorProne.hpp>
 #include <list>
 #include <string>
 

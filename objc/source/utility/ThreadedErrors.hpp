@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef ThreadedError_hpp
-#define ThreadedError_hpp
+#ifndef ThreadedErrors_hpp
+#define ThreadedErrors_hpp
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -32,8 +32,6 @@ public:
     const Error &getThreadedError();
     Error &&moveThreadedError();
 
-protected:
-    friend class ThreadedErrorProne;
     void setThreadedError(const Error &error);
     void setThreadedError(Error &&error);
 
@@ -41,24 +39,6 @@ private:
     ThreadLocal<Error> m_errors;
 };
 
-class ThreadedErrorProne {
-public:
-    void setThreadedError(const Error &error);
-    void setThreadedError(Error &&error);
-    const Error &getThreadedError();
-
-protected:
-    virtual ThreadedErrors *getThreadedErrors() = 0;
-};
-
-class SharedThreadedErrorProne : protected ThreadedErrorProne {
-public:
-    using ThreadedErrorProne::getThreadedError;
-
-protected:
-    ThreadedErrors *getThreadedErrors() override;
-};
-
 } //namespace WCDB
 
-#endif /* ThreadedError_hpp */
+#endif /* ThreadedErrors_hpp */
