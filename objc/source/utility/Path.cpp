@@ -21,6 +21,10 @@
 #include <WCDB/Path.hpp>
 #include <libgen.h>
 
+#if __cplusplus > 201402L
+#warning TODO std::filesystem is supported since C++17
+#endif
+
 namespace WCDB {
 
 namespace Path {
