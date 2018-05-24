@@ -24,6 +24,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+- (BOOL)archiveAsMaterial;
+
 /**
  @brief Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.
 
