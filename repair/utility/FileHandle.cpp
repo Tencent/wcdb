@@ -31,10 +31,19 @@ FileHandle::FileHandle(const std::string &path_) : path(path_), m_fd(-1)
 {
 }
 
-bool FileHandle::open()
+bool FileHandle::open(Mode mode)
 {
     if (m_fd == -1) {
-        m_fd = ::open(path.c_str(), O_RDONLY);
+        int flag;
+        switch (mode) {
+            case Mode::ReadWrite:
+                flag = O_RDWR;
+                break;
+            case Mode::ReadOnly:
+                flag = O_RDONLY;
+                break;
+        }
+        m_fd = ::open(path.c_str(), flag);
         if (m_fd == -1) {
             setupThreadedError();
         }

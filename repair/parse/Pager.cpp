@@ -117,6 +117,9 @@ Data Pager::acquirePageData(int number)
 
 Data Pager::acquireData(off_t offset, size_t size)
 {
+    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        return Data::emptyData();
+    }
     Data data(size);
     if (data.empty()) {
         return data;

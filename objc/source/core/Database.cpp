@@ -354,7 +354,7 @@ bool Database::backup(const Data &data)
 
     FileHandle fileHandle(backupPath.second);
     bool result = true;
-    if (!fileHandle.open() ||
+    if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||
         !fileHandle.write(materail.buffer(), 0, materail.size())) {
         setThreadedError(
             std::move(ThreadedErrors::shared()->moveThreadedError()));
