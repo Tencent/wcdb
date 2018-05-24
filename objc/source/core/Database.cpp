@@ -119,7 +119,7 @@ bool Database::isOpened() const
     return !m_pool->isDrained();
 }
 
-const Error &Database::getError() const
+const Error &Database::getError()
 {
     return getThreadedError();
 }
@@ -172,7 +172,7 @@ bool Database::removeFiles()
     if (fileManager->removeFiles(getPaths())) {
         return true;
     }
-    setThreadedError(fileManager->getError());
+    setThreadedError(fileManager->getThreadedError());
     return false;
 }
 
@@ -185,7 +185,7 @@ std::pair<bool, size_t> Database::getFilesSize()
     FileManager *fileManager = FileManager::shared();
     auto pair = fileManager->getFilesSize(getPaths());
     if (!pair.first) {
-        setThreadedError(fileManager->getError());
+        setThreadedError(fileManager->getThreadedError());
     }
     return pair;
 }
@@ -197,10 +197,11 @@ bool Database::moveFiles(const std::string &directory)
         if (fileManager->moveFiles(getPaths(), directory)) {
             return true;
         }
-        setThreadedError(fileManager->getError());
+        setThreadedError(fileManager->getThreadedError());
     } else {
-        error(Error(Error::Code::Misuse, "Moving files on an opened database "
-                                         "may cause a corrupted database."));
+        setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
+                                                    "database may cause a "
+                                                    "corrupted database."));
     }
     return false;
 }
@@ -215,10 +216,11 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         if (fileManager->moveFiles(paths, directory)) {
             return true;
         }
-        setThreadedError(fileManager->getError());
+        setThreadedError(fileManager->getThreadedError());
     } else {
-        error(Error(Error::Code::Misuse, "Moving files on an opened database "
-                                         "may cause a corrupted database."));
+        setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
+                                                    "database may cause a "
+                                                    "corrupted database."));
     }
     return false;
 }
@@ -480,8 +482,8 @@ bool Database::isInThreadedTransaction() const
            threadedHandle->end();
 }
 
-#pragma mark - ThreadedHandleErrorProne
-const HandlePool *Database::getErrorAssociatedHandlePool() const
+#pragma mark - HandlePoolThreadedErrorProne
+HandlePool *Database::getHandlePool()
 {
     return m_pool.getHandlePool();
 }

@@ -18,30 +18,46 @@
  * limitations under the License.
  */
 
-#ifndef ThreadedHandleErrorProne_hpp
-#define ThreadedHandleErrorProne_hpp
+#ifndef ThreadedError_hpp
+#define ThreadedError_hpp
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ThreadLocal.hpp>
-#include <unordered_map>
 
 namespace WCDB {
 
-class HandlePool;
+class ThreadedErrors {
+public:
+    static ThreadedErrors *shared();
+    const Error &getThreadedError();
 
-class ThreadedHandleErrorProne {
 protected:
-    void setThreadedError(const Error &error) const;
-    void setThreadedError(Error &&error) const;
-    const Error &getThreadedError() const;
-    virtual const HandlePool *getErrorAssociatedHandlePool() const = 0;
-    void error(Error &&error) const;
+    friend class ThreadedErrorProne;
+    void setThreadedError(const Error &error);
+    void setThreadedError(Error &&error);
 
 private:
-    using ThreadedErrors = std::unordered_map<const HandlePool *, Error>;
-    static ThreadLocal<ThreadedErrors> *threadedErrors();
+    ThreadLocal<Error> m_errors;
+};
+
+class ThreadedErrorProne {
+public:
+    void setThreadedError(const Error &error);
+    void setThreadedError(Error &&error);
+    const Error &getThreadedError();
+
+protected:
+    virtual ThreadedErrors *getThreadedErrors() = 0;
+};
+
+class SharedThreadedErrorProne : protected ThreadedErrorProne {
+public:
+    using ThreadedErrorProne::getThreadedError;
+
+protected:
+    ThreadedErrors *getThreadedErrors() override;
 };
 
 } //namespace WCDB
 
-#endif /* ThreadedHandleErrorProne_hpp */
+#endif /* ThreadedError_hpp */

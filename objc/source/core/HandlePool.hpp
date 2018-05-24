@@ -26,13 +26,23 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/ThreadedHandleErrorProne.hpp>
+#include <WCDB/ThreadedError.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class HandlePool : public ThreadedHandleErrorProne {
+class HandlePool;
+
+class HandlePoolThreadedErrorProne : protected ThreadedErrorProne {
+public:
+    ThreadedErrors *getThreadedErrors() override;
+
+protected:
+    virtual HandlePool *getHandlePool() = 0;
+};
+
+class HandlePool : private ThreadedErrorProne {
 #pragma mark - Initialize
 public:
     HandlePool() = delete;
@@ -56,7 +66,7 @@ protected:
 
 #pragma mark - Error
 public:
-    const Error &getError() const;
+    const Error &getError();
 
 #pragma mark - Config
 public:
@@ -103,8 +113,15 @@ protected:
     static int hardwareConcurrency();
     static int maxConcurrency();
 
-#pragma mark - ThreadedHandleErrorProne
-    virtual const HandlePool *getErrorAssociatedHandlePool() const override;
+#pragma mark - ThreadedErrorProne
+protected:
+    void setThreadedError(const Error &error);
+    void setThreadedError(Error &&error);
+    ThreadedErrors *getThreadedErrors() override;
+
+private:
+    friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
+    ThreadedErrors m_errors;
 };
 
 } //namespace WCDB

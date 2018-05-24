@@ -22,7 +22,7 @@
 #define FileManager_hpp
 
 #include <WCDB/Error.hpp>
-#include <WCDB/ThreadLocal.hpp>
+#include <WCDB/ThreadedError.hpp>
 #include <list>
 #include <string>
 
@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class FileManager {
+class FileManager : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     static FileManager *shared();
@@ -58,12 +58,8 @@ public:
     bool createDirectoryWithIntermediateDirectories(const std::string &path);
 
 #pragma mark - Error
-public:
-    const Error &getError();
-
 protected:
-    void error(const std::string &path);
-    ThreadLocal<Error> m_errors;
+    void setThreadedError(const std::string &path);
 };
 
 } //namespace WCDB
