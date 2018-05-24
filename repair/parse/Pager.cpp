@@ -22,6 +22,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
@@ -81,7 +82,7 @@ bool Pager::initialize()
     }
     auto fileSizePair = FileManager::shared()->getFileSize(getPath());
     if (!fileSizePair.first) {
-        m_error = FileManager::shared()->getError();
+        m_error = ThreadedErrors::shared()->getThreadedError();
         return false;
     }
     m_pageCount = (int) ((fileSizePair.second + m_pageSize - 1) / m_pageSize);
@@ -117,7 +118,7 @@ Data Pager::acquirePageData(int number)
 
 Data Pager::acquireData(off_t offset, size_t size)
 {
-    Data data = Data::data(size);
+    Data data(size);
     if (data.empty()) {
         markAsNoMemory();
         return data;

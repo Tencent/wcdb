@@ -29,7 +29,7 @@ LiteralValue LiteralValueConvertible<NSObject *>::as(NSObject *const &t)
     value = [(id<WCTColumnCoding>) value archivedWCTValue];
     if ([value isKindOfClass:NSData.class]) {
         NSData *data = (NSData *) value;
-        return LiteralValue(Data::data((const unsigned char *) data.bytes, (size_t) data.length));
+        return LiteralValue(Data((const unsigned char *) data.bytes, (size_t) data.length));
     } else if ([value isKindOfClass:NSString.class]) {
         NSString *string = (NSString *) value;
         return LiteralValue(string.cppString);

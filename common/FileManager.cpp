@@ -47,7 +47,7 @@ std::pair<bool, size_t> FileManager::getFileSize(const std::string &path)
     } else if (errno == ENOENT) {
         return {true, 0};
     }
-    error(path);
+    setThreadedError(path);
     return {false, 0};
 }
 
@@ -58,7 +58,7 @@ std::pair<bool, bool> FileManager::isExists(const std::string &path)
     } else if (errno == ENOENT) {
         return {true, false};
     }
-    error(path);
+    setThreadedError(path);
     return {false, false};
 }
 
@@ -67,7 +67,7 @@ bool FileManager::createHardLink(const std::string &from, const std::string &to)
     if (link(from.c_str(), to.c_str()) == 0) {
         return true;
     }
-    error(to);
+    setThreadedError(to);
     return false;
 }
 
@@ -76,7 +76,7 @@ bool FileManager::removeHardLink(const std::string &path)
     if (unlink(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    error(path);
+    setThreadedError(path);
     return false;
 }
 
@@ -85,7 +85,7 @@ bool FileManager::removeFile(const std::string &path)
     if (remove(path.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    error(path);
+    setThreadedError(path);
     return false;
 }
 
@@ -94,7 +94,7 @@ bool FileManager::createDirectory(const std::string &path)
     if (mkdir(path.c_str(), 0755) == 0) {
         return true;
     }
-    error(path);
+    setThreadedError(path);
     return false;
 }
 
@@ -105,7 +105,7 @@ FileManager::getFileModifiedTime(const std::string &path)
     if (stat(path.c_str(), &result) == 0) {
         return {true, result.st_mtime};
     }
-    error(path);
+    setThreadedError(path);
     return {false, 0};
 }
 
@@ -185,18 +185,14 @@ bool FileManager::createDirectoryWithIntermediateDirectories(
 }
 
 #pragma mark - Error
-void FileManager::error(const std::string &path)
+void FileManager::setThreadedError(const std::string &path)
 {
-    Error *error = m_errors.get();
-    error->setSystemCode(errno, Error::Code::IOError);
-    error->message = strerror(errno);
-    error->infos.set("Path", path);
-    Reporter::shared()->report(*error);
-}
-
-const Error &FileManager::getError()
-{
-    return *m_errors.get();
+    Error error;
+    error.setSystemCode(errno, Error::Code::IOError);
+    error.message = strerror(errno);
+    error.infos.set("Path", path);
+    Reporter::shared()->report(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 } //namespace WCDB

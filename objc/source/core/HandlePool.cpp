@@ -58,7 +58,7 @@ HandlePool::Tag HandlePool::getTag() const
 }
 
 #pragma mark - Error
-const Error &HandlePool::getError() const
+const Error &HandlePool::getError()
 {
     return getThreadedError();
 }
@@ -222,13 +222,13 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         static const std::string s_concurrency(
             "The concurrency of database exceeds the maxximum allowed: " +
             std::to_string(HandlePool::maxConcurrency()));
-        error(Error(Error::Code::Exceed, s_concurrency));
+        setThreadedError(Error(Error::Code::Exceed, s_concurrency));
         return nullptr;
     }
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         ConfiguredHandle::configuredHandle(generateHandle());
     if (!configuredHandle) {
-        error(Error(Error::Code::NoMemory));
+        setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
     Handle *handle = configuredHandle->getHandle();
@@ -272,10 +272,31 @@ bool HandlePool::willConfigurateHandle(Handle *handle)
     return true;
 }
 
-#pragma mark - ThreadedHandleErrorProne
-const HandlePool *HandlePool::getErrorAssociatedHandlePool() const
+#pragma mark - ThreadedErrorProne
+void HandlePool::setThreadedError(const Error &error)
 {
-    return this;
+    Error threadedError = error;
+    setThreadedError(std::move(threadedError));
+}
+
+void HandlePool::setThreadedError(Error &&error)
+{
+    if (getTag() != Handle::invalidTag) {
+        error.infos.set("Tag", getTag());
+    }
+    error.infos.set("Path", path);
+    Reporter::shared()->report(error);
+    ThreadedErrorProne::setThreadedError(std::move(error));
+}
+
+ThreadedErrors *HandlePool::getThreadedErrors()
+{
+    return &m_errors;
+}
+
+ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors()
+{
+    return getHandlePool()->getThreadedErrors();
 }
 
 } //namespace WCDB

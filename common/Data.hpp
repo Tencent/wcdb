@@ -21,13 +21,14 @@
 #ifndef Data_hpp
 #define Data_hpp
 
+#include <WCDB/ThreadedErrorProne.hpp>
 #include <memory>
 #include <stdio.h>
 #include <vector>
 
 namespace WCDB {
 
-class Data {
+class Data : protected SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     Data();
@@ -41,9 +42,8 @@ protected:
 
 #pragma mark - Shared
 public:
-    static Data data(unsigned char *buffer, size_t size);
-    static const Data data(const unsigned char *buffer, size_t size);
-    static Data data(size_t size);
+    Data(size_t size);
+    Data(const unsigned char *buffer, size_t size);
 
     bool makeShared();
     bool isShared() const;
@@ -57,7 +57,8 @@ protected:
 #pragma mark - No Shared
 public:
     static Data noCopyData(unsigned char *buffer, size_t size);
-    static const Data noCopyData(const unsigned char *buffer, size_t size);
+    static const Data immutableNoCopyData(const unsigned char *buffer,
+                                          size_t size);
 
 #pragma mark - Subdata
 public:

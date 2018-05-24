@@ -75,7 +75,7 @@ bool Cell::initialize()
                        offsetOfPayload + localPayloadSize + 4);
         deserialization.seek(offsetOfPayload + localPayloadSize);
         int overflowPageno = deserialization.advance4BytesInt();
-        m_payload = Data::data(payloadSize);
+        m_payload = Data(payloadSize);
         if (m_payload.empty()) {
             m_page.getPager().markAsNoMemory();
             return false;

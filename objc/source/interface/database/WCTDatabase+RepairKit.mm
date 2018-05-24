@@ -25,7 +25,7 @@
 
 - (BOOL)backupWithCipher:(NSData *)key
 {
-    return _database->backup(WCDB::Data::noCopyData((const unsigned char *) key.bytes, (size_t) key.length));
+    return _database->backup(WCDB::Data::immutableNoCopyData((const unsigned char *) key.bytes, (size_t) key.length));
 }
 
 - (BOOL)backup
@@ -40,8 +40,8 @@
 {
     return _database->recoverFromPath(corruptedDBPath.cppString,
                                       pageSize,
-                                      WCDB::Data::noCopyData((const unsigned char *) backupCipher.bytes, (size_t) backupCipher.length),
-                                      WCDB::Data::noCopyData((const unsigned char *) databaseCipher.bytes, (size_t) databaseCipher.length));
+                                      WCDB::Data::immutableNoCopyData((const unsigned char *) backupCipher.bytes, (size_t) backupCipher.length),
+                                      WCDB::Data::immutableNoCopyData((const unsigned char *) databaseCipher.bytes, (size_t) databaseCipher.length));
 }
 
 @end

@@ -157,7 +157,7 @@ const HandleStatement::BLOB HandleStatement::getBLOB(int index)
     int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
     const unsigned char *data = (const unsigned char *) sqlite3_column_blob(
         (sqlite3_stmt *) m_stmt, index);
-    return BLOB::noCopyData(data, size);
+    return BLOB::immutableNoCopyData(data, size);
 }
 
 bool HandleStatement::isReadonly()

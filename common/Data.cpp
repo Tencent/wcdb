@@ -33,41 +33,43 @@ Data::Data(const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer,
            size_t size)
     : m_sharedBuffer(sharedBuffer), m_buffer(buffer), m_size(size)
 {
-    WCTInnerAssert(m_sharedBuffer == nullptr ||
-                   m_buffer + m_size <=
-                       m_sharedBuffer->data() + m_sharedBuffer->size());
+    WCTInnerAssert(
+        m_sharedBuffer == nullptr || (m_buffer == nullptr && m_size == 0) ||
+        m_buffer + m_size <= m_sharedBuffer->data() + m_sharedBuffer->size());
 }
 
 #pragma mark - Shared
-Data Data::data(size_t size)
+Data::Data(size_t size) : m_sharedBuffer(new std::vector<unsigned char>(size))
 {
-    std::shared_ptr<std::vector<unsigned char>> sharedBuffer(
-        new std::vector<unsigned char>(size));
-    if (sharedBuffer != nullptr) {
-        return Data(sharedBuffer, sharedBuffer->data(), sharedBuffer->size());
+    if (m_sharedBuffer != nullptr) {
+        m_buffer = m_sharedBuffer->data();
+        m_size = size;
+    } else {
+        setThreadedError(Error(Error::Code::NoMemory));
+        m_buffer = nullptr;
+        m_size = 0;
     }
-    return Data::emptyData();
 }
 
-Data Data::data(unsigned char *buffer, size_t size)
+Data::Data(const unsigned char *buffer, size_t size)
+    : m_sharedBuffer(new std::vector<unsigned char>(size))
 {
-    std::shared_ptr<std::vector<unsigned char>> sharedBuffer(
-        new std::vector<unsigned char>(size));
-    if (sharedBuffer != nullptr) {
-        memcpy(sharedBuffer->data(), buffer, size);
-        return Data(sharedBuffer, sharedBuffer->data(), sharedBuffer->size());
+    if (m_sharedBuffer != nullptr) {
+        if (buffer != nullptr) {
+            memcpy(m_sharedBuffer->data(), buffer, size);
+        }
+        m_buffer = m_sharedBuffer->data();
+        m_size = size;
+    } else {
+        setThreadedError(Error(Error::Code::NoMemory));
+        m_buffer = nullptr;
+        m_size = 0;
     }
-    return Data::emptyData();
-}
-
-const Data Data::data(const unsigned char *buffer, size_t size)
-{
-    return Data::data((unsigned char *) buffer, size);
 }
 
 Data Data::copy() const
 {
-    return Data::data(m_buffer, m_size);
+    return Data(m_buffer, m_size);
 }
 
 bool Data::isShared() const
@@ -82,9 +84,12 @@ bool Data::makeShared()
     }
     m_sharedBuffer.reset(new std::vector<unsigned char>(m_size));
     if (m_sharedBuffer != nullptr) {
-        memcpy(m_sharedBuffer->data(), m_buffer, m_size);
+        if (m_buffer) {
+            memcpy(m_sharedBuffer->data(), m_buffer, m_size);
+        }
         return true;
     }
+    setThreadedError(Error(Error::Code::NoMemory));
     return false;
 }
 
@@ -96,9 +101,12 @@ bool Data::resize(size_t size)
         auto oldSharedBuffer = m_sharedBuffer;
         m_sharedBuffer.reset(new std::vector<unsigned char>(size));
         if (m_sharedBuffer == nullptr) {
+            setThreadedError(Error(Error::Code::NoMemory));
             return false;
         }
-        memcpy(m_sharedBuffer->data(), m_buffer, m_size);
+        if (m_buffer != nullptr) {
+            memcpy(m_sharedBuffer->data(), m_buffer, m_size);
+        }
         m_buffer = m_sharedBuffer->data();
         m_size = size;
     }
@@ -114,9 +122,12 @@ Data Data::noCopyData(unsigned char *buffer, size_t size)
     return Data::emptyData();
 }
 
-const Data Data::noCopyData(const unsigned char *buffer, size_t size)
+const Data Data::immutableNoCopyData(const unsigned char *buffer, size_t size)
 {
-    return Data::noCopyData((unsigned char *) buffer, size);
+    if (buffer != nullptr && size > 0) {
+        return Data(nullptr, (unsigned char *) (buffer), size);
+    }
+    return Data::emptyData();
 }
 
 #pragma mark - Subdata
