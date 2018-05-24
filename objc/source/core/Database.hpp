@@ -99,6 +99,7 @@ public:
 #pragma mark - Repair Kit
 public:
     bool backup(const Data &data);
+    bool archiveAsMaterial();
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,
                          const Data &backupCipher,
@@ -110,6 +111,8 @@ protected:
     std::pair<bool, std::string> pickUpBackup(bool old);
     static const std::string &getFirstBackupSubfix();
     static const std::string &getLastBackupSubfix();
+    static std::string getArchiveSubfix(int i);
+    std::string getMaterialsDirectory() const;
 
 #pragma mark - Handle
 public:

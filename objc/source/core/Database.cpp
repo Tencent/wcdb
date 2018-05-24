@@ -284,6 +284,65 @@ std::pair<bool, std::string> Database::pickUpNewBackup()
     return pickUpBackup(false);
 }
 
+std::string Database::getArchiveSubfix(int i)
+{
+    return "." + std::to_string(i);
+}
+
+bool Database::archiveAsMaterial()
+{
+    FileManager *fileManager = FileManager::shared();
+    const std::string materialDirectory = getMaterialsDirectory();
+
+    //resolve archived path
+    int i = 1;
+    std::string archivedSubfix;
+    while (true) {
+        archivedSubfix = getArchiveSubfix(i);
+        auto exists = fileManager->isExists(
+            Path::addExtention(getPath(), archivedSubfix));
+        if (!exists.first) {
+            assignWithSharedThreadedError();
+            return false;
+        }
+        if (!exists.second) {
+            break;
+        }
+        ++i;
+    }
+
+    // create material directory
+    if (!fileManager->createDirectoryWithIntermediateDirectories(
+            materialDirectory)) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+
+    //resolve archived paths
+    std::list<std::pair<std::string, std::string>> pairedPaths;
+    for (auto &path : getPaths()) {
+        std::string fileName =
+            Path::addExtention(Path::getFileName(path), archivedSubfix);
+        std::string newPath =
+            Path::addComponent(materialDirectory, std::move(fileName));
+        pairedPaths.push_back({std::move(path), std::move(newPath)});
+    }
+    bool result = false;
+    close([fileManager, &result, &pairedPaths]() {
+        result = fileManager->moveFiles(pairedPaths);
+    });
+    if (result) {
+        return true;
+    }
+    assignWithSharedThreadedError();
+    return false;
+}
+
+std::string Database::getMaterialsDirectory() const
+{
+    return Path::addComponent(getPath(), ".materials");
+}
+
 std::pair<bool, std::string> Database::pickUpBackup(bool old)
 {
     FileManager *fileManager = FileManager::shared();
