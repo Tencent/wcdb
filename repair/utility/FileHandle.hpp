@@ -22,8 +22,8 @@
 #define FileHandle_hpp
 
 #include <WCDB/Error.hpp>
-#include <stdio.h>
 #include <WCDB/ThreadedErrorProne.hpp>
+#include <stdio.h>
 
 namespace WCDB {
 
@@ -46,7 +46,7 @@ public:
     void close();
     ssize_t read(unsigned char *buffer, off_t offset, size_t size);
     ssize_t write(unsigned char *buffer, off_t offset, size_t size);
-    
+
 #pragma mark - Error
 protected:
     void setupThreadedError();
