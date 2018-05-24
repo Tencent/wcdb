@@ -100,7 +100,7 @@ bool Deconstructor::onPageCrawled(const Page &page, int height)
                 for (int i = 0; i < page.getSubPageCount(); ++i) {
                     auto pair = page.getSubPageno(i);
                     if (!pair.first) {
-                        markAsCorrupted();
+                        m_pager.markAsCorrupted();
                         break;
                     }
                     pagenos.push_back(page.number);

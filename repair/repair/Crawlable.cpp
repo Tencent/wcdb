@@ -23,6 +23,7 @@
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
@@ -30,19 +31,14 @@ namespace Repair {
 
 #pragma mark - Initialize
 Crawlable::Crawlable(const std::string &path, bool fatal)
-    : m_pager(path), m_fatal(fatal), m_error(false)
+    : m_pager(path), m_fatal(fatal)
 {
 }
 
 #pragma mark - Error
-bool Crawlable::isFatalError() const
+bool Crawlable::isFatal() const
 {
-    return m_fatal && m_error;
-}
-
-void Crawlable::markAsError()
-{
-    m_error = true;
+    return m_fatal;
 }
 
 void Crawlable::markAsCorrupted()
@@ -51,11 +47,16 @@ void Crawlable::markAsCorrupted()
     markAsError();
 }
 
+void Crawlable::markAsError()
+{
+    tryUpgradeErrorWithThreadedError();
+}
+
 bool Crawlable::crawl(int rootpageno)
 {
     std::set<int> crawledInteriorPages;
     safeCrawl(rootpageno, crawledInteriorPages, 1);
-    return isFatalError();
+    return getCriticalError().isOK();
 }
 
 void Crawlable::safeCrawl(int rootpageno,
@@ -80,7 +81,7 @@ void Crawlable::safeCrawl(int rootpageno,
             }
             crawledInteriorPages.insert(rootpageno);
             for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
-                if (isFatalError()) {
+                if (isFatal() && !getCriticalError().isOK()) {
                     break;
                 }
                 auto pair = rootpage.getSubPageno(i);
@@ -93,7 +94,7 @@ void Crawlable::safeCrawl(int rootpageno,
             break;
         case Page::Type::LeafTable:
             for (int i = 0; i < rootpage.getCellCount(); ++i) {
-                if (isFatalError()) {
+                if (isFatal() && !getCriticalError().isOK()) {
                     break;
                 }
                 Cell cell = rootpage.getCell(i);

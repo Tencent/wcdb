@@ -21,6 +21,7 @@
 #ifndef Crawlable_hpp
 #define Crawlable_hpp
 
+#include <WCDB/CriticalErrorOnly.hpp>
 #include <WCDB/Pager.hpp>
 #include <set>
 
@@ -32,7 +33,7 @@ class Cell;
 class Page;
 class Pager;
 
-class Crawlable {
+class Crawlable : public CriticalErrorOnly {
 #pragma mark - Initialize
 public:
     Crawlable(const std::string &path, bool fatal);
@@ -43,10 +44,9 @@ protected:
 
 #pragma mark - Error
 protected:
-    bool isFatalError() const;
+    bool isFatal() const;
     void markAsCorrupted();
     void markAsError();
-    bool m_error;
 
 #pragma mark - Crawlable
 protected:

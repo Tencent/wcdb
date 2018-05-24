@@ -50,6 +50,7 @@ void Mechanic::work()
 {
     WCTInnerAssert(m_assembler != nullptr);
     if (!m_pager.initialize()) {
+        markAsError();
         return;
     }
 
@@ -61,11 +62,15 @@ void Mechanic::work()
 
     for (const auto &content : m_materaial.contents) {
         m_assembler->markAsAssembling(content.tableName);
-        if (!m_assembler->assembleTable(content.sql) ||
-            !m_assembler->assembleTableAssociated(content.associatedSQLs)) {
+        if (m_assembler->assembleTable(content.sql) &&
+            m_assembler->assembleTableAssociated(content.associatedSQLs)) {
             for (const auto &pageno : content.pagenos) {
-                crawl(pageno);
+                if (!crawl(pageno)) {
+                    markAsError();
+                }
             }
+        } else {
+            markAsError();
         }
         m_assembler->markAsAssembled();
     }
@@ -89,7 +94,7 @@ bool Mechanic::onPageCrawled(const Page &page, int unused)
             (double) 1.0 / page.getCellCount() * m_pageWeight;
         return true;
     }
-    m_pager.markAsCorrupted();
+    markAsCorrupted();
     return false;
 }
 

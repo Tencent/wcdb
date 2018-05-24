@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/CriticalErrorOnly.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
@@ -58,6 +59,11 @@ void CriticalErrorOnly::tryUpgradeError(Error &&newError)
     if (criticalLevel(newError) > criticalLevel(m_criticalError)) {
         m_criticalError = std::move(newError);
     }
+}
+
+void CriticalErrorOnly::tryUpgradeErrorWithThreadedError()
+{
+    tryUpgradeError(std::move(ThreadedErrors::shared()->getThreadedError()));
 }
 
 } //namespace Repair
