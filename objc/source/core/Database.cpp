@@ -172,7 +172,7 @@ bool Database::removeFiles()
     if (fileManager->removeFiles(getPaths())) {
         return true;
     }
-    setThreadedError(fileManager->getThreadedError());
+    assignWithSharedThreadedError();
     return false;
 }
 
@@ -185,7 +185,7 @@ std::pair<bool, size_t> Database::getFilesSize()
     FileManager *fileManager = FileManager::shared();
     auto pair = fileManager->getFilesSize(getPaths());
     if (!pair.first) {
-        setThreadedError(fileManager->getThreadedError());
+        assignWithSharedThreadedError();
     }
     return pair;
 }
@@ -197,7 +197,7 @@ bool Database::moveFiles(const std::string &directory)
         if (fileManager->moveFiles(getPaths(), directory)) {
             return true;
         }
-        setThreadedError(fileManager->getThreadedError());
+        assignWithSharedThreadedError();
     } else {
         setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
                                                     "database may cause a "
@@ -216,7 +216,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         if (fileManager->moveFiles(paths, directory)) {
             return true;
         }
-        setThreadedError(fileManager->getThreadedError());
+        assignWithSharedThreadedError();
     } else {
         setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
                                                     "database may cause a "
@@ -486,6 +486,11 @@ bool Database::isInThreadedTransaction() const
 HandlePool *Database::getHandlePool()
 {
     return m_pool.getHandlePool();
+}
+
+void Database::assignWithSharedThreadedError()
+{
+    setThreadedError(std::move(ThreadedErrors::shared()->moveThreadedError()));
 }
 
 } //namespace WCDB

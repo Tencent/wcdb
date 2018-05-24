@@ -55,6 +55,8 @@ public:
     bool removeFiles(const std::list<std::string> &paths);
     bool moveFiles(const std::list<std::string> &paths,
                    const std::string &directory);
+    bool moveFiles(
+        const std::list<std::pair<std::string, std::string>> &pairedPaths);
     bool createDirectoryWithIntermediateDirectories(const std::string &path);
 
 #pragma mark - Error

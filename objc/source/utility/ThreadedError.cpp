@@ -33,6 +33,11 @@ const Error &ThreadedErrors::getThreadedError()
     return *(m_errors.get());
 }
 
+Error &&ThreadedErrors::moveThreadedError()
+{
+    return std::move(*(m_errors.get()));
+}
+
 void ThreadedErrors::setThreadedError(const Error &error)
 {
     *m_errors.get() = error;

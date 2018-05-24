@@ -30,6 +30,7 @@ class ThreadedErrors {
 public:
     static ThreadedErrors *shared();
     const Error &getThreadedError();
+    Error &&moveThreadedError();
 
 protected:
     friend class ThreadedErrorProne;
