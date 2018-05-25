@@ -43,20 +43,24 @@ protected:
 #pragma mark - Basic
 public:
     std::pair<bool, bool> isExists(const std::string &path);
-    std::pair<bool, size_t> getFileSize(const std::string &path);
+    std::pair<bool, size_t> getFileSize(const std::string &file);
+    std::pair<bool, size_t> getDirectorySize(const std::string &directory);
     bool createHardLink(const std::string &from, const std::string &to);
     bool removeHardLink(const std::string &path);
-    bool removeFile(const std::string &path);
+    bool removeFile(const std::string &file);
+    bool removeDirectory(const std::string &directory);
     bool createDirectory(const std::string &path);
     std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
 
 #pragma mark - Combination
 public:
-    std::pair<bool, size_t> getFilesSize(const std::list<std::string> &paths);
-    bool removeFiles(const std::list<std::string> &paths);
-    bool moveFiles(const std::list<std::string> &paths,
+    std::pair<bool, size_t> getItemSize(const std::string &path);
+    std::pair<bool, size_t> getItemsSize(const std::list<std::string> &paths);
+    bool removeItem(const std::string &path);
+    bool removeItems(const std::list<std::string> &paths);
+    bool moveItems(const std::list<std::string> &paths,
                    const std::string &directory);
-    bool moveFiles(
+    bool moveItems(
         const std::list<std::pair<std::string, std::string>> &pairedPaths);
     bool createDirectoryWithIntermediateDirectories(const std::string &path);
 

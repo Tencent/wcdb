@@ -171,7 +171,7 @@ bool Database::removeFiles()
         isBlockaded() && !isOpened(),
         "Removing files on an opened database may cause undefined results.",
         return false;);
-    if (FileManager::shared()->removeFiles(getPaths())) {
+    if (FileManager::shared()->removeItems(getPaths())) {
         return true;
     }
     assignWithSharedThreadedError();
@@ -184,7 +184,7 @@ std::pair<bool, size_t> Database::getFilesSize()
         WCTWarning("Getting files size on an opened database may get "
                    "incorrect results.");
     }
-    auto pair = FileManager::shared()->getFilesSize(getPaths());
+    auto pair = FileManager::shared()->getItemsSize(getPaths());
     if (!pair.first) {
         assignWithSharedThreadedError();
     }
@@ -194,7 +194,7 @@ std::pair<bool, size_t> Database::getFilesSize()
 bool Database::moveFiles(const std::string &directory)
 {
     if (isBlockaded() && !isOpened()) {
-        if (FileManager::shared()->moveFiles(getPaths(), directory)) {
+        if (FileManager::shared()->moveItems(getPaths(), directory)) {
             return true;
         }
         assignWithSharedThreadedError();
@@ -212,7 +212,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     if (isBlockaded() && !isOpened()) {
         std::list<std::string> paths = getPaths();
         paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
-        if (FileManager::shared()->moveFiles(paths, directory)) {
+        if (FileManager::shared()->moveItems(paths, directory)) {
             return true;
         }
         assignWithSharedThreadedError();
@@ -333,7 +333,7 @@ bool Database::archiveAsMaterial()
     }
     bool result = false;
     close([fileManager, &result, &pairedPaths]() {
-        result = fileManager->moveFiles(pairedPaths);
+        result = fileManager->moveItems(pairedPaths);
     });
     if (result) {
         return true;
@@ -425,6 +425,15 @@ bool Database::backup(const BackupFilter &shouldTableBeBackedup)
     }
     fileHandle.close();
     return result;
+}
+
+bool Database::removeMaterials()
+{
+    if (FileManager::shared()->removeDirectory(getMaterialsDirectory())) {
+        return true;
+    }
+    assignWithSharedThreadedError();
+    return false;
 }
 
 bool Database::restore()

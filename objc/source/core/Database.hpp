@@ -101,6 +101,7 @@ public:
     typedef std::function<bool(const std::string &)> BackupFilter;
     bool backup(const BackupFilter &shouldTableBeBackedup);
     bool archiveAsMaterial();
+    bool removeMaterials();
     bool restore();
 
 protected:

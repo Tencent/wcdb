@@ -22,8 +22,10 @@
 #include <WCDB/Path.hpp>
 #include <WCDB/Reporter.hpp>
 #include <WCDB/String.hpp>
+#include <dirent.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 namespace WCDB {
@@ -39,16 +41,52 @@ FileManager *FileManager::shared()
 }
 
 #pragma mark - Basic
-std::pair<bool, size_t> FileManager::getFileSize(const std::string &path)
+std::pair<bool, size_t> FileManager::getFileSize(const std::string &file)
 {
     struct stat temp;
-    if (lstat(path.c_str(), &temp) == 0) {
+    if (lstat(file.c_str(), &temp) == 0) {
         return {true, (size_t) temp.st_size};
     } else if (errno == ENOENT) {
         return {true, 0};
     }
-    setThreadedError(path);
+    setThreadedError(file);
     return {false, 0};
+}
+
+std::pair<bool, size_t>
+FileManager::getDirectorySize(const std::string &directory)
+{
+    DIR *dir = opendir(directory.c_str());
+    if (dir == NULL) {
+        if (errno == ENOENT) {
+            return {true, 0};
+        }
+        setThreadedError(directory);
+        return {false, 0};
+    }
+
+    size_t size = 0;
+    std::string path;
+    std::pair<bool, size_t> temp;
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
+            path = Path::addComponent(directory, entry->d_name);
+            if (entry->d_type == DT_DIR) {
+                temp = getDirectorySize(path);
+            } else {
+                temp = getFileSize(path);
+            }
+            if (!temp.first) {
+                setThreadedError(path);
+                return {false, 0};
+            }
+            size += temp.second;
+        }
+    }
+    closedir(dir);
+
+    return {true, size};
 }
 
 std::pair<bool, bool> FileManager::isExists(const std::string &path)
@@ -80,13 +118,45 @@ bool FileManager::removeHardLink(const std::string &path)
     return false;
 }
 
-bool FileManager::removeFile(const std::string &path)
+bool FileManager::removeFile(const std::string &file)
 {
-    if (remove(path.c_str()) == 0 || errno == ENOENT) {
+    if (remove(file.c_str()) == 0 || errno == ENOENT) {
         return true;
     }
-    setThreadedError(path);
+    setThreadedError(file);
     return false;
+}
+
+bool FileManager::removeDirectory(const std::string &directory)
+{
+    DIR *dir = opendir(directory.c_str());
+    if (dir == NULL) {
+        if (errno == ENOENT) {
+            return true;
+        }
+        setThreadedError(directory);
+        return false;
+    }
+
+    std::string path;
+    struct dirent *entry;
+    bool result;
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
+            path = Path::addComponent(directory, entry->d_name);
+            if (entry->d_type == DT_DIR) {
+                result = removeDirectory(path);
+            } else {
+                result = removeFile(path);
+            }
+            if (!result) {
+                setThreadedError(path);
+                return false;
+            }
+        }
+    }
+    closedir(dir);
+    return true;
 }
 
 bool FileManager::createDirectory(const std::string &path)
@@ -110,23 +180,62 @@ FileManager::getFileModifiedTime(const std::string &path)
 }
 
 #pragma mark - Combination
+std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
+{
+    struct stat temp;
+    if (lstat(path.c_str(), &temp) == 0) {
+        if (temp.st_mode & S_IFDIR) {
+            return getDirectorySize(path);
+        }
+        return getFileSize(path);
+    } else if (errno == ENOENT) {
+        return {true, 0};
+    }
+    setThreadedError(path);
+    return {false, 0};
+}
+
 std::pair<bool, size_t>
-FileManager::getFilesSize(const std::list<std::string> &paths)
+FileManager::getItemsSize(const std::list<std::string> &paths)
 {
     size_t size = 0;
-    std::pair<bool, size_t> ret;
+    std::pair<bool, size_t> temp;
     for (const auto &path : paths) {
-        ret = getFileSize(path);
-        if (ret.first) {
-            size += ret.second;
-        } else {
+        temp = getItemSize(path);
+        if (!temp.first) {
             return {false, 0};
         }
+        size += temp.second;
     }
     return {true, size};
 }
 
-bool FileManager::moveFiles(const std::list<std::string> &paths,
+bool FileManager::removeItem(const std::string &path)
+{
+    struct stat temp;
+    if (lstat(path.c_str(), &temp) == 0) {
+        if (temp.st_mode & S_IFDIR) {
+            return removeDirectory(path);
+        }
+        return removeFile(path);
+    } else if (errno == ENOENT) {
+        return true;
+    }
+    setThreadedError(path);
+    return false;
+}
+
+bool FileManager::removeItems(const std::list<std::string> &items)
+{
+    for (const auto &item : items) {
+        if (!removeItem(item)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool FileManager::moveItems(const std::list<std::string> &paths,
                             const std::string &directory)
 {
     if (!createDirectoryWithIntermediateDirectories(directory)) {
@@ -138,10 +247,10 @@ bool FileManager::moveFiles(const std::list<std::string> &paths,
         std::string newPath = Path::addComponent(directory, fileName);
         pairedPaths.push_back({path, newPath});
     }
-    return moveFiles(pairedPaths);
+    return moveItems(pairedPaths);
 }
 
-bool FileManager::moveFiles(
+bool FileManager::moveItems(
     const std::list<std::pair<std::string, std::string>> &pairedPaths)
 {
     bool result = true;
@@ -153,7 +262,7 @@ bool FileManager::moveFiles(
         }
         if (ret.second) {
             const std::string &newPath = pairedPath.second;
-            if (!removeFile(newPath) ||
+            if (!removeItem(newPath) ||
                 !createHardLink(pairedPath.first, pairedPath.second)) {
                 result = false;
                 break;
@@ -163,7 +272,7 @@ bool FileManager::moveFiles(
     }
     if (result) {
         for (const auto &pairedPath : pairedPaths) {
-            if (!removeFile(pairedPath.first)) {
+            if (!removeItem(pairedPath.first)) {
                 return false;
             }
         }
@@ -173,16 +282,6 @@ bool FileManager::moveFiles(
         }
     }
     return result;
-}
-
-bool FileManager::removeFiles(const std::list<std::string> &paths)
-{
-    for (const auto &path : paths) {
-        if (!removeFile(path)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 bool FileManager::createDirectoryWithIntermediateDirectories(
