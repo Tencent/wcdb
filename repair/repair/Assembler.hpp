@@ -21,9 +21,7 @@
 #ifndef Assembler_hpp
 #define Assembler_hpp
 
-#include <WCDB/Error.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
-#include <list>
 #include <string>
 
 namespace WCDB {
@@ -34,26 +32,16 @@ class Cell;
 
 class Assembler : protected SharedThreadedErrorProne {
 public:
-    virtual void markAsAssembling(const std::string &tableName);
-    virtual void markAsAssembled();
+    virtual bool markAsAssembling(const std::string &tableName);
+    virtual bool markAsAssembled();
     bool isAssembling() const;
 
-    virtual bool assembleTable(const std::string &sql);
-    virtual bool assembleTableAssociated(const std::list<std::string> &sqls);
-    virtual bool assembleCell(const Cell &cell);
+    virtual bool markAsMilestone() = 0;
+    virtual bool assembleTable(const std::string &sql) = 0;
+    virtual bool assembleCell(const Cell &cell) = 0;
 
 protected:
     std::string m_assembling;
-};
-
-class CanDoAssemble {
-public:
-    CanDoAssemble();
-
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
-
-protected:
-    std::shared_ptr<Assembler> m_assembler;
 };
 
 } //namespace Repair

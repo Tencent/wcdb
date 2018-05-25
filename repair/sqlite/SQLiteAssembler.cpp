@@ -32,7 +32,8 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialze
-SQLiteAssembler::SQLiteAssembler(const std::string &path_) : path(path_)
+SQLiteAssembler::SQLiteAssembler(const std::string &path_)
+    : Assembler(), path(path_), m_transaction(false)
 {
 }
 
@@ -42,63 +43,37 @@ SQLiteAssembler::~SQLiteAssembler()
 }
 
 #pragma mark - Assemble
-void SQLiteAssembler::markAsAssembled()
+bool SQLiteAssembler::markAsAssembling(const std::string &tableName)
 {
-    Assembler::markAsAssembled();
+    return SQLiteAssembler::markAsAssembling(tableName) && open();
+}
+
+bool SQLiteAssembler::markAsAssembled()
+{
     finalize();
+    return lazyCommitOrRollbackTransaction() && Assembler::markAsAssembled();
+}
+
+bool SQLiteAssembler::markAsMilestone()
+{
+    return lazyCommitOrRollbackTransaction();
 }
 
 bool SQLiteAssembler::assembleTable(const std::string &sql)
 {
-    if (!Assembler::assembleTable(sql)) {
-        return false;
-    }
-    if (!open()) {
-        return false;
-    }
-    int rc = sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr,
-                          nullptr);
-    if (rc != SQLITE_OK) {
-        setupError(rc, sql);
-        return false;
-    }
-    return true;
-}
-
-bool SQLiteAssembler::assembleTableAssociated(
-    const std::list<std::string> &sqls)
-{
-    if (!Assembler::assembleTableAssociated(sqls)) {
-        return false;
-    }
-    WCTInnerAssert(isOpened());
-    int rc = SQLITE_OK;
-    for (const auto &sql : sqls) {
-        rc = sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr,
-                          nullptr);
-        if (rc != SQLITE_OK) {
-            setupError(rc, sql);
-            return false;
-        }
-    }
-    return true;
+    WCTInnerAssert(isAssembling());
+    return lazyBeginTransaction() && execute(sql.c_str());
 }
 
 bool SQLiteAssembler::assembleCell(const Cell &cell)
 {
-    if (!Assembler::assembleCell(cell)) {
+    WCTInnerAssert(isAssembling());
+    if (!lazyBeginTransaction()) {
         return false;
     }
-    int rc = SQLITE_OK;
     if (!isPrepared()) {
         auto pair = getAssembleSQL();
-        if (!pair.first) {
-            return false;
-        }
-        rc = sqlite3_prepare_v2((sqlite3 *) m_handle, pair.second.c_str(), -1,
-                                (sqlite3_stmt **) &m_stmt, nullptr);
-        if (rc != SQLITE_OK) {
-            setupError(rc, pair.second);
+        if (!pair.first || !prepare(pair.second.c_str())) {
             return false;
         }
     }
@@ -135,30 +110,65 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
                 break;
         }
     }
-    rc = sqlite3_step((sqlite3_stmt *) m_stmt);
-    if (rc != SQLITE_ROW) {
-        const char *sql = sqlite3_sql((sqlite3_stmt *) m_stmt);
-        if (sql) {
-            setupError(rc, sql);
-        } else {
-            setupError(rc);
-        }
+    if (!step()) {
         return false;
     }
     sqlite3_reset((sqlite3_stmt *) m_stmt);
     return true;
 }
 
-#pragma mark - Error
-void SQLiteAssembler::setupError(int rc)
+bool SQLiteAssembler::lazyBeginTransaction()
 {
-    m_error.setupSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
+    if (m_transaction) {
+        return true;
+    }
+    if (execute("BEGIN IMMEDIATED")) {
+        m_transaction = true;
+        return true;
+    }
+    return false;
 }
 
-void SQLiteAssembler::setupError(int rc, const std::string &sql)
+bool SQLiteAssembler::lazyCommitOrRollbackTransaction()
 {
-    m_error.setupSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
-    m_error.message = sql;
+    if (m_transaction) {
+        m_transaction = false;
+        if (!execute("COMMIT")) {
+            execute("ROLLBACK", true); //ignore error
+            return false;
+        }
+    }
+    return true;
+}
+
+#pragma mark - Error
+void SQLiteAssembler::setThreadedError(int rc)
+{
+    Error error;
+    error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
+    const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
+    if (message) {
+        error.message = message;
+    }
+    error.infos.set("Path", path);
+    error.infos.set("Source", "SQLite");
+    Reporter::shared()->report(error);
+    setThreadedError(std::move(error));
+}
+
+void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
+{
+    Error error;
+    error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
+    const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
+    if (message) {
+        error.message = message;
+    }
+    error.infos.set("SQL", sql);
+    error.infos.set("Path", path);
+    error.infos.set("Source", "SQLite");
+    Reporter::shared()->report(error);
+    setThreadedError(std::move(error));
 }
 
 #pragma mark - SQLite Handle
@@ -167,7 +177,14 @@ bool SQLiteAssembler::open()
     if (!m_handle) {
         int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
-            setupError(rc);
+            setThreadedError(rc);
+            return false;
+        }
+        rc = sqlite3_exec((sqlite3 *) m_handle, "PRAGMA journal_mode=delete",
+                          nullptr, nullptr, nullptr);
+        if (rc != SQLITE_OK) {
+            setThreadedError(rc);
+            close();
             return false;
         }
     }
@@ -188,7 +205,59 @@ void SQLiteAssembler::close()
     }
 }
 
+bool SQLiteAssembler::execute(const char *sql, bool ignoreError)
+{
+    WCTInnerAssert(isOpened());
+    WCTInnerAssert(sql != nullptr);
+    int rc = sqlite3_exec((sqlite3 *) m_handle, sql, nullptr, nullptr, nullptr);
+    if (rc == SQLITE_OK) {
+        return true;
+    }
+    if (!ignoreError) {
+        setThreadedError(rc, sql);
+    }
+    return false;
+}
+
 #pragma mark - SQLite STMT
+bool SQLiteAssembler::prepare(const char *sql)
+{
+    WCTInnerAssert(isOpened());
+    WCTInnerAssert(!isPrepared());
+    WCTInnerAssert(sql != nullptr);
+    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle, sql, -1,
+                                (sqlite3_stmt **) &m_stmt, nullptr);
+    if (rc == SQLITE_OK) {
+        return true;
+    }
+    setThreadedError(rc, sql);
+    return false;
+}
+
+bool SQLiteAssembler::step()
+{
+    bool unused;
+    return step(unused);
+}
+
+bool SQLiteAssembler::step(bool &done)
+{
+    WCTInnerAssert(isOpened());
+    WCTInnerAssert(isPrepared());
+    int rc = sqlite3_step((sqlite3_stmt *) m_stmt);
+    done = rc == SQLITE_DONE;
+    if (rc == SQLITE_OK || rc == SQLITE_DONE || rc == SQLITE_ROW) {
+        return true;
+    };
+    const char *sql = sqlite3_sql((sqlite3_stmt *) m_stmt);
+    if (sql) {
+        setThreadedError(rc, sql);
+    } else {
+        setThreadedError(rc);
+    }
+    return false;
+}
+
 bool SQLiteAssembler::isPrepared() const
 {
     WCTInnerAssert(isOpened());
@@ -223,7 +292,7 @@ std::pair<bool, std::string> SQLiteAssembler::getAssembleSQL()
     int rc = sqlite3_prepare_v2((sqlite3 *) m_handle, tableInfoSQL.c_str(), -1,
                                 &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        setupError(rc, tableInfoSQL);
+        setThreadedError(rc, tableInfoSQL);
         return {false, ""};
     }
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
@@ -232,7 +301,7 @@ std::pair<bool, std::string> SQLiteAssembler::getAssembleSQL()
     }
     sqlite3_finalize(stmt);
     if (rc != SQLITE_DONE) {
-        setupError(rc, tableInfoSQL);
+        setThreadedError(rc, tableInfoSQL);
         return {false, ""};
     }
 

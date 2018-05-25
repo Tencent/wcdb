@@ -26,48 +26,23 @@ namespace WCDB {
 
 namespace Repair {
 
-void Assembler::markAsAssembling(const std::string &tableName)
+bool Assembler::markAsAssembling(const std::string &tableName)
 {
     WCTInnerAssert(!isAssembling());
     m_assembling = tableName;
+    return true;
 }
 
-void Assembler::markAsAssembled()
+bool Assembler::markAsAssembled()
 {
     WCTInnerAssert(isAssembling());
     m_assembling.clear();
-}
-
-bool Assembler::assembleTable(const std::string &sql)
-{
-    WCTInnerAssert(isAssembling());
-    return true;
-}
-
-bool Assembler::assembleTableAssociated(const std::list<std::string> &sqls)
-{
-    WCTInnerAssert(isAssembling());
-    return true;
-}
-
-bool Assembler::assembleCell(const Cell &cell)
-{
-    WCTInnerAssert(isAssembling());
     return true;
 }
 
 bool Assembler::isAssembling() const
 {
     return !m_assembling.empty();
-}
-
-CanDoAssemble::CanDoAssemble() : m_assembler(nullptr)
-{
-}
-
-void CanDoAssemble::setAssembler(const std::shared_ptr<Assembler> &assembler)
-{
-    m_assembler = assembler;
 }
 
 } //namespace Repair

@@ -29,16 +29,26 @@ namespace Repair {
 
 #pragma mark - Initialize
 Crawler::Crawler(const std::string &source)
-    : MasterCrawler(source, false)
-    , m_columnWeightForCurrentPage(0)
-    , m_parsedLeafPageCount(0)
+    : Repairman(), MasterCrawler(source, false)
 {
 }
 
 #pragma mark - Repair
 void Crawler::work()
 {
-    WCTInnerAssert(m_assembler != nullptr);
+    WCTInnerAssert(canAssembled());
+
+    //calculate score
+    int leafTablePageCount = 0;
+    for (int i = 0; i < m_pager.getPageCount(); ++i) {
+        Page page(i, m_pager);
+        auto pair = page.acquireType();
+        if (!pair.first // treat as leaf table
+            || pair.second == Page::Type::LeafTable) {
+            ++leafTablePageCount;
+        }
+    }
+    setPageWeight((double) leafTablePageCount / m_pager.getPageCount());
 
     if (m_pager.initialize() && MasterCrawler::work()) {
         for (const auto &element : getMasters()) {
@@ -46,30 +56,20 @@ void Crawler::work()
             if (master.tableName.empty() || master.sql.empty()) {
                 continue;
             }
-            m_assembler->markAsAssembling(element.second.tableName);
-            if (!m_assembler->assembleTable(master.sql) ||
-                !m_assembler->assembleTableAssociated(master.associatedSQLs) ||
-                !crawl(master.rootpage)) {
+            if (!markAsAssembling(element.second.tableName) ||
+                !assembleTable(master.sql)) {
+                markAsError();
+                continue;
+            }
+            if (!crawl(master.rootpage)) {
                 markAsError();
             }
-            m_assembler->markAsAssembled();
+            if (!markAsAssembled()) {
+                markAsError();
+            }
         }
     } else {
         markAsError();
-    }
-
-    if (m_score != 0 && m_parsedLeafPageCount != 0) {
-        //calculate score
-        int leafTablePageCount = 0;
-        for (int i = 0; i < m_pager.getPageCount(); ++i) {
-            Page page(i, m_pager);
-            auto pair = page.acquireType();
-            if (!pair.first // treat as leaf table
-                || pair.second == Page::Type::LeafTable) {
-                ++leafTablePageCount;
-            }
-        }
-        m_score = m_score * m_parsedLeafPageCount / leafTablePageCount;
     }
 }
 
@@ -78,12 +78,12 @@ bool Crawler::onCellCrawled(const Cell &cell)
 {
     if (isMasterCrawling()) {
         if (MasterCrawler::onCellCrawled(cell)) {
-            m_score += m_columnWeightForCurrentPage;
+            markCellAsCounted();
         }
     } else {
         Crawlable::onCellCrawled(cell);
-        if (m_assembler->assembleCell(cell)) {
-            m_score += m_columnWeightForCurrentPage;
+        if (!assembleCell(cell)) {
+            markAsError();
         }
     }
     return true;
@@ -97,8 +97,7 @@ bool Crawler::onPageCrawled(const Page &page, int unused)
         Crawlable::onPageCrawled(page, unused);
     }
     if (page.getType() == Page::Type::LeafTable) {
-        m_columnWeightForCurrentPage = (double) 1.0 / page.getCellCount();
-        ++m_parsedLeafPageCount;
+        markCellCount(page.getCellCount());
     }
     return true;
 }

@@ -39,16 +39,28 @@ public:
 
 #pragma mark - Assembler
 public:
-    void markAsAssembled() override;
+    bool markAsAssembling(const std::string &tableName) override;
+    bool markAsAssembled() override;
+
+    bool markAsMilestone() override;
 
     bool assembleTable(const std::string &sql) override;
-    bool assembleTableAssociated(const std::list<std::string> &sqls) override;
     bool assembleCell(const Cell &cell) override;
+
+protected:
+    bool lazyBeginTransaction();
+    bool lazyCommitOrRollbackTransaction();
+
+private:
+    bool m_transaction;
 
 #pragma mark - Error
 protected:
-    void setupError(int rc);
-    void setupError(int rc, const std::string &sql);
+    void setThreadedError(int rc);
+    void setThreadedError(int rc, const std::string &sql);
+
+private:
+    using Assembler::setThreadedError;
 
 #pragma mark - SQLite Handle
 protected:
@@ -56,11 +68,17 @@ protected:
     bool isOpened() const;
     void close();
 
+    bool execute(const char *sql, bool ignoreError = false);
+
     void *m_handle;
 
 #pragma mark - SQLite STMT
 protected:
     std::pair<bool, std::string> getAssembleSQL();
+
+    bool prepare(const char *sql);
+    bool step();
+    bool step(bool &done);
 
     bool isPrepared() const;
     void finalize();

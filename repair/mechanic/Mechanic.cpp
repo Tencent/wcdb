@@ -28,9 +28,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Mechanic::Mechanic(const std::string &path)
-    : Crawlable(path, false)
-    , m_pageWeight(0)
-    , m_columnWeightForCurrentPageInAllPages(0)
+    : Repairman(), Crawlable(path, false)
 {
 }
 
@@ -48,7 +46,7 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
-    WCTInnerAssert(m_assembler != nullptr);
+    WCTInnerAssert(canAssembled());
     if (!m_pager.initialize()) {
         markAsError();
         return;
@@ -58,21 +56,22 @@ void Mechanic::work()
     for (const auto &content : m_material.contents) {
         pageCount += content.pagenos.size();
     }
-    m_pageWeight = (double) 1.0 / pageCount;
+    setPageWeight((double) 1.0 / pageCount);
 
     for (const auto &content : m_material.contents) {
-        m_assembler->markAsAssembling(content.tableName);
-        if (m_assembler->assembleTable(content.sql) &&
-            m_assembler->assembleTableAssociated(content.associatedSQLs)) {
-            for (const auto &pageno : content.pagenos) {
-                if (!crawl(pageno)) {
-                    markAsError();
-                }
+        if (!markAsAssembling(content.tableName) ||
+            !assembleTable(content.sql)) {
+            markAsError();
+            continue;
+        }
+        for (const auto &pageno : content.pagenos) {
+            if (!crawl(pageno)) {
+                markAsError();
             }
-        } else {
+        }
+        if (!markAsAssembled()) {
             markAsError();
         }
-        m_assembler->markAsAssembled();
     }
 }
 
@@ -80,8 +79,8 @@ void Mechanic::work()
 bool Mechanic::onCellCrawled(const Cell &cell)
 {
     Crawlable::onCellCrawled(cell);
-    if (m_assembler->assembleCell(cell)) {
-        m_score += m_columnWeightForCurrentPageInAllPages;
+    if (!assembleCell(cell)) {
+        markAsError();
     }
     return true;
 }
@@ -90,8 +89,7 @@ bool Mechanic::onPageCrawled(const Page &page, int unused)
 {
     Crawlable::onPageCrawled(page, unused);
     if (page.getType() == Page::Type::LeafTable) {
-        m_columnWeightForCurrentPageInAllPages =
-            (double) 1.0 / page.getCellCount() * m_pageWeight;
+        markCellCount(page.getCellCount());
         return true;
     }
     markAsCorrupted();

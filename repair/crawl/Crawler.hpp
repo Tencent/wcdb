@@ -23,15 +23,15 @@
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
-#include <WCDB/Evaluation.hpp>
 #include <WCDB/MasterCrawler.hpp>
+#include <WCDB/Repairman.hpp>
 #include <map>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Crawler : public MasterCrawler, public CanDoAssemble, public Evaluation {
+class Crawler : public Repairman, public MasterCrawler {
 #pragma mark - Initialize
 public:
     Crawler(const std::string &source);
@@ -39,11 +39,6 @@ public:
 #pragma mark - Repair
 public:
     void work();
-
-#pragma mark - Evaluation
-protected:
-    double m_columnWeightForCurrentPage;
-    int m_parsedLeafPageCount;
 
 #pragma mark - Crawlable
     bool onCellCrawled(const Cell &cell) override;

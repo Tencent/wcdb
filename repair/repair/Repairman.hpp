@@ -18,45 +18,59 @@
  * limitations under the License.
  */
 
-#ifndef Mechanic_hpp
-#define Mechanic_hpp
+#ifndef Repairman_hpp
+#define Repairman_hpp
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
-#include <WCDB/Material.hpp>
-#include <WCDB/Repairman.hpp>
+#include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Material;
-
-class Mechanic : public Repairman, public Crawlable {
+class Repairman {
 #pragma mark - Initialize
 public:
-    Mechanic(const std::string &path);
-
-#pragma mark - Mechanic
+    Repairman();
+#pragma mark - Assembler
 public:
-    void work();
-
-#pragma mark - Material
-public:
-    void setMaterial(const Material &material);
-    void setMaterial(Material &&material);
+    void setAssembler(const std::shared_ptr<Assembler> &assembler);
 
 protected:
-    Material m_material;
+    bool markAsAssembling(const std::string &tableName);
+    bool markAsAssembled();
 
-#pragma mark - Crawlable
+    bool markAsMilestone();
+
+    bool assembleTable(const std::string &sql);
+    bool assembleCell(const Cell &cell);
+
+    bool canAssembled() const;
+
+private:
+    int m_maxCellsPerMilestone;
+    int m_cells;
+    std::shared_ptr<Assembler> m_assembler;
+
+#pragma mark - Evaluation
+public:
+    double getScore() const;
+
 protected:
-    bool onCellCrawled(const Cell &cell) override;
-    bool onPageCrawled(const Page &page, int unused) override;
+    void setPageWeight(double pageWeight);
+    void markCellCount(int cellCount);
+    void markCellAsCounted();
+
+private:
+    double m_uncountedScore;
+    double m_pageWeight;
+    double m_cellWeight;
+    double m_score;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Mechanic_hpp */
+#endif /* Repairman_hpp */
