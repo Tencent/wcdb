@@ -29,6 +29,7 @@
 
 namespace WCDB {
 
+//TODO disable migration while materials exist
 class MigrationDatabase : public Database {
 public:
 #pragma mark - Initializer
