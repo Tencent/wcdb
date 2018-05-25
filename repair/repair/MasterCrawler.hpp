@@ -23,7 +23,6 @@
 
 #include <WCDB/Crawlable.hpp>
 #include <list>
-#include <map>
 
 namespace WCDB {
 
@@ -32,7 +31,6 @@ namespace Repair {
 struct Master {
     std::string tableName;
     std::string sql;
-    std::list<std::string> associatedSQLs;
     int rootpage;
 };
 
@@ -45,10 +43,10 @@ public:
 public:
     bool work();
 
-    const std::map<std::string, Master> &getMasters() const;
+    const std::list<Master> &getMasters() const;
 
 protected:
-    std::map<std::string, Master> m_masters;
+    std::list<Master> m_masters;
     bool isMasterCrawling() const;
 
 private:

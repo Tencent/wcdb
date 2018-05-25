@@ -57,20 +57,15 @@ bool MasterCrawler::onCellCrawled(const Cell &cell)
         return !isFatal();
     }
 
-    auto iter = m_masters.find(tblName);
-    Master *master = nullptr;
-    if (iter != m_masters.end()) {
-        master = &iter->second;
-    } else {
-        master = &(m_masters.insert({tblName, Master()}).first->second);
+    if (name != tblName) {
+        //skip index/view/trigger
+        return true;
     }
-    if (name == tblName) {
-        master->rootpage = cell.int32Value(3);
-        master->tableName = name;
-        master->sql = sql;
-    } else {
-        master->associatedSQLs.push_back(sql);
-    }
+    Master master;
+    master.rootpage = cell.int32Value(3);
+    master.tableName = std::move(name);
+    master.sql = std::move(sql);
+    m_masters.push_back(std::move(master));
     return true;
 }
 
@@ -79,7 +74,7 @@ bool MasterCrawler::isMasterCrawling() const
     return m_crawling;
 }
 
-const std::map<std::string, Master> &MasterCrawler::getMasters() const
+const std::list<Master> &MasterCrawler::getMasters() const
 {
     return m_masters;
 }

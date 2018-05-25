@@ -82,20 +82,10 @@ bool Material::initWithData(const Data &data)
     while (!deserialization.ended()) {
         WCTInnerAssert(content.tableName.empty());
         WCTInnerAssert(content.sql.empty());
-        WCTInnerAssert(content.associatedSQLs.empty());
         WCTInnerAssert(content.pagenos.empty());
         content.tableName = deserialization.advanceZeroTerminatedString();
         content.sql = deserialization.advanceZeroTerminatedString();
-        intermediate = deserialization.advanceVarint();
-        if (intermediate.first <= 0) {
-            markAsCorrupt();
-            return false;
-        }
-        for (int i = 0; i < intermediate.second; ++i) {
-            std::string associatedSQL =
-                deserialization.advanceZeroTerminatedString();
-            content.associatedSQLs.push_back(std::move(associatedSQL));
-        }
+
         intermediate = deserialization.advanceVarint();
         if (intermediate.first <= 0) {
             markAsCorrupt();
@@ -111,6 +101,7 @@ bool Material::initWithData(const Data &data)
             }
             content.pagenos[i] = (uint32_t) intermediate.second;
         }
+
         contents.push_back(std::move(content));
     }
     return true;
@@ -141,15 +132,10 @@ Data Material::encodedData() const
                     content.tableName) // with '\0'
                 ||
                 !serialization.putZeroTerminatedString(content.sql) // with '\0'
-                || !serialization.putVarint(content.associatedSQLs.size())) {
+                ) {
                 goto WCDB_Repair_Material_EncodedData_Failed;
             }
-            for (const auto &sql : content.associatedSQLs) {
-                if (serialization.putZeroTerminatedString(sql) // with '\0'
-                    ) {
-                    goto WCDB_Repair_Material_EncodedData_Failed;
-                }
-            }
+
             if (!serialization.putVarint(content.pagenos.size())) {
                 goto WCDB_Repair_Material_EncodedData_Failed;
             }

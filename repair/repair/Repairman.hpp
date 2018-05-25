@@ -37,6 +37,11 @@ public:
 public:
     void setAssembler(const std::shared_ptr<Assembler> &assembler);
 
+#pragma mark - Repairman
+public:
+    //TODO 1. progress callback 2. table create hook to run associated sql
+    //    void work();
+
 protected:
     bool markAsAssembling(const std::string &tableName);
     bool markAsAssembled();

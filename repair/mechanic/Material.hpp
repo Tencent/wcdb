@@ -62,7 +62,6 @@ public:
     public:
         std::string tableName;
         std::string sql;
-        std::list<std::string> associatedSQLs;
         std::vector<uint32_t> pagenos;
     };
     std::list<Content> contents;

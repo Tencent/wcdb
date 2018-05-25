@@ -51,12 +51,11 @@ void Crawler::work()
     setPageWeight((double) leafTablePageCount / m_pager.getPageCount());
 
     if (m_pager.initialize() && MasterCrawler::work()) {
-        for (const auto &element : getMasters()) {
-            const Master &master = element.second;
+        for (const auto &master : getMasters()) {
             if (master.tableName.empty() || master.sql.empty()) {
                 continue;
             }
-            if (!markAsAssembling(element.second.tableName) ||
+            if (!markAsAssembling(master.tableName) ||
                 !assembleTable(master.sql)) {
                 markAsError();
                 continue;

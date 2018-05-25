@@ -46,8 +46,7 @@ bool Deconstructor::work()
         return false;
     }
 
-    for (auto &element : m_masters) {
-        Master &master = element.second;
+    for (auto &master : m_masters) {
         if (m_filter && !m_filter(master.tableName)) {
             continue;
         }
@@ -55,7 +54,6 @@ bool Deconstructor::work()
         Material::Content content;
         content.tableName = std::move(master.tableName);
         content.sql = std::move(master.sql);
-        content.associatedSQLs = std::move(master.associatedSQLs);
         m_material.contents.push_back(std::move(content));
 
         m_height = -1;
