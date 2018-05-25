@@ -27,14 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)archiveAsMaterial;
 
 /**
- @brief Backup metadata to recover. Since metadata will be changed while a table or an index is created or dropped, you should call this periodically.
-
- @param key The cipher key for backup
- @return YES only if it's successfully backed up
- */
-- (BOOL)backupWithCipher:(nullable NSData *)key;
-
-/**
  @brief This interface is equivalent to [database backupWithCipher:nil];
  @return YES only if it's successfully backed up
  */

@@ -98,7 +98,7 @@ public:
 
 #pragma mark - Repair Kit
 public:
-    bool backup(const Data &data);
+    bool backup();
     bool archiveAsMaterial();
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,

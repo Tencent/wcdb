@@ -28,14 +28,9 @@
     return _database->archiveAsMaterial();
 }
 
-- (BOOL)backupWithCipher:(NSData *)key
-{
-    return _database->backup(WCDB::Data::immutableNoCopyData((const unsigned char *) key.bytes, (size_t) key.length));
-}
-
 - (BOOL)backup
 {
-    return [self backupWithCipher:nil];
+    return _database->backup();
 }
 
 - (BOOL)recoverFromPath:(NSString *)corruptedDBPath

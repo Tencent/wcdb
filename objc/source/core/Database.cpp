@@ -154,7 +154,9 @@ void Database::removeConfig(const std::string &name)
 
 void Database::setCipher(const Data &cipher, int pageSize)
 {
-    m_pool->setConfig(CipherConfig::configWithKey(cipher, pageSize));
+    m_pool->setCipher(cipher);
+    m_pool->setConfig(
+        CipherConfig::configWithKey(m_pool->getCipher(), pageSize));
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
@@ -393,7 +395,7 @@ std::pair<bool, std::string> Database::pickUpBackup(bool old)
     return {true, first ? firstBackupPath : lastBackupPath};
 }
 
-bool Database::backup(const Data &data)
+bool Database::backup()
 {
     auto backupPath = pickUpOldBackup();
     if (!backupPath.first) {
@@ -413,6 +415,7 @@ bool Database::backup(const Data &data)
         return false;
     }
 
+    //TODO cipher
     FileHandle fileHandle(backupPath.second);
     bool result = true;
     if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||

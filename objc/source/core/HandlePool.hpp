@@ -123,6 +123,14 @@ protected:
 private:
     friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
     ThreadedErrors m_errors;
+
+#pragma mark - Info
+public:
+    void setCipher(const Data &cipher);
+    const Data &getCipher() const;
+
+private:
+    Data m_cipher;
 };
 
 } //namespace WCDB
