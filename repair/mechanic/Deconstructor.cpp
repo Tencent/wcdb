@@ -69,7 +69,7 @@ void Deconstructor::filter(const Filter &shouldTableDeconstructed)
     m_filter = shouldTableDeconstructed;
 }
 
-const Materaial &Deconstructor::getMaterail() const
+const Materaial &Deconstructor::getMaterial() const
 {
     return m_materaial;
 }

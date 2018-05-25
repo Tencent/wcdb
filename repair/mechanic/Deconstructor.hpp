@@ -42,7 +42,7 @@ public:
     typedef std::function<bool(const std::string &)> Filter;
     void filter(const Filter &shouldTableDeconstructed);
 
-    const Materaial &getMaterail() const;
+    const Materaial &getMaterial() const;
 
 protected:
     Filter m_filter;

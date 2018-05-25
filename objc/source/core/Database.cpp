@@ -408,8 +408,8 @@ bool Database::backup()
             std::move(ThreadedErrors::shared()->moveThreadedError()));
         return false;
     }
-    Data materail = deconstructor.getMaterail().encodedData();
-    if (materail.empty()) {
+    Data material = deconstructor.getMaterial().encodedData();
+    if (material.empty()) {
         setThreadedError(
             std::move(ThreadedErrors::shared()->moveThreadedError()));
         return false;
@@ -419,7 +419,7 @@ bool Database::backup()
     FileHandle fileHandle(backupPath.second);
     bool result = true;
     if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||
-        !fileHandle.write(materail.buffer(), 0, materail.size())) {
+        !fileHandle.write(material.buffer(), 0, material.size())) {
         setThreadedError(
             std::move(ThreadedErrors::shared()->moveThreadedError()));
         result = false;
