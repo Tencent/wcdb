@@ -20,6 +20,8 @@
 
 #import <WCDB/WCTDatabase.h>
 
+typedef BOOL (^WCTBackupFilterBlock)(NSString *_Nonnull);
+
 @interface WCTDatabase (RepairKit)
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
  @return YES only if it's successfully backed up
  */
 - (BOOL)backup;
+
+- (BOOL)backup:(WCTBackupFilterBlock)shouldTableBeBackedUp;
 
 /**
  @brief Recover data from a corruped db. You'd better to recover a closed database. A new repair kit is developing at https://github.com/Tencent/wcdb/tree/new-repair

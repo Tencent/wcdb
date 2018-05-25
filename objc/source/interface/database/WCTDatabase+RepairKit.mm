@@ -30,7 +30,18 @@
 
 - (BOOL)backup
 {
-    return _database->backup();
+    return _database->backup(nullptr);
+}
+
+- (BOOL)backup:(WCTBackupFilterBlock)shouldTableBeBackedUp
+{
+    WCDB::Database::BackupFilter filter = nullptr;
+    if (shouldTableBeBackedUp) {
+        filter = [shouldTableBeBackedUp](const std::string &tableName) -> bool {
+            return shouldTableBeBackedUp([NSString stringWithCppString:tableName]);
+        };
+    }
+    return _database->backup(filter);
 }
 
 - (BOOL)recoverFromPath:(NSString *)corruptedDBPath

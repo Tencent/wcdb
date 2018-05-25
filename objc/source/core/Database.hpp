@@ -98,7 +98,8 @@ public:
 
 #pragma mark - Repair Kit
 public:
-    bool backup();
+    typedef std::function<bool(const std::string &)> BackupFilter;
+    bool backup(const BackupFilter &shouldTableBeBackedup);
     bool archiveAsMaterial();
     bool recoverFromPath(const std::string &corruptedDBPath,
                          int pageSize,

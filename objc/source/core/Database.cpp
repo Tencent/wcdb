@@ -395,7 +395,7 @@ std::pair<bool, std::string> Database::pickUpBackup(bool old)
     return {true, first ? firstBackupPath : lastBackupPath};
 }
 
-bool Database::backup()
+bool Database::backup(const BackupFilter &shouldTableBeBackedup)
 {
     auto backupPath = pickUpOldBackup();
     if (!backupPath.first) {
@@ -403,6 +403,9 @@ bool Database::backup()
     }
 
     Repair::Deconstructor deconstructor(getPath());
+    if (shouldTableBeBackedup != nullptr) {
+        deconstructor.filter(shouldTableBeBackedup);
+    }
     if (!deconstructor.work()) {
         setThreadedError(
             std::move(ThreadedErrors::shared()->moveThreadedError()));
