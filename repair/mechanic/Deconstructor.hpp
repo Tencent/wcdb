@@ -22,7 +22,7 @@
 #define Deconstructor_hpp
 
 #include <WCDB/MasterCrawler.hpp>
-#include <WCDB/Materaial.hpp>
+#include <WCDB/Material.hpp>
 #include <string>
 #include <vector>
 
@@ -42,11 +42,11 @@ public:
     typedef std::function<bool(const std::string &)> Filter;
     void filter(const Filter &shouldTableDeconstructed);
 
-    const Materaial &getMaterial() const;
+    const Material &getMaterial() const;
 
 protected:
     Filter m_filter;
-    Materaial m_materaial;
+    Material m_material;
     int m_height;
 
 #pragma mark - Crawlable

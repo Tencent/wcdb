@@ -388,8 +388,7 @@ std::pair<bool, std::string> Database::pickUpBackup(bool old)
     } while (false);
 
     if (!result) {
-        setThreadedError(
-            std::move(ThreadedErrors::shared()->moveThreadedError()));
+        assignWithSharedThreadedError();
         return {false, String::empty()};
     }
     return {true, first ? firstBackupPath : lastBackupPath};
@@ -407,14 +406,12 @@ bool Database::backup(const BackupFilter &shouldTableBeBackedup)
         deconstructor.filter(shouldTableBeBackedup);
     }
     if (!deconstructor.work()) {
-        setThreadedError(
-            std::move(ThreadedErrors::shared()->moveThreadedError()));
+        assignWithSharedThreadedError();
         return false;
     }
     Data material = deconstructor.getMaterial().encodedData();
     if (material.empty()) {
-        setThreadedError(
-            std::move(ThreadedErrors::shared()->moveThreadedError()));
+        assignWithSharedThreadedError();
         return false;
     }
 
@@ -423,28 +420,15 @@ bool Database::backup(const BackupFilter &shouldTableBeBackedup)
     bool result = true;
     if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||
         !fileHandle.write(material.buffer(), 0, material.size())) {
-        setThreadedError(
-            std::move(ThreadedErrors::shared()->moveThreadedError()));
+        assignWithSharedThreadedError();
         result = false;
     }
     fileHandle.close();
     return result;
 }
 
-bool Database::recoverFromPath(const std::string &corruptedDBPath,
-                               int pageSize,
-                               const Data &backupCipher,
-                               const Data &databaseCipher)
+bool Database::restore()
 {
-    //    RecyclableHandle handle = getHandle();
-    //    if (handle == nullptr) {
-    //        return false;
-    //    }
-    //    if (handle->recoverFromPath(corruptedDBPath, pageSize, backupCipher,
-    //                                databaseCipher)) {
-    //        return true;
-    //    }
-    //    setThreadedError(handle->getError());
     return false;
 }
 

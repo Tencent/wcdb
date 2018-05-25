@@ -44,15 +44,9 @@
     return _database->backup(filter);
 }
 
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath
-           withPageSize:(const int)pageSize
-           backupCipher:(NSData *)backupCipher
-         databaseCipher:(NSData *)databaseCipher
+- (BOOL)restore
 {
-    return _database->recoverFromPath(corruptedDBPath.cppString,
-                                      pageSize,
-                                      WCDB::Data::immutableNoCopyData((const unsigned char *) backupCipher.bytes, (size_t) backupCipher.length),
-                                      WCDB::Data::immutableNoCopyData((const unsigned char *) databaseCipher.bytes, (size_t) databaseCipher.length));
+    return _database->restore();
 }
 
 @end

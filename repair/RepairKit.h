@@ -23,7 +23,7 @@
 
 #include <WCDB/Crawler.hpp>
 #include <WCDB/Deconstructor.hpp>
-#include <WCDB/Materaial.hpp>
+#include <WCDB/Material.hpp>
 #include <WCDB/Mechanic.hpp>
 
 #endif /* RepairKit_h */

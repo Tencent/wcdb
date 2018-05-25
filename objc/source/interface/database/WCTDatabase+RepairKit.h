@@ -28,34 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)archiveAsMaterial;
 
-/**
- @brief This interface is equivalent to [database backupWithCipher:nil];
- @return YES only if it's successfully backed up
- */
 - (BOOL)backup;
 
 - (BOOL)backup:(WCTBackupFilterBlock)shouldTableBeBackedUp;
 
-/**
- @brief Recover data from a corruped db. You'd better to recover a closed database. A new repair kit is developing at https://github.com/Tencent/wcdb/tree/new-repair
- 
-     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-     WCTDatabase* corruped = [[WCTDatabase alloc] initWithPath:corrupedDBPath];
-     [corruped close:^(){
-         BOOL result = [database recoverFromPath:corrupedDBPath withPageSize:4096 backupCipher:backupCipher databaseCipher:databaseCipher];
-         NSLog(@"result %d", result);
-     }];
-
- @param corruptedDBPath The path to the corrupted database
- @param pageSize Page size of the corrupted database. It's default to 4096 on iOS. Page size never change unless you can call "PRAGMA page_size=NewPageSize" to set it. Also, you can call "PRAGMA page_size" to check the current value while database is not corrupted.
- @param backupCipher The cipher key for backup
- @param databaseCipher The cipher key for corrupeted database
- @return YES only if it's successfully recovered.
- */
-- (BOOL)recoverFromPath:(NSString *)corruptedDBPath
-           withPageSize:(const int)pageSize
-           backupCipher:(nullable NSData *)backupCipher
-         databaseCipher:(nullable NSData *)databaseCipher;
+- (BOOL)restore;
 
 @end
 

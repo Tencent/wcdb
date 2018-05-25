@@ -168,10 +168,10 @@
 		23775B7720AD666900E21AB0 /* Deconstructor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3E20AD666900E21AB0 /* Deconstructor.cpp */; };
 		23775B7820AD666900E21AB0 /* Deconstructor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3F20AD666900E21AB0 /* Deconstructor.hpp */; };
 		23775B7920AD666900E21AB0 /* Deconstructor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3F20AD666900E21AB0 /* Deconstructor.hpp */; };
-		23775B7A20AD666900E21AB0 /* Materaial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Materaial.cpp */; };
-		23775B7B20AD666900E21AB0 /* Materaial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Materaial.cpp */; };
-		23775B7C20AD666900E21AB0 /* Materaial.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4120AD666900E21AB0 /* Materaial.hpp */; };
-		23775B7D20AD666900E21AB0 /* Materaial.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4120AD666900E21AB0 /* Materaial.hpp */; };
+		23775B7A20AD666900E21AB0 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Material.cpp */; };
+		23775B7B20AD666900E21AB0 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Material.cpp */; };
+		23775B7C20AD666900E21AB0 /* Material.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4120AD666900E21AB0 /* Material.hpp */; };
+		23775B7D20AD666900E21AB0 /* Material.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4120AD666900E21AB0 /* Material.hpp */; };
 		23775B7E20AD666900E21AB0 /* Mechanic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4220AD666900E21AB0 /* Mechanic.cpp */; };
 		23775B7F20AD666900E21AB0 /* Mechanic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4220AD666900E21AB0 /* Mechanic.cpp */; };
 		23775B8020AD666900E21AB0 /* Mechanic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4320AD666900E21AB0 /* Mechanic.hpp */; };
@@ -1145,8 +1145,8 @@
 		23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeprecatedRepairKit.hpp; sourceTree = "<group>"; };
 		23775B3E20AD666900E21AB0 /* Deconstructor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Deconstructor.cpp; sourceTree = "<group>"; };
 		23775B3F20AD666900E21AB0 /* Deconstructor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Deconstructor.hpp; sourceTree = "<group>"; };
-		23775B4020AD666900E21AB0 /* Materaial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Materaial.cpp; sourceTree = "<group>"; };
-		23775B4120AD666900E21AB0 /* Materaial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Materaial.hpp; sourceTree = "<group>"; };
+		23775B4020AD666900E21AB0 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		23775B4120AD666900E21AB0 /* Material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
 		23775B4220AD666900E21AB0 /* Mechanic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mechanic.cpp; sourceTree = "<group>"; };
 		23775B4320AD666900E21AB0 /* Mechanic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mechanic.hpp; sourceTree = "<group>"; };
 		23775B4520AD666900E21AB0 /* Cell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cell.cpp; sourceTree = "<group>"; };
@@ -1920,8 +1920,8 @@
 			children = (
 				23775B3E20AD666900E21AB0 /* Deconstructor.cpp */,
 				23775B3F20AD666900E21AB0 /* Deconstructor.hpp */,
-				23775B4020AD666900E21AB0 /* Materaial.cpp */,
-				23775B4120AD666900E21AB0 /* Materaial.hpp */,
+				23775B4020AD666900E21AB0 /* Material.cpp */,
+				23775B4120AD666900E21AB0 /* Material.hpp */,
 				23775B4220AD666900E21AB0 /* Mechanic.cpp */,
 				23775B4320AD666900E21AB0 /* Mechanic.hpp */,
 			);
@@ -2547,7 +2547,7 @@
 				23B0071D2047ED4800045245 /* ConfiguredHandle.hpp in Headers */,
 				234DBD032064DE04000E31E8 /* WCTDatabase+Transaction.h in Headers */,
 				234DBD052064DE04000E31E8 /* WCTHandle+Transaction.h in Headers */,
-				23775B7C20AD666900E21AB0 /* Materaial.hpp in Headers */,
+				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
 				2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */,
 				2349F72E1EA0D6680021EFA7 /* WCTSelectable+Private.h in Headers */,
 				23000F14203EC89700ED8008 /* LangColumn.hpp in Headers */,
@@ -2812,7 +2812,7 @@
 				23F5BDF120887FD3000CCD37 /* ConfiguredHandle.hpp in Headers */,
 				23F5BDF320887FD3000CCD37 /* WCTDatabase+Transaction.h in Headers */,
 				23F5BDF420887FD3000CCD37 /* WCTHandle+Transaction.h in Headers */,
-				23775B7D20AD666900E21AB0 /* Materaial.hpp in Headers */,
+				23775B7D20AD666900E21AB0 /* Material.hpp in Headers */,
 				23F5BDF520887FD3000CCD37 /* WCTError.h in Headers */,
 				23F5BDF620887FD3000CCD37 /* WCTSelectable+Private.h in Headers */,
 				23F5BDF720887FD3000CCD37 /* LangColumn.hpp in Headers */,
@@ -3144,7 +3144,7 @@
 				239774FA202AECD3000A681C /* JoinClause.cpp in Sources */,
 				23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */,
 				23977537202AECD3000A681C /* StatementRollback.cpp in Sources */,
-				23775B7A20AD666900E21AB0 /* Materaial.cpp in Sources */,
+				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
 				23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				2397756F202AECD3000A681C /* LangDropIndexSTMT.cpp in Sources */,
 				234D391D20833BC2005FD3CF /* MigrationTamperer.cpp in Sources */,
@@ -3363,7 +3363,7 @@
 				23F5BCE820887FD3000CCD37 /* JoinClause.cpp in Sources */,
 				23F5BCE920887FD3000CCD37 /* Operable.cpp in Sources */,
 				23F5BCEA20887FD3000CCD37 /* StatementRollback.cpp in Sources */,
-				23775B7B20AD666900E21AB0 /* Materaial.cpp in Sources */,
+				23775B7B20AD666900E21AB0 /* Material.cpp in Sources */,
 				23775B9720AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				23F5BCEB20887FD3000CCD37 /* LangDropIndexSTMT.cpp in Sources */,
 				23F5BCEC20887FD3000CCD37 /* MigrationTamperer.cpp in Sources */,

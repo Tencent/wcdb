@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Compression.hpp>
 #include <WCDB/Data.hpp>
-#include <WCDB/Materaial.hpp>
+#include <WCDB/Material.hpp>
 #include <WCDB/Serialization.hpp>
 
 namespace WCDB {
@@ -29,39 +29,44 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialization
-Materaial::Materaial() : walSalt1(0), walSalt2(0), walFrame(0)
+Material::Material()
 {
+    memset(&meta, 0, sizeof(meta));
 }
 
 #pragma mark - Serialization
-void Materaial::markAsCorrupt()
+void Material::markAsCorrupt()
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
-    error.message = "Materaial is corrupted";
+    error.message = "Material is corrupted";
     setThreadedError(std::move(error));
 }
 
-bool Materaial::initWithData(const Data &data)
+bool Material::initWithData(const Data &data)
 {
     Deserialization deserialization(data);
-    if (!deserialization.isEnough(24)) {
+    if (!deserialization.isEnough(Material::HeaderSize)) {
         markAsCorrupt();
         return false;
     }
     //Header
     uint32_t magic = deserialization.advance4BytesUInt();
-    if (magic != Materaial::magic) {
+    if (magic != Material::magic) {
         markAsCorrupt();
         return false;
     }
     uint32_t checksum = deserialization.advance4BytesUInt();
 
-    walSalt1 = deserialization.advance4BytesUInt();
-    walSalt2 = deserialization.advance4BytesUInt();
-    walFrame = deserialization.advance4BytesUInt();
+    meta.pageSize = deserialization.advance4BytesUInt();
+    meta.reservedBytes = deserialization.advance4BytesUInt();
 
-    Data decompressed = decompress(data.subdata(24, data.size() - 24));
+    meta.walSalt1 = deserialization.advance4BytesUInt();
+    meta.walSalt2 = deserialization.advance4BytesUInt();
+    meta.walFrame = deserialization.advance4BytesUInt();
+
+    Data decompressed = decompress(
+        data.subdata(Material::HeaderSize, data.size() - Material::HeaderSize));
     if (decompressed.empty()) {
         return checksum == 0;
     }
@@ -111,22 +116,24 @@ bool Materaial::initWithData(const Data &data)
     return true;
 }
 
-Data Materaial::encodedData() const
+Data Material::encodedData() const
 {
     Serialization serialization;
     uint32_t checksum = 0;
 
-    if (!serialization.resizeToFit(24)) {
-        goto WCDB_Repair_Materaial_EncodedData_Failed;
+    if (!serialization.resizeToFit(Material::HeaderSize)) {
+        goto WCDB_Repair_Material_EncodedData_Failed;
     }
 
     serialization.put4BytesUInt(magic);
     serialization.put4BytesUInt(checksum);
     serialization.put4BytesUInt(version);
 
-    serialization.put4BytesUInt(walSalt1);
-    serialization.put4BytesUInt(walSalt2);
-    serialization.put4BytesUInt(walFrame);
+    serialization.put4BytesUInt(meta.pageSize);
+    serialization.put4BytesUInt(meta.reservedBytes);
+    serialization.put4BytesUInt(meta.walSalt1);
+    serialization.put4BytesUInt(meta.walSalt2);
+    serialization.put4BytesUInt(meta.walFrame);
 
     if (!contents.empty()) {
         for (const auto &content : contents) {
@@ -135,45 +142,45 @@ Data Materaial::encodedData() const
                 ||
                 !serialization.putZeroTerminatedString(content.sql) // with '\0'
                 || !serialization.putVarint(content.associatedSQLs.size())) {
-                goto WCDB_Repair_Materaial_EncodedData_Failed;
+                goto WCDB_Repair_Material_EncodedData_Failed;
             }
             for (const auto &sql : content.associatedSQLs) {
                 if (serialization.putZeroTerminatedString(sql) // with '\0'
                     ) {
-                    goto WCDB_Repair_Materaial_EncodedData_Failed;
+                    goto WCDB_Repair_Material_EncodedData_Failed;
                 }
             }
             if (!serialization.putVarint(content.pagenos.size())) {
-                goto WCDB_Repair_Materaial_EncodedData_Failed;
+                goto WCDB_Repair_Material_EncodedData_Failed;
             }
             for (const auto &pageno : content.pagenos) {
                 if (!serialization.putVarint(pageno)) {
-                    goto WCDB_Repair_Materaial_EncodedData_Failed;
+                    goto WCDB_Repair_Material_EncodedData_Failed;
                 }
             }
         }
 
         const Data &uncompressed = serialization.finalize();
-        const Data uncompressedContent =
-            uncompressed.subdata(24, uncompressed.size() - 24);
+        const Data uncompressedContent = uncompressed.subdata(
+            Material::HeaderSize, uncompressed.size() - Material::HeaderSize);
         checksum = hash(uncompressedContent);
         serialization.seek(4);
         serialization.put4BytesUInt(checksum);
 
         const Data compressedContent = compress(uncompressedContent);
         if (compressedContent.empty()) {
-            goto WCDB_Repair_Materaial_EncodedData_Failed;
+            goto WCDB_Repair_Material_EncodedData_Failed;
         }
-        serialization.seek(24);
+        serialization.seek(Material::HeaderSize);
         if (!serialization.putBLOB(compressedContent)) {
-            goto WCDB_Repair_Materaial_EncodedData_Failed;
+            goto WCDB_Repair_Material_EncodedData_Failed;
         }
-        serialization.seek(24 + compressedContent.size());
+        serialization.seek(Material::HeaderSize + compressedContent.size());
     }
 
     return serialization.finalize();
 
-WCDB_Repair_Materaial_EncodedData_Failed:
+WCDB_Repair_Material_EncodedData_Failed:
     return Data::emptyData();
 }
 

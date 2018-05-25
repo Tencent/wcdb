@@ -34,15 +34,15 @@ Mechanic::Mechanic(const std::string &path)
 {
 }
 
-#pragma mark - Materaial
-void Mechanic::setMateraial(const Materaial &materaial)
+#pragma mark - Material
+void Mechanic::setMaterial(const Material &material)
 {
-    m_materaial = materaial;
+    m_material = material;
 }
 
-void Mechanic::setMateraial(Materaial &&materaial)
+void Mechanic::setMaterial(Material &&material)
 {
-    m_materaial = std::move(materaial);
+    m_material = std::move(material);
 }
 
 #pragma mark - Mechanic
@@ -55,12 +55,12 @@ void Mechanic::work()
     }
 
     int pageCount = 0;
-    for (const auto &content : m_materaial.contents) {
+    for (const auto &content : m_material.contents) {
         pageCount += content.pagenos.size();
     }
     m_pageWeight = (double) 1.0 / pageCount;
 
-    for (const auto &content : m_materaial.contents) {
+    for (const auto &content : m_material.contents) {
         m_assembler->markAsAssembling(content.tableName);
         if (m_assembler->assembleTable(content.sql) &&
             m_assembler->assembleTableAssociated(content.associatedSQLs)) {

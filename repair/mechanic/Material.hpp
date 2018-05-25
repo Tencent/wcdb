@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Materaial_hpp
-#define Materaial_hpp
+#ifndef Material_hpp
+#define Material_hpp
 
 #include <WCDB/ThreadedErrorProne.hpp>
 #include <list>
@@ -33,19 +33,28 @@ class Data;
 
 namespace Repair {
 
-class Materaial : protected SharedThreadedErrorProne {
+class Material : protected SharedThreadedErrorProne {
 #pragma mark - Initialiazation
 public:
-    Materaial();
+    Material();
 
 #pragma mark - Header
 public:
+    struct Meta {
+        uint32_t pageSize;
+        uint32_t reservedBytes;
+
+        uint32_t walSalt1;
+        uint32_t walSalt2;
+        uint32_t walFrame;
+    };
+
     static constexpr const uint32_t magic = 0x57434442;
     static constexpr const uint32_t version = 0x01000000; //1.0.0.0
+    static constexpr const int HeaderSize =
+        sizeof(uint32_t) * 3 + sizeof(Meta); //magic + version + meta
 
-    uint32_t walSalt1;
-    uint32_t walSalt2;
-    uint32_t walFrame;
+    Meta meta;
 
 #pragma mark - Content
 public:
@@ -71,4 +80,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Materaial_hpp */
+#endif /* Material_hpp */

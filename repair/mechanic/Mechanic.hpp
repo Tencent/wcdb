@@ -24,13 +24,13 @@
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/Evaluation.hpp>
-#include <WCDB/Materaial.hpp>
+#include <WCDB/Material.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Materaial;
+class Material;
 
 class Mechanic : public Crawlable, public CanDoAssemble, public Evaluation {
 #pragma mark - Initialize
@@ -41,13 +41,13 @@ public:
 public:
     void work();
 
-#pragma mark - Materaial
+#pragma mark - Material
 public:
-    void setMateraial(const Materaial &materaial);
-    void setMateraial(Materaial &&materaial);
+    void setMaterial(const Material &material);
+    void setMaterial(Material &&material);
 
 protected:
-    Materaial m_materaial;
+    Material m_material;
 
 #pragma mark - Evaluation
 protected:

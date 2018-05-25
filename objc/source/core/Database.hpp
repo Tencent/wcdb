@@ -101,10 +101,7 @@ public:
     typedef std::function<bool(const std::string &)> BackupFilter;
     bool backup(const BackupFilter &shouldTableBeBackedup);
     bool archiveAsMaterial();
-    bool recoverFromPath(const std::string &corruptedDBPath,
-                         int pageSize,
-                         const Data &backupCipher,
-                         const Data &databaseCipher);
+    bool restore();
 
 protected:
     std::pair<bool, std::string> pickUpNewBackup();

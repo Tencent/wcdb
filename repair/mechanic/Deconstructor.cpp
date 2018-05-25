@@ -39,6 +39,9 @@ bool Deconstructor::work()
         return false;
     }
 
+    m_material.meta.pageSize = m_pager.getPageSize();
+    m_material.meta.reservedBytes = m_pager.getReservedBytes();
+
     if (!MasterCrawler::work()) {
         return false;
     }
@@ -49,11 +52,11 @@ bool Deconstructor::work()
             continue;
         }
 
-        Materaial::Content content;
+        Material::Content content;
         content.tableName = std::move(master.tableName);
         content.sql = std::move(master.sql);
         content.associatedSQLs = std::move(master.associatedSQLs);
-        m_materaial.contents.push_back(std::move(content));
+        m_material.contents.push_back(std::move(content));
 
         m_height = -1;
         if (!crawl(master.rootpage)) {
@@ -69,9 +72,9 @@ void Deconstructor::filter(const Filter &shouldTableDeconstructed)
     m_filter = shouldTableDeconstructed;
 }
 
-const Materaial &Deconstructor::getMaterial() const
+const Material &Deconstructor::getMaterial() const
 {
-    return m_materaial;
+    return m_material;
 }
 
 #pragma mark - Crawlable
@@ -92,11 +95,11 @@ bool Deconstructor::onPageCrawled(const Page &page, int height)
     switch (page.getType()) {
         case Page::Type::LeafTable:
             m_height = height;
-            m_materaial.contents.back().pagenos.push_back(page.number);
+            m_material.contents.back().pagenos.push_back(page.number);
             return false;
         case Page::Type::InteriorTable:
             if (m_height > 0 && height == m_height - 1) {
-                auto &pagenos = m_materaial.contents.back().pagenos;
+                auto &pagenos = m_material.contents.back().pagenos;
                 for (int i = 0; i < page.getSubPageCount(); ++i) {
                     auto pair = page.getSubPageno(i);
                     if (!pair.first) {
