@@ -38,9 +38,14 @@ const Error &ThreadedErrorProne::getThreadedError()
     return getThreadedErrors()->getThreadedError();
 }
 
-ThreadedErrors *SharedThreadedErrorProne::getThreadedErrors()
+void SharedThreadedErrorProne::setThreadedError(const Error &error)
 {
-    return ThreadedErrors::shared();
+    ThreadedErrors::shared()->setThreadedError(error);
+}
+
+void SharedThreadedErrorProne::setThreadedError(Error &&error)
+{
+    ThreadedErrors::shared()->setThreadedError(std::move(error));
 }
 
 } //namespace WCDB

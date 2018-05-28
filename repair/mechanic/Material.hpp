@@ -46,7 +46,7 @@ public:
 public:
     static constexpr const uint32_t magic = 0x57434442;
     static constexpr const uint32_t version = 0x01000000; //1.0.0.0
-    static constexpr const int HeaderSize =
+    static constexpr const int headerSize =
         sizeof(magic) + sizeof(version); //magic + version
 
 #pragma mark - Content
@@ -75,11 +75,17 @@ public:
 public:
     bool deserialize(const Data &data);
     Data serialize() const;
+    static std::pair<bool, std::map<std::string, int64_t>>
+    acquireMetas(const std::string &path);
 
 protected:
-    bool serializeBLOB(Serialization &serialization, const Data &data) const;
-    std::pair<bool, Data> deserializeBLOB(Deserialization &deserialization);
-    void markAsCorrupt();
+    static bool serializeBLOB(Serialization &serialization, const Data &data);
+    static std::pair<bool, Data>
+    deserializeBLOB(Deserialization &deserialization);
+    static std::pair<bool, Data> deserializeUnwrappedBLOB(
+        Deserialization &deserialization, uint32_t checksum, uint32_t size);
+    static bool isHeaderSanity(Deserialization &deserialization);
+    static void markAsCorrupt();
 };
 
 } //namespace Repair

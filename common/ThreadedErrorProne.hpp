@@ -36,9 +36,10 @@ protected:
     virtual ThreadedErrors *getThreadedErrors() = 0;
 };
 
-class SharedThreadedErrorProne : protected ThreadedErrorProne {
+class SharedThreadedErrorProne {
 protected:
-    ThreadedErrors *getThreadedErrors() override;
+    static void setThreadedError(const Error &error);
+    static void setThreadedError(Error &&error);
 };
 
 } //namespace WCDB

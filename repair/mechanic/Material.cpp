@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Compression.hpp>
 #include <WCDB/Data.hpp>
+#include <WCDB/FileHandle.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -53,22 +54,8 @@ bool Material::deserialize(const Data &data)
 
     //Header
     {
-        if (!deserialization.isEnough(Material::HeaderSize)) {
-            markAsCorrupt();
+        if (!isHeaderSanity(deserialization)) {
             return false;
-        }
-        uint32_t magic = deserialization.advance4BytesUInt();
-        if (magic != Material::magic) {
-            markAsCorrupt();
-            return false;
-        }
-        uint32_t version = deserialization.advance4BytesUInt();
-        switch (version) {
-            case 0x01000000:
-                break;
-            default:
-                markAsCorrupt();
-                return false;
         }
     }
 
@@ -166,7 +153,7 @@ Data Material::serialize() const
 
     //Header
     {
-        if (!serialization.resizeToFit(Material::HeaderSize)) {
+        if (!serialization.resizeToFit(Material::headerSize)) {
             return Data::emptyData();
         }
         serialization.put4BytesUInt(magic);
@@ -224,8 +211,7 @@ Data Material::serialize() const
     return serialization.finalize();
 }
 
-bool Material::serializeBLOB(Serialization &serialization,
-                             const Data &data) const
+bool Material::serializeBLOB(Serialization &serialization, const Data &data)
 {
     Data compressed;
     if (!data.empty()) {
@@ -234,13 +220,13 @@ bool Material::serializeBLOB(Serialization &serialization,
             return false;
         }
     }
-    uint32_t checksum = compressed.empty() ? 0 : hash(compressed);
     uint32_t size = (uint32_t) compressed.size();
+    uint32_t checksum = compressed.empty() ? 0 : hash(compressed);
     if (!serialization.resizeToFit(sizeof(checksum) + sizeof(size) + size)) {
         return false;
     }
-    serialization.put4BytesUInt(checksum);
     serialization.put4BytesUInt(size);
+    serialization.put4BytesUInt(checksum);
     if (!compressed.empty()) {
         serialization.putBLOB(compressed);
     }
@@ -257,6 +243,12 @@ Material::deserializeBLOB(Deserialization &deserialization)
     }
     checksum = deserialization.advance4BytesUInt();
     size = deserialization.advance4BytesUInt();
+    return deserializeUnwrappedBLOB(deserialization, checksum, size);
+}
+
+std::pair<bool, Data> Material::deserializeUnwrappedBLOB(
+    Deserialization &deserialization, uint32_t checksum, uint32_t size)
+{
     if (size == 0) {
         if (checksum != 0) {
             markAsCorrupt();
@@ -279,6 +271,101 @@ Material::deserializeBLOB(Deserialization &deserialization)
         return {false, Data::emptyData()};
     }
     return {true, decompressed};
+}
+
+bool Material::isHeaderSanity(Deserialization &deserialization)
+{
+    if (!deserialization.isEnough(Material::headerSize)) {
+        markAsCorrupt();
+        return false;
+    }
+    uint32_t magic = deserialization.advance4BytesUInt();
+    uint32_t version = deserialization.advance4BytesUInt();
+    if (magic != Material::magic || version != 0x01000000) {
+        markAsCorrupt();
+        return false;
+    }
+    return true;
+}
+
+std::pair<bool, std::map<std::string, int64_t>>
+Material::acquireMetas(const std::string &path)
+{
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        return {false, {}};
+    }
+    uint32_t size;
+    uint32_t checksum;
+    constexpr const size_t fixedLength =
+        headerSize + sizeof(size) + sizeof(checksum);
+    //Header + Meta Header
+    {
+        Data header = Data(fixedLength);
+        if (header.empty()) {
+            return {false, {}};
+        }
+        ssize_t read = fileHandle.read(header.buffer(), 0, fixedLength);
+        if (read != fixedLength) {
+            if (read >= 0) {
+                markAsCorrupt();
+            }
+            return {false, {}};
+        }
+        Deserialization deserialization(header);
+        if (!isHeaderSanity(deserialization)) {
+            return {false, {}};
+        }
+        size = deserialization.advance4BytesUInt();
+        checksum = deserialization.advance4BytesUInt();
+    }
+    //Metas
+    Data compressed(size);
+    {
+        if (compressed.empty()) {
+            return {false, {}};
+        }
+        ssize_t read = fileHandle.read(compressed.buffer(), fixedLength, size);
+        if (read != size) {
+            if (read >= 0) {
+                markAsCorrupt();
+            }
+            return {false, {}};
+        }
+    }
+
+    Data decompressed;
+    {
+        Deserialization deserialization(compressed);
+        bool result;
+        std::tie(result, decompressed) =
+            deserializeUnwrappedBLOB(deserialization, checksum, size);
+        if (!result) {
+            return {false, {}};
+        }
+    }
+
+    std::map<std::string, int64_t> sequences;
+    {
+        Deserialization decoder(decompressed);
+        size_t lengthOfSequence;
+        int64_t sequence;
+        std::string tableName;
+        while (!decoder.ended()) {
+            tableName = decoder.advanceZeroTerminatedString();
+            if (tableName.empty()) {
+                markAsCorrupt();
+                return {false, {}};
+            }
+            std::tie(lengthOfSequence, sequence) = decoder.advanceVarint();
+            if (lengthOfSequence == 0) {
+                markAsCorrupt();
+                return {false, {}};
+            }
+            sequences[std::move(tableName)] = sequence;
+        }
+    }
+    return {true, sequences};
 }
 
 } //namespace Repair
