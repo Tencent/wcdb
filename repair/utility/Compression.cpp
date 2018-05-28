@@ -61,7 +61,8 @@ Data compress(const Data &source)
     z_stream zs;
     memset(&zs, 0, sizeof(zs));
 
-    int step = getpagesize();
+    uLong step = compressBound(
+        std::min(compressBound(source.size()), (uLong) getpagesize()));
     int offset = 0;
     size_t total = 0;
     Data destination;
@@ -81,7 +82,7 @@ Data compress(const Data &source)
             goto WCDB_Repair_Compress_End;
         }
         zs.next_out = reinterpret_cast<Bytef *>(destination.buffer() + offset);
-        zs.avail_out = step;
+        zs.avail_out = (uInt) step;
 
         ret = deflate(&zs, Z_FINISH);
         offset += step;
