@@ -22,11 +22,11 @@
 #define Tokenize_hpp
 
 #include <WCDB/Lock.hpp>
+#include <map>
 #include <sqlcipher/fts3_tokenizer.h>
 #include <sqlcipher/sqlite3.h>
 #include <stdlib.h>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace WCDB {
@@ -210,7 +210,7 @@ public:
     const Data &getAddress(const std::string &name) const;
 
 protected:
-    std::unordered_map<std::string, Data> m_modules;
+    std::map<std::string, Data> m_modules;
     mutable SharedLock m_lock;
 };
 

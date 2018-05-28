@@ -510,7 +510,7 @@ std::pair<bool, bool> Database::isTableExists(const TableOrSubquery &table)
 void Database::retainThreadedHandle(
     const RecyclableHandle &recyclableHandle) const
 {
-    std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
+    std::map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = Database::threadedHandles().get();
     auto iter = threadHandles->find(m_pool.getHandlePool());
     WCTInnerAssert(iter == threadHandles->end() ||
@@ -525,7 +525,7 @@ void Database::retainThreadedHandle(
 
 void Database::releaseThreadedHandle() const
 {
-    std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
+    std::map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = Database::threadedHandles().get();
     auto iter = threadHandles->find(m_pool.getHandlePool());
     WCTInnerAssert(iter != threadHandles->end());

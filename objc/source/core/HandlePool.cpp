@@ -22,8 +22,8 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
 #include <algorithm>
+#include <map>
 #include <thread>
-#include <unordered_map>
 
 namespace WCDB {
 

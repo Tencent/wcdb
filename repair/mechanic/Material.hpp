@@ -23,9 +23,9 @@
 
 #include <WCDB/ThreadedErrorProne.hpp>
 #include <list>
+#include <map>
 #include <stdlib.h>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace WCDB {
@@ -69,7 +69,7 @@ public:
         int64_t sequence;
         std::vector<uint32_t> pagenos;
     };
-    std::unordered_map<std::string, Content> contents;
+    std::map<std::string, Content> contents;
 
 #pragma mark - Serialization
 public:

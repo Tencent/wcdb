@@ -24,11 +24,11 @@
 #include <chrono>
 #include <condition_variable>
 #include <list>
+#include <map>
 #include <mutex>
 #include <stdio.h>
 #include <string>
 #include <thread>
-#include <unordered_map>
 
 #pragma GCC visibility push(hidden)
 
@@ -131,7 +131,7 @@ protected:
     typedef struct Element Element;
     //TODO refactor
     using List = std::list<Element>;
-    using Map = std::unordered_map<Key, typename List::iterator>;
+    using Map = std::map<Key, typename List::iterator>;
     Map m_map;
     List m_list;
     std::condition_variable m_cond;

@@ -121,8 +121,7 @@ public:
 
 protected:
     using ThreadedHandles =
-        std::unordered_map<const HandlePool *,
-                           std::pair<RecyclableHandle, int>>;
+        std::map<const HandlePool *, std::pair<RecyclableHandle, int>>;
     static ThreadLocal<ThreadedHandles> &threadedHandles();
 
     RecyclableHandle flowOutThreadedHandle();

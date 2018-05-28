@@ -52,11 +52,11 @@ protected:
     std::shared_ptr<HandlePool> generate(const std::string &path);
 
     RecyclableHandlePool getExistingPool(
-        const std::unordered_map<
-            std::string,
-            std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
+        const std::map<std::string,
+                       std::pair<std::shared_ptr<HandlePool>, int>>::iterator
+            &iter);
 
-    std::unordered_map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
+    std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
         m_pools; //path->{pool, reference}
     std::mutex m_mutex;
 };

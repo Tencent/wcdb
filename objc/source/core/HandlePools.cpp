@@ -91,9 +91,8 @@ RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
 }
 
 RecyclableHandlePool HandlePools::getExistingPool(
-    const std::unordered_map<
-        std::string,
-        std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
+    const std::map<std::string,
+                   std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
 {
     if (iter == m_pools.end()) {
         return nullptr;

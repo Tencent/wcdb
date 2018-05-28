@@ -50,7 +50,7 @@ protected:
     Material m_material;
     Material::Content m_content;
     int m_height;
-    std::unordered_map<std::string, int64_t> m_sequences;
+    std::map<std::string, int64_t> m_sequences;
     bool isSequenceCrawling() const;
     bool m_sequenceCrawling;
 
