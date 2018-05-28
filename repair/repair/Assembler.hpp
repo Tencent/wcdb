@@ -30,6 +30,7 @@ namespace Repair {
 
 class Cell;
 
+//TODO define critical error and differentiate masterial/database corrupt and assembler corrupt
 class Assembler : protected SharedThreadedErrorProne {
 public:
     virtual bool markAsAssembling(const std::string &tableName);
