@@ -215,12 +215,12 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
             if (done || stop.load()) {
                 break;
             }
-            if (callback && !callback(result, false)) {
+            if (callback && !callback(State::Migrating, result)) {
                 break;
             }
         }
         if (callback) {
-            callback(result, true);
+            callback(State::Done, done);
         }
     });
 }

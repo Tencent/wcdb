@@ -50,7 +50,12 @@ protected:
 public:
     bool stepMigration(bool &done);
 
-    typedef std::function<bool(bool, bool)> SteppedCallback;
+    enum State {
+        Migrating,
+        Done,
+    };
+    // Migrating -> stepped?, Done -> migrated?
+    typedef std::function<bool(State, bool)> SteppedCallback;
     void asyncMigration(double interval = 3.0, int retryTimes = 10);
     void asyncMigration(const SteppedCallback &callback);
 

@@ -239,9 +239,9 @@
     [_migrated setMigrateRowPerStep:100];
 
     __block BOOL migrated = NO;
-    [_migrated asyncMigrationWhenStepped:^BOOL(BOOL result, BOOL done) {
+    [_migrated asyncMigrationWhenStepped:^BOOL(WCTMigrationState state, BOOL result) {
       [NSThread sleepForTimeInterval:0.1];
-      if (done) {
+      if (state == WCTMigrationStateDone && result) {
           @synchronized(self)
           {
               migrated = YES;
@@ -301,9 +301,9 @@
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);
 
     __block BOOL migrated = NO;
-    [_migrated asyncMigrationWhenStepped:^BOOL(BOOL result, BOOL done) {
+    [_migrated asyncMigrationWhenStepped:^BOOL(WCTMigrationState state, BOOL result) {
       [NSThread sleepForTimeInterval:1.0];
-      if (done) {
+      if (state == WCTMigrationStateDone && result) {
           @synchronized(self)
           {
               migrated = YES;

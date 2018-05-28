@@ -121,8 +121,8 @@
       [condition unlock];
     }];
 
-    [_migrated asyncMigrationWhenStepped:^BOOL(BOOL result, BOOL done) {
-      if (done) {
+    [_migrated asyncMigrationWhenStepped:^BOOL(WCTMigrationState state, BOOL result) {
+      if (state == WCTMigrationStateDone && result) {
           [condition lock];
           migrated = YES;
           [condition signal];

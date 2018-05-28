@@ -26,7 +26,11 @@ typedef BOOL (^WCTMigrationConflictBlock)(WCTMigrationInfo *, long long);
 
 typedef void (^WCTTableMigratedBlock)(WCTMigrationInfo *);
 
-typedef BOOL (^WCTSteppedBlock)(BOOL, BOOL);
+typedef NS_ENUM(NSUInteger, WCTMigrationState) {
+    WCTMigrationStateMigrating,
+    WCTMigrationStateDone,
+};
+typedef BOOL (^WCTSteppedBlock)(WCTMigrationState, BOOL);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
