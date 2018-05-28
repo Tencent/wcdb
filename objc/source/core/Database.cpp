@@ -167,14 +167,16 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 #pragma mark - File
 bool Database::removeFiles()
 {
-    WCTRemedialAssert(
-        isBlockaded() && !isOpened(),
-        "Removing files on an opened database may cause undefined results.",
-        return false;);
-    if (FileManager::shared()->removeItems(getPaths())) {
-        return true;
+    if (isBlockaded() && !isOpened()) {
+        if (FileManager::shared()->removeItems(getPaths())) {
+            return true;
+        }
+        assignWithSharedThreadedError();
+    } else {
+        setThreadedError(Error(Error::Code::Misuse, "Removing files on an "
+                                                    "opened database may cause "
+                                                    "undefined results."));
     }
-    assignWithSharedThreadedError();
     return false;
 }
 
@@ -199,9 +201,9 @@ bool Database::moveFiles(const std::string &directory)
         }
         assignWithSharedThreadedError();
     } else {
-        setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
-                                                    "database may cause a "
-                                                    "corrupted database."));
+        setThreadedError(Error(Error::Code::Misuse,
+                               "Moving files on an opened "
+                               "database may cause undefined results."));
     }
     return false;
 }
@@ -217,9 +219,9 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         }
         assignWithSharedThreadedError();
     } else {
-        setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
-                                                    "database may cause a "
-                                                    "corrupted database."));
+        setThreadedError(Error(Error::Code::Misuse,
+                               "Moving files on an opened "
+                               "database may may cause undefined results."));
     }
     return false;
 }
@@ -293,26 +295,41 @@ std::string Database::getArchiveSubfix(int i)
     return "." + std::to_string(i);
 }
 
-bool Database::archiveAsMaterial()
+int Database::findNextAvailableArchiveID()
 {
-    FileManager *fileManager = FileManager::shared();
-    const std::string materialDirectory = getMaterialsDirectory();
-
-    //resolve archived path
     int i = 1;
     std::string archivedSubfix;
+    FileManager *fileManager = FileManager::shared();
     while (true) {
         archivedSubfix = getArchiveSubfix(i);
         auto exists = fileManager->isExists(
             Path::addExtention(getPath(), archivedSubfix));
         if (!exists.first) {
             assignWithSharedThreadedError();
-            return false;
+            return 0;
         }
         if (!exists.second) {
-            break;
+            return i;
         }
         ++i;
+    }
+}
+
+bool Database::archiveAsMaterial()
+{
+    if (!isBlockaded() || isOpened()) {
+        setThreadedError(Error(
+            Error::Code::Misuse,
+            "Archiving an opened  database may cause undefined results."));
+        return false;
+    }
+
+    FileManager *fileManager = FileManager::shared();
+    const std::string materialDirectory = getMaterialsDirectory();
+
+    int nextAvailbleID = findNextAvailableArchiveID();
+    if (nextAvailbleID == 0) {
+        return false;
     }
 
     // create material directory
@@ -323,6 +340,7 @@ bool Database::archiveAsMaterial()
     }
 
     //resolve archived paths
+    std::string archivedSubfix = getArchiveSubfix(nextAvailbleID);
     std::list<std::pair<std::string, std::string>> pairedPaths;
     for (auto &path : getPaths()) {
         std::string fileName =
@@ -331,15 +349,11 @@ bool Database::archiveAsMaterial()
             Path::addComponent(materialDirectory, std::move(fileName));
         pairedPaths.push_back({std::move(path), std::move(newPath)});
     }
-    bool result = false;
-    close([fileManager, &result, &pairedPaths]() {
-        result = fileManager->moveItems(pairedPaths);
-    });
-    if (result) {
-        return true;
+    if (!fileManager->moveItems(pairedPaths)) {
+        assignWithSharedThreadedError();
+        return false;
     }
-    assignWithSharedThreadedError();
-    return false;
+    return true;
 }
 
 std::string Database::getMaterialsDirectory() const
@@ -438,7 +452,19 @@ bool Database::removeMaterials()
 
 bool Database::restore()
 {
+    if (!isBlockaded() || isOpened()) {
+        setThreadedError(Error(
+            Error::Code::Misuse,
+            "Restoring an opened  database may cause undefined results."));
+        return false;
+    }
     return false;
+}
+
+std::string Database::getRestorePath() const
+{
+    return Path::addComponent(getMaterialsDirectory(),
+                              Path::addExtention(getPath(), ".restore"));
 }
 
 #pragma mark - Handle

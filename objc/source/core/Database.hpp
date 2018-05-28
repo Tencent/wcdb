@@ -108,10 +108,12 @@ protected:
     std::pair<bool, std::string> pickUpNewBackup();
     std::pair<bool, std::string> pickUpOldBackup();
     std::pair<bool, std::string> pickUpBackup(bool old);
+    int findNextAvailableArchiveID();
     static const std::string &getFirstBackupSubfix();
     static const std::string &getLastBackupSubfix();
     static std::string getArchiveSubfix(int i);
     std::string getMaterialsDirectory() const;
+    std::string getRestorePath() const;
 
 #pragma mark - Handle
 public:
