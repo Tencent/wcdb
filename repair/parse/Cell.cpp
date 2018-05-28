@@ -43,7 +43,7 @@ bool Cell::initialize()
     int lengthOfPayloadSize, payloadSize;
     std::tie(lengthOfPayloadSize, payloadSize) =
         deserialization.advanceVarint();
-    if (lengthOfPayloadSize <= 0) {
+    if (lengthOfPayloadSize == 0) {
         m_page.getPager().markAsCorrupted();
         return false;
     }
@@ -52,7 +52,7 @@ bool Cell::initialize()
     int lengthOfRowid;
     std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
     ;
-    if (lengthOfRowid <= 0) {
+    if (lengthOfRowid == 0) {
         m_page.getPager().markAsCorrupted();
         return false;
     }
@@ -125,7 +125,7 @@ bool Cell::initialize()
     int lengthOfOffsetOfValues, offsetOfValues;
     std::tie(lengthOfOffsetOfValues, offsetOfValues) =
         m_deserialization.advanceVarint();
-    if (lengthOfOffsetOfValues <= 0) {
+    if (lengthOfOffsetOfValues == 0) {
         m_page.getPager().markAsCorrupted();
         return false;
     }
@@ -143,7 +143,7 @@ bool Cell::initialize()
         m_deserialization.seek(cursorOfSerialTypes);
         std::tie(lengthOfSerialType, serialType) =
             m_deserialization.advanceVarint();
-        if (lengthOfSerialType <= 0 || !isSerialTypeSanity(serialType)) {
+        if (lengthOfSerialType == 0 || !isSerialTypeSanity(serialType)) {
             m_page.getPager().markAsCorrupted();
             return false;
         }

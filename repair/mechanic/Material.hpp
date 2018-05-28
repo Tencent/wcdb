@@ -25,6 +25,7 @@
 #include <list>
 #include <stdlib.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace WCDB {
@@ -33,6 +34,9 @@ class Data;
 
 namespace Repair {
 
+class Serialization;
+class Deserialization;
+
 class Material : protected SharedThreadedErrorProne {
 #pragma mark - Initialiazation
 public:
@@ -40,7 +44,14 @@ public:
 
 #pragma mark - Header
 public:
-    struct Meta {
+    static constexpr const uint32_t magic = 0x57434442;
+    static constexpr const uint32_t version = 0x01000000; //1.0.0.0
+    static constexpr const int HeaderSize =
+        sizeof(magic) + sizeof(version); //magic + version
+
+#pragma mark - Content
+public:
+    struct Info {
         uint32_t pageSize;
         uint32_t reservedBytes;
 
@@ -49,29 +60,25 @@ public:
         uint32_t walFrame;
     };
 
-    static constexpr const uint32_t magic = 0x57434442;
-    static constexpr const uint32_t version = 0x01000000; //1.0.0.0
-    static constexpr const int HeaderSize =
-        sizeof(uint32_t) * 3 + sizeof(Meta); //magic + version + meta
+    Info info;
 
-    Meta meta;
-
-#pragma mark - Content
-public:
     class Content {
     public:
-        std::string tableName;
+        Content();
         std::string sql;
+        int64_t sequence;
         std::vector<uint32_t> pagenos;
     };
-    std::list<Content> contents;
+    std::unordered_map<std::string, Content> contents;
 
 #pragma mark - Serialization
 public:
-    bool initWithData(const Data &data);
-    Data encodedData() const;
+    bool deserialize(const Data &data);
+    Data serialize() const;
 
 protected:
+    bool serializeBLOB(Serialization &serialization, const Data &data) const;
+    std::pair<bool, Data> deserializeBLOB(Deserialization &deserialization);
     void markAsCorrupt();
 };
 

@@ -59,9 +59,9 @@ public:
 #pragma mark - Advance
 public:
     std::string advanceZeroTerminatedString();
-    std::pair<int, const unsigned char *> advanceBLOB(size_t size);
-    std::pair<int, const char *> advanceCString(size_t size);
-    std::pair<int, uint64_t> advanceVarint();
+    const unsigned char *advanceBLOB(size_t size);
+    const char *advanceCString(size_t size);
+    std::pair<size_t, uint64_t> advanceVarint();
     int64_t advance8BytesInt();
     int64_t advance6BytesInt();
     int32_t advance4BytesInt();
@@ -74,9 +74,9 @@ public:
 #pragma mark - Get
 public:
     std::string getZeroTerminatedString(off_t offset) const;
-    std::pair<int, const unsigned char *> getBLOB(off_t offset, size_t size);
-    std::pair<int, const char *> getCString(off_t offset, size_t size);
-    std::pair<int, uint64_t> getVarint(off_t offset) const;
+    const unsigned char *getBLOB(off_t offset, size_t size);
+    const char *getCString(off_t offset, size_t size);
+    std::pair<size_t, uint64_t> getVarint(off_t offset) const;
     int64_t get8BytesInt(off_t offset) const;
     int64_t get6BytesInt(off_t offset) const;
     int32_t get4BytesInt(off_t offset) const;
@@ -105,7 +105,7 @@ public:
     bool putZeroTerminatedString(const std::string &value);
     bool putBLOB(const Data &data);
     bool put4BytesUInt(uint32_t value);
-    int putVarint(uint64_t value);
+    size_t putVarint(uint64_t value);
 };
 
 } //namespace Repair

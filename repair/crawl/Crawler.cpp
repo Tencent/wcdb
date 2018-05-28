@@ -80,7 +80,6 @@ bool Crawler::onCellCrawled(const Cell &cell)
             markCellAsCounted();
         }
     } else {
-        Crawlable::onCellCrawled(cell);
         if (!assembleCell(cell)) {
             markAsError();
         }

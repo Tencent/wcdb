@@ -40,8 +40,6 @@ bool MasterCrawler::work()
 
 bool MasterCrawler::onCellCrawled(const Cell &cell)
 {
-    Crawlable::onCellCrawled(cell);
-
     if (cell.getValueType(1) != Cell::Type::Text ||
         cell.getValueType(2) != Cell::Type::Text ||
         cell.getValueType(3) != Cell::Type::Integer32 ||

@@ -45,9 +45,14 @@ public:
     const Material &getMaterial() const;
 
 protected:
+    bool filter(const std::string &tableName);
     Filter m_filter;
     Material m_material;
+    Material::Content m_content;
     int m_height;
+    std::unordered_map<std::string, int64_t> m_sequences;
+    bool isSequenceCrawling() const;
+    bool m_sequenceCrawling;
 
 #pragma mark - Crawlable
 protected:

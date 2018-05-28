@@ -86,25 +86,25 @@ std::string Deserialization::advanceZeroTerminatedString()
     return value;
 }
 
-std::pair<int, const unsigned char *> Deserialization::advanceBLOB(size_t size)
+const unsigned char *Deserialization::advanceBLOB(size_t size)
 {
-    auto result = getBLOB(m_cursor, size);
-    if (result.first > 0) {
-        advance(result.first);
+    const unsigned char *blob = getBLOB(m_cursor, size);
+    if (blob) {
+        advance(size);
     }
-    return result;
+    return blob;
 }
 
-std::pair<int, const char *> Deserialization::advanceCString(size_t size)
+const char *Deserialization::advanceCString(size_t size)
 {
-    auto result = getCString(m_cursor, size);
-    if (result.first > 0) {
-        advance(result.first);
+    const char *cstring = getCString(m_cursor, size);
+    if (cstring) {
+        advance(size);
     }
-    return result;
+    return cstring;
 }
 
-std::pair<int, uint64_t> Deserialization::advanceVarint()
+std::pair<size_t, uint64_t> Deserialization::advanceVarint()
 {
     auto result = getVarint(m_cursor);
     if (result.first > 0) {
@@ -182,26 +182,23 @@ std::string Deserialization::getZeroTerminatedString(off_t offset) const
     return String::empty();
 }
 
-std::pair<int, const unsigned char *> Deserialization::getBLOB(off_t offset,
-                                                               size_t size)
+const unsigned char *Deserialization::getBLOB(off_t offset, size_t size)
 {
     if (!isEnough(offset, size)) {
-        return {0, Data::emptyBuffer()};
+        return nullptr;
     }
-    return {(int) size, m_data.buffer() + offset};
+    return m_data.buffer() + offset;
 }
 
-std::pair<int, const char *> Deserialization::getCString(off_t offset,
-                                                         size_t size)
+const char *Deserialization::getCString(off_t offset, size_t size)
 {
     if (!isEnough(offset, size)) {
-        return {0, reinterpret_cast<const char *>(Data::emptyBuffer())};
+        return nullptr;
     }
-    return {(int) size,
-            reinterpret_cast<const char *>(m_data.buffer() + offset)};
+    return reinterpret_cast<const char *>(m_data.buffer() + offset);
 }
 
-std::pair<int, uint64_t> Deserialization::getVarint(off_t offset) const
+std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
 {
     if (!isEnough(offset, 1)) {
         return {0, 0};
@@ -514,7 +511,7 @@ bool Serialization::put4BytesUInt(uint32_t value)
     return true;
 }
 
-int Serialization::putVarint(uint64_t value)
+size_t Serialization::putVarint(uint64_t value)
 {
     if (!resizeToFit(9)) {
         return 0;

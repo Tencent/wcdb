@@ -409,7 +409,7 @@ bool Database::backup(const BackupFilter &shouldTableBeBackedup)
         assignWithSharedThreadedError();
         return false;
     }
-    Data material = deconstructor.getMaterial().encodedData();
+    Data material = deconstructor.getMaterial().serialize();
     if (material.empty()) {
         assignWithSharedThreadedError();
         return false;

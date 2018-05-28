@@ -53,18 +53,18 @@ void Mechanic::work()
     }
 
     int pageCount = 0;
-    for (const auto &content : m_material.contents) {
-        pageCount += content.pagenos.size();
+    for (const auto &element : m_material.contents) {
+        pageCount += element.second.pagenos.size();
     }
     setPageWeight((double) 1.0 / pageCount);
 
-    for (const auto &content : m_material.contents) {
-        if (!markAsAssembling(content.tableName) ||
-            !assembleTable(content.sql)) {
+    for (const auto &element : m_material.contents) {
+        if (!markAsAssembling(element.first) ||
+            !assembleTable(element.second.sql)) {
             markAsError();
             continue;
         }
-        for (const auto &pageno : content.pagenos) {
+        for (const auto &pageno : element.second.pagenos) {
             if (!crawl(pageno)) {
                 markAsError();
             }
@@ -78,7 +78,6 @@ void Mechanic::work()
 #pragma mark - Crawlable
 bool Mechanic::onCellCrawled(const Cell &cell)
 {
-    Crawlable::onCellCrawled(cell);
     if (!assembleCell(cell)) {
         markAsError();
     }
@@ -87,7 +86,6 @@ bool Mechanic::onCellCrawled(const Cell &cell)
 
 bool Mechanic::onPageCrawled(const Page &page, int unused)
 {
-    Crawlable::onPageCrawled(page, unused);
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());
         return true;
