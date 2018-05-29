@@ -100,7 +100,7 @@ bool Handle::open()
 void Handle::close()
 {
     finalize();
-    sqlite3_close((sqlite3 *) m_handle);
+    sqlite3_close_v2((sqlite3 *) m_handle);
 }
 
 bool Handle::execute(const Statement &statement)
