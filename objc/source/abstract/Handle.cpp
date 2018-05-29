@@ -456,11 +456,10 @@ bool Handle::setCipherKey(const void *data, int size)
         return true;
     }
     setError(rc);
-    return false;
 #else  //SQLITE_HAS_CODEC
-    Error::fatal("[sqlite3_key] is not supported for current config");
-    return false;
+    WCTFatalError("[sqlite3_key] is not supported for current config");
 #endif //SQLITE_HAS_CODEC
+    return false;
 }
 
 #pragma mark - Trace
