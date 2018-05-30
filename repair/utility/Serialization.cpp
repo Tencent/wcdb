@@ -562,7 +562,7 @@ void Serialization::expand(off_t newTail)
 
 Data Serialization::finalize()
 {
-    return m_data.subdata(m_cursor);
+    return m_data.subdata((size_t) m_cursor);
 }
 
 } //namespace Repair

@@ -138,9 +138,10 @@ Data Data::subdata(size_t size) const
 
 Data Data::subdata(off_t offset, size_t size) const
 {
-    WCTRemedialAssert(
-        m_sharedBuffer == nullptr || m_sharedBuffer->size() >= offset + size,
-        "Memory cross-border", size = m_sharedBuffer->size() - offset;);
+    WCTRemedialAssert(m_sharedBuffer == nullptr ||
+                          m_sharedBuffer->size() >= offset + size,
+                      "Memory cross-border",
+                      size = m_sharedBuffer->size() - (size_t) offset;);
     return Data(m_sharedBuffer, m_buffer + offset, size);
 }
 
