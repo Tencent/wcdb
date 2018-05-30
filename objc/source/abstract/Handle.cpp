@@ -534,7 +534,10 @@ const Error &Handle::getError() const
 void Handle::setError(int rc, const std::string &sql)
 {
     m_error.setSQLiteCode(rc, getExtendedErrorCode());
-    m_error.message = getErrorMessage();
+    const char *message = getErrorMessage();
+    if (message) {
+        m_error.message = message;
+    }
     m_error.infos.set("SQL", sql);
     Reporter::shared()->report(m_error);
 }
