@@ -77,6 +77,7 @@ void SQLiteGlobal::log(void *userInfo, int code, const char *message)
     }
     error.setSQLiteCode(code);
     error.message = message ? message : String::empty();
+    Reporter::shared()->report(error);
 }
 
 } //namespace WCDB

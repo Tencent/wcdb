@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
+#import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTokenizer.h>
@@ -59,6 +60,7 @@
             error.infos.set("Path", path);
             error.infos.set("ExtCode", nsError.code);
             WCDB::Reporter::shared()->report(error);
+            WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
         }
     });
 #endif //TARGET_OS_IPHONE
