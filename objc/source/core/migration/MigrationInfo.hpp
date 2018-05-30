@@ -113,7 +113,7 @@ public:
         const Lang::InsertSTMT::Type &type) const;
 
 protected:
-    static const std::string &getUnionedViewPrefix();
+    static const std::string getUnionedViewPrefix();
 
     StatementInsert m_statementForMigration;
     StatementDelete m_statementForDeletingMigratedRow;

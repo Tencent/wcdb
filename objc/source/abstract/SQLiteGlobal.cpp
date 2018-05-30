@@ -27,8 +27,8 @@ namespace WCDB {
 
 SQLiteGlobal *SQLiteGlobal::shared()
 {
-    static SQLiteGlobal s_global;
-    return &s_global;
+    static SQLiteGlobal *s_global(new SQLiteGlobal);
+    return s_global;
 }
 
 SQLiteGlobal::SQLiteGlobal()

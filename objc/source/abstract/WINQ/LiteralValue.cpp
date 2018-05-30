@@ -22,25 +22,19 @@
 
 namespace WCDB {
 
-const LiteralValue &LiteralValue::currentTime()
+const LiteralValue LiteralValue::currentTime()
 {
-    static const LiteralValue s_currentTime(
-        Lang::LiteralValue::Type::CurrentTime);
-    return s_currentTime;
+    return LiteralValue(Lang::LiteralValue::Type::CurrentTime);
 }
 
-const LiteralValue &LiteralValue::currentDate()
+const LiteralValue LiteralValue::currentDate()
 {
-    static const LiteralValue s_currentDate(
-        Lang::LiteralValue::Type::CurrentDate);
-    return s_currentDate;
+    return LiteralValue(Lang::LiteralValue::Type::CurrentDate);
 }
 
-const LiteralValue &LiteralValue::currentTimestamp()
+const LiteralValue LiteralValue::currentTimestamp()
 {
-    static const LiteralValue s_currentTimestamp(
-        Lang::LiteralValue::Type::CurrentTimestamp);
-    return s_currentTimestamp;
+    return LiteralValue(Lang::LiteralValue::Type::CurrentTimestamp);
 }
 
 LiteralValue::LiteralValue(const Lang::LiteralValue::Type &type)

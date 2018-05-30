@@ -39,40 +39,35 @@ Handle::Handle(const std::string &path_)
 }
 
 #pragma mark - Path
-const std::string &Handle::getSHMSubfix()
+std::string Handle::getSHMSubfix()
 {
-    static const std::string s_SHMSubfix = "-shm";
-    return s_SHMSubfix;
+    return "-shm";
 }
 
-const std::string &Handle::getWALSubfix()
+std::string Handle::getWALSubfix()
 {
-    static const std::string s_WALSubfix = "-wal";
-    return s_WALSubfix;
+    return "-wal";
 }
 
-const std::string &Handle::getJournalSubfix()
+std::string Handle::getJournalSubfix()
 {
-    static const std::string s_journalSubfix = "-journal";
-    return s_journalSubfix;
+    return "-journal";
 }
 
-const std::string &Handle::getBackupSubfix()
+std::string Handle::getBackupSubfix()
 {
-    static const std::string s_backupSubfix = "-backup";
-    return s_backupSubfix;
+    return "-backup";
 }
 
-const std::array<std::string, 5> &Handle::getSubfixs()
+std::array<std::string, 5> Handle::getSubfixs()
 {
-    static const std::array<std::string, 5> s_subfixs = {
+    return std::array<std::string, 5>{
         "", //main db file
         Handle::getWALSubfix(),
         Handle::getSHMSubfix(),
         Handle::getJournalSubfix(),
         Handle::getBackupSubfix(),
     };
-    return s_subfixs;
 }
 
 #pragma mark - Basic
@@ -310,10 +305,8 @@ bool Handle::isPrepared()
 #pragma mark - Convenient
 std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
 {
-    static const StatementSelect s_statementSelect =
-        StatementSelect().select(1).limit(0);
-    StatementSelect statementSelect = s_statementSelect;
-    statementSelect.from(table);
+    StatementSelect statementSelect =
+        StatementSelect().select(1).from(table).limit(0);
     m_error.level = Error::Level::Ignore;
     bool unused;
     bool result = Handle::prepare(statementSelect) && Handle::step(unused);
@@ -356,10 +349,9 @@ Handle::getUnorderedValues(const Statement &statement, int index)
     return {false, {}};
 }
 
-const std::string &Handle::savepointPrefix()
+const std::string Handle::savepointPrefix()
 {
-    static const std::string s_savepointPrefix("WCDBSavepoint_");
-    return s_savepointPrefix;
+    return "WCDBSavepoint_";
 }
 
 bool Handle::beginNestedTransaction()

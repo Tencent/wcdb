@@ -199,10 +199,10 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
     std::string name("com.Tencent.WCDB.Migration.");
     name.append(std::to_string(getTag()));
     std::string path = getPath();
-    Dispatch::async(name, [path, callback](const std::atomic<bool> &stop) {
+    Dispatch::async(name, [path, callback]() {
         bool done = false;
         bool result = false;
-        while (!done && !stop.load()) {
+        while (!done) {
             std::shared_ptr<Database> database =
                 MigrationDatabase::databaseWithExistingPath(path);
             if (!database) {
@@ -211,11 +211,7 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
             MigrationDatabase *migrationDatabase =
                 static_cast<MigrationDatabase *>(database.get());
             result = migrationDatabase->stepMigration(done);
-            database = nullptr;
-            if (done || stop.load()) {
-                break;
-            }
-            if (callback && !callback(State::Migrating, result)) {
+            if (done || callback && !callback(State::Migrating, result)) {
                 break;
             }
         }

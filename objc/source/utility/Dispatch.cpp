@@ -19,33 +19,16 @@
  */
 
 #include <WCDB/Dispatch.hpp>
-#include <WCDB/ExitServer.hpp>
 #include <thread>
 
 namespace WCDB {
 
-void Dispatch::async(
-    const std::string &name,
-    const std::function<void(const std::atomic<bool> &)> &callback,
-    const std::function<void(void)> &atExit)
+void Dispatch::async(const std::string &name,
+                     const std::function<void(void)> &callback)
 {
-    std::thread t([name, callback, atExit]() {
+    std::thread t([name, callback]() {
         pthread_setname_np(name.c_str());
-        std::atomic<bool> stop(false);
-        std::atomic<bool> running(true);
-        ExitServer *exitServer = ExitServer::shared();
-        ExitServer::Token token =
-            exitServer->enroll([&stop, &running, atExit]() {
-                stop.store(true);
-                if (atExit) {
-                    atExit();
-                }
-                while (running.load())
-                    ;
-            });
-        callback(stop);
-        exitServer->disenroll(token);
-        running.store(false);
+        callback();
     });
     t.detach();
 }

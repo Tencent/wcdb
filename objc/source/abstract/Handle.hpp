@@ -50,11 +50,11 @@ protected:
 public:
     const std::string path;
 
-    static const std::string &getSHMSubfix();
-    static const std::string &getWALSubfix();
-    static const std::string &getJournalSubfix();
-    static const std::string &getBackupSubfix();
-    static const std::array<std::string, 5> &getSubfixs();
+    static std::string getSHMSubfix();
+    static std::string getWALSubfix();
+    static std::string getJournalSubfix();
+    static std::string getBackupSubfix();
+    static std::array<std::string, 5> getSubfixs();
 
 #pragma mark - Tag
 public:
@@ -159,7 +159,7 @@ protected:
     void discardableExecute(const Statement &statement);
     std::pair<bool, std::set<std::string>>
     getUnorderedValues(const Statement &statement, int index);
-    static const std::string &savepointPrefix();
+    static const std::string savepointPrefix();
     int m_nestedLevel;
 
 #pragma mark - Cipher

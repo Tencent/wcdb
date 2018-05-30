@@ -111,8 +111,7 @@ void MigrationInfo::initialize(const std::set<std::string> &columnNames)
 
 const std::string MigrationInfo::schemaPrefix()
 {
-    static const std::string s_schemaPrefix("WCDBMigration_");
-    return s_schemaPrefix;
+    return "WCDBMigration_";
 }
 
 std::string MigrationInfo::resolvedSchema(const std::string &path)
@@ -158,10 +157,9 @@ StatementDropTable MigrationInfo::getStatementForDroppingOldTable() const
         .ifExists();
 }
 
-const std::string &MigrationInfo::getUnionedViewPrefix()
+const std::string MigrationInfo::getUnionedViewPrefix()
 {
-    static const std::string s_unionedViewPrefix("WCDBUnioned");
-    return s_unionedViewPrefix;
+    return "WCDBUnioned";
 }
 
 StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const

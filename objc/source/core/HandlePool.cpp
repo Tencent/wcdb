@@ -78,7 +78,9 @@ void HandlePool::removeConfig(const std::string &name)
 int HandlePool::hardwareConcurrency()
 {
     static const int s_hardwareConcurrency =
-        std::thread::hardware_concurrency();
+        std::thread::hardware_concurrency() > 0
+            ? std::thread::hardware_concurrency()
+            : 8;
     return s_hardwareConcurrency;
 }
 
@@ -219,10 +221,10 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
                    m_sharedLock.isLocked());
 #endif
     if (m_aliveHandleCount >= HandlePool::maxConcurrency()) {
-        static const std::string s_concurrency(
-            "The concurrency of database exceeds the maxximum allowed: " +
-            std::to_string(HandlePool::maxConcurrency()));
-        setThreadedError(Error(Error::Code::Exceed, s_concurrency));
+        setThreadedError(
+            Error(Error::Code::Exceed,
+                  "The concurrency of database exceeds the maxximum allowed: " +
+                      std::to_string(HandlePool::maxConcurrency())));
         return nullptr;
     }
     std::shared_ptr<ConfiguredHandle> configuredHandle =

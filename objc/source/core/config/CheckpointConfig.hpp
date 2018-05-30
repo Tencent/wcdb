@@ -43,9 +43,12 @@ protected:
 
     TimedQueue<std::string, const int> m_timedQueue;
 
-    void loopQueue(const std::atomic<bool> &stop);
+    void loopQueue();
     void reQueue(const std::string &path, int pages);
     void blockedStopQueue();
+
+    const StatementPragma m_checkpointPassive;
+    const StatementPragma m_checkpointTruncate;
 };
 
 } //namespace WCDB

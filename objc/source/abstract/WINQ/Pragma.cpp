@@ -22,460 +22,384 @@
 
 namespace WCDB {
 
-const Pragma &Pragma::applicationId()
+const Pragma Pragma::applicationId()
 {
-    static const Pragma s_applicationId("application_id");
-    return s_applicationId;
+    return Pragma("application_id");
 }
 
-const Pragma &Pragma::autoVacuum()
+const Pragma Pragma::autoVacuum()
 {
-    static const Pragma s_autoVacuum("auto_vacuum");
-    return s_autoVacuum;
+    return Pragma("auto_vacuum");
 }
 
-const Pragma &Pragma::automaticIndex()
+const Pragma Pragma::automaticIndex()
 {
-    static const Pragma s_automaticIndex("automatic_index");
-    return s_automaticIndex;
+    return Pragma("automatic_index");
 }
 
-const Pragma &Pragma::busyTimeout()
+const Pragma Pragma::busyTimeout()
 {
-    static const Pragma s_busyTimeout("busy_timeout");
-    return s_busyTimeout;
+    return Pragma("busy_timeout");
 }
 
-const Pragma &Pragma::cacheSize()
+const Pragma Pragma::cacheSize()
 {
-    static const Pragma s_cacheSize("cache_size");
-    return s_cacheSize;
+    return Pragma("cache_size");
 }
 
-const Pragma &Pragma::cacheSpill()
+const Pragma Pragma::cacheSpill()
 {
-    static const Pragma s_cacheSpill("cache_spill");
-    return s_cacheSpill;
+    return Pragma("cache_spill");
 }
 
-const Pragma &Pragma::caseSensitiveLike()
+const Pragma Pragma::caseSensitiveLike()
 {
-    static const Pragma s_caseSensitiveLike("case_sensitive_like");
-    return s_caseSensitiveLike;
+    return Pragma("case_sensitive_like");
 }
 
-const Pragma &Pragma::cellSizeCheck()
+const Pragma Pragma::cellSizeCheck()
 {
-    static const Pragma s_cellSizeCheck("cell_size_check");
-    return s_cellSizeCheck;
+    return Pragma("cell_size_check");
 }
 
-const Pragma &Pragma::checkpointFullfsync()
+const Pragma Pragma::checkpointFullfsync()
 {
-    static const Pragma s_checkpointFullfsync("checkpoint_fullfsync");
-    return s_checkpointFullfsync;
+    return Pragma("checkpoint_fullfsync");
 }
 
-const Pragma &Pragma::cipher()
+const Pragma Pragma::cipher()
 {
-    static const Pragma s_cipher("cipher");
-    return s_cipher;
+    return Pragma("cipher");
 }
 
-const Pragma &Pragma::cipherAddRandom()
+const Pragma Pragma::cipherAddRandom()
 {
-    static const Pragma s_cipherAddRandom("cipher_add_random");
-    return s_cipherAddRandom;
+    return Pragma("cipher_add_random");
 }
 
-const Pragma &Pragma::cipherDefaultKdfIter()
+const Pragma Pragma::cipherDefaultKdfIter()
 {
-    static const Pragma s_cipherDefaultKdfIter("cipher_default_kdf_iter");
-    return s_cipherDefaultKdfIter;
+    return Pragma("cipher_default_kdf_iter");
 }
 
-const Pragma &Pragma::cipherDefaultPageSize()
+const Pragma Pragma::cipherDefaultPageSize()
 {
-    static const Pragma s_cipherDefaultPageSize("cipher_default_page_size");
-    return s_cipherDefaultPageSize;
+    return Pragma("cipher_default_page_size");
 }
 
-const Pragma &Pragma::cipherDefaultUseHmac()
+const Pragma Pragma::cipherDefaultUseHmac()
 {
-    static const Pragma s_cipherDefaultUseHmac("cipher_default_use_hmac");
-    return s_cipherDefaultUseHmac;
+    return Pragma("cipher_default_use_hmac");
 }
 
-const Pragma &Pragma::cipherMigrate()
+const Pragma Pragma::cipherMigrate()
 {
-    static const Pragma s_cipherMigrate("cipher_migrate");
-    return s_cipherMigrate;
+    return Pragma("cipher_migrate");
 }
 
-const Pragma &Pragma::cipherProfile()
+const Pragma Pragma::cipherProfile()
 {
-    static const Pragma s_cipherProfile("cipher_profile");
-    return s_cipherProfile;
+    return Pragma("cipher_profile");
 }
 
-const Pragma &Pragma::cipherProvider()
+const Pragma Pragma::cipherProvider()
 {
-    static const Pragma s_cipherProvider("cipher_provider");
-    return s_cipherProvider;
+    return Pragma("cipher_provider");
 }
 
-const Pragma &Pragma::cipherProviderVersion()
+const Pragma Pragma::cipherProviderVersion()
 {
-    static const Pragma s_cipherProviderVersion("cipher_provider_version");
-    return s_cipherProviderVersion;
+    return Pragma("cipher_provider_version");
 }
 
-const Pragma &Pragma::cipherUseHmac()
+const Pragma Pragma::cipherUseHmac()
 {
-    static const Pragma s_cipherUseHmac("cipher_use_hmac");
-    return s_cipherUseHmac;
+    return Pragma("cipher_use_hmac");
 }
 
-const Pragma &Pragma::cipherVersion()
+const Pragma Pragma::cipherVersion()
 {
-    static const Pragma s_cipherVersion("cipher_version");
-    return s_cipherVersion;
+    return Pragma("cipher_version");
 }
 
-const Pragma &Pragma::cipherPageSize()
+const Pragma Pragma::cipherPageSize()
 {
-    static const Pragma s_cipherPageSize("cipher_page_size");
-    return s_cipherPageSize;
+    return Pragma("cipher_page_size");
 }
 
-const Pragma &Pragma::collationList()
+const Pragma Pragma::collationList()
 {
-    static const Pragma s_collationList("collation_list");
-    return s_collationList;
+    return Pragma("collation_list");
 }
 
-const Pragma &Pragma::compileOptions()
+const Pragma Pragma::compileOptions()
 {
-    static const Pragma s_compileOptions("compile_options");
-    return s_compileOptions;
+    return Pragma("compile_options");
 }
 
-const Pragma &Pragma::dataVersion()
+const Pragma Pragma::dataVersion()
 {
-    static const Pragma s_dataVersion("data_version");
-    return s_dataVersion;
+    return Pragma("data_version");
 }
 
-const Pragma &Pragma::databaseList()
+const Pragma Pragma::databaseList()
 {
-    static const Pragma s_databaseList("database_list");
-    return s_databaseList;
+    return Pragma("database_list");
 }
 
-const Pragma &Pragma::deferForeignKeys()
+const Pragma Pragma::deferForeignKeys()
 {
-    static const Pragma s_deferForeignKeys("defer_foreign_keys");
-    return s_deferForeignKeys;
+    return Pragma("defer_foreign_keys");
 }
 
-const Pragma &Pragma::encoding()
+const Pragma Pragma::encoding()
 {
-    static const Pragma s_encoding("encoding");
-    return s_encoding;
+    return Pragma("encoding");
 }
 
-const Pragma &Pragma::foreignKeyCheck()
+const Pragma Pragma::foreignKeyCheck()
 {
-    static const Pragma s_foreignKeyCheck("foreign_key_check");
-    return s_foreignKeyCheck;
+    return Pragma("foreign_key_check");
 }
 
-const Pragma &Pragma::foreignKeyList()
+const Pragma Pragma::foreignKeyList()
 {
-    static const Pragma s_foreignKeyList("foreign_key_list");
-    return s_foreignKeyList;
+    return Pragma("foreign_key_list");
 }
 
-const Pragma &Pragma::foreignKeys()
+const Pragma Pragma::foreignKeys()
 {
-    static const Pragma s_foreignKeys("foreign_keys");
-    return s_foreignKeys;
+    return Pragma("foreign_keys");
 }
 
-const Pragma &Pragma::freelistCount()
+const Pragma Pragma::freelistCount()
 {
-    static const Pragma s_freelistCount("freelist_count");
-    return s_freelistCount;
+    return Pragma("freelist_count");
 }
 
-const Pragma &Pragma::fullfsync()
+const Pragma Pragma::fullfsync()
 {
-    static const Pragma s_fullfsync("fullfsync");
-    return s_fullfsync;
+    return Pragma("fullfsync");
 }
 
-const Pragma &Pragma::functionList()
+const Pragma Pragma::functionList()
 {
-    static const Pragma s_functionList("function_list");
-    return s_functionList;
+    return Pragma("function_list");
 }
 
-const Pragma &Pragma::ignoreCheckConstraints()
+const Pragma Pragma::ignoreCheckConstraints()
 {
-    static const Pragma s_ignoreCheckConstraints("ignore_check_constraints");
-    return s_ignoreCheckConstraints;
+    return Pragma("ignore_check_constraints");
 }
 
-const Pragma &Pragma::incrementalVacuum()
+const Pragma Pragma::incrementalVacuum()
 {
-    static const Pragma s_incrementalVacuum("incremental_vacuum");
-    return s_incrementalVacuum;
+    return Pragma("incremental_vacuum");
 }
 
-const Pragma &Pragma::indexInfo()
+const Pragma Pragma::indexInfo()
 {
-    static const Pragma s_indexInfo("index_info");
-    return s_indexInfo;
+    return Pragma("index_info");
 }
 
-const Pragma &Pragma::indexList()
+const Pragma Pragma::indexList()
 {
-    static const Pragma s_indexList("index_list");
-    return s_indexList;
+    return Pragma("index_list");
 }
 
-const Pragma &Pragma::indexXinfo()
+const Pragma Pragma::indexXinfo()
 {
-    static const Pragma s_indexXinfo("index_xinfo");
-    return s_indexXinfo;
+    return Pragma("index_xinfo");
 }
 
-const Pragma &Pragma::integrityCheck()
+const Pragma Pragma::integrityCheck()
 {
-    static const Pragma s_integrityCheck("integrity_check");
-    return s_integrityCheck;
+    return Pragma("integrity_check");
 }
 
-const Pragma &Pragma::journalMode()
+const Pragma Pragma::journalMode()
 {
-    static const Pragma s_journalMode("journal_mode");
-    return s_journalMode;
+    return Pragma("journal_mode");
 }
 
-const Pragma &Pragma::journalSizeLimit()
+const Pragma Pragma::journalSizeLimit()
 {
-    static const Pragma s_journalSizeLimit("journal_size_limit");
-    return s_journalSizeLimit;
+    return Pragma("journal_size_limit");
 }
 
-const Pragma &Pragma::key()
+const Pragma Pragma::key()
 {
-    static const Pragma s_Key("key");
-    return s_Key;
+    return Pragma("key");
 }
 
-const Pragma &Pragma::kdfIter()
+const Pragma Pragma::kdfIter()
 {
-    static const Pragma s_KdfIter("kdf_iter");
-    return s_KdfIter;
+    return Pragma("kdf_iter");
 }
 
-const Pragma &Pragma::legacyFileFormat()
+const Pragma Pragma::legacyFileFormat()
 {
-    static const Pragma s_legacyFileFormat("legacy_file_format");
-    return s_legacyFileFormat;
+    return Pragma("legacy_file_format");
 }
 
-const Pragma &Pragma::lockingMode()
+const Pragma Pragma::lockingMode()
 {
-    static const Pragma s_LockingMode("locking_mode");
-    return s_LockingMode;
+    return Pragma("locking_mode");
 }
 
-const Pragma &Pragma::maxPageCount()
+const Pragma Pragma::maxPageCount()
 {
-    static const Pragma s_maxPageCount("max_page_count");
-    return s_maxPageCount;
+    return Pragma("max_page_count");
 }
 
-const Pragma &Pragma::mmapSize()
+const Pragma Pragma::mmapSize()
 {
-    static const Pragma s_mmapSize("mmap_size");
-    return s_mmapSize;
+    return Pragma("mmap_size");
 }
 
-const Pragma &Pragma::moduleList()
+const Pragma Pragma::moduleList()
 {
-    static const Pragma s_moduleList("module_list");
-    return s_moduleList;
+    return Pragma("module_list");
 }
 
-const Pragma &Pragma::optimize()
+const Pragma Pragma::optimize()
 {
-    static const Pragma s_optimize("optimize");
-    return s_optimize;
+    return Pragma("optimize");
 }
 
-const Pragma &Pragma::pageCount()
+const Pragma Pragma::pageCount()
 {
-    static const Pragma s_pageCount("page_count");
-    return s_pageCount;
+    return Pragma("page_count");
 }
 
-const Pragma &Pragma::pageSize()
+const Pragma Pragma::pageSize()
 {
-    static const Pragma s_pageSize("page_size");
-    return s_pageSize;
+    return Pragma("page_size");
 }
 
-const Pragma &Pragma::parserTrace()
+const Pragma Pragma::parserTrace()
 {
-    static const Pragma s_parserTrace("parser_trace");
-    return s_parserTrace;
+    return Pragma("parser_trace");
 }
 
-const Pragma &Pragma::pragmaList()
+const Pragma Pragma::pragmaList()
 {
-    static const Pragma s_pragmaList("pragma_list");
-    return s_pragmaList;
+    return Pragma("pragma_list");
 }
 
-const Pragma &Pragma::queryOnly()
+const Pragma Pragma::queryOnly()
 {
-    static const Pragma s_queryOnly("query_only");
-    return s_queryOnly;
+    return Pragma("query_only");
 }
 
-const Pragma &Pragma::quickCheck()
+const Pragma Pragma::quickCheck()
 {
-    static const Pragma s_quickCheck("quick_check");
-    return s_quickCheck;
+    return Pragma("quick_check");
 }
 
-const Pragma &Pragma::readUncommitted()
+const Pragma Pragma::readUncommitted()
 {
-    static const Pragma s_readUncommitted("read_uncommitted");
-    return s_readUncommitted;
+    return Pragma("read_uncommitted");
 }
 
-const Pragma &Pragma::recursiveTriggers()
+const Pragma Pragma::recursiveTriggers()
 {
-    static const Pragma s_recursiveTriggers("recursive_triggers");
-    return s_recursiveTriggers;
+    return Pragma("recursive_triggers");
 }
 
-const Pragma &Pragma::rekey()
+const Pragma Pragma::rekey()
 {
-    static const Pragma s_rekey("rekey");
-    return s_rekey;
+    return Pragma("rekey");
 }
 
-const Pragma &Pragma::reverseUnorderedSelects()
+const Pragma Pragma::reverseUnorderedSelects()
 {
-    static const Pragma s_reverseUnorderedSelects("reverse_unordered_selects");
-    return s_reverseUnorderedSelects;
+    return Pragma("reverse_unordered_selects");
 }
 
-const Pragma &Pragma::schemaVersion()
+const Pragma Pragma::schemaVersion()
 {
-    static const Pragma s_schemaVersion("schema_version");
-    return s_schemaVersion;
+    return Pragma("schema_version");
 }
 
-const Pragma &Pragma::secureDelete()
+const Pragma Pragma::secureDelete()
 {
-    static const Pragma s_secureDelete("secure_delete");
-    return s_secureDelete;
+    return Pragma("secure_delete");
 }
 
-const Pragma &Pragma::shrinkMemory()
+const Pragma Pragma::shrinkMemory()
 {
-    static const Pragma s_shrinkMemory("shrink_memory");
-    return s_shrinkMemory;
+    return Pragma("shrink_memory");
 }
 
-const Pragma &Pragma::softHeapLimit()
+const Pragma Pragma::softHeapLimit()
 {
-    static const Pragma s_softHeapLimit("soft_heap_limit");
-    return s_softHeapLimit;
+    return Pragma("soft_heap_limit");
 }
 
-const Pragma &Pragma::stats()
+const Pragma Pragma::stats()
 {
-    static const Pragma s_stats("stats");
-    return s_stats;
+    return Pragma("stats");
 }
 
-const Pragma &Pragma::synchronous()
+const Pragma Pragma::synchronous()
 {
-    static const Pragma s_synchronous("synchronous");
-    return s_synchronous;
+    return Pragma("synchronous");
 }
 
-const Pragma &Pragma::tableInfo()
+const Pragma Pragma::tableInfo()
 {
-    static const Pragma s_tableInfo("table_info");
-    return s_tableInfo;
+    return Pragma("table_info");
 }
 
-const Pragma &Pragma::tempStore()
+const Pragma Pragma::tempStore()
 {
-    static const Pragma s_tempStore("temp_store");
-    return s_tempStore;
+    return Pragma("temp_store");
 }
 
-const Pragma &Pragma::threads()
+const Pragma Pragma::threads()
 {
-    static const Pragma s_threads("threads");
-    return s_threads;
+    return Pragma("threads");
 }
 
-const Pragma &Pragma::userVersion()
+const Pragma Pragma::userVersion()
 {
-    static const Pragma s_userVersion("user_version");
-    return s_userVersion;
+    return Pragma("user_version");
 }
 
-const Pragma &Pragma::vdbeAddoptrace()
+const Pragma Pragma::vdbeAddoptrace()
 {
-    static const Pragma s_vdbeAddoptrace("vdbe_addoptrace");
-    return s_vdbeAddoptrace;
+    return Pragma("vdbe_addoptrace");
 }
 
-const Pragma &Pragma::vdbeDebug()
+const Pragma Pragma::vdbeDebug()
 {
-    static const Pragma s_vdbeDebug("vdbe_debug");
-    return s_vdbeDebug;
+    return Pragma("vdbe_debug");
 }
 
-const Pragma &Pragma::vdbeListing()
+const Pragma Pragma::vdbeListing()
 {
-    static const Pragma s_vdbeListing("vdbe_listing");
-    return s_vdbeListing;
+    return Pragma("vdbe_listing");
 }
 
-const Pragma &Pragma::vdbeTrace()
+const Pragma Pragma::vdbeTrace()
 {
-    static const Pragma s_vdbeTrace("vdbe_trace");
-    return s_vdbeTrace;
+    return Pragma("vdbe_trace");
 }
 
-const Pragma &Pragma::walAutocheckpoint()
+const Pragma Pragma::walAutocheckpoint()
 {
-    static const Pragma s_walAutocheckpoint("wal_autocheckpoint");
-    return s_walAutocheckpoint;
+    return Pragma("wal_autocheckpoint");
 }
 
-const Pragma &Pragma::walCheckpoint()
+const Pragma Pragma::walCheckpoint()
 {
-    static const Pragma s_walCheckpoint("wal_checkpoint");
-    return s_walCheckpoint;
+    return Pragma("wal_checkpoint");
 }
 
-const Pragma &Pragma::writableSchema()
+const Pragma Pragma::writableSchema()
 {
-    static const Pragma s_writableSchema("writable_schema");
-    return s_writableSchema;
+    return Pragma("writable_schema");
 }
 
 Pragma::Pragma(const std::string &name)

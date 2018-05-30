@@ -78,6 +78,8 @@ public:
     {
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
+            m_list.clear();
+            m_map.clear();
             m_stop = true;
         }
         m_cond.notify_one();

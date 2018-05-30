@@ -24,8 +24,9 @@ namespace WCDB {
 
 std::shared_ptr<Config> TraceConfig::config()
 {
-    static std::shared_ptr<Config> s_config(new TraceConfig());
-    return s_config;
+    static std::shared_ptr<Config> *s_config =
+        new std::shared_ptr<Config>(new TraceConfig());
+    return *s_config;
 }
 
 void TraceConfig::setPerformanceTrace(

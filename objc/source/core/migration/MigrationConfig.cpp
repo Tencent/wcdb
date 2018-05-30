@@ -38,10 +38,9 @@ MigrationConfig::configWithSetting(MigrationSetting *setting)
     return std::shared_ptr<Config>(new MigrationConfig(setting));
 }
 
-const std::string &MigrationConfig::name()
+const std::string MigrationConfig::name()
 {
-    static const std::string s_name("migration");
-    return s_name;
+    return "migration";
 }
 
 bool MigrationConfig::invoke(Handle *handle) const

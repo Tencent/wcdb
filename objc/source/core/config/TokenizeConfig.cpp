@@ -40,7 +40,7 @@ bool TokenizeConfig::invoke(Handle *handle) const
         NoCopyData data((unsigned char *) &address, sizeof(unsigned char *));
 
         //Setup Tokenize
-        static const StatementSelect s_fts3Tokenizer =
+        const StatementSelect s_fts3Tokenizer =
             StatementSelect().select(Expression::function(
                 "fts3_tokenizer", {BindParameter(1), BindParameter(2)}));
         if (handle->prepare(s_fts3Tokenizer)) {

@@ -30,10 +30,8 @@ namespace WCDB {
 
 class Dispatch {
 public:
-    static void
-    async(const std::string &name,
-          const std::function<void(const std::atomic<bool> &)> &callback,
-          const std::function<void(void)> &atExit = nullptr);
+    static void async(const std::string &name,
+                      const std::function<void(void)> &callback);
 };
 
 } //namespace WCDB

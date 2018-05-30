@@ -25,8 +25,9 @@ namespace WCDB {
 
 std::shared_ptr<Config> BasicConfig::config()
 {
-    static std::shared_ptr<Config> s_config(new BasicConfig());
-    return s_config;
+    static std::shared_ptr<Config> *s_config =
+        new std::shared_ptr<Config>(new BasicConfig());
+    return *s_config;
 }
 
 BasicConfig::BasicConfig()

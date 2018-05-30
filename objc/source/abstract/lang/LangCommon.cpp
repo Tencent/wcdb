@@ -27,14 +27,14 @@ namespace Lang {
 
 const std::string &mainSchema()
 {
-    static const std::string s_mainSchema("main");
-    return s_mainSchema;
+    static const std::string *s_mainSchema = new std::string("main");
+    return *s_mainSchema;
 }
 
 const std::string &tempSchema()
 {
-    static const std::string s_tempSchema("temp");
-    return s_tempSchema;
+    static const std::string *s_tempSchema = new std::string("temp");
+    return *s_tempSchema;
 }
 
 const std::string &anySchema()
