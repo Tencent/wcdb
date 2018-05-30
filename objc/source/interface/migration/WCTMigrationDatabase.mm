@@ -120,8 +120,8 @@
 {
     WCDB::MigrationDatabase::SteppedCallback callback = nullptr;
     if (onStepped) {
-        callback = [onStepped](bool result, bool done) -> bool {
-            return onStepped(result, done);
+        callback = [onStepped](WCDB::MigrationDatabase::State state, bool result) -> bool {
+            return onStepped((WCTMigrationState) state, result);
         };
     }
     _migrationDatabase->asyncMigration(callback);

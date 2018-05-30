@@ -27,59 +27,49 @@ namespace WCDB {
 
 std::shared_ptr<Config> CheckpointConfig::config()
 {
-    static std::shared_ptr<Config> s_config(new CheckpointConfig());
-    return s_config;
+    static std::shared_ptr<Config> *s_config =
+        new std::shared_ptr<Config>(new CheckpointConfig());
+    return *s_config;
 }
 
 bool CheckpointConfig::invoke(Handle *handle) const
 {
-    CheckpointConfig *config =
-        static_cast<CheckpointConfig *>(CheckpointConfig::config().get());
-
     static std::once_flag s_once;
-    std::call_once(s_once, [config]() {
-        Dispatch::async("com.Tencent.WCDB.Checkpoint",
-                        [config](const std::atomic<bool> &stop) {
-                            config->loopQueue(stop);
-                        },
-                        [config]() { config->blockedStopQueue(); });
+    std::call_once(s_once, []() {
+        Dispatch::async("com.Tencent.WCDB.Checkpoint", []() {
+            CheckpointConfig *config = static_cast<CheckpointConfig *>(
+                CheckpointConfig::config().get());
+            if (config) {
+                config->loopQueue();
+            }
+        });
     });
 
     handle->setCommittedHook(
-        [config](Handle *handle, int pages, void *) {
-            config->reQueue(handle->path, pages);
+        [](Handle *handle, int pages, void *) {
+            CheckpointConfig *config = static_cast<CheckpointConfig *>(
+                CheckpointConfig::config().get());
+            if (config) {
+                config->reQueue(handle->path, pages);
+            }
         },
         nullptr);
     return true;
 }
 
-void CheckpointConfig::loopQueue(const std::atomic<bool> &stop)
+void CheckpointConfig::loopQueue()
 {
-    if (stop.load()) {
-        return;
-    }
-    m_timedQueue.loop([&stop](const std::string &path, const int &pages) {
+    m_timedQueue.loop([this](const std::string &path, const int &pages) {
         std::shared_ptr<Database> database =
             Database::databaseWithExistingPath(path);
         if (database == nullptr || !database->isOpened()) {
             return;
         }
-        static const StatementPragma s_checkpointPassive =
-            StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE");
-
-        if (stop.load()) {
-            return;
-        }
-        bool result = database->execute(s_checkpointPassive);
-        if (result && pages > 1000 && !stop.load()) {
+        bool result = database->execute(m_checkpointPassive);
+        if (result && pages > 1000) {
             //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
             //As a result, checkpoint process will not block the database too long.
-            static const StatementPragma s_checkpointTruncate =
-                StatementPragma()
-                    .pragma(Pragma::walCheckpoint())
-                    .to("TRUNCATE");
-
-            database->execute(s_checkpointTruncate);
+            database->execute(m_checkpointTruncate);
         }
     });
 }
@@ -98,7 +88,12 @@ void CheckpointConfig::blockedStopQueue()
 }
 
 CheckpointConfig::CheckpointConfig()
-    : Config("checkpoint", CheckpointConfig::order), m_timedQueue(2)
+    : Config("checkpoint", CheckpointConfig::order)
+    , m_timedQueue(2)
+    , m_checkpointTruncate(
+          StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
+    , m_checkpointPassive(
+          StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
 {
 }
 

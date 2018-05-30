@@ -33,7 +33,7 @@ public:
     static std::shared_ptr<Config> configWithSetting(MigrationSetting *setting);
     static constexpr const int order = INT_MIN + 4;
 
-    static const std::string &name();
+    static const std::string name();
 
     bool invoke(Handle *handle) const override;
 

@@ -24,8 +24,8 @@ namespace WCDB {
 
 ThreadedErrors *ThreadedErrors::shared()
 {
-    static ThreadedErrors s_threadedErrors;
-    return &s_threadedErrors;
+    static ThreadedErrors *s_threadedErrors = new ThreadedErrors;
+    return s_threadedErrors;
 }
 
 const Error &ThreadedErrors::getThreadedError()

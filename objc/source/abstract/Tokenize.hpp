@@ -191,13 +191,14 @@ public:
 
     static unsigned char *address()
     {
-        static sqlite3_tokenizer_module s_module(
-            {0, Module<TokenizerInfo, CursorInfo>::create,
-             Module<TokenizerInfo, CursorInfo>::destroy,
-             Module<TokenizerInfo, CursorInfo>::open,
-             Module<TokenizerInfo, CursorInfo>::close,
-             Module<TokenizerInfo, CursorInfo>::next});
-        return (unsigned char *) &s_module;
+        static sqlite3_tokenizer_module *s_module =
+            new sqlite3_tokenizer_module(
+                {0, Module<TokenizerInfo, CursorInfo>::create,
+                 Module<TokenizerInfo, CursorInfo>::destroy,
+                 Module<TokenizerInfo, CursorInfo>::open,
+                 Module<TokenizerInfo, CursorInfo>::close,
+                 Module<TokenizerInfo, CursorInfo>::next});
+        return reinterpret_cast<unsigned char *>(s_module);
     }
 };
 

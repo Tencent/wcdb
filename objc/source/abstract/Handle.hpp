@@ -50,10 +50,10 @@ protected:
 public:
     const std::string path;
 
-    static const std::string &getSHMSubfix();
-    static const std::string &getWALSubfix();
-    static const std::string &getJournalSubfix();
-    static const std::array<std::string, 4> &getSubfixs();
+    static std::string getSHMSubfix();
+    static std::string getWALSubfix();
+    static std::string getJournalSubfix();
+    static std::array<std::string, 4> getSubfixs();
 
 #pragma mark - Tag
 public:

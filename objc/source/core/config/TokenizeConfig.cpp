@@ -39,7 +39,7 @@ bool TokenizeConfig::invoke(Handle *handle) const
         const Data &data = FTS::Modules::shared()->getAddress(name);
 
         //Setup Tokenize
-        static const StatementSelect s_fts3Tokenizer =
+        const StatementSelect s_fts3Tokenizer =
             StatementSelect().select(Expression::function(
                 "fts3_tokenizer", {BindParameter(1), BindParameter(2)}));
         if (handle->prepare(s_fts3Tokenizer)) {

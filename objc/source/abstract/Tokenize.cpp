@@ -27,8 +27,8 @@ namespace FTS {
 
 Modules *Modules::shared()
 {
-    static Modules s_modules;
-    return &s_modules;
+    static Modules *s_modules = new Modules;
+    return s_modules;
 }
 
 void Modules::addAddress(const std::string &name, unsigned char *module)

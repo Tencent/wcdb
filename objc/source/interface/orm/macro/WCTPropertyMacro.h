@@ -34,10 +34,10 @@
     }                                                                          \
     +(const WCTProperty &) propertyName                                        \
     {                                                                          \
-        static const WCTProperty s_property(                                   \
-            WCTBinding::bindingWithClass(className.class)                      \
-                .getColumnBinding(columnName));                                \
-        return s_property;                                                     \
+        static const WCTProperty *s_property =                                 \
+            new WCTProperty((WCTBinding::bindingWithClass(className.class)     \
+                                 .getColumnBinding(columnName)));              \
+        return *s_property;                                                    \
     }
 
 #define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName,     \

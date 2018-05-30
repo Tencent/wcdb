@@ -51,13 +51,14 @@ Database::databaseWithExistingPath(const std::string &path)
 
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
-    static const HandlePools::Generator s_generator =
-        [](const std::string &path) -> std::shared_ptr<HandlePool> {
-        return std::shared_ptr<HandlePool>(
-            new HandlePool(path, Configs::default_()));
-    };
+    static const HandlePools::Generator *s_generator =
+        new HandlePools::Generator(
+            [](const std::string &path) -> std::shared_ptr<HandlePool> {
+                return std::shared_ptr<HandlePool>(
+                    new HandlePool(path, Configs::default_()));
+            });
     std::shared_ptr<Database> database(
-        new Database(HandlePools::defaultPools()->getPool(path, s_generator)));
+        new Database(HandlePools::defaultPools()->getPool(path, *s_generator)));
     if (database && database->isValid()) {
         return database;
     }
@@ -471,8 +472,9 @@ std::string Database::getRestorePath() const
 
 ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 {
-    static ThreadLocal<ThreadedHandles> s_threadedHandles;
-    return s_threadedHandles;
+    static ThreadLocal<ThreadedHandles> *s_threadedHandles =
+        new ThreadLocal<ThreadedHandles>;
+    return *s_threadedHandles;
 }
 
 RecyclableHandle Database::getHandle()

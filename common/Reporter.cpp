@@ -25,8 +25,8 @@ namespace WCDB {
 
 Reporter *Reporter::shared()
 {
-    static Reporter reporter;
-    return &reporter;
+    static Reporter *reporter = new Reporter;
+    return reporter;
 }
 
 void Reporter::defaultCallback(const Error &error)

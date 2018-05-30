@@ -24,8 +24,9 @@ namespace WCDB {
 
 const ResultColumn &ResultColumn::all()
 {
-    static const ResultColumn s_all(Lang::ResultColumn::Type::Star);
-    return s_all;
+    static const ResultColumn *s_all =
+        new ResultColumn(Lang::ResultColumn::Type::Star);
+    return *s_all;
 }
 
 ResultColumn::ResultColumn(const Expression::All &all)

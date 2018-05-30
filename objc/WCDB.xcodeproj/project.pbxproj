@@ -471,10 +471,6 @@
 		23BFE30E207CE3E200A4BD81 /* MigrationSetting.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23BFE30C207CE3E200A4BD81 /* MigrationSetting.hpp */; };
 		23C40CF9208DBCDF007B1648 /* Dispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C40CF4208DBCDD007B1648 /* Dispatch.cpp */; };
 		23C40CFA208DBCDF007B1648 /* Dispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C40CF4208DBCDD007B1648 /* Dispatch.cpp */; };
-		23C40CFB208DBCDF007B1648 /* ExitServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C40CF6208DBCDE007B1648 /* ExitServer.cpp */; };
-		23C40CFC208DBCDF007B1648 /* ExitServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C40CF6208DBCDE007B1648 /* ExitServer.cpp */; };
-		23C40CFD208DBCDF007B1648 /* ExitServer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C40CF7208DBCDE007B1648 /* ExitServer.hpp */; };
-		23C40CFE208DBCDF007B1648 /* ExitServer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C40CF7208DBCDE007B1648 /* ExitServer.hpp */; };
 		23C40CFF208DBCDF007B1648 /* Dispatch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C40CF8208DBCDF007B1648 /* Dispatch.hpp */; };
 		23C40D00208DBCDF007B1648 /* Dispatch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C40CF8208DBCDF007B1648 /* Dispatch.hpp */; };
 		23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
@@ -1415,8 +1411,6 @@
 		23BFE30B207CE3E200A4BD81 /* MigrationSetting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationSetting.cpp; sourceTree = "<group>"; };
 		23BFE30C207CE3E200A4BD81 /* MigrationSetting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationSetting.hpp; sourceTree = "<group>"; };
 		23C40CF4208DBCDD007B1648 /* Dispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dispatch.cpp; sourceTree = "<group>"; };
-		23C40CF6208DBCDE007B1648 /* ExitServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExitServer.cpp; sourceTree = "<group>"; };
-		23C40CF7208DBCDE007B1648 /* ExitServer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExitServer.hpp; sourceTree = "<group>"; };
 		23C40CF8208DBCDF007B1648 /* Dispatch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Dispatch.hpp; sourceTree = "<group>"; };
 		23C43BB0208720CA00AB186D /* ColumnType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnType.cpp; sourceTree = "<group>"; };
 		23C43BCC2087435800AB186D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -1824,8 +1818,6 @@
 				239776C3202AF2E2000A681C /* String.hpp */,
 				23C40CF4208DBCDD007B1648 /* Dispatch.cpp */,
 				23C40CF8208DBCDF007B1648 /* Dispatch.hpp */,
-				23C40CF6208DBCDE007B1648 /* ExitServer.cpp */,
-				23C40CF7208DBCDE007B1648 /* ExitServer.hpp */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -2311,7 +2303,6 @@
 				233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */,
 				239774EE202AECD3000A681C /* CommonTableExpression.hpp in Headers */,
 				239774F0202AECD3000A681C /* CTETableName.hpp in Headers */,
-				23C40CFD208DBCDF007B1648 /* ExitServer.hpp in Headers */,
 				239774F3202AECD3000A681C /* Describable.hpp in Headers */,
 				239774F5202AECD3000A681C /* Expression.hpp in Headers */,
 				239774F7202AECD3000A681C /* ForeignKeyClause.hpp in Headers */,
@@ -2576,7 +2567,6 @@
 				23F5BD1420887FD3000CCD37 /* WCTHandle+ChainCall.h in Headers */,
 				23F5BD1520887FD3000CCD37 /* CommonTableExpression.hpp in Headers */,
 				23F5BD1620887FD3000CCD37 /* CTETableName.hpp in Headers */,
-				23C40CFE208DBCDF007B1648 /* ExitServer.hpp in Headers */,
 				23F5BD1720887FD3000CCD37 /* Describable.hpp in Headers */,
 				23F5BD1820887FD3000CCD37 /* Expression.hpp in Headers */,
 				23F5BD1920887FD3000CCD37 /* ForeignKeyClause.hpp in Headers */,
@@ -3131,7 +3121,6 @@
 				23F70FB820A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */,
 				23977533202AECD3000A681C /* StatementReindex.cpp in Sources */,
 				23F70FA620A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
-				23C40CFB208DBCDF007B1648 /* ExitServer.cpp in Sources */,
 				2397759C202AECD3000A681C /* LangSavepointSTMT.cpp in Sources */,
 				239774FE202AECD3000A681C /* LiteralValue.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,
@@ -3350,7 +3339,6 @@
 				23F70FB920A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */,
 				23F5BCDF20887FD3000CCD37 /* StatementReindex.cpp in Sources */,
 				23F70FA720A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
-				23C40CFC208DBCDF007B1648 /* ExitServer.cpp in Sources */,
 				23F5BCE020887FD3000CCD37 /* LangSavepointSTMT.cpp in Sources */,
 				23F5BCE120887FD3000CCD37 /* LiteralValue.cpp in Sources */,
 				23F5BCE220887FD3000CCD37 /* WCTProperty.mm in Sources */,

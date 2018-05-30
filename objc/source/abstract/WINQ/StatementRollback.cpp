@@ -24,12 +24,12 @@ namespace WCDB {
 
 const StatementRollback &StatementRollback::rollback()
 {
-    static const StatementRollback s_rollback = []() -> StatementRollback {
-        StatementRollback statement;
-        statement.getMutableLang();
+    static const StatementRollback *s_rollback = []() -> StatementRollback * {
+        StatementRollback *statement = new StatementRollback;
+        statement->getMutableLang();
         return statement;
     }();
-    return s_rollback;
+    return *s_rollback;
 }
 
 StatementRollback &

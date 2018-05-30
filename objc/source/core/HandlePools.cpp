@@ -25,8 +25,8 @@ namespace WCDB {
 
 HandlePools *HandlePools::defaultPools()
 {
-    static HandlePools s_handlePools;
-    return &s_handlePools;
+    static HandlePools *s_handlePools = new HandlePools;
+    return s_handlePools;
 }
 
 HandlePools::HandlePools()

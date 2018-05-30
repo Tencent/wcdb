@@ -91,9 +91,9 @@ public:
         lang.dataValue = data;
     }
 
-    static const LiteralValue &currentTime();
-    static const LiteralValue &currentDate();
-    static const LiteralValue &currentTimestamp();
+    static const LiteralValue currentTime();
+    static const LiteralValue currentDate();
+    static const LiteralValue currentTimestamp();
 
 protected:
     LiteralValue(const Lang::LiteralValue::Type &type);

@@ -36,8 +36,8 @@ FileManager::FileManager()
 
 FileManager *FileManager::shared()
 {
-    static FileManager s_fileManager;
-    return &s_fileManager;
+    static FileManager *s_fileManager = new FileManager;
+    return s_fileManager;
 }
 
 #pragma mark - Basic

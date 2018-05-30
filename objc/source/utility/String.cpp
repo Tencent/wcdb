@@ -26,8 +26,8 @@ namespace String {
 
 const std::string &empty()
 {
-    static const std::string s_empty("");
-    return s_empty;
+    static const std::string *s_empty = new std::string("");
+    return *s_empty;
 }
 
 bool CaseInsensiveComparator::operator()(const std::string &lhs,

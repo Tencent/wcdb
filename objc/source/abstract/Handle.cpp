@@ -39,32 +39,28 @@ Handle::Handle(const std::string &path_)
 }
 
 #pragma mark - Path
-const std::string &Handle::getSHMSubfix()
+std::string Handle::getSHMSubfix()
 {
-    static const std::string s_SHMSubfix = "-shm";
-    return s_SHMSubfix;
+    return "-shm";
 }
 
-const std::string &Handle::getWALSubfix()
+std::string Handle::getWALSubfix()
 {
-    static const std::string s_WALSubfix = "-wal";
-    return s_WALSubfix;
+    return "-wal";
 }
 
-const std::string &Handle::getJournalSubfix()
+std::string Handle::getJournalSubfix()
 {
-    static const std::string s_journalSubfix = "-journal";
-    return s_journalSubfix;
+    return "-journal";
 }
 
-const std::array<std::string, 4> &Handle::getSubfixs()
+std::array<std::string, 4> Handle::getSubfixs()
 {
-    static const std::array<std::string, 4> s_subfixs = {
+    return std::array<std::string, 4>{
         "", //main db file
         Handle::getWALSubfix(), Handle::getSHMSubfix(),
         Handle::getJournalSubfix(),
     };
-    return s_subfixs;
 }
 
 #pragma mark - Basic

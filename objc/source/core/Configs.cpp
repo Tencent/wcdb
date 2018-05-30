@@ -24,10 +24,11 @@ namespace WCDB {
 
 std::shared_ptr<const Configs> Configs::default_()
 {
-    static std::shared_ptr<const Configs> s_configs(
-        new Configs({TraceConfig::config(), BasicConfig::config(),
-                     CheckpointConfig::config()}));
-    return s_configs;
+    static std::shared_ptr<const Configs> *s_configs =
+        new std::shared_ptr<const Configs>(
+            new Configs({TraceConfig::config(), BasicConfig::config(),
+                         CheckpointConfig::config()}));
+    return *s_configs;
 }
 
 std::shared_ptr<const Configs>

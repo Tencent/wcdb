@@ -88,8 +88,9 @@ Expression::Expression(
 
 const Expression &Expression::lastInsertedRowid()
 {
-    static const Expression s_lastInsertedRowid("last_insert_rowid");
-    return s_lastInsertedRowid;
+    static const Expression *s_lastInsertedRowid =
+        new Expression("last_insert_rowid");
+    return *s_lastInsertedRowid;
 }
 
 Expression Expression::function(const std::string &functionName)
@@ -137,8 +138,8 @@ Expression Expression::function(const std::string &functionName,
 
 const Expression::All &Expression::All::default_()
 {
-    static const Expression::All s_default;
-    return s_default;
+    static const Expression::All *s_default = new Expression::All;
+    return *s_default;
 }
 
 Expression Expression::All::function(const std::string &functionName,

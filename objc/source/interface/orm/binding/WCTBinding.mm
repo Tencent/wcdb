@@ -30,12 +30,12 @@
 
 const WCTBinding &WCTBinding::bindingWithClass(Class cls)
 {
-    static std::map<Class, WCTBinding> s_bindings;
-    static std::recursive_mutex s_mutex;
-    std::lock_guard<std::recursive_mutex> lockGuard(s_mutex);
-    auto iter = s_bindings.find(cls);
-    if (iter == s_bindings.end()) {
-        iter = s_bindings.insert({cls, WCTBinding(cls)}).first;
+    static std::map<Class, WCTBinding> *s_bindings = new std::map<Class, WCTBinding>;
+    static std::recursive_mutex *s_mutex = new std::recursive_mutex;
+    std::lock_guard<std::recursive_mutex> lockGuard(*s_mutex);
+    auto iter = s_bindings->find(cls);
+    if (iter == s_bindings->end()) {
+        iter = s_bindings->insert({cls, WCTBinding(cls)}).first;
         iter->second.initialize();
     }
     return iter->second;
