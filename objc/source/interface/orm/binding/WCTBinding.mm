@@ -72,6 +72,9 @@ void WCTBinding::initialize()
             [others addObject:selName];
         }
     }
+
+    free(methods);
+    
     for (NSString *selName in [synthesizations sortedArrayUsingSelector:@selector(compare:)]) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
