@@ -22,8 +22,39 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/Macro.hpp>
 #include <WCDB/String.hpp>
+#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
+
+static_assert((int) Error::Code::OK == SQLITE_OK, "");
+static_assert((int) Error::Code::Error == SQLITE_ERROR, "");
+static_assert((int) Error::Code::Internal == SQLITE_INTERNAL, "");
+static_assert((int) Error::Code::Permission == SQLITE_PERM, "");
+static_assert((int) Error::Code::Abort == SQLITE_ABORT, "");
+static_assert((int) Error::Code::Busy == SQLITE_BUSY, "");
+static_assert((int) Error::Code::Locked == SQLITE_LOCKED, "");
+static_assert((int) Error::Code::NoMemory == SQLITE_NOMEM, "");
+static_assert((int) Error::Code::Readonly == SQLITE_READONLY, "");
+static_assert((int) Error::Code::Interrupt == SQLITE_INTERRUPT, "");
+static_assert((int) Error::Code::IOError == SQLITE_IOERR, "");
+static_assert((int) Error::Code::Corrupt == SQLITE_CORRUPT, "");
+static_assert((int) Error::Code::NotFound == SQLITE_NOTFOUND, "");
+static_assert((int) Error::Code::Full == SQLITE_FULL, "");
+static_assert((int) Error::Code::CantOpen == SQLITE_CANTOPEN, "");
+static_assert((int) Error::Code::Protocol == SQLITE_PROTOCOL, "");
+static_assert((int) Error::Code::Empty == SQLITE_EMPTY, "");
+static_assert((int) Error::Code::Schema == SQLITE_SCHEMA, "");
+static_assert((int) Error::Code::Exceed == SQLITE_TOOBIG, "");
+static_assert((int) Error::Code::Constraint == SQLITE_CONSTRAINT, "");
+static_assert((int) Error::Code::Mismatch == SQLITE_MISMATCH, "");
+static_assert((int) Error::Code::Misuse == SQLITE_MISUSE, "");
+static_assert((int) Error::Code::NoLargeFileSupport == SQLITE_NOLFS, "");
+static_assert((int) Error::Code::Authorization == SQLITE_AUTH, "");
+static_assert((int) Error::Code::Format == SQLITE_FORMAT, "");
+static_assert((int) Error::Code::Range == SQLITE_RANGE, "");
+static_assert((int) Error::Code::NotADatabase == SQLITE_NOTADB, "");
+static_assert((int) Error::Code::Notice == SQLITE_NOTICE, "");
+static_assert((int) Error::Code::Warning == SQLITE_WARNING, "");
 
 #pragma mark - Initialize
 Error::Error() : level(Level::Error), m_code(Code::OK)
@@ -53,39 +84,45 @@ void Error::setCode(Code code)
     m_code = code;
 }
 
+void Error::setCode(Code code, const std::string &source)
+{
+    setCode(code);
+    infos.set("Source", source);
+}
+
 void Error::setSystemCode(int systemCode, Code codeIfUnresolve)
 {
+    Code code;
     switch (systemCode) {
         case EIO:
-            m_code = Code::IOError;
+            code = Code::IOError;
             break;
         case ENOMEM:
-            m_code = Code::NoMemory;
+            code = Code::NoMemory;
             break;
         case EACCES:
-            m_code = Code::Permission;
+            code = Code::Permission;
             break;
         case EBUSY:
-            m_code = Code::Busy;
+            code = Code::Busy;
             break;
         case ENOSPC:
-            m_code = Code::Full;
+            code = Code::Full;
             break;
         case EAUTH:
-            m_code = Code::Authorization;
+            code = Code::Authorization;
             break;
         default:
-            m_code = codeIfUnresolve;
+            code = codeIfUnresolve;
             break;
     }
+    setCode(code, "System");
     infos.set("ExtCode", systemCode);
-    infos.set("Source", "System");
 }
 
 void Error::setSQLiteCode(int code)
 {
-    m_code = (Code) code;
-    infos.set("Source", "SQLite");
+    setCode((Code) code, "SQLite");
 }
 
 void Error::setSQLiteCode(int code, int extendedCode)
