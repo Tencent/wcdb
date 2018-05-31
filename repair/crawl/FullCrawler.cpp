@@ -55,6 +55,7 @@ void FullCrawler::work()
     }
 
     MasterCrawler().work(this);
+    markAsAssembled();
 }
 
 #pragma mark - Crawlable
@@ -78,9 +79,10 @@ void FullCrawler::onMasterCellCrawled(const Master *master)
         //skip index/view/trigger
         return;
     }
-    if (markAsAssembling(master->tableName) && assembleTable(master->sql)) {
+    if (markTableAsAssembling(master->tableName) &&
+        assembleTable(master->sql)) {
         crawl(master->rootpage);
-        markAsAssembled();
+        markTableAsAssembled();
     }
 }
 

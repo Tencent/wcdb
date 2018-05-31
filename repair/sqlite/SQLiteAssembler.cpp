@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#ifndef WCDB_OMIT_SQLITE_ASSEMBLER
-
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
@@ -34,13 +32,11 @@ namespace Repair {
 
 #pragma mark - Initialze
 SQLiteAssembler::SQLiteAssembler(const std::string &path_)
-    : Assembler(), path(path_), m_transaction(false)
+    : Assembler()
+    , path(path_)
+    , m_transaction(false)
+    , m_onTableAssembled(nullptr)
 {
-}
-
-SQLiteAssembler::~SQLiteAssembler()
-{
-    close();
 }
 
 void SQLiteAssembler::setCallbackOnTableAssembled(
@@ -58,15 +54,24 @@ int SQLiteAssembler::onTableAssembled(const std::string &tableName)
 }
 
 #pragma mark - Assemble
-bool SQLiteAssembler::markAsAssembling(const std::string &tableName)
+bool SQLiteAssembler::markTableAsAssembling(const std::string &tableName)
 {
-    return Assembler::markAsAssembling(tableName) && open();
+    bool result = Assembler::markTableAsAssembling(tableName);
+    result = open() && result;
+    return result;
 }
 
-bool SQLiteAssembler::markAsAssembled()
+bool SQLiteAssembler::markTableAsAssembled()
 {
     finalize();
-    return lazyCommitOrRollbackTransaction() && Assembler::markAsAssembled();
+    bool result = lazyCommitOrRollbackTransaction();
+    result = Assembler::markTableAsAssembled() && result;
+    return result;
+}
+
+void SQLiteAssembler::markAsAssembled()
+{
+    close();
 }
 
 bool SQLiteAssembler::markAsMilestone()
@@ -338,5 +343,3 @@ std::pair<bool, std::string> SQLiteAssembler::getAssembleSQL()
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif // WCDB_OMIT_SQLITE_ASSEMBLER

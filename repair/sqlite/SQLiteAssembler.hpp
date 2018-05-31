@@ -21,8 +21,6 @@
 #ifndef SQLiteAssembler_hpp
 #define SQLiteAssembler_hpp
 
-#ifndef WCDB_OMIT_SQLITE_ASSEMBLER
-
 #include <WCDB/Assembler.hpp>
 
 namespace WCDB {
@@ -33,7 +31,6 @@ class SQLiteAssembler : public Assembler, public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     SQLiteAssembler(const std::string &path);
-    ~SQLiteAssembler();
 
     typedef std::function<int(const std::string &, void *)>
         TableAssembledCallback;
@@ -48,8 +45,9 @@ protected:
 
 #pragma mark - Assembler
 public:
-    bool markAsAssembling(const std::string &tableName) override;
-    bool markAsAssembled() override;
+    bool markTableAsAssembling(const std::string &tableName) override;
+    bool markTableAsAssembled() override;
+    void markAsAssembled() override;
 
     bool markAsMilestone() override;
 
@@ -97,7 +95,5 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif // WCDB_OMIT_SQLITE_ASSEMBLER
 
 #endif /* SQLiteAssembler_hpp */

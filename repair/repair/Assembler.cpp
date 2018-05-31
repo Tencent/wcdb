@@ -26,14 +26,14 @@ namespace WCDB {
 
 namespace Repair {
 
-bool Assembler::markAsAssembling(const std::string &tableName)
+bool Assembler::markTableAsAssembling(const std::string &tableName)
 {
     WCTInnerAssert(!isAssembling());
     m_assembling = tableName;
     return true;
 }
 
-bool Assembler::markAsAssembled()
+bool Assembler::markTableAsAssembled()
 {
     WCTInnerAssert(isAssembling());
     m_assembling.clear();

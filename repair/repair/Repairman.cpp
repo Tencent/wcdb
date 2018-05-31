@@ -56,21 +56,26 @@ void Repairman::setAssembler(const std::shared_ptr<Assembler> &assembler)
     m_assembler = assembler;
 }
 
-bool Repairman::markAsAssembling(const std::string &tableName)
+bool Repairman::markTableAsAssembling(const std::string &tableName)
 {
-    if (m_assembler->markAsAssembling(tableName)) {
+    if (m_assembler->markTableAsAssembling(tableName)) {
         return true;
     }
     tryUpgrateAssemblerError();
     return false;
 }
 
-void Repairman::markAsAssembled()
+void Repairman::markTableAsAssembled()
 {
     markAsMilestone();
-    if (!m_assembler->markAsAssembled()) {
+    if (!m_assembler->markTableAsAssembled()) {
         tryUpgrateAssemblerError();
     }
+}
+
+void Repairman::markAsAssembled()
+{
+    m_assembler->markAsAssembled();
 }
 
 void Repairman::markAsMilestone()

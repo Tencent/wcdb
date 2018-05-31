@@ -33,9 +33,10 @@ class Cell;
 
 class Assembler {
 public:
-    virtual bool markAsAssembling(const std::string &tableName);
-    virtual bool markAsAssembled();
+    virtual bool markTableAsAssembling(const std::string &tableName);
+    virtual bool markTableAsAssembled();
     bool isAssembling() const;
+    virtual void markAsAssembled() = 0;
 
     virtual bool markAsMilestone() = 0;
     virtual bool assembleTable(const std::string &sql) = 0;

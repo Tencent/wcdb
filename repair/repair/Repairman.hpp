@@ -56,7 +56,8 @@ public:
     //    void work();
 
 protected:
-    bool markAsAssembling(const std::string &tableName);
+    bool markTableAsAssembling(const std::string &tableName);
+    void markTableAsAssembled();
     void markAsAssembled();
 
     bool assembleTable(const std::string &sql);
