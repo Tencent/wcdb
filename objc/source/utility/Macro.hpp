@@ -74,4 +74,6 @@
     static_assert(sizeof(type_or_expression) > 0,                              \
                   WCDB_STRINGIFY(type_or_expression) "is not exists.")
 
+#define WCDB_NO_ESCAPE __attribute__((noescape))
+
 #endif /* Macro_hpp */

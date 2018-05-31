@@ -95,7 +95,7 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
  
  @param onClosed Trigger on database closed.
  */
-- (void)close:(WCTCloseBlock)onClosed;
+- (void)close:(WCDB_NO_ESCAPE WCTCloseBlock)onClosed;
 
 /**
  @brief This interface is equivalent to [database close:nil].
@@ -109,7 +109,7 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
  */
 - (void)blockade;
 
-- (bool)blockadeUntilDone:(WCTBlockadeBlock)onBlockaded;
+- (bool)blockadeUntilDone:(WCDB_NO_ESCAPE WCTBlockadeBlock)onBlockaded;
 
 /**
  @brief Unblockade the database.

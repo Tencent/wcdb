@@ -29,12 +29,12 @@ typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
 - (BOOL)beginTransaction;
 - (BOOL)commitOrRollbackTransaction;
 - (void)rollbackTransaction;
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction;
+- (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction;
 
 - (BOOL)beginNestedTransaction;
 - (BOOL)commitOrRollbackNestedTransaction;
 - (void)rollbackNestedTransaction;
-- (BOOL)runNestedTransaction:(WCTTransactionBlock)inTransaction;
+- (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction;
 @end
 
 NS_ASSUME_NONNULL_END
