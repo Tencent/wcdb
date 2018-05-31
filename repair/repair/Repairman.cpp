@@ -28,6 +28,7 @@ namespace Repair {
 #pragma mark - Initialize
 Repairman::Repairman(const std::string &path)
     : Crawlable()
+    , Progress()
     , m_pager(path)
     , m_assembler(nullptr)
     , m_maxCellsPerMilestone(5000)
@@ -76,6 +77,7 @@ void Repairman::markTableAsAssembled()
 void Repairman::markAsAssembled()
 {
     m_assembler->markAsAssembled();
+    finishProgress();
 }
 
 void Repairman::markAsMilestone()

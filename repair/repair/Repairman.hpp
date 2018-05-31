@@ -24,13 +24,15 @@
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/CriticalErrorOnly.hpp>
+#include <WCDB/Progress.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Repairman : public Crawlable, public CriticalErrorOnly {
+//TODO update progress
+class Repairman : public Crawlable, public CriticalErrorOnly, public Progress {
 #pragma mark - Initialize
 public:
     Repairman(const std::string &path);
@@ -41,19 +43,14 @@ protected:
     Pager &getPager() override;
     Pager m_pager;
 
-#pragma mark - Assembler
-public:
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
-
 #pragma mark - Critical Error
 protected:
     void tryUpgrateAssemblerError();
     void tryUpgradeCrawlerError();
 
-#pragma mark - Repairman
+#pragma mark - Assembler
 public:
-    //TODO 1. progress callback 2. table create hook to run associated sql
-    //    void work();
+    void setAssembler(const std::shared_ptr<Assembler> &assembler);
 
 protected:
     bool markTableAsAssembling(const std::string &tableName);
