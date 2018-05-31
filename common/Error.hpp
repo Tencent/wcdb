@@ -157,7 +157,7 @@ public:
     Code code() const;
     bool isOK() const;
 
-    void setSystemCode(int systemCode, Code codeIfUnresolve);
+    void setSystemCode(int systemCode, Code codeIfUnresolved);
     void setSQLiteCode(int code);
     void setSQLiteCode(int code, int extendedCode);
     void setCode(Code code);

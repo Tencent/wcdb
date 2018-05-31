@@ -51,6 +51,7 @@ public:
     bool removeDirectory(const std::string &directory);
     bool createDirectory(const std::string &path);
     std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
+    std::pair<bool, std::string> getUniqueFileName();
 
 #pragma mark - Combination
 public:
@@ -67,6 +68,7 @@ public:
 #pragma mark - Error
 protected:
     void setThreadedError(const std::string &path);
+    void setThreadedError(Error::Code codeIfUnresolved);
 };
 
 } //namespace WCDB

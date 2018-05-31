@@ -90,7 +90,7 @@ void Error::setCode(Code code, const std::string &source)
     infos.set("Source", source);
 }
 
-void Error::setSystemCode(int systemCode, Code codeIfUnresolve)
+void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
 {
     Code code;
     switch (systemCode) {
@@ -113,7 +113,7 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolve)
             code = Code::Authorization;
             break;
         default:
-            code = codeIfUnresolve;
+            code = codeIfUnresolved;
             break;
     }
     setCode(code, "System");

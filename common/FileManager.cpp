@@ -24,6 +24,7 @@
 #include <WCDB/String.hpp>
 #include <dirent.h>
 #include <errno.h>
+#include <iomanip>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -179,6 +180,21 @@ FileManager::getFileModifiedTime(const std::string &path)
     return {false, 0};
 }
 
+std::pair<bool, std::string> FileManager::getUniqueFileName()
+{
+    auto t = std::time(nullptr);
+    srand((unsigned) t);
+    struct tm tm;
+    if (!localtime_r(&t, &tm)) {
+        setThreadedError(Error::Code::Exceed);
+        return {false, String::empty()};
+    }
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S_");
+    oss << rand();
+    return {true, oss.str()};
+}
+
 #pragma mark - Combination
 std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
 {
@@ -306,6 +322,15 @@ void FileManager::setThreadedError(const std::string &path)
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
     error.infos.set("Path", path);
+    Reporter::shared()->report(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+}
+
+void FileManager::setThreadedError(Error::Code codeIfUnresolved)
+{
+    Error error;
+    error.setSystemCode(errno, codeIfUnresolved);
+    error.message = strerror(errno);
     Reporter::shared()->report(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
