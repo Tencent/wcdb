@@ -161,6 +161,7 @@ public:
     void setSQLiteCode(int code);
     void setSQLiteCode(int code, int extendedCode);
     void setCode(Code code);
+    void setCode(Code code, const std::string &source);
 
 protected:
     Code m_code;

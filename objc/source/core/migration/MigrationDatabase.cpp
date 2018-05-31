@@ -211,7 +211,7 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
             MigrationDatabase *migrationDatabase =
                 static_cast<MigrationDatabase *>(database.get());
             result = migrationDatabase->stepMigration(done);
-            if (done || callback && !callback(State::Migrating, result)) {
+            if (done || (callback && !callback(State::Migrating, result))) {
                 break;
             }
         }
