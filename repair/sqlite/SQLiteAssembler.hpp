@@ -29,13 +29,22 @@ namespace WCDB {
 
 namespace Repair {
 
-class SQLiteAssembler : public Assembler {
+class SQLiteAssembler : public Assembler, public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     SQLiteAssembler(const std::string &path);
     ~SQLiteAssembler();
 
+    typedef std::function<int(const std::string &, void *)>
+        TableAssembledCallback;
+    void
+    setCallbackOnTableAssembled(const TableAssembledCallback &onTableAssembled);
+
     const std::string path;
+
+protected:
+    int onTableAssembled(const std::string &tableName);
+    TableAssembledCallback m_onTableAssembled;
 
 #pragma mark - Assembler
 public:
@@ -46,6 +55,8 @@ public:
 
     bool assembleTable(const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
+
+    const Error &getError() const override;
 
 protected:
     bool lazyBeginTransaction();
@@ -58,9 +69,6 @@ private:
 protected:
     void setThreadedError(int rc);
     void setThreadedError(int rc, const std::string &sql);
-
-private:
-    using Assembler::setThreadedError;
 
 #pragma mark - SQLite Handle
 protected:

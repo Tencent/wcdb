@@ -23,6 +23,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 #include <list>
 #include <sqlite3.h>
 #include <sstream>
@@ -42,10 +43,24 @@ SQLiteAssembler::~SQLiteAssembler()
     close();
 }
 
+void SQLiteAssembler::setCallbackOnTableAssembled(
+    const TableAssembledCallback &onTableAssembled)
+{
+    m_onTableAssembled = onTableAssembled;
+}
+
+int SQLiteAssembler::onTableAssembled(const std::string &tableName)
+{
+    if (m_onTableAssembled) {
+        return m_onTableAssembled(tableName, m_handle);
+    }
+    return SQLITE_OK;
+}
+
 #pragma mark - Assemble
 bool SQLiteAssembler::markAsAssembling(const std::string &tableName)
 {
-    return SQLiteAssembler::markAsAssembling(tableName) && open();
+    return Assembler::markAsAssembling(tableName) && open();
 }
 
 bool SQLiteAssembler::markAsAssembled()
@@ -62,7 +77,14 @@ bool SQLiteAssembler::markAsMilestone()
 bool SQLiteAssembler::assembleTable(const std::string &sql)
 {
     WCTInnerAssert(isAssembling());
-    return lazyBeginTransaction() && execute(sql.c_str());
+    if (lazyBeginTransaction() && execute(sql.c_str())) {
+        int rc = onTableAssembled(m_assembling);
+        if (rc == SQLITE_OK) {
+            return true;
+        }
+        setThreadedError(rc);
+    }
+    return false;
 }
 
 bool SQLiteAssembler::assembleCell(const Cell &cell)
@@ -141,6 +163,11 @@ bool SQLiteAssembler::lazyCommitOrRollbackTransaction()
     return true;
 }
 
+const Error &SQLiteAssembler::getError() const
+{
+    return ThreadedErrors::shared()->getThreadedError();
+}
+
 #pragma mark - Error
 void SQLiteAssembler::setThreadedError(int rc)
 {
@@ -152,7 +179,7 @@ void SQLiteAssembler::setThreadedError(int rc)
     }
     error.infos.set("Path", path);
     Reporter::shared()->report(error);
-    setThreadedError(std::move(error));
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
@@ -166,7 +193,7 @@ void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
     error.infos.set("SQL", sql);
     error.infos.set("Path", path);
     Reporter::shared()->report(error);
-    setThreadedError(std::move(error));
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 #pragma mark - SQLite Handle
