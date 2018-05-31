@@ -32,19 +32,22 @@ const Error &CriticalErrorOnly::getCriticalError() const
 
 int CriticalErrorOnly::criticalLevel(const Error &error)
 {
-    static std::map<Error::Code, int> s_criticalLevel = {
-        {Error::Code::Full, std::numeric_limits<int>::max()},
-        {Error::Code::IOError, std::numeric_limits<int>::max() - 1},
-        {Error::Code::NoMemory, std::numeric_limits<int>::max() - 2},
-        // 0
-        {Error::Code::Corrupt, -1},
-        {Error::Code::OK, std::numeric_limits<int>::min()},
-    };
-    auto iter = s_criticalLevel.find(error.code());
-    if (iter == s_criticalLevel.end()) {
-        return 0;
+    switch (error.code()) {
+        case Error::Code::Full:
+            return std::numeric_limits<int>::max();
+        case Error::Code::Corrupt:
+        case Error::Code::NotADatabase:
+            if (error.level == Error::Level::Warning) {
+                return -1;
+            }
+            return std::numeric_limits<int>::max() - 1;
+        case Error::Code::IOError:
+            return std::numeric_limits<int>::max() - 2;
+        case Error::Code::OK:
+            return std::numeric_limits<int>::min();
+        default:
+            return 0;
     }
-    return iter->second;
 }
 
 void CriticalErrorOnly::tryUpgradeError(const Error &newError)
@@ -64,6 +67,11 @@ void CriticalErrorOnly::tryUpgradeError(Error &&newError)
 void CriticalErrorOnly::tryUpgradeErrorWithThreadedError()
 {
     tryUpgradeError(std::move(ThreadedErrors::shared()->getThreadedError()));
+}
+
+bool CriticalErrorOnly::isCriticalErrorFatal() const
+{
+    return criticalLevel(m_criticalError) > 0;
 }
 
 } //namespace Repair

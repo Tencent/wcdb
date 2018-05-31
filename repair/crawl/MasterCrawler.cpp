@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/MasterCrawler.hpp>
 
@@ -25,56 +26,66 @@ namespace WCDB {
 
 namespace Repair {
 
-MasterCrawler::MasterCrawler(const std::string &path, bool fatal)
-    : Crawlable(path, fatal)
+void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page)
 {
 }
 
-bool MasterCrawler::work()
+MasterCrawler::MasterCrawler() : Crawlable(), m_delegate(nullptr)
 {
-    m_crawling = true;
+}
+
+bool MasterCrawler::work(MasterCrawlerDelegate *delegate)
+{
+    WCTInnerAssert(delegate != nullptr);
+    m_delegate = delegate;
     bool result = crawl(1);
-    m_crawling = false;
+    m_delegate = nullptr;
     return result;
 }
 
-bool MasterCrawler::onCellCrawled(const Cell &cell)
+void MasterCrawler::onCellCrawled(const Cell &cell)
 {
     if (cell.getValueType(1) != Cell::Type::Text ||
         cell.getValueType(2) != Cell::Type::Text ||
         cell.getValueType(3) != Cell::Type::Integer32 ||
         cell.getValueType(4) != Cell::Type::Text) {
         markAsCorrupted();
-        return !isFatal();
+        return;
     }
     std::string name = cell.stringValue(1);
     std::string tblName = cell.stringValue(2);
     std::string sql = cell.stringValue(4);
     if (tblName.empty() || sql.empty() || name.empty()) {
         markAsCorrupted();
-        return !isFatal();
+        return;
     }
 
     if (name != tblName) {
         //skip index/view/trigger
-        return true;
+        m_delegate->onMasterCellCrawled(nullptr);
+        return;
     }
     Master master;
     master.rootpage = cell.int32Value(3);
     master.tableName = std::move(name);
     master.sql = std::move(sql);
-    m_masters.push_back(std::move(master));
+    m_delegate->onMasterCellCrawled(&master);
+}
+
+bool MasterCrawler::willCrawlPage(const Page &page, int unused)
+{
+    m_delegate->onMasterPageCrawled(page);
     return true;
 }
 
-bool MasterCrawler::isMasterCrawling() const
+void MasterCrawler::onCrawlerError()
 {
-    return m_crawling;
+    m_delegate->onMasterCrawlerError();
 }
 
-const std::list<Master> &MasterCrawler::getMasters() const
+Pager &MasterCrawler::getPager()
 {
-    return m_masters;
+    return m_delegate->getMasterPager();
 }
 
 } //namespace Repair

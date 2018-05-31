@@ -21,6 +21,7 @@
 #ifndef Pager_hpp
 #define Pager_hpp
 
+#include <WCDB/Error.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
 
@@ -63,6 +64,10 @@ protected:
 #pragma mark - Error
 public:
     void markAsCorrupted();
+
+protected:
+    void markAsNotADatabase();
+    void markAsError(Error::Code code);
 };
 
 } //namespace Repair

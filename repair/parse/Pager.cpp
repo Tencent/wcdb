@@ -58,7 +58,7 @@ bool Pager::initialize()
             return false;
         }
         if (memcmp(data.buffer(), "SQLite format 3\000", 16) != 0) {
-            markAsCorrupted();
+            markAsNotADatabase();
             return false;
         }
         Deserialization deserialization(data);
@@ -139,9 +139,20 @@ Data Pager::acquireData(off_t offset, size_t size)
 #pragma mark - Error
 void Pager::markAsCorrupted()
 {
+    markAsError(Error::Code::Corrupt);
+}
+
+void Pager::markAsNotADatabase()
+{
+    markAsError(Error::Code::NotADatabase);
+}
+
+void Pager::markAsError(Error::Code code)
+{
     Error error;
-    error.setCode(Error::Code::Corrupt, "Repair");
+    error.setCode(code, "Repair");
     error.infos.set("Path", m_fileHandle.path);
+    Reporter::shared()->report(error);
     setThreadedError(std::move(error));
 }
 

@@ -45,6 +45,7 @@ void Material::markAsCorrupt()
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
     error.message = "Material is corrupted";
+    Reporter::shared()->report(error);
     setThreadedError(std::move(error));
 }
 

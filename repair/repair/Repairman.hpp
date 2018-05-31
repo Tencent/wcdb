@@ -23,19 +23,32 @@
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
+#include <WCDB/CriticalErrorOnly.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Repairman {
+class Repairman : public Crawlable, public CriticalErrorOnly {
 #pragma mark - Initialize
 public:
-    Repairman();
+    Repairman(const std::string &path);
+
+#pragma mark - Crawlable
+protected:
+    void onCrawlerError() override;
+    Pager &getPager() override;
+    Pager m_pager;
+
 #pragma mark - Assembler
 public:
     void setAssembler(const std::shared_ptr<Assembler> &assembler);
+
+#pragma mark - Critical Error
+protected:
+    void tryUpgrateAssemblerError();
+    void tryUpgradeCrawlerError();
 
 #pragma mark - Repairman
 public:
@@ -44,14 +57,15 @@ public:
 
 protected:
     bool markAsAssembling(const std::string &tableName);
-    bool markAsAssembled();
-
-    bool markAsMilestone();
+    void markAsAssembled();
 
     bool assembleTable(const std::string &sql);
-    bool assembleCell(const Cell &cell);
+    void assembleCell(const Cell &cell);
 
     bool canAssembled() const;
+
+private:
+    void markAsMilestone();
 
 private:
     int m_maxCellsPerMilestone;
@@ -68,7 +82,7 @@ protected:
     void markCellAsCounted();
 
 private:
-    double m_uncountedScore;
+    double m_scorePool;
     double m_pageWeight;
     double m_cellWeight;
     double m_score;

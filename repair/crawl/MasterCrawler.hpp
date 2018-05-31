@@ -22,7 +22,6 @@
 #define MasterCrawler_hpp
 
 #include <WCDB/Crawlable.hpp>
-#include <list>
 
 namespace WCDB {
 
@@ -34,27 +33,36 @@ struct Master {
     int rootpage;
 };
 
+class MasterCrawler;
+
+class MasterCrawlerDelegate {
+protected:
+    friend class MasterCrawler;
+
+    virtual Pager &getMasterPager() = 0;
+    virtual void onMasterPageCrawled(const Page &page);
+    virtual void onMasterCellCrawled(const Master *master) = 0;
+    virtual void onMasterCrawlerError() = 0;
+};
+
 class MasterCrawler : public Crawlable {
 #pragma mark - Initialize
 public:
-    MasterCrawler(const std::string &path, bool fatal);
+    MasterCrawler();
 
 #pragma mark - Master
 public:
-    bool work();
-
-    const std::list<Master> &getMasters() const;
+    bool work(MasterCrawlerDelegate *delegate);
 
 protected:
-    std::list<Master> m_masters;
-    bool isMasterCrawling() const;
-
-private:
-    bool m_crawling;
+    MasterCrawlerDelegate *m_delegate;
 
 #pragma mark - Crawlable
 protected:
-    bool onCellCrawled(const Cell &cell) override;
+    Pager &getPager() override;
+    void onCellCrawled(const Cell &cell) override;
+    bool willCrawlPage(const Page &page, int height) override;
+    void onCrawlerError() override;
 };
 
 } //namespace Repair

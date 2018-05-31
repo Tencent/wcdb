@@ -19,21 +19,30 @@
  */
 
 #include <WCDB/Repairman.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
 #pragma mark - Initialize
-Repairman::Repairman()
-    : m_assembler(nullptr)
+Repairman::Repairman(const std::string &path)
+    : Crawlable()
+    , m_pager(path)
+    , m_assembler(nullptr)
     , m_maxCellsPerMilestone(5000)
     , m_cells(0)
-    , m_uncountedScore(0)
+    , m_scorePool(0)
     , m_pageWeight(0)
     , m_cellWeight(0)
     , m_score(0)
 {
+}
+
+#pragma mark - Crawlable
+Pager &Repairman::getPager()
+{
+    return m_pager;
 }
 
 #pragma mark - Assemble
@@ -49,49 +58,77 @@ void Repairman::setAssembler(const std::shared_ptr<Assembler> &assembler)
 
 bool Repairman::markAsAssembling(const std::string &tableName)
 {
-    return m_assembler->markAsAssembling(tableName);
-}
-
-bool Repairman::markAsAssembled()
-{
-    return markAsMilestone() && m_assembler->markAsAssembled();
-}
-
-bool Repairman::markAsMilestone()
-{
-    bool result = m_assembler->markAsMilestone();
-    if (result) {
-        m_score += m_uncountedScore;
+    if (m_assembler->markAsAssembling(tableName)) {
+        return true;
     }
-    m_uncountedScore = 0;
+    tryUpgrateAssemblerError();
+    return false;
+}
+
+void Repairman::markAsAssembled()
+{
+    markAsMilestone();
+    if (!m_assembler->markAsAssembled()) {
+        tryUpgrateAssemblerError();
+    }
+}
+
+void Repairman::markAsMilestone()
+{
+    if (m_assembler->markAsMilestone()) {
+        m_score += m_scorePool;
+    } else {
+        tryUpgrateAssemblerError();
+    }
+    m_scorePool = 0;
     m_cells = 0;
-    return result;
 }
 
 bool Repairman::assembleTable(const std::string &sql)
 {
-    return m_assembler->assembleTable(sql);
+    if (m_assembler->assembleTable(sql)) {
+        return true;
+    }
+    tryUpgrateAssemblerError();
+    return false;
 }
 
-bool Repairman::assembleCell(const Cell &cell)
+void Repairman::assembleCell(const Cell &cell)
 {
     if (!m_assembler->assembleCell(cell)) {
-        return false;
+        tryUpgrateAssemblerError();
+        return;
     }
     markCellAsCounted();
-    if (++m_cells < m_maxCellsPerMilestone) {
-        return true;
+    if (++m_cells > m_maxCellsPerMilestone) {
+        markAsMilestone();
     }
-    if (markAsMilestone()) {
-        return true;
+}
+
+void Repairman::onCrawlerError()
+{
+    tryUpgradeCrawlerError();
+}
+
+void Repairman::tryUpgradeCrawlerError()
+{
+    Error error = std::move(ThreadedErrors::shared()->moveThreadedError());
+    if (error.code() == Error::Code::Corrupt ||
+        error.code() == Error::Code::NotADatabase) {
+        error.level = Error::Level::Warning;
     }
-    return false;
+    tryUpgradeError(std::move(error));
+}
+
+void Repairman::tryUpgrateAssemblerError()
+{
+    tryUpgradeError(m_assembler->getError());
 }
 
 #pragma mark - Evaluation
 void Repairman::markCellAsCounted()
 {
-    m_uncountedScore += m_cellWeight;
+    m_scorePool += m_cellWeight;
 }
 
 void Repairman::markCellCount(int cellCount)

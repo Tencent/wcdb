@@ -152,10 +152,10 @@
 		23775B6720AD666900E21AB0 /* Reporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3220AD666900E21AB0 /* Reporter.cpp */; };
 		23775B6820AD666900E21AB0 /* Reporter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3320AD666900E21AB0 /* Reporter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23775B6920AD666900E21AB0 /* Reporter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3320AD666900E21AB0 /* Reporter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23775B6A20AD666900E21AB0 /* Crawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* Crawler.cpp */; };
-		23775B6B20AD666900E21AB0 /* Crawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* Crawler.cpp */; };
-		23775B6C20AD666900E21AB0 /* Crawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* Crawler.hpp */; };
-		23775B6D20AD666900E21AB0 /* Crawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* Crawler.hpp */; };
+		23775B6A20AD666900E21AB0 /* FullCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* FullCrawler.cpp */; };
+		23775B6B20AD666900E21AB0 /* FullCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3620AD666900E21AB0 /* FullCrawler.cpp */; };
+		23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* FullCrawler.hpp */; };
+		23775B6D20AD666900E21AB0 /* FullCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* FullCrawler.hpp */; };
 		23775B6E20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */; };
 		23775B6F20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */; };
 		23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */; };
@@ -196,10 +196,6 @@
 		23775B9720AD666900E21AB0 /* Crawlable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5020AD666900E21AB0 /* Crawlable.cpp */; };
 		23775B9820AD666900E21AB0 /* Crawlable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B5120AD666900E21AB0 /* Crawlable.hpp */; };
 		23775B9920AD666900E21AB0 /* Crawlable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B5120AD666900E21AB0 /* Crawlable.hpp */; };
-		23775B9E20AD666900E21AB0 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5420AD666900E21AB0 /* MasterCrawler.cpp */; };
-		23775B9F20AD666900E21AB0 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5420AD666900E21AB0 /* MasterCrawler.cpp */; };
-		23775BA020AD666900E21AB0 /* MasterCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B5520AD666900E21AB0 /* MasterCrawler.hpp */; };
-		23775BA120AD666900E21AB0 /* MasterCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B5520AD666900E21AB0 /* MasterCrawler.hpp */; };
 		23775BA220AD666900E21AB0 /* SQLiteAssembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5720AD666900E21AB0 /* SQLiteAssembler.cpp */; };
 		23775BA320AD666900E21AB0 /* SQLiteAssembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5720AD666900E21AB0 /* SQLiteAssembler.cpp */; };
 		23775BA420AD666900E21AB0 /* SQLiteAssembler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B5820AD666900E21AB0 /* SQLiteAssembler.hpp */; };
@@ -476,6 +472,14 @@
 		23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
 		23C5ABAD207DA9C100BEF3C6 /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */; };
 		23C5ABAE207DA9C100BEF3C6 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */; };
+		23D07CE420BE87360043F4D4 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
+		23D07CE520BE87360043F4D4 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
+		23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */; };
+		23D07CE720BE87360043F4D4 /* MasterCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */; };
+		23D07CEA20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE820BE873E0043F4D4 /* SequenceCrawler.cpp */; };
+		23D07CEB20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE820BE873E0043F4D4 /* SequenceCrawler.cpp */; };
+		23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */; };
+		23D07CED20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */; };
 		23D4DA452085A40A00AE6D90 /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA442085A3D300AE6D90 /* Interface.h */; };
 		23D4DA462085A41A00AE6D90 /* Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA432085A2CA00AE6D90 /* Migration.h */; };
 		23D4DA4A2085A99000AE6D90 /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA472085A98F00AE6D90 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1133,8 +1137,8 @@
 		23775B3120AD666900E21AB0 /* Error.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
 		23775B3220AD666900E21AB0 /* Reporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reporter.cpp; sourceTree = "<group>"; };
 		23775B3320AD666900E21AB0 /* Reporter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Reporter.hpp; sourceTree = "<group>"; };
-		23775B3620AD666900E21AB0 /* Crawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Crawler.cpp; sourceTree = "<group>"; };
-		23775B3720AD666900E21AB0 /* Crawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Crawler.hpp; sourceTree = "<group>"; };
+		23775B3620AD666900E21AB0 /* FullCrawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FullCrawler.cpp; sourceTree = "<group>"; };
+		23775B3720AD666900E21AB0 /* FullCrawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FullCrawler.hpp; sourceTree = "<group>"; };
 		23775B3920AD666900E21AB0 /* DeprecatedBackup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeprecatedBackup.cpp; sourceTree = "<group>"; };
 		23775B3A20AD666900E21AB0 /* DeprecatedBackup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeprecatedBackup.hpp; sourceTree = "<group>"; };
 		23775B3B20AD666900E21AB0 /* DeprecatedRepairKit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeprecatedRepairKit.cpp; sourceTree = "<group>"; };
@@ -1155,8 +1159,6 @@
 		23775B4F20AD666900E21AB0 /* Assembler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assembler.hpp; sourceTree = "<group>"; };
 		23775B5020AD666900E21AB0 /* Crawlable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Crawlable.cpp; sourceTree = "<group>"; };
 		23775B5120AD666900E21AB0 /* Crawlable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Crawlable.hpp; sourceTree = "<group>"; };
-		23775B5420AD666900E21AB0 /* MasterCrawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterCrawler.cpp; sourceTree = "<group>"; };
-		23775B5520AD666900E21AB0 /* MasterCrawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MasterCrawler.hpp; sourceTree = "<group>"; };
 		23775B5720AD666900E21AB0 /* SQLiteAssembler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteAssembler.cpp; sourceTree = "<group>"; };
 		23775B5820AD666900E21AB0 /* SQLiteAssembler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SQLiteAssembler.hpp; sourceTree = "<group>"; };
 		23775B5C20AD666900E21AB0 /* FileHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileHandle.cpp; sourceTree = "<group>"; };
@@ -1416,6 +1418,10 @@
 		23C43BCC2087435800AB186D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
+		23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterCrawler.cpp; sourceTree = "<group>"; };
+		23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MasterCrawler.hpp; sourceTree = "<group>"; };
+		23D07CE820BE873E0043F4D4 /* SequenceCrawler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequenceCrawler.cpp; sourceTree = "<group>"; };
+		23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SequenceCrawler.hpp; sourceTree = "<group>"; };
 		23D4DA432085A2CA00AE6D90 /* Migration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Migration.h; sourceTree = "<group>"; };
 		23D4DA442085A3D300AE6D90 /* Interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interface.h; sourceTree = "<group>"; };
 		23D4DA472085A98F00AE6D90 /* ColumnType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColumnType.hpp; sourceTree = "<group>"; };
@@ -1890,8 +1896,12 @@
 		23775B3520AD666900E21AB0 /* crawl */ = {
 			isa = PBXGroup;
 			children = (
-				23775B3620AD666900E21AB0 /* Crawler.cpp */,
-				23775B3720AD666900E21AB0 /* Crawler.hpp */,
+				23775B3620AD666900E21AB0 /* FullCrawler.cpp */,
+				23775B3720AD666900E21AB0 /* FullCrawler.hpp */,
+				23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */,
+				23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */,
+				23D07CE820BE873E0043F4D4 /* SequenceCrawler.cpp */,
+				23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */,
 			);
 			path = crawl;
 			sourceTree = "<group>";
@@ -1940,8 +1950,6 @@
 				23775B4F20AD666900E21AB0 /* Assembler.hpp */,
 				23775B5020AD666900E21AB0 /* Crawlable.cpp */,
 				23775B5120AD666900E21AB0 /* Crawlable.hpp */,
-				23775B5420AD666900E21AB0 /* MasterCrawler.cpp */,
-				23775B5520AD666900E21AB0 /* MasterCrawler.hpp */,
 				23F1699420B69BE2009B5C47 /* CriticalErrorOnly.cpp */,
 				23F1699520B69BE2009B5C47 /* CriticalErrorOnly.hpp */,
 				23EE0EB020B838E100C95998 /* Repairman.cpp */,
@@ -2311,7 +2319,6 @@
 				23B9E69420AE7D5000CF1683 /* Serialization.hpp in Headers */,
 				239774FB202AECD3000A681C /* JoinClause.hpp in Headers */,
 				239774FD202AECD3000A681C /* JoinConstraint.hpp in Headers */,
-				23775BA020AD666900E21AB0 /* MasterCrawler.hpp in Headers */,
 				239774FF202AECD3000A681C /* LiteralValue.hpp in Headers */,
 				23977501202AECD3000A681C /* ModuleArgument.hpp in Headers */,
 				23977503202AECD3000A681C /* OrderingTerm.hpp in Headers */,
@@ -2390,6 +2397,7 @@
 				23977566202AECD3000A681C /* LangCreateViewSTMT.hpp in Headers */,
 				23977568202AECD3000A681C /* LangCreateVirtualTableSTMT.hpp in Headers */,
 				2397756A202AECD3000A681C /* LangCTETableName.hpp in Headers */,
+				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
 				2397756C202AECD3000A681C /* LangDeleteSTMT.hpp in Headers */,
 				23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
@@ -2447,6 +2455,7 @@
 				239775A3202AECD3000A681C /* LangTableConstraint.hpp in Headers */,
 				239775A5202AECD3000A681C /* LangTableOrSubquery.hpp in Headers */,
 				239775A7202AECD3000A681C /* LangUpdateSTMT.hpp in Headers */,
+				23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
 				23F70FA220A055B400CCE3CD /* Config.hpp in Headers */,
 				23A7B35B2044F52000775DB8 /* CopyOnWriteList.hpp in Headers */,
 				239775A9202AECD3000A681C /* LangVacuumSTMT.hpp in Headers */,
@@ -2490,7 +2499,7 @@
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2301DA63203F016200C3B52A /* Convertible.hpp in Headers */,
 				23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */,
-				23775B6C20AD666900E21AB0 /* Crawler.hpp in Headers */,
+				23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
 				23D920C72009B534000634CB /* Abstract.h in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */,
 				2349F72F1EA0D6680021EFA7 /* WCTSelectable.h in Headers */,
@@ -2575,7 +2584,6 @@
 				23B9E69520AE7D5000CF1683 /* Serialization.hpp in Headers */,
 				23F5BD1D20887FD3000CCD37 /* JoinClause.hpp in Headers */,
 				23F5BD1F20887FD3000CCD37 /* JoinConstraint.hpp in Headers */,
-				23775BA120AD666900E21AB0 /* MasterCrawler.hpp in Headers */,
 				23F5BD2020887FD3000CCD37 /* LiteralValue.hpp in Headers */,
 				23F5BD2120887FD3000CCD37 /* ModuleArgument.hpp in Headers */,
 				23F5BD2220887FD3000CCD37 /* OrderingTerm.hpp in Headers */,
@@ -2654,6 +2662,7 @@
 				23F5BD6820887FD3000CCD37 /* LangCreateViewSTMT.hpp in Headers */,
 				23F5BD6920887FD3000CCD37 /* LangCreateVirtualTableSTMT.hpp in Headers */,
 				23F5BD6A20887FD3000CCD37 /* LangCTETableName.hpp in Headers */,
+				23D07CED20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
 				23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */,
 				23775BD020AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6120AD666900E21AB0 /* Assertion.hpp in Headers */,
@@ -2711,6 +2720,7 @@
 				23F5BD9A20887FD3000CCD37 /* LangTableConstraint.hpp in Headers */,
 				23F5BD9B20887FD3000CCD37 /* LangTableOrSubquery.hpp in Headers */,
 				23F5BD9C20887FD3000CCD37 /* LangUpdateSTMT.hpp in Headers */,
+				23D07CE720BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
 				23F70FA320A055B400CCE3CD /* Config.hpp in Headers */,
 				23F5BD9D20887FD3000CCD37 /* CopyOnWriteList.hpp in Headers */,
 				23F5BD9E20887FD3000CCD37 /* LangVacuumSTMT.hpp in Headers */,
@@ -2754,7 +2764,7 @@
 				23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */,
 				23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */,
 				23F5BDC420887FD3000CCD37 /* Tokenize.hpp in Headers */,
-				23775B6D20AD666900E21AB0 /* Crawler.hpp in Headers */,
+				23775B6D20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
 				23F5BDC520887FD3000CCD37 /* Abstract.h in Headers */,
 				23F5BDC620887FD3000CCD37 /* WCTDatabase+Table.h in Headers */,
 				23F5BDC720887FD3000CCD37 /* WCTSelectable.h in Headers */,
@@ -2973,6 +2983,7 @@
 				23775B6620AD666900E21AB0 /* Reporter.cpp in Sources */,
 				23977511202AECD3000A681C /* StatementAnalyze.cpp in Sources */,
 				2361C4402063872100A9966A /* Tracer.cpp in Sources */,
+				23D07CEA20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
 				239775A0202AECD3000A681C /* LangSelectSTMT.cpp in Sources */,
 				23977515202AECD3000A681C /* StatementBegin.cpp in Sources */,
 				23D96B972050E53600DB5E93 /* RecyclableHandlePool.cpp in Sources */,
@@ -2982,7 +2993,7 @@
 				2349F7711EA0D6680021EFA7 /* WCTDatabase+Table.mm in Sources */,
 				23F340DB204D32C3007DB8AB /* WCTTable.mm in Sources */,
 				2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */,
-				23775B6A20AD666900E21AB0 /* Crawler.cpp in Sources */,
+				23775B6A20AD666900E21AB0 /* FullCrawler.cpp in Sources */,
 				239776DA202AF2E3000A681C /* CopyOnWriteString.cpp in Sources */,
 				23977539202AECD3000A681C /* StatementSavepoint.cpp in Sources */,
 				23BFE306207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm in Sources */,
@@ -3042,7 +3053,6 @@
 				23C5ABAD207DA9C100BEF3C6 /* MigrationInfo.cpp in Sources */,
 				23977502202AECD3000A681C /* OrderingTerm.cpp in Sources */,
 				2397751D202AECD3000A681C /* StatementCreateTrigger.cpp in Sources */,
-				23775B9E20AD666900E21AB0 /* MasterCrawler.cpp in Sources */,
 				23977500202AECD3000A681C /* ModuleArgument.cpp in Sources */,
 				239774FC202AECD3000A681C /* JoinConstraint.cpp in Sources */,
 				238A8FC7208B377300DDFDCB /* NSString+CppString.mm in Sources */,
@@ -3157,6 +3167,7 @@
 				2397753B202AECD3000A681C /* StatementSelect.cpp in Sources */,
 				23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */,
 				23F70FA020A055B400CCE3CD /* Config.cpp in Sources */,
+				23D07CE420BE87360043F4D4 /* MasterCrawler.cpp in Sources */,
 				2397750F202AECD3000A681C /* StatementAlterTable.cpp in Sources */,
 				23BFE30D207CE3E200A4BD81 /* MigrationSetting.cpp in Sources */,
 				23977523202AECD3000A681C /* StatementDelete.cpp in Sources */,
@@ -3191,6 +3202,7 @@
 				23775B6720AD666900E21AB0 /* Reporter.cpp in Sources */,
 				23F5BC5620887FD3000CCD37 /* StatementAnalyze.cpp in Sources */,
 				23F5BC5720887FD3000CCD37 /* Tracer.cpp in Sources */,
+				23D07CEB20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
 				23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */,
 				23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */,
 				23F5BC5A20887FD3000CCD37 /* RecyclableHandlePool.cpp in Sources */,
@@ -3200,7 +3212,7 @@
 				23F5BC5D20887FD3000CCD37 /* WCTDatabase+Table.mm in Sources */,
 				23F5BC5E20887FD3000CCD37 /* WCTTable.mm in Sources */,
 				23F5BC5F20887FD3000CCD37 /* RecyclableHandle.cpp in Sources */,
-				23775B6B20AD666900E21AB0 /* Crawler.cpp in Sources */,
+				23775B6B20AD666900E21AB0 /* FullCrawler.cpp in Sources */,
 				23F5BC6020887FD3000CCD37 /* CopyOnWriteString.cpp in Sources */,
 				23F5BC6120887FD3000CCD37 /* StatementSavepoint.cpp in Sources */,
 				23F5BC6220887FD3000CCD37 /* NSNull+WCTColumnCoding.mm in Sources */,
@@ -3260,7 +3272,6 @@
 				23F5BC9520887FD3000CCD37 /* MigrationInfo.cpp in Sources */,
 				23F5BC9620887FD3000CCD37 /* OrderingTerm.cpp in Sources */,
 				23F5BC9720887FD3000CCD37 /* StatementCreateTrigger.cpp in Sources */,
-				23775B9F20AD666900E21AB0 /* MasterCrawler.cpp in Sources */,
 				23F5BC9820887FD3000CCD37 /* ModuleArgument.cpp in Sources */,
 				23F5BC9920887FD3000CCD37 /* JoinConstraint.cpp in Sources */,
 				238A8FC8208B377300DDFDCB /* NSString+CppString.mm in Sources */,
@@ -3375,6 +3386,7 @@
 				23F5BCFB20887FD3000CCD37 /* StatementSelect.cpp in Sources */,
 				23F5BCFD20887FD3000CCD37 /* ColumnType.cpp in Sources */,
 				23F70FA120A055B400CCE3CD /* Config.cpp in Sources */,
+				23D07CE520BE87360043F4D4 /* MasterCrawler.cpp in Sources */,
 				23F5BCFE20887FD3000CCD37 /* StatementAlterTable.cpp in Sources */,
 				23F5BD0020887FD3000CCD37 /* MigrationSetting.cpp in Sources */,
 				23F5BD0120887FD3000CCD37 /* StatementDelete.cpp in Sources */,

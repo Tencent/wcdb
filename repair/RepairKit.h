@@ -21,8 +21,8 @@
 #ifndef RepairKit_h
 #define RepairKit_h
 
-#include <WCDB/Crawler.hpp>
 #include <WCDB/Deconstructor.hpp>
+#include <WCDB/FullCrawler.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Mechanic.hpp>
 

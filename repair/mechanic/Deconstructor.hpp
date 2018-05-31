@@ -23,6 +23,7 @@
 
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Material.hpp>
+#include <WCDB/SequenceCrawler.hpp>
 #include <string>
 #include <vector>
 
@@ -30,34 +31,57 @@ namespace WCDB {
 
 namespace Repair {
 
-class Deconstructor : public MasterCrawler {
+class Deconstructor : public Crawlable,
+                      public MasterCrawlerDelegate,
+                      public SequenceCrawlerDelegate {
 #pragma mark - Initialize
 public:
     Deconstructor(const std::string &path);
 
+protected:
+    Pager m_pager;
+
 #pragma mark - Deconstructor
 public:
-    virtual bool work();
-
-    typedef std::function<bool(const std::string &)> Filter;
-    void filter(const Filter &shouldTableDeconstructed);
+    bool work();
 
     const Material &getMaterial() const;
 
 protected:
+    Material m_material;
+    Material::Content &getOrCreateContent(const std::string &tableName);
+    int m_height;
+    std::vector<uint32_t> m_pagenos;
+
+#pragma mark - Filter
+public:
+    typedef std::function<bool(const std::string &)> Filter;
+    void filter(const Filter &shouldTableDeconstructed);
+
+protected:
     bool filter(const std::string &tableName);
     Filter m_filter;
-    Material m_material;
-    Material::Content m_content;
-    int m_height;
-    std::map<std::string, int64_t> m_sequences;
-    bool isSequenceCrawling() const;
-    bool m_sequenceCrawling;
 
 #pragma mark - Crawlable
 protected:
-    bool onCellCrawled(const Cell &cell) override;
-    bool onPageCrawled(const Page &page, int height) override;
+    void onCellCrawled(const Cell &cell) override;
+    bool willCrawlPage(const Page &page, int height) override;
+    void onCrawlerError() override;
+    Pager &getPager() override;
+
+#pragma mark - MasterCrawlerDelegate
+protected:
+    void onMasterCellCrawled(const Master *master) override;
+    void onMasterCrawlerError() override;
+    Pager &getMasterPager() override;
+
+    MasterCrawler m_masterCrawler;
+
+#pragma mark - SequenceCrawlerDelegate
+protected:
+    void onSequenceCellCrawled(const Sequence &sequence) override;
+    void onSequenceCrawlerError() override;
+    Pager &getSequencePager() override;
 };
 
 } //namespace Repair

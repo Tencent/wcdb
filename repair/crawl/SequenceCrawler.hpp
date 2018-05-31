@@ -18,59 +18,53 @@
  * limitations under the License.
  */
 
-#ifndef Crawlable_hpp
-#define Crawlable_hpp
+#ifndef SequenceCrawler_hpp
+#define SequenceCrawler_hpp
 
-#include <WCDB/Pager.hpp>
-#include <set>
+#include <WCDB/Crawlable.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Cell;
-class Page;
-class Pager;
+struct Sequence {
+    std::string name;
+    int64_t seq;
+};
 
-class Crawlable {
+class SequenceCrawler;
+
+class SequenceCrawlerDelegate {
+protected:
+    friend class SequenceCrawler;
+
+    virtual Pager &getSequencePager() = 0;
+    virtual void onSequenceCellCrawled(const Sequence &sequence) = 0;
+    virtual void onSequenceCrawlerError() = 0;
+};
+
+class SequenceCrawler : public Crawlable {
 #pragma mark - Initialize
 public:
-    Crawlable();
+    SequenceCrawler();
 
-#pragma mark - Stoppable
+#pragma mark - Sequence
 public:
-    void stop();
+    static std::string name();
+    bool work(int rootpage, SequenceCrawlerDelegate *delegate);
 
 protected:
-    bool m_stop;
-
-#pragma mark - Error
-protected:
-    void markAsCorrupted();
-    void markAsError();
-    bool isError() const;
-
-private:
-    bool m_error;
+    SequenceCrawlerDelegate *m_delegate;
 
 #pragma mark - Crawlable
 protected:
-    bool crawl(int rootpageno);
-
-    virtual void onCellCrawled(const Cell &cell);
-    //return false to skip current page
-    virtual bool willCrawlPage(const Page &page, int height);
-    virtual void onCrawlerError();
-
-    virtual Pager &getPager() = 0;
-
-private:
-    void
-    safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height);
+    void onCellCrawled(const Cell &cell) override;
+    void onCrawlerError() override;
+    Pager &getPager() override;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Crawlable_hpp */
+#endif /* SequenceCrawler_hpp */

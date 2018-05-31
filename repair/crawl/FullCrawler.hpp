@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Crawler_hpp
-#define Crawler_hpp
+#ifndef FullCrawler_hpp
+#define FullCrawler_hpp
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
@@ -31,22 +31,28 @@ namespace WCDB {
 
 namespace Repair {
 
-class Crawler : public Repairman, public MasterCrawler {
+class FullCrawler : public Repairman, public MasterCrawlerDelegate {
 #pragma mark - Initialize
 public:
-    Crawler(const std::string &source);
+    FullCrawler(const std::string &source);
 
 #pragma mark - Repair
 public:
     void work();
 
 #pragma mark - Crawlable
-    bool onCellCrawled(const Cell &cell) override;
-    bool onPageCrawled(const Page &page, int unused) override;
+protected:
+    void onCellCrawled(const Cell &cell) override;
+
+#pragma mark - MasterCrawlerDelegate
+protected:
+    void onMasterPageCrawled(const Page &page) override;
+    void onMasterCellCrawled(const Master *master) override;
+    void onMasterCrawlerError() override;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Crawler_hpp */
+#endif /* FullCrawler_hpp */

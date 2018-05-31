@@ -53,6 +53,7 @@ static void setThreadedError(int zCode, const char *msg)
         error.message = msg;
     }
     error.infos.set("ExtCode", zCode);
+    Reporter::shared()->report(error);
     ThreadedErrors::shared()->setThreadedError(std::move(error));
 }
 

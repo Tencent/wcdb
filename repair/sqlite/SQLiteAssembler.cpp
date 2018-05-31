@@ -151,7 +151,6 @@ void SQLiteAssembler::setThreadedError(int rc)
         error.message = message;
     }
     error.infos.set("Path", path);
-    error.infos.set("Source", "SQLite");
     Reporter::shared()->report(error);
     setThreadedError(std::move(error));
 }
@@ -166,7 +165,6 @@ void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
     }
     error.infos.set("SQL", sql);
     error.infos.set("Path", path);
-    error.infos.set("Source", "SQLite");
     Reporter::shared()->report(error);
     setThreadedError(std::move(error));
 }

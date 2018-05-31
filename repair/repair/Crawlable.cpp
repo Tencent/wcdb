@@ -30,45 +30,52 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Crawlable::Crawlable(const std::string &path, bool fatal)
-    : m_pager(path), m_fatal(fatal)
+Crawlable::Crawlable() : m_stop(false), m_error(false)
 {
+}
+
+void Crawlable::stop()
+{
+    m_stop = true;
 }
 
 #pragma mark - Error
-bool Crawlable::isFatal() const
-{
-    return m_fatal;
-}
-
 void Crawlable::markAsCorrupted()
 {
-    m_pager.markAsCorrupted();
+    getPager().markAsCorrupted();
     markAsError();
 }
 
 void Crawlable::markAsError()
 {
-    tryUpgradeErrorWithThreadedError();
+    m_error = true;
+    onCrawlerError();
+}
+
+bool Crawlable::isError() const
+{
+    return m_error;
 }
 
 bool Crawlable::crawl(int rootpageno)
 {
     std::set<int> crawledInteriorPages;
+    m_stop = false;
+    m_error = false;
     safeCrawl(rootpageno, crawledInteriorPages, 1);
-    return getCriticalError().isOK();
+    return isError();
 }
 
 void Crawlable::safeCrawl(int rootpageno,
                           std::set<int> &crawledInteriorPages,
                           int height)
 {
-    Page rootpage(rootpageno, m_pager);
+    Page rootpage(rootpageno, getPager());
     if (!rootpage.initialize()) {
         markAsError();
         return;
     }
-    if (!onPageCrawled(rootpage, height)) {
+    if (!willCrawlPage(rootpage, height)) {
         return;
     }
     switch (rootpage.getType()) {
@@ -81,7 +88,7 @@ void Crawlable::safeCrawl(int rootpageno,
             }
             crawledInteriorPages.insert(rootpageno);
             for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
-                if (isFatal() && !getCriticalError().isOK()) {
+                if (m_stop) {
                     break;
                 }
                 auto pair = rootpage.getSubPageno(i);
@@ -94,16 +101,14 @@ void Crawlable::safeCrawl(int rootpageno,
             break;
         case Page::Type::LeafTable:
             for (int i = 0; i < rootpage.getCellCount(); ++i) {
-                if (isFatal() && !getCriticalError().isOK()) {
+                if (m_stop) {
                     break;
                 }
                 Cell cell = rootpage.getCell(i);
-                if (!cell.initialize()) {
+                if (cell.initialize()) {
+                    onCellCrawled(cell);
+                } else {
                     markAsError();
-                    continue;
-                }
-                if (!onCellCrawled(cell)) {
-                    break;
                 }
             }
             break;
@@ -112,14 +117,17 @@ void Crawlable::safeCrawl(int rootpageno,
     }
 }
 
-bool Crawlable::onCellCrawled(const Cell &cell)
+void Crawlable::onCellCrawled(const Cell &cell)
+{
+}
+
+bool Crawlable::willCrawlPage(const Page &page, int height)
 {
     return true;
 }
 
-bool Crawlable::onPageCrawled(const Page &page, int height)
+void Crawlable::onCrawlerError()
 {
-    return true;
 }
 
 } //namespace Repair

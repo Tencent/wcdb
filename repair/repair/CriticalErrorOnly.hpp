@@ -30,9 +30,10 @@ namespace Repair {
 class CriticalErrorOnly {
 public:
     const Error &getCriticalError() const;
+    bool isCriticalErrorFatal() const;
 
 protected:
-    int criticalLevel(const Error &error);
+    static int criticalLevel(const Error &error);
     void tryUpgradeError(const Error &newError);
     void tryUpgradeError(Error &&newError);
     void tryUpgradeErrorWithThreadedError();

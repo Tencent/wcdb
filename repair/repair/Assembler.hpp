@@ -21,17 +21,17 @@
 #ifndef Assembler_hpp
 #define Assembler_hpp
 
-#include <WCDB/ThreadedErrorProne.hpp>
 #include <string>
 
 namespace WCDB {
+
+class Error;
 
 namespace Repair {
 
 class Cell;
 
-//TODO define critical error and differentiate masterial/database corrupt and assembler corrupt
-class Assembler : protected SharedThreadedErrorProne {
+class Assembler {
 public:
     virtual bool markAsAssembling(const std::string &tableName);
     virtual bool markAsAssembled();
@@ -40,6 +40,8 @@ public:
     virtual bool markAsMilestone() = 0;
     virtual bool assembleTable(const std::string &sql) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
+
+    virtual const Error &getError() const = 0;
 
 protected:
     std::string m_assembling;

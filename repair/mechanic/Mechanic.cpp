@@ -27,8 +27,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Mechanic::Mechanic(const std::string &path)
-    : Repairman(), Crawlable(path, false)
+Mechanic::Mechanic(const std::string &path) : Repairman(path)
 {
 }
 
@@ -48,7 +47,7 @@ void Mechanic::work()
 {
     WCTInnerAssert(canAssembled());
     if (!m_pager.initialize()) {
-        markAsError();
+        tryUpgradeCrawlerError();
         return;
     }
 
@@ -61,30 +60,24 @@ void Mechanic::work()
     for (const auto &element : m_material.contents) {
         if (!markAsAssembling(element.first) ||
             !assembleTable(element.second.sql)) {
-            markAsError();
             continue;
         }
         for (const auto &pageno : element.second.pagenos) {
             if (!crawl(pageno)) {
-                markAsError();
+                tryUpgradeCrawlerError();
             }
         }
-        if (!markAsAssembled()) {
-            markAsError();
-        }
+        markAsAssembled();
     }
 }
 
 #pragma mark - Crawlable
-bool Mechanic::onCellCrawled(const Cell &cell)
+void Mechanic::onCellCrawled(const Cell &cell)
 {
-    if (!assembleCell(cell)) {
-        markAsError();
-    }
-    return true;
+    assembleCell(cell);
 }
 
-bool Mechanic::onPageCrawled(const Page &page, int unused)
+bool Mechanic::willCrawlPage(const Page &page, int unused)
 {
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());

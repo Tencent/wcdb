@@ -20,7 +20,7 @@
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Crawler.hpp>
+#include <WCDB/FullCrawler.hpp>
 #include <WCDB/Page.hpp>
 
 namespace WCDB {
@@ -28,13 +28,12 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Crawler::Crawler(const std::string &source)
-    : Repairman(), MasterCrawler(source, false)
+FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
 {
 }
 
 #pragma mark - Repair
-void Crawler::work()
+void FullCrawler::work()
 {
     WCTInnerAssert(canAssembled());
 
@@ -50,54 +49,44 @@ void Crawler::work()
     }
     setPageWeight((double) leafTablePageCount / m_pager.getPageCount());
 
-    if (m_pager.initialize() && MasterCrawler::work()) {
-        for (const auto &master : getMasters()) {
-            if (master.tableName.empty() || master.sql.empty()) {
-                continue;
-            }
-            if (!markAsAssembling(master.tableName) ||
-                !assembleTable(master.sql)) {
-                markAsError();
-                continue;
-            }
-            if (!crawl(master.rootpage)) {
-                markAsError();
-            }
-            if (!markAsAssembled()) {
-                markAsError();
-            }
-        }
-    } else {
+    if (!m_pager.initialize()) {
         markAsError();
+        return;
     }
+
+    MasterCrawler().work(this);
 }
 
 #pragma mark - Crawlable
-bool Crawler::onCellCrawled(const Cell &cell)
+void FullCrawler::onCellCrawled(const Cell &cell)
 {
-    if (isMasterCrawling()) {
-        if (MasterCrawler::onCellCrawled(cell)) {
-            markCellAsCounted();
-        }
-    } else {
-        if (!assembleCell(cell)) {
-            markAsError();
-        }
-    }
-    return true;
+    assembleCell(cell);
 }
 
-bool Crawler::onPageCrawled(const Page &page, int unused)
+#pragma mark - MasterCrawlerDelegate
+void FullCrawler::onMasterPageCrawled(const Page &page)
 {
-    if (isMasterCrawling()) {
-        MasterCrawler::onPageCrawled(page, unused);
-    } else {
-        Crawlable::onPageCrawled(page, unused);
-    }
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());
     }
-    return true;
+}
+
+void FullCrawler::onMasterCellCrawled(const Master *master)
+{
+    markCellAsCounted();
+    if (master == nullptr) {
+        //skip index/view/trigger
+        return;
+    }
+    if (markAsAssembling(master->tableName) && assembleTable(master->sql)) {
+        crawl(master->rootpage);
+        markAsAssembled();
+    }
+}
+
+void FullCrawler::onMasterCrawlerError()
+{
+    tryUpgradeCrawlerError();
 }
 
 } //namespace Repair
