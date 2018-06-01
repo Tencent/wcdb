@@ -107,7 +107,7 @@ public:
 public:
     RecyclableHandle getHandle();
     bool execute(const Statement &statement);
-    std::pair<bool, bool> isTableExists(const TableOrSubquery &table);
+    std::pair<bool, bool> tableExists(const TableOrSubquery &table);
 
 protected:
     using ThreadedHandles =

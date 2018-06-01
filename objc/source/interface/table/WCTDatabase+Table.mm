@@ -26,17 +26,17 @@
 
 @implementation WCTDatabase (Table)
 
-- (BOOL)isTableExists:(NSString *)tableName
+- (BOOL)tableExists:(NSString *)tableName
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    return _database->isTableExists(tableName.cppString).second;
+    return _database->tableExists(tableName.cppString).second;
 }
 
-- (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTError **)error
+- (BOOL)tableExists:(NSString *)tableName
+          withError:(WCTError **)error
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    auto result = _database->isTableExists(tableName.cppString);
+    auto result = _database->tableExists(tableName.cppString);
     if (error) {
         if (result.first) {
             *error = nil;

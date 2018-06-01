@@ -342,11 +342,11 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-std::pair<bool, bool> Database::isTableExists(const TableOrSubquery &table)
+std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
-        auto pair = handle->isTableExists(table);
+        auto pair = handle->tableExists(table);
         if (!pair.first) {
             setThreadedError(handle->getError());
         }

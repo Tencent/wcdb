@@ -303,7 +303,7 @@ bool Handle::isPrepared()
 }
 
 #pragma mark - Convenient
-std::pair<bool, bool> Handle::isTableExists(const TableOrSubquery &table)
+std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 {
     StatementSelect statementSelect =
         StatementSelect().select(1).from(table).limit(0);

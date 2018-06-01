@@ -26,24 +26,24 @@
 
 @implementation WCTHandle (Table)
 
-- (BOOL)isTableExists:(NSString *)tableName
+- (BOOL)tableExists:(NSString *)tableName
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
     }
-    return handle->isTableExists(tableName.cppString).second;
+    return handle->tableExists(tableName.cppString).second;
 }
 
-- (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTError **)error
+- (BOOL)tableExists:(NSString *)tableName
+          withError:(WCTError **)error
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     std::pair<bool, bool> result(true, false);
     if (handle) {
-        result = handle->isTableExists(tableName.cppString);
+        result = handle->tableExists(tableName.cppString);
     }
     if (error) {
         if (result.first) {

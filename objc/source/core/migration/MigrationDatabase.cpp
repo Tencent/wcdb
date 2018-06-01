@@ -112,7 +112,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             {
                 //check if source table exists
                 std::pair<bool, bool> sourceTableExists =
-                    migrationHandle->isTableExists(info->getSourceTable());
+                    migrationHandle->tableExists(info->getSourceTable());
                 if (!sourceTableExists.first || !sourceTableExists.second) {
                     isMigrated = sourceTableExists.first;
                     return false;

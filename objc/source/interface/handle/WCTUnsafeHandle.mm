@@ -538,11 +538,11 @@
     }
     std::string table = tableName.cppString;
     const WCTBinding &binding = [cls objectRelationalMapping];
-    std::pair<bool, bool> isTableExists = handle->isTableExists(table);
-    if (!isTableExists.first) {
+    std::pair<bool, bool> tableExists = handle->tableExists(table);
+    if (!tableExists.first) {
         return NO;
     }
-    if (isTableExists.second) {
+    if (tableExists.second) {
         auto pair = handle->getUnorderedColumnsWithTable(table);
         if (!pair.first) {
             return NO;
