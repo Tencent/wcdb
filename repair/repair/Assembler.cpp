@@ -26,23 +26,14 @@ namespace WCDB {
 
 namespace Repair {
 
-bool Assembler::markTableAsAssembling(const std::string &tableName)
+void Assembler::setPath(const std::string &path)
 {
-    WCTInnerAssert(!isAssembling());
-    m_assembling = tableName;
-    return true;
+    m_path = path;
 }
 
-bool Assembler::markTableAsAssembled()
+const std::string &Assembler::getPath() const
 {
-    WCTInnerAssert(isAssembling());
-    m_assembling.clear();
-    return true;
-}
-
-bool Assembler::isAssembling() const
-{
-    return !m_assembling.empty();
+    return m_path;
 }
 
 } //namespace Repair

@@ -21,6 +21,7 @@
 #ifndef Assembler_hpp
 #define Assembler_hpp
 
+#include <map>
 #include <string>
 
 namespace WCDB {
@@ -33,19 +34,23 @@ class Cell;
 
 class Assembler {
 public:
-    virtual bool markTableAsAssembling(const std::string &tableName);
-    virtual bool markTableAsAssembled();
-    bool isAssembling() const;
+    void setPath(const std::string &path);
+    const std::string &getPath() const;
+
+protected:
+    std::string m_path;
+
+public:
+    virtual bool markAsAssembling() = 0;
     virtual void markAsAssembled() = 0;
 
     virtual bool markAsMilestone() = 0;
-    virtual bool assembleTable(const std::string &sql) = 0;
+    virtual bool assembleTable(const std::string &tableName,
+                               const std::string &sql) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
+    //    virtual bool assembleSequences(const std::map<std::string, int64_t>& sequences) = 0;
 
     virtual const Error &getError() const = 0;
-
-protected:
-    std::string m_assembling;
 };
 
 } //namespace Repair

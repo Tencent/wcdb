@@ -53,21 +53,19 @@ public:
     void setAssembler(const std::shared_ptr<Assembler> &assembler);
 
 protected:
-    bool markTableAsAssembling(const std::string &tableName);
-    void markTableAsAssembled();
+    bool markAsAssembling();
     void markAsAssembled();
 
-    bool assembleTable(const std::string &sql);
+    bool assembleTable(const std::string &tableName, const std::string &sql);
     void assembleCell(const Cell &cell);
 
-    bool canAssembled() const;
+protected:
+    void towardMilestone(int mile);
 
 private:
     void markAsMilestone();
-
-private:
-    int m_maxCellsPerMilestone;
-    int m_cells;
+    int m_milestone;
+    int m_mile;
     std::shared_ptr<Assembler> m_assembler;
 
 #pragma mark - Evaluation

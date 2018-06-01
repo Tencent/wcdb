@@ -45,7 +45,6 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
-    WCTInnerAssert(canAssembled());
     if (!m_pager.initialize()) {
         tryUpgradeCrawlerError();
         return;
@@ -58,8 +57,7 @@ void Mechanic::work()
     setPageWeight((double) 1.0 / pageCount);
 
     for (const auto &element : m_material.contents) {
-        if (!markTableAsAssembling(element.first) ||
-            !assembleTable(element.second.sql)) {
+        if (!assembleTable(element.first, element.second.sql)) {
             continue;
         }
         for (const auto &pageno : element.second.pagenos) {
@@ -67,9 +65,7 @@ void Mechanic::work()
                 tryUpgradeCrawlerError();
             }
         }
-        markTableAsAssembled();
     }
-    markAsAssembled();
 }
 
 #pragma mark - Crawlable

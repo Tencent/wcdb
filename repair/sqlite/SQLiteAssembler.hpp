@@ -22,6 +22,7 @@
 #define SQLiteAssembler_hpp
 
 #include <WCDB/Assembler.hpp>
+#include <list>
 
 namespace WCDB {
 
@@ -45,20 +46,28 @@ protected:
 
 #pragma mark - Assembler
 public:
-    bool markTableAsAssembling(const std::string &tableName) override;
-    bool markTableAsAssembled() override;
+    bool markAsAssembling() override;
     void markAsAssembled() override;
 
     bool markAsMilestone() override;
 
-    bool assembleTable(const std::string &sql) override;
+    bool assembleTable(const std::string &tableName,
+                       const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
+    //TODO remove it ?
+    //    bool assembleSequences(const std::map<std::string, int64_t>& sequences) override;
 
     const Error &getError() const override;
 
+#pragma mark - Helper
+protected:
+    std::pair<bool, std::string> getAssembleSQL(const std::string &tableName);
+    std::pair<bool, std::list<std::string>>
+    getColumnNames(const std::string &tableName);
+
 protected:
     bool lazyBeginTransaction();
-    bool lazyCommitOrRollbackTransaction();
+    bool lazyCommitOrRollbackTransaction(bool commit = true);
 
 private:
     bool m_transaction;
@@ -80,8 +89,6 @@ protected:
 
 #pragma mark - SQLite STMT
 protected:
-    std::pair<bool, std::string> getAssembleSQL();
-
     bool prepare(const char *sql);
     bool step();
     bool step(bool &done);

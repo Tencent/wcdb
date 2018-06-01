@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Repairman.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
@@ -31,8 +32,8 @@ Repairman::Repairman(const std::string &path)
     , Progress()
     , m_pager(path)
     , m_assembler(nullptr)
-    , m_maxCellsPerMilestone(5000)
-    , m_cells(0)
+    , m_milestone(5000)
+    , m_mile(0)
     , m_scorePool(0)
     , m_pageWeight(0)
     , m_cellWeight(0)
@@ -47,35 +48,24 @@ Pager &Repairman::getPager()
 }
 
 #pragma mark - Assemble
-bool Repairman::canAssembled() const
-{
-    return m_assembler != nullptr;
-}
-
 void Repairman::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
     m_assembler = assembler;
 }
 
-bool Repairman::markTableAsAssembling(const std::string &tableName)
+bool Repairman::markAsAssembling()
 {
-    if (m_assembler->markTableAsAssembling(tableName)) {
+    WCTInnerAssert(!m_assembler->getPath().empty());
+    if (m_assembler->markAsAssembling()) {
         return true;
     }
     tryUpgrateAssemblerError();
     return false;
 }
 
-void Repairman::markTableAsAssembled()
-{
-    markAsMilestone();
-    if (!m_assembler->markTableAsAssembled()) {
-        tryUpgrateAssemblerError();
-    }
-}
-
 void Repairman::markAsAssembled()
 {
+    markAsMilestone();
     m_assembler->markAsAssembled();
     finishProgress();
 }
@@ -88,12 +78,22 @@ void Repairman::markAsMilestone()
         tryUpgrateAssemblerError();
     }
     m_scorePool = 0;
-    m_cells = 0;
+    m_mile = 0;
 }
 
-bool Repairman::assembleTable(const std::string &sql)
+void Repairman::towardMilestone(int mile)
 {
-    if (m_assembler->assembleTable(sql)) {
+    m_mile += mile;
+    if (m_mile > m_milestone) {
+        markAsMilestone();
+    }
+}
+
+bool Repairman::assembleTable(const std::string &tableName,
+                              const std::string &sql)
+{
+    if (m_assembler->assembleTable(tableName, sql)) {
+        towardMilestone(100);
         return true;
     }
     tryUpgrateAssemblerError();
@@ -104,11 +104,9 @@ void Repairman::assembleCell(const Cell &cell)
 {
     if (!m_assembler->assembleCell(cell)) {
         tryUpgrateAssemblerError();
-        return;
-    }
-    markCellAsCounted();
-    if (++m_cells > m_maxCellsPerMilestone) {
-        markAsMilestone();
+    } else {
+        markCellAsCounted();
+        towardMilestone(1);
     }
 }
 

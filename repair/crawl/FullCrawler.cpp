@@ -35,8 +35,6 @@ FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
 #pragma mark - Repair
 void FullCrawler::work()
 {
-    WCTInnerAssert(canAssembled());
-
     //calculate score
     int leafTablePageCount = 0;
     for (int i = 0; i < m_pager.getPageCount(); ++i) {
@@ -54,6 +52,7 @@ void FullCrawler::work()
         return;
     }
 
+    markAsAssembling();
     MasterCrawler().work(this);
     markAsAssembled();
 }
@@ -79,10 +78,8 @@ void FullCrawler::onMasterCellCrawled(const Master *master)
         //skip index/view/trigger
         return;
     }
-    if (markTableAsAssembling(master->tableName) &&
-        assembleTable(master->sql)) {
+    if (assembleTable(master->tableName, master->sql)) {
         crawl(master->rootpage);
-        markTableAsAssembled();
     }
 }
 

@@ -21,8 +21,8 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
-#include <list>
 #include <sqlite3.h>
 #include <sstream>
 
@@ -54,56 +54,40 @@ int SQLiteAssembler::onTableAssembled(const std::string &tableName)
 }
 
 #pragma mark - Assemble
-bool SQLiteAssembler::markTableAsAssembling(const std::string &tableName)
+bool SQLiteAssembler::markAsAssembling()
 {
-    bool result = Assembler::markTableAsAssembling(tableName);
-    result = open() && result;
-    return result;
-}
-
-bool SQLiteAssembler::markTableAsAssembled()
-{
-    finalize();
-    bool result = lazyCommitOrRollbackTransaction();
-    result = Assembler::markTableAsAssembled() && result;
-    return result;
+    return open();
 }
 
 void SQLiteAssembler::markAsAssembled()
 {
+    finalize();
     close();
 }
 
 bool SQLiteAssembler::markAsMilestone()
 {
-    return lazyCommitOrRollbackTransaction();
+    return lazyCommitOrRollbackTransaction() && lazyBeginTransaction();
 }
 
-bool SQLiteAssembler::assembleTable(const std::string &sql)
+bool SQLiteAssembler::assembleTable(const std::string &tableName,
+                                    const std::string &sql)
 {
-    WCTInnerAssert(isAssembling());
-    if (lazyBeginTransaction() && execute(sql.c_str())) {
-        int rc = onTableAssembled(m_assembling);
-        if (rc == SQLITE_OK) {
-            return true;
-        }
-        setThreadedError(rc);
+    finalize();
+    if (!execute(sql.c_str())) {
+        return false;
     }
-    return false;
+    int rc = onTableAssembled(tableName);
+    if (rc != SQLITE_OK) {
+        setThreadedError(rc);
+        return false;
+    }
+    auto pair = getAssembleSQL(tableName);
+    return pair.first && prepare(pair.second.c_str());
 }
 
 bool SQLiteAssembler::assembleCell(const Cell &cell)
 {
-    WCTInnerAssert(isAssembling());
-    if (!lazyBeginTransaction()) {
-        return false;
-    }
-    if (!isPrepared()) {
-        auto pair = getAssembleSQL();
-        if (!pair.first || !prepare(pair.second.c_str())) {
-            return false;
-        }
-    }
     sqlite3_bind_int64((sqlite3_stmt *) m_stmt, 1, cell.getRowID());
     for (int i = 0; i < cell.getCount(); ++i) {
         int bindIndex = i + 2;
@@ -119,13 +103,13 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
             case Cell::Text: {
                 auto pair = cell.textValue(i);
                 sqlite3_bind_text((sqlite3_stmt *) m_stmt, bindIndex,
-                                  pair.second, pair.first, SQLITE_STATIC);
+                                  pair.second, pair.first, SQLITE_TRANSIENT);
                 break;
             }
             case Cell::BLOB: {
                 auto pair = cell.blobValue(i);
                 sqlite3_bind_blob((sqlite3_stmt *) m_stmt, bindIndex,
-                                  pair.second, pair.first, SQLITE_STATIC);
+                                  pair.second, pair.first, SQLITE_TRANSIENT);
                 break;
             }
             case Cell::Real:
@@ -144,6 +128,87 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     return true;
 }
 
+//bool SQLiteAssembler::assembleSequences(const std::map<std::string, int64_t>& sequences)
+//{
+//    if (!lazyBeginTransaction()) {
+//        return false;
+//    }
+//    bool commit = false;
+//    do {
+//        //create auto increment table dummy to trigger the creation of sqlite_sequence.
+//        if (!execute("CREATE TABLE IF NOT EXISTS wcdb_dummy(i INTEGER PRIMARY KEY AUTOINCREMENT")) {
+//            break;
+//        }
+//        if (!prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)")) {
+//            break;
+//        }
+//        for (const auto& element : sequences) {
+//            sqlite3_bind_text((sqlite3_stmt *)m_stmt, 1, element.first.c_str(), 1, SQLITE_STATIC);
+//            sqlite3_bind_int64((sqlite3_stmt *)m_stmt, 2, element.second);
+//            if (!step()) {
+//                break;
+//            }
+//            sqlite3_reset((sqlite3_stmt *)m_stmt);
+//        }
+//        finalize();
+//        if (!execute("DROP TABLE IF EXISTS wcdb_dummy")) {
+//            break;
+//        }
+//    } while (false);
+//    finalize();
+//    return lazyCommitOrRollbackTransaction(commit);
+//}
+
+#pragma mark - Helper
+std::pair<bool, std::list<std::string>>
+SQLiteAssembler::getColumnNames(const std::string &tableName)
+{
+    std::ostringstream stringStream;
+    stringStream << "PRAGMA table_info(" << tableName << ")";
+    std::string tableInfoSQL = stringStream.str();
+    if (!prepare(stringStream.str().c_str())) {
+        return {false, {}};
+    }
+    bool done;
+    std::list<std::string> columnNames;
+    while (step(done) && !done) {
+        const char *columnName = reinterpret_cast<const char *>(
+            sqlite3_column_text((sqlite3_stmt *) m_stmt, 1));
+        columnNames.push_back(columnName ? columnName : String::empty());
+    }
+    finalize();
+    if (done) {
+        return {true, columnNames};
+    }
+    return {false, {}};
+}
+
+std::pair<bool, std::string>
+SQLiteAssembler::getAssembleSQL(const std::string &tableName)
+{
+    WCTInnerAssert(isOpened());
+    WCTInnerAssert(!isPrepared());
+
+    bool succeed;
+    std::list<std::string> columnNames;
+    std::tie(succeed, columnNames) = getColumnNames(tableName);
+    if (!succeed) {
+        return {false, String::empty()};
+    }
+
+    std::ostringstream firstHalfStream;
+    std::ostringstream lastHalfStream;
+    firstHalfStream << "INSERT INTO " << tableName << "(rowid";
+    lastHalfStream << ") VALUES(?";
+    for (const auto &columnName : columnNames) {
+        firstHalfStream << ", " << columnName;
+        lastHalfStream << ", ?";
+    }
+    lastHalfStream << ")";
+
+    return {true, firstHalfStream.str() + lastHalfStream.str()};
+}
+
 bool SQLiteAssembler::lazyBeginTransaction()
 {
     if (m_transaction) {
@@ -156,11 +221,11 @@ bool SQLiteAssembler::lazyBeginTransaction()
     return false;
 }
 
-bool SQLiteAssembler::lazyCommitOrRollbackTransaction()
+bool SQLiteAssembler::lazyCommitOrRollbackTransaction(bool commit)
 {
     if (m_transaction) {
         m_transaction = false;
-        if (!execute("COMMIT")) {
+        if (!commit || !execute("COMMIT")) {
             execute("ROLLBACK", true); //ignore error
             return false;
         }
@@ -300,44 +365,6 @@ void SQLiteAssembler::finalize()
         sqlite3_finalize((sqlite3_stmt *) m_stmt);
         m_stmt = nullptr;
     }
-}
-
-std::pair<bool, std::string> SQLiteAssembler::getAssembleSQL()
-{
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(isAssembling());
-    WCTInnerAssert(!isPrepared());
-
-    std::ostringstream stringStream;
-    stringStream << "PRAGMA table_info(" << m_assembling << ")";
-    std::string tableInfoSQL = stringStream.str();
-
-    std::ostringstream firstHalfStream;
-    std::ostringstream lastHalfStream;
-    firstHalfStream << "INSERT INTO " << m_assembling << "(rowid";
-    lastHalfStream << ") VALUES(?";
-
-    //get columns
-    sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle, tableInfoSQL.c_str(), -1,
-                                &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-        setThreadedError(rc, tableInfoSQL);
-        return {false, ""};
-    }
-    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-        firstHalfStream << ", " << sqlite3_column_text(stmt, 1);
-        lastHalfStream << ", ?";
-    }
-    sqlite3_finalize(stmt);
-    if (rc != SQLITE_DONE) {
-        setThreadedError(rc, tableInfoSQL);
-        return {false, ""};
-    }
-
-    lastHalfStream << ")";
-
-    return {true, firstHalfStream.str() + lastHalfStream.str()};
 }
 
 } //namespace Repair
