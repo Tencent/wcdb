@@ -18,40 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef Factory_hpp
-#define Factory_hpp
-
-#include <WCDB/FactoryArchiver.hpp>
-#include <WCDB/FactoryMaterials.hpp>
-#include <WCDB/FactoryRestorer.hpp>
-#include <future>
-#include <list>
-#include <string>
+#ifndef FactoryDerived_hpp
+#define FactoryDerived_hpp
 
 namespace WCDB {
 
 namespace Repair {
 
-class Assembler;
+class Factory;
 
-class Factory {
+class FactoryDerived {
 public:
-    Factory(const std::string &database);
+    FactoryDerived(const Factory &factory);
 
-    const std::string database;
-    const std::string directory;
-
-    std::list<std::string> getAssociatedPaths() const;
-
-    std::string getFirstMaterialPath() const;
-    std::string getLastMaterialPath() const;
-
-    FactoryArchiver archiver() const;
-    FactoryRestorer restorer() const;
+    const Factory &factory;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Factory_hpp */
+#endif /* FactoryDerived_hpp */

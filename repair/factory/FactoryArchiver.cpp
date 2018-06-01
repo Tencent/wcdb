@@ -18,40 +18,36 @@
  * limitations under the License.
  */
 
-#ifndef Factory_hpp
-#define Factory_hpp
-
+#include <WCDB/Factory.hpp>
 #include <WCDB/FactoryArchiver.hpp>
-#include <WCDB/FactoryMaterials.hpp>
-#include <WCDB/FactoryRestorer.hpp>
-#include <future>
-#include <list>
-#include <string>
+#include <WCDB/FileManager.hpp>
+#include <WCDB/Path.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Assembler;
+bool FactoryArchiver::work()
+{
+    FileManager *fileManager = FileManager::shared();
+    bool succeed;
+    std::string uniqueFileName;
+    std::tie(succeed, uniqueFileName) = fileManager->getUniqueFileName();
+    if (!succeed) {
+        return false;
+    }
 
-class Factory {
-public:
-    Factory(const std::string &database);
-
-    const std::string database;
-    const std::string directory;
-
-    std::list<std::string> getAssociatedPaths() const;
-
-    std::string getFirstMaterialPath() const;
-    std::string getLastMaterialPath() const;
-
-    FactoryArchiver archiver() const;
-    FactoryRestorer restorer() const;
-};
+    std::string archivedDirectory =
+        Path::addComponent(factory.directory, uniqueFileName);
+    if (!fileManager->createDirectoryWithIntermediateDirectories(
+            archivedDirectory) ||
+        !fileManager->moveItems(factory.getAssociatedPaths(),
+                                archivedDirectory)) {
+        return false;
+    }
+    return true;
+}
 
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* Factory_hpp */

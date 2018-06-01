@@ -18,59 +18,55 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assembler.hpp>
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Material.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
+#pragma mark - Factory
 Factory::Factory(const std::string &database_)
     : database(database_), directory(Path::addExtention(database_, ".factory"))
 {
 }
 
-bool Factory::archive()
-{
-    FileManager *fileManager = FileManager::shared();
-    auto intermediate = fileManager->getUniqueFileName();
-    if (!intermediate.first) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-    std::string archivedDirectory =
-        Path::addComponent(directory, intermediate.second);
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            archivedDirectory) ||
-        !fileManager->moveItems(getAssociatedPaths(), archivedDirectory)) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-    return true;
-}
-
-std::list<std::string> Factory::getAssociatedPaths()
+std::list<std::string> Factory::getAssociatedPaths() const
 {
     return {
         database,
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
-        Path::addExtention(database, "-first.material"),
-        Path::addExtention(database, "-last.material"),
+        getFirstMaterialPath(),
+        getLastMaterialPath(),
     };
 }
 
-const Error &Factory::getError() const
+std::string Factory::getFirstMaterialPath() const
 {
-    return m_error;
+    return Path::addExtention(database, "-first.material");
 }
 
-void Factory::assignWithSharedThreadedError()
+std::string Factory::getLastMaterialPath() const
 {
-    m_error = std::move(ThreadedErrors::shared()->moveThreadedError());
+    return Path::addExtention(database, "-last.material");
+}
+
+FactoryArchiver Factory::archiver() const
+{
+    return FactoryArchiver(*this);
+}
+
+FactoryRestorer Factory::restorer() const
+{
+    return FactoryRestorer(*this);
 }
 
 } //namespace Repair
