@@ -42,9 +42,9 @@ protected:
 
 #pragma mark - Basic
 public:
-    std::pair<bool, bool> isExists(const std::string &path);
-    std::pair<bool, size_t> getFileSize(const std::string &file);
+    std::tuple<bool, bool, bool> itemExists(const std::string &path);
     std::pair<bool, size_t> getDirectorySize(const std::string &directory);
+    std::pair<bool, size_t> getFileSize(const std::string &file);
     bool createHardLink(const std::string &from, const std::string &to);
     bool removeHardLink(const std::string &path);
     bool removeFile(const std::string &file);
@@ -55,6 +55,8 @@ public:
 
 #pragma mark - Combination
 public:
+    std::pair<bool, bool> fileExists(const std::string &file);
+    std::pair<bool, bool> directoryExists(const std::string &directory);
     std::pair<bool, size_t> getItemSize(const std::string &path);
     std::pair<bool, size_t> getItemsSize(const std::list<std::string> &paths);
     bool removeItem(const std::string &path);

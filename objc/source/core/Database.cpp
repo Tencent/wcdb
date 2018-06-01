@@ -303,7 +303,7 @@ int Database::findNextAvailableArchiveID()
     FileManager *fileManager = FileManager::shared();
     while (true) {
         archivedSubfix = getArchiveSubfix(i);
-        auto exists = fileManager->isExists(
+        auto exists = fileManager->fileExists(
             Path::addExtention(getPath(), archivedSubfix));
         if (!exists.first) {
             assignWithSharedThreadedError();
@@ -371,7 +371,7 @@ std::pair<bool, std::string> Database::pickUpBackup(bool old)
     std::string firstBackupPath = getFirstBackupPath();
     std::string lastBackupPath = getLastBackupPath();
     do {
-        std::pair<bool, bool> exists = fileManager->isExists(firstBackupPath);
+        std::pair<bool, bool> exists = fileManager->fileExists(firstBackupPath);
         if (!exists.first) {
             result = false;
             break;
@@ -381,7 +381,7 @@ std::pair<bool, std::string> Database::pickUpBackup(bool old)
             break;
         }
 
-        exists = fileManager->isExists(lastBackupPath);
+        exists = fileManager->fileExists(lastBackupPath);
         if (!exists.first) {
             result = false;
             break;
@@ -522,11 +522,11 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-std::pair<bool, bool> Database::isTableExists(const TableOrSubquery &table)
+std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
-        auto pair = handle->isTableExists(table);
+        auto pair = handle->tableExists(table);
         if (!pair.first) {
             setThreadedError(handle->getError());
         }

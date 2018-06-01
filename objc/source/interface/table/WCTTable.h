@@ -24,10 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol WCTTable
 
-- (BOOL)isTableExists:(NSString *)tableName;
+- (BOOL)tableExists:(NSString *)tableName;
 
-- (BOOL)isTableExists:(NSString *)tableName
-            withError:(WCTError *_Nullable *_Nullable)error;
+- (BOOL)tableExists:(NSString *)tableName
+          withError:(WCTError *_Nullable *_Nullable)error;
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
                     withClass:(Class<WCTTableCoding>)cls;

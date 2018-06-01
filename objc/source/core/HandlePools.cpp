@@ -44,7 +44,7 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
     bool generate = false;
     if (iter != m_pools.end()) {
         //check path is still sanity
-        auto pair = FileManager::shared()->isExists(path);
+        auto pair = FileManager::shared()->fileExists(path);
         if (!pair.first) {
             return nullptr;
         }

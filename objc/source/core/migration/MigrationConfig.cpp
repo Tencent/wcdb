@@ -101,7 +101,7 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
         if (!handle->runTransaction([&infos, this](Handle *handle) -> bool {
                 for (const auto &info : m_setting->getInfos()) {
                     auto pair =
-                        handle->isTableExists(info.second->getSourceTable());
+                        handle->tableExists(info.second->getSourceTable());
                     if (!pair.first) {
                         return false;
                     }

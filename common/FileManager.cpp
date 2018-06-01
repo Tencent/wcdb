@@ -42,6 +42,22 @@ FileManager *FileManager::shared()
 }
 
 #pragma mark - Basic
+std::tuple<bool, bool, bool> FileManager::itemExists(const std::string &path)
+{
+    struct stat s;
+    if (stat(path.c_str(), &s) == 0) {
+        if (s.st_mode & S_IFDIR) {
+            return {true, true, true};
+        } else {
+            return {true, true, false};
+        }
+    } else if (errno == ENOENT) {
+        return {true, false, false};
+    }
+    setThreadedError(path);
+    return {false, false, false};
+}
+
 std::pair<bool, size_t> FileManager::getFileSize(const std::string &file)
 {
     struct stat temp;
@@ -88,17 +104,6 @@ FileManager::getDirectorySize(const std::string &directory)
     closedir(dir);
 
     return {true, size};
-}
-
-std::pair<bool, bool> FileManager::isExists(const std::string &path)
-{
-    if (access(path.c_str(), F_OK) == 0) {
-        return {true, true};
-    } else if (errno == ENOENT) {
-        return {true, false};
-    }
-    setThreadedError(path);
-    return {false, false};
 }
 
 bool FileManager::createHardLink(const std::string &from, const std::string &to)
@@ -211,6 +216,20 @@ std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
     return {false, 0};
 }
 
+std::pair<bool, bool> FileManager::fileExists(const std::string &file)
+{
+    bool succeed, exists, isDirectory;
+    std::tie(succeed, exists, isDirectory) = itemExists(file);
+    return {succeed, exists && !isDirectory};
+}
+
+std::pair<bool, bool> FileManager::directoryExists(const std::string &directory)
+{
+    bool succeed, exists, isDirectory;
+    std::tie(succeed, exists, isDirectory) = itemExists(directory);
+    return {succeed, exists && isDirectory};
+}
+
 std::pair<bool, size_t>
 FileManager::getItemsSize(const std::list<std::string> &paths)
 {
@@ -272,7 +291,7 @@ bool FileManager::moveItems(
     bool result = true;
     std::list<std::string> recovers;
     for (const auto &pairedPath : pairedPaths) {
-        std::pair<bool, bool> ret = isExists(pairedPath.first);
+        std::pair<bool, bool> ret = fileExists(pairedPath.first);
         if (!ret.first) {
             break;
         }
@@ -303,7 +322,7 @@ bool FileManager::moveItems(
 bool FileManager::createDirectoryWithIntermediateDirectories(
     const std::string &path)
 {
-    auto ret = isExists(path);
+    auto ret = fileExists(path);
     if (!ret.first) {
         return false;
     }

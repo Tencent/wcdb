@@ -136,7 +136,7 @@ protected:
 
 #pragma mark - Convenient
 public:
-    std::pair<bool, bool> isTableExists(const TableOrSubquery &table);
+    std::pair<bool, bool> tableExists(const TableOrSubquery &table);
     std::pair<bool, std::set<std::string>> getUnorderedColumnsWithTable(
         const std::string &tableName,
         const std::string &schemaName = Schema::main());
