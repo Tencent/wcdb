@@ -103,7 +103,7 @@
 
     //old table is already dropped
     WCTError *error;
-    XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
+    XCTAssertFalse([_database tableExists:_tableName withError:&error]);
     XCTAssertNil(error);
 
     //view is already dropped

@@ -81,25 +81,25 @@
 - (void)test_table_exists
 {
     WCTError *error;
-    XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
+    XCTAssertFalse([_database tableExists:_tableName withError:&error]);
     XCTAssertNil(error);
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:_cls]);
-    XCTAssertTrue([_database isTableExists:_tableName]);
+    XCTAssertTrue([_database tableExists:_tableName]);
 }
 
 - (void)test_drop_table
 {
     WCTError *error;
 
-    XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
+    XCTAssertFalse([_database tableExists:_tableName withError:&error]);
     XCTAssertNil(error);
 
     XCTAssertTrue([_database createTableAndIndexes:_tableName withClass:_cls]);
-    XCTAssertTrue([_database isTableExists:_tableName]);
+    XCTAssertTrue([_database tableExists:_tableName]);
 
     XCTAssertTrue([_database dropTable:_tableName]);
 
-    XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
+    XCTAssertFalse([_database tableExists:_tableName withError:&error]);
     XCTAssertNil(error);
 }
 

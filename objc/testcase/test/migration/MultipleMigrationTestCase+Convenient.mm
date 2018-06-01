@@ -72,10 +72,10 @@
 #pragma mark - Drop Table
 - (void)drop_table_test:(NSString *)tableName
 {
-    XCTAssertTrue([_migrated isTableExists:tableName withError:nil]);
+    XCTAssertTrue([_migrated tableExists:tableName withError:nil]);
     XCTAssertTrue([_migrated dropTable:tableName]);
     WCTError *error = nil;
-    XCTAssertFalse([_migrated isTableExists:tableName withError:&error]);
+    XCTAssertFalse([_migrated tableExists:tableName withError:&error]);
     XCTAssertNil(error);
 }
 - (void)test_drop_table
