@@ -75,12 +75,18 @@ void WCTBinding::initialize()
 
     free(methods);
 
-    for (NSString *selName in [synthesizations sortedArrayUsingSelector:@selector(compare:)]) {
+    auto comparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
+      return [str1 compare:str2 options:NSNumericSearch];
+    };
+    [synthesizations sortUsingComparator:comparator];
+    [others sortUsingComparator:comparator];
+
+    for (NSString *selName in synthesizations) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
         ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
     }
-    for (NSString *selName in [others sortedArrayUsingSelector:@selector(compare:)]) {
+    for (NSString *selName in others) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
         ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);

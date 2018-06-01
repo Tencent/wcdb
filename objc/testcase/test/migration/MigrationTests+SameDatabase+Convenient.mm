@@ -56,13 +56,13 @@
 #pragma mark - Drop Table
 - (void)test_drop_table
 {
-    XCTAssertTrue([_migrated isTableExists:_migratedTableName withError:nil]);
-    XCTAssertTrue([_database isTableExists:_tableName withError:nil]);
+    XCTAssertTrue([_migrated tableExists:_migratedTableName withError:nil]);
+    XCTAssertTrue([_database tableExists:_tableName withError:nil]);
     XCTAssertTrue([_migrated dropTable:_migratedTableName]);
     WCTError *error = nil;
-    XCTAssertFalse([_migrated isTableExists:_migratedTableName withError:&error]);
+    XCTAssertFalse([_migrated tableExists:_migratedTableName withError:&error]);
     XCTAssertNil(error);
-    XCTAssertFalse([_database isTableExists:_tableName withError:&error]);
+    XCTAssertFalse([_database tableExists:_tableName withError:&error]);
     XCTAssertNil(error);
 }
 

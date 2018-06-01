@@ -91,11 +91,11 @@
 
     //old table is already dropped
     WCTError *error;
-    XCTAssertFalse([_database1 isTableExists:_table1 withError:&error]);
+    XCTAssertFalse([_database1 tableExists:_table1 withError:&error]);
     XCTAssertNil(error);
-    XCTAssertFalse([_database2 isTableExists:_table2 withError:&error]);
+    XCTAssertFalse([_database2 tableExists:_table2 withError:&error]);
     XCTAssertNil(error);
-    XCTAssertFalse([_migrated isTableExists:_table3 withError:&error]);
+    XCTAssertFalse([_migrated tableExists:_table3 withError:&error]);
     XCTAssertNil(error);
 
     //all data are migrated
