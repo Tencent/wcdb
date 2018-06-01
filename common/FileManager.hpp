@@ -23,6 +23,7 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
+#include <functional>
 #include <list>
 #include <string>
 
@@ -52,6 +53,10 @@ public:
     bool createDirectory(const std::string &path);
     std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
     std::pair<bool, std::string> getUniqueFileName();
+
+    bool enumerateDirectory(
+        const std::string &directory,
+        const std::function<bool(const std::string &, bool)> &enumeration);
 
 #pragma mark - Combination
 public:

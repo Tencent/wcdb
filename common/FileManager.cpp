@@ -73,37 +73,47 @@ std::pair<bool, size_t> FileManager::getFileSize(const std::string &file)
 std::pair<bool, size_t>
 FileManager::getDirectorySize(const std::string &directory)
 {
+    size_t totalSize = 0;
+    if (enumerateDirectory(
+            directory,
+            [&totalSize, this](const std::string &path, bool isDirectory) {
+                auto intermediate =
+                    isDirectory ? getDirectorySize(path) : getFileSize(path);
+                totalSize += intermediate.second;
+                return intermediate.first;
+            })) {
+        return {true, totalSize};
+    };
+    return {false, 0};
+}
+
+bool FileManager::enumerateDirectory(
+    const std::string &directory,
+    const std::function<bool(const std::string &, bool)> &enumeration)
+{
     DIR *dir = opendir(directory.c_str());
     if (dir == NULL) {
         if (errno == ENOENT) {
-            return {true, 0};
+            return true;
         }
         setThreadedError(directory);
-        return {false, 0};
+        return false;
     }
 
-    size_t size = 0;
     std::string path;
-    std::pair<bool, size_t> temp;
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL) {
-        if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
+        if (strcmp(entry->d_name, ".") != 0 &&
+            strcmp(entry->d_name, "..") != 0) {
             path = Path::addComponent(directory, entry->d_name);
-            if (entry->d_type == DT_DIR) {
-                temp = getDirectorySize(path);
-            } else {
-                temp = getFileSize(path);
+            if (!enumeration(path, entry->d_type == DT_DIR)) {
+                break;
             }
-            if (!temp.first) {
-                setThreadedError(path);
-                return {false, 0};
-            }
-            size += temp.second;
         }
     }
     closedir(dir);
 
-    return {true, size};
+    return true;
 }
 
 bool FileManager::createHardLink(const std::string &from, const std::string &to)
