@@ -59,7 +59,8 @@ public:
                    const std::string &directory);
     bool moveFiles(
         const std::list<std::pair<std::string, std::string>> &pairedPaths);
-    bool createDirectoryWithIntermediateDirectories(const std::string &path);
+    bool
+    createDirectoryWithIntermediateDirectories(const std::string &directory);
 
 #pragma mark - Error
 protected:

@@ -194,16 +194,16 @@ bool FileManager::removeFiles(const std::list<std::string> &paths)
 }
 
 bool FileManager::createDirectoryWithIntermediateDirectories(
-    const std::string &path)
+    const std::string &directory)
 {
-    auto ret = fileExists(path);
+    auto ret = directoryExists(directory);
     if (!ret.first) {
         return false;
     }
     if (!ret.second) {
         return createDirectoryWithIntermediateDirectories(
-                   Path::getBaseName(path)) &&
-               createDirectory(path);
+                   Path::getBaseName(directory)) &&
+               createDirectory(directory);
     }
     return true;
 }
