@@ -22,6 +22,7 @@
 #define Factory_hpp
 
 #include <WCDB/FactoryArchiver.hpp>
+#include <WCDB/FactoryDeconstructor.hpp>
 #include <WCDB/FactoryMaterials.hpp>
 #include <WCDB/FactoryRestorer.hpp>
 #include <future>
@@ -48,6 +49,12 @@ public:
 
     FactoryArchiver archiver() const;
     FactoryRestorer restorer() const;
+
+    static std::string
+    firstMaterialPathForDatabase(const std::string &database);
+    static std::string lastMaterialPathForDatabase(const std::string &database);
+    static std::pair<bool, std::string>
+    pickMaterailForRestoring(const std::string &database);
 };
 
 } //namespace Repair

@@ -51,12 +51,12 @@ std::list<std::string> Factory::getAssociatedPaths() const
 
 std::string Factory::getFirstMaterialPath() const
 {
-    return Path::addExtention(database, "-first.material");
+    return firstMaterialPathForDatabase(database);
 }
 
 std::string Factory::getLastMaterialPath() const
 {
-    return Path::addExtention(database, "-last.material");
+    return lastMaterialPathForDatabase(database);
 }
 
 FactoryArchiver Factory::archiver() const
@@ -67,6 +67,61 @@ FactoryArchiver Factory::archiver() const
 FactoryRestorer Factory::restorer() const
 {
     return FactoryRestorer(*this);
+}
+
+std::string Factory::firstMaterialPathForDatabase(const std::string &database)
+{
+    return Path::addExtention(database, "-first.material");
+}
+
+std::string Factory::lastMaterialPathForDatabase(const std::string &database)
+{
+    return Path::addExtention(database, "-last.material");
+}
+
+std::pair<bool, std::string>
+Factory::pickMaterailForRestoring(const std::string &database)
+{
+    //If all materials exist, return the new one.
+    //If all materials do not exist, return empty.
+    //Otherwise, return the existing one.
+    FileManager *fileManager = FileManager::shared();
+    std::string firstMaterialPath = firstMaterialPathForDatabase(database);
+    std::string lastMaterialPath = lastMaterialPathForDatabase(database);
+    bool succeed, firstMaterialExists, lastMaterialExists;
+    std::tie(succeed, firstMaterialExists) =
+        fileManager->fileExists(firstMaterialPath);
+    if (!succeed) {
+        return {false, String::empty()};
+    }
+    std::tie(succeed, lastMaterialExists) =
+        fileManager->fileExists(lastMaterialPath);
+    if (!succeed) {
+        return {false, String::empty()};
+    }
+    if (firstMaterialExists && lastMaterialExists) {
+        time_t firstMaterialModifiedTime, lastMaterialModifiedTime;
+        bool succeed;
+        std::tie(succeed, firstMaterialModifiedTime) =
+            fileManager->getFileModifiedTime(firstMaterialPath);
+        if (!succeed) {
+            return {false, String::empty()};
+        }
+        std::tie(succeed, lastMaterialModifiedTime) =
+            fileManager->getFileModifiedTime(lastMaterialPath);
+        if (!succeed) {
+            return {false, String::empty()};
+        }
+        return {true, firstMaterialModifiedTime > lastMaterialModifiedTime
+                          ? std::move(firstMaterialPath)
+                          : std::move(lastMaterialPath)};
+    } else if (firstMaterialExists && !lastMaterialExists) {
+        return {true, std::move(firstMaterialPath)};
+    } else if (!firstMaterialExists && lastMaterialExists) {
+        return {true, std::move(lastMaterialPath)};
+    } else {
+        return {true, String::empty()};
+    }
 }
 
 } //namespace Repair
