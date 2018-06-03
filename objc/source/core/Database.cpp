@@ -169,7 +169,9 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 bool Database::removeFiles()
 {
     if (isBlockaded() && !isOpened()) {
-        if (FileManager::shared()->removeItems(getPaths())) {
+        std::list<std::string> paths = getPaths();
+        paths.reverse();
+        if (FileManager::shared()->removeItems(paths)) {
             return true;
         }
         assignWithSharedThreadedError();
@@ -197,7 +199,10 @@ std::pair<bool, size_t> Database::getFilesSize()
 bool Database::moveFiles(const std::string &directory)
 {
     if (isBlockaded() && !isOpened()) {
-        if (FileManager::shared()->moveItems(getPaths(), directory)) {
+        FileManager *fileManager = FileManager::shared();
+        std::list<std::string> paths = getPaths();
+        paths.reverse();
+        if (fileManager->moveItems(paths, directory)) {
             return true;
         }
         assignWithSharedThreadedError();
@@ -213,9 +218,12 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
     if (isBlockaded() && !isOpened()) {
-        std::list<std::string> paths = getPaths();
-        paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
-        if (FileManager::shared()->moveItems(paths, directory)) {
+        std::list<std::string> paths = extraFiles;
+        std::list<std::string> dbPaths = getPaths();
+        dbPaths.reverse();
+        paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
+        FileManager *fileManager = FileManager::shared();
+        if (fileManager->moveItems(paths, directory)) {
             return true;
         }
         assignWithSharedThreadedError();
@@ -259,13 +267,15 @@ std::string Database::getLastBackupPath() const
 
 std::list<std::string> Database::getPaths() const
 {
-    return {getPath(),
-            getWALPath(),
-            getSHMPath(),
-            getJournalPath(),
-            getFirstBackupPath(),
-            getLastBackupPath(),
-            getMaterialsDirectory()};
+    return {
+        getPath(),
+        getWALPath(),
+        getFirstBackupPath(),
+        getLastBackupPath(),
+        getMaterialsDirectory(),
+        getSHMPath(),
+        getJournalPath(),
+    };
 }
 
 #pragma mark - Repair Kit
