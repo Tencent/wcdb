@@ -55,7 +55,7 @@ bool FactoryMaterials::doWork()
             bool succeed;
             std::string material;
             std::tie(succeed, material) =
-                Factory::pickMaterailForRestoring(database);
+                Factory::pickMaterialForRestoring(database);
             if (!succeed) {
                 result = false;
                 m_error =
