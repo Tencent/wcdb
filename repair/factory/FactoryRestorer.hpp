@@ -21,7 +21,9 @@
 #ifndef FactoryRestorer_hpp
 #define FactoryRestorer_hpp
 
+#include <WCDB/Assembler.hpp>
 #include <WCDB/FactoryDerived.hpp>
+#include <WCDB/Progress.hpp>
 
 namespace WCDB {
 
@@ -30,6 +32,10 @@ namespace Repair {
 class FactoryRestorer : public FactoryDerived {
 public:
     using FactoryDerived::FactoryDerived;
+    typedef Progress::ProgressUpdateCallback ProgressUpdateCallback;
+
+    bool work(std::shared_ptr<Assembler> &assembler,
+              const ProgressUpdateCallback &onProgressUpdated);
 };
 
 } //namespace Repair
