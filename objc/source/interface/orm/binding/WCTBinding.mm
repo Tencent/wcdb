@@ -28,6 +28,21 @@
 #import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
+static NSString * getCounterPart(NSString *selName) {
+    WCTAssert(selName.length > 3, "selName's length must bigger than 3.");
+    NSUInteger selLength = selName.length;
+    NSUInteger index = 0;
+    
+    for (NSUInteger i = selLength - 3; i > 0; i--) {
+        if ([selName characterAtIndex:i] == '_') {
+            index = i + 1;
+            break;
+        }
+    }
+    
+    return [selName substringWithRange:NSMakeRange(index, selLength - index - 1)];
+}
+
 const WCTBinding &WCTBinding::bindingWithClass(Class cls)
 {
     static std::map<Class, WCTBinding> *s_bindings = new std::map<Class, WCTBinding>;
@@ -74,13 +89,22 @@ void WCTBinding::initialize()
     }
 
     free(methods);
-
+    
     auto comparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
-      return [str1 compare:str2 options:NSNumericSearch];
+        NSInteger str1Integer = [getCounterPart(str1) integerValue];
+        NSInteger str2Integer = [getCounterPart(str2) integerValue];
+
+        if (str1Integer > str2Integer) {
+            return NSOrderedDescending;
+        } else if (str1Integer < str2Integer) {
+            return NSOrderedAscending;
+        } else {
+            return NSOrderedSame;
+        }
     };
     [synthesizations sortUsingComparator:comparator];
     [others sortUsingComparator:comparator];
-
+    
     for (NSString *selName in synthesizations) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
