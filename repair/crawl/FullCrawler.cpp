@@ -67,6 +67,11 @@ void FullCrawler::onCellCrawled(const Cell &cell)
 }
 
 #pragma mark - MasterCrawlerDelegate
+Pager &FullCrawler::getMasterPager()
+{
+    return m_pager;
+}
+
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
     if (isCriticalErrorFatal()) {
