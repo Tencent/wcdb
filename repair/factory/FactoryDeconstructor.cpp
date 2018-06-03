@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/Compression.hpp>
+#include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryDeconstructor.hpp>
 
@@ -26,8 +28,38 @@ namespace WCDB {
 namespace Repair {
 
 FactoryDeconstructor::FactoryDeconstructor(const Factory &factory)
-    : FactoryDerived(factory), m_deconstructor(factory.database)
+    : FactoryDerived(factory)
 {
+}
+
+bool FactoryDeconstructor::work(const Filter &shouldTableDeconstructed)
+{
+    Deconstructor deconstructor(factory.database);
+    deconstructor.filter(shouldTableDeconstructed);
+    if (!deconstructor.work()) {
+        return false;
+    }
+    Data material = deconstructor.getMaterial().serialize();
+    if (material.empty()) {
+        return false;
+    }
+
+    bool succeed;
+    std::string materialPath;
+    std::tie(succeed, materialPath) =
+        Factory::pickMaterialForOverwriting(factory.database);
+    if (!succeed) {
+        return false;
+    }
+
+    //TODO cipher
+    FileHandle fileHandle(materialPath);
+    if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||
+        !fileHandle.write(material.buffer(), 0, material.size())) {
+        succeed = false;
+    }
+    fileHandle.close();
+    return succeed;
 }
 
 } //namespace Repair

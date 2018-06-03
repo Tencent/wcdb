@@ -23,20 +23,17 @@
 
 #include <WCDB/Deconstructor.hpp>
 #include <WCDB/FactoryDerived.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryDeconstructor : public FactoryDerived,
-                             public SharedThreadedErrorProne {
+class FactoryDeconstructor : public FactoryDerived {
 public:
     FactoryDeconstructor(const Factory &factory);
     using Filter = Deconstructor::Filter;
 
-protected:
-    Deconstructor m_deconstructor;
+    bool work(const Filter &shouldTableDeconstructed);
 };
 
 } //namespace Repair

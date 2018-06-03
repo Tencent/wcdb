@@ -49,6 +49,7 @@ public:
 
     FactoryArchiver archiver() const;
     FactoryRestorer restorer() const;
+    FactoryDeconstructor deconstructor() const;
 
     FactoryMaterials &materials();
 
@@ -56,7 +57,9 @@ public:
     firstMaterialPathForDatabase(const std::string &database);
     static std::string lastMaterialPathForDatabase(const std::string &database);
     static std::pair<bool, std::string>
-    pickMaterailForRestoring(const std::string &database);
+    pickMaterialForRestoring(const std::string &database);
+    static std::pair<bool, std::string>
+    pickMaterialForOverwriting(const std::string &database);
 
 protected:
     FactoryMaterials m_materials;
