@@ -170,7 +170,9 @@ bool Database::removeFiles()
         "Removing files on an opened database may cause undefined results.",
         return false;);
     FileManager *fileManager = FileManager::shared();
-    if (fileManager->removeFiles(getPaths())) {
+    std::list<std::string> paths = getPaths();
+    paths.reverse();
+    if (fileManager->removeFiles(paths)) {
         return true;
     }
     assignWithSharedThreadedError();
@@ -195,7 +197,9 @@ bool Database::moveFiles(const std::string &directory)
 {
     if (isBlockaded() && !isOpened()) {
         FileManager *fileManager = FileManager::shared();
-        if (fileManager->moveFiles(getPaths(), directory)) {
+        std::list<std::string> paths = getPaths();
+        paths.reverse();
+        if (fileManager->moveFiles(paths, directory)) {
             return true;
         }
         assignWithSharedThreadedError();
@@ -211,8 +215,10 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
     if (isBlockaded() && !isOpened()) {
-        std::list<std::string> paths = getPaths();
-        paths.insert(paths.end(), extraFiles.begin(), extraFiles.end());
+        std::list<std::string> paths = extraFiles;
+        std::list<std::string> dbPaths = getPaths();
+        dbPaths.reverse();
+        paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
         FileManager *fileManager = FileManager::shared();
         if (fileManager->moveFiles(paths, directory)) {
             return true;
@@ -253,8 +259,8 @@ std::string Database::getBackupPath() const
 
 std::list<std::string> Database::getPaths() const
 {
-    return {getPath(), getWALPath(), getSHMPath(), getJournalPath(),
-            getBackupPath()};
+    return {getPath(), getWALPath(), getBackupPath(), getSHMPath(),
+            getJournalPath()};
 }
 
 #pragma mark - Repair Kit
