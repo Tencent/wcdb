@@ -28,7 +28,8 @@
 #import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
-static NSString * getCounterPart(NSString *selName) {
+static NSString * getCounterPart(NSString *selName)
+{
     WCTAssert(selName.length > 3, "selName's length must bigger than 3.");
     NSUInteger selLength = selName.length;
     NSUInteger index = 0;
