@@ -22,6 +22,7 @@
 #define FactoryMaterials_hpp
 
 #include <WCDB/FactoryDerived.hpp>
+#include <future>
 
 namespace WCDB {
 
@@ -29,7 +30,16 @@ namespace Repair {
 
 class FactoryMaterials : public FactoryDerived {
 public:
-    using FactoryDerived::FactoryDerived;
+    FactoryMaterials(const Factory &factory);
+    bool work();
+
+    const std::map<std::string, int64_t> &getSequences() const;
+
+protected:
+    bool doWork();
+    std::future<bool> m_done;
+    std::map<std::string, int64_t> m_sequences;
+    Error m_error;
 };
 
 } //namespace Repair

@@ -50,11 +50,16 @@ public:
     FactoryArchiver archiver() const;
     FactoryRestorer restorer() const;
 
+    FactoryMaterials &materials();
+
     static std::string
     firstMaterialPathForDatabase(const std::string &database);
     static std::string lastMaterialPathForDatabase(const std::string &database);
     static std::pair<bool, std::string>
     pickMaterailForRestoring(const std::string &database);
+
+protected:
+    FactoryMaterials m_materials;
 };
 
 } //namespace Repair

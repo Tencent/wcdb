@@ -33,7 +33,9 @@ namespace Repair {
 
 #pragma mark - Factory
 Factory::Factory(const std::string &database_)
-    : database(database_), directory(Path::addExtention(database_, ".factory"))
+    : database(database_)
+    , directory(Path::addExtention(database_, ".factory"))
+    , m_materials(*this)
 {
 }
 
@@ -122,6 +124,11 @@ Factory::pickMaterailForRestoring(const std::string &database)
     } else {
         return {true, String::empty()};
     }
+}
+
+FactoryMaterials &Factory::materials()
+{
+    return m_materials;
 }
 
 } //namespace Repair
