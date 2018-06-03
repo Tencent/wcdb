@@ -28,20 +28,22 @@
 #import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
-static NSString * getCounterPart(NSString *selName)
+static inline NSInteger getCounterPart(NSString *selName)
 {
     WCTAssert(selName.length > 3, "selName's length must bigger than 3.");
     NSUInteger selLength = selName.length;
-    NSUInteger index = 0;
+    NSInteger counter = 0;
+    const char * selChar = selName.UTF8String;
     
-    for (NSUInteger i = selLength - 3; i > 0; i--) {
-        if ([selName characterAtIndex:i] == '_') {
-            index = i + 1;
-            break;
+    for (NSUInteger i = selLength - 2; i > 0; i--) {
+        char c = selChar[i];
+        if (c != '_') {
+            counter += (c - '0') * pow(10, selLength - 2 - i);
         }
+        else { return counter; }
     }
     
-    return [selName substringWithRange:NSMakeRange(index, selLength - index - 1)];
+    return counter;
 }
 
 const WCTBinding &WCTBinding::bindingWithClass(Class cls)
@@ -92,8 +94,8 @@ void WCTBinding::initialize()
     free(methods);
     
     auto comparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
-        NSInteger str1Integer = [getCounterPart(str1) integerValue];
-        NSInteger str2Integer = [getCounterPart(str2) integerValue];
+        NSInteger str1Integer = getCounterPart(str1);
+        NSInteger str2Integer = getCounterPart(str2);
 
         if (str1Integer > str2Integer) {
             return NSOrderedDescending;
