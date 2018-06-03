@@ -31,6 +31,7 @@ class FileHandle : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     FileHandle(const std::string &path);
+    FileHandle(FileHandle &&);
     FileHandle() = delete;
     FileHandle(const FileHandle &) = delete;
     FileHandle &operator=(const FileHandle &) = delete;

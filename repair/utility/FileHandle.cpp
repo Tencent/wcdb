@@ -31,6 +31,12 @@ FileHandle::FileHandle(const std::string &path_) : path(path_), m_fd(-1)
 {
 }
 
+FileHandle::FileHandle(FileHandle &&other)
+    : path(std::move(other.path)), m_fd(std::move(other.m_fd))
+{
+    other.m_fd = -1;
+}
+
 bool FileHandle::open(Mode mode)
 {
     if (m_fd == -1) {
