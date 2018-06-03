@@ -57,6 +57,9 @@ void Mechanic::work()
     setPageWeight((double) 1.0 / pageCount);
 
     for (const auto &element : m_material.contents) {
+        if (isCriticalErrorFatal()) {
+            break;
+        }
         if (!assembleTable(element.first, element.second.sql)) {
             continue;
         }
@@ -71,11 +74,17 @@ void Mechanic::work()
 #pragma mark - Crawlable
 void Mechanic::onCellCrawled(const Cell &cell)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     assembleCell(cell);
 }
 
 bool Mechanic::willCrawlPage(const Page &page, int unused)
 {
+    if (isCriticalErrorFatal()) {
+        return false;
+    }
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());
         return true;

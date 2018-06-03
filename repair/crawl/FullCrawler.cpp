@@ -60,12 +60,18 @@ void FullCrawler::work()
 #pragma mark - Crawlable
 void FullCrawler::onCellCrawled(const Cell &cell)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     assembleCell(cell);
 }
 
 #pragma mark - MasterCrawlerDelegate
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());
     }
@@ -73,6 +79,9 @@ void FullCrawler::onMasterPageCrawled(const Page &page)
 
 void FullCrawler::onMasterCellCrawled(const Master *master)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     markCellAsCounted();
     if (master == nullptr) {
         //skip index/view/trigger
