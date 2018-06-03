@@ -92,8 +92,8 @@ Factory::associatedPathsForDatabase(const std::string &database)
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
-        getFirstMaterialPath(),
-        getLastMaterialPath(),
+        firstMaterialPathForDatabase(database),
+        lastMaterialPathForDatabase(database),
     };
 }
 
