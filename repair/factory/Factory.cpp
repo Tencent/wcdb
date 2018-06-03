@@ -41,14 +41,7 @@ Factory::Factory(const std::string &database_)
 
 std::list<std::string> Factory::getAssociatedPaths() const
 {
-    return {
-        database,
-        Path::addExtention(database, "-journal"),
-        Path::addExtention(database, "-wal"),
-        Path::addExtention(database, "-shm"),
-        getFirstMaterialPath(),
-        getLastMaterialPath(),
-    };
+    return Factory::associatedPathsForDatabase(database);
 }
 
 std::string Factory::getFirstMaterialPath() const
@@ -84,6 +77,42 @@ std::string Factory::firstMaterialPathForDatabase(const std::string &database)
 std::string Factory::lastMaterialPathForDatabase(const std::string &database)
 {
     return Path::addExtention(database, "-last.material");
+}
+
+std::string Factory::getRestoreDirectory() const
+{
+    return Path::addComponent(directory, "restore");
+}
+
+std::list<std::string>
+Factory::associatedPathsForDatabase(const std::string &database)
+{
+    return {
+        database,
+        Path::addExtention(database, "-journal"),
+        Path::addExtention(database, "-wal"),
+        Path::addExtention(database, "-shm"),
+        getFirstMaterialPath(),
+        getLastMaterialPath(),
+    };
+}
+
+std::pair<bool, std::list<std::string>> Factory::getMaterialDirectories() const
+{
+    std::list<std::string> materialDirectories;
+    std::string restoreDirectory;
+    if (FileManager::shared()->enumerateDirectory(
+            directory,
+            [&materialDirectories, &restoreDirectory](
+                const std::string &path, bool isDirectory) -> bool {
+                if (isDirectory && path != restoreDirectory) {
+                    materialDirectories.push_back(path);
+                }
+                return true;
+            })) {
+        return {true, materialDirectories};
+    }
+    return {false, {}};
 }
 
 std::pair<bool, std::string>

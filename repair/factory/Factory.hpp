@@ -46,6 +46,8 @@ public:
 
     std::string getFirstMaterialPath() const;
     std::string getLastMaterialPath() const;
+    std::string getRestoreDirectory() const;
+    std::pair<bool, std::list<std::string>> getMaterialDirectories() const;
 
     FactoryArchiver archiver() const;
     FactoryRestorer restorer() const;
@@ -53,6 +55,8 @@ public:
 
     FactoryMaterials &materials();
 
+    static std::list<std::string>
+    associatedPathsForDatabase(const std::string &database);
     static std::string
     firstMaterialPathForDatabase(const std::string &database);
     static std::string lastMaterialPathForDatabase(const std::string &database);
