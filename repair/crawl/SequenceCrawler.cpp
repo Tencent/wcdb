@@ -50,8 +50,7 @@ std::string SequenceCrawler::name()
 void SequenceCrawler::onCellCrawled(const Cell &cell)
 {
     if (cell.getValueType(1) != Cell::Type::Text ||
-        //TODO accept int32 and int64
-        cell.getValueType(2) != Cell::Type::Integer64) {
+        cell.getValueType(2) != Cell::Type::Integer) {
         markAsCorrupted();
         return;
     }
@@ -63,7 +62,7 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
 
     Sequence sequence;
     sequence.name = std::move(name);
-    sequence.seq = cell.int64Value(2);
+    sequence.seq = cell.integerValue(2);
     m_delegate->onSequenceCellCrawled(sequence);
 }
 

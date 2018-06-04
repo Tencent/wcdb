@@ -203,29 +203,31 @@ int Cell::getCount() const
 Cell::Type Cell::getValueType(int index) const
 {
     WCTInnerAssert(index < m_columns.size());
-    static Type s_typesOfSerialType[10] = {
-        Type::Null,      //Null
-        Type::Integer32, //8-bit integer
-        Type::Integer32, //16-bit integer
-        Type::Integer32, //24-bit integer
-        Type::Integer32, //32-bit integer
-        Type::Integer64, //48-bit integer
-        Type::Integer64, //64-bit integer
-        Type::Real,      //IEEE 754-2008 64-bit floating point number
-        Type::Integer32, //0
-        Type::Integer32, //1
-    };
     int serialType = m_columns[index].first;
-    if (serialType <= 10) {
-        return s_typesOfSerialType[serialType];
+    if (serialType == 0) {
+        return Type::Null;
+    } else if (serialType == 7) {
+        //IEEE 754-2008 64-bit floating point number
+        return Type::Real;
+    } else if (serialType <= 10) {
+        // 1. 8-bit integer
+        // 2. 16-bit integer
+        // 3. 24-bit integer
+        // 4. 32-bit integer
+        // 5. 48-bit integer
+        // 6. 64-bit integer
+        // 8. false
+        // 9. true
+        return Type::Integer;
+    } else {
+        return serialType % 2 ? Type::Text : Type::BLOB;
     }
-    return serialType % 2 ? Type::Text : Type::BLOB;
 }
 
-int32_t Cell::int32Value(int index) const
+int64_t Cell::integerValue(int index) const
 {
     WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Integer32);
+    WCTInnerAssert(getValueType(index) == Type::Integer);
     const auto &cell = m_columns[index];
     switch (getLengthOfSerialType(cell.first)) {
         case 1:
@@ -236,19 +238,6 @@ int32_t Cell::int32Value(int index) const
             return m_deserialization.get3BytesInt(cell.second);
         case 4:
             return m_deserialization.get4BytesInt(cell.second);
-        default:
-            break;
-    }
-    WCTInnerFatalError();
-    return 0;
-}
-
-int64_t Cell::int64Value(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Integer64);
-    const auto &cell = m_columns[index];
-    switch (getLengthOfSerialType(cell.first)) {
         case 6:
             return m_deserialization.get6BytesInt(cell.second);
         case 8:

@@ -92,13 +92,9 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     for (int i = 0; i < cell.getCount(); ++i) {
         int bindIndex = i + 2;
         switch (cell.getValueType(i)) {
-            case Cell::Integer32:
-                sqlite3_bind_int((sqlite3_stmt *) m_stmt, bindIndex,
-                                 cell.int32Value(i));
-                break;
-            case Cell::Integer64:
+            case Cell::Integer:
                 sqlite3_bind_int64((sqlite3_stmt *) m_stmt, bindIndex,
-                                   cell.int64Value(i));
+                                   cell.integerValue(i));
                 break;
             case Cell::Text: {
                 auto pair = cell.textValue(i);

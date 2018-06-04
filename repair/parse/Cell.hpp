@@ -40,18 +40,16 @@ public:
 
     enum Type {
         Null = 0,
-        Integer32 = 1,
-        Integer64 = 2,
-        Real = 3,
-        Text = 4,
-        BLOB = 5,
+        Integer = 1,
+        Real = 2,
+        Text = 3,
+        BLOB = 4,
     };
     int64_t getRowID() const;
     Type getValueType(int index) const;
     int getCount() const;
 
-    int32_t int32Value(int index) const;
-    int64_t int64Value(int index) const;
+    int64_t integerValue(int index) const;
     double doubleValue(int index) const;
     std::pair<int, const char *> textValue(int index) const;
     std::string stringValue(int index) const;
