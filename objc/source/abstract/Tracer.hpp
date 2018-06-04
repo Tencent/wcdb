@@ -51,7 +51,7 @@ public:
     void traceSQL(void *handle, const SQLTraceCallback &trace);
 
 protected:
-    static int TraceCallback(unsigned int flag, void *M, void *P, void *X);
+    static int traceCallback(unsigned int flag, void *M, void *P, void *X);
 
     void reportPerformance();
     void addPerformanceTrace(const std::string &sql, const int64_t &cost);

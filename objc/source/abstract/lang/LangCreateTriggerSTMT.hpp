@@ -65,8 +65,8 @@ public:
     static STMT::Type getType();
 
 protected:
-    static constexpr const char *TypeName(const Type &type);
-    static constexpr const char *OperationName(const Operation &operation);
+    static constexpr const char *typeName(const Type &type);
+    static constexpr const char *operationName(const Operation &operation);
 };
 
 template <>

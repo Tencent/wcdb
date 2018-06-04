@@ -55,7 +55,7 @@
             if (nsError.description.length > 0) {
                 error.message = nsError.description.cppString;
             } else {
-                error.message = WCDB::Error::CodeName(WCDB::Error::Code::IOError);
+                error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
             }
             error.infos.set("Path", path);
             error.infos.set("ExtCode", nsError.code);

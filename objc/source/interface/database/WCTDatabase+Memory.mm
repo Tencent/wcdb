@@ -37,7 +37,7 @@
                                         object:nil
                                          queue:nil
                                     usingBlock:^(NSNotification *) {
-                                      WCDB::Database::PurgeInAllDatabases();
+                                      WCDB::Database::purgeAllDatabases();
                                     }];
 
 #ifdef DEBUG
@@ -58,9 +58,9 @@
     _database->purge();
 }
 
-+ (void)PurgeInAllDatabases
++ (void)purgeAllDatabases
 {
-    WCDB::Database::PurgeInAllDatabases();
+    WCDB::Database::purgeAllDatabases();
 }
 
 @end

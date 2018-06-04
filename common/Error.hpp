@@ -39,7 +39,7 @@ public:
         Fatal = 5,
     };
     Level level;
-    static constexpr const char *LevelName(const Level &level)
+    static constexpr const char *levelName(const Level &level)
     {
         switch (level) {
             case Level::Ignore:
@@ -90,7 +90,7 @@ public:
         Notice = 27,       /* Notifications */
         Warning = 28,      /* Warnings */
     };
-    static constexpr const char *CodeName(const Code &code)
+    static constexpr const char *codeName(const Code &code)
     {
         switch (code) {
             case Code::OK:

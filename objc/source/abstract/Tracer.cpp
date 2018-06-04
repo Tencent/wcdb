@@ -27,7 +27,7 @@ Tracer::Footprint::Footprint(const std::string &sql_) : sql(sql_), frequency(1)
 {
 }
 
-int Tracer::TraceCallback(unsigned int flag, void *M, void *P, void *X)
+int Tracer::traceCallback(unsigned int flag, void *M, void *P, void *X)
 {
     Tracer *tracer = (Tracer *) M;
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
@@ -69,7 +69,7 @@ void Tracer::setupTrace(void *handle)
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        sqlite3_trace_v2((sqlite3 *) handle, flag, Tracer::TraceCallback, this);
+        sqlite3_trace_v2((sqlite3 *) handle, flag, Tracer::traceCallback, this);
     } else {
         sqlite3_trace_v2((sqlite3 *) handle, 0, nullptr, nullptr);
     }

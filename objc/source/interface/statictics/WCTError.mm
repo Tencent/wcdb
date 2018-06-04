@@ -48,7 +48,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         if (!error.message.empty()) {
             _message = [NSString stringWithCppString:error.message];
         } else {
-            _message = [NSString stringWithUTF8String:WCDB::Error::CodeName((WCDB::Error::Code) self.code)];
+            _message = [NSString stringWithUTF8String:WCDB::Error::codeName((WCDB::Error::Code) self.code)];
         }
         _level = (WCTErrorLevel) error.level;
     }
@@ -81,7 +81,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     if (self.code == WCTErrorCodeOK) {
         return nil;
     }
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, %@]", WCDB::Error::LevelName((WCDB::Error::Level) self.level), (long) self.code, self.message];
+    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, %@]", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code, self.message];
     __block BOOL comma = NO;
     [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
       if (comma) {

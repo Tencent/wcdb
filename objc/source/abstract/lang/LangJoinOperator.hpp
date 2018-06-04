@@ -45,7 +45,7 @@ public:
     CopyOnWriteString SQL() const override;
 
 protected:
-    static constexpr const char *JoinTypeName(const Type &type);
+    static constexpr const char *joinTypeName(const Type &type);
 };
 
 } // namespace Lang
