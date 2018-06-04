@@ -136,7 +136,7 @@ void Database::purge()
     m_pool->purgeFreeHandles();
 }
 
-void Database::PurgeInAllDatabases()
+void Database::purgeAllDatabases()
 {
     HandlePools::defaultPools()->purge();
 }

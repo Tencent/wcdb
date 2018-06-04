@@ -34,7 +34,7 @@ CopyOnWriteString InsertSTMT::SQL() const
     if (!withClause.empty()) {
         description.append(withClause.description().get() + " ");
     }
-    description.append(InsertSTMT::TypeName(type));
+    description.append(InsertSTMT::typeName(type));
     description.append(" INTO ");
     if (schemaName.isNull()) {
         description.append(mainSchema() + ".");
@@ -65,7 +65,7 @@ CopyOnWriteString InsertSTMT::SQL() const
     return description;
 }
 
-constexpr const char *InsertSTMT::TypeName(const Type &type)
+constexpr const char *InsertSTMT::typeName(const Type &type)
 {
     switch (type) {
         case Type::Insert:

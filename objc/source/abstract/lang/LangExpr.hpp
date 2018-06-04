@@ -190,7 +190,7 @@ public:
     ExprBase::Type getType() const override;
 
 protected:
-    static constexpr const char *TypeName(const Type &type);
+    static constexpr const char *typeName(const Type &type);
 };
 
 class ExprNull : public ExprBase {

@@ -38,7 +38,7 @@ CopyOnWriteString JoinOperator::SQL() const
             description.append("NATURAL ");
         }
         if (type != Type::NotSet) {
-            description.append(JoinOperator::JoinTypeName(type));
+            description.append(JoinOperator::joinTypeName(type));
             description.append(" ");
         }
         description.append("JOIN");
@@ -46,7 +46,7 @@ CopyOnWriteString JoinOperator::SQL() const
     return description;
 }
 
-constexpr const char *JoinOperator::JoinTypeName(const Type &type)
+constexpr const char *JoinOperator::joinTypeName(const Type &type)
 {
     switch (type) {
         case Type::Left:

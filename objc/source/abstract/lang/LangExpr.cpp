@@ -215,7 +215,7 @@ CopyOnWriteString ExprPattern::SQL() const
     if (isNot) {
         description.append("NOT ");
     }
-    description.append(ExprPattern::TypeName(type));
+    description.append(ExprPattern::typeName(type));
     LangRemedialAssert(!right.empty());
     description.append(" " + right.description().get());
     if (!escape.empty()) {
@@ -229,7 +229,7 @@ ExprBase::Type ExprPattern::getType() const
     return ExprBase::Type::Pattern;
 }
 
-constexpr const char *ExprPattern::TypeName(const Type &pattern)
+constexpr const char *ExprPattern::typeName(const Type &pattern)
 {
     switch (pattern) {
         case Type::Like:
