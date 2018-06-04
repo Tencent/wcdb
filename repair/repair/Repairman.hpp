@@ -74,6 +74,7 @@ public:
 
 protected:
     void setPageWeight(double pageWeight);
+    double getPageWeight() const;
     void markCellCount(int cellCount);
     void markCellAsCounted();
 

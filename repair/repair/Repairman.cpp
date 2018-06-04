@@ -151,6 +151,11 @@ void Repairman::setPageWeight(double pageWeight)
     m_pageWeight = pageWeight;
 }
 
+double Repairman::getPageWeight() const
+{
+    return m_pageWeight;
+}
+
 } //namespace Repair
 
 } //namespace WCDB

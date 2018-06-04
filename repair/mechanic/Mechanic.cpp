@@ -59,6 +59,7 @@ void Mechanic::work()
     }
     setPageWeight((double) 1.0 / pageCount);
 
+    markAsAssembling();
     for (const auto &element : m_material.contents) {
         if (isCriticalErrorFatal()) {
             break;
@@ -66,12 +67,15 @@ void Mechanic::work()
         if (!assembleTable(element.first, element.second.sql)) {
             continue;
         }
+        //TODO assembler sequence?
         for (const auto &pageno : element.second.pagenos) {
             if (!crawl(pageno)) {
                 tryUpgradeCrawlerError();
             }
+            increaseProgress(getPageWeight());
         }
     }
+    markAsAssembled();
 }
 
 #pragma mark - Crawlable
