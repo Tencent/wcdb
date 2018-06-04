@@ -97,6 +97,16 @@ Factory::associatedPathsForDatabase(const std::string &database)
     };
 }
 
+std::list<std::string>
+Factory::databasePathsForDatabase(const std::string &database)
+{
+    return {
+        database, Path::addExtention(database, "-journal"),
+        Path::addExtention(database, "-wal"),
+        Path::addExtention(database, "-shm"),
+    };
+}
+
 std::pair<bool, std::list<std::string>> Factory::getMaterialDirectories() const
 {
     std::list<std::string> materialDirectories;

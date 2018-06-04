@@ -57,6 +57,9 @@ public:
 
     static std::list<std::string>
     associatedPathsForDatabase(const std::string &database);
+    static std::list<std::string>
+    databasePathsForDatabase(const std::string &database);
+
     static std::string
     firstMaterialPathForDatabase(const std::string &database);
     static std::string lastMaterialPathForDatabase(const std::string &database);

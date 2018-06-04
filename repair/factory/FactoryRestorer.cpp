@@ -78,6 +78,17 @@ bool FactoryRestorer::work()
         return false;
     }
 
+    //1.5 calculate weights to deal with the progress and score
+    std::list<std::string> materialDirectories;
+    std::tie(succeed, materialDirectories) = factory.getMaterialDirectories();
+    if (!succeed) {
+        tryUpgradeErrorWithThreadedError();
+    }
+
+    if (!calculateWeights(materialDirectories)) {
+        return false;
+    }
+
     //2. Restore from current db. It must be succeed without even non-critical errors.
     if (!restore(factory.database) ||
         m_criticalError.code() != Error::Code::OK) {
@@ -85,11 +96,6 @@ bool FactoryRestorer::work()
     }
 
     //3. Restore from all archived db. It should be succeed without critical errors.
-    std::list<std::string> materialDirectories;
-    std::tie(succeed, materialDirectories) = factory.getMaterialDirectories();
-    if (!succeed) {
-        tryUpgradeErrorWithThreadedError();
-    }
     for (const auto &materialDirectory : materialDirectories) {
         if (!restore(Path::addComponent(materialDirectory, databaseFileName))) {
             return false;
@@ -119,6 +125,8 @@ bool FactoryRestorer::work()
     if (m_criticalError.code() == Error::Code::OK) {
         FileManager::shared()->removeItem(factory.directory);
     }
+
+    finishProgress();
 
     return true;
 }
@@ -165,7 +173,10 @@ bool FactoryRestorer::restore(const std::string &database)
         if (material.deserialize(materialData)) {
             Mechanic mechanic(database);
             mechanic.setAssembler(m_assembler);
-            //TODO progress
+            mechanic.setProgressCallback(
+                [&database, this](double progress, double increment) {
+                    updateProgress(database, increment);
+                });
             mechanic.work();
             tryUpgradeError(mechanic.getCriticalError());
             return mechanic.isCriticalErrorFatal();
@@ -190,7 +201,10 @@ bool FactoryRestorer::restore(const std::string &database)
     }
     FullCrawler fullCrawler(database);
     fullCrawler.setAssembler(m_assembler);
-    //TODO progress
+    fullCrawler.setProgressCallback(
+        [&database, this](double progress, double increment) {
+            updateProgress(database, increment);
+        });
     fullCrawler.work();
     tryUpgradeError(fullCrawler.getCriticalError());
     return fullCrawler.isCriticalErrorFatal();
@@ -202,6 +216,59 @@ void FactoryRestorer::setAssembler(const std::shared_ptr<Assembler> &assembler)
     WCTInnerAssert(m_assembler->getPath().empty());
     m_assembler = assembler;
     m_assembler->setPath(database);
+}
+
+#pragma mark - Score and Progress
+double FactoryRestorer::getScore() const
+{
+    return m_score;
+}
+
+bool FactoryRestorer::calculateWeights(
+    const std::list<std::string> &materialDirectories)
+{
+    size_t totalSize = 0;
+
+    //Origin database
+    if (!calculateWeight(factory.database, totalSize)) {
+        return false;
+    }
+
+    //Materials
+    for (const auto &materialDirectory : materialDirectories) {
+        std::string database =
+            Path::addComponent(materialDirectory, databaseFileName);
+        if (!calculateWeight(database, totalSize)) {
+            return false;
+        }
+    }
+
+    //Resolve to percentage
+    for (auto &element : m_weights) {
+        element.second = element.second / totalSize;
+    }
+    return true;
+}
+
+bool FactoryRestorer::calculateWeight(const std::string &database,
+                                      size_t &totalSize)
+{
+    bool succeed;
+    size_t fileSize;
+    std::tie(succeed, fileSize) = FileManager::shared()->getItemsSize(
+        Factory::databasePathsForDatabase(database));
+    if (!succeed) {
+        return false;
+    }
+    totalSize += fileSize;
+    m_weights[database] = fileSize;
+    return true;
+}
+
+void FactoryRestorer::updateProgress(const std::string &database,
+                                     double increment)
+{
+    increaseProgress(m_weights[database] * increment);
 }
 
 } //namespace Repair

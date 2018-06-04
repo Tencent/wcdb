@@ -58,14 +58,12 @@ public:
 
     const std::string database;
 
-protected:
-    const std::string databaseFileName;
-
 public:
     bool work();
 
 protected:
     bool restore(const std::string &database);
+    const std::string databaseFileName;
 
 #pragma mark - Assembler
 public:
@@ -73,6 +71,18 @@ public:
 
 protected:
     std::shared_ptr<Assembler> m_assembler;
+
+#pragma mark - Score and Progress
+public:
+    double getScore() const;
+
+protected:
+    bool calculateWeights(const std::list<std::string> &materialDirectories);
+    bool calculateWeight(const std::string &database, size_t &totalSize);
+    void updateProgress(const std::string &database, double increment);
+
+    std::map<std::string, double> m_weights;
+    double m_score;
 };
 
 } //namespace Repair
