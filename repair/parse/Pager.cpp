@@ -52,6 +52,17 @@ const std::string &Pager::getPath() const
 
 bool Pager::initialize()
 {
+    bool succeed;
+    size_t fileSize;
+    std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
+    if (!succeed) {
+        return false;
+    }
+    m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
+    if (m_pageCount == 0) {
+        return true;
+    }
+
     if (m_pageSize == -1 || m_reservedBytes == -1) {
         Data data = acquireData(0, 100);
         if (data.empty()) {
@@ -80,11 +91,6 @@ bool Pager::initialize()
         markAsCorrupted();
         return false;
     }
-    auto fileSizePair = FileManager::shared()->getFileSize(getPath());
-    if (!fileSizePair.first) {
-        return false;
-    }
-    m_pageCount = (int) ((fileSizePair.second + m_pageSize - 1) / m_pageSize);
     return true;
 }
 
