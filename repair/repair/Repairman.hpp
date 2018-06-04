@@ -31,7 +31,6 @@ namespace WCDB {
 
 namespace Repair {
 
-//TODO update progress
 class Repairman : public Crawlable, public CriticalErrorOnly, public Progress {
 #pragma mark - Initialize
 public:

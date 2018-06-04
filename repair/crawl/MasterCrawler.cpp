@@ -72,7 +72,7 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
     m_delegate->onMasterCellCrawled(&master);
 }
 
-bool MasterCrawler::willCrawlPage(const Page &page, int unused)
+bool MasterCrawler::willCrawlPage(const Page &page, int)
 {
     m_delegate->onMasterPageCrawled(page);
     return true;

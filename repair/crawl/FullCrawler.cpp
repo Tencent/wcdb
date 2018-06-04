@@ -66,6 +66,12 @@ void FullCrawler::onCellCrawled(const Cell &cell)
     assembleCell(cell);
 }
 
+bool FullCrawler::willCrawlPage(const Page &, int)
+{
+    increaseProgress(getPageWeight());
+    return true;
+}
+
 #pragma mark - MasterCrawlerDelegate
 Pager &FullCrawler::getMasterPager()
 {
@@ -74,6 +80,7 @@ Pager &FullCrawler::getMasterPager()
 
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
+    increaseProgress(getPageWeight());
     if (isCriticalErrorFatal()) {
         return;
     }

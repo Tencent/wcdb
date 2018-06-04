@@ -72,7 +72,6 @@ void Mechanic::work()
             if (!crawl(pageno)) {
                 tryUpgradeCrawlerError();
             }
-            increaseProgress(getPageWeight());
         }
     }
     markAsAssembled();
@@ -87,8 +86,9 @@ void Mechanic::onCellCrawled(const Cell &cell)
     assembleCell(cell);
 }
 
-bool Mechanic::willCrawlPage(const Page &page, int unused)
+bool Mechanic::willCrawlPage(const Page &page, int)
 {
+    increaseProgress(getPageWeight());
     if (isCriticalErrorFatal()) {
         return false;
     }
