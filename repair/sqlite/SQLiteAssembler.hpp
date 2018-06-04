@@ -54,8 +54,6 @@ public:
     bool assembleTable(const std::string &tableName,
                        const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
-    //TODO remove it ?
-    //    bool assembleSequences(const std::map<std::string, int64_t>& sequences) override;
 
     const Error &getError() const override;
 
