@@ -72,7 +72,7 @@ public:
 protected:
     std::shared_ptr<Assembler> m_assembler;
 
-#pragma mark - Score and Progress
+#pragma mark - Evaluation and Progress
 public:
     double getScore() const;
 
@@ -82,6 +82,7 @@ protected:
     void updateProgress(const std::string &database, double increment);
 
     std::map<std::string, double> m_weights;
+    void updateScore(const std::string &database, double increment);
     double m_score;
 };
 

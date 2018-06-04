@@ -131,6 +131,11 @@ void Repairman::tryUpgrateAssemblerError()
 }
 
 #pragma mark - Evaluation
+double Repairman::getScore() const
+{
+    return m_score;
+}
+
 void Repairman::markCellAsCounted()
 {
     m_scorePool += m_cellWeight;

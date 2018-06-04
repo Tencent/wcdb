@@ -51,6 +51,7 @@ FactoryRestorer::FactoryRestorer(const Factory &factory)
     , databaseFileName(Path::getFileName(factory.database))
     , database(
           Path::addComponent(factory.getRestoreDirectory(), databaseFileName))
+    , m_score(0)
 {
 }
 
@@ -178,6 +179,7 @@ bool FactoryRestorer::restore(const std::string &database)
                     updateProgress(database, increment);
                 });
             mechanic.work();
+            updateScore(database, mechanic.getScore());
             tryUpgradeError(mechanic.getCriticalError());
             return mechanic.isCriticalErrorFatal();
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
@@ -206,6 +208,7 @@ bool FactoryRestorer::restore(const std::string &database)
             updateProgress(database, increment);
         });
     fullCrawler.work();
+    updateScore(database, fullCrawler.getScore());
     tryUpgradeError(fullCrawler.getCriticalError());
     return fullCrawler.isCriticalErrorFatal();
 }
@@ -269,6 +272,11 @@ void FactoryRestorer::updateProgress(const std::string &database,
                                      double increment)
 {
     increaseProgress(m_weights[database] * increment);
+}
+
+void FactoryRestorer::updateScore(const std::string &database, double increment)
+{
+    m_score += increment * m_weights[database];
 }
 
 } //namespace Repair
