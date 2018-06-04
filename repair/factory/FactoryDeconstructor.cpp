@@ -34,32 +34,26 @@ FactoryDeconstructor::FactoryDeconstructor(const Factory &factory)
 
 bool FactoryDeconstructor::work(const Filter &shouldTableDeconstructed)
 {
-    Deconstructor deconstructor(factory.database);
+    return doWork(shouldTableDeconstructed, factory.database);
+}
+
+bool FactoryDeconstructor::doWork(const Filter &shouldTableDeconstructed,
+                                  const std::string &path)
+{
+    Deconstructor deconstructor(path);
     deconstructor.filter(shouldTableDeconstructed);
     if (!deconstructor.work()) {
-        return false;
-    }
-    Data material = deconstructor.getMaterial().serialize();
-    if (material.empty()) {
         return false;
     }
 
     bool succeed;
     std::string materialPath;
-    std::tie(succeed, materialPath) =
-        Factory::pickMaterialForOverwriting(factory.database);
+    std::tie(succeed, materialPath) = Factory::pickMaterialForOverwriting(path);
     if (!succeed) {
         return false;
     }
 
-    //TODO cipher
-    FileHandle fileHandle(materialPath);
-    if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||
-        !fileHandle.write(material.buffer(), 0, material.size())) {
-        succeed = false;
-    }
-    fileHandle.close();
-    return succeed;
+    return deconstructor.getMaterial().serialize(materialPath);
 }
 
 } //namespace Repair

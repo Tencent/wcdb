@@ -34,6 +34,10 @@ public:
     using Filter = Deconstructor::Filter;
 
     bool work(const Filter &shouldTableDeconstructed);
+
+protected:
+    bool doWork(const Filter &shouldTableDeconstructed,
+                const std::string &path);
 };
 
 } //namespace Repair

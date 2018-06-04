@@ -21,26 +21,48 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
+#include <WCDB/FactoryDeconstructor.hpp>
 #include <WCDB/FactoryRestorer.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/FullCrawler.hpp>
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-bool FactoryRestorer::work(std::shared_ptr<Assembler> &assembler,
-                           const ProgressUpdateCallback &onProgressUpdated)
+#pragma mark - Deconstructor
+FactoryRestorer::Deconstructor::Deconstructor(const FactoryRestorer &restorer)
+    : FactoryDeconstructor(restorer.factory), m_restorer(restorer)
 {
-    WCTInnerAssert(assembler->getPath().empty());
+}
 
-    //3. Restore from all archived db. It should be succeed without critical errors.
-    //4. Do a deconstructor on restore db.
-    //5. Archive current db and use restore db
-    //6. Remove all archived dbs.
+bool FactoryRestorer::Deconstructor::work(
+    const Filter &shouldTableDeconstructed)
+{
+    return doWork(shouldTableDeconstructed, m_restorer.database);
+}
+
+FactoryRestorer::FactoryRestorer(const Factory &factory)
+    : FactoryDerived(factory)
+    , databaseFileName(Path::getFileName(factory.database))
+    , database(
+          Path::addComponent(factory.getRestoreDirectory(), databaseFileName))
+{
+}
+
+void FactoryRestorer::filter(const Filter &filter)
+{
+    m_filter = filter;
+}
+
+#pragma mark - Restorer
+bool FactoryRestorer::work()
+{
+    WCTInnerAssert(m_assembler->getPath().empty());
 
     FileManager *fileManager = FileManager::shared();
     bool succeed;
@@ -48,60 +70,134 @@ bool FactoryRestorer::work(std::shared_ptr<Assembler> &assembler,
     //1. Remove the old restore db
     std::string restoreDirectory = factory.getRestoreDirectory();
     if (!fileManager->removeItem(restoreDirectory)) {
+        tryUpgradeErrorWithThreadedError();
         return false;
     }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
-    std::string restoreDatabasePath = Path::addComponent(
-        restoreDirectory, Path::getFileName(factory.database));
-    assembler->setPath(restoreDatabasePath);
-    std::string materialPath;
-    std::tie(succeed, materialPath) =
-        Factory::pickMaterialForRestoring(factory.database);
+    if (!restore(factory.database) ||
+        m_criticalError.code() != Error::Code::OK) {
+        return false;
+    }
+
+    //3. Restore from all archived db. It should be succeed without critical errors.
+    std::list<std::string> materialDirectories;
+    std::tie(succeed, materialDirectories) = factory.getMaterialDirectories();
+    if (!succeed) {
+        tryUpgradeErrorWithThreadedError();
+    }
+    for (const auto &materialDirectory : materialDirectories) {
+        if (!restore(Path::addComponent(materialDirectory, databaseFileName))) {
+            return false;
+        }
+    }
+
+    //4. Do a deconstructor on restore db.
+    FactoryRestorer::Deconstructor deconstructor(*this);
+    if (!deconstructor.work(m_filter)) {
+        tryUpgradeErrorWithThreadedError();
+        return false;
+    }
+
+    //5. Archive current db and use restore db
+    FactoryArchiver archiver(factory);
+    if (!archiver.work()) {
+        return false;
+    }
+    std::string baseDirectory = Path::getBaseName(factory.database);
+    succeed = FileManager::shared()->moveItems(
+        Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
         return false;
     }
 
-    //TODO
+    //6. Remove all archived dbs.
+    if (m_criticalError.code() == Error::Code::OK) {
+        FileManager::shared()->removeItem(factory.directory);
+    }
+
+    return true;
+}
+
+bool FactoryRestorer::restore(const std::string &database)
+{
+    WCTInnerAssert(m_assembler != nullptr);
+
+    std::string materialPath;
+    bool succeed;
+    std::tie(succeed, materialPath) =
+        Factory::pickMaterialForRestoring(database);
+    if (!succeed) {
+        tryUpgradeErrorWithThreadedError();
+        return false;
+    }
+
     if (!materialPath.empty()) {
         size_t fileSize;
-        std::tie(succeed, fileSize) = fileManager->getFileSize(materialPath);
+        std::tie(succeed, fileSize) =
+            FileManager::shared()->getFileSize(materialPath);
         if (!succeed) {
+            tryUpgradeErrorWithThreadedError();
             return false;
         }
 
         Data materialData(fileSize);
         if (materialData.empty()) {
+            tryUpgradeErrorWithThreadedError();
             return false;
         }
 
         FileHandle fileHandle(materialPath);
         if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+            tryUpgradeErrorWithThreadedError();
             return false;
         }
         ssize_t read = fileHandle.read(materialData.buffer(), 0, fileSize);
         if (read < 0) {
+            tryUpgradeErrorWithThreadedError();
             return false;
         }
         Material material;
-        //TODO resolved material corruption
-        if (!material.deserialize(materialData)) {
+        if (material.deserialize(materialData)) {
+            Mechanic mechanic(database);
+            mechanic.setAssembler(m_assembler);
+            //TODO progress
+            mechanic.work();
+            tryUpgradeError(mechanic.getCriticalError());
+            return mechanic.isCriticalErrorFatal();
+        } else if (ThreadedErrors::shared()->getThreadedError().code() !=
+                   Error::Code::Corrupt) {
+            tryUpgradeErrorWithThreadedError();
             return false;
         }
-        Mechanic mechanic(factory.database);
-        mechanic.setAssembler(assembler);
-        mechanic.setProgressCallback(onProgressUpdated);
-        mechanic.work();
+        Error warning;
+        warning.level = Error::Level::Warning;
+        warning.setCode(Error::Code::Corrupt, "Repair");
+        warning.infos.set("Path", materialPath);
+        warning.message = "Material is corrupted";
+        Reporter::shared()->report(std::move(warning));
     } else {
-        //TODO Warning
-        FullCrawler fullCrawler(factory.database);
-        fullCrawler.setAssembler(assembler);
-        fullCrawler.setProgressCallback(onProgressUpdated);
-        fullCrawler.work();
+        Error warning;
+        warning.level = Error::Level::Warning;
+        warning.setCode(Error::Code::NotFound, "Repair");
+        warning.infos.set("Path", database);
+        warning.message = "Material not found";
+        Reporter::shared()->report(std::move(warning));
     }
-    //TODO
+    FullCrawler fullCrawler(database);
+    fullCrawler.setAssembler(m_assembler);
+    //TODO progress
+    fullCrawler.work();
+    tryUpgradeError(fullCrawler.getCriticalError());
+    return fullCrawler.isCriticalErrorFatal();
+}
 
-    return false;
+#pragma mark - Assembler
+void FactoryRestorer::setAssembler(const std::shared_ptr<Assembler> &assembler)
+{
+    WCTInnerAssert(m_assembler->getPath().empty());
+    m_assembler = assembler;
+    m_assembler->setPath(database);
 }
 
 } //namespace Repair

@@ -22,6 +22,8 @@
 #define FactoryRestorer_hpp
 
 #include <WCDB/Assembler.hpp>
+#include <WCDB/CriticalErrorOnly.hpp>
+#include <WCDB/FactoryDeconstructor.hpp>
 #include <WCDB/FactoryDerived.hpp>
 #include <WCDB/Progress.hpp>
 
@@ -29,13 +31,48 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryRestorer : public FactoryDerived {
+class FactoryRestorer : public FactoryDerived,
+                        public CriticalErrorOnly,
+                        public Progress {
+#pragma mark - Deconstructor
 public:
-    using FactoryDerived::FactoryDerived;
-    typedef Progress::ProgressUpdateCallback ProgressUpdateCallback;
+    class Deconstructor : public FactoryDeconstructor {
+    public:
+        Deconstructor(const FactoryRestorer &restorer);
 
-    bool work(std::shared_ptr<Assembler> &assembler,
-              const ProgressUpdateCallback &onProgressUpdated);
+        bool work(const Filter &shouldTableDeconstructed);
+
+    protected:
+        const FactoryRestorer &m_restorer;
+    };
+
+    typedef Deconstructor::Filter Filter;
+    void filter(const Filter &filter);
+
+protected:
+    Filter m_filter;
+
+#pragma mark - Restorer
+public:
+    FactoryRestorer(const Factory &factory);
+
+    const std::string database;
+
+protected:
+    const std::string databaseFileName;
+
+public:
+    bool work();
+
+protected:
+    bool restore(const std::string &database);
+
+#pragma mark - Assembler
+public:
+    void setAssembler(const std::shared_ptr<Assembler> &assembler);
+
+protected:
+    std::shared_ptr<Assembler> m_assembler;
 };
 
 } //namespace Repair
