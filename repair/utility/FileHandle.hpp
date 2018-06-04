@@ -49,6 +49,7 @@ public:
     };
     bool open(Mode mode);
     void close();
+    ssize_t size();
     ssize_t read(unsigned char *buffer, off_t offset, size_t size);
     ssize_t write(unsigned char *buffer, off_t offset, size_t size);
 

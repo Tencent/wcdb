@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Reporter.hpp>
@@ -65,8 +66,15 @@ void FileHandle::close()
     }
 }
 
+ssize_t FileHandle::size()
+{
+    WCTInnerAssert(m_fd != -1);
+    return lseek(m_fd, 0, SEEK_END);
+}
+
 ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
 {
+    WCTInnerAssert(m_fd != -1);
     ssize_t got;
     size_t prior = 0;
     do {
@@ -94,6 +102,7 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
 
 ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
 {
+    WCTInnerAssert(m_fd != -1);
     ssize_t wrote;
     ssize_t prior = 0;
     do {
@@ -125,7 +134,7 @@ void FileHandle::setThreadedError()
     error.message = strerror(errno);
     error.infos.set("Path", path);
     Reporter::shared()->report(error);
-    setThreadedError(std::move(error));
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 } //namespace WCDB
