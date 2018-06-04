@@ -131,15 +131,14 @@ Data Pager::acquireData(off_t offset, size_t size)
         return data;
     }
     ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
-    if (read == size) {
-        return data;
-    } else if (read < 0) {
-        //file handle error
-    } else {
-        //short read
-        markAsCorrupted();
+    if (read != size) {
+        if (read >= 0) {
+            //short read
+            markAsCorrupted();
+        }
+        return Data::emptyData();
     }
-    return Data::emptyData();
+    return data;
 }
 
 #pragma mark - Error
