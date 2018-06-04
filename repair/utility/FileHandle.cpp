@@ -51,7 +51,7 @@ bool FileHandle::open(Mode mode)
         }
         m_fd = ::open(path.c_str(), flag);
         if (m_fd == -1) {
-            setupThreadedError();
+            setThreadedError();
         }
     }
     return m_fd != -1;
@@ -80,7 +80,7 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
                 continue;
             }
             prior = 0;
-            setupThreadedError();
+            setThreadedError();
             break;
         } else if (got > 0) {
             size -= got;
@@ -106,7 +106,7 @@ ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
                 wrote = 1;
                 continue;
             }
-            setupThreadedError();
+            setThreadedError();
             break;
         } else if (wrote > 0) {
             size -= wrote;
@@ -118,7 +118,7 @@ ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
     return wrote + prior;
 }
 
-void FileHandle::setupThreadedError()
+void FileHandle::setThreadedError()
 {
     Error error;
     error.setSystemCode(errno, Error::Code::IOError);

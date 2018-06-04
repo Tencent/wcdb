@@ -54,7 +54,7 @@ public:
 
 #pragma mark - Error
 protected:
-    void setupThreadedError();
+    void setThreadedError();
 };
 
 } //namespace WCDB
