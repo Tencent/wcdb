@@ -301,18 +301,4 @@ ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors()
     return getHandlePool()->getThreadedErrors();
 }
 
-#pragma mark - Info
-#if __cplusplus > 201402L
-#warning TODO refactor with std::any
-#endif
-void HandlePool::setCipher(const Data &cipher)
-{
-    m_cipher = cipher.copy();
-}
-
-const Data &HandlePool::getCipher() const
-{
-    return m_cipher;
-}
-
 } //namespace WCDB

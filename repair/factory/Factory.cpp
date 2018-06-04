@@ -44,16 +44,6 @@ std::list<std::string> Factory::getAssociatedPaths() const
     return Factory::associatedPathsForDatabase(database);
 }
 
-std::string Factory::getFirstMaterialPath() const
-{
-    return firstMaterialPathForDatabase(database);
-}
-
-std::string Factory::getLastMaterialPath() const
-{
-    return lastMaterialPathForDatabase(database);
-}
-
 FactoryArchiver Factory::archiver() const
 {
     return FactoryArchiver(*this);

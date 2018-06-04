@@ -35,6 +35,7 @@ namespace Repair {
 
 class Assembler;
 
+//Thread safe
 class Factory {
 public:
     Factory(const std::string &database);
@@ -44,8 +45,6 @@ public:
 
     std::list<std::string> getAssociatedPaths() const;
 
-    std::string getFirstMaterialPath() const;
-    std::string getLastMaterialPath() const;
     std::string getRestoreDirectory() const;
     std::pair<bool, std::list<std::string>> getMaterialDirectories() const;
 

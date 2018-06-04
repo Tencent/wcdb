@@ -24,6 +24,7 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
+#include <WCDB/Factory.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
@@ -123,14 +124,6 @@ protected:
 private:
     friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
     ThreadedErrors m_errors;
-
-#pragma mark - Info
-public:
-    void setCipher(const Data &cipher);
-    const Data &getCipher() const;
-
-private:
-    Data m_cipher;
 };
 
 } //namespace WCDB

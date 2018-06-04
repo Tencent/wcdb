@@ -155,9 +155,7 @@ void Database::removeConfig(const std::string &name)
 
 void Database::setCipher(const Data &cipher, int pageSize)
 {
-    m_pool->setCipher(cipher);
-    m_pool->setConfig(
-        CipherConfig::configWithKey(m_pool->getCipher(), pageSize));
+    m_pool->setConfig(CipherConfig::configWithKey(cipher, pageSize));
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
