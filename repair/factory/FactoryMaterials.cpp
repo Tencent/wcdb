@@ -29,16 +29,19 @@ namespace WCDB {
 namespace Repair {
 
 FactoryMaterials::FactoryMaterials(const Factory &factory)
-    : FactoryDerived(factory), m_done(std::async([this]() -> bool {
-        //TODO re-do when failed, skip corruption
-        return doWork();
-    }))
+    : FactoryDerived(factory)
+    , m_done(std::async([this]() -> bool { return doWork(); }))
 {
 }
 
 bool FactoryMaterials::work()
 {
-    return m_done.get();
+    bool succeed = m_done.get();
+    if (!succeed) {
+        //retry
+        m_done = std::async([this]() -> bool { return doWork(); });
+    }
+    return succeed;
 }
 
 bool FactoryMaterials::doWork()
