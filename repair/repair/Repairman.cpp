@@ -90,9 +90,10 @@ void Repairman::towardMilestone(int mile)
 }
 
 bool Repairman::assembleTable(const std::string &tableName,
-                              const std::string &sql)
+                              const std::string &sql,
+                              int64_t sequence)
 {
-    if (m_assembler->assembleTable(tableName, sql)) {
+    if (m_assembler->assembleTable(tableName, sql, sequence)) {
         towardMilestone(100);
         return true;
     }

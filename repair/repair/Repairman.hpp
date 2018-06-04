@@ -55,7 +55,9 @@ protected:
     bool markAsAssembling();
     void markAsAssembled();
 
-    bool assembleTable(const std::string &tableName, const std::string &sql);
+    bool assembleTable(const std::string &tableName,
+                       const std::string &sql,
+                       int64_t sequence);
     void assembleCell(const Cell &cell);
 
 protected:

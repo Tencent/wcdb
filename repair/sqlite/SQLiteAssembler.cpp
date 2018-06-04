@@ -71,10 +71,11 @@ bool SQLiteAssembler::markAsMilestone()
 }
 
 bool SQLiteAssembler::assembleTable(const std::string &tableName,
-                                    const std::string &sql)
+                                    const std::string &sql,
+                                    int64_t sequence)
 {
     finalize();
-    if (!execute(sql.c_str())) {
+    if (!execute(sql.c_str()) || !assemblerSequence(tableName, sequence)) {
         return false;
     }
     int rc = onTableAssembled(tableName);
@@ -125,6 +126,18 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
 }
 
 #pragma mark - Helper
+bool SQLiteAssembler::assemblerSequence(const std::string &tableName,
+                                        int64_t sequence)
+{
+    if (sequence <= 0) {
+        return true;
+    }
+    std::ostringstream stringStream;
+    stringStream << "INSERT INTO sqlite_sequence(name, seq) VALUES("
+                 << tableName << ", " << sequence << ")";
+    return execute(stringStream.str().c_str());
+}
+
 std::pair<bool, std::list<std::string>>
 SQLiteAssembler::getColumnNames(const std::string &tableName)
 {

@@ -99,7 +99,7 @@ void FullCrawler::onMasterCellCrawled(const Master *master)
         //skip index/view/trigger
         return;
     }
-    if (assembleTable(master->tableName, master->sql)) {
+    if (assembleTable(master->tableName, master->sql, 0)) {
         crawl(master->rootpage);
     }
 }

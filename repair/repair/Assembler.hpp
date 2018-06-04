@@ -46,7 +46,8 @@ public:
 
     virtual bool markAsMilestone() = 0;
     virtual bool assembleTable(const std::string &tableName,
-                               const std::string &sql) = 0;
+                               const std::string &sql,
+                               int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
     //    virtual bool assembleSequences(const std::map<std::string, int64_t>& sequences) = 0;
 

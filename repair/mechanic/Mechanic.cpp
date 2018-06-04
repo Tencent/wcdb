@@ -64,10 +64,10 @@ void Mechanic::work()
         if (isCriticalErrorFatal()) {
             break;
         }
-        if (!assembleTable(element.first, element.second.sql)) {
+        if (!assembleTable(element.first, element.second.sql,
+                           element.second.sequence)) {
             continue;
         }
-        //TODO assembler sequence?
         for (const auto &pageno : element.second.pagenos) {
             if (!crawl(pageno)) {
                 tryUpgradeCrawlerError();
