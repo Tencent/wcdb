@@ -73,6 +73,10 @@ bool FactoryRestorer::work()
         tryUpgradeErrorWithThreadedError();
         return false;
     }
+    if (!fileManager->createDirectoryWithIntermediateDirectories(
+            factory.getRestoreDirectory())) {
+        return false;
+    }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
     if (!restore(factory.database) ||
