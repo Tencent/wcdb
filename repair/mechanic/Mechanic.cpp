@@ -50,6 +50,9 @@ void Mechanic::work()
         return;
     }
 
+    m_pager.setPageSize(m_material.info.pageSize);
+    m_pager.setReservedBytes(m_material.info.reservedBytes);
+
     int pageCount = 0;
     for (const auto &element : m_material.contents) {
         pageCount += element.second.pagenos.size();
