@@ -298,10 +298,8 @@ bool Handle::isPrepared()
 #pragma mark - Convenient
 std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 {
-    static const StatementSelect s_statementSelect =
-        StatementSelect().select(1).limit(0);
-    StatementSelect statementSelect = s_statementSelect;
-    statementSelect.from(table);
+    StatementSelect statementSelect =
+        StatementSelect().select(1).from(table).limit(0);
     m_error.level = Error::Level::Ignore;
     bool unused;
     bool result = Handle::prepare(statementSelect) && Handle::step(unused);
