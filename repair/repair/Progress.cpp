@@ -41,10 +41,11 @@ void Progress::finishProgress()
 
 void Progress::updateProgress(double progress)
 {
-    if (m_progress < progress) {
+    double increment = m_progress - progress;
+    if (increment > 0) {
         m_progress = progress;
         if (m_onProgressUpdate) {
-            m_onProgressUpdate(m_progress);
+            m_onProgressUpdate(m_progress, increment);
         }
     }
 }
