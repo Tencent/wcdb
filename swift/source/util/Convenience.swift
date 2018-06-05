@@ -95,8 +95,8 @@ internal extension Array where Element==ColumnIndexConvertible {
 }
 
 internal extension Array where Element==PropertyConvertible {
-    internal func asCodingTableKeys() -> ContiguousArray<CodingTableKeyBase> {
-        return reduce(into: ContiguousArray<CodingTableKeyBase>()) { (result, element) in
+    internal func asCodingTableKeys() -> [CodingTableKeyBase] {
+        return reduce(into: [CodingTableKeyBase]()) { (result, element) in
             result.append(element.codingTableKey)
         }
     }

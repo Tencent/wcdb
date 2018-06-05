@@ -51,7 +51,7 @@ extension CodingTableKey {
         return objectRelationalMapping.allProperties
     }
     public static var any: Column {
-        return Column.any
+        return Column.all
     }
 }
 

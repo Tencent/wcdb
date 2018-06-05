@@ -492,7 +492,7 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testRedirect() {
-        let property = CRUDObject.Properties.allColumns.count().as(CRUDObject.Properties.variable1)
+        let property = CRUDObject.Properties.any.count().as(CRUDObject.Properties.variable1)
         let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(
             try database.getObject(on: property, fromTable: CRUDObject.name)
         )

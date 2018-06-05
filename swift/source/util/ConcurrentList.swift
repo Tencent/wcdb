@@ -21,7 +21,7 @@
 import Foundation
 
 final class ConcurrentList<Value> {
-    var values: ContiguousArray<Value> = []
+    var values: [Value] = []
     let capacityCap: Int
     let spin = Spin()
 

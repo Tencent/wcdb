@@ -112,16 +112,6 @@
 		23E737C81FB1689A00EEBC3D /* fts3_tokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 232DA34A1FB070F00075F021 /* fts3_tokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		23E737CD1FB1693400EEBC3D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23121ADC1E6FF9110012B45E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 23E737C91FB168B500EEBC3D;
-			remoteInfo = preprocess;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		23121C071E6FFA890012B45E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		232DA3201FB06FFD0075F021 /* keywordhash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = keywordhash.h; path = ../keywordhash.h; sourceTree = "<group>"; };
@@ -478,23 +468,6 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
-/* Begin PBXLegacyTarget section */
-		23E737C91FB168B500EEBC3D /* preprocess */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION) -f Makefile.preprocessed";
-			buildConfigurationList = 23E737CA1FB168B500EEBC3D /* Build configuration list for PBXLegacyTarget "preprocess" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = "$(SRCROOT)/../../../sqlcipher";
-			dependencies = (
-			);
-			name = preprocess;
-			passBuildSettingsInEnvironment = 0;
-			productName = preprocess;
-		};
-/* End PBXLegacyTarget section */
-
 /* Begin PBXNativeTarget section */
 		239325C71E836A7700D677CC /* sqlcipher.swift */ = {
 			isa = PBXNativeTarget;
@@ -508,7 +481,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				23E737CE1FB1693400EEBC3D /* PBXTargetDependency */,
 			);
 			name = sqlcipher.swift;
 			productName = sqlcipher;
@@ -528,10 +500,6 @@
 						CreatedOnToolsVersion = 8.2;
 						ProvisioningStyle = Automatic;
 					};
-					23E737C91FB168B500EEBC3D = {
-						CreatedOnToolsVersion = 9.0;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 23121ADF1E6FF9110012B45E /* Build configuration list for PBXProject "sqlcipher.swift" */;
@@ -547,7 +515,6 @@
 			projectRoot = "";
 			targets = (
 				239325C71E836A7700D677CC /* sqlcipher.swift */,
-				23E737C91FB168B500EEBC3D /* preprocess */,
 			);
 		};
 /* End PBXProject section */
@@ -671,14 +638,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		23E737CE1FB1693400EEBC3D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 23E737C91FB168B500EEBC3D /* preprocess */;
-			targetProxy = 23E737CD1FB1693400EEBC3D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		23121AE61E6FF9110012B45E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -689,15 +648,8 @@
 					armv7,
 					arm64,
 				);
-				"ARCHS[sdk=iphonesimulator*]" = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-					arm64,
-				);
-				"ARCHS[sdk=macosx*]" = (
-					"$(ARCHS_STANDARD)",
-					x86_64,
-				);
+				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
+				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -772,7 +724,9 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VALID_ARCHS = "x86_64 armv7 arm64";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
+				"VALID_ARCHS[sdk=macosx*]" = x86_64;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -786,15 +740,8 @@
 					armv7,
 					arm64,
 				);
-				"ARCHS[sdk=iphonesimulator*]" = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-					arm64,
-				);
-				"ARCHS[sdk=macosx*]" = (
-					"$(ARCHS_STANDARD)",
-					x86_64,
-				);
+				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
+				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -865,7 +812,9 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VALID_ARCHS = "x86_64 armv7 arm64";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
+				"VALID_ARCHS[sdk=macosx*]" = x86_64;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -914,63 +863,6 @@
 			};
 			name = Release;
 		};
-		23E737CB1FB168B500EEBC3D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEBUGGING_SYMBOLS = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		23E737CC1FB168B500EEBC3D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -988,15 +880,6 @@
 			buildConfigurations = (
 				239325CD1E836A7700D677CC /* Debug */,
 				239325CE1E836A7700D677CC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23E737CA1FB168B500EEBC3D /* Build configuration list for PBXLegacyTarget "preprocess" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23E737CB1FB168B500EEBC3D /* Debug */,
-				23E737CC1FB168B500EEBC3D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

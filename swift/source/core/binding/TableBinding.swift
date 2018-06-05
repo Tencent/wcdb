@@ -23,7 +23,7 @@ import Foundation
 public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     private let properties: [CodingTableKeyType: Property]
     let allProperties: [Property]
-    let allKeys: ContiguousArray<CodingTableKeyType>
+    let allKeys: [CodingTableKeyType]
 
     private lazy var columnTypes: [String: ColumnType] = {
         // CodingTableKeyType.Root must conform to TableEncodable protocol.
@@ -61,7 +61,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey> {
     public init(_ type: CodingTableKeyType.Type) {
         var allProperties: [Property] = []
         var properties: [CodingTableKeyType: Property] = [:]
-        var allKeys: ContiguousArray<CodingTableKeyType> = []
+        var allKeys: [CodingTableKeyType] = []
 
         var i = 0
         while true {
