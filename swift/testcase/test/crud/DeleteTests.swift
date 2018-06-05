@@ -29,8 +29,7 @@ class DeleteTests: CRUDTestCase {
         super.setUp()
 
         let optionalDelete = WCDBAssertNoThrowReturned(
-            try database.prepareDelete(fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareDelete(fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalDelete)
         delete = optionalDelete!

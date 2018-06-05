@@ -136,8 +136,7 @@ class MultiSelectTests: CRUDTestCase {
                 CRUDObject.Properties.variable2.in(table: CRUDObject.name),
                 MultiSelectObject.Properties.variable1.in(table: MultiSelectObject.name),
                 MultiSelectObject.Properties.variable2.in(table: MultiSelectObject.name),
-                                            fromTables: tables),
-            whenFailed: nil)
+                                            fromTables: tables))
         XCTAssertNotNil(optionalMultiSelect)
         let property1 = CRUDObject.Properties.variable1.in(table: CRUDObject.name)
         let property2 = MultiSelectObject.Properties.variable1.in(table: MultiSelectObject.name)
@@ -159,11 +158,7 @@ class MultiSelectTests: CRUDTestCase {
         let baseResults = results as? [[String: CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
-        for i in 0..<2 {
-            print(baseResults![i])
-//            print(preInsertedMultiObjects[i])
-        }
-        XCTAssertTrue(baseResults!.sorted() == preInsertedMultiObjects.sorted())
+        XCTAssertTrue(baseResults! == preInsertedMultiObjects)
     }
 
     func testOrderedSelect() {
@@ -175,7 +170,7 @@ class MultiSelectTests: CRUDTestCase {
         let baseResults = results as? [[String: CRUDObjectBase]]
         //Then
         XCTAssertNotNil(baseResults)
-        XCTAssertTrue(baseResults! == preInsertedMultiObjects.sorted().reversed())
+        XCTAssertTrue(baseResults! == preInsertedMultiObjects.reversed())
     }
 
     func testLimitedSelect() {
@@ -188,7 +183,7 @@ class MultiSelectTests: CRUDTestCase {
         //Then
         XCTAssertNotNil(baseResults)
         XCTAssertEqual(baseResults!.count, 1)
-        XCTAssertTrue(baseResults![0] == preInsertedMultiObjects.sorted()[0])
+        XCTAssertTrue(baseResults![0] == preInsertedMultiObjects[0])
     }
 
     func testOffsetSelect() {
@@ -201,19 +196,19 @@ class MultiSelectTests: CRUDTestCase {
         //Then
         XCTAssertNotNil(baseResults)
         XCTAssertEqual(baseResults!.count, 1)
-        XCTAssertTrue(baseResults![0] == preInsertedMultiObjects.sorted()[1])
+        XCTAssertTrue(baseResults![0] == preInsertedMultiObjects[1])
     }
 
     func testSelectIteration() {
         //When
         var results: [[String: CRUDObjectBase]] = []
-        while let result = WCDBAssertNoThrowReturned(try multiSelect.nextMultiObject(), whenFailed: nil) {
+        while let result = WCDBAssertNoThrowReturned(try multiSelect.nextMultiObject()) {
             let crudObject = result as? [String: CRUDObjectBase]
             XCTAssertNotNil(crudObject)
             results.append(crudObject!)
         }
         //Then
-        XCTAssertTrue(results.sorted() == preInsertedMultiObjects.sorted())
+        XCTAssertTrue(results == preInsertedMultiObjects)
     }
 
     func testMultiSelectFailed() {

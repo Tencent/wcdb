@@ -46,7 +46,7 @@ class SelectInterfaceTests: CRUDTestCase {
             try database.getObjects(fromTable: CRUDObject.name, orderBy: order),
             whenFailed: [CRUDObject]()
         )
-        XCTAssertEqual(results, preInsertedObjects.sorted().reversed())
+        XCTAssertEqual(results, preInsertedObjects.reversed())
     }
 
     func testLimitedSelect() {
@@ -55,7 +55,7 @@ class SelectInterfaceTests: CRUDTestCase {
             whenFailed: [CRUDObject]()
         )
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(results[0], preInsertedObjects.sorted()[0])
+        XCTAssertEqual(results[0], preInsertedObjects[0])
     }
 
     func testOffsetSelect() {
@@ -64,7 +64,7 @@ class SelectInterfaceTests: CRUDTestCase {
             whenFailed: [CRUDObject]()
         )
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(results[0], preInsertedObjects.sorted()[1])
+        XCTAssertEqual(results[0], preInsertedObjects[1])
     }
 
     func testPartialSelect() {

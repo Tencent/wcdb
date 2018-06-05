@@ -24,72 +24,82 @@ import WCDBSwift
 class LiteralValueTests: BaseTestCase {
 
     struct Int32LiteralValue: ColumnCodable {
-        func archivedValue() -> Int32? {
-            return int32
+        static var columnType: ColumnType {
+            return .integer32
         }
-        init?(with value: Int32) {
-            self.init(value)
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(int32)
+        }
+        init?(with value: FundamentalValue) {
+            self.init(value.int32Value)
         }
         init(_ value: Int32) {
             int32 = value
         }
-        typealias FundamentalType = Int32
         var int32: Int32
     }
 
     struct Int64LiteralValue: ColumnCodable {
-        func archivedValue() -> Int64? {
-            return int64
+        static var columnType: ColumnType {
+            return .integer64
         }
-        init?(with value: Int64) {
-            self.init(value)
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(int64)
+        }
+        init?(with value: FundamentalValue) {
+            self.init(value.int64Value)
         }
         init(_ value: Int64) {
             int64 = value
         }
-        typealias FundamentalType = Int64
         var int64: Int64
     }
 
     struct FloatLiteralValue: ColumnCodable {
-        func archivedValue() -> Double? {
-            return double
+        static var columnType: ColumnType {
+            return .float
         }
-        init?(with value: Double) {
-            self.init(value)
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(double)
+        }
+        init?(with value: FundamentalValue) {
+            self.init(value.doubleValue)
         }
         init(_ value: Double) {
             double = value
         }
-        typealias FundamentalType = Double
         var double: Double
     }
 
     struct StringLiteralValue: ColumnCodable {
-        func archivedValue() -> String? {
-            return string
+        static var columnType: ColumnType {
+            return .float
         }
-        init?(with value: String) {
-            self.init(value)
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(string)
+        }
+        init?(with value: FundamentalValue) {
+            self.init(value.stringValue)
         }
         init(_ value: String) {
             string = value
         }
-        typealias FundamentalType = String
         var string: String
     }
 
     struct DataLiteralValue: ColumnCodable {
-        func archivedValue() -> Data? {
-            return data
+        static var columnType: ColumnType {
+            return .BLOB
         }
-        init?(with value: Data) {
-            self.init(value)
+        func archivedValue() -> FundamentalValue {
+            return FundamentalValue(data)
+        }
+        init?(with value: FundamentalValue) {
+            self.init(value.dataValue)
         }
         init(_ value: Data) {
             data = value
         }
-        typealias FundamentalType = Data
         var data: Data
     }
 

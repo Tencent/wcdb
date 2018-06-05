@@ -135,12 +135,16 @@ public final class Update {
     ///
     /// - Parameter row: Column encodable row
     /// - Throws: `Error`
-    public func execute(with row: [ColumnEncodableBase?]) throws {
+    public func execute(with row: [ColumnEncodable?]) throws {
         let recyclableHandleStatement: RecyclableHandleStatement = try core.prepare(statement)
         let handleStatement = recyclableHandleStatement.raw
         for (index, value) in row.enumerated() {
             let bindingIndex = index + 1
-            handleStatement.bind(value?.archivedFundamentalValue(), toIndex: bindingIndex)
+            if let archivedValue = value?.archivedValue() {
+                handleStatement.bind(archivedValue, toIndex: bindingIndex)
+            } else {
+                handleStatement.bind(nil, toIndex: bindingIndex)
+            }
         }
         try handleStatement.step()
         changes = handleStatement.changes

@@ -45,27 +45,27 @@ public struct ColumnConstraintBinding {
         self.conflict = conflict
     }
 
-    public init<ColumnEncodableType: ColumnEncodableBase>(
+    public init<T: ColumnEncodable>(
         isPrimary: Bool = false,
         orderBy term: OrderTerm? = nil,
         isAutoIncrement: Bool = false,
         onConflict conflict: Conflict? = nil,
         isNotNull: Bool = false,
         isUnique: Bool = false,
-        defaultTo defaultEncodableValue: ColumnEncodableType) {
+        defaultTo defaultEncodedValue: T) {
         var defaultValue: ColumnDef.DefaultType!
-        let value = defaultEncodableValue.archivedFundamentalValue()
-        switch ColumnEncodableType.columnType {
+        let value = defaultEncodedValue.archivedValue()
+        switch T.columnType {
         case .integer32:
-            defaultValue = .int32(value as! Int32)
+            defaultValue = .int32(value.int32Value)
         case .integer64:
-            defaultValue = .int64(value as! Int64)
+            defaultValue = .int64(value.int64Value)
         case .text:
-            defaultValue = .text(value as! String)
+            defaultValue = .text(value.stringValue)
         case .float:
-            defaultValue = .float(value as! Double)
+            defaultValue = .float(value.doubleValue)
         case .BLOB:
-            defaultValue = .BLOB(value as! Data)
+            defaultValue = .BLOB(value.dataValue)
         case .null:
             defaultValue = .null
         }

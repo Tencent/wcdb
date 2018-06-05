@@ -150,7 +150,7 @@ internal final class ColumnTypeDecoder: Decoder {
 
         internal func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T: Decodable {
             // `type` must conform to ColumnDecodableBase protocol
-            let columnDecodableType = type as! ColumnDecodableBase.Type
+            let columnDecodableType = type as! ColumnDecodable.Type
             decoder.results[key.stringValue] = columnDecodableType.columnType
 
             let sizedPointer = SizedPointer(of: T.self)

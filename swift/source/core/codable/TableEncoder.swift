@@ -144,8 +144,8 @@ final class TableEncoder: Encoder {
                 return
             }
             //`key` must conform to ColumnEncodable protocol.
-            let encodableColumnValue = value as! ColumnEncodableBase
-            handleStatement.bind(encodableColumnValue.archivedFundamentalValue(), toIndex: index)
+            let encodableColumnValue = value as! ColumnEncodable
+            handleStatement.bind(encodableColumnValue.archivedValue(), toIndex: index)
         }
 
         func encode(_ value: Int8, forKey key: Key) throws {
@@ -373,8 +373,8 @@ final class TableEncoder: Encoder {
                 }
             if value != nil {
                 //`key` must conform to ColumnEncodable protocol.
-                let encodableColumnValue = value! as! ColumnEncodableBase
-                handleStatement.bind(encodableColumnValue.archivedFundamentalValue(), toIndex: index)
+                let encodableColumnValue = value! as! ColumnEncodable
+                handleStatement.bind(encodableColumnValue.archivedValue(), toIndex: index)
             } else {
                 handleStatement.bind(nil, toIndex: index)
             }

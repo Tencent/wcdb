@@ -44,10 +44,14 @@ public final class Insert {
         self.core = core
     }
 
+    private var conflict: Conflict? {
+        return isReplace ? Conflict.replace : nil
+    }
+
     private lazy var statement: StatementInsert = StatementInsert()
         .insert(intoTable: name,
                 with: properties!,
-                onConflict: isReplace ? Conflict.replace : nil)
+                onConflict: self.conflict)
         .values(Array(repeating: Expression.bindParameter, count: properties!.count))
 
     /// Execute the insert chain call with objects.

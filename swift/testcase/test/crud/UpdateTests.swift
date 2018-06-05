@@ -29,8 +29,7 @@ class UpdateTests: CRUDTestCase {
         super.setUp()
 
         let optionalUpdate = WCDBAssertNoThrowReturned(
-            try database.prepareUpdate(table: CRUDObject.name, on: CRUDObject.Properties.variable2),
-            whenFailed: nil
+            try database.prepareUpdate(table: CRUDObject.name, on: CRUDObject.Properties.variable2)
         )
         XCTAssertNotNil(optionalUpdate)
         update = optionalUpdate!

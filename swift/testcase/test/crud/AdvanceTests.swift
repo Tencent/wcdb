@@ -24,8 +24,8 @@ import WCDBSwift
 class AdvanceTests: CRUDTestCase {
 
     func testCoreStatement() {
-        let statement = StatementSelect().select(Column.any).from(Master.builtinTableName)
-        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        let statement = StatementSelect().select(Column.all).from(Master.builtinTableName)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
         XCTAssertNotNil(coreStatement.tag)
@@ -35,8 +35,8 @@ class AdvanceTests: CRUDTestCase {
 
     func testCoreStatementRead() {
         //Give
-        let statement = StatementSelect().select(Column.any).from(CRUDObject.name)
-        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        let statement = StatementSelect().select(Column.all).from(CRUDObject.name)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
 
@@ -90,7 +90,7 @@ class AdvanceTests: CRUDTestCase {
         //Give
         let bindParameters = Array(repeating: Expression.bindParameter, count: 2)
         let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindParameters)
-        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
 
@@ -155,7 +155,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: CoreStatementTypedObject.self))
         XCTAssertNoThrow(try database.insert(objects: CoreStatementTypedObject(), intoTable: tableName))
 
-        let statement = StatementSelect().select(Column.any).from(tableName)
+        let statement = StatementSelect().select(Column.all).from(tableName)
         let coreStatement: CoreStatement? = WCDBAssertNoThrowReturned(try database.prepare(statement))
         XCTAssertNotNil(coreStatement)
         let wrappedCoreStatement = coreStatement!
@@ -266,7 +266,7 @@ class AdvanceTests: CRUDTestCase {
         //Give
         let bindParameters = Array(repeating: Expression.bindParameter, count: 2)
         let statement = StatementInsert().insert(intoTable: CRUDObject.name).values(bindParameters)
-        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement), whenFailed: nil)
+        let optionalCoreStatement = WCDBAssertNoThrowReturned(try database.prepare(statement))
         XCTAssertNotNil(optionalCoreStatement)
         let coreStatement = optionalCoreStatement!
 
@@ -279,7 +279,7 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testExecFailed() {
-        let statement = StatementSelect().select(Column.any).from("nonexistentTable")
+        let statement = StatementSelect().select(Column.all).from("nonexistentTable")
         XCTAssertThrowsError(try database.exec(statement))
     }
 
@@ -304,7 +304,7 @@ class AdvanceTests: CRUDTestCase {
 
         database.close()
         database.setCipher(key: password)
-        let exists = WCDBAssertNoThrowReturned(try database.isTableExists(CRUDObject.name), whenFailed: nil)
+        let exists = WCDBAssertNoThrowReturned(try database.isTableExists(CRUDObject.name))
         XCTAssertNotNil(exists)
         XCTAssertTrue(exists!)
     }
@@ -324,8 +324,7 @@ class AdvanceTests: CRUDTestCase {
         //Then
         do {
             let optionalCoreStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.secureDelete)),
-                whenFailed: nil
+                try database.prepare(StatementPragma().pragma(.secureDelete))
             )
             XCTAssertNotNil(optionalCoreStatement)
             let coreStatement = optionalCoreStatement!
@@ -346,8 +345,7 @@ class AdvanceTests: CRUDTestCase {
         //Then
         do {
             let optionalCoreStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.secureDelete)),
-                whenFailed: nil
+                try database.prepare(StatementPragma().pragma(.secureDelete))
             )
             XCTAssertNotNil(optionalCoreStatement)
             let coreStatement = optionalCoreStatement!
@@ -363,8 +361,7 @@ class AdvanceTests: CRUDTestCase {
         //Then
         do {
             let optionalCoreStatement = WCDBAssertNoThrowReturned(
-                try database.prepare(StatementPragma().pragma(.secureDelete)),
-                whenFailed: nil
+                try database.prepare(StatementPragma().pragma(.secureDelete))
             )
             XCTAssertNotNil(optionalCoreStatement)
             let coreStatement = optionalCoreStatement!
@@ -488,17 +485,16 @@ class AdvanceTests: CRUDTestCase {
         //Give
         database.close()
         database.setConfig(named: "testConfigFailed", with: { (handle) throws in
-            try handle.exec(StatementSelect().select(Column.any).from("nonexistentTable"))
+            try handle.exec(StatementSelect().select(Column.all).from("nonexistentTable"))
         })
         //When
         XCTAssertFalse(database.canOpen)
     }
 
     func testRedirect() {
-        let property = CRUDObject.Properties.any.count().as(CRUDObject.Properties.variable1)
+        let property = CRUDObject.Properties.allColumns.count().as(CRUDObject.Properties.variable1)
         let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(
-            try database.getObject(on: property, fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.getObject(on: property, fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalObject)
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects.count)
@@ -507,142 +503,18 @@ class AdvanceTests: CRUDTestCase {
     func testRedirectCodingKey() {
         let property = CRUDObject.Properties.variable1.as(CRUDObject.Properties.variable1)
         let optionalObject: CRUDObject? = WCDBAssertNoThrowReturned(
-            try database.getObject(on: property, fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.getObject(on: property, fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalObject)
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects[0].variable1)
     }
 
-    class AppleFTSObject: CRUDObjectBase, TableCodable {
+    class FTSObject: CRUDObjectBase, TableCodable {
         var variable1: Int = 0
         var variable2: String = ""
 
         enum CodingKeys: String, CodingTableKey {
-            typealias Root = AppleFTSObject
-            case variable1
-            case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
-            static var columnConstraintBindings: [CodingKeys: ColumnConstraintBinding]? {
-                return [.variable1: ColumnConstraintBinding(isPrimary: true,
-                                                            orderBy: .ascending,
-                                                            isAutoIncrement: true)]
-            }
-            static var virtualTableBinding: VirtualTableBinding? {
-                return VirtualTableBinding(with: .fts3, and: ModuleArgument(with: .Apple))
-            }
-        }
-
-        override var hashValue: Int {
-            return (String(variable1)+variable2).hashValue
-        }
-    }
-    func testFTSWithAppleTokenize() {
-        //Give
-        XCTAssertNoThrow(try database.close {
-            try self.database.removeFiles()
-        })
-        database.setTokenizes(.Apple)
-        XCTAssertNoThrow(try database.create(virtualTable: AppleFTSObject.name, of: AppleFTSObject.self))
-
-        let preInsertedEnglishFTSObject: AppleFTSObject = {
-            let object = AppleFTSObject()
-            object.variable1 = 1
-            object.variable2 = "This is English test content"
-            return object
-        }()
-        let preInsertedChineseFTSObject: AppleFTSObject = {
-            let object = AppleFTSObject()
-            object.variable1 = 2
-            object.variable2 = "这是中文测试内容"
-            return object
-        }()
-        let preInsertedNumbericFTSObject: AppleFTSObject = {
-            let object = AppleFTSObject()
-            object.variable1 = 1
-            object.variable2 = "123456"
-            return object
-        }()
-        let preInsertedSymbolicFTSObject: AppleFTSObject = {
-            let object = AppleFTSObject()
-            object.variable1 = 1
-            object.variable2 = "abc..def"
-            return object
-        }()
-        let objects = [preInsertedEnglishFTSObject,
-                       preInsertedChineseFTSObject,
-                       preInsertedNumbericFTSObject,
-                       preInsertedSymbolicFTSObject]
-        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: AppleFTSObject.name))
-
-        //English
-        do {
-            //When
-            let condition = AppleFTSObject.Properties.variable2.match("Engl*")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: AppleFTSObject.name, where: condition),
-                whenFailed: [AppleFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedEnglishFTSObject)
-        }
-        //Chinese
-        do {
-            //When
-            let condition = AppleFTSObject.Properties.variable2.match("中文")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: AppleFTSObject.name, where: condition),
-                whenFailed: [AppleFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
-        }
-        //Numberic
-        do {
-            //When
-            let condition = AppleFTSObject.Properties.variable2.match("123*")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: AppleFTSObject.name, where: condition),
-                whenFailed: [AppleFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedNumbericFTSObject)
-        }
-        //Symbolic
-        do {
-            //When
-            let condition = AppleFTSObject.Properties.variable2.match("def")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: AppleFTSObject.name, where: condition),
-                whenFailed: [AppleFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedSymbolicFTSObject)
-        }
-
-        //Failed to find Chinese
-        do {
-            //When
-            let condition = AppleFTSObject.Properties.variable2.match("文测")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: AppleFTSObject.name, where: condition),
-                whenFailed: [AppleFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 0)
-        }
-    }
-
-    class WCDBFTSObject: CRUDObjectBase, TableCodable {
-        var variable1: Int = 0
-        var variable2: String = ""
-
-        enum CodingKeys: String, CodingTableKey {
-            typealias Root = WCDBFTSObject
+            typealias Root = FTSObject
             case variable1
             case variable2
             static let objectRelationalMapping = TableBinding(CodingKeys.self)
@@ -660,104 +532,104 @@ class AdvanceTests: CRUDTestCase {
             return (String(variable1)+variable2).hashValue
         }
     }
-    func testFTSWithWCDBTokenize() {
-        //Give
-        XCTAssertNoThrow(try database.close {
-            try self.database.removeFiles()
-        })
-        database.setTokenizes(.WCDB)
-        XCTAssertNoThrow(try database.create(virtualTable: WCDBFTSObject.name, of: WCDBFTSObject.self))
-
-        let preInsertedEnglishFTSObject: WCDBFTSObject = {
-            let object = WCDBFTSObject()
-            object.variable1 = 1
-            object.variable2 = "This is English test content"
-            return object
-        }()
-        let preInsertedChineseFTSObject: WCDBFTSObject = {
-            let object = WCDBFTSObject()
-            object.variable1 = 2
-            object.variable2 = "这是中文测试内容"
-            return object
-        }()
-        let preInsertedNumbericFTSObject: WCDBFTSObject = {
-            let object = WCDBFTSObject()
-            object.variable1 = 1
-            object.variable2 = "123456"
-            return object
-        }()
-        let preInsertedSymbolicFTSObject: WCDBFTSObject = {
-            let object = WCDBFTSObject()
-            object.variable1 = 1
-            object.variable2 = "abc..def"
-            return object
-        }()
-        let objects = [preInsertedEnglishFTSObject,
-                       preInsertedChineseFTSObject,
-                       preInsertedNumbericFTSObject,
-                       preInsertedSymbolicFTSObject]
-        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: WCDBFTSObject.name))
-
-        //English
-        do {
-            //When
-            let condition = WCDBFTSObject.Properties.variable2.match("Engl*")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: WCDBFTSObject.name, where: condition),
-                whenFailed: [WCDBFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedEnglishFTSObject)
-        }
-        //Chinese
-        do {
-            //When
-            let condition = WCDBFTSObject.Properties.variable2.match("中文*")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: WCDBFTSObject.name, where: condition),
-                whenFailed: [WCDBFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
-        }
-        //Numberic
-        do {
-            //When
-            let condition = WCDBFTSObject.Properties.variable2.match("123*")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: WCDBFTSObject.name, where: condition),
-                whenFailed: [WCDBFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedNumbericFTSObject)
-        }
-        //Symbolic
-        do {
-            //When
-            let condition = WCDBFTSObject.Properties.variable2.match("def")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: WCDBFTSObject.name, where: condition),
-                whenFailed: [WCDBFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedSymbolicFTSObject)
-        }
-
-        //Find Chinese
-        do {
-            //When
-            let condition = WCDBFTSObject.Properties.variable2.match("文测")
-            let objects = WCDBAssertNoThrowReturned(
-                try database.getObjects(fromTable: WCDBFTSObject.name, where: condition),
-                whenFailed: [WCDBFTSObject]()
-            )
-            //Then
-            XCTAssertEqual(objects.count, 1)
-            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
-        }
-    }
+//    func testFTS() {
+//        //Give
+//        XCTAssertNoThrow(try database.close {
+//            try self.database.removeFiles()
+//        })
+//        database.setTokenizes(.WCDB)
+//        XCTAssertNoThrow(try database.create(virtualTable: FTSObject.name, of: FTSObject.self))
+//
+//        let preInsertedEnglishFTSObject: FTSObject = {
+//            let object = FTSObject()
+//            object.variable1 = 1
+//            object.variable2 = "This is English test content"
+//            return object
+//        }()
+//        let preInsertedChineseFTSObject: FTSObject = {
+//            let object = FTSObject()
+//            object.variable1 = 2
+//            object.variable2 = "这是中文测试内容"
+//            return object
+//        }()
+//        let preInsertedNumbericFTSObject: FTSObject = {
+//            let object = FTSObject()
+//            object.variable1 = 1
+//            object.variable2 = "123456"
+//            return object
+//        }()
+//        let preInsertedSymbolicFTSObject: FTSObject = {
+//            let object = FTSObject()
+//            object.variable1 = 1
+//            object.variable2 = "abc..def"
+//            return object
+//        }()
+//        let objects = [preInsertedEnglishFTSObject,
+//                       preInsertedChineseFTSObject,
+//                       preInsertedNumbericFTSObject,
+//                       preInsertedSymbolicFTSObject]
+//        XCTAssertNoThrow(try database.insert(objects: objects, intoTable: FTSObject.name))
+//
+//        //English
+//        do {
+//            //When
+//            let condition = FTSObject.Properties.variable2.match("Engl*")
+//            let objects = WCDBAssertNoThrowReturned(
+//                try database.getObjects(fromTable: FTSObject.name, where: condition),
+//                whenFailed: [FTSObject]()
+//            )
+//            //Then
+//            XCTAssertEqual(objects.count, 1)
+//            XCTAssertEqual(objects[0], preInsertedEnglishFTSObject)
+//        }
+//        //Chinese
+//        do {
+//            //When
+//            let condition = FTSObject.Properties.variable2.match("中文*")
+//            let objects = WCDBAssertNoThrowReturned(
+//                try database.getObjects(fromTable: FTSObject.name, where: condition),
+//                whenFailed: [FTSObject]()
+//            )
+//            //Then
+//            XCTAssertEqual(objects.count, 1)
+//            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
+//        }
+//        //Numberic
+//        do {
+//            //When
+//            let condition = FTSObject.Properties.variable2.match("123*")
+//            let objects = WCDBAssertNoThrowReturned(
+//                try database.getObjects(fromTable: FTSObject.name, where: condition),
+//                whenFailed: [FTSObject]()
+//            )
+//            //Then
+//            XCTAssertEqual(objects.count, 1)
+//            XCTAssertEqual(objects[0], preInsertedNumbericFTSObject)
+//        }
+//        //Symbolic
+//        do {
+//            //When
+//            let condition = FTSObject.Properties.variable2.match("def")
+//            let objects = WCDBAssertNoThrowReturned(
+//                try database.getObjects(fromTable: FTSObject.name, where: condition),
+//                whenFailed: [FTSObject]()
+//            )
+//            //Then
+//            XCTAssertEqual(objects.count, 1)
+//            XCTAssertEqual(objects[0], preInsertedSymbolicFTSObject)
+//        }
+//
+//        //Find Chinese
+//        do {
+//            //When
+//            let condition = FTSObject.Properties.variable2.match("文测")
+//            let objects = WCDBAssertNoThrowReturned(
+//                try database.getObjects(fromTable: FTSObject.name, where: condition),
+//                whenFailed: [FTSObject]()
+//            )
+//            //Then
+//            XCTAssertEqual(objects.count, 1)
+//            XCTAssertEqual(objects[0], preInsertedChineseFTSObject)
+//        }
+//    }
 }

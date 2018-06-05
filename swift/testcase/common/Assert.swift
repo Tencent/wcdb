@@ -102,6 +102,19 @@ func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
     return failedValue()
 }
 
+func WCDBAssertNoThrowReturned<T>(_ expression: @autoclosure () throws -> T,
+                                  file: StaticString = #file,
+                                  line: UInt = #line) -> T? {
+    do {
+        return try expression()
+    } catch let error as WCDBSwift.Error {
+        XCTFail(error.description)
+    } catch {
+        XCTFail(error.localizedDescription)
+    }
+    return nil
+}
+
 func WCDBAssertNoThrowReturned<T: OptionalRepresentable>(
     _ expression: @autoclosure () throws -> T,
     file: StaticString = #file,

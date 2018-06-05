@@ -29,8 +29,7 @@ class RowSelectTests: CRUDTestCase {
         super.setUp()
 
         let optionalRowSelect = WCDBAssertNoThrowReturned(
-            try database.prepareRowSelect(fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareRowSelect(fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
@@ -109,9 +108,8 @@ class RowSelectTests: CRUDTestCase {
         XCTAssertNoThrow(try database.insert(objects: preInsertedObjects, intoTable: CRUDObject.name))
 
         let optionalRowSelect = WCDBAssertNoThrowReturned(
-            try database.prepareRowSelect(on: Column.any.count(),
-                                          fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareRowSelect(on: Column.all.count(),
+                                          fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
@@ -127,8 +125,7 @@ class RowSelectTests: CRUDTestCase {
     func testPartialRowSelect() {
         //Give
         let optionalRowSelect = WCDBAssertNoThrowReturned(
-            try database.prepareRowSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareRowSelect(on: CRUDObject.Properties.variable2, fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
@@ -143,7 +140,7 @@ class RowSelectTests: CRUDTestCase {
     func testRowSelectIteration() {
         //When
         var results: FundamentalRowXColumn = []
-        while let result = WCDBAssertNoThrowReturned(try rowSelect.nextRow(), whenFailed: nil) {
+        while let result = WCDBAssertNoThrowReturned(try rowSelect.nextRow()) {
             results.append(result)
         }
         //Then
@@ -166,7 +163,7 @@ class RowSelectTests: CRUDTestCase {
     func testRowSelectValueIteraion() {
         //When
         var results: FundamentalColumn = []
-        while let result = WCDBAssertNoThrowReturned(try rowSelect.nextValue(), whenFailed: nil) {
+        while let result = WCDBAssertNoThrowReturned(try rowSelect.nextValue()) {
             results.append(result)
         }
         //Then
@@ -194,8 +191,7 @@ class RowSelectTests: CRUDTestCase {
         let optionalRowSelect = WCDBAssertNoThrowReturned(
             try database.prepareRowSelect(on: column2Table1, column2Table2,
                                           fromTables: [table, table2])
-                .where(column1Table1 == column1Table2),
-            whenFailed: nil
+                .where(column1Table1 == column1Table2)
         )
         XCTAssertNotNil(optionalRowSelect)
         let rowSelect = optionalRowSelect!
@@ -222,8 +218,7 @@ class RowSelectTests: CRUDTestCase {
         //When
         let optionalRowSelect = WCDBAssertNoThrowReturned(
             try database.prepareRowSelect(fromTables: [table, table2])
-                .where(column1Table1 == column1Table2),
-            whenFailed: nil
+                .where(column1Table1 == column1Table2)
         )
         XCTAssertNotNil(optionalRowSelect)
         let rowSelect = optionalRowSelect!
@@ -242,8 +237,7 @@ class RowSelectTests: CRUDTestCase {
     func testRowSelectType() {
         //Give
         let optionalRowSelect = WCDBAssertNoThrowReturned(
-            try database.prepareRowSelect(on: 1, 2.0, "3", fromTable: CRUDObject.name),
-            whenFailed: nil
+            try database.prepareRowSelect(on: 1, 2.0, "3", fromTable: CRUDObject.name)
         )
         XCTAssertNotNil(optionalRowSelect)
         rowSelect = optionalRowSelect!
