@@ -26,9 +26,9 @@ import Foundation
  * .integer32:
  *      Bool, Int, Int8, Int16, Int32, UInt, UInt8, UInt16, UInt32  
  * .integer64:
- *      Int64, UInt64, Date
+ *      Int64, UInt64
  * .float:
- *      Float, Double
+ *      Float, Double, Date
  * .text:
  *      String, URL
  * .BLOB:
