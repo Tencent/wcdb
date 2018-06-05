@@ -54,14 +54,14 @@
     XCTAssertTrue([database2 canOpen]);
     XCTAssertTrue([database2 isOpened]);
 
-    [WCTDatabase PurgeInAllDatabases];
+    [WCTDatabase purgeAllDatabases];
     XCTAssertFalse([database1 isOpened]);
     XCTAssertFalse([database2 isOpened]);
 
     WCTHandle *handle = [database1 getHandle];
     [handle execute:WCDB::StatementBegin::deferred()];
     XCTAssertTrue([database2 canOpen]);
-    [WCTDatabase PurgeInAllDatabases];
+    [WCTDatabase purgeAllDatabases];
     XCTAssertTrue([database1 isOpened]);
     XCTAssertFalse([database2 isOpened]);
     [handle finalizeHandle];

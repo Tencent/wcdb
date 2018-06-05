@@ -194,20 +194,20 @@
                          object:_digitObject];
 }
 
-- (void)test_error_prone
-{
-    //TODO
-    FTSTestCaseObject *errorProneObject1 = [[FTSTestCaseObject alloc] initWithMessage:@"error prone: benefit"];
-    FTSTestCaseObject *errorProneObject2 = [[FTSTestCaseObject alloc] initWithMessage:@"error prone: island"];
-    NSArray<FTSTestCaseObject *> *objects = @[ errorProneObject1, errorProneObject2 ];
-    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
-
-    [self searching_test_failed:"is"];
-    [self searching_test:"is*" expectedObject:errorProneObject1];
-    [self searching_test_failed:"be"];
-    [self searching_test:"be*" expectedObject:errorProneObject2];
-    [self searching_test_failed:"are"];
-    [self searching_test_failed:"are*"];
-}
+//- (void)test_error_prone
+//{
+//    //TODO
+//    FTSTestCaseObject *errorProneObject1 = [[FTSTestCaseObject alloc] initWithMessage:@"error prone: benefit"];
+//    FTSTestCaseObject *errorProneObject2 = [[FTSTestCaseObject alloc] initWithMessage:@"error prone: island"];
+//    NSArray<FTSTestCaseObject *> *objects = @[ errorProneObject1, errorProneObject2 ];
+//    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
+//
+//    [self searching_test_failed:"is"];
+//    [self searching_test:"is*" expectedObject:errorProneObject1];
+//    [self searching_test_failed:"be"];
+//    [self searching_test:"be*" expectedObject:errorProneObject2];
+//    [self searching_test_failed:"are"];
+//    [self searching_test_failed:"are*"];
+//}
 
 @end

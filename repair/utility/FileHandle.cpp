@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Reporter.hpp>
@@ -29,6 +30,12 @@ namespace WCDB {
 
 FileHandle::FileHandle(const std::string &path_) : path(path_), m_fd(-1)
 {
+}
+
+FileHandle::FileHandle(FileHandle &&other)
+    : path(std::move(other.path)), m_fd(std::move(other.m_fd))
+{
+    other.m_fd = -1;
 }
 
 bool FileHandle::open(Mode mode)
@@ -45,7 +52,7 @@ bool FileHandle::open(Mode mode)
         }
         m_fd = ::open(path.c_str(), flag);
         if (m_fd == -1) {
-            setupThreadedError();
+            setThreadedError();
         }
     }
     return m_fd != -1;
@@ -59,8 +66,15 @@ void FileHandle::close()
     }
 }
 
+ssize_t FileHandle::size()
+{
+    WCTInnerAssert(m_fd != -1);
+    return lseek(m_fd, 0, SEEK_END);
+}
+
 ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
 {
+    WCTInnerAssert(m_fd != -1);
     ssize_t got;
     size_t prior = 0;
     do {
@@ -74,7 +88,7 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
                 continue;
             }
             prior = 0;
-            setupThreadedError();
+            setThreadedError();
             break;
         } else if (got > 0) {
             size -= got;
@@ -88,6 +102,7 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
 
 ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
 {
+    WCTInnerAssert(m_fd != -1);
     ssize_t wrote;
     ssize_t prior = 0;
     do {
@@ -100,7 +115,7 @@ ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
                 wrote = 1;
                 continue;
             }
-            setupThreadedError();
+            setThreadedError();
             break;
         } else if (wrote > 0) {
             size -= wrote;
@@ -112,14 +127,14 @@ ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
     return wrote + prior;
 }
 
-void FileHandle::setupThreadedError()
+void FileHandle::setThreadedError()
 {
     Error error;
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
     error.infos.set("Path", path);
     Reporter::shared()->report(error);
-    setThreadedError(std::move(error));
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 } //namespace WCDB

@@ -50,14 +50,22 @@ void Mechanic::work()
         return;
     }
 
+    m_pager.setPageSize(m_material.info.pageSize);
+    m_pager.setReservedBytes(m_material.info.reservedBytes);
+
     int pageCount = 0;
     for (const auto &element : m_material.contents) {
         pageCount += element.second.pagenos.size();
     }
     setPageWeight((double) 1.0 / pageCount);
 
+    markAsAssembling();
     for (const auto &element : m_material.contents) {
-        if (!assembleTable(element.first, element.second.sql)) {
+        if (isCriticalErrorFatal()) {
+            break;
+        }
+        if (!assembleTable(element.first, element.second.sql,
+                           element.second.sequence)) {
             continue;
         }
         for (const auto &pageno : element.second.pagenos) {
@@ -66,16 +74,24 @@ void Mechanic::work()
             }
         }
     }
+    markAsAssembled();
 }
 
 #pragma mark - Crawlable
 void Mechanic::onCellCrawled(const Cell &cell)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     assembleCell(cell);
 }
 
-bool Mechanic::willCrawlPage(const Page &page, int unused)
+bool Mechanic::willCrawlPage(const Page &page, int)
 {
+    increaseProgress(getPageWeight());
+    if (isCriticalErrorFatal()) {
+        return false;
+    }
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());
         return true;

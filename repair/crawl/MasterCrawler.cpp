@@ -47,7 +47,7 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
 {
     if (cell.getValueType(1) != Cell::Type::Text ||
         cell.getValueType(2) != Cell::Type::Text ||
-        cell.getValueType(3) != Cell::Type::Integer32 ||
+        cell.getValueType(3) != Cell::Type::Integer ||
         cell.getValueType(4) != Cell::Type::Text) {
         markAsCorrupted();
         return;
@@ -66,13 +66,13 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
         return;
     }
     Master master;
-    master.rootpage = cell.int32Value(3);
+    master.rootpage = (int) cell.integerValue(3);
     master.tableName = std::move(name);
     master.sql = std::move(sql);
     m_delegate->onMasterCellCrawled(&master);
 }
 
-bool MasterCrawler::willCrawlPage(const Page &page, int unused)
+bool MasterCrawler::willCrawlPage(const Page &page, int)
 {
     m_delegate->onMasterPageCrawled(page);
     return true;

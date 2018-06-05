@@ -18,12 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/FactoryMaterials.hpp>
+#include <WCDB/Attachment.hpp>
+#include <WCDB/HandlePool.hpp>
 
 namespace WCDB {
 
-namespace Repair {
-
-} //namespace Repair
+Attachment::Attachment(const HandlePool *handlePool) : factory(handlePool->path)
+{
+}
 
 } //namespace WCDB

@@ -18,24 +18,36 @@
  * limitations under the License.
  */
 
-#ifndef FactoryDerived_hpp
-#define FactoryDerived_hpp
+#ifndef FactoryMeta_hpp
+#define FactoryMeta_hpp
+
+#include <WCDB/FactoryRelated.hpp>
+#include <future>
+#include <mutex>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Factory;
-
-class FactoryDerived {
+//Thread safe
+class FactoryMeta : public FactoryRelated {
 public:
-    FactoryDerived(const Factory &factory);
+    FactoryMeta(const Factory &factory);
+    FactoryMeta(FactoryMeta &&factoryMaterials);
+    bool work();
 
-    const Factory &factory;
+    const std::map<std::string, int64_t> &getSequences() const;
+
+protected:
+    bool doWork();
+    std::future<bool> m_done;
+    std::map<std::string, int64_t> m_sequences;
+    Error m_error;
+    std::mutex m_mutex;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* FactoryDerived_hpp */
+#endif /* FactoryMeta_hpp */

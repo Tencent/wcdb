@@ -31,6 +31,7 @@ class FileHandle : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     FileHandle(const std::string &path);
+    FileHandle(FileHandle &&);
     FileHandle() = delete;
     FileHandle(const FileHandle &) = delete;
     FileHandle &operator=(const FileHandle &) = delete;
@@ -48,12 +49,13 @@ public:
     };
     bool open(Mode mode);
     void close();
+    ssize_t size();
     ssize_t read(unsigned char *buffer, off_t offset, size_t size);
     ssize_t write(unsigned char *buffer, off_t offset, size_t size);
 
 #pragma mark - Error
 protected:
-    void setupThreadedError();
+    void setThreadedError();
 };
 
 } //namespace WCDB

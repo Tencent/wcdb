@@ -60,12 +60,30 @@ void FullCrawler::work()
 #pragma mark - Crawlable
 void FullCrawler::onCellCrawled(const Cell &cell)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     assembleCell(cell);
 }
 
+bool FullCrawler::willCrawlPage(const Page &, int)
+{
+    increaseProgress(getPageWeight());
+    return true;
+}
+
 #pragma mark - MasterCrawlerDelegate
+Pager &FullCrawler::getMasterPager()
+{
+    return m_pager;
+}
+
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
+    increaseProgress(getPageWeight());
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     if (page.getType() == Page::Type::LeafTable) {
         markCellCount(page.getCellCount());
     }
@@ -73,12 +91,15 @@ void FullCrawler::onMasterPageCrawled(const Page &page)
 
 void FullCrawler::onMasterCellCrawled(const Master *master)
 {
+    if (isCriticalErrorFatal()) {
+        return;
+    }
     markCellAsCounted();
     if (master == nullptr) {
         //skip index/view/trigger
         return;
     }
-    if (assembleTable(master->tableName, master->sql)) {
+    if (assembleTable(master->tableName, master->sql, 0)) {
         crawl(master->rootpage);
     }
 }

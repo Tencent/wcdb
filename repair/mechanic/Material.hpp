@@ -75,6 +75,10 @@ public:
 public:
     bool deserialize(const Data &data);
     Data serialize() const;
+
+    bool deserialize(const std::string &path);
+    bool serialize(const std::string &path) const;
+
     static std::pair<bool, std::map<std::string, int64_t>>
     acquireMetas(const std::string &path);
 

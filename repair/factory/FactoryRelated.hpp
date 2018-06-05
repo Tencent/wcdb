@@ -18,29 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef FactoryDeconstructor_hpp
-#define FactoryDeconstructor_hpp
-
-#include <WCDB/Deconstructor.hpp>
-#include <WCDB/FactoryDerived.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
+#ifndef FactoryRelated_hpp
+#define FactoryRelated_hpp
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryDeconstructor : public FactoryDerived,
-                             public SharedThreadedErrorProne {
-public:
-    FactoryDeconstructor(const Factory &factory);
-    using Filter = Deconstructor::Filter;
+class Factory;
 
-protected:
-    Deconstructor m_deconstructor;
+class FactoryRelated {
+public:
+    FactoryRelated(const Factory &factory);
+
+    const Factory &factory;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* FactoryDeconstructor_hpp */
+#endif /* FactoryRelated_hpp */

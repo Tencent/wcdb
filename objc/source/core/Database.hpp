@@ -71,7 +71,7 @@ public:
 #pragma mark - Memory
 public:
     void purge();
-    static void PurgeInAllDatabases();
+    static void purgeAllDatabases();
 
 #pragma mark - Config
 public:
@@ -86,8 +86,6 @@ public:
     std::string getSHMPath() const;
     std::string getWALPath() const;
     std::string getJournalPath() const;
-    std::string getFirstBackupPath() const;
-    std::string getLastBackupPath() const;
     std::list<std::string> getPaths() const;
 
     bool moveFiles(const std::string &directory);
@@ -98,22 +96,14 @@ public:
 
 #pragma mark - Repair Kit
 public:
+    std::string getFirstMaterialPath() const;
+    std::string getLastMaterialPath() const;
+    const std::string &getFactoryDirectory() const;
+
     typedef std::function<bool(const std::string &)> BackupFilter;
     bool backup(const BackupFilter &shouldTableBeBackedup);
-    bool archiveAsMaterial();
-    bool removeMaterials();
-    bool restore();
-
-protected:
-    std::pair<bool, std::string> pickUpNewBackup();
-    std::pair<bool, std::string> pickUpOldBackup();
-    std::pair<bool, std::string> pickUpBackup(bool old);
-    int findNextAvailableArchiveID();
-    static const std::string &getFirstBackupSubfix();
-    static const std::string &getLastBackupSubfix();
-    static std::string getArchiveSubfix(int i);
-    std::string getMaterialsDirectory() const;
-    std::string getRestorePath() const;
+    bool deposit();
+    bool retrieve();
 
 #pragma mark - Handle
 public:

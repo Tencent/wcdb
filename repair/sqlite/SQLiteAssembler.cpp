@@ -71,10 +71,11 @@ bool SQLiteAssembler::markAsMilestone()
 }
 
 bool SQLiteAssembler::assembleTable(const std::string &tableName,
-                                    const std::string &sql)
+                                    const std::string &sql,
+                                    int64_t sequence)
 {
     finalize();
-    if (!execute(sql.c_str())) {
+    if (!execute(sql.c_str()) || !assemblerSequence(tableName, sequence)) {
         return false;
     }
     int rc = onTableAssembled(tableName);
@@ -92,13 +93,9 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     for (int i = 0; i < cell.getCount(); ++i) {
         int bindIndex = i + 2;
         switch (cell.getValueType(i)) {
-            case Cell::Integer32:
-                sqlite3_bind_int((sqlite3_stmt *) m_stmt, bindIndex,
-                                 cell.int32Value(i));
-                break;
-            case Cell::Integer64:
+            case Cell::Integer:
                 sqlite3_bind_int64((sqlite3_stmt *) m_stmt, bindIndex,
-                                   cell.int64Value(i));
+                                   cell.integerValue(i));
                 break;
             case Cell::Text: {
                 auto pair = cell.textValue(i);
@@ -128,38 +125,19 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     return true;
 }
 
-//bool SQLiteAssembler::assembleSequences(const std::map<std::string, int64_t>& sequences)
-//{
-//    if (!lazyBeginTransaction()) {
-//        return false;
-//    }
-//    bool commit = false;
-//    do {
-//        //create auto increment table dummy to trigger the creation of sqlite_sequence.
-//        if (!execute("CREATE TABLE IF NOT EXISTS wcdb_dummy(i INTEGER PRIMARY KEY AUTOINCREMENT")) {
-//            break;
-//        }
-//        if (!prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)")) {
-//            break;
-//        }
-//        for (const auto& element : sequences) {
-//            sqlite3_bind_text((sqlite3_stmt *)m_stmt, 1, element.first.c_str(), 1, SQLITE_STATIC);
-//            sqlite3_bind_int64((sqlite3_stmt *)m_stmt, 2, element.second);
-//            if (!step()) {
-//                break;
-//            }
-//            sqlite3_reset((sqlite3_stmt *)m_stmt);
-//        }
-//        finalize();
-//        if (!execute("DROP TABLE IF EXISTS wcdb_dummy")) {
-//            break;
-//        }
-//    } while (false);
-//    finalize();
-//    return lazyCommitOrRollbackTransaction(commit);
-//}
-
 #pragma mark - Helper
+bool SQLiteAssembler::assemblerSequence(const std::string &tableName,
+                                        int64_t sequence)
+{
+    if (sequence <= 0) {
+        return true;
+    }
+    std::ostringstream stringStream;
+    stringStream << "INSERT INTO sqlite_sequence(name, seq) VALUES("
+                 << tableName << ", " << sequence << ")";
+    return execute(stringStream.str().c_str());
+}
+
 std::pair<bool, std::list<std::string>>
 SQLiteAssembler::getColumnNames(const std::string &tableName)
 {

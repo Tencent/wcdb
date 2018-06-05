@@ -22,8 +22,10 @@
 #define HandlePool_hpp
 
 #include <WCDB/Abstract.h>
+#include <WCDB/Attachment.hpp>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
+#include <WCDB/Factory.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
@@ -124,13 +126,9 @@ private:
     friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
     ThreadedErrors m_errors;
 
-#pragma mark - Info
+#pragma mark - Attachment
 public:
-    void setCipher(const Data &cipher);
-    const Data &getCipher() const;
-
-private:
-    Data m_cipher;
+    Attachment attachment;
 };
 
 } //namespace WCDB

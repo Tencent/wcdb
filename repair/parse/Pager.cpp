@@ -52,6 +52,17 @@ const std::string &Pager::getPath() const
 
 bool Pager::initialize()
 {
+    bool succeed;
+    size_t fileSize;
+    std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
+    if (!succeed) {
+        return false;
+    }
+    m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
+    if (m_pageCount == 0) {
+        return true;
+    }
+
     if (m_pageSize == -1 || m_reservedBytes == -1) {
         Data data = acquireData(0, 100);
         if (data.empty()) {
@@ -80,11 +91,6 @@ bool Pager::initialize()
         markAsCorrupted();
         return false;
     }
-    auto fileSizePair = FileManager::shared()->getFileSize(getPath());
-    if (!fileSizePair.first) {
-        return false;
-    }
-    m_pageCount = (int) ((fileSizePair.second + m_pageSize - 1) / m_pageSize);
     return true;
 }
 
@@ -125,15 +131,14 @@ Data Pager::acquireData(off_t offset, size_t size)
         return data;
     }
     ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
-    if (read == size) {
-        return data;
-    } else if (read < 0) {
-        //file handle error
-    } else {
-        //short read
-        markAsCorrupted();
+    if (read != size) {
+        if (read >= 0) {
+            //short read
+            markAsCorrupted();
+        }
+        return Data::emptyData();
     }
-    return Data::emptyData();
+    return data;
 }
 
 #pragma mark - Error

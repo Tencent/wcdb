@@ -90,9 +90,10 @@ void Repairman::towardMilestone(int mile)
 }
 
 bool Repairman::assembleTable(const std::string &tableName,
-                              const std::string &sql)
+                              const std::string &sql,
+                              int64_t sequence)
 {
-    if (m_assembler->assembleTable(tableName, sql)) {
+    if (m_assembler->assembleTable(tableName, sql, sequence)) {
         towardMilestone(100);
         return true;
     }
@@ -131,6 +132,11 @@ void Repairman::tryUpgrateAssemblerError()
 }
 
 #pragma mark - Evaluation
+double Repairman::getScore() const
+{
+    return m_score;
+}
+
 void Repairman::markCellAsCounted()
 {
     m_scorePool += m_cellWeight;
@@ -144,6 +150,11 @@ void Repairman::markCellCount(int cellCount)
 void Repairman::setPageWeight(double pageWeight)
 {
     m_pageWeight = pageWeight;
+}
+
+double Repairman::getPageWeight() const
+{
+    return m_pageWeight;
 }
 
 } //namespace Repair

@@ -174,12 +174,12 @@ std::string Error::getDescription() const
         return String::empty();
     }
     std::ostringstream stream;
-    stream << "[" << Error::LevelName(level) << ": ";
+    stream << "[" << Error::levelName(level) << ": ";
     stream << (int) m_code << ", ";
     if (!message.empty()) {
         stream << message;
     } else {
-        stream << Error::CodeName(m_code);
+        stream << Error::codeName(m_code);
     }
     stream << "]";
 

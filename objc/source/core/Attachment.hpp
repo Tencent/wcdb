@@ -18,22 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef FactoryMaterials_hpp
-#define FactoryMaterials_hpp
+#ifndef Attachment_hpp
+#define Attachment_hpp
 
-#include <WCDB/FactoryDerived.hpp>
+#include <WCDB/Factory.hpp>
 
 namespace WCDB {
 
-namespace Repair {
+class HandlePool;
 
-class FactoryMaterials : public FactoryDerived {
+class Attachment {
 public:
-    using FactoryDerived::FactoryDerived;
-};
+    Attachment(const HandlePool *handlePool);
 
-} //namespace Repair
+    Repair::Factory factory;
+};
 
 } //namespace WCDB
 
-#endif /* FactoryMaterials_hpp */
+#endif /* Attachment_hpp */

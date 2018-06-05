@@ -32,11 +32,11 @@ CopyOnWriteString BeginSTMT::SQL() const
 {
     std::string description("BEGIN");
     description.append(" ");
-    description.append(BeginSTMT::TypeName(type));
+    description.append(BeginSTMT::typeName(type));
     return description;
 }
 
-constexpr const char *BeginSTMT::TypeName(const Type &type)
+constexpr const char *BeginSTMT::typeName(const Type &type)
 {
     switch (type) {
         case Type::Deferred:

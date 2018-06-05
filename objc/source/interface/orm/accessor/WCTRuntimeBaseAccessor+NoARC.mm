@@ -28,7 +28,7 @@
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif
 
-SEL WCTRuntimeBaseAccessor::GetGetterSelector(Class cls, const std::string &propertyName)
+SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const std::string &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
     const char *getter = property_copyAttributeValue(objcProperty, "G");
@@ -38,7 +38,7 @@ SEL WCTRuntimeBaseAccessor::GetGetterSelector(Class cls, const std::string &prop
     return sel_registerName(getter);
 }
 
-SEL WCTRuntimeBaseAccessor::GetSetterSelector(Class cls, const std::string &propertyName)
+SEL WCTRuntimeBaseAccessor::getSetterSelector(Class cls, const std::string &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
     const char *setter = property_copyAttributeValue(objcProperty, "S");
@@ -50,17 +50,17 @@ SEL WCTRuntimeBaseAccessor::GetSetterSelector(Class cls, const std::string &prop
     return sel_registerName(defaultSetter.c_str());
 }
 
-IMP WCTRuntimeBaseAccessor::GetClassMethodImplementation(Class cls, SEL selector)
+IMP WCTRuntimeBaseAccessor::getClassMethodImplementation(Class cls, SEL selector)
 {
     return [cls methodForSelector:selector];
 }
 
-IMP WCTRuntimeBaseAccessor::GetInstanceMethodImplementation(Class cls, SEL selector)
+IMP WCTRuntimeBaseAccessor::getInstanceMethodImplementation(Class cls, SEL selector)
 {
     return [cls instanceMethodForSelector:selector];
 }
 
-Class WCTRuntimeBaseAccessor::GetPropertyClass(Class cls, const std::string &propertyName)
+Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const std::string &propertyName)
 {
     objc_property_t property = class_getProperty(cls, propertyName.c_str());
     NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];

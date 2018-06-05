@@ -31,7 +31,6 @@ namespace WCDB {
 
 namespace Repair {
 
-//TODO update progress
 class Repairman : public Crawlable, public CriticalErrorOnly, public Progress {
 #pragma mark - Initialize
 public:
@@ -56,7 +55,9 @@ protected:
     bool markAsAssembling();
     void markAsAssembled();
 
-    bool assembleTable(const std::string &tableName, const std::string &sql);
+    bool assembleTable(const std::string &tableName,
+                       const std::string &sql,
+                       int64_t sequence);
     void assembleCell(const Cell &cell);
 
 protected:
@@ -74,6 +75,7 @@ public:
 
 protected:
     void setPageWeight(double pageWeight);
+    double getPageWeight() const;
     void markCellCount(int cellCount);
     void markCellAsCounted();
 

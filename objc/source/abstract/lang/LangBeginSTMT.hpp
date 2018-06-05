@@ -43,7 +43,7 @@ public:
     static STMT::Type getType();
 
 protected:
-    static constexpr const char *TypeName(const Type &type);
+    static constexpr const char *typeName(const Type &type);
 };
 
 } // namespace Lang

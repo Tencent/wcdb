@@ -34,7 +34,7 @@ CopyOnWriteString UpdateSTMT::SQL() const
     if (!withClause.empty()) {
         description.append(withClause.description().get() + " ");
     }
-    description.append(UpdateSTMT::TypeName(type));
+    description.append(UpdateSTMT::typeName(type));
     description.append(" ");
     LangRemedialAssert(!qualifiedTableName.empty());
 
@@ -83,7 +83,7 @@ CopyOnWriteString UpdateSTMT::SQL() const
     return description;
 }
 
-constexpr const char *UpdateSTMT::TypeName(const Type &type)
+constexpr const char *UpdateSTMT::typeName(const Type &type)
 {
     switch (type) {
         case Type::Update:

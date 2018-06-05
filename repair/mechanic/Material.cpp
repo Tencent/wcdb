@@ -289,6 +289,67 @@ bool Material::isHeaderSanity(Deserialization &deserialization)
     return true;
 }
 
+bool Material::deserialize(const std::string &path)
+{
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        return false;
+    }
+    bool succeed = false;
+    do {
+        ssize_t size = fileHandle.size();
+        if (size == -1) {
+            break;
+        }
+        Data data(size);
+        if (data.empty()) {
+            break;
+        }
+        ssize_t read = fileHandle.read(data.buffer(), 0, size);
+        if (read != size) {
+            if (read >= 0) {
+                Error error;
+                error.setCode(Error::Code::IOError, "Repair");
+                error.message = "Short read";
+                error.infos.set("Path", path);
+                Reporter::shared()->report(error);
+                setThreadedError(std::move(error));
+            }
+            break;
+        }
+        succeed = deserialize(data);
+    } while (false);
+    fileHandle.close();
+    return succeed;
+}
+
+bool Material::serialize(const std::string &path) const
+{
+    Data data = serialize();
+    if (data.empty()) {
+        return false;
+    }
+    //TODO cipher
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::ReadWrite)) {
+        return false;
+    }
+    ssize_t wrote = fileHandle.write(data.buffer(), 0, data.size());
+    fileHandle.close();
+    if (wrote != data.size()) {
+        if (wrote >= 0) {
+            Error error;
+            error.setCode(Error::Code::IOError, "Repair");
+            error.message = "Short write";
+            error.infos.set("Path", path);
+            Reporter::shared()->report(error);
+            setThreadedError(std::move(error));
+        }
+        return false;
+    }
+    return true;
+}
+
 std::pair<bool, std::map<std::string, int64_t>>
 Material::acquireMetas(const std::string &path)
 {
@@ -369,6 +430,6 @@ Material::acquireMetas(const std::string &path)
     return {true, sequences};
 }
 
-} //namespace Repair
+} // namespace WCDB
 
 } //namespace WCDB

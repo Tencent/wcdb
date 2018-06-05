@@ -18,24 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef FactoryArchiver_hpp
-#define FactoryArchiver_hpp
-
-#include <WCDB/FactoryDerived.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
+#include <WCDB/Factory.hpp>
+#include <WCDB/FactoryDepositor.hpp>
+#include <WCDB/FileManager.hpp>
+#include <WCDB/Path.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryArchiver : public FactoryDerived, public SharedThreadedErrorProne {
-public:
-    using FactoryDerived::FactoryDerived;
-    bool work();
-};
+bool FactoryDepositor::work()
+{
+    FileManager *fileManager = FileManager::shared();
+    bool succeed;
+    std::string workshopDirectory;
+    std::tie(succeed, workshopDirectory) = factory.generateWorkshopDiectory();
+    if (!succeed) {
+        return false;
+    }
+
+    if (!fileManager->createDirectoryWithIntermediateDirectories(
+            workshopDirectory) ||
+        !fileManager->moveItems(
+            Factory::associatedPathsForDatabase(factory.database),
+            workshopDirectory)) {
+        return false;
+    }
+    return true;
+}
 
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* FactoryArchiver_hpp */

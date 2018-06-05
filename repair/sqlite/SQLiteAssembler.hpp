@@ -52,10 +52,9 @@ public:
     bool markAsMilestone() override;
 
     bool assembleTable(const std::string &tableName,
-                       const std::string &sql) override;
+                       const std::string &sql,
+                       int64_t sequence) override;
     bool assembleCell(const Cell &cell) override;
-    //TODO remove it ?
-    //    bool assembleSequences(const std::map<std::string, int64_t>& sequences) override;
 
     const Error &getError() const override;
 
@@ -64,6 +63,7 @@ protected:
     std::pair<bool, std::string> getAssembleSQL(const std::string &tableName);
     std::pair<bool, std::list<std::string>>
     getColumnNames(const std::string &tableName);
+    bool assemblerSequence(const std::string &tableName, int64_t sequence);
 
 protected:
     bool lazyBeginTransaction();

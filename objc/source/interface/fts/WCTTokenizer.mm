@@ -30,7 +30,7 @@ public:
                   int inputLength,
                   WCDB::FTS::TokenizerInfoBase *tokenizerInfo)
         : WCDB::FTS::WCDBCursorInfo(input, inputLength, tokenizerInfo)
-        , m_symbolCharacterSet(GenerateSymbolCharacterSet())
+        , m_symbolCharacterSet(generateSymbolCharacterSet())
     {
     }
 
@@ -46,7 +46,7 @@ public:
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;
-    static CFCharacterSetRef GenerateSymbolCharacterSet()
+    static CFCharacterSetRef generateSymbolCharacterSet()
     {
         //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
         CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());

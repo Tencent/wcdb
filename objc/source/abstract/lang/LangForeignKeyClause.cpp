@@ -50,7 +50,7 @@ ForeignKeyClause::Trigger::Trigger()
 }
 
 constexpr const char *
-ForeignKeyClause::Trigger::OperationName(const Operation &operation)
+ForeignKeyClause::Trigger::operationName(const Operation &operation)
 {
     switch (operation) {
         case Operation::SetNull:
@@ -106,7 +106,7 @@ CopyOnWriteString ForeignKeyClause::Trigger::SQL() const
         } else {
             description.append("DELETE ");
         }
-        description.append(Trigger::OperationName(operation));
+        description.append(Trigger::operationName(operation));
     }
     return description;
 }

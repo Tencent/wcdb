@@ -26,13 +26,13 @@ typedef BOOL (^WCTBackupFilterBlock)(NSString *_Nonnull);
 
 NS_ASSUME_NONNULL_BEGIN
 
-- (BOOL)archiveAsMaterial;
+- (BOOL)deposit;
 
 - (BOOL)backup;
 
 - (BOOL)backup:(WCTBackupFilterBlock)shouldTableBeBackedUp;
 
-- (BOOL)restore;
+- (BOOL)retrieve;
 
 @end
 

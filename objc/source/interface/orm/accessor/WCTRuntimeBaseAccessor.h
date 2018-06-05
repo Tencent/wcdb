@@ -24,11 +24,11 @@
 class WCTRuntimeBaseAccessor {
 protected:
     using InstanceType = id;
-    static SEL GetGetterSelector(Class cls, const std::string &propertyName);
-    static SEL GetSetterSelector(Class cls, const std::string &propertyName);
-    static IMP GetClassMethodImplementation(Class cls, SEL selector);
-    static IMP GetInstanceMethodImplementation(Class cls, SEL selector);
-    static Class GetPropertyClass(Class cls, const std::string &propertyName);
+    static SEL getGetterSelector(Class cls, const std::string &propertyName);
+    static SEL getSetterSelector(Class cls, const std::string &propertyName);
+    static IMP getClassMethodImplementation(Class cls, SEL selector);
+    static IMP getInstanceMethodImplementation(Class cls, SEL selector);
+    static Class getPropertyClass(Class cls, const std::string &propertyName);
 };
 
 template <typename PropertyType>
@@ -49,8 +49,8 @@ public:
 protected:
     Getter GenerateGetter(Class cls, const std::string &propertyName)
     {
-        SEL selector = GetGetterSelector(cls, propertyName);
-        IMP imp = GetInstanceMethodImplementation(cls, selector);
+        SEL selector = getGetterSelector(cls, propertyName);
+        IMP imp = getInstanceMethodImplementation(cls, selector);
         auto block = ^(InstanceType instance) {
           using IMPGetter = PropertyType (*)(id, SEL);
           return ((IMPGetter) imp)(instance, selector);
@@ -60,8 +60,8 @@ protected:
 
     Setter GenerateSetter(Class cls, const std::string &propertyName)
     {
-        SEL selector = GetSetterSelector(cls, propertyName);
-        IMP imp = GetInstanceMethodImplementation(cls, selector);
+        SEL selector = getSetterSelector(cls, propertyName);
+        IMP imp = getInstanceMethodImplementation(cls, selector);
         auto block = ^(InstanceType instance, PropertyType value) {
           using IMPSetter = void (*)(InstanceType, SEL, PropertyType);
           return ((IMPSetter) imp)(instance, selector, value);

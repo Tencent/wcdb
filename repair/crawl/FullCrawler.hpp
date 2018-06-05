@@ -43,9 +43,11 @@ public:
 #pragma mark - Crawlable
 protected:
     void onCellCrawled(const Cell &cell) override;
+    bool willCrawlPage(const Page &, int) override;
 
 #pragma mark - MasterCrawlerDelegate
 protected:
+    Pager &getMasterPager() override;
     void onMasterPageCrawled(const Page &page) override;
     void onMasterCellCrawled(const Master *master) override;
     void onMasterCrawlerError() override;

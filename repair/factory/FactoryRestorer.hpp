@@ -21,15 +21,69 @@
 #ifndef FactoryRestorer_hpp
 #define FactoryRestorer_hpp
 
-#include <WCDB/FactoryDerived.hpp>
+#include <WCDB/Assembler.hpp>
+#include <WCDB/CriticalErrorOnly.hpp>
+#include <WCDB/FactoryBackup.hpp>
+#include <WCDB/FactoryRelated.hpp>
+#include <WCDB/Progress.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryRestorer : public FactoryDerived {
+class FactoryRestorer : public FactoryRelated,
+                        public CriticalErrorOnly,
+                        public Progress {
+#pragma mark - Backup
 public:
-    using FactoryDerived::FactoryDerived;
+    class Backup : public FactoryBackup {
+    public:
+        Backup(const FactoryRestorer &restorer);
+
+        bool work(const Filter &shouldTableDeconstructed);
+
+    protected:
+        const FactoryRestorer &m_restorer;
+    };
+
+    typedef Backup::Filter Filter;
+    void filter(const Filter &filter);
+
+protected:
+    Filter m_filter;
+
+#pragma mark - Restorer
+public:
+    FactoryRestorer(const Factory &factory);
+
+    const std::string database;
+
+public:
+    bool work();
+
+protected:
+    bool restore(const std::string &database);
+    const std::string databaseFileName;
+
+#pragma mark - Assembler
+public:
+    void setAssembler(const std::shared_ptr<Assembler> &assembler);
+
+protected:
+    std::shared_ptr<Assembler> m_assembler;
+
+#pragma mark - Evaluation and Progress
+public:
+    double getScore() const;
+
+protected:
+    bool calculateWeights(const std::list<std::string> &workshopDirectories);
+    bool calculateWeight(const std::string &database, size_t &totalSize);
+    void updateProgress(const std::string &database, double increment);
+
+    std::map<std::string, double> m_weights;
+    void updateScore(const std::string &database, double increment);
+    double m_score;
 };
 
 } //namespace Repair

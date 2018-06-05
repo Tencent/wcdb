@@ -26,6 +26,7 @@
 #include <WCDB/Path.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <iomanip>
 
 namespace WCDB {
 
@@ -33,35 +34,48 @@ namespace Repair {
 
 #pragma mark - Factory
 Factory::Factory(const std::string &database_)
-    : database(database_), directory(Path::addExtention(database_, ".factory"))
+    : database(database_)
+    , directory(Path::addExtention(database_, ".factory"))
+    , meta(*this)
 {
 }
 
-std::list<std::string> Factory::getAssociatedPaths() const
+std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 {
-    return {
-        database,
-        Path::addExtention(database, "-journal"),
-        Path::addExtention(database, "-wal"),
-        Path::addExtention(database, "-shm"),
-        getFirstMaterialPath(),
-        getLastMaterialPath(),
-    };
+    std::list<std::string> workshopDirectories;
+    std::string restoreDirectory = getRestoreDirectory();
+    if (FileManager::shared()->enumerateDirectory(
+            directory,
+            [&workshopDirectories, &restoreDirectory](
+                const std::string &path, bool isDirectory) -> bool {
+                if (isDirectory && path != restoreDirectory) {
+                    workshopDirectories.push_back(path);
+                }
+                return true;
+            })) {
+        return {true, workshopDirectories};
+    }
+    return {false, {}};
 }
 
-std::string Factory::getFirstMaterialPath() const
+std::pair<bool, std::string> Factory::generateWorkshopDiectory() const
 {
-    return firstMaterialPathForDatabase(database);
+    auto t = std::time(nullptr);
+    struct tm tm;
+    if (!localtime_r(&t, &tm)) {
+        setThreadedError(Error::Code::Exceed);
+        return {false, String::empty()};
+    }
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S_");
+    oss << rand();
+    return {true, Path::addComponent(directory, oss.str())};
 }
 
-std::string Factory::getLastMaterialPath() const
+#pragma mark - Factory Derived
+FactoryDepositor Factory::depositor() const
 {
-    return lastMaterialPathForDatabase(database);
-}
-
-FactoryArchiver Factory::archiver() const
-{
-    return FactoryArchiver(*this);
+    return FactoryDepositor(*this);
 }
 
 FactoryRestorer Factory::restorer() const
@@ -69,6 +83,12 @@ FactoryRestorer Factory::restorer() const
     return FactoryRestorer(*this);
 }
 
+FactoryBackup Factory::Backup() const
+{
+    return FactoryBackup(*this);
+}
+
+#pragma mark - Helper
 std::string Factory::firstMaterialPathForDatabase(const std::string &database)
 {
     return Path::addExtention(database, "-first.material");
@@ -79,8 +99,36 @@ std::string Factory::lastMaterialPathForDatabase(const std::string &database)
     return Path::addExtention(database, "-last.material");
 }
 
+std::string Factory::getRestoreDirectory() const
+{
+    return Path::addComponent(directory, "restore");
+}
+
+std::list<std::string>
+Factory::associatedPathsForDatabase(const std::string &database)
+{
+    return {
+        database,
+        Path::addExtention(database, "-journal"),
+        Path::addExtention(database, "-wal"),
+        Path::addExtention(database, "-shm"),
+        firstMaterialPathForDatabase(database),
+        lastMaterialPathForDatabase(database),
+    };
+}
+
+std::list<std::string>
+Factory::databasePathsForDatabase(const std::string &database)
+{
+    return {
+        database, Path::addExtention(database, "-journal"),
+        Path::addExtention(database, "-wal"),
+        Path::addExtention(database, "-shm"),
+    };
+}
+
 std::pair<bool, std::string>
-Factory::pickMaterailForRestoring(const std::string &database)
+Factory::pickMaterialForRestoring(const std::string &database)
 {
     //If all materials exist, return the new one.
     //If all materials do not exist, return empty.
@@ -122,6 +170,49 @@ Factory::pickMaterailForRestoring(const std::string &database)
     } else {
         return {true, String::empty()};
     }
+}
+
+std::pair<bool, std::string>
+Factory::pickMaterialForOverwriting(const std::string &database)
+{
+    //If all materials exist, return the old one.
+    //If all materials do not exist, return the first one.
+    //Otherwise, return the one that does not exist.
+    FileManager *fileManager = FileManager::shared();
+    std::string firstMaterialPath = firstMaterialPathForDatabase(database);
+    bool succeed, firstMaterialExists, lastMaterialExists;
+    std::tie(succeed, firstMaterialExists) =
+        fileManager->fileExists(firstMaterialPath);
+    if (!firstMaterialExists) {
+        if (succeed) {
+            return {true, firstMaterialPath};
+        }
+        return {false, String::empty()};
+    }
+
+    std::string lastMaterialPath = lastMaterialPathForDatabase(database);
+    std::tie(succeed, lastMaterialExists) =
+        fileManager->fileExists(lastMaterialPath);
+    if (!lastMaterialExists) {
+        if (succeed) {
+            return {true, lastMaterialPath};
+        }
+        return {false, String::empty()};
+    }
+    time_t firstMaterialModifiedTime, lastMaterialModifiedTime;
+    std::tie(succeed, firstMaterialModifiedTime) =
+        fileManager->getFileModifiedTime(firstMaterialPath);
+    if (!succeed) {
+        return {false, String::empty()};
+    }
+    std::tie(succeed, lastMaterialModifiedTime) =
+        fileManager->getFileModifiedTime(lastMaterialPath);
+    if (!succeed) {
+        return {false, String::empty()};
+    }
+    return {true, firstMaterialModifiedTime > lastMaterialModifiedTime
+                      ? std::move(lastMaterialPath)
+                      : std::move(firstMaterialPath)};
 }
 
 } //namespace Repair

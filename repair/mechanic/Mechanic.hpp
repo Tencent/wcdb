@@ -52,7 +52,7 @@ protected:
 #pragma mark - Crawlable
 protected:
     void onCellCrawled(const Cell &cell) override;
-    bool willCrawlPage(const Page &page, int unused) override;
+    bool willCrawlPage(const Page &page, int) override;
 };
 
 } //namespace Repair

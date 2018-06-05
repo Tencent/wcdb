@@ -52,7 +52,7 @@ public:
         CopyOnWriteString SQL() const override;
 
     protected:
-        static constexpr const char *OperationName(const Operation &operation);
+        static constexpr const char *operationName(const Operation &operation);
     };
 
     CopyOnWriteLazyLangList<Trigger> triggers;

@@ -18,34 +18,41 @@
  * limitations under the License.
  */
 
+#include <WCDB/Compression.hpp>
+#include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
-#include <WCDB/FactoryArchiver.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Path.hpp>
+#include <WCDB/FactoryBackup.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-bool FactoryArchiver::work()
+FactoryBackup::FactoryBackup(const Factory &factory) : FactoryRelated(factory)
 {
-    FileManager *fileManager = FileManager::shared();
+}
+
+bool FactoryBackup::work(const Filter &shouldTableDeconstructed)
+{
+    return doWork(shouldTableDeconstructed, factory.database);
+}
+
+bool FactoryBackup::doWork(const Filter &shouldTableDeconstructed,
+                           const std::string &path)
+{
+    Backup Backup(path);
+    Backup.filter(shouldTableDeconstructed);
+    if (!Backup.work()) {
+        return false;
+    }
+
     bool succeed;
-    std::string uniqueFileName;
-    std::tie(succeed, uniqueFileName) = fileManager->getUniqueFileName();
+    std::string materialPath;
+    std::tie(succeed, materialPath) = Factory::pickMaterialForOverwriting(path);
     if (!succeed) {
         return false;
     }
 
-    std::string archivedDirectory =
-        Path::addComponent(factory.directory, uniqueFileName);
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            archivedDirectory) ||
-        !fileManager->moveItems(factory.getAssociatedPaths(),
-                                archivedDirectory)) {
-        return false;
-    }
-    return true;
+    return Backup.getMaterial().serialize(materialPath);
 }
 
 } //namespace Repair

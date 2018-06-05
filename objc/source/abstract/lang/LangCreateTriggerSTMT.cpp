@@ -55,10 +55,10 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
     LangRemedialAssert(!triggerName.empty());
     description.append(triggerName.get() + " ");
     if (type != CreateTriggerSTMT::Type::NotSet) {
-        description.append(CreateTriggerSTMT::TypeName(type));
+        description.append(CreateTriggerSTMT::typeName(type));
         description.append(" ");
     }
-    description.append(CreateTriggerSTMT::OperationName(operation));
+    description.append(CreateTriggerSTMT::operationName(operation));
     if (operation == Operation::Update && !columns.empty()) {
         description.append(" OF " + columns.description().get());
     }
@@ -76,7 +76,7 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
     return description;
 }
 
-constexpr const char *CreateTriggerSTMT::TypeName(const Type &type)
+constexpr const char *CreateTriggerSTMT::typeName(const Type &type)
 {
     switch (type) {
         case Type::Before:
@@ -91,7 +91,7 @@ constexpr const char *CreateTriggerSTMT::TypeName(const Type &type)
 }
 
 constexpr const char *
-CreateTriggerSTMT::OperationName(const Operation &operation)
+CreateTriggerSTMT::operationName(const Operation &operation)
 {
     switch (operation) {
         case Operation::Delete:
