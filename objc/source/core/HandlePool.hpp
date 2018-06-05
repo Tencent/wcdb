@@ -22,6 +22,7 @@
 #define HandlePool_hpp
 
 #include <WCDB/Abstract.h>
+#include <WCDB/Attachment.hpp>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/Factory.hpp>
@@ -124,6 +125,10 @@ protected:
 private:
     friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
     ThreadedErrors m_errors;
+
+#pragma mark - Attachment
+public:
+    Attachment attachment;
 };
 
 } //namespace WCDB

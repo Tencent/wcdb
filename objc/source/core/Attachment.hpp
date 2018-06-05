@@ -18,32 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef FactoryMaterials_hpp
-#define FactoryMaterials_hpp
+#ifndef Attachment_hpp
+#define Attachment_hpp
 
-#include <WCDB/FactoryDerived.hpp>
-#include <future>
+#include <WCDB/Factory.hpp>
 
 namespace WCDB {
 
-namespace Repair {
+class HandlePool;
 
-class FactoryMaterials : public FactoryDerived {
+class Attachment {
 public:
-    FactoryMaterials(const Factory &factory);
-    bool work();
+    Attachment(const HandlePool *handlePool);
 
-    const std::map<std::string, int64_t> &getSequences() const;
-
-protected:
-    bool doWork();
-    std::future<bool> m_done;
-    std::map<std::string, int64_t> m_sequences;
-    Error m_error;
+    Repair::Factory factory;
 };
-
-} //namespace Repair
 
 } //namespace WCDB
 
-#endif /* FactoryMaterials_hpp */
+#endif /* Attachment_hpp */

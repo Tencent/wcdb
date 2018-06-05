@@ -23,22 +23,22 @@
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/CriticalErrorOnly.hpp>
-#include <WCDB/FactoryDeconstructor.hpp>
-#include <WCDB/FactoryDerived.hpp>
+#include <WCDB/FactoryBackup.hpp>
+#include <WCDB/FactoryRelated.hpp>
 #include <WCDB/Progress.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryRestorer : public FactoryDerived,
+class FactoryRestorer : public FactoryRelated,
                         public CriticalErrorOnly,
                         public Progress {
-#pragma mark - Deconstructor
+#pragma mark - Backup
 public:
-    class Deconstructor : public FactoryDeconstructor {
+    class Backup : public FactoryBackup {
     public:
-        Deconstructor(const FactoryRestorer &restorer);
+        Backup(const FactoryRestorer &restorer);
 
         bool work(const Filter &shouldTableDeconstructed);
 
@@ -46,7 +46,7 @@ public:
         const FactoryRestorer &m_restorer;
     };
 
-    typedef Deconstructor::Filter Filter;
+    typedef Backup::Filter Filter;
     void filter(const Filter &filter);
 
 protected:
@@ -77,7 +77,7 @@ public:
     double getScore() const;
 
 protected:
-    bool calculateWeights(const std::list<std::string> &materialDirectories);
+    bool calculateWeights(const std::list<std::string> &workshopDirectories);
     bool calculateWeight(const std::string &database, size_t &totalSize);
     void updateProgress(const std::string &database, double increment);
 

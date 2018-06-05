@@ -18,12 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef RepairKit_h
-#define RepairKit_h
+#ifndef FactoryBackup_hpp
+#define FactoryBackup_hpp
 
 #include <WCDB/Backup.hpp>
-#include <WCDB/FullCrawler.hpp>
-#include <WCDB/Material.hpp>
-#include <WCDB/Mechanic.hpp>
+#include <WCDB/FactoryRelated.hpp>
 
-#endif /* RepairKit_h */
+namespace WCDB {
+
+namespace Repair {
+
+class FactoryBackup : public FactoryRelated {
+public:
+    FactoryBackup(const Factory &factory);
+    using Filter = Backup::Filter;
+
+    bool work(const Filter &shouldTableDeconstructed);
+
+protected:
+    bool doWork(const Filter &shouldTableDeconstructed,
+                const std::string &path);
+};
+
+} //namespace Repair
+
+} //namespace WCDB
+
+#endif /* FactoryBackup_hpp */

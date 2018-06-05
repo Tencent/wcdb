@@ -253,231 +253,54 @@ std::string Database::getJournalPath() const
     return Path::addExtention(getPath(), Handle::getJournalSubfix());
 }
 
-std::string Database::getFirstBackupPath() const
-{
-    return Path::addExtention(getPath(), Database::getFirstBackupSubfix());
-}
-
-std::string Database::getLastBackupPath() const
-{
-    return Path::addExtention(getPath(), Database::getLastBackupSubfix());
-}
-
 std::list<std::string> Database::getPaths() const
 {
     return {
         getPath(),
         getWALPath(),
-        getFirstBackupPath(),
-        getLastBackupPath(),
-        getMaterialsDirectory(),
+        getFirstMaterialPath(),
+        getLastMaterialPath(),
+        getFactoryDirectory(),
         getSHMPath(),
         getJournalPath(),
     };
 }
 
 #pragma mark - Repair Kit
-const std::string &Database::getFirstBackupSubfix()
+std::string Database::getFirstMaterialPath() const
 {
-    static const std::string s_firstBackupSubfix("-first.material");
-    return s_firstBackupSubfix;
+    return Repair::Factory::firstMaterialPathForDatabase(getPath());
 }
 
-const std::string &Database::getLastBackupSubfix()
+std::string Database::getLastMaterialPath() const
 {
-    static const std::string s_lastBackupSubfix("-last.material");
-    return s_lastBackupSubfix;
+    return Repair::Factory::lastMaterialPathForDatabase(getPath());
 }
 
-std::pair<bool, std::string> Database::pickUpOldBackup()
+const std::string &Database::getFactoryDirectory() const
 {
-    return pickUpBackup(true);
-}
-
-std::pair<bool, std::string> Database::pickUpNewBackup()
-{
-    return pickUpBackup(false);
-}
-
-std::string Database::getArchiveSubfix(int i)
-{
-    return "." + std::to_string(i);
-}
-
-int Database::findNextAvailableArchiveID()
-{
-    int i = 1;
-    std::string archivedSubfix;
-    FileManager *fileManager = FileManager::shared();
-    while (true) {
-        archivedSubfix = getArchiveSubfix(i);
-        auto exists = fileManager->fileExists(
-            Path::addExtention(getPath(), archivedSubfix));
-        if (!exists.first) {
-            assignWithSharedThreadedError();
-            return 0;
-        }
-        if (!exists.second) {
-            return i;
-        }
-        ++i;
-    }
-}
-
-bool Database::archiveAsMaterial()
-{
-    if (!isBlockaded() || isOpened()) {
-        setThreadedError(Error(
-            Error::Code::Misuse,
-            "Archiving an opened  database may cause undefined results."));
-        return false;
-    }
-
-    FileManager *fileManager = FileManager::shared();
-    const std::string materialDirectory = getMaterialsDirectory();
-
-    int nextAvailbleID = findNextAvailableArchiveID();
-    if (nextAvailbleID == 0) {
-        return false;
-    }
-
-    // create material directory
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            materialDirectory)) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-
-    //resolve archived paths
-    std::string archivedSubfix = getArchiveSubfix(nextAvailbleID);
-    std::list<std::pair<std::string, std::string>> pairedPaths;
-    for (auto &path : getPaths()) {
-        std::string fileName =
-            Path::addExtention(Path::getFileName(path), archivedSubfix);
-        std::string newPath =
-            Path::addComponent(materialDirectory, std::move(fileName));
-        pairedPaths.push_back({std::move(path), std::move(newPath)});
-    }
-    if (!fileManager->moveItems(pairedPaths)) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-    return true;
-}
-
-std::string Database::getMaterialsDirectory() const
-{
-    return Path::addComponent(getPath(), ".materials");
-}
-
-std::pair<bool, std::string> Database::pickUpBackup(bool old)
-{
-    FileManager *fileManager = FileManager::shared();
-
-    bool first = false;
-    bool result = true;
-    std::string firstBackupPath = getFirstBackupPath();
-    std::string lastBackupPath = getLastBackupPath();
-    do {
-        std::pair<bool, bool> exists = fileManager->fileExists(firstBackupPath);
-        if (!exists.first) {
-            result = false;
-            break;
-        }
-        if (!exists.second) {
-            first = old;
-            break;
-        }
-
-        exists = fileManager->fileExists(lastBackupPath);
-        if (!exists.first) {
-            result = false;
-            break;
-        }
-        if (!exists.second) {
-            first = !old;
-            break;
-        }
-
-        //get the old one
-        auto firstBackupTime =
-            fileManager->getFileModifiedTime(firstBackupPath);
-        auto lastBackupTime = fileManager->getFileModifiedTime(lastBackupPath);
-        if (!firstBackupTime.first || !lastBackupTime.second) {
-            result = false;
-            break;
-        }
-        first = (firstBackupTime.second > lastBackupTime.second) ^ old;
-    } while (false);
-
-    if (!result) {
-        assignWithSharedThreadedError();
-        return {false, String::empty()};
-    }
-    return {true, first ? firstBackupPath : lastBackupPath};
+    return m_pool->attachment.factory.directory;
 }
 
 bool Database::backup(const BackupFilter &shouldTableBeBackedup)
 {
-    auto backupPath = pickUpOldBackup();
-    if (!backupPath.first) {
-        return false;
-    }
-
-    Repair::Deconstructor deconstructor(getPath());
-    if (shouldTableBeBackedup != nullptr) {
-        deconstructor.filter(shouldTableBeBackedup);
-    }
-    if (!deconstructor.work()) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-    Data material = deconstructor.getMaterial().serialize();
-    if (material.empty()) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-
-    //TODO cipher
-    FileHandle fileHandle(backupPath.second);
-    bool result = true;
-    if (!fileHandle.open(FileHandle::Mode::ReadWrite) ||
-        !fileHandle.write(material.buffer(), 0, material.size())) {
-        assignWithSharedThreadedError();
-        result = false;
-    }
-    fileHandle.close();
-    return result;
-}
-
-bool Database::removeMaterials()
-{
-    if (FileManager::shared()->removeDirectory(getMaterialsDirectory())) {
-        return true;
-    }
-    assignWithSharedThreadedError();
+    //TODO
     return false;
 }
 
-bool Database::restore()
+bool Database::deposit()
 {
-    if (!isBlockaded() || isOpened()) {
-        setThreadedError(Error(
-            Error::Code::Misuse,
-            "Restoring an opened  database may cause undefined results."));
-        return false;
-    }
+    //TODO
     return false;
 }
 
-std::string Database::getRestorePath() const
+bool Database::retrieve()
 {
-    return Path::addComponent(getMaterialsDirectory(),
-                              Path::addExtention(getPath(), ".restore"));
+    //TODO
+    return false;
 }
 
 #pragma mark - Handle
-
 ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 {
     static ThreadLocal<ThreadedHandles> *s_threadedHandles =

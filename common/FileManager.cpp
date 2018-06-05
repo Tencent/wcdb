@@ -24,7 +24,6 @@
 #include <WCDB/String.hpp>
 #include <dirent.h>
 #include <errno.h>
-#include <iomanip>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -193,21 +192,6 @@ FileManager::getFileModifiedTime(const std::string &path)
     }
     setThreadedError(path);
     return {false, 0};
-}
-
-std::pair<bool, std::string> FileManager::getUniqueFileName()
-{
-    auto t = std::time(nullptr);
-    srand((unsigned) t);
-    struct tm tm;
-    if (!localtime_r(&t, &tm)) {
-        setThreadedError(Error::Code::Exceed);
-        return {false, String::empty()};
-    }
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S_");
-    oss << rand();
-    return {true, oss.str()};
 }
 
 #pragma mark - Combination

@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Factory.hpp>
-#include <WCDB/FactoryMaterials.hpp>
+#include <WCDB/FactoryMeta.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/ThreadedErrors.hpp>
@@ -28,15 +28,22 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryMaterials::FactoryMaterials(const Factory &factory)
-    : FactoryDerived(factory)
+FactoryMeta::FactoryMeta(const Factory &factory)
+    : FactoryRelated(factory)
     , m_done(std::async([this]() -> bool { return doWork(); }))
 {
 }
 
-bool FactoryMaterials::work()
+FactoryMeta::FactoryMeta(FactoryMeta &&factoryMaterials)
+    : FactoryRelated(factoryMaterials.factory)
+    , m_done(std::move(factoryMaterials.m_done))
 {
-    bool succeed = m_done.get();
+}
+
+bool FactoryMeta::work()
+{
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    bool succeed = m_done.share().get();
     if (!succeed) {
         //retry
         m_done = std::async([this]() -> bool { return doWork(); });
@@ -44,18 +51,18 @@ bool FactoryMaterials::work()
     return succeed;
 }
 
-bool FactoryMaterials::doWork()
+bool FactoryMeta::doWork()
 {
     const std::string databaseName = Path::getFileName(factory.database);
     bool succeed;
-    std::list<std::string> materialDirectories;
-    std::tie(succeed, materialDirectories) = factory.getMaterialDirectories();
+    std::list<std::string> workshopDirectories;
+    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         return false;
     }
-    for (const auto &materialDirectory : materialDirectories) {
+    for (const auto &workshopDirectory : workshopDirectories) {
         std::string database =
-            Path::addComponent(materialDirectory, databaseName);
+            Path::addComponent(workshopDirectory, databaseName);
         std::string material;
         std::tie(succeed, material) =
             Factory::pickMaterialForRestoring(database);
@@ -86,7 +93,7 @@ bool FactoryMaterials::doWork()
     return false;
 }
 
-const std::map<std::string, int64_t> &FactoryMaterials::getSequences() const
+const std::map<std::string, int64_t> &FactoryMeta::getSequences() const
 {
     return m_sequences;
 }

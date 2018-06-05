@@ -21,9 +21,9 @@
 #ifndef Factory_hpp
 #define Factory_hpp
 
-#include <WCDB/FactoryArchiver.hpp>
-#include <WCDB/FactoryDeconstructor.hpp>
-#include <WCDB/FactoryMaterials.hpp>
+#include <WCDB/FactoryBackup.hpp>
+#include <WCDB/FactoryDepositor.hpp>
+#include <WCDB/FactoryMeta.hpp>
 #include <WCDB/FactoryRestorer.hpp>
 #include <future>
 #include <list>
@@ -36,24 +36,27 @@ namespace Repair {
 class Assembler;
 
 //Thread safe
-class Factory {
+class Factory : public SharedThreadedErrorProne {
+#pragma mark - Factory
 public:
     Factory(const std::string &database);
 
     const std::string database;
     const std::string directory;
 
-    std::list<std::string> getAssociatedPaths() const;
-
     std::string getRestoreDirectory() const;
-    std::pair<bool, std::list<std::string>> getMaterialDirectories() const;
+    std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
+    std::pair<bool, std::string> generateWorkshopDiectory() const;
 
-    FactoryArchiver archiver() const;
+#pragma - Factory Derived
+public:
+    FactoryDepositor depositor() const;
     FactoryRestorer restorer() const;
-    FactoryDeconstructor deconstructor() const;
+    FactoryBackup Backup() const;
+    FactoryMeta meta;
 
-    FactoryMaterials &materials();
-
+#pragma mark - Helper
+public:
     static std::list<std::string>
     associatedPathsForDatabase(const std::string &database);
     static std::list<std::string>
@@ -66,9 +69,6 @@ public:
     pickMaterialForRestoring(const std::string &database);
     static std::pair<bool, std::string>
     pickMaterialForOverwriting(const std::string &database);
-
-protected:
-    FactoryMaterials m_materials;
 };
 
 } //namespace Repair

@@ -26,6 +26,7 @@
 #include <WCDB/Path.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <iomanip>
 
 namespace WCDB {
 
@@ -35,18 +36,46 @@ namespace Repair {
 Factory::Factory(const std::string &database_)
     : database(database_)
     , directory(Path::addExtention(database_, ".factory"))
-    , m_materials(*this)
+    , meta(*this)
 {
 }
 
-std::list<std::string> Factory::getAssociatedPaths() const
+std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 {
-    return Factory::associatedPathsForDatabase(database);
+    std::list<std::string> workshopDirectories;
+    std::string restoreDirectory = getRestoreDirectory();
+    if (FileManager::shared()->enumerateDirectory(
+            directory,
+            [&workshopDirectories, &restoreDirectory](
+                const std::string &path, bool isDirectory) -> bool {
+                if (isDirectory && path != restoreDirectory) {
+                    workshopDirectories.push_back(path);
+                }
+                return true;
+            })) {
+        return {true, workshopDirectories};
+    }
+    return {false, {}};
 }
 
-FactoryArchiver Factory::archiver() const
+std::pair<bool, std::string> Factory::generateWorkshopDiectory() const
 {
-    return FactoryArchiver(*this);
+    auto t = std::time(nullptr);
+    struct tm tm;
+    if (!localtime_r(&t, &tm)) {
+        setThreadedError(Error::Code::Exceed);
+        return {false, String::empty()};
+    }
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S_");
+    oss << rand();
+    return {true, Path::addComponent(directory, oss.str())};
+}
+
+#pragma mark - Factory Derived
+FactoryDepositor Factory::depositor() const
+{
+    return FactoryDepositor(*this);
 }
 
 FactoryRestorer Factory::restorer() const
@@ -54,11 +83,12 @@ FactoryRestorer Factory::restorer() const
     return FactoryRestorer(*this);
 }
 
-FactoryDeconstructor Factory::deconstructor() const
+FactoryBackup Factory::Backup() const
 {
-    return FactoryDeconstructor(*this);
+    return FactoryBackup(*this);
 }
 
+#pragma mark - Helper
 std::string Factory::firstMaterialPathForDatabase(const std::string &database)
 {
     return Path::addExtention(database, "-first.material");
@@ -95,24 +125,6 @@ Factory::databasePathsForDatabase(const std::string &database)
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
     };
-}
-
-std::pair<bool, std::list<std::string>> Factory::getMaterialDirectories() const
-{
-    std::list<std::string> materialDirectories;
-    std::string restoreDirectory;
-    if (FileManager::shared()->enumerateDirectory(
-            directory,
-            [&materialDirectories, &restoreDirectory](
-                const std::string &path, bool isDirectory) -> bool {
-                if (isDirectory && path != restoreDirectory) {
-                    materialDirectories.push_back(path);
-                }
-                return true;
-            })) {
-        return {true, materialDirectories};
-    }
-    return {false, {}};
 }
 
 std::pair<bool, std::string>
@@ -201,11 +213,6 @@ Factory::pickMaterialForOverwriting(const std::string &database)
     return {true, firstMaterialModifiedTime > lastMaterialModifiedTime
                       ? std::move(lastMaterialPath)
                       : std::move(firstMaterialPath)};
-}
-
-FactoryMaterials &Factory::materials()
-{
-    return m_materials;
 }
 
 } //namespace Repair

@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/FactoryDerived.hpp>
+#include <WCDB/FactoryRelated.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-FactoryDerived::FactoryDerived(const Factory &factory_) : factory(factory_)
+FactoryRelated::FactoryRelated(const Factory &factory_) : factory(factory_)
 {
 }
 

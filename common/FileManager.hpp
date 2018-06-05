@@ -52,7 +52,6 @@ public:
     bool removeDirectory(const std::string &directory);
     bool createDirectory(const std::string &path);
     std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
-    std::pair<bool, std::string> getUniqueFileName();
 
     bool enumerateDirectory(
         const std::string &directory,

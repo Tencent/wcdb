@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
-#include <WCDB/FactoryDeconstructor.hpp>
+#include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryRestorer.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/FileManager.hpp>
@@ -34,20 +34,19 @@ namespace WCDB {
 
 namespace Repair {
 
-#pragma mark - Deconstructor
-FactoryRestorer::Deconstructor::Deconstructor(const FactoryRestorer &restorer)
-    : FactoryDeconstructor(restorer.factory), m_restorer(restorer)
+#pragma mark - Backup
+FactoryRestorer::Backup::Backup(const FactoryRestorer &restorer)
+    : FactoryBackup(restorer.factory), m_restorer(restorer)
 {
 }
 
-bool FactoryRestorer::Deconstructor::work(
-    const Filter &shouldTableDeconstructed)
+bool FactoryRestorer::Backup::work(const Filter &shouldTableDeconstructed)
 {
     return doWork(shouldTableDeconstructed, m_restorer.database);
 }
 
 FactoryRestorer::FactoryRestorer(const Factory &factory)
-    : FactoryDerived(factory)
+    : FactoryRelated(factory)
     , databaseFileName(Path::getFileName(factory.database))
     , database(
           Path::addComponent(factory.getRestoreDirectory(), databaseFileName))
@@ -80,13 +79,13 @@ bool FactoryRestorer::work()
     }
 
     //1.5 calculate weights to deal with the progress and score
-    std::list<std::string> materialDirectories;
-    std::tie(succeed, materialDirectories) = factory.getMaterialDirectories();
+    std::list<std::string> workshopDirectories;
+    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         tryUpgradeErrorWithThreadedError();
     }
 
-    if (!calculateWeights(materialDirectories)) {
+    if (!calculateWeights(workshopDirectories)) {
         return false;
     }
 
@@ -96,23 +95,23 @@ bool FactoryRestorer::work()
         return false;
     }
 
-    //3. Restore from all archived db. It should be succeed without critical errors.
-    for (const auto &materialDirectory : materialDirectories) {
-        if (!restore(Path::addComponent(materialDirectory, databaseFileName))) {
+    //3. Restore from all depositor db. It should be succeed without critical errors.
+    for (const auto &workshopDirectory : workshopDirectories) {
+        if (!restore(Path::addComponent(workshopDirectory, databaseFileName))) {
             return false;
         }
     }
 
-    //4. Do a deconstructor on restore db.
-    FactoryRestorer::Deconstructor deconstructor(*this);
-    if (!deconstructor.work(m_filter)) {
+    //4. Do a Backup on restore db.
+    FactoryRestorer::Backup Backup(*this);
+    if (!Backup.work(m_filter)) {
         tryUpgradeErrorWithThreadedError();
         return false;
     }
 
     //5. Archive current db and use restore db
-    FactoryArchiver archiver(factory);
-    if (!archiver.work()) {
+    FactoryDepositor depositor(factory);
+    if (!depositor.work()) {
         return false;
     }
     std::string baseDirectory = Path::getBaseName(factory.database);
@@ -122,7 +121,7 @@ bool FactoryRestorer::work()
         return false;
     }
 
-    //6. Remove all archived dbs.
+    //6. Remove all depositor dbs.
     if (m_criticalError.code() == Error::Code::OK) {
         FileManager::shared()->removeItem(factory.directory);
     }
@@ -228,7 +227,7 @@ double FactoryRestorer::getScore() const
 }
 
 bool FactoryRestorer::calculateWeights(
-    const std::list<std::string> &materialDirectories)
+    const std::list<std::string> &workshopDirectories)
 {
     size_t totalSize = 0;
 
@@ -238,9 +237,9 @@ bool FactoryRestorer::calculateWeights(
     }
 
     //Materials
-    for (const auto &materialDirectory : materialDirectories) {
+    for (const auto &workshopDirectory : workshopDirectories) {
         std::string database =
-            Path::addComponent(materialDirectory, databaseFileName);
+            Path::addComponent(workshopDirectory, databaseFileName);
         if (!calculateWeight(database, totalSize)) {
             return false;
         }

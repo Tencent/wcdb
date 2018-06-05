@@ -23,9 +23,9 @@
 
 @implementation WCTDatabase (RepairKit)
 
-- (BOOL)archiveAsMaterial
+- (BOOL)deposit
 {
-    return _database->archiveAsMaterial();
+    return _database->deposit();
 }
 
 - (BOOL)backup
@@ -44,9 +44,9 @@
     return _database->backup(filter);
 }
 
-- (BOOL)restore
+- (BOOL)retrieve
 {
-    return _database->restore();
+    return _database->retrieve();
 }
 
 @end

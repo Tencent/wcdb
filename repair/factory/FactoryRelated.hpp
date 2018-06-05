@@ -18,36 +18,24 @@
  * limitations under the License.
  */
 
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryArchiver.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Path.hpp>
+#ifndef FactoryRelated_hpp
+#define FactoryRelated_hpp
 
 namespace WCDB {
 
 namespace Repair {
 
-bool FactoryArchiver::work()
-{
-    FileManager *fileManager = FileManager::shared();
-    bool succeed;
-    std::string uniqueFileName;
-    std::tie(succeed, uniqueFileName) = fileManager->getUniqueFileName();
-    if (!succeed) {
-        return false;
-    }
+class Factory;
 
-    std::string archivedDirectory =
-        Path::addComponent(factory.directory, uniqueFileName);
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            archivedDirectory) ||
-        !fileManager->moveItems(factory.getAssociatedPaths(),
-                                archivedDirectory)) {
-        return false;
-    }
-    return true;
-}
+class FactoryRelated {
+public:
+    FactoryRelated(const Factory &factory);
+
+    const Factory &factory;
+};
 
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* FactoryRelated_hpp */

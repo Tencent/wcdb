@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Deconstructor_hpp
-#define Deconstructor_hpp
+#ifndef Backup_hpp
+#define Backup_hpp
 
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Material.hpp>
@@ -31,17 +31,17 @@ namespace WCDB {
 
 namespace Repair {
 
-class Deconstructor : public Crawlable,
-                      public MasterCrawlerDelegate,
-                      public SequenceCrawlerDelegate {
+class Backup : public Crawlable,
+               public MasterCrawlerDelegate,
+               public SequenceCrawlerDelegate {
 #pragma mark - Initialize
 public:
-    Deconstructor(const std::string &path);
+    Backup(const std::string &path);
 
 protected:
     Pager m_pager;
 
-#pragma mark - Deconstructor
+#pragma mark - Backup
 public:
     bool work();
 
@@ -88,4 +88,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Deconstructor_hpp */
+#endif /* Backup_hpp */

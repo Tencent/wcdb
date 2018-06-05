@@ -35,6 +35,7 @@ HandlePool::HandlePool(const std::string &thePath,
     , m_configs(configs)
     , m_handles(HandlePool::hardwareConcurrency())
     , m_aliveHandleCount(0)
+    , attachment(this)
 {
 }
 

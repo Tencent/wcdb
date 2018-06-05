@@ -18,24 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef FactoryArchiver_hpp
-#define FactoryArchiver_hpp
-
-#include <WCDB/FactoryDerived.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
+#include <WCDB/Attachment.hpp>
+#include <WCDB/HandlePool.hpp>
 
 namespace WCDB {
 
-namespace Repair {
-
-class FactoryArchiver : public FactoryDerived, public SharedThreadedErrorProne {
-public:
-    using FactoryDerived::FactoryDerived;
-    bool work();
-};
-
-} //namespace Repair
+Attachment::Attachment(const HandlePool *handlePool) : factory(handlePool->path)
+{
+}
 
 } //namespace WCDB
-
-#endif /* FactoryArchiver_hpp */
