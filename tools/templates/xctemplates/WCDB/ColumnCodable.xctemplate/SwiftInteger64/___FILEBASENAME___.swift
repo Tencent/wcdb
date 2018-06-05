@@ -3,14 +3,16 @@
 import Foundation
 import WCDBSwift
 
-class ___VARIABLE_productName___: WCDBSwift.ColumnCodable {
-    typealias FundamentalType = Int64
-
-    required init?(with value: Int64) {
-        /* <#Init ___VARIABLE_productName___ From Int64#> */
+class ___VARIABLE_productName___: WCDBSwift.ColumnCodable, WCDBSwift.LiteralValueConvertible, WCDBSwift.ExpressionCanBeOperated {
+    static var columnType: ColumnType {
+        return .BLOB
     }
 
-    func archivedValue() -> Int64? {
-        return /* <#Archive ___VARIABLE_productName___ To Int64#> */
+    required init?(with value: FundamentalValue) {
+        /* Init ___VARIABLE_productName___ From value.int64Value */
+    }
+
+    func archivedValue() -> FundamentalValue {
+        return FundamentalValue(<#Int64#>)
     }
 }
