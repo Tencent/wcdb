@@ -25,5 +25,6 @@
 #include <WCDB/FullCrawler.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Mechanic.hpp>
+#include <WCDB/SQLiteAssembler.hpp>
 
 #endif /* RepairKit_h */
