@@ -31,11 +31,8 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialze
-SQLiteAssembler::SQLiteAssembler(const std::string &path_)
-    : Assembler()
-    , path(path_)
-    , m_transaction(false)
-    , m_onTableAssembled(nullptr)
+SQLiteAssembler::SQLiteAssembler()
+    : Assembler(), m_transaction(false), m_onTableAssembled(nullptr)
 {
 }
 
@@ -225,7 +222,7 @@ void SQLiteAssembler::setThreadedError(int rc)
     if (message) {
         error.message = message;
     }
-    error.infos.set("Path", path);
+    error.infos.set("Path", m_path);
     Reporter::shared()->report(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
@@ -239,7 +236,7 @@ void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
         error.message = message;
     }
     error.infos.set("SQL", sql);
-    error.infos.set("Path", path);
+    error.infos.set("Path", m_path);
     Reporter::shared()->report(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
@@ -248,7 +245,7 @@ void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
 bool SQLiteAssembler::open()
 {
     if (!m_handle) {
-        int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
+        int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
             setThreadedError(rc);
             return false;

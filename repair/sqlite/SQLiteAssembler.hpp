@@ -31,14 +31,12 @@ namespace Repair {
 class SQLiteAssembler : public Assembler, public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
-    SQLiteAssembler(const std::string &path);
+    SQLiteAssembler();
 
     typedef std::function<int(const std::string &, void *)>
         TableAssembledCallback;
     void
     setCallbackOnTableAssembled(const TableAssembledCallback &onTableAssembled);
-
-    const std::string path;
 
 protected:
     int onTableAssembled(const std::string &tableName);
