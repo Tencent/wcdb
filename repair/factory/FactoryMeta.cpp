@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryMeta.hpp>
 #include <WCDB/FileManager.hpp>
@@ -30,7 +31,7 @@ namespace Repair {
 
 FactoryMeta::FactoryMeta(Factory &factory)
     : FactoryRelated(factory)
-    , m_done(std::async([this]() -> bool { return doWork(); }))
+    , m_done(std::async([this]() -> Error { return doWork(); }))
 {
 }
 
@@ -38,28 +39,31 @@ FactoryMeta::FactoryMeta(FactoryMeta &&factoryMaterials)
     : FactoryRelated(factoryMaterials.getFactory())
     , m_done(std::move(factoryMaterials.m_done))
 {
+    WCTInnerAssert(m_done.wait_for(std::chrono::seconds(0)) ==
+                   std::future_status::deferred);
 }
 
-bool FactoryMeta::work()
+Error FactoryMeta::work()
 {
     std::lock_guard<std::mutex> lockGuard(getMutex());
-    bool succeed = m_done.share().get();
-    if (!succeed) {
+    Error error = m_done.share().get();
+    if (!error.isOK()) {
         //retry
-        m_done = std::async([this]() -> bool { return doWork(); });
+        m_done = std::async([this]() -> Error { return doWork(); });
     }
-    return succeed;
+    return error;
 }
 
-bool FactoryMeta::doWork()
+Error FactoryMeta::doWork()
 {
+    std::lock_guard<std::mutex> lockGuard(getMutex());
     const std::string databaseName = Path::getFileName(getFactory().database);
     bool succeed;
     std::list<std::string> workshopDirectories;
     std::tie(succeed, workshopDirectories) =
         getFactory().getWorkshopDirectories();
     if (!succeed) {
-        return false;
+        return std::move(ThreadedErrors::shared()->moveThreadedError());
     }
     for (const auto &workshopDirectory : workshopDirectories) {
         std::string database =
@@ -88,14 +92,15 @@ bool FactoryMeta::doWork()
         }
     }
     if (succeed) {
-        return true;
+        return Error();
     }
-    m_error = std::move(ThreadedErrors::shared()->getThreadedError());
-    return false;
+    return std::move(ThreadedErrors::shared()->moveThreadedError());
 }
 
-const std::map<std::string, int64_t> &FactoryMeta::getSequences() const
+const std::map<std::string, int64_t> &FactoryMeta::getSequences()
 {
+    WCTInnerAssert(m_done.wait_for(std::chrono::seconds(0)) ==
+                   std::future_status::ready);
     return m_sequences;
 }
 

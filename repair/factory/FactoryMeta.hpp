@@ -34,15 +34,15 @@ class FactoryMeta : public FactoryRelated {
 public:
     FactoryMeta(Factory &factory);
     FactoryMeta(FactoryMeta &&factoryMaterials);
-    bool work();
 
-    const std::map<std::string, int64_t> &getSequences() const;
+    Error work();
+
+    const std::map<std::string, int64_t> &getSequences();
 
 protected:
-    bool doWork();
-    std::future<bool> m_done;
+    Error doWork();
+    std::future<Error> m_done;
     std::map<std::string, int64_t> m_sequences;
-    Error m_error;
 };
 
 } //namespace Repair
