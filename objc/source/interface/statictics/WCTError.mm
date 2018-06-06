@@ -55,6 +55,16 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     return self;
 }
 
+- (BOOL)isOK
+{
+    return self.code == WCTErrorCodeOK;
+}
+
+- (BOOL)isCorruption
+{
+    return self.code == WCTErrorCodeCorrupt || self.code == WCTErrorCodeNotADatabase;
+}
+
 - (NSString *)stringForKey:(WCTErrorKey)key
 {
     id value = [self.userInfo objectForKey:key];

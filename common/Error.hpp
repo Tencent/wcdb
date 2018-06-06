@@ -156,6 +156,7 @@ public:
 
     Code code() const;
     bool isOK() const;
+    bool isCorruption() const;
 
     void setSystemCode(int systemCode, Code codeIfUnresolved);
     void setSQLiteCode(int code);

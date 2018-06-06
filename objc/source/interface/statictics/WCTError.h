@@ -72,6 +72,10 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
 
 @property(nonatomic, readonly, nullable) NSString *message;
 
+- (BOOL)isOK;
+
+- (BOOL)isCorruption;
+
 @end
 
 @interface WCTError (Path)

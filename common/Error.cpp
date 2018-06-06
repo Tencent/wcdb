@@ -141,6 +141,12 @@ bool Error::isOK() const
     return m_code == Code::OK;
 }
 
+bool Error::isCorruption() const
+{
+    return m_code == Error::Code::Corrupt ||
+           m_code == Error::Code::NotADatabase;
+}
+
 #pragma mark - Info
 void Error::Infos::set(const std::string &key, int64_t value)
 {
